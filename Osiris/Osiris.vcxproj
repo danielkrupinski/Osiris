@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="imgui\examples\example_allegro5\imconfig_allegro5.h" />
     <ClInclude Include="imgui\examples\example_apple_metal\Shared\AppDelegate.h" />
     <ClInclude Include="imgui\examples\example_apple_metal\Shared\Renderer.h" />
