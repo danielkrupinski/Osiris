@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="GUI.cpp" />
     <ClCompile Include="imgui\examples\example_allegro5\main.cpp" />
     <ClCompile Include="imgui\examples\example_freeglut_opengl2\main.cpp" />
     <ClCompile Include="imgui\examples\example_glfw_opengl2\main.cpp" />
