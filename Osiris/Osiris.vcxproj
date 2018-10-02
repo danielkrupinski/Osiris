@@ -148,30 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h" />
-    <ClInclude Include="imgui\examples\example_allegro5\imconfig_allegro5.h" />
-    <ClInclude Include="imgui\examples\example_apple_metal\Shared\AppDelegate.h" />
-    <ClInclude Include="imgui\examples\example_apple_metal\Shared\Renderer.h" />
-    <ClInclude Include="imgui\examples\example_apple_metal\Shared\ViewController.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_allegro5.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_dx10.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_dx11.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_dx12.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_dx9.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_freeglut.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_glfw.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_marmalade.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_metal.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_opengl2.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_opengl3.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_osx.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_sdl.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_vulkan.h" />
-    <ClInclude Include="imgui\examples\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\examples\libs\gl3w\GL\gl3w.h" />
-    <ClInclude Include="imgui\examples\libs\gl3w\GL\glcorearb.h" />
-    <ClInclude Include="imgui\examples\libs\glfw\include\GLFW\glfw3.h" />
-    <ClInclude Include="imgui\examples\libs\glfw\include\GLFW\glfw3native.h" />
-    <ClInclude Include="imgui\examples\libs\usynergy\uSynergy.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx9.h" />
@@ -186,36 +162,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="GUI.cpp" />
-    <ClCompile Include="imgui\examples\example_allegro5\main.cpp" />
-    <ClCompile Include="imgui\examples\example_freeglut_opengl2\main.cpp" />
-    <ClCompile Include="imgui\examples\example_glfw_opengl2\main.cpp" />
-    <ClCompile Include="imgui\examples\example_glfw_opengl3\main.cpp" />
-    <ClCompile Include="imgui\examples\example_glfw_vulkan\main.cpp" />
-    <ClCompile Include="imgui\examples\example_marmalade\main.cpp" />
-    <ClCompile Include="imgui\examples\example_null\main.cpp" />
-    <ClCompile Include="imgui\examples\example_sdl_opengl2\main.cpp" />
-    <ClCompile Include="imgui\examples\example_sdl_opengl3\main.cpp" />
-    <ClCompile Include="imgui\examples\example_sdl_vulkan\main.cpp" />
-    <ClCompile Include="imgui\examples\example_win32_directx10\main.cpp" />
-    <ClCompile Include="imgui\examples\example_win32_directx11\main.cpp" />
-    <ClCompile Include="imgui\examples\example_win32_directx12\main.cpp" />
-    <ClCompile Include="imgui\examples\example_win32_directx9\main.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_allegro5.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_dx10.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_dx11.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_dx12.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_dx9.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_freeglut.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_glfw.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_marmalade.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_opengl2.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_sdl.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="imgui\examples\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\examples\libs\gl3w\GL\gl3w.c" />
-    <ClCompile Include="imgui\examples\libs\usynergy\uSynergy.c" />
+    <ClCompile Include="GUI.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -225,12 +177,7 @@
     <ClCompile Include="imgui\misc\freetype\imgui_freetype.cpp" />
     <ClCompile Include="imgui\misc\stl\imgui_stl.cpp" />
     <ClCompile Include="Osiris.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
