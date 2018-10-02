@@ -5,5 +5,5 @@
 
 GUI::GUI(IDirect3DDevice9* device, HWND window)
 {
-
+    ImGui_ImplDX9_Init(device);
 }
