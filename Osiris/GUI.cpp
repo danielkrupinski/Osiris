@@ -4,7 +4,7 @@
 
 #include "GUI.h"
 
-GUI::GUI(IDirect3DDevice9* device, HWND window)
+GUI::GUI(HWND window, IDirect3DDevice9* device)
 {
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX9_Init(device);

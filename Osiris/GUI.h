@@ -4,5 +4,5 @@
 
 class GUI {
 public:
-    GUI(IDirect3DDevice9* device, HWND window);
+    GUI(HWND window, IDirect3DDevice9* device);
 };
