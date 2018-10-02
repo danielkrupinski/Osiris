@@ -1,5 +1,6 @@
 #pragma once
 
-class GUI {
+#include <d3d9helper.h>
 
+class GUI {
 };
