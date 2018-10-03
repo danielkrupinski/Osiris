@@ -9,3 +9,5 @@ public:
     std::uintptr_t present;
     std::uintptr_t reset;
 };
+
+extern Memory memory;
