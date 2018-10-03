@@ -5,6 +5,11 @@
 
 #include "Memory.h"
 
+Memory::Memory()
+{
+
+}
+
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
 {
     MODULEINFO moduleInfo{ };
