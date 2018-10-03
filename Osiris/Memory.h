@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class Memory {
+class Memory final {
 public:
     Memory();
     std::uintptr_t findPattern(std::string, std::string);
