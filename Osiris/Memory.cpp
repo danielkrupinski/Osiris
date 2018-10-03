@@ -1,6 +1,6 @@
 #include "Memory.h"
 
-void* Memory::findPattern(std::string module, std::string pattern)
+std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
 {
-    return nullptr;
+    return 0;
 }

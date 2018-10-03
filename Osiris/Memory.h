@@ -3,5 +3,5 @@
 
 class Memory {
 public:
-    void* findPattern(std::string, std::string);
+    std::uintptr_t findPattern(std::string, std::string);
 };
