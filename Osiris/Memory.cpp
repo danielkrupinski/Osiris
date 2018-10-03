@@ -1,3 +1,5 @@
+#include <Psapi.h>
+
 #include "Memory.h"
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
