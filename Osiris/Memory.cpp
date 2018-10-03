@@ -1,4 +1,5 @@
 #include <Psapi.h>
+#include <Windows.h>
 
 #include "Memory.h"
 
