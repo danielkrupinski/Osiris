@@ -48,6 +48,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="imgui\misc\stl\imgui_stl.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
