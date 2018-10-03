@@ -2,6 +2,8 @@
 
 #include <functional>
 
-class Hooks {
+#include <d3d9.h>
 
+class Hooks {
+private:
 };
