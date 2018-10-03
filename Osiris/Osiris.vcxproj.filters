@@ -30,9 +30,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\misc\fonts\binary_to_compressed_c.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -42,16 +39,10 @@
     <ClCompile Include="imgui\imgui_draw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\misc\freetype\imgui_freetype.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_impl_dx9.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\misc\stl\imgui_stl.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
@@ -80,9 +71,6 @@
     <ClInclude Include="imgui\imgui.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui_impl_dx9.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -90,9 +78,6 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\misc\stl\imgui_stl.h">
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_rectpack.h">
