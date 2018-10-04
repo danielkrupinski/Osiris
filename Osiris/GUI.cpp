@@ -6,6 +6,5 @@
 
 GUI::GUI(HWND window, IDirect3DDevice9* device)
 {
-    ImGui_ImplWin32_Init(window);
-    ImGui_ImplDX9_Init(device);
+
 }
