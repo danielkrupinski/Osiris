@@ -76,3 +76,10 @@ HRESULT STDMETHODCALLTYPE Hooks::hookedPresent(IDirect3DDevice9* device, const R
     }
     return originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
+
+HRESULT STDMETHODCALLTYPE Hooks::hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    ImGui_ImplDX9_CreateDeviceObjects();
+    return originalReset(device, params);
+}
