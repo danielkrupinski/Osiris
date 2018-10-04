@@ -15,3 +15,5 @@ private:
     std::function<HRESULT STDMETHODCALLTYPE(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
     HRESULT STDMETHODCALLTYPE hookedReset(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
 };
+
+extern Hooks hooks;
