@@ -2,3 +2,4 @@
 #include "Memory.h"
 
 Memory memory;
+Hooks hooks;
