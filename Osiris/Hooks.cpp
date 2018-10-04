@@ -1,4 +1,5 @@
 #include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx9.h"
 
 #include "Hooks.h"
 #include "Memory.h"
