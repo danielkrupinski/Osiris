@@ -55,3 +55,24 @@ LRESULT STDMETHODCALLTYPE Hooks::hookedWndProc(HWND window, UINT msg, WPARAM wPa
     }
     return CallWindowProc(originalWndProc, window, msg, wParam, lParam);
 }
+
+HRESULT STDMETHODCALLTYPE Hooks::hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
+{
+    static bool isInitialised{ false };
+
+    if (!isInitialised) {
+        originalWndProc = reinterpret_cast<WNDPROC>(
+            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(this->hookedWndProc))
+            );
+
+        ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
+        ImGui_ImplDX9_Init(device);
+        isInitialised = true;
+    } else {
+        ImGui_ImplDX9_NewFrame();
+        ImGui::Begin("Test window");
+        ImGui::End();
+        ImGui::Render();
+    }
+    return originalPresent(device, src, dest, windowOverride, dirtyRegion);
+}
