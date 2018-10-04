@@ -8,7 +8,9 @@
 Hooks::Hooks()
 {
     originalPresent = reinterpret_cast<HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)>(memory.present);
+    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&this->hookedPresent);
     originalReset = reinterpret_cast<HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)>(memory.reset);
+    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&this->hookedReset);
 }
 
 LRESULT STDMETHODCALLTYPE Hooks::hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
