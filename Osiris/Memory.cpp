@@ -45,4 +45,5 @@ std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
             first_match = 0;
         }
     }
+    return 0;
 }

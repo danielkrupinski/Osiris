@@ -43,7 +43,6 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         device->SetSamplerState(NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
         device->SetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, NULL);
 
-
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
