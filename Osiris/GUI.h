@@ -2,7 +2,10 @@
 
 #include <d3d9helper.h>
 
-class GUI {
+class GUI final {
 public:
-    GUI(HWND window, IDirect3DDevice9* device);
+    GUI();
+    bool isOpen{ false };
 };
+
+extern GUI gui;
