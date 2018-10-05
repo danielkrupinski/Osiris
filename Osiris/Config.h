@@ -1,1 +1,5 @@
 #pragma once
+
+class Config {
+
+};
