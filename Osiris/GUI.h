@@ -9,6 +9,7 @@ public:
     bool isOpen{ false };
 private:
     void waitForToggle();
+    std::thread waitForToggleThread{ &GUI::waitForToggle, this };
 };
 
 extern GUI gui;
