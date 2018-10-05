@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Config {
+class Config final {
 public:
     Config(const std::string&);
 };
