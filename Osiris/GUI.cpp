@@ -4,7 +4,7 @@
 
 #include "GUI.h"
 
-GUI::GUI(HWND window, IDirect3DDevice9* device)
+GUI::GUI()
 {
-
+    isOpen = true;
 }
