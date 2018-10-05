@@ -57,6 +57,9 @@
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
