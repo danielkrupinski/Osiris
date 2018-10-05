@@ -2,86 +2,61 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "GUI.h"
 #include "Hooks.h"
 #include "Memory.h"
 
-Hooks::Hooks()
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    originalPresent = reinterpret_cast<HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&this->hookedPresent);
-    originalReset = reinterpret_cast<HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&this->hookedReset);
+    if (gui.isOpen && ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+        return true;
+
+    return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
-LRESULT STDMETHODCALLTYPE Hooks::hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    switch (msg) {
-    case WM_LBUTTONDOWN:
-        io.MouseDown[0] = true;
-        return true;
-    case WM_LBUTTONUP:
-        io.MouseDown[0] = false;
-        return true;
-    case WM_RBUTTONDOWN:
-        io.MouseDown[1] = true;
-        return true;
-    case WM_RBUTTONUP:
-        io.MouseDown[1] = false;
-        return true;
-    case WM_MBUTTONDOWN:
-        io.MouseDown[2] = true;
-        return true;
-    case WM_MBUTTONUP:
-        io.MouseDown[2] = false;
-        return true;
-    case WM_MOUSEWHEEL:
-        io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return true;
-    case WM_MOUSEMOVE:
-        io.MousePos.x = (signed short)(lParam);
-        io.MousePos.y = (signed short)(lParam >> 16);
-        return true;
-    case WM_KEYDOWN:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 1;
-        return true;
-    case WM_KEYUP:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 0;
-        return true;
-    case WM_CHAR:
-        if (wParam > 0 && wParam < 0x10000)
-            io.AddInputCharacter((unsigned short)wParam);
-        return true;
-    }
-    return CallWindowProc(originalWndProc, window, msg, wParam, lParam);
-}
-
-HRESULT STDMETHODCALLTYPE Hooks::hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
+static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
 {
     static bool isInitialised{ false };
 
     if (!isInitialised) {
-        originalWndProc = reinterpret_cast<WNDPROC>(
-            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(this->hookedWndProc))
-            );
-
+        ImGui::CreateContext();
         ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
         ImGui_ImplDX9_Init(device);
+        hooks.originalWndProc = reinterpret_cast<WNDPROC>(
+            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
+            );
         isInitialised = true;
-    } else {
-        ImGui_ImplDX9_NewFrame();
-        ImGui::Begin("Test window");
-        ImGui::End();
-        ImGui::Render();
     }
-    return originalPresent(device, src, dest, windowOverride, dirtyRegion);
+    else if (gui.isOpen) {
+        ImGui_ImplDX9_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::Begin("Hello, world!");
+        ImGui::End();
+
+        ImGui::EndFrame();
+        ImGui::Render();
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+    }
+    return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
-HRESULT STDMETHODCALLTYPE Hooks::hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
+static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
+    auto result = hooks.originalReset(device, params);
     ImGui_ImplDX9_CreateDeviceObjects();
-    return originalReset(device, params);
+    return result;
 }
+
+Hooks::Hooks()
+{
+    originalPresent = reinterpret_cast<decltype(originalPresent)>(memory.present);
+    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
+    originalReset = reinterpret_cast<decltype(originalReset)>(memory.reset);
+    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
+}
+
