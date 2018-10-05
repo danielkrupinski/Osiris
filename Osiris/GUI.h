@@ -6,6 +6,8 @@ class GUI final {
 public:
     GUI();
     bool isOpen{ false };
+private:
+    void waitForToggle();
 };
 
 extern GUI gui;

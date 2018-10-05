@@ -6,5 +6,10 @@
 
 GUI::GUI()
 {
-    isOpen = true;
+    
+}
+
+void GUI::waitForToggle()
+{
+
 }
