@@ -16,5 +16,9 @@ GUI::GUI()
 
 void GUI::waitForToggle()
 {
-    
+    while (true) {
+        if (GetAsyncKeyState(VK_INSERT) & 1)
+            isOpen = !isOpen;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
