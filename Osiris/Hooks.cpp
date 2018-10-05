@@ -54,9 +54,9 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 Hooks::Hooks()
 {
-    originalPresent = reinterpret_cast<decltype(originalPresent)>(memory.present);
+    originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
-    originalReset = reinterpret_cast<decltype(originalReset)>(memory.reset);
+    originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 }
 
