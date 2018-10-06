@@ -8,11 +8,11 @@ public:
     void load();
     void save();
 
-    int testValue;
+    int testValue{ 0 };
 
     struct {
-        bool bunnyHop;
-        bool autoStrafe;
+        bool bunnyHop{ false };
+        bool autoStrafe{ false };
     } misc;
 
 private:
