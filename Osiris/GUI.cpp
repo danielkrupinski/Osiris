@@ -13,3 +13,8 @@ GUI::GUI()
 {
 
 }
+
+void GUI::render()
+{
+
+}
