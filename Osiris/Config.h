@@ -8,3 +8,5 @@ public:
 private:
     std::string path;
 };
+
+extern Config config;
