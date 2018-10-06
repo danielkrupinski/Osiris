@@ -1,4 +1,9 @@
+#include <Windows.h>
+
+#include "playerinfo.h"
 #include "steam.h"
+#include "vector.h"
+#include "vmatrix.h"
 
 enum FlowType_t
 {
