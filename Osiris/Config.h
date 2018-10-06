@@ -4,7 +4,7 @@
 
 class Config final {
 public:
-    Config(const std::string&);
+    explicit Config(const std::string&);
     void load();
     void save() const;
 
