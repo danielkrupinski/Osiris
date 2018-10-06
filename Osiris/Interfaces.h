@@ -5,5 +5,5 @@
 class Interfaces final {
 public:
     Interfaces();
-    void* find();
+    void* find(const std::string&, const std::string&);
 };
