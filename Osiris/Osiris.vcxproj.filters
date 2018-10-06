@@ -16,6 +16,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{8c56775f-e99a-4a14-b8c8-21f63aca4485}</UniqueIdentifier>
     </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{d12e8b17-2ac5-4a28-bfeb-e1720d52ba4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -60,6 +63,9 @@
     <ClCompile Include="Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="json\jsoncpp.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json-forwards.h">
+      <Filter>json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
