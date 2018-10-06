@@ -12,6 +12,7 @@ GUI::GUI()
 void GUI::render()
 {
     ImGui::StyleColorsLight();
+    ImGuiStyle& style = ImGui::GetStyle();
     ImGui::Begin("Hello, world!");
     ImGui::Text("This is some useful text.");
     ImGui::End();
