@@ -27,3 +27,18 @@ void Config::load()
 
     in.close();
 }
+
+void Config::save()
+{
+    std::ofstream out{ path };
+
+    if (!out.is_open())
+        return;
+
+    Json::Value config;
+
+    config["testValue"] = ++testValue;
+
+    out << config;
+    out.close();
+}
