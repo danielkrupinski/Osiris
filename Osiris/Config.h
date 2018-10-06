@@ -8,8 +8,6 @@ public:
     void load();
     void save();
 
-    int testValue{ 0 };
-
     struct {
         bool bunnyHop{ false };
         bool autoStrafe{ false };
