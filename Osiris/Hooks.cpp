@@ -10,11 +10,8 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    static UINT last{ 0 };
-    if (wParam == VK_INSERT && msg != last && (last != WM_KEYDOWN || msg != WM_KEYUP)) {
-        last = msg;
+    if(GetAsyncKeyState(VK_INSERT) & 1)
         gui.isOpen = !gui.isOpen;
-    }
     if (gui.isOpen && ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
