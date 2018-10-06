@@ -20,13 +20,16 @@ void GUI::render()
     static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
     ImGui::PushItemWidth(165);
-    if (ImGui::BeginChild("##tabchild", ImVec2(0, 440), true)) {
+    if (ImGui::BeginChild("#tabs", ImVec2(0, 440), true)) {
         switch (tab) {
         case AIMBOT:
+            ImGui::Text("Aimbot tab welcomes!");
             break;
         case VISUALS:
+            ImGui::Text("Visuals tab welcomes!");
             break;
         case MISC:
+            ImGui::Text("Misc tab welcomes!");
             break;
         }
     }
@@ -34,15 +37,15 @@ void GUI::render()
     ImGui::EndChild();
     ImGui::PopItemWidth();
 
-    if (ImGui::Button("Aimbot", ImVec2(152, 20)))
+    if (ImGui::Button("Aimbot", ImVec2(207, 20)))
         tab = AIMBOT;
     ImGui::SameLine();
 
-    if (ImGui::Button("Visuals", ImVec2(152, 20)))
+    if (ImGui::Button("Visuals", ImVec2(207, 20)))
         tab = VISUALS;
     ImGui::SameLine();
 
-    if (ImGui::Button("Misc", ImVec2(152, 20)))
+    if (ImGui::Button("Misc", ImVec2(207, 20)))
         tab = MISC;
 
     ImGui::End();
