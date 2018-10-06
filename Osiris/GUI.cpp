@@ -13,27 +13,3 @@ GUI::GUI()
 {
 
 }
-
-void GUI::waitForToggle()
-{
-    while (true) {
-        static bool isDown{ false };
-        static bool isClicked{ false };
-        if (GetAsyncKeyState(VK_INSERT) & 1) {
-            isClicked = false;
-            isDown = true;
-        }
-        else if (!GetAsyncKeyState(VK_INSERT) && isDown) {
-            isClicked = true;
-            isDown = false;
-        }
-        else {
-            isClicked = false;
-            isDown = false;
-        }
-        if (isClicked) {
-            isOpen = !isOpen;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-}
