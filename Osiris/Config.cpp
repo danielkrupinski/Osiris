@@ -12,7 +12,6 @@ Config::Config(const std::string& name)
         path = buff + std::string{ '\\' } + name;
     }
     load();
-    save();
 }
 
 void Config::load()
