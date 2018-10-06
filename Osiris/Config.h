@@ -9,6 +9,12 @@ public:
     void save();
 
     int testValue;
+
+    struct {
+        bool bunnyHop;
+        bool autoStrafe;
+    } misc;
+
 private:
     std::string path;
 };
