@@ -11,6 +11,8 @@ Config::Config(const std::string& name)
     if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, buff))) {
         path = buff + std::string{ '\\' } + name;
     }
+    load();
+    save();
 }
 
 void Config::load()
