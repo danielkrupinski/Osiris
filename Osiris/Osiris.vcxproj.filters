@@ -66,6 +66,9 @@
     <ClCompile Include="json\jsoncpp.cpp">
       <Filter>json</Filter>
     </ClCompile>
+    <ClCompile Include="Interfaces.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
