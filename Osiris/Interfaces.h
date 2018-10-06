@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Interfaces {
+class Interfaces final {
 public:
     Interfaces();
     void* find();
