@@ -10,3 +10,5 @@ public:
     void* find(const std::string&, const std::string&);
     CEngine* engine;
 };
+
+extern Interfaces interfaces;

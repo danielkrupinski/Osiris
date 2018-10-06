@@ -7,4 +7,5 @@
 Config config{ "Osiris.json" };
 Memory memory;
 Hooks hooks;
+Interfaces interfaces;
 GUI gui;
