@@ -9,3 +9,8 @@ Config::Config(const std::string& name)
         path = buff + std::string{ '\\' } + name;
     }
 }
+
+void Config::load()
+{
+
+}
