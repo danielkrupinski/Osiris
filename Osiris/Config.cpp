@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include <ShlObj.h>
 
 #include "Config.h"
