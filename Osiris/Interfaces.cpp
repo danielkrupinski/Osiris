@@ -4,3 +4,8 @@ Interfaces::Interfaces()
 {
 
 }
+
+void* Interfaces::find()
+{
+    return nullptr;
+}

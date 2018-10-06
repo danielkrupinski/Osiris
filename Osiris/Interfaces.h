@@ -3,4 +3,5 @@
 class Interfaces {
 public:
     Interfaces();
+    void* find();
 };
