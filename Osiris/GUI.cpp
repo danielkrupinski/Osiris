@@ -17,7 +17,7 @@ void GUI::render()
     ImGui::SetNextWindowSize(ImVec2(650, 500));
     ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-    enum { AIMBOT, VISUALS, MISC } tab;
-
+    static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
+ 
     ImGui::End();
 }
