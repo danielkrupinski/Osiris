@@ -119,5 +119,8 @@
     <ClInclude Include="json\json-forwards.h">
       <Filter>json</Filter>
     </ClInclude>
+    <ClInclude Include="Interfaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
