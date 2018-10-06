@@ -6,7 +6,7 @@ class Config final {
 public:
     Config(const std::string&);
     void load();
-    void save();
+    void save() const;
 
     struct {
         bool bunnyHop{ false };

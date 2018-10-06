@@ -30,7 +30,7 @@ void Config::load()
     in.close();
 }
 
-void Config::save()
+void Config::save() const
 {
     std::ofstream out{ path };
 
