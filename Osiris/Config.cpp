@@ -26,6 +26,8 @@ void Config::load()
     in >> config;
 
     testValue = config["testValue"].asInt();
+    misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
+    misc.autoStrafe = config["misc"]["autoStrafe"].asBool();
 
     in.close();
 }
@@ -40,6 +42,9 @@ void Config::save()
     Json::Value config;
 
     config["testValue"] = ++testValue;
+
+    config["misc"]["bunnyHop"] = misc.bunnyHop;
+    config["misc"]["autoStrafe"] = misc.autoStrafe;
 
     out << config;
     out.close();
