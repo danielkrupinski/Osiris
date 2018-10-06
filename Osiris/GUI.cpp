@@ -14,6 +14,7 @@ void GUI::render()
     ImGui::StyleColorsLight();
     ImGuiStyle& style = ImGui::GetStyle();
     style.Alpha = 0.9f;
+    ImGui::SetNextWindowSize(ImVec2(650, 500));
     ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse);
     ImGui::End();
 }
