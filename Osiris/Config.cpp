@@ -15,5 +15,15 @@ Config::Config(const std::string& name)
 
 void Config::load()
 {
+    std::ifstream in{ path };
 
+    if (!in.is_open())
+        return;
+
+    Json::Value config;
+    in >> config;
+
+    testValue = config["testValue"].asInt();
+
+    in.close();
 }
