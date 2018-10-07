@@ -3,6 +3,7 @@
 #include "QAngle.h"
 #include "Studio.h"
 #include "Vector.h"
+#include "VMatrix.h"
 
 class Engine {
 public:
