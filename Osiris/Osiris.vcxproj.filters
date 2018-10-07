@@ -212,5 +212,8 @@
     <ClInclude Include="SDK\Enums.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\GlobalVars.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

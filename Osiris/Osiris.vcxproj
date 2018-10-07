@@ -58,6 +58,7 @@
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\ClientClass.h" />
     <ClInclude Include="SDK\Enums.h" />
+    <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\IAppSystem.h" />
     <ClInclude Include="SDK\IClientEntity.h" />
     <ClInclude Include="SDK\IClientNetworkable.h" />
