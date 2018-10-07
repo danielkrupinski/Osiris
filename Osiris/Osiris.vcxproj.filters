@@ -158,17 +158,8 @@
     <ClInclude Include="SDK\IRefCounted.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Structs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\UtlMemory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\UtlVector.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Vfunc.h">
       <Filter>SDK</Filter>
@@ -186,7 +177,19 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\IHandleEntity.h">
-      <Filter>Header Files</Filter>
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Structs.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UtlVector.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\UtlMemory.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ICollideable.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
