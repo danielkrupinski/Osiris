@@ -140,5 +140,8 @@
     <ClInclude Include="SDK\Studio.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\QAngle.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
