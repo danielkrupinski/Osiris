@@ -60,6 +60,7 @@
     <ClInclude Include="SDK\IVEngineClient.h" />
     <ClInclude Include="SDK\IVModelRender.h" />
     <ClInclude Include="SDK\QAngle.h" />
+    <ClInclude Include="SDK\Structs.h" />
     <ClInclude Include="SDK\Studio.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\VMatrix.h" />

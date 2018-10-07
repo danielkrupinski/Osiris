@@ -158,5 +158,8 @@
     <ClInclude Include="SDK\IRefCounted.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
