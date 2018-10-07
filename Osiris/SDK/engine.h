@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Windows.h>
 
 #include "playerinfo.h"

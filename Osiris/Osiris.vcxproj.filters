@@ -155,5 +155,8 @@
     <ClInclude Include="SDK\usercmd.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

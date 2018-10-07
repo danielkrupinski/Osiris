@@ -1,3 +1,4 @@
+#pragma once
 
 typedef struct player_info_s {
 private:
