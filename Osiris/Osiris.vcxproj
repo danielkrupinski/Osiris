@@ -60,6 +60,7 @@
     <ClInclude Include="SDK\Enums.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\IAppSystem.h" />
+    <ClInclude Include="SDK\IBaseClientDll.h" />
     <ClInclude Include="SDK\IClientEntity.h" />
     <ClInclude Include="SDK\IClientNetworkable.h" />
     <ClInclude Include="SDK\IClientRenderable.h" />

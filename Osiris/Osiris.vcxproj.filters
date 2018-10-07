@@ -215,5 +215,8 @@
     <ClInclude Include="SDK\GlobalVars.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IBaseClientDll.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
