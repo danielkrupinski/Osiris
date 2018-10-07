@@ -233,5 +233,8 @@
     <ClInclude Include="SDK\ChecksumCrc.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ChecksumMd5.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
