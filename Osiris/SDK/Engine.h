@@ -1,5 +1,7 @@
 #pragma once
 
+#include "QAngle.h"
+#include "Studio.h"
 #include "Vector.h"
 
 class Engine {
