@@ -72,9 +72,6 @@
     <ClCompile Include="Interfaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\Engine.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -126,36 +123,6 @@
       <Filter>json</Filter>
     </ClInclude>
     <ClInclude Include="Interfaces.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\engine.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\steam.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\playerinfo.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\vector.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\vmatrix.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\baseentity.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\CBaseAnimState.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\offsets.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\usercmd.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\crc32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
