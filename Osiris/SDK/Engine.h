@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+
 class Engine {
 public:
     virtual int                   GetIntersectingSurfaces(const model_t *model, const Vector &vCenter, const float radius, const bool bOnlyVisibleSurfaces, SurfInfo *pInfos, const int nMaxInfos) = 0;
