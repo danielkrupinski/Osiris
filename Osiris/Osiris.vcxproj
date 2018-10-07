@@ -59,6 +59,7 @@
     <ClInclude Include="SDK\IClientEntity.h" />
     <ClInclude Include="SDK\IClientNetworkable.h" />
     <ClInclude Include="SDK\IClientRenderable.h" />
+    <ClInclude Include="SDK\IClientThinkable.h" />
     <ClInclude Include="SDK\IRefCounted.h" />
     <ClInclude Include="SDK\IVEngineClient.h" />
     <ClInclude Include="SDK\IVModelRender.h" />
