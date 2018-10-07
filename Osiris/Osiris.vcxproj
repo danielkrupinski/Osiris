@@ -69,6 +69,7 @@
     <ClInclude Include="SDK\Platform.h" />
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Recv.h" />
+    <ClInclude Include="SDK\Singleton.h" />
     <ClInclude Include="SDK\Structs.h" />
     <ClInclude Include="SDK\Studio.h" />
     <ClInclude Include="SDK\UtlMemory.h" />
