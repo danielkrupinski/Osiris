@@ -63,6 +63,7 @@
     <ClInclude Include="SDK\ChecksumCrc.h" />
     <ClInclude Include="SDK\ChecksumMd5.h" />
     <ClInclude Include="SDK\ClientClass.h" />
+    <ClInclude Include="SDK\CUserCmd.h" />
     <ClInclude Include="SDK\Enums.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\IAppSystem.h" />
