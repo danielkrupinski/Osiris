@@ -56,6 +56,7 @@
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\IVEngineClient.h" />
+    <ClInclude Include="SDK\IVModelRender.h" />
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Studio.h" />
     <ClInclude Include="SDK\Vector.h" />
