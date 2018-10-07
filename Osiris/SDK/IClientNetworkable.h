@@ -1,7 +1,8 @@
 #pragma once
 
+#include "ClientClass.h"
+
 class IClientUnknown;
-class ClientClass;
 class bf_read;
 
 class IClientNetworkable {

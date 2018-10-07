@@ -3,7 +3,6 @@
 #include "Enums.h"
 #include "Recv.h"
 
-class ClientClass;
 class IClientNetworkable;
 
 typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);

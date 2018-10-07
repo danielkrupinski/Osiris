@@ -1,5 +1,6 @@
+#include "Math.h"
 #include "Structs.h"
-#include "../Helpers/Math.hpp"
+
 #include "../Helpers/Utils.hpp"
 
 bool C_BaseEntity::IsPlayer()
