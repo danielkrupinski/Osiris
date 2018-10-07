@@ -143,5 +143,17 @@
     <ClInclude Include="SDK\vmatrix.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\baseentity.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\CBaseAnimState.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\offsets.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\usercmd.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
