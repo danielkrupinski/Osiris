@@ -161,5 +161,8 @@
     <ClInclude Include="SDK\Structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Platform.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
