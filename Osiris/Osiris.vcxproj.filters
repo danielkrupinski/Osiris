@@ -176,5 +176,8 @@
     <ClInclude Include="SDK\IClientEntity.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IClientNetworkable.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
