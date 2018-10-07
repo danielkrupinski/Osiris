@@ -167,5 +167,8 @@
     <ClInclude Include="SDK\UtlMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\UtlVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
