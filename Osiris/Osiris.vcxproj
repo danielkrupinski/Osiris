@@ -56,6 +56,7 @@
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\IAppSystem.h" />
+    <ClInclude Include="SDK\IClientEntity.h" />
     <ClInclude Include="SDK\IRefCounted.h" />
     <ClInclude Include="SDK\IVEngineClient.h" />
     <ClInclude Include="SDK\IVModelRender.h" />

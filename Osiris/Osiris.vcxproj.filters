@@ -173,5 +173,8 @@
     <ClInclude Include="SDK\Vfunc.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IClientEntity.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
