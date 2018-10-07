@@ -63,6 +63,7 @@
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Structs.h" />
     <ClInclude Include="SDK\Studio.h" />
+    <ClInclude Include="SDK\UtlMemory.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\VMatrix.h" />
     <ClInclude Include="stdafx.h" />
