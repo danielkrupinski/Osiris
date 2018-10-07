@@ -35,6 +35,7 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="SDK\Engine.cpp" />
+    <ClCompile Include="SDK\QAngle.cpp" />
     <ClCompile Include="SDK\Vector.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
