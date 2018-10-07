@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QAngle.h"
+#include "Studio.h"
 #include "VMatrix.h"
 
 enum PreviewImageRetVal_t {
