@@ -1,9 +1,37 @@
 #pragma once
 
-#include "QAngle.h"
-#include "Studio.h"
-#include "Vector.h"
 #include "VMatrix.h"
+
+#define SIGNONSTATE_NONE		0	// no state yet, about to connect
+#define SIGNONSTATE_CHALLENGE	1	// client challenging server, all OOB packets
+#define SIGNONSTATE_CONNECTED	2	// client is connected to server, netchans ready
+#define SIGNONSTATE_NEW			3	// just got serverinfo and string tables
+#define SIGNONSTATE_PRESPAWN	4	// received signon buffers
+#define SIGNONSTATE_SPAWN		5	// ready to receive entity packets
+#define SIGNONSTATE_FULL		6	// we are fully connected, first non-delta packet received
+#define SIGNONSTATE_CHANGELEVEL	7	// server is changing level, please wait
+
+typedef struct InputContextHandle_t__ *InputContextHandle_t;
+struct client_textmessage_t;
+struct model_t;
+class SurfInfo;
+class IMaterial;
+class CSentence;
+class CAudioSource;
+class AudioState_t;
+class ISpatialQuery;
+class IMaterialSystem;
+class CPhysCollide;
+class IAchievementMgr;
+class INetChannelInfo;
+class ISPSharedMemory;
+class CGamestatsData;
+class KeyValues;
+class CSteamAPIContext;
+struct Frustum_t;
+
+typedef void(*pfnDemoCustomDataCallback)(uint8_t *pData, size_t iSize);
+
 
 typedef struct player_info_s {
     __int64         unknown;            //0x0000 
