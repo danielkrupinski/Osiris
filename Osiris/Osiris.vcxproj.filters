@@ -185,5 +185,8 @@
     <ClInclude Include="SDK\IClientThinkable.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IHandleEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
