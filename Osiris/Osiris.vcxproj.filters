@@ -152,5 +152,8 @@
     <ClInclude Include="SDK\IVModelRender.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IAppSystem.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
