@@ -221,5 +221,8 @@
     <ClInclude Include="SDK\IBaseClientDll.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Math.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

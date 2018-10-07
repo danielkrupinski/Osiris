@@ -72,6 +72,7 @@
     <ClInclude Include="SDK\IRefCounted.h" />
     <ClInclude Include="SDK\IVEngineClient.h" />
     <ClInclude Include="SDK\IVModelRender.h" />
+    <ClInclude Include="SDK\Math.h" />
     <ClInclude Include="SDK\Netvars.h" />
     <ClInclude Include="SDK\Platform.h" />
     <ClInclude Include="SDK\QAngle.h" />
