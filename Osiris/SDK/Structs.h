@@ -2,6 +2,7 @@
 
 #include <array>
 #include "IRefCounted.h"
+#include "UtlVector.h"
 
 #define NETVAR(type, name, table, netvar)                           \
     type& name##() const {                                          \

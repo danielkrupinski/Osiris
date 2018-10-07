@@ -170,5 +170,8 @@
     <ClInclude Include="SDK\UtlVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Vfunc.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
