@@ -34,6 +34,7 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
+    <ClCompile Include="SDK\Netvars.cpp" />
     <ClCompile Include="SDK\QAngle.cpp" />
     <ClCompile Include="SDK\Vector.cpp" />
     <ClCompile Include="SDK\VMatrix.cpp" />
