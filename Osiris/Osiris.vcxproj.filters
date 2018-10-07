@@ -155,5 +155,8 @@
     <ClInclude Include="SDK\IAppSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IRefCounted.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

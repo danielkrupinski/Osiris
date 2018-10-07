@@ -1,5 +1,6 @@
 #include <Windows.h>
 
+#include "SDK/IAppSystem.h"
 #include "Interfaces.h"
 
 Interfaces::Interfaces()
