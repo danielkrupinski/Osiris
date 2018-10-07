@@ -1,13 +1,14 @@
 #include <fstream>
 #include <utility>
 
+#include "../Interfaces.h"
 #include "Netvars.h"
 
 void NetvarSys::Initialize()
 {
     database.clear();
 
-    for (auto clientclass = g_CHLClient->GetAllClasses();
+    for (auto clientclass = interfaces.baseClient->GetAllClasses();
         clientclass != nullptr;
         clientclass = clientclass->m_pNext) {
         if (clientclass->m_pRecvTable) {
