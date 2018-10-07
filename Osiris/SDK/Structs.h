@@ -419,3 +419,17 @@ public:
     PNETVAR(int32_t, m_iMVPs, "DT_CSPlayerResource", "m_iMVPs");
     PNETVAR(int32_t, m_iScore, "DT_CSPlayerResource", "m_iScore");
 };
+
+class C_LocalPlayer {
+    friend bool operator==(const C_LocalPlayer& lhs, void* rhs);
+public:
+    C_LocalPlayer() : m_local(nullptr) {}
+
+    operator bool() const { return *m_local != nullptr; }
+    operator C_BasePlayer*() const { return *m_local; }
+
+    C_BasePlayer* operator->() { return *m_local; }
+
+private:
+    C_BasePlayer** m_local;
+};
