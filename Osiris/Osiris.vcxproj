@@ -35,6 +35,7 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="SDK\ChecksumCrc.cpp" />
+    <ClCompile Include="SDK\ChecksumMd5.cpp" />
     <ClCompile Include="SDK\Math.cpp" />
     <ClCompile Include="SDK\Netvars.cpp" />
     <ClCompile Include="SDK\QAngle.cpp" />
