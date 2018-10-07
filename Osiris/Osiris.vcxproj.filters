@@ -194,5 +194,8 @@
     <ClInclude Include="SDK\IClientUnknown.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Recv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
