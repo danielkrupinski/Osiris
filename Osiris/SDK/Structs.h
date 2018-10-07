@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include "IClientEntity.h"
 #include "IRefCounted.h"
 #include "UtlVector.h"
 #include "Vfunc.h"
