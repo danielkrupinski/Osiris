@@ -2,7 +2,7 @@
 #include "Structs.h"
 
 #include "../Helpers/Utils.hpp"
-
+#include "../Interfaces.h"
 bool C_BaseEntity::IsPlayer()
 {
     //index: 152
@@ -50,16 +50,16 @@ bool C_BaseCombatWeapon::CanFire()
 {
     static decltype(this) stored_weapon = nullptr;
     static auto stored_tick = 0;
-    if (stored_weapon != this || stored_tick >= g_LocalPlayer->m_nTickBase()) {
+    if (stored_weapon != this || stored_tick >= interfaces.localPlayer->m_nTickBase()) {
         stored_weapon = this;
-        stored_tick = g_LocalPlayer->m_nTickBase();
+        stored_tick = interfaces.localPlayer->m_nTickBase();
         return false; //cannot shoot first tick after switch
     }
 
-    if (IsReloading() || m_iClip1() <= 0 || !g_LocalPlayer)
+    if (IsReloading() || m_iClip1() <= 0 || !interfaces.localPlayer)
         return false;
 
-    auto flServerTime = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
+    auto flServerTime = interfaces.localPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
 
     return m_flNextPrimaryAttack() <= flServerTime;
 }
