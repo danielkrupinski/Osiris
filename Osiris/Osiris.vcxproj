@@ -34,6 +34,7 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
+    <ClCompile Include="SDK\Engine.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>

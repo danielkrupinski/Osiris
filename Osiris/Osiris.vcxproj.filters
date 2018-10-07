@@ -19,6 +19,9 @@
     <Filter Include="json">
       <UniqueIdentifier>{d12e8b17-2ac5-4a28-bfeb-e1720d52ba4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{a8171a2f-d9c9-4c0d-95b4-db282e441125}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="Interfaces.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\Engine.cpp">
+      <Filter>SDK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
