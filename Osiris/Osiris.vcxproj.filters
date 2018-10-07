@@ -200,5 +200,8 @@
     <ClInclude Include="SDK\Singleton.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Netvars.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
