@@ -134,5 +134,8 @@
     <ClInclude Include="SDK\Engine.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Vector.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
