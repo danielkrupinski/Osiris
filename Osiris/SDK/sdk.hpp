@@ -43,7 +43,8 @@
 
 #include "netvars.hpp"
 
-extern IVEngineClient*       g_EngineClient;
+/*
+extern IVEngineClient*       interfaces.engine;
 extern IBaseClientDLL*       g_CHLClient;
 extern IClientEntityList*    g_EntityList;
 extern CGlobalVarsBase*      g_GlobalVars;
@@ -66,7 +67,7 @@ extern CGameMovement*        g_GameMovement;
 extern IEngineSound*         g_EngineSound;
 extern CGlowObjectManager*   g_GlowObjManager;
 extern IViewRender*          g_ViewRender;
-extern IDirect3DDevice9*     g_D3DDevice9;
+// extern IDirect3DDevice9*     g_D3DDevice9;
 extern CClientState*         g_ClientState;
 extern IPhysicsSurfaceProps* g_PhysSurface;
 
@@ -102,3 +103,4 @@ private:
 
 extern C_LocalPlayer g_LocalPlayer;
 
+*/

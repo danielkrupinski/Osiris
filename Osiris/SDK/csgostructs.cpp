@@ -1,6 +1,8 @@
 #include "csgostructs.hpp"
-#include "../Helpers/Math.hpp"
-#include "../Helpers/Utils.hpp"
+#include "helpers/Math.hpp"
+#include "helpers/Utils.hpp"
+
+#include "../Interfaces.h"
 
 bool C_BaseEntity::IsPlayer()
 {
@@ -198,7 +200,7 @@ int C_BasePlayer::GetSequenceActivity(int sequence)
 	// sig for C_BaseAnimating version: 55 8B EC 83 7D 08 FF 56 8B F1 74 3D
 	// c_csplayer vfunc 242, follow calls to find the function.
 
-	static auto get_sequence_activity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
+	static auto get_sequence_activity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle("client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
 
 	return get_sequence_activity(this, hdr, sequence);
 }
@@ -217,7 +219,7 @@ CCSPlayerAnimState *C_BasePlayer::GetPlayerAnimState()
 void C_BasePlayer::UpdateAnimationState(CCSGOPlayerAnimState *state, QAngle angle)
 {
 	static auto UpdateAnimState = Utils::PatternScan(
-		GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
+		GetModuleHandle("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
 	/*static auto UpdateAnimState = Utils::PatternScan(
 	GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
 	*/
@@ -242,7 +244,7 @@ void C_BasePlayer::UpdateAnimationState(CCSGOPlayerAnimState *state, QAngle angl
 void C_BasePlayer::ResetAnimationState(CCSGOPlayerAnimState *state)
 {
 	using ResetAnimState_t = void(__thiscall*)(CCSGOPlayerAnimState*);
-	static auto ResetAnimState = (ResetAnimState_t)Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
+	static auto ResetAnimState = (ResetAnimState_t)Utils::PatternScan(GetModuleHandle("client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
 	if (!ResetAnimState)
 		return;
 
@@ -252,7 +254,7 @@ void C_BasePlayer::ResetAnimationState(CCSGOPlayerAnimState *state)
 void C_BasePlayer::CreateAnimationState(CCSGOPlayerAnimState *state)
 {
 	using CreateAnimState_t = void(__thiscall*)(CCSGOPlayerAnimState*, C_BasePlayer*);
-	static auto CreateAnimState = (CreateAnimState_t)Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
+	static auto CreateAnimState = (CreateAnimState_t)Utils::PatternScan(GetModuleHandle("client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
 	if (!CreateAnimState)
 		return;
 
@@ -267,7 +269,7 @@ Vector C_BasePlayer::GetEyePos()
 player_info_t C_BasePlayer::GetPlayerInfo()
 {
 	player_info_t info;
-	g_EngineClient->GetPlayerInfo(EntIndex(), &info);
+	interfaces.engine->GetPlayerInfo(EntIndex(), &info);
 	return info;
 }
 
@@ -286,7 +288,7 @@ bool C_BasePlayer::HasC4()
 {
 	static auto fnHasC4
 		= reinterpret_cast<bool(__thiscall*)(void*)>(
-			Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31")
+			Utils::PatternScan(GetModuleHandle("client_panorama.dll"), "56 8B F1 85 F6 74 31")
 			);
 
 	return fnHasC4(this);
@@ -465,7 +467,7 @@ CUtlVector<IRefCounted*>& C_EconItemView::m_CustomMaterials()
 
 CUtlVector<IRefCounted*>& C_EconItemView::m_VisualsDataProcessors()
 {
-	static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "81 C7 ? ? ? ? 8B 4F 0C 8B 57 04 89 4C 24 0C") + 2);
+	static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandle("client_panorama.dll"), "81 C7 ? ? ? ? 8B 4F 0C 8B 57 04 89 4C 24 0C") + 2);
 	return *(CUtlVector<IRefCounted*>*)((uintptr_t)this + inReload);
 }
 

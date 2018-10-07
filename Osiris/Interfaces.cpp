@@ -6,13 +6,12 @@
 
 Interfaces::Interfaces()
 {
-    engine = reinterpret_cast<CEngine*>(find("engine.dll", "VEngineClient"));
+    engine = reinterpret_cast<IVEngineClient*>(find("engine.dll", "VEngineClient"));
+    entityList = reinterpret_cast<IClientEntityList*>(find("client_panorama.dll", "VClientEntityList"));
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)
 {
-    typedef void* (*CreateInterfaceFn)(const char* Name, int* ReturnCode);
-
     void* Interface = nullptr;
 
     CreateInterfaceFn createInterface = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA(module.c_str()), "CreateInterface");

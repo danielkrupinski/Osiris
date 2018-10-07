@@ -170,31 +170,31 @@ public:
         return *this;
     }
 
-    Vector Vector::operator-(void) const
+    Vector operator-(void) const
     {
         return Vector(-x, -y, -z);
     }
-    Vector Vector::operator+(const Vector& v) const
+    Vector operator+(const Vector& v) const
     {
         return Vector(x + v.x, y + v.y, z + v.z);
     }
-    Vector Vector::operator-(const Vector& v) const
+    Vector operator-(const Vector& v) const
     {
         return Vector(x - v.x, y - v.y, z - v.z);
     }
-    Vector Vector::operator*(float fl) const
+    Vector operator*(float fl) const
     {
         return Vector(x * fl, y * fl, z * fl);
     }
-    Vector Vector::operator*(const Vector& v) const
+    Vector operator*(const Vector& v) const
     {
         return Vector(x * v.x, y * v.y, z * v.z);
     }
-    Vector Vector::operator/(float fl) const
+    Vector operator/(float fl) const
     {
         return Vector(x / fl, y / fl, z / fl);
     }
-    Vector Vector::operator/(const Vector& v) const
+    Vector operator/(const Vector& v) const
     {
         return Vector(x / v.x, y / v.y, z / v.z);
     }

@@ -31,6 +31,9 @@
     <Filter Include="SDK\misc">
       <UniqueIdentifier>{0ca5c57d-a495-496f-86cf-ad148a2ecf1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\helpers">
+      <UniqueIdentifier>{2fd3dddb-a7d1-4675-89c9-2730fd1dea8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -119,6 +122,18 @@
     </ClCompile>
     <ClCompile Include="SDK\misc\UtlString.cpp">
       <Filter>SDK\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\helpers\input.cpp">
+      <Filter>SDK\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\helpers\math.cpp">
+      <Filter>SDK\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\helpers\utils.cpp">
+      <Filter>SDK\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\helpers\vfunc_hook.cpp">
+      <Filter>SDK\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +364,27 @@
     </ClInclude>
     <ClInclude Include="SDK\interfaces\IMoveHelper.hpp">
       <Filter>SDK\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\misc\singleton.hpp">
+      <Filter>SDK\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\misc\IRefCounted.h">
+      <Filter>SDK\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\misc\datamap.hpp">
+      <Filter>SDK\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\helpers\utils.hpp">
+      <Filter>SDK\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\helpers\vfunc_hook.hpp">
+      <Filter>SDK\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\helpers\math.hpp">
+      <Filter>SDK\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\helpers\input.hpp">
+      <Filter>SDK\helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

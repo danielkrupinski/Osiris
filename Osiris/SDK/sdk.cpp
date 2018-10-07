@@ -1,8 +1,11 @@
 #include "sdk.hpp"
 
-IVEngineClient*       g_EngineClient   = nullptr;
+/*
+
+class IDirect3DDevice9;
+IVEngineClient*       interfaces.engine   = nullptr;
 IBaseClientDLL*       g_CHLClient      = nullptr;
-IClientEntityList*    g_EntityList     = nullptr;
+*/ IClientEntityList*    g_EntityList     = nullptr;
 CGlobalVarsBase*      g_GlobalVars     = nullptr;
 IEngineTrace*         g_EngineTrace    = nullptr;
 ICvar*                g_CVar           = nullptr;
@@ -28,6 +31,10 @@ CClientState*         g_ClientState    = nullptr;
 IPhysicsSurfaceProps* g_PhysSurface    = nullptr;
 C_LocalPlayer         g_LocalPlayer;
 
+
+*/
+
+/*
 namespace Interfaces
 {
     CreateInterfaceFn get_module_factory(HMODULE module)
@@ -63,7 +70,7 @@ namespace Interfaces
         g_Prediction          = get_interface<IPrediction>         (clientFactory   , "VClientPrediction001");
         g_GameMovement        = get_interface<CGameMovement>       (clientFactory   , "GameMovement001");
         g_MdlCache            = get_interface<IMDLCache>           (dataCacheFactory, "MDLCache004");
-        g_EngineClient        = get_interface<IVEngineClient>      (engineFactory   , "VEngineClient014");
+        interfaces.engine        = get_interface<IVEngineClient>      (engineFactory   , "VEngineClient014");
         g_MdlInfo             = get_interface<IVModelInfoClient>   (engineFactory   , "VModelInfoClient004");
         g_MdlRender           = get_interface<IVModelRender>       (engineFactory   , "VEngineModel016");
         g_RenderView          = get_interface<IVRenderView>        (engineFactory   , "VEngineRenderView014");
@@ -93,3 +100,4 @@ namespace Interfaces
         g_LocalPlayer     = *(C_LocalPlayer*)(Utils::PatternScan(client, "8B 0D ? ? ? ? 83 FF FF 74 07") + 2);
     }
 }
+*/

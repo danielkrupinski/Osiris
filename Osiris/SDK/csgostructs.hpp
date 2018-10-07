@@ -2,8 +2,10 @@
 
 #include "sdk.hpp"
 #include <array>
-#include "../IRefCounted.h"
-#include "../helpers/utils.hpp"
+#include "misc/IRefCounted.h"
+#include "helpers/utils.hpp"
+#include "../Interfaces.h"
+#include "misc/EHandle.hpp"
 
 #define NETVAR(type, name, table, netvar)                           \
     type& name##() const {                                          \
@@ -94,10 +96,10 @@ public:
 		return CallVFunction<o_GetPredDescMap>(this, 17)(this);
 	}
 	static __forceinline C_BaseEntity* GetEntityByIndex(int index) {
-		return static_cast<C_BaseEntity*>(g_EntityList->GetClientEntity(index));
+		return static_cast<C_BaseEntity*>(interfaces.entityList->GetClientEntity(index));
 	}
 	static __forceinline C_BaseEntity* get_entity_from_handle(CBaseHandle h) {
-		return static_cast<C_BaseEntity*>(g_EntityList->GetClientEntityFromHandle(h));
+		return static_cast<C_BaseEntity*>(interfaces.entityList->GetClientEntityFromHandle(h));
 	}
 
 	NETVAR(int32_t, m_nModelIndex, "DT_BaseEntity", "m_nModelIndex");
@@ -205,7 +207,7 @@ class C_BasePlayer : public C_BaseEntity
 public:
 	static __forceinline C_BasePlayer* GetPlayerByUserId(int id)
 	{
-		return static_cast<C_BasePlayer*>(GetEntityByIndex(g_EngineClient->GetPlayerForUserID(id)));
+		return static_cast<C_BasePlayer*>(GetEntityByIndex(interfaces.engine->GetPlayerForUserID(id)));
 	}
 	static __forceinline C_BasePlayer* GetPlayerByIndex(int i)
 	{

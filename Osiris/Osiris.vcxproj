@@ -35,6 +35,10 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="SDK\csgostructs.cpp" />
+    <ClCompile Include="SDK\helpers\input.cpp" />
+    <ClCompile Include="SDK\helpers\math.cpp" />
+    <ClCompile Include="SDK\helpers\utils.cpp" />
+    <ClCompile Include="SDK\helpers\vfunc_hook.cpp" />
     <ClCompile Include="SDK\math\Vector2D.cpp" />
     <ClCompile Include="SDK\math\Vector4D.cpp" />
     <ClCompile Include="SDK\math\VMatrix.cpp" />
@@ -66,6 +70,10 @@
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\csgostructs.hpp" />
+    <ClInclude Include="SDK\helpers\input.hpp" />
+    <ClInclude Include="SDK\helpers\math.hpp" />
+    <ClInclude Include="SDK\helpers\utils.hpp" />
+    <ClInclude Include="SDK\helpers\vfunc_hook.hpp" />
     <ClInclude Include="SDK\interfaces\CClientState.hpp" />
     <ClInclude Include="SDK\interfaces\CInput.hpp" />
     <ClInclude Include="SDK\interfaces\IAppSystem.hpp" />
@@ -109,13 +117,16 @@
     <ClInclude Include="SDK\misc\Color.hpp" />
     <ClInclude Include="SDK\misc\Convar.hpp" />
     <ClInclude Include="SDK\misc\CUserCmd.hpp" />
+    <ClInclude Include="SDK\misc\datamap.hpp" />
     <ClInclude Include="SDK\misc\EHandle.hpp" />
     <ClInclude Include="SDK\misc\Enums.hpp" />
     <ClInclude Include="SDK\misc\GlobalVars.hpp" />
     <ClInclude Include="SDK\misc\glow_outline_effect.hpp" />
     <ClInclude Include="SDK\misc\IHandleEntity.hpp" />
+    <ClInclude Include="SDK\misc\IRefCounted.h" />
     <ClInclude Include="SDK\misc\platform.hpp" />
     <ClInclude Include="SDK\misc\Recv.hpp" />
+    <ClInclude Include="SDK\misc\singleton.hpp" />
     <ClInclude Include="SDK\misc\Studio.hpp" />
     <ClInclude Include="SDK\misc\UtlBuffer.hpp" />
     <ClInclude Include="SDK\misc\UtlMemory.hpp" />
@@ -198,7 +209,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
