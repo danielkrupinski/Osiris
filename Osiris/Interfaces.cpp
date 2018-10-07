@@ -1,5 +1,6 @@
 #include <Windows.h>
 
+#include "Memory.h"
 #include "SDK/IAppSystem.h"
 #include "Interfaces.h"
 
@@ -7,6 +8,7 @@ Interfaces::Interfaces()
 {
     engine = reinterpret_cast<IVEngineClient*>(find("engine.dll", "VEngineClient"));
     baseClient = reinterpret_cast<IBaseClientDLL*>(find("client_panorama.dll", "VClient"));
+    localPlayer = *reinterpret_cast<C_LocalPlayer*>(memory.localPlayer);
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)

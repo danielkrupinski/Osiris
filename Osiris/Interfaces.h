@@ -4,6 +4,7 @@
 
 #include "SDK/IBaseClientDll.h"
 #include "SDK/IVEngineClient.h"
+#include "SDK/Structs.h"
 
 class Interfaces final {
 public:
@@ -11,6 +12,7 @@ public:
     void* find(const std::string&, const std::string&);
     IVEngineClient* engine;
     IBaseClientDLL* baseClient;
+    C_LocalPlayer localPlayer;
 };
 
 extern Interfaces interfaces;
