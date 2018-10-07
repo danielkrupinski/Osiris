@@ -146,5 +146,8 @@
     <ClInclude Include="SDK\QAngle.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\VMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
