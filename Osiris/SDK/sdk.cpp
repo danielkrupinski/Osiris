@@ -1,7 +1,5 @@
 #include "sdk.hpp"
 
-#include "../Helpers/Utils.hpp"
-
 IVEngineClient*       g_EngineClient   = nullptr;
 IBaseClientDLL*       g_CHLClient      = nullptr;
 IClientEntityList*    g_EntityList     = nullptr;
@@ -93,32 +91,5 @@ namespace Interfaces
         g_ClientState     =     **(CClientState***)(Utils::PatternScan(engine, "A1 ? ? ? ? 8B 80 ? ? ? ? C3") + 1);
 
         g_LocalPlayer     = *(C_LocalPlayer*)(Utils::PatternScan(client, "8B 0D ? ? ? ? 83 FF FF 74 07") + 2);
-    }
-
-    void Dump()
-    {
-        // Ugly macros ugh
-        #define STRINGIFY_IMPL(s) #s
-        #define STRINGIFY(s)      STRINGIFY_IMPL(s)
-        #define PRINT_INTERFACE(name) Utils::ConsolePrint("%-20s: %p\n", STRINGIFY(name), name)
-
-        PRINT_INTERFACE(g_CHLClient   );
-        PRINT_INTERFACE(g_EntityList  );
-        PRINT_INTERFACE(g_Prediction  );
-        PRINT_INTERFACE(g_GameMovement);
-        PRINT_INTERFACE(g_MdlCache    );
-        PRINT_INTERFACE(g_EngineClient);
-        PRINT_INTERFACE(g_MdlInfo     );
-        PRINT_INTERFACE(g_MdlRender   );
-        PRINT_INTERFACE(g_RenderView  );
-        PRINT_INTERFACE(g_EngineTrace );
-        PRINT_INTERFACE(g_DebugOverlay);
-        PRINT_INTERFACE(g_GameEvents  );
-        PRINT_INTERFACE(g_EngineSound );
-        PRINT_INTERFACE(g_MatSystem   );
-        PRINT_INTERFACE(g_CVar        );
-        PRINT_INTERFACE(g_VGuiPanel   );
-        PRINT_INTERFACE(g_VGuiSurface );
-        PRINT_INTERFACE(g_PhysSurface );
     }
 }

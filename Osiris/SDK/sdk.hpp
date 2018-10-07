@@ -43,14 +43,6 @@
 
 #include "netvars.hpp"
 
-struct IDirect3DDevice9;
-
-namespace Interfaces
-{
-    void Initialize();
-    void Dump();
-}
-
 extern IVEngineClient*       g_EngineClient;
 extern IBaseClientDLL*       g_CHLClient;
 extern IClientEntityList*    g_EntityList;
