@@ -72,9 +72,6 @@
     <ClCompile Include="Interfaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\Engine.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
     <ClCompile Include="SDK\Vector.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
@@ -137,9 +134,6 @@
     <ClInclude Include="Interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Engine.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Vector.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -150,6 +144,9 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\VMatrix.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\IVEngineClient.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

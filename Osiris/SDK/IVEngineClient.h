@@ -5,7 +5,7 @@
 #include "Vector.h"
 #include "VMatrix.h"
 
-class Engine {
+class IVEngineClient {
 public:
     virtual int                   GetIntersectingSurfaces(const model_t *model, const Vector &vCenter, const float radius, const bool bOnlyVisibleSurfaces, SurfInfo *pInfos, const int nMaxInfos) = 0;
     virtual Vector                GetLightForPoint(const Vector &pos, bool bClamp) = 0;

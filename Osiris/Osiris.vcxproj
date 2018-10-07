@@ -34,7 +34,6 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
-    <ClCompile Include="SDK\Engine.cpp" />
     <ClCompile Include="SDK\QAngle.cpp" />
     <ClCompile Include="SDK\Vector.cpp" />
     <ClCompile Include="SDK\VMatrix.cpp" />
@@ -56,7 +55,7 @@
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
-    <ClInclude Include="SDK\Engine.h" />
+    <ClInclude Include="SDK\IVEngineClient.h" />
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Studio.h" />
     <ClInclude Include="SDK\Vector.h" />
