@@ -70,6 +70,7 @@
     <ClInclude Include="SDK\IAppSystem.h" />
     <ClInclude Include="SDK\IBaseClientDll.h" />
     <ClInclude Include="SDK\IClientEntity.h" />
+    <ClInclude Include="SDK\IClientEntityList.h" />
     <ClInclude Include="SDK\IClientNetworkable.h" />
     <ClInclude Include="SDK\IClientRenderable.h" />
     <ClInclude Include="SDK\IClientThinkable.h" />

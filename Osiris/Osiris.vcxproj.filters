@@ -245,5 +245,8 @@
     <ClInclude Include="SDK\BaseHandle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IClientEntityList.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
