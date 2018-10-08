@@ -41,6 +41,7 @@
     <ClCompile Include="SDK\QAngle.cpp" />
     <ClCompile Include="SDK\Structs.cpp" />
     <ClCompile Include="SDK\Vector.cpp" />
+    <ClCompile Include="SDK\Vector4D.cpp" />
     <ClCompile Include="SDK\VMatrix.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
