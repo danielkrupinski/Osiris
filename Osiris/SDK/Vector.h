@@ -5,7 +5,7 @@ public:
     Vector(void);
     Vector(float X, float Y, float Z);
     Vector(const float* clr);
-    void Init(float, float, float);
+    void Init(float = 0.0f, float = 0.0f, float = 0.0f);
     bool IsValid() const;
     void Invalidate();
     float& operator[](int i);
