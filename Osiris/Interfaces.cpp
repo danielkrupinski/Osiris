@@ -8,6 +8,7 @@ Interfaces::Interfaces()
 {
     engine = reinterpret_cast<IVEngineClient*>(find("engine.dll", "VEngineClient"));
     baseClient = reinterpret_cast<IBaseClientDLL*>(find("client_panorama.dll", "VClient"));
+    globalVars = **reinterpret_cast<CGlobalVarsBase***>(memory.globalVars);
     localPlayer = *reinterpret_cast<C_LocalPlayer*>(memory.localPlayer);
 }
 

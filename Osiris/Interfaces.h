@@ -13,6 +13,7 @@ public:
     void* find(const std::string&, const std::string&);
     IVEngineClient* engine;
     IBaseClientDLL* baseClient;
+    CGlobalVarsBase* globalVars;
     C_LocalPlayer localPlayer;
 };
 
