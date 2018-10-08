@@ -207,7 +207,7 @@ class C_BasePlayer : public C_BaseEntity
 public:
     static __forceinline C_BasePlayer* GetPlayerByUserId(int id)
     {
-        return static_cast<C_BasePlayer*>(GetEntityByIndex(g_EngineClient->GetPlayerForUserID(id)));
+        return static_cast<C_BasePlayer*>(GetEntityByIndex(interfaces.engine->GetPlayerForUserID(id)));
     }
     static __forceinline C_BasePlayer* GetPlayerByIndex(int i)
     {
