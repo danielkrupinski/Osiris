@@ -1,14 +1,14 @@
 #pragma once
 
 #include "BaseHandle.h"
-
+#include "../Interfaces.h"
 // -------------------------------------------------------------------------------------------------- //
 // Game-code CBaseHandle implementation.
 // -------------------------------------------------------------------------------------------------- //
 
 inline IHandleEntity* CBaseHandle::Get() const
 {
-    return g_EntityList->GetClientEntityFromHandle(*this);
+    return interfaces.entityList->GetClientEntityFromHandle(*this);
 }
 
 

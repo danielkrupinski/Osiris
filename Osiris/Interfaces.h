@@ -4,6 +4,7 @@
 
 #include "SDK/GlobalVars.h"
 #include "SDK/IBaseClientDll.h"
+#include "SDK/IClientEntityList.h"
 #include "SDK/IVEngineClient.h"
 #include "SDK/Structs.h"
 
@@ -15,6 +16,7 @@ public:
     IBaseClientDLL* baseClient;
     CGlobalVarsBase* globalVars;
     C_LocalPlayer localPlayer;
+    IClientEntityList* entityList;
 };
 
 extern Interfaces interfaces;
