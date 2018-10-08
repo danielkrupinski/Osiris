@@ -9,6 +9,7 @@ public:
     std::uintptr_t present;
     std::uintptr_t reset;
     std::uintptr_t localPlayer;
+    std::uintptr_t globalVars;
 };
 
 extern Memory memory;
