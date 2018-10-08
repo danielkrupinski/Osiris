@@ -13,6 +13,9 @@ public:
 
 
     std::uintptr_t isReloading;
+    std::uintptr_t isReloading2;
+    std::uintptr_t currentCommand;
+    std::uintptr_t currentCommand2;
 };
 
 extern Memory memory;

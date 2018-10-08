@@ -1,8 +1,11 @@
 #include "Math.h"
 #include "Structs.h"
 
+#include "CUserCmd.h"
 #include "../Helpers/Utils.hpp"
 #include "../Interfaces.h"
+#include "../Memory.h"
+
 bool C_BaseEntity::IsPlayer()
 {
     //index: 152
@@ -133,7 +136,7 @@ bool C_BaseCombatWeapon::IsSniper()
 
 bool C_BaseCombatWeapon::IsReloading()
 {
-    static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2);
+    static auto inReload = *(uint32_t*)memory.isReloading;
     return *(bool*)((uintptr_t)this + inReload);
 }
 
@@ -154,19 +157,19 @@ void C_BaseCombatWeapon::UpdateAccuracyPenalty()
 
 CUtlVector<IRefCounted*>& C_BaseCombatWeapon::m_CustomMaterials()
 {
-    static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "83 BE ? ? ? ? ? 7F 67") + 2) - 12;
+    static auto inReload = *(uint32_t*)memory.isReloading2 - 12;
     return *(CUtlVector<IRefCounted*>*)((uintptr_t)this + inReload);
 }
 
 bool* C_BaseCombatWeapon::m_bCustomMaterialInitialized()
 {
-    static auto currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 86 ? ? ? ? ? FF 50 04") + 2);
+    static auto currentCommand = *(uint32_t*)memory.currentCommand;
     return (bool*)((uintptr_t)this + currentCommand);
 }
 
 CUserCmd*& C_BasePlayer::m_pCurrentCommand()
 {
-    static auto currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2);
+    static auto currentCommand = *(uint32_t*)memory.currentCommand2;
     return *(CUserCmd**)((uintptr_t)this + currentCommand);
 }
 

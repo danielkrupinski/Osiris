@@ -248,5 +248,8 @@
     <ClInclude Include="SDK\IClientEntityList.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Vector4D.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
