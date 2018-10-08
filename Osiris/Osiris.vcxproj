@@ -62,6 +62,7 @@
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\IEngineTrace.h" />
+    <ClInclude Include="SDK\IVModelInfoClient.h" />
     <ClInclude Include="SDK\Vector4D.h" />
     <ClInclude Include="SDK\BaseHandle.h" />
     <ClInclude Include="SDK\ChecksumCrc.h" />

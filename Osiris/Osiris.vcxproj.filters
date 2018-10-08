@@ -257,5 +257,8 @@
     <ClInclude Include="SDK\IEngineTrace.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IVModelInfoClient.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
