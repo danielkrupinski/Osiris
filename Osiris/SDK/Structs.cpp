@@ -59,7 +59,7 @@ bool C_BaseCombatWeapon::CanFire()
     if (IsReloading() || m_iClip1() <= 0 || !interfaces.localPlayer)
         return false;
 
-    auto flServerTime = interfaces.localPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
+    auto flServerTime = interfaces.localPlayer->m_nTickBase() * interfaces.globalVars->interval_per_tick;
 
     return m_flNextPrimaryAttack() <= flServerTime;
 }
