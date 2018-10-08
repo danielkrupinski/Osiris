@@ -93,3 +93,27 @@ struct datamap_t
     bool                packed_offsets_computed;
     int                    packed_size;
 };
+
+unsigned int findInDataMap(datamap_t *pMap, const char *name) {
+    while (pMap) {
+        for (int i = 0; i < pMap->dataNumFields; i++) {
+            if (pMap->dataDesc[i].fieldName == NULL)
+                continue;
+
+            if (strcmp(name, pMap->dataDesc[i].fieldName) == 0)
+                return pMap->dataDesc[i].fieldOffset[TD_OFFSET_NORMAL];
+
+            if (pMap->dataDesc[i].fieldType == FIELD_EMBEDDED) {
+                if (pMap->dataDesc[i].td) {
+                    unsigned int offset;
+
+                    if ((offset = findInDataMap(pMap->dataDesc[i].td, name)) != 0)
+                        return offset;
+                }
+            }
+        }
+        pMap = pMap->baseMap;
+    }
+
+    return 0;
+}
