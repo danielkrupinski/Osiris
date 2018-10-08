@@ -263,5 +263,8 @@
     <ClInclude Include="SDK\EHandle.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Datamap.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
