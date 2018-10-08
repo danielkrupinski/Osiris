@@ -10,6 +10,9 @@ public:
     std::uintptr_t reset;
     std::uintptr_t localPlayer;
     std::uintptr_t globalVars;
+
+
+    std::uintptr_t isReloading;
 };
 
 extern Memory memory;
