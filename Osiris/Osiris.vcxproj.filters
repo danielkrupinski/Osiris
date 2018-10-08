@@ -245,9 +245,6 @@
     <ClInclude Include="SDK\CUserCmd.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\BaseHandle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\IClientEntityList.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -258,6 +255,12 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\IVModelInfoClient.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\BaseHandle.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\EHandle.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
