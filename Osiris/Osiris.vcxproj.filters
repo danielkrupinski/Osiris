@@ -254,5 +254,8 @@
     <ClInclude Include="SDK\Vector4D.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\IEngineTrace.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
