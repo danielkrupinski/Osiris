@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "SDK/GlobalVars.h"
 #include "SDK/IBaseClientDll.h"
 #include "SDK/IVEngineClient.h"
 #include "SDK/Structs.h"
