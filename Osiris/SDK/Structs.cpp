@@ -269,7 +269,7 @@ Vector C_BasePlayer::GetEyePos()
 player_info_t C_BasePlayer::GetPlayerInfo()
 {
     player_info_t info;
-    g_EngineClient->GetPlayerInfo(EntIndex(), &info);
+    interfaces.engine->GetPlayerInfo(EntIndex(), &info);
     return info;
 }
 
