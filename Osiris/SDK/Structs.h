@@ -1,16 +1,17 @@
 #pragma once
 
+#include "../Interfaces.h"
 #include <array>
 #include "IClientEntity.h"
 #include "IRefCounted.h"
 #include "Netvars.h"
 #include "UtlVector.h"
 #include "Vfunc.h"
-#include "../Interfaces.h"
 #include "BaseHandle.h"
 #include "EHandle.h"
 #include "CUserCmd.h"
 #include "Studio.h"
+#include "Datamap.h"
 
 #define NETVAR(type, name, table, netvar)                           \
     type& name##() const {                                          \
@@ -284,18 +285,18 @@ public:
 
     float_t &m_surfaceFriction()
     {
-        static unsigned int _m_surfaceFriction = Utils::FindInDataMap(GetPredDescMap(), "m_surfaceFriction");
+        static unsigned int _m_surfaceFriction = findInDataMap(GetPredDescMap(), "m_surfaceFriction");
         return *(float_t*)((uintptr_t)this + _m_surfaceFriction);
     }
     Vector &m_vecBaseVelocity()
     {
-        static unsigned int _m_vecBaseVelocity = Utils::FindInDataMap(GetPredDescMap(), "m_vecBaseVelocity");
+        static unsigned int _m_vecBaseVelocity = findInDataMap(GetPredDescMap(), "m_vecBaseVelocity");
         return *(Vector*)((uintptr_t)this + _m_vecBaseVelocity);
     }
 
     float_t &m_flMaxspeed()
     {
-        static unsigned int _m_flMaxspeed = Utils::FindInDataMap(GetPredDescMap(), "m_flMaxspeed");
+        static unsigned int _m_flMaxspeed = findInDataMap(GetPredDescMap(), "m_flMaxspeed");
         return *(float_t*)((uintptr_t)this + _m_flMaxspeed);
     }
 

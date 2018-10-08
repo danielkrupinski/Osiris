@@ -21,7 +21,7 @@ Vector::Vector(const float* clr)
     z = clr[2];
 }
 
-void Vector::Init(float ix = 0.0f, float iy = 0.0f, float iz = 0.0f)
+void Vector::Init(float ix, float iy, float iz)
 {
     x = ix; y = iy; z = iz;
 }

@@ -11,6 +11,8 @@ Interfaces::Interfaces()
     globalVars = **reinterpret_cast<CGlobalVarsBase***>(memory.globalVars);
     localPlayer = *reinterpret_cast<C_LocalPlayer*>(memory.localPlayer);
     entityList = reinterpret_cast<IClientEntityList*>(find("client_panorama.dll", "VClientEntityList"));
+    modelInfo = reinterpret_cast<IVModelInfoClient*>(find("engine.dll", "VModelInfoClient"));
+    engineTrace = reinterpret_cast<IEngineTrace*>(find("engine.dll", "EngineTraceClient"));
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)

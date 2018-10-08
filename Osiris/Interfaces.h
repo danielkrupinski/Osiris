@@ -7,6 +7,8 @@
 #include "SDK/IClientEntityList.h"
 #include "SDK/IVEngineClient.h"
 #include "SDK/Structs.h"
+#include "SDK/IVModelInfoClient.h"
+#include "SDK/IEngineTrace.h"
 
 class Interfaces final {
 public:
@@ -17,6 +19,8 @@ public:
     CGlobalVarsBase* globalVars;
     C_LocalPlayer localPlayer;
     IClientEntityList* entityList;
+    IVModelInfoClient* modelInfo;
+    IEngineTrace* engineTrace;
 };
 
 extern Interfaces interfaces;
