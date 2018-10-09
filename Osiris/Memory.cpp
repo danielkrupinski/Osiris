@@ -9,6 +9,7 @@ Memory::Memory()
 {
     present = findPattern("gameoverlayrenderer.dll", "FF 15 ? ? ? ? 8B F8 85 DB") + 2;
     reset = findPattern("gameoverlayrenderer.dll", "C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8") + 9;
+    globalVars = **reinterpret_cast<GlobalVars***>(findPattern("client_panorama.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1);
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
