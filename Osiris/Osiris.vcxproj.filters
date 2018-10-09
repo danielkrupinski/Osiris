@@ -125,7 +125,7 @@
     <ClInclude Include="Interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalVars.h">
+    <ClInclude Include="SDK\GlobalVars.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

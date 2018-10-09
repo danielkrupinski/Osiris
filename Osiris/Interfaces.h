@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "SDK/GlobalVars.h"
+
 class Interfaces final {
 public:
     Interfaces();
