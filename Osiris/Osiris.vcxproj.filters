@@ -128,5 +128,8 @@
     <ClInclude Include="SDK\GlobalVars.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\EngineClient.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
