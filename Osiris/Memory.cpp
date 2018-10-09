@@ -9,14 +9,6 @@ Memory::Memory()
 {
     present = findPattern("gameoverlayrenderer.dll", "FF 15 ? ? ? ? 8B F8 85 DB") + 2;
     reset = findPattern("gameoverlayrenderer.dll", "C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8") + 9;
-    localPlayer = findPattern("client_panorama.dll", "8B 0D ? ? ? ? 83 FF FF 74 07") + 2;
-    globalVars = findPattern("client_panorama.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1;
-
-
-    isReloading = findPattern("client_panorama.dll", "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2;
-    isReloading2 = findPattern("client_panorama.dll", "83 BE ? ? ? ? ? 7F 67") + 2;
-    currentCommand = findPattern("client_panorama.dll", "C6 86 ? ? ? ? ? FF 50 04") + 2;
-    currentCommand2 = findPattern("client_panorama.dll", "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2;
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
