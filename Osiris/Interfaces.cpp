@@ -5,7 +5,7 @@
 
 Interfaces::Interfaces()
 {
-
+    engineClient = reinterpret_cast<EngineClient*>(find("engine.dll", "VEngineClient"));
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)
