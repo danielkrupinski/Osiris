@@ -1,3 +1,4 @@
+#include <type_traits>
 #include <Windows.h>
 
 #include "Interfaces.h"
