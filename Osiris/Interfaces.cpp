@@ -6,6 +6,7 @@
 Interfaces::Interfaces()
 {
     engineClient = reinterpret_cast<EngineClient*>(find("engine.dll", "VEngineClient"));
+    clientEntityList = reinterpret_cast<ClientEntityList*>(find("client_panorama.dll", "VClientEntityList"));
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)

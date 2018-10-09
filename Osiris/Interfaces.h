@@ -10,6 +10,7 @@ public:
     Interfaces();
     void* find(const std::string&, const std::string&);
     EngineClient* engineClient;
+    ClientEntityList* clientEntityList;
 };
 
 extern Interfaces interfaces;
