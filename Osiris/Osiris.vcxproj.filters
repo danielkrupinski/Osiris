@@ -131,5 +131,8 @@
     <ClInclude Include="SDK\EngineClient.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\BaseEntity.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
