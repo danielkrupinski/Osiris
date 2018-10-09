@@ -35,6 +35,7 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="SDK\BaseEntity.cpp" />
+    <ClCompile Include="SDK\ClientEntityList.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
