@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "SDK/EngineClient.h"
+
 class Interfaces final {
 public:
     Interfaces();
