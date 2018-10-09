@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "SDK/GlobalVars.h"
+
 class Memory final {
 public:
     Memory();
@@ -8,6 +10,8 @@ public:
 
     std::uintptr_t present;
     std::uintptr_t reset;
+
+    GlobalVars* globalVars;
 };
 
 extern Memory memory;
