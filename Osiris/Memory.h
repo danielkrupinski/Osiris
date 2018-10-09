@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include "SDK/BaseEntity.h"
 #include "SDK/GlobalVars.h"
 
 class Memory final {
@@ -12,6 +13,7 @@ public:
     std::uintptr_t reset;
 
     GlobalVars* globalVars;
+    BaseEntity* localPlayer;
 };
 
 extern Memory memory;
