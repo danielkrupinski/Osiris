@@ -2,6 +2,7 @@
 #include <string>
 
 #include "SDK/BaseEntity.h"
+#include "SDK/ClientMode.h"
 #include "SDK/GlobalVars.h"
 
 class C_LocalPlayer
