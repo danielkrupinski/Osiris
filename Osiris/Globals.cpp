@@ -5,7 +5,7 @@
 #include "Memory.h"
 
 Config config{ "Osiris.json" };
+Interfaces interfaces;
 Memory memory;
 Hooks hooks;
-Interfaces interfaces;
 GUI gui;
