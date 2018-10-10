@@ -1,3 +1,3 @@
 #pragma once
 
-class ClientMode final;
+class ClientMode final { };

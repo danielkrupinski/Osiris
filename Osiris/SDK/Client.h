@@ -1,3 +1,3 @@
 #pragma once
 
-class Client final;
+class Client final { };
