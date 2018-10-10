@@ -3,6 +3,9 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include "GUI.h"
+#include "Memory.h"
+#include <string>
+#include "Interfaces.h"
 
 GUI::GUI()
 {
@@ -23,7 +26,8 @@ void GUI::render()
     if (ImGui::BeginChild("#tabs", ImVec2(0.0f, 440.0f), true)) {
         switch (tab) {
         case AIMBOT:
-            ImGui::Text("Aimbot tab welcomes!");
+            if (interfaces.engineClient->IsInGame())
+                ImGui::Text(std::to_string(memory.localPlayer->GetHealth()).c_str());
             break;
         case VISUALS:
             ImGui::Text("Visuals tab welcomes!");
