@@ -42,6 +42,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="SDK\BaseEntity.h" />
     <ClInclude Include="SDK\ClientEntityList.h" />
+    <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\EngineClient.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="GUI.h" />
