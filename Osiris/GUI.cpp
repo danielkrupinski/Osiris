@@ -14,7 +14,7 @@ GUI::GUI()
 
 void GUI::render()
 {
-    ImGui::StyleColorsLight();
+    ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
     style.Alpha = 0.9f;
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
