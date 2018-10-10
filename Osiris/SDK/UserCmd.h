@@ -2,7 +2,6 @@
 
 class UserCmd final {
 public:
-    int pad;
     int     command_number;     // 0x04 For matching server and client commands for debugging
     int     tick_count;         // 0x08 the tick the client created this command
     // QAngle  viewangles;         // 0x0C Player instantaneous view angles.
