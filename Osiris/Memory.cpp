@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <Psapi.h>
 
+#include "Interfaces.h"
 #include "Memory.h"
 
 Memory::Memory()
