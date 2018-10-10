@@ -143,5 +143,8 @@
     <ClInclude Include="SDK\ClientEntityList.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\UserCmd.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
