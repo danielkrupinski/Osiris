@@ -12,6 +12,7 @@ Memory::Memory()
     reset = findPattern("gameoverlayrenderer.dll", "C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8") + 9;
     globalVars = **reinterpret_cast<GlobalVars***>(findPattern("client_panorama.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1);
     localPlayer = *(C_LocalPlayer*)(findPattern("client_panorama.dll", "8B 0D ? ? ? ? 83 FF FF 74 07") + 2);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)

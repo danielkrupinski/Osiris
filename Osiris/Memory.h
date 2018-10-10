@@ -30,6 +30,7 @@ public:
 
     GlobalVars* globalVars;
     C_LocalPlayer localPlayer;
+    ClientMode* clientMode;
 };
 
 extern Memory memory;

@@ -17,6 +17,7 @@ void GUI::render()
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
     style.Alpha = 0.9f;
+    style.WindowRounding = 0.0f;
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
