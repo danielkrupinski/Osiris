@@ -149,5 +149,8 @@
     <ClInclude Include="SDK\ClientMode.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Client.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
