@@ -12,6 +12,7 @@ public:
     void* find(const std::string&, const std::string&);
     EngineClient* engineClient;
     ClientEntityList* clientEntityList;
+    Client* client;
 };
 
 extern Interfaces interfaces;
