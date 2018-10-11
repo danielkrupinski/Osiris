@@ -16,7 +16,6 @@ void GUI::render()
 {
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
-    style.Alpha = 0.9f;
     style.WindowRounding = 0.0f;
     style.WindowBorderSize = 0.0f;
     style.ChildBorderSize = 0.0f;
