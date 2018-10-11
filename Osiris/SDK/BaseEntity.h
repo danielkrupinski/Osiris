@@ -3,5 +3,5 @@
 class BaseEntity final {
 public:
     int* getFlags();
-    int GetHealth();
+    int getHealth();
 };
