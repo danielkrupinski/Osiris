@@ -20,7 +20,7 @@ void GUI::render()
     static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
     ImGui::PushItemWidth(165);
-    if (ImGui::BeginChild("#tabs", ImVec2(0.0f, 440.0f), true)) {
+    if (ImGui::BeginChild("#tabs", ImVec2(0.0f, 480.0f), true)) {
         switch (tab) {
         case AIMBOT:
             if (interfaces.engineClient->IsInGame())
