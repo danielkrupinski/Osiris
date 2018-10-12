@@ -9,7 +9,9 @@ public:
     void save() const;
 
     struct {
+        struct {
 
+        } glow;
     } visuals;
 
     struct final {
