@@ -21,7 +21,7 @@ void GUI::render()
     style.ChildBorderSize = 0.0f;
 
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-    ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
     static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
