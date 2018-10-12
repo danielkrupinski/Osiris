@@ -73,6 +73,11 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
+static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
+{
+
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
