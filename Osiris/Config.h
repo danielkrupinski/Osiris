@@ -8,7 +8,7 @@ public:
     void load();
     void save() const;
 
-    struct {
+    struct final {
         bool bunnyHop{ false };
         bool autoStrafe{ false };
     } misc;
