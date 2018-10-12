@@ -19,6 +19,8 @@ void GUI::render()
     style.WindowRounding = 0.0f;
     style.WindowBorderSize = 0.0f;
     style.ChildBorderSize = 0.0f;
+    ImGuiIO& io = ImGui::GetIO();
+    io.IniFilename = nullptr;
 
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
