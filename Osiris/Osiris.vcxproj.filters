@@ -155,5 +155,8 @@
     <ClInclude Include="SDK\Material.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Vector.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
