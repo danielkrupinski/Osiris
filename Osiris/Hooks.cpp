@@ -5,6 +5,7 @@
 #include "GUI.h"
 #include "Hooks.h"
 #include "Memory.h"
+#include "SDK/UserCmd.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
