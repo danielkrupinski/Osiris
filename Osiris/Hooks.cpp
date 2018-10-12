@@ -85,4 +85,5 @@ Hooks::Hooks()
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
+    originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(reinterpret_cast<int*>(memory.clientMode) + 24);
 }
