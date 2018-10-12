@@ -4,6 +4,8 @@
 
 #include <d3d9.h>
 
+#include "SDK/UserCmd.h"
+
 class Hooks final {
 public:
     Hooks();
