@@ -211,7 +211,7 @@ inline Vector operator/(float lhs, const Vector& rhs)
     return rhs / lhs;
 }
 
-class __declspec(align(16)) VectorAligned : public Vector {
+class __declspec(align(16)) VectorAligned final : public Vector {
 public:
     inline VectorAligned(void) {};
     inline VectorAligned(float X, float Y, float Z)
