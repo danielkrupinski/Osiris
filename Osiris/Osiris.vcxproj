@@ -64,6 +64,7 @@
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\UserCmd.h" />
     <ClInclude Include="SDK\Vector.h" />
+    <ClInclude Include="SDK\Vector2D.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
