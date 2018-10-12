@@ -9,19 +9,11 @@
 
 GUI::GUI()
 {
-
+    
 }
 
 void GUI::render()
 {
-    ImGui::StyleColorsDark();
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 0.0f;
-    style.WindowBorderSize = 0.0f;
-    style.ChildBorderSize = 0.0f;
-    ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = nullptr;
-
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
