@@ -15,7 +15,7 @@ GUI::GUI()
 void GUI::render()
 {
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-    ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
     static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
