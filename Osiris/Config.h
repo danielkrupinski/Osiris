@@ -8,6 +8,10 @@ public:
     void load();
     void save() const;
 
+    struct {
+
+    } visuals;
+
     struct final {
         bool bunnyHop{ false };
         bool autoStrafe{ false };
