@@ -10,7 +10,7 @@ public:
 
     struct {
         struct {
-
+            bool enabled{ false };
         } glow;
     } visuals;
 

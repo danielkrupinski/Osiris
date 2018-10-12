@@ -24,6 +24,8 @@ void Config::load()
     Json::Value config;
     in >> config;
 
+    visuals.glow.enabled = config["visuals"]["glow"]["enabled"].asBool();
+
     misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
     misc.autoStrafe = config["misc"]["autoStrafe"].asBool();
 
@@ -38,6 +40,8 @@ void Config::save() const
         return;
 
     Json::Value config;
+
+    config["visuals"]["glow"]["enabled"] = visuals.glow.enabled;
 
     config["misc"]["bunnyHop"] = misc.bunnyHop;
     config["misc"]["autoStrafe"] = misc.autoStrafe;
