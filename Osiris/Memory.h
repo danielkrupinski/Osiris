@@ -29,7 +29,7 @@ public:
     std::uintptr_t reset;
 
     GlobalVars* globalVars;
-    C_LocalPlayer localPlayer;
+    BaseEntity** localPlayer;
     ClientMode* clientMode;
 };
 

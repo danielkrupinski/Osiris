@@ -24,7 +24,7 @@ void GUI::render()
         switch (tab) {
         case AIMBOT:
             if (interfaces.engineClient->IsInGame())
-                ImGui::Text(std::to_string(memory.localPlayer->getHealth()).c_str());
+                ImGui::Text("Player health: %d", (*memory.localPlayer)->getHealth());
             break;
         case VISUALS:
             ImGui::Text("Visuals tab welcomes!");
