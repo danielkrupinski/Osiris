@@ -153,7 +153,7 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Material.h">
-      <Filter>imgui</Filter>
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
