@@ -10,6 +10,7 @@ Interfaces::Interfaces()
     engineClient = reinterpret_cast<EngineClient*>(find(xorstr_("engine.dll"), xorstr_("VEngineClient")));
     clientEntityList = reinterpret_cast<ClientEntityList*>(find(xorstr_("client_panorama.dll"), xorstr_("VClientEntityList")));
     client = reinterpret_cast<Client*>(find(xorstr_("client_panorama.dll"), xorstr_("VClient")));
+    surface = reinterpret_cast<Surface*>(find(xorstr_("vguimatsurface.dll"), xorstr_("VGUI_Surface")));
 }
 
 void* Interfaces::find(const std::string& module, const std::string& name)

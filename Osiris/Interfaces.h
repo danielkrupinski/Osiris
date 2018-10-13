@@ -14,6 +14,7 @@ public:
     EngineClient* engineClient;
     ClientEntityList* clientEntityList;
     Client* client;
+    Surface* surface;
 };
 
 extern Interfaces interfaces;
