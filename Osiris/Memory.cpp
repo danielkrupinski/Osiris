@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <Psapi.h>
 
+#include "xorstr.hpp"
+
 #include "Interfaces.h"
 #include "Memory.h"
 
