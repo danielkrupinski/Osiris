@@ -173,5 +173,8 @@
     <ClInclude Include="xorstr.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VmtHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
