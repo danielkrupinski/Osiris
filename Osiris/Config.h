@@ -9,7 +9,7 @@ public:
     void save() const;
 
     struct final {
-        struct {
+        struct final {
             bool enabled{ false };
         } glow;
     } visuals;
