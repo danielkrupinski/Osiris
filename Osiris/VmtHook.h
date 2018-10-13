@@ -34,7 +34,7 @@ class VmtHook {
 public:
     VmtHook();
     VmtHook(void* base);
-    VmtHook();
+    ~VmtHook();
 
     bool setup(void* class_base = nullptr);
 
