@@ -167,9 +167,11 @@
     <ClInclude Include="SDK\Vector2D.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="xorstr.hpp" />
     <ClInclude Include="SDK\Surface.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="xorstr.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
