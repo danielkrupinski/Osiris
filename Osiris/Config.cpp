@@ -2,6 +2,7 @@
 #include <ShlObj.h>
 
 #include "json/json.h"
+#include "xorstr.hpp"
 
 #include "Config.h"
 
