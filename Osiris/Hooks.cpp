@@ -38,6 +38,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         style.ChildBorderSize = 0.0f;
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
+        io.LogFilename = nullptr;
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
             SetWindowLongPtr(FindWindowA(xorstr_("Valve001"), NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
