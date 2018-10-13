@@ -10,10 +10,10 @@
 
 Memory::Memory()
 {
-    present = findPattern("gameoverlayrenderer.dll", "FF 15 ? ? ? ? 8B F8 85 DB") + 2;
-    reset = findPattern("gameoverlayrenderer.dll", "C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8") + 9;
-    globalVars = **reinterpret_cast<GlobalVars***>(findPattern("client_panorama.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1);
-    localPlayer = *reinterpret_cast<BaseEntity***>(findPattern("client_panorama.dll", "8B 0D ? ? ? ? 83 FF FF 74 07") + 2);
+    present = findPattern(xorstr_("gameoverlayrenderer.dll"), xorstr_("FF 15 ? ? ? ? 8B F8 85 DB")) + 2;
+    reset = findPattern(xorstr_("gameoverlayrenderer.dll"), xorstr_("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8")) + 9;
+    globalVars = **reinterpret_cast<GlobalVars***>(findPattern(xorstr_("client_panorama.dll"), xorstr_("A1 ? ? ? ? 5E 8B 40 10")) + 1);
+    localPlayer = *reinterpret_cast<BaseEntity***>(findPattern(xorstr_("client_panorama.dll"), xorstr_("8B 0D ? ? ? ? 83 FF FF 74 07")) + 2);
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
 }
 
