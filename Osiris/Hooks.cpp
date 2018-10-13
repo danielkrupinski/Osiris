@@ -28,7 +28,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
     if (!isInitialised) {
         ImGui::CreateContext();
-        ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
+        ImGui_ImplWin32_Init(FindWindowA(xorstr_("Valve001"), NULL));
         ImGui_ImplDX9_Init(device);
 
         ImGui::StyleColorsDark();
@@ -40,7 +40,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         io.IniFilename = nullptr;
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
-            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
+            SetWindowLongPtr(FindWindowA(xorstr_("Valve001"), NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
             );
         isInitialised = true;
     }
