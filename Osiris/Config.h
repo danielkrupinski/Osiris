@@ -8,13 +8,13 @@ public:
     void load();
     void save() const;
 
-    struct final {
-        struct final {
+    struct {
+        struct {
             bool enabled{ false };
         } glow;
     } visuals;
 
-    struct final {
+    struct {
         bool bunnyHop{ false };
         bool autoStrafe{ false };
     } misc;
