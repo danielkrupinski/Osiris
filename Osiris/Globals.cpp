@@ -1,3 +1,5 @@
+#include "xorstr.hpp"
+
 #include "Config.h"
 #include "GUI.h"
 #include "Hooks.h"
