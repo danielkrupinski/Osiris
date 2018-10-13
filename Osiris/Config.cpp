@@ -25,10 +25,10 @@ void Config::load()
     Json::Value config;
     in >> config;
 
-    visuals.glow.enabled = config["visuals"]["glow"]["enabled"].asBool();
+    visuals.glow.enabled = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")].asBool();
 
-    misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
-    misc.autoStrafe = config["misc"]["autoStrafe"].asBool();
+    misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
+    misc.autoStrafe = config[xorstr_("misc")][xorstr_("autoStrafe")].asBool();
 
     in.close();
 }
@@ -42,10 +42,10 @@ void Config::save() const
 
     Json::Value config;
 
-    config["visuals"]["glow"]["enabled"] = visuals.glow.enabled;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
 
-    config["misc"]["bunnyHop"] = misc.bunnyHop;
-    config["misc"]["autoStrafe"] = misc.autoStrafe;
+    config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
+    config[xorstr_("misc")][xorstr_("autoStrafe")] = misc.autoStrafe;
 
     out << config;
     out.close();
