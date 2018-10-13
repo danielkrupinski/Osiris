@@ -5,6 +5,7 @@
 #include "SDK/Client.h"
 #include "SDK/ClientEntityList.h"
 #include "SDK/EngineClient.h"
+#include "SDK/Surface.h"
 
 class Interfaces final {
 public:
