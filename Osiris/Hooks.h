@@ -5,6 +5,7 @@
 #include <d3d9.h>
 
 #include "SDK/UserCmd.h"
+#include "VmtHook.h"
 
 class Hooks final {
 public:
