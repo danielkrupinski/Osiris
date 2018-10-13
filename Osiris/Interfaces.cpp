@@ -1,6 +1,8 @@
 #include <type_traits>
 #include <Windows.h>
 
+#include "xorstr.hpp"
+
 #include "Interfaces.h"
 
 Interfaces::Interfaces()
