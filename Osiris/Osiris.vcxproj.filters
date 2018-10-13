@@ -22,9 +22,6 @@
     <Filter Include="SDK">
       <UniqueIdentifier>{6cc612f0-86fb-4bf6-b64a-74e10f5b498a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="xorstr">
-      <UniqueIdentifier>{bd390aaa-0e6b-4e33-bb91-fdde6dab6384}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -170,8 +167,6 @@
     <ClInclude Include="SDK\Vector2D.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="xorstr\xorstr.hpp">
-      <Filter>xorstr</Filter>
-    </ClInclude>
+    <ClInclude Include="xorstr.hpp" />
   </ItemGroup>
 </Project>
