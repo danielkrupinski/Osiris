@@ -6,7 +6,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 
-Config config{ "Osiris.json" };
+Config config{ xorstr("Osiris.json").crypt_get() };
 Interfaces interfaces;
 Memory memory;
 Hooks hooks;
