@@ -16,22 +16,22 @@ GUI::GUI()
 void GUI::render()
 {
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-    ImGui::Begin("Osiris", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin(xorstr("Osiris").crypt_get(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
 
     static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
     ImGui::PushItemWidth(165);
-    if (ImGui::BeginChild("#tabs", ImVec2(0.0f, 460.0f), true)) {
+    if (ImGui::BeginChild(xorstr("#tabs").crypt_get(), ImVec2(0.0f, 460.0f), true)) {
         switch (tab) {
         case AIMBOT:
             if (interfaces.engineClient->IsInGame())
-                ImGui::Text("Player health: %d", (*memory.localPlayer)->getHealth());
+                ImGui::Text(xorstr("Player health: %d").crypt_get(), (*memory.localPlayer)->getHealth());
             break;
         case VISUALS:
-            ImGui::Text("Visuals tab welcomes!");
+            ImGui::Text(xorstr("Visuals tab welcomes!").crypt_get());
             break;
         case MISC:
-            ImGui::Text("Misc tab welcomes!");
+            ImGui::Text(xorstr("Misc tab welcomes!").crypt_get());
             break;
         }
     }
@@ -39,15 +39,15 @@ void GUI::render()
     ImGui::EndChild();
     ImGui::PopItemWidth();
 
-    if (ImGui::Button("Aimbot", ImVec2(207.0f, 20.0f)))
+    if (ImGui::Button(xorstr("Aimbot").crypt_get(), ImVec2(207.0f, 20.0f)))
         tab = AIMBOT;
     ImGui::SameLine();
 
-    if (ImGui::Button("Visuals", ImVec2(207.0f, 20.0f)))
+    if (ImGui::Button(xorstr("Visuals").crypt_get(), ImVec2(207.0f, 20.0f)))
         tab = VISUALS;
     ImGui::SameLine();
 
-    if (ImGui::Button("Misc", ImVec2(207.0f, 20.0f)))
+    if (ImGui::Button(xorstr("Misc").crypt_get(), ImVec2(207.0f, 20.0f)))
         tab = MISC;
 
     ImGui::End();
