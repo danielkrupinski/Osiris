@@ -14,8 +14,8 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if(GetAsyncKeyState(VK_INSERT) & 1)
-       gui.isOpen = !gui.isOpen;
+    if (GetAsyncKeyState(VK_INSERT) & 1)
+        gui.isOpen = !gui.isOpen;
 
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
@@ -86,11 +86,9 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
-static void __stdcall hookedCreateMove(int sequenceNumber, float inputSampleFrametime, bool active, bool& sendPacket)
+static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
 {
-    hooks.client.getOriginal<void(__thiscall*)(Client*, int, float, bool)>(22)(interfaces.client, sequenceNumber, inputSampleFrametime, active);
-
-    /* if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         if (config.misc.bunnyHop) {
             static auto bJumped = false;
             static auto bFake = false;
@@ -114,7 +112,7 @@ static void __stdcall hookedCreateMove(int sequenceNumber, float inputSampleFram
             }
         }
     }
-    */
+    return false;
 }
 
 static void __declspec(naked) __stdcall hookedCreateMoveProxy(int sequenceNumber, float inputSampleFrametime, bool active)
@@ -153,6 +151,6 @@ Hooks::Hooks()
     // originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(reinterpret_cast<int*>(interfaces.surface) + 67);
     surface.setup(interfaces.surface);
     surface.hook_index(67, hookedLockCursor);
-    client.setup(interfaces.client);
-    client.hook_index(22, hookedCreateMoveProxy);
+    client.setup(memory.clientMode);
+    client.hook_index(24, hookedCreateMove);
 }
