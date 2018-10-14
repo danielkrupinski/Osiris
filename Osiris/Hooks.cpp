@@ -86,9 +86,53 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
-static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
+static void __stdcall hookedCreateMove(int sequenceNumber, float inputSampleFrametime, bool active, bool& sendPacket)
 {
+    hooks.client.getOriginal<void(__thiscall*)(Client*, int, float, bool)>(22)(interfaces.client, sequenceNumber, inputSampleFrametime, active);
 
+    /* if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        if (config.misc.bunnyHop) {
+            static auto bJumped = false;
+            static auto bFake = false;
+            if (!bJumped && bFake) {
+                bFake = false;
+                cmd->buttons |= 2;
+            }
+            else if (cmd->buttons & 2) {
+                if (*((*memory.localPlayer)->getFlags()) & 1) {
+                    bJumped = true;
+                    bFake = true;
+                }
+                else {
+                    cmd->buttons &= ~2;
+                    bJumped = false;
+                }
+            }
+            else {
+                bJumped = false;
+                bFake = false;
+            }
+        }
+    }
+    */
+}
+
+static void __declspec(naked) __stdcall hookedCreateMoveProxy(int sequenceNumber, float inputSampleFrametime, bool active)
+{
+    __asm {
+        push ebp
+        mov  ebp, esp
+        push ebx
+        lea  ecx, [esp]
+        push ecx
+        push dword ptr[active]
+        push dword ptr[inputSampleFrametime]
+        push dword ptr[sequenceNumber]
+        call hookedCreateMove
+        pop  ebx
+        pop  ebp
+        retn 0Ch
+    }
 }
 
 void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
@@ -109,4 +153,6 @@ Hooks::Hooks()
     // originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(reinterpret_cast<int*>(interfaces.surface) + 67);
     surface.setup(interfaces.surface);
     surface.hook_index(67, hookedLockCursor);
+    client.setup(interfaces.client);
+    client.hook_index(22, hookedCreateMoveProxy);
 }
