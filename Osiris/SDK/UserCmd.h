@@ -1,12 +1,14 @@
 #pragma once
 
+#include "QAngle.h"
+#include "Vector.h"
+
 class UserCmd final {
 public:
     int     command_number;     // 0x04 For matching server and client commands for debugging
     int     tick_count;         // 0x08 the tick the client created this command
-    // QAngle  viewangles;         // 0x0C Player instantaneous view angles.
-    // Vector  aimdirection;       // 0x18
-    int pad1[7];
+    QAngle  viewangles;         // 0x0C Player instantaneous view angles.
+    Vector  aimdirection;       // 0x18
     float   forwardmove;        // 0x24
     float   sidemove;           // 0x28
     float   upmove;             // 0x2C
