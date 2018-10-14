@@ -2,6 +2,11 @@
 #include "../Memory.h"
 #include "Misc.h"
 
+void Misc::autoStrafe(UserCmd* cmd)
+{
+    
+}
+
 void Misc::bunnyHop(UserCmd* cmd)
 {
     if (config.misc.bunnyHop) {
