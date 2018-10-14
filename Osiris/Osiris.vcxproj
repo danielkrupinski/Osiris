@@ -63,6 +63,7 @@
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />
