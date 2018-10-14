@@ -5,7 +5,6 @@
 
 #include <cstdint>
 #include <stdexcept>
-#include <assert.h>
 
 namespace detail
 {
