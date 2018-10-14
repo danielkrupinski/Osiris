@@ -32,7 +32,6 @@ void GUI::render()
             ImGui::Text(xorstr_("Visuals tab welcomes!"));
             break;
         case MISC:
-            ImGui::Text(xorstr_("Misc tab welcomes!"));
             ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
             break;
         }
