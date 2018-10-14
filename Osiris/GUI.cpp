@@ -7,6 +7,7 @@
 #include "Memory.h"
 #include <string>
 #include "Interfaces.h"
+#include "Config.h"
 
 GUI::GUI()
 {

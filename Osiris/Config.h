@@ -7,7 +7,7 @@ public:
     explicit Config(const std::string&);
     void load();
     void save() const;
-
+    bool isMenuOpen { false };
     struct {
         struct {
             bool enabled{ false };

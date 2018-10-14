@@ -8,15 +8,16 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/UserCmd.h"
+#include "Config.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(GetAsyncKeyState(VK_INSERT) & 1)
-       gui.isOpen = !gui.isOpen;
+       config.isMenuOpen = !config.isMenuOpen;
 
-    if (gui.isOpen && ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+    if (config.isMenuOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -45,7 +46,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
             );
         isInitialised = true;
     }
-    else if (gui.isOpen) {
+    else if (config.isMenuOpen) {
         DWORD d3rsColorWrite;
         device->GetRenderState(D3DRS_COLORWRITEENABLE, &d3rsColorWrite);
         IDirect3DVertexDeclaration9* vertexDeclaration;
@@ -90,12 +91,22 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
 
 }
 
+void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
+{
+    if (config.isMenuOpen)
+        interfaces.surface->UnlockCursor();
+    else
+        hooks.surface.get_original<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
-    originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(reinterpret_cast<int*>(memory.clientMode) + 24);
-    originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(reinterpret_cast<int*>(interfaces.surface) + 67);
+    // originalCreateMove = reinterpret_cast<decltype(originalCreateMove)>(reinterpret_cast<int*>(memory.clientMode) + 24);
+    // originalLockCursor = reinterpret_cast<decltype(originalLockCursor)>(reinterpret_cast<int*>(interfaces.surface) + 67);
+    surface.setup(interfaces.surface);
+    surface.hook_index(67, hookedLockCursor);
 }

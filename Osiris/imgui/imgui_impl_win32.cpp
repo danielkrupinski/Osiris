@@ -132,7 +132,12 @@ static void ImGui_ImplWin32_UpdateMousePos()
     // Set mouse position
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     POINT pos;
-    if (::GetActiveWindow() == g_hWnd && ::GetCursorPos(&pos))
+
+    // Getting active window handle from the window threads processID # Bacause ::GetActiveWindow() fails in some cases.
+    GUITHREADINFO guiThreadInfo; guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
+    GetGUIThreadInfo(GetWindowThreadProcessId(g_hWnd, 0), &guiThreadInfo);
+
+    if (guiThreadInfo.hwndActive == g_hWnd && ::GetCursorPos(&pos))
         if (::ScreenToClient(g_hWnd, &pos))
             io.MousePos = ImVec2((float)pos.x, (float)pos.y);
 }

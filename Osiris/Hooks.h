@@ -16,6 +16,7 @@ public:
 
     std::add_pointer_t<bool __fastcall(void*, void*, float, UserCmd*)> originalCreateMove;
     std::add_pointer_t<void __stdcall()> originalLockCursor;
+    VmtHook surface;
 };
 
 extern Hooks hooks;
