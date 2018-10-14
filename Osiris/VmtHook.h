@@ -43,7 +43,7 @@ public:
     void hook_index(int index, T fun)
     {
         assert(index >= 0 && index <= (int)vmtLength);
-        new_vftbl[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
+        newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
     }
 
     void unhook_index(int);
@@ -60,6 +60,6 @@ private:
 
     void*           class_base;
     std::size_t     vmtLength;
-    std::uintptr_t* new_vftbl;
+    std::uintptr_t* newVmt;
     std::uintptr_t* old_vftbl;
 };

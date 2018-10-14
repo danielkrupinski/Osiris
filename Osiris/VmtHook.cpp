@@ -1,18 +1,18 @@
 #include "VmtHook.h"
 
 VmtHook::VmtHook()
-    : class_base(nullptr), vmtLength(0), new_vftbl(nullptr), old_vftbl(nullptr)
+    : class_base(nullptr), vmtLength(0), newVmt(nullptr), old_vftbl(nullptr)
 {
 }
 VmtHook::VmtHook(void* base)
-    : class_base(base), vmtLength(0), new_vftbl(nullptr), old_vftbl(nullptr)
+    : class_base(base), vmtLength(0), newVmt(nullptr), old_vftbl(nullptr)
 {
 }
 VmtHook::~VmtHook()
 {
     unhook_all();
 
-    delete[] new_vftbl;
+    delete[] newVmt;
 }
 
 bool VmtHook::setup(void* base /*= nullptr*/)
@@ -29,17 +29,17 @@ bool VmtHook::setup(void* base /*= nullptr*/)
     if (vmtLength == 0)
         return false;
 
-    new_vftbl = new std::uintptr_t[vmtLength + 1]();
+    newVmt = new std::uintptr_t[vmtLength + 1]();
 
-    std::memcpy(&new_vftbl[1], old_vftbl, vmtLength * sizeof(std::uintptr_t));
+    std::memcpy(&newVmt[1], old_vftbl, vmtLength * sizeof(std::uintptr_t));
 
     try {
         auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
-        new_vftbl[0] = old_vftbl[-1];
-        *(std::uintptr_t**)class_base = &new_vftbl[1];
+        newVmt[0] = old_vftbl[-1];
+        *(std::uintptr_t**)class_base = &newVmt[1];
     }
     catch (...) {
-        delete[] new_vftbl;
+        delete[] newVmt;
         return false;
     }
 
@@ -48,7 +48,7 @@ bool VmtHook::setup(void* base /*= nullptr*/)
 
 void VmtHook::unhook_index(int index)
 {
-    new_vftbl[index] = old_vftbl[index];
+    newVmt[index] = old_vftbl[index];
 }
 
 void VmtHook::unhook_all()
