@@ -14,3 +14,8 @@ Vector BaseEntity::getVelocity()
 {
     return *reinterpret_cast<Vector*>(this + 0x110);
 }
+
+int BaseEntity::getMoveType()
+{
+    return *reinterpret_cast<int*>(this + 0x258);
+}

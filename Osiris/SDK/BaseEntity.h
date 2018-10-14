@@ -7,4 +7,5 @@ public:
     int* getFlags();
     int getHealth();
     Vector getVelocity();
+    int getMoveType();
 };
