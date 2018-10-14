@@ -20,3 +20,11 @@ public:
     bool    hasbeenpredicted;   // 0x48 Client only, tracks whether we've predicted this command at least once
     char    pad_0x4C[0x18];     // 0x4C Current sizeof( usercmd ) =  100  = 0x64
 };
+
+using CRC32_t = unsigned long;
+
+class VerifiedUserCmd final {
+public:
+    UserCmd m_cmd;
+    CRC32_t  m_crc;
+};
