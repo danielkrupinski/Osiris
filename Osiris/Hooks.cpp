@@ -92,6 +92,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::bunnyHop(cmd);
         Misc::autoStrafe(cmd);
+        Misc::fixMovement(cmd);
     }
     return false;
 }
