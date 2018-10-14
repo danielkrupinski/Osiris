@@ -6,4 +6,5 @@ namespace Misc
 {
     void autoStrafe(UserCmd*);
     void bunnyHop(UserCmd*);
+    void fixMovement(UserCmd*);
 }

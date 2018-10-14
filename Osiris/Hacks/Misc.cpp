@@ -8,6 +8,7 @@
 #include "Misc.h"
 
 #define RAD2DEG( x ) ( ( float )( x ) * ( float )( 180.0f / ( float )( M_PI ) ) )
+#define DEG2RAD( x  )  ( (float)(x) * (float)(M_PI / 180.f) )
 #define CheckIfNonValidNumber(x) (fpclassify(x) == FP_INFINITE || fpclassify(x) == FP_NAN || fpclassify(x) == FP_SUBNORMAL)
 
 float normalizeYaw(float value)
@@ -168,4 +169,23 @@ void Misc::bunnyHop(UserCmd* cmd)
             bFake = false;
         }
     }
+}
+
+void Misc::fixMovement(UserCmd* cmd)
+{
+    Vector vMove = Vector(cmd->forwardmove, cmd->sidemove, 0.0f);
+    float flSpeed = vMove.Length();
+    Vector qMove;
+    vectorAngles(vMove, qMove);
+    float normalized = fmod(cmd->viewangles.y + 180.f, 360.f) - 180.f;
+    float normalizedx = fmod(cmd->viewangles.x + 180.f, 360.f) - 180.f;
+    Vector strafeAngle = cmd->viewangles;
+    float flYaw = DEG2RAD((normalized - strafeAngle.y) + qMove.y);
+
+    if (normalizedx >= 90.0f || normalizedx <= -90.0f || (cmd->viewangles.x >= 90.f && cmd->viewangles.x <= 200) || cmd->viewangles.x <= -90)
+        cmd->forwardmove = -cos(flYaw) * flSpeed;
+    else
+        cmd->forwardmove = cos(flYaw) * flSpeed;
+
+    cmd->sidemove = sin(flYaw) * flSpeed;
 }
