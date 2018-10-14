@@ -46,6 +46,11 @@ bool VmtHook::setup(void* base /*= nullptr*/)
     return true;
 }
 
+void VmtHook::unhook_index(int index)
+{
+    new_vftbl[index] = old_vftbl[index];
+}
+
 std::size_t VmtHook::estimate_vftbl_length(std::uintptr_t* vftbl_start)
 {
     auto len = std::size_t{};
