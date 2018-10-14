@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="SDK\AppSystem.h" />
     <ClInclude Include="SDK\BaseEntity.h" />
     <ClInclude Include="SDK\Client.h" />
