@@ -89,30 +89,8 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
-        if (config.misc.bunnyHop) {
-            static auto bJumped = false;
-            static auto bFake = false;
-            if (!bJumped && bFake) {
-                bFake = false;
-                cmd->buttons |= 2;
-            }
-            else if (cmd->buttons & 2) {
-                if (*((*memory.localPlayer)->getFlags()) & 1) {
-                    bJumped = true;
-                    bFake = true;
-                }
-                else {
-                    cmd->buttons &= ~2;
-                    bJumped = false;
-                }
-            }
-            else {
-                bJumped = false;
-                bFake = false;
-            }
-        }
-    }
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())
+        Misc::bunnyHop(cmd);
     return false;
 }
 
