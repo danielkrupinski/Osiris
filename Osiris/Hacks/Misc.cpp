@@ -1,3 +1,5 @@
+#include "../Config.h"
+#include "../Memory.h"
 #include "Misc.h"
 
 void Misc::bunnyHop(UserCmd* cmd)
