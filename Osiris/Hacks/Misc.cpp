@@ -1,6 +1,6 @@
 #include "Misc.h"
 
-void Misc::bunnyHop()
+void Misc::bunnyHop(UserCmd* cmd)
 {
     if (config.misc.bunnyHop) {
         static auto bJumped = false;
