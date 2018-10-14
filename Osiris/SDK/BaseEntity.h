@@ -6,4 +6,5 @@ class BaseEntity final {
 public:
     int* getFlags();
     int getHealth();
+    Vector getVelocity();
 };
