@@ -17,6 +17,7 @@ public:
     GlobalVars* globalVars;
     BaseEntity** localPlayer;
     ClientMode* clientMode;
+    Input* input;
 };
 
 extern Memory memory;

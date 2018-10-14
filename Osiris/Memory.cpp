@@ -15,6 +15,7 @@ Memory::Memory()
     globalVars = **reinterpret_cast<GlobalVars***>(findPattern(xorstr_("client_panorama.dll"), xorstr_("A1 ? ? ? ? 5E 8B 40 10")) + 1);
     localPlayer = *reinterpret_cast<BaseEntity***>(findPattern(xorstr_("client_panorama.dll"), xorstr_("8B 0D ? ? ? ? 83 FF FF 74 07")) + 2);
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
+    input = *reinterpret_cast<Input**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85")) + 1);
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
