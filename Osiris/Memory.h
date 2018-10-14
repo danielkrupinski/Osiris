@@ -4,6 +4,7 @@
 #include "SDK/BaseEntity.h"
 #include "SDK/ClientMode.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/Input.h"
 
 class Memory final {
 public:
