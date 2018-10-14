@@ -4,6 +4,7 @@
 
 #include <d3d9.h>
 
+#include "SDK/ClientMode.h"
 #include "SDK/UserCmd.h"
 #include "VmtHook.h"
 
