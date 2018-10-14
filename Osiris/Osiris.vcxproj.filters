@@ -195,7 +195,7 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Defines.h">
-      <Filter>Source Files</Filter>
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

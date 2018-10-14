@@ -89,8 +89,10 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::bunnyHop(cmd);
+        Misc::autoStrafe(cmd);
+    }
     return false;
 }
 
