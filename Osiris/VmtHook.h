@@ -50,7 +50,7 @@ public:
     void unhook_all();
 
     template<typename T>
-    constexpr auto getOriginal(int index)
+    constexpr auto getOriginal(int index) noexcept
     {
         return reinterpret_cast<T>(old_vftbl[index]);
     }
