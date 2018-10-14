@@ -96,7 +96,7 @@ void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
     if (config.isMenuOpen)
         interfaces.surface->UnlockCursor();
     else
-        hooks.surface.get_original<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
+        hooks.surface.getOriginal<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
 }
 
 Hooks::Hooks()
