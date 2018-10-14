@@ -3,12 +3,13 @@
 #include "imgui/imgui_impl_win32.h"
 #include "xorstr.hpp"
 
+#include "Config.h"
 #include "GUI.h"
+#include "Hacks/Misc.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/UserCmd.h"
-#include "Config.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
