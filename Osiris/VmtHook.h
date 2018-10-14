@@ -47,18 +47,7 @@ public:
     }
     void unhook_index(int);
 
-    void unhook_all()
-    {
-        try {
-            if (old_vftbl != nullptr) {
-                auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
-                *(std::uintptr_t**)class_base = old_vftbl;
-                old_vftbl = nullptr;
-            }
-        }
-        catch (...) {
-        }
-    }
+    void unhook_all();
 
     template<typename T>
     T get_original(int index)

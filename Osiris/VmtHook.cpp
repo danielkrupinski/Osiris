@@ -51,6 +51,19 @@ void VmtHook::unhook_index(int index)
     new_vftbl[index] = old_vftbl[index];
 }
 
+void VmtHook::unhook_all()
+{
+    try {
+        if (old_vftbl != nullptr) {
+            auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
+            *(std::uintptr_t**)class_base = old_vftbl;
+            old_vftbl = nullptr;
+        }
+    }
+    catch (...) {
+    }
+}
+
 std::size_t VmtHook::estimate_vftbl_length(std::uintptr_t* vftbl_start)
 {
     auto len = std::size_t{};
