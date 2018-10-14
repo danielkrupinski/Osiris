@@ -42,8 +42,8 @@ public:
     template<typename T>
     void hook_index(int index, T fun)
     {
-        assert(index >= 0 && index <= (int)vmtLength);
-        newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
+        if (static_cast<std::size_t>(index) <= vmtLength)
+            newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
     }
 
     void unhook_index(int);
