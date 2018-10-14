@@ -52,7 +52,7 @@ public:
     template<typename T>
     constexpr auto getOriginal(int index) noexcept
     {
-        return reinterpret_cast<T>(old_vftbl[index]);
+        return reinterpret_cast<T>(oldVmt[index]);
     }
 
 private:
@@ -61,5 +61,5 @@ private:
     void*           class_base;
     std::size_t     vmtLength;
     std::uintptr_t* newVmt;
-    std::uintptr_t* old_vftbl;
+    std::uintptr_t* oldVmt;
 };
