@@ -15,9 +15,9 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if(GetAsyncKeyState(VK_INSERT) & 1)
-       config.isMenuOpen = !config.isMenuOpen;
+       gui.isOpen = !gui.isOpen;
 
-    if (config.isMenuOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -46,7 +46,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
             );
         isInitialised = true;
     }
-    else if (config.isMenuOpen) {
+    else if (gui.isOpen) {
         DWORD d3rsColorWrite;
         device->GetRenderState(D3DRS_COLORWRITEENABLE, &d3rsColorWrite);
         IDirect3DVertexDeclaration9* vertexDeclaration;
@@ -93,7 +93,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
 
 void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 {
-    if (config.isMenuOpen)
+    if (gui.isOpen)
         interfaces.surface->UnlockCursor();
     else
         hooks.surface.getOriginal<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
