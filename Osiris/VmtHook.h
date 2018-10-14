@@ -42,7 +42,7 @@ public:
     template<typename T>
     void hook_index(int index, T fun)
     {
-        assert(index >= 0 && index <= (int)vftbl_len);
+        assert(index >= 0 && index <= (int)vmtLength);
         new_vftbl[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
     }
 
@@ -59,7 +59,7 @@ private:
     static inline std::size_t estimate_vftbl_length(std::uintptr_t* vftbl_start);
 
     void*           class_base;
-    std::size_t     vftbl_len;
+    std::size_t     vmtLength;
     std::uintptr_t* new_vftbl;
     std::uintptr_t* old_vftbl;
 };

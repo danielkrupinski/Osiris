@@ -1,11 +1,11 @@
 #include "VmtHook.h"
 
 VmtHook::VmtHook()
-    : class_base(nullptr), vftbl_len(0), new_vftbl(nullptr), old_vftbl(nullptr)
+    : class_base(nullptr), vmtLength(0), new_vftbl(nullptr), old_vftbl(nullptr)
 {
 }
 VmtHook::VmtHook(void* base)
-    : class_base(base), vftbl_len(0), new_vftbl(nullptr), old_vftbl(nullptr)
+    : class_base(base), vmtLength(0), new_vftbl(nullptr), old_vftbl(nullptr)
 {
 }
 VmtHook::~VmtHook()
@@ -24,14 +24,14 @@ bool VmtHook::setup(void* base /*= nullptr*/)
         return false;
 
     old_vftbl = *(std::uintptr_t**)class_base;
-    vftbl_len = estimate_vftbl_length(old_vftbl);
+    vmtLength = estimate_vftbl_length(old_vftbl);
 
-    if (vftbl_len == 0)
+    if (vmtLength == 0)
         return false;
 
-    new_vftbl = new std::uintptr_t[vftbl_len + 1]();
+    new_vftbl = new std::uintptr_t[vmtLength + 1]();
 
-    std::memcpy(&new_vftbl[1], old_vftbl, vftbl_len * sizeof(std::uintptr_t));
+    std::memcpy(&new_vftbl[1], old_vftbl, vmtLength * sizeof(std::uintptr_t));
 
     try {
         auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
