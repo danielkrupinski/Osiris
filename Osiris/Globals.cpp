@@ -7,7 +7,7 @@
 #include "Memory.h"
 
 Config config{ xorstr_("Osiris.json") };
+GUI gui;
 Interfaces interfaces;
 Memory memory;
 Hooks hooks;
-GUI gui;
