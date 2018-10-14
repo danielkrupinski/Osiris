@@ -33,6 +33,7 @@ void GUI::render()
             break;
         case MISC:
             ImGui::Text(xorstr("Misc tab welcomes!").crypt_get());
+            ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
             break;
         }
     }
