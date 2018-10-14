@@ -45,14 +45,14 @@ public:
         assert(index >= 0 && index <= (int)vftbl_len);
         new_vftbl[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
     }
-    void unhook_index(int);
 
+    void unhook_index(int);
     void unhook_all();
 
     template<typename T>
-    T get_original(int index)
+    auto get_original(int index)
     {
-        return (T)old_vftbl[index];
+        return reinterpret_cast<T>(old_vftbl[index]);
     }
 
 private:
