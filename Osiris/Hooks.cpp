@@ -125,7 +125,7 @@ void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 
 static int __stdcall hookedDoPostScreenEffects(int param)
 {
-    
+    return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 
 Hooks::Hooks()
