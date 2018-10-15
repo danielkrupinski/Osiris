@@ -55,6 +55,7 @@
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\Defines.h" />
     <ClInclude Include="SDK\EngineClient.h" />
+    <ClInclude Include="SDK\Enums.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
