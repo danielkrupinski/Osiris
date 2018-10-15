@@ -221,5 +221,8 @@
     <ClInclude Include="SDK\Enums.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ClientNetworkable.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
