@@ -123,6 +123,11 @@ void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
         hooks.surface.getOriginal<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
 }
 
+static int __stdcall hookedDoPostScreenEffects(int param)
+{
+    
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
