@@ -203,8 +203,11 @@
     <ClInclude Include="Hacks\Visuals.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\UtlVector.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
     <ClInclude Include="SDK\UtlMemory.h">
-      <Filter>Header Files</Filter>
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
