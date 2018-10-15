@@ -4,6 +4,7 @@
 #include "SDK/BaseEntity.h"
 #include "SDK/ClientMode.h"
 #include "SDK/GlobalVars.h"
+#include "SDK/GlowObjectManager.h"
 #include "SDK/Input.h"
 
 class Memory final {
@@ -18,6 +19,7 @@ public:
     BaseEntity** localPlayer;
     ClientMode* clientMode;
     Input* input;
+    GlowObjectManager* glowObjectManager;
 };
 
 extern Memory memory;

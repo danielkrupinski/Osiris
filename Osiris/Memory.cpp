@@ -16,6 +16,7 @@ Memory::Memory()
     localPlayer = *reinterpret_cast<BaseEntity***>(findPattern(xorstr_("client_panorama.dll"), xorstr_("8B 0D ? ? ? ? 83 FF FF 74 07")) + 2);
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
     input = *reinterpret_cast<Input**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85")) + 1);
+    glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("0F 11 05 ? ? ? ? 83 C8 01")) + 3);
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
