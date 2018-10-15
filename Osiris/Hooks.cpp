@@ -139,4 +139,5 @@ Hooks::Hooks()
     surface.hook_index(67, hookedLockCursor);
     client.setup(memory.clientMode);
     client.hook_index(24, hookedCreateMove);
+    client.hook_index(44, hookedDoPostScreenEffects);
 }
