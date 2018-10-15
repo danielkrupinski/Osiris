@@ -44,7 +44,7 @@ void vectorAngles(const Vector& vecForward, Vector& vecAngles)
     vecAngles[2] = 0.f;
 }
 
-void Misc::autoStrafe(UserCmd* cmd)
+/* void Misc::autoStrafe(UserCmd* cmd)
 {
     if (config.misc.autoStrafe) {
         if (GetAsyncKeyState(VK_SPACE)) {
@@ -144,6 +144,7 @@ void Misc::autoStrafe(UserCmd* cmd)
         }
     }
 }
+*/
 
 void Misc::bunnyHop(UserCmd* cmd)
 {
@@ -170,7 +171,7 @@ void Misc::bunnyHop(UserCmd* cmd)
         }
     }
 }
-
+/*
 void Misc::fixMovement(UserCmd* cmd)
 {
     Vector vMove = Vector(cmd->forwardmove, cmd->sidemove, 0.0f);
@@ -189,3 +190,4 @@ void Misc::fixMovement(UserCmd* cmd)
 
     cmd->sidemove = sin(flYaw) * flSpeed;
 }
+*/
