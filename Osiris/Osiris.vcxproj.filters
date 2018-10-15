@@ -224,5 +224,8 @@
     <ClInclude Include="SDK\ClientNetworkable.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\HandleEntity.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
