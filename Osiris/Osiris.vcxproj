@@ -50,6 +50,7 @@
     <ClInclude Include="SDK\BaseEntity.h" />
     <ClInclude Include="SDK\BaseHandle.h" />
     <ClInclude Include="SDK\Client.h" />
+    <ClInclude Include="SDK\ClientClass.h" />
     <ClInclude Include="SDK\ClientEntityList.h" />
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\Defines.h" />
