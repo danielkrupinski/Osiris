@@ -73,6 +73,7 @@
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />
+    <ClInclude Include="SDK\UtlMemory.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Vector2D.h" />
     <ClInclude Include="stdafx.h" />
