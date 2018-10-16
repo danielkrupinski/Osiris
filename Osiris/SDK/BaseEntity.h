@@ -9,4 +9,5 @@ public:
     int getHealth();
     Vector getVelocity();
     int getMoveType();
+    int getTeamNumber();
 };

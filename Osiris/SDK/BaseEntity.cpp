@@ -19,3 +19,8 @@ int BaseEntity::getMoveType()
 {
     return *reinterpret_cast<int*>(this + 0x258);
 }
+
+int BaseEntity::getTeamNumber()
+{
+    return 0;
+}
