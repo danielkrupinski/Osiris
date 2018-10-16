@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "ClientEntity.h"
 #include "UtlVector.h"
 
 class GlowObjectDefinition_t {
