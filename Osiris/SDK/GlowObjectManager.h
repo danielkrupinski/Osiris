@@ -21,7 +21,8 @@ public:
     float   m_flAlpha;                 //0x0010
     uint8_t pad_0014[4];               //0x0014
     float   m_flSomeFloat;             //0x0018
-    uint8_t pad_001C[4];               //0x001C
+    uint8_t pad_001C[1];               //0x001C
+    int m_nFullBloomStencilTestValue;
     float   m_flAnotherFloat;          //0x0020
     bool    m_bRenderWhenOccluded;     //0x0024
     bool    m_bRenderWhenUnoccluded;   //0x0025
