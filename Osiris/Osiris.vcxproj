@@ -54,6 +54,7 @@
     <ClInclude Include="SDK\ClientEntityList.h" />
     <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\ClientNetworkable.h" />
+    <ClInclude Include="SDK\ClientUnknown.h" />
     <ClInclude Include="SDK\Defines.h" />
     <ClInclude Include="SDK\EngineClient.h" />
     <ClInclude Include="SDK\Enums.h" />
