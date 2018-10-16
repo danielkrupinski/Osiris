@@ -6,12 +6,10 @@ void Visuals::glow()
     for (int index = 0; index < memory.glowObjectManager->m_GlowObjectDefinitions.m_Size; index++) {
         GlowObjectDefinition_t& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
 
-        if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->IsUnused())
+        if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->IsUnused() || !glowobject.m_pEntity)
             continue;
 
-        BaseEntity* entity = glowobject.m_pEntity;
-
-        if (entity->GetClientClass()->m_ClassID != ClassId_CCSPlayer) // || entity->IsDormant())
+        if (glowobject.m_pEntity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.m_pEntity->IsDormant())
             continue;
             //entity->setShouldGlow(true);
 
