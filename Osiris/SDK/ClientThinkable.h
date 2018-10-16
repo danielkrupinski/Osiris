@@ -4,7 +4,7 @@ class ClientUnknown;
 class ClientThinkHandlePtr;
 typedef ClientThinkHandlePtr* ClientThinkHandle_t;
 
-class IClientThinkable {
+class ClientThinkable {
 public:
     virtual ClientUnknown*     GetIClientUnknown() = 0;
     virtual void                ClientThink() = 0;
