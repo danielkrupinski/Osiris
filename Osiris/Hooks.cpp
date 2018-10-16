@@ -10,6 +10,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/UserCmd.h"
+#include "Hacks/Visuals.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -93,6 +94,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
         Misc::bunnyHop(cmd);
         //Misc::autoStrafe(cmd);
         //Misc::fixMovement(cmd);
+        Visuals::glow();
     }
     return false;
 }
