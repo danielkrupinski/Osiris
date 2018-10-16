@@ -233,5 +233,8 @@
     <ClInclude Include="SDK\ClientRenderable.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ClientThinkable.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
