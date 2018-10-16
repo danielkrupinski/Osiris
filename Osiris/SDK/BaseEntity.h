@@ -1,8 +1,9 @@
 #pragma once
 
+#include "ClientEntity.h"
 #include "Vector.h"
 
-class BaseEntity final {
+class BaseEntity : public ClientEntity {
 public:
     int* getFlags();
     int getHealth();

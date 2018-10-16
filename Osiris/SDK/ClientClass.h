@@ -3,7 +3,7 @@
 #include "Enums.h"
 
 //class ClientClass;
-class IClientNetworkable;
+class ClientNetworkable;
 
 typedef ClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
 typedef ClientNetworkable* (*CreateEventFn)();
