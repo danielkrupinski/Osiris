@@ -3,7 +3,7 @@
 #include "ClientEntity.h"
 #include "Vector.h"
 
-class BaseEntity : public ClientEntity {
+class BaseEntity {
 public:
     int* getFlags();
     int getHealth();
