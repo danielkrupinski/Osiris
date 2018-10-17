@@ -29,7 +29,6 @@ void GUI::render()
                 ImGui::Text(xorstr_("Player health: %d"), (*memory.localPlayer)->getHealth());
             break;
         case VISUALS:
-            ImGui::Text(xorstr_("Visuals tab welcomes!"));
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             break;
         case MISC:
