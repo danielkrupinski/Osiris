@@ -34,6 +34,12 @@ void GUI::render()
             break;
         case MISC:
             ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
+            ImGui::Text(xorstr_("Config"));
+            if (ImGui::Button(xorstr_("Load")))
+                config.load();
+            if (ImGui::Button(xorstr_("Save")))
+                config.save();
+
             // ImGui::Checkbox(xorstr_("Auto strafe"), &config.misc.autoStrafe);
             break;
         }
