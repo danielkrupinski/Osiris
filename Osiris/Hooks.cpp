@@ -94,7 +94,6 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
         Misc::bunnyHop(cmd);
         //Misc::autoStrafe(cmd);
         //Misc::fixMovement(cmd);
-        Visuals::glow();
     }
     return false;
 }
@@ -127,6 +126,9 @@ void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 
 static int __stdcall hookedDoPostScreenEffects(int param)
 {
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        Visuals::glow();
+    }
     return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 
