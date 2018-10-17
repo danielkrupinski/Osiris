@@ -98,24 +98,6 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
     return false;
 }
 
-static void __declspec(naked) __stdcall hookedCreateMoveProxy(int sequenceNumber, float inputSampleFrametime, bool active)
-{
-    __asm {
-        push ebp
-        mov  ebp, esp
-        push ebx
-        lea  ecx, [esp]
-        push ecx
-        push dword ptr[active]
-        push dword ptr[inputSampleFrametime]
-        push dword ptr[sequenceNumber]
-        call hookedCreateMove
-        pop  ebx
-        pop  ebp
-        retn 0Ch
-    }
-}
-
 void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 {
     if (gui.isOpen)
