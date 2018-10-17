@@ -12,6 +12,7 @@ public:
         struct {
             bool enabled{ false };
             float thickness{ 0.0f };
+            float alpha{ 0.0f };
         } glow;
     } visuals;
 

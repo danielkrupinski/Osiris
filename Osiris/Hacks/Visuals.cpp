@@ -16,7 +16,7 @@ void Visuals::glow()
             //entity->setShouldGlow(true);
 
             glowobject.m_vGlowColor = Vector{ 153.0f, 0.0f, 0.0f };
-            glowobject.m_flAlpha = 1.0f;
+            glowobject.m_flAlpha = config.visuals.glow.alpha;
             glowobject.m_bRenderWhenOccluded = true;
             glowobject.m_bRenderWhenUnoccluded = false;
             glowobject.m_nGlowStyle = 0;
