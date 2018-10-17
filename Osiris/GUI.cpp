@@ -30,6 +30,7 @@ void GUI::render()
             break;
         case VISUALS:
             ImGui::Text(xorstr_("Visuals tab welcomes!"));
+            ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             break;
         case MISC:
             ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
