@@ -98,7 +98,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
     return false;
 }
 
-void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
+static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 {
     if (gui.isOpen)
         interfaces.surface->UnlockCursor();
