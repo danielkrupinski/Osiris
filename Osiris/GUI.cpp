@@ -30,6 +30,7 @@ void GUI::render()
             break;
         case VISUALS:
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
+            ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
             break;
         case MISC:
             ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);

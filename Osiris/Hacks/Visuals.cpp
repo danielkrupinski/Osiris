@@ -22,7 +22,7 @@ void Visuals::glow()
             glowobject.m_nGlowStyle = 0;
             glowobject.m_bFullBloomRender = false;
             glowobject.m_nFullBloomStencilTestValue = 0;
-            glowobject.m_flBloomAmount = 0.5f;
+            glowobject.m_flBloomAmount = config.visuals.glow.thickness;
         }
     }
 }
