@@ -32,7 +32,7 @@ void GUI::render()
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
             ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
-            ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color);
+            ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
             break;
         case MISC:
             ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
