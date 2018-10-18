@@ -32,6 +32,7 @@ void Config::load()
     visuals.glow.color[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][2].asFloat();
 
     visuals.glow.thickness = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")].asFloat();
+    visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.autoStrafe = config[xorstr_("misc")][xorstr_("autoStrafe")].asBool();
