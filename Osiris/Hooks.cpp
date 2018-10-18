@@ -90,11 +90,8 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())
         Misc::bunnyHop(cmd);
-        //Misc::autoStrafe(cmd);
-        //Misc::fixMovement(cmd);
-    }
     return false;
 }
 
@@ -108,9 +105,8 @@ static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 
 static int __stdcall hookedDoPostScreenEffects(int param)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())
         Visuals::glow();
-    }
     return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 

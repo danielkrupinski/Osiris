@@ -13,7 +13,6 @@ void Visuals::glow()
 
             if (glowobject.m_pEntity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.m_pEntity->IsDormant())
                 continue;
-            //entity->setShouldGlow(true);
 
             glowobject.m_vGlowColor = config.visuals.glow.color;
             glowobject.m_flAlpha = config.visuals.glow.alpha;
