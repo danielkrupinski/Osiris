@@ -3,9 +3,9 @@
 #include "ClientEntity.h"
 #include "UtlVector.h"
 
-class GlowObjectDefinition_t {
+class GlowObjectDefinition {
 public:
-    GlowObjectDefinition_t() { memset(this, 0, sizeof(*this)); }
+    GlowObjectDefinition() { memset(this, 0, sizeof(*this)); }
 
     class ClientEntity* m_pEntity;
     union
@@ -32,7 +32,7 @@ public:
     int32_t m_nSplitScreenSlot;
     int32_t m_nNextFreeSlot;
 
-    constexpr bool isUnused() const noexcept { return m_nNextFreeSlot != GlowObjectDefinition_t::ENTRY_IN_USE; }
+    constexpr bool isUnused() const noexcept { return m_nNextFreeSlot != GlowObjectDefinition::ENTRY_IN_USE; }
 
     static constexpr int END_OF_FREE_LIST = -1;
     static constexpr int ENTRY_IN_USE = -2;
@@ -40,6 +40,6 @@ public:
 
 class GlowObjectManager {
 public:
-    UtlVector<GlowObjectDefinition_t> m_GlowObjectDefinitions;
+    UtlVector<GlowObjectDefinition> m_GlowObjectDefinitions;
     int m_nFirstFreeSlot;
 };

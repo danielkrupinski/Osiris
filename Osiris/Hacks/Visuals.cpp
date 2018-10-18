@@ -6,7 +6,7 @@ void Visuals::glow()
 {
     if (config.visuals.glow.enabled) {
         for (int index = 0; index < memory.glowObjectManager->m_GlowObjectDefinitions.m_Size; index++) {
-            GlowObjectDefinition_t& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
+            GlowObjectDefinition& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
 
             if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->isUnused() || !glowobject.m_pEntity)
                 continue;
