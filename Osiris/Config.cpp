@@ -44,6 +44,10 @@ void Config::save() const
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
 
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][0] = visuals.glow.color[0];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][1] = visuals.glow.color[1];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][2] = visuals.glow.color[2];
+
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("autoStrafe")] = misc.autoStrafe;
 
