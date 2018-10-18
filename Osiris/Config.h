@@ -12,8 +12,8 @@ public:
         struct {
             bool enabled{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
-            float thickness{ 0.0f };
-            float alpha{ 0.0f };
+            float thickness{ 1.0f };
+            float alpha{ 1.0f };
         } glow;
     } visuals;
 
