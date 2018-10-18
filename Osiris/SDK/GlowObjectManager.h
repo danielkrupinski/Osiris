@@ -32,7 +32,7 @@ public:
     int32_t m_nSplitScreenSlot;
     int32_t m_nNextFreeSlot;
 
-    bool IsUnused() const { return m_nNextFreeSlot != GlowObjectDefinition_t::ENTRY_IN_USE; }
+    bool isUnused() const { return m_nNextFreeSlot != GlowObjectDefinition_t::ENTRY_IN_USE; }
 
     static constexpr int END_OF_FREE_LIST = -1;
     static constexpr int ENTRY_IN_USE = -2;
