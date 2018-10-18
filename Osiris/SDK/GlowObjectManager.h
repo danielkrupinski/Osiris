@@ -35,7 +35,7 @@ public:
     bool IsUnused() const { return m_nNextFreeSlot != GlowObjectDefinition_t::ENTRY_IN_USE; }
 
     static constexpr int END_OF_FREE_LIST = -1;
-    static const int ENTRY_IN_USE = -2;
+    static constexpr int ENTRY_IN_USE = -2;
 }; //Size: 0x0038 (56)
 
 class GlowObjectManager {
