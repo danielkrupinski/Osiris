@@ -1,8 +1,3 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <Windows.h>
-
-#include "../SDK/Defines.h"
 #include "../Config.h"
 #include "../Memory.h"
 #include "Misc.h"
