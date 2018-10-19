@@ -11,7 +11,7 @@
 
 GUI::GUI()
 {
-    
+
 }
 
 void GUI::render()
@@ -24,8 +24,8 @@ void GUI::render()
         }
 
         if (ImGui::BeginMenu(xorstr_("Visuals"))) {
-            if (ImGui::MenuItem(xorstr_("Glow")));
-                
+            if (ImGui::MenuItem(xorstr_("Glow")))
+                window = GLOW;
             ImGui::EndMenu();
         }
 
@@ -46,14 +46,15 @@ void GUI::render()
 
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin(xorstr_("Osiris"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
- 
-    ImGui::PushItemWidth(165);
-    if (ImGui::BeginChild(xorstr_("#tabs"), ImVec2(0.0f, 460.0f), true)) {
-        switch (tab) {
-        case AIMBOT:
-            if (interfaces.engineClient->IsInGame())
-                ImGui::Text(xorstr_("Player health: %d"), (*memory.localPlayer)->getHealth());
+
+    switch (window) {
+        case GLOW:
+            ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
+            ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
+            ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
+            ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
             break;
+        /*
         case VISUALS:
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
@@ -67,25 +68,9 @@ void GUI::render()
                 config.load();
             if (ImGui::Button(xorstr_("Save")))
                 config.save();
-
-            // ImGui::Checkbox(xorstr_("Auto strafe"), &config.misc.autoStrafe);
             break;
+        */
         }
-    }
-    
-    ImGui::EndChild();
-    ImGui::PopItemWidth();
-
-    if (ImGui::Button(xorstr_("Aimbot"), ImVec2(207.0f, 20.0f)))
-        tab = AIMBOT;
-    ImGui::SameLine();
-
-    if (ImGui::Button(xorstr_("Visuals"), ImVec2(207.0f, 20.0f)))
-        tab = VISUALS;
-    ImGui::SameLine();
-
-    if (ImGui::Button(xorstr_("Misc"), ImVec2(207.0f, 20.0f)))
-        tab = MISC;
 
     ImGui::End();
 }
