@@ -50,13 +50,20 @@ void GUI::render()
     }
 
     if (window.glow) {
-            ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-            ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);// | ImGuiWindowFlags_NoTitleBar);
-            ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
-            ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
-            ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
-            ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
-            ImGui::End();
+        ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
+        ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);// | ImGuiWindowFlags_NoTitleBar);
+        ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
+        ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
+        ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
+        ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
+        ImGui::End();
+    }
+
+    if (window.misc) {
+        ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
+        ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);// | ImGuiWindowFlags_NoTitleBar);
+        ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
+    }
         /*
         case VISUALS:
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
@@ -73,7 +80,5 @@ void GUI::render()
                 config.save();
             break;
         */
-        }
-
    
 }
