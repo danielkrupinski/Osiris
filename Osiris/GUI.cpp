@@ -20,6 +20,10 @@ void GUI::render()
         if (ImGui::BeginMenu("Aimbot")) {
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Visuals")) {
+            ImGui::EndMenu();
+        }
         ImGui::EndMainMenuBar();
     }
 
