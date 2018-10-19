@@ -24,6 +24,11 @@ void GUI::render()
         if (ImGui::BeginMenu("Visuals")) {
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Misc")) {
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMainMenuBar();
     }
 
