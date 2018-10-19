@@ -16,12 +16,16 @@ GUI::GUI()
 
 void GUI::render()
 {
+    static enum { NONE, GLOW } window{ NONE };
+
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu(xorstr_("Aimbot"))) {
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu(xorstr_("Visuals"))) {
+            if (ImGui::MenuItem(xorstr_("Glow")));
+                
             ImGui::EndMenu();
         }
 
@@ -42,8 +46,6 @@ void GUI::render()
 
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin(xorstr_("Osiris"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
-
-    static enum { AIMBOT, VISUALS, MISC } tab{ MISC };
  
     ImGui::PushItemWidth(165);
     if (ImGui::BeginChild(xorstr_("#tabs"), ImVec2(0.0f, 460.0f), true)) {
