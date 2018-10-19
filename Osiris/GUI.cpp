@@ -32,6 +32,8 @@ void GUI::render()
         if (ImGui::BeginMenu("Config")) {
             if (ImGui::MenuItem("Load"))
                 config.load();
+            if (ImGui::MenuItem("Save"))
+                config.save();
             ImGui::EndMenu();
         }
 
