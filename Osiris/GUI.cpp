@@ -49,7 +49,7 @@ void GUI::render()
 
     if (window.glow) {
             ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-            ImGui::Begin(xorstr_("Glow"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
+            ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);// | ImGuiWindowFlags_NoTitleBar);
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
             ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
