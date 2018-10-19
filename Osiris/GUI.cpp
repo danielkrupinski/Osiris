@@ -17,22 +17,22 @@ GUI::GUI()
 void GUI::render()
 {
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::BeginMenu("Aimbot")) {
+        if (ImGui::BeginMenu(xorstr_("Aimbot"))) {
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Visuals")) {
+        if (ImGui::BeginMenu(xorstr_("Visuals"))) {
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Misc")) {
+        if (ImGui::BeginMenu(xorstr_("Misc"))) {
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Config")) {
-            if (ImGui::MenuItem("Load"))
+        if (ImGui::BeginMenu(xorstr_("Config"))) {
+            if (ImGui::MenuItem(xorstr_("Load")))
                 config.load();
-            if (ImGui::MenuItem("Save"))
+            if (ImGui::MenuItem(xorstr_("Save")))
                 config.save();
             ImGui::EndMenu();
         }
