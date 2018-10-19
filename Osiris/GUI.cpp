@@ -29,6 +29,10 @@ void GUI::render()
             ImGui::EndMenu();
         }
 
+        if (ImGui::BeginMenu("Config")) {
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMainMenuBar();
     }
 
