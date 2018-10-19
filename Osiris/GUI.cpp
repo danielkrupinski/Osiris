@@ -30,6 +30,8 @@ void GUI::render()
         }
 
         if (ImGui::BeginMenu("Config")) {
+            if (ImGui::MenuItem("Load"))
+                config.load();
             ImGui::EndMenu();
         }
 
