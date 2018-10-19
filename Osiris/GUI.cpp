@@ -16,6 +16,13 @@ GUI::GUI()
 
 void GUI::render()
 {
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("Aimbot")) {
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+
     ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
     ImGui::Begin(xorstr_("Osiris"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
 
