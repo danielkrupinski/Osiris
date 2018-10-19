@@ -16,7 +16,10 @@ GUI::GUI()
 
 void GUI::render()
 {
-    static enum { NONE, GLOW } window{ NONE };
+    static struct {
+        bool none{ true };
+        bool glow{ false };
+    } window;
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu(xorstr_("Aimbot"))) {
@@ -25,7 +28,7 @@ void GUI::render()
 
         if (ImGui::BeginMenu(xorstr_("Visuals"))) {
             if (ImGui::MenuItem(xorstr_("Glow")))
-                window = GLOW;
+                window.glow = true;
             ImGui::EndMenu();
         }
 
@@ -44,16 +47,14 @@ void GUI::render()
         ImGui::EndMainMenuBar();
     }
 
-    ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
-    ImGui::Begin(xorstr_("Osiris"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
-
-    switch (window) {
-        case GLOW:
+    if (window.glow) {
+            ImGui::SetNextWindowSize(ImVec2(650.0f, 500.0f));
+            ImGui::Begin(xorstr_("Glow"), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
             ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
             ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
             ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
-            break;
+            ImGui::End();
         /*
         case VISUALS:
             ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
@@ -72,5 +73,5 @@ void GUI::render()
         */
         }
 
-    ImGui::End();
+   
 }
