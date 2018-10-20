@@ -17,7 +17,6 @@ GUI::GUI()
 void GUI::render()
 {
     static struct {
-        bool none{ true };
         bool glow{ false };
         bool misc{ false };
     } window;
