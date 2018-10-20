@@ -4,7 +4,9 @@
 
 void Visuals::glow()
 {
-    if (config.visuals.glow.enabled) {
+    const auto& glow = config.visuals.glow;
+
+    if (glow.enabled) {
         for (int index = 0; index < memory.glowObjectManager->m_GlowObjectDefinitions.m_Size; index++) {
             GlowObjectDefinition& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
 
@@ -15,8 +17,6 @@ void Visuals::glow()
                 continue;
 
             bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.m_pEntity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
-
-            const auto& glow = config.visuals.glow;
 
             if (isEnemy) {
                 glowobject.m_vGlowColor = glow.enemiesColor;
