@@ -49,12 +49,13 @@ void GUI::render()
     }
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 300.0f));
+        ImGui::SetNextWindowSize(ImVec2(150.0f, 300.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::Checkbox(xorstr_("Glow"), &config.visuals.glow.enabled);
-        ImGui::SliderFloat(xorstr_("Glow thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
-        ImGui::SliderFloat(xorstr_("Glow alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
-        ImGui::ColorEdit3(xorstr_("Glow color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
+        ImGui::PushItemWidth(-70);
+        ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
+        ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
+        ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
+        ImGui::ColorEdit3(xorstr_("Color"), config.visuals.glow.color, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
 
