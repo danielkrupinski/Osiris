@@ -26,6 +26,7 @@ void Config::load()
     in >> config;
 
     visuals.glow.enabled = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")].asBool();
+    visuals.glow.enemiesOnly = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")].asBool();
 
     visuals.glow.color[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][0].asFloat();
     visuals.glow.color[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][1].asFloat();
@@ -49,6 +50,7 @@ void Config::save() const
     Json::Value config;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")] = visuals.glow.enemiesOnly;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][0] = visuals.glow.color[0];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][1] = visuals.glow.color[1];
