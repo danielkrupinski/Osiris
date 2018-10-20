@@ -35,7 +35,6 @@ void Config::load()
     visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
-    misc.autoStrafe = config[xorstr_("misc")][xorstr_("autoStrafe")].asBool();
 
     in.close();
 }
@@ -59,7 +58,6 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
 
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
-    config[xorstr_("misc")][xorstr_("autoStrafe")] = misc.autoStrafe;
 
     out << config;
     out.close();

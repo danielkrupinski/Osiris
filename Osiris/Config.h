@@ -20,7 +20,6 @@ public:
 
     struct {
         bool bunnyHop{ false };
-        bool autoStrafe{ false };
     } misc;
 
 private:
