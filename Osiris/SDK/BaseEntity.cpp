@@ -25,7 +25,3 @@ int BaseEntity::getTeamNumber()
     return *reinterpret_cast<int*>(this + 0xF0);
 }
 
-void BaseEntity::setShouldGlow(bool shouldGlow)
-{
-    *reinterpret_cast<bool*>(this + 0x29BB) = true;
-}

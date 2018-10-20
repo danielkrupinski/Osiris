@@ -10,5 +10,4 @@ public:
     Vector getVelocity();
     int getMoveType();
     int getTeamNumber();
-    void setShouldGlow(bool);
 };
