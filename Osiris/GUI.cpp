@@ -53,7 +53,7 @@ void GUI::render()
     if (window.glow) {
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(-70);
+        ImGui::PushItemWidth(io.DisplaySize.x / 16.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
