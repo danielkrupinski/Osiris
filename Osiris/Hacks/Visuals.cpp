@@ -29,7 +29,7 @@ void Visuals::glow()
                 glowobject.m_flBloomAmount = glow.thickness;
             }
             else if (!glow.enemiesOnly) {
-                glowobject.m_vGlowColor = { 1.0f, 1.0f, 1.0f };
+                glowobject.m_vGlowColor = glow.alliesColor;
                 glowobject.m_flAlpha = glow.alpha;
                 glowobject.m_bRenderWhenOccluded = true;
                 glowobject.m_bRenderWhenUnoccluded = false;
