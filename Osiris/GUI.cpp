@@ -48,8 +48,10 @@ void GUI::render()
         ImGui::EndMainMenuBar();
     }
 
+    ImGuiIO& io = ImGui::GetIO();
+
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(150.0f, 300.0f));
+        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(-70);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
