@@ -11,6 +11,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
+            bool enemiesOnly{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
             float thickness{ 1.0f };
             float alpha{ 1.0f };
