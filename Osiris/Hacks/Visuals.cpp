@@ -26,6 +26,16 @@ void Visuals::glow()
                 glowobject.m_nFullBloomStencilTestValue = 0;
                 glowobject.m_flBloomAmount = config.visuals.glow.thickness;
             }
+            else if (!config.visuals.glow.enemiesOnly) {
+                glowobject.m_vGlowColor = { 1.0f, 1.0f, 1.0f };
+                glowobject.m_flAlpha = config.visuals.glow.alpha;
+                glowobject.m_bRenderWhenOccluded = true;
+                glowobject.m_bRenderWhenUnoccluded = false;
+                glowobject.m_nGlowStyle = 0;
+                glowobject.m_bFullBloomRender = false;
+                glowobject.m_nFullBloomStencilTestValue = 0;
+                glowobject.m_flBloomAmount = config.visuals.glow.thickness;
+            }
         }
     }
 }
