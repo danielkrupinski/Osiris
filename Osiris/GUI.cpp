@@ -48,7 +48,7 @@ void GUI::render()
         ImGui::EndMainMenuBar();
     }
 
-    ImGuiIO& io = ImGui::GetIO();
+    const ImGuiIO& io = ImGui::GetIO();
 
     if (window.glow) {
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
