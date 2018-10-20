@@ -16,25 +16,27 @@ void Visuals::glow()
 
             bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.m_pEntity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
+            const auto& glow = config.visuals.glow;
+
             if (isEnemy) {
-                glowobject.m_vGlowColor = config.visuals.glow.color;
-                glowobject.m_flAlpha = config.visuals.glow.alpha;
+                glowobject.m_vGlowColor = glow.enemiesColor;
+                glowobject.m_flAlpha = glow.alpha;
                 glowobject.m_bRenderWhenOccluded = true;
                 glowobject.m_bRenderWhenUnoccluded = false;
                 glowobject.m_nGlowStyle = 0;
                 glowobject.m_bFullBloomRender = false;
                 glowobject.m_nFullBloomStencilTestValue = 0;
-                glowobject.m_flBloomAmount = config.visuals.glow.thickness;
+                glowobject.m_flBloomAmount = glow.thickness;
             }
-            else if (!config.visuals.glow.enemiesOnly) {
+            else if (!glow.enemiesOnly) {
                 glowobject.m_vGlowColor = { 1.0f, 1.0f, 1.0f };
-                glowobject.m_flAlpha = config.visuals.glow.alpha;
+                glowobject.m_flAlpha = glow.alpha;
                 glowobject.m_bRenderWhenOccluded = true;
                 glowobject.m_bRenderWhenUnoccluded = false;
                 glowobject.m_nGlowStyle = 0;
                 glowobject.m_bFullBloomRender = false;
                 glowobject.m_nFullBloomStencilTestValue = 0;
-                glowobject.m_flBloomAmount = config.visuals.glow.thickness;
+                glowobject.m_flBloomAmount = glow.thickness;
             }
         }
     }
