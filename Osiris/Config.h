@@ -12,8 +12,8 @@ public:
         struct {
             bool enabled{ false };
             bool enemiesOnly{ false };
-            float alliesColor[3]{ 1.0f, 1.0f, 1.0f };
-            float enemiesColor[3]{ 1.0f, 1.0f, 1.0f };
+            float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
+            float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
             float thickness{ 1.0f };
             float alpha{ 1.0f };
         } glow;
