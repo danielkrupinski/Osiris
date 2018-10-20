@@ -28,9 +28,9 @@ void Config::load()
     visuals.glow.enabled = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")].asBool();
     visuals.glow.enemiesOnly = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")].asBool();
 
-    visuals.glow.enemiesColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][0].asFloat();
-    visuals.glow.enemiesColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][1].asFloat();
-    visuals.glow.enemiesColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][2].asFloat();
+    visuals.glow.enemiesColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][0].asFloat();
+    visuals.glow.enemiesColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][1].asFloat();
+    visuals.glow.enemiesColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][2].asFloat();
 
     visuals.glow.thickness = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")].asFloat();
     visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
@@ -52,9 +52,9 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")] = visuals.glow.enemiesOnly;
 
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][0] = visuals.glow.enemiesColor[0];
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][1] = visuals.glow.enemiesColor[1];
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("color")][2] = visuals.glow.enemiesColor[2];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][0] = visuals.glow.enemiesColor[0];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][1] = visuals.glow.enemiesColor[1];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][2] = visuals.glow.enemiesColor[2];
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")] = visuals.glow.thickness;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
