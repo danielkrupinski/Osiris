@@ -1,5 +1,8 @@
 # Osiris
 
+Free open-source cheating software for Counter-Strike: Global Offensive.
+
+
 ## License
 
 > Copyright (c) 2018 Daniel Krupiński
