@@ -38,6 +38,7 @@ void Config::load()
 
     visuals.glow.thickness = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")].asFloat();
     visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
+    visuals.glow.style = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")].asInt();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
@@ -67,6 +68,7 @@ void Config::save() const
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")] = visuals.glow.thickness;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")] = visuals.glow.style;
 
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
