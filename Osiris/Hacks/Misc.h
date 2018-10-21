@@ -5,4 +5,5 @@
 namespace Misc
 {
     void bunnyHop(UserCmd*);
+    void disablePostProcessing();
 }
