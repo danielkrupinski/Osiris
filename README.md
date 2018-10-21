@@ -12,9 +12,15 @@ Free open-source cheating software for Counter-Strike: Global Offensive.
     * Style
     * Allies color
     * Enemies color
+
 * Misc
     * Bunny hop
     * Disable post-processing
+
+* Config
+    * Load
+    * Save
+    * Reset
 
 ## License
 
