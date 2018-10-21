@@ -10,13 +10,13 @@ void Visuals::glow()
         for (int index = 0; index < memory.glowObjectManager->m_GlowObjectDefinitions.m_Size; index++) {
             GlowObjectDefinition& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
 
-            if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->isUnused() || !glowobject.m_pEntity)
+            if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->isUnused() || !glowobject.entity)
                 continue;
 
-            if (glowobject.m_pEntity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.m_pEntity->IsDormant())
+            if (glowobject.entity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.entity->IsDormant())
                 continue;
 
-            bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.m_pEntity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
+            bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
             if (isEnemy) {
                 glowobject.m_vGlowColor = glow.enemiesColor;

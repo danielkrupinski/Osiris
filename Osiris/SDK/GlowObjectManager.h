@@ -7,7 +7,7 @@ class GlowObjectDefinition {
 public:
     GlowObjectDefinition() { memset(this, 0, sizeof(*this)); }
 
-    ClientEntity* m_pEntity;
+    ClientEntity* entity;
     union
     {
         Vector m_vGlowColor;
