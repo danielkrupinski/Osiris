@@ -106,6 +106,8 @@ static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 static int __stdcall hookedDoPostScreenEffects(int param)
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        if (*memory.disablePostProcessing != config.misc.disablePostProcessing)
+            *memory.disablePostProcessing = config.misc.disablePostProcessing;
         Visuals::glow();
     }
     return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
