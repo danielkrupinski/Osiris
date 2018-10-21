@@ -24,6 +24,8 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
 
 ## FAQ
 
+### Where is my config file saved?
+Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`).
 
 ## License
 
