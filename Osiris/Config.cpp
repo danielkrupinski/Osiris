@@ -68,6 +68,7 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
 
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
+    config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
 
     out << config;
     out.close();
