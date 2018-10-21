@@ -60,6 +60,7 @@ void GUI::render()
         ImGui::Checkbox(xorstr_("Enemies only"), &config.visuals.glow.enemiesOnly);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
+        ImGui::SliderInt(xorstr_("Style"), &config.visuals.glow.style, 0, 3);
         ImGui::ColorEdit3(xorstr_("Allies color"), config.visuals.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.visuals.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();

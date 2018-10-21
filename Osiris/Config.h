@@ -17,6 +17,7 @@ public:
             float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
             float thickness{ 1.0f };
             float alpha{ 1.0f };
+            int style{ 0 };
         } glow;
     } visuals;
 

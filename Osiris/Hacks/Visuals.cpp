@@ -23,7 +23,7 @@ void Visuals::glow()
                 glowobject.alpha = glow.alpha;
                 glowobject.renderWhenOccluded = true;
                 glowobject.renderWhenUnoccluded = false;
-                glowobject.glowStyle = 0;
+                glowobject.glowStyle = glow.style;
                 glowobject.fullBloomRender = false;
                 glowobject.fullBloomStencilTestValue = 0;
                 glowobject.bloomAmount = glow.thickness;
@@ -33,7 +33,7 @@ void Visuals::glow()
                 glowobject.alpha = glow.alpha;
                 glowobject.renderWhenOccluded = true;
                 glowobject.renderWhenUnoccluded = false;
-                glowobject.glowStyle = 0;
+                glowobject.glowStyle = glow.style;
                 glowobject.fullBloomRender = false;
                 glowobject.fullBloomStencilTestValue = 0;
                 glowobject.bloomAmount = glow.thickness;
