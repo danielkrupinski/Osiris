@@ -5,25 +5,25 @@
 void Misc::bunnyHop(UserCmd* cmd)
 {
     if (config.misc.bunnyHop) {
-        static auto bJumped = false;
-        static auto bFake = false;
-        if (!bJumped && bFake) {
-            bFake = false;
+        static auto jumped = false;
+        static auto fake = false;
+        if (!jumped && fake) {
+            fake = false;
             cmd->buttons |= 2;
         }
         else if (cmd->buttons & 2) {
             if (*((*memory.localPlayer)->getFlags()) & 1) {
-                bJumped = true;
-                bFake = true;
+                jumped = true;
+                fake = true;
             }
             else {
                 cmd->buttons &= ~2;
-                bJumped = false;
+                jumped = false;
             }
         }
         else {
-            bJumped = false;
-            bFake = false;
+            jumped = false;
+            fake = false;
         }
     }
 }
