@@ -53,7 +53,7 @@ void GUI::render()
     const ImGuiIO& io = ImGui::GetIO();
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
+        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 7.5f, io.DisplaySize.y / 3.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(io.DisplaySize.x / 16.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
@@ -66,7 +66,7 @@ void GUI::render()
     }
 
     if (window.misc) {
-        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
+        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 6.0f, io.DisplaySize.y / 3.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
