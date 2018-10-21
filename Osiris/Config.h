@@ -21,6 +21,7 @@ public:
 
     struct {
         bool bunnyHop{ false };
+        bool disablePostProcessing{ false };
     } misc;
 
 private:
