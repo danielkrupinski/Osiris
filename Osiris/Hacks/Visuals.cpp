@@ -19,24 +19,24 @@ void Visuals::glow()
             bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
             if (isEnemy) {
-                glowobject.m_vGlowColor = glow.enemiesColor;
-                glowobject.m_flAlpha = glow.alpha;
-                glowobject.m_bRenderWhenOccluded = true;
-                glowobject.m_bRenderWhenUnoccluded = false;
-                glowobject.m_nGlowStyle = 0;
-                glowobject.m_bFullBloomRender = false;
-                glowobject.m_nFullBloomStencilTestValue = 0;
-                glowobject.m_flBloomAmount = glow.thickness;
+                glowobject.glowColor = glow.enemiesColor;
+                glowobject.alpha = glow.alpha;
+                glowobject.renderWhenOccluded = true;
+                glowobject.renderWhenUnoccluded = false;
+                glowobject.glowStyle = 0;
+                glowobject.fullBloomRender = false;
+                glowobject.fullBloomStencilTestValue = 0;
+                glowobject.bloomAmount = glow.thickness;
             }
             else if (!glow.enemiesOnly) {
-                glowobject.m_vGlowColor = glow.alliesColor;
-                glowobject.m_flAlpha = glow.alpha;
-                glowobject.m_bRenderWhenOccluded = true;
-                glowobject.m_bRenderWhenUnoccluded = false;
-                glowobject.m_nGlowStyle = 0;
-                glowobject.m_bFullBloomRender = false;
-                glowobject.m_nFullBloomStencilTestValue = 0;
-                glowobject.m_flBloomAmount = glow.thickness;
+                glowobject.glowColor = glow.alliesColor;
+                glowobject.alpha = glow.alpha;
+                glowobject.renderWhenOccluded = true;
+                glowobject.renderWhenUnoccluded = false;
+                glowobject.glowStyle = 0;
+                glowobject.fullBloomRender = false;
+                glowobject.fullBloomStencilTestValue = 0;
+                glowobject.bloomAmount = glow.thickness;
             }
         }
     }

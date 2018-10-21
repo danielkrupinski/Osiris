@@ -10,29 +10,29 @@ public:
     ClientEntity* entity;
     union
     {
-        Vector m_vGlowColor;
+        Vector glowColor;
         struct
         {
-            float   m_flRed;
-            float   m_flGreen;
-            float   m_flBlue;
+            float   red;
+            float   green;
+            float   blue;
         };
     };
-    float   m_flAlpha;
-    uint8_t pad_0014[4];
+    float   alpha;
+    uint8_t pad[4];
     float   m_flSomeFloat;
-    float   m_flBloomAmount;
+    float   bloomAmount;
     float   m_flAnotherFloat;
-    bool    m_bRenderWhenOccluded;
-    bool    m_bRenderWhenUnoccluded;
-    bool    m_bFullBloomRender;
-    uint8_t pad_0027[1];
-    int m_nFullBloomStencilTestValue;
-    int32_t m_nGlowStyle;
-    int32_t m_nSplitScreenSlot;
-    int32_t m_nNextFreeSlot;
+    bool    renderWhenOccluded;
+    bool    renderWhenUnoccluded;
+    bool    fullBloomRender;
+    uint8_t pad1;
+    int fullBloomStencilTestValue;
+    int32_t glowStyle;
+    int32_t splitScreenSlot;
+    int32_t nextFreeSlot;
 
-    constexpr bool isUnused() const noexcept { return m_nNextFreeSlot != GlowObjectDefinition::ENTRY_IN_USE; }
+    constexpr bool isUnused() const noexcept { return nextFreeSlot != GlowObjectDefinition::ENTRY_IN_USE; }
 
     static constexpr int END_OF_FREE_LIST = -1;
     static constexpr int ENTRY_IN_USE = -2;
