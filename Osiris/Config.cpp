@@ -10,7 +10,7 @@ Config::Config(const std::string& name)
 {
     char buff[MAX_PATH]{ };
     if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, buff))) {
-        path = buff + std::string{ '\\' } + name;
+        path = buff + std::string{ '\\' } +name;
     }
     load();
 }
@@ -77,5 +77,20 @@ void Config::save() const
 
 void Config::reset()
 {
+    visuals.glow.enabled = false;
+    visuals.glow.enemiesOnly = false;
 
+    visuals.glow.alliesColor[0] = 0.0f;
+    visuals.glow.alliesColor[1] = 1.0f;
+    visuals.glow.alliesColor[2] = 0.0f;
+
+    visuals.glow.enemiesColor[0] = 1.0f;
+    visuals.glow.enemiesColor[1] = 0.0f;
+    visuals.glow.enemiesColor[2] = 0.0f;
+
+    visuals.glow.thickness = 1.0f;
+    visuals.glow.alpha = 1.0f;
+
+    misc.bunnyHop = false;
+    misc.disablePostProcessing = false;
 }
