@@ -30,5 +30,6 @@ void Misc::bunnyHop(UserCmd* cmd)
 
 void Misc::disablePostProcessing()
 {
-
+    if (*memory.disablePostProcessing != config.misc.disablePostProcessing)
+        *memory.disablePostProcessing = config.misc.disablePostProcessing;
 }
