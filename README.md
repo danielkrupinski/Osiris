@@ -2,6 +2,19 @@
 
 Free open-source cheating software for Counter-Strike: Global Offensive.
 
+## Features
+
+- Glow
+    * Enable / Disable
+    * Enemies only
+    * Thickness
+    * Alpha
+    * Style
+    * Allies color
+    * Enemies color
+- Misc
+    * Bunny hop
+    * Disable post-processing
 
 ## License
 
