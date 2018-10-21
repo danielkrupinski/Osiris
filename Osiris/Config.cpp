@@ -74,3 +74,8 @@ void Config::save() const
     out << config;
     out.close();
 }
+
+void Config::reset()
+{
+
+}

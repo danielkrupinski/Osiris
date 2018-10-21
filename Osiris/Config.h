@@ -7,6 +7,7 @@ public:
     explicit Config(const std::string&);
     void load();
     void save() const;
+    void reset();
 
     struct {
         struct {
