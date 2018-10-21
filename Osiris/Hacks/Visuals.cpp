@@ -7,10 +7,10 @@ void Visuals::glow()
     static constexpr auto& glow = config.visuals.glow;
 
     if (glow.enabled) {
-        for (int index = 0; index < memory.glowObjectManager->m_GlowObjectDefinitions.m_Size; index++) {
-            GlowObjectDefinition& glowobject = memory.glowObjectManager->m_GlowObjectDefinitions[index];
+        for (int index = 0; index < memory.glowObjectManager->glowObjectDefinitions.m_Size; index++) {
+            GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[index];
 
-            if (memory.glowObjectManager->m_GlowObjectDefinitions.m_pElements->isUnused() || !glowobject.entity)
+            if (memory.glowObjectManager->glowObjectDefinitions.m_pElements->isUnused() || !glowobject.entity)
                 continue;
 
             if (glowobject.entity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.entity->IsDormant())

@@ -40,6 +40,6 @@ public:
 
 class GlowObjectManager {
 public:
-    UtlVector<GlowObjectDefinition> m_GlowObjectDefinitions;
-    int m_nFirstFreeSlot;
+    UtlVector<GlowObjectDefinition> glowObjectDefinitions;
+    int firstFreeSlot;
 };
