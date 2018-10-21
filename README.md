@@ -22,6 +22,9 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
     * Save
     * Reset
 
+## FAQ
+
+
 ## License
 
 > Copyright (c) 2018 Daniel Krupiński
