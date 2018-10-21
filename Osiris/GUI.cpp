@@ -42,6 +42,8 @@ void GUI::render()
                 config.load();
             if (ImGui::MenuItem(xorstr_("Save")))
                 config.save();
+            if (ImGui::MenuItem(xorstr_("Reset")))
+                config.reset();
             ImGui::EndMenu();
         }
 
