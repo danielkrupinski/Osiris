@@ -20,6 +20,7 @@ public:
     ClientMode* clientMode;
     Input* input;
     GlowObjectManager* glowObjectManager;
+    bool* disablePostProcessing;
 };
 
 extern Memory memory;
