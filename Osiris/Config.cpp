@@ -40,6 +40,7 @@ void Config::load()
     visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
+    misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
 
     in.close();
 }
