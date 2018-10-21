@@ -90,6 +90,7 @@ void Config::reset()
 
     visuals.glow.thickness = 1.0f;
     visuals.glow.alpha = 1.0f;
+    visuals.glow.style = 0;
 
     misc.bunnyHop = false;
     misc.disablePostProcessing = false;
