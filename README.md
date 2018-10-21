@@ -22,6 +22,11 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
     * Save
     * Reset
 
+## Getting started
+
+### Prerequisites
+Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+
 ## FAQ
 
 ### Where is my config file saved?
