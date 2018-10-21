@@ -67,6 +67,7 @@ void GUI::render()
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 8.0f, io.DisplaySize.y / 3.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
+        ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
         ImGui::End();
     }
 }
