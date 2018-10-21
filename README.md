@@ -1,6 +1,6 @@
 # Osiris
 
-Free open-source cheating software for Counter-Strike: Global Offensive.
+Free open-source cheating software for Counter-Strike: Global Offensive. Designed as internal cheat - injectable DLL.
 
 ## Features
 
