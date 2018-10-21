@@ -27,3 +27,8 @@ void Misc::bunnyHop(UserCmd* cmd)
         }
     }
 }
+
+void Misc::disablePostProcessing()
+{
+
+}
