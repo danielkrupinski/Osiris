@@ -24,6 +24,7 @@ public:
     struct {
         bool bunnyHop{ false };
         bool disablePostProcessing{ false };
+        std::string skybox;
     } misc;
 
 private:
