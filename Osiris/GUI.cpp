@@ -73,10 +73,7 @@ void GUI::render()
         static const char* skyboxes[]{ "Default", "vietnam" };
         static int currentSkybox{ 0 };
         ImGui::Combo("Skybox", &currentSkybox, skyboxes, IM_ARRAYSIZE(skyboxes));
-
-        if (currentSkybox)
-            config.misc.skybox = skyboxes[currentSkybox];
-
+        config.misc.skybox = skyboxes[currentSkybox];
         ImGui::End();
     }
 }

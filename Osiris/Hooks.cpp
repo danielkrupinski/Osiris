@@ -90,8 +90,11 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleTime, UserCmd* cmd)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        if (config.misc.skybox != "Default")
+            reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
         Misc::bunnyHop(cmd);
+    }
     return false;
 }
 
