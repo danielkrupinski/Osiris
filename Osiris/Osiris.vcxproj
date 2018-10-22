@@ -35,7 +35,6 @@
     <ClCompile Include="Interfaces.cpp" />
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Memory.cpp" />
-    <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="SDK\BaseEntity.cpp" />
     <ClCompile Include="SDK\ClientEntityList.cpp" />
     <ClCompile Include="SDK\Vector2D.cpp" />
