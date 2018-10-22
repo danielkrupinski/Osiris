@@ -32,9 +32,8 @@ void GUI::render()
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu(xorstr_("Misc"))) {
+        if (ImGui::MenuItem(xorstr_("Misc"))) {
             window.misc = true;
-            ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu(xorstr_("Config"))) {
