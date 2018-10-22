@@ -75,9 +75,6 @@
     <ClCompile Include="SDK\BaseEntity.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\ClientEntityList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SDK\Vector2D.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
@@ -89,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="Hacks\Visuals.cpp">
       <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\ClientEntityList.cpp">
+      <Filter>SDK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
