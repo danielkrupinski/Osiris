@@ -70,7 +70,7 @@ void GUI::render()
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
-        static const char* skyboxes[]{ "Default", "vietnam" };
+        static const char* skyboxes[]{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "vietnam" };
         static int currentSkybox{ 0 };
         ImGui::Combo("Skybox", &currentSkybox, skyboxes, IM_ARRAYSIZE(skyboxes));
         config.misc.skybox = skyboxes[currentSkybox];
