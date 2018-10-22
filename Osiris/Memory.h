@@ -21,6 +21,8 @@ public:
     Input* input;
     GlowObjectManager* glowObjectManager;
     bool* disablePostProcessing;
+
+    std::uintptr_t loadSky;
 };
 
 extern Memory memory;
