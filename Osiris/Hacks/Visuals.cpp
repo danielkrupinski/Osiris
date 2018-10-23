@@ -13,11 +13,10 @@ void Visuals::glow()
             if (memory.glowObjectManager->glowObjectDefinitions.m_pElements->isUnused() || !glowobject.entity)
                 continue;
 
-            if (glowobject.entity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.entity->IsDormant())
+            if (glowobject.entity->IsDormant())
                 continue;
 
-            switch (glowobject.entity->GetClientClass()->m_ClassID) {
-            case ClassId_CCSPlayer:
+            if (glowobject.entity->GetClientClass()->m_ClassID == ClassId_CCSPlayer) {
                 if (glow.players) {
                     bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
@@ -44,6 +43,18 @@ void Visuals::glow()
                 }
                     
 
+            }
+            else if (glowobject.entity->GetClientClass()->m_ClassID >= ClassId_CWeaponAug && glowobject.entity->GetClientClass()->m_ClassID <= ClassId_CWeaponXM1014) {
+                if (glow.weapons) {
+                    glowobject.glowColor = glow.weaponsColor;
+                    glowobject.alpha = glow.alpha;
+                    glowobject.renderWhenOccluded = true;
+                    glowobject.renderWhenUnoccluded = false;
+                    glowobject.glowStyle = glow.style;
+                    glowobject.fullBloomRender = false;
+                    glowobject.fullBloomStencilTestValue = 0;
+                    glowobject.bloomAmount = glow.thickness;
+                }
             }
         }
     }
