@@ -26,6 +26,7 @@ void Config::load()
     in >> config;
 
     visuals.glow.enabled = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")].asBool();
+    visuals.glow.players = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("players")].asBool();
     visuals.glow.enemiesOnly = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")].asBool();
 
     visuals.glow.alliesColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alliesColor")][0].asFloat();
@@ -57,6 +58,7 @@ void Config::save() const
     Json::Value config;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("players")] = visuals.glow.players;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")] = visuals.glow.enemiesOnly;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alliesColor")][0] = visuals.glow.alliesColor[0];
@@ -82,6 +84,7 @@ void Config::save() const
 void Config::reset()
 {
     visuals.glow.enabled = false;
+    visuals.glow.players = false;
     visuals.glow.enemiesOnly = false;
 
     visuals.glow.alliesColor[0] = 0.0f;
