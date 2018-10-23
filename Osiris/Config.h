@@ -14,6 +14,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
+            bool players{ false };
             bool enemiesOnly{ false };
             float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
             float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
