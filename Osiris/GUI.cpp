@@ -51,7 +51,7 @@ void GUI::render()
     const ImGuiIO& io = ImGui::GetIO();
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 7.5f, io.DisplaySize.y / 3.0f));
+        ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x / 7.5f, io.DisplaySize.y / 2.5f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(io.DisplaySize.x / 16.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
