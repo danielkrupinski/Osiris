@@ -41,6 +41,11 @@ void Config::load()
     visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
     visuals.glow.style = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")].asInt();
 
+    visuals.glow.weapons = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weapons")].asBool();
+    visuals.glow.weaponsColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][0].asFloat();
+    visuals.glow.weaponsColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1].asFloat();
+    visuals.glow.weaponsColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2].asFloat();
+
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
@@ -73,6 +78,11 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")] = visuals.glow.style;
 
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weapons")] = visuals.glow.weapons;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][0] = visuals.glow.weaponsColor[0];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1] = visuals.glow.weaponsColor[1];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2] = visuals.glow.weaponsColor[2];
+
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
@@ -98,6 +108,11 @@ void Config::reset()
     visuals.glow.thickness = 1.0f;
     visuals.glow.alpha = 1.0f;
     visuals.glow.style = 0;
+
+    visuals.glow.weapons = false;
+    visuals.glow.weaponsColor[0] = 1.0f;
+    visuals.glow.weaponsColor[1] = 1.0f;
+    visuals.glow.weaponsColor[2] = 1.0f;
 
     misc.bunnyHop = false;
     misc.disablePostProcessing = false;
