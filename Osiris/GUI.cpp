@@ -62,6 +62,7 @@ void GUI::render()
         ImGui::SliderInt(xorstr_("Style"), &config.visuals.glow.style, 0, 3);
         ImGui::ColorEdit3(xorstr_("Allies color"), config.visuals.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.visuals.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Weapons"), &config.visuals.glow.weapons);
         ImGui::End();
     }
 
