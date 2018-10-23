@@ -16,27 +16,34 @@ void Visuals::glow()
             if (glowobject.entity->GetClientClass()->m_ClassID != ClassId_CCSPlayer || glowobject.entity->IsDormant())
                 continue;
 
-            bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
+            switch (glowobject.entity->GetClientClass()->m_ClassID) {
+            case ClassId_CCSPlayer:
+                if (glow.players) {
+                    bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
-            if (isEnemy) {
-                glowobject.glowColor = glow.enemiesColor;
-                glowobject.alpha = glow.alpha;
-                glowobject.renderWhenOccluded = true;
-                glowobject.renderWhenUnoccluded = false;
-                glowobject.glowStyle = glow.style;
-                glowobject.fullBloomRender = false;
-                glowobject.fullBloomStencilTestValue = 0;
-                glowobject.bloomAmount = glow.thickness;
-            }
-            else if (!glow.enemiesOnly) {
-                glowobject.glowColor = glow.alliesColor;
-                glowobject.alpha = glow.alpha;
-                glowobject.renderWhenOccluded = true;
-                glowobject.renderWhenUnoccluded = false;
-                glowobject.glowStyle = glow.style;
-                glowobject.fullBloomRender = false;
-                glowobject.fullBloomStencilTestValue = 0;
-                glowobject.bloomAmount = glow.thickness;
+                    if (isEnemy) {
+                        glowobject.glowColor = glow.enemiesColor;
+                        glowobject.alpha = glow.alpha;
+                        glowobject.renderWhenOccluded = true;
+                        glowobject.renderWhenUnoccluded = false;
+                        glowobject.glowStyle = glow.style;
+                        glowobject.fullBloomRender = false;
+                        glowobject.fullBloomStencilTestValue = 0;
+                        glowobject.bloomAmount = glow.thickness;
+                    }
+                    else if (!glow.enemiesOnly) {
+                        glowobject.glowColor = glow.alliesColor;
+                        glowobject.alpha = glow.alpha;
+                        glowobject.renderWhenOccluded = true;
+                        glowobject.renderWhenUnoccluded = false;
+                        glowobject.glowStyle = glow.style;
+                        glowobject.fullBloomRender = false;
+                        glowobject.fullBloomStencilTestValue = 0;
+                        glowobject.bloomAmount = glow.thickness;
+                    }
+                }
+                    
+
             }
         }
     }
