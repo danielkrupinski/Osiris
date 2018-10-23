@@ -1,12 +1,11 @@
+#include <string>
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 #include "xorstr.hpp"
 
 #include "GUI.h"
-#include "Memory.h"
-#include <string>
-#include "Interfaces.h"
 #include "Config.h"
 
 GUI::GUI()
