@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "xorstr.hpp"
+
 class Config final {
 public:
     explicit Config(const std::string&);
@@ -24,7 +26,7 @@ public:
     struct {
         bool bunnyHop{ false };
         bool disablePostProcessing{ false };
-        std::string skybox;
+        std::string skybox{ xorstr_("Default") };
     } misc;
 
 private:
