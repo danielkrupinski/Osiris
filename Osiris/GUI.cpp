@@ -72,7 +72,7 @@ void GUI::render()
         static const std::string skyboxes[]{ xorstr_("Default"), xorstr_("cs_baggage_skybox_"), xorstr_("cs_tibet"), xorstr_("embassy"), xorstr_("italy"), xorstr_("jungle"), xorstr_("nukeblank"), xorstr_("office"), xorstr_("sky_cs15_daylight01_hdr"), xorstr_("sky_cs15_daylight02_hdr"), xorstr_("sky_cs15_daylight03_hdr"), xorstr_("sky_cs15_daylight04_hdr"), xorstr_("sky_csgo_cloudy01"), xorstr_("sky_csgo_night_flat"), xorstr_("sky_csgo_night02"), xorstr_("sky_day02_05_hdr"), xorstr_("sky_day02_05"), xorstr_("sky_dust"), xorstr_("sky_l4d_rural02_ldr"), xorstr_("sky_venice"), xorstr_("vertigo_hdr"), xorstr_("vertigo"), xorstr_("vertigoblue_hdr"), xorstr_("vietnam") };
         static std::string currentSkybox = config.misc.skybox;
 
-        if (ImGui::BeginCombo("Skybox", currentSkybox.c_str())) {
+        if (ImGui::BeginCombo(xorstr_("Skybox"), currentSkybox.c_str())) {
             for (const auto& a : skyboxes) {
                 bool isSelected = (currentSkybox == a);
                 if (ImGui::Selectable(a.c_str(), isSelected))
