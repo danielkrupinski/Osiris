@@ -22,6 +22,7 @@ public:
             float alpha{ 1.0f };
             int style{ 0 };
             bool weapons{ false };
+            float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
         } glow;
     } visuals;
 
