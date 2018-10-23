@@ -21,6 +21,7 @@ public:
             float thickness{ 1.0f };
             float alpha{ 1.0f };
             int style{ 0 };
+            bool weapons{ false };
         } glow;
     } visuals;
 
