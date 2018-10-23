@@ -23,6 +23,7 @@ public:
             int style{ 0 };
             bool weapons{ false };
             float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool chickens{ false };
         } glow;
     } visuals;
 
