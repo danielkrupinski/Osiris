@@ -1,12 +1,5 @@
 #include "ClientEntityList.h"
-
-template<typename T>
-__forceinline constexpr static T callVirtualFunction(void* ppClass, int index)
-{
-    int* pVTable = *(int**)ppClass;
-    int dwAddress = pVTable[index];
-    return (T)(dwAddress);
-}
+#include "../Utils.h"
 
 BaseEntity* ClientEntityList::getClientEntity(int index)
 {
