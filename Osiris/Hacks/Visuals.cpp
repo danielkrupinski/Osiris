@@ -16,6 +16,14 @@ void Visuals::glow()
             if (glowobject.entity->IsDormant())
                 continue;
 
+            glowobject.alpha = glow.alpha;
+            glowobject.renderWhenOccluded = true;
+            glowobject.renderWhenUnoccluded = false;
+            glowobject.glowStyle = glow.style;
+            glowobject.fullBloomRender = false;
+            glowobject.fullBloomStencilTestValue = 0;
+            glowobject.bloomAmount = glow.thickness;
+
             switch (glowobject.entity->GetClientClass()->m_ClassID) {
             case ClassId_CCSPlayer:
                 if (glow.players) {
@@ -23,51 +31,23 @@ void Visuals::glow()
 
                     if (isEnemy) {
                         glowobject.glowColor = glow.enemiesColor;
-                        glowobject.alpha = glow.alpha;
-                        glowobject.renderWhenOccluded = true;
-                        glowobject.renderWhenUnoccluded = false;
-                        glowobject.glowStyle = glow.style;
-                        glowobject.fullBloomRender = false;
-                        glowobject.fullBloomStencilTestValue = 0;
-                        glowobject.bloomAmount = glow.thickness;
                     }
                     else if (!glow.enemiesOnly) {
                         glowobject.glowColor = glow.alliesColor;
-                        glowobject.alpha = glow.alpha;
-                        glowobject.renderWhenOccluded = true;
-                        glowobject.renderWhenUnoccluded = false;
-                        glowobject.glowStyle = glow.style;
-                        glowobject.fullBloomRender = false;
-                        glowobject.fullBloomStencilTestValue = 0;
-                        glowobject.bloomAmount = glow.thickness;
                     }
                 }
                 break;
             case ClassId_CChicken:
                 glowobject.glowColor = glow.chickensColor;
-                glowobject.alpha = glow.alpha;
-                glowobject.renderWhenOccluded = true;
-                glowobject.renderWhenUnoccluded = false;
-                glowobject.glowStyle = glow.style;
-                glowobject.fullBloomRender = false;
-                glowobject.fullBloomStencilTestValue = 0;
-                glowobject.bloomAmount = glow.thickness;
                 break;
             default:
                 if (glowobject.entity->isWeapon()) {
                     if (glow.weapons) {
                         glowobject.glowColor = glow.weaponsColor;
-                        glowobject.alpha = glow.alpha;
-                        glowobject.renderWhenOccluded = true;
-                        glowobject.renderWhenUnoccluded = false;
-                        glowobject.glowStyle = glow.style;
-                        glowobject.fullBloomRender = false;
-                        glowobject.fullBloomStencilTestValue = 0;
-                        glowobject.bloomAmount = glow.thickness;
+                        
                     }
                 }
-
-
+                glowobject.renderWhenOccluded = false;
             }
         }
     }
