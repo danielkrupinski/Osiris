@@ -16,7 +16,8 @@ void Visuals::glow()
             if (glowobject.entity->IsDormant())
                 continue;
 
-            if (glowobject.entity->GetClientClass()->m_ClassID == ClassId_CCSPlayer) {
+            switch (glowobject.entity->GetClientClass()->m_ClassID) {
+            case ClassId_CCSPlayer:
                 if (glow.players) {
                     bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
@@ -41,22 +42,8 @@ void Visuals::glow()
                         glowobject.bloomAmount = glow.thickness;
                     }
                 }
-                    
-
-            }
-            else if (glowobject.entity->isWeapon()) {
-                if (glow.weapons) {
-                    glowobject.glowColor = glow.weaponsColor;
-                    glowobject.alpha = glow.alpha;
-                    glowobject.renderWhenOccluded = true;
-                    glowobject.renderWhenUnoccluded = false;
-                    glowobject.glowStyle = glow.style;
-                    glowobject.fullBloomRender = false;
-                    glowobject.fullBloomStencilTestValue = 0;
-                    glowobject.bloomAmount = glow.thickness;
-                }
-            }
-            else if (glowobject.entity->GetClientClass()->m_ClassID == ClassId_CChicken) {
+                break;
+            case ClassId_CChicken:
                 glowobject.glowColor = glow.chickensColor;
                 glowobject.alpha = glow.alpha;
                 glowobject.renderWhenOccluded = true;
@@ -65,6 +52,22 @@ void Visuals::glow()
                 glowobject.fullBloomRender = false;
                 glowobject.fullBloomStencilTestValue = 0;
                 glowobject.bloomAmount = glow.thickness;
+                break;
+            default:
+                if (glowobject.entity->isWeapon()) {
+                    if (glow.weapons) {
+                        glowobject.glowColor = glow.weaponsColor;
+                        glowobject.alpha = glow.alpha;
+                        glowobject.renderWhenOccluded = true;
+                        glowobject.renderWhenUnoccluded = false;
+                        glowobject.glowStyle = glow.style;
+                        glowobject.fullBloomRender = false;
+                        glowobject.fullBloomStencilTestValue = 0;
+                        glowobject.bloomAmount = glow.thickness;
+                    }
+                }
+
+
             }
         }
     }
