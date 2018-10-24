@@ -47,6 +47,7 @@ void Visuals::glow()
                         glowobject.glowColor = glow.weaponsColor;
 
                     }
+                    break;
                 }
                 glowobject.renderWhenOccluded = false;
             }
