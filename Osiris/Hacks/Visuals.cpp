@@ -44,7 +44,7 @@ void Visuals::glow()
                     
 
             }
-            else if (glowobject.entity->GetClientClass()->m_ClassID >= ClassId_CWeaponAug && glowobject.entity->GetClientClass()->m_ClassID <= ClassId_CWeaponXM1014) {
+            else if (glowobject.entity->isWeapon()) {
                 if (glow.weapons) {
                     glowobject.glowColor = glow.weaponsColor;
                     glowobject.alpha = glow.alpha;
