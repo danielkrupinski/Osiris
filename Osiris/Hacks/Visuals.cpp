@@ -56,6 +56,16 @@ void Visuals::glow()
                     glowobject.bloomAmount = glow.thickness;
                 }
             }
+            else if (glowobject.entity->GetClientClass()->m_ClassID == ClassId_CChicken) {
+                glowobject.glowColor = glow.chickensColor;
+                glowobject.alpha = glow.alpha;
+                glowobject.renderWhenOccluded = true;
+                glowobject.renderWhenUnoccluded = false;
+                glowobject.glowStyle = glow.style;
+                glowobject.fullBloomRender = false;
+                glowobject.fullBloomStencilTestValue = 0;
+                glowobject.bloomAmount = glow.thickness;
+            }
         }
     }
 }
