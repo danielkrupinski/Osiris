@@ -51,11 +51,11 @@ void GUI::render()
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(io.DisplaySize.x / 16.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
-        ImGui::Checkbox(xorstr_("Players"), &config.visuals.glow.players);
-        ImGui::Checkbox(xorstr_("Enemies only"), &config.visuals.glow.enemiesOnly);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
         ImGui::SliderInt(xorstr_("Style"), &config.visuals.glow.style, 0, 3);
+        ImGui::Checkbox(xorstr_("Players"), &config.visuals.glow.players);
+        ImGui::Checkbox(xorstr_("Enemies only"), &config.visuals.glow.enemiesOnly);
         ImGui::ColorEdit3(xorstr_("Allies color"), config.visuals.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.visuals.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Weapons"), &config.visuals.glow.weapons);
