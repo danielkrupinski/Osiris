@@ -4,29 +4,29 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
 
 ## Features
 
-* Glow
-    * Enable / Disable
-    * Players
-    * Enemies only
-    * Thickness
-    * Alpha
-    * Style
+* Glow - render glow effect on entities
+    * Enable - on / off master switch
+    * Players - enable glow on players
+    * Enemies only - glow only oponents
+    * Thickness - outline thickness
+    * Alpha - outline alpha
+    * Style - glow style [0-3]
     * Allies color
     * Enemies color
-    * Weapons
+    * Weapons - enable glow on weapon
     * Weapons color
-    * Chickens
+    * Chickens - enable glow on chickens
     * Chickens color
 
 * Misc
-    * Bunny hop
-    * Disable post-processing
-    * Skybox
+    * Bunny hop - automatically jump to increase movement speed
+    * Disable post-processing - disable post-processing effects in order to increase FPS
+    * Skybox - change skybox
 
 * Config
-    * Load
-    * Save
-    * Reset
+    * Load - load configuration file
+    * Save - save configuration file
+    * Reset - restore default configuration settings
 
 ## Getting started
 
