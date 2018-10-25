@@ -46,6 +46,11 @@ void Config::load()
     visuals.glow.weaponsColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1].asFloat();
     visuals.glow.weaponsColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2].asFloat();
 
+    visuals.glow.chickens = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickens")].asBool();
+    visuals.glow.chickensColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][0].asFloat();
+    visuals.glow.chickensColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][1].asFloat();
+    visuals.glow.chickensColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
+
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
@@ -83,6 +88,11 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1] = visuals.glow.weaponsColor[1];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2] = visuals.glow.weaponsColor[2];
 
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickens")] = visuals.glow.chickens;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][0] = visuals.glow.chickensColor[0];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][1] = visuals.glow.chickensColor[1];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][2] = visuals.glow.chickensColor[2];
+
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
@@ -113,6 +123,11 @@ void Config::reset()
     visuals.glow.weaponsColor[0] = 1.0f;
     visuals.glow.weaponsColor[1] = 1.0f;
     visuals.glow.weaponsColor[2] = 1.0f;
+
+    visuals.glow.chickens = false;
+    visuals.glow.chickensColor[0] = 1.0f;
+    visuals.glow.chickensColor[1] = 0.08f;
+    visuals.glow.chickensColor[2] = 0.58f;
 
     misc.bunnyHop = false;
     misc.disablePostProcessing = false;
