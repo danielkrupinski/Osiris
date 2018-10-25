@@ -26,6 +26,11 @@ void Config::load()
     in >> config;
 
     visuals.glow.enabled = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")].asBool();
+
+    visuals.glow.thickness = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")].asFloat();
+    visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
+    visuals.glow.style = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")].asInt();
+
     visuals.glow.players = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("players")].asBool();
     visuals.glow.enemiesOnly = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")].asBool();
 
@@ -36,10 +41,6 @@ void Config::load()
     visuals.glow.enemiesColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][0].asFloat();
     visuals.glow.enemiesColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][1].asFloat();
     visuals.glow.enemiesColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][2].asFloat();
-
-    visuals.glow.thickness = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")].asFloat();
-    visuals.glow.alpha = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")].asFloat();
-    visuals.glow.style = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")].asInt();
 
     visuals.glow.weapons = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weapons")].asBool();
     visuals.glow.weaponsColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][0].asFloat();
@@ -68,6 +69,11 @@ void Config::save() const
     Json::Value config;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enabled")] = visuals.glow.enabled;
+
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")] = visuals.glow.thickness;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")] = visuals.glow.style;
+
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("players")] = visuals.glow.players;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesOnly")] = visuals.glow.enemiesOnly;
 
@@ -78,10 +84,6 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][0] = visuals.glow.enemiesColor[0];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][1] = visuals.glow.enemiesColor[1];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("enemiesColor")][2] = visuals.glow.enemiesColor[2];
-
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("thickness")] = visuals.glow.thickness;
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("alpha")] = visuals.glow.alpha;
-    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("style")] = visuals.glow.style;
 
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weapons")] = visuals.glow.weapons;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][0] = visuals.glow.weaponsColor[0];
@@ -104,6 +106,11 @@ void Config::save() const
 void Config::reset()
 {
     visuals.glow.enabled = false;
+
+    visuals.glow.thickness = 1.0f;
+    visuals.glow.alpha = 1.0f;
+    visuals.glow.style = 0;
+
     visuals.glow.players = false;
     visuals.glow.enemiesOnly = false;
 
@@ -114,10 +121,6 @@ void Config::reset()
     visuals.glow.enemiesColor[0] = 1.0f;
     visuals.glow.enemiesColor[1] = 0.0f;
     visuals.glow.enemiesColor[2] = 0.0f;
-
-    visuals.glow.thickness = 1.0f;
-    visuals.glow.alpha = 1.0f;
-    visuals.glow.style = 0;
 
     visuals.glow.weapons = false;
     visuals.glow.weaponsColor[0] = 1.0f;
