@@ -1,6 +1,6 @@
 # Osiris
 
-Free open-source cheating software for Counter-Strike: Global Offensive. Designed as internal cheat - injectable DLL.
+Free open-source training / cheating software for **Counter-Strike: Global Offensive**. Designed as internal cheat - injectable DLL.
 
 ## Features
 
@@ -54,6 +54,9 @@ Open your favorite `DLL injector` and just inject `Osiris.dll` into `csgo.exe` p
 When injected, menu is openable under `INSERT` key.
 
 ## FAQ
+
+### How do I open menu?
+Press `INSERT` key while in game.
 
 ### Where is my config file saved?
 Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`).
