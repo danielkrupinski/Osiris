@@ -39,5 +39,6 @@ void Misc::disablePostProcessing()
 
 void Misc::skybox()
 {
-
+    if (config.misc.skybox != "Default")
+        reinterpret_cast<void (__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
 }
