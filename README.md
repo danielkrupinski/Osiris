@@ -1,6 +1,6 @@
 # Osiris
 
-Free open-source training / cheating software for **Counter-Strike: Global Offensive**. Designed as internal cheat - injectable DLL.
+Free open-source training / cheating software for **Counter-Strike: Global Offensive**. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
 
 ## Features
 
@@ -34,7 +34,7 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
 Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Cloning
-First step is to clone this repo from GitHub to your local computer:
+The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer:
 ```
 git clone https://www.github.com/danielkrupinski/Osiris.git
 ```
