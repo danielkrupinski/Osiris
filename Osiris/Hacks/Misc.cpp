@@ -36,3 +36,8 @@ void Misc::disablePostProcessing()
     if (*memory.disablePostProcessing != config.misc.disablePostProcessing)
         *memory.disablePostProcessing = config.misc.disablePostProcessing;
 }
+
+void Misc::skybox()
+{
+
+}
