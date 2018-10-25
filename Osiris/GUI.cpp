@@ -8,11 +8,6 @@
 #include "GUI.h"
 #include "Config.h"
 
-GUI::GUI()
-{
-
-}
-
 void GUI::render()
 {
     static struct {

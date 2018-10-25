@@ -2,7 +2,6 @@
 
 class GUI final {
 public:
-    GUI();
     void render();
     bool isOpen{ false };
 };
