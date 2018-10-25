@@ -40,13 +40,15 @@ void Visuals::glow()
             case ClassId_CChicken:
                 if (glow.chickens)
                     glowobject.glowColor = glow.chickensColor;
+                else
+                    glowobject.renderWhenOccluded = false;
                 break;
             default:
                 if (glowobject.entity->isWeapon()) {
-                    if (glow.weapons) {
+                    if (glow.weapons)
                         glowobject.glowColor = glow.weaponsColor;
-
-                    }
+                    else
+                        glowobject.renderWhenOccluded = false;
                     break;
                 }
                 glowobject.renderWhenOccluded = false;
