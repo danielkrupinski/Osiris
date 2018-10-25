@@ -8,10 +8,10 @@ public:
     typedef A Allocator;
 
     T& operator[](int i) {
-        return m_Memory[i];
+        return memory[i];
     };
 
-    Allocator m_Memory;
-    int m_Size;
-    T* m_pElements;
+    Allocator memory;
+    int size;
+    T* elements;
 };

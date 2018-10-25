@@ -7,10 +7,10 @@ void Visuals::glow()
     static constexpr auto& glow = config.visuals.glow;
 
     if (glow.enabled) {
-        for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.m_Size; i++) {
+        for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
             GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-            if (memory.glowObjectManager->glowObjectDefinitions.m_pElements->isUnused() || !glowobject.entity)
+            if (memory.glowObjectManager->glowObjectDefinitions.elements->isUnused() || !glowobject.entity)
                 continue;
 
             if (glowobject.entity->IsDormant())
