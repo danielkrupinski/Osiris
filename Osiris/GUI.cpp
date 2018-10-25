@@ -21,10 +21,6 @@ void GUI::render()
     } window;
 
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::BeginMenu(xorstr_("Aimbot"))) {
-            ImGui::EndMenu();
-        }
-
         if (ImGui::BeginMenu(xorstr_("Visuals"))) {
             if (ImGui::MenuItem(xorstr_("Glow")))
                 window.glow = true;
