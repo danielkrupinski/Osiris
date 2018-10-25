@@ -21,7 +21,7 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
 * Misc
     * Bunny hop - automatically jump to increase movement speed
     * Disable post-processing - disable post-processing effects in order to increase FPS
-    * Skybox - change skybox
+    * Skybox - change sky(box)
 
 * Config
     * Load - load configuration file
@@ -32,6 +32,26 @@ Free open-source cheating software for Counter-Strike: Global Offensive. Designe
 
 ### Prerequisites
 Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+
+### Cloning
+First step is to clone this repo from GitHub to your local computer:
+```
+git clone https://www.github.com/danielkrupinski/Osiris.git
+```
+
+### Compiling from source
+
+When you have equiped a copy of source code, next step is opening `Osiris.sln` in Microsoft Visual Studio 2017.
+
+Then change build configuration to `Release | x86` and simply press `Build solution`.
+
+If everything went right you should receive `Osiris.dll`  binary file.
+
+### Loading / Injecting into game process
+
+Open your favorite `DLL injector` and just inject `Osiris.dll` into `csgo.exe` process.
+
+When injected, menu is openable under `INSERT` key.
 
 ## FAQ
 
