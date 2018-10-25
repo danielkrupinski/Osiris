@@ -134,5 +134,5 @@ void Config::reset()
 
     misc.bunnyHop = false;
     misc.disablePostProcessing = false;
-    misc.skybox = "Default";
+    misc.skybox = xorstr_("Default");
 }
