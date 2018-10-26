@@ -7,7 +7,7 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
 * Glow - render glow effect on entities
     * Enable - on / off master switch
     * Players - enable glow on players
-    * Enemies only - glow only oponents
+    * Enemies only - glow only opponents
     * Thickness - outline thickness
     * Alpha - outline alpha
     * Style - glow style [0-3]
@@ -59,7 +59,7 @@ When injected, menu is openable under `INSERT` key.
 Press `INSERT` key while in game.
 
 ### Where is my config file saved?
-Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`).
+Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read.
 
 ## License
 
