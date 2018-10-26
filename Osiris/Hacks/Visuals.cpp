@@ -43,6 +43,12 @@ void Visuals::glow()
                 else
                     glowobject.renderWhenOccluded = false;
                 break;
+            case ClassId_CPlantedC4:
+                if (glow.plantedC4)
+                    glowobject.glowColor = glow.plantedC4Color;
+                else
+                    glowobject.renderWhenOccluded = false;
+                break;
             default:
                 if (glowobject.entity->isWeapon()) {
                     if (glow.weapons)
