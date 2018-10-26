@@ -47,6 +47,11 @@ void Config::load()
     visuals.glow.weaponsColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1].asFloat();
     visuals.glow.weaponsColor[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2].asFloat();
 
+    visuals.glow.plantedC4 = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4")].asBool();
+    visuals.glow.plantedC4Color[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][0].asFloat();
+    visuals.glow.plantedC4Color[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][1].asFloat();
+    visuals.glow.plantedC4Color[2] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][2].asFloat();
+
     visuals.glow.chickens = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickens")].asBool();
     visuals.glow.chickensColor[0] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][0].asFloat();
     visuals.glow.chickensColor[1] = config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][1].asFloat();
@@ -90,6 +95,11 @@ void Config::save() const
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][1] = visuals.glow.weaponsColor[1];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("weaponsColor")][2] = visuals.glow.weaponsColor[2];
 
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4")] = visuals.glow.plantedC4;
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][0] = visuals.glow.plantedC4Color[0];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][1] = visuals.glow.plantedC4Color[1];
+    config[xorstr_("visuals")][xorstr_("glow")][xorstr_("plantedC4Color")][2] = visuals.glow.plantedC4Color[2];
+
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickens")] = visuals.glow.chickens;
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][0] = visuals.glow.chickensColor[0];
     config[xorstr_("visuals")][xorstr_("glow")][xorstr_("chickensColor")][1] = visuals.glow.chickensColor[1];
@@ -126,6 +136,11 @@ void Config::reset()
     visuals.glow.weaponsColor[0] = 1.0f;
     visuals.glow.weaponsColor[1] = 1.0f;
     visuals.glow.weaponsColor[2] = 1.0f;
+
+    visuals.glow.plantedC4 = false;
+    visuals.glow.plantedC4Color[0] = 1.0f;
+    visuals.glow.plantedC4Color[1] = 0.5f;
+    visuals.glow.plantedC4Color[2] = 0.31f;
 
     visuals.glow.chickens = false;
     visuals.glow.chickensColor[0] = 1.0f;
