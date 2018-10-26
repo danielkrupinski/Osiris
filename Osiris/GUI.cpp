@@ -55,6 +55,8 @@ void GUI::render()
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.visuals.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Weapons"), &config.visuals.glow.weapons);
         ImGui::ColorEdit3(xorstr_("Weapons color"), config.visuals.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Planted C4"), &config.visuals.glow.plantedC4);
+        ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.visuals.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Chickens"), &config.visuals.glow.chickens);
         ImGui::ColorEdit3(xorstr_("Chickens color"), config.visuals.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
