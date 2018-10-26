@@ -25,7 +25,7 @@ public:
             bool weapons{ false };
             float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
             bool plantedC4{ false };
-            float plantedC4Color[3]{ 1.0f, 0.5f, 0.31f };
+            float plantedC4Color[3]{ 1.0f, 0.27f, 0.0f };
             bool chickens{ false };
             float chickensColor[3]{ 1.0f, 0.08f, 0.58f };
         } glow;
