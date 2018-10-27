@@ -17,7 +17,7 @@ void Visuals::glow()
                 continue;
 
             glowobject.alpha = glow.alpha;
-            glowobject.renderWhenOccluded = true;
+            glowobject.renderWhenOccluded = false;
             glowobject.renderWhenUnoccluded = false;
             glowobject.glowStyle = glow.style;
             glowobject.fullBloomRender = false;
@@ -31,33 +31,33 @@ void Visuals::glow()
 
                     if (isEnemy) {
                         glowobject.glowColor = glow.enemiesColor;
+                        glowobject.renderWhenOccluded = true;
                     }
                     else if (!glow.enemiesOnly) {
                         glowobject.glowColor = glow.alliesColor;
+                        glowobject.renderWhenOccluded = true;
                     }
                 }
                 break;
             case ClassId_CChicken:
-                if (glow.chickens)
+                if (glow.chickens) {
                     glowobject.glowColor = glow.chickensColor;
-                else
-                    glowobject.renderWhenOccluded = false;
+                    glowobject.renderWhenOccluded = true;
+                }
                 break;
             case ClassId_CPlantedC4:
-                if (glow.plantedC4)
+                if (glow.plantedC4) {
                     glowobject.glowColor = glow.plantedC4Color;
-                else
-                    glowobject.renderWhenOccluded = false;
+                    glowobject.renderWhenOccluded = true;
+                }
                 break;
             default:
                 if (glowobject.entity->isWeapon()) {
-                    if (glow.weapons)
+                    if (glow.weapons) {
                         glowobject.glowColor = glow.weaponsColor;
-                    else
-                        glowobject.renderWhenOccluded = false;
-                    break;
+                        glowobject.renderWhenOccluded = true;
+                    }
                 }
-                glowobject.renderWhenOccluded = false;
             }
         }
     }
