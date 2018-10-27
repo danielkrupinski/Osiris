@@ -17,6 +17,7 @@ public:
     ClientEntityList* clientEntityList;
     Client* client;
     Surface* surface;
+    Cvar* cvar;
 private:
     void* find(const std::string&, const std::string&);
 };
