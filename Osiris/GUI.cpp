@@ -83,7 +83,7 @@ void GUI::render()
             ImGui::EndCombo();
         }
 
-        ImGui::SliderFloat(xorstr_("Viewmodel FOV"), &config.misc.viewmodelFov, 0.0f, 200.0f);
+        ImGui::SliderFloat(xorstr_("Viewmodel FOV"), &config.misc.viewmodelFov, 0.0f, 130.0f);
         ImGui::End();
     }
 }
