@@ -4,29 +4,31 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
 
 ## Features
 
-* Glow - render glow effect on entities
-    * Enable - on / off master switch
-    * Players - enable glow on players
-    * Enemies only - glow only opponents
-    * Thickness - outline thickness
-    * Alpha - outline alpha
-    * Style - glow style [0-3]
-    * Allies color
-    * Enemies color
-    * Weapons - enable glow on weapon
-    * Weapons color
-    * Chickens - enable glow on chickens
-    * Chickens color
+* **Glow** - render glow effect on entities
+    * **Enable** - on / off master switch
+    * **Players** - enable glow on players
+    * **Enemies only** - glow only opponents
+    * **Thickness** - outline thickness
+    * **Alpha** - outline alpha
+    * **Style** - glow style [0-3]
+    * **Allies color**
+    * **Enemies color**
+    * **Weapons** - enable glow on weapon
+    * **Weapons color**
+    * **Planted C4** - enable glow on planted C4 explosive
+    * **Planted C4 color**
+    * **Chickens** - enable glow on chickens
+    * **Chickens color**
 
-* Misc
-    * Bunny hop - automatically jump to increase movement speed
-    * Disable post-processing - disable post-processing effects in order to increase FPS
-    * Skybox - change sky(box)
+* **Misc**
+    * **Bunny hop** - automatically jump to increase movement speed
+    * **Disable post-processing** - disable post-processing effects in order to increase FPS
+    * **Skybox** - change sky(box)
 
-* Config
-    * Load - load configuration file
-    * Save - save configuration file
-    * Reset - restore default configuration settings
+* **Config**
+    * **Load** - load configuration file
+    * **Save** - save configuration file
+    * **Reset** - restore default configuration settings
 
 ## Getting started
 
@@ -36,7 +38,7 @@ Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer:
 ```
-git clone https://www.github.com/danielkrupinski/Osiris.git
+git clone https://github.com/danielkrupinski/Osiris.git
 ```
 
 ### Compiling from source
