@@ -38,5 +38,8 @@ void* Interfaces::find(const std::string& module, const std::string& name)
         if (foundInterface)
             break;
     }
+
+    if (!foundInterface)
+        throw std::runtime_error(std::string{ xorstr_("Could not find ") } +name + std::string{ xorstr_(" in ") } + module + std::string{ xorstr_("!") });
     return foundInterface;
 }
