@@ -37,6 +37,7 @@ public:
         bool bunnyHop{ false };
         bool disablePostProcessing{ false };
         std::string skybox{ xorstr_("Default") };
+        float viewmodelFov{ 60.0f };
     } misc;
 
 private:
