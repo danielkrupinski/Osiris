@@ -131,4 +131,5 @@ Hooks::Hooks()
     client.setup(memory.clientMode);
     client.hook_index(24, hookedCreateMove);
     client.hook_index(44, hookedDoPostScreenEffects);
+    client.hook_index(35, hookedGetViewModelFov);
 }
