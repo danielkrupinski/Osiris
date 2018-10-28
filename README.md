@@ -15,6 +15,8 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
     * Enemies color
     * Weapons - enable glow on weapon
     * Weapons color
+    * Planted C4 - enable glow on planted C4 explosive
+    * Planted C4 color
     * Chickens - enable glow on chickens
     * Chickens color
 
