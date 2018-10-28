@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <type_traits>
 
 #define WIN32_LEAN_AND_MEAN
