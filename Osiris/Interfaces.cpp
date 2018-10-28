@@ -18,7 +18,7 @@ Interfaces::Interfaces()
         cvar = reinterpret_cast<Cvar*>(find(xorstr_("vstdlib.dll"), xorstr_("VEngineCvar")));
     }
     catch (std::runtime_error& e) {
-
+        MessageBox(NULL, e.what(), xorstr_("Error"), MB_OK | MB_ICONERROR);
     }
 }
 
