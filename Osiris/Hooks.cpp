@@ -114,6 +114,11 @@ static int __stdcall hookedDoPostScreenEffects(int param)
     return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 
+static float __stdcall hookedGetViewModelFOV()
+{
+
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
