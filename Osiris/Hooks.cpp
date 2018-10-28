@@ -116,7 +116,7 @@ static int __stdcall hookedDoPostScreenEffects(int param)
 
 static float __stdcall hookedGetViewModelFOV()
 {
-
+    return config.misc.viewmodelFov;
 }
 
 Hooks::Hooks()
