@@ -2,64 +2,37 @@
 
 #include "UtlVector.h"
 
+class ConVar;
+
 typedef void(*FnChangeCallback_t)(ConVar *var, const char *pOldValue, float flOldValue);
+
+class ConCommandBase;
 
 class ConCommandBaseAccessor {
 public:
     virtual bool RegisterConCommandBase(ConCommandBase *pVar) = 0;
 };
 
-class ConCommandBase
-{
-    friend class CCvar;
-    friend class ConVar;
-    friend class ConCommand;
-    friend void ConVar_Register(int nCVarFlag, ConCommandBaseAccessor *pAccessor);
-
-    // FIXME: Remove when ConVar changes are done
-    friend class CDefaultCvar;
-
+class ConCommandBase {
 public:
-    ConCommandBase(void);
-    ConCommandBase(const char *pName, const char *pHelpString = 0, int flags = 0);
+    virtual                     ~ConCommandBase(void) = 0;
+    virtual bool                IsCommand(void) const = 0;
+    virtual bool                IsFlagSet(int flag) const = 0;
+    virtual void                AddFlags(int flags) = 0;
+    virtual void                RemoveFlags(int flags) = 0;
+    virtual int                 GetFlags() const = 0;
+    virtual const char*         GetName(void) const = 0;
+    virtual const char*         GetHelpText(void) const = 0;
 
-    virtual                     ~ConCommandBase(void);
-    virtual bool                IsCommand(void) const;
-    virtual bool                IsFlagSet(int flag) const;
-    virtual void                AddFlags(int flags);
-    virtual void                RemoveFlags(int flags);
-    virtual int                 GetFlags() const;
-    virtual const char*         GetName(void) const;
-    virtual const char*         GetHelpText(void) const;
-    const ConCommandBase*       GetNext(void) const;
-    ConCommandBase*             GetNext(void);
-    virtual bool                IsRegistered(void) const;
-    virtual int                 GetDLLIdentifier() const;
+    virtual bool                IsRegistered(void) const = 0;
+    virtual int                 GetDLLIdentifier() const = 0;
 
-    virtual void                Create(const char *pName, const char *pHelpString = 0, int flags = 0);
-    virtual void                Init();
-    void                        Shutdown();
-    char*                       CopyString(const char *from);
-
-    ConCommandBase*             m_pNext;
-    bool                        m_bRegistered;
-    const char*                 m_pszName;
-    const char*                 m_pszHelpString;
+    virtual void                Create(const char *pName, const char *pHelpString = 0, int flags = 0) = 0;
+    virtual void                Init() = 0;
     int                         m_nFlags;
-
-protected:
-    static ConCommandBase* s_pConCommandBases;
-    static ConCommandBaseAccessor* s_pAccessor;
-
-public:
-    static ConCommandBase* s_pRegisteredCommands;
 };
 
-class ConVar : public ConCommandBase, public ConVar {
-    friend class CCvar;
-    friend class ConVarRef;
-    friend class SplitScreenConVarRef;
-
+class ConVar : public ConCommandBase {
 public:
     typedef ConCommandBase BaseClass;
 
@@ -70,28 +43,24 @@ public:
     ConVar(const char *pName, const char *pDefaultValue, int flags, const char *pHelpString, FnChangeCallback_t callback);
     ConVar(const char *pName, const char *pDefaultValue, int flags, const char *pHelpString, bool bMin, float fMin, bool bMax, float fMax, FnChangeCallback_t callback);
 
-    virtual                     ~ConVar(void);
-    virtual bool                IsFlagSet(int flag) const;
-    virtual const char*         GetHelpText(void) const;
-    virtual bool                IsRegistered(void) const;
-    virtual const char*         GetName(void) const;
-    virtual const char*         GetBaseName(void) const;
+    virtual                     ~ConVar(void) = 0;
+    virtual bool                IsFlagSet(int flag) const = 0;
+    virtual const char*         GetHelpText(void) const = 0;
+    virtual bool                IsRegistered(void) const = 0;
+    virtual const char*         GetName(void) const = 0;
+    virtual const char*         GetBaseName(void) const = 0;
     virtual int                 GetSplitScreenPlayerSlot() const;
 
-    virtual void                AddFlags(int flags);
-    virtual int                 GetFlags() const;
+    virtual void                AddFlags(int flags) = 0;
+    virtual int                 GetFlags() const = 0;
     virtual bool                IsCommand(void) const;
-
-    // Install a change callback (there shouldn't already be one....)
-    void InstallChangeCallback(FnChangeCallback_t callback, bool bInvoke = true);
-    void RemoveChangeCallback(FnChangeCallback_t callbackToRemove);
 
     int GetChangeCallbackCount() const { return m_pParent->m_fnChangeCallbacks.size; }
     FnChangeCallback_t GetChangeCallback(int slot) const { return m_pParent->m_fnChangeCallbacks[slot]; }
 
     // Retrieve value
-    virtual float                   GetFloat(void) const;
-    virtual int                     GetInt(void) const;
+    virtual float                   GetFloat(void) const = 0;
+    virtual int                     GetInt(void) const = 0;
     //Color          GetColor(void) const;
     //bool           GetBool() const { return !!GetInt(); }
     //char const*    GetString(void) const;
@@ -111,14 +80,18 @@ public:
     virtual void                    SetValue(Color value);
 
     // Reset to default value
-    void                            Revert(void);
-    bool                            HasMin() const;
-    bool                            HasMax() const;
-    bool                            GetMin(float& minVal) const;
-    bool                            GetMax(float& maxVal) const;
-    float                           GetMinValue() const;
-    float                           GetMaxValue() const;
-    const char*                     GetDefault(void) const;
+
+    //private:
+    virtual void                InternalSetValue(const char *value) = 0;
+    virtual void                InternalSetFloatValue(float fNewValue) = 0;
+    virtual void                InternalSetIntValue(int nValue) = 0;
+    virtual void                InternalSetColorValue(Color value) = 0;
+    virtual bool                ClampValue(float& value);
+    virtual void                ChangeStringValue(const char *tempVal, float flOldValue) = 0;
+    virtual void                Create(const char *pName, const char *pDefaultValue, int flags = 0, const char *pHelpString = 0, bool bMin = false, float fMin = 0.0, bool bMax = false, float fMax = false, FnChangeCallback_t callback = 0) = 0;
+
+    // Used internally by OneTimeInit to Initialize.
+    virtual void                Init() = 0;
 
     struct CVValue_t
     {
@@ -128,38 +101,13 @@ public:
         int     m_nValue;
     };
 
-    CVValue_t &GetRawValue()
-    {
-        return m_Value;
-    }
-
-    const CVValue_t &GetRawValue() const
-    {
-        return m_Value;
-    }
-
-    //private:
-    bool                        InternalSetColorFromString(const char *value);
-    virtual void                InternalSetValue(const char *value);
-    virtual void                InternalSetFloatValue(float fNewValue);
-    virtual void                InternalSetIntValue(int nValue);
-    virtual void                InternalSetColorValue(Color value);
-    virtual bool                ClampValue(float& value);
-    virtual void                ChangeStringValue(const char *tempVal, float flOldValue);
-    virtual void                Create(const char *pName, const char *pDefaultValue, int flags = 0, const char *pHelpString = 0, bool bMin = false, float fMin = 0.0, bool bMax = false, float fMax = false, FnChangeCallback_t callback = 0);
-
-    // Used internally by OneTimeInit to Initialize.
-    virtual void                Init();
-
     //protected:
     ConVar*                     m_pParent;
-    const char*                 m_pszDefaultValue;
     CVValue_t                   m_Value;
     bool                        m_bHasMin;
     float                       m_fMinVal;
     bool                        m_bHasMax;
     float                       m_fMaxVal;
-
     // Call this function when ConVar changes
     UtlVector<FnChangeCallback_t> m_fnChangeCallbacks;
 };
