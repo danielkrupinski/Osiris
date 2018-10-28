@@ -19,6 +19,7 @@ Interfaces::Interfaces()
     }
     catch (std::runtime_error& e) {
         MessageBox(NULL, e.what(), xorstr_("Error"), MB_OK | MB_ICONERROR);
+        std::exit(EXIT_FAILURE);
     }
 }
 
