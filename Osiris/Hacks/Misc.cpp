@@ -45,5 +45,5 @@ void Misc::skybox()
 
 void Misc::clanTag()
 {
-
+    reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)("H4CK3R L33T", "");
 }
