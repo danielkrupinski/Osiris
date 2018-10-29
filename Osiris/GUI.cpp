@@ -70,6 +70,7 @@ void GUI::render()
         ImGui::PushItemWidth(120.0f);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
         char buf[20];
+        std::strcpy(buf, config.misc.clanTag.c_str());
         ImGui::InputText(xorstr_("Clantag"), buf, IM_ARRAYSIZE(buf));
         config.misc.clanTag = buf;
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);

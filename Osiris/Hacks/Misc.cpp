@@ -40,10 +40,10 @@ void Misc::disablePostProcessing()
 void Misc::skybox()
 {
     if (config.misc.skybox != xorstr_("Default"))
-        reinterpret_cast<void (__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
+        reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
 }
 
 void Misc::clanTag()
 {
-    reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)("H4CK3R L33T", "");
+    reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(config.misc.clanTag.c_str(), "");
 }
