@@ -141,8 +141,8 @@ void Config::reset()
 
     visuals.glow.plantedC4 = false;
     visuals.glow.plantedC4Color[0] = 1.0f;
-    visuals.glow.plantedC4Color[1] = 0.5f;
-    visuals.glow.plantedC4Color[2] = 0.31f;
+    visuals.glow.plantedC4Color[1] = 0.27f;
+    visuals.glow.plantedC4Color[2] = 0.0f;
 
     visuals.glow.chickens = false;
     visuals.glow.chickensColor[0] = 1.0f;
