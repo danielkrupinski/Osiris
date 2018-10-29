@@ -47,6 +47,11 @@ void Config::load()
     glow.weaponsColor[1] = config[xorstr_("glow")][xorstr_("weaponsColor")][1].asFloat();
     glow.weaponsColor[2] = config[xorstr_("glow")][xorstr_("weaponsColor")][2].asFloat();
 
+    glow.C4 = config[xorstr_("glow")][xorstr_("C4")].asBool();
+    glow.C4Color[0] = config[xorstr_("glow")][xorstr_("C4Color")][0].asFloat();
+    glow.C4Color[1] = config[xorstr_("glow")][xorstr_("C4Color")][1].asFloat();
+    glow.C4Color[2] = config[xorstr_("glow")][xorstr_("C4Color")][2].asFloat();
+
     glow.plantedC4 = config[xorstr_("glow")][xorstr_("plantedC4")].asBool();
     glow.plantedC4Color[0] = config[xorstr_("glow")][xorstr_("plantedC4Color")][0].asFloat();
     glow.plantedC4Color[1] = config[xorstr_("glow")][xorstr_("plantedC4Color")][1].asFloat();
@@ -96,6 +101,11 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("weaponsColor")][1] = glow.weaponsColor[1];
     config[xorstr_("glow")][xorstr_("weaponsColor")][2] = glow.weaponsColor[2];
 
+    config[xorstr_("glow")][xorstr_("C4")] = glow.C4;
+    config[xorstr_("glow")][xorstr_("C4Color")][0] = glow.C4Color[0];
+    config[xorstr_("glow")][xorstr_("C4Color")][1] = glow.C4Color[1];
+    config[xorstr_("glow")][xorstr_("C4Color")][2] = glow.C4Color[2];
+
     config[xorstr_("glow")][xorstr_("plantedC4")] = glow.plantedC4;
     config[xorstr_("glow")][xorstr_("plantedC4Color")][0] = glow.plantedC4Color[0];
     config[xorstr_("glow")][xorstr_("plantedC4Color")][1] = glow.plantedC4Color[1];
@@ -138,6 +148,11 @@ void Config::reset()
     glow.weaponsColor[0] = 1.0f;
     glow.weaponsColor[1] = 1.0f;
     glow.weaponsColor[2] = 1.0f;
+
+    glow.C4 = false;
+    glow.C4Color[0] = 1.0f;
+    glow.C4Color[1] = 1.0f;
+    glow.C4Color[2] = 0.0f;
 
     glow.plantedC4 = false;
     glow.plantedC4Color[0] = 1.0f;
