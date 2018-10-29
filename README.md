@@ -15,6 +15,8 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
     * **Enemies color**
     * **Weapons** - enable glow on weapon
     * **Weapons color**
+    * **C4** - enable glow on dropped C4 explosive
+    * **C4 color**
     * **Planted C4** - enable glow on planted C4 explosive
     * **Planted C4 color**
     * **Chickens** - enable glow on chickens
@@ -22,8 +24,10 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
 
 * **Misc**
     * **Bunny hop** - automatically jump to increase movement speed
+    * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Skybox** - change sky(box)
+    * **Viewmodel FOV** - change viewmodel FOV [0-130]
 
 * **Config**
     * **Load** - load configuration file
@@ -43,9 +47,9 @@ git clone https://github.com/danielkrupinski/Osiris.git
 
 ### Compiling from source
 
-When you have equiped a copy of source code, next step is opening `Osiris.sln` in Microsoft Visual Studio 2017.
+When you have equiped a copy of source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2017.
 
-Then change build configuration to `Release | x86` and simply press `Build solution`.
+Then change build configuration to `Release | x86` and simply press **Build solution**.
 
 If everything went right you should receive `Osiris.dll`  binary file.
 
