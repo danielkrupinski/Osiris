@@ -35,6 +35,7 @@ public:
 
     struct {
         bool bunnyHop{ false };
+        std::string clanTag;
         bool disablePostProcessing{ false };
         std::string skybox{ xorstr_("Default") };
         int viewmodelFov{ 60 };
