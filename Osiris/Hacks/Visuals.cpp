@@ -45,6 +45,10 @@ void Visuals::glow()
                     glowobject.renderWhenOccluded = true;
                 }
                 break;
+            case ClassId_CC4:
+                glowobject.glowColor = { 1.0f, 1.0f, 0.0f };
+                glowobject.renderWhenOccluded = true;
+                break;
             case ClassId_CPlantedC4:
                 if (glow.plantedC4) {
                     glowobject.glowColor = glow.plantedC4Color;
