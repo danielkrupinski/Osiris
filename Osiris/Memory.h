@@ -23,6 +23,7 @@ public:
     bool* disablePostProcessing;
 
     std::uintptr_t loadSky;
+    std::uintptr_t setClanTag;
 };
 
 extern Memory memory;

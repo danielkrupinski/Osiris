@@ -19,6 +19,7 @@ Memory::Memory()
     glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("0F 11 05 ? ? ? ? 83 C8 01")) + 3);
     disablePostProcessing = *reinterpret_cast<bool**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("80 3D ? ? ? ? ? 53 56 57 0F 85")) + 2);
     loadSky = findPattern(xorstr_("engine.dll"), xorstr_("55 8B EC 81 EC ? ? ? ? 56 57 8B F9 C7 45"));
+    setClanTag = findPattern(xorstr_("engine.dll"), xorstr_("53 56 57 8B DA 8B F9 FF 15"));
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
