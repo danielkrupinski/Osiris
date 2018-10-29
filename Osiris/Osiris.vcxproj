@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
-    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Hacks\Misc.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
