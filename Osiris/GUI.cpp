@@ -44,7 +44,7 @@ void GUI::render()
     if (window.glow) {
         ImGui::SetNextWindowSize(ImVec2(170.67f, 360.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(80);
+        ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
@@ -67,6 +67,7 @@ void GUI::render()
     if (window.misc) {
         ImGui::SetNextWindowSize(ImVec2(240.0f, 180.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::PushItemWidth(120.0f);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
         static const std::string skyboxes[]{ xorstr_("Default"), xorstr_("cs_baggage_skybox_"), xorstr_("cs_tibet"), xorstr_("embassy"), xorstr_("italy"), xorstr_("jungle"), xorstr_("nukeblank"), xorstr_("office"), xorstr_("sky_austria_dusk"), xorstr_("sky_cs15_daylight01_hdr"), xorstr_("sky_cs15_daylight02_hdr"), xorstr_("sky_cs15_daylight03_hdr"), xorstr_("sky_cs15_daylight04_hdr"), xorstr_("sky_csgo_cloudy01"), xorstr_("sky_csgo_night_flat"), xorstr_("sky_csgo_night02"), xorstr_("sky_day02_05_hdr"), xorstr_("sky_day02_05"), xorstr_("sky_dust"), xorstr_("sky_l4d_rural02_ldr"), xorstr_("sky_venice"), xorstr_("vertigo_hdr"), xorstr_("vertigo"), xorstr_("vertigoblue_hdr"), xorstr_("vietnam") };
@@ -82,7 +83,6 @@ void GUI::render()
             }
             ImGui::EndCombo();
         }
-
         ImGui::SliderInt(xorstr_("Viewmodel FOV"), &config.misc.viewmodelFov, 0, 130);
         ImGui::End();
     }
