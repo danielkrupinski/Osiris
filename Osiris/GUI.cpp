@@ -16,10 +16,8 @@ void GUI::render()
     } window;
 
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::BeginMenu(xorstr_("Visuals"))) {
-            if (ImGui::MenuItem(xorstr_("Glow")))
-                window.glow = true;
-            ImGui::EndMenu();
+        if (ImGui::MenuItem(xorstr_("Glow"))) {
+            window.glow = true;
         }
 
         if (ImGui::MenuItem(xorstr_("Misc"))) {
