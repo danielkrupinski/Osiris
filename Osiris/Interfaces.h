@@ -13,7 +13,7 @@
 
 class Interfaces final {
 public:
-    explicit Interfaces();
+    explicit Interfaces() noexcept;
 
     EngineClient* engineClient;
     ClientEntityList* clientEntityList;

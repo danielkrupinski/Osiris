@@ -7,7 +7,7 @@
 
 #include "Interfaces.h"
 
-Interfaces::Interfaces()
+Interfaces::Interfaces() noexcept
 {
     try {
         engineClient = find<EngineClient>(xorstr_("engine.dll"), xorstr_("VEngineClient"));
