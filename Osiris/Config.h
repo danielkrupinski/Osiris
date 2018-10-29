@@ -23,6 +23,8 @@ public:
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool C4{ false };
+        float C4Color[3]{ 1.0f, 1.0f, 0.0f };
         bool plantedC4{ false };
         float plantedC4Color[3]{ 1.0f, 0.27f, 0.0f };
         bool defuseKits{ false };
