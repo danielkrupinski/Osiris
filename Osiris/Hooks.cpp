@@ -116,7 +116,10 @@ static int __stdcall hookedDoPostScreenEffects(int param)
 
 static float __stdcall hookedGetViewModelFov()
 {
-    return !(*memory.localPlayer)->isScoped() ? config.misc.viewmodelFov : 60.0f;
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame() && !(*memory.localPlayer)->isScoped())
+        return config.misc.viewmodelFov;
+    else
+        return 60.0f;
 }
 
 Hooks::Hooks()
