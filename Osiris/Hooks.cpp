@@ -117,7 +117,7 @@ static int __stdcall hookedDoPostScreenEffects(int param)
 static float __stdcall hookedGetViewModelFov()
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame() && !(*memory.localPlayer)->isScoped())
-        return config.misc.viewmodelFov;
+        return static_cast<float>(config.misc.viewmodelFov);
     else
         return 60.0f;
 }

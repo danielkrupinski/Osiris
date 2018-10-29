@@ -60,7 +60,7 @@ void Config::load()
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
-    misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asFloat();
+    misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asInt();
 
     in.close();
 }
@@ -152,5 +152,5 @@ void Config::reset()
     misc.bunnyHop = false;
     misc.disablePostProcessing = false;
     misc.skybox = xorstr_("Default");
-    misc.viewmodelFov = 60.0f;
+    misc.viewmodelFov = 60;
 }
