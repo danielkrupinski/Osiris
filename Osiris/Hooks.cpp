@@ -93,6 +93,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::skybox();
         Misc::bunnyHop(cmd);
+        Misc::clanTag();
     }
     return false;
 }
