@@ -39,7 +39,7 @@ public:
     bool setup(void* class_base = nullptr);
 
     template<typename T>
-    void hook_index(int index, T fun)
+    void hookAt(int index, T fun)
     {
         if (static_cast<std::size_t>(index) <= vmtLength)
             newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
