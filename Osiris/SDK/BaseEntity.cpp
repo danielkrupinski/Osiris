@@ -25,3 +25,7 @@ int BaseEntity::getTeamNumber()
     return *reinterpret_cast<int*>(this + 0xF0);
 }
 
+bool BaseEntity::isScoped()
+{
+    return *reinterpret_cast<bool*>(this + 0x388E);
+}

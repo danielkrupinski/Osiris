@@ -10,4 +10,5 @@ public:
     Vector getVelocity();
     int getMoveType();
     int getTeamNumber();
+    bool isScoped();
 };
