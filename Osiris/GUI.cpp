@@ -65,7 +65,7 @@ void GUI::render()
     }
 
     if (window.misc) {
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 180.0f));
+        ImGui::SetNextWindowSize(ImVec2(240.0f, 180.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
