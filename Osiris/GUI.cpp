@@ -45,22 +45,22 @@ void GUI::render()
         ImGui::SetNextWindowSize(ImVec2(170.67f, 360.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(80.0f);
-        ImGui::Checkbox(xorstr_("Enabled"), &config.visuals.glow.enabled);
-        ImGui::SliderFloat(xorstr_("Thickness"), &config.visuals.glow.thickness, 0.0f, 1.0f);
-        ImGui::SliderFloat(xorstr_("Alpha"), &config.visuals.glow.alpha, 0.0f, 1.0f);
-        ImGui::SliderInt(xorstr_("Style"), &config.visuals.glow.style, 0, 3);
-        ImGui::Checkbox(xorstr_("Players"), &config.visuals.glow.players);
-        ImGui::Checkbox(xorstr_("Enemies only"), &config.visuals.glow.enemiesOnly);
-        ImGui::ColorEdit3(xorstr_("Allies color"), config.visuals.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Enemies color"), config.visuals.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Weapons"), &config.visuals.glow.weapons);
-        ImGui::ColorEdit3(xorstr_("Weapons color"), config.visuals.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Planted C4"), &config.visuals.glow.plantedC4);
-        ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.visuals.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
-        // ImGui::Checkbox(xorstr_("Defuse kits"), &config.visuals.glow.defuseKits);
-        // ImGui::ColorEdit3(xorstr_("Defuse kits color"), config.visuals.glow.defuseKitsColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Chickens"), &config.visuals.glow.chickens);
-        ImGui::ColorEdit3(xorstr_("Chickens color"), config.visuals.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Enabled"), &config.glow.enabled);
+        ImGui::SliderFloat(xorstr_("Thickness"), &config.glow.thickness, 0.0f, 1.0f);
+        ImGui::SliderFloat(xorstr_("Alpha"), &config.glow.alpha, 0.0f, 1.0f);
+        ImGui::SliderInt(xorstr_("Style"), &config.glow.style, 0, 3);
+        ImGui::Checkbox(xorstr_("Players"), &config.glow.players);
+        ImGui::Checkbox(xorstr_("Enemies only"), &config.glow.enemiesOnly);
+        ImGui::ColorEdit3(xorstr_("Allies color"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Enemies color"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Weapons"), &config.glow.weapons);
+        ImGui::ColorEdit3(xorstr_("Weapons color"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
+        ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
+        // ImGui::Checkbox(xorstr_("Defuse kits"), &config.glow.defuseKits);
+        // ImGui::ColorEdit3(xorstr_("Defuse kits color"), config.glow.defuseKitsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
+        ImGui::ColorEdit3(xorstr_("Chickens color"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
 

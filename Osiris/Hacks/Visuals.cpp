@@ -4,7 +4,7 @@
 
 void Visuals::glow()
 {
-    static constexpr auto& glow = config.visuals.glow;
+    static constexpr auto& glow = config.glow;
 
     if (glow.enabled) {
         for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
