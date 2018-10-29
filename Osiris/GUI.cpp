@@ -53,6 +53,8 @@ void GUI::render()
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Weapons"), &config.glow.weapons);
         ImGui::ColorEdit3(xorstr_("Weapons color"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("C4"), &config.glow.C4);
+        ImGui::ColorEdit3(xorstr_("C4 color"), config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
         ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
         // ImGui::Checkbox(xorstr_("Defuse kits"), &config.glow.defuseKits);
