@@ -17,6 +17,8 @@
 #ifndef JM_XORSTR_HPP
 #define JM_XORSTR_HPP
 
+#define JM_XORSTR_DISABLE_AVX_INTRINSICS
+
 #include <immintrin.h>
 #include <cstdint>
 #include <cstddef>
