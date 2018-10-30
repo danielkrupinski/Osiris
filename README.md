@@ -27,7 +27,7 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Skybox** - change sky(box)
-    * **Viewmodel FOV** - change viewmodel FOV [0-130]
+    * **View model FOV** - change view model FOV [0-130]
 
 * **Config**
     * **Load** - load configuration file
