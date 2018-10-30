@@ -6,18 +6,20 @@ void Visuals::glow()
 {
     constexpr auto& glow = config.glow;
 
-    if (glow.enabled) {
-        for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
-            GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
+    for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
+        GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-            if (memory.glowObjectManager->glowObjectDefinitions.elements->isUnused() || !glowobject.entity)
-                continue;
+        if (memory.glowObjectManager->glowObjectDefinitions.elements->isUnused() || !glowobject.entity)
+            continue;
 
-            if (glowobject.entity->IsDormant())
-                continue;
+        if (glowobject.entity->IsDormant())
+            continue;
+
+        glowobject.renderWhenOccluded = false;
+
+        if (glow.enabled) {
 
             glowobject.alpha = glow.alpha;
-            glowobject.renderWhenOccluded = false;
             glowobject.renderWhenUnoccluded = false;
             glowobject.glowStyle = glow.style;
             glowobject.fullBloomRender = false;
