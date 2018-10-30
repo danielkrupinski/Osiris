@@ -47,7 +47,7 @@ void Misc::skybox()
 
 void Misc::clanTag()
 {
-    static std::string clanTag = config.misc.clanTag;
+    static std::string_view clanTag = config.misc.clanTag;
     if (clanTag != config.misc.clanTag) {
         reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(config.misc.clanTag.c_str(), "");
         clanTag = config.misc.clanTag;
