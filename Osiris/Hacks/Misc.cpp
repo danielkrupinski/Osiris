@@ -1,3 +1,5 @@
+#include <string_view>
+
 #include "../Config.h"
 #include "../Memory.h"
 #include "Misc.h"
