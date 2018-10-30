@@ -63,6 +63,7 @@ void Config::load()
     glow.chickensColor[2] = config[xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
+    misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
     misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asInt();
@@ -117,6 +118,7 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("chickensColor")][2] = glow.chickensColor[2];
 
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
+    config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
     config[xorstr_("misc")][xorstr_("viewmodelFov")] = misc.viewmodelFov;
@@ -165,6 +167,7 @@ void Config::reset()
     glow.chickensColor[2] = 0.58f;
 
     misc.bunnyHop = false;
+    misc.clanTag = "";
     misc.disablePostProcessing = false;
     misc.skybox = xorstr_("Default");
     misc.viewmodelFov = 60;
