@@ -69,7 +69,7 @@ void GUI::render()
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(120.0f);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
-        char buf[20];
+        char buf[16];
         std::strcpy(buf, config.misc.clanTag.c_str());
         ImGui::InputText(xorstr_("Clantag"), buf, IM_ARRAYSIZE(buf));
         config.misc.clanTag = buf;
