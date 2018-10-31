@@ -35,7 +35,7 @@ public:
 
     struct {
         bool enabled{ false };
-        int reactionTime{ 0 };
+        int shotDelay{ 0 };
     } triggerbot;
 
     struct {
