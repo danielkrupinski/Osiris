@@ -1,1 +1,3 @@
 #pragma once
+
+void renderGlow();
