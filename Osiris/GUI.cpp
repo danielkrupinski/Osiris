@@ -74,7 +74,7 @@ void GUI::render()
         ImGui::Begin(xorstr_("Triggerbot"), &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(70.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.triggerbot.enabled);
-        ImGui::SliderInt(xorstr_("Shot delay"), &config.triggerbot.shotDelay, 0, 250);
+        ImGui::SliderInt(xorstr_("Shot delay"), &config.triggerbot.shotDelay, 0, 250, xorstr_("%d ms"));
         ImGui::End();
     }
 
