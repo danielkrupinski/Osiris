@@ -1,44 +1,85 @@
 #pragma once
 
-#include "AppSystem.h"
-#include "ConVar.h"
+#include "../Utils.h"
 
-class ConCommandBase;
-class ConCommand;
-class ConVar;
-
-typedef int CVarDLLIdentifier_t;
-
-class ConsoleDisplayFunc
-{
+class Cvar {
 public:
-    virtual void ColorPrint(const char* clr, const char *pMessage) = 0;
-    virtual void Print(const char *pMessage) = 0;
-    virtual void DPrint(const char *pMessage) = 0;
-};
+    const char* GetString()
+    {
+        using OriginalFn = const char *(__thiscall *)(void *);
+        return callVirtualFunction<OriginalFn>(this, 11)(this);
+    }
 
-typedef void(*FnChangeCallback_t)(ConVar *var, const char *pOldValue, float flOldValue);
+    float GetFloat()
+    {
+        using OriginalFn = float(__thiscall *)(void *);
+        return callVirtualFunction<OriginalFn>(this, 12)(this);
+    }
 
-class Cvar : public AppSystem {
-public:
-    virtual CVarDLLIdentifier_t        AllocateDLLIdentifier() = 0; // 9
-    virtual void                       RegisterConCommand(ConCommandBase *pCommandBase) = 0; //10
-    virtual void                       UnregisterConCommand(ConCommandBase *pCommandBase) = 0;
-    virtual void                       UnregisterConCommands(CVarDLLIdentifier_t id) = 0;
-    virtual const char*                GetCommandLineValue(const char *pVariableName) = 0;
-    virtual ConCommandBase*            FindCommandBase(const char *name) = 0;
-    virtual const ConCommandBase*      FindCommandBase(const char *name) const = 0;
-    virtual ConVar*                    FindVar(const char *var_name) = 0; //16
-    virtual const ConVar*              FindVar(const char *var_name) const = 0;
-    virtual ConCommand*                FindCommand(const char *name) = 0;
-    virtual const ConCommand*          FindCommand(const char *name) const = 0;
-    virtual void                       InstallGlobalChangeCallback(FnChangeCallback_t callback) = 0;
-    virtual void                       RemoveGlobalChangeCallback(FnChangeCallback_t callback) = 0;
-    virtual void                       CallGlobalChangeCallbacks(ConVar *var, const char *pOldString, float flOldValue) = 0;
-    virtual void                       InstallConsoleDisplayFunc(ConsoleDisplayFunc* pDisplayFunc) = 0;
-    virtual void                       RemoveConsoleDisplayFunc(ConsoleDisplayFunc* pDisplayFunc) = 0;
-    virtual void                       ConsoleColorPrintf(const char* clr, const char *pFormat, ...) const = 0;
-    virtual void                       ConsolePrintf(const char *pFormat, ...) const = 0;
-    virtual void                       ConsoleDPrintf(const char *pFormat, ...) const = 0;
-    virtual void                       RevertFlaggedConVars(int nFlag) = 0;
+    int GetInt()
+    {
+        using OriginalFn = int(__thiscall *)(void *);
+        return callVirtualFunction<OriginalFn>(this, 13)(this);
+    }
+
+    void SetValue(const char *value)
+    {
+        using OriginalFn = void(__thiscall *)(void *, const char *);
+        callVirtualFunction<OriginalFn>(this, 14)(this, value);
+    }
+
+    void SetValue(float value)
+    {
+        using OriginalFn = void(__thiscall *)(void *, float);
+        callVirtualFunction<OriginalFn>(this, 15)(this, value);
+    }
+
+    void SetValue(int value)
+    {
+        using OriginalFn = void(__thiscall *)(void *, int);
+        callVirtualFunction<OriginalFn>(this, 16)(this, value);
+    }
+
+    void SetValue(Color value)
+    {
+        using OriginalFn = void(__thiscall *)(void *, Color);
+        callVirtualFunction<OriginalFn>(this, 17)(this, value);
+    }
+
+    Cvar* FindVar(const char *var_name)
+    {
+        typedef Cvar*(__thiscall* OriginalFn)(void*, const char*);
+        return callVirtualFunction<OriginalFn>(this, 15)(this, var_name);
+    }
+
+    void* RegisterConCommand(Cvar *pCommandBase)
+    {
+        typedef Cvar*(__thiscall* OriginalFn)(void*, Cvar*);
+        return callVirtualFunction<OriginalFn>(this, 9)(this, pCommandBase);
+    }
+
+    void* UnregisterConCommand(Cvar *pCommandBase)
+    {
+        typedef Cvar*(__thiscall* OriginalFn)(void*, Cvar*);
+        return callVirtualFunction<OriginalFn>(this, 10)(this, pCommandBase);
+    }
+
+    char pad_0x0000[0x4];
+    Cvar *pNext;
+    int32_t bRegistered;
+    char *pszName;
+    char *pszHelpString;
+    int32_t nFlags;
+    char pad_0x0018[0x4];
+    Cvar *pParent;
+    char *pszDefaultValue;
+    char *strString;
+    int32_t StringLength;
+    float fValue;
+    int32_t nValue;
+    int32_t bHasMin;
+    float fMinVal;
+    int32_t bHasMax;
+    float fMaxVal;
+    void *fnChangeCallback;
 };
