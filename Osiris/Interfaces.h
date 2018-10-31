@@ -36,12 +36,10 @@ private:
             interfaceName << name << std::setfill('0') << std::setw(3) << i;
             foundInterface = createInterface(interfaceName.str().c_str(), nullptr);
             if (foundInterface)
-                break;
+                return foundInterface;
         }
 
-        if (!foundInterface)
-            throw std::runtime_error(std::string{ xorstr_("Could not find ") } + name + std::string{ xorstr_(" in ") } + module + std::string{ xorstr_("!") });
-        return foundInterface;
+        throw std::runtime_error(std::string{ xorstr_("Could not find ") } + name + std::string{ xorstr_(" in ") } + module + std::string{ xorstr_("!") });
     }
 
 };
