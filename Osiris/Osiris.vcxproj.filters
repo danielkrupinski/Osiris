@@ -78,9 +78,6 @@
     <ClCompile Include="Hacks\Misc.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Visuals.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="SDK\ClientEntityList.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
@@ -199,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="SDK\Defines.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Visuals.h">
-      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\UtlVector.h">
       <Filter>SDK</Filter>
