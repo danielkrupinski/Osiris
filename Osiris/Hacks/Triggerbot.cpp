@@ -11,7 +11,9 @@
 void runTriggerbot(UserCmd* cmd)
 {
     if (config.triggerbot.enabled) {
-        if (GetAsyncKeyState(VK_MENU)) {
+        static auto lastTime = std::chrono::steady_clock::now();
+        if (GetAsyncKeyState(VK_MENU)
+            && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastTime).count() > 2000) {
             auto inCrosshair = (*memory.localPlayer)->getCrosshairID();
             if (inCrosshair > 0 && inCrosshair <= 64) {
                 auto target = interfaces.clientEntityList->getClientEntity(inCrosshair);
@@ -21,6 +23,7 @@ void runTriggerbot(UserCmd* cmd)
                     cmd->buttons |= IN_ATTACK;
                 }
             }
+            lastTime = std::chrono::steady_clock::now();
         }
     }
 }
