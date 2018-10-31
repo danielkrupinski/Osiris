@@ -11,4 +11,5 @@ public:
     int getMoveType();
     int getTeamNumber();
     bool isScoped();
+    int getCrosshairID();
 };

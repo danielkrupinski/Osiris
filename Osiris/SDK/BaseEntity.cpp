@@ -29,3 +29,8 @@ bool BaseEntity::isScoped()
 {
     return *reinterpret_cast<bool*>(this + 0x38AA);
 }
+
+int BaseEntity::getCrosshairID()
+{
+    return *reinterpret_cast<int*>(this + 0xB2DC);
+}
