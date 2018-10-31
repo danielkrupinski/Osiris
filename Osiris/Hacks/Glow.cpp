@@ -9,7 +9,7 @@ void renderGlow()
     for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-        if (memory.glowObjectManager->glowObjectDefinitions.elements->isUnused() || !glowobject.entity)
+        if (glowobject.isUnused() || !glowobject.entity)
             continue;
 
         if (glowobject.entity->IsDormant())
