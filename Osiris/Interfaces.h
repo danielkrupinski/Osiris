@@ -4,6 +4,8 @@
 #include <string>
 #include <type_traits>
 
+#include "xorstr.hpp"
+
 #include "SDK/Client.h"
 #include "SDK/ClientEntityList.h"
 #include "SDK/Cvar.h"
