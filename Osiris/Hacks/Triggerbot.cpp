@@ -7,7 +7,7 @@
 
 void runTriggerbot(UserCmd* cmd)
 {
-    if (GetAsyncKeyState(VK_MENU) & 1) {
+    if (GetAsyncKeyState(VK_MENU)) {
         auto inCrosshair = (*memory.localPlayer)->getCrosshairID();
         if (inCrosshair > 0 && inCrosshair <= 64) {
             auto target = interfaces.clientEntityList->getClientEntity(inCrosshair);
