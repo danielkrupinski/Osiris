@@ -11,6 +11,7 @@
 #include "Memory.h"
 #include "SDK/UserCmd.h"
 #include "Hacks/Glow.h"
+#include "Hacks/Triggerbot.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -94,6 +95,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
         Misc::skybox();
         Misc::bunnyHop(cmd);
         Misc::clanTag();
+        runTriggerbot(cmd);
     }
     return false;
 }
