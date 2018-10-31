@@ -34,6 +34,10 @@ public:
     } glow;
 
     struct {
+        bool enabled{ false };
+    } triggerbot;
+
+    struct {
         bool bunnyHop{ false };
         std::string clanTag;
         bool disablePostProcessing{ false };
