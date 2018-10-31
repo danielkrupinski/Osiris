@@ -40,12 +40,6 @@ public:
         callVirtualFunction<OriginalFn>(this, 16)(this, value);
     }
 
-    void SetValue(Color value)
-    {
-        using OriginalFn = void(__thiscall *)(void *, Color);
-        callVirtualFunction<OriginalFn>(this, 17)(this, value);
-    }
-
     Cvar* FindVar(const char *var_name)
     {
         typedef Cvar*(__thiscall* OriginalFn)(void*, const char*);
