@@ -62,6 +62,8 @@ void Config::load()
     glow.chickensColor[1] = config[xorstr_("glow")][xorstr_("chickensColor")][1].asFloat();
     glow.chickensColor[2] = config[xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
 
+    triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
+
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
@@ -117,6 +119,8 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("chickensColor")][1] = glow.chickensColor[1];
     config[xorstr_("glow")][xorstr_("chickensColor")][2] = glow.chickensColor[2];
 
+    config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
+
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
@@ -165,6 +169,8 @@ void Config::reset()
     glow.chickensColor[0] = 1.0f;
     glow.chickensColor[1] = 0.08f;
     glow.chickensColor[2] = 0.58f;
+
+    triggerbot.enabled = false;
 
     misc.bunnyHop = false;
     misc.clanTag = "";
