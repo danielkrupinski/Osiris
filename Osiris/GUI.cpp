@@ -69,6 +69,11 @@ void GUI::render()
         ImGui::End();
     }
 
+    if (window.triggerbot) {
+        ImGui::SetNextWindowSize(ImVec2(240.0f, 180.0f));
+        ImGui::Begin(xorstr_("Triggerbot"), &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    }
+
     if (window.misc) {
         ImGui::SetNextWindowSize(ImVec2(240.0f, 180.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
