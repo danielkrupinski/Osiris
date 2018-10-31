@@ -70,8 +70,9 @@ void GUI::render()
     }
 
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize(ImVec2(240.0f, 180.0f));
+        ImGui::SetNextWindowSize(ImVec2(150.0f, 100.0f));
         ImGui::Begin(xorstr_("Triggerbot"), &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::End();
     }
 
     if (window.misc) {
