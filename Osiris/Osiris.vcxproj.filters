@@ -245,5 +245,8 @@
     <ClInclude Include="Hacks\Glow.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Triggerbot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

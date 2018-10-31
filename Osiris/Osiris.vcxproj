@@ -45,6 +45,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
+    <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="SDK\AppSystem.h" />
     <ClInclude Include="SDK\BaseEntity.h" />
     <ClInclude Include="SDK\BaseHandle.h" />
