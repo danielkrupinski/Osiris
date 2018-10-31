@@ -10,7 +10,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/UserCmd.h"
-#include "Hacks/Visuals.h"
+#include "Hacks/Glow.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -110,7 +110,7 @@ static int __stdcall hookedDoPostScreenEffects(int param)
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::disablePostProcessing();
-        Visuals::glow();
+        renderGlow();
     }
     return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
