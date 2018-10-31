@@ -1,3 +1,5 @@
 #pragma once
 
-void runTriggerbot();
+#include "../SDK/UserCmd.h"
+
+void runTriggerbot(UserCmd*);

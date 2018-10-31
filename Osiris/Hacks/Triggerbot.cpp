@@ -2,7 +2,7 @@
 #include "../Memory.h"
 #include "Triggerbot.h"
 
-void runTriggerbot()
+void runTriggerbot(UserCmd* cmd)
 {
     if (GetAsyncKeyState(VK_MENU) & 1) {
         auto inCrosshair = (*memory.localPlayer)->getCrosshairID();
