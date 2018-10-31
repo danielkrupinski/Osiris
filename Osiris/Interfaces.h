@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -31,13 +32,9 @@ private:
         auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), xorstr_("CreateInterface")));
 
         for (int i = 1; i < 100; i++) {
-            std::string interfaceName{ name + std::string{ xorstr_("0") } + std::to_string(i) };
-            foundInterface = createInterface(interfaceName.c_str(), nullptr);
-            if (foundInterface)
-                break;
-
-            interfaceName = name + xorstr_("00") + std::to_string(i);
-            foundInterface = createInterface(interfaceName.c_str(), nullptr);
+            std::stringstream interfaceName;
+            interfaceName << name << std::setfill('0') << std::setw(3) << i;
+            foundInterface = createInterface(interfaceName.str().c_str(), nullptr);
             if (foundInterface)
                 break;
         }
