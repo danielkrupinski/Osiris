@@ -90,6 +90,9 @@
     <ClCompile Include="Osiris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Glow.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="SDK\ConVar.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Glow.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
