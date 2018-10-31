@@ -90,6 +90,9 @@
     <ClCompile Include="Hacks\Glow.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Triggerbot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -246,7 +249,7 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\Triggerbot.h">
-      <Filter>Header Files</Filter>
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
