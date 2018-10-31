@@ -91,7 +91,7 @@
       <Filter>Hacks</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Triggerbot.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Hacks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
