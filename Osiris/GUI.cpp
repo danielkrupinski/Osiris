@@ -42,8 +42,6 @@ void GUI::render()
         ImGui::EndMainMenuBar();
     }
 
-    const ImGuiIO& io = ImGui::GetIO();
-
     if (window.glow) {
         ImGui::SetNextWindowSize(ImVec2(170.67f, 395.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
