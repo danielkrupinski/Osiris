@@ -95,7 +95,7 @@ static bool __fastcall hookedCreateMove(void* thisptr, void*, float inputSampleT
         Misc::skybox();
         Misc::bunnyHop(cmd);
         Misc::clanTag();
-        runTriggerbot(cmd);
+        Triggerbot::run(cmd);
     }
     return false;
 }

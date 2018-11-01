@@ -2,4 +2,7 @@
 
 #include "../SDK/UserCmd.h"
 
-void runTriggerbot(UserCmd*);
+namespace Triggerbot {
+    void run(UserCmd*);
+}
+
