@@ -8,5 +8,5 @@ namespace Misc
     void disablePostProcessing();
     void skybox();
     void clanTag();
-    void postprocess();
+    void colorWorld();
 }

@@ -55,7 +55,7 @@ void Misc::clanTag()
     }
 }
 
-void Misc::postprocess()
+void Misc::colorWorld()
 {
     static auto red = interfaces.cvar->FindVar("mat_ambient_light_r");
     static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
