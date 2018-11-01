@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 #include "xorstr.hpp"
 
