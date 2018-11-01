@@ -22,6 +22,10 @@ Free open-source training / cheating software for **Counter-Strike: Global Offen
     * **Chickens** - enable glow on chickens
     * **Chickens color**
 
+* **Triggerbot** - automatically shoot when crosshair is on enemy
+    * **Enable** - on / off triggerbot switch
+    * **Shot delay** - delay time in ms (milliseconds)
+
 * **Misc**
     * **Bunny hop** - automatically jump to increase movement speed
     * **Clan tag** - set custom clan tag
