@@ -1,6 +1,7 @@
 #include <string_view>
 
 #include "../Config.h"
+#include "../Interfaces.h"
 #include "../Memory.h"
 #include "Misc.h"
 
@@ -56,5 +57,11 @@ void Misc::clanTag()
 
 void Misc::postprocess()
 {
+    static auto red = interfaces.cvar->FindVar("mat_ambient_light_r");
+    static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
+    static auto blue = interfaces.cvar->FindVar("mat_ambient_light_b");
 
+    red->SetValue(config.misc.postprocessingRed);
+    green->SetValue(config.misc.postprocessingGreen);
+    blue->SetValue(config.misc.postprocessingBlue);
 }
