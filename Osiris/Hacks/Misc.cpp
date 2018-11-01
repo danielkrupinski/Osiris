@@ -57,9 +57,9 @@ void Misc::clanTag()
 
 void Misc::colorWorld()
 {
-    static auto red = interfaces.cvar->FindVar("mat_ambient_light_r");
-    static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
-    static auto blue = interfaces.cvar->FindVar("mat_ambient_light_b");
+    static auto red = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_r"));
+    static auto green = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_g"));
+    static auto blue = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_b"));
 
     red->SetValue(config.misc.worldRed);
     green->SetValue(config.misc.worldGreen);
