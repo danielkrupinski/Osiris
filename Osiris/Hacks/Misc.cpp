@@ -53,3 +53,8 @@ void Misc::clanTag()
         clanTag = config.misc.clanTag;
     }
 }
+
+void Misc::postprocess()
+{
+
+}
