@@ -61,7 +61,7 @@ void Misc::colorWorld()
     static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
     static auto blue = interfaces.cvar->FindVar("mat_ambient_light_b");
 
-    red->SetValue(config.misc.postprocessingRed);
-    green->SetValue(config.misc.postprocessingGreen);
-    blue->SetValue(config.misc.postprocessingBlue);
+    red->SetValue(config.misc.worldRed);
+    green->SetValue(config.misc.worldGreen);
+    blue->SetValue(config.misc.worldBlue);
 }

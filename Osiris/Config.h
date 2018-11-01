@@ -42,9 +42,9 @@ public:
         bool bunnyHop{ false };
         std::string clanTag;
         bool disablePostProcessing{ false };
-        float postprocessingRed{ 0.0f };
-        float postprocessingGreen{ 0.0f };
-        float postprocessingBlue{ 0.0f };
+        float worldRed{ 0.0f };
+        float worldGreen{ 0.0f };
+        float worldBlue{ 0.0f };
         std::string skybox{ xorstr_("Default") };
         int viewmodelFov{ 60 };
     } misc;
