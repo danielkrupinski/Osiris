@@ -78,6 +78,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         device->SetVertexDeclaration(vertexDeclaration);
         device->SetVertexShader(vertexShader);
     }
+    Misc::postprocess();
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
