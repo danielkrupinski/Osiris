@@ -2,7 +2,7 @@
 #include "Glow.h"
 #include "../Memory.h"
 
-void renderGlow()
+void Glow::render()
 {
     constexpr auto& glow = config.glow;
 

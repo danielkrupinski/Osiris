@@ -1,3 +1,6 @@
 #pragma once
 
-void renderGlow();
+namespace Glow {
+    void render();
+}
+
