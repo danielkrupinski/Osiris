@@ -63,6 +63,7 @@ void Config::load()
     glow.chickensColor[2] = config[xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
 
     triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
+    triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
 
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
@@ -120,6 +121,7 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("chickensColor")][2] = glow.chickensColor[2];
 
     config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
+    config[xorstr_("triggerbot")][xorstr_("shotDelay")] = triggerbot.shotDelay;
 
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
@@ -171,6 +173,7 @@ void Config::reset()
     glow.chickensColor[2] = 0.58f;
 
     triggerbot.enabled = false;
+    triggerbot.shotDelay = 0;
 
     misc.bunnyHop = false;
     misc.clanTag = "";
