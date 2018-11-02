@@ -128,7 +128,7 @@ static float __stdcall hookedGetViewModelFov()
 
 static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const int& pInfo, void* pCustomBoneToWorld)
 {
-
+    return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, const int&, const int&, void*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
 }
 
 Hooks::Hooks()
@@ -144,4 +144,6 @@ Hooks::Hooks()
     client.hookAt(24, hookedCreateMove);
     client.hookAt(44, hookedDoPostScreenEffects);
     client.hookAt(35, hookedGetViewModelFov);
+    modelRender.setup(interfaces.modelRender);
+    modelRender.hookAt(21, hookedDrawModelExecute);
 }

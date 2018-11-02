@@ -19,6 +19,7 @@ public:
     std::add_pointer_t<void __stdcall()> originalLockCursor;
     VmtHook surface;
     VmtHook client;
+    VmtHook modelRender;
 };
 
 extern Hooks hooks;
