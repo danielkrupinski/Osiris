@@ -68,6 +68,7 @@ void Config::load()
     misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
     misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
+    misc.flashReduction = config[xorstr_("misc")][xorstr_("flashReduction")].asInt();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
     misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asInt();
     misc.worldColor[0] = config[xorstr_("misc")][xorstr_("worldColor")][0].asFloat();
@@ -129,6 +130,7 @@ void Config::save() const
     config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
     config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
+    config[xorstr_("misc")][xorstr_("flashReduction")] = misc.flashReduction;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
     config[xorstr_("misc")][xorstr_("viewmodelFov")] = misc.viewmodelFov;
     config[xorstr_("misc")][xorstr_("worldColor")][0] = misc.worldColor[0];
@@ -184,6 +186,7 @@ void Config::reset()
     misc.bunnyHop = false;
     misc.clanTag = "";
     misc.disablePostProcessing = false;
+    misc.flashReduction = 0;
     misc.skybox = xorstr_("Default");
     misc.viewmodelFov = 60;
     misc.worldColor[0] = 0.0f;
