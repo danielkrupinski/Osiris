@@ -126,6 +126,11 @@ static float __stdcall hookedGetViewModelFov()
         return 60.0f;
 }
 
+static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const int& pInfo, void* pCustomBoneToWorld)
+{
+
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
