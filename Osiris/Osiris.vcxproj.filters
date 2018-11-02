@@ -81,9 +81,6 @@
     <ClCompile Include="SDK\ClientEntityList.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\ConVar.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Osiris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -240,9 +237,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Cvar.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\ConVar.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\Glow.h">

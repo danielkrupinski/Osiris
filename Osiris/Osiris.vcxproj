@@ -37,7 +37,6 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="SDK\BaseEntity.cpp" />
     <ClCompile Include="SDK\ClientEntityList.cpp" />
-    <ClCompile Include="SDK\ConVar.cpp" />
     <ClCompile Include="SDK\Vector2D.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="VmtHook.cpp" />
@@ -59,7 +58,6 @@
     <ClInclude Include="SDK\ClientRenderable.h" />
     <ClInclude Include="SDK\ClientThinkable.h" />
     <ClInclude Include="SDK\ClientUnknown.h" />
-    <ClInclude Include="SDK\ConVar.h" />
     <ClInclude Include="SDK\Cvar.h" />
     <ClInclude Include="SDK\Defines.h" />
     <ClInclude Include="SDK\EngineClient.h" />
