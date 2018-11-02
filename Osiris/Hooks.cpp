@@ -140,10 +140,12 @@ Hooks::Hooks()
 
     surface.setup(interfaces.surface);
     surface.hookAt(67, hookedLockCursor);
+
     client.setup(memory.clientMode);
     client.hookAt(24, hookedCreateMove);
     client.hookAt(44, hookedDoPostScreenEffects);
     client.hookAt(35, hookedGetViewModelFov);
+
     modelRender.setup(interfaces.modelRender);
     modelRender.hookAt(21, hookedDrawModelExecute);
 }
