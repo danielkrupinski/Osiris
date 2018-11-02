@@ -15,6 +15,7 @@ Interfaces::Interfaces() noexcept
         client = find<Client>(xorstr_("client_panorama.dll"), xorstr_("VClient"));
         surface = find<Surface>(xorstr_("vguimatsurface.dll"), xorstr_("VGUI_Surface"));
         cvar = find<Cvar>(xorstr_("vstdlib.dll"), xorstr_("VEngineCvar"));
+        modelRender = find<ModelRender>(xorstr_("engine.dll"), xorstr_("VEngineModel"));
     }
     catch (std::runtime_error& e) {
         MessageBox(NULL, e.what(), xorstr_("Error"), MB_OK | MB_ICONERROR);

@@ -15,6 +15,7 @@
 #include "SDK/Cvar.h"
 #include "SDK/EngineClient.h"
 #include "SDK/Material.h"
+#include "SDK/ModelRender.h"
 #include "SDK/Surface.h"
 
 class Interfaces final {
@@ -26,6 +27,7 @@ public:
     Client* client;
     Surface* surface;
     Cvar* cvar;
+    ModelRender* modelRender;
 private:
     template <typename T>
     auto find(const std::string& module, const std::string& name)
