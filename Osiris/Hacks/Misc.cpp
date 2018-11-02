@@ -65,3 +65,8 @@ void Misc::colorWorld()
     green->SetValue(config.misc.worldColor[1]);
     blue->SetValue(config.misc.worldColor[2]);
 }
+
+void Misc::reduceFlashEffect()
+{
+
+}

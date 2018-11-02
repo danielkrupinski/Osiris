@@ -9,4 +9,5 @@ namespace Misc
     void skybox();
     void clanTag();
     void colorWorld();
+    void reduceFlashEffect();
 }
