@@ -10,7 +10,7 @@ Config::Config(const std::string& name)
 {
     char buff[MAX_PATH]{ };
     if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, buff))) {
-        path = buff + std::string{ '\\' } +name;
+        path = buff + std::string{ '\\' } + name;
     }
     load();
 }
@@ -70,6 +70,9 @@ void Config::load()
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
     misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asInt();
+    misc.worldColor[0] = config[xorstr_("misc")][xorstr_("worldColor")][0].asFloat();
+    misc.worldColor[1] = config[xorstr_("misc")][xorstr_("worldColor")][1].asFloat();
+    misc.worldColor[2] = config[xorstr_("misc")][xorstr_("worldColor")][2].asFloat();
 
     in.close();
 }
@@ -128,6 +131,9 @@ void Config::save() const
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
     config[xorstr_("misc")][xorstr_("viewmodelFov")] = misc.viewmodelFov;
+    config[xorstr_("misc")][xorstr_("worldColor")][0] = misc.worldColor[0];
+    config[xorstr_("misc")][xorstr_("worldColor")][1] = misc.worldColor[1];
+    config[xorstr_("misc")][xorstr_("worldColor")][2] = misc.worldColor[2];
 
     out << config;
     out.close();
@@ -180,4 +186,7 @@ void Config::reset()
     misc.disablePostProcessing = false;
     misc.skybox = xorstr_("Default");
     misc.viewmodelFov = 60;
-}
+    misc.worldColor[0] = 0.0f;
+    misc.worldColor[1] = 0.0f;
+    misc.worldColor[2] = 0.0f;
+};
