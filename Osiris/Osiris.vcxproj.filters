@@ -245,5 +245,8 @@
     <ClInclude Include="Hacks\Triggerbot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ModelRender.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
