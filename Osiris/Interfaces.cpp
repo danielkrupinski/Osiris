@@ -17,7 +17,7 @@ Interfaces::Interfaces() noexcept
         cvar = find<Cvar>(xorstr_("vstdlib.dll"), xorstr_("VEngineCvar"));
         modelRender = find<ModelRender>(xorstr_("engine.dll"), xorstr_("VEngineModel"));
     }
-    catch (std::runtime_error& e) {
+    catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), xorstr_("Error"), MB_OK | MB_ICONERROR);
         std::exit(EXIT_FAILURE);
     }
