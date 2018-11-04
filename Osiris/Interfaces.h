@@ -38,9 +38,8 @@ private:
             if (T* foundInterface = createInterface((std::stringstream{ } << name << std::setfill('0') << std::setw(3) << i).str().c_str(), nullptr))
                 return foundInterface;
         }
-        throw std::runtime_error(std::string{ xorstr_("Could not find ") } + name + std::string{ xorstr_(" in ") } + module + std::string{ xorstr_("!") });
+        throw std::runtime_error(xorstr_("Could not find ") + name + xorstr_(" in ") + module + xorstr_("!"));
     }
-
 };
 
 extern Interfaces interfaces;
