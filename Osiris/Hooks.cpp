@@ -132,6 +132,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const 
     return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, const int&, const int&, void*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
 }
 
+
 enum class ClientFrameStage {
     FRAME_UNDEFINED = -1,
     FRAME_START,
@@ -142,6 +143,11 @@ enum class ClientFrameStage {
     FRAME_RENDER_START,
     FRAME_RENDER_END
 };
+
+static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
+{
+ 
+}
 
 Hooks::Hooks()
 {
