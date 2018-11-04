@@ -116,7 +116,7 @@ static int __stdcall hookedDoPostScreenEffects(int param)
         Misc::disablePostProcessing();
         Glow::render();
     }
-    return hooks.client.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
+    return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 
 static float __stdcall hookedGetViewModelFov()
@@ -142,10 +142,10 @@ Hooks::Hooks()
     surface.setup(interfaces.surface);
     surface.hookAt(67, hookedLockCursor);
 
-    client.setup(memory.clientMode);
-    client.hookAt(24, hookedCreateMove);
-    client.hookAt(44, hookedDoPostScreenEffects);
-    client.hookAt(35, hookedGetViewModelFov);
+    clientMode.setup(memory.clientMode);
+    clientMode.hookAt(24, hookedCreateMove);
+    clientMode.hookAt(44, hookedDoPostScreenEffects);
+    clientMode.hookAt(35, hookedGetViewModelFov);
 
     modelRender.setup(interfaces.modelRender);
     modelRender.hookAt(21, hookedDrawModelExecute);
