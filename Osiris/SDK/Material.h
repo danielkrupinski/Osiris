@@ -39,6 +39,6 @@ class Material {
 public:
     void setMaterialVarFlag(MaterialVar flag, bool isOn)
     {
-        callVirtualFunction<void(__stdcall*)(MaterialVar, bool)>(this, 30)(flag, isOn);
+        callVirtualFunction<void(__thiscall*)(void*, MaterialVar, bool)>(this, 29)(this, flag, isOn);
     }
 };

@@ -12,6 +12,7 @@
 #include "SDK/UserCmd.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Triggerbot.h"
+#include <vector>
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -134,6 +135,25 @@ static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const 
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
 {
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
+        return;
+    }
+    std::vector<const char*> smoke_materials = {
+        "particle/vistasmokev1/vistasmokev1_fire",
+        "particle/vistasmokev1/vistasmokev1_smokegrenade",
+        "particle/vistasmokev1/vistasmokev1_emods",
+        "particle/vistasmokev1/vistasmokev1_emods_impactdust",
+    };
+
+    if (stage == ClientFrameStage::FRAME_NET_UPDATE_START)
+    {
+        for (auto material_name : smoke_materials)
+        {
+            Material* mat = interfaces.materialSystem->findMaterial(material_name, "Other textures");
+            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, true);
+        }
+    }
     hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
 }
 
