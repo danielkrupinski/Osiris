@@ -151,7 +151,7 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
         for (auto material_name : smoke_materials)
         {
             Material* mat = interfaces.materialSystem->findMaterial(material_name, "Other textures");
-            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, true);
+            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, !config.misc.noSmoke);
         }
     }
     hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
