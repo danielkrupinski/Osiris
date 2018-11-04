@@ -57,8 +57,8 @@ public:
 private:
     static inline std::size_t estimate_vftbl_length(std::uintptr_t* vftbl_start);
 
-    void*           class_base;
-    std::size_t     vmtLength;
-    std::uintptr_t* newVmt;
-    std::uintptr_t* oldVmt;
+    void*           class_base{ nullptr };
+    std::size_t     vmtLength{ 0 };
+    std::uintptr_t* newVmt{ nullptr };
+    std::uintptr_t* oldVmt{ nullptr };
 };
