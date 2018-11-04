@@ -135,7 +135,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const 
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
 {
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+    if (!(interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())) {
         hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
         return;
     }
@@ -151,7 +151,7 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
         for (auto material_name : smoke_materials)
         {
             Material* mat = interfaces.materialSystem->findMaterial(material_name, "Other textures");
-            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, !config.misc.noSmoke);
+            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         }
     }
     hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
