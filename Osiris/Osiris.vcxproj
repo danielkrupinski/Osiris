@@ -80,6 +80,7 @@
     <ClInclude Include="SDK\HandleEntity.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\Material.h" />
+    <ClInclude Include="SDK\MaterialSystem.h" />
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Surface.h" />
