@@ -27,7 +27,7 @@ void Glow::render()
             glowobject.bloomAmount = glow.thickness;
 
             switch (glowobject.entity->GetClientClass()->m_ClassID) {
-            case ClassId_CCSPlayer:
+            case ClassId::CSPlayer:
                 if (glow.players) {
                     bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
 
@@ -41,19 +41,19 @@ void Glow::render()
                     }
                 }
                 break;
-            case ClassId_CChicken:
+            case ClassId::Chicken:
                 if (glow.chickens) {
                     glowobject.glowColor = glow.chickensColor;
                     glowobject.renderWhenOccluded = true;
                 }
                 break;
-            case ClassId_CC4:
+            case ClassId::C4:
                 if (glow.C4) {
                     glowobject.glowColor = glow.C4Color;
                     glowobject.renderWhenOccluded = true;
                 }
                 break;
-            case ClassId_CPlantedC4:
+            case ClassId::PlantedC4:
                 if (glow.plantedC4) {
                     glowobject.glowColor = glow.plantedC4Color;
                     glowobject.renderWhenOccluded = true;
