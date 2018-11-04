@@ -1,6 +1,6 @@
 # Osiris
 
-Free open-source training software / cheat for **Counter-Strike: Global Offensive**. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
+Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
 
 ## Features
 
@@ -31,9 +31,10 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [0-255] (0 - full flash, 255 - no flash)
+    * **No smoke** (beta) - remove smoke grenade effect
     * **Skybox** - change sky(box)
     * **View model FOV** - change view model FOV [0-130]
-    * **World color** - set world color
+    * **World color** - set world ambient color
 
 * **Config**
     * **Load** - load configuration file
