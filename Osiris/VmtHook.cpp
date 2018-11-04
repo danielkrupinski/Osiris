@@ -1,9 +1,5 @@
 #include "VmtHook.h"
 
-VmtHook::VmtHook(void* base)
-    : class_base(base), vmtLength(0), newVmt(nullptr), oldVmt(nullptr)
-{
-}
 VmtHook::~VmtHook()
 {
     unhook_all();

@@ -32,7 +32,6 @@ namespace detail
 
 class VmtHook {
 public:
-    VmtHook(void* base);
     ~VmtHook();
 
     bool setup(void* class_base = nullptr);
