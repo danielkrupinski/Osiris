@@ -32,7 +32,6 @@ namespace detail
 
 class VmtHook {
 public:
-    VmtHook();
     VmtHook(void* base);
     ~VmtHook();
 
