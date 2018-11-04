@@ -224,9 +224,6 @@
     <ClInclude Include="SDK\ClientEntity.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Cvar.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -240,6 +237,9 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\MaterialSystem.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Utils.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

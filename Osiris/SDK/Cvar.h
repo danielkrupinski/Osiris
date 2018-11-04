@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Utils.h"
+#include "Utils.h"
 
 class Cvar {
 public:

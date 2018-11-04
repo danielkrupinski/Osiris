@@ -4,7 +4,7 @@
 #include "ClientRenderable.h"
 #include "ClientThinkable.h"
 #include "ClientUnknown.h"
-#include "../Utils.h"
+#include "Utils.h"
 
 class ClientEntity : public ClientUnknown, public ClientRenderable, public ClientNetworkable, public ClientThinkable {
 public:

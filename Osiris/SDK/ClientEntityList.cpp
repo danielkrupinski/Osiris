@@ -1,5 +1,5 @@
 #include "ClientEntityList.h"
-#include "../Utils.h"
+#include "Utils.h"
 
 BaseEntity* ClientEntityList::getClientEntity(int index)
 {
