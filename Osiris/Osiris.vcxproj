@@ -88,7 +88,6 @@
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Vector2D.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VmtHook.h" />
     <ClInclude Include="xorstr.hpp" />
