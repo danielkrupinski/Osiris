@@ -8,7 +8,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 
-Memory::Memory()
+Memory::Memory() noexcept
 {
     present = findPattern(xorstr_("gameoverlayrenderer.dll"), xorstr_("FF 15 ? ? ? ? 8B F8 85 DB")) + 2;
     reset = findPattern(xorstr_("gameoverlayrenderer.dll"), xorstr_("C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8")) + 9;

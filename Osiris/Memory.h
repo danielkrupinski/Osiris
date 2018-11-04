@@ -9,7 +9,7 @@
 
 class Memory final {
 public:
-    Memory();
+    Memory() noexcept;
     std::uintptr_t findPattern(std::string, std::string);
 
     std::uintptr_t present;
