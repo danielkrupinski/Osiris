@@ -14,7 +14,7 @@
 #include "SDK/ClientEntityList.h"
 #include "SDK/Cvar.h"
 #include "SDK/EngineClient.h"
-#include "SDK/Material.h"
+#include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Surface.h"
 
