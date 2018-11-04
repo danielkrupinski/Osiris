@@ -132,6 +132,17 @@ static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const 
     return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, const int&, const int&, void*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
 }
 
+enum class ClientFrameStage {
+    FRAME_UNDEFINED = -1,
+    FRAME_START,
+    FRAME_NET_UPDATE_START,
+    FRAME_NET_UPDATE_POSTDATAUPDATE_START,
+    FRAME_NET_UPDATE_POSTDATAUPDATE_END,
+    FRAME_NET_UPDATE_END,
+    FRAME_RENDER_START,
+    FRAME_RENDER_END
+};
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
