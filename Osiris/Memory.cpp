@@ -22,7 +22,7 @@ Memory::Memory() noexcept
     setClanTag = findPattern(xorstr_("engine.dll"), xorstr_("53 56 57 8B DA 8B F9 FF 15"));
 }
 
-std::uintptr_t Memory::findPattern(std::string module, std::string pattern)
+std::uintptr_t Memory::findPattern(std::string module, std::string pattern) const
 {
     MODULEINFO moduleInfo{ };
 
