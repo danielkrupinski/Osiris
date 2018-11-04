@@ -146,7 +146,7 @@ enum class ClientFrameStage {
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
 {
- 
+    hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
 }
 
 Hooks::Hooks()
@@ -166,4 +166,7 @@ Hooks::Hooks()
 
     modelRender.setup(interfaces.modelRender);
     modelRender.hookAt(21, hookedDrawModelExecute);
+
+    client.setup(interfaces.client);
+    client.hookAt(37, hookedFrameStageNotify);
 }

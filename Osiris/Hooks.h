@@ -20,6 +20,7 @@ public:
     VmtHook surface;
     VmtHook clientMode;
     VmtHook modelRender;
+    VmtHook client;
 };
 
 extern Hooks hooks;
