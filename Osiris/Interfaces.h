@@ -28,6 +28,7 @@ public:
     Surface* surface;
     Cvar* cvar;
     ModelRender* modelRender;
+    MaterialSystem* materialSystem;
 private:
     template <typename T>
     auto find(const std::string& module, const std::string& name) const

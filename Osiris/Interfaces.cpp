@@ -16,6 +16,7 @@ Interfaces::Interfaces() noexcept
         surface = find<Surface>(xorstr_("vguimatsurface.dll"), xorstr_("VGUI_Surface"));
         cvar = find<Cvar>(xorstr_("vstdlib.dll"), xorstr_("VEngineCvar"));
         modelRender = find<ModelRender>(xorstr_("engine.dll"), xorstr_("VEngineModel"));
+        materialSystem = find<MaterialSystem>(xorstr_("materialsystem.dll"), xorstr_("VMaterialSystem"));
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), xorstr_("Error"), MB_OK | MB_ICONERROR);
