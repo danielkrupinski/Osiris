@@ -108,4 +108,9 @@ void Misc::removeSmoke(ClientFrameStage stage)
             mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         }
     }
+
+    if (config.misc.noSmoke)
+    {
+        *memory.smokeCount = 0;
+    }
 }
