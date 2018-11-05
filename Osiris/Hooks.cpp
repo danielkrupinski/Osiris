@@ -139,42 +139,7 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
         hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
         return;
     }
-
-    static const std::string smoke_materials[]{
-        xorstr_("particle/beam_smoke_01"),
-        xorstr_("particle/particle_smokegrenade"),
-        xorstr_("particle/particle_smokegrenade1"),
-        xorstr_("particle/particle_smokegrenade2"),
-        xorstr_("particle/particle_smokegrenade3"),
-        xorstr_("particle/particle_smokegrenade_sc"),
-        xorstr_("particle/smoke1/smoke1"),
-        xorstr_("particle/smoke1/smoke1_ash"),
-        xorstr_("particle/smoke1/smoke1_nearcull"),
-        xorstr_("particle/smoke1/smoke1_nearcull2"),
-        xorstr_("particle/smoke1/smoke1_snow"),
-        xorstr_("particle/smokesprites_0001"),
-        xorstr_("particle/smokestack"),
-        xorstr_("particle/vistasmokev1/vistasmokev1"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_fire"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_nearcull"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_nearcull_fog"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_nearcull_nodepth"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_smokegrenade"),
-        xorstr_("particle/vistasmokev1/vistasmokev4_emods_nocull"),
-        xorstr_("particle/vistasmokev1/vistasmokev4_nearcull"),
-        xorstr_("particle/vistasmokev1/vistasmokev4_nocull")
-    };
-
-    if (stage == ClientFrameStage::FRAME_NET_UPDATE_START)
-    {
-        for (auto material_name : smoke_materials)
-        {
-            Material* mat = interfaces.materialSystem->findMaterial(material_name.c_str(), xorstr_("Other textures"));
-            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
-        }
-    }
+    Misc::removeSmoke(stage);
     hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
 }
 

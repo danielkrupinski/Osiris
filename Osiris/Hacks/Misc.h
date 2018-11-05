@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../SDK/UserCmd.h"
+#include "../SDK/Enums.h"
 
 namespace Misc {
     void bunnyHop(UserCmd*);
@@ -9,5 +10,5 @@ namespace Misc {
     void clanTag();
     void colorWorld();
     void reduceFlashEffect();
-    void removeSmoke();
+    void removeSmoke(ClientFrameStage);
 }
