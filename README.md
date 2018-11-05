@@ -23,7 +23,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Chickens color**
 
 * **Triggerbot** - automatically shoot when crosshair is on enemy
-    * **Enable** - on / off triggerbot switch
+    * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
     * **Shot delay** - delay time in ms (milliseconds)
 
 * **Misc**
