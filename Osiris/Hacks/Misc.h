@@ -2,12 +2,12 @@
 
 #include "../SDK/UserCmd.h"
 
-namespace Misc
-{
+namespace Misc {
     void bunnyHop(UserCmd*);
     void disablePostProcessing();
     void skybox();
     void clanTag();
     void colorWorld();
     void reduceFlashEffect();
+    void removeSmoke();
 }
