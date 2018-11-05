@@ -20,6 +20,7 @@ Memory::Memory() noexcept
     disablePostProcessing = *reinterpret_cast<bool**>(findPattern(xorstr_("client_panorama.dll"), xorstr_("80 3D ? ? ? ? ? 53 56 57 0F 85")) + 2);
     loadSky = findPattern(xorstr_("engine.dll"), xorstr_("55 8B EC 81 EC ? ? ? ? 56 57 8B F9 C7 45"));
     setClanTag = findPattern(xorstr_("engine.dll"), xorstr_("53 56 57 8B DA 8B F9 FF 15"));
+    smokeCount = reinterpret_cast<int*>(findPattern(xorstr_("client_panorama.dll"), xorstr_("8B 1D ? ? ? ? 56 33 F6 57 85 DB")) + 2);
 }
 
 std::uintptr_t Memory::findPattern(std::string module, std::string pattern) const
