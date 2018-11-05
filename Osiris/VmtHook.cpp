@@ -9,11 +9,10 @@ VmtHook::~VmtHook()
 
 bool VmtHook::setup(void* base /*= nullptr*/)
 {
-    if (base != nullptr)
-        class_base = base;
-
-    if (class_base == nullptr)
+    if (!base)
         return false;
+
+    class_base = base;
 
     oldVmt = *(std::uintptr_t**)class_base;
     vmtLength = estimate_vftbl_length(oldVmt);
