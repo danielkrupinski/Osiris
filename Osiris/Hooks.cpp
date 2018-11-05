@@ -139,7 +139,8 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
         hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
         return;
     }
-    std::vector<const char*> smoke_materials = {
+
+    static const std::string smoke_materials[]{
         "particle/vistasmokev1/vistasmokev1_fire",
         "particle/vistasmokev1/vistasmokev1_smokegrenade",
         "particle/vistasmokev1/vistasmokev1_emods",
@@ -150,7 +151,7 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
     {
         for (auto material_name : smoke_materials)
         {
-            Material* mat = interfaces.materialSystem->findMaterial(material_name, "Other textures");
+            Material* mat = interfaces.materialSystem->findMaterial(material_name.c_str(), "Other textures");
             mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         }
     }
