@@ -73,7 +73,7 @@ void Misc::reduceFlashEffect()
 
 void Misc::removeSmoke(ClientFrameStage stage)
 {
-    static const std::string smoke_materials[]{
+    static const std::string smokeMaterials[]{
         xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
         xorstr_("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
         xorstr_("particle/vistasmokev1/vistasmokev1_fire"),
@@ -82,7 +82,7 @@ void Misc::removeSmoke(ClientFrameStage stage)
 
     if (stage == ClientFrameStage::FRAME_NET_UPDATE_START)
     {
-        for (auto material_name : smoke_materials)
+        for (auto material_name : smokeMaterials)
         {
             Material* mat = interfaces.materialSystem->findMaterial(material_name.c_str(), xorstr_("Other textures"));
             mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
