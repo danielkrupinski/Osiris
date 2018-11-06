@@ -55,15 +55,12 @@ void VmtHook::unhook_all()
     }
 }
 
-std::size_t VmtHook::estimate_vftbl_length(std::uintptr_t* vftbl_start)
+std::size_t VmtHook::estimate_vftbl_length(std::uintptr_t* vftbl)
 {
-    auto len = std::size_t{};
+    std::size_t length{ 0 };
 
-    while (vftbl_start[len] >= 0x00010000 &&
-        vftbl_start[len] < 0xFFF00000 &&
-        len < 512 /* Hard coded value. Can cause problems, beware.*/) {
-        len++;
-    }
+    while (vftbl[length] >= 0x10000 && vftbl[length] < 0xFFF00000 && length < 512)
+        length++;
 
-    return len;
+    return length;
 }
