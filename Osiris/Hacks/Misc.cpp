@@ -80,17 +80,13 @@ void Misc::removeSmoke(ClientFrameStage stage)
         xorstr_("particle/vistasmokev1/vistasmokev1_smokegrenade"),
     };
 
-    if (stage == ClientFrameStage::FRAME_NET_UPDATE_START)
-    {
-        for (auto material_name : smokeMaterials)
-        {
-            Material* mat = interfaces.materialSystem->findMaterial(material_name.c_str(), xorstr_("Other textures"));
-            mat->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
+    if (stage == ClientFrameStage::FRAME_NET_UPDATE_START) {
+        for (const auto& mat : smokeMaterials) {
+            Material* material = interfaces.materialSystem->findMaterial(mat.c_str(), xorstr_("Other textures"));
+            material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         }
     }
 
     if (config.misc.noSmoke)
-    {
         *memory.smokeCount = 0;
-    }
 }
