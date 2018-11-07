@@ -37,6 +37,11 @@ enum class MaterialVar {
 
 class Material {
 public:
+    void colorModulate(float r, float g, float b)
+    {
+        callVirtualFunction<void(__thiscall*)(void*, float, float, float)>(this, 28)(this, r, g, b);
+    }
+
     void setMaterialVarFlag(MaterialVar flag, bool isOn)
     {
         callVirtualFunction<void(__thiscall*)(void*, MaterialVar, bool)>(this, 29)(this, flag, isOn);
