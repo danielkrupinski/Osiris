@@ -242,5 +242,8 @@
     <ClInclude Include="SDK\Utils.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Chams.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

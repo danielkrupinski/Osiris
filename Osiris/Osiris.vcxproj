@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
