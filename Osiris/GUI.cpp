@@ -12,6 +12,7 @@ void GUI::render()
 {
     static struct {
         bool glow{ false };
+        bool chams{ false };
         bool triggerbot{ false };
         bool misc{ false };
     } window;
@@ -19,6 +20,10 @@ void GUI::render()
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::MenuItem(xorstr_("Glow"))) {
             window.glow = true;
+        }
+
+        if (ImGui::MenuItem(xorstr_("Chams"))) {
+            window.chams = true;
         }
 
         if (ImGui::MenuItem(xorstr_("Triggerbot"))) {
@@ -62,6 +67,12 @@ void GUI::render()
         ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
         ImGui::ColorEdit3(xorstr_("Chickens color"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::End();
+    }
+
+    if (window.chams) {
+        ImGui::SetNextWindowSize(ImVec2(180.0f, 100.0f));
+        ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::End();
     }
 
