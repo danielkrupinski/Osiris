@@ -20,3 +20,8 @@ R"#("VertexLitGeneric"
 }
 )#";
 }
+
+void Chams::render()
+{
+
+}
