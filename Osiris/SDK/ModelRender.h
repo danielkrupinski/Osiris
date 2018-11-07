@@ -2,12 +2,25 @@
 
 #include "Utils.h"
 
+struct Model {
+    void*   fnHandle;
+    char    szName[260];
+    __int32 nLoadFlags;
+    __int32 nServerCount;
+    __int32 type;
+    __int32 flags;
+    Vector  vecMins;
+    Vector  vecMaxs;
+    float   radius;
+    char    pad[0x1C];
+};
+
 struct ModelRenderInfo {
     Vector                  origin;
     QAngle                  angles;
     char                    pad[4];
-    ClientRenderable*      pRenderable;
-    const model_t*          pModel;
+    ClientRenderable*       pRenderable;
+    const Model*            pModel;
     const matrix3x4_t*      pModelToWorld;
     const matrix3x4_t*      pLightingOffset;
     const Vector*           pLightingOrigin;
