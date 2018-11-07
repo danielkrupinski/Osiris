@@ -60,8 +60,6 @@ void GUI::render()
         ImGui::ColorEdit3(xorstr_("C4 color"), config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
         ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
-        // ImGui::Checkbox(xorstr_("Defuse kits"), &config.glow.defuseKits);
-        // ImGui::ColorEdit3(xorstr_("Defuse kits color"), config.glow.defuseKitsColor, ImGuiColorEditFlags_NoInputs);
         ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
         ImGui::ColorEdit3(xorstr_("Chickens color"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
