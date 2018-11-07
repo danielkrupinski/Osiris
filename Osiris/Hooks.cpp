@@ -128,9 +128,9 @@ static float __stdcall hookedGetViewModelFov()
         return 60.0f;
 }
 
-static void __stdcall hookedDrawModelExecute(void* ctx, const int& state, const int& pInfo, void* pCustomBoneToWorld)
+static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const ModelRenderInfo& pInfo, int* pCustomBoneToWorld)
 {
-    return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, const int&, const int&, void*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
+    return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, int*, const int&, const ModelRenderInfo&, int*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
 }
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
