@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Utils.h"
+#include "Vector.h"
+#include "QAngle.h"
+#include "ClientRenderable.h"
+#include "Material.h"
 
 struct Model {
     void*   fnHandle;
