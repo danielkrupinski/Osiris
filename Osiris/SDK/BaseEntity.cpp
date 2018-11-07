@@ -37,5 +37,5 @@ int BaseEntity::getCrosshairID()
 
 bool BaseEntity::isAlive()
 {
-    return !*reinterpret_cast<bool*>(this + 0x25B);
+    return (*reinterpret_cast<int*>(this + 0x25B)) == 0;
 }
