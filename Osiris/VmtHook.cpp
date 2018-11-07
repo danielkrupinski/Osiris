@@ -7,7 +7,7 @@ VmtHook::~VmtHook()
     delete[] newVmt;
 }
 
-bool VmtHook::setup(void* base /*= nullptr*/)
+bool VmtHook::setup(void* base)
 {
     if (!base)
         return false;
@@ -36,7 +36,6 @@ void VmtHook::unhook_all()
 {
     try {
         if (oldVmt != nullptr) {
-            auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
             *(std::uintptr_t**)class_base = oldVmt;
             oldVmt = nullptr;
         }
