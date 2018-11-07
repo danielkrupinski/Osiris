@@ -20,20 +20,10 @@ bool VmtHook::setup(void* base /*= nullptr*/)
     if (vmtLength == 0)
         return false;
 
-    newVmt = new std::uintptr_t[vmtLength + 1]();
+    newVmt = new std::uintptr_t[vmtLength];
 
-    std::memcpy(&newVmt[1], oldVmt, vmtLength * sizeof(std::uintptr_t));
-
-    try {
-        auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
-        newVmt[0] = oldVmt[-1];
-        *(std::uintptr_t**)class_base = &newVmt[1];
-    }
-    catch (...) {
-        delete[] newVmt;
-        return false;
-    }
-
+    std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
+    *(std::uintptr_t**)class_base = newVmt;
     return true;
 }
 

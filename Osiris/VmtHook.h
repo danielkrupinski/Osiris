@@ -39,8 +39,8 @@ public:
     template<typename T>
     void hookAt(int index, T fun)
     {
-        if (static_cast<std::size_t>(index) <= vmtLength)
-            newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
+        if (static_cast<std::size_t>(index) < vmtLength)
+            newVmt[index] = reinterpret_cast<std::uintptr_t>(fun);
     }
 
     void unhook_index(int);
