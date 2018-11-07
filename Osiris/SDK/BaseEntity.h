@@ -12,4 +12,5 @@ public:
     int getTeamNumber();
     bool isScoped();
     int getCrosshairID();
+    bool isAlive();
 };
