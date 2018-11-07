@@ -87,6 +87,9 @@
     <ClCompile Include="Hacks\Triggerbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Chams.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
