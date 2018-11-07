@@ -6,30 +6,6 @@
 #include <cstdint>
 #include <stdexcept>
 
-namespace detail
-{
-    class protect_guard
-    {
-    public:
-        protect_guard(void* base, size_t len, std::uint32_t flags)
-        {
-            _base = base;
-            _length = len;
-            if (!VirtualProtect(base, len, flags, (PDWORD)&_old))
-                throw std::runtime_error("Failed to protect region.");
-        }
-        ~protect_guard()
-        {
-            VirtualProtect(_base, _length, _old, (PDWORD)&_old);
-        }
-
-    private:
-        void*         _base;
-        size_t        _length;
-        std::uint32_t _old;
-    };
-}
-
 class VmtHook {
 public:
     ~VmtHook();
