@@ -14,6 +14,7 @@
 #include "Hacks/Triggerbot.h"
 #include <vector>
 #include <fstream>
+#include "Hacks/Chams.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -131,15 +132,8 @@ static float __stdcall hookedGetViewModelFov()
 
 static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const ModelRenderInfo& pInfo, int* pCustomBoneToWorld)
 {
-    if (strstr(pInfo.pModel->szName,"models/player") != nullptr) {
-        auto entity = interfaces.clientEntityList->getClientEntity(pInfo.entity_index);
-        if (entity && entity->isAlive() && interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
-            if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
-                auto material = interfaces.materialSystem->findMaterial("simple_regular", "Model textures");
-                    material->colorModulate(1.0f, 0.08f, 0.58f);
-                    interfaces.modelRender->forceMaterialOverride(material);
-            }
-        }
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+
     }
     return hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, int*, const int&, const ModelRenderInfo&, int*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
 }
@@ -156,20 +150,6 @@ static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
 
 Hooks::Hooks()
 {
-    std::ofstream("csgo\\materials\\simple_regular.vmt") << R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
