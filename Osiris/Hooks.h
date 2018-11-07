@@ -17,6 +17,11 @@ public:
 
     std::add_pointer_t<bool __fastcall(void*, void*, float, UserCmd*)> originalCreateMove;
     std::add_pointer_t<void __stdcall()> originalLockCursor;
+
+    class Vmt {
+
+    };
+
     VmtHook surface;
     VmtHook clientMode;
     VmtHook modelRender;
