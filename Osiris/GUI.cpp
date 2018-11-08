@@ -73,6 +73,8 @@ void GUI::render()
     if (window.chams) {
         ImGui::SetNextWindowSize(ImVec2(180.0f, 100.0f));
         ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
         ImGui::End();
     }
 
