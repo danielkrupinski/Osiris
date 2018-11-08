@@ -18,6 +18,9 @@ public:
     class Vmt {
     public:
         Vmt();
+    private:
+        std::uintptr_t* oldVmt;
+        std::uintptr_t* newVmt;
     };
 
     VmtHook surface;
