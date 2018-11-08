@@ -35,6 +35,7 @@ public:
 
     struct {
         bool enabled{ false };
+        float alpha{ 1.0f };
     } chams;
 
     struct {
