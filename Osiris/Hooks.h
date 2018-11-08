@@ -16,7 +16,8 @@ public:
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 
     class Vmt {
-
+    public:
+        Vmt();
     };
 
     VmtHook surface;
