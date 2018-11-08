@@ -77,6 +77,10 @@ Configuration file is saved under name `Osiris.json` in your `Documents` folder 
 ### I don't see DllMain function nor dllmain.cpp file. What is cheat's entry point and where is it located?
 All cheats modules are globally initialized by program loader. Modules are defined in `Osiris.cpp`.
 
+## Acknowledgments
+
+* [ocornut](https://github.com/ocornut) and contributors for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
+
 ## License
 
 > Copyright (c) 2018 Daniel Krupiński
