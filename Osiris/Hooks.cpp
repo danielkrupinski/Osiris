@@ -170,3 +170,8 @@ Hooks::Hooks()
     client.setup(interfaces.client);
     client.hookAt(37, hookedFrameStageNotify);
 }
+
+Hooks::Vmt::Vmt(void* void)
+{
+    
+}
