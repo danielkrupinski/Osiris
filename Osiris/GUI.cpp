@@ -75,6 +75,7 @@ void GUI::render()
         ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
+        ImGui::SliderFloat(xorstr_("Alpha"), &config.chams.alpha, 0.0f, 1.0f);
         ImGui::End();
     }
 
