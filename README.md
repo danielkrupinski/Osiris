@@ -74,6 +74,9 @@ Press `INSERT` key while in game.
 ### Where is my config file saved?
 Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read.
 
+### I don't see DllMain function nor dllmain.cpp file. What is cheat's entry point and where is it located?
+All cheats modules are globally initialized by program loader. Modules are defined in `Osiris.cpp`.
+
 ## License
 
 > Copyright (c) 2018 Daniel Krupiński
