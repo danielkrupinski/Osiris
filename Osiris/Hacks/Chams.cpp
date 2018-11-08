@@ -23,6 +23,11 @@ R"#("VertexLitGeneric"
 )#";
 }
 
+Chams::~Chams()
+{
+    std::remove("csgo\\materials\\simple_regular.vmt");
+}
+
 void Chams::render(const ModelRenderInfo& pInfo)
 {
     if (strstr(pInfo.pModel->szName, "models/player") != nullptr) {
