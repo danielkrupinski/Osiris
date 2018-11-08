@@ -17,7 +17,7 @@ public:
 
     class Vmt {
     public:
-        Vmt();
+        Vmt(void*);
     private:
         std::uintptr_t* oldVmt;
         std::uintptr_t* newVmt;
