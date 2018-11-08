@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "Chams.h"
+#include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 
@@ -30,13 +31,15 @@ Chams::~Chams()
 
 void Chams::render(const ModelRenderInfo& pInfo)
 {
-    if (strstr(pInfo.pModel->szName, "models/player") != nullptr) {
-        auto entity = interfaces.clientEntityList->getClientEntity(pInfo.entity_index);
-        if (entity && entity->isAlive()) {
-            if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
-                auto material = interfaces.materialSystem->findMaterial("simple_regular", "Model textures");
-                material->colorModulate(1.0f, 0.08f, 0.58f);
-                interfaces.modelRender->forceMaterialOverride(material);
+    if (config.chams.enabled) {
+        if (strstr(pInfo.pModel->szName, "models/player") != nullptr) {
+            auto entity = interfaces.clientEntityList->getClientEntity(pInfo.entity_index);
+            if (entity && entity->isAlive()) {
+                if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
+                    auto material = interfaces.materialSystem->findMaterial("simple_regular", "Model textures");
+                    material->colorModulate(1.0f, 0.08f, 0.58f);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                }
             }
         }
     }
