@@ -35,6 +35,10 @@ public:
 
     struct {
         bool enabled{ false };
+    } chams;
+
+    struct {
+        bool enabled{ false };
         int shotDelay{ 0 };
     } triggerbot;
 
