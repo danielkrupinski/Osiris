@@ -175,10 +175,15 @@ Hooks::Hooks()
 Hooks::Vmt::Vmt(void* base)
 {
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
-   
+    
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
 {
-    return std::size_t();
+    std::size_t length{ 0 };
+
+    while (vmt[length] >= 0x10000 && vmt[length] < 0xFFF00000 && length < 512)
+        length++;
+
+    return length;
 }
