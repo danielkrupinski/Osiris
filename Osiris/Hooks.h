@@ -21,6 +21,7 @@ public:
     private:
         std::uintptr_t* oldVmt;
         std::uintptr_t* newVmt;
+        std::size_t vmtLength;
     };
 
     VmtHook surface;
