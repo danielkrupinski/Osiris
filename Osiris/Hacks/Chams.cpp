@@ -5,30 +5,6 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-Chams::Chams()
-{
-    std::ofstream("csgo\\materials\\simple_regular.vmt") <<        
-R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
-}
-
-Chams::~Chams()
-{
-    std::remove("csgo\\materials\\simple_regular.vmt");
-}
-
 void Chams::render(const ModelRenderInfo& pInfo)
 {
     if (config.chams.enabled) {
