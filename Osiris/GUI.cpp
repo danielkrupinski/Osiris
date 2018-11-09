@@ -76,6 +76,7 @@ void GUI::render()
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.chams.alpha, 0.0f, 1.0f);
+        ImGui::ColorEdit3(xorstr_("Allies color"), config.chams.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
 
