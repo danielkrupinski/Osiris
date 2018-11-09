@@ -137,6 +137,7 @@ static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const M
         chams.render(pInfo);
     }
     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, int*, const int&, const ModelRenderInfo&, int*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
+    interfaces.modelRender->forceMaterialOverride(nullptr);
 }
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
