@@ -37,6 +37,7 @@ void Chams::render(const ModelRenderInfo& pInfo)
             if (entity && entity->isAlive()) {
                 if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
                     auto material = interfaces.materialSystem->findMaterial("dev/glow_color", "Model textures");
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     material->alphaModulate(config.chams.alpha);
                     material->colorModulate(1.0f, 0.08f, 0.58f);
                     interfaces.modelRender->forceMaterialOverride(material);
