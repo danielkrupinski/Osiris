@@ -2,9 +2,6 @@
 
 #include "../SDK/ModelRender.h"
 
-class Chams final {
-public:
-    Chams();
-    ~Chams();
+namespace Chams {
     void render(const ModelRenderInfo&);
 };
