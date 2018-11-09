@@ -51,4 +51,9 @@ public:
     {
         callVirtualFunction<void(__thiscall*)(void*, MaterialVar, bool)>(this, 29)(this, flag, isOn);
     }
+
+    void setShader(const char* shaderName)
+    {
+        callVirtualFunction<void(__thiscall*)(void*, const char*)>(this, 34)(this, shaderName);
+    }
 };
