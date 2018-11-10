@@ -19,6 +19,7 @@ public:
     public:
         Vmt(void*);
     private:
+        void apply(const std::string&);
         std::size_t calculateLength(std::uintptr_t*);
         std::uintptr_t* oldVmt;
         std::uintptr_t* newVmt;
