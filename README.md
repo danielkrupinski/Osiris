@@ -22,6 +22,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Chickens** - enable glow on chickens
     * **Chickens color**
 
+* **Chams** - color player models to improve visibility
+    * **Enable** - on / off master switch
+    * **Alpha** - material transparency
+    * **Allies color** - material color applied to allies
+    * **Enemies color** - material color applied to enemies
+
 * **Triggerbot** - automatically shoot when crosshair is on enemy
     * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
     * **Shot delay** - delay time in ms (milliseconds)
