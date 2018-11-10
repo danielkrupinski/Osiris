@@ -1,5 +1,7 @@
 #include <fstream>
 
+#include "../xorstr.hpp"
+
 #include "Chams.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -8,10 +10,10 @@
 void Chams::render(const ModelRenderInfo& pInfo)
 {
     if (config.chams.enabled) {
-        if (strstr(pInfo.pModel->szName, "models/player") != nullptr) {
+        if (strstr(pInfo.pModel->szName, xorstr_("models/player")) != nullptr) {
             auto entity = interfaces.clientEntityList->getClientEntity(pInfo.entity_index);
             if (entity && entity->isAlive()) {
-                auto material = interfaces.materialSystem->findMaterial("dev/glow_color", "Model textures");
+                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), xorstr_("Model textures"));
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->alphaModulate(config.chams.alpha);
                 if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
