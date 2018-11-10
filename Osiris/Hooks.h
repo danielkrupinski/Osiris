@@ -23,7 +23,13 @@ public:
         void hookAt(std::size_t index, T fun)
         {
             if (index < vmtLength)
-                newVmt[index] = fun;
+                newVmt[index] = reinterpret_cast<std::uintptr_t>(fun);
+        }
+
+        template<typename T>
+        constexpr auto getOriginal(int index) noexcept
+        {
+            return reinterpret_cast<T>(oldVmt[index]);
         }
 
         void apply();
