@@ -93,9 +93,9 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
-static bool __fastcall hookedCreateMove(void* thisptr, void* second, float inputSampleTime, UserCmd* cmd)
+static bool __fastcall hookedCreateMove(void*, void*, float inputSampleTime, UserCmd* cmd)
 {
-    hooks.clientMode.getOriginal<bool(__fastcall*)(ClientMode*, void*, float, UserCmd*)>(24)(memory.clientMode, second, inputSampleTime, cmd);
+    hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::skybox();
         Misc::bunnyHop(cmd);
