@@ -196,5 +196,47 @@ std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::size_t vmtSize)
 {
+    auto check_data_section = [&](LPCVOID address, const std::size_t vmt_size)
+    {
+        const DWORD DataProtection = (PAGE_EXECUTE_READWRITE | PAGE_READWRITE);
+        MEMORY_BASIC_INFORMATION mbi = { 0 };
 
+        if (VirtualQuery(address, &mbi, sizeof(mbi)) == sizeof(mbi) && mbi.AllocationBase && mbi.BaseAddress &&
+            mbi.State == MEM_COMMIT && !(mbi.Protect & PAGE_GUARD) && mbi.Protect != PAGE_NOACCESS)
+        {
+            if ((mbi.Protect & DataProtection) && mbi.RegionSize >= vmt_size)
+            {
+                return ((mbi.Protect & DataProtection) && mbi.RegionSize >= vmt_size) ? true : false;
+            }
+        }
+        return false;
+    };
+
+    auto module_addr = GetModuleHandleA(module.c_str());
+
+    if (module_addr == nullptr)
+        return nullptr;
+
+    const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER> (module_addr);
+    const auto nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS> (reinterpret_cast<std::uint8_t*>(module_addr) + dos_header->e_lfanew);
+
+    const auto module_end = reinterpret_cast<std::uintptr_t>(module_addr) + nt_headers->OptionalHeader.SizeOfImage - sizeof(std::uintptr_t);
+
+    for (auto current_address = module_end; current_address > (DWORD)module_addr; current_address -= sizeof(std::uintptr_t))
+    {
+        if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0 && check_data_section(reinterpret_cast<LPCVOID>(current_address), vmtSize))
+        {
+            bool is_good_vmt = true;
+            auto page_count = 0u;
+
+            for (; page_count < vmtSize && is_good_vmt; page_count += sizeof(std::uintptr_t))
+            {
+                if (*reinterpret_cast<std::uintptr_t*>(current_address + page_count) != 0)
+                    is_good_vmt = false;
+            }
+
+            if (is_good_vmt && page_count >= vmtSize)
+                return (uintptr_t*)current_address;
+        }
+    }
 }
