@@ -28,7 +28,7 @@ public:
         }
 
         template<typename T>
-        constexpr auto getOriginal(int index) const noexcept
+        constexpr auto getOriginal(std::size_t index) const noexcept
         {
             return reinterpret_cast<T>(oldVmt[index]);
         }
