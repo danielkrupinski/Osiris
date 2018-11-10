@@ -141,11 +141,9 @@ static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const M
 
 static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
 {
-    if (!(interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame())) {
-        hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
-        return;
+    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        Misc::removeSmoke(stage);
     }
-    Misc::removeSmoke(stage);
     hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
 }
 
