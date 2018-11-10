@@ -91,7 +91,6 @@
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Vector2D.h" />
     <ClInclude Include="SDK\Utils.h" />
-    <ClInclude Include="VmtHook.h" />
     <ClInclude Include="xorstr.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
