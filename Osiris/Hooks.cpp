@@ -155,19 +155,19 @@ Hooks::Hooks()
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
-    surface.setup(interfaces.surface);
     surface.hookAt(67, hookedLockCursor);
+    surface.apply();
 
-    clientMode.setup(memory.clientMode);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
+    clientMode.apply();
 
-    modelRender.setup(interfaces.modelRender);
     modelRender.hookAt(21, hookedDrawModelExecute);
+    modelRender.apply();
 
-    client.setup(interfaces.client);
     client.hookAt(37, hookedFrameStageNotify);
+    client.apply();
 }
 
 Hooks::Vmt::Vmt(void* base)

@@ -4,6 +4,8 @@
 
 #include <d3d9.h>
 
+#include "Interfaces.h"
+#include "Memory.h"
 #include "SDK/ClientMode.h"
 #include "SDK/UserCmd.h"
 #include "VmtHook.h"
@@ -41,10 +43,10 @@ public:
         std::size_t vmtLength;
     };
 
-    VmtHook surface;
-    VmtHook clientMode;
-    VmtHook modelRender;
-    VmtHook client;
+    Vmt surface{ interfaces.surface };
+    Vmt clientMode{ memory.clientMode };
+    Vmt modelRender{ interfaces.modelRender };
+    Vmt client{ interfaces.client };
 };
 
 extern Hooks hooks;
