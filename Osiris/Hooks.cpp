@@ -193,3 +193,8 @@ std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
 
     return length;
 }
+
+std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::size_t vmtSize)
+{
+
+}
