@@ -28,7 +28,7 @@ public:
         }
 
         template<typename T>
-        constexpr auto getOriginal(int index) noexcept
+        constexpr auto getOriginal(int index) const noexcept
         {
             return reinterpret_cast<T>(oldVmt[index]);
         }
