@@ -175,7 +175,8 @@ Hooks::Vmt::Vmt(void* base)
     classBase = base;
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     vmtLength = calculateLength(oldVmt);
-    
+    newVmt = new std::uintptr_t[vmtLength];
+    std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
 }
 
 void Hooks::Vmt::apply()
