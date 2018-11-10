@@ -21,7 +21,7 @@ public:
         Vmt(void*);
 
         template<typename T>
-        void hookAt(std::size_t index, T fun) const
+        void hookAt(std::size_t index, T fun) const noexcept
         {
             if (index < vmtLength)
                 newVmt[index] = reinterpret_cast<std::uintptr_t>(fun);
