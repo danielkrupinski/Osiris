@@ -169,7 +169,7 @@ Hooks::Hooks()
     client.hookAt(37, hookedFrameStageNotify);
 }
 
-Hooks::Vmt::Vmt(void* base)
+Hooks::Vmt::Vmt(void* base, const std::string& module)
 {
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     vmtLength = calculateLength(oldVmt);
@@ -177,6 +177,11 @@ Hooks::Vmt::Vmt(void* base)
     newVmt = new std::uintptr_t[vmtLength];
 
     std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
+}
+
+void Hooks::Vmt::apply()
+{
+
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
