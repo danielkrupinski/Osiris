@@ -39,7 +39,6 @@
     <ClCompile Include="SDK\BaseEntity.cpp" />
     <ClCompile Include="SDK\ClientEntityList.cpp" />
     <ClCompile Include="SDK\Vector2D.cpp" />
-    <ClCompile Include="VmtHook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />

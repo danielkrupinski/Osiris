@@ -69,9 +69,6 @@
     <ClCompile Include="SDK\Vector2D.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="VmtHook.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Misc.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
