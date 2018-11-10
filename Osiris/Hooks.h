@@ -18,8 +18,16 @@ public:
     class Vmt {
     public:
         Vmt(void*);
-    private:
+
+        template<typename T>
+        void hookAt(std::size_t index, T fun)
+        {
+            if (index < vmtLength)
+                newVmt[index] = fun;
+        }
+
         void apply();
+    private:
         std::size_t calculateLength(std::uintptr_t*);
         std::uintptr_t* findFreeDataPage(const std::string&, std::size_t);
         void* classBase;
