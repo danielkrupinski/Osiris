@@ -8,7 +8,6 @@
 #include "Memory.h"
 #include "SDK/ClientMode.h"
 #include "SDK/UserCmd.h"
-#include "VmtHook.h"
 
 class Hooks final {
 public:
