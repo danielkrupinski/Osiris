@@ -88,6 +88,6 @@ void Misc::removeSmoke(ClientFrameStage stage)
         }
     }
 
-    if (config.misc.noSmoke)
+    if (config.misc.noSmoke || config.misc.wireframeSmoke)
         *memory.smokeCount = 0;
 }
