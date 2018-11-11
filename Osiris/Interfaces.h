@@ -16,6 +16,7 @@
 #include "SDK/EngineClient.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
+#include "SDK/RenderView.h"
 #include "SDK/Surface.h"
 
 class Interfaces final {
@@ -29,11 +30,12 @@ public:
     Cvar* cvar;
     ModelRender* modelRender;
     MaterialSystem* materialSystem;
+    RenderView* renderView;
 private:
     template <typename T>
     auto find(const std::string& module, const std::string& name) const
     {
-        auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), xorstr_("CreateInterface")));
+        auto createInterface = reinterpret_cast<std::add_pointer_t<T*(const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), xorstr_("CreateInterface")));
 
         for (int i = 1; i < 100; i++) {
             if (T* foundInterface = createInterface((std::stringstream{ } << name << std::setfill('0') << std::setw(3) << i).str().c_str(), nullptr))
