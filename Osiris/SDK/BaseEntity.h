@@ -13,4 +13,5 @@ public:
     bool isScoped();
     int getCrosshairID();
     bool isAlive();
+    ClientRenderable* getRenderable();
 };

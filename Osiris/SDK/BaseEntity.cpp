@@ -39,3 +39,8 @@ bool BaseEntity::isAlive()
 {
     return (*reinterpret_cast<int*>(this + 0x25B)) == 0;
 }
+
+ClientRenderable* BaseEntity::getRenderable()
+{
+    return reinterpret_cast<ClientRenderable*>(this + 0x4);
+}
