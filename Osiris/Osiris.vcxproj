@@ -209,6 +209,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
