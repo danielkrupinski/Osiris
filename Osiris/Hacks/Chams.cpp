@@ -7,22 +7,24 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-void Chams::render(const ModelRenderInfo& pInfo)
+void Chams::render()
 {
     if (config.chams.enabled) {
-        if (strstr(pInfo.pModel->szName, xorstr_("models/player")) != nullptr) {
-            auto entity = interfaces.clientEntityList->getClientEntity(pInfo.entity_index);
-            if (entity && entity->isAlive()) {
-                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), xorstr_("Model textures"));
-                material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-                material->alphaModulate(config.chams.alpha);
-                if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
-                    material->colorModulate(config.chams.enemiesColor[0], config.chams.enemiesColor[1], config.chams.enemiesColor[2]);
+        for (int i = 1; i < interfaces.engineClient->GetMaxClients(); ++i) {
+            BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
+
+            if(entity && entity->isAlive()) {
+                if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
+                    interfaces.renderView->setColorModulation(config.chams.enemiesColor);
+                else
+                    interfaces.renderView->setColorModulation(config.chams.alliesColor);
+
+                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
+                if (material) {
+                    interfaces.modelRender->forceMaterialOverride(material);
+                    entity->drawModel(1, 255);
+                    interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
-                else {
-                    material->colorModulate(config.chams.alliesColor[0], config.chams.alliesColor[1], config.chams.alliesColor[2]);
-                }
-                interfaces.modelRender->forceMaterialOverride(material);
             }
         }
     }

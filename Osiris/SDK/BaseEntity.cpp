@@ -45,7 +45,7 @@ ClientRenderable* BaseEntity::getRenderable()
     return reinterpret_cast<ClientRenderable*>(this + 0x4);
 }
 
-void BaseEntity::drawModel(int flags, char alpha)
+void BaseEntity::drawModel(int flags, unsigned char alpha)
 {
-    return callVirtualFunction<void(__thiscall*)(void*, int, char)>(getRenderable(), 9)(getRenderable(), flags, alpha);
+    return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(getRenderable(), 9)(getRenderable(), flags, alpha);
 }

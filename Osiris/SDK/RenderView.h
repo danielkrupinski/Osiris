@@ -3,8 +3,9 @@
 #include "Utils.h"
 
 class RenderView {
-    void setColorModulation(const float* colors)
+public:
+    void setColorModulation(float const* colors)
     {
-        return callVirtualFunction<void(__thiscall*)(void*, const float*)>(this, 6)(this, colors);
+        return callVirtualFunction<void(__thiscall*)(void*, float const*)>(this, 6)(this, colors);
     }
 };

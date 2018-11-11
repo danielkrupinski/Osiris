@@ -14,5 +14,5 @@ public:
     int getCrosshairID();
     bool isAlive();
     ClientRenderable* getRenderable();
-    void drawModel(int flags, char alpha);
+    void drawModel(int flags, unsigned char alpha);
 };
