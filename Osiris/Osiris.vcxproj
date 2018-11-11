@@ -84,6 +84,7 @@
     <ClInclude Include="SDK\MaterialSystem.h" />
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\QAngle.h" />
+    <ClInclude Include="SDK\RenderView.h" />
     <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />
     <ClInclude Include="SDK\UtlMemory.h" />
