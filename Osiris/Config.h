@@ -51,6 +51,7 @@ public:
         bool disablePostProcessing{ false };
         int flashReduction{ 0 };
         bool noSmoke{ false };
+        bool wireframeSmoke{ false };
         std::string skybox{ xorstr_("Default") };
         int viewmodelFov{ 60 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
