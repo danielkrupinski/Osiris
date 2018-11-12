@@ -78,6 +78,7 @@ void GUI::render()
         ImGui::SliderFloat(xorstr_("Alpha"), &config.chams.alpha, 0.0f, 1.0f);
         ImGui::ColorEdit3(xorstr_("Allies color"), config.chams.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.chams.enemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Wireframe"), &config.chams.wireframe);
         ImGui::End();
     }
 
