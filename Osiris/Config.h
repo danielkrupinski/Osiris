@@ -38,6 +38,7 @@ public:
         float alpha{ 1.0f };
         float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
+        bool wireframe{ false };
     } chams;
 
     struct {
