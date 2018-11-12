@@ -62,6 +62,17 @@ void Config::load()
     glow.chickensColor[1] = config[xorstr_("glow")][xorstr_("chickensColor")][1].asFloat();
     glow.chickensColor[2] = config[xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
 
+    chams.enabled = config[xorstr_("chams")][xorstr_("enabled")].asBool();
+    chams.alpha = config[xorstr_("chams")][xorstr_("alpha")].asFloat();
+
+    chams.alliesColor[0] = config[xorstr_("chams")][xorstr_("alliesColor")][0].asFloat();
+    chams.alliesColor[1] = config[xorstr_("chams")][xorstr_("alliesColor")][1].asFloat();
+    chams.alliesColor[2] = config[xorstr_("chams")][xorstr_("alliesColor")][2].asFloat();
+
+    chams.enemiesColor[0] = config[xorstr_("chams")][xorstr_("enemiesColor")][0].asFloat();
+    chams.enemiesColor[1] = config[xorstr_("chams")][xorstr_("enemiesColor")][1].asFloat();
+    chams.enemiesColor[2] = config[xorstr_("chams")][xorstr_("enemiesColor")][2].asFloat();
+
     triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
     triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
 
@@ -125,6 +136,17 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("chickensColor")][1] = glow.chickensColor[1];
     config[xorstr_("glow")][xorstr_("chickensColor")][2] = glow.chickensColor[2];
 
+    config[xorstr_("chams")][xorstr_("enabled")] = chams.enabled;
+    config[xorstr_("chams")][xorstr_("alpha")] = chams.alpha;
+
+    config[xorstr_("chams")][xorstr_("alliesColor")][0] = chams.alliesColor[0];
+    config[xorstr_("chams")][xorstr_("alliesColor")][1] = chams.alliesColor[1];
+    config[xorstr_("chams")][xorstr_("alliesColor")][2] = chams.alliesColor[2];
+
+    config[xorstr_("chams")][xorstr_("enemiesColor")][0] = chams.enemiesColor[0];
+    config[xorstr_("chams")][xorstr_("enemiesColor")][1] = chams.enemiesColor[1];
+    config[xorstr_("chams")][xorstr_("enemiesColor")][2] = chams.enemiesColor[2];
+
     config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
     config[xorstr_("triggerbot")][xorstr_("shotDelay")] = triggerbot.shotDelay;
 
@@ -181,6 +203,17 @@ void Config::reset()
     glow.chickensColor[0] = 1.0f;
     glow.chickensColor[1] = 0.08f;
     glow.chickensColor[2] = 0.58f;
+
+    chams.enabled = false;
+    chams.alpha = 1.0f;
+
+    chams.alliesColor[0] = 0.0f;
+    chams.alliesColor[1] = 1.0f;
+    chams.alliesColor[2] = 0.0f;
+
+    chams.enemiesColor[0] = 1.0f;
+    chams.enemiesColor[1] = 0.0f;
+    chams.enemiesColor[2] = 0.0f;
 
     triggerbot.enabled = false;
     triggerbot.shotDelay = 0;
