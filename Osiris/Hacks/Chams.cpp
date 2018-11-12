@@ -22,9 +22,11 @@ void Chams::render()
 
                 auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
                 if (material) {
+                    material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
                     interfaces.modelRender->forceMaterialOverride(material);
                     entity->drawModel(1, 255);
                     interfaces.modelRender->forceMaterialOverride(nullptr);
+                    material->setMaterialVarFlag(MaterialVar::WIREFRAME, false);
                 }
             }
         }
