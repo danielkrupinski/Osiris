@@ -14,6 +14,7 @@ void Chams::render()
             BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
 
             if(entity && entity->isAlive()) {
+                interfaces.renderView->setBlend(config.chams.alpha);
                 if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
                     interfaces.renderView->setColorModulation(config.chams.enemiesColor);
                 else
