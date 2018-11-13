@@ -24,15 +24,19 @@ void Chams::render()
 
                 auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
                 if (material) {
-                    if (isEnemy)
-                        interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
-                    else
-                        interfaces.renderView->setColorModulation(config.chams.occludedAlliesColor);
-
-                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
-                    interfaces.modelRender->forceMaterialOverride(material);
-                    entity->drawModel(1, 255);
+
+                    if (!config.chams.visibleOnly) {
+                        if (isEnemy)
+                            interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
+                        else
+                            interfaces.renderView->setColorModulation(config.chams.occludedAlliesColor);
+
+                        material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+                        
+                        interfaces.modelRender->forceMaterialOverride(material);
+                        entity->drawModel(1, 255);
+                    }
 
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     if (isEnemy)
