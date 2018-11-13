@@ -69,9 +69,9 @@ void Config::load()
     chams.visibleAlliesColor[1] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1].asFloat();
     chams.visibleAlliesColor[2] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2].asFloat();
 
-    chams.enemiesColor[0] = config[xorstr_("chams")][xorstr_("enemiesColor")][0].asFloat();
-    chams.enemiesColor[1] = config[xorstr_("chams")][xorstr_("enemiesColor")][1].asFloat();
-    chams.enemiesColor[2] = config[xorstr_("chams")][xorstr_("enemiesColor")][2].asFloat();
+    chams.visibleEnemiesColor[0] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0].asFloat();
+    chams.visibleEnemiesColor[1] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1].asFloat();
+    chams.visibleEnemiesColor[2] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2].asFloat();
 
     triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
     triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
@@ -143,9 +143,9 @@ void Config::save() const
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1] = chams.visibleAlliesColor[1];
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2] = chams.visibleAlliesColor[2];
 
-    config[xorstr_("chams")][xorstr_("enemiesColor")][0] = chams.enemiesColor[0];
-    config[xorstr_("chams")][xorstr_("enemiesColor")][1] = chams.enemiesColor[1];
-    config[xorstr_("chams")][xorstr_("enemiesColor")][2] = chams.enemiesColor[2];
+    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0] = chams.visibleEnemiesColor[0];
+    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1] = chams.visibleEnemiesColor[1];
+    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2] = chams.visibleEnemiesColor[2];
 
     config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
     config[xorstr_("triggerbot")][xorstr_("shotDelay")] = triggerbot.shotDelay;
@@ -211,9 +211,9 @@ void Config::reset()
     chams.visibleAlliesColor[1] = 1.0f;
     chams.visibleAlliesColor[2] = 0.0f;
 
-    chams.enemiesColor[0] = 1.0f;
-    chams.enemiesColor[1] = 0.0f;
-    chams.enemiesColor[2] = 0.0f;
+    chams.visibleEnemiesColor[0] = 1.0f;
+    chams.visibleEnemiesColor[1] = 0.0f;
+    chams.visibleEnemiesColor[2] = 0.0f;
 
     triggerbot.enabled = false;
     triggerbot.shotDelay = 0;
