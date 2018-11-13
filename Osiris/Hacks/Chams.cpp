@@ -13,10 +13,12 @@ void Chams::render()
         for (int i = 1; i < interfaces.engineClient->GetMaxClients(); ++i) {
             BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
 
-            if(entity && entity->isAlive()) {
+            if (entity && entity->isAlive()) {
                 interfaces.renderView->setBlend(config.chams.alpha);
                 if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
                     interfaces.renderView->setColorModulation(config.chams.enemiesColor);
+                else if (config.chams.enemiesOnly)
+                    continue;
                 else
                     interfaces.renderView->setColorModulation(config.chams.alliesColor);
 
