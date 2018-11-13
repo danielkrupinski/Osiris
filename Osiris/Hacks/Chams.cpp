@@ -15,19 +15,35 @@ void Chams::render()
 
             if (entity && entity->isAlive()) {
                 interfaces.renderView->setBlend(config.chams.alpha);
-                if (entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
-                    interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
-                else if (config.chams.enemiesOnly)
+                auto isEnemy = entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
+                if (!isEnemy && config.chams.enemiesOnly)
                     continue;
-                else
+
+                    interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
                     interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
 
                 auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
                 if (material) {
+                    if (isEnemy)
+                        interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
+                    else
+                        interfaces.renderView->setColorModulation(config.chams.occludedAlliesColor);
+
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
                     interfaces.modelRender->forceMaterialOverride(material);
                     entity->drawModel(1, 255);
+
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                    if (isEnemy)
+                        interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
+                    else
+                        interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                    entity->drawModel(1, 255);
+
                     interfaces.modelRender->forceMaterialOverride(nullptr);
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     material->setMaterialVarFlag(MaterialVar::WIREFRAME, false);
                 }
             }
