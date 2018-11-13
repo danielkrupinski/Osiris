@@ -37,6 +37,7 @@ public:
         bool enabled{ false };
         float alpha{ 1.0f };
         bool enemiesOnly{ false };
+        bool visibleOnly{ false };
         float visibleAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
         float occludedAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
         float visibleEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
