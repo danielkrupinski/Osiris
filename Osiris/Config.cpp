@@ -65,9 +65,9 @@ void Config::load()
     chams.enabled = config[xorstr_("chams")][xorstr_("enabled")].asBool();
     chams.alpha = config[xorstr_("chams")][xorstr_("alpha")].asFloat();
 
-    chams.alliesColor[0] = config[xorstr_("chams")][xorstr_("alliesColor")][0].asFloat();
-    chams.alliesColor[1] = config[xorstr_("chams")][xorstr_("alliesColor")][1].asFloat();
-    chams.alliesColor[2] = config[xorstr_("chams")][xorstr_("alliesColor")][2].asFloat();
+    chams.visibleAlliesColor[0] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0].asFloat();
+    chams.visibleAlliesColor[1] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1].asFloat();
+    chams.visibleAlliesColor[2] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2].asFloat();
 
     chams.enemiesColor[0] = config[xorstr_("chams")][xorstr_("enemiesColor")][0].asFloat();
     chams.enemiesColor[1] = config[xorstr_("chams")][xorstr_("enemiesColor")][1].asFloat();
@@ -139,9 +139,9 @@ void Config::save() const
     config[xorstr_("chams")][xorstr_("enabled")] = chams.enabled;
     config[xorstr_("chams")][xorstr_("alpha")] = chams.alpha;
 
-    config[xorstr_("chams")][xorstr_("alliesColor")][0] = chams.alliesColor[0];
-    config[xorstr_("chams")][xorstr_("alliesColor")][1] = chams.alliesColor[1];
-    config[xorstr_("chams")][xorstr_("alliesColor")][2] = chams.alliesColor[2];
+    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0] = chams.visibleAlliesColor[0];
+    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1] = chams.visibleAlliesColor[1];
+    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2] = chams.visibleAlliesColor[2];
 
     config[xorstr_("chams")][xorstr_("enemiesColor")][0] = chams.enemiesColor[0];
     config[xorstr_("chams")][xorstr_("enemiesColor")][1] = chams.enemiesColor[1];
@@ -207,9 +207,9 @@ void Config::reset()
     chams.enabled = false;
     chams.alpha = 1.0f;
 
-    chams.alliesColor[0] = 0.0f;
-    chams.alliesColor[1] = 1.0f;
-    chams.alliesColor[2] = 0.0f;
+    chams.visibleAlliesColor[0] = 0.0f;
+    chams.visibleAlliesColor[1] = 1.0f;
+    chams.visibleAlliesColor[2] = 0.0f;
 
     chams.enemiesColor[0] = 1.0f;
     chams.enemiesColor[1] = 0.0f;

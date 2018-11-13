@@ -20,7 +20,7 @@ void Chams::render()
                 else if (config.chams.enemiesOnly)
                     continue;
                 else
-                    interfaces.renderView->setColorModulation(config.chams.alliesColor);
+                    interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
 
                 auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
                 if (material) {
