@@ -156,9 +156,6 @@ Hooks::Hooks()
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
     clientMode.apply();
-
-   // modelRender.hookAt(21, hookedDrawModelExecute);
-   // modelRender.apply();
 }
 
 Hooks::Vmt::Vmt(void* base)
