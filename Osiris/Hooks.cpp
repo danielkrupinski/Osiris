@@ -182,8 +182,6 @@ Hooks::Vmt::Vmt(void* base)
 
 void Hooks::Vmt::apply()
 {
-    DWORD oldProtection;
-    VirtualProtect(newVmt, vmtLength * sizeof(std::uintptr_t), PAGE_READONLY, &oldProtection);
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
