@@ -237,7 +237,26 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
 
 void Hooks::Vmt::setup(void* base)
 {
+    std::string moduleName;
 
+    classBase = base;
+    oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
+    vmtLength = calculateLength(oldVmt);
+
+    MEMORY_BASIC_INFORMATION mbi = { 0 };
+    if (VirtualQuery(base, &mbi, sizeof(mbi))) {
+        char buffer[MAX_PATH];
+        GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
+        std::string temp = buffer;
+        const size_t last_slash_idx = temp.find_last_of("\\/");
+        if (std::string::npos != last_slash_idx)
+            temp.erase(0, last_slash_idx + 1), moduleName = temp;
+    }
+    if (moduleName.size()) {
+        newVmt = findFreeDataPage(moduleName, vmtLength * sizeof(std::uintptr_t));
+        std::memset(newVmt, NULL, vmtLength * sizeof(std::uintptr_t));
+        std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
+    }
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
