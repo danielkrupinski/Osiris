@@ -161,6 +161,11 @@ Hooks::Hooks()
     modelRender.apply();
 }
 
+Hooks::Vmt::Vmt(void* base)
+{
+
+}
+
 void Hooks::Vmt::apply()
 {
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
