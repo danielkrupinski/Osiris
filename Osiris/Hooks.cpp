@@ -159,9 +159,6 @@ Hooks::Hooks()
 
     modelRender.hookAt(21, hookedDrawModelExecute);
     modelRender.apply();
-
-    client.hookAt(37, hookedFrameStageNotify);
-    client.apply();
 }
 
 void Hooks::Vmt::apply()

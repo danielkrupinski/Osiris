@@ -45,7 +45,6 @@ public:
     Vmt surface{ interfaces.surface };
     Vmt clientMode{ memory.clientMode };
     Vmt modelRender{ interfaces.modelRender };
-    Vmt client{ interfaces.client };
 };
 
 extern Hooks hooks;
