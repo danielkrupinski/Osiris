@@ -142,14 +142,6 @@ static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const M
     //interfaces.modelRender->forceMaterialOverride(nullptr);
 }
 
-static void __stdcall hookedFrameStageNotify(ClientFrameStage stage)
-{
-    if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
-        Misc::removeSmoke(stage);
-    }
-    hooks.client.getOriginal<void(__thiscall*)(void*, ClientFrameStage)>(37)(interfaces.client, stage);
-}
-
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
