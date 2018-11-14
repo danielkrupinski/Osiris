@@ -138,7 +138,7 @@ static void __stdcall hookedDrawModelExecute(int* ctx, const int& state, const M
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         //Chams::render(pInfo);
     }
-    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, int*, const int&, const ModelRenderInfo&, int*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
+   // hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, int*, const int&, const ModelRenderInfo&, int*)>(21)(interfaces.modelRender, ctx, state, pInfo, pCustomBoneToWorld);
     //interfaces.modelRender->forceMaterialOverride(nullptr);
 }
 
@@ -157,8 +157,8 @@ Hooks::Hooks()
     clientMode.hookAt(35, hookedGetViewModelFov);
     clientMode.apply();
 
-    modelRender.hookAt(21, hookedDrawModelExecute);
-    modelRender.apply();
+   // modelRender.hookAt(21, hookedDrawModelExecute);
+   // modelRender.apply();
 }
 
 Hooks::Vmt::Vmt(void* base)
