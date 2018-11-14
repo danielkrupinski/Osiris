@@ -18,8 +18,6 @@ public:
 
     class Vmt {
     public:
-        Vmt(void*);
-
         template<typename T>
         void hookAt(std::size_t index, T fun) const noexcept
         {

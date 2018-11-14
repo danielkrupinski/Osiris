@@ -171,15 +171,6 @@ Hooks::Hooks()
     client.apply();
 }
 
-Hooks::Vmt::Vmt(void* base)
-{
-    classBase = base;
-    oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
-    vmtLength = calculateLength(oldVmt);
-    newVmt = reinterpret_cast<std::uintptr_t*>(VirtualAlloc(NULL, vmtLength * sizeof(std::uintptr_t), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
-    std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
-}
-
 void Hooks::Vmt::apply()
 {
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
