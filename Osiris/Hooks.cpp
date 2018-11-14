@@ -187,7 +187,12 @@ void Hooks::Vmt::apply()
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
-void Hooks::Vmt::setup()
+std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string, std::size_t)
+{
+    return nullptr;
+}
+
+void Hooks::Vmt::setup(void* base)
 {
 
 }
