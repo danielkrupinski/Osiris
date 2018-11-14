@@ -187,6 +187,11 @@ void Hooks::Vmt::apply()
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
+void Hooks::Vmt::setup()
+{
+
+}
+
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
 {
     std::size_t length{ 0 };

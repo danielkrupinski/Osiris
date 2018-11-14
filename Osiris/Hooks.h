@@ -34,6 +34,7 @@ public:
         }
 
         void apply();
+        void setup();
     private:
         std::size_t calculateLength(std::uintptr_t*);
         void* classBase;
