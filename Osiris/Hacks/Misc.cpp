@@ -71,7 +71,7 @@ void Misc::reduceFlashEffect()
     *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - static_cast<float>(config.misc.flashReduction);
 }
 
-void Misc::removeSmoke(ClientFrameStage stage)
+void Misc::removeSmoke()
 {
     static const std::string smokeMaterials[]{
         xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
@@ -80,12 +80,10 @@ void Misc::removeSmoke(ClientFrameStage stage)
         xorstr_("particle/vistasmokev1/vistasmokev1_smokegrenade"),
     };
 
-    if (stage == ClientFrameStage::FRAME_NET_UPDATE_START) {
-        for (const auto& mat : smokeMaterials) {
-            Material* material = interfaces.materialSystem->findMaterial(mat.c_str(), xorstr_("Other textures"));
-            material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
-            material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
-        }
+    for (const auto& mat : smokeMaterials) {
+        Material* material = interfaces.materialSystem->findMaterial(mat.c_str(), xorstr_("Other textures"));
+        material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
     }
 
     if (config.misc.noSmoke || config.misc.wireframeSmoke)

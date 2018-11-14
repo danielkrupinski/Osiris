@@ -10,5 +10,5 @@ namespace Misc {
     void clanTag();
     void colorWorld();
     void reduceFlashEffect();
-    void removeSmoke(ClientFrameStage);
+    void removeSmoke();
 }
