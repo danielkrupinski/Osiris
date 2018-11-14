@@ -116,6 +116,7 @@ static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
 static int __stdcall hookedDoPostScreenEffects(int param)
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        Misc::removeSmoke();
         Misc::reduceFlashEffect();
         Misc::disablePostProcessing();
         Glow::render();
