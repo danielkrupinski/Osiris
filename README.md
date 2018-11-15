@@ -38,6 +38,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [0-255] (0 - full flash, 255 - no flash)
     * **No smoke** - remove smoke grenade effect
+    * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Skybox** - change sky(box)
     * **View model FOV** - change view model FOV [0-130]
     * **World color** - set world ambient color
