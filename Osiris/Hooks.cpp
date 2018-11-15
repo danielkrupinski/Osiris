@@ -200,17 +200,11 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
         return false;
     };
 
-    auto module_addr = GetModuleHandleA(module.c_str());
+    MODULEINFO moduleInfo;
+    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo));
+    const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
 
-    if (module_addr == nullptr)
-        return nullptr;
-    GetModuleInformation()
-    const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER> (module_addr);
-    const auto nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS> (reinterpret_cast<std::uint8_t*>(module_addr) + dos_header->e_lfanew);
-
-    const auto module_end = reinterpret_cast<std::uintptr_t>(module_addr) + nt_headers->OptionalHeader.SizeOfImage - sizeof(std::uintptr_t);
-
-    for (auto current_address = module_end; current_address > (DWORD)module_addr; current_address -= sizeof(std::uintptr_t))
+    for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
     {
         if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0 && check_data_section(reinterpret_cast<LPCVOID>(current_address), vmtSize))
         {
