@@ -25,8 +25,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
     * **Alpha** - material transparency
-    * **Allies color** - material color applied to allies
-    * **Enemies color** - material color applied to enemies
+    * **Enemies only**
+    * **Visible only**
+    * **Visible allies color** - material color applied to allies
+    * **Occluded allies color**
+    * **Visible enemies color**
+    * **Occluded enemies color** - material color applied to enemies
 
 * **Triggerbot** - automatically shoot when crosshair is on enemy
     * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
@@ -41,7 +45,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Skybox** - change sky(box)
     * **View model FOV** - change view model FOV [0-130]
-    * **World color** - set world ambient color
+    * **World color** - set world material ambient light color
 
 * **Config**
     * **Load** - load configuration file
