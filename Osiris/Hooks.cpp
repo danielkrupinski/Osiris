@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include <Psapi.h>
 
 #include "imgui/imgui.h"
@@ -202,7 +204,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
 
     if (module_addr == nullptr)
         return nullptr;
-
+    GetModuleInformation()
     const auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER> (module_addr);
     const auto nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS> (reinterpret_cast<std::uint8_t*>(module_addr) + dos_header->e_lfanew);
 
