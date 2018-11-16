@@ -31,6 +31,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Occluded allies color**
     * **Visible enemies color**
     * **Occluded enemies color** - material color applied to enemies
+    * **Wireframe**
 
 * **Triggerbot** - automatically shoot when crosshair is on enemy
     * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
