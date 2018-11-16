@@ -161,7 +161,7 @@ Hooks::Vmt::Vmt(void* base)
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     vmtLength = calculateLength(oldVmt);
 
-    MEMORY_BASIC_INFORMATION mbi = { 0 };
+    MEMORY_BASIC_INFORMATION mbi;
     if (VirtualQuery(base, &mbi, sizeof(mbi))) {
         char buffer[MAX_PATH];
         GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
@@ -187,7 +187,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
     auto check_data_section = [&](LPCVOID address, const std::size_t vmt_size)
     {
         constexpr auto dataProtection = PAGE_EXECUTE_READWRITE | PAGE_READWRITE;
-        MEMORY_BASIC_INFORMATION mbi = { 0 };
+        MEMORY_BASIC_INFORMATION mbi;
 
         if (VirtualQuery(address, &mbi, sizeof(mbi)) == sizeof(mbi) && mbi.AllocationBase && mbi.BaseAddress &&
             mbi.State == MEM_COMMIT && !(mbi.Protect & PAGE_GUARD) && mbi.Protect != PAGE_NOACCESS)
