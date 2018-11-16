@@ -170,7 +170,7 @@ Hooks::Vmt::Vmt(void* base)
         if (std::string::npos != last_slash_idx)
             temp.erase(0, last_slash_idx + 1), moduleName = temp;
     }
-    if (moduleName.size()) {
+    if (!moduleName.empty()) {
         newVmt = findFreeDataPage(moduleName, vmtLength * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, vmtLength * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
