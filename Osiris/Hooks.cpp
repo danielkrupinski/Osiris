@@ -224,7 +224,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
     return nullptr;
 }
 
-std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
+std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const
 {
 	std::size_t length{ 0 };
 	MEMORY_BASIC_INFORMATION memoryInfo;
