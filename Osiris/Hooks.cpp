@@ -186,7 +186,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
 {
     auto check_data_section = [&](LPCVOID address, const std::size_t vmt_size)
     {
-        constexpr auto dataProtection = PAGE_EXECUTE_READWRITE | PAGE_READWRITE;
+        constexpr auto dataProtection = PAGE_READWRITE;
         MEMORY_BASIC_INFORMATION mbi;
 
         if (VirtualQuery(address, &mbi, sizeof(mbi)) == sizeof(mbi) && mbi.AllocationBase && mbi.BaseAddress &&
