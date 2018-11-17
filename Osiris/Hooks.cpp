@@ -159,7 +159,7 @@ Hooks::Vmt::Vmt(void* base)
 
     classBase = base;
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
-    vmtLength = calculateLength(oldVmt);
+    length = calculateLength(oldVmt);
 
     MEMORY_BASIC_INFORMATION mbi;
     if (VirtualQuery(base, &mbi, sizeof(mbi))) {
@@ -171,9 +171,9 @@ Hooks::Vmt::Vmt(void* base)
             temp.erase(0, last_slash_idx + 1), moduleName = temp;
     }
     if (!moduleName.empty()) {
-        newVmt = findFreeDataPage(moduleName, vmtLength * sizeof(std::uintptr_t));
-        std::memset(newVmt, NULL, vmtLength * sizeof(std::uintptr_t));
-        std::memcpy(newVmt, oldVmt, vmtLength * sizeof(std::uintptr_t));
+        newVmt = findFreeDataPage(moduleName, length * sizeof(std::uintptr_t));
+        std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
+        std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
     }
 }
 

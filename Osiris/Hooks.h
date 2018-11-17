@@ -23,7 +23,7 @@ public:
         template<typename T>
         void hookAt(std::size_t index, T fun) const noexcept
         {
-            if (index < vmtLength)
+            if (index < length)
                 newVmt[index] = reinterpret_cast<std::uintptr_t>(fun);
         }
 
@@ -40,7 +40,7 @@ public:
         void* classBase;
         std::uintptr_t* oldVmt;
         std::uintptr_t* newVmt;
-        std::size_t vmtLength;
+        std::size_t length;
     };
 
     Vmt surface{ interfaces.surface };
