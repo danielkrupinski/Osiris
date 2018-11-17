@@ -166,9 +166,9 @@ Hooks::Vmt::Vmt(void* base)
 		char buffer[MAX_PATH];
 		GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
 		std::string temp = buffer;
-		const size_t last_slash_idx = temp.find_last_of("\\/");
+		const size_t last_slash_idx = temp.find_last_of('\\');
 		if (std::string::npos != last_slash_idx)
-			temp.erase(0, last_slash_idx + 1), moduleName = temp;
+			moduleName = temp.substr(last_slash_idx + 1);
 	}
 	if (!moduleName.empty()) {
 		newVmt = findFreeDataPage(moduleName, length * sizeof(std::uintptr_t));
