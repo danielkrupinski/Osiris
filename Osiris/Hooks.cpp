@@ -193,9 +193,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
             mbi.State == MEM_COMMIT && !(mbi.Protect & PAGE_GUARD) && mbi.Protect != PAGE_NOACCESS)
         {
             if (mbi.Protect & dataProtection && mbi.RegionSize >= vmt_size)
-            {
-                return mbi.Protect & dataProtection && mbi.RegionSize >= vmt_size ? true : false;
-            }
+				return true;
         }
         return false;
     };
