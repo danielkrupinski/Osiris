@@ -226,13 +226,9 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt)
 {
-	MEMORY_BASIC_INFORMATION memInfo = { NULL };
-	int m_nSize = -1;
-	do {
-		m_nSize++;
-		VirtualQuery(reinterpret_cast<LPCVOID>(vmt[m_nSize]), &memInfo, sizeof(memInfo));
-
-	} while (memInfo.Protect == PAGE_EXECUTE_READ || memInfo.Protect == PAGE_EXECUTE_READWRITE);
-
-	return m_nSize;
+	std::size_t length{ 0 };
+	MEMORY_BASIC_INFORMATION memoryInfo;
+	while (VirtualQuery(reinterpret_cast<LPCVOID>(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
+		length++;
+	return length;
 }
