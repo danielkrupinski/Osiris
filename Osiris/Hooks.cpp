@@ -17,7 +17,6 @@
 #include "Hacks/Glow.h"
 #include "Hacks/Triggerbot.h"
 #include <vector>
-#include <fstream>
 #include "Hacks/Chams.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
