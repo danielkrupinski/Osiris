@@ -34,7 +34,7 @@ public:
         }
 
         void apply();
-        std::uintptr_t* findFreeDataPage(const std::string&, std::size_t);
+        std::uintptr_t* findFreeDataPage(std::string_view, std::size_t);
     private:
         std::size_t calculateLength(std::uintptr_t*) const noexcept;
         void* classBase;

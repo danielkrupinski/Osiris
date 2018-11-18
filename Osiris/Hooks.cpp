@@ -164,7 +164,7 @@ Hooks::Vmt::Vmt(void* base)
         char buffer[MAX_PATH];
         GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
         std::string_view moduleName{ buffer };
-        newVmt = findFreeDataPage(std::string{ moduleName.substr(moduleName.find_first_of('\\') + 1) }, length * sizeof(std::uintptr_t));
+        newVmt = findFreeDataPage(moduleName.substr(moduleName.find_first_of('\\') + 1), length * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
     }
@@ -175,7 +175,7 @@ void Hooks::Vmt::apply()
     *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
-std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::size_t vmtSize)
+std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string_view module, std::size_t vmtSize)
 {
     auto check_data_section = [](LPCVOID address, const std::size_t vmt_size)
     {
@@ -187,7 +187,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(const std::string& module, std::siz
     };
 
     MODULEINFO moduleInfo;
-    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo));
+    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(std::string{ module }.c_str()), &moduleInfo, sizeof(moduleInfo));
     const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
 
     for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
