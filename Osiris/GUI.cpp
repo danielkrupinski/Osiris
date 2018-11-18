@@ -48,10 +48,10 @@ void GUI::render()
     }
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(300.0f, 300.0f));
+        ImGui::SetNextWindowSize(ImVec2(300.0f, 260.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
-        ImGui::SetColumnOffset(1, 165.0f);
+        ImGui::SetColumnOffset(1, 170.0f);
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.glow.enabled);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.glow.thickness, 0.0f, 1.0f);
@@ -64,12 +64,12 @@ void GUI::render()
         ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
         ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
         ImGui::NextColumn();
-        ImGui::ColorEdit3(xorstr_("Allies color"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Enemies color"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Weapons color"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("C4 color"), config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Chickens color"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Allies"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Enemies"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Weapons"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("C4"), config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Planted C4"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Chickens"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
 
