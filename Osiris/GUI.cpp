@@ -48,9 +48,10 @@ void GUI::render()
     }
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(500.67f, 395.0f));
+        ImGui::SetNextWindowSize(ImVec2(300.0f, 300.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 165.0f);
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.glow.enabled);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.glow.thickness, 0.0f, 1.0f);
