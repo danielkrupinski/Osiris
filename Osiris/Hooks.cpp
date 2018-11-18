@@ -155,8 +155,6 @@ Hooks::Hooks()
 
 Hooks::Vmt::Vmt(void* base)
 {
-    std::string moduleName;
-
     classBase = base;
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
@@ -165,13 +163,8 @@ Hooks::Vmt::Vmt(void* base)
     if (VirtualQuery(base, &mbi, sizeof(mbi))) {
         char buffer[MAX_PATH];
         GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
-        std::string temp = buffer;
-        const size_t last_slash_idx = temp.find_last_of('\\');
-        if (std::string::npos != last_slash_idx)
-            moduleName = temp.substr(last_slash_idx + 1);
-    }
-    if (!moduleName.empty()) {
-        newVmt = findFreeDataPage(moduleName, length * sizeof(std::uintptr_t));
+        std::string_view moduleName{ buffer };
+        newVmt = findFreeDataPage(std::string{ moduleName.substr(moduleName.find_first_of('\\') + 1) }, length * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
     }
