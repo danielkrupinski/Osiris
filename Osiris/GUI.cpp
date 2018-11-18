@@ -48,8 +48,9 @@ void GUI::render()
     }
 
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(170.67f, 395.0f));
+        ImGui::SetNextWindowSize(ImVec2(500.67f, 395.0f));
         ImGui::Begin(xorstr_("Glow"), &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Columns(2);
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.glow.enabled);
         ImGui::SliderFloat(xorstr_("Thickness"), &config.glow.thickness, 0.0f, 1.0f);
@@ -57,15 +58,16 @@ void GUI::render()
         ImGui::SliderInt(xorstr_("Style"), &config.glow.style, 0, 3);
         ImGui::Checkbox(xorstr_("Players"), &config.glow.players);
         ImGui::Checkbox(xorstr_("Enemies only"), &config.glow.enemiesOnly);
+        ImGui::Checkbox(xorstr_("Weapons"), &config.glow.weapons);
+        ImGui::Checkbox(xorstr_("C4"), &config.glow.C4);
+        ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
+        ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
+        ImGui::NextColumn();
         ImGui::ColorEdit3(xorstr_("Allies color"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::ColorEdit3(xorstr_("Enemies color"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Weapons"), &config.glow.weapons);
         ImGui::ColorEdit3(xorstr_("Weapons color"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("C4"), &config.glow.C4);
         ImGui::ColorEdit3(xorstr_("C4 color"), config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Planted C4"), &config.glow.plantedC4);
         ImGui::ColorEdit3(xorstr_("Planted C4 color"), config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Chickens"), &config.glow.chickens);
         ImGui::ColorEdit3(xorstr_("Chickens color"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
