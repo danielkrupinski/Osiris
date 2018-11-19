@@ -3,9 +3,9 @@
 class GUI final {
 public:
     void render();
-    void renderGlowWindow();
     bool isOpen{ false };
 private:
+    void renderGlowWindow();
     struct {
         bool glow{ false };
         bool chams{ false };
