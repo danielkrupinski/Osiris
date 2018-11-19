@@ -10,6 +10,15 @@
 
 void GUI::render()
 {
+    renderMenuBar();
+    renderGlowWindow();
+    renderChamsWindow();
+    renderTriggerbotWindow();
+    renderMiscWindow();
+}
+
+void GUI::renderMenuBar()
+{
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::MenuItem(xorstr_("Glow"))) {
             window.glow = true;
@@ -39,16 +48,6 @@ void GUI::render()
 
         ImGui::EndMainMenuBar();
     }
-
-    renderGlowWindow();
-    renderChamsWindow();
-    renderTriggerbotWindow();
-    renderMiscWindow();
-}
-
-void GUI::renderMenuBar()
-{
-
 }
 
 void GUI::renderGlowWindow()
