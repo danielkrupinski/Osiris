@@ -128,3 +128,8 @@ void GUI::renderGlowWindow()
         ImGui::End();
     }
 }
+
+void GUI::renderChamsWindow()
+{
+
+}

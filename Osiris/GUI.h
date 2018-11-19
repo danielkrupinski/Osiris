@@ -6,6 +6,7 @@ public:
     bool isOpen{ false };
 private:
     void renderGlowWindow();
+    void renderChamsWindow();
     struct {
         bool glow{ false };
         bool chams{ false };
