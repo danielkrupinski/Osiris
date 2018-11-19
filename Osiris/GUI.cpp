@@ -43,38 +43,7 @@ void GUI::render()
     renderGlowWindow();
     renderChamsWindow();
     renderTriggerbotWindow();
-
-    if (window.misc) {
-        ImGui::SetNextWindowSize(ImVec2(250.0f, 240.0f));
-        ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(120.0f);
-        ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
-        char buf[16];
-        std::strcpy(buf, config.misc.clanTag.c_str());
-        ImGui::InputText(xorstr_("Clantag"), buf, IM_ARRAYSIZE(buf));
-        config.misc.clanTag = buf;
-        ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
-        ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 255);
-        ImGui::Checkbox(xorstr_("No smoke"), &config.misc.noSmoke);
-        if (!config.misc.noSmoke)
-            ImGui::Checkbox(xorstr_("Wireframe smoke"), &config.misc.wireframeSmoke);
-        static const std::string skyboxes[]{ xorstr_("Default"), xorstr_("cs_baggage_skybox_"), xorstr_("cs_tibet"), xorstr_("embassy"), xorstr_("italy"), xorstr_("jungle"), xorstr_("nukeblank"), xorstr_("office"), xorstr_("sky_cs15_daylight01_hdr"), xorstr_("sky_cs15_daylight02_hdr"), xorstr_("sky_cs15_daylight03_hdr"), xorstr_("sky_cs15_daylight04_hdr"), xorstr_("sky_csgo_cloudy01"), xorstr_("sky_csgo_night_flat"), xorstr_("sky_csgo_night02"), xorstr_("sky_day02_05_hdr"), xorstr_("sky_day02_05"), xorstr_("sky_dust"), xorstr_("sky_l4d_rural02_ldr"), xorstr_("sky_venice"), xorstr_("vertigo_hdr"), xorstr_("vertigo"), xorstr_("vertigoblue_hdr"), xorstr_("vietnam") };
-        constexpr std::string& currentSkybox = config.misc.skybox;
-
-        if (ImGui::BeginCombo(xorstr_("Skybox"), currentSkybox.c_str())) {
-            for (const auto& a : skyboxes) {
-                bool isSelected = (currentSkybox == a);
-                if (ImGui::Selectable(a.c_str(), isSelected))
-                    currentSkybox = a;
-                if (isSelected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndCombo();
-        }
-        ImGui::SliderInt(xorstr_("Viewmodel FOV"), &config.misc.viewmodelFov, 0, 130);
-        ImGui::ColorEdit3(xorstr_("World color"), config.misc.worldColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::End();
-    }
+    renderMiscWindow();
 }
 
 void GUI::renderGlowWindow()
@@ -139,5 +108,35 @@ void GUI::renderTriggerbotWindow()
 
 void GUI::renderMiscWindow()
 {
+    if (window.misc) {
+        ImGui::SetNextWindowSize(ImVec2(250.0f, 240.0f));
+        ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::PushItemWidth(120.0f);
+        ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
+        char buf[16];
+        std::strcpy(buf, config.misc.clanTag.c_str());
+        ImGui::InputText(xorstr_("Clantag"), buf, IM_ARRAYSIZE(buf));
+        config.misc.clanTag = buf;
+        ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
+        ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 255);
+        ImGui::Checkbox(xorstr_("No smoke"), &config.misc.noSmoke);
+        if (!config.misc.noSmoke)
+            ImGui::Checkbox(xorstr_("Wireframe smoke"), &config.misc.wireframeSmoke);
+        static const std::string skyboxes[]{ xorstr_("Default"), xorstr_("cs_baggage_skybox_"), xorstr_("cs_tibet"), xorstr_("embassy"), xorstr_("italy"), xorstr_("jungle"), xorstr_("nukeblank"), xorstr_("office"), xorstr_("sky_cs15_daylight01_hdr"), xorstr_("sky_cs15_daylight02_hdr"), xorstr_("sky_cs15_daylight03_hdr"), xorstr_("sky_cs15_daylight04_hdr"), xorstr_("sky_csgo_cloudy01"), xorstr_("sky_csgo_night_flat"), xorstr_("sky_csgo_night02"), xorstr_("sky_day02_05_hdr"), xorstr_("sky_day02_05"), xorstr_("sky_dust"), xorstr_("sky_l4d_rural02_ldr"), xorstr_("sky_venice"), xorstr_("vertigo_hdr"), xorstr_("vertigo"), xorstr_("vertigoblue_hdr"), xorstr_("vietnam") };
+        constexpr std::string& currentSkybox = config.misc.skybox;
 
+        if (ImGui::BeginCombo(xorstr_("Skybox"), currentSkybox.c_str())) {
+            for (const auto& a : skyboxes) {
+                bool isSelected = (currentSkybox == a);
+                if (ImGui::Selectable(a.c_str(), isSelected))
+                    currentSkybox = a;
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::SliderInt(xorstr_("Viewmodel FOV"), &config.misc.viewmodelFov, 0, 130);
+        ImGui::ColorEdit3(xorstr_("World color"), config.misc.worldColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::End();
+    }
 }
