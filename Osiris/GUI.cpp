@@ -41,22 +41,8 @@ void GUI::render()
     }
 
     renderGlowWindow();
-
-    if (window.chams) {
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 240.0f));
-        ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(80.0f);
-        ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
-        ImGui::SliderFloat(xorstr_("Alpha"), &config.chams.alpha, 0.0f, 1.0f);
-        ImGui::Checkbox(xorstr_("Enemies only"), &config.chams.enemiesOnly);
-        ImGui::Checkbox(xorstr_("Visible only"), &config.chams.visibleOnly);
-        ImGui::ColorEdit3(xorstr_("Visible allies color"), config.chams.visibleAlliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Occluded allies color"), config.chams.occludedAlliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Visible enemies color"), config.chams.visibleEnemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Occluded enemies color"), config.chams.occludedEnemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("Wireframe"), &config.chams.wireframe);
-        ImGui::End();
-    }
+    renderChamsWindow();
+    
 
     if (window.triggerbot) {
         ImGui::SetNextWindowSize(ImVec2(180.0f, 100.0f));
@@ -131,5 +117,19 @@ void GUI::renderGlowWindow()
 
 void GUI::renderChamsWindow()
 {
-
+    if (window.chams) {
+        ImGui::SetNextWindowSize(ImVec2(200.0f, 240.0f));
+        ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
+        ImGui::SliderFloat(xorstr_("Alpha"), &config.chams.alpha, 0.0f, 1.0f);
+        ImGui::Checkbox(xorstr_("Enemies only"), &config.chams.enemiesOnly);
+        ImGui::Checkbox(xorstr_("Visible only"), &config.chams.visibleOnly);
+        ImGui::ColorEdit3(xorstr_("Visible allies color"), config.chams.visibleAlliesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Occluded allies color"), config.chams.occludedAlliesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Visible enemies color"), config.chams.visibleEnemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(xorstr_("Occluded enemies color"), config.chams.occludedEnemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("Wireframe"), &config.chams.wireframe);
+        ImGui::End();
+    }
 }
