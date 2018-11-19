@@ -10,13 +10,6 @@
 
 void GUI::render()
 {
-    static struct {
-        bool glow{ false };
-        bool chams{ false };
-        bool triggerbot{ false };
-        bool misc{ false };
-    } window;
-
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::MenuItem(xorstr_("Glow"))) {
             window.glow = true;
