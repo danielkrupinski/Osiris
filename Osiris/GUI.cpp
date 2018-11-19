@@ -133,3 +133,8 @@ void GUI::renderChamsWindow()
         ImGui::End();
     }
 }
+
+void GUI::renderTriggerbotWindow()
+{
+
+}

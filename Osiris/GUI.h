@@ -7,6 +7,7 @@ public:
 private:
     void renderGlowWindow();
     void renderChamsWindow();
+    void renderTriggerbotWindow();
     struct {
         bool glow{ false };
         bool chams{ false };
