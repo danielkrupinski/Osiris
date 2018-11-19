@@ -164,12 +164,8 @@ Hooks::Vmt::Vmt(void* base)
         newVmt = findFreeDataPage(buffer, length * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
+        *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
     }
-}
-
-void Hooks::Vmt::apply()
-{
-    *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string_view module, std::size_t vmtSize)
