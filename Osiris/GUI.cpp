@@ -46,6 +46,11 @@ void GUI::render()
     renderMiscWindow();
 }
 
+void GUI::renderMenuBar()
+{
+
+}
+
 void GUI::renderGlowWindow()
 {
     if (window.glow) {

@@ -5,6 +5,7 @@ public:
     void render();
     bool isOpen{ false };
 private:
+    void renderMenuBar();
     void renderGlowWindow();
     void renderChamsWindow();
     void renderTriggerbotWindow();
