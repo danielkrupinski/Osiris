@@ -136,3 +136,8 @@ void GUI::renderTriggerbotWindow()
         ImGui::End();
     }
 }
+
+void GUI::renderMiscWindow()
+{
+
+}
