@@ -130,3 +130,8 @@ void GUI::render()
         ImGui::End();
     }
 }
+
+void GUI::renderGlowWindow()
+{
+
+}
