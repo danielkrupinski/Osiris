@@ -143,12 +143,10 @@ Hooks::Hooks()
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
     surface.hookAt(67, hookedLockCursor);
-    surface.apply();
 
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
-    clientMode.apply();
 }
 
 Hooks::Vmt::Vmt(void* base)
