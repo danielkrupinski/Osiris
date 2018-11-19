@@ -168,7 +168,7 @@ Hooks::Vmt::Vmt(void* base)
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string_view module, std::size_t vmtSize)
 {
-    auto check_data_section = [](LPCVOID address, const std::size_t vmt_size)
+    auto isInDataSection = [](LPCVOID address, const std::size_t vmt_size)
     {
         MEMORY_BASIC_INFORMATION mbi;
         if (VirtualQuery(address, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmt_size)
@@ -183,7 +183,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string_view module, std::size_
 
     for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
     {
-        if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0 && check_data_section(reinterpret_cast<LPCVOID>(current_address), vmtSize))
+        if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0 && isInDataSection(reinterpret_cast<LPCVOID>(current_address), vmtSize))
         {
             bool is_good_vmt = true;
             auto page_count = 0u;
