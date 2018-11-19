@@ -20,21 +20,17 @@ void GUI::render()
 void GUI::renderMenuBar()
 {
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::MenuItem(xorstr_("Glow"))) {
+        if (ImGui::MenuItem(xorstr_("Glow")))
             window.glow = true;
-        }
 
-        if (ImGui::MenuItem(xorstr_("Chams"))) {
+        if (ImGui::MenuItem(xorstr_("Chams")))
             window.chams = true;
-        }
 
-        if (ImGui::MenuItem(xorstr_("Triggerbot"))) {
+        if (ImGui::MenuItem(xorstr_("Triggerbot")))
             window.triggerbot = true;
-        }
 
-        if (ImGui::MenuItem(xorstr_("Misc"))) {
+        if (ImGui::MenuItem(xorstr_("Misc")))
             window.misc = true;
-        }
 
         if (ImGui::BeginMenu(xorstr_("Config"))) {
             if (ImGui::MenuItem(xorstr_("Load")))
@@ -45,7 +41,6 @@ void GUI::renderMenuBar()
                 config.reset();
             ImGui::EndMenu();
         }
-
         ImGui::EndMainMenuBar();
     }
 }
