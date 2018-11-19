@@ -40,6 +40,8 @@ void GUI::render()
         ImGui::EndMainMenuBar();
     }
 
+    renderGlowWindow();
+
     if (window.chams) {
         ImGui::SetNextWindowSize(ImVec2(200.0f, 240.0f));
         ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
