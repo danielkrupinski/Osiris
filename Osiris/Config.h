@@ -17,9 +17,9 @@ public:
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
-        bool players{ false };
-        bool enemiesOnly{ false };
+        bool allies{ false };
         float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
+		bool enemies{ false };
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };

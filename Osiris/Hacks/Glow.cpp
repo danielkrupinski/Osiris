@@ -28,17 +28,15 @@ void Glow::render()
 
             switch (glowobject.entity->GetClientClass()->m_ClassID) {
             case ClassId::CSPlayer:
-                if (glow.players) {
-                    bool isEnemy = reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
-
-                    if (isEnemy) {
+                if (reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
+                    if (glow.enemies) {
                         glowobject.glowColor = glow.enemiesColor;
                         glowobject.renderWhenOccluded = true;
                     }
-                    else if (!glow.enemiesOnly) {
-                        glowobject.glowColor = glow.alliesColor;
-                        glowobject.renderWhenOccluded = true;
-                    }
+                }
+                else if (glow.allies) {
+                    glowobject.glowColor = glow.alliesColor;
+                    glowobject.renderWhenOccluded = true;
                 }
                 break;
             case ClassId::Chicken:

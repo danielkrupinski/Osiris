@@ -55,11 +55,13 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat(xorstr_("Thickness"), &config.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat(xorstr_("Alpha"), &config.glow.alpha, 0.0f, 1.0f);
         ImGui::SliderInt(xorstr_("Style"), &config.glow.style, 0, 3);
-        ImGui::Checkbox(xorstr_("Players"), &config.glow.players);
-        ImGui::Checkbox(xorstr_("Enemies only"), &config.glow.enemiesOnly);
+		ImGui::Checkbox(xorstr_("##Allies"), &config.glow.allies);
+		ImGui::SameLine(0.0f, 5.0f);
+		ImGui::ColorEdit3(xorstr_("Allies"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("##Enemies"), &config.glow.enemies);
+		ImGui::SameLine(0.0f, 5.0f);
+		ImGui::ColorEdit3(xorstr_("Enemies"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::NextColumn();
-        ImGui::ColorEdit3(xorstr_("Allies"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3(xorstr_("Enemies"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
 		ImGui::Checkbox(xorstr_("##Weapons"), &config.glow.weapons);
 		ImGui::SameLine(0.0f, 5.0f);
         ImGui::ColorEdit3(xorstr_("Weapons"), config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);

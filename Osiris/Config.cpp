@@ -31,13 +31,12 @@ void Config::load()
     glow.alpha = config[xorstr_("glow")][xorstr_("alpha")].asFloat();
     glow.style = config[xorstr_("glow")][xorstr_("style")].asInt();
 
-    glow.players = config[xorstr_("glow")][xorstr_("players")].asBool();
-    glow.enemiesOnly = config[xorstr_("glow")][xorstr_("enemiesOnly")].asBool();
-
+    glow.allies = config[xorstr_("glow")][xorstr_("allies")].asBool();
     glow.alliesColor[0] = config[xorstr_("glow")][xorstr_("alliesColor")][0].asFloat();
     glow.alliesColor[1] = config[xorstr_("glow")][xorstr_("alliesColor")][1].asFloat();
     glow.alliesColor[2] = config[xorstr_("glow")][xorstr_("alliesColor")][2].asFloat();
 
+    glow.enemies = config[xorstr_("glow")][xorstr_("enemies")].asBool();
     glow.enemiesColor[0] = config[xorstr_("glow")][xorstr_("enemiesColor")][0].asFloat();
     glow.enemiesColor[1] = config[xorstr_("glow")][xorstr_("enemiesColor")][1].asFloat();
     glow.enemiesColor[2] = config[xorstr_("glow")][xorstr_("enemiesColor")][2].asFloat();
@@ -105,13 +104,12 @@ void Config::save() const
     config[xorstr_("glow")][xorstr_("alpha")] = glow.alpha;
     config[xorstr_("glow")][xorstr_("style")] = glow.style;
 
-    config[xorstr_("glow")][xorstr_("players")] = glow.players;
-    config[xorstr_("glow")][xorstr_("enemiesOnly")] = glow.enemiesOnly;
-
+    config[xorstr_("glow")][xorstr_("allies")] = glow.allies;
     config[xorstr_("glow")][xorstr_("alliesColor")][0] = glow.alliesColor[0];
     config[xorstr_("glow")][xorstr_("alliesColor")][1] = glow.alliesColor[1];
     config[xorstr_("glow")][xorstr_("alliesColor")][2] = glow.alliesColor[2];
 
+    config[xorstr_("glow")][xorstr_("enemies")] = glow.enemies;
     config[xorstr_("glow")][xorstr_("enemiesColor")][0] = glow.enemiesColor[0];
     config[xorstr_("glow")][xorstr_("enemiesColor")][1] = glow.enemiesColor[1];
     config[xorstr_("glow")][xorstr_("enemiesColor")][2] = glow.enemiesColor[2];
@@ -173,13 +171,12 @@ void Config::reset()
     glow.alpha = 1.0f;
     glow.style = 0;
 
-    glow.players = false;
-    glow.enemiesOnly = false;
-
+    glow.allies = false;
     glow.alliesColor[0] = 0.0f;
     glow.alliesColor[1] = 1.0f;
     glow.alliesColor[2] = 0.0f;
 
+    glow.enemies = false;
     glow.enemiesColor[0] = 1.0f;
     glow.enemiesColor[1] = 0.0f;
     glow.enemiesColor[2] = 0.0f;
