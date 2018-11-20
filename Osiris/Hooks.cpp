@@ -20,7 +20,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
+static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (GetAsyncKeyState(VK_INSERT) & 1)
         gui.isOpen = !gui.isOpen;
@@ -31,7 +31,7 @@ static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPA
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
-static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion)
+static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
     static bool isInitialised{ false };
 
@@ -87,7 +87,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
-static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params)
+static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
     auto result = hooks.originalReset(device, params);
@@ -95,7 +95,7 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
-static bool __fastcall hookedCreateMove(void*, void*, float inputSampleTime, UserCmd* cmd)
+static bool __fastcall hookedCreateMove(void*, void*, float inputSampleTime, UserCmd* cmd) noexcept
 {
     hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
@@ -107,7 +107,7 @@ static bool __fastcall hookedCreateMove(void*, void*, float inputSampleTime, Use
     return false;
 }
 
-static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
+static void __fastcall hookedLockCursor(Surface* thisptr, void* edx) noexcept
 {
     if (gui.isOpen)
         interfaces.surface->UnlockCursor();
@@ -115,7 +115,7 @@ static void __fastcall hookedLockCursor(Surface* thisptr, void* edx)
         hooks.surface.getOriginal<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
 }
 
-static int __stdcall hookedDoPostScreenEffects(int param)
+static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::removeSmoke();
@@ -127,7 +127,7 @@ static int __stdcall hookedDoPostScreenEffects(int param)
     return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
 
-static float __stdcall hookedGetViewModelFov()
+static float __stdcall hookedGetViewModelFov() noexcept
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame() && !(*memory.localPlayer)->isScoped())
         return static_cast<float>(config.misc.viewmodelFov);
