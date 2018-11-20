@@ -6,7 +6,7 @@
 #include "GUI.h"
 #include "Config.h"
 
-void GUI::render()
+void GUI::render() noexcept
 {
     renderMenuBar();
     renderGlowWindow();
@@ -15,7 +15,7 @@ void GUI::render()
     renderMiscWindow();
 }
 
-void GUI::renderMenuBar()
+void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::MenuItem(xorstr_("Glow")))
@@ -43,7 +43,7 @@ void GUI::renderMenuBar()
     }
 }
 
-void GUI::renderGlowWindow()
+void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
         ImGui::SetNextWindowSize(ImVec2(300.0f, 260.0f));
@@ -72,7 +72,7 @@ void GUI::renderGlowWindow()
     }
 }
 
-void GUI::renderChamsWindow()
+void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
         ImGui::SetNextWindowSize(ImVec2(200.0f, 240.0f));
@@ -91,7 +91,7 @@ void GUI::renderChamsWindow()
     }
 }
 
-void GUI::renderTriggerbotWindow()
+void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
         ImGui::SetNextWindowSize(ImVec2(180.0f, 100.0f));
@@ -103,7 +103,7 @@ void GUI::renderTriggerbotWindow()
     }
 }
 
-void GUI::renderMiscWindow()
+void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
         ImGui::SetNextWindowSize(ImVec2(250.0f, 240.0f));

@@ -2,14 +2,14 @@
 
 class GUI final {
 public:
-    void render();
+    void render() noexcept;
     bool isOpen{ false };
 private:
-    void renderMenuBar();
-    void renderGlowWindow();
-    void renderChamsWindow();
-    void renderTriggerbotWindow();
-    void renderMiscWindow();
+    void renderMenuBar() noexcept;
+    void renderGlowWindow() noexcept;
+    void renderChamsWindow() noexcept;
+    void renderTriggerbotWindow() noexcept;
+    void renderMiscWindow() noexcept;
     struct {
         bool glow{ false };
         bool chams{ false };
