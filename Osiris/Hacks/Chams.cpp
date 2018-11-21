@@ -1,5 +1,3 @@
-#include <fstream>
-
 #include "../xorstr.hpp"
 
 #include "Chams.h"
