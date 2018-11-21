@@ -83,7 +83,6 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         device->SetVertexDeclaration(vertexDeclaration);
         device->SetVertexShader(vertexShader);
     }
-    Misc::colorWorld();
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
@@ -121,6 +120,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Misc::removeSmoke();
         Misc::reduceFlashEffect();
         Misc::disablePostProcessing();
+        Misc::colorWorld();
         Glow::render();
         Chams::render();
     }
