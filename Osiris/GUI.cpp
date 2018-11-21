@@ -58,9 +58,6 @@ void GUI::renderGlowWindow() noexcept
 		ImGui::Checkbox(xorstr_("##Allies"), &config.glow.allies);
 		ImGui::SameLine(0.0f, 5.0f);
 		ImGui::ColorEdit3(xorstr_("Allies"), config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::Checkbox(xorstr_("##Enemies"), &config.glow.enemies);
-		ImGui::SameLine(0.0f, 5.0f);
-		ImGui::ColorEdit3(xorstr_("Enemies"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::NextColumn();
 		ImGui::Checkbox(xorstr_("##Weapons"), &config.glow.weapons);
 		ImGui::SameLine(0.0f, 5.0f);
@@ -74,6 +71,9 @@ void GUI::renderGlowWindow() noexcept
 		ImGui::Checkbox(xorstr_("##Chickens"), &config.glow.chickens);
 		ImGui::SameLine(0.0f, 5.0f);
         ImGui::ColorEdit3(xorstr_("Chickens"), config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::Checkbox(xorstr_("##Enemies"), &config.glow.enemies);
+        ImGui::SameLine(0.0f, 5.0f);
+        ImGui::ColorEdit3(xorstr_("Enemies"), config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
         ImGui::End();
     }
 }
