@@ -48,7 +48,9 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
         io.LogFilename = nullptr;
-        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 16.0f);
+        char buffer[MAX_PATH];
+        GetWindowsDirectoryA(buffer, MAX_PATH);
+        io.Fonts->AddFontFromFileTTF(std::string{ buffer + std::string{ xorstr_("\\Fonts\\Tahoma.ttf") } }.c_str(), 16.0f);
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
             SetWindowLongPtr(FindWindowA(xorstr_("Valve001"), NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
