@@ -81,7 +81,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 240.0f));
+        ImGui::SetNextWindowSize(ImVec2(200.0f, 270.0f));
         ImGui::Begin(xorstr_("Chams"), &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox(xorstr_("Enabled"), &config.chams.enabled);
@@ -112,7 +112,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize(ImVec2(250.0f, 240.0f));
+        ImGui::SetNextWindowSize(ImVec2(250.0f, 270.0f));
         ImGui::Begin(xorstr_("Misc"), &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(120.0f);
         ImGui::Checkbox(xorstr_("Bunny hop"), &config.misc.bunnyHop);
