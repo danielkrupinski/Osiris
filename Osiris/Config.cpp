@@ -64,13 +64,24 @@ void Config::load()
     chams.enabled = config[xorstr_("chams")][xorstr_("enabled")].asBool();
     chams.alpha = config[xorstr_("chams")][xorstr_("alpha")].asFloat();
 
+    chams.enemiesOnly = config[xorstr_("chams")][xorstr_("enemiesOnly")].asBool();
+    chams.visibleOnly = config[xorstr_("chams")][xorstr_("visibleOnly")].asBool();
+
     chams.visibleAlliesColor[0] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0].asFloat();
     chams.visibleAlliesColor[1] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1].asFloat();
     chams.visibleAlliesColor[2] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2].asFloat();
 
+    chams.occludedAlliesColor[0] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][0].asFloat();
+    chams.occludedAlliesColor[1] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][1].asFloat();
+    chams.occludedAlliesColor[2] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][2].asFloat();
+
     chams.visibleEnemiesColor[0] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0].asFloat();
     chams.visibleEnemiesColor[1] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1].asFloat();
     chams.visibleEnemiesColor[2] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2].asFloat();
+
+    chams.occludedEnemiesColor[0] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][0].asFloat();
+    chams.occludedEnemiesColor[1] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][1].asFloat();
+    chams.occludedEnemiesColor[2] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][2].asFloat();
 
     triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
     triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
@@ -136,6 +147,9 @@ void Config::save() const
 
     config[xorstr_("chams")][xorstr_("enabled")] = chams.enabled;
     config[xorstr_("chams")][xorstr_("alpha")] = chams.alpha;
+
+    config[xorstr_("chams")][xorstr_("enemiesOnly")] = chams.enemiesOnly;
+    config[xorstr_("chams")][xorstr_("visibleOnly")] = chams.visibleOnly;
 
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0] = chams.visibleAlliesColor[0];
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1] = chams.visibleAlliesColor[1];
