@@ -6,7 +6,6 @@
 
 class Config final {
 public:
-    Config() = delete;
     explicit Config(const std::string&);
     void load();
     void save() const;
