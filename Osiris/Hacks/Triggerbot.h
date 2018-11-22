@@ -3,6 +3,6 @@
 #include "../SDK/UserCmd.h"
 
 namespace Triggerbot {
-    void run(UserCmd*);
+    void run(UserCmd*) noexcept;
 }
 

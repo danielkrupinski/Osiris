@@ -5,7 +5,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-void Chams::render()
+void Chams::render() noexcept
 {
     if (config.chams.enabled) {
         for (int i = 1; i < interfaces.engineClient->GetMaxClients(); ++i) {

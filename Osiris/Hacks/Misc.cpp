@@ -5,7 +5,7 @@
 #include "../Memory.h"
 #include "Misc.h"
 
-void Misc::bunnyHop(UserCmd* cmd)
+void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
     if (config.misc.bunnyHop) {
         constexpr int ON_GROUND{ 1 };
@@ -34,19 +34,19 @@ void Misc::bunnyHop(UserCmd* cmd)
     }
 }
 
-void Misc::disablePostProcessing()
+void Misc::disablePostProcessing() noexcept
 {
     if (*memory.disablePostProcessing != config.misc.disablePostProcessing)
         *memory.disablePostProcessing = config.misc.disablePostProcessing;
 }
 
-void Misc::skybox()
+void Misc::skybox() noexcept
 {
     if (config.misc.skybox != xorstr_("Default"))
         reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
 }
 
-void Misc::clanTag()
+void Misc::clanTag() noexcept
 {
     static std::string_view clanTag = config.misc.clanTag;
     if (clanTag != config.misc.clanTag) {
@@ -55,7 +55,7 @@ void Misc::clanTag()
     }
 }
 
-void Misc::colorWorld()
+void Misc::colorWorld() noexcept
 {
     static auto red = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_r"));
     static auto green = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_g"));
@@ -66,12 +66,12 @@ void Misc::colorWorld()
     blue->SetValue(config.misc.worldColor[2]);
 }
 
-void Misc::reduceFlashEffect()
+void Misc::reduceFlashEffect() noexcept
 {
     *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - static_cast<float>(config.misc.flashReduction);
 }
 
-void Misc::removeSmoke()
+void Misc::removeSmoke() noexcept
 {
     static const std::string smokeMaterials[]{
         xorstr_("particle/vistasmokev1/vistasmokev1_emods"),

@@ -8,7 +8,7 @@
 #include "../Memory.h"
 #include "Triggerbot.h"
 
-void Triggerbot::run(UserCmd* cmd)
+void Triggerbot::run(UserCmd* cmd) noexcept
 {
     if (config.triggerbot.enabled) {
         static auto lastTime = std::chrono::steady_clock::now();

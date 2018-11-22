@@ -3,5 +3,5 @@
 #include "../SDK/ModelRender.h"
 
 namespace Chams {
-    void render();
+    void render() noexcept;
 };
