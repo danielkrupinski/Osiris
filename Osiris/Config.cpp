@@ -83,6 +83,8 @@ void Config::load()
     chams.occludedEnemiesColor[1] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][1].asFloat();
     chams.occludedEnemiesColor[2] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][2].asFloat();
 
+    chams.wireframe = config[xorstr_("chams")][xorstr_("wireframe")].asBool();
+
     triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
     triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
 
@@ -155,9 +157,19 @@ void Config::save() const
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1] = chams.visibleAlliesColor[1];
     config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2] = chams.visibleAlliesColor[2];
 
+    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][0] = chams.occludedAlliesColor[0];
+    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][1] = chams.occludedAlliesColor[1];
+    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][2] = chams.occludedAlliesColor[2];
+
     config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0] = chams.visibleEnemiesColor[0];
     config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1] = chams.visibleEnemiesColor[1];
     config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2] = chams.visibleEnemiesColor[2];
+
+    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][0] = chams.occludedEnemiesColor[0];
+    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][1] = chams.occludedEnemiesColor[1];
+    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][2] = chams.occludedEnemiesColor[2];
+
+    config[xorstr_("chams")][xorstr_("wireframe")] = chams.wireframe;
 
     config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
     config[xorstr_("triggerbot")][xorstr_("shotDelay")] = triggerbot.shotDelay;
@@ -218,13 +230,26 @@ void Config::reset()
     chams.enabled = false;
     chams.alpha = 1.0f;
 
+    chams.enemiesOnly = false;
+    chams.visibleOnly = false;
+
     chams.visibleAlliesColor[0] = 0.0f;
     chams.visibleAlliesColor[1] = 1.0f;
     chams.visibleAlliesColor[2] = 0.0f;
 
+    chams.occludedAlliesColor[0] = 0.0f;
+    chams.occludedAlliesColor[1] = 1.0f;
+    chams.occludedAlliesColor[2] = 0.0f;
+
     chams.visibleEnemiesColor[0] = 1.0f;
     chams.visibleEnemiesColor[1] = 0.0f;
     chams.visibleEnemiesColor[2] = 0.0f;
+
+    chams.occludedEnemiesColor[0] = 1.0f;
+    chams.occludedEnemiesColor[1] = 0.0f;
+    chams.occludedEnemiesColor[2] = 0.0f;
+
+    chams.wireframe = false;
 
     triggerbot.enabled = false;
     triggerbot.shotDelay = 0;
