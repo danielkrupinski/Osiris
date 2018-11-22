@@ -56,7 +56,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2017 and Windows SDK 10.0.17763.0 (10.0.17134.0 or lower should work too but requires change in project settings) are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer:
