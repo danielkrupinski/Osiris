@@ -170,22 +170,16 @@ Hooks::Vmt::Vmt(void* base)
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(std::string_view module, std::size_t vmtSize)
 {
-    auto isInDataSection = [](LPCVOID address, const std::size_t vmt_size)
-    {
-        MEMORY_BASIC_INFORMATION mbi;
-        if (VirtualQuery(address, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmt_size)
-            return true;
-        else
-            return false;
-    };
-
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(std::string{ module }.c_str()), &moduleInfo, sizeof(moduleInfo));
     const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
 
     for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
     {
-        if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0 && isInDataSection(reinterpret_cast<LPCVOID>(current_address), vmtSize))
+        MEMORY_BASIC_INFORMATION mbi;
+        if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0
+            && VirtualQuery(reinterpret_cast<LPCVOID>(current_address), &mbi, sizeof(mbi))
+            && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize)
         {
             bool is_good_vmt = true;
             auto page_count = 0u;
