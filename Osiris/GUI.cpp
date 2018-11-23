@@ -9,6 +9,7 @@
 void GUI::render() noexcept
 {
     renderMenuBar();
+    renderAimbotWindow();
     renderGlowWindow();
     renderChamsWindow();
     renderTriggerbotWindow();
@@ -18,6 +19,9 @@ void GUI::render() noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::MenuItem(xorstr_("Aimbot")))
+            window.aimbot = true;
+
         if (ImGui::MenuItem(xorstr_("Glow")))
             window.glow = true;
 
@@ -45,7 +49,11 @@ void GUI::renderMenuBar() noexcept
 
 void GUI::renderAimbotWindow() noexcept
 {
-
+    if (window.aimbot) {
+        ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f));
+        ImGui::Begin(xorstr_("Aimbot"), &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::End();
+    }
 }
 
 void GUI::renderGlowWindow() noexcept
