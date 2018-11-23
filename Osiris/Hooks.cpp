@@ -162,10 +162,10 @@ Hooks::Vmt::Vmt(void* const base)
     *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
 
-std::uintptr_t* Hooks::Vmt::findFreeDataPage(PVOID moduleBase, std::size_t vmtSize)
+std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
-    VirtualQuery(moduleBase, &mbi, sizeof(mbi));
+    VirtualQuery(base, &mbi, sizeof(mbi));
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
     const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
