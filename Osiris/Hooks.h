@@ -36,7 +36,6 @@ public:
         std::uintptr_t* findFreeDataPage(PVOID, std::size_t);
     private:
         std::size_t calculateLength(std::uintptr_t*) const noexcept;
-        void* classBase;
         std::uintptr_t* oldVmt;
         std::uintptr_t* newVmt;
         std::size_t length;

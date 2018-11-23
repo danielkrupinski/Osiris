@@ -153,14 +153,13 @@ Hooks::Hooks()
 
 Hooks::Vmt::Vmt(void* const base)
 {
-    classBase = base;
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
 
     newVmt = findFreeDataPage(base, length * sizeof(std::uintptr_t));
     std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
     std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
-    *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
+    *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(PVOID moduleBase, std::size_t vmtSize)
