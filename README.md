@@ -6,21 +6,15 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
-    * **Players** - enable glow on players
-    * **Enemies only** - glow only opponents
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [0-3]
-    * **Allies color**
-    * **Enemies color**
-    * **Weapons** - enable glow on weapon
-    * **Weapons color**
-    * **C4** - enable glow on dropped C4 explosive
-    * **C4 color**
-    * **Planted C4** - enable glow on planted C4 explosive
-    * **Planted C4 color**
-    * **Chickens** - enable glow on chickens
-    * **Chickens color**
+    * **Allies [color]**
+    * **Enemies [color]**
+    * **Weapons [color]**
+    * **C4 [color]**
+    * **Planted C4 [color]**
+    * **Chickens [color]**
 
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
@@ -56,7 +50,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2017 and Windows SDK 10.0.17134.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2017 and Windows SDK 10.0.17763.0 (10.0.17134.0 or lower should work too but requires change in project settings) are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer:
