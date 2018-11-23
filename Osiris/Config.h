@@ -54,6 +54,7 @@ public:
         std::string clanTag;
         bool disablePostProcessing{ false };
         int flashReduction{ 0 };
+        bool noBlood{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
         std::string skybox{ xorstr_("Default") };

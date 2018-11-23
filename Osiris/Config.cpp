@@ -92,6 +92,7 @@ void Config::load()
     misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.flashReduction = config[xorstr_("misc")][xorstr_("flashReduction")].asInt();
+    misc.noBlood = config[xorstr_("misc")][xorstr_("noBlood")].asBool();
     misc.noSmoke = config[xorstr_("misc")][xorstr_("noSmoke")].asBool();
     misc.wireframeSmoke = config[xorstr_("misc")][xorstr_("wireframeSmoke")].asBool();
     misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
@@ -179,6 +180,7 @@ void Config::save() const
     config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("flashReduction")] = misc.flashReduction;
+    config[xorstr_("misc")][xorstr_("noBlood")] = misc.noBlood;
     config[xorstr_("misc")][xorstr_("noSmoke")] = misc.noSmoke;
     config[xorstr_("misc")][xorstr_("wireframeSmoke")] = misc.wireframeSmoke;
     config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
@@ -260,6 +262,7 @@ void Config::reset()
     misc.clanTag = "";
     misc.disablePostProcessing = false;
     misc.flashReduction = 0;
+    misc.noBlood = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
     misc.skybox = xorstr_("Default");
