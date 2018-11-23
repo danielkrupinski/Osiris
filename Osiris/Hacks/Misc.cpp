@@ -73,7 +73,8 @@ void Misc::reduceFlashEffect() noexcept
 
 void Misc::removeBlood() noexcept
 {
-
+    static auto enableBlood = interfaces.cvar->FindVar(xorstr_("violence_hblood"));
+    enableBlood->SetValue(config.misc.noBlood);
 }
 
 void Misc::removeSmoke() noexcept
