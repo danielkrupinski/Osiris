@@ -157,10 +157,10 @@ Hooks::Vmt::Vmt(void* base)
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
 
-        newVmt = findFreeDataPage(base, length * sizeof(std::uintptr_t));
-        std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
-        std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
-        *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
+    newVmt = findFreeDataPage(base, length * sizeof(std::uintptr_t));
+    std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
+    std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
+    *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
 }
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(PVOID moduleBase, std::size_t vmtSize)
@@ -171,17 +171,14 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(PVOID moduleBase, std::size_t vmtSi
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
     const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
 
-    for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
-    {
+    for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t)) {
         if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0
             && VirtualQuery(reinterpret_cast<LPCVOID>(current_address), &mbi, sizeof(mbi))
-            && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize)
-        {
+            && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize) {
             bool is_good_vmt = true;
             auto page_count = 0u;
 
-            for (; page_count < vmtSize && is_good_vmt; page_count += sizeof(std::uintptr_t))
-            {
+            for (; page_count < vmtSize && is_good_vmt; page_count += sizeof(std::uintptr_t)) {
                 if (*reinterpret_cast<std::uintptr_t*>(current_address + page_count) != 0)
                     is_good_vmt = false;
             }
