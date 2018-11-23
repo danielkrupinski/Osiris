@@ -6,21 +6,15 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
-    * **Players** - enable glow on players
-    * **Enemies only** - glow only opponents
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [0-3]
-    * **Allies color**
-    * **Enemies color**
-    * **Weapons** - enable glow on weapon
-    * **Weapons color**
-    * **C4** - enable glow on dropped C4 explosive
-    * **C4 color**
-    * **Planted C4** - enable glow on planted C4 explosive
-    * **Planted C4 color**
-    * **Chickens** - enable glow on chickens
-    * **Chickens color**
+    * **Allies [color]**
+    * **Enemies [color]**
+    * **Weapons [color]**
+    * **C4 [color]**
+    * **Planted C4 [color]**
+    * **Chickens [color]**
 
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
