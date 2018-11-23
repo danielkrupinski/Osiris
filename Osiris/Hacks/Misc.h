@@ -10,5 +10,6 @@ namespace Misc {
     void clanTag() noexcept;
     void colorWorld() noexcept;
     void reduceFlashEffect() noexcept;
+    void removeBlood() noexcept;
     void removeSmoke() noexcept;
 }
