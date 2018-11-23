@@ -6,6 +6,7 @@ public:
     bool isOpen{ false };
 private:
     void renderMenuBar() noexcept;
+    void renderAimbotWindow() noexcept;
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
     void renderTriggerbotWindow() noexcept;

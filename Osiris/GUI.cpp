@@ -43,6 +43,11 @@ void GUI::renderMenuBar() noexcept
     }
 }
 
+void GUI::renderAimbotWindow() noexcept
+{
+
+}
+
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
