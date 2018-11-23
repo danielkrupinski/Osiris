@@ -33,7 +33,7 @@ public:
             return reinterpret_cast<T>(oldVmt[index]);
         }
 
-        std::uintptr_t* findFreeDataPage(std::string_view, std::size_t);
+        std::uintptr_t* findFreeDataPage(PVOID, std::size_t);
     private:
         std::size_t calculateLength(std::uintptr_t*) const noexcept;
         void* classBase;
