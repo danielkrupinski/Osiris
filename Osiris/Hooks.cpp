@@ -157,24 +157,22 @@ Hooks::Vmt::Vmt(void* base)
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
 
-    MEMORY_BASIC_INFORMATION mbi;
-    if (VirtualQuery(base, &mbi, sizeof(mbi))) {
-        newVmt = findFreeDataPage(mbi.AllocationBase, length * sizeof(std::uintptr_t));
+        newVmt = findFreeDataPage(base, length * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
         *reinterpret_cast<std::uintptr_t**>(classBase) = newVmt;
-    }
 }
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(PVOID moduleBase, std::size_t vmtSize)
 {
+    MEMORY_BASIC_INFORMATION mbi;
+    VirtualQuery(moduleBase, &mbi, sizeof(mbi));
     MODULEINFO moduleInfo;
-    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(moduleBase), &moduleInfo, sizeof(moduleInfo));
+    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
     const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage - sizeof(std::uintptr_t);
 
     for (auto current_address = module_end; current_address > (DWORD)moduleInfo.lpBaseOfDll; current_address -= sizeof(std::uintptr_t))
     {
-        MEMORY_BASIC_INFORMATION mbi;
         if (*reinterpret_cast<std::uintptr_t*>(current_address) == 0
             && VirtualQuery(reinterpret_cast<LPCVOID>(current_address), &mbi, sizeof(mbi))
             && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize)
