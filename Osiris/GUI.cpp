@@ -135,6 +135,7 @@ void GUI::renderMiscWindow() noexcept
         config.misc.clanTag = buf;
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
         ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 255);
+        ImGui::Checkbox(xorstr_("No blood"), &config.misc.noBlood);
         ImGui::Checkbox(xorstr_("No smoke"), &config.misc.noSmoke);
         if (!config.misc.noSmoke)
             ImGui::Checkbox(xorstr_("Wireframe smoke"), &config.misc.wireframeSmoke);
