@@ -159,8 +159,6 @@ Hooks::Vmt::Vmt(void* base)
 
     MEMORY_BASIC_INFORMATION mbi;
     if (VirtualQuery(base, &mbi, sizeof(mbi))) {
-        char buffer[MAX_PATH];
-        GetModuleFileNameA((HMODULE)mbi.AllocationBase, buffer, MAX_PATH);
         newVmt = findFreeDataPage(mbi.AllocationBase, length * sizeof(std::uintptr_t));
         std::memset(newVmt, NULL, length * sizeof(std::uintptr_t));
         std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
