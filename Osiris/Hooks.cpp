@@ -151,7 +151,7 @@ Hooks::Hooks()
     clientMode.hookAt(35, hookedGetViewModelFov);
 }
 
-Hooks::Vmt::Vmt(void* base)
+Hooks::Vmt::Vmt(void* const base)
 {
     classBase = base;
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
