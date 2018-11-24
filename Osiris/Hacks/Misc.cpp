@@ -68,7 +68,7 @@ void Misc::colorWorld() noexcept
 
 void Misc::reduceFlashEffect() noexcept
 {
-    *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - static_cast<float>(config.misc.flashReduction);
+    *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
 void Misc::removeBlood() noexcept
