@@ -134,7 +134,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::InputText(xorstr_("Clantag"), buf, IM_ARRAYSIZE(buf));
         config.misc.clanTag = buf;
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
-        ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 255);
+        ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 100, "%d%%");
         ImGui::Checkbox(xorstr_("No blood"), &config.misc.noBlood);
         ImGui::Checkbox(xorstr_("No smoke"), &config.misc.noSmoke);
         if (!config.misc.noSmoke)
