@@ -36,6 +36,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [0-255] (0 - full flash, 255 - no flash)
+    * **No blood** - remove blood
     * **No smoke** - remove smoke grenade effect
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Skybox** - change sky(box)
