@@ -88,7 +88,7 @@
       <Filter>Hacks</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Aimbot.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Hacks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="SDK\RenderView.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Aimbot.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
