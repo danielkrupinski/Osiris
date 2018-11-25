@@ -68,7 +68,8 @@ void Misc::colorWorld() noexcept
 
 void Misc::inverseRagdollGravity() noexcept
 {
-
+    static auto ragdollGravity = interfaces.cvar->FindVar(xorstr_("cl_ragdoll_gravity"));
+    ragdollGravity->SetValue(config.misc.inverseRagdollGravity ? -600 : 600);
 }
 
 void Misc::reduceFlashEffect() noexcept
