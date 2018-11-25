@@ -9,6 +9,7 @@ namespace Misc {
     void skybox() noexcept;
     void clanTag() noexcept;
     void colorWorld() noexcept;
+    void inverseRagdollGravity() noexcept;
     void reduceFlashEffect() noexcept;
     void removeBlood() noexcept;
     void removeSmoke() noexcept;

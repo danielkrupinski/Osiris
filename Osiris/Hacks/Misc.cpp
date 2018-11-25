@@ -66,6 +66,11 @@ void Misc::colorWorld() noexcept
     blue->SetValue(config.misc.worldColor[2]);
 }
 
+void Misc::inverseRagdollGravity() noexcept
+{
+
+}
+
 void Misc::reduceFlashEffect() noexcept
 {
     *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - config.misc.flashReduction * 2.55f;
