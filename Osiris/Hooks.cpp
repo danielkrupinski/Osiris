@@ -119,6 +119,7 @@ static void __fastcall hookedLockCursor(Surface* thisptr, void* edx) noexcept
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
+        Misc::inverseRagdollGravity();
         Misc::removeBlood();
         Misc::removeSmoke();
         Misc::reduceFlashEffect();
