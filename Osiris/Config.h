@@ -54,6 +54,7 @@ public:
         std::string clanTag;
         bool disablePostProcessing{ false };
         int flashReduction{ 0 };
+        bool inverseRagdollGravity{ false };
         bool noBlood{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
