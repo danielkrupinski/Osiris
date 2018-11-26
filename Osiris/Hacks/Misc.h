@@ -12,5 +12,6 @@ namespace Misc {
     void inverseRagdollGravity() noexcept;
     void reduceFlashEffect() noexcept;
     void removeBlood() noexcept;
+    void removeCrouchCooldown() noexcept;
     void removeSmoke() noexcept;
 }

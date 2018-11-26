@@ -83,6 +83,11 @@ void Misc::removeBlood() noexcept
     enableBlood->SetValue(!config.misc.noBlood);
 }
 
+void Misc::removeCrouchCooldown() noexcept
+{
+
+}
+
 void Misc::removeSmoke() noexcept
 {
     static const std::string smokeMaterials[]{
