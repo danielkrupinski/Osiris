@@ -136,6 +136,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox(xorstr_("Disable post-processing"), &config.misc.disablePostProcessing);
         ImGui::SliderInt(xorstr_("Flash reduction"), &config.misc.flashReduction, 0, 100, xorstr_("%d%%"));
         ImGui::Checkbox(xorstr_("Inverse ragdoll gravity"), &config.misc.inverseRagdollGravity);
+        ImGui::Checkbox(xorstr_("No crouch cooldown"), &config.misc.noCrouchCooldown);
         ImGui::Checkbox(xorstr_("No blood"), &config.misc.noBlood);
         ImGui::Checkbox(xorstr_("No smoke"), &config.misc.noSmoke);
         if (!config.misc.noSmoke)
