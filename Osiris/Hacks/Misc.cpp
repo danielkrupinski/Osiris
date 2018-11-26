@@ -85,8 +85,10 @@ void Misc::removeBlood() noexcept
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 {
-    constexpr int IN_BULLRUSH{ 4194304 };
-    cmd->buttons |= IN_BULLRUSH;
+    if (config.misc.noCrouchCooldown) {
+        constexpr int IN_BULLRUSH{ 4194304 };
+        cmd->buttons |= IN_BULLRUSH;
+    }
 }
 
 void Misc::removeSmoke() noexcept
