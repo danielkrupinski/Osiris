@@ -102,6 +102,7 @@ static bool __fastcall hookedCreateMove(void*, void*, float inputSampleTime, Use
     if (interfaces.engineClient->IsConnected() && interfaces.engineClient->IsInGame()) {
         Misc::skybox();
         Misc::bunnyHop(cmd);
+        Misc::removeCrouchCooldown(cmd);
         Misc::clanTag();
         Triggerbot::run(cmd);
     }
