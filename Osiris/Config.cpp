@@ -93,6 +93,7 @@ void Config::load()
     misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
     misc.flashReduction = config[xorstr_("misc")][xorstr_("flashReduction")].asInt();
     misc.inverseRagdollGravity = config[xorstr_("misc")][xorstr_("inverseRagdollGravity")].asBool();
+    misc.noCrouchCooldown = config[xorstr_("misc")][xorstr_("noCrouchCooldown")].asBool();
     misc.noBlood = config[xorstr_("misc")][xorstr_("noBlood")].asBool();
     misc.noSmoke = config[xorstr_("misc")][xorstr_("noSmoke")].asBool();
     misc.wireframeSmoke = config[xorstr_("misc")][xorstr_("wireframeSmoke")].asBool();
@@ -182,6 +183,7 @@ void Config::save() const
     config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
     config[xorstr_("misc")][xorstr_("flashReduction")] = misc.flashReduction;
     config[xorstr_("misc")][xorstr_("inverseRagdollGravity")] = misc.inverseRagdollGravity;
+    config[xorstr_("misc")][xorstr_("noCrouchCooldown")] = misc.noCrouchCooldown;
     config[xorstr_("misc")][xorstr_("noBlood")] = misc.noBlood;
     config[xorstr_("misc")][xorstr_("noSmoke")] = misc.noSmoke;
     config[xorstr_("misc")][xorstr_("wireframeSmoke")] = misc.wireframeSmoke;
@@ -265,6 +267,7 @@ void Config::reset()
     misc.disablePostProcessing = false;
     misc.flashReduction = 0;
     misc.inverseRagdollGravity = false;
+    misc.noCrouchCooldown = false;
     misc.noBlood = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
