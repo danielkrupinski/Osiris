@@ -101,7 +101,7 @@ void Misc::removeSmoke() noexcept
     };
 
     for (const auto& mat : smokeMaterials) {
-        Material* material = interfaces.materialSystem->findMaterial(mat, xorstr_("Other textures"));
+        Material* material = interfaces.materialSystem->findMaterial(mat, nullptr);
         material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
     }
