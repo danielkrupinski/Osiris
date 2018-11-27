@@ -1,4 +1,4 @@
-#include <string_view>
+#include <string>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -93,7 +93,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 
 void Misc::removeSmoke() noexcept
 {
-    static const std::string_view smokeMaterials[]{
+    static const std::string smokeMaterials[]{
         xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
         xorstr_("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
         xorstr_("particle/vistasmokev1/vistasmokev1_fire"),
