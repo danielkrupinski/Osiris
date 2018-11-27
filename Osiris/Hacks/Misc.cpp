@@ -93,7 +93,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 
 void Misc::removeSmoke() noexcept
 {
-    static const std::string smokeMaterials[]{
+    static const std::string_view smokeMaterials[]{
         xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
         xorstr_("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
         xorstr_("particle/vistasmokev1/vistasmokev1_fire"),
@@ -101,7 +101,7 @@ void Misc::removeSmoke() noexcept
     };
 
     for (const auto& mat : smokeMaterials) {
-        Material* material = interfaces.materialSystem->findMaterial(mat.c_str(), xorstr_("Other textures"));
+        Material* material = interfaces.materialSystem->findMaterial(mat, xorstr_("Other textures"));
         material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
     }
