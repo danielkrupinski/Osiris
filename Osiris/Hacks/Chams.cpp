@@ -20,7 +20,7 @@ void Chams::render() noexcept
                     interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
                     interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
 
-                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"), nullptr);
+                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"));
                 if (material) {
                     material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 
