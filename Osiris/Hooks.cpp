@@ -4,7 +4,6 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
-#include "xorstr.hpp"
 
 #include "Config.h"
 #include "GUI.h"
@@ -36,7 +35,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
     if (!isInitialised) {
         ImGui::CreateContext();
-        ImGui_ImplWin32_Init(FindWindowA(xorstr_("Valve001"), NULL));
+        ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
         ImGui_ImplDX9_Init(device);
 
         ImGui::StyleColorsDark();
@@ -49,10 +48,10 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         io.LogFilename = nullptr;
         char buffer[MAX_PATH];
         GetWindowsDirectoryA(buffer, MAX_PATH);
-        io.Fonts->AddFontFromFileTTF(std::string{ buffer + std::string{ xorstr_("\\Fonts\\Tahoma.ttf") } }.c_str(), 16.0f);
+        io.Fonts->AddFontFromFileTTF(std::string{ buffer + std::string{ "\\Fonts\\Tahoma.ttf" } }.c_str(), 16.0f);
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
-            SetWindowLongPtr(FindWindowA(xorstr_("Valve001"), NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
+            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
             );
         isInitialised = true;
     }

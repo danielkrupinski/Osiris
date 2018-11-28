@@ -2,7 +2,6 @@
 #include <ShlObj.h>
 
 #include "json/json.h"
-#include "xorstr.hpp"
 
 #include "Config.h"
 
@@ -25,83 +24,83 @@ void Config::load()
     Json::Value config;
     in >> config;
 
-    glow.enabled = config[xorstr_("glow")][xorstr_("enabled")].asBool();
+    glow.enabled = config["glow"]["enabled"].asBool();
 
-    glow.thickness = config[xorstr_("glow")][xorstr_("thickness")].asFloat();
-    glow.alpha = config[xorstr_("glow")][xorstr_("alpha")].asFloat();
-    glow.style = config[xorstr_("glow")][xorstr_("style")].asInt();
+    glow.thickness = config["glow"]["thickness"].asFloat();
+    glow.alpha = config["glow"]["alpha"].asFloat();
+    glow.style = config["glow"]["style"].asInt();
 
-    glow.allies = config[xorstr_("glow")][xorstr_("allies")].asBool();
-    glow.alliesColor[0] = config[xorstr_("glow")][xorstr_("alliesColor")][0].asFloat();
-    glow.alliesColor[1] = config[xorstr_("glow")][xorstr_("alliesColor")][1].asFloat();
-    glow.alliesColor[2] = config[xorstr_("glow")][xorstr_("alliesColor")][2].asFloat();
+    glow.allies = config["glow"]["allies"].asBool();
+    glow.alliesColor[0] = config["glow"]["alliesColor"][0].asFloat();
+    glow.alliesColor[1] = config["glow"]["alliesColor"][1].asFloat();
+    glow.alliesColor[2] = config["glow"]["alliesColor"][2].asFloat();
 
-    glow.enemies = config[xorstr_("glow")][xorstr_("enemies")].asBool();
-    glow.enemiesColor[0] = config[xorstr_("glow")][xorstr_("enemiesColor")][0].asFloat();
-    glow.enemiesColor[1] = config[xorstr_("glow")][xorstr_("enemiesColor")][1].asFloat();
-    glow.enemiesColor[2] = config[xorstr_("glow")][xorstr_("enemiesColor")][2].asFloat();
+    glow.enemies = config["glow"]["enemies"].asBool();
+    glow.enemiesColor[0] = config["glow"]["enemiesColor"][0].asFloat();
+    glow.enemiesColor[1] = config["glow"]["enemiesColor"][1].asFloat();
+    glow.enemiesColor[2] = config["glow"]["enemiesColor"][2].asFloat();
 
-    glow.weapons = config[xorstr_("glow")][xorstr_("weapons")].asBool();
-    glow.weaponsColor[0] = config[xorstr_("glow")][xorstr_("weaponsColor")][0].asFloat();
-    glow.weaponsColor[1] = config[xorstr_("glow")][xorstr_("weaponsColor")][1].asFloat();
-    glow.weaponsColor[2] = config[xorstr_("glow")][xorstr_("weaponsColor")][2].asFloat();
+    glow.weapons = config["glow"]["weapons"].asBool();
+    glow.weaponsColor[0] = config["glow"]["weaponsColor"][0].asFloat();
+    glow.weaponsColor[1] = config["glow"]["weaponsColor"][1].asFloat();
+    glow.weaponsColor[2] = config["glow"]["weaponsColor"][2].asFloat();
 
-    glow.C4 = config[xorstr_("glow")][xorstr_("C4")].asBool();
-    glow.C4Color[0] = config[xorstr_("glow")][xorstr_("C4Color")][0].asFloat();
-    glow.C4Color[1] = config[xorstr_("glow")][xorstr_("C4Color")][1].asFloat();
-    glow.C4Color[2] = config[xorstr_("glow")][xorstr_("C4Color")][2].asFloat();
+    glow.C4 = config["glow"]["C4"].asBool();
+    glow.C4Color[0] = config["glow"]["C4Color"][0].asFloat();
+    glow.C4Color[1] = config["glow"]["C4Color"][1].asFloat();
+    glow.C4Color[2] = config["glow"]["C4Color"][2].asFloat();
 
-    glow.plantedC4 = config[xorstr_("glow")][xorstr_("plantedC4")].asBool();
-    glow.plantedC4Color[0] = config[xorstr_("glow")][xorstr_("plantedC4Color")][0].asFloat();
-    glow.plantedC4Color[1] = config[xorstr_("glow")][xorstr_("plantedC4Color")][1].asFloat();
-    glow.plantedC4Color[2] = config[xorstr_("glow")][xorstr_("plantedC4Color")][2].asFloat();
+    glow.plantedC4 = config["glow"]["plantedC4"].asBool();
+    glow.plantedC4Color[0] = config["glow"]["plantedC4Color"][0].asFloat();
+    glow.plantedC4Color[1] = config["glow"]["plantedC4Color"][1].asFloat();
+    glow.plantedC4Color[2] = config["glow"]["plantedC4Color"][2].asFloat();
 
-    glow.chickens = config[xorstr_("glow")][xorstr_("chickens")].asBool();
-    glow.chickensColor[0] = config[xorstr_("glow")][xorstr_("chickensColor")][0].asFloat();
-    glow.chickensColor[1] = config[xorstr_("glow")][xorstr_("chickensColor")][1].asFloat();
-    glow.chickensColor[2] = config[xorstr_("glow")][xorstr_("chickensColor")][2].asFloat();
+    glow.chickens = config["glow"]["chickens"].asBool();
+    glow.chickensColor[0] = config["glow"]["chickensColor"][0].asFloat();
+    glow.chickensColor[1] = config["glow"]["chickensColor"][1].asFloat();
+    glow.chickensColor[2] = config["glow"]["chickensColor"][2].asFloat();
 
-    chams.enabled = config[xorstr_("chams")][xorstr_("enabled")].asBool();
-    chams.alpha = config[xorstr_("chams")][xorstr_("alpha")].asFloat();
+    chams.enabled = config["chams"]["enabled"].asBool();
+    chams.alpha = config["chams"]["alpha"].asFloat();
 
-    chams.enemiesOnly = config[xorstr_("chams")][xorstr_("enemiesOnly")].asBool();
-    chams.visibleOnly = config[xorstr_("chams")][xorstr_("visibleOnly")].asBool();
+    chams.enemiesOnly = config["chams"]["enemiesOnly"].asBool();
+    chams.visibleOnly = config["chams"]["visibleOnly"].asBool();
 
-    chams.visibleAlliesColor[0] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0].asFloat();
-    chams.visibleAlliesColor[1] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1].asFloat();
-    chams.visibleAlliesColor[2] = config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2].asFloat();
+    chams.visibleAlliesColor[0] = config["chams"]["visibleAlliesColor"][0].asFloat();
+    chams.visibleAlliesColor[1] = config["chams"]["visibleAlliesColor"][1].asFloat();
+    chams.visibleAlliesColor[2] = config["chams"]["visibleAlliesColor"][2].asFloat();
 
-    chams.occludedAlliesColor[0] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][0].asFloat();
-    chams.occludedAlliesColor[1] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][1].asFloat();
-    chams.occludedAlliesColor[2] = config[xorstr_("chams")][xorstr_("occludedAlliesColor")][2].asFloat();
+    chams.occludedAlliesColor[0] = config["chams"]["occludedAlliesColor"][0].asFloat();
+    chams.occludedAlliesColor[1] = config["chams"]["occludedAlliesColor"][1].asFloat();
+    chams.occludedAlliesColor[2] = config["chams"]["occludedAlliesColor"][2].asFloat();
 
-    chams.visibleEnemiesColor[0] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0].asFloat();
-    chams.visibleEnemiesColor[1] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1].asFloat();
-    chams.visibleEnemiesColor[2] = config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2].asFloat();
+    chams.visibleEnemiesColor[0] = config["chams"]["visibleEnemiesColor"][0].asFloat();
+    chams.visibleEnemiesColor[1] = config["chams"]["visibleEnemiesColor"][1].asFloat();
+    chams.visibleEnemiesColor[2] = config["chams"]["visibleEnemiesColor"][2].asFloat();
 
-    chams.occludedEnemiesColor[0] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][0].asFloat();
-    chams.occludedEnemiesColor[1] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][1].asFloat();
-    chams.occludedEnemiesColor[2] = config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][2].asFloat();
+    chams.occludedEnemiesColor[0] = config["chams"]["occludedEnemiesColor"][0].asFloat();
+    chams.occludedEnemiesColor[1] = config["chams"]["occludedEnemiesColor"][1].asFloat();
+    chams.occludedEnemiesColor[2] = config["chams"]["occludedEnemiesColor"][2].asFloat();
 
-    chams.wireframe = config[xorstr_("chams")][xorstr_("wireframe")].asBool();
+    chams.wireframe = config["chams"]["wireframe"].asBool();
 
-    triggerbot.enabled = config[xorstr_("triggerbot")][xorstr_("enabled")].asBool();
-    triggerbot.shotDelay = config[xorstr_("triggerbot")][xorstr_("shotDelay")].asInt();
+    triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
+    triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
 
-    misc.bunnyHop = config[xorstr_("misc")][xorstr_("bunnyHop")].asBool();
-    misc.clanTag = config[xorstr_("misc")][xorstr_("clanTag")].asString();
-    misc.disablePostProcessing = config[xorstr_("misc")][xorstr_("disablePostProcessing")].asBool();
-    misc.flashReduction = config[xorstr_("misc")][xorstr_("flashReduction")].asInt();
-    misc.inverseRagdollGravity = config[xorstr_("misc")][xorstr_("inverseRagdollGravity")].asBool();
-    misc.noCrouchCooldown = config[xorstr_("misc")][xorstr_("noCrouchCooldown")].asBool();
-    misc.noBlood = config[xorstr_("misc")][xorstr_("noBlood")].asBool();
-    misc.noSmoke = config[xorstr_("misc")][xorstr_("noSmoke")].asBool();
-    misc.wireframeSmoke = config[xorstr_("misc")][xorstr_("wireframeSmoke")].asBool();
-    misc.skybox = config[xorstr_("misc")][xorstr_("skybox")].asString();
-    misc.viewmodelFov = config[xorstr_("misc")][xorstr_("viewmodelFov")].asInt();
-    misc.worldColor[0] = config[xorstr_("misc")][xorstr_("worldColor")][0].asFloat();
-    misc.worldColor[1] = config[xorstr_("misc")][xorstr_("worldColor")][1].asFloat();
-    misc.worldColor[2] = config[xorstr_("misc")][xorstr_("worldColor")][2].asFloat();
+    misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
+    misc.clanTag = config["misc"]["clanTag"].asString();
+    misc.disablePostProcessing = config["misc"]["disablePostProcessing"].asBool();
+    misc.flashReduction = config["misc"]["flashReduction"].asInt();
+    misc.inverseRagdollGravity = config["misc"]["inverseRagdollGravity"].asBool();
+    misc.noCrouchCooldown = config["misc"]["noCrouchCooldown"].asBool();
+    misc.noBlood = config["misc"]["noBlood"].asBool();
+    misc.noSmoke = config["misc"]["noSmoke"].asBool();
+    misc.wireframeSmoke = config["misc"]["wireframeSmoke"].asBool();
+    misc.skybox = config["misc"]["skybox"].asString();
+    misc.viewmodelFov = config["misc"]["viewmodelFov"].asInt();
+    misc.worldColor[0] = config["misc"]["worldColor"][0].asFloat();
+    misc.worldColor[1] = config["misc"]["worldColor"][1].asFloat();
+    misc.worldColor[2] = config["misc"]["worldColor"][2].asFloat();
 
     in.close();
 }
@@ -115,83 +114,83 @@ void Config::save() const
 
     Json::Value config;
 
-    config[xorstr_("glow")][xorstr_("enabled")] = glow.enabled;
+    config["glow"]["enabled"] = glow.enabled;
 
-    config[xorstr_("glow")][xorstr_("thickness")] = glow.thickness;
-    config[xorstr_("glow")][xorstr_("alpha")] = glow.alpha;
-    config[xorstr_("glow")][xorstr_("style")] = glow.style;
+    config["glow"]["thickness"] = glow.thickness;
+    config["glow"]["alpha"] = glow.alpha;
+    config["glow"]["style"] = glow.style;
 
-    config[xorstr_("glow")][xorstr_("allies")] = glow.allies;
-    config[xorstr_("glow")][xorstr_("alliesColor")][0] = glow.alliesColor[0];
-    config[xorstr_("glow")][xorstr_("alliesColor")][1] = glow.alliesColor[1];
-    config[xorstr_("glow")][xorstr_("alliesColor")][2] = glow.alliesColor[2];
+    config["glow"]["allies"] = glow.allies;
+    config["glow"]["alliesColor"][0] = glow.alliesColor[0];
+    config["glow"]["alliesColor"][1] = glow.alliesColor[1];
+    config["glow"]["alliesColor"][2] = glow.alliesColor[2];
 
-    config[xorstr_("glow")][xorstr_("enemies")] = glow.enemies;
-    config[xorstr_("glow")][xorstr_("enemiesColor")][0] = glow.enemiesColor[0];
-    config[xorstr_("glow")][xorstr_("enemiesColor")][1] = glow.enemiesColor[1];
-    config[xorstr_("glow")][xorstr_("enemiesColor")][2] = glow.enemiesColor[2];
+    config["glow"]["enemies"] = glow.enemies;
+    config["glow"]["enemiesColor"][0] = glow.enemiesColor[0];
+    config["glow"]["enemiesColor"][1] = glow.enemiesColor[1];
+    config["glow"]["enemiesColor"][2] = glow.enemiesColor[2];
 
-    config[xorstr_("glow")][xorstr_("weapons")] = glow.weapons;
-    config[xorstr_("glow")][xorstr_("weaponsColor")][0] = glow.weaponsColor[0];
-    config[xorstr_("glow")][xorstr_("weaponsColor")][1] = glow.weaponsColor[1];
-    config[xorstr_("glow")][xorstr_("weaponsColor")][2] = glow.weaponsColor[2];
+    config["glow"]["weapons"] = glow.weapons;
+    config["glow"]["weaponsColor"][0] = glow.weaponsColor[0];
+    config["glow"]["weaponsColor"][1] = glow.weaponsColor[1];
+    config["glow"]["weaponsColor"][2] = glow.weaponsColor[2];
 
-    config[xorstr_("glow")][xorstr_("C4")] = glow.C4;
-    config[xorstr_("glow")][xorstr_("C4Color")][0] = glow.C4Color[0];
-    config[xorstr_("glow")][xorstr_("C4Color")][1] = glow.C4Color[1];
-    config[xorstr_("glow")][xorstr_("C4Color")][2] = glow.C4Color[2];
+    config["glow"]["C4"] = glow.C4;
+    config["glow"]["C4Color"][0] = glow.C4Color[0];
+    config["glow"]["C4Color"][1] = glow.C4Color[1];
+    config["glow"]["C4Color"][2] = glow.C4Color[2];
 
-    config[xorstr_("glow")][xorstr_("plantedC4")] = glow.plantedC4;
-    config[xorstr_("glow")][xorstr_("plantedC4Color")][0] = glow.plantedC4Color[0];
-    config[xorstr_("glow")][xorstr_("plantedC4Color")][1] = glow.plantedC4Color[1];
-    config[xorstr_("glow")][xorstr_("plantedC4Color")][2] = glow.plantedC4Color[2];
+    config["glow"]["plantedC4"] = glow.plantedC4;
+    config["glow"]["plantedC4Color"][0] = glow.plantedC4Color[0];
+    config["glow"]["plantedC4Color"][1] = glow.plantedC4Color[1];
+    config["glow"]["plantedC4Color"][2] = glow.plantedC4Color[2];
 
-    config[xorstr_("glow")][xorstr_("chickens")] = glow.chickens;
-    config[xorstr_("glow")][xorstr_("chickensColor")][0] = glow.chickensColor[0];
-    config[xorstr_("glow")][xorstr_("chickensColor")][1] = glow.chickensColor[1];
-    config[xorstr_("glow")][xorstr_("chickensColor")][2] = glow.chickensColor[2];
+    config["glow"]["chickens"] = glow.chickens;
+    config["glow"]["chickensColor"][0] = glow.chickensColor[0];
+    config["glow"]["chickensColor"][1] = glow.chickensColor[1];
+    config["glow"]["chickensColor"][2] = glow.chickensColor[2];
 
-    config[xorstr_("chams")][xorstr_("enabled")] = chams.enabled;
-    config[xorstr_("chams")][xorstr_("alpha")] = chams.alpha;
+    config["chams"]["enabled"] = chams.enabled;
+    config["chams"]["alpha"] = chams.alpha;
 
-    config[xorstr_("chams")][xorstr_("enemiesOnly")] = chams.enemiesOnly;
-    config[xorstr_("chams")][xorstr_("visibleOnly")] = chams.visibleOnly;
+    config["chams"]["enemiesOnly"] = chams.enemiesOnly;
+    config["chams"]["visibleOnly"] = chams.visibleOnly;
 
-    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][0] = chams.visibleAlliesColor[0];
-    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][1] = chams.visibleAlliesColor[1];
-    config[xorstr_("chams")][xorstr_("visibleAlliesColor")][2] = chams.visibleAlliesColor[2];
+    config["chams"]["visibleAlliesColor"][0] = chams.visibleAlliesColor[0];
+    config["chams"]["visibleAlliesColor"][1] = chams.visibleAlliesColor[1];
+    config["chams"]["visibleAlliesColor"][2] = chams.visibleAlliesColor[2];
 
-    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][0] = chams.occludedAlliesColor[0];
-    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][1] = chams.occludedAlliesColor[1];
-    config[xorstr_("chams")][xorstr_("occludedAlliesColor")][2] = chams.occludedAlliesColor[2];
+    config["chams"]["occludedAlliesColor"][0] = chams.occludedAlliesColor[0];
+    config["chams"]["occludedAlliesColor"][1] = chams.occludedAlliesColor[1];
+    config["chams"]["occludedAlliesColor"][2] = chams.occludedAlliesColor[2];
 
-    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][0] = chams.visibleEnemiesColor[0];
-    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][1] = chams.visibleEnemiesColor[1];
-    config[xorstr_("chams")][xorstr_("visibleEnemiesColor")][2] = chams.visibleEnemiesColor[2];
+    config["chams"]["visibleEnemiesColor"][0] = chams.visibleEnemiesColor[0];
+    config["chams"]["visibleEnemiesColor"][1] = chams.visibleEnemiesColor[1];
+    config["chams"]["visibleEnemiesColor"][2] = chams.visibleEnemiesColor[2];
 
-    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][0] = chams.occludedEnemiesColor[0];
-    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][1] = chams.occludedEnemiesColor[1];
-    config[xorstr_("chams")][xorstr_("occludedEnemiesColor")][2] = chams.occludedEnemiesColor[2];
+    config["chams"]["occludedEnemiesColor"][0] = chams.occludedEnemiesColor[0];
+    config["chams"]["occludedEnemiesColor"][1] = chams.occludedEnemiesColor[1];
+    config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
 
-    config[xorstr_("chams")][xorstr_("wireframe")] = chams.wireframe;
+    config["chams"]["wireframe"] = chams.wireframe;
 
-    config[xorstr_("triggerbot")][xorstr_("enabled")] = triggerbot.enabled;
-    config[xorstr_("triggerbot")][xorstr_("shotDelay")] = triggerbot.shotDelay;
+    config["triggerbot"]["enabled"] = triggerbot.enabled;
+    config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
 
-    config[xorstr_("misc")][xorstr_("bunnyHop")] = misc.bunnyHop;
-    config[xorstr_("misc")][xorstr_("clanTag")] = misc.clanTag;
-    config[xorstr_("misc")][xorstr_("disablePostProcessing")] = misc.disablePostProcessing;
-    config[xorstr_("misc")][xorstr_("flashReduction")] = misc.flashReduction;
-    config[xorstr_("misc")][xorstr_("inverseRagdollGravity")] = misc.inverseRagdollGravity;
-    config[xorstr_("misc")][xorstr_("noCrouchCooldown")] = misc.noCrouchCooldown;
-    config[xorstr_("misc")][xorstr_("noBlood")] = misc.noBlood;
-    config[xorstr_("misc")][xorstr_("noSmoke")] = misc.noSmoke;
-    config[xorstr_("misc")][xorstr_("wireframeSmoke")] = misc.wireframeSmoke;
-    config[xorstr_("misc")][xorstr_("skybox")] = misc.skybox;
-    config[xorstr_("misc")][xorstr_("viewmodelFov")] = misc.viewmodelFov;
-    config[xorstr_("misc")][xorstr_("worldColor")][0] = misc.worldColor[0];
-    config[xorstr_("misc")][xorstr_("worldColor")][1] = misc.worldColor[1];
-    config[xorstr_("misc")][xorstr_("worldColor")][2] = misc.worldColor[2];
+    config["misc"]["bunnyHop"] = misc.bunnyHop;
+    config["misc"]["clanTag"] = misc.clanTag;
+    config["misc"]["disablePostProcessing"] = misc.disablePostProcessing;
+    config["misc"]["flashReduction"] = misc.flashReduction;
+    config["misc"]["inverseRagdollGravity"] = misc.inverseRagdollGravity;
+    config["misc"]["noCrouchCooldown"] = misc.noCrouchCooldown;
+    config["misc"]["noBlood"] = misc.noBlood;
+    config["misc"]["noSmoke"] = misc.noSmoke;
+    config["misc"]["wireframeSmoke"] = misc.wireframeSmoke;
+    config["misc"]["skybox"] = misc.skybox;
+    config["misc"]["viewmodelFov"] = misc.viewmodelFov;
+    config["misc"]["worldColor"][0] = misc.worldColor[0];
+    config["misc"]["worldColor"][1] = misc.worldColor[1];
+    config["misc"]["worldColor"][2] = misc.worldColor[2];
 
     out << config;
     out.close();
@@ -271,7 +270,7 @@ void Config::reset()
     misc.noBlood = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
-    misc.skybox = xorstr_("Default");
+    misc.skybox = "Default";
     misc.viewmodelFov = 60;
     misc.worldColor[0] = 0.0f;
     misc.worldColor[1] = 0.0f;

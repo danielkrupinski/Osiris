@@ -1,5 +1,3 @@
-#include "../xorstr.hpp"
-
 #include "Chams.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -20,7 +18,7 @@ void Chams::render() noexcept
                     interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
                     interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
 
-                auto material = interfaces.materialSystem->findMaterial(xorstr_("dev/glow_color"));
+                auto material = interfaces.materialSystem->findMaterial("dev/glow_color");
                 if (material) {
                     material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 

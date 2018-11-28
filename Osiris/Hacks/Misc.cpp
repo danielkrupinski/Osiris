@@ -42,7 +42,7 @@ void Misc::disablePostProcessing() noexcept
 
 void Misc::skybox() noexcept
 {
-    if (config.misc.skybox != xorstr_("Default"))
+    if (config.misc.skybox != "Default")
         reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(config.misc.skybox.c_str());
 }
 
@@ -57,9 +57,9 @@ void Misc::clanTag() noexcept
 
 void Misc::colorWorld() noexcept
 {
-    static auto red = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_r"));
-    static auto green = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_g"));
-    static auto blue = interfaces.cvar->FindVar(xorstr_("mat_ambient_light_b"));
+    static auto red = interfaces.cvar->FindVar("mat_ambient_light_r");
+    static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
+    static auto blue = interfaces.cvar->FindVar("mat_ambient_light_b");
 
     red->SetValue(config.misc.worldColor[0]);
     green->SetValue(config.misc.worldColor[1]);
@@ -68,7 +68,7 @@ void Misc::colorWorld() noexcept
 
 void Misc::inverseRagdollGravity() noexcept
 {
-    static auto ragdollGravity = interfaces.cvar->FindVar(xorstr_("cl_ragdoll_gravity"));
+    static auto ragdollGravity = interfaces.cvar->FindVar("cl_ragdoll_gravity");
     ragdollGravity->SetValue(config.misc.inverseRagdollGravity ? -600 : 600);
 }
 
@@ -79,7 +79,7 @@ void Misc::reduceFlashEffect() noexcept
 
 void Misc::removeBlood() noexcept
 {
-    static auto enableBlood = interfaces.cvar->FindVar(xorstr_("violence_hblood"));
+    static auto enableBlood = interfaces.cvar->FindVar("violence_hblood");
     enableBlood->SetValue(!config.misc.noBlood);
 }
 
@@ -94,10 +94,10 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 void Misc::removeSmoke() noexcept
 {
     static const std::string smokeMaterials[]{
-        xorstr_("particle/vistasmokev1/vistasmokev1_emods"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_fire"),
-        xorstr_("particle/vistasmokev1/vistasmokev1_smokegrenade"),
+        "particle/vistasmokev1/vistasmokev1_emods",
+        "particle/vistasmokev1/vistasmokev1_emods_impactdust",
+        "particle/vistasmokev1/vistasmokev1_fire",
+        "particle/vistasmokev1/vistasmokev1_smokegrenade",
     };
 
     for (const auto& mat : smokeMaterials) {
