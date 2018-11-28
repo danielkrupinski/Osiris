@@ -108,12 +108,12 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     return false;
 }
 
-static void __fastcall hookedLockCursor(Surface* thisptr, void* edx) noexcept
+static void __stdcall hookedLockCursor() noexcept
 {
     if (gui.isOpen)
         interfaces.surface->UnlockCursor();
     else
-        hooks.surface.getOriginal<void(__fastcall*)(Surface*, void*)>(67)(thisptr, edx);
+        hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
 }
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
