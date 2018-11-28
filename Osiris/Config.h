@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "xorstr.hpp"
-
 class Config final {
 public:
     explicit Config(const std::string&);
