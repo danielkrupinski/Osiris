@@ -18,9 +18,11 @@ void GUI::render() noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::MenuItem("Aimbot"))
-            window.aimbot = true;
-
+        /* Temporary disable aimbot tab
+         *
+         * if (ImGui::MenuItem("Aimbot"))
+              window.aimbot = true;
+        */
         if (ImGui::MenuItem("Glow"))
             window.glow = true;
 
