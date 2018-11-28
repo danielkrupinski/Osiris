@@ -9,12 +9,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [0-3]
-    * **Allies [color]**
-    * **Enemies [color]**
-    * **Weapons [color]**
-    * **C4 [color]**
-    * **Planted C4 [color]**
-    * **Chickens [color]**
+    * **Allies**
+    * **Enemies**
+    * **Weapons**
+    * **C4**
+    * **Planted C4**
+    * **Chickens**
 
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
@@ -35,7 +35,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Bunny hop** - automatically jump to increase movement speed
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
-    * **Flash reduction** - reduces flashbang grenade effect [0-255] (0 - full flash, 255 - no flash)
+    * **Flash reduction** - reduces flashbang grenade effect [0-100%] (0 - full flash, 100 - no flash)
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No blood** - remove blood
     * **No smoke** - remove smoke grenade effect
