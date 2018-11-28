@@ -40,10 +40,9 @@ public:
         callVirtualFunction<OriginalFn>(this, 16)(this, value);
     }
 
-    Cvar* FindVar(const char *var_name)
+    Cvar* FindVar(const char* name)
     {
-        typedef Cvar*(__thiscall* OriginalFn)(void*, const char*);
-        return callVirtualFunction<OriginalFn>(this, 15)(this, var_name);
+        return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name);
     }
 
     void* RegisterConCommand(Cvar *pCommandBase)
