@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename T>
-__forceinline constexpr static T callVirtualFunction(void* ppClass, int index)
+__forceinline constexpr static T callVirtualFunction(void* ppClass, int index) noexcept
 {
     int* pVTable = *(int**)ppClass;
     int dwAddress = pVTable[index];
