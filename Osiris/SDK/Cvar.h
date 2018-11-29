@@ -9,10 +9,9 @@ public:
         return callVirtualFunction<const char*(__thiscall*)(void*)>(this, 11)(this);
     }
 
-    float getFloat()
+    constexpr float getFloat() noexcept
     {
-        using OriginalFn = float(__thiscall *)(void *);
-        return callVirtualFunction<OriginalFn>(this, 12)(this);
+        return callVirtualFunction<float(__thiscall*)(void*)>(this, 12)(this);
     }
 
     int getInt()
