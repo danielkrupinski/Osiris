@@ -16,7 +16,7 @@ public:
         return callVirtualFunction<OriginalFn>(this, 12)(this);
     }
 
-    int GetInt()
+    int getInt()
     {
         using OriginalFn = int(__thiscall *)(void *);
         return callVirtualFunction<OriginalFn>(this, 13)(this);
