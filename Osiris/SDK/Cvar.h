@@ -4,10 +4,9 @@
 
 class Cvar {
 public:
-    const char* getString()
+    constexpr std::string_view getString() noexcept
     {
-        using OriginalFn = const char *(__thiscall *)(void *);
-        return callVirtualFunction<OriginalFn>(this, 11)(this);
+        return callVirtualFunction<const char*(__thiscall*)(void*)>(this, 11)(this);
     }
 
     float getFloat()
