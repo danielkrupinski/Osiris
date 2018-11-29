@@ -93,7 +93,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 
 void Misc::removeSmoke() noexcept
 {
-    static const std::string smokeMaterials[]{
+    constexpr std::string_view smokeMaterials[]{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
