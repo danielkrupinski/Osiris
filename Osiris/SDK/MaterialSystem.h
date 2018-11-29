@@ -5,8 +5,8 @@
 
 class MaterialSystem {
 public:
-    Material* findMaterial(const std::string& materialName)
+    Material* findMaterial(std::string_view materialName)
     {
-        return callVirtualFunction<Material*(__thiscall*)(void*, const char*, const char*, bool, const char*)>(this, 84)(this, materialName.c_str(), nullptr, true, nullptr);
+        return callVirtualFunction<Material*(__thiscall*)(void*, const char*, const char*, bool, const char*)>(this, 84)(this, materialName.data(), nullptr, true, nullptr);
     }
 };
