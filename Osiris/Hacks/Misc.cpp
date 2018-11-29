@@ -100,7 +100,7 @@ void Misc::removeSmoke() noexcept
         "particle/vistasmokev1/vistasmokev1_smokegrenade",
     };
 
-    for (const auto& mat : smokeMaterials) {
+    for (const auto mat : smokeMaterials) {
         Material* material = interfaces.materialSystem->findMaterial(mat);
         material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
