@@ -19,22 +19,19 @@ public:
         return callVirtualFunction<int(__thiscall*)(void*)>(this, 13)(this);
     }
 
-    void SetValue(const char *value)
+    constexpr void SetValue(const std::string_view value) noexcept
     {
-        using OriginalFn = void(__thiscall *)(void *, const char *);
-        callVirtualFunction<OriginalFn>(this, 14)(this, value);
+        callVirtualFunction<void(__thiscall*)(void*, const char*)>(this, 14)(this, value.data());
     }
 
-    void SetValue(float value)
+    constexpr void SetValue(float value) noexcept
     {
-        using OriginalFn = void(__thiscall *)(void *, float);
-        callVirtualFunction<OriginalFn>(this, 15)(this, value);
+        callVirtualFunction<void(__thiscall*)(void*, float)>(this, 15)(this, value);
     }
 
-    void SetValue(int value)
+    constexpr void SetValue(int value) noexcept
     {
-        using OriginalFn = void(__thiscall *)(void *, int);
-        callVirtualFunction<OriginalFn>(this, 16)(this, value);
+        callVirtualFunction<void(__thiscall*)(void*, int)>(this, 16)(this, value);
     }
 
     constexpr Cvar* findVar(const std::string_view name) noexcept
