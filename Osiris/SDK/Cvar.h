@@ -14,10 +14,9 @@ public:
         return callVirtualFunction<float(__thiscall*)(void*)>(this, 12)(this);
     }
 
-    int getInt()
+    constexpr int getInt() noexcept
     {
-        using OriginalFn = int(__thiscall *)(void *);
-        return callVirtualFunction<OriginalFn>(this, 13)(this);
+        return callVirtualFunction<int(__thiscall*)(void*)>(this, 13)(this);
     }
 
     void SetValue(const char *value)
