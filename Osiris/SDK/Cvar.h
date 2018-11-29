@@ -40,7 +40,7 @@ public:
         callVirtualFunction<OriginalFn>(this, 16)(this, value);
     }
 
-    Cvar* FindVar(const std::string_view name) noexcept
+    constexpr Cvar* FindVar(const std::string_view name) noexcept
     {
         return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name.data());
     }
