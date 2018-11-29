@@ -61,15 +61,15 @@ void Misc::colorWorld() noexcept
     static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
     static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
 
-    red->SetValue(config.misc.worldColor[0]);
-    green->SetValue(config.misc.worldColor[1]);
-    blue->SetValue(config.misc.worldColor[2]);
+    red->setValue(config.misc.worldColor[0]);
+    green->setValue(config.misc.worldColor[1]);
+    blue->setValue(config.misc.worldColor[2]);
 }
 
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->SetValue(config.misc.inverseRagdollGravity ? -600 : 600);
+    ragdollGravity->setValue(config.misc.inverseRagdollGravity ? -600 : 600);
 }
 
 void Misc::reduceFlashEffect() noexcept
@@ -80,7 +80,7 @@ void Misc::reduceFlashEffect() noexcept
 void Misc::removeBlood() noexcept
 {
     static auto enableBlood = interfaces.cvar->findVar("violence_hblood");
-    enableBlood->SetValue(!config.misc.noBlood);
+    enableBlood->setValue(!config.misc.noBlood);
 }
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept

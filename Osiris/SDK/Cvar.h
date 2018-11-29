@@ -19,17 +19,17 @@ public:
         return callVirtualFunction<int(__thiscall*)(void*)>(this, 13)(this);
     }
 
-    constexpr void SetValue(const std::string_view value) noexcept
+    constexpr void setValue(const std::string_view value) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, const char*)>(this, 14)(this, value.data());
     }
 
-    constexpr void SetValue(float value) noexcept
+    constexpr void setValue(float value) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, float)>(this, 15)(this, value);
     }
 
-    constexpr void SetValue(int value) noexcept
+    constexpr void setValue(int value) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, int)>(this, 16)(this, value);
     }
