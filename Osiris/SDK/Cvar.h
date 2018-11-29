@@ -45,18 +45,6 @@ public:
         return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name.data());
     }
 
-    void* RegisterConCommand(Cvar *pCommandBase)
-    {
-        typedef Cvar*(__thiscall* OriginalFn)(void*, Cvar*);
-        return callVirtualFunction<OriginalFn>(this, 9)(this, pCommandBase);
-    }
-
-    void* UnregisterConCommand(Cvar *pCommandBase)
-    {
-        typedef Cvar*(__thiscall* OriginalFn)(void*, Cvar*);
-        return callVirtualFunction<OriginalFn>(this, 10)(this, pCommandBase);
-    }
-
     char pad_0x0000[0x4];
     Cvar *pNext;
     int32_t bRegistered;
