@@ -57,9 +57,9 @@ void Misc::clanTag() noexcept
 
 void Misc::colorWorld() noexcept
 {
-    static auto red = interfaces.cvar->FindVar("mat_ambient_light_r");
-    static auto green = interfaces.cvar->FindVar("mat_ambient_light_g");
-    static auto blue = interfaces.cvar->FindVar("mat_ambient_light_b");
+    static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
+    static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
+    static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
 
     red->SetValue(config.misc.worldColor[0]);
     green->SetValue(config.misc.worldColor[1]);
@@ -68,7 +68,7 @@ void Misc::colorWorld() noexcept
 
 void Misc::inverseRagdollGravity() noexcept
 {
-    static auto ragdollGravity = interfaces.cvar->FindVar("cl_ragdoll_gravity");
+    static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
     ragdollGravity->SetValue(config.misc.inverseRagdollGravity ? -600 : 600);
 }
 
@@ -79,7 +79,7 @@ void Misc::reduceFlashEffect() noexcept
 
 void Misc::removeBlood() noexcept
 {
-    static auto enableBlood = interfaces.cvar->FindVar("violence_hblood");
+    static auto enableBlood = interfaces.cvar->findVar("violence_hblood");
     enableBlood->SetValue(!config.misc.noBlood);
 }
 
