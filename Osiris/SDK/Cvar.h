@@ -4,7 +4,7 @@
 
 class Cvar {
 public:
-    const char* GetString()
+    const char* getString()
     {
         using OriginalFn = const char *(__thiscall *)(void *);
         return callVirtualFunction<OriginalFn>(this, 11)(this);
