@@ -10,7 +10,7 @@ public:
         return callVirtualFunction<OriginalFn>(this, 11)(this);
     }
 
-    float GetFloat()
+    float getFloat()
     {
         using OriginalFn = float(__thiscall *)(void *);
         return callVirtualFunction<OriginalFn>(this, 12)(this);
