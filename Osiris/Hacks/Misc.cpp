@@ -1,5 +1,3 @@
-#include <string>
-
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -101,7 +99,7 @@ void Misc::removeSmoke() noexcept
     };
 
     for (const auto mat : smokeMaterials) {
-        Material* material = interfaces.materialSystem->findMaterial(mat);
+        auto material = interfaces.materialSystem->findMaterial(mat);
         material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
     }
