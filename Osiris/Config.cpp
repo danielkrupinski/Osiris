@@ -1,3 +1,4 @@
+#include <comutil.h>
 #include <fstream>
 #include <ShlObj.h>
 
@@ -5,11 +6,12 @@
 
 #include "Config.h"
 
-Config::Config(const std::wstring& name)
+Config::Config(const std::string& name)
 {
-    char buff[MAX_PATH]{ };
-    if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, buff))) {
-        path = buff + std::string{ '\\' } + name;
+    PWSTR pathToDocuments;
+    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
+        path = std::string{ _bstr_t{ pathToDocuments } } + "\\" + name;
+        CoTaskMemFree(pathToDocuments);
     }
     load();
 }
