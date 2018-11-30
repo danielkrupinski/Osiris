@@ -5,7 +5,7 @@
 
 #include "Config.h"
 
-Config::Config(const std::string& name)
+Config::Config(const std::wstring& name)
 {
     char buff[MAX_PATH]{ };
     if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, buff))) {
