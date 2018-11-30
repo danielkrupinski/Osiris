@@ -1,8 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 template<typename T>
 constexpr auto callVirtualFunction(void* classBase, int index) noexcept
 {
-    int* vmt = *(int**)classBase;
-    return reinterpret_cast<T>(vmt[index]);
+    return reinterpret_cast<T>((*reinterpret_cast<std::uintptr_t**>(classBase))[index]);
 }
