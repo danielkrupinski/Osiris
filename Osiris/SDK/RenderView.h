@@ -4,7 +4,7 @@
 
 class RenderView {
 public:
-    void setBlend(float alpha)
+    void setBlend(float alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, float)>(this, 4)(this, alpha);
     }
