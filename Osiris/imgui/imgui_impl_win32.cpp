@@ -18,6 +18,7 @@
 
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
+//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
 //  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
 //  2018-06-10: Inputs: Fixed handling of mouse wheel messages to support fine position messages (typically sent by track-pads).
 //  2018-06-08: Misc: Extracted imgui_impl_win32.cpp/.h away from the old combined DX9/DX10/DX11/DX12 examples.
@@ -52,6 +53,7 @@ bool    ImGui_ImplWin32_Init(void* hwnd)
     ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendPlatformName = "imgui_impl_win32";
     io.ImeWindowHandle = hwnd;
 
     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
@@ -132,12 +134,7 @@ static void ImGui_ImplWin32_UpdateMousePos()
     // Set mouse position
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     POINT pos;
-
-    // Getting active window handle from the window threads processID # Bacause ::GetActiveWindow() fails in some cases.
-    GUITHREADINFO guiThreadInfo; guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
-    GetGUIThreadInfo(GetWindowThreadProcessId(g_hWnd, 0), &guiThreadInfo);
-
-    if (guiThreadInfo.hwndActive == g_hWnd && ::GetCursorPos(&pos))
+    if (::GetActiveWindow() == g_hWnd && ::GetCursorPos(&pos))
         if (::ScreenToClient(g_hWnd, &pos))
             io.MousePos = ImVec2((float)pos.x, (float)pos.y);
 }
@@ -250,4 +247,3 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
     }
     return 0;
 }
-

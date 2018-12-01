@@ -1065,8 +1065,8 @@ ImGuiIO::ImGuiIO()
     memset(this, 0, sizeof(*this));
 
     // Settings
-    ConfigFlags = 0x00;
-    BackendFlags = 0x00;
+    ConfigFlags = ImGuiConfigFlags_None;
+    BackendFlags = ImGuiBackendFlags_None;
     DisplaySize = ImVec2(-1.0f, -1.0f);
     DeltaTime = 1.0f / 60.0f;
     IniSavingRate = 5.0f;
@@ -1096,7 +1096,8 @@ ImGuiIO::ImGuiIO()
     ConfigInputTextCursorBlink = true;
     ConfigResizeWindowsFromEdges = false;
 
-    // Settings (User Functions)
+    // Platform Functions
+    BackendPlatformName = BackendRendererName = NULL;
     GetClipboardTextFn = GetClipboardTextFn_DefaultImpl;   // Platform dependent default implementations
     SetClipboardTextFn = SetClipboardTextFn_DefaultImpl;
     ClipboardUserData = NULL;
@@ -1107,7 +1108,7 @@ ImGuiIO::ImGuiIO()
     RenderDrawListsFn = NULL;
 #endif
 
-    // Input (NB: we already have memset zero the entire structure)
+    // Input (NB: we already have memset zero the entire structure!)
     MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     MousePosPrev = ImVec2(-FLT_MAX, -FLT_MAX);
     MouseDragThreshold = 6.0f;
@@ -5289,13 +5290,15 @@ void ImGui::FocusPreviousWindowIgnoringOne(ImGuiWindow* ignore_window)
     ImGuiContext& g = *GImGui;
     for (int i = g.WindowsFocusOrder.Size - 1; i >= 0; i--)
     {
+        // We may later decide to test for different NoXXXInputs based on the active navigation input (mouse vs nav) but that may feel more confusing to the user.
         ImGuiWindow* window = g.WindowsFocusOrder[i];
         if (window != ignore_window && window->WasActive && !(window->Flags & ImGuiWindowFlags_ChildWindow))
-        {
-            ImGuiWindow* focus_window = NavRestoreLastChildNavWindow(window);
-            FocusWindow(focus_window);
-            return;
-        }
+            if ((window->Flags & (ImGuiWindowFlags_NoMouseInputs | ImGuiWindowFlags_NoNavInputs)) != (ImGuiWindowFlags_NoMouseInputs | ImGuiWindowFlags_NoNavInputs))
+            {
+                ImGuiWindow* focus_window = NavRestoreLastChildNavWindow(window);
+                FocusWindow(focus_window);
+                return;
+            }
     }
 }
 
@@ -5672,6 +5675,8 @@ bool ImGui::IsWindowFocused(ImGuiFocusedFlags flags)
 }
 
 // Can we focus this window with CTRL+TAB (or PadMenu + PadFocusPrev/PadFocusNext)
+// Note that NoNavFocus makes the window not reachable with CTRL+TAB but it can still be focused with mouse or programmaticaly.
+// If you want a window to never be focused, you may use the e.g. NoInputs flag.
 bool ImGui::IsWindowNavFocusable(ImGuiWindow* window)
 {
     return window->Active && window == window->RootWindow && !(window->Flags & ImGuiWindowFlags_NoNavFocus);

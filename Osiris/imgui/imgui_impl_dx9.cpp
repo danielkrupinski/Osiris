@@ -10,6 +10,7 @@
 
 // CHANGELOG 
 // (minor and older changes stripped away, please see git history for details)
+//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
 //  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
 //  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
 //  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
@@ -65,7 +66,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 
     // Backup the DX9 state
     IDirect3DStateBlock9* d3d9_state_block = NULL;
-    if (g_pd3dDevice->CreateStateBlock(D3DSBT_PIXELSTATE, &d3d9_state_block) < 0)
+    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
         return;
 
     // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
@@ -150,10 +151,10 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
         D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
         D3DMATRIX mat_projection =
         {
-            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
+            2.0f / (R - L),   0.0f,         0.0f,  0.0f,
+            0.0f,         2.0f / (T - B),   0.0f,  0.0f,
             0.0f,         0.0f,         0.5f,  0.0f,
-            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
+            (L + R) / (L - R),  (T + B) / (B - T),  0.5f,  1.0f,
         };
         g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
         g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
@@ -180,7 +181,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
                 const LPDIRECT3DTEXTURE9 texture = (LPDIRECT3DTEXTURE9)pcmd->TextureId;
                 g_pd3dDevice->SetTexture(0, texture);
                 g_pd3dDevice->SetScissorRect(&r);
-                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, idx_offset, pcmd->ElemCount/3);
+                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, idx_offset, pcmd->ElemCount / 3);
             }
             idx_offset += pcmd->ElemCount;
         }
@@ -199,6 +200,9 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 
 bool ImGui_ImplDX9_Init(IDirect3DDevice9* device)
 {
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendRendererName = "imgui_impl_dx9";
+
     g_pd3dDevice = device;
     return true;
 }

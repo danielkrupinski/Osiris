@@ -204,7 +204,8 @@ namespace ImGui
 
     // Demo, Debug, Information
     IMGUI_API void          ShowDemoWindow(bool* p_open = NULL);        // create demo/test window (previously called ShowTestWindow). demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!
-    IMGUI_API void          ShowMetricsWindow(bool* p_open = NULL);     // create metrics window. display ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.
+    IMGUI_API void          ShowAboutWindow(bool* p_open = NULL);       // create about window. display Dear ImGui version, credits and build/system information.
+    IMGUI_API void          ShowMetricsWindow(bool* p_open = NULL);     // create metrics window. display Dear ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.
     IMGUI_API void          ShowStyleEditor(ImGuiStyle* ref = NULL);    // add style editor block (not a window). you can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it uses the default style)
     IMGUI_API bool          ShowStyleSelector(const char* label);       // add style selector block (not a window), essentially a combo listing the default styles.
     IMGUI_API void          ShowFontSelector(const char* label);        // add font selector block (not a window), essentially a combo listing the loaded fonts.
@@ -896,6 +897,7 @@ enum ImGuiNavInput_
 // Configuration flags stored in io.ConfigFlags. Set by user/application.
 enum ImGuiConfigFlags_
 {
+    ImGuiConfigFlags_None = 0,
     ImGuiConfigFlags_NavEnableKeyboard = 1 << 0,   // Master keyboard navigation enable flag. NewFrame() will automatically fill io.NavInputs[] based on io.KeysDown[].
     ImGuiConfigFlags_NavEnableGamepad = 1 << 1,   // Master gamepad navigation enable flag. This is mostly to instruct your imgui back-end to fill io.NavInputs[]. Back-end also needs to set ImGuiBackendFlags_HasGamepad.
     ImGuiConfigFlags_NavEnableSetMousePos = 1 << 2,   // Instruct navigation to move the mouse cursor. May be useful on TV/console systems where moving a virtual mouse is awkward. Will update io.MousePos and set io.WantSetMousePos=true. If enabled you MUST honor io.WantSetMousePos requests in your binding, otherwise ImGui will react as if the mouse is jumping around back and forth.
@@ -911,6 +913,7 @@ enum ImGuiConfigFlags_
 // Back-end capabilities flags stored in io.BackendFlags. Set by imgui_impl_xxx or custom back-end.
 enum ImGuiBackendFlags_
 {
+    ImGuiBackendFlags_None = 0,
     ImGuiBackendFlags_HasGamepad = 1 << 0,   // Back-end supports gamepad and currently has one connected.
     ImGuiBackendFlags_HasMouseCursors = 1 << 1,   // Back-end supports honoring GetMouseCursor() value to change the OS cursor shape.
     ImGuiBackendFlags_HasSetMousePos = 1 << 2    // Back-end supports io.WantSetMousePos requests to reposition the OS mouse position (only used if ImGuiConfigFlags_NavEnableSetMousePos is set).
@@ -1136,7 +1139,7 @@ struct ImGuiIO
     //------------------------------------------------------------------
 
     ImGuiConfigFlags   ConfigFlags;         // = 0                  // See ImGuiConfigFlags_ enum. Set by user/application. Gamepad/keyboard navigation options, etc.
-    ImGuiBackendFlags  BackendFlags;        // = 0                  // Set ImGuiBackendFlags_ enum. Set by imgui_impl_xxx files or custom back-end to communicate features supported by the back-end.
+    ImGuiBackendFlags  BackendFlags;        // = 0                  // See ImGuiBackendFlags_ enum. Set by back-end (imgui_impl_xxx files or custom back-end) to communicate features supported by the back-end.
     ImVec2        DisplaySize;              // <unset>              // Main display size, in pixels. For clamping windows positions.
     float         DeltaTime;                // = 1.0f/60.0f         // Time elapsed since last frame, in seconds.
     float         IniSavingRate;            // = 5.0f               // Minimum time between saving positions/sizes to .ini file, in seconds.
@@ -1155,8 +1158,8 @@ struct ImGuiIO
     bool          FontAllowUserScaling;     // = false              // Allow user scaling text of individual window with CTRL+Wheel.
     ImFont*       FontDefault;              // = NULL               // Font to use on NewFrame(). Use NULL to uses Fonts->Fonts[0].
     ImVec2        DisplayFramebufferScale;  // = (1.0f,1.0f)        // For retina display or other situations where window coordinates are different from framebuffer coordinates. User storage only, presently not used by ImGui.
-    ImVec2        DisplayVisibleMin;        // <unset> (0.0f,0.0f)  // [obsolete] If you use DisplaySize as a virtual space larger than your screen, set DisplayVisibleMin/Max to the visible area.
-    ImVec2        DisplayVisibleMax;        // <unset> (0.0f,0.0f)  // [obsolete: just use io.DisplaySize] If the values are the same, we defaults to Min=(0.0f) and Max=DisplaySize
+    ImVec2        DisplayVisibleMin;        // <unset> (0.0f,0.0f)  // [OBSOLETE] If you use DisplaySize as a virtual space larger than your screen, set DisplayVisibleMin/Max to the visible area.
+    ImVec2        DisplayVisibleMax;        // <unset> (0.0f,0.0f)  // [OBSOLETE: just use io.DisplaySize!] If the values are the same, we defaults to Min=(0.0f) and Max=DisplaySize
 
     // Miscellaneous configuration options
     bool          MouseDrawCursor;              // = false          // Request ImGui to draw a mouse cursor for you (if you are on a platform without a mouse cursor). Cannot be easily renamed to 'io.ConfigXXX' because this is frequently used by back-end implementations.
@@ -1165,19 +1168,24 @@ struct ImGuiIO
     bool          ConfigResizeWindowsFromEdges; // = false          // [BETA] Enable resizing of windows from their edges and from the lower-left corner. This requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback. (This used to be the ImGuiWindowFlags_ResizeFromAnySide flag)
 
     //------------------------------------------------------------------
-    // Settings (User Functions)
+    // Platform Functions
+    // (the imgui_impl_xxxx back-end files are setting those up for you)
     //------------------------------------------------------------------
 
-    // Optional: access OS clipboard
+    // Optional: Platform/Renderer back-end name (informational only! will be displayed in About Window)
+    const char* BackendPlatformName;
+    const char* BackendRendererName;
+
+    // Optional: Access OS clipboard
     // (default to use native Win32 clipboard on Windows, otherwise uses a private clipboard. Override to access OS clipboard on other architectures)
     const char* (*GetClipboardTextFn)(void* user_data);
     void(*SetClipboardTextFn)(void* user_data, const char* text);
     void*       ClipboardUserData;
 
-    // Optional: notify OS Input Method Editor of the screen position of your cursor for text input position (e.g. when using Japanese/Chinese IME in Windows)
+    // Optional: Notify OS Input Method Editor of the screen position of your cursor for text input position (e.g. when using Japanese/Chinese IME on Windows)
     // (default to use native imm32 api on Windows)
     void(*ImeSetInputScreenPosFn)(int x, int y);
-    void*       ImeWindowHandle;            // (Windows) Set this to your HWND to get automatic IME cursor positioning.
+    void*       ImeWindowHandle;                // (Windows) Set this to your HWND to get automatic IME cursor positioning.
 
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
     // [OBSOLETE since 1.60+] Rendering function, will be automatically called in Render(). Please call your rendering function yourself now!
@@ -1232,7 +1240,7 @@ struct ImGuiIO
     // [Internal] ImGui will maintain those fields. Forward compatibility not guaranteed!
     //------------------------------------------------------------------
 
-    ImVec2      MousePosPrev;               // Previous mouse position temporary storage (nb: not for public use, set to MousePos in NewFrame())
+    ImVec2      MousePosPrev;               // Previous mouse position (note that MouseDelta is not necessary == MousePos-MousePosPrev, in case either position is invalid)
     ImVec2      MouseClickedPos[5];         // Position at time of clicking
     double      MouseClickedTime[5];        // Time of last click (used to figure out double-click)
     bool        MouseClicked[5];            // Mouse button went from !Down to Down
@@ -1359,7 +1367,7 @@ namespace ImGui
     static inline bool  IsMouseHoveringAnyWindow() { return IsWindowHovered(ImGuiHoveredFlags_AnyWindow); }
     static inline bool  IsMouseHoveringWindow() { return IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem); }
 }
-typedef ImGuiInputTextCallback      ImGuiTextEditCallback;      // [OBSOLETE 1.63+] Made the names consistent
+typedef ImGuiInputTextCallback      ImGuiTextEditCallback;      // OBSOLETE in 1.63 (from Aug 2018): made the names consistent
 typedef ImGuiInputTextCallbackData  ImGuiTextEditCallbackData;
 #endif
 
@@ -1420,7 +1428,7 @@ public:
         Capacity = new_capacity;
     }
 
-    // NB: It is forbidden to call push_back/push_front/insert with a reference pointing inside the ImVector data itself! e.g. v.push_back(v[10]) is forbidden.
+    // NB: It is illegal to call push_back/push_front/insert with a reference pointing inside the ImVector data itself! e.g. v.push_back(v[10]) is forbidden.
     inline void         push_back(const value_type& v) { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
     inline void         pop_back() { IM_ASSERT(Size > 0); Size--; }
     inline void         push_front(const value_type& v) { if (Size == 0) push_back(v); else insert(Data, v); }
@@ -1629,9 +1637,10 @@ struct ImColor
 //-----------------------------------------------------------------------------
 
 // Draw callbacks for advanced uses.
-// NB- You most likely do NOT need to use draw callbacks just to create your own widget or customized UI rendering (you can poke into the draw list for that)
-// Draw callback may be useful for example, A) Change your GPU render state, B) render a complex 3D scene inside a UI element (without an intermediate texture/render target), etc.
-// The expected behavior from your rendering function is 'if (cmd.UserCallback != NULL) cmd.UserCallback(parent_list, cmd); else RenderTriangles()'
+// NB: You most likely do NOT need to use draw callbacks just to create your own widget or customized UI rendering,
+// you can poke into the draw list for that! Draw callback may be useful for example to: A) Change your GPU render state, 
+// B) render a complex 3D scene inside a UI element without an intermediate texture/render target, etc.
+// The expected behavior from your rendering function is 'if (cmd.UserCallback != NULL) { cmd.UserCallback(parent_list, cmd); } else { RenderTriangles() }'
 typedef void(*ImDrawCallback)(const ImDrawList* parent_list, const ImDrawCmd* cmd);
 
 // Typically, 1 command = 1 GPU draw call (unless command is a callback)
@@ -1646,7 +1655,7 @@ struct ImDrawCmd
     ImDrawCmd() { ElemCount = 0; ClipRect.x = ClipRect.y = ClipRect.z = ClipRect.w = 0.0f; TextureId = (ImTextureID)NULL; UserCallback = NULL; UserCallbackData = NULL; }
 };
 
-// Vertex index (override with '#define ImDrawIdx unsigned int' inside in imconfig.h)
+// Vertex index (override with '#define ImDrawIdx unsigned int' in imconfig.h)
 #ifndef ImDrawIdx
 typedef unsigned short ImDrawIdx;
 #endif
@@ -1690,8 +1699,9 @@ enum ImDrawCornerFlags_
 
 enum ImDrawListFlags_
 {
-    ImDrawListFlags_AntiAliasedLines = 1 << 0,
-    ImDrawListFlags_AntiAliasedFill = 1 << 1
+    ImDrawListFlags_None = 0,
+    ImDrawListFlags_AntiAliasedLines = 1 << 0,  // Lines are anti-aliased (*2 the number of triangles for 1.0f wide line, otherwise *3 the number of triangles)
+    ImDrawListFlags_AntiAliasedFill = 1 << 1   // Filled shapes have anti-aliased edges (*2 the number of vertices)
 };
 
 // Draw command list
