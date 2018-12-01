@@ -1,6 +1,6 @@
 #pragma once
 
-struct Vector {
+struct Vector final {
     Vector& operator=(const float* array) noexcept
     {
         x = array[0];
