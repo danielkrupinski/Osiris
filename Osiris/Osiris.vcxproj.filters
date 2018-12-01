@@ -164,9 +164,6 @@
     <ClInclude Include="SDK\Vector.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\AppSystem.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Vector2D.h">
       <Filter>SDK</Filter>
     </ClInclude>
