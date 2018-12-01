@@ -66,9 +66,6 @@
     <ClCompile Include="SDK\BaseEntity.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\Vector2D.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Misc.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -162,9 +159,6 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Vector.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Vector2D.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Surface.h">

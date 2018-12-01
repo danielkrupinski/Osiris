@@ -39,7 +39,6 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="SDK\BaseEntity.cpp" />
     <ClCompile Include="SDK\ClientEntityList.cpp" />
-    <ClCompile Include="SDK\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -91,7 +90,6 @@
     <ClInclude Include="SDK\UtlMemory.h" />
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\Vector.h" />
-    <ClInclude Include="SDK\Vector2D.h" />
     <ClInclude Include="SDK\Utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
