@@ -7,11 +7,11 @@
 
 Config::Config(const std::string& name)
 {
-    PWSTR buffer;
-    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &buffer))) {
-        const std::wstring_view pathToDocuments{ buffer };
-        path = std::string{ pathToDocuments.cbegin(), pathToDocuments.cend() } + "\\" + name;
-        CoTaskMemFree(buffer);
+    PWSTR pathToDocuments;
+    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
+        path = pathToDocuments;
+        path /= name;
+        CoTaskMemFree(pathToDocuments);
     }
     load();
 }
