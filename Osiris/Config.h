@@ -64,7 +64,7 @@ public:
     } misc;
 
 private:
-    std::string path;
+    std::filesystem::path path;
 };
 
 extern Config config;
