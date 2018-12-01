@@ -1,7 +1,6 @@
 #pragma once
 
-class Vector {
-public:
+struct Vector {
     Vector(const float* array)
     {
         x = array[0];
