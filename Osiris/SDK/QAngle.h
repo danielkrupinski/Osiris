@@ -1,6 +1,7 @@
 #pragma once
 
-class QAngle {
-public:
-    float pitch, yaw, roll;
+struct QAngle {
+    float pitch;
+    float yaw;
+    float roll;
 };
