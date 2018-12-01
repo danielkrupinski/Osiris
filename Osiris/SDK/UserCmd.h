@@ -23,11 +23,3 @@ public:
     bool    hasbeenpredicted;
     char    pad_0x4C[0x18];
 };
-
-using CRC32_t = unsigned long;
-
-class VerifiedUserCmd final {
-public:
-    UserCmd m_cmd;
-    CRC32_t  m_crc;
-};
