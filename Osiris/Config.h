@@ -5,7 +5,7 @@
 
 class Config final {
 public:
-    explicit Config(const std::string&);
+    explicit Config(const std::string_view);
     void load();
     void save() const;
     void reset();

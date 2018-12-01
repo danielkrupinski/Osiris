@@ -5,7 +5,7 @@
 
 #include "Config.h"
 
-Config::Config(const std::string& name)
+Config::Config(const std::string_view name)
 {
     PWSTR pathToDocuments;
     if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
