@@ -211,31 +211,3 @@ inline Vector operator/(float lhs, const Vector& rhs)
     return rhs / lhs;
 }
 
-class __declspec(align(16)) VectorAligned final : public Vector {
-public:
-    inline VectorAligned(void) {};
-    inline VectorAligned(float X, float Y, float Z)
-    {
-        Init(X, Y, Z);
-    }
-
-public:
-    explicit VectorAligned(const Vector &vOther)
-    {
-        Init(vOther.x, vOther.y, vOther.z);
-    }
-
-    VectorAligned& operator=(const Vector &vOther)
-    {
-        Init(vOther.x, vOther.y, vOther.z);
-        return *this;
-    }
-
-    VectorAligned& operator=(const VectorAligned &vOther)
-    {
-        Init(vOther.x, vOther.y, vOther.z);
-        return *this;
-    }
-
-    float w;
-};
