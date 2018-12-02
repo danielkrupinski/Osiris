@@ -185,9 +185,6 @@
     <ClInclude Include="SDK\GlowObjectManager.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\BaseHandle.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\ClientClass.h">
       <Filter>SDK</Filter>
     </ClInclude>
