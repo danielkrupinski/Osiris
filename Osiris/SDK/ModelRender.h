@@ -19,23 +19,6 @@ struct Model {
     char    pad[0x1C];
 };
 
-struct ModelRenderInfo {
-    Vector                  origin;
-    QAngle                  angles;
-    char                    pad[4];
-    ClientRenderable*       pRenderable;
-    const Model*            pModel;
-    const matrix3x4_t*      pModelToWorld;
-    const matrix3x4_t*      pLightingOffset;
-    const Vector*           pLightingOrigin;
-    int                     flags;
-    int                     entity_index;
-    int                     skin;
-    int                     body;
-    int                     hitboxset;
-    ModelInstanceHandle_t   instance;
-};
-
 class ModelRender {
 public:
     void forceMaterialOverride(Material* newMaterial, int nOverrideType = 0, int nOverrides = 0)
