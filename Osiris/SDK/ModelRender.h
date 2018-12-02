@@ -6,19 +6,6 @@
 #include "ClientRenderable.h"
 #include "Material.h"
 
-struct Model {
-    void*   fnHandle;
-    char    szName[260];
-    __int32 nLoadFlags;
-    __int32 nServerCount;
-    __int32 type;
-    __int32 flags;
-    Vector  vecMins;
-    Vector  vecMaxs;
-    float   radius;
-    char    pad[0x1C];
-};
-
 class ModelRender {
 public:
     void forceMaterialOverride(Material* newMaterial, int nOverrideType = 0, int nOverrides = 0)
