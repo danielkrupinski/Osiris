@@ -1,10 +1,7 @@
 #pragma once
 
-#include "Utils.h"
-#include "Vector.h"
-#include "QAngle.h"
-#include "ClientRenderable.h"
 #include "Material.h"
+#include "Utils.h"
 
 class ModelRender {
 public:
