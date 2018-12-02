@@ -56,18 +56,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         isInitialised = true;
     }
     else if (gui.isOpen) {
-        DWORD d3rsColorWrite;
-        device->GetRenderState(D3DRS_COLORWRITEENABLE, &d3rsColorWrite);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
-        device->GetVertexDeclaration(&vertexDeclaration);
-        IDirect3DVertexShader9* vertexShader;
-        device->GetVertexShader(&vertexShader);
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, 0xffffffff);
-        device->SetRenderState(D3DRS_SRGBWRITEENABLE, false);
-        device->SetSamplerState(NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-        device->SetSamplerState(NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-        device->SetSamplerState(NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
-        device->SetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, NULL);
+        device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_ALPHA);
 
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -78,11 +67,6 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGui::EndFrame();
         ImGui::Render();
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, d3rsColorWrite);
-        device->SetRenderState(D3DRS_SRGBWRITEENABLE, true);
-        device->SetVertexDeclaration(vertexDeclaration);
-        device->SetVertexShader(vertexShader);
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
