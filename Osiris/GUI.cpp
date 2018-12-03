@@ -71,23 +71,23 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderInt("Style", &config.glow.style, 0, 3);
 		ImGui::Checkbox("##Allies", &config.glow.allies);
 		ImGui::SameLine(0.0f, 5.0f);
-		ImGui::ColorEdit3("Allies", config.glow.alliesColor, ImGuiColorEditFlags_NoInputs);
+		ImGui::ColorEdit3("Allies", config.glow.alliesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::NextColumn();
 		ImGui::Checkbox("##Weapons", &config.glow.weapons);
 		ImGui::SameLine(0.0f, 5.0f);
-        ImGui::ColorEdit3("Weapons", config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("Weapons", config.glow.weaponsColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
 		ImGui::Checkbox("##C4", &config.glow.C4);
 		ImGui::SameLine(0.0f, 5.0f);
-        ImGui::ColorEdit3("C4", config.glow.C4Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("C4", config.glow.C4Color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
 		ImGui::Checkbox("##PlantedC4", &config.glow.plantedC4);
 		ImGui::SameLine(0.0f, 5.0f);
-        ImGui::ColorEdit3("Planted C4", config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("Planted C4", config.glow.plantedC4Color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
 		ImGui::Checkbox("##Chickens", &config.glow.chickens);
 		ImGui::SameLine(0.0f, 5.0f);
-        ImGui::ColorEdit3("Chickens", config.glow.chickensColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("Chickens", config.glow.chickensColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::Checkbox("##Enemies", &config.glow.enemies);
         ImGui::SameLine(0.0f, 5.0f);
-        ImGui::ColorEdit3("Enemies", config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("Enemies", config.glow.enemiesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::End();
     }
 }
@@ -102,10 +102,10 @@ void GUI::renderChamsWindow() noexcept
         ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
         ImGui::Checkbox("Enemies only", &config.chams.enemiesOnly);
         ImGui::Checkbox("Visible only", &config.chams.visibleOnly);
-        ImGui::ColorEdit3("Visible allies color", config.chams.visibleAlliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3("Occluded allies color", config.chams.occludedAlliesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3("Visible enemies color", config.chams.visibleEnemiesColor, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit3("Occluded enemies color", config.chams.occludedEnemiesColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("Visible allies color", config.chams.visibleAlliesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        ImGui::ColorEdit3("Occluded allies color", config.chams.occludedAlliesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        ImGui::ColorEdit3("Visible enemies color", config.chams.visibleEnemiesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        ImGui::ColorEdit3("Occluded enemies color", config.chams.occludedEnemiesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::End();
     }
@@ -156,7 +156,7 @@ void GUI::renderMiscWindow() noexcept
             ImGui::EndCombo();
         }
         ImGui::SliderInt("Viewmodel FOV", &config.misc.viewmodelFov, 0, 130);
-        ImGui::ColorEdit3("World color", config.misc.worldColor, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3("World color", config.misc.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::End();
     }
 }
