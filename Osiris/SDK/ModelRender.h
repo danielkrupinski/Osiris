@@ -5,7 +5,7 @@
 
 class ModelRender {
 public:
-    void forceMaterialOverride(Material* newMaterial) noexcept
+    constexpr void forceMaterialOverride(Material* newMaterial) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, Material*, int, int)>(this, 1)(this, newMaterial, 0, 0);
     }
