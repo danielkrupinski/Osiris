@@ -98,7 +98,7 @@ void Config::load()
     misc.noBlood = config["misc"]["noBlood"].asBool();
     misc.noSmoke = config["misc"]["noSmoke"].asBool();
     misc.wireframeSmoke = config["misc"]["wireframeSmoke"].asBool();
-    misc.skybox = config["misc"]["skybox"].asString();
+    misc.skybox = config["misc"]["skybox"].asInt();
     misc.viewmodelFov = config["misc"]["viewmodelFov"].asInt();
     misc.worldColor[0] = config["misc"]["worldColor"][0].asFloat();
     misc.worldColor[1] = config["misc"]["worldColor"][1].asFloat();
@@ -272,7 +272,7 @@ void Config::reset()
     misc.noBlood = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
-    misc.skybox = "Default";
+    misc.skybox = 0;
     misc.viewmodelFov = 60;
     misc.worldColor[0] = 0.0f;
     misc.worldColor[1] = 0.0f;
