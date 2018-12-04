@@ -4,5 +4,8 @@
 
 class ClientEntityList {
 public:
-    BaseEntity* getClientEntity(int);
+    BaseEntity* getClientEntity(int index)
+    {
+        return callVirtualFunction<BaseEntity*(__thiscall*)(void*, int)>(this, 3)(this, index);
+    }
 };
