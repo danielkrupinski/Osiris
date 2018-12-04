@@ -18,16 +18,16 @@ Memory::Memory() noexcept
     smokeCount = *reinterpret_cast<int**>(findPattern("client_panorama.dll", "8B 1D ? ? ? ? 56 33 F6 57 85 DB") + 2);
 }
 
-std::uintptr_t Memory::findPattern(std::string module, std::string pattern) const
+std::uintptr_t Memory::findPattern(const std::string_view module, const std::string_view pattern) const
 {
     MODULEINFO moduleInfo{ };
 
-    if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo)))
+    if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
         return 0;
 
     const std::uintptr_t start_address = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll);
     const std::uintptr_t end_address = start_address + moduleInfo.SizeOfImage;
-    const char* scanPattern = pattern.c_str();
+    const char* scanPattern = pattern.data();
 
     std::uintptr_t first_match = 0;
 
@@ -48,7 +48,7 @@ std::uintptr_t Memory::findPattern(std::string module, std::string pattern) cons
             scanPattern += pattern_current != '\?' ? 3 : 2;
         }
         else {
-            scanPattern = pattern.c_str();
+            scanPattern = pattern.data();
             first_match = 0;
         }
     }

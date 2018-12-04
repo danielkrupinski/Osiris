@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <string_view>
 
 #include "SDK/BaseEntity.h"
 #include "SDK/ClientMode.h"
@@ -9,7 +9,7 @@
 class Memory final {
 public:
     Memory() noexcept;
-    std::uintptr_t findPattern(std::string, std::string) const;
+    std::uintptr_t findPattern(const std::string_view, const std::string_view) const;
 
     std::uintptr_t present;
     std::uintptr_t reset;
