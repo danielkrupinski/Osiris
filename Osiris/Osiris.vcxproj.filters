@@ -170,9 +170,6 @@
     <ClInclude Include="Hacks\Misc.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Defines.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\UtlVector.h">
       <Filter>SDK</Filter>
     </ClInclude>

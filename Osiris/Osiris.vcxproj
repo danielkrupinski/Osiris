@@ -57,7 +57,6 @@
     <ClInclude Include="SDK\ClientThinkable.h" />
     <ClInclude Include="SDK\ClientUnknown.h" />
     <ClInclude Include="SDK\Cvar.h" />
-    <ClInclude Include="SDK\Defines.h" />
     <ClInclude Include="SDK\EngineClient.h" />
     <ClInclude Include="SDK\Enums.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
