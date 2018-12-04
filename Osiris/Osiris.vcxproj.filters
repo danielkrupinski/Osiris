@@ -69,9 +69,6 @@
     <ClCompile Include="Hacks\Misc.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\ClientEntityList.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Osiris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

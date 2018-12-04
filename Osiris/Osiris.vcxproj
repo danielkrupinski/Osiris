@@ -38,7 +38,6 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="SDK\BaseEntity.cpp" />
-    <ClCompile Include="SDK\ClientEntityList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
