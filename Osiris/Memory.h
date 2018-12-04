@@ -3,7 +3,6 @@
 
 #include "SDK/BaseEntity.h"
 #include "SDK/ClientMode.h"
-#include "SDK/GlobalVars.h"
 #include "SDK/GlowObjectManager.h"
 #include "SDK/Input.h"
 
@@ -15,7 +14,6 @@ public:
     std::uintptr_t present;
     std::uintptr_t reset;
 
-    GlobalVars* globalVars;
     BaseEntity** localPlayer;
     ClientMode* clientMode;
     Input* input;
