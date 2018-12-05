@@ -31,7 +31,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
     * **Shot delay** - delay time in ms (milliseconds)
 
-* **Misc**
+* **Misc** - miscellaneous features
     * **Bunny hop** - automatically jump to increase movement speed
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
