@@ -88,6 +88,7 @@ All cheats modules are globally initialized by program loader. Modules are defin
 ## Acknowledgments
 
 * [ocornut](https://github.com/ocornut) and contributors for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
+* [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
 
 ## License
 
