@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -74,7 +75,8 @@ std::uintptr_t Memory::findPattern_2(const std::string_view module, const std::r
     MODULEINFO moduleInfo;
 
     if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
-        return 0; // TODO: Error / exception throw
+        throw std::runtime_error("Could not get module information about " + module.data() + "!");
+       // return 0; // TODO: Error / exception throw
 
     const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
     const char* end = begin + moduleInfo.SizeOfImage;
