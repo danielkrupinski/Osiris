@@ -6,6 +6,7 @@
 
 Memory::Memory() noexcept
 {
+    /*
     present = findPattern("gameoverlayrenderer.dll", "FF 15 ? ? ? ? 8B F8 85 DB") + 2;
     reset = findPattern("gameoverlayrenderer.dll", "C7 45 ? ? ? ? ? FF 15 ? ? ? ? 8B F8") + 9;
     localPlayer = *reinterpret_cast<BaseEntity***>(findPattern("client_panorama.dll", "8B 0D ? ? ? ? 83 FF FF 74 07") + 2);
@@ -16,6 +17,19 @@ Memory::Memory() noexcept
     loadSky = findPattern("engine.dll", "55 8B EC 81 EC ? ? ? ? 56 57 8B F9 C7 45");
     setClanTag = findPattern("engine.dll", "53 56 57 8B DA 8B F9 FF 15");
     smokeCount = *reinterpret_cast<int**>(findPattern("client_panorama.dll", "8B 1D ? ? ? ? 56 33 F6 57 85 DB") + 2);
+    */
+
+    present = findPattern_2("gameoverlayrenderer.dll", std::regex{ "\xFF\x15.{4}\x8B\xF8\x85\xDB", std::regex::optimize }) + 2;
+    reset = findPattern_2("gameoverlayrenderer.dll", std::regex{ "\xC7\x45.{5}\xFF\x15.{4}\x8B\xF8", std::regex::optimize }) + 9;
+    localPlayer = *reinterpret_cast<BaseEntity***>(findPattern_2("client_panorama.dll", std::regex{ "\x8B\x0D.{4}\x83\xFF\xFF\x74\x07", std::regex::optimize }) + 2);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
+    input = *reinterpret_cast<Input**>(findPattern_2("client_panorama.dll", std::regex{ "\xB9.{4}\x8B\x40\x38\xFF\xD0\x84\xC0\x0F\x85", std::regex::optimize }) + 1);
+    glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern_2("client_panorama.dll", std::regex{ "\x0F\x11\x05.{4}\x83\xC8\x01", std::regex::optimize }) + 3);
+    disablePostProcessing = *reinterpret_cast<bool**>(findPattern_2("client_panorama.dll", std::regex{ "\x80\x3D.{5}\x53\x56\x57\x0F\x85", std::regex::optimize }) + 2);
+    loadSky = findPattern_2("engine.dll", std::regex{ "\x55\x8B\xEC\x81\xEC.{4}\x56\x57\x8B\xF9\xC7\x45", std::regex::optimize });
+    setClanTag = findPattern_2("engine.dll", std::regex{ "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15", std::regex::optimize });
+    smokeCount = *reinterpret_cast<int**>(findPattern_2("client_panorama.dll", std::regex{ "\x8B\x1D.{4}\x56\x33\xF6\x57\x85\xDB", std::regex::optimize }) + 2);
+
 }
 
 std::uintptr_t Memory::findPattern(const std::string_view module, const std::string_view pattern) const
