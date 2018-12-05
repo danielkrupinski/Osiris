@@ -180,7 +180,13 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmtSize)
 {
-    return nullptr;
+    MEMORY_BASIC_INFORMATION mbi;
+    VirtualQuery(base, &mbi, sizeof(mbi));
+    MODULEINFO moduleInfo;
+    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
+    //const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage;
+    std::string a(vmtSize, '\0');
+    return std::find_end(reinterpret_cast<std::uintptr_t*>(moduleInfo.lpBaseOfDll), reinterpret_cast<std::uintptr_t*>(reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage), a.begin(), a.end());
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
