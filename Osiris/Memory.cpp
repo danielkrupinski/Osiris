@@ -57,5 +57,8 @@ std::uintptr_t Memory::findPattern(const std::string_view module, const std::str
 
 std::uintptr_t Memory::findPattern_2(const std::string_view module, const std::regex pattern) const
 {
-    return std::uintptr_t();
+    MODULEINFO moduleInfo;
+
+    if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
+        return 0; // TODO: Error / exception throw
 }
