@@ -61,4 +61,11 @@ std::uintptr_t Memory::findPattern_2(const std::string_view module, const std::r
 
     if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
         return 0; // TODO: Error / exception throw
+
+    const char* start = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
+    const char* end = start + moduleInfo.SizeOfImage;
+
+    std::cmatch match;
+    if (std::regex_search(start, end, match, pattern))
+        return reinterpret_cast<ptrdiff_t>(moduleInfo.lpBaseOfDll) + match.position();
 }
