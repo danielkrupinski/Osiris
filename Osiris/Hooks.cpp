@@ -178,6 +178,11 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
     return nullptr;
 }
 
+std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmtSize)
+{
+    return nullptr;
+}
+
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
 {
     std::size_t length{ 0 };
