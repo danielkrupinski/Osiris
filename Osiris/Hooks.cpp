@@ -147,7 +147,7 @@ Hooks::Vmt::Vmt(void* const base)
     length = calculateLength(oldVmt);
 
     newVmt = findFreeDataPage(base, length * sizeof(std::uintptr_t));
-    std::memcpy(newVmt, oldVmt, length * sizeof(std::uintptr_t));
+    std::copy(oldVmt, oldVmt + length, newVmt);
     *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
 
