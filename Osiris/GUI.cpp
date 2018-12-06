@@ -15,17 +15,17 @@ void GUI::render() noexcept
     renderMiscWindow();
 }
 
-void GUI::checkBoxAndColorPicker(const std::string_view name)
+void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, float* color)
 {
-	ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), &config.glow.weapons);
+	ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), enable);
 	ImGui::SameLine(0.0f, 5.0f);
-	bool openPopup = ImGui::ColorButton(std::string{ "##" }.append(name).append("ColorButton").c_str(), ImColor{ config.glow.weaponsColor[0], config.glow.weaponsColor[1], config.glow.weaponsColor[2] }, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_AlphaPreviewHalf);
+	bool openPopup = ImGui::ColorButton(std::string{ "##" }.append(name).append("ColorButton").c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_AlphaPreviewHalf);
 	ImGui::SameLine(0.0f, 5.0f);
 	ImGui::Text(name.data());
 	if (openPopup)
 		ImGui::OpenPopup(std::string{ "##" }.append(name).append("Popup").c_str());
 	if (ImGui::BeginPopup(std::string{ "##" }.append(name).append("Popup").c_str())) {
-		ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), config.glow.weaponsColor, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoSmallPreview);
+		ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoSmallPreview);
 		ImGui::EndPopup();
 	}
 }
