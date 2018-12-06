@@ -15,6 +15,11 @@ void GUI::render() noexcept
     renderMiscWindow();
 }
 
+void GUI::checkBoxAndColorPicker(const std::string_view name)
+{
+
+}
+
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
