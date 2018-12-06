@@ -1,6 +1,5 @@
 #pragma once
 
-#include <regex>
 #include <string_view>
 
 #include "SDK/BaseEntity.h"

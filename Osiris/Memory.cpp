@@ -1,3 +1,4 @@
+#include <regex>
 #include <stdexcept>
 #include <Windows.h>
 #include <Psapi.h>
