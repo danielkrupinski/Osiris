@@ -43,7 +43,7 @@ std::uintptr_t Memory::findPattern(const std::string& module, const std::string&
 {
 	MODULEINFO moduleInfo;
 
-	if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
+	if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo)))
 		throw std::runtime_error{ "Could not get module information about " + module + "!" };
 
 	const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
