@@ -25,7 +25,7 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
 	if (openPopup)
 		ImGui::OpenPopup(std::string{ "##" }.append(name).append("Popup").c_str());
 	if (ImGui::BeginPopup(std::string{ "##" }.append(name).append("Popup").c_str())) {
-		ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_NoSidePreview);
+		ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
 		ImGui::EndPopup();
 	}
 }
