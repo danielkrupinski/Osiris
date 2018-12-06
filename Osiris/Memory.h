@@ -10,7 +10,6 @@
 class Memory final {
 public:
     Memory() noexcept;
-    std::uintptr_t findPattern(const std::string_view, const std::string_view) const;
     std::uintptr_t findPattern_2(const std::string&, const std::string&) const;
 
     std::uintptr_t present;
