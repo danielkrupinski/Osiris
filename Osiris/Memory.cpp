@@ -75,7 +75,7 @@ std::uintptr_t Memory::findPattern_2(const std::string_view module, const std::r
     MODULEINFO moduleInfo;
 
     if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.data()), &moduleInfo, sizeof(moduleInfo)))
-        throw std::runtime_error("Could not get module information about " + module.data() + "!");
+        throw std::runtime_error("Could not get module information about " + std::string{ module } + "!");
        // return 0; // TODO: Error / exception throw
 
     const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
@@ -84,4 +84,6 @@ std::uintptr_t Memory::findPattern_2(const std::string_view module, const std::r
     std::cmatch match;
     if (std::regex_search(begin, end, match, pattern))
         return reinterpret_cast<ptrdiff_t>(moduleInfo.lpBaseOfDll) + match.position();
+    else
+        throw std::runtime_error("Memory pattern search failed!");
 }
