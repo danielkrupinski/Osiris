@@ -99,7 +99,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 static void __stdcall hookedLockCursor() noexcept
 {
     if (gui.isOpen)
-        interfaces.surface->UnlockCursor();
+        interfaces.surface->unlockCursor();
     else
         hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
 }
