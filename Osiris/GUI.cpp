@@ -17,17 +17,17 @@ void GUI::render() noexcept
 
 void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, float* color) const noexcept
 {
-	ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), enable);
-	ImGui::SameLine(0.0f, 5.0f);
-	bool openPopup = ImGui::ColorButton(std::string{ "##" }.append(name).append("ColorButton").c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
-	ImGui::SameLine(0.0f, 5.0f);
-	ImGui::Text(name.data());
-	if (openPopup)
-		ImGui::OpenPopup(std::string{ "##" }.append(name).append("Popup").c_str());
-	if (ImGui::BeginPopup(std::string{ "##" }.append(name).append("Popup").c_str())) {
-		ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
-		ImGui::EndPopup();
-	}
+    ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), enable);
+    ImGui::SameLine(0.0f, 5.0f);
+    bool openPopup = ImGui::ColorButton(std::string{ "##" }.append(name).append("ColorButton").c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
+    ImGui::SameLine(0.0f, 5.0f);
+    ImGui::Text(name.data());
+    if (openPopup)
+        ImGui::OpenPopup(std::string{ "##" }.append(name).append("Popup").c_str());
+    if (ImGui::BeginPopup(std::string{ "##" }.append(name).append("Popup").c_str())) {
+        ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+        ImGui::EndPopup();
+    }
 }
 
 void GUI::renderMenuBar() noexcept
@@ -84,13 +84,13 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat("Thickness", &config.glow.thickness, 0.0f, 1.0f);
         ImGui::SliderFloat("Alpha", &config.glow.alpha, 0.0f, 1.0f);
         ImGui::SliderInt("Style", &config.glow.style, 0, 3);
-		checkBoxAndColorPicker("Allies", &config.glow.allies, config.glow.alliesColor);
+        checkBoxAndColorPicker("Allies", &config.glow.allies, config.glow.alliesColor);
         ImGui::NextColumn();
-		checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
-		checkBoxAndColorPicker("C4", &config.glow.C4, config.glow.C4Color);
-		checkBoxAndColorPicker("PlantedC4", &config.glow.plantedC4, config.glow.plantedC4Color);
-		checkBoxAndColorPicker("Chickens", &config.glow.chickens, config.glow.chickensColor);
-		checkBoxAndColorPicker("Enemies", &config.glow.enemies, config.glow.enemiesColor);
+        checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
+        checkBoxAndColorPicker("C4", &config.glow.C4, config.glow.C4Color);
+        checkBoxAndColorPicker("PlantedC4", &config.glow.plantedC4, config.glow.plantedC4Color);
+        checkBoxAndColorPicker("Chickens", &config.glow.chickens, config.glow.chickensColor);
+        checkBoxAndColorPicker("Enemies", &config.glow.enemies, config.glow.enemiesColor);
         ImGui::End();
     }
 }
