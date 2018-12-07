@@ -1,7 +1,7 @@
 #pragma once
 
 struct Vector final {
-    Vector& operator=(const float* array) noexcept
+    constexpr Vector& operator=(const float* array) noexcept
     {
         x = array[0];
         y = array[1];
