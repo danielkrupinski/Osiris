@@ -2,42 +2,42 @@
 
 int* BaseEntity::getFlags()
 {
-    return reinterpret_cast<int*>(this + 0x100);
+    return reinterpret_cast<int*>(this + 0x104);
 }
 
 int BaseEntity::getHealth()
 {
-    return *reinterpret_cast<int*>(this + 0xFC);
+    return *reinterpret_cast<int*>(this + 0x100);
 }
 
 Vector BaseEntity::getVelocity()
 {
-    return *reinterpret_cast<Vector*>(this + 0x110);
+    return *reinterpret_cast<Vector*>(this + 0x114);
 }
 
 int BaseEntity::getMoveType()
 {
-    return *reinterpret_cast<int*>(this + 0x258);
+    return *reinterpret_cast<int*>(this + 0x25C);
 }
 
 int BaseEntity::getTeamNumber()
 {
-    return *reinterpret_cast<int*>(this + 0xF0);
+    return *reinterpret_cast<int*>(this + 0xF4);
 }
 
 bool BaseEntity::isScoped()
 {
-    return *reinterpret_cast<bool*>(this + 0x38AA);
+    return *reinterpret_cast<bool*>(this + 0x390A);
 }
 
 int BaseEntity::getCrosshairID()
 {
-    return *reinterpret_cast<int*>(this + 0xB2DC);
+    return *reinterpret_cast<int*>(this + 0xB390);
 }
 
 bool BaseEntity::isAlive()
 {
-    return (*reinterpret_cast<int*>(this + 0x25B)) == 0;
+    return (*reinterpret_cast<int*>(this + 0x25F)) == 0;
 }
 
 ClientRenderable* BaseEntity::getRenderable()
