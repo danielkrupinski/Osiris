@@ -6,9 +6,4 @@ public:
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 66)(this);
     }
-
-    constexpr void LockCursor() noexcept
-    {
-        callVirtualFunction<void(__thiscall*)(void*)>(this, 67)(this);
-    }
 };
