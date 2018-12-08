@@ -74,7 +74,7 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::reduceFlashEffect() noexcept
 {
-    *reinterpret_cast<float*>((*memory.localPlayer) + 0xA328) = 255.0f - config.misc.flashReduction * 2.55f;
+    *reinterpret_cast<float*>((*memory.localPlayer) + 0xA3DC) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
 void Misc::removeBlood() noexcept
