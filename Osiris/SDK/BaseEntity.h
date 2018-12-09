@@ -6,8 +6,6 @@
 class BaseEntity {
 public:
     int* getFlags();
-    int getHealth();
-    Vector getVelocity();
     int getMoveType();
     int getTeamNumber();
     bool isScoped();
@@ -15,4 +13,5 @@ public:
     bool isAlive();
     ClientRenderable* getRenderable();
     void drawModel(int flags, unsigned char alpha);
+    bool isEnemy();
 };

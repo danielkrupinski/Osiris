@@ -39,3 +39,8 @@ void BaseEntity::drawModel(int flags, unsigned char alpha)
 {
     return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(getRenderable(), 9)(getRenderable(), flags, alpha);
 }
+
+bool BaseEntity::isEnemy()
+{
+    return false;
+}
