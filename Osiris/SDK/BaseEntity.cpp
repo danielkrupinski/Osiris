@@ -10,11 +10,6 @@ int BaseEntity::getHealth()
     return *reinterpret_cast<int*>(this + 0x100);
 }
 
-Vector BaseEntity::getVelocity()
-{
-    return *reinterpret_cast<Vector*>(this + 0x114);
-}
-
 int BaseEntity::getMoveType()
 {
     return *reinterpret_cast<int*>(this + 0x25C);
