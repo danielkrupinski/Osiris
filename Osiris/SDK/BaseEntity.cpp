@@ -5,11 +5,6 @@ int* BaseEntity::getFlags()
     return reinterpret_cast<int*>(this + 0x104);
 }
 
-int BaseEntity::getHealth()
-{
-    return *reinterpret_cast<int*>(this + 0x100);
-}
-
 int BaseEntity::getMoveType()
 {
     return *reinterpret_cast<int*>(this + 0x25C);
