@@ -184,9 +184,15 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmt
     VirtualQuery(base, &mbi, sizeof(mbi));
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
-    //const auto module_end = reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage;
-    std::string a(vmtSize, '\0');
-    return std::find_end(reinterpret_cast<std::uintptr_t*>(moduleInfo.lpBaseOfDll), reinterpret_cast<std::uintptr_t*>(reinterpret_cast<std::uintptr_t>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage), a.begin(), a.end());
+
+    std::uintptr_t* moduleEnd{ static_cast<std::uintptr_t*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage / sizeof(std::uintptr_t) };
+
+    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= vmtSize) {
+        if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
+            && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(std::uintptr_t)
+            && std::all_of(currentAddress, currentAddress + vmtSize + 1, [](std::uintptr_t a) { return !a; }))
+            return currentAddress;
+    }
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
