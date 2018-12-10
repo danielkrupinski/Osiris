@@ -146,7 +146,7 @@ Hooks::Vmt::Vmt(void* const base)
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
 
-    newVmt = findFreeDataPage_2(base, length);
+    newVmt = findFreeDataPage(base, length);
     std::copy(oldVmt, oldVmt + length, newVmt);
     *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
@@ -182,7 +182,7 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
 
 */
 
-std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmtSize)
+std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
     VirtualQuery(base, &mbi, sizeof(mbi));
