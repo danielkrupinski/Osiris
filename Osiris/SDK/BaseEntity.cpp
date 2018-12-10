@@ -1,4 +1,6 @@
 #include "BaseEntity.h"
+#include "../Interfaces.h"
+#include "../Memory.h"
 
 int* BaseEntity::getFlags()
 {
@@ -42,5 +44,10 @@ void BaseEntity::drawModel(int flags, unsigned char alpha)
 
 bool BaseEntity::isEnemy()
 {
-    return false;
+    static auto gameMode = interfaces.cvar->findVar("game_mode");
+
+    if (gameMode->getInt() == 6 && getTeamNumber() == (*memory.localPlayer)->getTeamNumber() || getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
+        return true;
+    else
+        return false;
 }
