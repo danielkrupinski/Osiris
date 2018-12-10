@@ -28,7 +28,7 @@ void Glow::render() noexcept
 
             switch (glowobject.entity->GetClientClass()->m_ClassID) {
             case ClassId::CSPlayer:
-                if (reinterpret_cast<BaseEntity*>(glowobject.entity)->getTeamNumber() != (*memory.localPlayer)->getTeamNumber()) {
+                if (reinterpret_cast<BaseEntity*>(glowobject.entity)->isEnemy()) {
                     if (glow.enemies) {
                         glowobject.glowColor = glow.enemiesColor;
                         glowobject.renderWhenOccluded = true;
