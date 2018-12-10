@@ -11,7 +11,7 @@ void Chams::render() noexcept
 
             if (entity && entity->isAlive()) {
                 interfaces.renderView->setBlend(config.chams.alpha);
-                auto isEnemy = entity->getTeamNumber() != (*memory.localPlayer)->getTeamNumber();
+                auto isEnemy = entity->isEnemy();
                 if (!isEnemy && config.chams.enemiesOnly)
                     continue;
 
