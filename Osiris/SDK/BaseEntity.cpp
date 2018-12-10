@@ -44,7 +44,7 @@ void BaseEntity::drawModel(int flags, unsigned char alpha)
 
 bool BaseEntity::isEnemy()
 {
-    static auto gameMode = interfaces.cvar->findVar("game_mode");
+    static auto gameMode = interfaces.cvar->findVar("game_type");
 
     if (gameMode->getInt() == 6 && getTeamNumber() == (*memory.localPlayer)->getTeamNumber() || getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
         return true;
