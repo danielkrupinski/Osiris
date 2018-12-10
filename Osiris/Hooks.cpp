@@ -187,12 +187,14 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmt
 
     std::uintptr_t* moduleEnd{ reinterpret_cast<std::uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
-    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= vmtSize) {
-        if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
-            && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(std::uintptr_t)
-            && std::all_of(currentAddress, currentAddress + vmtSize, [](std::uintptr_t a) { return !a; }))
-            return currentAddress;
-    }
+    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress--)
+        if (!*currentAddress)
+            if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
+                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(std::uintptr_t)
+                && std::all_of(currentAddress, currentAddress + vmtSize, [](std::uintptr_t a) { return !a; }))
+                    return currentAddress;
+        else
+            currentAddress -= vmtSize;
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
