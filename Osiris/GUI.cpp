@@ -88,7 +88,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::NextColumn();
         checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
         checkBoxAndColorPicker("C4", &config.glow.C4, config.glow.C4Color);
-        checkBoxAndColorPicker("PlantedC4", &config.glow.plantedC4, config.glow.plantedC4Color);
+        checkBoxAndColorPicker("Planted C4", &config.glow.plantedC4, config.glow.plantedC4Color);
         checkBoxAndColorPicker("Chickens", &config.glow.chickens, config.glow.chickensColor);
         checkBoxAndColorPicker("Enemies", &config.glow.enemies, config.glow.enemiesColor);
         ImGui::End();
