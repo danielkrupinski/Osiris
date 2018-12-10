@@ -185,12 +185,12 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmt
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
 
-    std::uintptr_t* moduleEnd{ static_cast<std::uintptr_t*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage / sizeof(std::uintptr_t) };
+    std::uintptr_t* moduleEnd{ reinterpret_cast<std::uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
     for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= vmtSize) {
         if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
             && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(std::uintptr_t)
-            && std::all_of(currentAddress, currentAddress + vmtSize + 1, [](std::uintptr_t a) { return !a; }))
+            && std::all_of(currentAddress, currentAddress + vmtSize, [](std::uintptr_t a) { return !a; }))
             return currentAddress;
     }
 }
