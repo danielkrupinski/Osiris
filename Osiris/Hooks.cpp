@@ -151,6 +151,8 @@ Hooks::Vmt::Vmt(void* const base)
     *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
 
+/*
+
 std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
@@ -177,6 +179,8 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
     }
     return nullptr;
 }
+
+*/
 
 std::uintptr_t* Hooks::Vmt::findFreeDataPage_2(void* const base, std::size_t vmtSize)
 {
