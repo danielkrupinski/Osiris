@@ -103,13 +103,14 @@ void GUI::renderChamsWindow() noexcept
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
         ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
-        ImGui::Checkbox("Enemies only", &config.chams.enemiesOnly);
-        ImGui::Checkbox("Visible only", &config.chams.visibleOnly);
-        ImGui::ColorEdit3("Visible allies color", config.chams.visibleAlliesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
-        ImGui::ColorEdit3("Occluded allies color", config.chams.occludedAlliesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
-        ImGui::ColorEdit3("Visible enemies color", config.chams.visibleEnemiesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
-        ImGui::ColorEdit3("Occluded enemies color", config.chams.occludedEnemiesColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        //ImGui::Checkbox("Enemies only", &config.chams.enemiesOnly);
+       // ImGui::Checkbox("Visible only", &config.chams.visibleOnly);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
+        checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
+        checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
+        checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
+        checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
+        //ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::End();
     }
 }
