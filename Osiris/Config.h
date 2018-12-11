@@ -38,8 +38,11 @@ public:
         bool visibleOnly{ false };
         bool visibleAllies{ false };
         float visibleAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
+        bool occludedAllies{ false };
         float occludedAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
+        bool visibleEnemies{ false };
         float visibleEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
+        bool occludedEnemies{ false };
         float occludedEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool wireframe{ false };
     } chams;
