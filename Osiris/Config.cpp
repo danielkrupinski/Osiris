@@ -64,9 +64,7 @@ void Config::load()
 
     chams.enabled = config["chams"]["enabled"].asBool();
     chams.alpha = config["chams"]["alpha"].asFloat();
-
-    chams.enemiesOnly = config["chams"]["enemiesOnly"].asBool();
-    chams.visibleOnly = config["chams"]["visibleOnly"].asBool();
+    chams.wireframe = config["chams"]["wireframe"].asBool();
 
     chams.visibleAlliesColor[0] = config["chams"]["visibleAlliesColor"][0].asFloat();
     chams.visibleAlliesColor[1] = config["chams"]["visibleAlliesColor"][1].asFloat();
@@ -83,8 +81,6 @@ void Config::load()
     chams.occludedEnemiesColor[0] = config["chams"]["occludedEnemiesColor"][0].asFloat();
     chams.occludedEnemiesColor[1] = config["chams"]["occludedEnemiesColor"][1].asFloat();
     chams.occludedEnemiesColor[2] = config["chams"]["occludedEnemiesColor"][2].asFloat();
-
-    chams.wireframe = config["chams"]["wireframe"].asBool();
 
     triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
     triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
@@ -154,9 +150,7 @@ void Config::save() const
 
     config["chams"]["enabled"] = chams.enabled;
     config["chams"]["alpha"] = chams.alpha;
-
-    config["chams"]["enemiesOnly"] = chams.enemiesOnly;
-    config["chams"]["visibleOnly"] = chams.visibleOnly;
+    config["chams"]["wireframe"] = chams.wireframe;
 
     config["chams"]["visibleAlliesColor"][0] = chams.visibleAlliesColor[0];
     config["chams"]["visibleAlliesColor"][1] = chams.visibleAlliesColor[1];
@@ -173,8 +167,6 @@ void Config::save() const
     config["chams"]["occludedEnemiesColor"][0] = chams.occludedEnemiesColor[0];
     config["chams"]["occludedEnemiesColor"][1] = chams.occludedEnemiesColor[1];
     config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
-
-    config["chams"]["wireframe"] = chams.wireframe;
 
     config["triggerbot"]["enabled"] = triggerbot.enabled;
     config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
@@ -238,9 +230,7 @@ void Config::reset()
 
     chams.enabled = false;
     chams.alpha = 1.0f;
-
-    chams.enemiesOnly = false;
-    chams.visibleOnly = false;
+    chams.wireframe = false;
 
     chams.visibleAlliesColor[0] = 0.0f;
     chams.visibleAlliesColor[1] = 1.0f;
@@ -257,8 +247,6 @@ void Config::reset()
     chams.occludedEnemiesColor[0] = 1.0f;
     chams.occludedEnemiesColor[1] = 0.0f;
     chams.occludedEnemiesColor[2] = 0.0f;
-
-    chams.wireframe = false;
 
     triggerbot.enabled = false;
     triggerbot.shotDelay = 0;
