@@ -66,18 +66,22 @@ void Config::load()
     chams.alpha = config["chams"]["alpha"].asFloat();
     chams.wireframe = config["chams"]["wireframe"].asBool();
 
+    chams.visibleAllies = config["chams"]["visibleAllies"].asBool();
     chams.visibleAlliesColor[0] = config["chams"]["visibleAlliesColor"][0].asFloat();
     chams.visibleAlliesColor[1] = config["chams"]["visibleAlliesColor"][1].asFloat();
     chams.visibleAlliesColor[2] = config["chams"]["visibleAlliesColor"][2].asFloat();
 
+    chams.occludedAllies = config["chams"]["occludedAllies"].asBool();
     chams.occludedAlliesColor[0] = config["chams"]["occludedAlliesColor"][0].asFloat();
     chams.occludedAlliesColor[1] = config["chams"]["occludedAlliesColor"][1].asFloat();
     chams.occludedAlliesColor[2] = config["chams"]["occludedAlliesColor"][2].asFloat();
 
+    chams.visibleEnemies = config["chams"]["visibleEnemies"].asBool();
     chams.visibleEnemiesColor[0] = config["chams"]["visibleEnemiesColor"][0].asFloat();
     chams.visibleEnemiesColor[1] = config["chams"]["visibleEnemiesColor"][1].asFloat();
     chams.visibleEnemiesColor[2] = config["chams"]["visibleEnemiesColor"][2].asFloat();
 
+    chams.occludedEnemies = config["chams"]["occludedEnemies"].asBool();
     chams.occludedEnemiesColor[0] = config["chams"]["occludedEnemiesColor"][0].asFloat();
     chams.occludedEnemiesColor[1] = config["chams"]["occludedEnemiesColor"][1].asFloat();
     chams.occludedEnemiesColor[2] = config["chams"]["occludedEnemiesColor"][2].asFloat();
@@ -152,18 +156,22 @@ void Config::save() const
     config["chams"]["alpha"] = chams.alpha;
     config["chams"]["wireframe"] = chams.wireframe;
 
+    config["chams"]["visibleAllies"] = chams.visibleAllies;
     config["chams"]["visibleAlliesColor"][0] = chams.visibleAlliesColor[0];
     config["chams"]["visibleAlliesColor"][1] = chams.visibleAlliesColor[1];
     config["chams"]["visibleAlliesColor"][2] = chams.visibleAlliesColor[2];
 
+    config["chams"]["occludedAllies"] = chams.occludedAllies;
     config["chams"]["occludedAlliesColor"][0] = chams.occludedAlliesColor[0];
     config["chams"]["occludedAlliesColor"][1] = chams.occludedAlliesColor[1];
     config["chams"]["occludedAlliesColor"][2] = chams.occludedAlliesColor[2];
 
+    config["chams"]["visibleEnemies"] = chams.visibleEnemies;
     config["chams"]["visibleEnemiesColor"][0] = chams.visibleEnemiesColor[0];
     config["chams"]["visibleEnemiesColor"][1] = chams.visibleEnemiesColor[1];
     config["chams"]["visibleEnemiesColor"][2] = chams.visibleEnemiesColor[2];
 
+    config["chams"]["occludedEnemies"] = chams.occludedEnemies;
     config["chams"]["occludedEnemiesColor"][0] = chams.occludedEnemiesColor[0];
     config["chams"]["occludedEnemiesColor"][1] = chams.occludedEnemiesColor[1];
     config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
@@ -232,18 +240,22 @@ void Config::reset()
     chams.alpha = 1.0f;
     chams.wireframe = false;
 
+    chams.visibleAllies = false;
     chams.visibleAlliesColor[0] = 0.0f;
     chams.visibleAlliesColor[1] = 1.0f;
     chams.visibleAlliesColor[2] = 0.0f;
 
+    chams.occludedAllies = false;
     chams.occludedAlliesColor[0] = 0.0f;
     chams.occludedAlliesColor[1] = 1.0f;
     chams.occludedAlliesColor[2] = 0.0f;
 
+    chams.visibleEnemies = false;
     chams.visibleEnemiesColor[0] = 1.0f;
     chams.visibleEnemiesColor[1] = 0.0f;
     chams.visibleEnemiesColor[2] = 0.0f;
 
+    chams.occludedEnemies = false;
     chams.occludedEnemiesColor[0] = 1.0f;
     chams.occludedEnemiesColor[1] = 0.0f;
     chams.occludedEnemiesColor[2] = 0.0f;
