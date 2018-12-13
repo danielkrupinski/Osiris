@@ -12,7 +12,7 @@ void Chams::render() noexcept
             if (entity && entity->isAlive()) {
                 interfaces.renderView->setBlend(config.chams.alpha);
                 auto isEnemy = entity->isEnemy();
-                auto material = interfaces.materialSystem->findMaterial("dev/glow_color");
+                static auto material = interfaces.materialSystem->findMaterial("dev/glow_color");
 
                 material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 
