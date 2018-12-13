@@ -14,9 +14,7 @@ void Chams::render() noexcept
             BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
 
             if (entity && entity->isAlive()) {
-
-                auto isEnemy = entity->isEnemy();
-                if (isEnemy) {
+                if (entity->isEnemy()) {
                     if (config.chams.occludedEnemies) {
                         interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
                         material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
