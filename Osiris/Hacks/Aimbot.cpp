@@ -7,7 +7,7 @@
 
 static int findTarget(UserCmd* cmd, Vector& position)
 {
-    for (int i = 1; i < interfaces.engineClient->GetMaxClients(); i++) {
+    for (int i = 1; i < interfaces.engineClient->getMaxClients(); i++) {
         auto entity = interfaces.clientEntityList->getClientEntity(i);
         if (!entity || !entity->isAlive() || entity == *memory.localPlayer
             || entity->getTeamNumber() == (*memory.localPlayer)->getTeamNumber())

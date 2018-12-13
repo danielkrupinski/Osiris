@@ -10,7 +10,7 @@ void Chams::render() noexcept
 		material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 		interfaces.renderView->setBlend(config.chams.alpha);
 
-        for (int i = 1; i < interfaces.engineClient->GetMaxClients(); ++i) {
+        for (int i = 1; i < interfaces.engineClient->getMaxClients(); ++i) {
             BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
 
             if (entity && entity->isAlive()) {
