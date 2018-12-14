@@ -5,8 +5,6 @@
 
 class GlowObjectDefinition {
 public:
-    GlowObjectDefinition() { memset(this, 0, sizeof(*this)); }
-
     ClientEntity* entity;
     union
     {
