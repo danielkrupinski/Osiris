@@ -9,23 +9,21 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [0-3]
-    * **Allies**
-    * **Enemies**
-    * **Weapons**
-    * **C4**
-    * **Planted C4**
-    * **Chickens**
+    * **Allies** - glow allies entities
+    * **Enemies** - glow enemies entities
+    * **Weapons** - glow dropped weapons
+    * **C4** - glow dropped C4 explosive
+    * **Planted C4** - glow planted bomb
+    * **Chickens** - glow chickens entities
 
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
     * **Alpha** - material transparency
-    * **Enemies only**
-    * **Visible only**
-    * **Visible allies color** - material color applied to allies
-    * **Occluded allies color**
-    * **Visible enemies color**
-    * **Occluded enemies color** - material color applied to enemies
-    * **Wireframe**
+    * **Wireframe** - render triangle mesh instead of solid material
+    * **Visible allies** - visible allies chams on / off and color applied to them
+    * **Occluded allies** - occluded allies chams on / off and color applied to them
+    * **Visible enemies** - visible enemies chams on / off and color applied to them
+    * **Occluded enemies** - occluded enemies chams on / off and color applied to them
 
 * **Triggerbot** - automatically shoot when crosshair is on enemy
     * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
@@ -44,7 +42,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **View model FOV** - change view model FOV [0-130]
     * **World color** - set world material ambient light color
 
-* **Config**
+* **Config** - configuration system
     * **Load** - load configuration file
     * **Save** - save configuration file
     * **Reset** - restore default configuration settings
@@ -77,13 +75,13 @@ When injected, menu is openable under `INSERT` key.
 ## FAQ
 
 ### How do I open menu?
-Press `INSERT` key while in game.
+Press `INSERT` key while while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read.
+Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read by humans.
 
-### I don't see DllMain function nor dllmain.cpp file. What is cheat's entry point and where is it located?
-All cheats modules are globally initialized by program loader. Modules are defined in `Osiris.cpp`.
+### I don't see DllMain function, what is cheat's entry point and where is it located?
+Osiris is based on five main global objects ("modules") - see Osiris.cpp file for detailes. The modules are initialized in the order they are declared in above file.
 
 ## Acknowledgments
 
