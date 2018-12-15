@@ -10,5 +10,5 @@ class ClientEntity : public ClientUnknown, public ClientRenderable, public Clien
 public:
     virtual void Release(void) = 0;
 
-    bool isWeapon() { return callVirtualFunction<bool(__thiscall*)(ClientEntity*)>(this, 160)(this); }
+    bool isWeapon() { return callVirtualFunction<bool(__thiscall*)(ClientEntity*)>(this, 161)(this); }
 };
