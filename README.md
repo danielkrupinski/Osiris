@@ -81,11 +81,11 @@ Press `INSERT` key while while focused on CS:GO window.
 Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read by humans.
 
 ### I don't see DllMain function, what is cheat's entry point and where is it located?
-Osiris is based on five main global objects ("modules") - see Osiris.cpp file for detailes. The modules are initialized in the order they are declared in above file.
+Osiris is based on five main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file.
 
 ## Acknowledgments
 
-* [ocornut](https://github.com/ocornut) and contributors for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
+* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
 * [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
 
 ## License
