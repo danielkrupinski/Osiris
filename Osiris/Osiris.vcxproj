@@ -69,7 +69,6 @@
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\GlowObjectManager.h" />
-    <ClInclude Include="SDK\HandleEntity.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\MaterialSystem.h" />

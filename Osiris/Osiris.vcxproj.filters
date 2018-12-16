@@ -182,9 +182,6 @@
     <ClInclude Include="SDK\Enums.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\HandleEntity.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Cvar.h">
       <Filter>SDK</Filter>
     </ClInclude>
