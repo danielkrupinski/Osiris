@@ -16,9 +16,9 @@ struct GlowObjectDefinition {
     bool    fullBloomRender;
     uint8_t pad1;
     int fullBloomStencilTestValue;
-    int32_t glowStyle;
-    int32_t splitScreenSlot;
-    int32_t nextFreeSlot;
+    int glowStyle;
+    int splitScreenSlot;
+    int nextFreeSlot;
 
     constexpr bool isUnused() const noexcept { return nextFreeSlot != ENTRY_IN_USE; }
 
