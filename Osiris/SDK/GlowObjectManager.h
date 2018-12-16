@@ -26,8 +26,7 @@ struct GlowObjectDefinition {
     static constexpr int ENTRY_IN_USE = -2;
 };
 
-class GlowObjectManager {
-public:
+struct GlowObjectManager {
     UtlVector<GlowObjectDefinition> glowObjectDefinitions;
     int firstFreeSlot;
 };
