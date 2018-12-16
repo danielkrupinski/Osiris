@@ -62,3 +62,8 @@ bool BaseEntity::isWeapon()
 {
     return callVirtualFunction<bool(__thiscall*)(void*)>(this, 161)(this);
 }
+
+ClientClass* BaseEntity::getClientClass()
+{
+    return callVirtualFunction<ClientClass*(__thiscall*)(void*)>(this + 8, 2)(this + 8);
+}

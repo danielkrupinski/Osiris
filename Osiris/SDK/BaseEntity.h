@@ -16,4 +16,5 @@ public:
     bool isEnemy();
 	bool isDormant();
 	bool isWeapon();
+    ClientClass* getClientClass();
 };
