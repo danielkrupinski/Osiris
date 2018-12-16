@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ClientEntity.h"
+#include "BaseEntity.h"
 #include "UtlVector.h"
 
 class GlowObjectDefinition {
 public:
-    ClientEntity* entity;
+    BaseEntity* entity;
     union
     {
         Vector glowColor;
