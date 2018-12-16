@@ -98,12 +98,15 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 270.0f));
+        ImGui::SetNextWindowSize(ImVec2(330.0f, 140.0f));
         ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(80.0f);
+		ImGui::Columns(2, nullptr, false);
+		ImGui::SetColumnOffset(1, 150.0f);
+		ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
         ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
+		ImGui::NextColumn();
         checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
         checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
         checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
