@@ -197,9 +197,6 @@
     <ClInclude Include="SDK\ClientThinkable.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\ClientEntity.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Cvar.h">
       <Filter>SDK</Filter>
     </ClInclude>

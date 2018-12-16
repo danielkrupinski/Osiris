@@ -1,6 +1,7 @@
 #include "../Config.h"
 #include "Glow.h"
 #include "../Memory.h"
+#include "../SDK/ClientClass.h"
 
 void Glow::render() noexcept
 {

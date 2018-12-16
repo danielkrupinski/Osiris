@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseEntity.h"
+#include "Utils.h"
 
 class ClientEntityList {
 public:

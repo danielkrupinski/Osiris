@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ClientEntity.h"
+#include "ClientClass.h"
 #include "Vector.h"
 
 class BaseEntity {
