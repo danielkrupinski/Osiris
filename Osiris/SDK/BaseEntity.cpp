@@ -52,3 +52,8 @@ bool BaseEntity::isEnemy()
     else
         return false;
 }
+
+bool BaseEntity::isDormant()
+{
+	return callVirtualFunction<bool(__thiscall*)(void*)>(this + 8, 9)(this + 8);
+}

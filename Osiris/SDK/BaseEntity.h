@@ -14,4 +14,5 @@ public:
     // ClientRenderable* getRenderable();
     void drawModel(int flags, unsigned char alpha);
     bool isEnemy();
+	bool isDormant();
 };
