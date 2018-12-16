@@ -54,7 +54,6 @@
     <ClInclude Include="SDK\ClientNetworkable.h" />
     <ClInclude Include="SDK\ClientRenderable.h" />
     <ClInclude Include="SDK\ClientThinkable.h" />
-    <ClInclude Include="SDK\ClientUnknown.h" />
     <ClInclude Include="SDK\Cvar.h" />
     <ClInclude Include="SDK\EngineClient.h" />
     <ClInclude Include="SDK\Enums.h" />
