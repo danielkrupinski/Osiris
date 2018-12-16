@@ -3,8 +3,7 @@
 #include "BaseEntity.h"
 #include "UtlVector.h"
 
-class GlowObjectDefinition {
-public:
+struct GlowObjectDefinition {
     BaseEntity* entity;
     Vector glowColor;
     float   alpha;
