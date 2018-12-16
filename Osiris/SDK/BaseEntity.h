@@ -11,7 +11,7 @@ public:
     bool isScoped();
     int getCrosshairID();
     bool isAlive();
-    ClientRenderable* getRenderable();
+    // ClientRenderable* getRenderable();
     void drawModel(int flags, unsigned char alpha);
     bool isEnemy();
 };
