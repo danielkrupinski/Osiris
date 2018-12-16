@@ -6,16 +6,7 @@
 class GlowObjectDefinition {
 public:
     BaseEntity* entity;
-    union
-    {
-        Vector glowColor;
-        struct
-        {
-            float   red;
-            float   green;
-            float   blue;
-        };
-    };
+    Vector glowColor;
     float   alpha;
     uint8_t pad[4];
     float   m_flSomeFloat;
