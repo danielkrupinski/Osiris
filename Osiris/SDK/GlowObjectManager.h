@@ -7,14 +7,14 @@ struct GlowObjectDefinition {
     BaseEntity* entity;
     Vector glowColor;
     float   alpha;
-    uint8_t pad[4];
+    std::byte pad[4];
     float   m_flSomeFloat;
     float   bloomAmount;
     float   m_flAnotherFloat;
     bool    renderWhenOccluded;
     bool    renderWhenUnoccluded;
     bool    fullBloomRender;
-    uint8_t pad1;
+    std::byte pad1;
     int fullBloomStencilTestValue;
     int glowStyle;
     int splitScreenSlot;
