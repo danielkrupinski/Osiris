@@ -57,3 +57,9 @@ bool BaseEntity::isDormant()
 {
 	return callVirtualFunction<bool(__thiscall*)(void*)>(this + 8, 9)(this + 8);
 }
+
+bool BaseEntity::isWeapon()
+{
+	return callVirtualFunction<bool(__thiscall*)(void*)>(this, 161)(this);
+
+}

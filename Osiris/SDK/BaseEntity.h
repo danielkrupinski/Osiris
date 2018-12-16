@@ -15,4 +15,5 @@ public:
     void drawModel(int flags, unsigned char alpha);
     bool isEnemy();
 	bool isDormant();
+	bool isWeapon();
 };
