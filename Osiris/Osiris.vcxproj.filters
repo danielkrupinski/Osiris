@@ -143,9 +143,6 @@
     <ClInclude Include="SDK\UserCmd.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Client.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Material.h">
       <Filter>SDK</Filter>
     </ClInclude>

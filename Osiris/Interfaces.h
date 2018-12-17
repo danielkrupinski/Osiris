@@ -7,7 +7,6 @@
 #include <type_traits>
 #include <Windows.h>
 
-#include "SDK/Client.h"
 #include "SDK/ClientEntityList.h"
 #include "SDK/Cvar.h"
 #include "SDK/EngineClient.h"
@@ -22,7 +21,7 @@ public:
 
     EngineClient* engineClient;
     ClientEntityList* clientEntityList;
-    Client* client;
+    class Client* client;
     Surface* surface;
     Cvar* cvar;
     ModelRender* modelRender;
