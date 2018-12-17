@@ -13,7 +13,7 @@ void Chams::render() noexcept
         for (int i = 1; i < interfaces.engineClient->getMaxClients(); ++i) {
             BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
 
-            if (entity && entity->isAlive()) {
+            if (entity && !entity->isDormant() && entity->isAlive()) {
                 if (entity->isEnemy()) {
                     if (config.chams.occludedEnemies) {
                         interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
