@@ -3,7 +3,6 @@
 #include <string_view>
 
 #include "SDK/BaseEntity.h"
-#include "SDK/ClientMode.h"
 #include "SDK/GlowObjectManager.h"
 #include "SDK/Input.h"
 
@@ -16,7 +15,7 @@ public:
     std::uintptr_t reset;
 
     BaseEntity** localPlayer;
-    ClientMode* clientMode;
+    class ClientMode* clientMode;
     Input* input;
     GlowObjectManager* glowObjectManager;
     bool* disablePostProcessing;
