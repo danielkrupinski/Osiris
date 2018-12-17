@@ -6,7 +6,6 @@
 
 #include "Interfaces.h"
 #include "Memory.h"
-#include "SDK/ClientMode.h"
 #include "SDK/UserCmd.h"
 
 class Hooks final {
