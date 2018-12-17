@@ -67,3 +67,8 @@ ClientClass* BaseEntity::getClientClass()
 {
     return callVirtualFunction<ClientClass*(__thiscall*)(void*)>(this + 8, 2)(this + 8);
 }
+
+bool BaseEntity::isAlive_2()
+{
+    return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
+}
