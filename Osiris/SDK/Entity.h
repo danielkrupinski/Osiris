@@ -3,7 +3,7 @@
 #include "ClientClass.h"
 #include "Vector.h"
 
-class BaseEntity {
+class Entity {
 public:
     int* getFlags();
     int getMoveType();
