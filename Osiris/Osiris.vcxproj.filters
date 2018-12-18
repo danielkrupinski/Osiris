@@ -63,9 +63,6 @@
     <ClCompile Include="Interfaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\BaseEntity.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Misc.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Hacks\Aimbot.cpp">
       <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\Entity.cpp">
+      <Filter>SDK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
