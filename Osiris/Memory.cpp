@@ -11,7 +11,7 @@ Memory::Memory() noexcept
     try {
         present = findPattern("gameoverlayrenderer.dll", "\xFF\x15.{4}\x8B\xF8\x85\xDB") + 2;
         reset = findPattern("gameoverlayrenderer.dll", "\xC7\x45.{5}\xFF\x15.{4}\x8B\xF8") + 9;
-        localPlayer = *reinterpret_cast<BaseEntity***>(findPattern("client_panorama.dll", "\x8B\x0D.{4}\x83\xFF\xFF\x74\x07") + 2);
+        localPlayer = *reinterpret_cast<Entity***>(findPattern("client_panorama.dll", "\x8B\x0D.{4}\x83\xFF\xFF\x74\x07") + 2);
         clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
         input = *reinterpret_cast<Input**>(findPattern("client_panorama.dll", "\xB9.{4}\x8B\x40\x38\xFF\xD0\x84\xC0\x0F\x85") + 1);
         glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern("client_panorama.dll", "\x0F\x11\x05.{4}\x83\xC8\x01") + 3);

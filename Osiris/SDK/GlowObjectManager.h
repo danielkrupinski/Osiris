@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "Entity.h"
 #include "UtlVector.h"
 
 struct GlowObjectDefinition {
-    BaseEntity* entity;
+    Entity* entity;
     Vector glowColor;
     float   alpha;
     std::byte pad[4];

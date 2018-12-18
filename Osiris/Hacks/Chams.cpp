@@ -11,7 +11,7 @@ void Chams::render() noexcept
 		interfaces.renderView->setBlend(config.chams.alpha);
 
         for (int i = 1; i < interfaces.engineClient->getMaxClients(); ++i) {
-            BaseEntity* entity = interfaces.clientEntityList->getClientEntity(i);
+            auto entity = interfaces.clientEntityList->getClientEntity(i);
 
             if (entity && !entity->isDormant() && entity->isAlive()) {
                 if (entity->isEnemy()) {
