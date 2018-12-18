@@ -14,7 +14,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastTime).count() >= config.triggerbot.shotDelay) {
             auto inCrosshair = (*memory.localPlayer)->getCrosshairID();
             if (inCrosshair > 0 && inCrosshair <= 64) {
-                auto target = interfaces.clientEntityList->getClientEntity(inCrosshair);
+                auto target = interfaces.entityList->getClientEntity(inCrosshair);
                 if (/* !reinterpret_cast<ClientEntity*>(target)->IsDormant() && */target->isEnemy()) {
                     constexpr int IN_ATTACK{ 1 };
                     cmd->buttons |= IN_ATTACK;

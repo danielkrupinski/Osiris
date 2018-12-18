@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "Utils.h"
 
-class ClientEntityList {
+class EntityList {
 public:
     constexpr Entity* getClientEntity(int index) noexcept
     {

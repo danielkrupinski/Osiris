@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <Windows.h>
 
-#include "SDK/ClientEntityList.h"
+#include "SDK/EntityList.h"
 #include "SDK/Cvar.h"
 #include "SDK/EngineClient.h"
 #include "SDK/MaterialSystem.h"
@@ -20,7 +20,7 @@ public:
     explicit Interfaces() noexcept;
 
     EngineClient* engineClient;
-    ClientEntityList* clientEntityList;
+    EntityList* entityList;
     class Client* client;
     Surface* surface;
     Cvar* cvar;
