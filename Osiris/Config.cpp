@@ -87,6 +87,7 @@ void Config::load()
     chams.occludedEnemiesColor[2] = config["chams"]["occludedEnemiesColor"][2].asFloat();
 
     triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
+    triggerbot.onKey = config["triggerbot"]["onKey"].asBool();
     triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
 
     misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
@@ -177,6 +178,7 @@ void Config::save() const
     config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
 
     config["triggerbot"]["enabled"] = triggerbot.enabled;
+    config["triggerbot"]["onKey"] = triggerbot.onKey;
     config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
 
     config["misc"]["bunnyHop"] = misc.bunnyHop;
@@ -261,6 +263,7 @@ void Config::reset()
     chams.occludedEnemiesColor[2] = 0.0f;
 
     triggerbot.enabled = false;
+    triggerbot.onKey = false;
     triggerbot.shotDelay = 0;
 
     misc.bunnyHop = false;
