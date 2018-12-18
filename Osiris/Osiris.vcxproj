@@ -48,7 +48,7 @@
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="SDK\Entity.h" />
     <ClInclude Include="SDK\ClientClass.h" />
-    <ClInclude Include="SDK\ClientEntityList.h" />
+    <ClInclude Include="SDK\EntityList.h" />
     <ClInclude Include="SDK\Cvar.h" />
     <ClInclude Include="SDK\EngineClient.h" />
     <ClInclude Include="SDK\ClassId.h" />
