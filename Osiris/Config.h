@@ -47,6 +47,7 @@ public:
 
     struct {
         bool enabled{ false };
+        bool onKey{ false };
         int shotDelay{ 0 };
     } triggerbot;
 
