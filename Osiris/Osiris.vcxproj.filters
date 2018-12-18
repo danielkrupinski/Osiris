@@ -134,9 +134,6 @@
     <ClInclude Include="SDK\EngineClient.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\BaseEntity.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\ClientEntityList.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -202,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\Aimbot.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Entity.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
