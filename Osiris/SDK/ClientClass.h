@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enums.h"
+#include "ClassId.h"
 
 //class ClientClass;
 class ClientNetworkable;
