@@ -170,9 +170,6 @@
     <ClInclude Include="SDK\ClientClass.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Enums.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Cvar.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -201,6 +198,9 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Entity.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ClassId.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

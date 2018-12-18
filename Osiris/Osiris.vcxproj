@@ -51,7 +51,7 @@
     <ClInclude Include="SDK\ClientEntityList.h" />
     <ClInclude Include="SDK\Cvar.h" />
     <ClInclude Include="SDK\EngineClient.h" />
-    <ClInclude Include="SDK\Enums.h" />
+    <ClInclude Include="SDK\ClassId.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="imgui\imconfig.h" />
