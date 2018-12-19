@@ -107,10 +107,13 @@ void GUI::renderChamsWindow() noexcept
         ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::NextColumn();
-        checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
-        checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
-        checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
-        checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
+        checkBoxAndColorPicker("Allies", &config.chams.allies, config.chams.alliesColor);
+        if (config.chams.allies)
+            checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
+
+        checkBoxAndColorPicker("Enemies", &config.chams.enemies, config.chams.enemiesColor);
+        if (config.chams.enemies)
+            checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
         ImGui::End();
     }
 }
