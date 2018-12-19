@@ -118,7 +118,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize(ImVec2(180.0f, 130.0f));
+        ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
         ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(70.0f);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
