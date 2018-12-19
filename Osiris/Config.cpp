@@ -66,25 +66,25 @@ void Config::load()
     chams.alpha = config["chams"]["alpha"].asFloat();
     chams.wireframe = config["chams"]["wireframe"].asBool();
 
+    chams.allies = config["chams"]["allies"].asBool();
+    chams.alliesColor[0] = config["chams"]["alliesColor"][0].asFloat();
+    chams.alliesColor[1] = config["chams"]["alliesColor"][1].asFloat();
+    chams.alliesColor[2] = config["chams"]["alliesColor"][2].asFloat();
+
     chams.visibleAllies = config["chams"]["visibleAllies"].asBool();
     chams.visibleAlliesColor[0] = config["chams"]["visibleAlliesColor"][0].asFloat();
     chams.visibleAlliesColor[1] = config["chams"]["visibleAlliesColor"][1].asFloat();
     chams.visibleAlliesColor[2] = config["chams"]["visibleAlliesColor"][2].asFloat();
 
-    chams.occludedAllies = config["chams"]["occludedAllies"].asBool();
-    chams.occludedAlliesColor[0] = config["chams"]["occludedAlliesColor"][0].asFloat();
-    chams.occludedAlliesColor[1] = config["chams"]["occludedAlliesColor"][1].asFloat();
-    chams.occludedAlliesColor[2] = config["chams"]["occludedAlliesColor"][2].asFloat();
+    chams.enemies = config["chams"]["enemies"].asBool();
+    chams.enemiesColor[0] = config["chams"]["enemiesColor"][0].asFloat();
+    chams.enemiesColor[1] = config["chams"]["enemiesColor"][1].asFloat();
+    chams.enemiesColor[2] = config["chams"]["enemiesColor"][2].asFloat();
 
     chams.visibleEnemies = config["chams"]["visibleEnemies"].asBool();
     chams.visibleEnemiesColor[0] = config["chams"]["visibleEnemiesColor"][0].asFloat();
     chams.visibleEnemiesColor[1] = config["chams"]["visibleEnemiesColor"][1].asFloat();
     chams.visibleEnemiesColor[2] = config["chams"]["visibleEnemiesColor"][2].asFloat();
-
-    chams.occludedEnemies = config["chams"]["occludedEnemies"].asBool();
-    chams.occludedEnemiesColor[0] = config["chams"]["occludedEnemiesColor"][0].asFloat();
-    chams.occludedEnemiesColor[1] = config["chams"]["occludedEnemiesColor"][1].asFloat();
-    chams.occludedEnemiesColor[2] = config["chams"]["occludedEnemiesColor"][2].asFloat();
 
     triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
     triggerbot.onKey = config["triggerbot"]["onKey"].asBool();
@@ -157,25 +157,25 @@ void Config::save() const
     config["chams"]["alpha"] = chams.alpha;
     config["chams"]["wireframe"] = chams.wireframe;
 
+    config["chams"]["allies"] = chams.allies;
+    config["chams"]["alliesColor"][0] = chams.alliesColor[0];
+    config["chams"]["alliesColor"][1] = chams.alliesColor[1];
+    config["chams"]["alliesColor"][2] = chams.alliesColor[2];
+
     config["chams"]["visibleAllies"] = chams.visibleAllies;
     config["chams"]["visibleAlliesColor"][0] = chams.visibleAlliesColor[0];
     config["chams"]["visibleAlliesColor"][1] = chams.visibleAlliesColor[1];
     config["chams"]["visibleAlliesColor"][2] = chams.visibleAlliesColor[2];
 
-    config["chams"]["occludedAllies"] = chams.occludedAllies;
-    config["chams"]["occludedAlliesColor"][0] = chams.occludedAlliesColor[0];
-    config["chams"]["occludedAlliesColor"][1] = chams.occludedAlliesColor[1];
-    config["chams"]["occludedAlliesColor"][2] = chams.occludedAlliesColor[2];
+    config["chams"]["enemies"] = chams.enemies;
+    config["chams"]["enemiesColor"][0] = chams.enemiesColor[0];
+    config["chams"]["enemiesColor"][1] = chams.enemiesColor[1];
+    config["chams"]["enemiesColor"][2] = chams.enemiesColor[2];
 
     config["chams"]["visibleEnemies"] = chams.visibleEnemies;
     config["chams"]["visibleEnemiesColor"][0] = chams.visibleEnemiesColor[0];
     config["chams"]["visibleEnemiesColor"][1] = chams.visibleEnemiesColor[1];
     config["chams"]["visibleEnemiesColor"][2] = chams.visibleEnemiesColor[2];
-
-    config["chams"]["occludedEnemies"] = chams.occludedEnemies;
-    config["chams"]["occludedEnemiesColor"][0] = chams.occludedEnemiesColor[0];
-    config["chams"]["occludedEnemiesColor"][1] = chams.occludedEnemiesColor[1];
-    config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
 
     config["triggerbot"]["enabled"] = triggerbot.enabled;
     config["triggerbot"]["onKey"] = triggerbot.onKey;
@@ -242,25 +242,25 @@ void Config::reset()
     chams.alpha = 1.0f;
     chams.wireframe = false;
 
+    chams.allies = false;
+    chams.alliesColor[0] = 0.0f;
+    chams.alliesColor[1] = 1.0f;
+    chams.alliesColor[2] = 0.0f;
+
     chams.visibleAllies = false;
     chams.visibleAlliesColor[0] = 0.0f;
     chams.visibleAlliesColor[1] = 1.0f;
     chams.visibleAlliesColor[2] = 0.0f;
 
-    chams.occludedAllies = false;
-    chams.occludedAlliesColor[0] = 0.0f;
-    chams.occludedAlliesColor[1] = 1.0f;
-    chams.occludedAlliesColor[2] = 0.0f;
+    chams.enemies = false;
+    chams.enemiesColor[0] = 1.0f;
+    chams.enemiesColor[1] = 0.0f;
+    chams.enemiesColor[2] = 0.0f;
 
     chams.visibleEnemies = false;
     chams.visibleEnemiesColor[0] = 1.0f;
     chams.visibleEnemiesColor[1] = 0.0f;
     chams.visibleEnemiesColor[2] = 0.0f;
-
-    chams.occludedEnemies = false;
-    chams.occludedEnemiesColor[0] = 1.0f;
-    chams.occludedEnemiesColor[1] = 0.0f;
-    chams.occludedEnemiesColor[2] = 0.0f;
 
     triggerbot.enabled = false;
     triggerbot.onKey = false;

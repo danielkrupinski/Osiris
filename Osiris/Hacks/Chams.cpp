@@ -15,8 +15,8 @@ void Chams::render() noexcept
 
             if (entity && !entity->isDormant() && entity->isAlive()) {
                 if (entity->isEnemy()) {
-                    if (config.chams.occludedEnemies) {
-                        interfaces.renderView->setColorModulation(config.chams.occludedEnemiesColor);
+                    if (config.chams.enemies) {
+                        interfaces.renderView->setColorModulation(config.chams.enemiesColor);
                         material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                         interfaces.modelRender->forceMaterialOverride(material);
                         entity->drawModel(1, 255);
@@ -29,8 +29,8 @@ void Chams::render() noexcept
                     }
                 }
                 else {
-                    if (config.chams.occludedAllies) {
-                        interfaces.renderView->setColorModulation(config.chams.occludedAlliesColor);
+                    if (config.chams.allies) {
+                        interfaces.renderView->setColorModulation(config.chams.alliesColor);
                         material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                         interfaces.modelRender->forceMaterialOverride(material);
                         entity->drawModel(1, 255);
