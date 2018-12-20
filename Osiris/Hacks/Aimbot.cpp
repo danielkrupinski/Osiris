@@ -9,7 +9,7 @@ static int findTarget(UserCmd* cmd, Vector& position)
 {
     for (int i = 1; i < interfaces.engineClient->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getClientEntity(i);
-        if (!entity || !entity->isDormant() || !entity->isAlive_2() || !entity->isEnemy())
+        if (!entity || !entity->isDormant() || !entity->isAlive() || !entity->isEnemy())
             continue;
     }
 }

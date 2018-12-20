@@ -57,7 +57,7 @@ ClientClass* Entity::getClientClass()
     return callVirtualFunction<ClientClass*(__thiscall*)(void*)>(this + 8, 2)(this + 8);
 }
 
-bool Entity::isAlive_2()
+bool Entity::isAlive()
 {
     return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
 }

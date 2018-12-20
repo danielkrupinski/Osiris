@@ -15,5 +15,5 @@ public:
 	bool isDormant();
 	bool isWeapon();
     ClientClass* getClientClass();
-    bool isAlive_2();
+    bool isAlive();
 };
