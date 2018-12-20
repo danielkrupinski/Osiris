@@ -27,13 +27,6 @@ int Entity::getCrosshairID()
     return *reinterpret_cast<int*>(this + 0xB390);
 }
 
-/*
-bool Entity::isAlive()
-{
-    return (*reinterpret_cast<int*>(this + 0x25F)) == 0;
-}
-*/
-
 void Entity::drawModel(int flags, unsigned char alpha)
 {
     return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
