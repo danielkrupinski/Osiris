@@ -10,7 +10,7 @@ public:
     int getTeamNumber();
     bool isScoped();
     int getCrosshairID();
-    bool isAlive();
+    // bool isAlive();
     void drawModel(int flags, unsigned char alpha);
     bool isEnemy();
 	bool isDormant();
