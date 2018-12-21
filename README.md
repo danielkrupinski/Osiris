@@ -20,13 +20,14 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Enable** - on / off master switch
     * **Alpha** - material transparency
     * **Wireframe** - render triangle mesh instead of solid material
+    * **Allies** - allies chams on / off and color applied to them
     * **Visible allies** - visible allies chams on / off and color applied to them
-    * **Occluded allies** - occluded allies chams on / off and color applied to them
+    * **Enemies** - enemies chams on / off and color applied to them
     * **Visible enemies** - visible enemies chams on / off and color applied to them
-    * **Occluded enemies** - occluded enemies chams on / off and color applied to them
 
 * **Triggerbot** - automatically shoot when crosshair is on enemy
-    * **Enable** - on / off triggerbot switch, works when you hold **ALT** key
+    * **Enable** - on / off triggerbot master switch
+    * **On key (ALT)** - triggerbot works only when **ALT** key is being held
     * **Shot delay** - delay time in ms (milliseconds)
 
 * **Misc** - miscellaneous features
