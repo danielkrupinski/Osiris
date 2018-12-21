@@ -16,4 +16,5 @@ public:
 	bool isWeapon();
     ClientClass* getClientClass();
     bool isAlive();
+    bool isInLocalTeam();
 };

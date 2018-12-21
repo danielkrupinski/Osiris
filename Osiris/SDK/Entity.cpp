@@ -61,3 +61,10 @@ bool Entity::isAlive()
 {
     return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
 }
+
+bool Entity::isInLocalTeam()
+{
+    return false;
+}
+
+// 81
