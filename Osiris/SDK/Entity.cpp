@@ -12,10 +12,12 @@ int Entity::getMoveType()
     return *reinterpret_cast<int*>(this + 0x25C);
 }
 
+/*
 int Entity::getTeamNumber()
 {
     return *reinterpret_cast<int*>(this + 0xF4);
 }
+*/
 
 bool Entity::isScoped()
 {

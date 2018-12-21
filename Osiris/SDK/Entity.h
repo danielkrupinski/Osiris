@@ -7,7 +7,7 @@ class Entity {
 public:
     int* getFlags();
     int getMoveType();
-    int getTeamNumber();
+    // int getTeamNumber();
     bool isScoped();
     int getCrosshairID();
     void drawModel(int flags, unsigned char alpha);
