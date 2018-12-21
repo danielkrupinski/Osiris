@@ -6,9 +6,11 @@
 void Chams::render() noexcept
 {
     if (config.chams.enabled) {
-		static auto material = interfaces.materialSystem->findMaterial("dev/glow_color");
+		// static auto material = interfaces.materialSystem->findMaterial("dev/glow_color");
         static auto vertex = interfaces.materialSystem->findMaterial("debug/debugambientcube");
         static auto unlit = interfaces.materialSystem->findMaterial("debug/debugdrawflat");
+        auto material = config.chams.shader ? unlit : vertex;
+
 		material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 		interfaces.renderView->setBlend(config.chams.alpha);
 
