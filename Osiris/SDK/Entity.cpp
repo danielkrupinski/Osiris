@@ -36,7 +36,7 @@ bool Entity::isEnemy()
 {
     static auto gameMode = interfaces.cvar->findVar("game_type");
 
-    if (gameMode->getInt() == 6 || getTeamNumber() != (*memory.localPlayer)->getTeamNumber())
+    if (!isInLocalTeam() || gameMode->getInt() == 6)
         return true;
     else
         return false;
