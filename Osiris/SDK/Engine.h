@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 
-class EngineClient {
+class Engine {
 public:
 	int getMaxClients()
 	{

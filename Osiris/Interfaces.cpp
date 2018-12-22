@@ -6,7 +6,7 @@
 Interfaces::Interfaces() noexcept
 {
     try {
-        engineClient = find<EngineClient>("engine.dll", "VEngineClient");
+        engineClient = find<Engine>("engine.dll", "VEngineClient");
         entityList = find<EntityList>("client_panorama.dll", "VClientEntityList");
         client = find<Client>("client_panorama.dll", "VClient");
         surface = find<Surface>("vguimatsurface.dll", "VGUI_Surface");

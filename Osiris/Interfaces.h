@@ -19,7 +19,7 @@ class Interfaces final {
 public:
     explicit Interfaces() noexcept;
 
-    EngineClient* engineClient;
+    Engine* engineClient;
     EntityList* entityList;
     class Client* client;
     Surface* surface;
