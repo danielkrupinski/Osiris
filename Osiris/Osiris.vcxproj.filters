@@ -81,9 +81,6 @@
     <ClCompile Include="Hacks\Aimbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\Entity.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
