@@ -50,7 +50,7 @@ void Chams::render() noexcept
         }
 
 		interfaces.modelRender->forceMaterialOverride(nullptr);
-		material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
-		material->setMaterialVarFlag(MaterialVar::WIREFRAME, false);
+		// material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+		// material->setMaterialVarFlag(MaterialVar::WIREFRAME, false);
     }
 }
