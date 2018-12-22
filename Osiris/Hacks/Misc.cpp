@@ -5,7 +5,18 @@
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
+    constexpr int ON_GROUND{ 1 };
+    constexpr int IN_JUMP{ 2 };
     if (config.misc.bunnyHop) {
+        if (cmd->buttons & IN_JUMP) {
+            if (*((*memory.localPlayer)->getFlags()) & ON_GROUND) {
+                cmd->buttons |= IN_JUMP;
+            }
+            else {
+                cmd->buttons &= ~IN_JUMP;
+            }
+        }
+        /*
         constexpr int ON_GROUND{ 1 };
         constexpr int IN_JUMP{ 2 };
 
@@ -29,6 +40,8 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
             jumped = false;
             fake = false;
         }
+    }
+    */
     }
 }
 
