@@ -26,7 +26,7 @@ public:
         return *reinterpret_cast<int*>(this + 0xB394);
     }
 
-    void drawModel(int flags, unsigned char alpha) noexcept
+    constexpr void drawModel(int flags, unsigned char alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
     }
@@ -41,27 +41,27 @@ public:
             return false;
     }
 
-    bool isDormant() noexcept
+    constexpr bool isDormant() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this + 8, 9)(this + 8);
     }
 
-    bool isWeapon() noexcept
+    constexpr bool isWeapon() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 161)(this);
     }
 
-    ClientClass* getClientClass() noexcept
+    constexpr ClientClass* getClientClass() noexcept
     {
         return callVirtualFunction<ClientClass*(__thiscall*)(void*)>(this + 8, 2)(this + 8);
     }
 
-    bool isAlive() noexcept
+    constexpr bool isAlive() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
     }
 
-    bool isInLocalTeam() noexcept
+    constexpr bool isInLocalTeam() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 92)(this);
     }
