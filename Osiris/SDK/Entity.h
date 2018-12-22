@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ClientClass.h"
-#include "Vector.h"
+#include "../Interfaces.h"
+#include "Utils.h"
 
 class Entity {
 public:

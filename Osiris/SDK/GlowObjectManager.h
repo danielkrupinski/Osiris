@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "UtlVector.h"
+#include "Vector.h"
 
 struct GlowObjectDefinition {
     Entity* entity;
