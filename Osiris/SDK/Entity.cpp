@@ -26,7 +26,7 @@ bool Entity::isScoped()
 
 int Entity::getCrosshairID()
 {
-    return *reinterpret_cast<int*>(this + 0xB390);
+    return *reinterpret_cast<int*>(this + 0xB394);
 }
 
 void Entity::drawModel(int flags, unsigned char alpha)
