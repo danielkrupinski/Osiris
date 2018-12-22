@@ -9,7 +9,7 @@
 
 #include "SDK/EntityList.h"
 #include "SDK/Cvar.h"
-#include "SDK/EngineClient.h"
+#include "SDK/Engine.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/RenderView.h"
@@ -19,7 +19,7 @@ class Interfaces final {
 public:
     explicit Interfaces() noexcept;
 
-    Engine* engineClient;
+    Engine* engine;
     EntityList* entityList;
     class Client* client;
     Surface* surface;
