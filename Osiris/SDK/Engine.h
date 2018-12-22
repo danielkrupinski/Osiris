@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils.h"
+
 class EngineClient {
 public:
 	int getMaxClients()

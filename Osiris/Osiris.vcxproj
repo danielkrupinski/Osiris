@@ -49,7 +49,7 @@
     <ClInclude Include="SDK\ClientClass.h" />
     <ClInclude Include="SDK\EntityList.h" />
     <ClInclude Include="SDK\Cvar.h" />
-    <ClInclude Include="SDK\EngineClient.h" />
+    <ClInclude Include="SDK\Engine.h" />
     <ClInclude Include="SDK\ClassId.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Hooks.h" />
