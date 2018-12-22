@@ -109,12 +109,9 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::NextColumn();
         checkBoxAndColorPicker("Allies", &config.chams.allies, config.chams.alliesColor);
-        if (config.chams.allies)
-            checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
-
+        checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
         checkBoxAndColorPicker("Enemies", &config.chams.enemies, config.chams.enemiesColor);
-        if (config.chams.enemies)
-            checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
+        checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
         ImGui::End();
     }
 }

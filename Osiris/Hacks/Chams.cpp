@@ -24,13 +24,12 @@ void Chams::render() noexcept
                         material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                         interfaces.modelRender->forceMaterialOverride(material);
                         entity->drawModel(1, 255);
-
-                        if (config.chams.visibleEnemies) {
-                            interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
-                            material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-                            interfaces.modelRender->forceMaterialOverride(material);
-                            entity->drawModel(1, 255);
-                        }
+                    }
+                    if (config.chams.visibleEnemies) {
+                        interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
+                        material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                        interfaces.modelRender->forceMaterialOverride(material);
+                        entity->drawModel(1, 255);
                     }
                 }
                 else {
@@ -39,13 +38,12 @@ void Chams::render() noexcept
                         material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                         interfaces.modelRender->forceMaterialOverride(material);
                         entity->drawModel(1, 255);
-
-                        if (config.chams.visibleAllies) {
-                            interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
-                            material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-                            interfaces.modelRender->forceMaterialOverride(material);
-                            entity->drawModel(1, 255);
-                        }
+                    }
+                    if (config.chams.visibleAllies) {
+                        interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
+                        material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                        interfaces.modelRender->forceMaterialOverride(material);
+                        entity->drawModel(1, 255);
                     }
                 }
             }
