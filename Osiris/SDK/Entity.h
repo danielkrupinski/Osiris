@@ -6,32 +6,32 @@
 
 class Entity {
 public:
-    int* getFlags()
+    int* getFlags() noexcept
     {
         return reinterpret_cast<int*>(this + 0x104);
     }
 
-    int getMoveType()
+    int getMoveType() noexcept
     {
         return *reinterpret_cast<int*>(this + 0x25C);
     }
 
-    bool isScoped()
+    bool isScoped() noexcept
     {
         return *reinterpret_cast<bool*>(this + 0x390A);
     }
 
-    int getCrosshairID()
+    int getCrosshairID() noexcept
     {
         return *reinterpret_cast<int*>(this + 0xB394);
     }
 
-    void drawModel(int flags, unsigned char alpha)
+    void drawModel(int flags, unsigned char alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
     }
 
-    bool isEnemy()
+    bool isEnemy() noexcept
     {
         static auto gameMode = interfaces.cvar->findVar("game_type");
 
@@ -41,27 +41,27 @@ public:
             return false;
     }
 
-    bool isDormant()
+    bool isDormant() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this + 8, 9)(this + 8);
     }
 
-    bool isWeapon()
+    bool isWeapon() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 161)(this);
     }
 
-    ClientClass* getClientClass()
+    ClientClass* getClientClass() noexcept
     {
         return callVirtualFunction<ClientClass*(__thiscall*)(void*)>(this + 8, 2)(this + 8);
     }
 
-    bool isAlive()
+    bool isAlive() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
     }
 
-    bool isInLocalTeam()
+    bool isInLocalTeam() noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 92)(this);
     }
