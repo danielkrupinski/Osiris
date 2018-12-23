@@ -169,6 +169,8 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
         }
         else
             currentAddress -= vmtSize;
+
+    throw std::runtime_error{ "Could not find free memory pages in module at " + std::to_string(reinterpret_cast<int>(moduleInfo.lpBaseOfDll)) };
 }
 
 std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
