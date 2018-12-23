@@ -146,7 +146,13 @@ Hooks::Vmt::Vmt(void* const base)
     oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     length = calculateLength(oldVmt);
 
-    newVmt = findFreeDataPage(base, length);
+    try {
+        newVmt = findFreeDataPage(base, length);
+    }
+    catch (const std::runtime_error& e) {
+        MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
+        std::exit(EXIT_FAILURE);
+    }
     std::copy(oldVmt, oldVmt + length, newVmt);
     *reinterpret_cast<std::uintptr_t**>(base) = newVmt;
 }
