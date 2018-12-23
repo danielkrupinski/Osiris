@@ -13,9 +13,4 @@ public:
 	{
 		return callVirtualFunction<int(__thiscall*)(void*)>(this, 26)(this);
 	}
-
-	bool isConnected()
-	{
-		return callVirtualFunction<bool(__thiscall*)(void*)>(this, 27)(this);
-	}
 };
