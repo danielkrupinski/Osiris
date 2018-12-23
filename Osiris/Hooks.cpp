@@ -86,7 +86,7 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
-    if (interfaces.engine->isConnected() && interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame()) {
         Misc::skybox();
         Misc::bunnyHop(cmd);
         Misc::removeCrouchCooldown(cmd);
@@ -106,7 +106,7 @@ static void __stdcall hookedLockCursor() noexcept
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
-    if (interfaces.engine->isConnected() && interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame()) {
         Misc::inverseRagdollGravity();
         Misc::removeBlood();
         Misc::removeSmoke();
@@ -121,7 +121,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 
 static float __stdcall hookedGetViewModelFov() noexcept
 {
-    if (interfaces.engine->isConnected() && interfaces.engine->isInGame() && !(*memory.localPlayer)->isScoped())
+    if (interfaces.engine->isInGame() && !(*memory.localPlayer)->isScoped())
         return static_cast<float>(config.misc.viewmodelFov);
     else
         return 60.0f;
