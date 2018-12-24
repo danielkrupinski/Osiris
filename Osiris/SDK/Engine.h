@@ -11,6 +11,6 @@ public:
 
 	bool isInGame()
 	{
-		return callVirtualFunction<int(__thiscall*)(void*)>(this, 26)(this);
+		return callVirtualFunction<bool(__thiscall*)(void*)>(this, 26)(this);
 	}
 };
