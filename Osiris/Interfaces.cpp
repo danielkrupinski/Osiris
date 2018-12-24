@@ -14,6 +14,7 @@ Interfaces::Interfaces() noexcept
         modelRender = find<ModelRender>("engine.dll", "VEngineModel");
         materialSystem = find<MaterialSystem>("materialsystem.dll", "VMaterialSystem");
         renderView = find<RenderView>("engine.dll", "VEngineRenderView");
+        inputSystem = find<InputSystem>("inputsystem.dll", "InputSystemVersion");
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
