@@ -200,5 +200,8 @@
     <ClInclude Include="SDK\Engine.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\InputSystem.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
