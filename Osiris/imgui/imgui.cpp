@@ -43,6 +43,7 @@ DOCUMENTATION
   - How can I load multiple fonts?
   - How can I display and input non-latin characters such as Chinese, Japanese, Korean, Cyrillic?
   - How can I use the drawing facilities without an ImGui window? (using ImDrawList API)
+  - How can I use Dear ImGui on a platform that doesn't have a mouse or a keyboard? (input share, remoting, gamepad)
   - I integrated Dear ImGui in my engine and the text or lines are blurry..
   - I integrated Dear ImGui in my engine and some elements are clipping or disappearing when I move windows around..
   - How can I help?
@@ -818,8 +819,23 @@ CODE
       (The ImGuiWindowFlags_NoDecoration flag itself is a shortcut for NoTitleBar | NoResize | NoScrollbar | NoCollapse)
       Then you can retrieve the ImDrawList* via GetWindowDrawList() and draw to it in any way you like.
     - You can call ImGui::GetOverlayDrawList() and use this draw list to display contents over every other imgui windows.
-    - You can create your own ImDrawList instance. You'll need to initialize them ImGui::GetDrawListSharedData(), or create your own ImDrawListSharedData,
-      and then call your rendered code with your own ImDrawList or ImDrawData data.
+    - You can create your own ImDrawList instance. You'll need to initialize them ImGui::GetDrawListSharedData(), or create
+      your own ImDrawListSharedData, and then call your rendered code with your own ImDrawList or ImDrawData data.
+
+ Q: How can I use this without a mouse, without a keyboard or without a screen? (gamepad, input share, remote display)
+ A: - You can control Dear ImGui with a gamepad. Read about navigation in "Using gamepad/keyboard navigation controls".
+      (short version: map gamepad inputs into the io.NavInputs[] array + set io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad)
+    - You can share your computer mouse seamlessly with your console/tablet/phone using Synergy (https://symless.com/synergy)
+      This is the preferred solution for developer productivity.
+      In particular, the "micro-synergy-client" repository (https://github.com/symless/micro-synergy-client) has simple
+      and portable source code (uSynergy.c/.h) for a small embeddable client that you can use on any platform to connect
+      to your host computer, based on the Synergy 1.x protocol. Make sure you download the Synergy 1 server on your computer.
+      Console SDK also sometimes provide equivalent tooling or wrapper for Synergy-like protocols.
+    - You may also use a third party solution such as Remote ImGui (https://github.com/JordiRos/remoteimgui) which sends
+      the vertices to render over the local network, allowing you to use Dear ImGui even on a screen-less machine.
+    - For touch inputs, you can increase the hit box of widgets (via the style.TouchPadding setting) to accommodate
+      for the lack of precision of touch inputs, but it is recommended you use a mouse or gamepad to allow optimizing
+      for screen real-estate and precision.
 
  Q: I integrated Dear ImGui in my engine and the text or lines are blurry..
  A: In your Render function, try translating your projection matrix by (0.5f,0.5f) or (0.375f,0.375f).
@@ -1095,6 +1111,7 @@ ImGuiIO::ImGuiIO()
 
     // Platform Functions
     BackendPlatformName = BackendRendererName = NULL;
+    BackendPlatformUserData = BackendRendererUserData = BackendLanguageUserData = NULL;
     GetClipboardTextFn = GetClipboardTextFn_DefaultImpl;   // Platform dependent default implementations
     SetClipboardTextFn = SetClipboardTextFn_DefaultImpl;
     ClipboardUserData = NULL;
@@ -2630,7 +2647,7 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg)
     window->DC.LastItemStatusFlags = ImGuiItemStatusFlags_None;
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
-    ImGuiTestEngineHook_ItemAdd(id, bb);
+    ImGuiTestEngineHook_ItemAdd(bb, id);
 #endif
 
     // Clipping test
@@ -3299,7 +3316,7 @@ void ImGui::NewFrame()
     // No window should be open at the beginning of the frame.
     // But in order to allow the user to call NewFrame() multiple times without calling Render(), we are doing an explicit clear.
     g.CurrentWindowStack.resize(0);
-    g.CurrentPopupStack.resize(0);
+    g.BeginPopupStack.resize(0);
     ClosePopupsOverWindow(g.NavWindow);
 
     // Create implicit/fallback window - which we will only render it if the user has added something to it.
@@ -3373,7 +3390,7 @@ void ImGui::Shutdown(ImGuiContext* context)
     g.StyleModifiers.clear();
     g.FontStack.clear();
     g.OpenPopupStack.clear();
-    g.CurrentPopupStack.clear();
+    g.BeginPopupStack.clear();
     g.DrawDataBuilder.ClearFreeMemory();
     g.OverlayDrawList.ClearFreeMemory();
     g.PrivateClipboard.clear();
@@ -3536,7 +3553,10 @@ void ImGui::EndFrame()
     IM_ASSERT(g.Initialized);
     if (g.FrameCountEnded == g.FrameCount)          // Don't process EndFrame() multiple times.
         return;
-    IM_ASSERT(g.FrameScopeActive && "Forgot to call ImGui::NewFrame()");
+    IM_ASSERT(g.FrameScopeActive && "Forgot to call ImGui::NewFrame()?");
+
+    g.FrameScopeActive = false;
+    g.FrameCountEnded = g.FrameCount;
 
     // Notify OS when our Input Method Editor cursor has moved (e.g. CJK inputs using Microsoft IME)
     if (g.IO.ImeSetInputScreenPosFn && ImLengthSqr(g.PlatformImeLastPos - g.PlatformImePos) > 0.0001f)
@@ -3545,8 +3565,23 @@ void ImGui::EndFrame()
         g.PlatformImeLastPos = g.PlatformImePos;
     }
 
-    // Hide implicit "Debug" window if it hasn't been used
-    IM_ASSERT(g.CurrentWindowStack.Size == 1);    // Mismatched Begin()/End() calls, did you forget to call end on g.CurrentWindow->Name?
+    // Report when there is a mismatch of Begin/BeginChild vs End/EndChild calls. Important: Remember that the Begin/BeginChild API requires you
+    // to always call End/EndChild even if Begin/BeginChild returns false! (this is unfortunately inconsistent with most other Begin* API).
+    if (g.CurrentWindowStack.Size != 1)
+    {
+        if (g.CurrentWindowStack.Size > 1)
+        {
+            IM_ASSERT(g.CurrentWindowStack.Size == 1 && "Mismatched Begin/BeginChild vs End/EndChild calls: did you forget to call End/EndChild?");
+            while (g.CurrentWindowStack.Size > 1) // FIXME-ERRORHANDLING
+                End();
+        }
+        else
+        {
+            IM_ASSERT(g.CurrentWindowStack.Size == 1 && "Mismatched Begin/BeginChild vs End/EndChild calls: did you call End/EndChild too much?");
+        }
+    }
+
+    // Hide implicit/fallback "Debug" window if it hasn't been used
     if (g.CurrentWindow && !g.CurrentWindow->WriteAccessed)
         g.CurrentWindow->Active = false;
     End();
@@ -3639,9 +3674,6 @@ void ImGui::EndFrame()
     g.IO.MouseWheel = g.IO.MouseWheelH = 0.0f;
     memset(g.IO.InputCharacters, 0, sizeof(g.IO.InputCharacters));
     memset(g.IO.NavInputs, 0, sizeof(g.IO.NavInputs));
-
-    g.FrameScopeActive = false;
-    g.FrameCountEnded = g.FrameCount;
 }
 
 void ImGui::Render()
@@ -3682,7 +3714,7 @@ void ImGui::Render()
     g.IO.MetricsRenderVertices = g.DrawData.TotalVtxCount;
     g.IO.MetricsRenderIndices = g.DrawData.TotalIdxCount;
 
-    // Render. If user hasn't set a callback then they may retrieve the draw data via GetDrawData()
+    // (Legacy) Call the Render callback function. The current prefer way is to let the user retrieve GetDrawData() and call the render function themselves.
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
     if (g.DrawData.CmdListsCount > 0 && g.IO.RenderDrawListsFn != NULL)
         g.IO.RenderDrawListsFn(&g.DrawData);
@@ -3942,8 +3974,8 @@ ImVec2 ImGui::GetMousePos()
 ImVec2 ImGui::GetMousePosOnOpeningCurrentPopup()
 {
     ImGuiContext& g = *GImGui;
-    if (g.CurrentPopupStack.Size > 0)
-        return g.OpenPopupStack[g.CurrentPopupStack.Size - 1].OpenMousePos;
+    if (g.BeginPopupStack.Size > 0)
+        return g.OpenPopupStack[g.BeginPopupStack.Size - 1].OpenMousePos;
     return g.IO.MousePos;
 }
 
@@ -3956,6 +3988,8 @@ bool ImGui::IsMousePosValid(const ImVec2* mouse_pos)
     return mouse_pos->x >= MOUSE_INVALID && mouse_pos->y >= MOUSE_INVALID;
 }
 
+// Return the delta from the initial clicking position.
+// This is locked and return 0.0f until the mouse moves past a distance threshold at least once.
 // NB: This is only valid if IsMousePosValid(). Back-ends in theory should always keep mouse position valid when dragging even outside the client window.
 ImVec2 ImGui::GetMouseDragDelta(int button, float lock_threshold)
 {
@@ -4134,6 +4168,10 @@ static bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size
     child_window->ChildId = id;
     child_window->AutoFitChildAxises = auto_fit_axises;
 
+    // Set the cursor to handle case where the user called SetNextWindowPos()+BeginChild() manually.
+    // While this is not really documented/defined, it seems that the expected thing to do.
+    parent_window->DC.CursorPos = child_window->Pos;
+
     // Process navigation-in immediately so NavInit can run on first frame
     if (g.NavActivateId == id && !(flags & ImGuiWindowFlags_NavFlattened) && (child_window->DC.NavLayerActiveMask != 0 || child_window->DC.NavHasScroll))
     {
@@ -4224,7 +4262,7 @@ static void CheckStacksSize(ImGuiWindow* window, bool write)
     short* p_backup = &window->DC.StackSizesBackup[0];
     { int current = window->IDStack.Size;       if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup == current && "PushID/PopID or TreeNode/TreePop Mismatch!");   p_backup++; }    // Too few or too many PopID()/TreePop()
     { int current = window->DC.GroupStack.Size; if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup == current && "BeginGroup/EndGroup Mismatch!");                p_backup++; }    // Too few or too many EndGroup()
-    { int current = g.CurrentPopupStack.Size;   if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup == current && "BeginMenu/EndMenu or BeginPopup/EndPopup Mismatch"); p_backup++; }// Too few or too many EndMenu()/EndPopup()
+    { int current = g.BeginPopupStack.Size;     if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup == current && "BeginMenu/EndMenu or BeginPopup/EndPopup Mismatch"); p_backup++; }// Too few or too many EndMenu()/EndPopup()
     // For color, style and font stacks there is an incentive to use Push/Begin/Pop/.../End patterns, so we relax our checks a little to allow them.
     { int current = g.ColorModifiers.Size;      if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup >= current && "PushStyleColor/PopStyleColor Mismatch!");       p_backup++; }    // Too few or too many PopStyleColor()
     { int current = g.StyleModifiers.Size;      if (write) *p_backup = (short)current; else IM_ASSERT(*p_backup >= current && "PushStyleVar/PopStyleVar Mismatch!");           p_backup++; }    // Too few or too many PopStyleVar()
@@ -4598,7 +4636,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 {
     ImGuiContext& g = *GImGui;
     const ImGuiStyle& style = g.Style;
-    IM_ASSERT(name != NULL);                        // Window name required
+    IM_ASSERT(name != NULL && name[0] != '\0');     // Window name required
     IM_ASSERT(g.FrameScopeActive);                  // Forgot to call ImGui::NewFrame()
     IM_ASSERT(g.FrameCountEnded != g.FrameCount);   // Called ImGui::Render() or ImGui::EndFrame() and haven't called ImGui::NewFrame() again yet
 
@@ -4638,7 +4676,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
     const bool window_just_appearing_after_hidden_for_resize = (window->HiddenFramesForResize > 0);
     if (flags & ImGuiWindowFlags_Popup)
     {
-        ImGuiPopupRef& popup_ref = g.OpenPopupStack[g.CurrentPopupStack.Size];
+        ImGuiPopupRef& popup_ref = g.OpenPopupStack[g.BeginPopupStack.Size];
         window_just_activated_by_user |= (window->PopupId != popup_ref.PopupId); // We recycle popups so treat window as activated if popup id changed
         window_just_activated_by_user |= (window != popup_ref.Window);
     }
@@ -4652,9 +4690,9 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
     CheckStacksSize(window, true);
     if (flags & ImGuiWindowFlags_Popup)
     {
-        ImGuiPopupRef& popup_ref = g.OpenPopupStack[g.CurrentPopupStack.Size];
+        ImGuiPopupRef& popup_ref = g.OpenPopupStack[g.BeginPopupStack.Size];
         popup_ref.Window = window;
-        g.CurrentPopupStack.push_back(popup_ref);
+        g.BeginPopupStack.push_back(popup_ref);
         window->PopupId = popup_ref.PopupId;
     }
 
@@ -4829,7 +4867,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         {
             window->AutoPosLastDirection = ImGuiDir_None;
             if ((flags & ImGuiWindowFlags_Popup) != 0 && !window_pos_set_by_api)
-                window->Pos = g.CurrentPopupStack.back().OpenPopupPos;
+                window->Pos = g.BeginPopupStack.back().OpenPopupPos;
         }
 
         // Position child window
@@ -5219,6 +5257,13 @@ bool ImGui::Begin(const char* name, bool* p_open, const ImVec2& size_first_use, 
 void ImGui::End()
 {
     ImGuiContext& g = *GImGui;
+
+    if (g.CurrentWindowStack.Size <= 1 && g.FrameScopeActive)
+    {
+        IM_ASSERT(g.CurrentWindowStack.Size > 1 && "Calling End() too many times!");
+        return; // FIXME-ERRORHANDLING
+    }
+
     ImGuiWindow* window = g.CurrentWindow;
 
     if (window->DC.ColumnsSet != NULL)
@@ -5232,7 +5277,7 @@ void ImGui::End()
     // Pop from window stack
     g.CurrentWindowStack.pop_back();
     if (window->Flags & ImGuiWindowFlags_Popup)
-        g.CurrentPopupStack.pop_back();
+        g.BeginPopupStack.pop_back();
     CheckStacksSize(window, false);
     SetCurrentWindow(g.CurrentWindowStack.empty() ? NULL : g.CurrentWindowStack.back());
 }
@@ -6082,10 +6127,10 @@ ImVec2 ImGui::GetCursorScreenPos()
     return window->DC.CursorPos;
 }
 
-void ImGui::SetCursorScreenPos(const ImVec2& screen_pos)
+void ImGui::SetCursorScreenPos(const ImVec2& pos)
 {
     ImGuiWindow* window = GetCurrentWindow();
-    window->DC.CursorPos = screen_pos;
+    window->DC.CursorPos = pos;
     window->DC.CursorMaxPos = ImMax(window->DC.CursorMaxPos, window->DC.CursorPos);
 }
 
@@ -6123,12 +6168,12 @@ void ImGui::SetScrollY(float scroll_y)
     window->ScrollTargetCenterRatio.y = 0.0f;
 }
 
-void ImGui::SetScrollFromPosY(float pos_y, float center_y_ratio)
+void ImGui::SetScrollFromPosY(float local_y, float center_y_ratio)
 {
     // We store a target position so centering can occur on the next frame when we are guaranteed to have a known window size
     ImGuiWindow* window = GetCurrentWindow();
     IM_ASSERT(center_y_ratio >= 0.0f && center_y_ratio <= 1.0f);
-    window->ScrollTarget.y = (float)(int)(pos_y + window->Scroll.y);
+    window->ScrollTarget.y = (float)(int)(local_y + window->Scroll.y);
     window->ScrollTargetCenterRatio.y = center_y_ratio;
 }
 
@@ -6428,13 +6473,13 @@ void ImGui::SetTooltip(const char* fmt, ...)
 bool ImGui::IsPopupOpen(ImGuiID id)
 {
     ImGuiContext& g = *GImGui;
-    return g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == id;
+    return g.OpenPopupStack.Size > g.BeginPopupStack.Size && g.OpenPopupStack[g.BeginPopupStack.Size].PopupId == id;
 }
 
 bool ImGui::IsPopupOpen(const char* str_id)
 {
     ImGuiContext& g = *GImGui;
-    return g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == g.CurrentWindow->GetID(str_id);
+    return g.OpenPopupStack.Size > g.BeginPopupStack.Size && g.OpenPopupStack[g.BeginPopupStack.Size].PopupId == g.CurrentWindow->GetID(str_id);
 }
 
 ImGuiWindow* ImGui::GetFrontMostPopupModal()
@@ -6461,7 +6506,7 @@ void ImGui::OpenPopupEx(ImGuiID id)
 {
     ImGuiContext& g = *GImGui;
     ImGuiWindow* parent_window = g.CurrentWindow;
-    int current_stack_size = g.CurrentPopupStack.Size;
+    int current_stack_size = g.BeginPopupStack.Size;
     ImGuiPopupRef popup_ref; // Tagged as new ref as Window will be set back to NULL if we write this into OpenPopupStack.
     popup_ref.PopupId = id;
     popup_ref.Window = NULL;
@@ -6520,12 +6565,13 @@ void ImGui::ClosePopupsOverWindow(ImGuiWindow* ref_window)
 
     // When popups are stacked, clicking on a lower level popups puts focus back to it and close popups above it.
     // Don't close our own child popup windows.
-    int n = 0;
+    int popup_count_to_keep = 0;
     if (ref_window)
     {
-        for (n = 0; n < g.OpenPopupStack.Size; n++)
+        // Find the highest popup which is a descendant of the reference window (generally reference window = NavWindow)
+        for (; popup_count_to_keep < g.OpenPopupStack.Size; popup_count_to_keep++)
         {
-            ImGuiPopupRef& popup = g.OpenPopupStack[n];
+            ImGuiPopupRef& popup = g.OpenPopupStack[popup_count_to_keep];
             if (!popup.Window)
                 continue;
             IM_ASSERT((popup.Window->Flags & ImGuiWindowFlags_Popup) != 0);
@@ -6533,47 +6579,60 @@ void ImGui::ClosePopupsOverWindow(ImGuiWindow* ref_window)
                 continue;
 
             // Trim the stack if popups are not direct descendant of the reference window (which is often the NavWindow)
-            bool has_focus = false;
-            for (int m = n; m < g.OpenPopupStack.Size && !has_focus; m++)
-                has_focus = (g.OpenPopupStack[m].Window && g.OpenPopupStack[m].Window->RootWindow == ref_window->RootWindow);
-            if (!has_focus)
+            bool popup_or_descendent_has_focus = false;
+            for (int m = popup_count_to_keep; m < g.OpenPopupStack.Size && !popup_or_descendent_has_focus; m++)
+                if (g.OpenPopupStack[m].Window && g.OpenPopupStack[m].Window->RootWindow == ref_window->RootWindow)
+                    popup_or_descendent_has_focus = true;
+            if (!popup_or_descendent_has_focus)
                 break;
         }
     }
-    if (n < g.OpenPopupStack.Size) // This test is not required but it allows to set a convenient breakpoint on the block below
-        ClosePopupToLevel(n);
+    if (popup_count_to_keep < g.OpenPopupStack.Size) // This test is not required but it allows to set a convenient breakpoint on the statement below
+    {
+        //IMGUI_DEBUG_LOG("ClosePopupsOverWindow(%s) -> ClosePopupToLevel(%d)\n", ref_window->Name, popup_count_to_keep);
+        ClosePopupToLevel(popup_count_to_keep, false);
+    }
 }
 
-void ImGui::ClosePopupToLevel(int remaining)
+void ImGui::ClosePopupToLevel(int remaining, bool apply_focus_to_window_under)
 {
     IM_ASSERT(remaining >= 0);
     ImGuiContext& g = *GImGui;
     ImGuiWindow* focus_window = (remaining > 0) ? g.OpenPopupStack[remaining - 1].Window : g.OpenPopupStack[0].ParentWindow;
-    if (g.NavLayer == 0)
-        focus_window = NavRestoreLastChildNavWindow(focus_window);
-    FocusWindow(focus_window);
-    focus_window->DC.NavHideHighlightOneFrame = true;
     g.OpenPopupStack.resize(remaining);
-}
 
-void ImGui::ClosePopup(ImGuiID id)
-{
-    if (!IsPopupOpen(id))
-        return;
-    ImGuiContext& g = *GImGui;
-    ClosePopupToLevel(g.OpenPopupStack.Size - 1);
+    // FIXME: This code is faulty and we may want to eventually to replace or remove the 'apply_focus_to_window_under=true' path completely.
+    // Instead of using g.OpenPopupStack[remaining-1].Window etc. we should find the highest root window that is behind the popups we are closing.
+    // The current code will set focus to the parent of the popup window which is incorrect. 
+    // It rarely manifested until now because UpdateMouseMovingWindow() would call FocusWindow() again on the clicked window, 
+    // leading to a chain of focusing A (clicked window) then B (parent window of the popup) then A again.
+    // However if the clicked window has the _NoMove flag set we would be left with B focused.
+    // For now, we have disabled this path when called from ClosePopupsOverWindow() because the users of ClosePopupsOverWindow() don't need to alter focus anyway,
+    // but we should inspect and fix this properly.
+    if (apply_focus_to_window_under)
+    {
+        if (g.NavLayer == 0)
+            focus_window = NavRestoreLastChildNavWindow(focus_window);
+        FocusWindow(focus_window);
+    }
 }
 
 // Close the popup we have begin-ed into.
 void ImGui::CloseCurrentPopup()
 {
     ImGuiContext& g = *GImGui;
-    int popup_idx = g.CurrentPopupStack.Size - 1;
-    if (popup_idx < 0 || popup_idx >= g.OpenPopupStack.Size || g.CurrentPopupStack[popup_idx].PopupId != g.OpenPopupStack[popup_idx].PopupId)
+    int popup_idx = g.BeginPopupStack.Size - 1;
+    if (popup_idx < 0 || popup_idx >= g.OpenPopupStack.Size || g.BeginPopupStack[popup_idx].PopupId != g.OpenPopupStack[popup_idx].PopupId)
         return;
     while (popup_idx > 0 && g.OpenPopupStack[popup_idx].Window && (g.OpenPopupStack[popup_idx].Window->Flags & ImGuiWindowFlags_ChildMenu))
         popup_idx--;
-    ClosePopupToLevel(popup_idx);
+    ClosePopupToLevel(popup_idx, true);
+
+    // A common pattern is to close a popup when selecting a menu item/selectable that will open another window.
+    // To improve this usage pattern, we avoid nav highlight for a single frame in the parent window.
+    // Similarly, we could avoid mouse hover highlight in this window but it is less visually problematic.
+    if (ImGuiWindow* window = g.NavWindow)
+        window->DC.NavHideHighlightOneFrame = true;
 }
 
 bool ImGui::BeginPopupEx(ImGuiID id, ImGuiWindowFlags extra_flags)
@@ -6587,7 +6646,7 @@ bool ImGui::BeginPopupEx(ImGuiID id, ImGuiWindowFlags extra_flags)
 
     char name[20];
     if (extra_flags & ImGuiWindowFlags_ChildMenu)
-        ImFormatString(name, IM_ARRAYSIZE(name), "##Menu_%02d", g.CurrentPopupStack.Size);    // Recycle windows based on depth
+        ImFormatString(name, IM_ARRAYSIZE(name), "##Menu_%02d", g.BeginPopupStack.Size); // Recycle windows based on depth
     else
         ImFormatString(name, IM_ARRAYSIZE(name), "##Popup_%08x", id); // Not recycling, so we can close/open during the same frame
 
@@ -6601,7 +6660,7 @@ bool ImGui::BeginPopupEx(ImGuiID id, ImGuiWindowFlags extra_flags)
 bool ImGui::BeginPopup(const char* str_id, ImGuiWindowFlags flags)
 {
     ImGuiContext& g = *GImGui;
-    if (g.OpenPopupStack.Size <= g.CurrentPopupStack.Size) // Early out for performance
+    if (g.OpenPopupStack.Size <= g.BeginPopupStack.Size) // Early out for performance
     {
         g.NextWindowData.Clear(); // We behave like Begin() and need to consume those values
         return false;
@@ -6610,6 +6669,8 @@ bool ImGui::BeginPopup(const char* str_id, ImGuiWindowFlags flags)
     return BeginPopupEx(g.CurrentWindow->GetID(str_id), flags);
 }
 
+// If 'p_open' is specified for a modal popup window, the popup will have a regular close button which will close the popup.
+// Note that popup visibility status is owned by imgui (and manipulated with e.g. OpenPopup) so the actual value of *p_open is meaningless here.
 bool ImGui::BeginPopupModal(const char* name, bool* p_open, ImGuiWindowFlags flags)
 {
     ImGuiContext& g = *GImGui;
@@ -6632,7 +6693,7 @@ bool ImGui::BeginPopupModal(const char* name, bool* p_open, ImGuiWindowFlags fla
     {
         EndPopup();
         if (is_open)
-            ClosePopup(id);
+            ClosePopupToLevel(g.BeginPopupStack.Size, true);
         return false;
     }
     return is_open;
@@ -6642,7 +6703,7 @@ void ImGui::EndPopup()
 {
     ImGuiContext& g = *GImGui; (void)g;
     IM_ASSERT(g.CurrentWindow->Flags & ImGuiWindowFlags_Popup);  // Mismatched BeginPopup()/EndPopup() calls
-    IM_ASSERT(g.CurrentPopupStack.Size > 0);
+    IM_ASSERT(g.BeginPopupStack.Size > 0);
 
     // Make all menus and popups wrap around for now, may need to expose that policy.
     NavMoveRequestTryWrapping(g.CurrentWindow, ImGuiNavMoveFlags_LoopY);
@@ -7358,7 +7419,7 @@ static void ImGui::NavUpdate()
         {
             // Close open popup/menu
             if (!(g.OpenPopupStack.back().Window->Flags & ImGuiWindowFlags_Modal))
-                ClosePopupToLevel(g.OpenPopupStack.Size - 1);
+                ClosePopupToLevel(g.OpenPopupStack.Size - 1, true);
         }
         else if (g.NavLayer != 0)
         {
