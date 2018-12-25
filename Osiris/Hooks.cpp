@@ -33,6 +33,8 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 {
     static bool isInitialised{ false };
 
+    static void* windowHandle;
+
     if (!isInitialised) {
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
@@ -60,6 +62,9 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         IDirect3DVertexDeclaration9* vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
 
+        if (!windowHandle)
+            std::swap(windowHandle, interfaces.inputSystem->getMutableWindowHandle());
+
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
@@ -71,6 +76,10 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
         device->SetVertexDeclaration(vertexDeclaration);
+    }
+    else {
+        if (windowHandle)
+            std::swap(windowHandle, interfaces.inputSystem->getMutableWindowHandle());
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
