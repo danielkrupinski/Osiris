@@ -40,7 +40,7 @@ public:
         std::size_t length;
     };
 
-    Vmt surface{ interfaces.surface };
+    // Vmt surface{ interfaces.surface };
     Vmt clientMode{ memory.clientMode };
 };
 
