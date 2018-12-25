@@ -144,7 +144,7 @@ Hooks::Hooks()
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
-    surface.hookAt(67, hookedLockCursor);
+    // surface.hookAt(67, hookedLockCursor);
 
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
