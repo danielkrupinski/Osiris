@@ -33,7 +33,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 {
     static bool isInitialised{ false };
 
-    static void* windowHandle = nullptr;
+    static bool isMenuToggled = false;
 
     if (!isInitialised) {
         ImGui::CreateContext();
@@ -48,7 +48,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
         io.LogFilename = nullptr;
-        //io.MouseDrawCursor = true;
+        io.MouseDrawCursor = true;
         char buffer[MAX_PATH];
         GetWindowsDirectoryA(buffer, MAX_PATH);
         io.Fonts->AddFontFromFileTTF(std::string{ buffer + std::string{ "\\Fonts\\Tahoma.ttf" } }.c_str(), 16.0f);
@@ -63,10 +63,11 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         IDirect3DVertexDeclaration9* vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
 
-        if (!windowHandle) {
+        if (!isMenuToggled) {
            memory.input->isMouseInitialized = false;
            memory.input->isMouseActive = false;
-           std::swap(windowHandle, interfaces.inputSystem->getMutableWindowHandle());
+           interfaces.inputSystem->enableInput(false);
+           isMenuToggled = true;
         }
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -81,10 +82,11 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         device->SetVertexDeclaration(vertexDeclaration);
     }
     else {
-        if (windowHandle) {
-            std::swap(windowHandle, interfaces.inputSystem->getMutableWindowHandle());
+        if (isMenuToggled) {
             memory.input->isMouseInitialized = true;
+            interfaces.inputSystem->enableInput(true);
             interfaces.inputSystem->resetInputState();
+            isMenuToggled = false;
         }
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);

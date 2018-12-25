@@ -13,12 +13,4 @@ public:
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 39)(this);
     }
-
-    void*& getMutableWindowHandle()
-    {
-        static uint32_t offset = 0;
-        if (!offset)
-            offset = *(uint32_t*)((*(char***)this)[10] + 5);
-        return *(void**)((char*)this + offset);
-    }
 };
