@@ -2,7 +2,7 @@
 
 #include "ClassId.h"
 
-struct ClientClass {
+struct ClientClass final {
     void* createFunction;
     void* createEventFunction;
     char* networkName;
