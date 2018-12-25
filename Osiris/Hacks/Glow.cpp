@@ -27,7 +27,7 @@ void Glow::render() noexcept
             glowobject.fullBloomStencilTestValue = 0;
             glowobject.bloomAmount = glow.thickness;
 
-            switch (glowobject.entity->getClientClass()->m_ClassID) {
+            switch (glowobject.entity->getClientClass()->classId) {
             case ClassId::CSPlayer:
                 if (glowobject.entity->isEnemy()) {
                     if (glow.enemies) {

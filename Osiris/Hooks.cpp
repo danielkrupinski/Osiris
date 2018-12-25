@@ -117,8 +117,8 @@ static void __stdcall hookedLockCursor() noexcept
 {
     if (gui.isOpen)
         interfaces.surface->unlockCursor();
-    else
-        hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
+    //else
+       // hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
 }
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
