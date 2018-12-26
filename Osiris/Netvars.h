@@ -7,7 +7,7 @@
 class Netvars final {
 public:
     Netvars();
-    int getOffset(const std::string_view, const std::string_view);
+    int getOffset(const std::string_view);
 private:
     std::unordered_map<std::string_view, RecvTable*> recvTables;
 };

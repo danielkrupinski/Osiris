@@ -4,13 +4,15 @@
 
 Netvars::Netvars()
 {
-    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-             recvTables.emplace(clientClass->networkName, clientClass->recvTable);
-
-    std::ofstream dump{ "netvar_dump.txt" };
-
-    for (auto recvTable : recvTables) {
-        dump << recvTable.first << '\n';
+    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next) {
+        if (std::string_view{ clientClass->networkName } == "CCSPlayer")
+            recvTables.emplace("CCSPlayer", clientClass->recvTable);
     }
-    dump.close();
+}
+
+int Netvars::getOffset(const std::string_view propertyName)
+{
+    for (int i = 0; i != recvTables["CCSPlayer"]->m_nProps; i++)
+        if (recvTables["CCSPlayer"]->m_pProps[i].m_pVarName == propertyName)
+            return recvTables["CCSPlayer"]->m_pProps[i].m_Offset;
 }
