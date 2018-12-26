@@ -9,5 +9,5 @@ Config config{ "Osiris.json" };
 GUI gui;
 Interfaces interfaces;
 Memory memory;
-Netvars netvars;
+// Netvars netvars;
 Hooks hooks;
