@@ -7,8 +7,9 @@
 #include <type_traits>
 #include <Windows.h>
 
-#include "SDK/EntityList.h"
+#include "SDK/Client.h"
 #include "SDK/Cvar.h"
+#include "SDK/EntityList.h"
 #include "SDK/Engine.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
@@ -22,7 +23,7 @@ public:
 
     Engine* engine;
     EntityList* entityList;
-    class Client* client;
+    Client* client;
     Surface* surface;
     Cvar* cvar;
     ModelRender* modelRender;
