@@ -81,6 +81,9 @@
     <ClCompile Include="Hacks\Aimbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Netvars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
