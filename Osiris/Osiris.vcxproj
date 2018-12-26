@@ -47,6 +47,7 @@
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Netvars.h" />
+    <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\Entity.h" />
     <ClInclude Include="SDK\ClientClass.h" />
     <ClInclude Include="SDK\EntityList.h" />
