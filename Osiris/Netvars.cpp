@@ -6,12 +6,9 @@ Netvars::Netvars()
     auto clientClass = interfaces.client->getAllClasses();
 
     while (clientClass) {
-        auto recvTable = clientClass->recvTable;
-
-        //if (recvTable)
-        //    tables.emplace(std::string(client->m_pNetworkName), recvTable);
+        if (auto recvTable = clientClass->recvTable)
+            recvTables.emplace(clientClass->networkName, recvTable);
 
         clientClass = clientClass->next;
     }
-
 }
