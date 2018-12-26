@@ -8,4 +8,9 @@ public:
     {
         callVirtualFunction<void(__thiscall*)()>(this, 14)();
     }
+
+    void deactivateMouse()
+    {
+        callVirtualFunction<void(__thiscall*)()>(this, 15)();
+    }
 };
