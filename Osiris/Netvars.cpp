@@ -1,14 +1,16 @@
+#include <fstream>
 #include "Interfaces.h"
 #include "Netvars.h"
 
 Netvars::Netvars()
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        if (clientClass->recvTable)
-            recvTables.emplace(clientClass->networkName, clientClass->recvTable);
-}
+             recvTables.emplace(clientClass->networkName, clientClass->recvTable);
 
-int Netvars::getOffset(const std::string_view, const std::string_view)
-{
-    return 0;
+    std::ofstream dump{ "netvar_dump.txt" };
+
+    for (auto recvTable : recvTables) {
+        dump << recvTable.first << '\n';
+    }
+    dump.close();
 }

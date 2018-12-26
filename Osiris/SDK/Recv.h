@@ -11,7 +11,7 @@ struct RecvProp {
     void* m_ArrayLengthProxy;
     void* m_ProxyFn;
     void* m_DataTableProxyFn;
-    RecvTable* m_pDataTable;
+    struct RecvTable* m_pDataTable;
     int m_Offset;
     int m_ElementStride;
     int m_nElements;

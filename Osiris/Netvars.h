@@ -9,5 +9,6 @@ public:
     Netvars();
     int getOffset(const std::string_view, const std::string_view);
 private:
-    std::unordered_map<std::string, RecvTable*> recvTables;
+    std::unordered_map<std::string_view, RecvTable*> recvTables;
 };
+
