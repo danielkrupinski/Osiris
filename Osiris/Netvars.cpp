@@ -3,12 +3,7 @@
 
 Netvars::Netvars()
 {
-    auto clientClass = interfaces.client->getAllClasses();
-
-    while (clientClass) {
-        if (auto recvTable = clientClass->recvTable)
-            recvTables.emplace(clientClass->networkName, recvTable);
-
-        clientClass = clientClass->next;
-    }
+    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+        if (clientClass->recvTable)
+            recvTables.emplace(clientClass->networkName, clientClass->recvTable);
 }
