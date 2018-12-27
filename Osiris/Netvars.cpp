@@ -5,7 +5,7 @@
 Netvars::Netvars()
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next) {
-        if (std::string_view{ clientClass->recvTable->m_pNetTableName } == "DT_BasePlayer") {
+        if (std::string_view{ clientClass->recvTable->m_pNetTableName } == "DT_CSPlayer") {
             loadTable(clientClass->recvTable);
             break;
         }
