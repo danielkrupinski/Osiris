@@ -11,10 +11,12 @@ Netvars::Netvars()
         }
     }
 
-    std::ofstream dump{ "netvars_dump.txt" };
-    for (auto prop : playerOffsets)
-        dump << prop.first << ' ' << prop.second << '\n';
-    dump.close();
+    /* Debug dump */
+    //
+    //    std::ofstream dump{ "netvars_dump.txt" };
+    //    for (auto prop : playerOffsets)
+    //        dump << prop.first << ' ' << prop.second << '\n';
+    //    dump.close();
 }
 
 
