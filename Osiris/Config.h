@@ -17,7 +17,7 @@ public:
         int style{ 0 };
         bool allies{ false };
         float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
-		bool enemies{ false };
+        bool enemies{ false };
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
