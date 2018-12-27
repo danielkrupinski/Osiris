@@ -20,8 +20,6 @@ Netvars::Netvars()
 
 void Netvars::loadTable(RecvTable* recvTable, std::size_t offset)
 {
-    std::vector<std::pair<std::string_view, std::size_t>> properties;
-
     for (int i = 0; i < recvTable->m_nProps; ++i) {
         auto prop = &recvTable->m_pProps[i];
 
