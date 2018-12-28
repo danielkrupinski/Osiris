@@ -14,3 +14,4 @@ private:
     std::unordered_map<std::string_view, std::size_t> playerOffsets;
 };
 
+extern Netvars netvars;
