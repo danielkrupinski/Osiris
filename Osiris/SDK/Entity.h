@@ -5,6 +5,7 @@
 #include "Matrix3x4.h"
 #include "../Netvars.h"
 #include "Utils.h"
+#include "Vector.h"
 
 class Entity {
 public:

@@ -25,7 +25,7 @@ struct Vector final {
         return *this;
     }
 
-    constexpr float length2D() const noexcept
+    float length2D() const noexcept
     {
         return std::sqrt(x * x + y * y);
     }
