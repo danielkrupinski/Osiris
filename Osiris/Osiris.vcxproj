@@ -73,6 +73,7 @@
     <ClInclude Include="SDK\InputSystem.h" />
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\MaterialSystem.h" />
+    <ClInclude Include="SDK\Matrix3x4.h" />
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\QAngle.h" />
     <ClInclude Include="SDK\Recv.h" />
