@@ -15,7 +15,6 @@
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/RenderView.h"
-#include "SDK/Surface.h"
 
 class Interfaces final {
 public:
@@ -24,7 +23,6 @@ public:
     Engine* engine;
     EntityList* entityList;
     Client* client;
-    Surface* surface;
     Cvar* cvar;
     ModelRender* modelRender;
     MaterialSystem* materialSystem;
