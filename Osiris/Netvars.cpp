@@ -1,4 +1,3 @@
-#include <fstream>
 #include "Interfaces.h"
 #include "Netvars.h"
 
@@ -10,13 +9,6 @@ Netvars::Netvars()
             break;
         }
     }
-
-    /* Debug dump */
-    //
-    //    std::ofstream dump{ "netvars_dump.txt" };
-    //    for (auto prop : playerOffsets)
-    //        dump << prop.first << ' ' << prop.second << '\n';
-    //    dump.close();
 }
 
 std::size_t Netvars::getOffset(const std::string_view propertyName)
@@ -24,8 +16,7 @@ std::size_t Netvars::getOffset(const std::string_view propertyName)
     return playerOffsets[propertyName];
 }
 
-
-void Netvars::loadTable(RecvTable* recvTable, std::size_t offset)
+void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
 {
     for (int i = 0; i < recvTable->m_nProps; ++i) {
         auto prop = &recvTable->m_pProps[i];

@@ -10,7 +10,7 @@ public:
     Netvars();
     std::size_t getOffset(const std::string_view);
 private:
-    void loadTable(RecvTable*, std::size_t = 0);
+    void loadTable(RecvTable*, const std::size_t = 0);
     std::unordered_map<std::string_view, std::size_t> playerOffsets;
 };
 
