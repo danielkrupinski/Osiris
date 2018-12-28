@@ -2,28 +2,29 @@
 
 #include "ClientClass.h"
 #include "../Interfaces.h"
+#include "../Netvars.h"
 #include "Utils.h"
 
 class Entity {
 public:
     int* getFlags() noexcept
     {
-        return reinterpret_cast<int*>(this + 0x104);
+        return reinterpret_cast<int*>(this + netvars.getOffset("m_fFlags"));
     }
 
     int getMoveType() noexcept
     {
-        return *reinterpret_cast<int*>(this + 0x25C);
+        return *reinterpret_cast<int*>(this + netvars.getOffset("m_MoveType"));
     }
 
     bool isScoped() noexcept
     {
-        return *reinterpret_cast<bool*>(this + 0x390A);
+        return *reinterpret_cast<bool*>(this + netvars.getOffset("m_bIsScoped"));
     }
 
     int getCrosshairID() noexcept
     {
-        return *reinterpret_cast<int*>(this + 0xB394);
+        return *reinterpret_cast<int*>(this + netvars.getOffset("m_bHasDefuser") + 92);
     }
 
     constexpr void drawModel(int flags, unsigned char alpha) noexcept

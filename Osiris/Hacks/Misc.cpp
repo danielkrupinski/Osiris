@@ -1,6 +1,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../Netvars.h"
 #include "Misc.h"
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
@@ -61,7 +62,7 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::reduceFlashEffect() noexcept
 {
-    *reinterpret_cast<float*>((*memory.localPlayer) + 0xA3DC) = 255.0f - config.misc.flashReduction * 2.55f;
+    *reinterpret_cast<float*>(*memory.localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
 void Misc::removeBlood() noexcept
