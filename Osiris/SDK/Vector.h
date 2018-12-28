@@ -9,6 +9,14 @@ struct Vector final {
         return *this;
     }
 
+    constexpr Vector& operator+(const Vector& v) noexcept
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
+    }
+
     constexpr Vector& operator-(const Vector& v) noexcept
     {
         x -= v.x;
