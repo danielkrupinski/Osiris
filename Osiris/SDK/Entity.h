@@ -38,6 +38,17 @@ public:
         return callVirtualFunction<bool(__thiscall*)(void*, Matrix3x4*, int, int, float)>(this + 4, 13)(this + 4, out, maxBones, boneMask, currentTime);
     }
 
+    Vector getBonePosition(int bone)
+    {
+        Matrix3x4 boneMatrixes[128];
+        if (setupBones(boneMatrixes, 128, 256, 0.0f)) {
+            Matrix3x4 boneMatrix = boneMatrixes[bone];
+            return Vector{ boneMatrix.matrix[0][3], boneMatrix.matrix[1][3], boneMatrix.matrix[2][3] };
+        }
+        else
+            return Vector{ };
+    }
+
     bool isEnemy() noexcept
     {
         static auto gameMode = interfaces.cvar->findVar("game_type");
