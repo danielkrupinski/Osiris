@@ -113,14 +113,6 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     return false;
 }
 
-static void __stdcall hookedLockCursor() noexcept
-{
-    if (gui.isOpen)
-        interfaces.surface->unlockCursor();
-    //else
-       // hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
-}
-
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
     if (interfaces.engine->isInGame()) {
@@ -150,8 +142,6 @@ Hooks::Hooks()
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
-
-    // surface.hookAt(67, hookedLockCursor);
 
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
