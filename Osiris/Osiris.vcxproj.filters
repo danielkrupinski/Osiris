@@ -140,9 +140,6 @@
     <ClInclude Include="SDK\Vector.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Surface.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Input.h">
       <Filter>SDK</Filter>
     </ClInclude>
