@@ -49,6 +49,11 @@ public:
             return Vector{ };
     }
 
+    Vector getEyePosition()
+    {
+        return Vector { *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) } + Vector{ *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]")) };
+    }
+
     bool isEnemy() noexcept
     {
         static auto gameMode = interfaces.cvar->findVar("game_type");
