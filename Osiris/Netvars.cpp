@@ -19,6 +19,11 @@ Netvars::Netvars()
     //    dump.close();
 }
 
+std::size_t Netvars::getOffset(const std::string_view propertyName)
+{
+    return playerOffsets[propertyName];
+}
+
 
 void Netvars::loadTable(RecvTable* recvTable, std::size_t offset)
 {
