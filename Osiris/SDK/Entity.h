@@ -2,6 +2,7 @@
 
 #include "ClientClass.h"
 #include "../Interfaces.h"
+#include "Matrix3x4.h"
 #include "../Netvars.h"
 #include "Utils.h"
 
@@ -30,6 +31,11 @@ public:
     constexpr void drawModel(int flags, unsigned char alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
+    }
+
+    constexpr bool setupBones(Matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
+    {
+        return callVirtualFunction<bool(__thiscall*)(void*, Matrix3x4*, int, int, float)>(this + 4, 13)(this + 4, out, maxBones, boneMask, currentTime);
     }
 
     bool isEnemy() noexcept
