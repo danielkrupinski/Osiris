@@ -1,7 +1,6 @@
 #include <string>
 
 #include "imgui/imgui.h"
-
 #include "GUI.h"
 #include "Config.h"
 
@@ -33,11 +32,8 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        /* Temporary disable aimbot tab
-         *
-         * if (ImGui::MenuItem("Aimbot"))
-              window.aimbot = true;
-        */
+        if (ImGui::MenuItem("Aimbot"))
+            window.aimbot = true;
         if (ImGui::MenuItem("Glow"))
             window.glow = true;
 
@@ -66,8 +62,9 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f));
+        ImGui::SetNextWindowSize(ImVec2(100.0f, 300.0f));
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::End();
     }
 }
