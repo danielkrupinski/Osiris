@@ -12,6 +12,10 @@ public:
 
     struct {
         bool enabled{ false };
+    } aimbot;
+
+    struct {
+        bool enabled{ false };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
