@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "Aimbot.h"
+#include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/UserCmd.h"
@@ -9,57 +10,40 @@
 
 static QAngle calculateAngleBetween(Vector source, Vector destination)
 {
-    QAngle angles;
     Vector delta = source - destination;
-
-    if (delta.y == 0.0f && delta.x == 0.0f)
-    {
-        angles.pitch = (delta.z > 0.0f) ? 270.0f : 90.0f; // Pitch (up/down)
-        angles.yaw = 0.0f;  //yaw left/right
-    }
-    else
-    {
-        angles.pitch = atan2(-delta.z, delta.length2D()) * -180 / M_PI;
-        angles.yaw = atan2(delta.y, delta.x) * 180 / M_PI;
-
-        if (angles.yaw > 90.0f) angles.yaw -= 180.0f;
-        else if (angles.yaw < 90.0f) angles.yaw += 180.0f;
-        else if (angles.yaw == 90) angles.yaw = 0.0f;
-    }
-
+    float hyp = delta.length();
+    QAngle angles;
+    angles.pitch = atanf(delta.z / hyp) * 180 / M_PI;
+    angles.yaw = atanf(delta.y / delta.x) * 180 / M_PI; // 57.295779513082f);
     angles.roll = 0.0f;
-    return angles;
-}
 
-static float getFov(QAngle& viewAngle, QAngle& aimAngle)
-{
-    QAngle delta = aimAngle - viewAngle;
-    delta.normalize();
-    return sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f));
+    if (delta.x >= 0.0)
+        angles.yaw += 180.0f;
+
+    return angles;
 }
 
 static int findTarget(UserCmd* cmd)
 {
-    float bestFov = 999999.9f;
-    int bestTarget = 0;
-
     for (int i = 1; i < interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getClientEntity(i);
         if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy())
             continue;
         auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-        auto fov = getFov(cmd->viewangles, angle);
-        if (fov < bestFov) {
-            bestFov = fov;
-            bestTarget = i;
-        }
+        cmd->viewangles = angle;
+        interfaces.engine->setViewAngles(cmd->viewangles);
+        break;
     }
-    return bestTarget;
+    return 0;
 }
 
 void Aimbot::run(UserCmd* cmd)
 {
-    auto entity = interfaces.entityList->getClientEntity(findTarget(cmd));
-    auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-    cmd->viewangles = angle;
+    if (config.aimbot.enabled && GetAsyncKeyState(VK_MENU)) {
+        findTarget(cmd);
+        // entity = interfaces.entityList->getClientEntity(findTarget(cmd));
+        //auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+       // cmd->viewangles = angle;
+       // interfaces.engine->setViewAngles(angle);
+    }
 }
