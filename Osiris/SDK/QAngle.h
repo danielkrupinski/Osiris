@@ -27,8 +27,6 @@ struct QAngle final {
             yaw = -180.f;
 
         roll = 0;
-
-        return *this;
     }
 
     float pitch;

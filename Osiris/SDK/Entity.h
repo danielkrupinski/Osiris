@@ -52,7 +52,7 @@ public:
 
     Vector getEyePosition()
     {
-        return Vector { *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) } + Vector{ *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]")) };
+        return *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) + *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]"));
     }
 
     bool isEnemy() noexcept
