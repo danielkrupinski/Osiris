@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "GUI.h"
 #include "Hacks/Misc.h"
+#include "Hacks/Aimbot.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
@@ -108,6 +109,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
         Misc::bunnyHop(cmd);
         Misc::removeCrouchCooldown(cmd);
         Misc::clanTag();
+        Aimbot::run(cmd);
         Triggerbot::run(cmd);
     }
     return false;
