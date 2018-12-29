@@ -42,7 +42,7 @@ public:
     Vector getBonePosition(int bone)
     {
         Matrix3x4 boneMatrixes[128];
-        if (setupBones(boneMatrixes, 128, 256, 0.0f)) {
+        if (setupBones(boneMatrixes, 128, 256, interfaces.engine->GetLastTimeStamp())) {
             Matrix3x4 boneMatrix = boneMatrixes[bone];
             return Vector{ boneMatrix.matrix[0][3], boneMatrix.matrix[1][3], boneMatrix.matrix[2][3] };
         }
@@ -52,7 +52,10 @@ public:
 
     Vector getEyePosition()
     {
-        return *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) + *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]"));
+        Vector vec;
+        callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);
+        return vec;
+        //return *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) + *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]"));
     }
 
     bool isEnemy() noexcept
