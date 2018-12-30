@@ -53,9 +53,11 @@ static int findTarget(UserCmd* cmd)
 void Aimbot::run(UserCmd* cmd)
 {
     if (config.aimbot.enabled && GetAsyncKeyState(VK_MENU)) {
-        auto entity = interfaces.entityList->getClientEntity(findTarget(cmd));
-        auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-        cmd->viewangles = angle;
-        interfaces.engine->setViewAngles(angle);
+        if (auto target = findTarget(cmd)) {
+            auto entity = interfaces.entityList->getClientEntity(target);
+            auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+            cmd->viewangles = angle;
+            interfaces.engine->setViewAngles(angle);
+        }
     }
 }
