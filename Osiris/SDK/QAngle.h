@@ -11,6 +11,13 @@ struct QAngle final {
 
     void normalize() noexcept
     {
+        if (pitch != pitch)
+            pitch = 0.0f;
+        if (yaw != yaw)
+            yaw = 0.0f;
+        if (roll != roll)
+            roll = 0.0f;
+
         if (pitch > 89.f)
             pitch = 89.f;
         if (pitch < -89.f)

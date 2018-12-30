@@ -23,27 +23,38 @@ static QAngle calculateAngleBetween(Vector source, Vector destination)
     return angles;
 }
 
+static float getFov(QAngle& viewAngle, QAngle& aimAngle)
+{
+    QAngle delta = aimAngle - viewAngle;
+    delta.normalize();
+    return sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f));
+}
+
 static int findTarget(UserCmd* cmd)
 {
+    auto bestFov = 99999.9f;
+    auto bestTarget = 0;
+
     for (int i = 1; i < interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getClientEntity(i);
         if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy())
             continue;
         auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-        cmd->viewangles = angle;
-        interfaces.engine->setViewAngles(cmd->viewangles);
-        break;
+        auto fov = getFov(cmd->viewangles, angle);
+        if (fov < bestFov) {
+            bestFov = fov;
+            bestTarget = i;
+        }
     }
-    return 0;
+    return bestTarget;
 }
 
 void Aimbot::run(UserCmd* cmd)
 {
     if (config.aimbot.enabled && GetAsyncKeyState(VK_MENU)) {
-        findTarget(cmd);
-        // entity = interfaces.entityList->getClientEntity(findTarget(cmd));
-        //auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-       // cmd->viewangles = angle;
-       // interfaces.engine->setViewAngles(angle);
+        auto entity = interfaces.entityList->getClientEntity(findTarget(cmd));
+        auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+        cmd->viewangles = angle;
+        interfaces.engine->setViewAngles(angle);
     }
 }
