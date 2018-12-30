@@ -20,6 +20,7 @@ static QAngle calculateAngleBetween(Vector source, Vector destination)
     if (delta.x >= 0.0)
         angles.yaw += 180.0f;
 
+    angles.normalize();
     return angles;
 }
 
