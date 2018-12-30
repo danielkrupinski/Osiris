@@ -14,7 +14,7 @@ static QAngle calculateAngleBetween(Vector source, Vector destination)
     float hyp = delta.length();
     QAngle angles;
     angles.pitch = atanf(delta.z / hyp) * 180 / M_PI;
-    angles.yaw = atanf(delta.y / delta.x) * 180 / M_PI; // 57.295779513082f);
+    angles.yaw = atanf(delta.y / delta.x) * 180 / M_PI;
     angles.roll = 0.0f;
 
     if (delta.x >= 0.0)
@@ -33,10 +33,10 @@ static float getFov(QAngle& viewAngle, QAngle& aimAngle)
 
 static int findTarget(UserCmd* cmd)
 {
-    auto bestFov = 99999.9f;
+    auto bestFov = 180.0f;
     auto bestTarget = 0;
 
-    for (int i = 1; i < interfaces.engine->getMaxClients(); i++) {
+    for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getClientEntity(i);
         if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy())
             continue;
