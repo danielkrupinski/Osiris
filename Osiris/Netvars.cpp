@@ -21,7 +21,7 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
     for (int i = 0; i < recvTable->m_nProps; ++i) {
         auto prop = &recvTable->m_pProps[i];
 
-        if (std::isdigit(prop->m_pVarName[0]))
+        if (isdigit(prop->m_pVarName[0]))
             continue;
 
         if (prop->m_pDataTable)
