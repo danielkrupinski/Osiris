@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 struct QAngle final {
     constexpr QAngle& operator-(const QAngle& v) noexcept
     {
@@ -11,29 +13,9 @@ struct QAngle final {
 
     void normalize() noexcept
     {
-        if (pitch != pitch)
-            pitch = 0.0f;
-        if (yaw != yaw)
-            yaw = 0.0f;
-        if (roll != roll)
-            roll = 0.0f;
-
-        if (pitch > 89.f)
-            pitch = 89.f;
-        if (pitch < -89.f)
-            pitch = -89.f;
-
-        while (yaw > 180)
-            yaw -= 360;
-        while (yaw <= -180)
-            yaw += 360;
-
-        if (yaw > 180.f)
-            yaw = 180.f;
-        if (yaw < -180.f)
-            yaw = -180.f;
-
-        roll = 0;
+        pitch = std::isfinite(pitch) ? std::remainderf(pitch, 360.0f) : 0.0f;
+        yaw = std::isfinite(yaw) ? std::remainderf(yaw, 360.0f) : 0.0f;
+        roll = 0.0f;
     }
 
     float pitch;
