@@ -26,6 +26,8 @@ void Config::load()
     Json::Value config;
     in >> config;
 
+    aimbot.enabled = config["aimbot"]["enabled"].asBool();
+
     glow.enabled = config["glow"]["enabled"].asBool();
 
     glow.thickness = config["glow"]["thickness"].asFloat();
@@ -64,6 +66,7 @@ void Config::load()
 
     chams.enabled = config["chams"]["enabled"].asBool();
     chams.alpha = config["chams"]["alpha"].asFloat();
+    chams.shader = config["chams"]["shader"].asInt();
     chams.wireframe = config["chams"]["wireframe"].asBool();
 
     chams.allies = config["chams"]["allies"].asBool();
@@ -117,6 +120,8 @@ void Config::save() const
 
     Json::Value config;
 
+    config["aimbot"]["enabled"] = aimbot.enabled;
+
     config["glow"]["enabled"] = glow.enabled;
 
     config["glow"]["thickness"] = glow.thickness;
@@ -155,6 +160,7 @@ void Config::save() const
 
     config["chams"]["enabled"] = chams.enabled;
     config["chams"]["alpha"] = chams.alpha;
+    config["chams"]["shader"] = chams.shader;
     config["chams"]["wireframe"] = chams.wireframe;
 
     config["chams"]["allies"] = chams.allies;
@@ -202,6 +208,8 @@ void Config::save() const
 
 void Config::reset()
 {
+    aimbot.enabled = false;
+
     glow.enabled = false;
 
     glow.thickness = 1.0f;
@@ -240,6 +248,7 @@ void Config::reset()
 
     chams.enabled = false;
     chams.alpha = 1.0f;
+    chams.shader = 0;
     chams.wireframe = false;
 
     chams.allies = false;
