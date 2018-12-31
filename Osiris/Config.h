@@ -68,7 +68,7 @@ public:
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
         int skybox{ 0 };
-        int viewmodelFov{ 60 };
+        int viewmodelFov{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
     } misc;
 

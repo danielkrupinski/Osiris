@@ -136,10 +136,10 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 
 static float __stdcall hookedGetViewModelFov() noexcept
 {
-    if (interfaces.engine->isInGame() && !(*memory.localPlayer)->isScoped())
-        return static_cast<float>(config.misc.viewmodelFov);
-    else
-        return 60.0f;
+ //   if (interfaces.engine->isInGame() && !(*memory.localPlayer)->isScoped())
+      return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.misc.viewmodelFov);
+   // else
+    //    return 60.0f;
 }
 
 Hooks::Hooks()
