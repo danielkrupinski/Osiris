@@ -18,15 +18,15 @@ std::size_t Netvars::getOffset(const std::string_view propertyName)
 
 void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
 {
-    for (int i = 0; i < recvTable->m_nProps; ++i) {
-        auto prop = &recvTable->m_pProps[i];
+    for (int i = 0; i < recvTable->propCount; ++i) {
+        auto prop = &recvTable->props[i];
 
-        if (isdigit(prop->m_pVarName[0]))
+        if (isdigit(prop->name[0]))
             continue;
 
-        if (prop->m_pDataTable)
-            loadTable(prop->m_pDataTable, prop->m_Offset + offset);
+        if (prop->dataTable)
+            loadTable(prop->dataTable, prop->offset + offset);
         else
-            playerOffsets[prop->m_pVarName] = prop->m_Offset + offset;
+            playerOffsets[prop->name] = prop->offset + offset;
     }
 }
