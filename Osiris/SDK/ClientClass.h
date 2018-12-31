@@ -7,7 +7,7 @@ struct ClientClass final {
     void* createFunction;
     void* createEventFunction;
     char* networkName;
-    RecvTable* recvTable; // RecvTable*
+    RecvTable* recvTable;
     ClientClass* next;
     ClassId classId;
 };

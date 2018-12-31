@@ -39,22 +39,6 @@ public:
         return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name.data());
     }
 
-    char pad_0x0000[0x4];
-    Cvar *pNext;
-    int32_t bRegistered;
-    char *pszName;
-    char *pszHelpString;
-    int32_t nFlags;
-    char pad_0x0018[0x4];
-    Cvar *pParent;
-    char *pszDefaultValue;
-    char *strString;
-    int32_t StringLength;
-    float fValue;
-    int32_t nValue;
-    int32_t bHasMin;
-    float fMinVal;
-    int32_t bHasMax;
-    float fMaxVal;
-    void *fnChangeCallback;
+    std::byte pad[68];
+    void* onChangeCallback;
 };
