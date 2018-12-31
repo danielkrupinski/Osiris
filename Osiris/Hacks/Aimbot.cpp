@@ -33,7 +33,7 @@ static float getFov(QAngle& viewAngle, QAngle& aimAngle)
 
 static int findTarget(UserCmd* cmd)
 {
-    auto bestFov = 180.0f;
+    auto bestFov = config.aimbot.fov;
     auto bestTarget = 0;
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
