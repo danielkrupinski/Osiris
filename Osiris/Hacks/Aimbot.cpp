@@ -43,7 +43,7 @@ static int findTarget(UserCmd* cmd)
         auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
         auto fov = getFov(cmd->viewangles, angle);
         if (fov < bestFov) {
-            bestFov = fov;
+            bestFov = static_cast<int>(fov);
             bestTarget = i;
         }
     }
