@@ -65,6 +65,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SetNextWindowSize(ImVec2(320.0f, 170.0f));
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
+        ImGui::SliderFloat("Fov", &config.aimbot.fov, 0.0f, 180.0f);
+        ImGui::SliderFloat("Smooth", &config.aimbot.smooth, 0.0f, 100.0f);
         ImGui::End();
     }
 }
