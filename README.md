@@ -3,6 +3,8 @@
 Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
 
 ## Features
+* **Aimbot** - aim assistance, now it locks on nearest (to crosshair) enemy's head while holding **ALT**
+    * **Enable** - on / off master switch
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
@@ -36,6 +38,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [0-100%] (0 - full flash, 100 - no flash)
+    * **No crouch cooldown** - remove crouch delay; fast duck
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No blood** - remove blood
     * **No smoke** - remove smoke grenade effect
@@ -82,8 +85,8 @@ Press `INSERT` key while while focused on CS:GO window.
 ### Where is my config file saved?
 Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read by humans.
 
-### I don't see DllMain function, what is cheat's entry point and where is it located?
-Osiris is based on five main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file.
+### What is cheat execution entry point and where is it located?
+Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
 
 ## Acknowledgments
 
