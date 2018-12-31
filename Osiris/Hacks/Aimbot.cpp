@@ -30,6 +30,12 @@ static float getFov(QAngle& viewAngle, QAngle& aimAngle)
     delta.normalize();
     return sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f));
 }
+static QAngle smoothAngle(QAngle& aimAngle,QAngle& viewAngle)
+{
+	auto delta = viewAngle - aimAngle;
+	aimAngle = viewAngle - delta / config.aimbot.smooth;
+	return aimAngle;
+}
 
 static int findTarget(UserCmd* cmd)
 {
@@ -55,9 +61,10 @@ void Aimbot::run(UserCmd* cmd)
     if (config.aimbot.enabled && GetAsyncKeyState(VK_MENU)) {
         if (auto target = findTarget(cmd)) {
             auto entity = interfaces.entityList->getClientEntity(target);
-            auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
-            cmd->viewangles = angle;
-            interfaces.engine->setViewAngles(angle);
+            auto calc_angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+            auto end_angle = smoothAngle(calc_angle,cmd->viewangles);
+            cmd->viewangles = end_angle;
+            interfaces.engine->setViewAngles(end_angle);
         }
     }
 }
