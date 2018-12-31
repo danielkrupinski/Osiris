@@ -27,6 +27,8 @@ void Config::load()
     in >> config;
 
     aimbot.enabled = config["aimbot"]["enabled"].asBool();
+    aimbot.fov = config["aimbot"]["fov"].asFloat();
+    aimbot.smooth = config["aimbot"]["smooth"].asFloat();
 
     glow.enabled = config["glow"]["enabled"].asBool();
 
@@ -121,6 +123,8 @@ void Config::save() const
     Json::Value config;
 
     config["aimbot"]["enabled"] = aimbot.enabled;
+    config["aimbot"]["fov"] = aimbot.fov;
+    config["aimbot"]["smooth"] = aimbot.smooth;
 
     config["glow"]["enabled"] = glow.enabled;
 
