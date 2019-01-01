@@ -212,8 +212,5 @@
     <ClInclude Include="SDK\Recv.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Matrix3x4.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
