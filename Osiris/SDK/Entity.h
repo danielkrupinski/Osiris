@@ -34,18 +34,18 @@ public:
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
     }
 
-    constexpr bool setupBones(Matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
+    using matrix3x4 = float[3][4];
+
+    constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
-        return callVirtualFunction<bool(__thiscall*)(void*, Matrix3x4*, int, int, float)>(this + 4, 13)(this + 4, out, maxBones, boneMask, currentTime);
+        return callVirtualFunction<bool(__thiscall*)(void*, matrix3x4*, int, int, float)>(this + 4, 13)(this + 4, out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone)
     {
-        Matrix3x4 boneMatrixes[128];
-        if (setupBones(boneMatrixes, 128, 256, 0.0f)) {
-            Matrix3x4 boneMatrix = boneMatrixes[bone];
-            return Vector{ boneMatrix.matrix[0][3], boneMatrix.matrix[1][3], boneMatrix.matrix[2][3] };
-        }
+        matrix3x4 boneMatrices[128];
+        if (setupBones(boneMatrices, 128, 256, 0.0f))
+            return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
     }
@@ -55,7 +55,6 @@ public:
         Vector vec;
         callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);
         return vec;
-        //return *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecOrigin")) + *reinterpret_cast<Vector*>(this + netvars.getOffset("m_vecViewOffset[0]"));
     }
 
     bool isEnemy() noexcept
