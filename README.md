@@ -5,12 +5,13 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Features
 * **Aimbot** - aim assistance, now it locks on nearest (to crosshair) enemy's head while holding **ALT**
     * **Enable** - on / off master switch
+    * **Fov** - field-of-view which aimbot operates [*0*-*180*]
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
-    * **Style** - glow style [0-3]
+    * **Style** - glow style [*0*-*3*]
     * **Allies** - glow allies entities
     * **Enemies** - glow enemies entities
     * **Weapons** - glow dropped weapons
@@ -21,7 +22,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
     * **Alpha** - material transparency
-    * **Shader** - sets chams shader [vertex (VertexLitGeneric) / unlit (UnlitGeneric)]
+    * **Shader** - sets chams shader [*vertex* (VertexLitGeneric) / *unlit* (UnlitGeneric)]
     * **Wireframe** - render triangle mesh instead of solid material
     * **Allies** - allies chams on / off and color applied to them
     * **Visible allies** - visible allies chams on / off and color applied to them
@@ -37,20 +38,20 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Bunny hop** - automatically jump to increase movement speed
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
-    * **Flash reduction** - reduces flashbang grenade effect [0-100%] (0 - full flash, 100 - no flash)
+    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **No crouch cooldown** - remove crouch delay; fast duck
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No blood** - remove blood
     * **No smoke** - remove smoke grenade effect
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Skybox** - change sky(box)
-    * **View model FOV** - change view model FOV [0-130]
+    * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **World color** - set world material ambient light color
 
-* **Config** - configuration system
-    * **Load** - load configuration file
-    * **Save** - save configuration file
-    * **Reset** - restore default configuration settings
+* **Config** - JSON-based configuration system
+    * **Load** - load configuration file from disk
+    * **Save** - save configuration file to disk
+    * **Reset** - restore default configuration settings (does not touch saved configuration)
 
 ## Getting started
 
@@ -95,6 +96,6 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 
 ## License
 
-> Copyright (c) 2018 Daniel Krupiński
+> Copyright (c) 2018-2019 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
