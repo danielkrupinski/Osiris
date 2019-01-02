@@ -52,7 +52,7 @@ static int findTarget(UserCmd* cmd)
 
 void Aimbot::run(UserCmd* cmd)
 {
-    if (config.aimbot.enabled && GetAsyncKeyState(VK_MENU)) {
+    if (config.aimbot.enabled && cmd->buttons & 1) {
         if (auto target = findTarget(cmd)) {
             auto entity = interfaces.entityList->getClientEntity(target);
             auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
