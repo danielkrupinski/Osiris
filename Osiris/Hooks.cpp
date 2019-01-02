@@ -69,10 +69,10 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         device->GetVertexDeclaration(&vertexDeclaration);
 
         if (!isMenuToggled) {
-           memory.input->isMouseInitialized = false;
-           memory.input->isMouseActive = false;
-           interfaces.inputSystem->enableInput(false);
-           isMenuToggled = true;
+            memory.input->isMouseInitialized = false;
+            memory.input->isMouseActive = false;
+            interfaces.inputSystem->enableInput(false);
+            isMenuToggled = true;
         }
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -139,10 +139,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 
 static float __stdcall hookedGetViewModelFov() noexcept
 {
- //   if (interfaces.engine->isInGame() && !(*memory.localPlayer)->isScoped())
-      return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.misc.viewmodelFov);
-   // else
-    //    return 60.0f;
+    return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.misc.viewmodelFov);
 }
 
 Hooks::Hooks()
