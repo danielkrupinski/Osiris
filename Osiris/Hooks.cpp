@@ -35,7 +35,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 {
     static bool isInitialised{ false };
 
-    static bool isMenuToggled = false;
+    static bool isMenuToggled{ false };
 
     if (!isInitialised) {
         ImGui::CreateContext();
@@ -44,9 +44,12 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
         ImGui::StyleColorsDark();
         ImGuiStyle& style = ImGui::GetStyle();
-        style.WindowRounding = 0.0f;
+        style.WindowRounding = 5.0f;
         style.WindowBorderSize = 0.0f;
         style.ChildBorderSize = 0.0f;
+        style.GrabMinSize = 7.0f;
+        style.GrabRounding = 5.0f;
+        style.FrameRounding = 5.0f;
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
         io.LogFilename = nullptr;
