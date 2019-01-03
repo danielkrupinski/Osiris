@@ -3,7 +3,7 @@
 Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
 
 ## Features
-* **Aimbot** - aim assistance, now it locks on nearest (to crosshair) enemy's head while holding **ALT**
+* **Aimbot** - aim assistance
     * **Enable** - on / off master switch
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
 
