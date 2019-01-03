@@ -32,19 +32,11 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::MenuItem("Aimbot"))
-            window.aimbot = true;
-        if (ImGui::MenuItem("Glow"))
-            window.glow = true;
-
-        if (ImGui::MenuItem("Chams"))
-            window.chams = true;
-
-        if (ImGui::MenuItem("Triggerbot"))
-            window.triggerbot = true;
-
-        if (ImGui::MenuItem("Misc"))
-            window.misc = true;
+        ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
+        ImGui::MenuItem("Glow", nullptr, &window.glow);
+        ImGui::MenuItem("Chams", nullptr, &window.chams);
+        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
+        ImGui::MenuItem("Misc", nullptr, &window.misc);
 
         if (ImGui::BeginMenu("Config")) {
             if (ImGui::MenuItem("Load"))
