@@ -11,6 +11,7 @@
 static QAngle calculateAngleBetween(Vector source, Vector destination)
 {
     Vector delta = source - destination;
+    delta /= config.aimbot.smooth;
     float hyp = delta.length();
     QAngle angles;
     angles.pitch = atanf(delta.z / hyp) * 180 / M_PI;

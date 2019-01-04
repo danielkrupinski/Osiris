@@ -60,6 +60,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::Checkbox("Silent", &config.aimbot.silent);
         ImGui::SliderFloat("Fov", &config.aimbot.fov, 0.0f, 180.0f);
+        ImGui::SliderFloat("Smooth", &config.aimbot.smooth, 1.0f, 100.0f);
         ImGui::End();
     }
 }

@@ -25,6 +25,14 @@ struct Vector final {
         return *this;
     }
 
+    constexpr Vector& operator/=(float div) noexcept
+    {
+        x /= div;
+        y /= div;
+        z /= div;
+        return *this;
+    }
+
     float length() const noexcept
     {
         return std::sqrt(x * x + y * y + z * z);

@@ -14,6 +14,7 @@ public:
         bool enabled{ false };
         bool silent{ false };
         float fov{ 0.0f };
+        float smooth{ 1.0f };
     } aimbot;
 
     struct {
