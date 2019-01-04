@@ -54,7 +54,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize(ImVec2(150.0f, 115.0f));
+        ImGui::SetNextWindowSize(ImVec2(150.0f, 135.0f));
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(100.0f);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
