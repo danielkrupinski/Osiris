@@ -50,6 +50,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         style.GrabMinSize = 7.0f;
         style.GrabRounding = 5.0f;
         style.FrameRounding = 5.0f;
+        style.PopupRounding = 5.0f;
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
         io.LogFilename = nullptr;
