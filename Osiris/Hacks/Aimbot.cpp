@@ -57,7 +57,8 @@ void Aimbot::run(UserCmd* cmd)
             auto entity = interfaces.entityList->getClientEntity(target);
             auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
             cmd->viewangles = angle;
-            interfaces.engine->setViewAngles(angle);
+            if (!config.aimbot.silent)
+                interfaces.engine->setViewAngles(angle);
         }
     }
 }
