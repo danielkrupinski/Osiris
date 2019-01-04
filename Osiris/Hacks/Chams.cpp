@@ -8,6 +8,14 @@ void Chams::render() noexcept
     if (config.chams.enabled) {
         static auto vertex = interfaces.materialSystem->findMaterial("debug/debugambientcube");
         static auto unlit = interfaces.materialSystem->findMaterial("debug/debugdrawflat");
+        static bool isInitialized = false;
+
+        if (!isInitialized) {
+            vertex->incrementReferenceCount();
+            unlit->incrementReferenceCount();
+            isInitialized = true;
+        }
+
         auto material = config.chams.shader ? unlit : vertex;
 
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
