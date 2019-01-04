@@ -11,6 +11,14 @@ struct QAngle final {
         return *this;
     }
 
+    constexpr QAngle& operator/(float div) noexcept
+    {
+        pitch /= div;
+        yaw /= div;
+        roll /= div;
+        return *this;
+    }
+
     void normalize() noexcept
     {
         pitch = std::isfinite(pitch) ? std::remainderf(pitch, 360.0f) : 0.0f;
