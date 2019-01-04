@@ -12,6 +12,7 @@ public:
 
     struct {
         bool enabled{ false };
+        bool silent{ false };
         int fov{ 0 };
     } aimbot;
 
