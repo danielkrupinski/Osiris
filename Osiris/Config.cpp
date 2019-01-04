@@ -27,7 +27,7 @@ void Config::load()
     in >> config;
 
     aimbot.enabled = config["aimbot"]["enabled"].asBool();
-    aimbot.fov = config["aimbot"]["fov"].asInt();
+    aimbot.fov = config["aimbot"]["fov"].asFloat();
 
     glow.enabled = config["glow"]["enabled"].asBool();
 
@@ -211,7 +211,7 @@ void Config::save() const
 void Config::reset()
 {
     aimbot.enabled = false;
-    aimbot.fov = 0;
+    aimbot.fov = 0.0f;
 
     glow.enabled = false;
 
