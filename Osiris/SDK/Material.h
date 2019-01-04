@@ -37,6 +37,11 @@ enum class MaterialVar {
 
 class Material {
 public:
+    void incrementReferenceCount()
+    {
+        callVirtualFunction<void(__thiscall*)(void*)>(this, 12)(this);
+    }
+
     void alphaModulate(float alpha)
     {
         callVirtualFunction<void(__thiscall*)(void*, float)>(this, 27)(this, alpha);
