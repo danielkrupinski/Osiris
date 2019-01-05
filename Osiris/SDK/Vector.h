@@ -25,6 +25,11 @@ struct Vector final {
         return *this;
     }
 
+    constexpr auto operator-(const Vector& v) const noexcept
+    {
+        return Vector{ x - v.x, y - v.y, z - v.z };
+    }
+
     constexpr Vector& operator/=(float div) noexcept
     {
         x /= div;
