@@ -8,7 +8,7 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 
-static QAngle calculateAngleBetween(Vector source, Vector destination)
+static QAngle calculateAngleBetween(const Vector& source, const Vector& destination)
 {
     Vector delta = source - destination;
     delta /= config.aimbot.smooth;
