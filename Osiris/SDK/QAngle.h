@@ -11,6 +11,11 @@ struct QAngle final {
         return *this;
     }
 
+    constexpr auto operator-(const QAngle& v) const noexcept
+    {
+        return QAngle{ pitch - v.pitch, yaw - v.yaw, roll - v.roll };
+    }
+
     constexpr QAngle& operator/(float div) noexcept
     {
         pitch /= div;
