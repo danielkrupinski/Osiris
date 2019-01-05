@@ -32,7 +32,7 @@ static float getFov(QAngle& viewAngle, QAngle& aimAngle) noexcept
     return sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f));
 }
 
-static int findTarget(UserCmd* cmd)
+static int findTarget(UserCmd* cmd) noexcept
 {
     auto bestFov = config.aimbot.fov;
     auto bestTarget = 0;
