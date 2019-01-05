@@ -25,7 +25,7 @@ static QAngle calculateAngleBetween(const Vector& source, const Vector& destinat
     return angles;
 }
 
-static float getFov(QAngle& viewAngle, QAngle& aimAngle)
+static float getFov(QAngle& viewAngle, QAngle& aimAngle) noexcept
 {
     QAngle delta = aimAngle - viewAngle;
     delta.normalize();
