@@ -64,26 +64,28 @@ void Chams::render() noexcept
 
 void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
-    if (config.chams.enabled) {
-        if (!strstr(info.model->name, "models/player"))
-            return;
-        static auto vertex = interfaces.materialSystem->findMaterial("dev/glow_color");
-        static auto unlit = interfaces.materialSystem->findMaterial("debug/debugdrawflat");
+    if (config.chams.enabled && strstr(info.model->name, "models/player")) {
         static bool isInitialized = false;
-
+        static Material* normal;
+        static Material* flat;
         if (!isInitialized) {
-            vertex->incrementReferenceCount();
-            unlit->incrementReferenceCount();
+            Chams::initialize();
+            normal = interfaces.materialSystem->findMaterial("chamsNormal");
+            flat = interfaces.materialSystem->findMaterial("chamsFlat");
+            normal->incrementReferenceCount();
+            flat->incrementReferenceCount();
             isInitialized = true;
         }
 
-        auto material = config.chams.shader ? unlit : vertex;
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
-        material->alphaModulate(config.chams.alpha);
+        auto material = config.chams.shader ? normal : flat;
+        //material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
+        // material->alphaModulate(config.chams.alpha);
 
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
 
         if (entity && !entity->isDormant() && entity->isAlive()) {
+            material->alphaModulate(config.chams.alpha);
+            material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
             if (entity->isEnemy()) {
                 if (config.chams.enemies) {
                     interfaces.renderView->setColorModulation(config.chams.enemiesColor);
@@ -99,7 +101,8 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
             }
             else {
                 if (config.chams.allies) {
-                    interfaces.renderView->setColorModulation(config.chams.alliesColor);
+                    // interfaces.renderView->setColorModulation(config.chams.alliesColor);
+                    material->alphaModulate(config.chams.alpha);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
                     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
@@ -120,12 +123,14 @@ void Chams::initialize()
     std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
+  "$model" "1"
 }
 )#";
 
     std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
+  "$model" "1"
 }
 )#";
 }
