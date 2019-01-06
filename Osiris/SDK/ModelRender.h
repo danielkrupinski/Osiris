@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Material.h"
+#include "QAngle.h"
 #include "Utils.h"
+#include "Vector.h"
 
 using matrix3x4 = float[3][4];
 
@@ -20,7 +22,7 @@ struct Model {
 struct ModelRenderInfo {
     Vector origin;
     QAngle angles;
-    std::byte pad[4];
+    char pad[4];
     void* renderable;
     const Model* model;
     const matrix3x4* modelToWorld;
