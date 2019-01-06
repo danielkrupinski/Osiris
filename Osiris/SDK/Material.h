@@ -10,6 +10,11 @@ enum class MaterialVar {
 
 class Material {
 public:
+    auto getName() noexcept
+    {
+        return std::string_view{ callVirtualFunction<const char*(__thiscall*)(void*)>(this, 0)(this) };
+    }
+
     void incrementReferenceCount()
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 12)(this);
