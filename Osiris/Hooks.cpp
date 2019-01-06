@@ -134,7 +134,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Misc::disablePostProcessing();
         Misc::colorWorld();
         Glow::render();
-        Chams::render();
+        //Chams::render();
     }
     return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
 }
@@ -148,6 +148,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
 {
     if (interfaces.engine->isInGame()) {
         // render chams here
+        Chams::renderDME(ctx, state, info, customBoneToWorld);
     }
     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
     interfaces.modelRender->forceMaterialOverride(nullptr);
