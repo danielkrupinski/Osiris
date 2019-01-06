@@ -17,8 +17,7 @@ struct Model {
     float   radius;
 };
 
-struct ModelRenderInfo
-{
+struct ModelRenderInfo {
     Vector origin;
     QAngle angles;
     std::byte pad[4];
