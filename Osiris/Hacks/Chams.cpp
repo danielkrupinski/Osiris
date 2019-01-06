@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "Chams.h"
 #include "../Config.h"
 #include "../Hooks.h"
@@ -7,7 +9,7 @@
 void Chams::render() noexcept
 {
     if (config.chams.enabled) {
-        static auto vertex = interfaces.materialSystem->findMaterial("debug/debugambientcube");
+        static auto vertex = interfaces.materialSystem->findMaterial("dev/glow_rim3d");
         static auto unlit = interfaces.materialSystem->findMaterial("debug/debugdrawflat");
         static bool isInitialized = false;
 
@@ -111,4 +113,19 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
         }
         //interfaces.modelRender->forceMaterialOverride(nullptr);
     }
+}
+
+void Chams::initialize()
+{
+    std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
+{
+  "$basetexture" "vgui/white_additive"
+}
+)#";
+
+    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("VertexLitGeneric"
+{
+  "$basetexture" "vgui/white_additive"
+}
+)#";
 }
