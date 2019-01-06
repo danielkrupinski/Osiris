@@ -1,5 +1,6 @@
 #include "Chams.h"
 #include "../Config.h"
+#include "../Hooks.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 
@@ -59,7 +60,55 @@ void Chams::render() noexcept
     }
 }
 
-void Chams::renderDME(const ModelRenderInfo& info)
+void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
+    if (config.chams.enabled) {
+        if (!strstr(info.model->name, "models/player"))
+            return;
+        static auto vertex = interfaces.materialSystem->findMaterial("dev/glow_color");
+        static auto unlit = interfaces.materialSystem->findMaterial("debug/debugdrawflat");
+        static bool isInitialized = false;
 
+        if (!isInitialized) {
+            vertex->incrementReferenceCount();
+            unlit->incrementReferenceCount();
+            isInitialized = true;
+        }
+
+        auto material = config.chams.shader ? unlit : vertex;
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
+        material->alphaModulate(config.chams.alpha);
+
+        auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
+
+        if (entity && !entity->isDormant() && entity->isAlive()) {
+            if (entity->isEnemy()) {
+                if (config.chams.enemies) {
+                    interfaces.renderView->setColorModulation(config.chams.enemiesColor);
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                }
+                if (config.chams.visibleEnemies) {
+                    interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                }
+            }
+            else {
+                if (config.chams.allies) {
+                    interfaces.renderView->setColorModulation(config.chams.alliesColor);
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                }
+                if (config.chams.visibleAllies) {
+                    interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
+                    material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                    interfaces.modelRender->forceMaterialOverride(material);
+                }
+            }
+        }
+        //interfaces.modelRender->forceMaterialOverride(nullptr);
+    }
 }

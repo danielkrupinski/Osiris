@@ -4,5 +4,5 @@
 
 namespace Chams {
     void render() noexcept;
-    void renderDME(const ModelRenderInfo&);
+    void renderDME(void*, void*, const ModelRenderInfo&, matrix3x4*);
 };
