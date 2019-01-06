@@ -148,7 +148,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
     if (interfaces.engine->isInGame()) {
         // render chams here
     }
-    hooks.clientMode.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(44)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+    hooks.clientMode.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
     interfaces.modelRender->forceMaterialOverride(nullptr);
 }
 
@@ -162,6 +162,8 @@ Hooks::Hooks()
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
+
+    modelRender.hookAt(21, hookedDrawModelExecute);
 }
 
 Hooks::Vmt::Vmt(void* const base)
