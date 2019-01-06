@@ -87,25 +87,26 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
 
             if (entity->isEnemy()) {
                 if (config.chams.enemies) {
-                    interfaces.renderView->setColorModulation(config.chams.enemiesColor);
+                    material->colorModulate(config.chams.enemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
                     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
                 if (config.chams.visibleEnemies) {
-                    interfaces.renderView->setColorModulation(config.chams.visibleEnemiesColor);
+                    material->colorModulate(config.chams.visibleEnemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     interfaces.modelRender->forceMaterialOverride(material);
                 }
             }
             else {
                 if (config.chams.allies) {
+                    material->colorModulate(config.chams.alliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
                     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
                 if (config.chams.visibleAllies) {
-                    interfaces.renderView->setColorModulation(config.chams.visibleAlliesColor);
+                    material->colorModulate(config.chams.visibleAlliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     interfaces.modelRender->forceMaterialOverride(material);
                 }
