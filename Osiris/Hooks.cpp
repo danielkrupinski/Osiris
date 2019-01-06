@@ -14,6 +14,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/UserCmd.h"
+#include "SDK/ModelRender.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Chams.h"
@@ -148,7 +149,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
     if (interfaces.engine->isInGame()) {
         // render chams here
     }
-    hooks.clientMode.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
     interfaces.modelRender->forceMaterialOverride(nullptr);
 }
 
