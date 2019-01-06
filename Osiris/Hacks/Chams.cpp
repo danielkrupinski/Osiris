@@ -6,7 +6,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-void Chams::render() noexcept
+[[deprecated]] void Chams::render() noexcept
 {
     if (config.chams.enabled) {
         static auto vertex = interfaces.materialSystem->findMaterial("dev/glow_rim3d");
