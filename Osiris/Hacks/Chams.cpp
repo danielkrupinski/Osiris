@@ -124,7 +124,7 @@ void Chams::initialize()
 }
 )#";
 
-    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("VertexLitGeneric"
+    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$model" "1"
