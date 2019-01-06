@@ -58,3 +58,8 @@ void Chams::render() noexcept
         interfaces.modelRender->forceMaterialOverride(nullptr);
     }
 }
+
+void Chams::renderDME(const ModelRenderInfo& info)
+{
+
+}
