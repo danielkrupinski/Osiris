@@ -20,9 +20,9 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, float)>(this, 27)(this, alpha);
     }
 
-    void colorModulate(float r, float g, float b)
+    void colorModulate(float color[3])
     {
-        callVirtualFunction<void(__thiscall*)(void*, float, float, float)>(this, 28)(this, r, g, b);
+        callVirtualFunction<void(__thiscall*)(void*, float, float, float)>(this, 28)(this, color[0], color[1], color[2]);
     }
 
     void setMaterialVarFlag(MaterialVar flag, bool isOn)
