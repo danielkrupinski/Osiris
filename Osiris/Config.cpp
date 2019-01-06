@@ -67,7 +67,7 @@ void Config::load()
 
     chams.enabled = config["chams"]["enabled"].asBool();
     chams.alpha = config["chams"]["alpha"].asFloat();
-    chams.shader = config["chams"]["shader"].asInt();
+    chams.flat = config["chams"]["flat"].asBool();
     chams.wireframe = config["chams"]["wireframe"].asBool();
 
     chams.allies = config["chams"]["allies"].asBool();
@@ -162,7 +162,7 @@ void Config::save() const
 
     config["chams"]["enabled"] = chams.enabled;
     config["chams"]["alpha"] = chams.alpha;
-    config["chams"]["shader"] = chams.shader;
+    config["chams"]["flat"] = chams.flat;
     config["chams"]["wireframe"] = chams.wireframe;
 
     config["chams"]["allies"] = chams.allies;
@@ -251,7 +251,7 @@ void Config::reset()
 
     chams.enabled = false;
     chams.alpha = 1.0f;
-    chams.shader = 0;
+    chams.flat = false;
     chams.wireframe = false;
 
     chams.allies = false;

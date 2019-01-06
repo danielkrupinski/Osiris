@@ -41,7 +41,7 @@ public:
     struct {
         bool enabled{ false };
         float alpha{ 1.0f };
-        int shader{ 0 };
+        bool flat{ false };
         bool wireframe{ false };
         bool allies{ false };
         float alliesColor[3]{ 0.0f, 1.0f, 0.0f };

@@ -19,7 +19,7 @@
             isInitialized = true;
         }
 
-        auto material = config.chams.shader ? unlit : vertex;
+        auto material = config.chams.flat ? unlit : vertex;
 
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
         interfaces.renderView->setBlend(config.chams.alpha);
@@ -78,7 +78,7 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
             isInitialized = true;
         }
 
-        auto material = config.chams.shader ? normal : flat;
+        auto material = config.chams.flat ? flat : normal;
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
 
         if (entity && !entity->isDormant() && entity->isAlive()) {

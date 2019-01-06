@@ -98,7 +98,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
         ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
-        ImGui::Combo("Shader", &config.chams.shader, "vertex\0unlit");
+        ImGui::Checkbox("Flat", &config.chams.flat);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::NextColumn();
         checkBoxAndColorPicker("Allies", &config.chams.allies, config.chams.alliesColor);
