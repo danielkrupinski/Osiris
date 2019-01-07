@@ -97,3 +97,8 @@ void Misc::removeSmoke() noexcept
     if (config.misc.noSmoke || config.misc.wireframeSmoke)
         *memory.smokeCount = 0;
 }
+
+void Misc::thirdPerson() noexcept
+{
+
+}

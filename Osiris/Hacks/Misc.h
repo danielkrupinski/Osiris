@@ -13,4 +13,5 @@ namespace Misc {
     void removeBlood() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
     void removeSmoke() noexcept;
+    void thirdPerson() noexcept;
 }
