@@ -143,14 +143,6 @@ static float __stdcall hookedGetViewModelFov() noexcept
     return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.misc.viewmodelFov);
 }
 
-static void __stdcall hookedOverrideView(void* view) noexcept
-{
-    if (interfaces.engine->isInGame())
-        Misc::thirdPerson();
-
-    hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, void*)>(18)(memory.clientMode, view);
-}
-
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
@@ -170,7 +162,6 @@ Hooks::Hooks()
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
-    clientMode.hookAt(18, hookedOverrideView);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);

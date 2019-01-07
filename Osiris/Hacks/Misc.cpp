@@ -97,15 +97,3 @@ void Misc::removeSmoke() noexcept
     if (config.misc.noSmoke || config.misc.wireframeSmoke)
         *memory.smokeCount = 0;
 }
-
-void Misc::thirdPerson() noexcept
-{
-    static QAngle angles;
-    interfaces.engine->getViewAngles(angles);
-
-    if (!memory.input->isCameraInThirdPerson)
-    {
-        memory.input->isCameraInThirdPerson = true;
-        memory.input->cameraOffset = Vector{ angles.pitch, angles.yaw, 30.0f };
-    }
-}

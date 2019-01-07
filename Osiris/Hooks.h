@@ -42,7 +42,6 @@ public:
 
     Vmt clientMode{ memory.clientMode };
     Vmt modelRender{ interfaces.modelRender };
-    Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
 };
 
 extern Hooks hooks;
