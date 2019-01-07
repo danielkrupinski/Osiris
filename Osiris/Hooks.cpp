@@ -146,7 +146,7 @@ static float __stdcall hookedGetViewModelFov() noexcept
 
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
         // render chams here
         Chams::renderDME(ctx, state, info, customBoneToWorld);
     }
