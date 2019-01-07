@@ -64,7 +64,7 @@
 
 void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
-    if (config.chams.enabled && strstr(info.model->name, "models/player")) {
+    if (config.chams.enabled) {
         static bool isInitialized = false;
         static Material* normal;
         static Material* flat;
@@ -90,13 +90,13 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
                     material->colorModulate(config.chams.enemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    if (config.chams.visibleEnemies)
+                        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
                 if (config.chams.visibleEnemies) {
                     material->colorModulate(config.chams.visibleEnemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
             }
             else {
@@ -104,16 +104,15 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
                     material->colorModulate(config.chams.alliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    if (config.chams.visibleAllies)
+                        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
                 if (config.chams.visibleAllies) {
                     material->colorModulate(config.chams.visibleAlliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
                 }
             }
-            interfaces.modelRender->forceMaterialOverride(nullptr);
         }
     }
 }
