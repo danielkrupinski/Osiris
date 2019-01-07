@@ -5,7 +5,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Features
 * **Aimbot** - aim assistance
     * **Enable** - on / off master switch
+    * **Silent**
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
+    * **Smooth**
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
@@ -22,7 +24,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Chams** - color player models to improve visibility
     * **Enable** - on / off master switch
     * **Alpha** - material transparency
-    * **Shader** - sets chams shader [*vertex* (VertexLitGeneric) / *unlit* (UnlitGeneric)]
+    * **Flat**
     * **Wireframe** - render triangle mesh instead of solid material
     * **Allies** - allies chams on / off and color applied to them
     * **Visible allies** - visible allies chams on / off and color applied to them
