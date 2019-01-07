@@ -100,5 +100,12 @@ void Misc::removeSmoke() noexcept
 
 void Misc::thirdPerson() noexcept
 {
+    static QAngle angles;
+    interfaces.engine->getViewAngles(angles);
 
+    if (!memory.input->isCameraInThirdPerson)
+    {
+        memory.input->isCameraInThirdPerson = true;
+        memory.input->cameraOffset = Vector{ angles.pitch, angles.yaw, 30.0f };
+    }
 }
