@@ -42,4 +42,9 @@ public:
     {
         callVirtualFunction<void(__thiscall*)(void*, Material*, int, int)>(this, 1)(this, newMaterial, 0, 0);
     }
+
+    constexpr bool isMaterialOverriden() noexcept
+    {
+        return callVirtualFunction<bool(__thiscall*)(void*)>(this, 2)(this);
+    }
 };
