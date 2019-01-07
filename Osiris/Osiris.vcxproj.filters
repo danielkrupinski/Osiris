@@ -84,6 +84,9 @@
     <ClCompile Include="Netvars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Visuals.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
