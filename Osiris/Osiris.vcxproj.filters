@@ -212,5 +212,8 @@
     <ClInclude Include="SDK\Recv.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Visuals.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
