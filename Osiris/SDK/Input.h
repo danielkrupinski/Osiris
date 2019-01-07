@@ -6,7 +6,7 @@ public:
     bool isTrackIRAvailable;
     bool isMouseInitialized;
     bool isMouseActive;
-    std::byte pad1[164];
+    std::byte pad1[158];
     bool isCameraInThirdPerson;
     std::byte pad2;
     Vector cameraOffset;
