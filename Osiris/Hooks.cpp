@@ -170,6 +170,7 @@ Hooks::Hooks()
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
+    clientMode.hookAt(18, hookedOverrideView);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
