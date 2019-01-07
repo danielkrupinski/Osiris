@@ -22,10 +22,10 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
             isInitialized = true;
         }
 
-        auto material = config.chams.flat ? flat : normal;
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
 
         if (entity && !entity->isDormant() && entity->isAlive()) {
+            auto material = config.chams.flat ? flat : normal;
             material->alphaModulate(config.chams.alpha);
             material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 
