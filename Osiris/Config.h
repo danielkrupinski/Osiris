@@ -54,6 +54,10 @@ public:
     } chams;
 
     struct {
+
+    } visuals;
+
+    struct {
         bool enabled{ false };
         bool onKey{ false };
         int shotDelay{ 0 };
