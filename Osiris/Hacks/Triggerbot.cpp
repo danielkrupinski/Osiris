@@ -15,7 +15,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             auto inCrosshair = (*memory.localPlayer)->getCrosshairID();
             if (inCrosshair > 0 && inCrosshair <= 64) {
                 auto target = interfaces.entityList->getClientEntity(inCrosshair);
-                if (target->isEnemy()) {
+                if (target->isEnemy() && !target->isImmune()) {
                     constexpr int IN_ATTACK{ 1 };
                     cmd->buttons |= IN_ATTACK;
                 }
