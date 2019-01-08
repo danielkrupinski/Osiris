@@ -34,8 +34,9 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
                     material->colorModulate(config.chams.enemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    if (config.chams.visibleEnemies)
-                        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    if (!config.chams.visibleEnemies)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
                 if (config.chams.visibleEnemies) {
                     material->colorModulate(config.chams.visibleEnemiesColor);
@@ -48,8 +49,9 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
                     material->colorModulate(config.chams.alliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
-                    if (config.chams.visibleAllies)
-                        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                    if (!config.chams.visibleAllies)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
                 if (config.chams.visibleAllies) {
                     material->colorModulate(config.chams.visibleAlliesColor);
