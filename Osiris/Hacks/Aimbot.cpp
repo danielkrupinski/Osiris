@@ -39,7 +39,7 @@ static int findTarget(UserCmd* cmd) noexcept
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getClientEntity(i);
-        if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy())
+        if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
         auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
         auto fov = getFov(cmd->viewangles, angle);
