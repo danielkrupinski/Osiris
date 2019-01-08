@@ -30,8 +30,8 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
             material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
 
             if (entity->isEnemy()) {
-                if (config.chams.enemies) {
-                    material->colorModulate(config.chams.enemiesColor);
+                if (config.chams.occludedEnemies) {
+                    material->colorModulate(config.chams.occludedEnemiesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
                     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
@@ -45,8 +45,8 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
                 }
             }
             else {
-                if (config.chams.allies) {
-                    material->colorModulate(config.chams.alliesColor);
+                if (config.chams.occludedAllies) {
+                    material->colorModulate(config.chams.occludedAlliesColor);
                     material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                     interfaces.modelRender->forceMaterialOverride(material);
                     hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
