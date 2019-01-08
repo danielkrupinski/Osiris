@@ -28,6 +28,11 @@ public:
         return *reinterpret_cast<int*>(this + netvars.getOffset("m_bHasDefuser") + 92);
     }
 
+    bool isImmune() noexcept
+    {
+        return *reinterpret_cast<bool*>(this + netvars.getOffset("m_bGunGameImmunity"));
+    }
+
     constexpr void drawModel(int flags, unsigned char alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
