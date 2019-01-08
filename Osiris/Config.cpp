@@ -27,10 +27,11 @@ void Config::load()
     in >> config;
 
     aimbot.enabled = config["aimbot"]["enabled"].asBool();
+    aimbot.silent = config["aimbot"]["silent"].asBool();
     aimbot.fov = config["aimbot"]["fov"].asFloat();
+    aimbot.smooth = config["aimbot"]["smooth"].asFloat();
 
     glow.enabled = config["glow"]["enabled"].asBool();
-
     glow.thickness = config["glow"]["thickness"].asFloat();
     glow.alpha = config["glow"]["alpha"].asFloat();
     glow.style = config["glow"]["style"].asInt();
@@ -122,10 +123,11 @@ void Config::save() const
     Json::Value config;
 
     config["aimbot"]["enabled"] = aimbot.enabled;
+    config["aimbot"]["silent"] = aimbot.silent;
     config["aimbot"]["fov"] = aimbot.fov;
+    config["aimbot"]["smooth"] = aimbot.smooth;
 
     config["glow"]["enabled"] = glow.enabled;
-
     config["glow"]["thickness"] = glow.thickness;
     config["glow"]["alpha"] = glow.alpha;
     config["glow"]["style"] = glow.style;
@@ -211,7 +213,9 @@ void Config::save() const
 void Config::reset()
 {
     aimbot.enabled = false;
+    aimbot.silent = false;
     aimbot.fov = 0.0f;
+    aimbot.smooth = 1.0f;
 
     glow.enabled = false;
 
