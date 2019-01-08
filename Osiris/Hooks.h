@@ -22,8 +22,8 @@ public:
         template<typename T>
         void hookAt(std::size_t index, T fun) const noexcept
         {
-            if (index < length)
-                newVmt[index] = reinterpret_cast<std::uintptr_t>(fun);
+            if (index <= length)
+                newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
         }
 
         template<typename T>
