@@ -31,13 +31,13 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 {
     if (config.chams.enabled) {
         if (std::string_view{ info.model->name }.find("models/player") != std::string_view::npos)
-            renderDME(ctx, state, info, customBoneToWorld);
+            renderPlayers(ctx, state, info, customBoneToWorld);
         else if ((std::string_view{ info.model->name }.find("models/weapons/v_") != std::string_view::npos) && (std::string_view{ info.model->name }.find("arms") == std::string_view::npos))
             renderWeapons(ctx, state, info, customBoneToWorld);
     }
 }
 
-void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
+void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
     if (config.chams.enabled) {
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
