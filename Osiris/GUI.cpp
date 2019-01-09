@@ -105,6 +105,7 @@ void GUI::renderChamsWindow() noexcept
         checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
         checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
         checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
+        checkBoxAndColorPicker("Weapons", &config.chams.weapons, config.chams.weaponsColor);
         ImGui::End();
     }
 }
