@@ -83,14 +83,14 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
 
 void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (config.chams.enabled) {
+    if (config.chams.weapons) {
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
         auto material = config.chams.flat ? flat : normal;
 
         material->alphaModulate(config.chams.alpha);
+        material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
-        material->colorModulate(config.chams.occludedEnemiesColor);
-        material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+        material->colorModulate(config.chams.weaponsColor);
         interfaces.modelRender->forceMaterialOverride(material);
     }
 }
