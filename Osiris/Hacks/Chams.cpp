@@ -27,9 +27,14 @@ Chams::Chams() noexcept
     flat->incrementReferenceCount();
 }
 
-void Chams::render(void *, void *, const ModelRenderInfo &, matrix3x4 *) noexcept
+void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-
+    if (config.chams.enabled) {
+        if (std::string_view{ info.model->name }.find("models/player") != std::string_view::npos)
+            renderDME(ctx, state, info, customBoneToWorld);
+        else if (std::string_view{ info.model->name }.find("models/weapons/v_") != std::string_view::npos)
+            renderWeapons(ctx, state, info, customBoneToWorld);
+    }
 }
 
 void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)

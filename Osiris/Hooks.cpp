@@ -146,8 +146,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
 {
     if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
         static Chams chams;
-        if (std::string_view{ info.model->name }.find("models/player") != std::string_view::npos)
-            chams.renderDME(ctx, state, info, customBoneToWorld);
+        chams.render(ctx, state, info, customBoneToWorld);
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
         interfaces.modelRender->forceMaterialOverride(nullptr);
     }
