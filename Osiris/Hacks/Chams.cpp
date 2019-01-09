@@ -6,23 +6,30 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-static bool isInitialized = false;
+Chams::Chams() noexcept
+{
+    std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
+{
+  "$basetexture" "vgui/white_additive"
+  "$model" "1"
+}
+)#";
+
+    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("UnlitGeneric"
+{
+  "$basetexture" "vgui/white_additive"
+  "$model" "1"
+}
+)#";
+    normal = interfaces.materialSystem->findMaterial("chamsNormal");
+    flat = interfaces.materialSystem->findMaterial("chamsFlat");
+    normal->incrementReferenceCount();
+    flat->incrementReferenceCount();
+}
 
 void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
     if (config.chams.enabled) {
-        static Material* normal;
-        static Material* flat;
-
-        if (!isInitialized) {
-            Chams::initialize();
-            normal = interfaces.materialSystem->findMaterial("chamsNormal");
-            flat = interfaces.materialSystem->findMaterial("chamsFlat");
-            normal->incrementReferenceCount();
-            flat->incrementReferenceCount();
-            isInitialized = true;
-        }
-
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
 
         if (entity && !entity->isDormant() && entity->isAlive()) {
@@ -67,21 +74,9 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
 void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chams.enabled) {
-        static Material* normal;
-        static Material* flat;
-
-        if (!isInitialized) {
-            Chams::initialize();
-            normal = interfaces.materialSystem->findMaterial("chamsNormal");
-            flat = interfaces.materialSystem->findMaterial("chamsFlat");
-            normal->incrementReferenceCount();
-            flat->incrementReferenceCount();
-            isInitialized = true;
-        }
-
         auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
-
         auto material = config.chams.flat ? flat : normal;
+
         material->alphaModulate(config.chams.alpha);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.wireframe);
         material->colorModulate(config.chams.occludedEnemiesColor);
@@ -92,17 +87,5 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::initialize()
 {
-    std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$model" "1"
-}
-)#";
-
-    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("UnlitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$model" "1"
-}
-)#";
+    
 }
