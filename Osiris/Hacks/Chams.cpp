@@ -33,7 +33,7 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         if (std::string_view{ info.model->name }.find("models/player") != std::string_view::npos)
             renderPlayers(ctx, state, info, customBoneToWorld);
         else if ((std::string_view{ info.model->name }.find("models/weapons/v_") != std::string_view::npos) && (std::string_view{ info.model->name }.find("arms") == std::string_view::npos))
-            renderWeapons(ctx, state, info, customBoneToWorld);
+            renderWeapons(info.entityIndex);
     }
 }
 
@@ -79,10 +79,10 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     }
 }
 
-void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderWeapons(int entityIndex) noexcept
 {
     if (config.chams.weapons) {
-        auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
+        auto entity = interfaces.entityList->getClientEntity(entityIndex);
         auto material = config.chams.flat ? flat : normal;
 
         material->alphaModulate(config.chams.alpha);
