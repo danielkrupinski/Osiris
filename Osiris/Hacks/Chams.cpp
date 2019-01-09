@@ -63,6 +63,11 @@ void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matri
     }
 }
 
+void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+{
+
+}
+
 void Chams::initialize()
 {
     std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
