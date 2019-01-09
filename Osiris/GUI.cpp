@@ -91,7 +91,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize(ImVec2(330.0f, 140.0f));
+        ImGui::SetNextWindowSize(ImVec2(330.0f, 160.0f));
         ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
