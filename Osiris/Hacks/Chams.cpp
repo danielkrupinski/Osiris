@@ -94,8 +94,3 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
         interfaces.modelRender->forceMaterialOverride(material);
     }
 }
-
-void Chams::initialize()
-{
-    
-}
