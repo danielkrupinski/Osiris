@@ -289,7 +289,7 @@ void Config::reset()
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
     misc.skybox = 0;
-    misc.viewmodelFov = 60;
+    misc.viewmodelFov = 0;
     misc.worldColor[0] = 0.0f;
     misc.worldColor[1] = 0.0f;
     misc.worldColor[2] = 0.0f;
