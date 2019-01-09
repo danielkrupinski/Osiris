@@ -65,12 +65,6 @@ void Misc::reduceFlashEffect() noexcept
     *reinterpret_cast<float*>(*memory.localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
-void Misc::removeBlood() noexcept
-{
-    static auto enableBlood = interfaces.cvar->findVar("violence_hblood");
-    enableBlood->setValue(!config.misc.noBlood);
-}
-
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 {
     if (config.misc.noCrouchCooldown) {

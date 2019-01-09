@@ -10,7 +10,6 @@ namespace Misc {
     void colorWorld() noexcept;
     void inverseRagdollGravity() noexcept;
     void reduceFlashEffect() noexcept;
-    void removeBlood() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
     void removeSmoke() noexcept;
 }

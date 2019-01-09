@@ -70,7 +70,6 @@ public:
         int flashReduction{ 0 };
         bool inverseRagdollGravity{ false };
         bool noCrouchCooldown{ false };
-        bool noBlood{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
         int skybox{ 0 };

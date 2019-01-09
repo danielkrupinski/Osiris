@@ -101,7 +101,6 @@ void Config::load()
     misc.flashReduction = config["misc"]["flashReduction"].asInt();
     misc.inverseRagdollGravity = config["misc"]["inverseRagdollGravity"].asBool();
     misc.noCrouchCooldown = config["misc"]["noCrouchCooldown"].asBool();
-    misc.noBlood = config["misc"]["noBlood"].asBool();
     misc.noSmoke = config["misc"]["noSmoke"].asBool();
     misc.wireframeSmoke = config["misc"]["wireframeSmoke"].asBool();
     misc.skybox = config["misc"]["skybox"].asInt();
@@ -197,7 +196,6 @@ void Config::save() const
     config["misc"]["flashReduction"] = misc.flashReduction;
     config["misc"]["inverseRagdollGravity"] = misc.inverseRagdollGravity;
     config["misc"]["noCrouchCooldown"] = misc.noCrouchCooldown;
-    config["misc"]["noBlood"] = misc.noBlood;
     config["misc"]["noSmoke"] = misc.noSmoke;
     config["misc"]["wireframeSmoke"] = misc.wireframeSmoke;
     config["misc"]["skybox"] = misc.skybox;
@@ -288,7 +286,6 @@ void Config::reset()
     misc.flashReduction = 0;
     misc.inverseRagdollGravity = false;
     misc.noCrouchCooldown = false;
-    misc.noBlood = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
     misc.skybox = 0;

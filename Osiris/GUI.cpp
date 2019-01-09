@@ -137,7 +137,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SliderInt("Flash reduction", &config.misc.flashReduction, 0, 100, "%d%%");
         ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
         ImGui::Checkbox("No crouch cooldown", &config.misc.noCrouchCooldown);
-        ImGui::Checkbox("No blood", &config.misc.noBlood);
         ImGui::Checkbox("No smoke", &config.misc.noSmoke);
         if (!config.misc.noSmoke)
             ImGui::Checkbox("Wireframe smoke", &config.misc.wireframeSmoke);

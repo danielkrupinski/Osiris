@@ -128,7 +128,6 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
     if (interfaces.engine->isInGame()) {
         Misc::inverseRagdollGravity();
-        Misc::removeBlood();
         Misc::removeSmoke();
         Misc::reduceFlashEffect();
         Misc::disablePostProcessing();
