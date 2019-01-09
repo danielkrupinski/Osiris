@@ -56,11 +56,11 @@ void GUI::renderAimbotWindow() noexcept
     if (window.aimbot) {
         ImGui::SetNextWindowSize(ImVec2(165.0f, 137.0f));
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(100.0f);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::Checkbox("Silent", &config.aimbot.silent);
-        ImGui::SliderFloat("Fov", &config.aimbot.fov, 0.0f, 180.0f, "%.2f");
-        ImGui::SliderFloat("Smooth", &config.aimbot.smooth, 1.0f, 100.0f, "%.2f");
+        ImGui::PushItemWidth(150.0f);
+        ImGui::SliderFloat("##Fov", &config.aimbot.fov, 0.0f, 180.0f, "Fov: %.2f");
+        ImGui::SliderFloat("##Smooth", &config.aimbot.smooth, 1.0f, 100.0f, "Smooth: %.2f");
         ImGui::End();
     }
 }
@@ -104,7 +104,7 @@ void GUI::renderChamsWindow() noexcept
         checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
         checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
         checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
-        checkBoxAndColorPicker("Occluded Enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
+        checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
         ImGui::End();
     }
 }
