@@ -72,11 +72,11 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Begin("Glow", &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);
-        ImGui::PushItemWidth(80.0f);
+        ImGui::PushItemWidth(150.0f);
         ImGui::Checkbox("Enabled", &config.glow.enabled);
-        ImGui::SliderFloat("Thickness", &config.glow.thickness, 0.0f, 1.0f);
-        ImGui::SliderFloat("Alpha", &config.glow.alpha, 0.0f, 1.0f);
-        ImGui::SliderInt("Style", &config.glow.style, 0, 3);
+        ImGui::SliderFloat("##Thickness", &config.glow.thickness, 0.0f, 1.0f, "Thickness: %.2f");
+        ImGui::SliderFloat("##Alpha", &config.glow.alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::SliderInt("##Style", &config.glow.style, 0, 3, "Style: %d");
         checkBoxAndColorPicker("Allies", &config.glow.allies, config.glow.alliesColor);
         ImGui::NextColumn();
         checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
