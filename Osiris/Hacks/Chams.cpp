@@ -27,6 +27,11 @@ Chams::Chams() noexcept
     flat->incrementReferenceCount();
 }
 
+void Chams::render(void *, void *, const ModelRenderInfo &, matrix3x4 *) noexcept
+{
+
+}
+
 void Chams::renderDME(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld)
 {
     if (config.chams.enabled) {
