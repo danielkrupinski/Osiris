@@ -124,6 +124,11 @@ void GUI::renderChamsWindow() noexcept
     }
 }
 
+void GUI::renderVisualsWindow() noexcept
+{
+
+}
+
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {

@@ -11,6 +11,7 @@ private:
     void renderTriggerbotWindow() noexcept;
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
+    void renderVisualsWindow() noexcept;
     void renderMiscWindow() noexcept;
     struct {
         bool aimbot{ false };
