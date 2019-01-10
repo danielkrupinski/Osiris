@@ -10,12 +10,11 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     constexpr int IN_JUMP{ 2 };
     if (config.misc.bunnyHop) {
         if (cmd->buttons & IN_JUMP) {
-            if (*((*memory.localPlayer)->getFlags()) & ON_GROUND) {
+            auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+            if (*localPlayer->getFlags() & ON_GROUND)
                 cmd->buttons |= IN_JUMP;
-            }
-            else {
+            else
                 cmd->buttons &= ~IN_JUMP;
-            }
         }
     }
 }
@@ -62,7 +61,8 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::reduceFlashEffect() noexcept
 {
-    *reinterpret_cast<float*>(*memory.localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.misc.flashReduction * 2.55f;
+    auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+    *reinterpret_cast<float*>(localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
