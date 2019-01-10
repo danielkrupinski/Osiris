@@ -5,6 +5,11 @@
 
 class Engine {
 public:
+    auto getLocalPlayer() noexcept
+    {
+        return callVirtualFunction<int(__thiscall*)(void*)>(this, 12)(this);
+    }
+
     auto getViewAngles(QAngle& angles) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, QAngle&)>(this, 18)(this, angles);
