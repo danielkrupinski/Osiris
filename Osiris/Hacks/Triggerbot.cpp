@@ -3,7 +3,7 @@
 
 #include "../Config.h"
 #include "../Interfaces.h"
-#include "../Memory.h"
+#include "../SDK/Entity.h"
 #include "Triggerbot.h"
 
 void Triggerbot::run(UserCmd* cmd) noexcept

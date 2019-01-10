@@ -4,7 +4,6 @@
 #include "../Config.h"
 #include "../Hooks.h"
 #include "../Interfaces.h"
-#include "../Memory.h"
 
 Chams::Chams() noexcept
 {
