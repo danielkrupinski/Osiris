@@ -8,9 +8,9 @@ private:
 	void checkBoxAndColorPicker(const std::string_view, bool*, float*) const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;
+    void renderTriggerbotWindow() noexcept;
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
-    void renderTriggerbotWindow() noexcept;
     void renderMiscWindow() noexcept;
     struct {
         bool aimbot{ false };

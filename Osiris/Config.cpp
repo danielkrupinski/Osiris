@@ -31,6 +31,10 @@ void Config::load()
     aimbot.fov = config["aimbot"]["fov"].asFloat();
     aimbot.smooth = config["aimbot"]["smooth"].asFloat();
 
+    triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
+    triggerbot.onKey = config["triggerbot"]["onKey"].asBool();
+    triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
+
     glow.enabled = config["glow"]["enabled"].asBool();
     glow.thickness = config["glow"]["thickness"].asFloat();
     glow.alpha = config["glow"]["alpha"].asFloat();
@@ -91,10 +95,6 @@ void Config::load()
     chams.visibleEnemiesColor[1] = config["chams"]["visibleEnemiesColor"][1].asFloat();
     chams.visibleEnemiesColor[2] = config["chams"]["visibleEnemiesColor"][2].asFloat();
 
-    triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
-    triggerbot.onKey = config["triggerbot"]["onKey"].asBool();
-    triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
-
     misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
     misc.clanTag = config["misc"]["clanTag"].asString();
     misc.disablePostProcessing = config["misc"]["disablePostProcessing"].asBool();
@@ -125,6 +125,10 @@ void Config::save() const
     config["aimbot"]["silent"] = aimbot.silent;
     config["aimbot"]["fov"] = aimbot.fov;
     config["aimbot"]["smooth"] = aimbot.smooth;
+
+    config["triggerbot"]["enabled"] = triggerbot.enabled;
+    config["triggerbot"]["onKey"] = triggerbot.onKey;
+    config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
 
     config["glow"]["enabled"] = glow.enabled;
     config["glow"]["thickness"] = glow.thickness;
@@ -186,10 +190,6 @@ void Config::save() const
     config["chams"]["occludedEnemiesColor"][1] = chams.occludedEnemiesColor[1];
     config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
 
-    config["triggerbot"]["enabled"] = triggerbot.enabled;
-    config["triggerbot"]["onKey"] = triggerbot.onKey;
-    config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
-
     config["misc"]["bunnyHop"] = misc.bunnyHop;
     config["misc"]["clanTag"] = misc.clanTag;
     config["misc"]["disablePostProcessing"] = misc.disablePostProcessing;
@@ -215,8 +215,11 @@ void Config::reset()
     aimbot.fov = 0.0f;
     aimbot.smooth = 1.0f;
 
-    glow.enabled = false;
+    triggerbot.enabled = false;
+    triggerbot.onKey = false;
+    triggerbot.shotDelay = 0;
 
+    glow.enabled = false;
     glow.thickness = 1.0f;
     glow.alpha = 1.0f;
     glow.style = 0;
@@ -275,10 +278,6 @@ void Config::reset()
     chams.occludedEnemiesColor[0] = 1.0f;
     chams.occludedEnemiesColor[1] = 0.0f;
     chams.occludedEnemiesColor[2] = 0.0f;
-
-    triggerbot.enabled = false;
-    triggerbot.onKey = false;
-    triggerbot.shotDelay = 0;
 
     misc.bunnyHop = false;
     misc.clanTag = "";

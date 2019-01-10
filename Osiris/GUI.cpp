@@ -8,9 +8,9 @@ void GUI::render() noexcept
 {
     renderMenuBar();
     renderAimbotWindow();
+    renderTriggerbotWindow();
     renderGlowWindow();
     renderChamsWindow();
-    renderTriggerbotWindow();
     renderMiscWindow();
 }
 
@@ -33,9 +33,9 @@ void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
+        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
 
         if (ImGui::BeginMenu("Config")) {
@@ -64,6 +64,20 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::End();
     }
 }
+
+void GUI::renderTriggerbotWindow() noexcept
+{
+    if (window.triggerbot) {
+        ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
+        ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::PushItemWidth(70.0f);
+        ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
+        ImGui::Checkbox("On key (ALT)", &config.triggerbot.onKey);
+        ImGui::SliderInt("Shot delay", &config.triggerbot.shotDelay, 0, 250, "%d ms");
+        ImGui::End();
+    }
+}
+
 
 void GUI::renderGlowWindow() noexcept
 {
@@ -106,19 +120,6 @@ void GUI::renderChamsWindow() noexcept
         checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
         checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
         checkBoxAndColorPicker("Weapons", &config.chams.weapons, config.chams.weaponsColor);
-        ImGui::End();
-    }
-}
-
-void GUI::renderTriggerbotWindow() noexcept
-{
-    if (window.triggerbot) {
-        ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
-        ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(70.0f);
-        ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
-        ImGui::Checkbox("On key (ALT)", &config.triggerbot.onKey);
-        ImGui::SliderInt("Shot delay", &config.triggerbot.shotDelay, 0, 250, "%d ms");
         ImGui::End();
     }
 }

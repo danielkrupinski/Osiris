@@ -19,6 +19,12 @@ public:
 
     struct {
         bool enabled{ false };
+        bool onKey{ false };
+        int shotDelay{ 0 };
+    } triggerbot;
+
+    struct {
+        bool enabled{ false };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
@@ -58,12 +64,6 @@ public:
     struct {
 
     } visuals;
-
-    struct {
-        bool enabled{ false };
-        bool onKey{ false };
-        int shotDelay{ 0 };
-    } triggerbot;
 
     struct {
         bool bunnyHop{ false };
