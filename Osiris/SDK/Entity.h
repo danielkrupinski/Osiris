@@ -54,7 +54,7 @@ public:
             return Vector{ };
     }
 
-    Vector getEyePosition()
+    Vector getEyeOrigin()
     {
         Vector vec;
         callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);

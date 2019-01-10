@@ -41,7 +41,7 @@ static int findTarget(UserCmd* cmd) noexcept
         auto entity = interfaces.entityList->getClientEntity(i);
         if (!entity || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
-        auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+        auto angle = calculateAngleBetween((*memory.localPlayer)->getEyeOrigin(), entity->getBonePosition(8));
         auto fov = getFov(cmd->viewangles, angle);
         if (fov < bestFov) {
             bestFov = fov;
@@ -56,7 +56,7 @@ void Aimbot::run(UserCmd* cmd)
     if (config.aimbot.enabled && cmd->buttons & 1) {
         if (auto target = findTarget(cmd)) {
             auto entity = interfaces.entityList->getClientEntity(target);
-            auto angle = calculateAngleBetween((*memory.localPlayer)->getEyePosition(), entity->getBonePosition(8));
+            auto angle = calculateAngleBetween((*memory.localPlayer)->getEyeOrigin(), entity->getBonePosition(8));
             cmd->viewangles = angle;
             if (!config.aimbot.silent)
                 interfaces.engine->setViewAngles(angle);
