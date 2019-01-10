@@ -12,7 +12,7 @@ static QAngle calculateAngleBetween(const Vector& source, const Vector& destinat
 {
     Vector delta = source - destination;
     delta /= config.aimbot.smooth;
-    float hyp = delta.length();
+    float hyp = delta.length2D();
     QAngle angles;
     angles.pitch = atanf(delta.z / hyp) * 180 / M_PI;
     angles.yaw = atanf(delta.y / delta.x) * 180 / M_PI;
