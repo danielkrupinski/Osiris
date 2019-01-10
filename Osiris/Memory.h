@@ -14,7 +14,6 @@ public:
     std::uintptr_t present;
     std::uintptr_t reset;
 
-    Entity** localPlayer;
     class ClientMode* clientMode;
     Input* input;
     GlowObjectManager* glowObjectManager;
