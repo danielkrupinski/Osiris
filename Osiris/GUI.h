@@ -15,9 +15,10 @@ private:
     void renderMiscWindow() noexcept;
     struct {
         bool aimbot{ false };
+        bool triggerbot{ false };
         bool glow{ false };
         bool chams{ false };
-        bool triggerbot{ false };
+        bool visuals{ false };
         bool misc{ false };
     } window;
 };
