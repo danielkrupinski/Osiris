@@ -137,7 +137,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
         ImGui::SliderInt("Flash reduction", &config.misc.flashReduction, 0, 100, "%d%%");
         ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
-        ImGui::Checkbox("No crouch cooldown", &config.misc.noCrouchCooldown);
+        ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("No smoke", &config.misc.noSmoke);
         if (!config.misc.noSmoke)
             ImGui::Checkbox("Wireframe smoke", &config.misc.wireframeSmoke);

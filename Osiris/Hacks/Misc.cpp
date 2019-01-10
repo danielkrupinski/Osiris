@@ -67,7 +67,7 @@ void Misc::reduceFlashEffect() noexcept
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 {
-    if (config.misc.noCrouchCooldown) {
+    if (config.misc.fastDuck) {
         constexpr int IN_BULLRUSH{ 4194304 };
         cmd->buttons |= IN_BULLRUSH;
     }

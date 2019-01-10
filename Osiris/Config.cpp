@@ -100,7 +100,7 @@ void Config::load()
     misc.disablePostProcessing = config["misc"]["disablePostProcessing"].asBool();
     misc.flashReduction = config["misc"]["flashReduction"].asInt();
     misc.inverseRagdollGravity = config["misc"]["inverseRagdollGravity"].asBool();
-    misc.noCrouchCooldown = config["misc"]["noCrouchCooldown"].asBool();
+    misc.fastDuck = config["misc"]["fastDuck"].asBool();
     misc.noSmoke = config["misc"]["noSmoke"].asBool();
     misc.wireframeSmoke = config["misc"]["wireframeSmoke"].asBool();
     misc.skybox = config["misc"]["skybox"].asInt();
@@ -195,7 +195,7 @@ void Config::save() const
     config["misc"]["disablePostProcessing"] = misc.disablePostProcessing;
     config["misc"]["flashReduction"] = misc.flashReduction;
     config["misc"]["inverseRagdollGravity"] = misc.inverseRagdollGravity;
-    config["misc"]["noCrouchCooldown"] = misc.noCrouchCooldown;
+    config["misc"]["fastDuck"] = misc.fastDuck;
     config["misc"]["noSmoke"] = misc.noSmoke;
     config["misc"]["wireframeSmoke"] = misc.wireframeSmoke;
     config["misc"]["skybox"] = misc.skybox;
@@ -285,7 +285,7 @@ void Config::reset()
     misc.disablePostProcessing = false;
     misc.flashReduction = 0;
     misc.inverseRagdollGravity = false;
-    misc.noCrouchCooldown = false;
+    misc.fastDuck = false;
     misc.noSmoke = false;
     misc.wireframeSmoke = false;
     misc.skybox = 0;
