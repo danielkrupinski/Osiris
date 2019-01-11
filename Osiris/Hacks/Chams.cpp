@@ -7,14 +7,14 @@
 
 Chams::Chams() noexcept
 {
-    std::ofstream("csgo\\materials\\chamsNormal.vmt") << R"#("VertexLitGeneric"
+    std::ofstream("csgo/materials/chamsNormal.vmt") << R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$model" "1"
 }
 )#";
 
-    std::ofstream("csgo\\materials\\chamsFlat.vmt") << R"#("UnlitGeneric"
+    std::ofstream("csgo/materials/chamsFlat.vmt") << R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$model" "1"
