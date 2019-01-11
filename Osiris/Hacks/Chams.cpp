@@ -8,7 +8,7 @@
 Chams::Chams() noexcept
 {
     std::ofstream{ "csgo/materials/chamsNormal.vmt" } <<
-        "VertexLitGeneric { $basetexture vgui/white_additive $model 1 }";
+        "VertexLitGeneric { }";
 
     std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
         "UnlitGeneric { $basetexture vgui/white_additive $model 1 }";
