@@ -11,7 +11,7 @@ Chams::Chams() noexcept
         "VertexLitGeneric { }";
 
     std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
-        "UnlitGeneric { $basetexture vgui/white_additive $model 1 }";
+        "UnlitGeneric { }";
 
     normal = interfaces.materialSystem->findMaterial("chamsNormal");
     flat = interfaces.materialSystem->findMaterial("chamsFlat");
