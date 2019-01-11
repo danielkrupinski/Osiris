@@ -22,9 +22,12 @@ Chams::Chams() noexcept
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (config.chams.enabled) {
-        if (std::string_view{ info.model->name }.find("models/player") != std::string_view::npos)
+        const std::string_view modelName{ info.model->name };
+        if (modelName.find("models/player") != std::string_view::npos)
             renderPlayers(ctx, state, info, customBoneToWorld);
-        else if ((std::string_view{ info.model->name }.find("models/weapons/v_") != std::string_view::npos) && (std::string_view{ info.model->name }.find("arms") == std::string_view::npos))
+        else if ((modelName.find("models/weapons/v_") != std::string_view::npos)
+            && (modelName.find("tablet") == std::string_view::npos)
+            && (modelName.find("parachute") == std::string_view::npos))
             renderWeapons(info.entityIndex);
     }
 }
