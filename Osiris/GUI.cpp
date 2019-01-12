@@ -29,6 +29,11 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
     }
 }
 
+void GUI::hotkey() const noexcept
+{
+
+}
+
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
