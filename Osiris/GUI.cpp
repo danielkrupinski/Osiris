@@ -1,4 +1,4 @@
-#include <string>
+#include <sstream>
 #include <Windows.h>
 
 #include "imgui/imgui.h"
@@ -32,15 +32,13 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
 
 void GUI::hotkey(int* key) const noexcept
 {
-    std::string name{ "[ " };
-    name.append(*key ? std::to_string(*key) : "key");
-    name.append(" ]");
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui::Text(name.c_str());
-    if (ImGui::IsItemHovered())
+    ImGui::Text((std::ostringstream{ } << "[ " << (*key ? std::to_string(*key) : "key") << " ]").str().c_str());
+    if (ImGui::IsItemHovered()) {
+        ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != VK_INSERT)
                 *key = i != VK_ESCAPE ? i : 0;
+    }
 }
 
 void GUI::renderMenuBar() noexcept
