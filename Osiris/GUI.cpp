@@ -70,10 +70,10 @@ void GUI::renderTriggerbotWindow() noexcept
     if (window.triggerbot) {
         ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
         ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(70.0f);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key (ALT)", &config.triggerbot.onKey);
-        ImGui::SliderInt("Shot delay", &config.triggerbot.shotDelay, 0, 250, "%d ms");
+        ImGui::PushItemWidth(160.0f);
+        ImGui::SliderInt("##Shot delay", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
     }
 }
@@ -109,9 +109,9 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
-        ImGui::PushItemWidth(80.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
-        ImGui::SliderFloat("Alpha", &config.chams.alpha, 0.0f, 1.0f);
+        ImGui::PushItemWidth(120.0f);
+        ImGui::SliderFloat("##Alpha", &config.chams.alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::Checkbox("Flat", &config.chams.flat);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::NextColumn();
