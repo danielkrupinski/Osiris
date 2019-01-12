@@ -83,7 +83,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
         ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
-        ImGui::Checkbox("On key (ALT)", &config.triggerbot.onKey);
+        ImGui::Checkbox("On key", &config.triggerbot.onKey);
         ImGui::SameLine();
         hotkey(&config.triggerbot.key);
         ImGui::PushItemWidth(160.0f);
