@@ -86,6 +86,8 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key (ALT)", &config.triggerbot.onKey);
+        ImGui::SameLine();
+        hotkey(&config.triggerbot.key);
         ImGui::PushItemWidth(160.0f);
         ImGui::SliderInt("##Shot delay", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
