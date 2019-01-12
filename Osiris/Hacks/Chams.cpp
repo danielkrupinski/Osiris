@@ -28,7 +28,8 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         else if ((modelName.find("models/weapons/v_") != std::string_view::npos)
             && (modelName.find("arms") == std::string_view::npos)
             && (modelName.find("tablet") == std::string_view::npos)
-            && (modelName.find("parachute") == std::string_view::npos))
+            && (modelName.find("parachute") == std::string_view::npos)
+            && (modelName.find("fists") == std::string_view::npos))
             renderWeapons(info.entityIndex);
     }
 }
