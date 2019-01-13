@@ -117,8 +117,8 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
         Misc::clanTag();
         Aimbot::run(cmd);
         Triggerbot::run(cmd);
-        cmd->viewangles.pitch = std::max(-89.0f, std::min(89.0f, cmd->viewangles.pitch));
-        cmd->viewangles.yaw = std::max(-180.0f, std::min(180.0f, cmd->viewangles.yaw));
+        cmd->viewangles.pitch = std::clamp(cmd->viewangles.pitch, -89.0f, 89.0f);
+        cmd->viewangles.yaw = std::clamp(cmd->viewangles.yaw, -180.0f, 180.0f);
         cmd->viewangles.roll = 0.0f;
     }
     return false;
