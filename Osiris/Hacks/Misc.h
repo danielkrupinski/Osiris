@@ -12,4 +12,5 @@ namespace Misc {
     void reduceFlashEffect() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
     void removeSmoke() noexcept;
+    void autoPistol() noexcept;
 }
