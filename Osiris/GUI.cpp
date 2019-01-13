@@ -12,6 +12,7 @@ void GUI::render() noexcept
     renderTriggerbotWindow();
     renderGlowWindow();
     renderChamsWindow();
+    renderVisualsWindow();
     renderMiscWindow();
 }
 
@@ -48,6 +49,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
+        ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
 
         if (ImGui::BeginMenu("Config")) {
