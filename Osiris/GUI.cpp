@@ -140,7 +140,12 @@ void GUI::renderChamsWindow() noexcept
 
 void GUI::renderVisualsWindow() noexcept
 {
-
+    if (window.visuals) {
+        ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f));
+        ImGui::Begin("Visuals", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
+        ImGui::End();
+    }
 }
 
 void GUI::renderMiscWindow() noexcept
