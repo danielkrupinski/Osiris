@@ -63,7 +63,7 @@ public:
     } chams;
 
     struct {
-
+        bool noSleeves{ false };
     } visuals;
 
     struct {
