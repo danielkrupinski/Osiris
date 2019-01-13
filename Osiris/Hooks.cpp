@@ -9,6 +9,7 @@
 #include "GUI.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Aimbot.h"
+#include "Hacks/Visuals.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
@@ -144,6 +145,8 @@ static float __stdcall hookedGetViewModelFov() noexcept
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
+        if (Visuals::removeSleeves(info.model->name))
+            return;
         static Chams chams;
         chams.render(ctx, state, info, customBoneToWorld);
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
