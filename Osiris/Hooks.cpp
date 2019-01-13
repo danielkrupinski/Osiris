@@ -145,7 +145,7 @@ static float __stdcall hookedGetViewModelFov() noexcept
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
-        if (Visuals::removeSleeves(info.model->name))
+        if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name))
             return;
         static Chams chams;
         chams.render(ctx, state, info, customBoneToWorld);
