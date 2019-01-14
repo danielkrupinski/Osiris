@@ -33,6 +33,11 @@ public:
         return *reinterpret_cast<bool*>(this + netvars.getOffset("m_bGunGameImmunity"));
     }
 
+    int getActiveWeaponHandle() noexcept
+    {
+        return *reinterpret_cast<int*>(this + netvars.getOffset("m_hActiveWeapon"));
+    }
+
     constexpr void drawModel(int flags, unsigned char alpha) noexcept
     {
         return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
