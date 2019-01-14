@@ -38,7 +38,7 @@ public:
         return *reinterpret_cast<int*>(this + netvars.getOffset("m_hActiveWeapon"));
     }
 
-    bool isPistol() noexcept
+    constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
         case ClassId::Deagle:
