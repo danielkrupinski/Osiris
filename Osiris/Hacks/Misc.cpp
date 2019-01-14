@@ -92,7 +92,13 @@ void Misc::removeSmoke() noexcept
         *memory.smokeCount = 0;
 }
 
-void Misc::autoPistol() noexcept
+void Misc::autoPistol(UserCmd* cmd) noexcept
 {
-
+    static bool wasInAttackLastTick{ false };
+    if (cmd->buttons & 1 && wasInAttackLastTick
+        && interfaces.entityList->getClientEntityFromHandle(
+            interfaces.entityList->getClientEntity(
+                interfaces.engine->getLocalPlayer())->getActiveWeaponHandle())->isPistol())
+        cmd->buttons &= ~1;
+    wasInAttackLastTick = cmd->buttons & 1;
 }
