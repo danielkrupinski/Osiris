@@ -29,4 +29,9 @@ public:
 	{
 		return callVirtualFunction<bool(__thiscall*)(void*)>(this, 26)(this);
 	}
+
+    auto getNetworkChannel() noexcept
+    {
+        return callVirtualFunction<int(__thiscall*)(void*)>(this, 78)(this);
+    }
 };
