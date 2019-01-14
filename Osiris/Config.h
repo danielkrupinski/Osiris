@@ -79,6 +79,7 @@ public:
         int skybox{ 0 };
         int viewmodelFov{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
+        bool autoPistol{ false };
     } misc;
 
 private:
