@@ -218,5 +218,8 @@
     <ClInclude Include="Hacks\Visuals.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\NetworkChannel.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
