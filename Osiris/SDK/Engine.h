@@ -1,5 +1,6 @@
 #pragma once
 
+#include "NetworkChannel.h"
 #include "QAngle.h"
 #include "Utils.h"
 
@@ -32,6 +33,6 @@ public:
 
     auto getNetworkChannel() noexcept
     {
-        return callVirtualFunction<int(__thiscall*)(void*)>(this, 78)(this);
+        return callVirtualFunction<NetworkChannel*(__thiscall*)(void*)>(this, 78)(this);
     }
 };
