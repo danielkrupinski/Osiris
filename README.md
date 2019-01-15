@@ -5,9 +5,14 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Features
 * **Aimbot** - aim assistance
     * **Enable** - on / off master switch
-    * **Silent**
+    * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
     * **Smooth**
+
+* **Triggerbot** - automatically fires when crosshair is on enemy
+    * **Enable** - on / off triggerbot master switch
+    * **On key [ key ]** - triggerbot works only when chosen key is being held
+    * **Shot delay** - delay time in ms (milliseconds)
 
 * **Glow** - render glow effect on entities
     * **Enable** - on / off master switch
@@ -31,13 +36,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Enemies** - enemies chams on / off and color applied to them
     * **Visible enemies** - visible enemies chams on / off and color applied to them
 
-* **Triggerbot** - automatically shoot when crosshair is on enemy
-    * **Enable** - on / off triggerbot master switch
-    * **On key (ALT)** - triggerbot works only when **ALT** key is being held
-    * **Shot delay** - delay time in ms (milliseconds)
+* **Visuals** - miscellaneous visual options
+    * **No sleeves** - removes sleeves model from first-person view
+    * **No hands** - removes arms / hands model from first-person view
 
 * **Misc** - miscellaneous features
-    * **Bunny hop** - automatically jump to increase movement speed
+    * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
@@ -49,6 +53,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **World color** - set world material ambient light color
+    * **Auto pistol** - add ability of firing pistols like automatic rifles 
 
 * **Config** - JSON-based configuration system
     * **Load** - load configuration file from disk
