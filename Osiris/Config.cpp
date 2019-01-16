@@ -33,6 +33,7 @@ void Config::load()
 
     triggerbot.enabled = config["triggerbot"]["enabled"].asBool();
     triggerbot.onKey = config["triggerbot"]["onKey"].asBool();
+    triggerbot.key = config["triggerbot"]["key"].asInt();
     triggerbot.shotDelay = config["triggerbot"]["shotDelay"].asInt();
 
     glow.enabled = config["glow"]["enabled"].asBool();
@@ -108,6 +109,7 @@ void Config::load()
     misc.worldColor[0] = config["misc"]["worldColor"][0].asFloat();
     misc.worldColor[1] = config["misc"]["worldColor"][1].asFloat();
     misc.worldColor[2] = config["misc"]["worldColor"][2].asFloat();
+    misc.autoPistol = config["misc"]["autoPistol"].asBool();
 
     in.close();
 }
@@ -128,6 +130,7 @@ void Config::save() const
 
     config["triggerbot"]["enabled"] = triggerbot.enabled;
     config["triggerbot"]["onKey"] = triggerbot.onKey;
+    config["triggerbot"]["key"] = triggerbot.key;
     config["triggerbot"]["shotDelay"] = triggerbot.shotDelay;
 
     config["glow"]["enabled"] = glow.enabled;
@@ -203,6 +206,7 @@ void Config::save() const
     config["misc"]["worldColor"][0] = misc.worldColor[0];
     config["misc"]["worldColor"][1] = misc.worldColor[1];
     config["misc"]["worldColor"][2] = misc.worldColor[2];
+    config["misc"]["autoPistol"] = misc.autoPistol;
 
     out << config;
     out.close();
@@ -217,6 +221,7 @@ void Config::reset()
 
     triggerbot.enabled = false;
     triggerbot.onKey = false;
+    triggerbot.key = 0;
     triggerbot.shotDelay = 0;
 
     glow.enabled = false;
@@ -292,4 +297,5 @@ void Config::reset()
     misc.worldColor[0] = 0.0f;
     misc.worldColor[1] = 0.0f;
     misc.worldColor[2] = 0.0f;
+    misc.autoPistol = false;
 };
