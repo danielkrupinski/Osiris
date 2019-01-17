@@ -66,7 +66,7 @@ public:
         bool noHands{ false };
         bool noSleeves{ false };
         bool thirdperson{ false };
-        float thirdpersonDistance{ 0.0f };
+        int thirdpersonDistance{ 0 };
     } visuals;
 
     struct {
