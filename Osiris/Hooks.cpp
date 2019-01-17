@@ -129,6 +129,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
     if (interfaces.engine->isInGame()) {
+        Visuals::thirdperson();
         Misc::inverseRagdollGravity();
         Misc::removeSmoke();
         Misc::reduceFlashEffect();
