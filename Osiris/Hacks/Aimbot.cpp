@@ -13,9 +13,10 @@ static QAngle calculateAngleBetween(const Vector& source, const Vector& destinat
     Vector delta = source - destination;
     delta /= config.aimbot.smooth;
     float hyp = delta.length2D();
+    constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
     QAngle angles;
-    angles.pitch = atanf(delta.z / hyp) * 180 / M_PI;
-    angles.yaw = atanf(delta.y / delta.x) * 180 / M_PI;
+    angles.pitch = radiansToDegrees(atanf(delta.z / hyp));
+    angles.yaw = radiansToDegrees(atanf(delta.y / delta.x));
     angles.roll = 0.0f;
 
     if (delta.x >= 0.0)
