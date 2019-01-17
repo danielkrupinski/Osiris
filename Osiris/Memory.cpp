@@ -18,6 +18,7 @@ Memory::Memory() noexcept
         loadSky = findPattern("engine.dll", "\x55\x8B\xEC\x81\xEC.{4}\x56\x57\x8B\xF9\xC7\x45");
         setClanTag = findPattern("engine.dll", "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15");
         smokeCount = *reinterpret_cast<int**>(findPattern("client_panorama.dll", "\x8B\x1D.{4}\x56\x33\xF6\x57\x85\xDB") + 2);
+        cameraThink = findPattern("client_panorama.dll", "\x85\xC0\x75\x30\x38\x86");
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);

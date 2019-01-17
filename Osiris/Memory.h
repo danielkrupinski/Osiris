@@ -22,6 +22,7 @@ public:
     std::uintptr_t loadSky;
     std::uintptr_t setClanTag;
     int* smokeCount;
+    std::uintptr_t cameraThink;
 };
 
 extern Memory memory;
