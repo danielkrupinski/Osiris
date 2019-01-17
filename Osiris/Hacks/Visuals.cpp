@@ -1,4 +1,5 @@
 #include "../Config.h"
+#include "../Memory.h"
 #include "Visuals.h"
 
 bool Visuals::removeHands(const std::string_view modelName) noexcept
@@ -13,5 +14,6 @@ bool Visuals::removeSleeves(const std::string_view modelName) noexcept
 
 void Visuals::thirdperson()
 {
-
+    if (memory.input->isCameraInThirdPerson = config.visuals.thirdperson)
+        memory.input->cameraOffset.z = 50.0f;
 }
