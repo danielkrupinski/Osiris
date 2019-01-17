@@ -65,6 +65,7 @@ public:
     struct {
         bool noHands{ false };
         bool noSleeves{ false };
+        bool thirdperson{ false };
     } visuals;
 
     struct {
