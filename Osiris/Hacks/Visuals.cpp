@@ -15,5 +15,5 @@ bool Visuals::removeSleeves(const std::string_view modelName) noexcept
 void Visuals::thirdperson()
 {
     if (memory.input->isCameraInThirdPerson = config.visuals.thirdperson)
-        memory.input->cameraOffset.z = 50.0f;
+        memory.input->cameraOffset.z = config.visuals.thirdpersonDistance;
 }
