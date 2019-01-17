@@ -1,3 +1,4 @@
+#include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -157,6 +158,14 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
 }
 
+static bool __fastcall hookedSvCheatsGetBool(void* _this)
+{
+    if (reinterpret_cast<std::uintptr_t>(_ReturnAddress()) == memory.cameraThink)
+        return true;
+    else
+        return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
@@ -169,6 +178,8 @@ Hooks::Hooks()
     clientMode.hookAt(35, hookedGetViewModelFov);
 
     modelRender.hookAt(21, hookedDrawModelExecute);
+
+    svCheats.hookAt(13, hookedSvCheatsGetBool);
 }
 
 Hooks::Vmt::Vmt(void* const base)
