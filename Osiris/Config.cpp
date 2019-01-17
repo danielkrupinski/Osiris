@@ -25,6 +25,7 @@ void Config::load()
 
     Json::Value config;
     in >> config;
+    in.close();
 
     aimbot.enabled = config["aimbot"]["enabled"].asBool();
     aimbot.silent = config["aimbot"]["silent"].asBool();
@@ -110,17 +111,10 @@ void Config::load()
     misc.worldColor[1] = config["misc"]["worldColor"][1].asFloat();
     misc.worldColor[2] = config["misc"]["worldColor"][2].asFloat();
     misc.autoPistol = config["misc"]["autoPistol"].asBool();
-
-    in.close();
 }
 
 void Config::save() const
 {
-    std::ofstream out{ path };
-
-    if (!out.is_open())
-        return;
-
     Json::Value config;
 
     config["aimbot"]["enabled"] = aimbot.enabled;
@@ -208,8 +202,7 @@ void Config::save() const
     config["misc"]["worldColor"][2] = misc.worldColor[2];
     config["misc"]["autoPistol"] = misc.autoPistol;
 
-    out << config;
-    out.close();
+    std::ofstream{ path } << config;
 }
 
 void Config::reset()
