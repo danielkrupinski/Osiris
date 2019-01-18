@@ -28,6 +28,12 @@ public:
         bool onKey{ false };
         int key{ 0 };
         int shotDelay{ 0 };
+
+        template <class Archive>
+        void serialize(Archive& archive)
+        {
+            archive(enabled, onKey, key, shotDelay);
+        }
     } triggerbot;
 
     struct {
