@@ -100,6 +100,12 @@ public:
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
+
+        template <class Archive>
+        void serialize(Archive& archive)
+        {
+            archive(noHands, noSleeves, thirdperson, thirdpersonKey, thirdpersonDistance);
+        }
     } visuals;
 
     struct {
