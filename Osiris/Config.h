@@ -120,6 +120,14 @@ public:
         int viewmodelFov{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool autoPistol{ false };
+
+        template <class Archive>
+        void serialize(Archive& archive)
+        {
+            archive(bunnyHop, disablePostProcessing, flashReduction,
+                inverseRagdollGravity, fastDuck, noSmoke, wireframeSmoke,
+                skybox, viewmodelFov, worldColor, autoPistol);
+        }
     } misc;
 
 private:
