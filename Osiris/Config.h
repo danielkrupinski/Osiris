@@ -81,6 +81,17 @@ public:
         float occludedEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 0.0f, 0.0f, 1.0f };
+
+        template <class Archive>
+        void serialize(Archive& archive)
+        {
+            archive(enabled, alpha, flat, wireframe,
+                visibleAllies, visibleAlliesColor,
+                occludedAllies, occludedAlliesColor,
+                visibleEnemies, visibleEnemiesColor,
+                occludedEnemies, occludedEnemiesColor,
+                weapons, weaponsColor);
+        }
     } chams;
 
     struct {
