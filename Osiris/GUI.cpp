@@ -149,6 +149,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
+        ImGui::SameLine();
+        hotkey(&config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
         ImGui::SliderInt("##Thirdperson distance", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
         ImGui::End();

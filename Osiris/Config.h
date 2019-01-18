@@ -66,6 +66,7 @@ public:
         bool noHands{ false };
         bool noSleeves{ false };
         bool thirdperson{ false };
+        int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
     } visuals;
 
