@@ -69,7 +69,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize(ImVec2(165.0f, 137.0f));
+        ImGui::SetNextWindowSize({ 165.0f, 137.0f });
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::Checkbox("Silent", &config.aimbot.silent);
@@ -83,7 +83,7 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize(ImVec2(180.0f, 115.0f));
+        ImGui::SetNextWindowSize({ 180.0f, 115.0f });
         ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key", &config.triggerbot.onKey);
@@ -99,7 +99,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        ImGui::SetNextWindowSize(ImVec2(320.0f, 170.0f));
+        ImGui::SetNextWindowSize({ 320.0f, 170.0f });
         ImGui::Begin("Glow", &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);
@@ -122,7 +122,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize(ImVec2(330.0f, 160.0f));
+        ImGui::SetNextWindowSize({ 330.0f, 160.0f });
         ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
@@ -144,7 +144,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize(ImVec2(300.0f, 200.0f));
+        ImGui::SetNextWindowSize({ 300.0f, 200.0f });
         ImGui::Begin("Visuals", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
@@ -160,7 +160,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize(ImVec2(250.0f, 345.0f));
+        ImGui::SetNextWindowSize({ 250.0f, 345.0f });
         ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(160.0f);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
