@@ -33,13 +33,9 @@ void Misc::skybox() noexcept
         reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(skyboxes[config.misc.skybox].data());
 }
 
-void Misc::clanTag() noexcept
+void Misc::clanTag(const std::string& clanTag) noexcept
 {
-    static std::string_view clanTag = config.misc.clanTag;
-    if (clanTag != config.misc.clanTag) {
-        reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(config.misc.clanTag.c_str(), "");
-        clanTag = config.misc.clanTag;
-    }
+    reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag.c_str(), clanTag.c_str());
 }
 
 void Misc::colorWorld() noexcept

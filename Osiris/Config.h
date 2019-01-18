@@ -71,7 +71,6 @@ public:
 
     struct {
         bool bunnyHop{ false };
-        std::string clanTag;
         bool disablePostProcessing{ false };
         int flashReduction{ 0 };
         bool inverseRagdollGravity{ false };

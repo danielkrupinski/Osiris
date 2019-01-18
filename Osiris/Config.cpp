@@ -98,7 +98,7 @@ void Config::load()
     chams.visibleEnemiesColor[2] = config["chams"]["visibleEnemiesColor"][2].asFloat();
 
     misc.bunnyHop = config["misc"]["bunnyHop"].asBool();
-    misc.clanTag = config["misc"]["clanTag"].asString();
+   // misc.clanTag = config["misc"]["clanTag"].asString();
     misc.disablePostProcessing = config["misc"]["disablePostProcessing"].asBool();
     misc.flashReduction = config["misc"]["flashReduction"].asInt();
     misc.inverseRagdollGravity = config["misc"]["inverseRagdollGravity"].asBool();
@@ -188,7 +188,7 @@ void Config::save() const
     config["chams"]["occludedEnemiesColor"][2] = chams.occludedEnemiesColor[2];
 
     config["misc"]["bunnyHop"] = misc.bunnyHop;
-    config["misc"]["clanTag"] = misc.clanTag;
+//    config["misc"]["clanTag"] = misc.clanTag;
     config["misc"]["disablePostProcessing"] = misc.disablePostProcessing;
     config["misc"]["flashReduction"] = misc.flashReduction;
     config["misc"]["inverseRagdollGravity"] = misc.inverseRagdollGravity;
@@ -278,7 +278,7 @@ void Config::reset()
     chams.occludedEnemiesColor[2] = 0.0f;
 
     misc.bunnyHop = false;
-    misc.clanTag = "";
+//    misc.clanTag = "";
     misc.disablePostProcessing = false;
     misc.flashReduction = 0;
     misc.inverseRagdollGravity = false;

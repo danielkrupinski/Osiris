@@ -6,7 +6,7 @@ namespace Misc {
     void bunnyHop(UserCmd*) noexcept;
     void disablePostProcessing() noexcept;
     void skybox() noexcept;
-    void clanTag() noexcept;
+    void clanTag(const std::string&) noexcept;
     void colorWorld() noexcept;
     void inverseRagdollGravity() noexcept;
     void reduceFlashEffect() noexcept;

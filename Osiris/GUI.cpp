@@ -4,6 +4,7 @@
 #include "imgui/imgui.h"
 #include "GUI.h"
 #include "Config.h"
+#include "Hacks/Misc.h"
 
 void GUI::render() noexcept
 {
@@ -161,10 +162,12 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(160.0f);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        char buf[16];
-        std::strcpy(buf, config.misc.clanTag.c_str());
-        ImGui::InputText("Clantag", buf, IM_ARRAYSIZE(buf));
-        config.misc.clanTag = buf;
+        static std::vector<char> buffer(16);
+        ImGui::InputText("##Clantag", buffer.data(), buffer.size());
+        ImGui::SameLine();
+        if (ImGui::Button("Set clantag"))
+            Misc::clanTag(buffer.data());
+
         ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
         ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
