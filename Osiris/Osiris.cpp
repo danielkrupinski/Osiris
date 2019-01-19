@@ -5,7 +5,7 @@
 #include "Memory.h"
 #include "Netvars.h"
 
-Config config{ "Osiris.json" };
+Config config{ "Osiris" };
 GUI gui;
 Interfaces interfaces;
 Memory memory;

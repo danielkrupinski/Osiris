@@ -14,6 +14,7 @@ Config::Config(const std::string_view name)
         path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+    std::remove("Osiris.json");
     load();
 }
 
