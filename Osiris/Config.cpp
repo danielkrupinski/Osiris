@@ -2,7 +2,6 @@
 #include <ShlObj.h>
 
 #include "cereal/archives/binary.hpp"
-#include "json/json.h"
 
 #include "Config.h"
 
