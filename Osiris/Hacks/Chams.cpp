@@ -78,8 +78,8 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderWeapons(int entityIndex) noexcept
 {
-    if (config.chams.weapons) {
-        auto entity = interfaces.entityList->getClientEntity(entityIndex);
+    if (config.chams.weapons &&
+        !interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer())->isScoped()) {
         auto material = config.chams.flat ? flat : normal;
 
         material->alphaModulate(config.chams.alpha);
