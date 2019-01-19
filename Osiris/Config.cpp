@@ -11,10 +11,10 @@ Config::Config(const std::string_view name)
     PWSTR pathToDocuments;
     if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
         path = pathToDocuments;
+        std::remove((path / "Osiris.json").string().c_str());
         path /= name;
         CoTaskMemFree(pathToDocuments);
     }
-    std::remove("Osiris.json");
     load();
 }
 
