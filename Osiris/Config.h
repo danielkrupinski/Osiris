@@ -51,8 +51,6 @@ public:
         float C4Color[3]{ 1.0f, 1.0f, 0.0f };
         bool plantedC4{ false };
         float plantedC4Color[3]{ 1.0f, 0.27f, 0.0f };
-        bool defuseKits{ false };
-        float defuseKitsColor[3]{ 0.0f, 0.0f, 1.0f };
         bool chickens{ false };
         float chickensColor[3]{ 1.0f, 0.08f, 0.58f };
 
@@ -61,8 +59,7 @@ public:
         {
             archive(enabled, thickness, alpha, style, allies, alliesColor,
                 enemies, enemiesColor, weapons, weaponsColor, C4, C4Color,
-                plantedC4, plantedC4Color, defuseKits, defuseKitsColor,
-                chickens, chickensColor);
+                plantedC4, plantedC4Color, chickens, chickensColor);
         }
     } glow;
 
