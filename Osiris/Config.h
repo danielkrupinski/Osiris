@@ -78,6 +78,8 @@ public:
         float occludedEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 0.0f, 0.0f, 1.0f };
+        bool hands{ false };
+        float handsColor[3]{ 0.0f, 1.0f, 0.0f };
 
         template <class Archive>
         void serialize(Archive& archive)
@@ -87,7 +89,7 @@ public:
                 occludedAllies, occludedAlliesColor,
                 visibleEnemies, visibleEnemiesColor,
                 occludedEnemies, occludedEnemiesColor,
-                weapons, weaponsColor);
+                weapons, weaponsColor, hands, handsColor);
         }
     } chams;
 
