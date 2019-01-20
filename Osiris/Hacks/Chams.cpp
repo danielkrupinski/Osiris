@@ -89,3 +89,8 @@ void Chams::renderWeapons(int entityIndex) noexcept
         interfaces.modelRender->forceMaterialOverride(material);
     }
 }
+
+void Chams::renderHands() noexcept
+{
+
+}
