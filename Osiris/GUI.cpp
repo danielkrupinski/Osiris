@@ -122,7 +122,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize({ 330.0f, 160.0f });
+        ImGui::SetNextWindowSize({ 330.0f, 190.0f });
         ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
@@ -137,6 +137,7 @@ void GUI::renderChamsWindow() noexcept
         checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
         checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
         checkBoxAndColorPicker("Weapons", &config.chams.weapons, config.chams.weaponsColor);
+        checkBoxAndColorPicker("Hands", &config.chams.hands, config.chams.handsColor);
         ImGui::End();
     }
 }
