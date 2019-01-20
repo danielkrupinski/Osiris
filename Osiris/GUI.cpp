@@ -69,13 +69,14 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 165.0f, 137.0f });
+        ImGui::SetNextWindowSize({ 165.0f, 160.0f });
         ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::Checkbox("Silent", &config.aimbot.silent);
         ImGui::PushItemWidth(150.0f);
         ImGui::SliderFloat("##Fov", &config.aimbot.fov, 0.0f, 180.0f, "Fov: %.2f");
         ImGui::SliderFloat("##Smooth", &config.aimbot.smooth, 1.0f, 100.0f, "Smooth: %.2f");
+        ImGui::Combo("Bone", &config.aimbot.bone, "Head\0Neck");
         ImGui::End();
     }
 }
