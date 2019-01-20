@@ -8,6 +8,16 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 
+static constexpr int getBoneId() noexcept
+{
+    switch (config.aimbot.bone) {
+    case 0:
+        return 8;
+    case 1:
+        return 7;
+    }
+}
+
 static QAngle calculateAngleBetween(const Vector& source, const Vector& destination) noexcept
 {
     Vector delta = source - destination;
@@ -43,7 +53,7 @@ static int findTarget(UserCmd* cmd) noexcept
         auto entity = interfaces.entityList->getClientEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
-        auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(8));
+        auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
         auto fov = getFov(cmd->viewangles, angle);
         if (fov < bestFov) {
             bestFov = fov;
@@ -59,7 +69,7 @@ void Aimbot::run(UserCmd* cmd)
         if (auto target = findTarget(cmd)) {
             auto entity = interfaces.entityList->getClientEntity(target);
             auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
-            auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(8));
+            auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
             cmd->viewangles = angle;
             if (!config.aimbot.silent)
                 interfaces.engine->setViewAngles(angle);
