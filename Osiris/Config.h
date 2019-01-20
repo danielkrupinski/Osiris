@@ -15,11 +15,12 @@ public:
         bool silent{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
+        int bone{ 0 };
 
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(enabled, silent, fov, smooth);
+            archive(enabled, silent, fov, smooth, bone);
         }
     } aimbot;
 
