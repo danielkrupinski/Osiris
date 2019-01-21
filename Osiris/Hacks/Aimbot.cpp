@@ -15,6 +15,8 @@ static constexpr int getBoneId() noexcept
         return 8;
     case 1:
         return 7;
+    default:
+        return 8;
     }
 }
 
