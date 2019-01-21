@@ -162,7 +162,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 250.0f, 345.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 365.0f });
         ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::PushItemWidth(160.0f);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
@@ -183,6 +183,8 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SliderInt("##Viewmodel FOV", &config.misc.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
         ImGui::ColorEdit3("World color", config.misc.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
+        if (ImGui::Button("Reveal ranks"))
+            Misc::revealRanks();
         ImGui::End();
     }
 }
