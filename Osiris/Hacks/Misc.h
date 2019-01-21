@@ -13,4 +13,5 @@ namespace Misc {
     void removeCrouchCooldown(UserCmd*) noexcept;
     void removeSmoke() noexcept;
     void autoPistol(UserCmd*) noexcept;
+    void revealRanks() noexcept;
 }
