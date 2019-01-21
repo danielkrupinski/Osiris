@@ -76,7 +76,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PushItemWidth(150.0f);
         ImGui::SliderFloat("##Fov", &config.aimbot.fov, 0.0f, 180.0f, "Fov: %.2f");
         ImGui::SliderFloat("##Smooth", &config.aimbot.smooth, 1.0f, 100.0f, "Smooth: %.2f");
-        ImGui::Combo("Bone", &config.aimbot.bone, "Head\0Neck");
+        ImGui::Combo("Bone", &config.aimbot.bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
         ImGui::End();
     }
 }
