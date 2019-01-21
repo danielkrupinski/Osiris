@@ -23,6 +23,7 @@ public:
     std::uintptr_t setClanTag;
     int* smokeCount;
     std::uintptr_t cameraThink;
+    std::uintptr_t revealRanks;
 };
 
 extern Memory memory;
