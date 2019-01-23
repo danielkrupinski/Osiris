@@ -57,10 +57,10 @@ static int findTarget(UserCmd* cmd) noexcept
 {
     auto bestFov = config.aimbot.fov;
     auto bestTarget = 0;
-    auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-        auto entity = interfaces.entityList->getClientEntity(i);
+        auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
         auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
@@ -77,8 +77,8 @@ void Aimbot::run(UserCmd* cmd)
 {
     if (config.aimbot.enabled && cmd->buttons & 1) {
         if (auto target = findTarget(cmd)) {
-            auto entity = interfaces.entityList->getClientEntity(target);
-            auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+            auto entity = interfaces.entityList->getEntity(target);
+            auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
             cmd->viewangles = angle;
             if (!config.aimbot.silent)

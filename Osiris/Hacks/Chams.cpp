@@ -37,7 +37,7 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    auto entity = interfaces.entityList->getClientEntity(info.entityIndex);
+    auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
         auto material = config.chams.flat ? flat : normal;
@@ -80,7 +80,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 void Chams::renderWeapons(int entityIndex) noexcept
 {
     if (config.chams.weapons &&
-        !interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer())->isScoped()) {
+        !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped()) {
         auto material = config.chams.flat ? flat : normal;
 
         material->alphaModulate(config.chams.alpha);

@@ -10,7 +10,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     constexpr int IN_JUMP{ 2 };
     if (config.misc.bunnyHop) {
         if (cmd->buttons & IN_JUMP) {
-            auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+            auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             if (*localPlayer->getFlags() & ON_GROUND)
                 cmd->buttons |= IN_JUMP;
             else
@@ -57,7 +57,7 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::reduceFlashEffect() noexcept
 {
-    auto localPlayer = interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer());
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     *reinterpret_cast<float*>(localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.misc.flashReduction * 2.55f;
 }
 
@@ -92,7 +92,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 {
     if (config.misc.autoPistol) {
         const auto activeWeapon = interfaces.entityList->getClientEntityFromHandle(
-            interfaces.entityList->getClientEntity(
+            interfaces.entityList->getEntity(
                 interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };

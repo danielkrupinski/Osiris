@@ -4,7 +4,7 @@
 
 class EntityList {
 public:
-    constexpr class Entity* getClientEntity(int index) noexcept
+    constexpr class Entity* getEntity(int index) noexcept
     {
         return callVirtualFunction<class Entity*(__thiscall*)(void*, int)>(this, 3)(this, index);
     }
