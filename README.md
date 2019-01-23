@@ -8,6 +8,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
     * **Smooth**
+    * **Bone** - bone which aimbot aims at
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enable** - on / off triggerbot master switch
@@ -53,7 +54,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **World color** - set world material ambient light color
-    * **Auto pistol** - add ability of firing pistols like automatic rifles 
+    * **Auto pistol** - add ability of firing pistols like automatic rifles
+    * **Reveal ranks** - reveal player ranks in competitive modes
 
 * **Config** - JSON-based configuration system
     * **Load** - load configuration file from disk
@@ -91,7 +93,7 @@ When injected, menu is openable under `INSERT` key.
 Press `INSERT` key while while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration file is saved under name `Osiris.json` in your `Documents` folder (`%USERPROFILE%\Documents`). Of course you can edit config file by hand as it's in JSON format which is easy to read by humans.
+Configuration file is saved under name `Osiris` in your `Documents` folder (`%USERPROFILE%\Documents`). The config is binary serialized so it is not meant to be edited. Sometimes after updates configuration file needs to be deleted and recreated.
 
 ### What is cheat execution entry point and where is it located?
 Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
