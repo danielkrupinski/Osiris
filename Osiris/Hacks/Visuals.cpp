@@ -5,8 +5,12 @@
 void Visuals::thirdperson()
 {
     static bool isInThirdperson{ true };
-    if (GetAsyncKeyState(config.visuals.thirdpersonKey))
+    static float lastTime{ memory.globalVars->realtime };
+
+    if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
+        lastTime = memory.globalVars->realtime;
+    }
     if (memory.input->isCameraInThirdPerson =
         (config.visuals.thirdperson && isInThirdperson
             && interfaces.entityList->getClientEntity(interfaces.engine->getLocalPlayer())->isAlive()))
