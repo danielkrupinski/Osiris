@@ -449,6 +449,9 @@
     <ClInclude Include="cereal\types\common.hpp">
       <Filter>cereal</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\GlobalVars.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html">
