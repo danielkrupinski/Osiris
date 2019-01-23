@@ -14,4 +14,5 @@ namespace Misc {
     void removeSmoke() noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
+    void animateClanTag() noexcept;
 }
