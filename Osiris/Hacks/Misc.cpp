@@ -33,7 +33,7 @@ void Misc::skybox() noexcept
         reinterpret_cast<void(__fastcall*)(const char*)>(memory.loadSky)(skyboxes[config.misc.skybox].data());
 }
 
-void Misc::clanTag(const std::string& clanTag) noexcept
+void Misc::setClanTag(const std::string& clanTag) noexcept
 {
     reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag.c_str(), clanTag.c_str());
 }

@@ -170,7 +170,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::InputText("##Clantag", buffer.data(), buffer.size());
         ImGui::SameLine();
         if (ImGui::Button("Set clantag"))
-            Misc::clanTag(buffer.data());
+            Misc::setClanTag(buffer.data());
 
         ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
         ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
