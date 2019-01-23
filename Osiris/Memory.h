@@ -3,6 +3,7 @@
 #include <string_view>
 
 #include "SDK/Entity.h"
+#include "SDK/GlobalVars.h"
 #include "SDK/GlowObjectManager.h"
 #include "SDK/Input.h"
 
@@ -16,7 +17,9 @@ public:
 
     class ClientMode* clientMode;
     Input* input;
+    GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+
     bool* disablePostProcessing;
 
     std::uintptr_t loadSky;
