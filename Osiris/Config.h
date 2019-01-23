@@ -97,6 +97,8 @@ public:
     struct {
         bool noHands{ false };
         bool noSleeves{ false };
+        bool noSmoke{ false };
+        bool wireframeSmoke{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
@@ -104,7 +106,7 @@ public:
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(noHands, noSleeves, thirdperson, thirdpersonKey, thirdpersonDistance);
+            archive(noHands, noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey, thirdpersonDistance);
         }
     } visuals;
 
@@ -114,8 +116,6 @@ public:
         int flashReduction{ 0 };
         bool inverseRagdollGravity{ false };
         bool fastDuck{ false };
-        bool noSmoke{ false };
-        bool wireframeSmoke{ false };
         int skybox{ 0 };
         int viewmodelFov{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
@@ -125,8 +125,8 @@ public:
         void serialize(Archive& archive)
         {
             archive(bunnyHop, disablePostProcessing, flashReduction,
-                inverseRagdollGravity, fastDuck, noSmoke, wireframeSmoke,
-                skybox, viewmodelFov, worldColor, autoPistol);
+                inverseRagdollGravity, fastDuck, skybox, viewmodelFov,
+                worldColor, autoPistol);
         }
     } misc;
 

@@ -150,6 +150,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Begin("Visuals", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
+        ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
+        ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
         ImGui::SameLine();
         hotkey(&config.visuals.thirdpersonKey);
@@ -176,9 +178,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
-        ImGui::Checkbox("No smoke", &config.misc.noSmoke);
-        if (!config.misc.noSmoke)
-            ImGui::Checkbox("Wireframe smoke", &config.misc.wireframeSmoke);
         ImGui::Combo("Skybox", &config.misc.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
         ImGui::SliderInt("##Viewmodel FOV", &config.misc.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
         ImGui::ColorEdit3("World color", config.misc.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);

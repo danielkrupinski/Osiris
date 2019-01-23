@@ -12,5 +12,6 @@ namespace Visuals {
     {
         return config.visuals.noSleeves && (modelName.find("sleeve") != std::string_view::npos);
     }
+    void modifySmoke() noexcept;
     void thirdperson();
 };

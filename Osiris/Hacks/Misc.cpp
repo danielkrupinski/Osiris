@@ -69,25 +69,6 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::removeSmoke() noexcept
-{
-    constexpr std::string_view smokeMaterials[]{
-        "particle/vistasmokev1/vistasmokev1_emods",
-        "particle/vistasmokev1/vistasmokev1_emods_impactdust",
-        "particle/vistasmokev1/vistasmokev1_fire",
-        "particle/vistasmokev1/vistasmokev1_smokegrenade",
-    };
-
-    for (const auto mat : smokeMaterials) {
-        auto material = interfaces.materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.misc.noSmoke);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.misc.wireframeSmoke);
-    }
-
-    if (config.misc.noSmoke || config.misc.wireframeSmoke)
-        *memory.smokeCount = 0;
-}
-
 void Misc::autoPistol(UserCmd* cmd) noexcept
 {
     if (config.misc.autoPistol) {

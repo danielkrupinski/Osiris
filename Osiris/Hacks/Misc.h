@@ -11,7 +11,6 @@ namespace Misc {
     void inverseRagdollGravity() noexcept;
     void reduceFlashEffect() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
-    void removeSmoke() noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
     void animateClanTag() noexcept;
