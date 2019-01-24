@@ -24,6 +24,14 @@ struct QAngle final {
         return *this;
     }
 
+    constexpr QAngle& operator+=(const QAngle& v) noexcept
+    {
+        pitch += v.pitch;
+        yaw += v.yaw;
+        roll += v.roll;
+        return *this;
+    }
+
     void normalize() noexcept
     {
         pitch = std::isfinite(pitch) ? std::remainderf(pitch, 360.0f) : 0.0f;
