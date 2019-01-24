@@ -171,8 +171,10 @@ void GUI::renderMiscWindow() noexcept
         static std::vector<char> buffer(16);
         ImGui::InputText("##Clantag", buffer.data(), buffer.size());
         ImGui::SameLine();
-        if (ImGui::Button("Set clantag"))
+        if (ImGui::Button("Set clantag")) {
             Misc::setClanTag(buffer.data());
+            Misc::animateClanTag(buffer.data());
+        }
 
         ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
         ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
