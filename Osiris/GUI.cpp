@@ -175,7 +175,7 @@ void GUI::renderMiscWindow() noexcept
             Misc::setClanTag(buffer.data());
             Misc::animateClanTag(buffer.data());
         }
-
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
         ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
