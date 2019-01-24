@@ -112,6 +112,7 @@ public:
 
     struct {
         bool bunnyHop{ false };
+        bool animatedClanTag{ false };
         bool disablePostProcessing{ false };
         int flashReduction{ 0 };
         bool inverseRagdollGravity{ false };
@@ -124,7 +125,7 @@ public:
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(bunnyHop, disablePostProcessing, flashReduction,
+            archive(bunnyHop, animatedClanTag, disablePostProcessing, flashReduction,
                 inverseRagdollGravity, fastDuck, skybox, viewmodelFov,
                 worldColor, autoPistol);
         }
