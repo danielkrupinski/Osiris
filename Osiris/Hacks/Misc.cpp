@@ -90,7 +90,17 @@ void Misc::revealRanks() noexcept
     reinterpret_cast<void(__cdecl*)(int*)>(memory.revealRanks)(param);
 }
 
-void Misc::animateClanTag() noexcept
+void Misc::animateClanTag(const std::string_view tag) noexcept
 {
+    static float lastTime{ 0.0f };
+    static std::string tag_;
 
+    if (!tag.empty())
+        tag_ = tag;
+
+    if (tag_.length() > 1 && memory.globalVars->realtime - lastTime > 0.5f) {
+        std::rotate(std::begin(tag_), std::begin(tag_) + 1, std::end(tag_));
+        setClanTag(tag_.data());
+        lastTime = memory.globalVars->realtime;
+    }
 }

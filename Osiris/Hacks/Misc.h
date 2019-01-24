@@ -13,5 +13,5 @@ namespace Misc {
     void removeCrouchCooldown(UserCmd*) noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
-    void animateClanTag() noexcept;
+    void animateClanTag(const std::string_view = { }) noexcept;
 }
