@@ -95,13 +95,16 @@ void Misc::animateClanTag(const std::string_view tag) noexcept
     static float lastTime{ 0.0f };
     static std::string tag_;
 
-    if (!tag.empty())
+    if (!tag.empty()) {
         tag_ = tag;
+        if (tag_.front() != ' ' || tag_.back() != ' ')
+            tag_.push_back(' ');
+    }
 
     if (config.misc.animatedClanTag && tag_.length() > 1
         && memory.globalVars->realtime - lastTime > 0.5f) {
         std::rotate(std::begin(tag_), std::begin(tag_) + 1, std::end(tag_));
-        setClanTag(tag_.data());
+        setClanTag(tag_.c_str());
         lastTime = memory.globalVars->realtime;
     }
 }
