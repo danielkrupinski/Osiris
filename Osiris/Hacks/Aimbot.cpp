@@ -31,7 +31,6 @@ static constexpr int getBoneId() noexcept
 static QAngle calculateAngleBetween(const Vector& source, const Vector& destination) noexcept
 {
     Vector delta = source - destination;
-    delta /= config.aimbot.smooth;
     float hyp = delta.length2D();
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
     QAngle angles;
@@ -80,7 +79,7 @@ void Aimbot::run(UserCmd* cmd)
             auto entity = interfaces.entityList->getEntity(target);
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
-            cmd->viewangles = angle;
+            cmd->viewangles += angle / config.aimbot.smooth;
             if (!config.aimbot.silent)
                 interfaces.engine->setViewAngles(angle);
         }
