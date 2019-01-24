@@ -98,7 +98,8 @@ void Misc::animateClanTag(const std::string_view tag) noexcept
     if (!tag.empty())
         tag_ = tag;
 
-    if (tag_.length() > 1 && memory.globalVars->realtime - lastTime > 0.5f) {
+    if (config.misc.animatedClanTag && tag_.length() > 1
+        && memory.globalVars->realtime - lastTime > 0.5f) {
         std::rotate(std::begin(tag_), std::begin(tag_) + 1, std::end(tag_));
         setClanTag(tag_.data());
         lastTime = memory.globalVars->realtime;
