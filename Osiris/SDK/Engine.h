@@ -1,8 +1,8 @@
 #pragma once
 
 #include "NetworkChannel.h"
-#include "QAngle.h"
 #include "Utils.h"
+#include "Vector.h"
 
 class Engine {
 public:
@@ -11,14 +11,14 @@ public:
         return callVirtualFunction<int(__thiscall*)(void*)>(this, 12)(this);
     }
 
-    auto getViewAngles(QAngle& angles) noexcept
+    auto getViewAngles(Vector& angles) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, QAngle&)>(this, 18)(this, angles);
+        callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 18)(this, angles);
     }
 
-    auto setViewAngles(const QAngle& angles) noexcept
+    auto setViewAngles(const Vector& angles) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, const QAngle&)>(this, 19)(this, angles);
+        callVirtualFunction<void(__thiscall*)(void*, const Vector&)>(this, 19)(this, angles);
     }
 
 	auto getMaxClients() noexcept

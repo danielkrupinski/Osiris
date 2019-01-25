@@ -1,6 +1,5 @@
 #pragma once
 
-#include "QAngle.h"
 #include "Vector.h"
 
 class UserCmd final {
@@ -8,7 +7,7 @@ public:
     int pad;
     int     command_number;
     int     tick_count;
-    QAngle  viewangles;
+    Vector  viewangles;
     Vector  aimdirection;
     float   forwardmove;
     float   sidemove;

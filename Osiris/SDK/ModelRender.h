@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Material.h"
-#include "QAngle.h"
 #include "Utils.h"
 #include "Vector.h"
 
@@ -21,7 +20,7 @@ struct Model {
 
 struct ModelRenderInfo {
     Vector origin;
-    QAngle angles;
+    Vector angles;
     char pad[4];
     void* renderable;
     const Model* model;

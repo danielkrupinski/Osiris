@@ -38,6 +38,22 @@ struct Vector final {
         return Vector{ x - v.x, y - v.y, z - v.z };
     }
 
+    constexpr Vector& operator-=(const Vector& v) noexcept
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        return *this;
+    }
+
+    constexpr Vector& operator/(float div) noexcept
+    {
+        x /= div;
+        y /= div;
+        z /= div;
+        return *this;
+    }
+
     constexpr Vector& operator/=(float div) noexcept
     {
         x /= div;
@@ -59,7 +75,7 @@ struct Vector final {
     void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
-        y = std::isfinite(z) ? std::remainderf(z, 360.0f) : 0.0f;
+        y = std::isfinite(y) ? std::remainderf(y, 360.0f) : 0.0f;
         z = 0.0f;
     }
 

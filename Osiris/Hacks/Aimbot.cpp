@@ -28,28 +28,28 @@ static constexpr int getBoneId() noexcept
     }
 }
 
-static QAngle calculateAngleBetween(const Vector& source, const Vector& destination) noexcept
+static Vector calculateAngleBetween(const Vector& source, const Vector& destination) noexcept
 {
     Vector delta = source - destination;
     float hyp = delta.length2D();
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
-    QAngle angles;
-    angles.pitch = radiansToDegrees(atanf(delta.z / hyp));
-    angles.yaw = radiansToDegrees(atanf(delta.y / delta.x));
-    angles.roll = 0.0f;
+    Vector angles;
+    angles.x = radiansToDegrees(atanf(delta.z / hyp));
+    angles.y = radiansToDegrees(atanf(delta.y / delta.x));
+    angles.z = 0.0f;
 
     if (delta.x >= 0.0)
-        angles.yaw += 180.0f;
+        angles.y += 180.0f;
 
     angles.normalize();
     return angles;
 }
 
-static float getFov(const QAngle& viewAngle, const QAngle& aimAngle) noexcept
+static float getFov(const Vector& viewAngle, const Vector& aimAngle) noexcept
 {
-    QAngle delta = aimAngle - viewAngle;
+    Vector delta = aimAngle - viewAngle;
     delta.normalize();
-    return sqrtf(powf(delta.pitch, 2.0f) + powf(delta.yaw, 2.0f));
+    return delta.length2D();
 }
 
 static int findTarget(UserCmd* cmd) noexcept
@@ -79,7 +79,10 @@ void Aimbot::run(UserCmd* cmd)
             auto entity = interfaces.entityList->getEntity(target);
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
-            cmd->viewangles += (angle - cmd->viewangles) / config.aimbot.smooth;
+            angle -= cmd->viewangles;
+            angle /= config.aimbot.smooth;
+            angle.normalize();
+            cmd->viewangles += angle;
             if (!config.aimbot.silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
         }
