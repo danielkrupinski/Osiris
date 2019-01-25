@@ -137,9 +137,6 @@
     <ClInclude Include="SDK\Input.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\QAngle.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Misc.h">
       <Filter>Hacks</Filter>
     </ClInclude>
