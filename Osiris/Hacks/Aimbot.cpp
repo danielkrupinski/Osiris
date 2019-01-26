@@ -28,7 +28,7 @@ static constexpr int getBoneId() noexcept
     }
 }
 
-static Vector calculateAngleBetween(const Vector& source, const Vector& destination) noexcept
+static Vector calculateAngleBetween(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta = source - destination;
     float hyp = delta.length2D();
@@ -40,6 +40,8 @@ static Vector calculateAngleBetween(const Vector& source, const Vector& destinat
 
     if (delta.x >= 0.0)
         angles.y += 180.0f;
+
+    angles -= viewAngles;
 
     angles.normalize();
     return angles;
@@ -62,8 +64,8 @@ static int findTarget(UserCmd* cmd) noexcept
         auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
-        auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
-        auto fov = getFov(cmd->viewangles, angle);
+        auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
+        auto fov = angle.length2D();// getFov(cmd->viewangles, angle);
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = i;
@@ -78,10 +80,9 @@ void Aimbot::run(UserCmd* cmd)
         if (auto target = findTarget(cmd)) {
             auto entity = interfaces.entityList->getEntity(target);
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()));
-            angle -= cmd->viewangles;
+            auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
+            //angle -= cmd->viewangles;
             angle /= config.aimbot.smooth;
-            angle.normalize();
             cmd->viewangles += angle;
             if (!config.aimbot.silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
