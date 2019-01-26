@@ -19,14 +19,12 @@ static Vector calculateAngleBetween(const Vector& source, const Vector& destinat
     float hyp = delta.length2D();
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
     Vector angles;
-    angles.x = radiansToDegrees(atanf(delta.z / hyp));
-    angles.y = radiansToDegrees(atanf(delta.y / delta.x));
+    angles.x = radiansToDegrees(atanf(delta.z / hyp)) - viewAngles.x;
+    angles.y = radiansToDegrees(atanf(delta.y / delta.x)) - viewAngles.y;
     angles.z = 0.0f;
 
     if (delta.x >= 0.0)
         angles.y += 180.0f;
-
-    angles -= viewAngles;
 
     angles.normalize();
     return angles;
