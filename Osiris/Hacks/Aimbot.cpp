@@ -30,13 +30,6 @@ static Vector calculateAngleBetween(const Vector& source, const Vector& destinat
     return angles;
 }
 
-static float getFov(const Vector& viewAngle, const Vector& aimAngle) noexcept
-{
-    Vector delta = aimAngle - viewAngle;
-    delta.normalize();
-    // return delta.length2D();
-}
-
 static int findTarget(UserCmd* cmd) noexcept
 {
     auto bestFov = config.aimbot.fov;
