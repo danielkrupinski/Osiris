@@ -1,5 +1,6 @@
 #include "Interfaces.h"
 #include "Netvars.h"
+#include "SDK/ClientClass.h"
 
 Netvars::Netvars()
 {

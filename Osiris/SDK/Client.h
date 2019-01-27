@@ -1,11 +1,12 @@
 #pragma once
 
-#include "ClientClass.h"
 #include "Utils.h"
+
+struct ClientClass;
 
 class Client final {
 public:
-    ClientClass* getAllClasses()
+    auto getAllClasses()
     {
         return callVirtualFunction<ClientClass*(__thiscall*)()>(this, 8)();
     }
