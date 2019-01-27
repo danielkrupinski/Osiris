@@ -3,12 +3,8 @@
 
 Netvars::Netvars()
 {
-    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next) {
-        if (std::string_view{ clientClass->recvTable->m_pNetTableName } == "DT_CSPlayer") {
-            loadTable(clientClass->recvTable);
-            break;
-        }
-    }
+    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+        loadTable(clientClass->recvTable);
 }
 
 std::size_t Netvars::getOffset(const std::string_view propertyName)
