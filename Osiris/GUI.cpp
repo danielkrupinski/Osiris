@@ -146,17 +146,28 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 300.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 200.0f });
         ImGui::Begin("Visuals", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 210.0f);
+        //ImGui::PushItemWidth(250.0f);
+        ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
+        ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
         ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
+        ImGui::NextColumn();
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
         ImGui::SameLine();
         hotkey(&config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
         ImGui::SliderInt("##Thirdperson distance", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
+        ImGui::SliderInt("##Viewmodel FOV", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
+        ImGui::SliderInt("##Flash reduction", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::PopItemWidth();
+        ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
+        ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::End();
     }
 }
@@ -164,11 +175,11 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 250.0f, 365.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 190.0f });
         ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-        ImGui::PushItemWidth(160.0f);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static std::vector<char> buffer(16);
+        ImGui::PushItemWidth(120.0f);
         ImGui::InputText("##Clantag", buffer.data(), buffer.size());
         ImGui::SameLine();
         if (ImGui::Button("Set clantag")) {
@@ -176,13 +187,7 @@ void GUI::renderMiscWindow() noexcept
             Misc::animateClanTag(buffer.data());
         }
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
-        ImGui::Checkbox("Disable post-processing", &config.misc.disablePostProcessing);
-        ImGui::SliderInt("##Flash reduction", &config.misc.flashReduction, 0, 100, "Flash reduction: %d%%");
-        ImGui::Checkbox("Inverse ragdoll gravity", &config.misc.inverseRagdollGravity);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
-        ImGui::Combo("Skybox", &config.misc.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
-        ImGui::SliderInt("##Viewmodel FOV", &config.misc.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
-        ImGui::ColorEdit3("World color", config.misc.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
         if (ImGui::Button("Reveal ranks"))
             Misc::revealRanks();

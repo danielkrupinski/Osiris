@@ -142,7 +142,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 
 static float __stdcall hookedGetViewModelFov() noexcept
 {
-    return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.misc.viewmodelFov);
+    return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.visuals.viewmodelFov);
 }
 
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept

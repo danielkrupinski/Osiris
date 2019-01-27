@@ -95,6 +95,8 @@ public:
     } chams;
 
     struct {
+        bool disablePostProcessing{ false };
+        bool inverseRagdollGravity{ false };
         bool noHands{ false };
         bool noSleeves{ false };
         bool noSmoke{ false };
@@ -102,32 +104,30 @@ public:
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
+        int viewmodelFov{ 0 };
+        int flashReduction{ 0 };
+        int skybox{ 0 };
+        float worldColor[3]{ 0.0f, 0.0f, 0.0f };
 
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(noHands, noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey, thirdpersonDistance);
+            archive(disablePostProcessing, inverseRagdollGravity, noHands,
+                noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey,
+                thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
     } visuals;
 
     struct {
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
-        bool disablePostProcessing{ false };
-        int flashReduction{ 0 };
-        bool inverseRagdollGravity{ false };
         bool fastDuck{ false };
-        int skybox{ 0 };
-        int viewmodelFov{ 0 };
-        float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool autoPistol{ false };
 
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(bunnyHop, animatedClanTag, disablePostProcessing, flashReduction,
-                inverseRagdollGravity, fastDuck, skybox, viewmodelFov,
-                worldColor, autoPistol);
+            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol);
         }
     } misc;
 
