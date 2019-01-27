@@ -34,7 +34,7 @@ static float getFov(const Vector& viewAngle, const Vector& aimAngle) noexcept
 {
     Vector delta = aimAngle - viewAngle;
     delta.normalize();
-    return delta.length2D();
+    // return delta.length2D();
 }
 
 static int findTarget(UserCmd* cmd) noexcept

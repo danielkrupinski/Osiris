@@ -62,16 +62,6 @@ struct Vector final {
         return *this;
     }
 
-    float length() const noexcept
-    {
-        return std::sqrt(x * x + y * y + z * z);
-    }
-
-    float length2D() const noexcept
-    {
-        return std::sqrt(x * x + y * y);
-    }
-
     void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
