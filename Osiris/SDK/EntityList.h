@@ -11,7 +11,7 @@ public:
         return callVirtualFunction<Entity*(__thiscall*)(void*, int)>(this, 3)(this, index);
     }
 
-    constexpr auto getClientEntityFromHandle(int handle) noexcept
+    constexpr auto getEntityFromHandle(int handle) noexcept
     {
         return callVirtualFunction<Entity*(__thiscall*)(void*, int)>(this, 4)(this, handle);
     }

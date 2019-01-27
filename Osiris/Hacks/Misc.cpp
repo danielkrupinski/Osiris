@@ -72,7 +72,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 void Misc::autoPistol(UserCmd* cmd) noexcept
 {
     if (config.misc.autoPistol) {
-        const auto activeWeapon = interfaces.entityList->getClientEntityFromHandle(
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
             interfaces.entityList->getEntity(
                 interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
         if (activeWeapon && activeWeapon->isPistol()) {
