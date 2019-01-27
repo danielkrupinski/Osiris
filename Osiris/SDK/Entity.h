@@ -43,6 +43,11 @@ public:
         return *reinterpret_cast<float*>(this + netvars.getOffset("m_flNextPrimaryAttack"));
     }
 
+    float getFireReadyTime() noexcept
+    {
+        return *reinterpret_cast<float*>(this + netvars.getOffset("m_flPostponeFireReadyTime"));
+    }
+
     short getItemDefinitionIndex() noexcept
     {
         return *reinterpret_cast<short*>(this + netvars.getOffset("m_iItemDefinitionIndex"));
