@@ -77,9 +77,15 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
                 interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };
-            if (cmd->buttons & 1 && wasInAttackLastTick)
+            if (activeWeapon->getItemDefinitionIndex() == 64 && wasInAttackLastTick) {
+                if (cmd->buttons & 1 && activeWeapon->getFireReadyTime() <= memory.globalVars->currenttime)
+                    cmd->buttons &= ~1;
+                else if (cmd->buttons & 1 << 11 && activeWeapon->getNextPrimaryAttack() <= memory.globalVars->realtime)
+                    cmd->buttons &= ~(1 << 11);
+            }
+            else if (cmd->buttons & 1 && wasInAttackLastTick)
                 cmd->buttons &= ~1;
-            wasInAttackLastTick = cmd->buttons & 1;
+            wasInAttackLastTick = cmd->buttons & (1 | 1 << 11);
         }
     }
 }
