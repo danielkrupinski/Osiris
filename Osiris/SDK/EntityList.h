@@ -2,16 +2,18 @@
 
 #include "Utils.h"
 
+class Entity;
+
 class EntityList {
 public:
     constexpr auto getEntity(int index) noexcept
     {
-        return callVirtualFunction<class Entity*(__thiscall*)(void*, int)>(this, 3)(this, index);
+        return callVirtualFunction<Entity*(__thiscall*)(void*, int)>(this, 3)(this, index);
     }
 
     constexpr auto getClientEntityFromHandle(int handle) noexcept
     {
-        return callVirtualFunction<class Entity*(__thiscall*)(void*, int)>(this, 4)(this, handle);
+        return callVirtualFunction<Entity*(__thiscall*)(void*, int)>(this, 4)(this, handle);
     }
 
     constexpr auto getHighestEntityIndex() noexcept
