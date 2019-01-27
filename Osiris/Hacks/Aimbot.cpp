@@ -16,10 +16,10 @@ static constexpr int getBoneId() noexcept
 static Vector calculateAngleBetween(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta = source - destination;
-    float hyp = delta.length2D();
+    // float hyp = delta.length2D();
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
     Vector angles;
-    angles.x = radiansToDegrees(atanf(delta.z / hyp)) - viewAngles.x;
+    angles.x = radiansToDegrees(atanf(delta.z / std::hypotf(delta.x, delta.y))) - viewAngles.x;
     angles.y = radiansToDegrees(atanf(delta.y / delta.x)) - viewAngles.y;
     angles.z = 0.0f;
 
@@ -48,7 +48,7 @@ static int findTarget(UserCmd* cmd) noexcept
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
         auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
-        auto fov = angle.length2D();// getFov(cmd->viewangles, angle);
+        auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = i;
@@ -64,7 +64,6 @@ void Aimbot::run(UserCmd* cmd)
             auto entity = interfaces.entityList->getEntity(target);
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateAngleBetween(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
-            //angle -= cmd->viewangles;
             angle /= config.aimbot.smooth;
             cmd->viewangles += angle;
             if (!config.aimbot.silent)
