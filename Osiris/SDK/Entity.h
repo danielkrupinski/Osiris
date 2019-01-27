@@ -38,6 +38,11 @@ public:
         return *reinterpret_cast<int*>(this + netvars.getOffset("m_hActiveWeapon"));
     }
 
+    float getNextPrimaryAttack() noexcept
+    {
+        return *reinterpret_cast<float*>(this + netvars.getOffset("m_flNextPrimaryAttack"));
+    }
+
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
