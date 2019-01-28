@@ -32,14 +32,14 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
     }
 }
 
-void GUI::hotkey(int* key) const noexcept
+void GUI::hotkey(int& key) const noexcept
 {
-    ImGui::Text((std::ostringstream{ } << "[ " << (*key ? std::to_string(*key) : "key") << " ]").str().c_str());
+    ImGui::Text((std::ostringstream{ } << "[ " << (key ? std::to_string(key) : "key") << " ]").str().c_str());
     if (ImGui::IsItemHovered()) {
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != VK_INSERT)
-                *key = i != VK_ESCAPE ? i : 0;
+                key = i != VK_ESCAPE ? i : 0;
     }
 }
 
@@ -89,7 +89,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key", &config.triggerbot.onKey);
         ImGui::SameLine();
-        hotkey(&config.triggerbot.key);
+        hotkey(config.triggerbot.key);
         ImGui::PushItemWidth(160.0f);
         ImGui::SliderInt("##Shot delay", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
@@ -160,7 +160,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::NextColumn();
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
         ImGui::SameLine();
-        hotkey(&config.visuals.thirdpersonKey);
+        hotkey(config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
         ImGui::SliderInt("##Thirdperson distance", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
         ImGui::SliderInt("##Viewmodel FOV", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
