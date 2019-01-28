@@ -7,7 +7,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Enable** - on / off master switch
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
-    * **Smooth**
+    * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Bone** - bone which aimbot aims at
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
@@ -36,19 +36,20 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Visible allies** - visible allies chams on / off and color applied to them
     * **Enemies** - enemies chams on / off and color applied to them
     * **Visible enemies** - visible enemies chams on / off and color applied to them
+    * **Weapons** - view model weapons chams on / off and color applied to them
+    * **Hands** - view model hands chams on / off and color applied to them
 
 * **Visuals** - miscellaneous visual options
+    * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **No sleeves** - removes sleeves model from first-person view
     * **No hands** - removes arms / hands model from first-person view
 
 * **Misc** - miscellaneous features
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
-    * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **No crouch cooldown** - remove crouch delay; fast duck
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
-    * **No blood** - remove blood
     * **No smoke** - remove smoke grenade effect
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Skybox** - change sky(box)
