@@ -19,6 +19,6 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
         if (prop->dataTable)
             loadTable(prop->dataTable, prop->offset + offset);
         else
-            playerOffsets[prop->name] = prop->offset + offset;
+            offsets[prop->name] = prop->offset + offset;
     }
 }

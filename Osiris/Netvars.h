@@ -11,11 +11,11 @@ public:
 
     auto operator[](const std::string_view netvar) noexcept
     {
-        return playerOffsets[netvar];
+        return offsets[netvar];
     }
 private:
     void loadTable(RecvTable*, const std::size_t = 0);
-    std::unordered_map<std::string_view, std::size_t> playerOffsets;
+    std::unordered_map<std::string_view, std::size_t> offsets;
 };
 
 extern Netvars netvars;
