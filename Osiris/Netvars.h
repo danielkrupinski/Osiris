@@ -14,7 +14,7 @@ public:
         return offsets[netvar];
     }
 private:
-    void loadTable(RecvTable*, const std::size_t = 0);
+    void loadTable(RecvTable*, const std::size_t = 0) noexcept;
     std::unordered_map<std::string_view, std::size_t> offsets;
 };
 

@@ -8,7 +8,7 @@ Netvars::Netvars()
         loadTable(clientClass->recvTable);
 }
 
-void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
+void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto prop = &recvTable->props[i];
