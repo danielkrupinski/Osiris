@@ -9,6 +9,11 @@ class Netvars final {
 public:
     Netvars();
     std::size_t getOffset(const std::string_view);
+
+    auto operator[](const std::string_view netvar) noexcept
+    {
+        return playerOffsets[netvar];
+    }
 private:
     void loadTable(RecvTable*, const std::size_t = 0);
     std::unordered_map<std::string_view, std::size_t> playerOffsets;
