@@ -58,7 +58,7 @@ void Misc::inverseRagdollGravity() noexcept
 void Misc::reduceFlashEffect() noexcept
 {
     auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    *reinterpret_cast<float*>(localPlayer + netvars.getOffset("m_flFlashMaxAlpha")) = 255.0f - config.visuals.flashReduction * 2.55f;
+    *reinterpret_cast<float*>(localPlayer + netvars["m_flFlashMaxAlpha"]) = 255.0f - config.visuals.flashReduction * 2.55f;
 }
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept

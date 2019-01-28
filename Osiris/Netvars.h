@@ -8,7 +8,6 @@
 class Netvars final {
 public:
     Netvars();
-    [[deprecated]] std::size_t getOffset(const std::string_view);
 
     auto operator[](const std::string_view netvar) noexcept
     {

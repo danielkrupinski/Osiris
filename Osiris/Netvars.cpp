@@ -8,11 +8,6 @@ Netvars::Netvars()
         loadTable(clientClass->recvTable);
 }
 
-std::size_t Netvars::getOffset(const std::string_view propertyName)
-{
-    return playerOffsets[propertyName];
-}
-
 void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset)
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
