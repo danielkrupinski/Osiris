@@ -10,47 +10,47 @@ class Entity {
 public:
     int* getFlags() noexcept
     {
-        return reinterpret_cast<int*>(this + netvars.getOffset("m_fFlags"));
+        return reinterpret_cast<int*>(this + netvars["m_fFlags"]);
     }
 
     int getMoveType() noexcept
     {
-        return *reinterpret_cast<int*>(this + netvars.getOffset("m_MoveType"));
+        return *reinterpret_cast<int*>(this + netvars["m_MoveType"]);
     }
 
     bool isScoped() noexcept
     {
-        return *reinterpret_cast<bool*>(this + netvars.getOffset("m_bIsScoped"));
+        return *reinterpret_cast<bool*>(this + netvars["m_bIsScoped"]);
     }
 
     int getCrosshairID() noexcept
     {
-        return *reinterpret_cast<int*>(this + netvars.getOffset("m_bHasDefuser") + 92);
+        return *reinterpret_cast<int*>(this + netvars["m_bHasDefuser"] + 92);
     }
 
     bool isImmune() noexcept
     {
-        return *reinterpret_cast<bool*>(this + netvars.getOffset("m_bGunGameImmunity"));
+        return *reinterpret_cast<bool*>(this + netvars["m_bGunGameImmunity"]);
     }
 
     int getActiveWeaponHandle() noexcept
     {
-        return *reinterpret_cast<int*>(this + netvars.getOffset("m_hActiveWeapon"));
+        return *reinterpret_cast<int*>(this + netvars["m_hActiveWeapon"]);
     }
 
     float getNextPrimaryAttack() noexcept
     {
-        return *reinterpret_cast<float*>(this + netvars.getOffset("m_flNextPrimaryAttack"));
+        return *reinterpret_cast<float*>(this + netvars["m_flNextPrimaryAttack"]);
     }
 
     float getFireReadyTime() noexcept
     {
-        return *reinterpret_cast<float*>(this + netvars.getOffset("m_flPostponeFireReadyTime"));
+        return *reinterpret_cast<float*>(this + netvars["m_flPostponeFireReadyTime"]);
     }
 
     short getItemDefinitionIndex() noexcept
     {
-        return *reinterpret_cast<short*>(this + netvars.getOffset("m_iItemDefinitionIndex"));
+        return *reinterpret_cast<short*>(this + netvars["m_iItemDefinitionIndex"]);
     }
 
     constexpr bool isPistol() noexcept
