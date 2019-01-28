@@ -50,9 +50,10 @@ void Aimbot::run(UserCmd* cmd)
             auto entity = interfaces.entityList->getEntity(target);
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateRelativeAngle(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
+            auto distance = std::hypotf(angle.x, angle.y);
             angle /= config.aimbot.smooth;
             cmd->viewangles += angle;
-            if (!config.aimbot.silent)
+            if (!config.aimbot.silent || distance > 1.0f)
                 interfaces.engine->setViewAngles(cmd->viewangles);
         }
     }
