@@ -41,20 +41,20 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
+    * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No sleeves** - removes sleeves model from first-person view
     * **No hands** - removes arms / hands model from first-person view
+   * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
+    * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
+    * **Skybox** - change sky(box)
+    * **World color** - set world material ambient light color
 
 * **Misc** - miscellaneous features
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
-    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
-    * **No crouch cooldown** - remove crouch delay; fast duck
-    * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
+    * **Fast duck** - remove crouch delay
     * **No smoke** - remove smoke grenade effect
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
-    * **Skybox** - change sky(box)
-    * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
-    * **World color** - set world material ambient light color
     * **Auto pistol** - add ability of firing pistols like automatic rifles
     * **Reveal ranks** - reveal player ranks in competitive modes
 
