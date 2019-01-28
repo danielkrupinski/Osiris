@@ -28,12 +28,13 @@ static int findTarget(UserCmd* cmd) noexcept
     auto bestFov = config.aimbot.fov;
     auto bestTarget = 0;
     auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    auto localPlayerEyeOrigin = localPlayer->getEyeOrigin();
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune())
             continue;
-        auto angle = calculateRelativeAngle(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId()), cmd->viewangles);
+        auto angle = calculateRelativeAngle(localPlayerEyeOrigin, entity->getBonePosition(getBoneId()), cmd->viewangles);
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
