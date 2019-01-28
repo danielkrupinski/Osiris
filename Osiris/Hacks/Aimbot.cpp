@@ -15,16 +15,10 @@ static constexpr int getBoneId() noexcept
 
 static Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
-    Vector delta = source - destination;
+    Vector delta = destination - source;
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
-    Vector angles;
-    angles.x = radiansToDegrees(atanf(delta.z / std::hypotf(delta.x, delta.y))) - viewAngles.x;
-    angles.y = radiansToDegrees(atanf(delta.y / delta.x)) - viewAngles.y;
-    angles.z = 0.0f;
-
-    if (delta.x >= 0.0)
-        angles.y += 180.0f;
-
+    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
+                   radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
     angles.normalize();
     return angles;
 }
