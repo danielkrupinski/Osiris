@@ -1,5 +1,12 @@
 #pragma once
 
+struct recvProxyData {
+    int pad;
+    int value;
+};
+
+using recvProxy = void(*)(const recvProxyData* data, void* struct_, void* out);
+
 struct RecvProp {
     char* name;
     int type;
@@ -9,7 +16,7 @@ struct RecvProp {
     const void* m_pExtraData;
     RecvProp* m_pArrayProp;
     void* arrayLengthProxy;
-    void* proxyFn;
+    recvProxy proxy;
     void* dataTableProxyFn;
     struct RecvTable* dataTable;
     int offset;
