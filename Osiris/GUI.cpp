@@ -6,6 +6,9 @@
 #include "Config.h"
 #include "Hacks/Misc.h"
 
+constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+                           | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
 void GUI::render() noexcept
 {
     renderMenuBar();
@@ -70,7 +73,7 @@ void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
         ImGui::SetNextWindowSize({ 165.0f, 160.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         ImGui::Checkbox("Enabled", &config.aimbot.enabled);
         ImGui::Checkbox("Silent", &config.aimbot.silent);
         ImGui::PushItemWidth(150.0f);
@@ -85,7 +88,7 @@ void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
         ImGui::SetNextWindowSize({ 180.0f, 115.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key", &config.triggerbot.onKey);
         ImGui::SameLine();
@@ -101,7 +104,7 @@ void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
         ImGui::SetNextWindowSize({ 320.0f, 170.0f });
-        ImGui::Begin("Glow", &window.glow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Glow", &window.glow, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);
         ImGui::PushItemWidth(150.0f);
@@ -124,7 +127,7 @@ void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
         ImGui::SetNextWindowSize({ 330.0f, 190.0f });
-        ImGui::Begin("Chams", &window.chams, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Chams", &window.chams, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
@@ -147,10 +150,9 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         ImGui::SetNextWindowSize({ 520.0f, 200.0f });
-        ImGui::Begin("Visuals", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
-        //ImGui::PushItemWidth(250.0f);
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
@@ -176,7 +178,7 @@ void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
         ImGui::SetNextWindowSize({ 220.0f, 190.0f });
-        ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static std::vector<char> buffer(16);
         ImGui::PushItemWidth(120.0f);
