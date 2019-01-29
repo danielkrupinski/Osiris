@@ -17,10 +17,24 @@ public:
         float smooth{ 1.0f };
         int bone{ 0 };
 
+        struct {
+            bool enabled{ false };
+            bool silent{ false };
+            float fov{ 0.0f };
+            float smooth{ 1.0f };
+            int bone{ 0 };
+
+            template <class Archive>
+            void serialize(Archive& archive)
+            {
+                archive(enabled, silent, fov, smooth, bone);
+            }
+        } weapons[100];
+
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(enabled, silent, fov, smooth, bone);
+            archive(enabled, silent, fov, smooth, bone, weapons);
         }
     } aimbot;
 
