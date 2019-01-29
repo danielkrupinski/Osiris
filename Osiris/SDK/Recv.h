@@ -1,11 +1,20 @@
 #pragma once
 
+#include "Vector.h"
+
 struct recvProxyData {
     int pad;
-    int value;
+    union {
+        float floatValue;
+        long intValue;
+        char* stringValue;
+        void* data;
+        float vector[3];
+        int64_t  int64Value;
+    };
 };
 
-using recvProxy = void(*)(const recvProxyData* data, void* struct_, void* out);
+typedef void(*recvProxy)(const recvProxyData* pData, void* pStruct, void* pOut);
 
 struct RecvProp {
     char* name;
