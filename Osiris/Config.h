@@ -28,7 +28,7 @@ public:
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(enabled, silent, fov, smooth, bone, weapons);
+            archive(weapons);
         }
     } aimbot;
 
