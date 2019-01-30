@@ -9,7 +9,6 @@ namespace Misc {
     void setClanTag(const std::string&) noexcept;
     void colorWorld() noexcept;
     void inverseRagdollGravity() noexcept;
-    void reduceFlashEffect() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;

@@ -132,7 +132,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
-        Misc::reduceFlashEffect();
+        Visuals::reduceFlashEffect();
         Misc::disablePostProcessing();
         Misc::colorWorld();
         Glow::render();
