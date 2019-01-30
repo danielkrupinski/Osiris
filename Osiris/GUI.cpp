@@ -8,7 +8,7 @@
 #include "Hacks/Visuals.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-                           | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 void GUI::render() noexcept
 {
@@ -73,14 +73,50 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 165.0f, 160.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 200.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
-        ImGui::Checkbox("Enabled", &config.aimbot.enabled);
-        ImGui::Checkbox("Silent", &config.aimbot.silent);
+        static int currentCategory{ 0 };
+        ImGui::PushItemWidth(110.0f);
+        ImGui::Combo("##category", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles");
+        ImGui::SameLine();
+        static int currentWeapon{ 0 };
+
+        switch (currentCategory) {
+        case 0:
+            currentWeapon = 0;
+            ImGui::NewLine();
+            break;
+        case 1: {
+            static int currentPistol{ 0 };
+            ImGui::Combo("##weapon_pistol", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
+            currentWeapon = currentPistol + 1;
+            break;
+        }
+        case 2: {
+            static int currentHeavy{ 0 };
+            ImGui::Combo("##weapon_heavy", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
+            currentWeapon = currentHeavy + 11;
+            break;
+        }
+        case 3: {
+            static int currentSmg{ 0 };
+            ImGui::Combo("##weapon_smg", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
+            currentWeapon = currentSmg + 17;
+            break;
+        }
+        case 4: {
+            static int currentRifle{ 0 };
+            ImGui::Combo("##weapon_rifle", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
+            currentWeapon = currentRifle + 24;
+            break;
+        }
+        }
+        ImGui::Checkbox("Enabled", &config.aimbot.weapons[currentWeapon].enabled);
+        ImGui::Checkbox("Silent", &config.aimbot.weapons[currentWeapon].silent);
         ImGui::PushItemWidth(150.0f);
-        ImGui::SliderFloat("##Fov", &config.aimbot.fov, 0.0f, 255.0f, "Fov: %.2f");
-        ImGui::SliderFloat("##Smooth", &config.aimbot.smooth, 1.0f, 100.0f, "Smooth: %.2f");
-        ImGui::Combo("Bone", &config.aimbot.bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
+        ImGui::SliderFloat("##Fov", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
+        ImGui::SliderFloat("##Smooth", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
+        ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
         ImGui::End();
     }
 }
