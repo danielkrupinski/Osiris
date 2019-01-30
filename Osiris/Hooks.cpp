@@ -133,7 +133,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
         Misc::disablePostProcessing();
-        Misc::colorWorld();
+        Visuals::colorWorld();
         Glow::render();
     }
     return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);

@@ -7,7 +7,6 @@ namespace Misc {
     void disablePostProcessing() noexcept;
     void skybox() noexcept;
     void setClanTag(const std::string&) noexcept;
-    void colorWorld() noexcept;
     void inverseRagdollGravity() noexcept;
     void removeCrouchCooldown(UserCmd*) noexcept;
     void autoPistol(UserCmd*) noexcept;

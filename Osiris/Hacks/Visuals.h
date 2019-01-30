@@ -3,6 +3,7 @@
 #include <string_view>
 
 namespace Visuals {
+    void colorWorld() noexcept;
     void reduceFlashEffect() noexcept;
     constexpr bool removeHands(const std::string_view modelName) noexcept
     {
