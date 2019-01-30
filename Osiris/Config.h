@@ -11,12 +11,6 @@ public:
     void reset();
 
     struct {
-        bool enabled{ false };
-        bool silent{ false };
-        float fov{ 0.0f };
-        float smooth{ 1.0f };
-        int bone{ 0 };
-
         struct {
             bool enabled{ false };
             bool silent{ false };
@@ -29,7 +23,7 @@ public:
             {
                 archive(enabled, silent, fov, smooth, bone);
             }
-        } weapons[100];
+        } weapons[35];
 
         template <class Archive>
         void serialize(Archive& archive)
