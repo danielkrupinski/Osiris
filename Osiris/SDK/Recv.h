@@ -14,7 +14,7 @@ struct recvProxyData {
     };
 };
 
-typedef void(*recvProxy)(const recvProxyData* pData, void* pStruct, void* pOut);
+using recvProxy = std::add_pointer_t<void(recvProxyData*, void*, void*)>;
 
 struct RecvProp {
     char* name;
