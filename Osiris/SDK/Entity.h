@@ -5,6 +5,7 @@
 #include "../Netvars.h"
 #include "Utils.h"
 #include "Vector.h"
+#include "WeaponId.h"
 
 class Entity {
 public:
@@ -48,9 +49,9 @@ public:
         return *reinterpret_cast<float*>(this + netvars["m_flPostponeFireReadyTime"]);
     }
 
-    short getItemDefinitionIndex() noexcept
+    WeaponId getItemDefinitionIndex() noexcept
     {
-        return *reinterpret_cast<short*>(this + netvars["m_iItemDefinitionIndex"]);
+        return *reinterpret_cast<WeaponId*>(this + netvars["m_iItemDefinitionIndex"]);
     }
 
     constexpr bool isPistol() noexcept

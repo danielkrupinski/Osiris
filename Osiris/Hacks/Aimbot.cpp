@@ -7,78 +7,50 @@
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
+#include "../SDK/WeaponId.h"
 
-static constexpr int getCurrentWeaponConfigIndex(short itemDefinitionIndex) noexcept
+static constexpr int getCurrentWeaponConfigIndex(WeaponId itemDefinitionIndex) noexcept
 {
     switch (itemDefinitionIndex) {
-    case 1:
-        return 9;
-    case 2:
-        return 4;
-    case 3:
-        return 7;
-    case 4:
-        return 1;
-    case 7:
-        return 26;
-    case 8:
-        return 31;
-    case 9:
-        return 32;
-    case 10:
-        return 25;
-    case 11:
-        return 33;
-    case 13:
-        return 24;
-    case 14:
-        return 15;
-    case 16:
-        return 27;
-    case 17:
-        return 17;
-    case 19:
-        return 22;
-    case 24:
-        return 21;
-    case 25:
-        return 12;
-    case 26:
-        return 23;
-    case 27:
-        return 14;
-    case 28:
-        return 16;
-    case 29:
-        return 13;
-    case 30:
-        return 6;
-    case 32:
-        return 2;
-    case 33:
-        return 19;
-    case 34:
-        return 18;
-    case 35:
-        return 11;
-    case 36:
-        return 5;
-    case 38:
-        return 34;
-    case 39:
-        return 30;
-    case 40:
-        return 29;
-    case 60:
-        return 28;
-    case 61:
-        return 3;
-    case 63:
-        return 8;
-    case 64:
-        return 10;
-    default:
-        return 0;
+    default: return 0;
+
+    case WeaponId::Glock: return 1;
+    case WeaponId::Hkp2000: return 2;
+    case WeaponId::Usp_s: return 3;
+    case WeaponId::Elite: return 4;
+    case WeaponId::P250: return 5;
+    case WeaponId::Tec9: return 6;
+    case WeaponId::Fiveseven: return 7;
+    case WeaponId::Cz75a: return 8;
+    case WeaponId::Deagle: return 9;
+    case WeaponId::Revolver: return 10;
+
+    case WeaponId::Nova: return 11;
+    case WeaponId::Xm1014: return 12;
+    case WeaponId::Sawedoff: return 13;
+    case WeaponId::Mag7: return 14;
+    case WeaponId::M249: return 15;
+    case WeaponId::Negev: return 16;
+
+    case WeaponId::Mac10: return 17;
+    case WeaponId::Mp9: return 18;
+    case WeaponId::Mp7: return 19;
+    case WeaponId::Mp5sd: return 20;
+    case WeaponId::Ump45: return 21;
+    case WeaponId::P90: return 22;
+    case WeaponId::Bizon: return 23;
+
+    case WeaponId::GalilAr: return 24;
+    case WeaponId::Famas: return 25;
+    case WeaponId::Ak47: return 26;
+    case WeaponId::M4A1: return 27;
+    case WeaponId::M4a1_s: return 28;
+    case WeaponId::Ssg08: return 29;
+    case WeaponId::Sg553: return 30;
+    case WeaponId::Aug: return 31;
+    case WeaponId::Awp: return 32;
+    case WeaponId::G3SG1: return 33;
+    case WeaponId::Scar20: return 34;
     }
 }
 
@@ -125,6 +97,8 @@ void Aimbot::run(UserCmd* cmd)
         return;
 
     auto weaponIndex = getCurrentWeaponConfigIndex(activeWeapon->getItemDefinitionIndex());
+    if (!weaponIndex)
+        return;
 
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
