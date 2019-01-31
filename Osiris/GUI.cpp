@@ -73,7 +73,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 520.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 200.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
