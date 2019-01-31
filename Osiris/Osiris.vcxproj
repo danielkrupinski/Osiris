@@ -161,6 +161,7 @@
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Utils.h" />
+    <ClInclude Include="SDK\WeaponId.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
