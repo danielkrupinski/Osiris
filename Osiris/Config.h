@@ -109,6 +109,7 @@ public:
         bool noSleeves{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
+        bool radarHack{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
@@ -121,7 +122,7 @@ public:
         void serialize(Archive& archive)
         {
             archive(disablePostProcessing, inverseRagdollGravity, noHands,
-                noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey,
+                noSleeves, noSmoke, wireframeSmoke, radarHack, thirdperson, thirdpersonKey,
                 thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
     } visuals;
