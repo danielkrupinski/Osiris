@@ -4,11 +4,20 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
+#include "../SDK/WeaponId.h"
 #include "Triggerbot.h"
 
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     if (config.triggerbot.enabled) {
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
+        if (!activeWeapon)
+            return;
+
+        auto weaponIndex = getWeaponIndex(activeWeapon->getItemDefinitionIndex());
+        if (!weaponIndex)
+            return;
+
         static auto lastTime = std::chrono::steady_clock::now();
         if ((GetAsyncKeyState(config.triggerbot.key) || !config.triggerbot.onKey)
             && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastTime).count() >= config.triggerbot.shotDelay) {

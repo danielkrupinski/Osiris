@@ -9,51 +9,6 @@
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 
-static constexpr int getWeaponIndex(WeaponId itemDefinitionIndex) noexcept
-{
-    switch (itemDefinitionIndex) {
-    default: return 0;
-
-    case WeaponId::Glock: return 1;
-    case WeaponId::Hkp2000: return 2;
-    case WeaponId::Usp_s: return 3;
-    case WeaponId::Elite: return 4;
-    case WeaponId::P250: return 5;
-    case WeaponId::Tec9: return 6;
-    case WeaponId::Fiveseven: return 7;
-    case WeaponId::Cz75a: return 8;
-    case WeaponId::Deagle: return 9;
-    case WeaponId::Revolver: return 10;
-
-    case WeaponId::Nova: return 11;
-    case WeaponId::Xm1014: return 12;
-    case WeaponId::Sawedoff: return 13;
-    case WeaponId::Mag7: return 14;
-    case WeaponId::M249: return 15;
-    case WeaponId::Negev: return 16;
-
-    case WeaponId::Mac10: return 17;
-    case WeaponId::Mp9: return 18;
-    case WeaponId::Mp7: return 19;
-    case WeaponId::Mp5sd: return 20;
-    case WeaponId::Ump45: return 21;
-    case WeaponId::P90: return 22;
-    case WeaponId::Bizon: return 23;
-
-    case WeaponId::GalilAr: return 24;
-    case WeaponId::Famas: return 25;
-    case WeaponId::Ak47: return 26;
-    case WeaponId::M4A1: return 27;
-    case WeaponId::M4a1_s: return 28;
-    case WeaponId::Ssg08: return 29;
-    case WeaponId::Sg553: return 30;
-    case WeaponId::Aug: return 31;
-    case WeaponId::Awp: return 32;
-    case WeaponId::G3SG1: return 33;
-    case WeaponId::Scar20: return 34;
-    }
-}
-
 static constexpr int getBoneId(int weaponIndex) noexcept
 {
     return 8 - config.aimbot.weapons[weaponIndex].bone;
