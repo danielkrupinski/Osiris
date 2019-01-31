@@ -9,7 +9,7 @@
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 
-static constexpr int getCurrentWeaponConfigIndex(WeaponId itemDefinitionIndex) noexcept
+static constexpr int getWeaponIndex(WeaponId itemDefinitionIndex) noexcept
 {
     switch (itemDefinitionIndex) {
     default: return 0;
@@ -96,7 +96,7 @@ void Aimbot::run(UserCmd* cmd)
     if (!activeWeapon)
         return;
 
-    auto weaponIndex = getCurrentWeaponConfigIndex(activeWeapon->getItemDefinitionIndex());
+    auto weaponIndex = getWeaponIndex(activeWeapon->getItemDefinitionIndex());
     if (!weaponIndex)
         return;
 
