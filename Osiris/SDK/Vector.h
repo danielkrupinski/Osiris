@@ -38,12 +38,9 @@ struct Vector final {
         return *this;
     }
 
-    constexpr Vector& operator*=(float mul) noexcept
+    constexpr auto operator*(float mul) const noexcept
     {
-        x *= mul;
-        y *= mul;
-        z *= mul;
-        return *this;
+        return Vector{ x * mul, y * mul, z * mul };
     }
 
     void normalize() noexcept
