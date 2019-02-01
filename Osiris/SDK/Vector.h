@@ -17,6 +17,14 @@ struct Vector final {
         return *this;
     }
 
+    constexpr Vector& operator-=(const Vector& v) noexcept
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        return *this;
+    }
+
     constexpr auto operator-(const Vector& v) const noexcept
     {
         return Vector{ x - v.x, y - v.y, z - v.z };
