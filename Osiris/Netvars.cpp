@@ -1,8 +1,16 @@
+#include "Config.h"
 #include "Interfaces.h"
 #include "Netvars.h"
 #include "SDK/ClientClass.h"
 
 static std::unordered_map<std::string_view, recvProxy> proxies;
+
+static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
+{
+    if (config.misc.radarHack)
+        data->intValue = 1;
+    proxies["m_bSpotted"](data, arg2, arg3);
+}
 
 Netvars::Netvars()
 {
@@ -21,8 +29,10 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
         if (prop->dataTable)
             loadTable(prop->dataTable, prop->offset + offset);
         else {
-            offsets[prop->name] = prop->offset + offset;
-
+            std::string_view name{ prop->name };
+            offsets[name] = prop->offset + offset;
+            if (name == "m_bSpotted")
+                hookProperty(prop, spottedHook);
         }
     }
 }
