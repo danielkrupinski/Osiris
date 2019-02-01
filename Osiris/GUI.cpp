@@ -214,7 +214,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 220.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static std::vector<char> buffer(16);
@@ -228,6 +228,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
+        ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         if (ImGui::Button("Reveal ranks"))
             Misc::revealRanks();
         ImGui::End();
