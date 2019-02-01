@@ -109,7 +109,6 @@ public:
         bool noSleeves{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
-        bool radarHack{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
@@ -122,7 +121,7 @@ public:
         void serialize(Archive& archive)
         {
             archive(disablePostProcessing, inverseRagdollGravity, noHands,
-                noSleeves, noSmoke, wireframeSmoke, radarHack, thirdperson, thirdpersonKey,
+                noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey,
                 thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
     } visuals;
@@ -132,11 +131,12 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool autoPistol{ false };
+        bool radarHack{ false };
 
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol);
+            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol, radarHack);
         }
     } misc;
 
