@@ -192,6 +192,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SetColumnOffset(1, 210.0f);
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
+        ImGui::Checkbox("No visual recoil", &config.visuals.noVisualRecoil);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
