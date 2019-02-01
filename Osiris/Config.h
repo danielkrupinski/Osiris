@@ -105,6 +105,7 @@ public:
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+        bool noVisualRecoil{ false };
         bool noHands{ false };
         bool noSleeves{ false };
         bool noSmoke{ false };
@@ -120,7 +121,7 @@ public:
         template <class Archive>
         void serialize(Archive& archive)
         {
-            archive(disablePostProcessing, inverseRagdollGravity, noHands,
+            archive(disablePostProcessing, inverseRagdollGravity, noVisualRecoil, noHands,
                 noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey,
                 thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
