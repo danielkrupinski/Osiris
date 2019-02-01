@@ -30,6 +30,14 @@ struct Vector final {
         return *this;
     }
 
+    constexpr Vector& operator*=(float mul) noexcept
+    {
+        x *= mul;
+        y *= mul;
+        z *= mul;
+        return *this;
+    }
+
     void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
