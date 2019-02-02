@@ -54,6 +54,11 @@ public:
         return *reinterpret_cast<WeaponId*>(this + netvars["m_iItemDefinitionIndex"]);
     }
 
+    Vector getAimPunch() noexcept
+    {
+        return *reinterpret_cast<Vector*>(this + netvars["m_aimPunchAngle"]);
+    }
+
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
