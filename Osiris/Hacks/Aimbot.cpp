@@ -59,13 +59,14 @@ void Aimbot::run(UserCmd* cmd)
         weaponIndex = 0;
 
     if (config.aimbot.weapons[weaponIndex].enabled && cmd->buttons & 1) {
+        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
         auto aimPunch = interfaces.entityList->getEntity(
             interfaces.engine->getLocalPlayer())->getAimPunch();
         aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 
-        cmd->viewangles -= aimPunch * 2.0f;
-
+        cmd->viewangles -= aimPunch * weaponRecoilScale->getFloat();
+        
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
             interfaces.entityList->getEntity(
                 interfaces.engine->getLocalPlayer())->getActiveWeaponHandle())->getItemDefinitionIndex();
