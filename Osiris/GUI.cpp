@@ -188,7 +188,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 235.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
@@ -197,6 +197,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No visual recoil", &config.visuals.noVisualRecoil);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
+        ImGui::Checkbox("No weapons", &config.visuals.noWeapons);
         ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
         ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
         ImGui::NextColumn();
