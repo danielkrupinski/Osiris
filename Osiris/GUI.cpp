@@ -73,7 +73,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 300.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -117,6 +117,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("##Fov", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
         ImGui::SliderFloat("##Smooth", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
         ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
+        ImGui::SliderFloat("##Recoil Control X", &config.aimbot.weapons[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil Control X: %.2f");
+        ImGui::SliderFloat("##Recoil Control Y", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil Control Y: %.2f");
         ImGui::End();
     }
 }
