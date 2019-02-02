@@ -110,6 +110,7 @@ public:
         bool noVisualRecoil{ false };
         bool noHands{ false };
         bool noSleeves{ false };
+        bool noWeapons{ false };
         bool noSmoke{ false };
         bool wireframeSmoke{ false };
         bool thirdperson{ false };
@@ -124,7 +125,7 @@ public:
         void serialize(Archive& archive)
         {
             archive(disablePostProcessing, inverseRagdollGravity, noVisualRecoil, noHands,
-                noSleeves, noSmoke, wireframeSmoke, thirdperson, thirdpersonKey,
+                noSleeves, noSmoke, noWeapons, wireframeSmoke, thirdperson, thirdpersonKey,
                 thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
     } visuals;
