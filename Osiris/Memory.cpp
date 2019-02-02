@@ -32,15 +32,19 @@ std::uintptr_t Memory::findPattern(const std::string& module, const std::string&
 {
     MODULEINFO moduleInfo;
 
-    if (!GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo)))
-        throw std::runtime_error{ "Could not get module information about " + module + "!" };
+    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module.c_str()), &moduleInfo, sizeof(moduleInfo));
 
     const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
     const char* end = begin + moduleInfo.SizeOfImage;
 
     std::cmatch match;
-    if (std::regex_search(begin, end, match, std::regex{ pattern, std::regex::optimize }))
-        return reinterpret_cast<ptrdiff_t>(moduleInfo.lpBaseOfDll) + match.position();
+
+    int searchCount = 0;
+    while (!std::regex_search(begin, end, match, std::regex{ pattern, std::regex::optimize }) && searchCount < 5)
+        searchCount++;
+
+    if (searchCount == 5)
+        throw std::runtime_error{ "Memory pattern scan in " + module + " failed after 5 tries!" };
     else
-        throw std::runtime_error{ "Memory search for " + pattern + " in " + module + " failed!" };
+        return reinterpret_cast<ptrdiff_t>(moduleInfo.lpBaseOfDll) + match.position();
 }
