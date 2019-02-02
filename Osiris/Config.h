@@ -17,11 +17,13 @@ public:
             float fov{ 0.0f };
             float smooth{ 1.0f };
             int bone{ 0 };
+            float recoilControlX{ 0.0f };
+            float recoilControlY{ 0.0f };
 
             template <class Archive>
             void serialize(Archive& archive)
             {
-                archive(enabled, silent, fov, smooth, bone);
+                archive(enabled, silent, fov, smooth, bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
 
