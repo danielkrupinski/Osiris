@@ -38,7 +38,7 @@ void Visuals::modifySmoke() noexcept
         *memory.smokeCount = 0;
 }
 
-void Visuals::thirdperson()
+void Visuals::thirdperson() noexcept
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };

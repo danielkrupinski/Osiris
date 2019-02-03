@@ -24,5 +24,5 @@ namespace Visuals {
             && modelName.find("fists") == std::string_view::npos;
     }
     void modifySmoke() noexcept;
-    void thirdperson();
+    void thirdperson() noexcept;
 };
