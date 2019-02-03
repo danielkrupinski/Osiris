@@ -1,7 +1,7 @@
 #pragma once
 
 struct GlobalVars {
-    float realtime;
-    std::byte pad[12];
-    float currenttime;
+    const float realtime;
+    const std::byte pad[12];
+    const float currenttime;
 };
