@@ -77,7 +77,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
-        ImGui::Combo("##category", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles");
+        ImGui::Combo("##1", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles");
         ImGui::SameLine();
         static int currentWeapon{ 0 };
 
@@ -88,25 +88,25 @@ void GUI::renderAimbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::Combo("##weapon_pistol", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
+            ImGui::Combo("##2", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
             currentWeapon = currentPistol + 1;
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::Combo("##weapon_heavy", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
+            ImGui::Combo("##3", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
             currentWeapon = currentHeavy + 11;
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::Combo("##weapon_smg", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
+            ImGui::Combo("##4", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
             currentWeapon = currentSmg + 17;
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::Combo("##weapon_rifle", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
+            ImGui::Combo("##5", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
             currentWeapon = currentRifle + 24;
             break;
         }
@@ -114,11 +114,11 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Enabled", &config.aimbot.weapons[currentWeapon].enabled);
         ImGui::Checkbox("Silent", &config.aimbot.weapons[currentWeapon].silent);
         ImGui::PushItemWidth(150.0f);
-        ImGui::SliderFloat("##Fov", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
-        ImGui::SliderFloat("##Smooth", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
+        ImGui::SliderFloat("##6", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
+        ImGui::SliderFloat("##7", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
         ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
-        ImGui::SliderFloat("##Recoil Control X", &config.aimbot.weapons[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil Control X: %.2f");
-        ImGui::SliderFloat("##Recoil Control Y", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil Control Y: %.2f");
+        ImGui::SliderFloat("##8", &config.aimbot.weapons[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil Control X: %.2f");
+        ImGui::SliderFloat("##9", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil Control Y: %.2f");
         ImGui::End();
     }
 }
@@ -133,7 +133,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::SameLine();
         hotkey(config.triggerbot.key);
         ImGui::PushItemWidth(160.0f);
-        ImGui::SliderInt("##Shot delay", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
+        ImGui::SliderInt("##1", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
     }
 }
@@ -148,9 +148,9 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SetColumnOffset(1, 170.0f);
         ImGui::PushItemWidth(150.0f);
         ImGui::Checkbox("Enabled", &config.glow.enabled);
-        ImGui::SliderFloat("##Thickness", &config.glow.thickness, 0.0f, 1.0f, "Thickness: %.2f");
-        ImGui::SliderFloat("##Alpha", &config.glow.alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::SliderInt("##Style", &config.glow.style, 0, 3, "Style: %d");
+        ImGui::SliderFloat("##1", &config.glow.thickness, 0.0f, 1.0f, "Thickness: %.2f");
+        ImGui::SliderFloat("##2", &config.glow.alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::SliderInt("##3", &config.glow.style, 0, 3, "Style: %d");
         checkBoxAndColorPicker("Allies", &config.glow.allies, config.glow.alliesColor);
         ImGui::NextColumn();
         checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
@@ -171,7 +171,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Enabled", &config.chams.enabled);
         ImGui::PushItemWidth(120.0f);
-        ImGui::SliderFloat("##Alpha", &config.chams.alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::SliderFloat("##1", &config.chams.alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::Checkbox("Flat", &config.chams.flat);
         ImGui::Checkbox("Wireframe", &config.chams.wireframe);
         ImGui::NextColumn();
@@ -205,9 +205,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SameLine();
         hotkey(config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
-        ImGui::SliderInt("##Thirdperson distance", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
-        ImGui::SliderInt("##Viewmodel FOV", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
-        ImGui::SliderInt("##Flash reduction", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::SliderInt("##1", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
+        ImGui::SliderInt("##2", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
+        ImGui::SliderInt("##3", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
@@ -223,7 +223,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static std::vector<char> buffer(16);
         ImGui::PushItemWidth(120.0f);
-        ImGui::InputText("##Clantag", buffer.data(), buffer.size());
+        ImGui::InputText("##1", buffer.data(), buffer.size());
         ImGui::SameLine();
         if (ImGui::Button("Set clantag")) {
             Misc::setClanTag(buffer.data());
