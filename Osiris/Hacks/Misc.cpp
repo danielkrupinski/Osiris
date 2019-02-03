@@ -79,21 +79,21 @@ void Misc::revealRanks() noexcept
     reinterpret_cast<void(__cdecl*)(int*)>(memory.revealRanks)(param);
 }
 
-void Misc::animateClanTag(const std::string_view tag) noexcept
+void Misc::animateClanTag(bool update, const std::string_view tag) noexcept
 {
     static float lastTime{ 0.0f };
-    static std::string tag_;
+    static std::string clanTag;
 
-    if (!tag.empty()) {
-        tag_ = tag;
-        if (tag_.front() != ' ' || tag_.back() != ' ')
-            tag_.push_back(' ');
+    if (update) {
+        clanTag = tag;
+        if (clanTag.front() != ' ' || clanTag.back() != ' ')
+            clanTag.push_back(' ');
     }
 
-    if (config.misc.animatedClanTag && tag_.length() > 1
+    if (config.misc.animatedClanTag && clanTag.length() > 1
         && memory.globalVars->realtime - lastTime > 0.5f) {
-        std::rotate(std::begin(tag_), std::begin(tag_) + 1, std::end(tag_));
-        setClanTag(tag_.c_str());
+        std::rotate(std::begin(clanTag), std::begin(clanTag) + 1, std::end(clanTag));
+        setClanTag(clanTag.c_str());
         lastTime = memory.globalVars->realtime;
     }
 }
