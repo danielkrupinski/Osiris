@@ -118,8 +118,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("##6", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
         ImGui::SliderFloat("##7", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
         ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
-        ImGui::SliderFloat("##8", &config.aimbot.weapons[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil Control X: %.2f");
-        ImGui::SliderFloat("##9", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil Control Y: %.2f");
+        ImGui::SliderFloat("##8", &config.aimbot.weapons[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil control x: %.2f");
+        ImGui::SliderFloat("##9", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil control y: %.2f");
         ImGui::End();
     }
 }
