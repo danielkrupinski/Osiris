@@ -17,6 +17,6 @@ Interfaces::Interfaces() noexcept
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
-        std::exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 }

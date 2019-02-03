@@ -11,7 +11,7 @@ Memory::Memory() noexcept
     try {
         present = findPattern("gameoverlayrenderer", "\xFF\x15.{4}\x8B\xF8\x85\xDB") + 2;
         reset = findPattern("gameoverlayrenderer", "\xC7\x45.{5}\xFF\x15.{4}\x8B\xF8") + 9;
-        clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<std::uintptr_t**>(interfaces.client))[10] + 5);
+        clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
         input = *reinterpret_cast<Input**>(findPattern("client_panorama", "\xB9.{4}\x8B\x40\x38\xFF\xD0\x84\xC0\x0F\x85") + 1);
         globalVars = **reinterpret_cast<GlobalVars***>(findPattern("client_panorama", "\xA1.{5}\x8B\x40\x10") + 1);
         glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern("client_panorama", "\x0F\x11\x05.{4}\x83\xC8\x01") + 3);
@@ -28,7 +28,7 @@ Memory::Memory() noexcept
     }
 }
 
-std::uintptr_t Memory::findPattern(const std::string& module, const std::string& pattern) const
+uintptr_t Memory::findPattern(const std::string& module, const std::string& pattern) const
 {
     MODULEINFO moduleInfo;
 

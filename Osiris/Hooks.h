@@ -20,10 +20,10 @@ public:
         explicit Vmt(void* const);
 
         template<typename T>
-        void hookAt(std::size_t index, T fun) const noexcept
+        void hookAt(size_t index, T fun) const noexcept
         {
             if (index <= length)
-                newVmt[index + 1] = reinterpret_cast<std::uintptr_t>(fun);
+                newVmt[index + 1] = reinterpret_cast<uintptr_t>(fun);
         }
 
         template<typename T>
@@ -32,12 +32,12 @@ public:
             return reinterpret_cast<T>(oldVmt[index]);
         }
 
-        std::uintptr_t* findFreeDataPage(void* const, std::size_t);
+        uintptr_t* findFreeDataPage(void* const, size_t);
     private:
-        std::size_t calculateLength(std::uintptr_t*) const noexcept;
-        std::uintptr_t* oldVmt;
-        std::uintptr_t* newVmt;
-        std::size_t length;
+        size_t calculateLength(uintptr_t*) const noexcept;
+        uintptr_t* oldVmt;
+        uintptr_t* newVmt;
+        size_t length;
     };
 
     Vmt clientMode{ memory.clientMode };

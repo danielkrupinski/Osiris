@@ -163,7 +163,7 @@ static bool __stdcall hookedSvCheatsGetBool()
 {
     static auto _this = interfaces.cvar->findVar("sv_cheats");
 
-    if (reinterpret_cast<std::uintptr_t>(_ReturnAddress()) == memory.cameraThink)
+    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink)
         return true;
     else
         return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
@@ -187,7 +187,7 @@ Hooks::Hooks()
 
 Hooks::Vmt::Vmt(void* const base)
 {
-    oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
+    oldVmt = *reinterpret_cast<uintptr_t**>(base);
     length = calculateLength(oldVmt) + 1;
 
     try {
@@ -198,23 +198,23 @@ Hooks::Vmt::Vmt(void* const base)
         std::exit(EXIT_FAILURE);
     }
     std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-    *reinterpret_cast<std::uintptr_t**>(base) = newVmt + 1;
+    *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
 }
 
-std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSize)
+uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
     VirtualQuery(base, &mbi, sizeof(mbi));
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
 
-    std::uintptr_t* moduleEnd{ reinterpret_cast<std::uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
+    uintptr_t* moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
     for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress--)
         if (!*currentAddress) {
             if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
-                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(std::uintptr_t)
-                && std::all_of(currentAddress, currentAddress + vmtSize, [](std::uintptr_t a) { return !a; }))
+                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(uintptr_t)
+                && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
                 return currentAddress;
         }
         else
@@ -223,9 +223,9 @@ std::uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, std::size_t vmtSi
     throw std::runtime_error{ "Could not find free memory pages in module at " + std::to_string(reinterpret_cast<int>(moduleInfo.lpBaseOfDll)) };
 }
 
-std::size_t Hooks::Vmt::calculateLength(std::uintptr_t* vmt) const noexcept
+size_t Hooks::Vmt::calculateLength(uintptr_t* vmt) const noexcept
 {
-    std::size_t length{ 0 };
+    size_t length{ 0 };
     MEMORY_BASIC_INFORMATION memoryInfo;
     while (VirtualQuery(reinterpret_cast<LPCVOID>(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
         length++;
