@@ -1,3 +1,4 @@
+#include <array>
 #include <sstream>
 #include <Windows.h>
 
@@ -221,7 +222,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SetNextWindowSize({ 220.0f, 220.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        static std::vector<char> buffer(16);
+        static std::array<char, 16> buffer;
         ImGui::PushItemWidth(120.0f);
         ImGui::InputText("##1", buffer.data(), buffer.size());
         ImGui::SameLine();
