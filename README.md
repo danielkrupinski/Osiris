@@ -9,6 +9,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Fov** - field-of-view which aimbot operates [*0*-*180*]
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Bone** - bone which aimbot aims at
+    * **Recoil control x** - horizontal recoil control factor
+    * **Recoil control y** - vertical recoil control factor
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enable** - on / off triggerbot master switch
@@ -44,6 +46,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No sleeves** - removes sleeves model from first-person view
     * **No hands** - removes arms / hands model from first-person view
+    * **No weapons** - removes weapons model from first-person view
+    * **No smoke** - remove smoke grenade effect
+    * **Wireframe smoke** - render smoke skeleton instead of particle effect
    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **Skybox** - change sky(box)
@@ -52,13 +57,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Misc** - miscellaneous features
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
+    * **Animated clan tag** - animate clan tag
     * **Fast duck** - remove crouch delay
-    * **No smoke** - remove smoke grenade effect
-    * **Wireframe smoke** - render smoke skeleton instead of particle effect
     * **Auto pistol** - add ability of firing pistols like automatic rifles
     * **Reveal ranks** - reveal player ranks in competitive modes
 
-* **Config** - JSON-based configuration system
+* **Config** - configuration system based on cereal binary serialization
     * **Load** - load configuration file from disk
     * **Save** - save configuration file to disk
     * **Reset** - restore default configuration settings (does not touch saved configuration)
