@@ -210,15 +210,12 @@ uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
 
     uintptr_t* moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
-    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress--)
-        if (!*currentAddress) {
+    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
+        if (!*currentAddress)
             if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
                 && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(uintptr_t)
                 && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
                 return currentAddress;
-        }
-        else
-            currentAddress -= vmtSize;
 
     throw std::runtime_error{ "Could not find free memory pages in module at " + std::to_string(reinterpret_cast<int>(moduleInfo.lpBaseOfDll)) };
 }
