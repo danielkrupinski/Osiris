@@ -7,7 +7,7 @@
 
 class Netvars final {
 public:
-    Netvars();
+    Netvars() noexcept;
 
     auto operator[](const std::string_view netvar) noexcept
     {

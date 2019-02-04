@@ -18,7 +18,7 @@ static void viewPunchHook(recvProxyData* data, void* arg2, void* arg3) noexcept
         proxies["m_viewPunchAngle"](data, arg2, arg3);
 }
 
-Netvars::Netvars()
+Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
         loadTable(clientClass->recvTable);
