@@ -3,6 +3,7 @@
 #include "ClientClass.h"
 #include "../Interfaces.h"
 #include "../Netvars.h"
+#include "EngineTrace.h"
 #include "Utils.h"
 #include "Vector.h"
 #include "WeaponId.h"
@@ -100,6 +101,19 @@ public:
         Vector vec;
         callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);
         return vec;
+    }
+
+    bool isVisible() noexcept
+    {
+        auto localPlayerEyeOrigin = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getEyeOrigin();
+        Ray ray{ localPlayerEyeOrigin, 0.0f, getBonePosition(8) - localPlayerEyeOrigin };
+        ray.isRay = true;
+        ray.isSwept = ray.delta.x * ray.delta.x + ray.delta.y * ray.delta.y + ray.delta.z * ray.delta.z;
+        TraceFilter filter;
+        filter.skip = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        Trace trace;
+        interfaces.engineTrace->traceRay(ray, 1174421515, filter, trace);
+        return trace.entity == this || trace.fraction > 0.97f;
     }
 
     bool isEnemy() noexcept
