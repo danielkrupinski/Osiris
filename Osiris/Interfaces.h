@@ -11,6 +11,7 @@
 #include "SDK/Cvar.h"
 #include "SDK/EntityList.h"
 #include "SDK/Engine.h"
+#include "SDK/EngineTrace.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
@@ -21,6 +22,7 @@ public:
     explicit Interfaces() noexcept;
 
     Engine* engine;
+    EngineTrace* engineTrace;
     EntityList* entityList;
     Client* client;
     Cvar* cvar;
