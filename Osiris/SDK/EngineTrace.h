@@ -2,10 +2,15 @@
 
 #include <cstddef>
 #include "Utils.h"
-
+#include "Vector.h"
 
 struct Ray {
-    std::byte pad[80];
+    Vector start;
+    float pad;
+    Vector delta;
+    std::byte pad2[37];
+    bool isRay;
+    bool isSwept;
 };
 
 class TraceFilter { };
@@ -19,6 +24,6 @@ class EngineTrace {
 public:
     constexpr void traceRay(const Ray& ray, unsigned int mask, TraceFilter& filter, Trace& trace) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, const Ray&, unsigned int, TraceFilter& , Trace&) > (this, 5)(this, ray, mask, filter, trace);
+        callVirtualFunction<void(__thiscall*)(void*, const Ray&, unsigned int, TraceFilter& , Trace&)>(this, 5)(this, ray, mask, filter, trace);
     }
 };
