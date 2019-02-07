@@ -1,8 +1,8 @@
-#include <chrono>
 #include <Windows.h>
 
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 #include "../SDK/Entity.h"
 #include "../SDK/WeaponId.h"
 #include "Triggerbot.h"
@@ -10,18 +10,17 @@
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     if (config.triggerbot.enabled) {
-        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
-        if (!activeWeapon)
-            return;
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        auto weaponIndex = getWeaponIndex(activeWeapon->getItemDefinitionIndex());
-        if (!weaponIndex)
-            return;
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getActiveWeaponHandle());
+            if (!activeWeapon || !getWeaponIndex(activeWeapon->getItemDefinitionIndex()))
+                return;
 
-        static auto lastTime = std::chrono::steady_clock::now();
+        static auto lastTime = memory.globalVars->realtime;
+        auto now = memory.globalVars->realtime;
+
         if ((GetAsyncKeyState(config.triggerbot.key) || !config.triggerbot.onKey)
-            && std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastTime).count() >= config.triggerbot.shotDelay) {
-            auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+            && now - lastTime >= config.triggerbot.shotDelay / 1000.0f) {
             auto inCrosshair = localPlayer->getCrosshairID();
             if (inCrosshair > 0 && inCrosshair <= 64) {
                 auto target = interfaces.entityList->getEntity(inCrosshair);
@@ -30,7 +29,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     cmd->buttons |= IN_ATTACK;
                 }
             }
-            lastTime = std::chrono::steady_clock::now();
+            lastTime = now;
         }
     }
 }
