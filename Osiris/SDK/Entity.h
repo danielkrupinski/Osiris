@@ -80,10 +80,6 @@ public:
             return false;
         }
     }
-    constexpr void drawModel(int flags, unsigned char alpha) noexcept
-    {
-        return callVirtualFunction<void(__thiscall*)(void*, int, unsigned char)>(this + 4, 9)(this + 4, flags, alpha);
-    }
 
     using matrix3x4 = float[3][4];
 
