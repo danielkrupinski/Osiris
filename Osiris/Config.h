@@ -14,6 +14,7 @@ public:
         struct {
             bool enabled{ false };
             bool silent{ false };
+            bool visibleOnly{ true };
             float fov{ 0.0f };
             float smooth{ 1.0f };
             int bone{ 0 };
@@ -23,7 +24,7 @@ public:
             template <class Archive>
             void serialize(Archive& archive)
             {
-                archive(enabled, silent, fov, smooth, bone, recoilControlX, recoilControlY);
+                archive(enabled, silent, visibleOnly, fov, smooth, bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
 
