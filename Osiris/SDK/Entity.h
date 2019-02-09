@@ -103,14 +103,12 @@ public:
         return vec;
     }
 
-    bool isVisible() noexcept
+    bool isVisible(int bone) noexcept
     {
-        auto localPlayerEyeOrigin = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getEyeOrigin();
-        Ray ray{ localPlayerEyeOrigin, 0.0f, getBonePosition(8) - localPlayerEyeOrigin };
-        ray.isRay = true;
-        ray.isSwept = ray.delta.x * ray.delta.x + ray.delta.y * ray.delta.y + ray.delta.z * ray.delta.z;
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        Ray ray{ localPlayer->getEyeOrigin(), getBonePosition(bone) };
         TraceFilter filter;
-        filter.skip = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        filter.skip = localPlayer;
         Trace trace;
         interfaces.engineTrace->traceRay(ray, 1174421505, filter, trace);
         return trace.entity == this || trace.fraction > 0.97f;
