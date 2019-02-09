@@ -14,19 +14,9 @@ struct Ray {
     std::byte pad3[40];
 };
 
-class ITraceFilter {
+class TraceFilter {
 public:
-    virtual bool shouldHitEntity(Entity*) = 0;
-    virtual int getTraceType() const = 0;
-};
-
-class TraceFilter : public ITraceFilter {
-public:
-    bool shouldHitEntity(Entity* entity)
-    {
-        return entity != skip;
-    }
-
+    virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
     void* skip;
     char* ignore;
@@ -37,6 +27,7 @@ struct Trace {
     float fraction;
     std::byte pad1[28];
     class Entity* entity;
+    int hitbox;
 };
 
 class EngineTrace {
