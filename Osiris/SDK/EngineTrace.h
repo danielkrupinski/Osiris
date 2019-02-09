@@ -5,13 +5,13 @@
 #include "Vector.h"
 
 struct Ray {
+    Ray(const Vector& src, const Vector& dest) : start(src), delta(dest - src) { isSwept = delta.x || delta.y || delta.z; }
     Vector start;
     float pad;
     Vector delta;
     std::byte pad2[40];
-    bool isRay;
+    bool isRay{ true };
     bool isSwept;
-    std::byte pad3[40];
 };
 
 class TraceFilter {
