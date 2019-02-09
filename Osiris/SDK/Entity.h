@@ -112,7 +112,7 @@ public:
         TraceFilter filter;
         filter.skip = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         Trace trace;
-        interfaces.engineTrace->traceRay(ray, 1174421515, filter, trace);
+        interfaces.engineTrace->traceRay(ray, 1174421505, filter, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
