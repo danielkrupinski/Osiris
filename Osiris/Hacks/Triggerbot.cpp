@@ -12,8 +12,8 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (config.triggerbot.enabled) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getActiveWeaponHandle());
-            if (!activeWeapon || !getWeaponIndex(activeWeapon->getItemDefinitionIndex()))
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
+            if (!activeWeapon || !getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex")))
                 return;
 
         static auto lastTime = memory.globalVars->realtime;
@@ -21,10 +21,10 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
         if ((GetAsyncKeyState(config.triggerbot.key) || !config.triggerbot.onKey)
             && now - lastTime >= config.triggerbot.shotDelay / 1000.0f) {
-            auto inCrosshair = localPlayer->getCrosshairID();
+            auto inCrosshair = localPlayer->getProperty<int>("m_bHasDefuser", 92);
             if (inCrosshair > 0 && inCrosshair <= 64) {
                 auto target = interfaces.entityList->getEntity(inCrosshair);
-                if (target->isEnemy() && !target->isImmune()) {
+                if (target->isEnemy() && !target->getProperty<bool>("m_bGunGameImmunity")) {
                     constexpr int IN_ATTACK{ 1 };
                     cmd->buttons |= IN_ATTACK;
                 }

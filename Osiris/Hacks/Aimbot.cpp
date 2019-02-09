@@ -33,7 +33,7 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
-        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->isImmune() || (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(config.aimbot.weapons[weaponIndex].bone)))
+        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->getProperty<bool>("m_bGunGameImmunity") || (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(config.aimbot.weapons[weaponIndex].bone)))
             continue;
         auto angle = calculateRelativeAngle(localPlayerEyeOrigin, entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
         auto fov = std::hypotf(angle.x, angle.y);
@@ -47,11 +47,11 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
 
 void Aimbot::run(UserCmd* cmd)
 {
-    const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
+    const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
     if (!activeWeapon)
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->getItemDefinitionIndex());
+    auto weaponIndex = getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex"));
     if (!weaponIndex)
         return;
 
@@ -71,7 +71,7 @@ void Aimbot::run(UserCmd* cmd)
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
         auto aimPunch = interfaces.entityList->getEntity(
-            interfaces.engine->getLocalPlayer())->getAimPunch();
+            interfaces.engine->getLocalPlayer())->getProperty<Vector>("m_aimPunchAngle");
         aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 

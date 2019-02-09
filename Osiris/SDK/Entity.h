@@ -10,55 +10,60 @@
 
 class Entity {
 public:
-    int* getFlags() noexcept
+    template <typename T>
+    constexpr auto getProperty(const std::string_view name, const std::size_t offset = 0) noexcept
     {
-        return reinterpret_cast<int*>(this + netvars["m_fFlags"]);
+        return *reinterpret_cast<T*>(this + netvars[name] + offset);
     }
+    //int* getFlags() noexcept
+    //{
+   //     return reinterpret_cast<int*>(this + netvars["m_fFlags"]);
+    //}
 
-    int getMoveType() noexcept
-    {
-        return *reinterpret_cast<int*>(this + netvars["m_MoveType"]);
-    }
+   // int getMoveType() noexcept
+   // {
+   //     return *reinterpret_cast<int*>(this + netvars["m_MoveType"]);
+   // }
 
-    bool isScoped() noexcept
-    {
-        return *reinterpret_cast<bool*>(this + netvars["m_bIsScoped"]);
-    }
+    //bool isScoped() noexcept
+   // {
+   //     return *reinterpret_cast<bool*>(this + netvars["m_bIsScoped"]);
+   // }
 
-    int getCrosshairID() noexcept
-    {
-        return *reinterpret_cast<int*>(this + netvars["m_bHasDefuser"] + 92);
-    }
+    //int getCrosshairID() noexcept
+   // {
+   //     return *reinterpret_cast<int*>(this + netvars["m_bHasDefuser"] + 92);
+   // }
 
-    bool isImmune() noexcept
-    {
-        return *reinterpret_cast<bool*>(this + netvars["m_bGunGameImmunity"]);
-    }
+   // bool isImmune() noexcept
+  //  {
+  //      return *reinterpret_cast<bool*>(this + netvars["m_bGunGameImmunity"]);
+  //  }
 
-    int getActiveWeaponHandle() noexcept
-    {
-        return *reinterpret_cast<int*>(this + netvars["m_hActiveWeapon"]);
-    }
+  //  int getActiveWeaponHandle() noexcept
+   // {
+   //     return *reinterpret_cast<int*>(this + netvars["m_hActiveWeapon"]);
+  //  }
 
-    float getNextPrimaryAttack() noexcept
-    {
-        return *reinterpret_cast<float*>(this + netvars["m_flNextPrimaryAttack"]);
-    }
+   // float getNextPrimaryAttack() noexcept
+   // {
+   //     return *reinterpret_cast<float*>(this + netvars["m_flNextPrimaryAttack"]);
+   // }
 
-    float getFireReadyTime() noexcept
-    {
-        return *reinterpret_cast<float*>(this + netvars["m_flPostponeFireReadyTime"]);
-    }
+    //float getFireReadyTime() noexcept
+    //{
+    //    return *reinterpret_cast<float*>(this + netvars["m_flPostponeFireReadyTime"]);
+   // }
 
-    WeaponId getItemDefinitionIndex() noexcept
-    {
-        return *reinterpret_cast<WeaponId*>(this + netvars["m_iItemDefinitionIndex"]);
-    }
+   // WeaponId getItemDefinitionIndex() noexcept
+  //  {
+  //      return *reinterpret_cast<WeaponId*>(this + netvars["m_iItemDefinitionIndex"]);
+  //  }
 
-    Vector getAimPunch() noexcept
-    {
-        return *reinterpret_cast<Vector*>(this + netvars["m_aimPunchAngle"]);
-    }
+ //   Vector getAimPunch() noexcept
+   // {
+   //     return *reinterpret_cast<Vector*>(this + netvars["m_aimPunchAngle"]);
+   // }
 
     constexpr bool isPistol() noexcept
     {

@@ -11,7 +11,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     if (config.misc.bunnyHop) {
         if (cmd->buttons & IN_JUMP) {
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            if (*localPlayer->getFlags() & ON_GROUND)
+            if (localPlayer->getProperty<int>("m_fFlags") & ON_GROUND)
                 cmd->buttons |= IN_JUMP;
             else
                 cmd->buttons &= ~IN_JUMP;
@@ -57,13 +57,13 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     if (config.misc.autoPistol) {
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
             interfaces.entityList->getEntity(
-                interfaces.engine->getLocalPlayer())->getActiveWeaponHandle());
+                interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };
-            if (activeWeapon->getItemDefinitionIndex() == WeaponId::Revolver && wasInAttackLastTick) {
-                if (cmd->buttons & 1 && activeWeapon->getFireReadyTime() <= memory.globalVars->currenttime)
+            if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver && wasInAttackLastTick) {
+                if (cmd->buttons & 1 && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime)
                     cmd->buttons &= ~1;
-                else if (cmd->buttons & 1 << 11 && activeWeapon->getNextPrimaryAttack() <= memory.globalVars->realtime)
+                else if (cmd->buttons & 1 << 11 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->realtime)
                     cmd->buttons &= ~(1 << 11);
             }
             else if (cmd->buttons & 1 && wasInAttackLastTick)
