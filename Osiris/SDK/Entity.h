@@ -92,7 +92,7 @@ public:
         return callVirtualFunction<bool(__thiscall*)(void*, matrix3x4*, int, int, float)>(this + 4, 13)(this + 4, out, maxBones, boneMask, currentTime);
     }
 
-    Vector getBonePosition(int bone)
+    Vector getBonePosition(int bone) noexcept
     {
         matrix3x4 boneMatrices[128];
         if (setupBones(boneMatrices, 128, 256, 0.0f))
@@ -101,7 +101,7 @@ public:
             return Vector{ };
     }
 
-    Vector getEyeOrigin()
+    Vector getEyeOrigin() noexcept
     {
         Vector vec;
         callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);
