@@ -6,16 +6,16 @@
 
 struct Ray {
     Ray(const Vector& src, const Vector& dest) : start(src), delta(dest - src) { isSwept = delta.x || delta.y || delta.z; }
-    Vector start;
-    float pad;
-    Vector delta;
-    std::byte pad2[40];
+    Vector start{ };
+    float pad{ };
+    Vector delta{ };
+    std::byte pad2[40]{ };
     bool isRay{ true };
-    bool isSwept;
+    bool isSwept{ };
 };
 
 struct TraceFilter {
-    TraceFilter(const Entity* entity) : skip(entity) { }
+    TraceFilter(const Entity* entity) : skip{ entity } { }
     virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
     const void* skip;
