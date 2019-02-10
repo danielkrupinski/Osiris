@@ -15,55 +15,6 @@ public:
     {
         return *reinterpret_cast<T*>(this + netvars[name] + offset);
     }
-    //int* getFlags() noexcept
-    //{
-   //     return reinterpret_cast<int*>(this + netvars["m_fFlags"]);
-    //}
-
-   // int getMoveType() noexcept
-   // {
-   //     return *reinterpret_cast<int*>(this + netvars["m_MoveType"]);
-   // }
-
-    //bool isScoped() noexcept
-   // {
-   //     return *reinterpret_cast<bool*>(this + netvars["m_bIsScoped"]);
-   // }
-
-    //int getCrosshairID() noexcept
-   // {
-   //     return *reinterpret_cast<int*>(this + netvars["m_bHasDefuser"] + 92);
-   // }
-
-   // bool isImmune() noexcept
-  //  {
-  //      return *reinterpret_cast<bool*>(this + netvars["m_bGunGameImmunity"]);
-  //  }
-
-  //  int getActiveWeaponHandle() noexcept
-   // {
-   //     return *reinterpret_cast<int*>(this + netvars["m_hActiveWeapon"]);
-  //  }
-
-   // float getNextPrimaryAttack() noexcept
-   // {
-   //     return *reinterpret_cast<float*>(this + netvars["m_flNextPrimaryAttack"]);
-   // }
-
-    //float getFireReadyTime() noexcept
-    //{
-    //    return *reinterpret_cast<float*>(this + netvars["m_flPostponeFireReadyTime"]);
-   // }
-
-   // WeaponId getItemDefinitionIndex() noexcept
-  //  {
-  //      return *reinterpret_cast<WeaponId*>(this + netvars["m_iItemDefinitionIndex"]);
-  //  }
-
- //   Vector getAimPunch() noexcept
-   // {
-   //     return *reinterpret_cast<Vector*>(this + netvars["m_aimPunchAngle"]);
-   // }
 
     constexpr bool isPistol() noexcept
     {
