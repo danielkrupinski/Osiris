@@ -107,10 +107,8 @@ public:
     bool isVisible(int bone) noexcept
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        Ray ray{ localPlayer->getEyeOrigin(), getBonePosition(bone) };
-        TraceFilter filter{ localPlayer };
-        Trace trace;
-        interfaces.engineTrace->traceRay(ray, 1174421505, filter, trace);
+        static Trace trace;
+        interfaces.engineTrace->traceRay({ localPlayer->getEyeOrigin(), getBonePosition(bone) }, 0x46004003, { localPlayer }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 

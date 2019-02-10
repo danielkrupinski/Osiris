@@ -32,8 +32,8 @@ struct Trace {
 
 class EngineTrace {
 public:
-    constexpr void traceRay(const Ray& ray, unsigned int mask, TraceFilter& filter, Trace& trace) noexcept
+    constexpr void traceRay(const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, const Ray&, unsigned int, TraceFilter& , Trace&)>(this, 5)(this, ray, mask, filter, trace);
+        callVirtualFunction<void(__thiscall*)(void*, const Ray&, unsigned int, const TraceFilter& , Trace&)>(this, 5)(this, ray, mask, filter, trace);
     }
 };
