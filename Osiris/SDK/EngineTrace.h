@@ -14,12 +14,12 @@ struct Ray {
     bool isSwept;
 };
 
-class TraceFilter {
-public:
+struct TraceFilter {
+    TraceFilter(const Entity* entity) : skip(entity) { }
     virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
-    void* skip;
-    char* ignore;
+    const void* skip;
+    const char* ignore;
 };
 
 struct Trace {

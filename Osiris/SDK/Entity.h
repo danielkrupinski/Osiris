@@ -108,8 +108,7 @@ public:
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         Ray ray{ localPlayer->getEyeOrigin(), getBonePosition(bone) };
-        TraceFilter filter;
-        filter.skip = localPlayer;
+        TraceFilter filter{ localPlayer };
         Trace trace;
         interfaces.engineTrace->traceRay(ray, 1174421505, filter, trace);
         return trace.entity == this || trace.fraction > 0.97f;
