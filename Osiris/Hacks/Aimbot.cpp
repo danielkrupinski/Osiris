@@ -47,7 +47,9 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
 
 void Aimbot::run(UserCmd* cmd)
 {
-    const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
     if (!activeWeapon)
         return;
 
@@ -61,7 +63,6 @@ void Aimbot::run(UserCmd* cmd)
     if (config.aimbot.weapons[weaponIndex].enabled && cmd->buttons & 1) {
         if (auto target = findTarget(cmd, weaponIndex)) {
             auto entity = interfaces.entityList->getEntity(target);
-            auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto angle = calculateRelativeAngle(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
             angle /= config.aimbot.weapons[weaponIndex].smooth;
             cmd->viewangles += angle;
@@ -70,8 +71,7 @@ void Aimbot::run(UserCmd* cmd)
         }
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = interfaces.entityList->getEntity(
-            interfaces.engine->getLocalPlayer())->getProperty<Vector>("m_aimPunchAngle");
+        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle");
         aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 
