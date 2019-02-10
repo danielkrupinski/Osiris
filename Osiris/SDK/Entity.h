@@ -108,7 +108,7 @@ public:
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         static Trace trace;
-        interfaces.engineTrace->traceRay({ localPlayer->getEyeOrigin(), getBonePosition(bone) }, 0x46004003, { localPlayer }, trace);
+        interfaces.engineTrace->traceRay({ localPlayer->getEyeOrigin(), getBonePosition(bone) }, 0x46004009, { localPlayer }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
