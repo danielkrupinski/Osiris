@@ -45,7 +45,7 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
     return bestTarget;
 }
 
-void Aimbot::run(UserCmd* cmd)
+void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 

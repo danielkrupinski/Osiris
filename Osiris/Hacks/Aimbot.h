@@ -3,5 +3,5 @@
 #include "../SDK/UserCmd.h"
 
 namespace Aimbot {
-    void run(UserCmd*);
+    void run(UserCmd*) noexcept;
 }
