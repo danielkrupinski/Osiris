@@ -33,9 +33,10 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
-        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->getProperty<bool>("m_bGunGameImmunity") || (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(config.aimbot.weapons[weaponIndex].bone)))
+        auto bonePosition = entity->getBonePosition(getBoneId(weaponIndex));
+        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->getProperty<bool>("m_bGunGameImmunity") || (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(bonePosition)))
             continue;
-        auto angle = calculateRelativeAngle(localPlayerEyeOrigin, entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
+        auto angle = calculateRelativeAngle(localPlayerEyeOrigin, bonePosition, cmd->viewangles);
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
