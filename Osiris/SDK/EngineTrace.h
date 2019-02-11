@@ -19,7 +19,6 @@ struct TraceFilter {
     virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
     virtual int getTraceType() const { return 0; }
     const void* skip;
-    const char* ignore;
 };
 
 struct Trace {
