@@ -9,7 +9,7 @@ struct recvProxyData {
         long intValue;
         char* stringValue;
         void* data;
-        float vector[3];
+        Vector vector;
         int64_t  int64Value;
     };
 };
@@ -21,12 +21,12 @@ struct RecvProp {
     int type;
     int flags;
     int stringBufferSize;
-    int m_bInsideArray;
-    const void* m_pExtraData;
-    RecvProp* m_pArrayProp;
+    int insideArray;
+    const void* extraData;
+    RecvProp* arrayProp;
     void* arrayLengthProxy;
     recvProxy proxy;
-    void* dataTableProxyFn;
+    void* dataTableProxy;
     struct RecvTable* dataTable;
     int offset;
     int elementStride;
@@ -38,7 +38,7 @@ struct RecvTable {
     RecvProp* props;
     int propCount;
     void* decoder;
-    char* m_pNetTableName;
+    char* netTableName;
     bool isInitialized;
     bool isInMainList;
 };
