@@ -22,14 +22,15 @@ public:
             float recoilControlY{ 0.0f };
 
             template <class Archive>
-            void serialize(Archive& archive)
+            constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, silent, visibleOnly, fov, smooth, bone, recoilControlX, recoilControlY);
+                archive(enabled, silent, visibleOnly, fov, smooth,
+                    bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(weapons);
         }
@@ -42,7 +43,7 @@ public:
         int shotDelay{ 0 };
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(enabled, onKey, key, shotDelay);
         }
@@ -67,7 +68,7 @@ public:
         float chickensColor[3]{ 1.0f, 0.08f, 0.58f };
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(enabled, thickness, alpha, style, allies, alliesColor,
                 enemies, enemiesColor, weapons, weaponsColor, C4, C4Color,
@@ -101,14 +102,14 @@ public:
             float color[3]{ 1.0f, 1.0f, 1.0f };
 
             template <class Archive>
-            void serialize(Archive& archive)
+            constexpr void serialize(Archive& archive) noexcept
             {
                 archive(enabled, alpha, flat, wireframe, color);
             }
         } chams[6];
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(chams);
         }
@@ -132,7 +133,7 @@ public:
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(disablePostProcessing, inverseRagdollGravity, noVisualRecoil, noHands,
                 noSleeves, noSmoke, noWeapons, wireframeSmoke, thirdperson, thirdpersonKey,
@@ -148,7 +149,7 @@ public:
         bool radarHack{ false };
 
         template <class Archive>
-        void serialize(Archive& archive)
+        constexpr void serialize(Archive& archive) noexcept
         {
             archive(bunnyHop, animatedClanTag, fastDuck, autoPistol, radarHack);
         }
