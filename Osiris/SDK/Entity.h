@@ -90,7 +90,7 @@ public:
 
     constexpr bool isAlive() noexcept
     {
-        return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this);
+        return callVirtualFunction<bool(__thiscall*)(void*)>(this, 151)(this) && getProperty<int>("m_iHealth") > 0;
     }
 
     constexpr bool isInLocalTeam() noexcept
