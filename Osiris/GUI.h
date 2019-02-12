@@ -5,7 +5,7 @@ public:
     void render() noexcept;
     bool isOpen{ false };
 private:
-	void checkBoxAndColorPicker(const std::string_view, bool*, float*) const noexcept;
+	static void checkBoxAndColorPicker(const std::string_view, bool*, float*) noexcept;
     void hotkey(int&) const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;

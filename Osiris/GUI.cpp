@@ -22,7 +22,7 @@ void GUI::render() noexcept
     renderMiscWindow();
 }
 
-void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, float* color) const noexcept
+void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, float* color) noexcept
 {
     ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), enable);
     ImGui::SameLine(0.0f, 5.0f);
