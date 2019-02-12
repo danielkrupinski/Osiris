@@ -191,7 +191,17 @@ void GUI::renderChamsWindow() noexcept
         ImGui::SliderFloat("##3", &config.chams.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::Checkbox("Flat", &config.chams.chams[currentItem].flat);
         ImGui::Checkbox("Wireframe", &config.chams.chams[currentItem].wireframe);
-        checkBoxAndColorPicker("Color", &config.chams.chams[currentItem].enabled, config.chams.chams[currentItem].color);
+       // checkBoxAndColorPicker("Color", &config.chams.chams[currentItem].enabled, config.chams.chams[currentItem].color);
+
+        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.chams.chams[currentItem].color[0], config.chams.chams[currentItem].color[1], config.chams.chams[currentItem].color[2] }, ImGuiColorEditFlags_NoTooltip);
+        ImGui::SameLine(0.0f, 5.0f);
+        ImGui::Text("Color");
+        if (openPopup)
+            ImGui::OpenPopup("##4");
+        if (ImGui::BeginPopup("##4")) {
+            ImGui::ColorPicker3("##5", config.chams.chams[currentItem].color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+            ImGui::EndPopup();
+        }
        // checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
       //  checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
       //  checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
