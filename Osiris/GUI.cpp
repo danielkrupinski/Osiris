@@ -169,20 +169,34 @@ void GUI::renderChamsWindow() noexcept
     if (window.chams) {
         ImGui::SetNextWindowSize({ 330.0f, 190.0f });
         ImGui::Begin("Chams", &window.chams, windowFlags);
-        ImGui::Columns(2, nullptr, false);
-        ImGui::SetColumnOffset(1, 150.0f);
-        ImGui::Checkbox("Enabled", &config.chams.enabled);
+        static int currentCategory{ 0 };
+        ImGui::PushItemWidth(110.0f);
+        ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Weapons\0Hands");
+        static int currentItem{ 0 };
+
+        if (!currentCategory || currentCategory == 1) {
+            ImGui::SameLine();
+            static int currentType{ 0 };
+            ImGui::Combo("##2", &currentType, "Visible\0Occluded");
+            currentItem = currentCategory * 2 + currentType;
+        }
+        else {
+            currentItem = currentCategory + 2;
+        }
+
+        //ImGui::Columns(2, nullptr, false);
+        //ImGui::SetColumnOffset(1, 150.0f);
+        ImGui::Checkbox("Enabled", &config.chams.chams[currentItem].enabled);
         ImGui::PushItemWidth(120.0f);
-        ImGui::SliderFloat("##1", &config.chams.alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::Checkbox("Flat", &config.chams.flat);
-        ImGui::Checkbox("Wireframe", &config.chams.wireframe);
-        ImGui::NextColumn();
-        checkBoxAndColorPicker("Visible allies", &config.chams.visibleAllies, config.chams.visibleAlliesColor);
-        checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
-        checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
-        checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
-        checkBoxAndColorPicker("Weapons", &config.chams.weapons, config.chams.weaponsColor);
-        checkBoxAndColorPicker("Hands", &config.chams.hands, config.chams.handsColor);
+        ImGui::SliderFloat("##3", &config.chams.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::Checkbox("Flat", &config.chams.chams[currentItem].flat);
+        ImGui::Checkbox("Wireframe", &config.chams.chams[currentItem].wireframe);
+        checkBoxAndColorPicker("Color", &config.chams.chams[currentItem].enabled, config.chams.chams[currentItem].color);
+       // checkBoxAndColorPicker("Occluded allies", &config.chams.occludedAllies, config.chams.occludedAlliesColor);
+      //  checkBoxAndColorPicker("Visible enemies", &config.chams.visibleEnemies, config.chams.visibleEnemiesColor);
+      //  checkBoxAndColorPicker("Occluded enemies", &config.chams.occludedEnemies, config.chams.occludedEnemiesColor);
+      //  checkBoxAndColorPicker("Weapons", &config.chams.weapons, config.chams.weaponsColor);
+      //  checkBoxAndColorPicker("Hands", &config.chams.hands, config.chams.handsColor);
         ImGui::End();
     }
 }
