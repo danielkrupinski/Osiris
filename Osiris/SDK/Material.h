@@ -5,10 +5,10 @@
 enum class MaterialVar {
     NO_DRAW = 1 << 2,
     IGNOREZ = 1 << 15,
-    WIREFRAME = 1 << 28,
+    WIREFRAME = 1 << 28
 };
 
-class Material {
+class Material final {
 public:
     constexpr auto getName() noexcept
     {
