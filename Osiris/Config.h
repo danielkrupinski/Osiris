@@ -77,23 +77,6 @@ public:
     } glow;
 
     struct {
-      //  bool enabled{ false };
-      //  float alpha{ 1.0f };
-      //  bool flat{ false };
-      //  bool wireframe{ false };
-      //  bool visibleAllies{ false };
-      //  float visibleAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
-      //  bool occludedAllies{ false };
-      //  float occludedAlliesColor[3]{ 0.0f, 1.0f, 0.0f };
-      //  bool visibleEnemies{ false };
-      //  float visibleEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
-      //  bool occludedEnemies{ false };
-      //  float occludedEnemiesColor[3]{ 1.0f, 0.0f, 0.0f };
-      //  bool weapons{ false };
-      //  float weaponsColor[3]{ 0.12f, 0.33f, 0.62f };
-      //  bool hands{ false };
-      //  float handsColor[3]{ 0.05f, 0.61f, 0.47f };
-
         struct {
             bool enabled{ false };
             float alpha{ 1.0f };

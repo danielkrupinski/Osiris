@@ -21,18 +21,16 @@ Chams::Chams() noexcept
 
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    //if (config.chams.enabled) {
-        const std::string_view modelName{ info.model->name };
-        if (modelName.find("models/player") != std::string_view::npos)
-            renderPlayers(ctx, state, info, customBoneToWorld);
-        else if (modelName.find("arms") != std::string_view::npos)
-            renderHands();
-        else if (modelName.find("models/weapons/v_") != std::string_view::npos
-            && modelName.find("tablet") == std::string_view::npos
-            && modelName.find("parachute") == std::string_view::npos
-            && modelName.find("fists") == std::string_view::npos)
-            renderWeapons(info.entityIndex);
-   // }
+    const std::string_view modelName{ info.model->name };
+    if (modelName.find("models/player") != std::string_view::npos)
+        renderPlayers(ctx, state, info, customBoneToWorld);
+    else if (modelName.find("arms") != std::string_view::npos)
+        renderHands();
+    else if (modelName.find("models/weapons/v_") != std::string_view::npos
+        && modelName.find("tablet") == std::string_view::npos
+        && modelName.find("parachute") == std::string_view::npos
+        && modelName.find("fists") == std::string_view::npos)
+        renderWeapons(info.entityIndex);
 }
 
 void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
@@ -40,8 +38,6 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
-       // auto material = config.chams.chams[3].flat ? flat : normal;
-
         if (entity->isEnemy()) {
             if (config.chams.chams[3].enabled) {
                 auto material = config.chams.chams[3].flat ? flat : normal;
