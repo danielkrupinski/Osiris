@@ -37,7 +37,7 @@ void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, floa
     }
 }
 
-void GUI::hotkey(int& key) const noexcept
+void GUI::hotkey(int& key) noexcept
 {
     ImGui::Text((std::ostringstream{ } << "[ " << (key ? std::to_string(key) : "key") << " ]").str().c_str());
     if (ImGui::IsItemHovered()) {
