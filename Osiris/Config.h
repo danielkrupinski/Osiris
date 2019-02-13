@@ -79,15 +79,15 @@ public:
     struct {
         struct {
             bool enabled{ false };
-            float alpha{ 1.0f };
             bool flat{ false };
             bool wireframe{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
+            float alpha{ 1.0f };
 
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, alpha, flat, wireframe, color);
+                archive(enabled, flat, wireframe, color, alpha);
             }
         } chams[6];
 
