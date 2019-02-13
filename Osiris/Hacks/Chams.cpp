@@ -19,7 +19,7 @@ Chams::Chams() noexcept
     flat->incrementReferenceCount();
 }
 
-void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     const std::string_view modelName{ info.model->name };
     if (modelName.find("models/player") != std::string_view::npos)
@@ -33,7 +33,7 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         renderWeapons();
 }
 
-void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
@@ -83,7 +83,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     }
 }
 
-void Chams::renderWeapons() noexcept
+void Chams::renderWeapons() const noexcept
 {
     if (config.chams.chams[4].enabled &&
         !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped")) {
@@ -96,7 +96,7 @@ void Chams::renderWeapons() noexcept
     }
 }
 
-void Chams::renderHands() noexcept
+void Chams::renderHands() const noexcept
 {
     if (config.chams.chams[5].enabled) {
         auto material = config.chams.chams[5].flat ? flat : normal;
