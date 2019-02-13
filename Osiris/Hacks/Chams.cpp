@@ -30,7 +30,7 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         && modelName.find("tablet") == std::string_view::npos
         && modelName.find("parachute") == std::string_view::npos
         && modelName.find("fists") == std::string_view::npos)
-        renderWeapons(info.entityIndex);
+        renderWeapons();
 }
 
 void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
@@ -83,7 +83,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     }
 }
 
-void Chams::renderWeapons(int entityIndex) noexcept
+void Chams::renderWeapons() noexcept
 {
     if (config.chams.chams[4].enabled &&
         !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped")) {
