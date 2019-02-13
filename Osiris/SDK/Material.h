@@ -10,28 +10,28 @@ enum class MaterialVar {
 
 class Material {
 public:
-    auto getName() noexcept
+    constexpr auto getName() noexcept
     {
         return std::string_view{ callVirtualFunction<const char*(__thiscall*)(void*)>(this, 0)(this) };
     }
 
-    void incrementReferenceCount()
+    constexpr void incrementReferenceCount() noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 12)(this);
     }
 
-    void alphaModulate(float alpha)
+    constexpr void alphaModulate(float alpha) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, float)>(this, 27)(this, alpha);
     }
 
-    void colorModulate(float color[3])
+    constexpr void colorModulate(float color[3]) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, float, float, float)>(this, 28)(this, color[0], color[1], color[2]);
     }
 
-    void setMaterialVarFlag(MaterialVar flag, bool isOn)
+    constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, MaterialVar, bool)>(this, 29)(this, flag, isOn);
+        callVirtualFunction<void(__thiscall*)(void*, MaterialVar, bool)>(this, 29)(this, flag, on);
     }
 };
