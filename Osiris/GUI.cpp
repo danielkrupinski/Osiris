@@ -167,7 +167,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize({ 330.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 190.0f });
         ImGui::Begin("Chams", &window.chams, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -185,8 +185,6 @@ void GUI::renderChamsWindow() noexcept
         }
 
         ImGui::Checkbox("Enabled", &config.chams.chams[currentItem].enabled);
-        ImGui::PushItemWidth(120.0f);
-        ImGui::SliderFloat("##3", &config.chams.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::Checkbox("Flat", &config.chams.chams[currentItem].flat);
         ImGui::Checkbox("Wireframe", &config.chams.chams[currentItem].wireframe);
 
@@ -194,11 +192,13 @@ void GUI::renderChamsWindow() noexcept
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
         if (openPopup)
-            ImGui::OpenPopup("##4");
-        if (ImGui::BeginPopup("##4")) {
-            ImGui::ColorPicker3("##5", config.chams.chams[currentItem].color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+            ImGui::OpenPopup("##3");
+        if (ImGui::BeginPopup("##3")) {
+            ImGui::ColorPicker3("##4", config.chams.chams[currentItem].color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
             ImGui::EndPopup();
         }
+        ImGui::PushItemWidth(220.0f);
+        ImGui::SliderFloat("##5", &config.chams.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::End();
     }
 }
