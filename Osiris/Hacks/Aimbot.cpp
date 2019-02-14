@@ -29,7 +29,7 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
     auto bestFov = config.aimbot.weapons[weaponIndex].fov;
     auto bestTarget = 0;
     auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    auto localPlayerEyeOrigin = localPlayer->getEyeOrigin();
+    auto localPlayerEyeOrigin = localPlayer->getEyePosition();
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
@@ -68,7 +68,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (config.aimbot.weapons[weaponIndex].enabled && cmd->buttons & 1) {
         if (auto target = findTarget(cmd, weaponIndex)) {
             auto entity = interfaces.entityList->getEntity(target);
-            auto angle = calculateRelativeAngle(localPlayer->getEyeOrigin(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
+            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
             angle /= config.aimbot.weapons[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)

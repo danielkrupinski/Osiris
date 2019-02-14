@@ -48,7 +48,7 @@ public:
             return Vector{ };
     }
 
-    Vector getEyeOrigin() noexcept
+    Vector getEyePosition() noexcept
     {
         Vector vec;
         callVirtualFunction<void(__thiscall*)(void*, Vector&)>(this, 279)(this, vec);
@@ -59,7 +59,7 @@ public:
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         static Trace trace;
-        interfaces.engineTrace->traceRay({ localPlayer->getEyeOrigin(), position }, 0x46004009, { localPlayer }, trace);
+        interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), position }, 0x46004009, { localPlayer }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
