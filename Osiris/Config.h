@@ -89,7 +89,7 @@ public:
             {
                 archive(enabled, flat, wireframe, color, alpha);
             }
-        } chams[6];
+        } chams[7];
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
