@@ -144,7 +144,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        ImGui::SetNextWindowSize({ 320.0f, 170.0f });
+        ImGui::SetNextWindowSize({ 320.0f, 185.0f });
         ImGui::Begin("Glow", &window.glow, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);
@@ -154,12 +154,13 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat("##2", &config.glow.alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::SliderInt("##3", &config.glow.style, 0, 3, "Style: %d");
         checkBoxAndColorPicker("Allies", &config.glow.allies, config.glow.alliesColor);
+        checkBoxAndColorPicker("Enemies", &config.glow.enemies, config.glow.enemiesColor);
         ImGui::NextColumn();
+        checkBoxAndColorPicker("Local player", &config.glow.localPlayer, config.glow.localPlayerColor);
         checkBoxAndColorPicker("Weapons", &config.glow.weapons, config.glow.weaponsColor);
         checkBoxAndColorPicker("C4", &config.glow.C4, config.glow.C4Color);
         checkBoxAndColorPicker("Planted C4", &config.glow.plantedC4, config.glow.plantedC4Color);
         checkBoxAndColorPicker("Chickens", &config.glow.chickens, config.glow.chickensColor);
-        checkBoxAndColorPicker("Enemies", &config.glow.enemies, config.glow.enemiesColor);
         ImGui::End();
     }
 }
