@@ -47,8 +47,9 @@ void Visuals::thirdperson() noexcept
         isInThirdperson = !isInThirdperson;
         lastTime = memory.globalVars->realtime;
     }
-    if (memory.input->isCameraInThirdPerson =
-        (config.visuals.thirdperson && isInThirdperson
-            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()))
-        memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+
+    if (config.visuals.thirdperson)
+        if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
+            memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
 }

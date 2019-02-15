@@ -163,7 +163,7 @@ static bool __stdcall hookedSvCheatsGetBool()
 {
     static auto _this = interfaces.cvar->findVar("sv_cheats");
 
-    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink)
+    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
         return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
