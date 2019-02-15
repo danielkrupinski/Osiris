@@ -29,7 +29,13 @@ void Glow::render() noexcept
 
             switch (glowobject.entity->getClientClass()->classId) {
             case ClassId::CSPlayer:
-                if (glowobject.entity->isEnemy()) {
+                if (glowobject.entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+                    if (glow.localPlayer) {
+                        glowobject.glowColor = glow.localPlayerColor;
+                        glowobject.renderWhenOccluded = true;
+                    }
+                }
+                else if (glowobject.entity->isEnemy()) {
                     if (glow.enemies) {
                         glowobject.glowColor = glow.enemiesColor;
                         glowobject.renderWhenOccluded = true;
