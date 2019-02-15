@@ -59,7 +59,7 @@ public:
         bool enemies{ false };
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
         bool localPlayer{ false };
-        float localPlayerColor[3]{ 1.0f, 1.0f, 1.0f };
+        float localPlayerColor[3]{ 0.15f, 0.76f, 0.8f };
         bool weapons{ false };
         float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
         bool C4{ false };
