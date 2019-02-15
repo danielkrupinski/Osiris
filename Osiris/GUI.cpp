@@ -171,7 +171,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Begin("Chams", &window.chams, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
-        ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Weapons\0Hands");
+        ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Local player\0Weapons\0Hands");
         static int currentItem{ 0 };
 
         if (!currentCategory || currentCategory == 1) {
