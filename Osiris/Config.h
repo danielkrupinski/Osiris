@@ -58,6 +58,8 @@ public:
         float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
         bool enemies{ false };
         float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
+        bool localPlayer{ false };
+        float localPlayerColor[3]{ 1.0f, 1.0f, 1.0f };
         bool weapons{ false };
         float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
         bool C4{ false };
@@ -71,7 +73,8 @@ public:
         constexpr void serialize(Archive& archive) noexcept
         {
             archive(enabled, thickness, alpha, style, allies, alliesColor,
-                enemies, enemiesColor, weapons, weaponsColor, C4, C4Color,
+                enemies, enemiesColor, localPlayer, localPlayerColor,
+                weapons, weaponsColor, C4, C4Color,
                 plantedC4, plantedC4Color, chickens, chickensColor);
         }
     } glow;
