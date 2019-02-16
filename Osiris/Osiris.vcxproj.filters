@@ -455,6 +455,9 @@
     <ClInclude Include="SDK\EngineTrace.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ModelInfo.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html">
