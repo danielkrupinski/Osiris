@@ -14,6 +14,7 @@
 #include "SDK/EngineTrace.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
+#include "SDK/ModelInfo.h"
 #include "SDK/ModelRender.h"
 #include "SDK/RenderView.h"
 
@@ -26,6 +27,7 @@ public:
     EntityList* entityList;
     Client* client;
     Cvar* cvar;
+    ModelInfo* modelInfo;
     ModelRender* modelRender;
     MaterialSystem* materialSystem;
     RenderView* renderView;
