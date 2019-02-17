@@ -143,9 +143,6 @@
     <ClInclude Include="SDK\UtlVector.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\UtlMemory.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\GlowObjectManager.h">
       <Filter>SDK</Filter>
     </ClInclude>

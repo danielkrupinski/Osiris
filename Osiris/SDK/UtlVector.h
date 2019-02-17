@@ -1,7 +1,5 @@
 #pragma once
 
-#include "UtlMemory.h"
-
 template <typename T>
 class UtlVector {
 public:
