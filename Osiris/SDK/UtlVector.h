@@ -2,16 +2,17 @@
 
 #include "UtlMemory.h"
 
-template <typename T, typename A = UtlMemory<T>>
+template <typename T>
 class UtlVector {
 public:
-    typedef A Allocator;
-
-    T& operator[](int i) {
+    T& operator[](int i)
+    {
         return memory[i];
     };
 
-    Allocator memory;
+    T* memory;
+    int allocationCount;
+    int growSize;
     int size;
     T* elements;
 };
