@@ -11,7 +11,7 @@ Interfaces::Interfaces() noexcept
         entityList = find<EntityList>("client_panorama", "VClientEntityList");
         client = find<Client>("client_panorama", "VClient");
         cvar = find<Cvar>("vstdlib", "VEngineCvar");
-        modelInfo = find<ModelInfo>("engine.dll", "VModelInfoClient");
+        modelInfo = find<ModelInfo>("engine", "VModelInfoClient");
         modelRender = find<ModelRender>("engine", "VEngineModel");
         materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem");
         renderView = find<RenderView>("engine", "VEngineRenderView");
