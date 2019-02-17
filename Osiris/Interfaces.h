@@ -20,7 +20,7 @@
 
 class Interfaces final {
 public:
-    explicit Interfaces() noexcept;
+    Interfaces() noexcept;
 
     Engine* engine;
     EngineTrace* engineTrace;
