@@ -36,13 +36,12 @@ private:
     template <typename T>
     auto find(const std::string& module, const std::string& name) const
     {
-        const auto createInterface = reinterpret_cast<std::add_pointer_t<T*(const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), "CreateInterface"));
+        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), "CreateInterface"));
 
-        for (int i = 1; i < 100; i++)
-            if (T* foundInterface = createInterface((std::ostringstream{ } << name << std::setfill('0') << std::setw(3) << i).str().c_str(), nullptr))
-                return foundInterface;
-
-        throw std::runtime_error("Could not find " + name + " in " + module + "!");
+        if (auto foundInterface = createInterface(name.c_str(), nullptr))
+            return foundInterface;
+        else
+            throw std::runtime_error("Could not find " + name + " in " + module + "!");
     }
 };
 
