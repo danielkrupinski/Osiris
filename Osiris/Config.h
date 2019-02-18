@@ -129,6 +129,10 @@ public:
     } visuals;
 
     struct {
+        int knife{ 0 };
+    } knifeChanger;
+
+    struct {
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
