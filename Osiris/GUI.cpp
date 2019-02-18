@@ -19,6 +19,7 @@ void GUI::render() noexcept
     renderGlowWindow();
     renderChamsWindow();
     renderVisualsWindow();
+    renderKnifeChangerWindow();
     renderMiscWindow();
 }
 
@@ -56,6 +57,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
+        ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
 
         if (ImGui::BeginMenu("Config")) {
