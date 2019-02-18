@@ -13,6 +13,7 @@ private:
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
     void renderVisualsWindow() noexcept;
+    void renderKnifeChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
     struct {
         bool aimbot{ false };
@@ -20,6 +21,7 @@ private:
         bool glow{ false };
         bool chams{ false };
         bool visuals{ false };
+        bool knifeChanger{ false };
         bool misc{ false };
     } window;
 };

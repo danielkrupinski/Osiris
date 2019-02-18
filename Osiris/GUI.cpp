@@ -235,6 +235,13 @@ void GUI::renderVisualsWindow() noexcept
     }
 }
 
+void GUI::renderKnifeChangerWindow() noexcept
+{
+    if (window.knifeChanger) {
+
+    }
+}
+
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
