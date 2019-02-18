@@ -5,6 +5,8 @@ enum class ClassId {
     Chicken = 34,
     CSPlayer = 38,
     Deagle = 44,
+    Knife = 105,
+    KnifeGG = 106,
     PlantedC4 = 126,
     Elite = 235,
     FiveSeven = 237,
