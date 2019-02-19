@@ -129,6 +129,7 @@ public:
     } visuals;
 
     struct {
+        bool enabled{ false };
         int knife{ 0 };
     } knifeChanger;
 
