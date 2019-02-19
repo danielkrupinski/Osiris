@@ -240,8 +240,9 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderKnifeChangerWindow() noexcept
 {
     if (window.knifeChanger) {
-        ImGui::SetNextWindowSize({ 300.0f, 300.0f });
+        ImGui::SetNextWindowSize({ 180.0f, 100.0f });
         ImGui::Begin("Knife changer", &window.knifeChanger, windowFlags);
+        ImGui::PushItemWidth(130.0f);
         ImGui::Checkbox("Enabled", &config.knifeChanger.enabled);
         ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden");
         ImGui::End();
