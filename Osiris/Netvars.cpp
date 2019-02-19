@@ -15,43 +15,59 @@ static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 
 static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 {
-    if (config.knifeChanger.knife && interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        static int bayonet{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_bayonet.mdl") };
+        static int bowie{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_survival_bowie.mdl") };
+        static int butterfly{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_butterfly.mdl") };
+        static int falchion{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_falchion_advanced.mdl") };
+        static int flip{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_flip.mdl") };
+        static int gut{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gut.mdl") };
+        static int huntsman{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_tactical.mdl") };
+        static int karambit{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_karam.mdl") };
+        static int m9bayonet{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_m9_bay.mdl") };
+        static int daggers{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_push.mdl") };
+        static int navaja{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl") };
+        static int stiletto{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_stiletto.mdl") };
+        static int talon{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_widowmaker.mdl") };
+        static int ursus{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ursus.mdl") };
+        static int golden{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gg.mdl") };
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
             if (activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
                 data->intValue = [](int id) {
                 switch (id) {
                 case 1:
-                    return 480;
+                    return bayonet;
                 case 2:
-                    return 501;
+                    return bowie;
                 case 3:
-                    return 504;
+                    return butterfly;
                 case 4:
-                    return 498;
+                    return falchion;
                 case 5:
-                    return 483;
+                    return flip;
                 case 6:
-                    return 486;
+                    return gut;
                 case 7:
-                    return 495;
+                    return huntsman;
                 case 8:
-                    return 489;
+                    return karambit;
                 case 9:
-                    return 492;
+                    return m9bayonet;
                 case 10:
-                    return 507;
+                    return daggers;
                 case 11:
-                    return 514;
+                    return navaja;
                 case 12:
-                    return 517;
+                    return stiletto;
                 case 13:
-                    return 520;
+                    return talon;
                 case 14:
-                    return 511;
+                    return ursus;
                 case 15:
-                    return 390;
+                    return golden;
                 }}(config.knifeChanger.knife);
     }
     proxies["m_nModelIndex"](data, arg2, arg3);
