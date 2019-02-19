@@ -1,8 +1,15 @@
+#include <random>
 #include "Config.h"
 #include "Interfaces.h"
 #include "Netvars.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Entity.h"
+
+static int random(int min, int max) noexcept
+{
+    static std::mt19937 gen{ std::random_device{ }() };
+    return std::uniform_int_distribution{ min, max }(gen);
+}
 
 static std::unordered_map<std::string_view, recvProxy> proxies;
 
@@ -73,6 +80,88 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
     proxies["m_nModelIndex"](data, arg2, arg3);
 }
 
+static void viewModelSequenceHook(recvProxyData* data, void* arg2, void* arg3) noexcept
+{
+    if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        static const int bowie{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_survival_bowie.mdl") };
+        static const int butterfly{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_butterfly.mdl") };
+        static const int falchion{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_falchion_advanced.mdl") };
+        static const int daggers{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_push.mdl") };
+        static const int stiletto{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_stiletto.mdl") };
+        static const int talon{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_widowmaker.mdl") };
+        static const int ursus{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ursus.mdl") };
+
+        if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
+            if (activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG) {
+                auto& sequence = data->intValue;
+                [&sequence](int id) {
+                    switch (id) {
+                    case 2:
+                        if (sequence > 1)
+                            sequence--;
+                        break;
+                    case 3:
+                    case 14:
+                        if (!sequence)
+                            sequence = random(0, 1);
+                        else if (sequence == 12)
+                            sequence = random(13, 15);
+                        else
+                            sequence++;
+                        break;
+                    case 4:
+                        if (sequence == 9)
+                            sequence = random(8, 9);
+                        else if (sequence == 12)
+                            sequence = random(12, 13);
+                        else if (sequence > 1)
+                            sequence--;
+                        break;
+                    case 10:
+                        switch (sequence) {
+                        case 0:
+                        case 1:
+                            break;
+                        case 2:
+                            sequence = 1;
+                            break;
+                        case 3:
+                        case 4:
+                            sequence = random(2, 6);
+                            break;
+                        case 9:
+                            sequence = random(11, 12);
+                            break;
+                        case 10:
+                        case 11:
+                        case 12:
+                            sequence += 3;
+                            break;
+                        default:
+                            sequence += 2;
+                        }
+                        break;
+                    case 12:
+                        if (sequence == 12)
+                            sequence = random(12, 13);
+                        break;
+                    case 13:
+                        if (sequence == 12)
+                            sequence = random(14, 15);
+                        break;
+                    case 15:
+                        if (sequence == 12)
+                            sequence = 1;
+                        break;
+                    }
+                }(config.knifeChanger.knife);
+            }
+    }
+    proxies["m_nSequence"](data, arg2, arg3);
+}
+
 static void viewPunchHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 {
     if (!config.visuals.noVisualRecoil)
@@ -105,6 +194,8 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
                 hookProperty(prop, viewPunchHook);
             else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
                 hookProperty(prop, modelIndexHook);
+            else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
+                hookProperty(prop, viewModelSequenceHook);
         }
     }
 }
