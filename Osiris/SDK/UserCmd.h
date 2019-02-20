@@ -4,6 +4,12 @@
 
 class UserCmd final {
 public:
+    enum {
+        IN_ATTACK = 1 << 0,
+        IN_JUMP = 1 << 1,
+        IN_ATTACK2 = 1 << 11,
+        IN_BULLRUSH = 1 << 22
+    };
     int pad;
     int     command_number;
     int     tick_count;

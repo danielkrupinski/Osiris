@@ -6,15 +6,13 @@
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
-    constexpr int ON_GROUND{ 1 };
-    constexpr int IN_JUMP{ 2 };
     if (config.misc.bunnyHop) {
-        if (cmd->buttons & IN_JUMP) {
+        if (cmd->buttons & UserCmd::IN_JUMP) {
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            if (localPlayer->getProperty<int>("m_fFlags") & ON_GROUND)
-                cmd->buttons |= IN_JUMP;
+            if (localPlayer->getProperty<int>("m_fFlags") & 1)
+                cmd->buttons |= UserCmd::IN_JUMP;
             else
-                cmd->buttons &= ~IN_JUMP;
+                cmd->buttons &= ~UserCmd::IN_JUMP;
         }
     }
 }
@@ -61,14 +59,14 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };
             if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver && wasInAttackLastTick) {
-                if (cmd->buttons & 1 && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime)
-                    cmd->buttons &= ~1;
-                else if (cmd->buttons & 1 << 11 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->realtime)
-                    cmd->buttons &= ~(1 << 11);
+                if (cmd->buttons & UserCmd::IN_ATTACK && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime)
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+                else if (cmd->buttons & UserCmd::IN_ATTACK2 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->realtime)
+                    cmd->buttons &= ~UserCmd::IN_ATTACK2;
             }
-            else if (cmd->buttons & 1 && wasInAttackLastTick)
-                cmd->buttons &= ~1;
-            wasInAttackLastTick = cmd->buttons & (1 | 1 << 11);
+            else if (cmd->buttons & UserCmd::IN_ATTACK && wasInAttackLastTick)
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
+            wasInAttackLastTick = cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }
     }
 }

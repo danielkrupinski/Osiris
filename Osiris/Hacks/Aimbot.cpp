@@ -65,7 +65,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & 1 || config.aimbot.weapons[weaponIndex].autoShot)) {
+    if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
         if (auto target = findTarget(cmd, weaponIndex)) {
             auto entity = interfaces.entityList->getEntity(target);
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
@@ -73,7 +73,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             cmd->viewangles += angle;
             if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
                 interfaces.engine->setViewAngles(cmd->viewangles);
-            cmd->buttons |= 1;
+            cmd->buttons |= UserCmd::IN_ATTACK;
         }
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");

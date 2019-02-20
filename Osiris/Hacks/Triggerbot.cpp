@@ -25,8 +25,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             if (inCrosshair > 0 && inCrosshair <= 64) {
                 auto target = interfaces.entityList->getEntity(inCrosshair);
                 if (target->isEnemy() && !target->getProperty<bool>("m_bGunGameImmunity")) {
-                    constexpr int IN_ATTACK{ 1 };
-                    cmd->buttons |= IN_ATTACK;
+                    cmd->buttons |= UserCmd::IN_ATTACK;
                 }
             }
             lastTime = now;
