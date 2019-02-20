@@ -56,7 +56,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
-    if (!activeWeapon)
+    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1"))
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex"));
