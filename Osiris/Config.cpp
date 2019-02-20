@@ -5,7 +5,7 @@
 
 #include "Config.h"
 
-Config::Config(const std::string_view name)
+Config::Config(const std::string_view name) noexcept
 {
     PWSTR pathToDocuments;
     if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
@@ -15,7 +15,7 @@ Config::Config(const std::string_view name)
     }
 }
 
-void Config::load()
+void Config::load() noexcept
 {
     std::ifstream in{ path };
 
@@ -27,7 +27,7 @@ void Config::load()
     in.close();
 }
 
-void Config::save() const
+void Config::save() const noexcept
 {
     std::ofstream out{ path };
 
@@ -39,7 +39,7 @@ void Config::save() const
     out.close();
 }
 
-void Config::reset()
+void Config::reset() noexcept
 {
     aimbot = { };
     triggerbot = { };

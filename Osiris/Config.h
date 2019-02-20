@@ -1,14 +1,14 @@
 #pragma once
 
 #include <filesystem>
-#include <string>
+#include <string_view>
 
 class Config final {
 public:
-    explicit Config(const std::string_view);
-    void load();
-    void save() const;
-    void reset();
+    explicit Config(const std::string_view) noexcept;
+    void load() noexcept;
+    void save() const noexcept;
+    void reset() noexcept;
 
     struct {
         struct {
