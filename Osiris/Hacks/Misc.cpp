@@ -93,3 +93,8 @@ void Misc::animateClanTag(bool update, const std::string_view tag) noexcept
         lastTime = memory.globalVars->realtime;
     }
 }
+
+void Misc::spectatorsList() noexcept
+{
+
+}
