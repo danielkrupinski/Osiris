@@ -4,6 +4,7 @@
 #include "Aimbot.h"
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
@@ -67,13 +68,26 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
         if (auto target = findTarget(cmd, weaponIndex)) {
-            auto entity = interfaces.entityList->getEntity(target);
-            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
-            angle /= config.aimbot.weapons[weaponIndex].smooth;
-            cmd->viewangles += angle;
-            if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
-                interfaces.engine->setViewAngles(cmd->viewangles);
-            cmd->buttons |= UserCmd::IN_ATTACK;
+            if (config.aimbot.weapons[weaponIndex].autoShot) {
+                cmd->buttons |= UserCmd::IN_ATTACK;
+                static bool wasInAttackLastTick{ false };
+                if (wasInAttackLastTick) {
+                    if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
+                        && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime
+                        || activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver)
+                        cmd->buttons &= ~UserCmd::IN_ATTACK;
+                }
+                wasInAttackLastTick = cmd->buttons & UserCmd::IN_ATTACK;
+            }
+
+            if (cmd->buttons & UserCmd::IN_ATTACK) {
+                auto entity = interfaces.entityList->getEntity(target);
+                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
+                angle /= config.aimbot.weapons[weaponIndex].smooth;
+                cmd->viewangles += angle;
+                if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
+                    interfaces.engine->setViewAngles(cmd->viewangles);
+            }
         }
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
