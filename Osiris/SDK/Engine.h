@@ -14,7 +14,7 @@ struct PlayerInfo {
     char name[128];
     int userId;
     char steamIdString[20];
-    char pad[16];
+    char pad1[16];
     unsigned long steamId;
     char friendsName[128];
     bool fakeplayer;
