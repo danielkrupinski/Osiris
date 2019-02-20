@@ -25,6 +25,11 @@ struct PlayerInfo {
 
 class Engine {
 public:
+    constexpr auto getPlayerInfo(int entityIndex, const PlayerInfo& playerInfo) noexcept
+    {
+        return callVirtualFunction<bool(__thiscall*)(void*, int, const PlayerInfo&)>(this, 8)(this, entityIndex, playerInfo);
+    }
+
     constexpr auto getLocalPlayer() noexcept
     {
         return callVirtualFunction<int(__thiscall*)(void*)>(this, 12)(this);
