@@ -4,6 +4,25 @@
 #include "Utils.h"
 #include "Vector.h"
 
+struct PlayerInfo {
+    unsigned long pad;
+    union {
+        unsigned long steamID64;
+        unsigned int xuidLow;
+        unsigned int xuidHigh;
+    };
+    char name[128];
+    int userId;
+    char steamIdString[20];
+    char pad[16];
+    unsigned long steamId;
+    char friendsName[128];
+    bool fakeplayer;
+    bool ishltv;
+    unsigned int customfiles[4];
+    unsigned char filesdownloaded;
+};
+
 class Engine {
 public:
     constexpr auto getLocalPlayer() noexcept
