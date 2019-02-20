@@ -25,7 +25,7 @@ public:
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, silent, visibleOnly, fov, smooth,
+                archive(enabled, silent, visibleOnly, autoShot, fov, smooth,
                     bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
@@ -131,6 +131,12 @@ public:
     struct {
         bool enabled{ false };
         int knife{ 0 };
+
+        template <class Archive>
+        constexpr void serialize(Archive& archive) noexcept
+        {
+            archive(enabled, knife);
+        }
     } knifeChanger;
 
     struct {

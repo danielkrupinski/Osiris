@@ -23,7 +23,7 @@ void Config::load()
         return;
 
     cereal::BinaryInputArchive inputArchive{ in };
-    inputArchive(aimbot, triggerbot, glow, chams, visuals, misc);
+    inputArchive(aimbot, triggerbot, glow, chams, visuals, knifeChanger, misc);
     in.close();
 }
 
@@ -35,7 +35,7 @@ void Config::save() const
         return;
 
     cereal::BinaryOutputArchive outputArchive{ out };
-    outputArchive(aimbot, triggerbot, glow, chams, visuals, misc);
+    outputArchive(aimbot, triggerbot, glow, chams, visuals, knifeChanger, misc);
     out.close();
 }
 
@@ -46,5 +46,6 @@ void Config::reset()
     glow = { };
     chams = { };
     visuals = { };
+    knifeChanger = { };
     misc = { };
 }
