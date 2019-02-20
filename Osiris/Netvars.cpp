@@ -45,6 +45,7 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
             if (activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
                 data->intValue = [=](int id) {
                 switch (id) {
+                default:
                 case 1:
                     return bayonet;
                 case 2:
