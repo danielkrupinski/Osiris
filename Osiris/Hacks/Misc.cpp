@@ -96,5 +96,21 @@ void Misc::animateClanTag(bool update, const std::string_view tag) noexcept
 
 void Misc::spectatorsList() noexcept
 {
+    if (config.misc.spectatorsList) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isAlive())
+                continue;
 
+            PlayerInfo playerInfo;
+
+            if (interfaces.engine->getPlayerInfo(i, playerInfo)) {
+                auto target = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hObserverTarget"));
+
+                if (target == localPlayer)
+                    ; // TODO: Draw player name
+            }
+        }
+    }
 }
