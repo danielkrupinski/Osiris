@@ -18,6 +18,7 @@
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
 #include "SDK/RenderView.h"
+#include "SDK/Surface.h"
 
 class Interfaces final {
 public:
@@ -34,6 +35,7 @@ public:
     ModelRender* modelRender;
     Panel* panel;
     RenderView* renderView;
+    Surface* surface;
 private:
     template <typename T>
     static auto find(const std::string& module, const std::string& name)

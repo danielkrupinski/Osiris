@@ -17,6 +17,7 @@ Interfaces::Interfaces() noexcept
         modelRender = find<ModelRender>("engine", "VEngineModel016");
         panel = find<Panel>("vgui2", "VGUI_Panel009");
         renderView = find<RenderView>("engine", "VEngineRenderView014");
+        surface = find<Surface>("vguimatsurface", "VGUI_Surface031");
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
