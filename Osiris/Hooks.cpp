@@ -169,6 +169,11 @@ static bool __stdcall hookedSvCheatsGetBool()
         return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
 }
 
+static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
+{
+    hooks.panel.getOriginal<void(__thiscall*)(Panel*, unsigned int, bool, bool)>(41)(interfaces.panel, panel, forceRepaint, allowForce);
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
@@ -181,6 +186,8 @@ Hooks::Hooks()
     clientMode.hookAt(35, hookedGetViewModelFov);
 
     modelRender.hookAt(21, hookedDrawModelExecute);
+
+    panel.hookAt(41, hookedPaintTraverse);
 
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 }
