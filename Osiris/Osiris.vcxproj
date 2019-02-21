@@ -91,6 +91,7 @@
     <ClInclude Include="SDK\Panel.h" />
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\RenderView.h" />
+    <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\Vector.h" />
