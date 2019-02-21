@@ -9,29 +9,31 @@
 
 #include "SDK/Client.h"
 #include "SDK/Cvar.h"
-#include "SDK/EntityList.h"
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
+#include "SDK/EntityList.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/ModelRender.h"
+#include "SDK/Panel.h"
 #include "SDK/RenderView.h"
 
 class Interfaces final {
 public:
     Interfaces() noexcept;
 
+    Client* client;
+    Cvar* cvar;
     Engine* engine;
     EngineTrace* engineTrace;
     EntityList* entityList;
-    Client* client;
-    Cvar* cvar;
+    InputSystem* inputSystem;
+    MaterialSystem* materialSystem;
     ModelInfo* modelInfo;
     ModelRender* modelRender;
-    MaterialSystem* materialSystem;
+    Panel* panel;
     RenderView* renderView;
-    InputSystem* inputSystem;
 private:
     template <typename T>
     static auto find(const std::string& module, const std::string& name)

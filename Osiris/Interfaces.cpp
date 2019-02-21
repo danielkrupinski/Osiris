@@ -6,16 +6,17 @@
 Interfaces::Interfaces() noexcept
 {
     try {
+        client = find<Client>("client_panorama", "VClient018");
+        cvar = find<Cvar>("vstdlib", "VEngineCvar007");
         engine = find<Engine>("engine", "VEngineClient014");
         engineTrace = find<EngineTrace>("engine", "EngineTraceClient004");
         entityList = find<EntityList>("client_panorama", "VClientEntityList003");
-        client = find<Client>("client_panorama", "VClient018");
-        cvar = find<Cvar>("vstdlib", "VEngineCvar007");
+        inputSystem = find<InputSystem>("inputsystem", "InputSystemVersion001");
+        materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem080");
         modelInfo = find<ModelInfo>("engine", "VModelInfoClient004");
         modelRender = find<ModelRender>("engine", "VEngineModel016");
-        materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem080");
+        panel = find<Panel>("vgui2", "VGUI_Panel009");
         renderView = find<RenderView>("engine", "VEngineRenderView014");
-        inputSystem = find<InputSystem>("inputsystem", "InputSystemVersion001");
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
