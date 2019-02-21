@@ -14,6 +14,8 @@ struct Ray {
     bool isSwept{ };
 };
 
+class Entity;
+
 struct TraceFilter {
     TraceFilter(const Entity* entity) : skip{ entity } { }
     virtual bool shouldHitEntity(Entity* entity, int) { return entity != skip; }
@@ -25,7 +27,7 @@ struct Trace {
     std::byte pad[44];
     float fraction;
     std::byte pad1[28];
-    class Entity* entity;
+    Entity* entity;
     int hitbox;
 };
 
