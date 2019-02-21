@@ -88,6 +88,7 @@
     <ClInclude Include="SDK\ModelInfo.h" />
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\NetworkChannel.h" />
+    <ClInclude Include="SDK\Panel.h" />
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\RenderView.h" />
     <ClInclude Include="SDK\UserCmd.h" />
