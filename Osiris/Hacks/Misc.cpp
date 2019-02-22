@@ -98,6 +98,14 @@ void Misc::spectatorsList() noexcept
 {
     if (config.misc.spectatorsList) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        interfaces.surface->setTextColor(51, 153, 255, 255);
+
+        int width, height;
+        interfaces.surface->getScreenSize(width, height);
+
+        auto spectatorsCount{ 0 };
+
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isAlive())
@@ -108,8 +116,14 @@ void Misc::spectatorsList() noexcept
             if (interfaces.engine->getPlayerInfo(i, playerInfo)) {
                 auto target = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hObserverTarget"));
 
-                if (target == localPlayer)
-                    ; // TODO: Draw player name
+                if (target == localPlayer) {
+                    static wchar_t name[128]{ };
+                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                        interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20));
+                        interfaces.surface->printText(name);
+                        spectatorsCount++;
+                    }
+                }
             }
         }
     }
