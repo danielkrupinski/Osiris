@@ -5,11 +5,11 @@
 #include "Vector.h"
 
 struct PlayerInfo {
-    unsigned long pad;
+    __int64 pad;
     union {
-        unsigned long steamID64;
-        unsigned int xuidLow;
-        unsigned int xuidHigh;
+        __int64 steamID64;
+        __int32 xuidLow;
+        __int32 xuidHigh;
     };
     char name[128];
     int userId;
