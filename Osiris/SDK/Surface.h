@@ -29,8 +29,8 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, int, int)>(this, 26)(this, x, y);
     }
 
-    constexpr void printText(const wchar_t* text, int textLength, int drawType = 0) noexcept
+    constexpr void printText(const std::wstring_view text, int drawType = 0) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, const wchar_t*, int, int)>(this, 28)(this, text, textLength, drawType);
+        callVirtualFunction<void(__thiscall*)(void*, const wchar_t*, int, int)>(this, 28)(this, text.data(), text.length(), drawType);
     }
 };
