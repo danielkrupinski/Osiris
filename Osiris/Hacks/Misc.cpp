@@ -94,9 +94,9 @@ void Misc::animateClanTag(bool update, const std::string_view tag) noexcept
     }
 }
 
-void Misc::spectatorsList() noexcept
+void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorsList) {
+    if (config.misc.spectatorList) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         interfaces.surface->setTextColor(51, 153, 255, 255);

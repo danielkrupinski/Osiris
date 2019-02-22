@@ -179,7 +179,7 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
             panelId = panel;
     }
     else if (panel == panelId && interfaces.engine->isInGame()) {
-        Misc::spectatorsList();
+        Misc::spectatorList();
     }
 }
 

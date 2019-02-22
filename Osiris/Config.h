@@ -145,12 +145,12 @@ public:
         bool fastDuck{ false };
         bool autoPistol{ false };
         bool radarHack{ false };
-        bool spectatorsList{ false };
+        bool spectatorList{ false };
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol, radarHack, spectatorsList);
+            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol, radarHack, spectatorList);
         }
     } misc;
 
