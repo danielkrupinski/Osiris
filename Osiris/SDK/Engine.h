@@ -25,11 +25,6 @@ struct PlayerInfo {
 
 class Engine {
 public:
-    constexpr auto getScreenSize(int& width, int& height) noexcept
-    {
-        callVirtualFunction<void(__thiscall*)(void*, int&, int&)>(this, 5)(this, width, height);
-    }
-
     constexpr auto getPlayerInfo(int entityIndex, const PlayerInfo& playerInfo) noexcept
     {
         return callVirtualFunction<bool(__thiscall*)(void*, int, const PlayerInfo&)>(this, 8)(this, entityIndex, playerInfo);
