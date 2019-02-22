@@ -67,17 +67,14 @@ void Aimbot::run(UserCmd* cmd) noexcept
         weaponIndex = 0;
 
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
+        static bool wasInAttackLastTick{ false };
         if (auto target = findTarget(cmd, weaponIndex)) {
             if (config.aimbot.weapons[weaponIndex].autoShot) {
                 cmd->buttons |= UserCmd::IN_ATTACK;
-                static bool wasInAttackLastTick{ false };
-                if (wasInAttackLastTick) {
-                    if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
+                    if (wasInAttackLastTick && (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
                         && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime
-                        || activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver)
+                        || activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver))
                         cmd->buttons &= ~UserCmd::IN_ATTACK;
-                }
-                wasInAttackLastTick = cmd->buttons & UserCmd::IN_ATTACK;
             }
 
             if (cmd->buttons & UserCmd::IN_ATTACK) {
@@ -90,6 +87,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
+        wasInAttackLastTick = cmd->buttons & UserCmd::IN_ATTACK;
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
         auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle");
         aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
