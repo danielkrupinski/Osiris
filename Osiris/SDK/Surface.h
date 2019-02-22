@@ -6,7 +6,7 @@ class Surface final {
 public:
     constexpr void setDrawColor(int r, int g, int b, int a) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, int, int, int, int)>(this, 14)(this, r, g, b, a);
+        callVirtualFunction<void(__thiscall*)(void*, int, int, int, int)>(this, 15)(this, r, g, b, a);
     }
 
     constexpr void drawFilledRect(int x0, int y0, int x1, int y1) noexcept
@@ -21,7 +21,7 @@ public:
 
     constexpr void setTextColor(int r, int g, int b, int a) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, int, int, int, int)>(this, 24)(this, r, g, b, a);
+        callVirtualFunction<void(__thiscall*)(void*, int, int, int, int)>(this, 25)(this, r, g, b, a);
     }
 
     constexpr void setTextPosition(int x, int y) noexcept
