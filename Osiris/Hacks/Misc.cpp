@@ -99,6 +99,9 @@ void Misc::spectatorList() noexcept
     if (config.misc.spectatorList) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
+        if (!localPlayer->isAlive())
+            return;
+
         interfaces.surface->setTextColor(51, 153, 255, 255);
 
         int width, height;
@@ -108,7 +111,7 @@ void Misc::spectatorList() noexcept
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity->isAlive())
+            if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
             PlayerInfo playerInfo;
