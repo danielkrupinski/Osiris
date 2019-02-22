@@ -172,6 +172,15 @@ static bool __stdcall hookedSvCheatsGetBool()
 static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     hooks.panel.getOriginal<void(__thiscall*)(Panel*, unsigned int, bool, bool)>(41)(interfaces.panel, panel, forceRepaint, allowForce);
+
+    static unsigned int panelId{ 0 };
+    if (!panelId) {
+        if (interfaces.panel->getName(panel) == "MatSystemTopPanel")
+            panelId = panel;
+    }
+    else if (panel == panelId && interfaces.engine->isInGame()) {
+        Misc::spectatorsList();
+    }
 }
 
 Hooks::Hooks()
