@@ -267,6 +267,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
+        ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         if (ImGui::Button("Reveal ranks"))
             Misc::revealRanks();
         ImGui::End();
