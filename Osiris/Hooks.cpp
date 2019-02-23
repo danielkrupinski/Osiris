@@ -201,23 +201,7 @@ Hooks::Hooks()
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 }
 
-Hooks::Vmt::Vmt(void* const base)
-{
-    oldVmt = *reinterpret_cast<uintptr_t**>(base);
-    length = calculateLength(oldVmt) + 1;
-
-    try {
-        newVmt = findFreeDataPage(base, length);
-    }
-    catch (const std::runtime_error& e) {
-        MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
-        std::exit(EXIT_FAILURE);
-    }
-    std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-    *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
-}
-
-uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
+auto Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
     VirtualQuery(base, &mbi, sizeof(mbi));
@@ -236,11 +220,27 @@ uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
     throw std::runtime_error{ "Could not find free memory pages in module at " + std::to_string(reinterpret_cast<int>(moduleInfo.lpBaseOfDll)) };
 }
 
-size_t Hooks::Vmt::calculateLength(uintptr_t* vmt) const noexcept
+auto Hooks::Vmt::calculateLength(uintptr_t * vmt) noexcept
 {
     size_t length{ 0 };
     MEMORY_BASIC_INFORMATION memoryInfo;
     while (VirtualQuery(reinterpret_cast<LPCVOID>(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
         length++;
     return length;
+}
+
+Hooks::Vmt::Vmt(void* const base)
+{
+    oldVmt = *reinterpret_cast<uintptr_t**>(base);
+    length = calculateLength(oldVmt) + 1;
+
+    try {
+        newVmt = findFreeDataPage(base, length);
+    }
+    catch (const std::runtime_error& e) {
+        MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
+        std::exit(EXIT_FAILURE);
+    }
+    std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+    *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
 }

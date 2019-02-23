@@ -31,10 +31,9 @@ public:
         {
             return reinterpret_cast<T>(oldVmt[index]);
         }
-
-        uintptr_t* findFreeDataPage(void* const, size_t);
     private:
-        size_t calculateLength(uintptr_t*) const noexcept;
+        static auto findFreeDataPage(void* const, size_t);
+        static auto calculateLength(uintptr_t*) noexcept;
         uintptr_t* oldVmt;
         uintptr_t* newVmt;
         size_t length;
