@@ -104,8 +104,7 @@ void Misc::spectatorList() noexcept
 
         interfaces.surface->setTextColor(51, 153, 255, 255);
 
-        int width, height;
-        interfaces.surface->getScreenSize(width, height);
+        const auto [width, height] = interfaces.surface->getScreenSize();
 
         auto spectatorsCount{ 0 };
 

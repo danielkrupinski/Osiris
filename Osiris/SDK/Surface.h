@@ -34,8 +34,10 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, const wchar_t*, int, int)>(this, 28)(this, text.data(), text.length(), drawType);
     }
 
-    constexpr void getScreenSize(int& width, int& height) noexcept
+    auto getScreenSize() noexcept
     {
+        static int width, height;
         callVirtualFunction<void(__thiscall*)(void*, int&, int&)>(this, 44)(this, width, height);
+        return std::make_pair(width, height);
     }
 };
