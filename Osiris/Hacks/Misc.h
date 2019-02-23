@@ -27,7 +27,7 @@ namespace Misc {
         if (config.misc.watermark) {
             interfaces.surface->setTextColor(51, 153, 255, 255);
             interfaces.surface->setTextPosition(0, 0);
-            interfaces.surface->printText(L"Osiris");
+            interfaces.surface->printText(L"Osiris Internal Multihack\nDeveloped by Daniel Krupiński (dk12345)");
         }
     }
 }
