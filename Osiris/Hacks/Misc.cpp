@@ -67,7 +67,7 @@ void Misc::animateClanTag(bool update, const std::string_view tag) noexcept
 
 void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorList) {
+    if (config.misc.spectatorList && interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (!localPlayer->isAlive())

@@ -178,7 +178,8 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
         if (interfaces.panel->getName(panel) == "MatSystemTopPanel")
             panelId = panel;
     }
-    else if (panel == panelId && interfaces.engine->isInGame()) {
+    else if (panel == panelId) {
+        Misc::watermark();
         Misc::spectatorList();
     }
 }
