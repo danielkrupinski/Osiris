@@ -112,7 +112,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 {
     hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
     if (interfaces.engine->isInGame()) {
-        Misc::skybox();
+        Visuals::skybox();
         Misc::bunnyHop(cmd);
         Misc::removeCrouchCooldown(cmd);
         Aimbot::run(cmd);

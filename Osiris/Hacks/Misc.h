@@ -5,7 +5,6 @@
 
 namespace Misc {
     void bunnyHop(UserCmd*) noexcept;
-    void skybox() noexcept;
     void inverseRagdollGravity() noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
