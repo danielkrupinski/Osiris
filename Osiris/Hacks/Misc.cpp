@@ -114,13 +114,13 @@ void Misc::spectatorList() noexcept
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
-            PlayerInfo playerInfo;
+            static PlayerInfo playerInfo;
 
             if (interfaces.engine->getPlayerInfo(i, playerInfo)) {
                 auto target = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hObserverTarget"));
 
                 if (target == localPlayer) {
-                    static wchar_t name[128]{ };
+                    static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20));
                         interfaces.surface->printText(name);
