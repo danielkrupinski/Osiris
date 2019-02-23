@@ -2,11 +2,19 @@
 
 #include <string_view>
 
+#include "../Memory.h"
+
 namespace Visuals {
     void colorWorld() noexcept;
     void reduceFlashEffect() noexcept;
     void modifySmoke() noexcept;
     void thirdperson() noexcept;
+
+    constexpr void disablePostProcessing() noexcept
+    {
+        if (*memory.disablePostProcessing != config.visuals.disablePostProcessing)
+            *memory.disablePostProcessing = config.visuals.disablePostProcessing;
+    }
 
     constexpr bool removeHands(const std::string_view modelName) noexcept
     {
