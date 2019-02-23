@@ -66,6 +66,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Animated clan tag** - animate clan tag
     * **Fast duck** - remove crouch delay
     * **Auto pistol** - add ability of firing pistols like automatic rifles
+    * **Spectator list** - show nicknames of players spectating you
+    * **Watermark** - show cheat name in upper-left screen corner
     * **Reveal ranks** - reveal player ranks in competitive modes
 
 * **Config** - configuration system based on cereal binary serialization
@@ -76,13 +78,14 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2017 15.9.4 and Windows SDK 10.0.17763.0 (10.0.17134.0 or lower should work too but requires change in project settings) are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2017 15.9.7 and Windows SDK 10.0.17763.0 (10.0.17134.0 or lower should work too but requires change in project settings) are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup). Project will be upgraded to Visual Studio 2019 after it's launch April 2nd.
 
 ### Cloning
-The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer:
+The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
 ```
 git clone https://github.com/danielkrupinski/Osiris.git
 ```
+`Osiris` folder should have been succesfully created, containing all the source files.
 
 ### Compiling from source
 
@@ -104,7 +107,7 @@ When injected, menu is openable under `INSERT` key.
 Press `INSERT` key while while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration file is saved under name `Osiris` in your `Documents` folder (`%USERPROFILE%\Documents`). The config is binary serialized so it is not meant to be edited. Sometimes after updates configuration file needs to be deleted and recreated.
+Configuration file is saved under name `Osiris` (without extension) in your `Documents` folder (`%USERPROFILE%\Documents`). The config is binary serialized so it is not meant to be edited by humans. Sometimes after updates configuration file needs to be deleted and recreated.
 
 ### What is cheat execution entry point and where is it located?
 Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
