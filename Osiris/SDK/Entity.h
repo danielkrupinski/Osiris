@@ -97,4 +97,9 @@ public:
     {
         return callVirtualFunction<bool(__thiscall*)(void*)>(this, 92)(this);
     }
+
+    constexpr float getInaccuracy() noexcept
+    {
+        return callVirtualFunction<float(__thiscall*)(void*)>(this, 471)(this);
+    }
 };
