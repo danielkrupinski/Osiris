@@ -146,11 +146,13 @@ public:
         bool autoPistol{ false };
         bool radarHack{ false };
         bool spectatorList{ false };
+        bool watermark{ false };
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(bunnyHop, animatedClanTag, fastDuck, autoPistol, radarHack, spectatorList);
+            archive(bunnyHop, animatedClanTag, fastDuck,
+                autoPistol, radarHack, spectatorList, watermark);
         }
     } misc;
 
