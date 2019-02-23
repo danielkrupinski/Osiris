@@ -21,4 +21,13 @@ namespace Misc {
     {
         reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag.data(), clanTag.data());
     }
+
+    constexpr void watermark() noexcept
+    {
+        if (config.misc.watermark) {
+            interfaces.surface->setTextColor(51, 153, 255, 255);
+            interfaces.surface->setTextPosition(0, 0);
+            interfaces.surface->printText(L"Osiris");
+        }
+    }
 }
