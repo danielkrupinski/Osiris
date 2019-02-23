@@ -5,6 +5,9 @@
 namespace Visuals {
     void colorWorld() noexcept;
     void reduceFlashEffect() noexcept;
+    void modifySmoke() noexcept;
+    void thirdperson() noexcept;
+
     constexpr bool removeHands(const std::string_view modelName) noexcept
     {
         return config.visuals.noHands && (modelName.find("arms") != std::string_view::npos);
@@ -23,6 +26,4 @@ namespace Visuals {
             && modelName.find("parachute") == std::string_view::npos
             && modelName.find("fists") == std::string_view::npos;
     }
-    void modifySmoke() noexcept;
-    void thirdperson() noexcept;
 };

@@ -40,14 +40,6 @@ void Misc::inverseRagdollGravity() noexcept
     ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
 }
 
-void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
-{
-    if (config.misc.fastDuck) {
-        constexpr int IN_BULLRUSH{ 1 << 22 };
-        cmd->buttons |= IN_BULLRUSH;
-    }
-}
-
 void Misc::autoPistol(UserCmd* cmd) noexcept
 {
     if (config.misc.autoPistol) {
@@ -57,9 +49,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };
             if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver && wasInAttackLastTick) {
-                if (cmd->buttons & UserCmd::IN_ATTACK && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime)
-                    cmd->buttons &= ~UserCmd::IN_ATTACK;
-                else if (cmd->buttons & UserCmd::IN_ATTACK2 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->realtime)
+                if (cmd->buttons & UserCmd::IN_ATTACK2 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->currenttime)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
             }
             else if (cmd->buttons & UserCmd::IN_ATTACK && wasInAttackLastTick)
