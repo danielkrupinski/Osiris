@@ -6,7 +6,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Aimbot** - aim assistance
     * **Enable** - on / off master switch
     * **Silent** - aimbot is not visible on your screen (client-sided only)
-    * **Fov** - field-of-view which aimbot operates [*0*-*180*]
+    * **Visible only** - aim only on visible players
+    * **Auto shot** - shoot automatically when target found
+    * **Fov** - field-of-view which aimbot operates [*0*-*255*]
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Bone** - bone which aimbot aims at
     * **Recoil control x** - horizontal recoil control factor
@@ -53,6 +55,10 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
+
+* **Knife changer** - change knife model
+    * **Enabled** - enable / disable knife changer
+    * **Knife** - desired knife model
 
 * **Misc** - miscellaneous features
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
