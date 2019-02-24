@@ -66,7 +66,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
+    if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)){
+
+        if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->hasScope() && !localPlayer->getProperty<int>("m_bIsScoped"))
+            return;
+
         static bool wasInAttackLastTick{ false };
         if (auto target = findTarget(cmd, weaponIndex)) {
             if (config.aimbot.weapons[weaponIndex].autoShot) {
