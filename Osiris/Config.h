@@ -15,6 +15,7 @@ public:
             bool enabled{ false };
             bool silent{ false };
             bool visibleOnly{ true };
+            bool scopedOnly{ true };
             bool autoShot{ false };
             float fov{ 0.0f };
             float smooth{ 1.0f };
