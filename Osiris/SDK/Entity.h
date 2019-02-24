@@ -32,6 +32,21 @@ public:
         }
     }
 
+    constexpr bool hasScope() noexcept
+    {
+        switch (getClientClass()->classId) {
+        case ClassId::Ssg08:
+        case ClassId::Aug:
+        case ClassId::Sg553:
+        case ClassId::Awp:
+        case ClassId::Scar20:
+        case ClassId::G3sg1:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     using matrix3x4 = float[3][4];
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
