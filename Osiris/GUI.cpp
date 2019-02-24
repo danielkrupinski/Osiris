@@ -76,7 +76,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 290.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 320.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -117,6 +117,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Enabled", &config.aimbot.weapons[currentWeapon].enabled);
         ImGui::Checkbox("Silent", &config.aimbot.weapons[currentWeapon].silent);
         ImGui::Checkbox("Visible only", &config.aimbot.weapons[currentWeapon].visibleOnly);
+        ImGui::Checkbox("Scoped only", &config.aimbot.weapons[currentWeapon].scopedOnly);
         ImGui::Checkbox("Auto shot", &config.aimbot.weapons[currentWeapon].autoShot);
         ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
         ImGui::PushItemWidth(240.0f);
