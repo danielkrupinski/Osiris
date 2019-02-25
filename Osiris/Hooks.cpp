@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
@@ -59,7 +60,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         io.MouseDrawCursor = true;
         char buffer[MAX_PATH];
         GetWindowsDirectoryA(buffer, MAX_PATH);
-        io.Fonts->AddFontFromFileTTF(std::string{ buffer + std::string{ "\\Fonts\\Tahoma.ttf" } }.c_str(), 16.0f);
+        io.Fonts->AddFontFromFileTTF(strcat(buffer, "\\Fonts\\Tahoma.ttf"), 16.0f);
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
             SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
