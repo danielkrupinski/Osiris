@@ -34,7 +34,8 @@ static int findTarget(UserCmd* cmd, int weaponIndex) noexcept
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
-        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->getProperty<bool>("m_bGunGameImmunity"))
+        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
+            || !entity->isEnemy() && !config.aimbot.weapons[weaponIndex].friendlyFire || entity->getProperty<bool>("m_bGunGameImmunity"))
             continue;
 
         auto bonePosition = entity->getBonePosition(getBoneId(weaponIndex));
