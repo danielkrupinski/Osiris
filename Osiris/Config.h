@@ -14,6 +14,7 @@ public:
         struct {
             bool enabled{ false };
             bool silent{ false };
+            bool friendlyFire{ false };
             bool visibleOnly{ true };
             bool scopedOnly{ true };
             bool autoShot{ false };
@@ -26,7 +27,8 @@ public:
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, silent, visibleOnly, autoShot, fov, smooth,
+                archive(enabled, silent, friendlyFire, visibleOnly,
+                    scopedOnly, autoShot, fov, smooth,
                     bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
