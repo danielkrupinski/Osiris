@@ -177,17 +177,17 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Begin("Chams", &window.chams, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
-        ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Local player\0Weapons\0Hands");
+        ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Defusing\0Local player\0Weapons\0Hands");
         static int currentItem{ 0 };
 
-        if (!currentCategory || currentCategory == 1) {
+        if (currentCategory <= 2) {
             ImGui::SameLine();
             static int currentType{ 0 };
             ImGui::Combo("##2", &currentType, "Visible\0Occluded");
             currentItem = currentCategory * 2 + currentType;
         }
         else {
-            currentItem = currentCategory + 2;
+            currentItem = currentCategory + 3;
         }
 
         ImGui::Checkbox("Enabled", &config.chams.chams[currentItem].enabled);

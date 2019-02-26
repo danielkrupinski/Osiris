@@ -38,13 +38,34 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
-        if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
+        if (entity->getProperty<int>("m_bIsDefusing")) {
+            if (config.chams.chams[5].enabled) {
+                auto material = config.chams.chams[5].flat ? flat : normal;
+                material->colorModulate(config.chams.chams[5].color);
+                material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
+                material->alphaModulate(config.chams.chams[5].alpha);
+                material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[5].wireframe);
+                interfaces.modelRender->forceMaterialOverride(material);
+                hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                if (!config.chams.chams[4].enabled)
+                    interfaces.modelRender->forceMaterialOverride(nullptr);
+            }
             if (config.chams.chams[4].enabled) {
                 auto material = config.chams.chams[4].flat ? flat : normal;
-                material->alphaModulate(config.chams.chams[4].alpha);
-                material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-                material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[4].wireframe);
                 material->colorModulate(config.chams.chams[4].color);
+                material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                material->alphaModulate(config.chams.chams[4].alpha);
+                material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[4].wireframe);
+                interfaces.modelRender->forceMaterialOverride(material);
+            }
+        }
+        else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
+            if (config.chams.chams[6].enabled) {
+                auto material = config.chams.chams[6].flat ? flat : normal;
+                material->alphaModulate(config.chams.chams[6].alpha);
+                material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
+                material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[6].wireframe);
+                material->colorModulate(config.chams.chams[6].color);
                 interfaces.modelRender->forceMaterialOverride(material);
             }
         }
@@ -95,25 +116,25 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderWeapons() const noexcept
 {
-    if (config.chams.chams[5].enabled &&
+    if (config.chams.chams[7].enabled &&
         !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped")) {
-        auto material = config.chams.chams[5].flat ? flat : normal;
-        material->alphaModulate(config.chams.chams[5].alpha);
+        auto material = config.chams.chams[7].flat ? flat : normal;
+        material->alphaModulate(config.chams.chams[7].alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[5].wireframe);
-        material->colorModulate(config.chams.chams[5].color);
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[7].wireframe);
+        material->colorModulate(config.chams.chams[7].color);
         interfaces.modelRender->forceMaterialOverride(material);
     }
 }
 
 void Chams::renderHands() const noexcept
 {
-    if (config.chams.chams[6].enabled) {
-        auto material = config.chams.chams[6].flat ? flat : normal;
-        material->alphaModulate(config.chams.chams[6].alpha);
+    if (config.chams.chams[8].enabled) {
+        auto material = config.chams.chams[8].flat ? flat : normal;
+        material->alphaModulate(config.chams.chams[8].alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[6].wireframe);
-        material->colorModulate(config.chams.chams[6].color);
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams.chams[8].wireframe);
+        material->colorModulate(config.chams.chams[8].color);
         interfaces.modelRender->forceMaterialOverride(material);
     }
 }
