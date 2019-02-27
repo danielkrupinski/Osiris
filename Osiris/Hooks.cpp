@@ -160,7 +160,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
 }
 
-static bool __stdcall hookedSvCheatsGetBool()
+static bool __stdcall hookedSvCheatsGetBool() noexcept
 {
     static auto _this = interfaces.cvar->findVar("sv_cheats");
 
