@@ -143,6 +143,10 @@ public:
     } knifeChanger;
 
     struct {
+        bool enabled{ false };
+    } skinChanger;
+
+    struct {
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
