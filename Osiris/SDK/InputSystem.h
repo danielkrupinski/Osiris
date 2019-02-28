@@ -4,12 +4,12 @@
 
 class InputSystem {
 public:
-    void enableInput(bool enable)
+    constexpr void enableInput(bool enable) noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*, bool)>(this, 11)(this, enable);
     }
 
-    void resetInputState()
+    constexpr void resetInputState() noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 39)(this);
     }
