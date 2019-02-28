@@ -17,9 +17,9 @@ namespace Misc {
             cmd->buttons |= UserCmd::IN_BULLRUSH;
     }
 
-    constexpr void setClanTag(const std::string_view clanTag) noexcept
+    constexpr void setClanTag(const char* clanTag) noexcept
     {
-        reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag.data(), clanTag.data());
+        reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag, clanTag);
     }
 
     constexpr void watermark() noexcept
