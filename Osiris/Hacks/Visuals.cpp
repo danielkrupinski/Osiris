@@ -21,7 +21,7 @@ void Visuals::reduceFlashEffect() noexcept
 
 void Visuals::modifySmoke() noexcept
 {
-    constexpr std::string_view smokeMaterials[]{
+    static constexpr const char* smokeMaterials[]{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
