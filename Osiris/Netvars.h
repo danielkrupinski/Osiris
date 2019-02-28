@@ -9,14 +9,14 @@ class Netvars final {
 public:
     Netvars() noexcept;
 
-    auto operator[](const std::string_view netvar) noexcept
+    auto operator[](const char* netvar) noexcept
     {
         return offsets[netvar];
     }
 private:
     void loadTable(RecvTable*, const std::size_t = 0) noexcept;
     void hookProperty(RecvProp*, recvProxy) noexcept;
-    std::unordered_map<std::string_view, std::size_t> offsets;
+    std::unordered_map<const char*, std::size_t> offsets;
 };
 
 extern Netvars netvars;

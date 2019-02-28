@@ -11,7 +11,7 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
-static std::unordered_map<std::string_view, recvProxy> proxies;
+static std::unordered_map<const char*, recvProxy> proxies;
 
 static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 {
@@ -174,7 +174,7 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
         else {
             std::string_view name{ prop->name };
             std::string_view tableName{ recvTable->netTableName };
-            offsets[name] = prop->offset + offset;
+            offsets[prop->name] = prop->offset + offset;
             if (name == "m_bSpotted")
                 hookProperty(prop, spottedHook);
             else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
