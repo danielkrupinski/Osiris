@@ -53,3 +53,26 @@ void Visuals::thirdperson() noexcept
             && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
             memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
 }
+
+void Visuals::removeVisualRecoil(FrameStage stage) noexcept
+{
+    if (config.visuals.noVisualRecoil) {
+        static Vector aimPunch;
+        static Vector viewPunch;
+
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        switch (stage) {
+        case FrameStage::RENDER_START:
+            aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle");
+            viewPunch = localPlayer->getProperty<Vector>("m_viewPunchAngle");
+            localPlayer->setProperty("m_aimPunchAngle", Vector{ });
+            localPlayer->setProperty("m_viewPunchAngle", Vector{ });
+            break;
+        case FrameStage::RENDER_END:
+            localPlayer->setProperty("m_aimPunchAngle", aimPunch);
+            localPlayer->setProperty("m_viewPunchAngle", aimPunch);
+            break;
+        }
+    }
+}
