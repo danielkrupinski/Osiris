@@ -185,19 +185,12 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
     }
 }
 
-enum class FrameStage {
-    UNDEFINED = -1,
-    START,
-    NET_UPDATE_START,
-    NET_UPDATE_POSTDATAUPDATE_START,
-    NET_UPDATE_POSTDATAUPDATE_END,
-    NET_UPDATE_END,
-    RENDER_START,
-    RENDER_END
-};
-
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
 {
+    if (interfaces.engine->isInGame()) {
+        Visuals::removeVisualRecoil(stage);
+    }
+
     hooks.client.getOriginal<void(__thiscall*)(Client*, FrameStage)>(37)(interfaces.client, stage);
 }
 
