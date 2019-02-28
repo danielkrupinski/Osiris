@@ -39,6 +39,7 @@ public:
         size_t length;
     };
 
+    Vmt client{ interfaces.client };
     Vmt clientMode{ memory.clientMode };
     Vmt modelRender{ interfaces.modelRender };
     Vmt panel{ interfaces.panel };

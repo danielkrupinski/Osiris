@@ -185,12 +185,30 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
     }
 }
 
+enum class FrameStage {
+    UNDEFINED = -1,
+    START,
+    NET_UPDATE_START,
+    NET_UPDATE_POSTDATAUPDATE_START,
+    NET_UPDATE_POSTDATAUPDATE_END,
+    NET_UPDATE_END,
+    RENDER_START,
+    RENDER_END
+};
+
+static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
+{
+    hooks.client.getOriginal<void(__thiscall*)(Client*, FrameStage)>(37)(interfaces.client, stage);
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
+
+    client.hookAt(37, hookedFrameStageNotify);
 
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
