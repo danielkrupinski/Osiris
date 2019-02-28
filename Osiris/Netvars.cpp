@@ -155,12 +155,6 @@ static void viewModelSequenceHook(recvProxyData* data, void* arg2, void* arg3) n
     proxies["m_nSequence"](data, arg2, arg3);
 }
 
-static void viewPunchHook(recvProxyData* data, void* arg2, void* arg3) noexcept
-{
-    if (!config.visuals.noVisualRecoil)
-        proxies["m_viewPunchAngle"](data, arg2, arg3);
-}
-
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
@@ -183,8 +177,6 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
             offsets[name] = prop->offset + offset;
             if (name == "m_bSpotted")
                 hookProperty(prop, spottedHook);
-            else if (name == "m_viewPunchAngle")
-                hookProperty(prop, viewPunchHook);
             else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
                 hookProperty(prop, modelIndexHook);
             else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
