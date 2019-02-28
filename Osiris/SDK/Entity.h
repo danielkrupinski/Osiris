@@ -16,6 +16,12 @@ public:
         return *reinterpret_cast<T*>(this + netvars[name] + offset);
     }
 
+    template <typename T>
+    constexpr void setProperty(const std::string_view name, const T& value) noexcept
+    {
+        *reinterpret_cast<T*>(this + netvars[name]) = value;
+    }
+
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
