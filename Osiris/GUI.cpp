@@ -23,17 +23,17 @@ void GUI::render() noexcept
     renderMiscWindow();
 }
 
-void GUI::checkBoxAndColorPicker(const std::string_view name, bool* enable, float* color) noexcept
+void GUI::checkBoxAndColorPicker(const std::string& name, bool* enable, float* color) noexcept
 {
-    ImGui::Checkbox(std::string{ "##" }.append(name).c_str(), enable);
+    ImGui::Checkbox(("##" + name).c_str(), enable);
     ImGui::SameLine(0.0f, 5.0f);
-    bool openPopup = ImGui::ColorButton(std::string{ "##" }.append(name).append("ColorButton").c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
+    bool openPopup = ImGui::ColorButton(("##" + name + "ColorButton").c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
     ImGui::SameLine(0.0f, 5.0f);
-    ImGui::Text(name.data());
+    ImGui::Text(name.c_str());
     if (openPopup)
-        ImGui::OpenPopup(std::string{ "##" }.append(name).append("Popup").c_str());
-    if (ImGui::BeginPopup(std::string{ "##" }.append(name).append("Popup").c_str())) {
-        ImGui::ColorPicker3(std::string{ "##" }.append(name).append("Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+        ImGui::OpenPopup(("##" + name + "Popup").c_str());
+    if (ImGui::BeginPopup(("##" + name + "Popup").c_str())) {
+        ImGui::ColorPicker3(("##" + name + "Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
         ImGui::EndPopup();
     }
 }
