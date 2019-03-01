@@ -42,7 +42,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 
 void Misc::revealRanks() noexcept
 {
-    int param[3]{ };
+    static int param[3]{ };
     reinterpret_cast<void(__cdecl*)(int*)>(memory.revealRanks)(param);
 }
 
