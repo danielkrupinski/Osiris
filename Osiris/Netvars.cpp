@@ -11,7 +11,7 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
-static std::unordered_map<const char*, recvProxy> proxies;
+static std::unordered_map<std::string_view, recvProxy> proxies;
 
 static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 {
