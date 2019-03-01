@@ -42,8 +42,6 @@ public:
     {
         switch (getClientClass()->classId) {
         case ClassId::Ssg08:
-        case ClassId::Aug:
-        case ClassId::Sg553:
         case ClassId::Awp:
         case ClassId::Scar20:
         case ClassId::G3sg1:
