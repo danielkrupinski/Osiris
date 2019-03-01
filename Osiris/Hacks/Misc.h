@@ -8,7 +8,7 @@ namespace Misc {
     void inverseRagdollGravity() noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
-    void animateClanTag(bool = false, const std::string_view = { }) noexcept;
+    void animateClanTag(const char* = nullptr) noexcept;
     void spectatorList() noexcept;
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept

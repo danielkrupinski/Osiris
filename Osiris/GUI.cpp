@@ -262,7 +262,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         if (ImGui::Button("Set clantag")) {
             Misc::setClanTag(buffer);
-            Misc::animateClanTag(true, buffer);
+            Misc::animateClanTag(buffer);
         }
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
