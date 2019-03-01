@@ -1,4 +1,3 @@
-#include <array>
 #include <sstream>
 #include <Windows.h>
 
@@ -257,13 +256,13 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SetNextWindowSize({ 220.0f, 260.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        static std::array<char, 16> buffer;
+        static char buffer[16];
         ImGui::PushItemWidth(120.0f);
-        ImGui::InputText("##1", buffer.data(), buffer.size());
+        ImGui::InputText("##1", buffer, IM_ARRAYSIZE(buffer));
         ImGui::SameLine();
         if (ImGui::Button("Set clantag")) {
-            Misc::setClanTag(buffer.data());
-            Misc::animateClanTag(true, buffer.data());
+            Misc::setClanTag(buffer);
+            Misc::animateClanTag(true, buffer);
         }
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
