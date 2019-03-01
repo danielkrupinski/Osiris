@@ -38,7 +38,7 @@ public:
         }
     }
 
-    constexpr bool hasScope() noexcept
+    constexpr bool isSniperRifle() noexcept
     {
         switch (getClientClass()->classId) {
         case ClassId::Ssg08:

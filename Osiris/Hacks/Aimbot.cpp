@@ -69,7 +69,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)){
 
-        if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->hasScope() && !localPlayer->getProperty<bool>("m_bIsScoped"))
+        if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
             return;
 
         static bool wasInAttackLastTick{ false };
