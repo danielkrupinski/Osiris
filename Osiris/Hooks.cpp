@@ -111,8 +111,9 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    hooks.clientMode.getOriginal<void(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
-    if (interfaces.engine->isInGame()) {
+    auto result = hooks.clientMode.getOriginal<bool(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
+
+    if (cmd->command_number && interfaces.engine->isInGame()) {
         Visuals::skybox();
         Misc::bunnyHop(cmd);
         Misc::removeCrouchCooldown(cmd);
@@ -123,8 +124,10 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
         cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
         cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
         cmd->viewangles.z = 0.0f;
+        return false;
     }
-    return false;
+    else
+        return result;
 }
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
