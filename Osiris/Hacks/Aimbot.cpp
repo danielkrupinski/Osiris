@@ -67,12 +67,15 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
 
-    static Vector oldAimPunch;
-
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
 
         if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
             return;
+
+        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+        aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
+        aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 
         static bool wasInAttackLastTick{ false };
         if (auto target = findTarget(cmd, weaponIndex)) {
@@ -86,25 +89,13 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (cmd->buttons & UserCmd::IN_ATTACK) {
                 auto entity = interfaces.entityList->getEntity(target);
-                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles);
+                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles + aimPunch);
                 angle /= config.aimbot.weapons[weaponIndex].smooth;
                 cmd->viewangles += angle;
             }
         }
-
         wasInAttackLastTick = cmd->buttons & UserCmd::IN_ATTACK;
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle");
-        aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
-        cmd->viewangles -= aimPunch * weaponRecoilScale->getFloat();
-        if (!config.aimbot.weapons[weaponIndex].silent)
-            cmd->viewangles += oldAimPunch * weaponRecoilScale->getFloat();
-
-        oldAimPunch = aimPunch;
         if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
             interfaces.engine->setViewAngles(cmd->viewangles);
     }
-    else
-       oldAimPunch = { 0.0f, 0.0f, 0.0f };
 }
