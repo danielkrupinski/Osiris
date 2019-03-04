@@ -72,24 +72,21 @@ void Aimbot::run(UserCmd* cmd) noexcept
         if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
             return;
 
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
-        aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
-
         static bool wasInAttackLastTick{ false };
         if (auto target = findTarget(cmd, weaponIndex)) {
             if (config.aimbot.weapons[weaponIndex].autoShot) {
                 cmd->buttons |= UserCmd::IN_ATTACK;
-                if (wasInAttackLastTick && (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
-                    && activeWeapon->getProperty<float>("m_flPostponeFireReadyTime") <= memory.globalVars->currenttime
-                    || activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver))
+                if (wasInAttackLastTick && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK;
             }
 
             if (cmd->buttons & UserCmd::IN_ATTACK) {
-                auto entity = interfaces.entityList->getEntity(target);
-                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), entity->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles + aimPunch);
+                static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+                auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+                aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
+                aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
+
+                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), interfaces.entityList->getEntity(target)->getBonePosition(getBoneId(weaponIndex)), cmd->viewangles + aimPunch);
                 angle /= config.aimbot.weapons[weaponIndex].smooth;
                 cmd->viewangles += angle;
             }
