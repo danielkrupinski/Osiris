@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string_view>
+#include <string>
 
 #include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
@@ -10,10 +10,10 @@
 class Memory final {
 public:
     Memory() noexcept;
-    std::uintptr_t findPattern(const std::string&, const std::string&) const;
+    uintptr_t findPattern(const std::string&, const std::string&) const;
 
-    std::uintptr_t present;
-    std::uintptr_t reset;
+    uintptr_t present;
+    uintptr_t reset;
 
     class ClientMode* clientMode;
     Input* input;
@@ -22,11 +22,11 @@ public:
 
     bool* disablePostProcessing;
 
-    std::uintptr_t loadSky;
-    std::uintptr_t setClanTag;
+    uintptr_t loadSky;
+    uintptr_t setClanTag;
     int* smokeCount;
-    std::uintptr_t cameraThink;
-    std::uintptr_t revealRanks;
+    uintptr_t cameraThink;
+    uintptr_t revealRanks;
 };
 
 extern Memory memory;
