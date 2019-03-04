@@ -29,12 +29,13 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
                 interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->isPistol()) {
             static bool wasInAttackLastTick{ false };
-            if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver && wasInAttackLastTick) {
-                if (cmd->buttons & UserCmd::IN_ATTACK2 && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->currenttime)
+            if (wasInAttackLastTick) {
+                if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
+                    && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->currenttime)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
+                else
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
             }
-            else if (cmd->buttons & UserCmd::IN_ATTACK && wasInAttackLastTick)
-                cmd->buttons &= ~UserCmd::IN_ATTACK;
             wasInAttackLastTick = cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }
     }
