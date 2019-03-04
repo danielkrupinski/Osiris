@@ -5,7 +5,7 @@
 
 #include "Config.h"
 
-Config::Config(const std::string_view name) noexcept
+Config::Config(const char* name) noexcept
 {
     PWSTR pathToDocuments;
     if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {

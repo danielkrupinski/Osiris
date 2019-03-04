@@ -5,7 +5,7 @@
 
 class Config final {
 public:
-    explicit Config(const std::string_view) noexcept;
+    explicit Config(const char*) noexcept;
     void load() noexcept;
     void save() const noexcept;
     void reset() noexcept;
