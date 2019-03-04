@@ -10,6 +10,7 @@ namespace Misc {
     void revealRanks() noexcept;
     void animateClanTag(const char* = nullptr) noexcept;
     void spectatorList() noexcept;
+    void sniperCrosshair() noexcept;
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {

@@ -102,3 +102,9 @@ void Misc::spectatorList() noexcept
         }
     }
 }
+
+void Misc::sniperCrosshair() noexcept
+{
+    static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
+    showSpread->setValue(config.misc.sniperCrosshair ? 3 : 0);
+}
