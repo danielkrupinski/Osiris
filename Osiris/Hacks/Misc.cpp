@@ -111,6 +111,6 @@ void Misc::sniperCrosshair() noexcept
 
 void Misc::recoilCrosshair() noexcept
 {
-    static auto showSpread = interfaces.cvar->findVar("cl_crosshair_recoil");
-    showSpread->setValue(config.misc.sniperCrosshair ? 1 : 0);
+    static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
+    recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
 }
