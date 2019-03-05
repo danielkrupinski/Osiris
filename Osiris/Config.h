@@ -151,6 +151,7 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool sniperCrosshair{ false };
+        bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool radarHack{ false };
         bool spectatorList{ false };
@@ -160,8 +161,8 @@ public:
         constexpr void serialize(Archive& archive) noexcept
         {
             archive(bunnyHop, animatedClanTag, fastDuck,
-                sniperCrosshair, autoPistol, radarHack,
-                spectatorList, watermark);
+                sniperCrosshair, recoilCrosshair, autoPistol,
+                radarHack, spectatorList, watermark);
         }
     } misc;
 
