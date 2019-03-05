@@ -78,7 +78,7 @@ void Misc::spectatorList() noexcept
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
-        auto spectatorsCount{ 0 };
+        int spectatorsCount{ 0 };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
