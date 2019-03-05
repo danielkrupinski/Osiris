@@ -108,3 +108,9 @@ void Misc::sniperCrosshair() noexcept
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
     showSpread->setValue(config.misc.sniperCrosshair ? 3 : 0);
 }
+
+void Misc::recoilCrosshair() noexcept
+{
+    static auto showSpread = interfaces.cvar->findVar("cl_crosshair_recoil");
+    showSpread->setValue(config.misc.sniperCrosshair ? 1 : 0);
+}

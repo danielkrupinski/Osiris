@@ -11,6 +11,7 @@ namespace Misc {
     void animateClanTag(const char* = nullptr) noexcept;
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
+    void recoilCrosshair() noexcept;
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
