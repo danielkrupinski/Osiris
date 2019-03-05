@@ -115,6 +115,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 
     if (cmd->command_number && interfaces.engine->isInGame()) {
         Misc::sniperCrosshair();
+        Misc::recoilCrosshair();
         Visuals::skybox();
         Misc::bunnyHop(cmd);
         Misc::removeCrouchCooldown(cmd);
