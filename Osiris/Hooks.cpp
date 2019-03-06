@@ -201,7 +201,7 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
 
 static void __stdcall hookedPlaySound(const char* name) noexcept
 {
-
+    hooks.client.getOriginal<void(__thiscall*)(Surface*, const char*)>(82)(interfaces.surface, name);
 }
 
 Hooks::Hooks()
@@ -220,6 +220,8 @@ Hooks::Hooks()
     modelRender.hookAt(21, hookedDrawModelExecute);
 
     panel.hookAt(41, hookedPaintTraverse);
+
+    surface.hookAt(82, hookedPlaySound);
 
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 }
