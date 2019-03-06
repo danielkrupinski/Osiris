@@ -199,6 +199,11 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
     hooks.client.getOriginal<void(__thiscall*)(Client*, FrameStage)>(37)(interfaces.client, stage);
 }
 
+static void __stdcall hookedPlaySound(const char* name) noexcept
+{
+
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
