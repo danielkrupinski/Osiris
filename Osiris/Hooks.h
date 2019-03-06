@@ -43,6 +43,7 @@ public:
     Vmt clientMode{ memory.clientMode };
     Vmt modelRender{ interfaces.modelRender };
     Vmt panel{ interfaces.panel };
+    Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
 };
 
