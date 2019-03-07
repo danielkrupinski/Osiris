@@ -23,10 +23,10 @@ public:
     bool* disablePostProcessing;
 
     uintptr_t loadSky;
-    uintptr_t setClanTag;
+    std::add_pointer_t<void __fastcall(const char*, const char*) noexcept> setClanTag;
     int* smokeCount;
     uintptr_t cameraThink;
-    uintptr_t revealRanks;
+    std::add_pointer_t<void __cdecl(int*) noexcept> revealRanks;
 };
 
 extern Memory memory;

@@ -44,7 +44,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 void Misc::revealRanks() noexcept
 {
     static int param[3]{ };
-    reinterpret_cast<void(__cdecl*)(int*)>(memory.revealRanks)(param);
+    memory.revealRanks(param);
 }
 
 void Misc::animateClanTag(const char* tag) noexcept

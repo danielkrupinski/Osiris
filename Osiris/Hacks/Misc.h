@@ -21,7 +21,7 @@ namespace Misc {
 
     constexpr void setClanTag(const char* clanTag) noexcept
     {
-        reinterpret_cast<void(__fastcall*)(const char*, const char*)>(memory.setClanTag)(clanTag, clanTag);
+        memory.setClanTag(clanTag, clanTag);
     }
 
     constexpr void watermark() noexcept
