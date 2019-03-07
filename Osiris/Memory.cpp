@@ -21,6 +21,7 @@ Memory::Memory() noexcept
         smokeCount = *reinterpret_cast<int**>(findPattern("client_panorama", "\x8B\x1D.{4}\x56\x33\xF6\x57\x85\xDB") + 2);
         cameraThink = findPattern("client_panorama", "\x85\xC0\x75\x30\x38\x86");
         revealRanks = reinterpret_cast<decltype(revealRanks)>(findPattern("client_panorama", "\x55\x8B\xEC\x8B\x0D.{4}\x85\xC9\x75.\xA1.{4}\x68.{4}\x8B\x08\x8B\x01\xFF\x50\x04\x85\xC0\x74\x0B\x8B\xC8\xE8.{4}\x8B\xC8\xEB\x02\x33\xC9\x89\x0D.{4}\x8B\x45\x08"));
+        acceptMatch = reinterpret_cast<decltype(acceptMatch)>(findPattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA.{4}E8.{4}\x85\xC0\x75\x12"));
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);

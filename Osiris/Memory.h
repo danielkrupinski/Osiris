@@ -27,6 +27,7 @@ public:
     int* smokeCount;
     uintptr_t cameraThink;
     std::add_pointer_t<void __cdecl(int*) noexcept> revealRanks;
+    std::add_pointer_t<bool __stdcall(const char*) noexcept> acceptMatch;
 };
 
 extern Memory memory;
