@@ -36,6 +36,7 @@ public:
     Panel* panel;
     RenderView* renderView;
     Surface* surface;
+    class Sound* sound;
 private:
     template <typename T>
     static auto find(const std::string& module, const std::string& name)
