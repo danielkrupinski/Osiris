@@ -153,6 +153,7 @@ public:
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
+        bool autoAccept{ false };
         bool radarHack{ false };
         bool spectatorList{ false };
         bool watermark{ false };
@@ -162,7 +163,7 @@ public:
         {
             archive(bunnyHop, animatedClanTag, fastDuck,
                 sniperCrosshair, recoilCrosshair, autoPistol,
-                radarHack, spectatorList, watermark);
+                autoAccept, radarHack, spectatorList, watermark);
         }
     } misc;
 
