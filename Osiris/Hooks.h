@@ -44,7 +44,6 @@ public:
     Vmt modelRender{ interfaces.modelRender };
     Vmt panel{ interfaces.panel };
     Vmt sound{ interfaces.sound };
-    Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
 };
 
