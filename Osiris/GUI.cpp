@@ -253,7 +253,7 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 315.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 335.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];
@@ -269,6 +269,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
+        ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         ImGui::Checkbox("Watermark", &config.misc.watermark);
