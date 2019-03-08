@@ -204,6 +204,13 @@ static void __stdcall hookedPlaySound(const char* name) noexcept
     hooks.client.getOriginal<void(__thiscall*)(Surface*, const char*)>(82)(interfaces.surface, name);
 }
 
+static void __stdcall hookedEmitSound(int& filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, float attenuation, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, int unknown)
+{
+    hooks.sound.getOriginal<void(__thiscall*)(Sound*, int&, int, int, const char*, unsigned int, const char*, float, int, float, int, int, const Vector&, const Vector&, void*, bool, float, int, int)>(5)(interfaces.sound, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, attenuation, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, unknown);
+    if (!strcmp(soundEntry, "UIPanorama.popup_accept_match_beep"))
+        memory.acceptMatch("");
+}
+
 Hooks::Hooks()
 {
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
@@ -222,6 +229,7 @@ Hooks::Hooks()
     panel.hookAt(41, hookedPaintTraverse);
 
     surface.hookAt(82, hookedPlaySound);
+    sound.hookAt(5, hookedEmitSound);
 
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 }
