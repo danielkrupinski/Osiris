@@ -76,3 +76,9 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
         }
     }
 }
+
+void Visuals::removeBlur() noexcept
+{
+    static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
+    blur->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noBlur);
+}
