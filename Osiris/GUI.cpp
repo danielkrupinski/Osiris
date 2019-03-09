@@ -211,7 +211,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 235.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 265.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
@@ -222,6 +222,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No weapons", &config.visuals.noWeapons);
         ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
+        ImGui::Checkbox("No blur", &config.visuals.noBlur);
         ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
         ImGui::NextColumn();
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
@@ -253,7 +254,7 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 335.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 340.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];
