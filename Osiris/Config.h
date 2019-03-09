@@ -113,6 +113,7 @@ public:
         bool noSleeves{ false };
         bool noWeapons{ false };
         bool noSmoke{ false };
+        bool noBlur{ false };
         bool wireframeSmoke{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
@@ -126,7 +127,7 @@ public:
         constexpr void serialize(Archive& archive) noexcept
         {
             archive(disablePostProcessing, inverseRagdollGravity, noVisualRecoil, noHands,
-                noSleeves, noSmoke, noWeapons, wireframeSmoke, thirdperson, thirdpersonKey,
+                noSleeves, noWeapons, noSmoke, noBlur, wireframeSmoke, thirdperson, thirdpersonKey,
                 thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
         }
     } visuals;
