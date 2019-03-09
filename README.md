@@ -50,6 +50,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **No hands** - removes arms / hands model from first-person view
     * **No weapons** - removes weapons model from first-person view
     * **No smoke** - remove smoke grenade effect
+    * **No blur** - remove blur
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
@@ -65,6 +66,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Clan tag** - set custom clan tag
     * **Animated clan tag** - animate clan tag
     * **Fast duck** - remove crouch delay
+    * **Sniper crosshair** - draw crosshair while holding sniper rifle
+    * **Recoil crosshair** - crosshair follows recoil pattern
     * **Auto pistol** - add ability of firing pistols like automatic rifles
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner
