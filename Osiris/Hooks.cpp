@@ -142,6 +142,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Visuals::colorWorld();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
+        Visuals::updateBrightness();
         Glow::render();
     }
     return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
