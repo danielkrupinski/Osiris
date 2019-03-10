@@ -232,6 +232,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderInt("##1", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
         ImGui::SliderInt("##2", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
         ImGui::SliderInt("##3", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::SliderFloat("##4", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
