@@ -120,6 +120,7 @@ public:
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
         int flashReduction{ 0 };
+        float brightness{ 0.0f };
         int skybox{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
 
@@ -128,7 +129,7 @@ public:
         {
             archive(disablePostProcessing, inverseRagdollGravity, noVisualRecoil, noHands,
                 noSleeves, noWeapons, noSmoke, noBlur, wireframeSmoke, thirdperson, thirdpersonKey,
-                thirdpersonDistance, viewmodelFov, flashReduction, skybox, worldColor);
+                thirdpersonDistance, viewmodelFov, flashReduction, brightness, skybox, worldColor);
         }
     } visuals;
 
