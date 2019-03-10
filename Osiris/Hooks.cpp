@@ -179,14 +179,10 @@ static bool __stdcall hookedSvCheatsGetBool() noexcept
 
 static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
-    hooks.panel.getOriginal<void(__thiscall*)(Panel*, unsigned int, bool, bool)>(41)(interfaces.panel, panel, forceRepaint, allowForce);
+    if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
+        hooks.panel.getOriginal<void(__thiscall*)(Panel*, unsigned int, bool, bool)>(41)(interfaces.panel, panel, forceRepaint, allowForce);
 
-    static unsigned int panelId{ 0 };
-    if (!panelId) {
-        if (interfaces.panel->getName(panel) == "MatSystemTopPanel")
-            panelId = panel;
-    }
-    else if (panel == panelId) {
+    if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
         Misc::spectatorList();
     }
