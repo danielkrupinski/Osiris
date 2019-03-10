@@ -82,3 +82,9 @@ void Visuals::removeBlur() noexcept
     static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
     blur->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noBlur);
 }
+
+void Visuals::updateBrightness() noexcept
+{
+    static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
+    brightness->setValue(config.visuals.brightness);
+}

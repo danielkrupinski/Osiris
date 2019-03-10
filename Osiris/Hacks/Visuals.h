@@ -22,6 +22,7 @@ namespace Visuals {
     void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage) noexcept;
     void removeBlur() noexcept;
+    void updateBrightness() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
