@@ -62,17 +62,15 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        switch (stage) {
-        case FrameStage::RENDER_START:
+        if (stage == FrameStage::RENDER_START) {
             aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle");
             viewPunch = localPlayer->getProperty<Vector>("m_viewPunchAngle");
             localPlayer->setProperty("m_aimPunchAngle", Vector{ });
             localPlayer->setProperty("m_viewPunchAngle", Vector{ });
-            break;
-        case FrameStage::RENDER_END:
+        }
+        else if (stage == FrameStage::RENDER_END) {
             localPlayer->setProperty("m_aimPunchAngle", aimPunch);
             localPlayer->setProperty("m_viewPunchAngle", aimPunch);
-            break;
         }
     }
 }
