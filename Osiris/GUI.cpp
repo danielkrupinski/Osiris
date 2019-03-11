@@ -32,7 +32,7 @@ void GUI::checkBoxAndColorPicker(const std::string& name, bool* enable, float* c
     if (openPopup)
         ImGui::OpenPopup(("##" + name + "Popup").c_str());
     if (ImGui::BeginPopup(("##" + name + "Popup").c_str())) {
-        ImGui::ColorPicker3(("##" + name + "Picker").c_str(), color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+        ImGui::ColorPicker3(("##" + name + "Picker").c_str(), color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
         ImGui::EndPopup();
     }
 }
@@ -199,7 +199,7 @@ void GUI::renderChamsWindow() noexcept
         if (openPopup)
             ImGui::OpenPopup("##3");
         if (ImGui::BeginPopup("##3")) {
-            ImGui::ColorPicker3("##4", config.chams.chams[currentItem].color, ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_NoSidePreview);
+            ImGui::ColorPicker3("##4", config.chams.chams[currentItem].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
             ImGui::EndPopup();
         }
         ImGui::PushItemWidth(220.0f);
