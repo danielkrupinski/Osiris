@@ -51,9 +51,11 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **No weapons** - removes weapons model from first-person view
     * **No smoke** - remove smoke grenade effect
     * **No blur** - remove blur
+    * **No scope overlay** - remove black overlay while scoping
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
+    * **Brightness** - control game brightness [*0.0*-*1.0*]
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
 
