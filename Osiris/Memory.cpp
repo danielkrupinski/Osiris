@@ -49,3 +49,29 @@ uintptr_t Memory::findPattern(const std::string& module, const std::string& patt
     else
         return reinterpret_cast<ptrdiff_t>(moduleInfo.lpBaseOfDll) + match.position();
 }
+
+uintptr_t Memory::findPattern_2(const char* module, std::string_view pattern) const
+{
+    MODULEINFO moduleInfo;
+
+    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo));
+
+    const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
+    const char* end = begin + moduleInfo.SizeOfImage;
+
+    for (const char* c = begin; c != end; c++) {
+        bool matched = true;
+        auto it = c;
+
+        for (auto a : pattern) {
+            if (a != '?' && *it != a) {
+                matched = false;
+                break;
+            }
+            it++;
+        }
+        if (matched)
+            return reinterpret_cast<uintptr_t>(c);
+    }
+    throw std::runtime_error{ "Memory scan failed!" };
+}

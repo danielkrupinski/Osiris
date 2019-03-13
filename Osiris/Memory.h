@@ -11,6 +11,7 @@ class Memory final {
 public:
     Memory() noexcept;
     uintptr_t findPattern(const std::string&, const std::string&) const;
+    uintptr_t findPattern_2(const char*, std::string_view) const;
 
     uintptr_t present;
     uintptr_t reset;
