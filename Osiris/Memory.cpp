@@ -56,7 +56,7 @@ uintptr_t Memory::findPattern_2(const char* module, std::string_view pattern) co
 
     GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo));
 
-    const char* begin = reinterpret_cast<const char*>(moduleInfo.lpBaseOfDll);
+    const char* begin = static_cast<const char*>(moduleInfo.lpBaseOfDll);
     const char* end = begin + moduleInfo.SizeOfImage;
 
     for (const char* c = begin; c != end; c++) {
