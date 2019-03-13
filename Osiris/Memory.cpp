@@ -12,7 +12,7 @@ Memory::Memory() noexcept
         present = findPattern_2("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB") + 2;
         reset = findPattern_2("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8") + 9;
         clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
-        input = *reinterpret_cast<Input**>(findPattern_2("client_panorama", "\xB9????\x8B\x40\x38\xFF\xD0\x84\xC0\x0F\x85") + 1);
+        input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
         globalVars = **reinterpret_cast<GlobalVars***>(findPattern_2("client_panorama", "\xA1?????\x8B\x40\x10") + 1);
         glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern_2("client_panorama", "\x0F\x11\x05????\x83\xC8\x01") + 3);
         disablePostProcessing = *reinterpret_cast<bool**>(findPattern_2("client_panorama", "\x80\x3D?????\x53\x56\x57\x0F\x85") + 2);
