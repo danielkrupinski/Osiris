@@ -211,7 +211,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 287.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 315.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
@@ -224,6 +224,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
         ImGui::Checkbox("No blur", &config.visuals.noBlur);
         ImGui::Checkbox("No scope overlay", &config.visuals.noScopeOverlay);
+        ImGui::Checkbox("No grass", &config.visuals.noGrass);
         ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
         ImGui::NextColumn();
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
