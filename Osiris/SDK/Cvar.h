@@ -4,9 +4,9 @@
 
 class Cvar {
 public:
-    constexpr std::string_view getString() noexcept
+    constexpr auto getString() noexcept
     {
-        return callVirtualFunction<const char*(__thiscall*)(void*)>(this, 11)(this);
+        return std::string_view{ callVirtualFunction<const char*(__thiscall*)(void*)>(this, 11)(this) };
     }
 
     constexpr float getFloat() noexcept
@@ -19,9 +19,9 @@ public:
         return callVirtualFunction<int(__thiscall*)(void*)>(this, 13)(this);
     }
 
-    constexpr void setValue(const std::string_view value) noexcept
+    constexpr void setValue(const char* value) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, const char*)>(this, 14)(this, value.data());
+        callVirtualFunction<void(__thiscall*)(void*, const char*)>(this, 14)(this, value);
     }
 
     constexpr void setValue(float value) noexcept
@@ -34,9 +34,9 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, int)>(this, 16)(this, value);
     }
 
-    constexpr Cvar* findVar(const std::string_view name) noexcept
+    constexpr Cvar* findVar(const char* name) noexcept
     {
-        return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name.data());
+        return callVirtualFunction<Cvar*(__thiscall*)(void*, const char*)>(this, 15)(this, name);
     }
 
     std::byte pad[68];
