@@ -113,7 +113,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 {
     auto result = hooks.clientMode.getOriginal<bool(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
 
-    if (cmd->command_number && interfaces.engine->isInGame()) {
+    if (cmd->command_number) {
         Misc::sniperCrosshair();
         Misc::recoilCrosshair();
         Visuals::skybox();
