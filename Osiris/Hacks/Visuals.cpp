@@ -86,3 +86,9 @@ void Visuals::updateBrightness() noexcept
     static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
     brightness->setValue(config.visuals.brightness);
 }
+
+void Visuals::removeGrass() noexcept
+{
+    static auto grass = interfaces.materialSystem->findMaterial("detail/detailsprites_survival");
+    grass->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+}

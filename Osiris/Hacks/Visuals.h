@@ -23,6 +23,7 @@ namespace Visuals {
     void removeVisualRecoil(FrameStage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;
+    void removeGrass() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
