@@ -109,7 +109,7 @@ When injected, menu is openable under `INSERT` key.
 ## FAQ
 
 ### How do I open menu?
-Press `INSERT` key while while focused on CS:GO window.
+Press `INSERT` key while focused on CS:GO window.
 
 ### Where is my config file saved?
 Configuration file is saved under name `Osiris` (without extension) in your `Documents` folder (`%USERPROFILE%\Documents`). The config is binary serialized so it is not meant to be edited by humans. Sometimes after updates configuration file needs to be deleted and recreated.
