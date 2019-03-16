@@ -113,23 +113,22 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
 {
     auto result = hooks.clientMode.getOriginal<bool(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
 
-    if (cmd->command_number) {
-        Misc::sniperCrosshair();
-        Misc::recoilCrosshair();
-        Visuals::skybox();
-        Misc::bunnyHop(cmd);
-        Misc::removeCrouchCooldown(cmd);
-        Aimbot::run(cmd);
-        Triggerbot::run(cmd);
-        Misc::autoPistol(cmd);
-        Misc::animateClanTag();
-        cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-        cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-        cmd->viewangles.z = 0.0f;
-        return false;
-    }
-    else
+    if (!cmd->command_number)
         return result;
+
+    Misc::sniperCrosshair();
+    Misc::recoilCrosshair();
+    Visuals::skybox();
+    Misc::bunnyHop(cmd);
+    Misc::removeCrouchCooldown(cmd);
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Misc::autoPistol(cmd);
+    Misc::animateClanTag();
+    cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+    cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+    cmd->viewangles.z = 0.0f;
+    return false;
 }
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
