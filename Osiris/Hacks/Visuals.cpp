@@ -56,14 +56,11 @@ void Visuals::thirdperson() noexcept
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
-    if (config.visuals.noVisualRecoil) {
-
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-        if (stage == FrameStage::RENDER_START) {
+    if (config.visuals.noVisualRecoil && stage == FrameStage::RENDER_START) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        localPlayer->setProperty("m_viewPunchAngle", Vector{ });
+        if (!config.misc.recoilCrosshair)
             localPlayer->setProperty("m_aimPunchAngle", Vector{ });
-            localPlayer->setProperty("m_viewPunchAngle", Vector{ });
-        }
     }
 }
 
