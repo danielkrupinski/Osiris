@@ -22,7 +22,7 @@ public:
 
     bool* disablePostProcessing;
 
-    uintptr_t loadSky;
+    std::add_pointer_t<void __fastcall(const char*) noexcept> loadSky;
     std::add_pointer_t<void __fastcall(const char*, const char*) noexcept> setClanTag;
     int* smokeCount;
     uintptr_t cameraThink;
