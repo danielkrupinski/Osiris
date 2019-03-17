@@ -15,9 +15,10 @@ public:
         return std::string_view{ callVirtualFunction<const char*(__thiscall*)(void*)>(this, 0)(this) };
     }
 
-    constexpr void incrementReferenceCount() noexcept
+    constexpr int incrementReferenceCount() noexcept
     {
         callVirtualFunction<void(__thiscall*)(void*)>(this, 12)(this);
+        return 0;
     }
 
     constexpr void alphaModulate(float alpha) noexcept
