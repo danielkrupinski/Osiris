@@ -1,6 +1,5 @@
 #include <stdexcept>
 #include <Windows.h>
-#include <Psapi.h>
 
 #include "Interfaces.h"
 #include "Memory.h"
@@ -8,48 +7,22 @@
 Memory::Memory() noexcept
 {
     try {
-        present = findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB") + 2;
-        reset = findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8") + 9;
+        present = findPattern<>("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
+        reset = findPattern<>("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8", 9);
         clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
         input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
         globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
-        glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern("client_panorama", "\x0F\x11\x05????\x83\xC8\x01") + 3);
-        disablePostProcessing = *reinterpret_cast<bool**>(findPattern("client_panorama", "\x80\x3D?????\x53\x56\x57\x0F\x85") + 2);
-        loadSky = reinterpret_cast<decltype(loadSky)>(findPattern("engine", "\x55\x8B\xEC\x81\xEC????\x56\x57\x8B\xF9\xC7\x45"));
-        setClanTag = reinterpret_cast<decltype(setClanTag)>(findPattern("engine", "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15"));
-        smokeCount = *reinterpret_cast<int**>(findPattern("client_panorama", "\x8B\x1D????\x56\x33\xF6\x57\x85\xDB") + 2);
-        cameraThink = findPattern("client_panorama", "\x85\xC0\x75\x30\x38\x86");
-        revealRanks = reinterpret_cast<decltype(revealRanks)>(findPattern("client_panorama", "\x55\x8B\xEC\x8B\x0D????\x85\xC9\x75\x28\xA1????\x68????\x8B\x08\x8B\x01\xFF\x50\x04\x85\xC0\x74\x0B\x8B\xC8\xE8????\x8B\xC8\xEB\x02\x33\xC9\x89\x0D????\x8B\x45\x08"));
-        acceptMatch = reinterpret_cast<decltype(acceptMatch)>(findPattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12"));
+        glowObjectManager = *findPattern<GlowObjectManager**>("client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3);
+        disablePostProcessing = *findPattern<bool**>("client_panorama", "\x80\x3D?????\x53\x56\x57\x0F\x85", 2);
+        loadSky = findPattern<decltype(loadSky)>("engine", "\x55\x8B\xEC\x81\xEC????\x56\x57\x8B\xF9\xC7\x45");
+        setClanTag = findPattern<decltype(setClanTag)>("engine", "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15");
+        smokeCount = *findPattern<int**>("client_panorama", "\x8B\x1D????\x56\x33\xF6\x57\x85\xDB", 2);
+        cameraThink = findPattern<>("client_panorama", "\x85\xC0\x75\x30\x38\x86");
+        revealRanks = findPattern<decltype(revealRanks)>("client_panorama", "\x55\x8B\xEC\x8B\x0D????\x85\xC9\x75\x28\xA1????\x68????\x8B\x08\x8B\x01\xFF\x50\x04\x85\xC0\x74\x0B\x8B\xC8\xE8????\x8B\xC8\xEB\x02\x33\xC9\x89\x0D????\x8B\x45\x08");
+        acceptMatch = findPattern<decltype(acceptMatch)>("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12");
     }
     catch (const std::runtime_error& e) {
         MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
         std::exit(EXIT_FAILURE);
     }
-}
-
-uintptr_t Memory::findPattern(const char* module, std::string_view pattern) const
-{
-    MODULEINFO moduleInfo;
-
-    GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo));
-
-    const char* begin = static_cast<const char*>(moduleInfo.lpBaseOfDll);
-    const char* end = begin + moduleInfo.SizeOfImage;
-
-    for (const char* c = begin; c != end; c++) {
-        bool matched = true;
-        auto it = c;
-
-        for (auto a : pattern) {
-            if (a != '?' && *it != a) {
-                matched = false;
-                break;
-            }
-            it++;
-        }
-        if (matched)
-            return reinterpret_cast<uintptr_t>(c);
-    }
-    throw std::runtime_error{ "Memory scan failed!" };
 }

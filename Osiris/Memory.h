@@ -1,6 +1,8 @@
 #pragma once
 
-#include <string>
+#include <string_view>
+#include <Windows.h>
+#include <Psapi.h>
 
 #include "SDK/Entity.h"
 #include "SDK/GlobalVars.h"
@@ -10,7 +12,33 @@
 class Memory final {
 public:
     Memory() noexcept;
-    uintptr_t findPattern(const char*, std::string_view) const;
+
+    template <typename T = uintptr_t>
+    auto findPattern(const char* module, std::string_view pattern, size_t offset = 0) const
+    {
+        MODULEINFO moduleInfo;
+
+        GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo));
+
+        char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
+        char* end = begin + moduleInfo.SizeOfImage;
+
+        for (char* c = begin; c != end; c++) {
+            bool matched = true;
+            auto it = c;
+
+            for (auto a : pattern) {
+                if (a != '?' && *it != a) {
+                    matched = false;
+                    break;
+                }
+                it++;
+            }
+            if (matched)
+                return reinterpret_cast<T>(c + offset);
+        }
+        throw std::runtime_error{ "Memory scan failed!" };
+    }
 
     uintptr_t present;
     uintptr_t reset;
