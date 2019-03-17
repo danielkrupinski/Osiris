@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iomanip>
-#include <sstream>
 #include <stdexcept>
-#include <string>
 #include <type_traits>
 #include <Windows.h>
 
@@ -39,14 +36,14 @@ public:
     class Sound* sound;
 private:
     template <typename T>
-    static auto find(const std::string& module, const std::string& name)
+    static auto find(const char* module, const char* name)
     {
-        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module.c_str()), "CreateInterface"));
+        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module), "CreateInterface"));
 
-        if (auto foundInterface = createInterface(name.c_str(), nullptr))
+        if (auto foundInterface = createInterface(name, nullptr))
             return foundInterface;
         else
-            throw std::runtime_error("Could not find " + name + " in " + module + "!");
+            throw std::runtime_error{ "Interface search failed!" };
     }
 };
 
