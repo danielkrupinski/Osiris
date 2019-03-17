@@ -10,16 +10,14 @@ void Glow::render() noexcept
     for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
-        if (glowobject.isUnused() || !glowobject.entity)
-            continue;
+        auto entity = glowobject.entity;
 
-        if (glowobject.entity->isDormant())
+        if (glowobject.isUnused() || !entity || entity->isDormant())
             continue;
 
         glowobject.renderWhenOccluded = false;
 
         if (glow.enabled) {
-
             glowobject.alpha = glow.alpha;
             glowobject.renderWhenUnoccluded = false;
             glowobject.glowStyle = glow.style;
@@ -27,15 +25,15 @@ void Glow::render() noexcept
             glowobject.fullBloomStencilTestValue = 0;
             glowobject.bloomAmount = glow.thickness;
 
-            switch (glowobject.entity->getClientClass()->classId) {
+            switch (entity->getClientClass()->classId) {
             case ClassId::CSPlayer:
-                if (glowobject.entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+                if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
                     if (glow.localPlayer) {
                         glowobject.glowColor = glow.localPlayerColor;
                         glowobject.renderWhenOccluded = true;
                     }
                 }
-                else if (glowobject.entity->isEnemy()) {
+                else if (entity->isEnemy()) {
                     if (glow.enemies) {
                         glowobject.glowColor = glow.enemiesColor;
                         glowobject.renderWhenOccluded = true;
@@ -65,7 +63,7 @@ void Glow::render() noexcept
                 }
                 break;
             default:
-                if (glowobject.entity->isWeapon()) {
+                if (entity->isWeapon()) {
                     if (glow.weapons) {
                         glowobject.glowColor = glow.weaponsColor;
                         glowobject.renderWhenOccluded = true;
