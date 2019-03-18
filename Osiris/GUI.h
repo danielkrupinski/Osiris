@@ -7,7 +7,6 @@ public:
     void render() noexcept;
     bool isOpen{ false };
 private:
-	static void checkBoxAndColorPicker(const std::string&, bool*, float*) noexcept;
     static void hotkey(int&) noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;
