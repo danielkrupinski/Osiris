@@ -39,7 +39,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
         auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
-        if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<int>("m_bStartedArming")) {
+        if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
             if (config.chams.chams[5].enabled) {
                 auto material = config.chams.chams[5].flat ? flat : normal;
                 material->colorModulate(config.chams.chams[5].color);
@@ -60,7 +60,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 interfaces.modelRender->forceMaterialOverride(material);
             }
         }
-        else if (entity->getProperty<int>("m_bIsDefusing")) {
+        else if (entity->getProperty<bool>("m_bIsDefusing")) {
             if (config.chams.chams[7].enabled) {
                 auto material = config.chams.chams[7].flat ? flat : normal;
                 material->colorModulate(config.chams.chams[7].color);
