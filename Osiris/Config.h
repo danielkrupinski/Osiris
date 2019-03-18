@@ -60,34 +60,23 @@ public:
             float alpha{ 1.0f };
             int style{ 0 };
             float color[3]{ 1.0f, 1.0f, 1.0f };
-        } glow[7];
 
-        bool enabled{ false };
-        float thickness{ 1.0f };
-        float alpha{ 1.0f };
-        int style{ 0 };
-        bool allies{ false };
-        float alliesColor[3]{ 0.0f, 1.0f, 0.0f };
-        bool enemies{ false };
-        float enemiesColor[3]{ 1.0f, 0.0f, 0.0f };
-        bool localPlayer{ false };
-        float localPlayerColor[3]{ 0.15f, 0.76f, 0.8f };
-        bool weapons{ false };
-        float weaponsColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool C4{ false };
-        float C4Color[3]{ 1.0f, 1.0f, 0.0f };
-        bool plantedC4{ false };
-        float plantedC4Color[3]{ 1.0f, 0.27f, 0.0f };
-        bool chickens{ false };
-        float chickensColor[3]{ 1.0f, 0.08f, 0.58f };
+            template <class Archive>
+            constexpr void serialize(Archive& archive) noexcept
+            {
+                archive(enabled, thickness, alpha, style, color);
+            }
+        } glowa[7];
+
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return glowa[index];
+        }
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(enabled, thickness, alpha, style, allies, alliesColor,
-                enemies, enemiesColor, localPlayer, localPlayerColor,
-                weapons, weaponsColor, C4, C4Color,
-                plantedC4, plantedC4Color, chickens, chickensColor);
+            archive(glowa);
         }
     } glow;
 

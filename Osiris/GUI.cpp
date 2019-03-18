@@ -156,17 +156,17 @@ void GUI::renderGlowWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::Combo("##1", &currentCategory, "Allies\0Enemies\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0");
-        ImGui::Checkbox("Enabled", &config.glow.glow[currentCategory].enabled);
-        ImGui::SliderFloat("##2", &config.glow.glow[currentCategory].thickness, 0.0f, 1.0f, "Thickness: %.2f");
-        ImGui::SliderFloat("##3", &config.glow.glow[currentCategory].alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::SliderInt("##4", &config.glow.glow[currentCategory].style, 0, 3, "Style: %d");
-        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow.glow[currentCategory].color[0], config.glow.glow[currentCategory].color[1], config.glow.glow[currentCategory].color[2] }, ImGuiColorEditFlags_NoTooltip);
+        ImGui::Checkbox("Enabled", &config.glow[currentCategory].enabled);
+        ImGui::SliderFloat("##2", &config.glow[currentCategory].thickness, 0.0f, 1.0f, "Thickness: %.2f");
+        ImGui::SliderFloat("##3", &config.glow[currentCategory].alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::SliderInt("##4", &config.glow[currentCategory].style, 0, 3, "Style: %d");
+        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow[currentCategory].color[0], config.glow[currentCategory].color[1], config.glow[currentCategory].color[2] }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
         if (openPopup)
             ImGui::OpenPopup("##5");
         if (ImGui::BeginPopup("##5")) {
-            ImGui::ColorPicker3("##6", config.glow.glow[currentCategory].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+            ImGui::ColorPicker3("##6", config.glow[currentCategory].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
             ImGui::EndPopup();
         }
         ImGui::End();
