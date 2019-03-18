@@ -44,6 +44,10 @@ void GUI::hotkey(int& key) noexcept
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != VK_INSERT)
                 key = i != VK_ESCAPE ? i : 0;
+
+        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+            if (ImGui::IsMouseDown(i))
+                key = i == 2 ? 4 : i + 1;
     }
 }
 
