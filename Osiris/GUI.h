@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 class GUI final {
 public:
     void render() noexcept;
