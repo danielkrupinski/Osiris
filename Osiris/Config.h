@@ -106,6 +106,11 @@ public:
             }
         } chams[11];
 
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return chams[index];
+        }
+
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
