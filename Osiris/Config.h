@@ -54,6 +54,14 @@ public:
     } triggerbot;
 
     struct {
+        struct {
+            bool enabled{ false };
+            float thickness{ 1.0f };
+            float alpha{ 1.0f };
+            int style{ 0 };
+            float color[3]{ 1.0f, 1.0f, 1.0f };
+        } glow[7];
+
         bool enabled{ false };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
