@@ -21,13 +21,32 @@ void Glow::render() noexcept
         glowobject.fullBloomStencilTestValue = 0;
 
         switch (entity->getClientClass()->classId) {
-        case ClassId::CSPlayer:
-            if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+        case ClassId::CSPlayer: {
+            auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
+            if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
                 if (glow[2].enabled) {
                     glowobject.alpha = glow[2].alpha;
                     glowobject.glowStyle = glow[2].style;
                     glowobject.bloomAmount = glow[2].thickness;
                     glowobject.glowColor = glow[2].color;
+                    glowobject.renderWhenOccluded = true;
+                }
+            }
+            else if (entity->getProperty<bool>("m_bIsDefusing")) {
+                if (glow[3].enabled) {
+                    glowobject.alpha = glow[3].alpha;
+                    glowobject.glowStyle = glow[3].style;
+                    glowobject.bloomAmount = glow[3].thickness;
+                    glowobject.glowColor = glow[3].color;
+                    glowobject.renderWhenOccluded = true;
+                }
+            }
+            else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+                if (glow[4].enabled) {
+                    glowobject.alpha = glow[4].alpha;
+                    glowobject.glowStyle = glow[4].style;
+                    glowobject.bloomAmount = glow[4].thickness;
+                    glowobject.glowColor = glow[4].color;
                     glowobject.renderWhenOccluded = true;
                 }
             }
@@ -48,7 +67,17 @@ void Glow::render() noexcept
                 glowobject.renderWhenOccluded = true;
             }
             break;
+        }
         case ClassId::Chicken:
+            if (glow[8].enabled) {
+                glowobject.alpha = glow[8].alpha;
+                glowobject.glowStyle = glow[8].style;
+                glowobject.bloomAmount = glow[8].thickness;
+                glowobject.glowColor = glow[8].color;
+                glowobject.renderWhenOccluded = true;
+            }
+            break;
+        case ClassId::C4:
             if (glow[6].enabled) {
                 glowobject.alpha = glow[6].alpha;
                 glowobject.glowStyle = glow[6].style;
@@ -57,31 +86,22 @@ void Glow::render() noexcept
                 glowobject.renderWhenOccluded = true;
             }
             break;
-        case ClassId::C4:
-            if (glow[4].enabled) {
-                glowobject.alpha = glow[4].alpha;
-                glowobject.glowStyle = glow[4].style;
-                glowobject.bloomAmount = glow[4].thickness;
-                glowobject.glowColor = glow[4].color;
-                glowobject.renderWhenOccluded = true;
-            }
-            break;
         case ClassId::PlantedC4:
-            if (glow[5].enabled) {
-                glowobject.alpha = glow[5].alpha;
-                glowobject.glowStyle = glow[5].style;
-                glowobject.bloomAmount = glow[5].thickness;
-                glowobject.glowColor = glow[5].color;
+            if (glow[7].enabled) {
+                glowobject.alpha = glow[7].alpha;
+                glowobject.glowStyle = glow[7].style;
+                glowobject.bloomAmount = glow[7].thickness;
+                glowobject.glowColor = glow[7].color;
                 glowobject.renderWhenOccluded = true;
             }
             break;
         default:
             if (entity->isWeapon()) {
-                if (glow[3].enabled) {
-                    glowobject.alpha = glow[3].alpha;
-                    glowobject.glowStyle = glow[3].style;
-                    glowobject.bloomAmount = glow[3].thickness;
-                    glowobject.glowColor = glow[3].color;
+                if (glow[5].enabled) {
+                    glowobject.alpha = glow[5].alpha;
+                    glowobject.glowStyle = glow[5].style;
+                    glowobject.bloomAmount = glow[5].thickness;
+                    glowobject.glowColor = glow[5].color;
                     glowobject.renderWhenOccluded = true;
                 }
             }

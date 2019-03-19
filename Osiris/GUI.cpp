@@ -151,7 +151,7 @@ void GUI::renderGlowWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0");
         ImGui::Checkbox("Enabled", &config.glow[currentCategory].enabled);
         bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow[currentCategory].color[0], config.glow[currentCategory].color[1], config.glow[currentCategory].color[2] }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);

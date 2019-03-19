@@ -65,17 +65,17 @@ public:
             {
                 archive(enabled, thickness, alpha, style, color);
             }
-        } glowa[7];
+        } glow[9];
 
         constexpr auto& operator[](size_t index) noexcept
         {
-            return glowa[index];
+            return glow[index];
         }
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(glowa);
+            archive(glow);
         }
     } glow;
 
