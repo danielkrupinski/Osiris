@@ -7,12 +7,12 @@ public:
     explicit Config(const char*) noexcept;
     void load(std::string item) noexcept;
     void save(std::string item) const noexcept;
-	void add(std::string item) noexcept;
-	void remove(std::string item) noexcept;
-	void rename(std::string item, std::string newName) noexcept;
+    void add(std::string item) noexcept;
+    void remove(std::string item) noexcept;
+    void rename(std::string item, std::string newName) noexcept;
     void reset() noexcept;
-	std::vector<std::string> getConfigs() noexcept;
-	std::string currentConfig;
+    std::vector<std::string> getConfigs() noexcept;
+    std::string currentConfig;
 
     struct {
         struct {
@@ -180,7 +180,7 @@ public:
 
 private:
     std::filesystem::path path;
-	std::vector<std::string> configs = { "Default" };
+    std::vector<std::string> configs = { "Default" };
 };
 
 extern Config config;

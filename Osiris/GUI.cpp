@@ -19,7 +19,7 @@ void GUI::render() noexcept
     renderVisualsWindow();
     renderKnifeChangerWindow();
     renderMiscWindow();
-	renderConfigWindow();
+    renderConfigWindow();
 }
 
 void GUI::hotkey(int& key) noexcept
@@ -47,7 +47,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
-		ImGui::MenuItem("Config", nullptr, &window.config);
+        ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
 }
@@ -263,133 +263,133 @@ void GUI::renderKnifeChangerWindow() noexcept
 
 void GUI::renderMiscWindow() noexcept
 {
-	if (window.misc) {
-		ImGui::SetNextWindowSize({ 220.0f, 340.0f });
-		ImGui::Begin("Misc", &window.misc, windowFlags);
-		ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-		static char buffer[16];
-		ImGui::PushItemWidth(120.0f);
-		ImGui::PushID(0);
-		ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer));
-		ImGui::SameLine();
-		if (ImGui::Button("Set clantag")) {
-			Misc::setClanTag(buffer);
-			Misc::animateClanTag(buffer);
-		}
-		ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
-		ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
-		ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
-		ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
-		ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
-		ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
-		ImGui::Checkbox("Radar hack", &config.misc.radarHack);
-		ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
-		ImGui::Checkbox("Watermark", &config.misc.watermark);
+    if (window.misc) {
+        ImGui::SetNextWindowSize({ 220.0f, 340.0f });
+        ImGui::Begin("Misc", &window.misc, windowFlags);
+        ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
+        static char buffer[16];
+        ImGui::PushItemWidth(120.0f);
+        ImGui::PushID(0);
+        ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer));
+        ImGui::SameLine();
+        if (ImGui::Button("Set clantag")) {
+            Misc::setClanTag(buffer);
+            Misc::animateClanTag(buffer);
+        }
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
+        ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
+        ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
+        ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
+        ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
+        ImGui::Checkbox("Radar hack", &config.misc.radarHack);
+        ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
+        ImGui::Checkbox("Watermark", &config.misc.watermark);
 
-		if (ImGui::Button("Reveal ranks"))
-			Misc::revealRanks();
-		ImGui::End();
-	}
+        if (ImGui::Button("Reveal ranks"))
+            Misc::revealRanks();
+        ImGui::End();
+    }
 }
 
 void GUI::renderConfigWindow() noexcept
 {
-	if (window.config) {
-		ImGui::SetNextWindowSize({ 290.0f, 190.0f });
-		ImGui::Begin("Config", &window.config, windowFlags);
+    if (window.config) {
+        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+        ImGui::Begin("Config", &window.config, windowFlags);
 
-		std::string currentConfigString("Current Config: " + config.currentConfig);
-		ImGui::Text(currentConfigString.c_str());
+        std::string currentConfigString("Current Config: " + config.currentConfig);
+        ImGui::Text(currentConfigString.c_str());
 
-		ImGui::Columns(2, nullptr, false);
-		ImGui::SetColumnOffset(1, 170.0f);
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 170.0f);
 
-		ImGui::PushItemWidth(160.0f);
+        ImGui::PushItemWidth(160.0f);
 
-		std::vector<std::string> configItems = config.getConfigs();
-		static int configCurrent = -1;
+        std::vector<std::string> configItems = config.getConfigs();
+        static int configCurrent = -1;
 
-		ImGui::ListBox("", &configCurrent, configItems, 5);
+        ImGui::ListBox("", &configCurrent, configItems, 5);
 
-		if (configCurrent < configItems.size()) {
-			if (configCurrent != 0) {
-				char buffer[16];
-				strcpy(buffer, configItems[configCurrent].c_str());
+        if (configCurrent < configItems.size()) {
+            if (configCurrent != 0) {
+                char buffer[16];
+                strcpy(buffer, configItems[configCurrent].c_str());
 
-				if (ImGui::InputText("##1", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
-					char* nameBuffer = buffer;
-					char* str_end = nameBuffer + strlen(nameBuffer);
-					while (str_end > nameBuffer && str_end[-1] == ' ')
-						str_end--; *str_end = 0;
+                if (ImGui::InputText("##1", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    char* nameBuffer = buffer;
+                    char* str_end = nameBuffer + strlen(nameBuffer);
+                    while (str_end > nameBuffer && str_end[-1] == ' ')
+                        str_end--; *str_end = 0;
 
-					std::string name(nameBuffer);
-					config.rename(configItems[configCurrent], name);
-				}
-			}
-			else {
-				ImGui::InputTextDisabled("Default");
-			}
-		}
-		else {
-			ImGui::InputTextDisabled("No Config Selected");
-		}
+                    std::string name(nameBuffer);
+                    config.rename(configItems[configCurrent], name);
+                }
+            }
+            else {
+                ImGui::InputTextDisabled("Default");
+            }
+        }
+        else {
+            ImGui::InputTextDisabled("No Config Selected");
+        }
 
-		ImGui::PopItemWidth();
-		ImGui::NextColumn();
+        ImGui::PopItemWidth();
+        ImGui::NextColumn();
 
-		ImGui::PushItemWidth(100.0f);
+        ImGui::PushItemWidth(100.0f);
 
-		if (configCurrent >= configItems.size()) {
-			ImGui::ButtonDisabled("Load Selected");
-			ImGui::ButtonDisabled("Save Selected");
-			if (ImGui::Button("New Config", { 100.0f, 25.0f })) {
-				config.add(GetNewConfigName());
-			}
-			ImGui::ButtonDisabled("Delete Config");
-		}
-		else {
-			if (ImGui::Button("Load Selected", { 100.0f, 25.0f })) {
-				config.load(configItems[configCurrent].c_str());
-			}
+        if (configCurrent >= configItems.size()) {
+            ImGui::ButtonDisabled("Load Selected");
+            ImGui::ButtonDisabled("Save Selected");
+            if (ImGui::Button("New Config", { 100.0f, 25.0f })) {
+                config.add(GetNewConfigName());
+            }
+            ImGui::ButtonDisabled("Delete Config");
+        }
+        else {
+            if (ImGui::Button("Load Selected", { 100.0f, 25.0f })) {
+                config.load(configItems[configCurrent].c_str());
+            }
 
-			if (configCurrent != 0) {
-				if (ImGui::Button("Save Selected", { 100.0f, 25.0f })) {
-					config.save(configItems[configCurrent]);
-				}
-			}
-			else {
-				ImGui::ButtonDisabled("Save Selected");
-			}
+            if (configCurrent != 0) {
+                if (ImGui::Button("Save Selected", { 100.0f, 25.0f })) {
+                    config.save(configItems[configCurrent]);
+                }
+            }
+            else {
+                ImGui::ButtonDisabled("Save Selected");
+            }
 
-			if (ImGui::Button("New Config", { 100.0f, 25.0f })) {
-				config.add(GetNewConfigName());
-			}
+            if (ImGui::Button("New Config", { 100.0f, 25.0f })) {
+                config.add(GetNewConfigName());
+            }
 
-			if (configCurrent != 0)
-			{
-				if (ImGui::Button("Delete Config", { 100.0f, 25.0f })) {
-					config.remove(configItems[configCurrent]);
-				}
-			}
-			else {
-				ImGui::ButtonDisabled("Delete Config");
-			}
-		}
+            if (configCurrent != 0)
+            {
+                if (ImGui::Button("Delete Config", { 100.0f, 25.0f })) {
+                    config.remove(configItems[configCurrent]);
+                }
+            }
+            else {
+                ImGui::ButtonDisabled("Delete Config");
+            }
+        }
 
-		ImGui::PopItemWidth();
-		ImGui::End();
-	}
+        ImGui::PopItemWidth();
+        ImGui::End();
+    }
 }
 
 std::string GUI::GetNewConfigName(std::string name, int i) noexcept {
-	std::vector<std::string> configItems = config.getConfigs();
+    std::vector<std::string> configItems = config.getConfigs();
 
-	auto cName = std::find(configItems.begin(), configItems.end(), name + (i == 0 ? "" : " " + std::to_string(i)));
-	if (cName == configItems.end())
-		if (i == 0)
-			return name;
-		else
-			return name + " " + std::to_string(i);
-	else
-		return GetNewConfigName(name, i + 1);
+    auto cName = std::find(configItems.begin(), configItems.end(), name + (i == 0 ? "" : " " + std::to_string(i)));
+    if (cName == configItems.end())
+        if (i == 0)
+            return name;
+        else
+            return name + " " + std::to_string(i);
+    else
+        return GetNewConfigName(name, i + 1);
 }
