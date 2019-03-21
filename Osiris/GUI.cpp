@@ -152,25 +152,37 @@ void GUI::renderGlowWindow() noexcept
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
         ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0");
-        ImGui::Checkbox("Enabled", &config.glow[currentCategory].enabled);
-        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow[currentCategory].color[0], config.glow[currentCategory].color[1], config.glow[currentCategory].color[2] }, ImGuiColorEditFlags_NoTooltip);
+        static int currentItem{ 0 };
+        if (currentCategory <= 3) {
+            ImGui::SameLine();
+            static int currentType{ 0 };
+            ImGui::PushID(1);
+            ImGui::Combo("", &currentType, "Visible\0Occluded");
+            currentItem = currentCategory * 2 + currentType;
+        }
+        else {
+            currentItem = currentCategory + 4;
+        }
+
+        ImGui::Checkbox("Enabled", &config.glow[currentItem].enabled);
+        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow[currentItem].color[0], config.glow[currentItem].color[1], config.glow[currentItem].color[2] }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
-        ImGui::PushID(1);
+        ImGui::PushID(2);
         if (openPopup)
             ImGui::OpenPopup("");
         if (ImGui::BeginPopup("")) {
-            ImGui::PushID(2);
-            ImGui::ColorPicker3("", config.glow[currentCategory].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+            ImGui::PushID(3);
+            ImGui::ColorPicker3("", config.glow[currentItem].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
             ImGui::EndPopup();
         }
         ImGui::PushItemWidth(220.0f);
-        ImGui::PushID(3);
-        ImGui::SliderFloat("", &config.glow[currentCategory].thickness, 0.0f, 1.0f, "Thickness: %.2f");
         ImGui::PushID(4);
-        ImGui::SliderFloat("", &config.glow[currentCategory].alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::SliderFloat("", &config.glow[currentItem].thickness, 0.0f, 1.0f, "Thickness: %.2f");
         ImGui::PushID(5);
-        ImGui::SliderInt("", &config.glow[currentCategory].style, 0, 3, "Style: %d");
+        ImGui::SliderFloat("", &config.glow[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
+        ImGui::PushID(6);
+        ImGui::SliderInt("", &config.glow[currentItem].style, 0, 3, "Style: %d");
         ImGui::End();
     }
 }

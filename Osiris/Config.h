@@ -65,7 +65,7 @@ public:
             {
                 archive(enabled, thickness, alpha, style, color);
             }
-        } glow[9];
+        } glow[13];
 
         constexpr auto& operator[](size_t index) noexcept
         {
