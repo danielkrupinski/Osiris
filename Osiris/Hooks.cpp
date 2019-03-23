@@ -65,6 +65,8 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
             SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
             );
+
+        interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
         isInitialised = true;
     }
     else if (gui.isOpen) {
