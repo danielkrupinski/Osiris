@@ -11,6 +11,7 @@ Interfaces::Interfaces() noexcept
         engine = find<Engine>("engine", "VEngineClient014");
         engineTrace = find<EngineTrace>("engine", "EngineTraceClient004");
         entityList = find<EntityList>("client_panorama", "VClientEntityList003");
+        gameUI = find<GameUI>("client_panorama", "GameUI011");
         inputSystem = find<InputSystem>("inputsystem", "InputSystemVersion001");
         materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem080");
         modelInfo = find<ModelInfo>("engine", "VModelInfoClient004");

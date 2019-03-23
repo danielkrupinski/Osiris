@@ -9,6 +9,7 @@
 #include "SDK/Engine.h"
 #include "SDK/EngineTrace.h"
 #include "SDK/EntityList.h"
+#include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelInfo.h"
@@ -26,6 +27,7 @@ public:
     Engine* engine;
     EngineTrace* engineTrace;
     EntityList* entityList;
+    GameUI* gameUI;
     InputSystem* inputSystem;
     MaterialSystem* materialSystem;
     ModelInfo* modelInfo;
