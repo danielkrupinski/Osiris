@@ -17,7 +17,7 @@ public:
 
     class Vmt {
     public:
-        explicit Vmt(void* const);
+        explicit Vmt(void* const) noexcept;
 
         template<typename T>
         void hookAt(size_t index, T fun) const noexcept

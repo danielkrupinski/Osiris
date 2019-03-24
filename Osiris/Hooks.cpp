@@ -260,7 +260,7 @@ auto Hooks::Vmt::calculateLength(uintptr_t * vmt) noexcept
     return length;
 }
 
-Hooks::Vmt::Vmt(void* const base)
+Hooks::Vmt::Vmt(void* const base) noexcept
 {
     oldVmt = *reinterpret_cast<uintptr_t**>(base);
     length = calculateLength(oldVmt) + 1;
