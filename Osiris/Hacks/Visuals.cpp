@@ -13,12 +13,6 @@ void Visuals::colorWorld() noexcept
     blue->setValue(config.visuals.worldColor[2]);
 }
 
-void Visuals::reduceFlashEffect() noexcept
-{
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    *reinterpret_cast<float*>(localPlayer + netvars["m_flFlashMaxAlpha"]) = 255.0f - config.visuals.flashReduction * 2.55f;
-}
-
 void Visuals::modifySmoke() noexcept
 {
     static constexpr const char* smokeMaterials[]{

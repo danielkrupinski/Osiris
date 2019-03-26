@@ -17,7 +17,6 @@ enum class FrameStage {
 
 namespace Visuals {
     void colorWorld() noexcept;
-    void reduceFlashEffect() noexcept;
     void modifySmoke() noexcept;
     void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage) noexcept;
@@ -29,6 +28,11 @@ namespace Visuals {
     {
         if (*memory.disablePostProcessing != config.visuals.disablePostProcessing)
             *memory.disablePostProcessing = config.visuals.disablePostProcessing;
+    }
+
+    constexpr void reduceFlashEffect() noexcept
+    {
+        interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->setProperty("m_flFlashMaxAlpha", 255.0f - config.visuals.flashReduction * 2.55f);
     }
 
     constexpr bool removeHands(const std::string_view modelName) noexcept
