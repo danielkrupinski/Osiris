@@ -163,12 +163,3 @@ void Chams::renderHands() const noexcept
     }
 }
 
-Material* Chams::dispatchMaterial(int id) const noexcept
-{
-    switch (id) {
-    default:
-    case 0: return normal;
-    case 1: return flat;
-    case 2: return palm;
-    }
-}
