@@ -35,23 +35,21 @@ namespace Visuals {
         interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->setProperty("m_flFlashMaxAlpha", 255.0f - config.visuals.flashReduction * 2.55f);
     }
 
-    constexpr bool removeHands(const std::string_view modelName) noexcept
+    constexpr bool removeHands(const char* modelName) noexcept
     {
-        return config.visuals.noHands && (modelName.find("arms") != std::string_view::npos);
+        return config.visuals.noHands && strstr(modelName, "arms");
     }
 
-    constexpr bool removeSleeves(const std::string_view modelName) noexcept
+    constexpr bool removeSleeves(const char* modelName) noexcept
     {
-        return config.visuals.noSleeves && (modelName.find("sleeve") != std::string_view::npos);
+        return config.visuals.noSleeves && strstr(modelName, "sleeve");
     }
 
-    constexpr bool removeWeapons(const std::string_view modelName) noexcept
+    constexpr bool removeWeapons(const char* modelName) noexcept
     {
-        return config.visuals.noWeapons && modelName.find("models/weapons/v_") != std::string_view::npos
-            && modelName.find("arms") == std::string_view::npos
-            && modelName.find("tablet") == std::string_view::npos
-            && modelName.find("parachute") == std::string_view::npos
-            && modelName.find("fists") == std::string_view::npos;
+        return config.visuals.noWeapons && strstr(modelName, "models/weapons/v_")
+            && !strstr(modelName, "arms") && !strstr(modelName, "tablet")
+            && !strstr(modelName, "parachute") && !strstr(modelName, "fists");
     }
 
     constexpr void skybox() noexcept
