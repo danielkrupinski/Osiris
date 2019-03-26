@@ -14,9 +14,11 @@ Chams::Chams() noexcept
         "UnlitGeneric { }";
 
     normal = interfaces.materialSystem->findMaterial("chamsNormal");
-    flat = interfaces.materialSystem->findMaterial("chamsFlat");
     normal->incrementReferenceCount();
+    flat = interfaces.materialSystem->findMaterial("chamsFlat");
     flat->incrementReferenceCount();
+    palm = interfaces.materialSystem->findMaterial("models/props/de_dust/hr_dust/foliage/palm_bark_01");
+    palm->incrementReferenceCount();
 }
 
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
@@ -41,7 +43,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
             if (config.chams[5].enabled) {
-                auto material = config.chams[5].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[5].material);
                 material->colorModulate(config.chams[5].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                 material->alphaModulate(config.chams[5].alpha);
@@ -52,7 +54,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[4].enabled) {
-                auto material = config.chams[4].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[4].material);
                 material->colorModulate(config.chams[4].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->alphaModulate(config.chams[4].alpha);
@@ -62,7 +64,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         }
         else if (entity->getProperty<bool>("m_bIsDefusing")) {
             if (config.chams[7].enabled) {
-                auto material = config.chams[7].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[7].material);
                 material->colorModulate(config.chams[7].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                 material->alphaModulate(config.chams[7].alpha);
@@ -73,7 +75,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[6].enabled) {
-                auto material = config.chams[6].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[6].material);
                 material->colorModulate(config.chams[6].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->alphaModulate(config.chams[6].alpha);
@@ -83,7 +85,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         }
         else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
             if (config.chams[8].enabled) {
-                auto material = config.chams[8].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[8].material);
                 material->alphaModulate(config.chams[8].alpha);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams[8].wireframe);
@@ -93,7 +95,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         }
         else if (entity->isEnemy()) {
             if (config.chams[3].enabled) {
-                auto material = config.chams[3].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[3].material);
                 material->colorModulate(config.chams[3].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                 material->alphaModulate(config.chams[3].alpha);
@@ -104,7 +106,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[2].enabled) {
-                auto material = config.chams[2].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[2].material);
                 material->colorModulate(config.chams[2].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->alphaModulate(config.chams[2].alpha);
@@ -114,7 +116,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         }
         else {
             if (config.chams[1].enabled) {
-                auto material = config.chams[1].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[1].material);
                 material->colorModulate(config.chams[1].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, true);
                 material->alphaModulate(config.chams[1].alpha);
@@ -125,7 +127,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[0].enabled) {
-                auto material = config.chams[0].flat ? flat : normal;
+                auto material = dispatchMaterial(config.chams[0].material);
                 material->colorModulate(config.chams[0].color);
                 material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
                 material->alphaModulate(config.chams[0].alpha);
@@ -140,7 +142,7 @@ void Chams::renderWeapons() const noexcept
 {
     if (config.chams[9].enabled &&
         !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped")) {
-        auto material = config.chams[9].flat ? flat : normal;
+        auto material = dispatchMaterial(config.chams[9].material);
         material->alphaModulate(config.chams[9].alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams[9].wireframe);
@@ -152,11 +154,21 @@ void Chams::renderWeapons() const noexcept
 void Chams::renderHands() const noexcept
 {
     if (config.chams[10].enabled) {
-        auto material = config.chams[10].flat ? flat : normal;
+        auto material = dispatchMaterial(config.chams[10].material);
         material->alphaModulate(config.chams[10].alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, false);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.chams[10].wireframe);
         material->colorModulate(config.chams[10].color);
         interfaces.modelRender->forceMaterialOverride(material);
+    }
+}
+
+Material* Chams::dispatchMaterial(int id) const noexcept
+{
+    switch (id) {
+    default:
+    case 0: return normal;
+    case 1: return flat;
+    case 2: return palm;
     }
 }

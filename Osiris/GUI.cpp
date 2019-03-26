@@ -210,7 +210,8 @@ void GUI::renderChamsWindow() noexcept
         }
 
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
-        ImGui::Checkbox("Flat", &config.chams[currentItem].flat);
+        ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm");
+        //ImGui::Checkbox("Flat", &config.chams[currentItem].flat);
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
         bool openPopup = ImGui::ColorButton("Color", ImColor{ config.chams[currentItem].color[0], config.chams[currentItem].color[1], config.chams[currentItem].color[2] }, ImGuiColorEditFlags_NoTooltip);

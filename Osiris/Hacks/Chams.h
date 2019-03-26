@@ -10,6 +10,8 @@ public:
     void renderWeapons() const noexcept;
     void renderHands() const noexcept;
 private:
+    Material* dispatchMaterial(int) const noexcept;
     Material* normal;
     Material* flat;
+    Material* palm;
 };
