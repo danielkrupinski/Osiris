@@ -14,6 +14,7 @@ private:
     void renderVisualsWindow() noexcept;
     void renderKnifeChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
+    void renderConfigWindow() noexcept;
     struct {
         bool aimbot{ false };
         bool triggerbot{ false };
@@ -22,6 +23,7 @@ private:
         bool visuals{ false };
         bool knifeChanger{ false };
         bool misc{ false };
+        bool config{ false };
     } window;
 };
 

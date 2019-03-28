@@ -19,6 +19,7 @@ void GUI::render() noexcept
     renderVisualsWindow();
     renderKnifeChangerWindow();
     renderMiscWindow();
+    renderConfigWindow();
 }
 
 void GUI::hotkey(int& key) noexcept
@@ -46,16 +47,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
-
-        if (ImGui::BeginMenu("Config")) {
-            if (ImGui::MenuItem("Load"))
-                config.load();
-            if (ImGui::MenuItem("Save"))
-                config.save();
-            if (ImGui::MenuItem("Reset"))
-                config.reset();
-            ImGui::EndMenu();
-        }
+        ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
 }
@@ -331,6 +323,61 @@ void GUI::renderMiscWindow() noexcept
 
         if (ImGui::Button("Reveal ranks"))
             Misc::revealRanks();
+        ImGui::End();
+    }
+}
+
+void GUI::renderConfigWindow() noexcept
+{
+    if (window.config) {
+        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+        ImGui::Begin("Config", &window.config, windowFlags);
+
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 170.0f);
+
+        ImGui::PushItemWidth(160.0f);
+
+        constexpr auto& configItems = config.getConfigs();
+        static int currentConfig = -1;
+
+        if (static_cast<size_t>(currentConfig) >= configItems.size())
+            currentConfig = -1;
+
+        ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
+            auto& vector = *static_cast<std::vector<std::string>*>(data);
+            *out_text = vector[idx].c_str();
+            return true;
+        }, &configItems, configItems.size(), 5);
+
+        static char buffer[16];
+        if (currentConfig != -1)
+            strcpy(buffer, configItems[currentConfig].c_str());
+
+        ImGui::PushID(0);
+        if (ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+            if (currentConfig != -1)
+                config.rename(currentConfig, buffer);
+        }
+        ImGui::PopID();
+        ImGui::NextColumn();
+
+        ImGui::PushItemWidth(100.0f);
+
+        if (ImGui::Button("Create config", { 100.0f, 25.0f }))
+            config.add(buffer);
+
+        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
+            config.reset();
+
+        if (currentConfig != -1) {
+            if (ImGui::Button("Load selected", { 100.0f, 25.0f }))
+                config.load(currentConfig);
+            if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
+                config.save(currentConfig);
+            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
+                config.remove(currentConfig);
+        }
         ImGui::End();
     }
 }
