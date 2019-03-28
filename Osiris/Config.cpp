@@ -14,50 +14,16 @@ Config::Config(const char* name) noexcept
         CoTaskMemFree(pathToDocuments);
     }
 
-    std::ifstream file(path.string().c_str(), std::ifstream::binary);
-    if (file.good()) {
-        file.seekg(0, file.end);
-        long size = file.tellg();
-        file.seekg(0);
-        char* buffer = new char[size];
-
-        file.read(buffer, size);
-        file.close();
-
-        std::filesystem::remove(path);
+    if (!std::filesystem::exists(path))
         std::filesystem::create_directory(path);
 
-        std::ofstream output(std::string(path.string() + "/" + "My Config").c_str(), std::ofstream::binary);
-        output.write(buffer, size);
-
-        delete[] buffer;
-        output.close();
-    }
-    else {
-        if (!std::filesystem::exists(path))
-            std::filesystem::create_directory(path);
-    }
-
-    for (const auto &p : std::filesystem::directory_iterator(path)) {
+    for (const auto& p : std::filesystem::directory_iterator(path))
         configs.push_back(p.path().filename().string());
-    }
-
-    load("Default");
 }
 
-void Config::load(std::string item) noexcept
+void Config::load(size_t id) noexcept
 {
-    if (std::strcmp(item.c_str(), "Default") == 0) {
-        currentConfig = "Default";
-        reset();
-        return;
-    }
-
-    std::filesystem::path configPath = path;
-    const char* fileName = item.c_str();
-    configPath /= fileName;
-
-    std::ifstream in(configPath);
+    std::ifstream in{ path / configs[id] };
 
     if (!in.good())
         return;
@@ -68,16 +34,11 @@ void Config::load(std::string item) noexcept
     }
     catch (cereal::Exception&) { }
     in.close();
-    currentConfig = item;
 }
 
-void Config::save(std::string item) const noexcept
+void Config::save(size_t id) const noexcept
 {
-    std::filesystem::path configPath = path;
-    const char* fileName = item.c_str();
-    configPath /= fileName;
-
-    std::ofstream out(configPath);
+    std::ofstream out{ path / configs[id] };
 
     if (!out.good())
         return;
@@ -90,29 +51,21 @@ void Config::save(std::string item) const noexcept
     out.close();
 }
 
-void Config::add(std::string item) noexcept
+void Config::add(const char* name) noexcept
 {
-    configs.push_back(item);
-    save(item);
+    configs.emplace_back(name);
 }
 
-void Config::remove(std::string item) noexcept
+void Config::remove(size_t id) noexcept
 {
-    auto to_remove = std::find(configs.begin(), configs.end(), item);
-    if (to_remove != configs.end())
-        configs.erase(to_remove);
-
-    std::filesystem::remove(path / item);
+    std::filesystem::remove(path / configs[id]);
+    configs.erase(configs.cbegin() + id);
 }
 
-void Config::rename(std::string item, std::string newName) noexcept
+void Config::rename(size_t item, const char* newName) noexcept
 {
-    auto to_rename = std::find(configs.begin(), configs.end(), item);
-    if (to_rename != configs.end()) {
-        auto index = std::distance(configs.begin(), to_rename);
-        configs[index] = newName;
-    }
-    std::filesystem::rename(path / item, path / newName);
+    std::filesystem::rename(path / configs[item], path / newName);
+    configs[item] = newName;
 }
 
 void Config::reset() noexcept
@@ -124,9 +77,4 @@ void Config::reset() noexcept
     visuals = { };
     knifeChanger = { };
     misc = { };
-}
-
-std::vector<std::string> Config::getConfigs() noexcept
-{
-    return configs;
 }
