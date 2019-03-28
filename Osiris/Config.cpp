@@ -58,13 +58,19 @@ void Config::add(const char* name) noexcept
 
 void Config::remove(size_t id) noexcept
 {
-    std::filesystem::remove(path / configs[id]);
+    try {
+        std::filesystem::remove(path / configs[id]);
+    }
+    catch (std::filesystem::filesystem_error&) { }
     configs.erase(configs.cbegin() + id);
 }
 
 void Config::rename(size_t item, const char* newName) noexcept
 {
-    std::filesystem::rename(path / configs[item], path / newName);
+    try {
+        std::filesystem::rename(path / configs[item], path / newName);
+    }
+    catch (std::filesystem::filesystem_error&) { }
     configs[item] = newName;
 }
 
