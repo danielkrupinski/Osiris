@@ -5,14 +5,17 @@
 class Config final {
 public:
     explicit Config(const char*) noexcept;
-    void load(std::string item) noexcept;
-    void save(std::string item) const noexcept;
-    void add(std::string item) noexcept;
-    void remove(std::string item) noexcept;
-    void rename(std::string item, std::string newName) noexcept;
+    void load(size_t) noexcept;
+    void save(size_t) const noexcept;
+    void add(const char*) noexcept;
+    void remove(size_t) noexcept;
+    void rename(size_t, const char*) noexcept;
     void reset() noexcept;
-    std::vector<std::string> getConfigs() noexcept;
-    std::string currentConfig;
+
+    constexpr auto& getConfigs() noexcept
+    {
+        return configs;
+    }
 
     struct {
         struct {
@@ -70,7 +73,7 @@ public:
             {
                 archive(enabled, thickness, alpha, style, color);
             }
-        } glow[9];
+        } glow[13];
 
         constexpr auto& operator[](size_t index) noexcept
         {
@@ -87,7 +90,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
-            bool flat{ false };
+            int material{ 0 };
             bool wireframe{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
@@ -95,7 +98,7 @@ public:
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, flat, wireframe, color, alpha);
+                archive(enabled, material, wireframe, color, alpha);
             }
         } chams[11];
 
@@ -180,7 +183,7 @@ public:
 
 private:
     std::filesystem::path path;
-    std::vector<std::string> configs = { "Default" };
+    std::vector<std::string> configs;
 };
 
 extern Config config;
