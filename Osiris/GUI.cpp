@@ -344,14 +344,13 @@ void GUI::renderConfigWindow() noexcept
         if (static_cast<size_t>(currentConfig) >= configItems.size())
             currentConfig = -1;
 
-        ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
+        static char buffer[16];
+
+        if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
             auto& vector = *static_cast<std::vector<std::string>*>(data);
             *out_text = vector[idx].c_str();
             return true;
-        }, &configItems, configItems.size(), 5);
-
-        static char buffer[16];
-        if (currentConfig != -1)
+        }, &configItems, configItems.size(), 5) && currentConfig != -1)
             strcpy(buffer, configItems[currentConfig].c_str());
 
         ImGui::PushID(0);
