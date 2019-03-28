@@ -24,7 +24,7 @@ void Glow::render() noexcept
         case ClassId::CSPlayer: {
             auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
-                if (entity->isVisible(entity->getBonePosition(5))) {
+                if (entity->isVisible(entity->getBonePosition(8))) {
                     if (glow[4].enabled) {
                         glowobject.alpha = glow[4].alpha;
                         glowobject.glowStyle = glow[4].style;
@@ -44,7 +44,7 @@ void Glow::render() noexcept
                 }
             }
             else if (entity->getProperty<bool>("m_bIsDefusing")) {
-                if (entity->isVisible(entity->getBonePosition(5))) {
+                if (entity->isVisible(entity->getBonePosition(8))) {
                     if (glow[6].enabled) {
                         glowobject.alpha = glow[6].alpha;
                         glowobject.glowStyle = glow[6].style;
@@ -73,7 +73,7 @@ void Glow::render() noexcept
                 }
             }
             else if (entity->isEnemy()) {
-                if (entity->isVisible(entity->getBonePosition(5))) {
+                if (entity->isVisible(entity->getBonePosition(8))) {
                     if (glow[2].enabled) {
                         glowobject.alpha = glow[2].alpha;
                         glowobject.glowStyle = glow[2].style;
@@ -93,7 +93,7 @@ void Glow::render() noexcept
                 }
             }
             else {
-                if (entity->isVisible(entity->getBonePosition(5))) {
+                if (entity->isVisible(entity->getBonePosition(8))) {
                     if (glow[0].enabled) {
                         glowobject.alpha = glow[0].alpha;
                         glowobject.glowStyle = glow[0].style;
