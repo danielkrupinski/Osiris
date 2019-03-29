@@ -53,24 +53,20 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
-    configs.emplace_back(name);
+        configs.emplace_back(name);
 }
 
 void Config::remove(size_t id) noexcept
 {
-    try {
+    if (std::filesystem::exists(path / configs[id]))
         std::filesystem::remove(path / configs[id]);
-    }
-    catch (std::filesystem::filesystem_error&) { }
     configs.erase(configs.cbegin() + id);
 }
 
 void Config::rename(size_t item, const char* newName) noexcept
 {
-    try {
+    if (std::filesystem::exists(path / configs[item]))
         std::filesystem::rename(path / configs[item], path / newName);
-    }
-    catch (std::filesystem::filesystem_error&) { }
     configs[item] = newName;
 }
 
