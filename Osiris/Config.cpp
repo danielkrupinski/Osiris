@@ -53,6 +53,7 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
+    if (*name && std::find(std::begin(configs), std::end(configs), name) == std::end(configs))
         configs.emplace_back(name);
 }
 
