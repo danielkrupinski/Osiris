@@ -1,6 +1,11 @@
 #pragma once
 
 struct Vector final {
+    constexpr operator bool() const noexcept
+    {
+        return x || y || z;
+    }
+
     constexpr Vector& operator=(const float* array) noexcept
     {
         x = array[0];
