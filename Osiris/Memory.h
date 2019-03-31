@@ -27,6 +27,9 @@ public:
             bool matched = true;
             auto it = c;
 
+            if (*(c + pattern.length() - 1) != pattern.back())
+                continue;
+
             for (auto a : pattern) {
                 if (a != '?' && *it != a) {
                     matched = false;
