@@ -40,4 +40,9 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, int&, int&)>(this, 44)(this, width, height);
         return std::make_pair(width, height);
     }
+
+    constexpr unsigned createFont() noexcept
+    {
+        return callVirtualFunction<unsigned(__thiscall*)(void*)>(this, 71)(this);
+    }
 };
