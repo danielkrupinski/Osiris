@@ -6,4 +6,6 @@ struct GlobalVars {
     const float currenttime;
     const float frametime;
     const int maxClients;
+    const int tickCount;
+    const float intervalPerTick;
 };
