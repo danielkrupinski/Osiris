@@ -13,7 +13,7 @@ Memory::Memory() noexcept
         input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
         globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
         glowObjectManager = *findPattern<GlowObjectManager**>("client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3);
-        disablePostProcessing = *findPattern<bool**>("client_panorama", "\x80\x3D?????\x53\x56\x57\x0F\x85", 2);
+        disablePostProcessing = *findPattern<bool**>("client_panorama", "\x83\xEC\x4C\x80\x3D", 5);
         loadSky = findPattern<decltype(loadSky)>("engine", "\x55\x8B\xEC\x81\xEC????\x56\x57\x8B\xF9\xC7\x45");
         setClanTag = findPattern<decltype(setClanTag)>("engine", "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15");
         smokeCount = *findPattern<int**>("client_panorama", "\x8B\x1D????\x56\x33\xF6\x57\x85\xDB", 2);
