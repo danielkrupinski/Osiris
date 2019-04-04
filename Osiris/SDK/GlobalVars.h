@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Interfaces.h"
+
 struct GlobalVars {
     const float realtime;
     const std::byte pad[12];
@@ -8,4 +10,9 @@ struct GlobalVars {
     const int maxClients;
     const int tickCount;
     const float intervalPerTick;
+
+    constexpr float serverTime() noexcept
+    {
+        return interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_nTickBase") * intervalPerTick;
+    }
 };
