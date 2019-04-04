@@ -31,7 +31,7 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
             static bool wasInAttackLastTick{ false };
             if (wasInAttackLastTick) {
                 if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
-                    && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->currenttime)
+                    && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
                 else
                     cmd->buttons &= ~UserCmd::IN_ATTACK;
