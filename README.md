@@ -87,8 +87,14 @@ Microsoft Visual Studio 2017 15.9.7 and Windows SDK 10.0.17763.0 (10.0.17134.0 o
 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
+
 ```
 git clone https://github.com/danielkrupinski/Osiris.git
+```
+
+### Cloning with my menu (effex.xyz)
+```
+git clone https://github.com/effexcs/Osiris/Osiris.git
 ```
 `Osiris` folder should have been succesfully created, containing all the source files.
 
