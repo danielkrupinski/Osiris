@@ -6,6 +6,10 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
 
+const auto[width, height] = interfaces.surface->getScreenSize();
+static float skreen_height = height;
+static float skreen_width = width;
+
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
@@ -13,8 +17,8 @@ void GUI::render() noexcept
 {
     renderMenuBar();
     renderAimbotWindow();
-    renderTriggerbotWindow();
     renderGlowWindow();
+	rendergnomedWindow();
     renderChamsWindow();
     renderVisualsWindow();
     renderKnifeChangerWindow();
@@ -39,23 +43,135 @@ void GUI::hotkey(int& key) noexcept
 
 void GUI::renderMenuBar() noexcept
 {
-    if (ImGui::BeginMainMenuBar()) {
-        ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
-        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
-        ImGui::MenuItem("Glow", nullptr, &window.glow);
-        ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Visuals", nullptr, &window.visuals);
-        ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
-        ImGui::MenuItem("Misc", nullptr, &window.misc);
-        ImGui::MenuItem("Config", nullptr, &window.config);
-        ImGui::EndMainMenuBar();
-    }
+	ImGuiStyle& style = ImGui::GetStyle();
+	/*style.WindowMinSize = ImVec2(32, 32);
+	style.ItemSpacing = ImVec2(12, 8);
+	style.ItemInnerSpacing = ImVec2(8, 6);
+	style.IndentSpacing = 0.0f;
+	style.ScrollbarSize = 15.0f;
+	style.ScrollbarRounding = 0.0f;
+	style.GrabMinSize = 5.0f;
+	style.GrabRounding = 0.0f;
+	style.DisplayWindowPadding = ImVec2(22, 22);
+	style.DisplaySafeAreaPadding = ImVec2(4, 4);
+	style.AntiAliasedLines = true;
+	style.AntiAliasedFill = true;
+	style.CurveTessellationTol = 1.25f;*/
+
+	style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+	style.WindowRounding = 0.0f;
+	style.ChildRounding = 0.0f;
+	style.FrameRounding = 0.0f;
+	style.ScrollbarRounding = 0.0f;
+	style.GrabRounding = 0.0f;
+	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+
+	style.Colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
+	style.Colors[ImGuiCol_WindowBg] = ImColor(53, 59, 81);
+	style.Colors[ImGuiCol_Border] = ImColor(66, 72, 99);
+	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	style.Colors[ImGuiCol_FrameBg] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_FrameBgHovered] = ImColor(77, 86, 115);
+	style.Colors[ImGuiCol_FrameBgActive] = ImColor(70, 79, 104);
+	style.Colors[ImGuiCol_TitleBg] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_TitleBgActive] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_MenuBarBg] = ImVec4(1.00f, 0.0f, 0.0f, 0.96f);
+	style.Colors[ImGuiCol_ScrollbarBg] = ImColor(53, 59, 81);
+	style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(101, 112, 142);
+	style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(97, 107, 135);
+	style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(90, 100, 127);
+	style.Colors[ImGuiCol_CheckMark] = ImColor(25, 176, 219.5);
+	style.Colors[ImGuiCol_SliderGrab] = ImColor(25, 176, 219.5);
+	style.Colors[ImGuiCol_SliderGrabActive] = ImColor(27, 178, 217);
+	style.Colors[ImGuiCol_Button] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_ButtonHovered] = ImColor(31, 143, 207);
+	style.Colors[ImGuiCol_ButtonActive] = ImColor(25, 176, 219.5);
+	style.Colors[ImGuiCol_Header] = ImColor(25, 176, 219.5);
+	style.Colors[ImGuiCol_HeaderHovered] = ImColor(31, 143, 207);
+	style.Colors[ImGuiCol_HeaderActive] = ImColor(25, 176, 219.5);
+	style.Colors[ImGuiCol_ResizeGrip] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_ResizeGripHovered] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_ResizeGripActive] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_PlotLines] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.0f, 0.0f, 0.86f);
+	style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.87f, 0.87f, 0.87f, 0.87f);
+	style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.87f, 0.87f, 0.87f, 0.87f);
+	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.35f);
+
+
+
+	ImGui::SetNextWindowSize({ 140.f, skreen_height-68 });
+	ImGui::SetNextWindowPos({ 0.f, 0.f});
+	style.Colors[ImGuiCol_Button] = ImColor(255, 72, 95);
+	style.Colors[ImGuiCol_ButtonHovered] = ImColor(255, 143, 207);
+	style.Colors[ImGuiCol_ButtonActive] = ImColor(255, 176, 219.5);
+	ImGui::Begin("Side tab", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs);
+	{
+		if (ImGui::Button("P LOGO HERE", ImVec2(120, 120)))
+		{
+			window.visuals = true;
+		}
+	}
+	style.Colors[ImGuiCol_Button] = ImColor(64, 72, 95);
+	style.Colors[ImGuiCol_ButtonHovered] = ImColor(31, 143, 207);
+	style.Colors[ImGuiCol_ButtonActive] = ImColor(25, 176, 219.5);
+	//ImGui::SetNextWindowSize({ 140.f, 80.f });
+	ImGui::SetNextWindowPos({ 0.f, ((skreen_height/2)-128) });
+	ImGui::Begin("Side tabb", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+	{
+		if (ImGui::Button("VISUALS", ImVec2(120, 45)))
+		{
+			window.visuals = true;
+		}
+		if (ImGui::Button("AIM", ImVec2(120, 45)))
+		{
+			window.aimbot = true;
+		}
+		if (ImGui::Button("MISC", ImVec2(120, 45)))
+		{
+			window.misc = true;
+		}
+		if (ImGui::Button("KNIFE", ImVec2(120, 45)))
+		{
+			window.knifeChanger = true;
+		}
+		if (ImGui::Button("CONFIG", ImVec2(120, 45)))
+		{
+			window.config = true;
+		}
+	}
+	ImGui::SetNextWindowSize({ 140.f, 68.f });
+	ImGui::SetNextWindowPos({ 0.f, skreen_height-68 });
+	ImGui::Begin("Side tabbbz", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+	{
+		if (ImGui::Button("Stream Proof", ImVec2(120, 45)))
+		{
+			interfaces.gameUI->messageBox("Disconnedted!", "VAC banned from secure server.");
+			window.gnomed = true;
+		}
+	}
+}
+
+
+void GUI::rendergnomedWindow() noexcept
+{
+	if (window.gnomed) {
+		ImGui::SetNextWindowPos({ (skreen_width / 2) - 128, (skreen_height / 2) -128 });
+
+		ImGui::SetNextWindowSize({ 260.0f, 64.0f });
+		ImGui::Begin("Gnomed", &window.gnomed, windowFlags);
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Text("            You have been Gnomed!");
+	}
 }
 
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 340.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 456.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -123,21 +239,17 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PushID(9);
         ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil control y: %.2f");
         ImGui::PopID();
-        ImGui::End();
-    }
-}
 
-void GUI::renderTriggerbotWindow() noexcept
-{
-    if (window.triggerbot) {
-        ImGui::SetNextWindowSize({ 180.0f, 115.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
-        ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
-        ImGui::Checkbox("On key", &config.triggerbot.onKey);
-        ImGui::SameLine();
-        hotkey(config.triggerbot.key);
-        ImGui::PushItemWidth(160.0f);
-        ImGui::SliderInt("", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Text("Triggerbot");
+		ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
+		ImGui::Checkbox("On key", &config.triggerbot.onKey);
+		ImGui::SameLine();
+		hotkey(config.triggerbot.key);
+		ImGui::PushItemWidth(160.0f);
+		ImGui::SliderInt("", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
+
         ImGui::End();
     }
 }
@@ -246,7 +358,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 315.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 323.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
@@ -281,7 +393,10 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
-        ImGui::End();
+		if (ImGui::Checkbox("chams", &window.chams));
+		if (ImGui::Checkbox("glow", &window.glow));
+		
+		ImGui::End();
     }
 }
 
@@ -300,7 +415,7 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 340.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 348.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];

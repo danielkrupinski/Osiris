@@ -8,7 +8,7 @@ private:
     static void hotkey(int&) noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;
-    void renderTriggerbotWindow() noexcept;
+    void rendergnomedWindow() noexcept;
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
     void renderVisualsWindow() noexcept;
@@ -16,6 +16,7 @@ private:
     void renderMiscWindow() noexcept;
     void renderConfigWindow() noexcept;
     struct {
+        bool gnomed{ false };
         bool aimbot{ false };
         bool triggerbot{ false };
         bool glow{ false };
