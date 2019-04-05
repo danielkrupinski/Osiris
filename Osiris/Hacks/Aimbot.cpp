@@ -35,8 +35,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
 
-    static bool wasInAttackLastTick{ false };
-
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
 
         if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
@@ -69,25 +67,19 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         if (bestTarget) {
-            if (config.aimbot.weapons[weaponIndex].autoShot) {
+            if (config.aimbot.weapons[weaponIndex].autoShot)
                 cmd->buttons |= UserCmd::IN_ATTACK;
-                if (wasInAttackLastTick && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") != WeaponId::Revolver)
-                    cmd->buttons &= ~UserCmd::IN_ATTACK;
-            }
 
-            if (cmd->buttons & UserCmd::IN_ATTACK) {
-                static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-                auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
-                aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
-                aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
+            static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+            auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+            aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
+            aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 
-                auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
-                angle /= config.aimbot.weapons[weaponIndex].smooth;
-                cmd->viewangles += angle;
-                if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
-                    interfaces.engine->setViewAngles(cmd->viewangles);
-            }
+            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            angle /= config.aimbot.weapons[weaponIndex].smooth;
+            cmd->viewangles += angle;
+            if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
+                interfaces.engine->setViewAngles(cmd->viewangles);
         }
     }
-    wasInAttackLastTick = cmd->buttons & UserCmd::IN_ATTACK;
 }
