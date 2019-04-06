@@ -169,7 +169,7 @@ void GUI::renderGlowWindow() noexcept
         }
 
         ImGui::Checkbox("Enabled", &config.glow[currentItem].enabled);
-        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.glow[currentItem].color[0], config.glow[currentItem].color[1], config.glow[currentItem].color[2] }, ImGuiColorEditFlags_NoTooltip);
+        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
         ImGui::PushID(2);
@@ -224,7 +224,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm");
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
-        bool openPopup = ImGui::ColorButton("Color", ImColor{ config.chams[currentItem].color[0], config.chams[currentItem].color[1], config.chams[currentItem].color[2] }, ImGuiColorEditFlags_NoTooltip);
+        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
         ImGui::PushID(2);
