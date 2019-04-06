@@ -173,9 +173,10 @@ static void __stdcall hookedEmitSound(int& filter, int entityIndex, int channel,
 {
     if (config.misc.autoAccept && !strcmp(soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
-        FLASHWINFO flash{ sizeof(FLASHWINFO), FindWindowA("Valve001", NULL), FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
+        auto window = FindWindowA("Valve001", NULL);
+        FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
         FlashWindowEx(&flash);
-        ShowWindow(FindWindowA("Valve001", NULL), SW_RESTORE);
+        ShowWindow(window, SW_RESTORE);
     }
     hooks.sound.getOriginal<void(__thiscall*)(Sound*, int&, int, int, const char*, unsigned int, const char*, float, int, float, int, int, const Vector&, const Vector&, void*, bool, float, int, int)>(5)(interfaces.sound, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, attenuation, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, unknown);
 }
@@ -229,7 +230,7 @@ Hooks::Hooks()
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
-auto Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
+uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
 {
     MEMORY_BASIC_INFORMATION mbi;
     VirtualQuery(base, &mbi, sizeof(mbi));
@@ -245,7 +246,7 @@ auto Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
                 && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
                 return currentAddress;
 
-    throw std::runtime_error{ "Could not find free memory pages in module at " + std::to_string(reinterpret_cast<int>(moduleInfo.lpBaseOfDll)) };
+    return nullptr;
 }
 
 auto Hooks::Vmt::calculateLength(uintptr_t * vmt) noexcept
@@ -262,13 +263,8 @@ Hooks::Vmt::Vmt(void* const base) noexcept
     oldVmt = *reinterpret_cast<uintptr_t**>(base);
     length = calculateLength(oldVmt) + 1;
 
-    try {
-        newVmt = findFreeDataPage(base, length);
+    if (newVmt = findFreeDataPage(base, length)) {
+        std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
     }
-    catch (const std::runtime_error& e) {
-        MessageBox(NULL, e.what(), "Error", MB_OK | MB_ICONERROR);
-        std::exit(EXIT_FAILURE);
-    }
-    std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-    *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
 }
