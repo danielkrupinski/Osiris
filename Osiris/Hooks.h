@@ -27,12 +27,12 @@ public:
         }
 
         template<typename T>
-        constexpr auto getOriginal(std::size_t index) const noexcept
+        constexpr auto getOriginal(size_t index) const noexcept
         {
             return reinterpret_cast<T>(oldVmt[index]);
         }
     private:
-        static uintptr_t* findFreeDataPage(void* const, size_t);
+        static uintptr_t* findFreeDataPage(void* const, size_t) noexcept;
         static auto calculateLength(uintptr_t*) noexcept;
         uintptr_t* oldVmt;
         uintptr_t* newVmt;

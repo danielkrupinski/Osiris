@@ -230,7 +230,7 @@ Hooks::Hooks()
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
-uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
+uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
 {
     MEMORY_BASIC_INFORMATION mbi;
     VirtualQuery(base, &mbi, sizeof(mbi));
