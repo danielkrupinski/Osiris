@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 struct Vector final {
     constexpr operator bool() const noexcept
     {
