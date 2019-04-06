@@ -60,8 +60,8 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         io.LogFilename = nullptr;
         io.MouseDrawCursor = true;
         char buffer[MAX_PATH];
-        GetWindowsDirectoryA(buffer, MAX_PATH);
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "\\Fonts\\Tahoma.ttf"), 16.0f);
+        if (GetWindowsDirectoryA(buffer, MAX_PATH))
+            io.Fonts->AddFontFromFileTTF(strcat(buffer, "\\Fonts\\Tahoma.ttf"), 16.0f);
 
         hooks.originalWndProc = reinterpret_cast<WNDPROC>(
             SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
