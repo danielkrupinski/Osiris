@@ -27,16 +27,11 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
             interfaces.entityList->getEntity(
                 interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
-        if (activeWeapon && activeWeapon->isPistol()) {
-            static bool wasInAttackLastTick{ false };
-            if (wasInAttackLastTick) {
-                if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver
-                    && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
-                    cmd->buttons &= ~UserCmd::IN_ATTACK2;
-                else
-                    cmd->buttons &= ~UserCmd::IN_ATTACK;
-            }
-            wasInAttackLastTick = cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
+        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
+            if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver)
+                cmd->buttons &= ~UserCmd::IN_ATTACK2;
+            else
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
         }
     }
 }
