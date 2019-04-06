@@ -37,40 +37,11 @@ static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPA
 
 static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
-    static bool isInitialised{ false };
+    static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
     static bool isMenuToggled{ false };
 
-    if (!isInitialised) {
-        ImGui::CreateContext();
-        ImGui_ImplWin32_Init(FindWindowA("Valve001", NULL));
-        ImGui_ImplDX9_Init(device);
-
-        ImGui::StyleColorsDark();
-        ImGuiStyle& style = ImGui::GetStyle();
-        style.WindowRounding = 5.0f;
-        style.WindowBorderSize = 0.0f;
-        style.ChildBorderSize = 0.0f;
-        style.GrabMinSize = 7.0f;
-        style.GrabRounding = 5.0f;
-        style.FrameRounding = 5.0f;
-        style.PopupRounding = 5.0f;
-        ImGuiIO& io = ImGui::GetIO();
-        io.IniFilename = nullptr;
-        io.LogFilename = nullptr;
-        io.MouseDrawCursor = true;
-        char buffer[MAX_PATH];
-        if (GetWindowsDirectoryA(buffer, MAX_PATH))
-            io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f);
-
-        hooks.originalWndProc = reinterpret_cast<WNDPROC>(
-            SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(hookedWndProc))
-            );
-
-        interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
-        isInitialised = true;
-    }
-    else if (gui.isOpen) {
+    if (gui.isOpen) {
         device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
         IDirect3DVertexDeclaration9* vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
@@ -93,13 +64,11 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
         device->SetVertexDeclaration(vertexDeclaration);
     }
-    else {
-        if (isMenuToggled) {
+    else if (isMenuToggled) {
             memory.input->isMouseInitialized = true;
             interfaces.inputSystem->enableInput(true);
             interfaces.inputSystem->resetInputState();
             isMenuToggled = false;
-        }
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -213,6 +182,31 @@ static void __stdcall hookedEmitSound(int& filter, int entityIndex, int channel,
 
 Hooks::Hooks()
 {
+    ImGui::CreateContext();
+    auto window = FindWindowA("Valve001", NULL);
+    ImGui_ImplWin32_Init(window);
+
+    ImGui::StyleColorsDark();
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.WindowRounding = 5.0f;
+    style.WindowBorderSize = 0.0f;
+    style.ChildBorderSize = 0.0f;
+    style.GrabMinSize = 7.0f;
+    style.GrabRounding = 5.0f;
+    style.FrameRounding = 5.0f;
+    style.PopupRounding = 5.0f;
+    ImGuiIO& io = ImGui::GetIO();
+    io.IniFilename = nullptr;
+    io.LogFilename = nullptr;
+    io.MouseDrawCursor = true;
+    char buffer[MAX_PATH];
+    if (GetWindowsDirectoryA(buffer, MAX_PATH))
+        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f);
+
+    originalWndProc = reinterpret_cast<WNDPROC>(
+        SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(hookedWndProc))
+        );
+
     originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
     originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
@@ -231,6 +225,8 @@ Hooks::Hooks()
     sound.hookAt(5, hookedEmitSound);
 
     svCheats.hookAt(13, hookedSvCheatsGetBool);
+
+    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
 auto Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize)
