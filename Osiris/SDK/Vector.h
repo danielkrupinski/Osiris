@@ -8,7 +8,7 @@ struct Vector final {
         return x || y || z;
     }
 
-    constexpr Vector& operator=(const float* array) noexcept
+    constexpr Vector& operator=(float array[3]) noexcept
     {
         x = array[0];
         y = array[1];
