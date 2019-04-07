@@ -92,6 +92,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     Misc::recoilCrosshair();
     Visuals::skybox();
     Misc::bunnyHop(cmd);
+    Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
     Aimbot::run(cmd);
     Triggerbot::run(cmd);

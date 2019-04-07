@@ -12,6 +12,17 @@ namespace Misc {
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
 
+    constexpr void autoStrafe(UserCmd* cmd) noexcept
+    {
+        if (config.misc.autoStrafe && cmd->buttons & UserCmd::IN_JUMP
+            && !(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_fFlags") & 1)) {
+            if (cmd->mousedx < 0)
+                cmd->sidemove = -450.0f;
+            else if (cmd->mousedx > 0)
+                cmd->sidemove = 450.0f;
+        }
+    }
+
     constexpr void bunnyHop(UserCmd* cmd) noexcept
     {
         if (config.misc.bunnyHop && cmd->buttons & UserCmd::IN_JUMP

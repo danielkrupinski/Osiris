@@ -161,6 +161,7 @@ public:
     } skinChanger;
 
     struct {
+        bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
@@ -175,7 +176,7 @@ public:
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(bunnyHop, animatedClanTag, fastDuck,
+            archive(autoStrafe, bunnyHop, animatedClanTag, fastDuck,
                 sniperCrosshair, recoilCrosshair, autoPistol,
                 autoAccept, radarHack, spectatorList, watermark);
         }
