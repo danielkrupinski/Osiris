@@ -4,17 +4,6 @@
 #include "../Netvars.h"
 #include "Misc.h"
 
-void Misc::bunnyHop(UserCmd* cmd) noexcept
-{
-    if (config.misc.bunnyHop) {
-        if (cmd->buttons & UserCmd::IN_JUMP) {
-            auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            if (!(localPlayer->getProperty<int>("m_fFlags") & 1))
-                cmd->buttons &= ~UserCmd::IN_JUMP;
-        }
-    }
-}
-
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");

@@ -4,7 +4,6 @@
 #include "../SDK/UserCmd.h"
 
 namespace Misc {
-    void bunnyHop(UserCmd*) noexcept;
     void inverseRagdollGravity() noexcept;
     void autoPistol(UserCmd*) noexcept;
     void revealRanks() noexcept;
@@ -12,6 +11,14 @@ namespace Misc {
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
+
+    constexpr void bunnyHop(UserCmd* cmd) noexcept
+    {
+        if (config.misc.bunnyHop && cmd->buttons & UserCmd::IN_JUMP
+            && !(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_fFlags") & 1)) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+        }
+    }
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
