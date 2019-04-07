@@ -302,8 +302,9 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 340.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 365.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
+        ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];
         ImGui::PushItemWidth(120.0f);
