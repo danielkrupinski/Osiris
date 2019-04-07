@@ -14,7 +14,7 @@ namespace Misc {
 
     constexpr void autoStrafe(UserCmd* cmd) noexcept
     {
-        if (config.misc.autoStrafe && cmd->buttons & UserCmd::IN_JUMP
+        if (config.misc.autoStrafe
             && !(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_fFlags") & 1)) {
             if (cmd->mousedx < 0)
                 cmd->sidemove = -450.0f;
