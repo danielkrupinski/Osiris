@@ -74,11 +74,11 @@ public:
         return vec;
     }
 
-    bool isVisible(const Vector& position) noexcept
+    bool isVisible(const Vector& position = { }) noexcept
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         static Trace trace;
-        interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), position }, 0x46004009, { localPlayer }, trace);
+        interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : localPlayer->getBonePosition(8) }, 0x46004009, { localPlayer }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
