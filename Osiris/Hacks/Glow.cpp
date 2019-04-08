@@ -30,34 +30,30 @@ void Glow::render() noexcept
         case ClassId::CSPlayer: {
             auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
-                if (entity->isVisible(entity->getBonePosition(8))) applyGlow(glow[4]);
+                if (entity->isVisible()) applyGlow(glow[4]);
                 else applyGlow(glow[5]);
             }
             else if (entity->getProperty<bool>("m_bIsDefusing")) {
-                if (entity->isVisible(entity->getBonePosition(8))) applyGlow(glow[6]);
+                if (entity->isVisible()) applyGlow(glow[6]);
                 else applyGlow(glow[7]);
             }
             else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
                 applyGlow(glow[8]);
             }
             else if (entity->isEnemy()) {
-                if (entity->isVisible(entity->getBonePosition(8))) applyGlow(glow[2]);
+                if (entity->isVisible()) applyGlow(glow[2]);
                 else applyGlow(glow[3]);
             }
             else {
-                if (entity->isVisible(entity->getBonePosition(8))) applyGlow(glow[0]);
+                if (entity->isVisible()) applyGlow(glow[0]);
                 else applyGlow(glow[1]);
             }
             break;
         }
-        case ClassId::Chicken:
-            applyGlow(glow[12]); break;
-        case ClassId::C4:
-            applyGlow(glow[10]); break;
-        case ClassId::PlantedC4:
-            applyGlow(glow[11]); break;
-        default:
-            if (entity->isWeapon()) applyGlow(glow[9]);
+        case ClassId::Chicken: applyGlow(glow[12]); break;
+        case ClassId::C4: applyGlow(glow[10]); break;
+        case ClassId::PlantedC4: applyGlow(glow[11]); break;
+        default: if (entity->isWeapon()) applyGlow(glow[9]);
         }
     }
 }
