@@ -1,6 +1,10 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
 #include <cmath>
+#include <corecrt_math_defines.h> // VS 2019 BUG - M_PI: undeclared identifier
+
+constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
 
 struct Vector final {
     constexpr operator bool() const noexcept
