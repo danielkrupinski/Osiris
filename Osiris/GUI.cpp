@@ -132,7 +132,7 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize({ 180.0f, 115.0f });
+        ImGui::SetNextWindowSize({ 180.0f, 135.0f });
         ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
         ImGui::Checkbox("Enabled", &config.triggerbot.enabled);
         ImGui::Checkbox("On key", &config.triggerbot.onKey);
@@ -140,6 +140,7 @@ void GUI::renderTriggerbotWindow() noexcept
         hotkey(config.triggerbot.key);
         ImGui::PushItemWidth(160.0f);
         ImGui::SliderInt("", &config.triggerbot.shotDelay, 0, 250, "Shot delay: %d ms");
+        ImGui::Checkbox("Ray tracing", &config.triggerbot.rayTracing);
         ImGui::End();
     }
 }
