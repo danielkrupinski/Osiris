@@ -26,7 +26,9 @@ struct TraceFilter {
 struct Trace {
     std::byte pad[44];
     float fraction;
-    std::byte pad1[28];
+    std::byte pad1[20];
+    int hitgroup;
+    int pad2;
     Entity* entity;
     int hitbox;
 };
