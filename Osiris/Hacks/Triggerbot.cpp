@@ -13,6 +13,8 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 {
     if (config.triggerbot.enabled) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
+            return;
 
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
             if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1")
