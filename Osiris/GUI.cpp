@@ -189,7 +189,6 @@ void GUI::renderTriggerbotWindow() noexcept
         hotkey(config.triggerbot.weapons[currentWeapon].key);
         ImGui::PushItemWidth(160.0f);
         ImGui::SliderInt("", &config.triggerbot.weapons[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
-        ImGui::Checkbox("Ray tracing", &config.triggerbot.weapons[currentWeapon].rayTracing);
         ImGui::PushItemWidth(85.0f);
         ImGui::Combo("Hitgroup", &config.triggerbot.weapons[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg");
         ImGui::End();

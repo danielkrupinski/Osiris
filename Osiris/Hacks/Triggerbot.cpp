@@ -33,35 +33,21 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         if ((GetAsyncKeyState(config.triggerbot.weapons[weaponIndex].key) || !config.triggerbot.weapons[weaponIndex].onKey)
             && now - lastTime >= config.triggerbot.weapons[weaponIndex].shotDelay / 1000.0f) {
 
-            if (config.triggerbot.weapons[weaponIndex].rayTracing) {
-                constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
-                constexpr float maxRange{ 8192.0f };
-                Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * maxRange,
-                                   cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * maxRange,
-                                  -sin(degreesToRadians(cmd->viewangles.x)) * maxRange };
-                static Trace trace;
-                interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
-                if (trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy()
-                    && !trace.entity->getProperty<bool>("m_bGunGameImmunity") && (!config.triggerbot.weapons[weaponIndex].hitgroup || trace.hitgroup == config.triggerbot.weapons[weaponIndex].hitgroup)) {
-                    cmd->buttons |= UserCmd::IN_ATTACK;
-                    lastTime = 0.0f;
-                }
-                else {
-                    lastTime = now;
-                }
+            constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
+            constexpr float maxRange{ 8192.0f };
+            Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * maxRange,
+                               cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * maxRange,
+                              -sin(degreesToRadians(cmd->viewangles.x)) * maxRange };
+            static Trace trace;
+            interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
+            if (trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy()
+                && !trace.entity->getProperty<bool>("m_bGunGameImmunity") && (!config.triggerbot.weapons[weaponIndex].hitgroup
+                    || trace.hitgroup == config.triggerbot.weapons[weaponIndex].hitgroup)) {
+                cmd->buttons |= UserCmd::IN_ATTACK;
+                lastTime = 0.0f;
             }
             else {
-                auto inCrosshair = localPlayer->getProperty<int>("m_bHasDefuser", 92);
-                if (inCrosshair > 0 && inCrosshair <= 64) {
-                    auto target = interfaces.entityList->getEntity(inCrosshair);
-                    if (target->isEnemy() && !target->getProperty<bool>("m_bGunGameImmunity")) {
-                        cmd->buttons |= UserCmd::IN_ATTACK;
-                        lastTime = 0.0f;
-                    }
-                    else {
-                        lastTime = now;
-                    }
-                }
+                lastTime = now;
             }
         }
     }
