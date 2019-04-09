@@ -17,7 +17,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             return;
 
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
-            if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1")
+            if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1") || activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()
                 || !getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex")))
                 return;
 
