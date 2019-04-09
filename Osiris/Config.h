@@ -53,11 +53,12 @@ public:
         int key{ 0 };
         int shotDelay{ 0 };
         bool rayTracing{ false };
+        int hitgroup{ 0 };
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(enabled, onKey, key, shotDelay, rayTracing);
+            archive(enabled, onKey, key, shotDelay, rayTracing, hitgroup);
         }
     } triggerbot;
 
