@@ -14,9 +14,9 @@ public:
         callVirtualFunction<void(__thiscall*)(void*, int, int, int, int)>(this, 16)(this, x0, y0, x1, y1);
     }
 
-    constexpr void setTextFont(unsigned long font) noexcept
+    constexpr void setTextFont(unsigned font) noexcept
     {
-        callVirtualFunction<void(__thiscall*)(void*, unsigned long)>(this, 23)(this, font);
+        callVirtualFunction<void(__thiscall*)(void*, unsigned)>(this, 23)(this, font);
     }
 
     constexpr void setTextColor(int r, int g, int b, int a) noexcept
