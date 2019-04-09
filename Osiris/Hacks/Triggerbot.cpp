@@ -21,8 +21,8 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                 || !getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex")))
                 return;
 
-        static auto lastTime = memory.globalVars->realtime;
-        auto now = memory.globalVars->realtime;
+        static float lastTime{ 0.0f };
+        const auto now = memory.globalVars->serverTime();
 
         if ((GetAsyncKeyState(config.triggerbot.key) || !config.triggerbot.onKey)
             && now - lastTime >= config.triggerbot.shotDelay / 1000.0f) {
@@ -35,8 +35,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                                   -sin(degreesToRadians(cmd->viewangles.x)) * maxRange };
                 static Trace trace;
                 interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
-                if (trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy())
+                if (trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy() && (!config.triggerbot.hitgroup || trace.hitgroup == config.triggerbot.hitgroup)) {
                     cmd->buttons |= UserCmd::IN_ATTACK;
+                    lastTime = 0.0f;
+                }
+                else {
+                    lastTime = now;
+                }
             }
             else {
                 auto inCrosshair = localPlayer->getProperty<int>("m_bHasDefuser", 92);
@@ -44,11 +49,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     auto target = interfaces.entityList->getEntity(inCrosshair);
                     if (target->isEnemy() && !target->getProperty<bool>("m_bGunGameImmunity")) {
                         cmd->buttons |= UserCmd::IN_ATTACK;
+                        lastTime = 0.0f;
+                    }
+                    else {
+                        lastTime = now;
                     }
                 }
             }
-
-            lastTime = now;
         }
     }
 }
