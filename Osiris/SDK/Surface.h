@@ -48,6 +48,6 @@ public:
 
     constexpr bool setFontGlyphSet(unsigned font, const char* fontName, int tall, int weight, int blur, int scanlines, int flags, int rangeMin = 0, int rangeMax = 0) noexcept
     {
-        callVirtualFunction<bool(__thiscall*)(void*, unsigned, const char*, int, int, int, int, int, int, int)>(this, 72)(this, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax);
+        return callVirtualFunction<bool(__thiscall*)(void*, unsigned, const char*, int, int, int, int, int, int, int)>(this, 72)(this, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax);
     }
 };
