@@ -11,6 +11,7 @@ namespace Misc {
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
+    void watermark() noexcept;
 
     constexpr void autoStrafe(UserCmd* cmd) noexcept
     {
@@ -40,14 +41,5 @@ namespace Misc {
     constexpr void setClanTag(const char* clanTag) noexcept
     {
         memory.setClanTag(clanTag, clanTag);
-    }
-
-    constexpr void watermark() noexcept
-    {
-        if (config.misc.watermark) {
-            interfaces.surface->setTextColor(51, 153, 255, 255);
-            interfaces.surface->setTextPosition(0, 0);
-            interfaces.surface->printText(L"Osiris");
-        }
     }
 }

@@ -98,3 +98,15 @@ void Misc::recoilCrosshair() noexcept
     static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
     recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
 }
+
+void Misc::watermark() noexcept
+{
+    if (config.misc.watermark) {
+        static unsigned font = interfaces.surface->createFont();
+        static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
+        interfaces.surface->setTextFont(font);
+        interfaces.surface->setTextColor(51, 153, 255, 255);
+        interfaces.surface->setTextPosition(0, 0);
+        interfaces.surface->printText(L"Osiris");
+    }
+}
