@@ -27,7 +27,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         return;
 
     const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
-    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1") || activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime())
+    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1"))
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex"));
@@ -69,7 +69,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         if (bestTarget) {
-            if (config.aimbot.weapons[weaponIndex].autoShot)
+            if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
