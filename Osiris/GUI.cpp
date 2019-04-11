@@ -287,12 +287,13 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 315.0f });
+        ImGui::SetNextWindowSize({ 520.0f, 340.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
+        ImGui::Checkbox("No 3d sky", &config.visuals.no3dSky);
         ImGui::Checkbox("No visual recoil", &config.visuals.noVisualRecoil);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
