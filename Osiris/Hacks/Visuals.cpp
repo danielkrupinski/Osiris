@@ -86,3 +86,9 @@ void Visuals::removeGrass() noexcept
     static auto incrementOnce = grass->incrementReferenceCount();
     grass->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
 }
+
+void Visuals::remove3dSky() noexcept
+{
+    static auto sky = interfaces.cvar->findVar("r_3dsky");
+    sky->setValue(!config.visuals.no3dSky);
+}
