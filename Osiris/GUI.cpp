@@ -66,6 +66,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
+        ImGui::PushID(1);
 
         switch (currentCategory) {
         case 0:
@@ -74,37 +75,30 @@ void GUI::renderAimbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::PushID(1);
             ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
-            ImGui::PopID();
             currentWeapon = currentPistol + 1;
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::PushID(2);
             ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
-            ImGui::PopID();
             currentWeapon = currentHeavy + 11;
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::PushID(3);
             ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
-            ImGui::PopID();
             currentWeapon = currentSmg + 17;
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::PushID(4);
             ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
-            ImGui::PopID();
             currentWeapon = currentRifle + 24;
             break;
         }
         }
+        ImGui::PopID();
         ImGui::Checkbox("Enabled", &config.aimbot.weapons[currentWeapon].enabled);
         ImGui::Checkbox("Silent", &config.aimbot.weapons[currentWeapon].silent);
         ImGui::Checkbox("Friendly fire", &config.aimbot.weapons[currentWeapon].friendlyFire);
