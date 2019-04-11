@@ -45,7 +45,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                 && (!config.triggerbot.weapons[weaponIndex].hitgroup
                     || trace.hitgroup == config.triggerbot.weapons[weaponIndex].hitgroup)
                 && (config.triggerbot.weapons[weaponIndex].ignoreSmoke
-                    || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles))
+                    || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
                 && (config.triggerbot.weapons[weaponIndex].ignoreFlash
                     || !localPlayer->getProperty<float>("m_flFlashDuration"))) {
                 cmd->buttons |= UserCmd::IN_ATTACK;
