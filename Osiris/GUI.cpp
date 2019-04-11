@@ -132,7 +132,7 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize({ 250.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 210.0f });
         ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
 
 
@@ -187,6 +187,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Checkbox("On key", &config.triggerbot.weapons[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.triggerbot.weapons[currentWeapon].key);
+        ImGui::Checkbox("Ignore smoke", &config.triggerbot.weapons[currentWeapon].ignoreSmoke);
         ImGui::PushItemWidth(85.0f);
         ImGui::Combo("Hitgroup", &config.triggerbot.weapons[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg");
         ImGui::PushItemWidth(220.0f);
