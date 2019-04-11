@@ -52,6 +52,7 @@ public:
             bool enabled{ false };
             bool onKey{ false };
             int key{ 0 };
+            bool ignoreFlash{ false };
             bool ignoreSmoke{ false };
             int hitgroup{ 0 };
             int shotDelay{ 0 };
@@ -59,7 +60,7 @@ public:
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, onKey, key, ignoreSmoke, hitgroup, shotDelay);
+                archive(enabled, onKey, key, ignoreFlash, ignoreSmoke, hitgroup, shotDelay);
             }
         } weapons[35];
 
