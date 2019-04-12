@@ -128,8 +128,6 @@ void GUI::renderTriggerbotWindow() noexcept
     if (window.triggerbot) {
         ImGui::SetNextWindowSize({ 250.0f, 270.0f });
         ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
-
-
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -174,6 +172,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::SameLine();
         hotkey(config.triggerbot.weapons[currentWeapon].key);
         ImGui::Checkbox("Friendly fire", &config.triggerbot.weapons[currentWeapon].friendlyFire);
+        ImGui::Checkbox("Scoped only", &config.triggerbot.weapons[currentWeapon].scopedOnly);
         ImGui::Checkbox("Ignore flash", &config.triggerbot.weapons[currentWeapon].ignoreFlash);
         ImGui::Checkbox("Ignore smoke", &config.triggerbot.weapons[currentWeapon].ignoreSmoke);
         ImGui::PushItemWidth(85.0f);
