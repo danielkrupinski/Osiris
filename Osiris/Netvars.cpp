@@ -47,34 +47,49 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
                 switch (id) {
                 default:
                 case 1:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Bayonet);
                     return bayonet;
                 case 2:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Bowie);
                     return bowie;
                 case 3:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Butterfly);
                     return butterfly;
                 case 4:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Falchion);
                     return falchion;
                 case 5:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Flip);
                     return flip;
                 case 6:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Gut);
                     return gut;
                 case 7:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Huntsman);
                     return huntsman;
                 case 8:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Karambit);
                     return karambit;
                 case 9:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::M9Bayonet);
                     return m9bayonet;
                 case 10:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Daggers);
                     return daggers;
                 case 11:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Navaja);
                     return navaja;
                 case 12:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Stiletto);
                     return stiletto;
                 case 13:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Talon);
                     return talon;
                 case 14:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Ursus);
                     return ursus;
                 case 15:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::GoldenKnife);
                     return golden;
                 }}(config.knifeChanger.knife);
     }
