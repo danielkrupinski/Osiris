@@ -35,7 +35,21 @@ enum class WeaponId : short {
     M4a1_s = 60,
     Usp_s,
     Cz75a = 63,
-    Revolver
+    Revolver,
+    Bayonet = 500,
+    Flip = 505,
+    Gut,
+    Karambit,
+    Bayonet,
+    Huntsman,
+    Falchion = 512,
+    Bowie = 514,
+    Butterfly,
+    Daggers,
+    Ursus = 519,
+    Navaja,
+    Stiletto = 522,
+    Talon
 };
 
 constexpr int getWeaponIndex(WeaponId weaponId) noexcept
