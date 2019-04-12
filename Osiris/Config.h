@@ -24,6 +24,8 @@ public:
             bool friendlyFire{ false };
             bool visibleOnly{ true };
             bool scopedOnly{ true };
+            bool ignoreFlash{ false };
+            bool ignoreSmoke{ false };
             bool autoShot{ false };
             float fov{ 0.0f };
             float smooth{ 1.0f };
@@ -35,8 +37,8 @@ public:
             constexpr void serialize(Archive& archive) noexcept
             {
                 archive(enabled, silent, friendlyFire, visibleOnly,
-                    scopedOnly, autoShot, fov, smooth,
-                    bone, recoilControlX, recoilControlY);
+                    scopedOnly, ignoreFlash, ignoreSmoke, autoShot,
+                    fov, smooth, bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
 
