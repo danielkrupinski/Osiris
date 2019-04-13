@@ -29,6 +29,9 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     static float lastTime{ 0.0f };
     const auto now = memory.globalVars->serverTime();
 
+    if (lastTime > now)
+        lastTime = 0.0f;
+
     if (config.triggerbot.weapons[weaponIndex].enabled) {
         if ((GetAsyncKeyState(config.triggerbot.weapons[weaponIndex].key) || !config.triggerbot.weapons[weaponIndex].onKey)
             && now - lastTime >= config.triggerbot.weapons[weaponIndex].shotDelay / 1000.0f) {
