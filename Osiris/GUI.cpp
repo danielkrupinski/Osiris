@@ -57,7 +57,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 365.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 420.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -104,6 +104,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Friendly fire", &config.aimbot.weapons[currentWeapon].friendlyFire);
         ImGui::Checkbox("Visible only", &config.aimbot.weapons[currentWeapon].visibleOnly);
         ImGui::Checkbox("Scoped only", &config.aimbot.weapons[currentWeapon].scopedOnly);
+        ImGui::Checkbox("Ignore flash", &config.aimbot.weapons[currentWeapon].ignoreFlash);
+        ImGui::Checkbox("Ignore smoke", &config.aimbot.weapons[currentWeapon].ignoreSmoke);
         ImGui::Checkbox("Auto shot", &config.aimbot.weapons[currentWeapon].autoShot);
         ImGui::Checkbox("Recoil-based fov", &config.aimbot.weapons[currentWeapon].recoilbasedFov);
         ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Nearest\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
