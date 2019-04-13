@@ -11,3 +11,10 @@ Interfaces interfaces;
 Memory memory;
 Netvars netvars;
 Hooks hooks;
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID reserved)
+{
+    if (reason == DLL_PROCESS_ATTACH)
+        DisableThreadLibraryCalls(hinstDLL);
+    return TRUE;
+}
