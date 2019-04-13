@@ -46,6 +46,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
+        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+        aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
+        aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
+
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
@@ -57,7 +62,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(bonePosition))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles);
+                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot.weapons[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
@@ -71,11 +76,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
         if (bestTarget) {
             if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
                 cmd->buttons |= UserCmd::IN_ATTACK;
-
-            static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-            auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
-            aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
-            aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
 
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             angle /= config.aimbot.weapons[weaponIndex].smooth;
