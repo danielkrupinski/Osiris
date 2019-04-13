@@ -37,6 +37,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].enabled)
         weaponIndex = 0;
 
+    if (!config.aimbot.weapons[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
+        return;
+
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
 
         if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
@@ -73,7 +76,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
-        if (bestTarget) {
+        if (bestTarget && (config.aimbot.weapons[weaponIndex].ignoreSmoke
+            || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
