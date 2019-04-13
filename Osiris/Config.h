@@ -27,6 +27,7 @@ public:
             bool ignoreFlash{ false };
             bool ignoreSmoke{ false };
             bool autoShot{ false };
+            bool recoilbasedFov{ false };
             float fov{ 0.0f };
             float smooth{ 1.0f };
             int bone{ 0 };
@@ -38,7 +39,7 @@ public:
             {
                 archive(enabled, silent, friendlyFire, visibleOnly,
                     scopedOnly, ignoreFlash, ignoreSmoke, autoShot,
-                    fov, smooth, bone, recoilControlX, recoilControlY);
+                    recoilbasedFov, fov, smooth, bone, recoilControlX, recoilControlY);
             }
         } weapons[35];
 
