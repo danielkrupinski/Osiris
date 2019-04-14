@@ -179,17 +179,17 @@ Netvars::Netvars() noexcept
 void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
-        auto prop = &recvTable->props[i];
+        auto& prop = recvTable->props[i];
 
-        if (isdigit(prop->name[0]))
+        if (isdigit(prop.name[0]))
             continue;
 
-        if (prop->dataTable)
-            loadTable(prop->dataTable, prop->offset + offset);
+        if (prop.dataTable)
+            loadTable(prop.dataTable, prop.offset + offset);
         else {
-            std::string_view name{ prop->name };
+            std::string_view name{ prop.name };
             std::string_view tableName{ recvTable->netTableName };
-            offsets[prop->name] = prop->offset + offset;
+            offsets[prop.name] = prop.offset + offset;
             if (name == "m_bSpotted")
                 hookProperty(prop, spottedHook);
             else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
@@ -200,10 +200,10 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
     }
 }
 
-void Netvars::hookProperty(RecvProp* prop, recvProxy proxy) noexcept
+void Netvars::hookProperty(RecvProp& prop, recvProxy proxy) noexcept
 {
-    if (prop->proxy != proxy) {
-        proxies[prop->name] = prop->proxy;
-        prop->proxy = proxy;
+    if (prop.proxy != proxy) {
+        proxies[prop.name] = prop.proxy;
+        prop.proxy = proxy;
     }
 }
