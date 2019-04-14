@@ -26,7 +26,7 @@ namespace Misc {
 
     constexpr void bunnyHop(UserCmd* cmd) noexcept
     {
-        if (config.misc.bunnyHop && cmd->buttons & UserCmd::IN_JUMP
+        if (config.misc.bunnyHop
             && !(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_fFlags") & 1)) {
             cmd->buttons &= ~UserCmd::IN_JUMP;
         }
