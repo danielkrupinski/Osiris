@@ -13,6 +13,14 @@ static int random(int min, int max) noexcept
 
 static std::unordered_map<std::string_view, recvProxy> proxies;
 
+constexpr void hookProperty(RecvProp& prop, recvProxy proxy) noexcept
+{
+    if (prop.proxy != proxy) {
+        proxies[prop.name] = prop.proxy;
+        prop.proxy = proxy;
+    }
+}
+
 static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
@@ -197,13 +205,5 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
             else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
                 hookProperty(prop, viewModelSequenceHook);
         }
-    }
-}
-
-void Netvars::hookProperty(RecvProp& prop, recvProxy proxy) noexcept
-{
-    if (prop.proxy != proxy) {
-        proxies[prop.name] = prop.proxy;
-        prop.proxy = proxy;
     }
 }

@@ -15,7 +15,6 @@ public:
     }
 private:
     void loadTable(RecvTable*, const std::size_t = 0) noexcept;
-    void hookProperty(RecvProp&, recvProxy) noexcept;
     mutable std::unordered_map<std::string_view, std::size_t> offsets;
 };
 
