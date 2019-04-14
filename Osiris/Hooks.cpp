@@ -177,7 +177,7 @@ struct SoundData {
     std::byte pad[56];
 };
 
-static void __stdcall hookedEmitSound(SoundData data)
+static void __stdcall hookedEmitSound(SoundData data) noexcept
 {
     if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
