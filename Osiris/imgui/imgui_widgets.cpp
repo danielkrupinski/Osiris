@@ -1,4 +1,4 @@
-// dear imgui, v1.69 WIP
+// dear imgui, v1.70 WIP
 // (widgets code)
 
 /*
@@ -37,7 +37,7 @@ Index of this file:
 #endif
 #include "imgui_internal.h"
 
-#include <ctype.h>      // toupper, isprint
+#include <ctype.h>      // toupper
 #if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
 #include <stddef.h>     // intptr_t
 #else
@@ -394,6 +394,56 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 // - Bullet()
 //-------------------------------------------------------------------------
 
+// The ButtonBehavior() function is key to many interactions and used by many/most widgets.
+// Because we handle so many cases (keyboard/gamepad navigation, drag and drop) and many specific behavior (via ImGuiButtonFlags_),
+// this code is a little complex.
+// By far the most common path is interacting with the Mouse using the default ImGuiButtonFlags_PressedOnClickRelease button behavior.
+// See the series of events below and the corresponding state reported by dear imgui:
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// with PressedOnClickRelease:             return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
+//   Frame N+0 (mouse is outside bb)        -             -                -               -                  -                    -    
+//   Frame N+1 (mouse moves inside bb)      -             true             -               -                  -                    -    
+//   Frame N+2 (mouse button is down)       -             true             true            true               -                    true
+//   Frame N+3 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+4 (mouse moves outside bb)     -             -                true            -                  -                    -
+//   Frame N+5 (mouse moves inside bb)      -             true             true            -                  -                    -
+//   Frame N+6 (mouse button is released)   true          true             -               -                  true                 -    
+//   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
+//   Frame N+8 (mouse moves outside bb)     -             -                -               -                  -                    -    
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// with PressedOnClick:                    return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
+//   Frame N+2 (mouse button is down)       true          true             true            true               -                    true
+//   Frame N+3 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -    
+//   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// with PressedOnRelease:                  return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
+//   Frame N+2 (mouse button is down)       -             true             -               -                  -                    true
+//   Frame N+3 (mouse button is down)       -             true             -               -                  -                    -    
+//   Frame N+6 (mouse button is released)   true          true             -               -                  -                    -
+//   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// with PressedOnDoubleClick:              return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
+//   Frame N+0 (mouse button is down)       -             true             -               -                  -                    true
+//   Frame N+1 (mouse button is down)       -             true             -               -                  -                    -    
+//   Frame N+2 (mouse button is released)   -             true             -               -                  -                    -
+//   Frame N+3 (mouse button is released)   -             true             -               -                  -                    -    
+//   Frame N+4 (mouse button is down)       true          true             true            true               -                    true
+//   Frame N+5 (mouse button is down)       -             true             true            -                  -                    -    
+//   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
+//   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -    
+//------------------------------------------------------------------------------------------------------------------------------------------------
+// The behavior of the return-value changes when ImGuiButtonFlags_Repeat is set:
+//                                         Repeat+                  Repeat+           Repeat+             Repeat+
+//                                         PressedOnClickRelease    PressedOnClick    PressedOnRelease    PressedOnDoubleClick
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+//   Frame N+0 (mouse button is down)       -                        true              -                   true 
+//   ...                                    -                        -                 -                   -
+//   Frame N + RepeatDelay                  true                     true              -                   true
+//   ...                                    -                        -                 -                   -
+//   Frame N + RepeatDelay + RepeatRate*N   true                     true              -                   true
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+
 bool ImGui::ButtonBehavior(const ImRect & bb, ImGuiID id, bool* out_hovered, bool* out_held, ImGuiButtonFlags flags)
 {
     ImGuiContext& g = *GImGui;
@@ -452,12 +502,6 @@ bool ImGui::ButtonBehavior(const ImRect & bb, ImGuiID id, bool* out_hovered, boo
     {
         if (!(flags & ImGuiButtonFlags_NoKeyModifiers) || (!g.IO.KeyCtrl && !g.IO.KeyShift && !g.IO.KeyAlt))
         {
-            //                        | CLICKING        | HOLDING with ImGuiButtonFlags_Repeat
-            // PressedOnClickRelease  |  <on release>*  |  <on repeat> <on repeat> .. (NOT on release)  <-- MOST COMMON! (*) only if both click/release were over bounds
-            // PressedOnClick         |  <on click>     |  <on click> <on repeat> <on repeat> ..
-            // PressedOnRelease       |  <on release>   |  <on repeat> <on repeat> .. (NOT on release)
-            // PressedOnDoubleClick   |  <on dclick>    |  <on dclick> <on repeat> <on repeat> ..
-            // FIXME-NAV: We don't honor those different behaviors.
             if ((flags & ImGuiButtonFlags_PressedOnClickRelease) && g.IO.MouseClicked[0])
             {
                 SetActiveID(id, window);
@@ -494,7 +538,8 @@ bool ImGui::ButtonBehavior(const ImRect & bb, ImGuiID id, bool* out_hovered, boo
     // Gamepad/Keyboard navigation
     // We report navigated item as hovered but we don't set g.HoveredId to not interfere with mouse.
     if (g.NavId == id && !g.NavDisableHighlight && g.NavDisableMouseHover && (g.ActiveId == 0 || g.ActiveId == id || g.ActiveId == window->MoveId))
-        hovered = true;
+        if (!(flags & ImGuiButtonFlags_NoHoveredOnNav))
+            hovered = true;
 
     if (g.NavActivateDownId == id)
     {
@@ -642,7 +687,7 @@ bool ImGui::ArrowButtonEx(const char* str_id, ImGuiDir dir, ImVec2 size, ImGuiBu
     const ImGuiID id = window->GetID(str_id);
     const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size);
     const float default_size = GetFrameHeight();
-    ItemSize(bb, (size.y >= default_size) ? g.Style.FramePadding.y : 0.0f);
+    ItemSize(size, (size.y >= default_size) ? g.Style.FramePadding.y : 0.0f);
     if (!ItemAdd(bb, id))
         return false;
 
@@ -1040,8 +1085,9 @@ void ImGui::ProgressBar(float fraction, const ImVec2 & size_arg, const char* ove
     const ImGuiStyle& style = g.Style;
 
     ImVec2 pos = window->DC.CursorPos;
-    ImRect bb(pos, pos + CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f));
-    ItemSize(bb, style.FramePadding.y);
+    ImVec2 size = CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
+    ImRect bb(pos, pos + size);
+    ItemSize(size, style.FramePadding.y);
     if (!ItemAdd(bb, 0))
         return;
 
@@ -1114,7 +1160,7 @@ void ImGui::Dummy(const ImVec2 & size)
         return;
 
     const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size);
-    ItemSize(bb);
+    ItemSize(size);
     ItemAdd(bb, 0);
 }
 
@@ -3139,7 +3185,8 @@ static bool InputTextFilterCharacter(unsigned int* p_char, ImGuiInputTextFlags f
 {
     unsigned int c = *p_char;
 
-    if (c < 128 && c != ' ' && !isprint((int)(c & 0xFF)))
+    // Filter non-printable (NB: isprint is unreliable! see #2467)
+    if (c < 0x20)
     {
         bool pass = false;
         pass |= (c == '\n' && (flags & ImGuiInputTextFlags_Multiline));
@@ -3148,9 +3195,11 @@ static bool InputTextFilterCharacter(unsigned int* p_char, ImGuiInputTextFlags f
             return false;
     }
 
-    if (c >= 0xE000 && c <= 0xF8FF) // Filter private Unicode range. I don't imagine anybody would want to input them. GLFW on OSX seems to send private characters for special keys like arrow keys.
+    // Filter private Unicode range. GLFW on OSX seems to send private characters for special keys like arrow keys (FIXME)
+    if (c >= 0xE000 && c <= 0xF8FF)
         return false;
 
+    // Generic named filters
     if (flags & (ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CharsScientific))
     {
         if (flags & ImGuiInputTextFlags_CharsDecimal)
@@ -3174,6 +3223,7 @@ static bool InputTextFilterCharacter(unsigned int* p_char, ImGuiInputTextFlags f
                 return false;
     }
 
+    // Custom callback filter
     if (flags & ImGuiInputTextFlags_CallbackCharFilter)
     {
         ImGuiInputTextCallbackData callback_data;
@@ -3329,7 +3379,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         FocusWindow(window);
         IM_ASSERT(ImGuiNavInput_COUNT < 32);
         g.ActiveIdBlockNavInputFlags = (1 << ImGuiNavInput_Cancel);
-        if (flags & (ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_AllowTabInput))  // Disable keyboard tabbing out
+        if (flags & (ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_AllowTabInput))  // Disable keyboard tabbing out as we will use the \t character.
             g.ActiveIdBlockNavInputFlags |= (1 << ImGuiNavInput_KeyTab_);
         if (!is_multiline && !(flags & ImGuiInputTextFlags_CallbackHistory))
             g.ActiveIdAllowNavDirFlags = ((1 << ImGuiDir_Up) | (1 << ImGuiDir_Down));
@@ -3343,37 +3393,27 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     if (g.ActiveId == id && io.MouseClicked[0] && !init_state && !init_make_active) //-V560
         clear_active_id = true;
 
-    // When read-only we always use the live data passed to the function
-    // FIXME-OPT: Because our selection/cursor code currently needs the wide text we need to convert it when active, which is not ideal :(
-    if (is_readonly && state != NULL)
-    {
-        const bool will_render_cursor = (g.ActiveId == id) || (user_scroll_active);
-        const bool will_render_selection = state->HasSelection() && (RENDER_SELECTION_WHEN_INACTIVE || will_render_cursor);
-        if (will_render_cursor || will_render_selection)
-        {
-            const char* buf_end = NULL;
-            state->TextW.resize(buf_size + 1);
-            state->CurLenW = ImTextStrFromUtf8(state->TextW.Data, state->TextW.Size, buf, NULL, &buf_end);
-            state->CurLenA = (int)(buf_end - buf);
-            state->CursorClamp();
-        }
-    }
-
     // Lock the decision of whether we are going to take the path displaying the cursor or selection
     const bool render_cursor = (g.ActiveId == id) || (state && user_scroll_active);
-    const bool render_selection = state && state->HasSelection() && (RENDER_SELECTION_WHEN_INACTIVE || render_cursor);
+    bool render_selection = state && state->HasSelection() && (RENDER_SELECTION_WHEN_INACTIVE || render_cursor);
     bool value_changed = false;
     bool enter_pressed = false;
 
-    // Select the buffer to render.
-    const char* buf_display = ((render_cursor || render_selection || g.ActiveId == id) && !is_readonly && state && state->TextAIsValid) ? state->TextA.Data : buf;
-    const char* buf_display_end = NULL; // We have specialized paths below for setting the length
-    const bool is_displaying_hint = (hint != NULL && buf_display[0] == 0);
-    if (is_displaying_hint)
+    // When read-only we always use the live data passed to the function
+    // FIXME-OPT: Because our selection/cursor code currently needs the wide text we need to convert it when active, which is not ideal :(
+    if (is_readonly && state != NULL && (render_cursor || render_selection))
     {
-        buf_display = hint;
-        buf_display_end = hint + strlen(hint);
+        const char* buf_end = NULL;
+        state->TextW.resize(buf_size + 1);
+        state->CurLenW = ImTextStrFromUtf8(state->TextW.Data, state->TextW.Size, buf, NULL, &buf_end);
+        state->CurLenA = (int)(buf_end - buf);
+        state->CursorClamp();
+        render_selection &= state->HasSelection();
     }
+
+    // Select the buffer to render.
+    const bool buf_display_from_state = (render_cursor || render_selection || g.ActiveId == id) && !is_readonly && state && state->TextAIsValid;
+    const bool is_displaying_hint = (hint != NULL && (buf_display_from_state ? state->TextA.Data : buf)[0] == 0);
 
     // Password pushes a temporary font with only a fallback glyph
     if (is_password && !is_displaying_hint)
@@ -3441,16 +3481,28 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         if (state->SelectedAllMouseLock && !io.MouseDown[0])
             state->SelectedAllMouseLock = false;
 
+        // It is ill-defined whether the back-end needs to send a \t character when pressing the TAB keys.
+        // Win32 and GLFW naturally do it but not SDL.
+        const bool ignore_char_inputs = (io.KeyCtrl && !io.KeyAlt) || (is_osx && io.KeySuper);
+        if ((flags & ImGuiInputTextFlags_AllowTabInput) && IsKeyPressedMap(ImGuiKey_Tab) && !ignore_char_inputs && !io.KeyShift && !is_readonly)
+            if (!io.InputQueueCharacters.contains('\t'))
+            {
+                unsigned int c = '\t'; // Insert TAB
+                if (InputTextFilterCharacter(&c, flags, callback, callback_user_data))
+                    state->OnKeyPressed((int)c);
+            }
+
+        // Process regular text input (before we check for Return because using some IME will effectively send a Return?)
+        // We ignore CTRL inputs, but need to allow ALT+CTRL as some keyboards (e.g. German) use AltGR (which _is_ Alt+Ctrl) to input certain characters.
         if (io.InputQueueCharacters.Size > 0)
         {
-            // Process text input (before we check for Return because using some IME will effectively send a Return?)
-            // We ignore CTRL inputs, but need to allow ALT+CTRL as some keyboards (e.g. German) use AltGR (which _is_ Alt+Ctrl) to input certain characters.
-            bool ignore_inputs = (io.KeyCtrl && !io.KeyAlt) || (is_osx && io.KeySuper);
-            if (!ignore_inputs && !is_readonly && !user_nav_input_start)
+            if (!ignore_char_inputs && !is_readonly && !user_nav_input_start)
                 for (int n = 0; n < io.InputQueueCharacters.Size; n++)
                 {
                     // Insert character if they pass filtering
                     unsigned int c = (unsigned int)io.InputQueueCharacters[n];
+                    if (c == '\t' && io.KeyShift)
+                        continue;
                     if (InputTextFilterCharacter(&c, flags, callback, callback_user_data))
                         state->OnKeyPressed((int)c);
                 }
@@ -3512,12 +3564,6 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
                     state->OnKeyPressed((int)c);
             }
         }
-        else if ((flags & ImGuiInputTextFlags_AllowTabInput) && IsKeyPressedMap(ImGuiKey_Tab) && !io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !is_readonly)
-        {
-            unsigned int c = '\t'; // Insert TAB
-            if (InputTextFilterCharacter(&c, flags, callback, callback_user_data))
-                state->OnKeyPressed((int)c);
-        }
         else if (IsKeyPressedMap(ImGuiKey_Escape))
         {
             clear_active_id = cancel_edit = true;
@@ -3540,7 +3586,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
                 const int ib = state->HasSelection() ? ImMin(state->Stb.select_start, state->Stb.select_end) : 0;
                 const int ie = state->HasSelection() ? ImMax(state->Stb.select_start, state->Stb.select_end) : state->CurLenW;
                 const int clipboard_data_len = ImTextCountUtf8BytesFromStr(state->TextW.Data + ib, state->TextW.Data + ie) + 1;
-                char* clipboard_data = (char*)MemAlloc(clipboard_data_len * sizeof(char));
+                char* clipboard_data = (char*)IM_ALLOC(clipboard_data_len * sizeof(char));
                 ImTextStrToUtf8(clipboard_data, clipboard_data_len, state->TextW.Data + ib, state->TextW.Data + ie);
                 SetClipboardText(clipboard_data);
                 MemFree(clipboard_data);
@@ -3559,7 +3605,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             {
                 // Filter pasted buffer
                 const int clipboard_len = (int)strlen(clipboard);
-                ImWchar* clipboard_filtered = (ImWchar*)MemAlloc((clipboard_len + 1) * sizeof(ImWchar));
+                ImWchar* clipboard_filtered = (ImWchar*)IM_ALLOC((clipboard_len + 1) * sizeof(ImWchar));
                 int clipboard_filtered_len = 0;
                 for (const char* s = clipboard; *s; )
                 {
@@ -3580,6 +3626,9 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
                 MemFree(clipboard_filtered);
             }
         }
+
+        // Update render selection flag after events have been handled, so selection highlight can be displayed during the same frame.
+        render_selection |= state->HasSelection() && (RENDER_SELECTION_WHEN_INACTIVE || render_cursor);
     }
 
     // Process callbacks and apply result back to user's buffer.
@@ -3740,6 +3789,13 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     // without any carriage return, which would makes ImFont::RenderText() reserve too many vertices and probably crash. Avoid it altogether.
     // Note that we only use this limit on single-line InputText(), so a pathologically large line on a InputTextMultiline() would still crash.
     const int buf_display_max_length = 2 * 1024 * 1024;
+    const char* buf_display = buf_display_from_state ? state->TextA.Data : buf; //-V595
+    const char* buf_display_end = NULL; // We have specialized paths below for setting the length
+    if (is_displaying_hint)
+    {
+        buf_display = hint;
+        buf_display_end = hint + strlen(hint);
+    }
 
     // Render text. We currently only render selection when the widget is active or while scrolling.
     // FIXME: We could remove the '&& render_cursor' to keep rendering selection when inactive.
@@ -5038,6 +5094,8 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
         button_flags |= ImGuiButtonFlags_PressedOnDragDropHold;
 
     bool selected = (flags & ImGuiTreeNodeFlags_Selected) != 0;
+    const bool was_selected = selected;
+
     bool hovered, held;
     bool pressed = ButtonBehavior(interact_bb, id, &hovered, &held, button_flags);
     bool toggled = false;
@@ -5073,6 +5131,10 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
     }
     if (flags & ImGuiTreeNodeFlags_AllowItemOverlap)
         SetItemAllowOverlap();
+
+    // In this branch, TreeNodeBehavior() cannot toggle the selection so this will never trigger.
+    if (selected != was_selected) //-V547
+        window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
 
     // Render
     const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
@@ -5250,7 +5312,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     ImVec2 pos = window->DC.CursorPos;
     pos.y += window->DC.CurrentLineTextBaseOffset;
     ImRect bb_inner(pos, pos + size);
-    ItemSize(bb_inner);
+    ItemSize(size);
 
     // Fill horizontal space.
     ImVec2 window_padding = window->WindowPadding;
@@ -5261,21 +5323,21 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (size_arg.x == 0.0f || (flags & ImGuiSelectableFlags_DrawFillAvailWidth))
         bb.Max.x += window_padding.x;
 
-    // Selectables are tightly packed together, we extend the box to cover spacing between selectable.
-    float spacing_L = (float)(int)(style.ItemSpacing.x * 0.5f);
-    float spacing_U = (float)(int)(style.ItemSpacing.y * 0.5f);
-    float spacing_R = style.ItemSpacing.x - spacing_L;
-    float spacing_D = style.ItemSpacing.y - spacing_U;
+    // Selectables are tightly packed together so we extend the box to cover spacing between selectable.
+    const float spacing_x = style.ItemSpacing.x;
+    const float spacing_y = style.ItemSpacing.y;
+    const float spacing_L = (float)(int)(spacing_x * 0.50f);
+    const float spacing_U = (float)(int)(spacing_y * 0.50f);
     bb.Min.x -= spacing_L;
     bb.Min.y -= spacing_U;
-    bb.Max.x += spacing_R;
-    bb.Max.y += spacing_D;
+    bb.Max.x += (spacing_x - spacing_L);
+    bb.Max.y += (spacing_y - spacing_U);
 
     bool item_add;
     if (flags & ImGuiSelectableFlags_Disabled)
     {
         ImGuiItemFlags backup_item_flags = window->DC.ItemFlags;
-        window->DC.ItemFlags |= ImGuiItemFlags_NoNav | ImGuiItemFlags_NoNavDefaultFocus;
+        window->DC.ItemFlags |= ImGuiItemFlags_Disabled | ImGuiItemFlags_NoNavDefaultFocus;
         item_add = ItemAdd(bb, id);
         window->DC.ItemFlags = backup_item_flags;
     }
@@ -5297,9 +5359,12 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (flags & ImGuiSelectableFlags_PressedOnRelease) button_flags |= ImGuiButtonFlags_PressedOnRelease;
     if (flags & ImGuiSelectableFlags_Disabled) button_flags |= ImGuiButtonFlags_Disabled;
     if (flags & ImGuiSelectableFlags_AllowDoubleClick) button_flags |= ImGuiButtonFlags_PressedOnClickRelease | ImGuiButtonFlags_PressedOnDoubleClick;
+    if (flags & ImGuiSelectableFlags_AllowItemOverlap) button_flags |= ImGuiButtonFlags_AllowItemOverlap;
+
     if (flags & ImGuiSelectableFlags_Disabled)
         selected = false;
 
+    const bool was_selected = selected;
     bool hovered, held;
     bool pressed = ButtonBehavior(bb, id, &hovered, &held, button_flags);
     // Hovering selectable with mouse updates NavId accordingly so navigation can be resumed with gamepad/keyboard (this doesn't happen on most widgets)
@@ -5311,6 +5376,13 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
         }
     if (pressed)
         MarkItemEdited(id);
+
+    if (flags & ImGuiSelectableFlags_AllowItemOverlap)
+        SetItemAllowOverlap();
+
+    // In this branch, Selectable() cannot toggle the selection so this will never trigger.
+    if (selected != was_selected) //-V547
+        window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
 
     // Render
     if (hovered || selected)
@@ -5333,6 +5405,8 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     // Automatically close popups
     if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
         CloseCurrentPopup();
+
+    IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags);
     return pressed;
 }
 
@@ -5505,6 +5579,8 @@ void ImGui::PlotEx(ImGuiPlotType plot_type, const char* label, float (*values_ge
         for (int i = 0; i < values_count; i++)
         {
             const float v = values_getter(data, i);
+            if (v != v) // Ignore NaN values
+                continue;
             v_min = ImMin(v_min, v);
             v_max = ImMax(v_max, v);
         }
@@ -5682,6 +5758,7 @@ ImGuiMenuColumns::ImGuiMenuColumns()
 void ImGuiMenuColumns::Update(int count, float spacing, bool clear)
 {
     IM_ASSERT(count == IM_ARRAYSIZE(Pos));
+    IM_UNUSED(count);
     Width = NextWidth = 0.0f;
     Spacing = spacing;
     if (clear)
@@ -6063,7 +6140,7 @@ ImGuiTabBar::ImGuiTabBar()
     CurrFrameVisible = PrevFrameVisible = -1;
     ContentsHeight = 0.0f;
     OffsetMax = OffsetNextTab = 0.0f;
-    ScrollingAnim = ScrollingTarget = 0.0f;
+    ScrollingAnim = ScrollingTarget = ScrollingTargetDistToVisibility = ScrollingSpeed = 0.0f;
     Flags = ImGuiTabBarFlags_None;
     ReorderRequestTabId = 0;
     ReorderRequestDir = 0;
@@ -6357,9 +6434,19 @@ static void ImGui::TabBarLayout(ImGuiTabBar * tab_bar)
             TabBarScrollToTab(tab_bar, scroll_track_selected_tab);
     tab_bar->ScrollingAnim = TabBarScrollClamp(tab_bar, tab_bar->ScrollingAnim);
     tab_bar->ScrollingTarget = TabBarScrollClamp(tab_bar, tab_bar->ScrollingTarget);
-    const float scrolling_speed = (tab_bar->PrevFrameVisible + 1 < g.FrameCount) ? FLT_MAX : (g.IO.DeltaTime * g.FontSize * 70.0f);
     if (tab_bar->ScrollingAnim != tab_bar->ScrollingTarget)
-        tab_bar->ScrollingAnim = ImLinearSweep(tab_bar->ScrollingAnim, tab_bar->ScrollingTarget, scrolling_speed);
+    {
+        // Scrolling speed adjust itself so we can always reach our target in 1/3 seconds.
+        // Teleport if we are aiming far off the visible line
+        tab_bar->ScrollingSpeed = ImMax(tab_bar->ScrollingSpeed, 70.0f * g.FontSize);
+        tab_bar->ScrollingSpeed = ImMax(tab_bar->ScrollingSpeed, ImFabs(tab_bar->ScrollingTarget - tab_bar->ScrollingAnim) / 0.3f);
+        const bool teleport = (tab_bar->PrevFrameVisible + 1 < g.FrameCount) || (tab_bar->ScrollingTargetDistToVisibility > 10.0f * g.FontSize);
+        tab_bar->ScrollingAnim = teleport ? tab_bar->ScrollingTarget : ImLinearSweep(tab_bar->ScrollingAnim, tab_bar->ScrollingTarget, g.IO.DeltaTime * tab_bar->ScrollingSpeed);
+    }
+    else
+    {
+        tab_bar->ScrollingSpeed = 0.0f;
+    }
 
     // Clear name buffers
     if ((tab_bar->Flags & ImGuiTabBarFlags_DockNode) == 0)
@@ -6437,10 +6524,17 @@ static void ImGui::TabBarScrollToTab(ImGuiTabBar * tab_bar, ImGuiTabItem * tab)
     int order = tab_bar->GetTabOrder(tab);
     float tab_x1 = tab->Offset + (order > 0 ? -margin : 0.0f);
     float tab_x2 = tab->Offset + tab->Width + (order + 1 < tab_bar->Tabs.Size ? margin : 1.0f);
+    tab_bar->ScrollingTargetDistToVisibility = 0.0f;
     if (tab_bar->ScrollingTarget > tab_x1)
+    {
+        tab_bar->ScrollingTargetDistToVisibility = ImMax(tab_bar->ScrollingAnim - tab_x2, 0.0f);
         tab_bar->ScrollingTarget = tab_x1;
-    if (tab_bar->ScrollingTarget + tab_bar->BarRect.GetWidth() < tab_x2)
+    }
+    else if (tab_bar->ScrollingTarget < tab_x2 - tab_bar->BarRect.GetWidth())
+    {
+        tab_bar->ScrollingTargetDistToVisibility = ImMax((tab_x1 - tab_bar->BarRect.GetWidth()) - tab_bar->ScrollingAnim, 0.0f);
         tab_bar->ScrollingTarget = tab_x2 - tab_bar->BarRect.GetWidth();
+    }
 }
 
 void ImGui::TabBarQueueChangeTabOrder(ImGuiTabBar * tab_bar, const ImGuiTabItem * tab, int dir)
@@ -6778,7 +6872,8 @@ bool    ImGui::TabItemEx(ImGuiTabBar * tab_bar, const char* label, bool* p_open,
     window->DC.CursorPos = backup_main_cursor_pos;
 
     // Tooltip (FIXME: Won't work over the close button because ItemOverlap systems messes up with HoveredIdTimer)
-    if (g.HoveredId == id && !held && g.HoveredIdNotActiveTimer > 0.50f)
+    // We test IsItemHovered() to discard e.g. when another item is active or drag and drop over the tab bar (which g.HoveredId ignores)
+    if (g.HoveredId == id && !held && g.HoveredIdNotActiveTimer > 0.50f && IsItemHovered())
         if (!(tab_bar->Flags & ImGuiTabBarFlags_NoTooltip))
             SetTooltip("%.*s", (int)(FindRenderedTextEnd(label) - label), label);
 

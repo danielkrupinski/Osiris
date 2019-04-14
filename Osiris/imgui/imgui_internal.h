@@ -1,4 +1,4 @@
-// dear imgui, v1.69 WIP
+// dear imgui, v1.70 WIP
 // (internal structures/api)
 
 // You may use this file to debug, understand or extend ImGui features but we don't provide any guarantee of forward compatibility!
@@ -129,6 +129,7 @@ extern IMGUI_API ImGuiContext* GImGui;  // Current implicit ImGui context pointe
 #else
 #define IM_NEWLINE      "\n"
 #endif
+#define IM_TABSIZE      (4)
 
 #define IMGUI_DEBUG_LOG(_FMT,...)       printf("[%05d] " _FMT, GImGui->FrameCount, __VA_ARGS__)
 #define IM_STATIC_ASSERT(_COND)         typedef char static_assertion_##__line__[(_COND)?1:-1]
@@ -299,7 +300,7 @@ enum ImGuiButtonFlags_
 {
     ImGuiButtonFlags_None = 0,
     ImGuiButtonFlags_Repeat = 1 << 0,   // hold to repeat
-    ImGuiButtonFlags_PressedOnClickRelease = 1 << 1,   // return true on click + release on same item [DEFAULT if no PressedOn* flag is set]
+    ImGuiButtonFlags_PressedOnClickRelease = 1 << 1,   // [Default] return true on click + release on same item
     ImGuiButtonFlags_PressedOnClick = 1 << 2,   // return true on click (default requires click+release)
     ImGuiButtonFlags_PressedOnRelease = 1 << 3,   // return true on release (default requires click+release)
     ImGuiButtonFlags_PressedOnDoubleClick = 1 << 4,   // return true on double-click (default requires click+release)
@@ -311,7 +312,8 @@ enum ImGuiButtonFlags_
     ImGuiButtonFlags_NoKeyModifiers = 1 << 10,  // disable interaction if a key modifier is held
     ImGuiButtonFlags_NoHoldingActiveID = 1 << 11,  // don't set ActiveId while holding the mouse (ImGuiButtonFlags_PressedOnClick only)
     ImGuiButtonFlags_PressedOnDragDropHold = 1 << 12,  // press when held into while we are drag and dropping another item (used by e.g. tree nodes, collapsing headers)
-    ImGuiButtonFlags_NoNavFocus = 1 << 13   // don't override navigation focus when activated
+    ImGuiButtonFlags_NoNavFocus = 1 << 13,  // don't override navigation focus when activated
+    ImGuiButtonFlags_NoHoveredOnNav = 1 << 14   // don't report as hovered when navigated on
 };
 
 enum ImGuiSliderFlags_
@@ -343,7 +345,8 @@ enum ImGuiSelectableFlagsPrivate_
     ImGuiSelectableFlags_NoHoldingActiveID = 1 << 10,
     ImGuiSelectableFlags_PressedOnClick = 1 << 11,
     ImGuiSelectableFlags_PressedOnRelease = 1 << 12,
-    ImGuiSelectableFlags_DrawFillAvailWidth = 1 << 13
+    ImGuiSelectableFlags_DrawFillAvailWidth = 1 << 13,
+    ImGuiSelectableFlags_AllowItemOverlap = 1 << 14
 };
 
 enum ImGuiSeparatorFlags_
@@ -372,7 +375,8 @@ enum ImGuiItemStatusFlags_
     ImGuiItemStatusFlags_None = 0,
     ImGuiItemStatusFlags_HoveredRect = 1 << 0,
     ImGuiItemStatusFlags_HasDisplayRect = 1 << 1,
-    ImGuiItemStatusFlags_Edited = 1 << 2    // Value exposed by item was edited in the current frame (should match the bool return value of most widgets)
+    ImGuiItemStatusFlags_Edited = 1 << 2,   // Value exposed by item was edited in the current frame (should match the bool return value of most widgets)
+    ImGuiItemStatusFlags_ToggledSelection = 1 << 3    // Set when Selectable(), TreeNode() reports toggling a selection. We can't report "Selected" because reporting the change allows us to handle clipping with less issues.
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
     , // [imgui-test only]
@@ -859,7 +863,7 @@ struct ImGuiContext
     ImGuiID                 NavInputId;                         // ~~ IsNavInputPressed(ImGuiNavInput_Input) ? NavId : 0
     ImGuiID                 NavJustTabbedId;                    // Just tabbed to this id.
     ImGuiID                 NavJustMovedToId;                   // Just navigated to this id (result of a successfully MoveRequest).
-    ImGuiID                 NavJustMovedToSelectScopeId;        // Just navigated to this select scope id (result of a successfully MoveRequest).
+    ImGuiID                 NavJustMovedToMultiSelectScopeId;   // Just navigated to this select scope id (result of a successfully MoveRequest).
     ImGuiID                 NavNextActivateId;                  // Set by ActivateItem(), queued until next frame.
     ImGuiInputSource        NavInputSource;                     // Keyboard or Gamepad mode? THIS WILL ONLY BE None or NavGamepad or NavKeyboard.
     ImRect                  NavScoringRectScreen;               // Rectangle used for scoring, in screen space. Based of window->DC.NavRefRectRel[], modified for directional navigation scoring.
@@ -1023,7 +1027,7 @@ struct ImGuiContext
 
         NavWindow = NULL;
         NavId = NavActivateId = NavActivateDownId = NavActivatePressedId = NavInputId = 0;
-        NavJustTabbedId = NavJustMovedToId = NavJustMovedToSelectScopeId = NavNextActivateId = 0;
+        NavJustTabbedId = NavJustMovedToId = NavJustMovedToMultiSelectScopeId = NavNextActivateId = 0;
         NavInputSource = ImGuiInputSource_None;
         NavScoringRectScreen = ImRect();
         NavScoringCount = 0;
@@ -1228,8 +1232,8 @@ struct IMGUI_API ImGuiWindow
     bool                    AutoFitOnlyGrows;
     int                     AutoFitChildAxises;
     ImGuiDir                AutoPosLastDirection;
-    int                     HiddenFramesRegular;                // Hide the window for N frames
-    int                     HiddenFramesForResize;              // Hide the window for N frames while allowing items to be submitted so we can measure their size
+    int                     HiddenFramesCanSkipItems;           // Hide the window for N frames
+    int                     HiddenFramesCannotSkipItems;        // Hide the window for N frames while allowing items to be submitted so we can measure their size
     ImGuiCond               SetWindowPosAllowFlags;             // store acceptable condition flags for SetNextWindowPos() use.
     ImGuiCond               SetWindowSizeAllowFlags;            // store acceptable condition flags for SetNextWindowSize() use.
     ImGuiCond               SetWindowCollapsedAllowFlags;       // store acceptable condition flags for SetNextWindowCollapsed() use.
@@ -1340,6 +1344,8 @@ struct ImGuiTabBar
     float               OffsetNextTab;          // Distance from BarRect.Min.x, incremented with each BeginTabItem() call, not used if ImGuiTabBarFlags_Reorderable if set.
     float               ScrollingAnim;
     float               ScrollingTarget;
+    float               ScrollingTargetDistToVisibility;
+    float               ScrollingSpeed;
     ImGuiTabBarFlags    Flags;
     ImGuiID             ReorderRequestTabId;
     int                 ReorderRequestDir;
@@ -1347,7 +1353,7 @@ struct ImGuiTabBar
     bool                VisibleTabWasSubmitted;
     short               LastTabItemIdx;         // For BeginTabItem()/EndTabItem()
     ImVec2              FramePadding;           // style.FramePadding locked at the time of BeginTabBar()
-    ImGuiTextBuffer     TabsNames;              // For non-docking tab bar we re-append names in a contiguous buffer. 
+    ImGuiTextBuffer     TabsNames;              // For non-docking tab bar we re-append names in a contiguous buffer.
 
     ImGuiTabBar();
     int                 GetTabOrder(const ImGuiTabItem* tab) const { return Tabs.index_from_ptr(tab); }
@@ -1437,6 +1443,7 @@ namespace ImGui
     IMGUI_API void          PushMultiItemsWidths(int components, float width_full = 0.0f);
     IMGUI_API void          PushItemFlag(ImGuiItemFlags option, bool enabled);
     IMGUI_API void          PopItemFlag();
+    IMGUI_API bool          IsItemToggledSelection();                                           // was the last item selection toggled? (after Selectable(), TreeNode() etc. We only returns toggle _event_ in order to handle clipping correctly)
 
     // Logging/Capture
     IMGUI_API void          LogBegin(ImGuiLogType type, int auto_open_depth);   // -> BeginCapture() when we design v2 api, for now stay under the radar by using the old name.
@@ -1577,8 +1584,10 @@ extern void                 ImGuiTestEngineHook_PreNewFrame(ImGuiContext * ctx);
 extern void                 ImGuiTestEngineHook_PostNewFrame(ImGuiContext * ctx);
 extern void                 ImGuiTestEngineHook_ItemAdd(ImGuiContext * ctx, const ImRect & bb, ImGuiID id);
 extern void                 ImGuiTestEngineHook_ItemInfo(ImGuiContext * ctx, ImGuiID id, const char* label, ImGuiItemStatusFlags flags);
+#define IMGUI_TEST_ENGINE_ITEM_ADD(_BB, _ID)                ImGuiTestEngineHook_ItemAdd(&g, _BB, _ID)               // Register status flags
 #define IMGUI_TEST_ENGINE_ITEM_INFO(_ID, _LABEL, _FLAGS)  ImGuiTestEngineHook_ItemInfo(&g, _ID, _LABEL, _FLAGS)   // Register status flags
 #else
+#define IMGUI_TEST_ENGINE_ITEM_ADD(_BB, _ID)                do { } while (0)
 #define IMGUI_TEST_ENGINE_ITEM_INFO(_ID, _LABEL, _FLAGS)  do { } while (0)
 #endif
 
