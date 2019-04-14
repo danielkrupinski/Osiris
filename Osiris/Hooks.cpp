@@ -171,16 +171,22 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
     hooks.client.getOriginal<void(__thiscall*)(Client*, FrameStage)>(37)(interfaces.client, stage);
 }
 
-static void __stdcall hookedEmitSound(int& filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, float attenuation, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, int unknown)
+struct SoundData {
+    std::byte data[12];
+    const char* soundEntry;
+    std::byte pad[56];
+};
+
+static void __stdcall hookedEmitSound(SoundData data)
 {
-    if (config.misc.autoAccept && !strcmp(soundEntry, "UIPanorama.popup_accept_match_beep")) {
+    if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
         auto window = FindWindowA("Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
         FlashWindowEx(&flash);
         ShowWindow(window, SW_RESTORE);
     }
-    hooks.sound.getOriginal<void(__thiscall*)(Sound*, int&, int, int, const char*, unsigned int, const char*, float, int, float, int, int, const Vector&, const Vector&, void*, bool, float, int, int)>(5)(interfaces.sound, filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, attenuation, flags, pitch, origin, direction, utlVecOrigins, updatePositions, soundtime, speakerentity, unknown);
+    hooks.sound.getOriginal<void(__thiscall*)(Sound*, SoundData)>(5)(interfaces.sound, data);
 }
 
 Hooks::Hooks()
