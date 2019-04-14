@@ -189,7 +189,7 @@ static void __stdcall hookedEmitSound(SoundData data) noexcept
     hooks.sound.getOriginal<void(__thiscall*)(Sound*, SoundData)>(5)(interfaces.sound, data);
 }
 
-Hooks::Hooks()
+Hooks::Hooks() noexcept
 {
     ImGui::CreateContext();
     auto window = FindWindowA("Valve001", NULL);
