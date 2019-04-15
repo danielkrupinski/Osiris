@@ -10,7 +10,13 @@ public:
     void render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderWeapons() const noexcept;
-    void renderHands() const noexcept;
+
+    constexpr void renderHands() const noexcept
+    {
+        if (config.chams[10].enabled)
+            applyChams(config.chams[10], false);
+    }
+
 private:
     Material* normal;
     Material* flat;

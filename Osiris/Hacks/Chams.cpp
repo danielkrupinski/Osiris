@@ -94,9 +94,3 @@ void Chams::renderWeapons() const noexcept
         !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
         applyChams(config.chams[9], false);
 }
-
-void Chams::renderHands() const noexcept
-{
-    if (config.chams[10].enabled)
-        applyChams(config.chams[10], false);
-}
