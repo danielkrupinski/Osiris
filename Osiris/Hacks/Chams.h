@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Config.h"
+#include "../Interfaces.h"
 #include "../SDK/ModelRender.h"
 
 class Chams {
@@ -22,5 +24,15 @@ private:
         case 1: return flat;
         case 2: return palm;
         }
+    }
+
+    constexpr void applyChams(decltype(config.chams[0])& params, bool ignorez) const noexcept
+    {
+        auto material = dispatchMaterial(params.material);
+        material->colorModulate(params.color);
+        material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
+        material->alphaModulate(params.alpha);
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, params.wireframe);
+        interfaces.modelRender->forceMaterialOverride(material);
     }
 };
