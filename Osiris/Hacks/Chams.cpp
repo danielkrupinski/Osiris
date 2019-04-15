@@ -50,8 +50,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
             if (config.chams[4].enabled)
                 applyChams(config.chams[4], false);
-        }
-        else if (entity->getProperty<bool>("m_bIsDefusing")) {
+        } else if (entity->getProperty<bool>("m_bIsDefusing")) {
             if (config.chams[7].enabled) {
                 applyChams(config.chams[7], true);
                 hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
@@ -60,12 +59,10 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
             if (config.chams[6].enabled)
                 applyChams(config.chams[6], false);
-        }
-        else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
+        } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
             if (config.chams[8].enabled)
                 applyChams(config.chams[8], false);
-        }
-        else if (entity->isEnemy()) {
+        } else if (entity->isEnemy()) {
             if (config.chams[3].enabled) {
                 applyChams(config.chams[3], true);
                 hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
@@ -74,8 +71,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
             if (config.chams[2].enabled)
                 applyChams(config.chams[2], false);
-        }
-        else {
+        } else {
             if (config.chams[1].enabled) {
                 applyChams(config.chams[1], true);
                 hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);

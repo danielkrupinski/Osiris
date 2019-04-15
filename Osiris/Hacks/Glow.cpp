@@ -32,19 +32,15 @@ void Glow::render() noexcept
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
                 if (entity->isVisible()) applyGlow(glow[4]);
                 else applyGlow(glow[5]);
-            }
-            else if (entity->getProperty<bool>("m_bIsDefusing")) {
+            } else if (entity->getProperty<bool>("m_bIsDefusing")) {
                 if (entity->isVisible()) applyGlow(glow[6]);
                 else applyGlow(glow[7]);
-            }
-            else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+            } else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
                 applyGlow(glow[8]);
-            }
-            else if (entity->isEnemy()) {
+            } else if (entity->isEnemy()) {
                 if (entity->isVisible()) applyGlow(glow[2]);
                 else applyGlow(glow[3]);
-            }
-            else {
+            } else {
                 if (entity->isVisible()) applyGlow(glow[0]);
                 else applyGlow(glow[1]);
             }

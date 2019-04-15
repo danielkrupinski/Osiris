@@ -43,7 +43,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
     if (gui.isOpen) {
         device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
+        IDirect3DVertexDeclaration9 * vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
 
         if (!isMenuToggled) {
@@ -63,12 +63,11 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
         device->SetVertexDeclaration(vertexDeclaration);
-    }
-    else if (isMenuToggled) {
-            memory.input->isMouseInitialized = true;
-            interfaces.inputSystem->enableInput(true);
-            interfaces.inputSystem->resetInputState();
-            isMenuToggled = false;
+    } else if (isMenuToggled) {
+        memory.input->isMouseInitialized = true;
+        interfaces.inputSystem->enableInput(true);
+        interfaces.inputSystem->resetInputState();
+        isMenuToggled = false;
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -136,8 +135,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         chams.render(ctx, state, info, customBoneToWorld);
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
         interfaces.modelRender->forceMaterialOverride(nullptr);
-    }
-    else
+    } else
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
 }
 
