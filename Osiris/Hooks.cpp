@@ -141,10 +141,8 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
 }
 
-static bool __stdcall hookedSvCheatsGetBool() noexcept
+static bool __fastcall hookedSvCheatsGetBool(void* _this) noexcept
 {
-    static auto _this = interfaces.cvar->findVar("sv_cheats");
-
     if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
