@@ -2,6 +2,7 @@
 
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../SDK/Entity.h"
 #include "../SDK/ModelRender.h"
 
 class Chams {
@@ -9,12 +10,18 @@ public:
     Chams() noexcept;
     void render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderWeapons() const noexcept;
 
     constexpr void renderHands() const noexcept
     {
         if (config.chams[10].enabled)
             applyChams(config.chams[10], false);
+    }
+
+    constexpr void renderWeapons() const noexcept
+    {
+        if (config.chams[9].enabled &&
+            !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
+            applyChams(config.chams[9], false);
     }
 
 private:

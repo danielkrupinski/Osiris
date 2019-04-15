@@ -87,10 +87,3 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         }
     }
 }
-
-void Chams::renderWeapons() const noexcept
-{
-    if (config.chams[9].enabled &&
-        !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
-        applyChams(config.chams[9], false);
-}
