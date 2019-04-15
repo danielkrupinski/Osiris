@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include <stdexcept>
 #include <type_traits>
 #include <Windows.h>
@@ -42,10 +43,17 @@ private:
     {
         const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module), "CreateInterface"));
 
-        if (auto foundInterface = createInterface(name, nullptr))
+        T* foundInterface{ nullptr };
+
+        if (createInterface)
+            foundInterface = createInterface(name, nullptr);
+
+        if (foundInterface)
             return foundInterface;
-        else
-            throw std::runtime_error{ "Interface search failed!" };
+        else {
+            MessageBox(NULL, (std::ostringstream{ } << "Failed to find " << name << " in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+            exit(EXIT_FAILURE);
+        }
     }
 };
 
