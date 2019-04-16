@@ -27,7 +27,6 @@ public:
     std::add_pointer_t<void __fastcall(const char*, const char*) noexcept> setClanTag;
     int* smokeCount;
     uintptr_t cameraThink;
-    std::add_pointer_t<void __cdecl(int*) noexcept> revealRanks;
     std::add_pointer_t<bool __stdcall(const char*) noexcept> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short) noexcept> lineGoesThroughSmoke;
 

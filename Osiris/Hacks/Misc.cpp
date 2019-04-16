@@ -27,8 +27,6 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 
 void Misc::revealRanks() noexcept
 {
-    //static int param[3]{ };
-    //memory.revealRanks(param);
     interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
 }
 
