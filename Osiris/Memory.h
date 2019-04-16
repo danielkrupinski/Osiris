@@ -33,7 +33,7 @@ public:
 
 private:
     template <typename T = uintptr_t>
-    static auto findPattern(const char* module, std::string_view pattern, size_t offset = 0)
+    static auto findPattern(const char* module, std::string_view pattern, size_t offset = 0) noexcept
     {
         MODULEINFO moduleInfo;
 
