@@ -132,6 +132,10 @@ public:
     } chams;
 
     struct {
+
+    } esp;
+
+    struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
         bool no3dSky{ false };
