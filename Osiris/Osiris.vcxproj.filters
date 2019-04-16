@@ -260,5 +260,8 @@
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Esp.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
