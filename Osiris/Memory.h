@@ -18,29 +18,30 @@ public:
     {
         MODULEINFO moduleInfo;
 
-        GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo));
+        if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo))) {
+            char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
+            char* end = begin + moduleInfo.SizeOfImage;
 
-        char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
-        char* end = begin + moduleInfo.SizeOfImage;
+            for (char* c = begin; c != end; c++) {
+                bool matched = true;
+                auto it = c;
 
-        for (char* c = begin; c != end; c++) {
-            bool matched = true;
-            auto it = c;
+                if (*(c + pattern.length() - 1) != pattern.back())
+                    continue;
 
-            if (*(c + pattern.length() - 1) != pattern.back())
-                continue;
-
-            for (auto a : pattern) {
-                if (a != '?' && *it != a) {
-                    matched = false;
-                    break;
+                for (auto a : pattern) {
+                    if (a != '?' && *it != a) {
+                        matched = false;
+                        break;
+                    }
+                    it++;
                 }
-                it++;
+                if (matched)
+                    return reinterpret_cast<T>(c + offset);
             }
-            if (matched)
-                return reinterpret_cast<T>(c + offset);
         }
-        throw std::runtime_error{ "Memory scan failed!" };
+        MessageBox(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+        exit(EXIT_FAILURE);
     }
 
     uintptr_t present;
