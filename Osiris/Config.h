@@ -138,6 +138,7 @@ public:
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+        bool noFog{ false };
         bool no3dSky{ false };
         bool noVisualRecoil{ false };
         bool noHands{ false };
@@ -160,7 +161,7 @@ public:
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(disablePostProcessing, inverseRagdollGravity, no3dSky, noVisualRecoil, noHands,
+            archive(disablePostProcessing, inverseRagdollGravity, noFog, no3dSky, noVisualRecoil, noHands,
                 noSleeves, noWeapons, noSmoke, noBlur, noScopeOverlay, noGrass, wireframeSmoke, thirdperson,
                 thirdpersonKey, thirdpersonDistance, viewmodelFov, flashReduction, brightness, skybox,
                 worldColor);
