@@ -48,9 +48,10 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
         int talon{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_widowmaker.mdl") };
         int ursus{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ursus.mdl") };
         int golden{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gg.mdl") };
+        int hostageArm{ interfaces.modelInfo->getModelIndex("models/hostage/v_hostage_arm.mdl") };
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
-            if (activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
+            if (data->intValue != hostageArm && activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
                 data->intValue = [=](int id) {
                 switch (id) {
                 default:
