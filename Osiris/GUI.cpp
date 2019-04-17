@@ -364,11 +364,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
         ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
+        ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         ImGui::Checkbox("Watermark", &config.misc.watermark);
-
-        if (ImGui::Button("Reveal ranks"))
-            Misc::revealRanks();
         ImGui::End();
     }
 }

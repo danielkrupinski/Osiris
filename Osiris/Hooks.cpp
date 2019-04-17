@@ -97,6 +97,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::animateClanTag();
+    Misc::revealRanks(cmd);
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
@@ -253,7 +254,7 @@ uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexce
     return nullptr;
 }
 
-auto Hooks::Vmt::calculateLength(uintptr_t * vmt) noexcept
+auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
 {
     size_t length{ 0 };
     MEMORY_BASIC_INFORMATION memoryInfo;

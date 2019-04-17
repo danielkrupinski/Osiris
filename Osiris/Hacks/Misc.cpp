@@ -25,11 +25,6 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::revealRanks() noexcept
-{
-    interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
-}
-
 void Misc::animateClanTag(const char* tag) noexcept
 {
     static float lastTime{ 0.0f };

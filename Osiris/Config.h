@@ -192,6 +192,7 @@ public:
         bool autoPistol{ false };
         bool autoAccept{ false };
         bool radarHack{ false };
+        bool revealRanks{ false };
         bool spectatorList{ false };
         bool watermark{ false };
 
@@ -200,7 +201,7 @@ public:
         {
             archive(autoStrafe, bunnyHop, animatedClanTag, fastDuck,
                 sniperCrosshair, recoilCrosshair, autoPistol,
-                autoAccept, radarHack, spectatorList, watermark);
+                autoAccept, radarHack, revealRanks, spectatorList, watermark);
         }
     } misc;
 

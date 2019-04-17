@@ -6,12 +6,19 @@
 namespace Misc {
     void inverseRagdollGravity() noexcept;
     void autoPistol(UserCmd*) noexcept;
-    void revealRanks() noexcept;
     void animateClanTag(const char* = nullptr) noexcept;
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
+
+
+    constexpr void revealRanks(UserCmd* cmd) noexcept
+    {
+        if (config.misc.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
+            interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
+    }
+
 
     constexpr void autoStrafe(UserCmd* cmd) noexcept
     {
