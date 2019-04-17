@@ -39,7 +39,7 @@ private:
 
         if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo))) {
             char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
-            char* end = begin + moduleInfo.SizeOfImage;
+            char* end = begin + moduleInfo.SizeOfImage - pattern.length() + 1;
 
             for (char* c = begin; c != end; c++) {
                 bool matched = true;
