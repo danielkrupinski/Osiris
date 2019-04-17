@@ -21,14 +21,14 @@ constexpr void hookProperty(RecvProp& prop, recvProxy proxy) noexcept
     }
 }
 
-static void spottedHook(recvProxyData* data, void* arg2, void* arg3) noexcept
+static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
-        data->intValue = 1;
+        data.intValue = 1;
     proxies["m_bSpotted"](data, arg2, arg3);
 }
 
-static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
+static void modelIndexHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
@@ -51,8 +51,8 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
         int hostageArm{ interfaces.modelInfo->getModelIndex("models/hostage/v_hostage_arm.mdl") };
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
-            if (data->intValue != hostageArm && activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
-                data->intValue = [=](int id) {
+            if (data.intValue != hostageArm && activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
+                data.intValue = [=](int id) {
                 switch (id) {
                 default:
                 case 1:
@@ -105,14 +105,14 @@ static void modelIndexHook(recvProxyData* data, void* arg2, void* arg3) noexcept
     proxies["m_nModelIndex"](data, arg2, arg3);
 }
 
-static void viewModelSequenceHook(recvProxyData* data, void* arg2, void* arg3) noexcept
+static void viewModelSequenceHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
             if (activeWeapon->getClientClass()->classId == ClassId::Knife || activeWeapon->getClientClass()->classId == ClassId::KnifeGG) {
-                auto& sequence = data->intValue;
+                auto& sequence = data.intValue;
                 [&sequence](int id) {
                     switch (id) {
                     case 2:
