@@ -16,4 +16,5 @@ Memory::Memory() noexcept
     smokeCount = *(reinterpret_cast<int**>(lineGoesThroughSmoke) + 2);
     cameraThink = findPattern<>("client_panorama", "\x85\xC0\x75\x30\x38\x86");
     acceptMatch = findPattern<decltype(acceptMatch)>("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12");
+    getSequenceActivity = findPattern<decltype(getSequenceActivity)>("client_panorama", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83");
 }

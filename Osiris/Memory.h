@@ -29,6 +29,7 @@ public:
     uintptr_t cameraThink;
     std::add_pointer_t<bool __stdcall(const char*) noexcept> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short) noexcept> lineGoesThroughSmoke;
+    std::add_pointer_t<int __fastcall(void*, void*, int) noexcept> getSequenceActivity;
 
 private:
     template <typename T = uintptr_t>
