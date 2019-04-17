@@ -186,6 +186,11 @@ static void __stdcall hookedEmitSound(SoundData data) noexcept
     hooks.sound.getOriginal<void(__thiscall*)(Sound*, SoundData)>(5)(interfaces.sound, data);
 }
 
+static bool __stdcall hookedShouldDrawFog() noexcept
+{
+    return !config.visuals.noFog;
+}
+
 Hooks::Hooks() noexcept
 {
     ImGui::CreateContext();
@@ -220,6 +225,7 @@ Hooks::Hooks() noexcept
 
     client.hookAt(37, hookedFrameStageNotify);
 
+    clientMode.hookAt(17, hookedShouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
