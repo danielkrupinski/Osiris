@@ -132,7 +132,12 @@ public:
     } chams;
 
     struct {
-
+        bool enabled{ false };
+        bool reserved{ false };
+        bool reserved1{ false };
+        bool reserved2{ false };
+        bool reserved3{ false };
+        bool reserved4{ false };
     } esp;
 
     struct {
