@@ -252,7 +252,6 @@ void ImGui::ShowDemoWindow(bool* p_open)
         ImGui::End();
         return;
     }
-    ImGui::Text("dear imgui says hello. (%s)", IMGUI_VERSION);
 
     // Most "big" widgets share a common width settings by default.
     //ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // Use 2/3 of the space for widgets and 1/3 for labels (default)
@@ -292,7 +291,9 @@ void ImGui::ShowDemoWindow(bool* p_open)
         ImGui::EndMenuBar();
     }
 
+    ImGui::Text("dear imgui says hello. (%s)", IMGUI_VERSION);
     ImGui::Spacing();
+
     if (ImGui::CollapsingHeader("Help"))
     {
         ImGui::Text("PROGRAMMER GUIDE:");
@@ -607,8 +608,7 @@ static void ShowDemoWindowWidgets()
                         ImGui::Text("Blah blah\nBlah Blah");
                         ImGui::TreePop();
                     }
-                }
-                else
+                } else
                 {
                     // Items 3..5 are Tree Leaves
                     // The only reason we use TreeNode at all is to allow selection of the leaf.
@@ -2059,8 +2059,7 @@ static void ShowDemoWindowLayout()
                 {
                     ImGui::TextColored(ImVec4(1, 1, 0, 1), "Line %d", line);
                     ImGui::SetScrollHereY(i * 0.25f); // 0.0f:top, 0.5f:center, 1.0f:bottom
-                }
-                else
+                } else
                 {
                     ImGui::Text("Line %d", line);
                 }
@@ -3351,8 +3350,7 @@ struct ExampleAppConsole
 
             // Normally you would store more information in your item (e.g. make Items[] an array of structure, store color/type etc.)
             bool pop_color = false;
-            if (strstr(item, "[error]")) { ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f)); pop_color = true; }
-            else if (strncmp(item, "# ", 2) == 0) { ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.8f, 0.6f, 1.0f)); pop_color = true; }
+            if (strstr(item, "[error]")) { ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f)); pop_color = true; } else if (strncmp(item, "# ", 2) == 0) { ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.8f, 0.6f, 1.0f)); pop_color = true; }
             ImGui::TextUnformatted(item);
             if (pop_color)
                 ImGui::PopStyleColor();
@@ -3405,20 +3403,17 @@ struct ExampleAppConsole
         if (Stricmp(command_line, "CLEAR") == 0)
         {
             ClearLog();
-        }
-        else if (Stricmp(command_line, "HELP") == 0)
+        } else if (Stricmp(command_line, "HELP") == 0)
         {
             AddLog("Commands:");
             for (int i = 0; i < Commands.Size; i++)
                 AddLog("- %s", Commands[i]);
-        }
-        else if (Stricmp(command_line, "HISTORY") == 0)
+        } else if (Stricmp(command_line, "HISTORY") == 0)
         {
             int first = History.Size - 10;
             for (int i = first > 0 ? first : 0; i < History.Size; i++)
                 AddLog("%3d: %s\n", i, History[i]);
-        }
-        else
+        } else
         {
             AddLog("Unknown command: '%s'\n", command_line);
         }
@@ -3463,15 +3458,13 @@ struct ExampleAppConsole
             {
                 // No match
                 AddLog("No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
-            }
-            else if (candidates.Size == 1)
+            } else if (candidates.Size == 1)
             {
                 // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing
                 data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
                 data->InsertChars(data->CursorPos, candidates[0]);
                 data->InsertChars(data->CursorPos, " ");
-            }
-            else
+            } else
             {
                 // Multiple matches. Complete as much as we can, so inputing "C" will complete to "CL" and display "CLEAR" and "CLASSIFY"
                 int match_len = (int)(word_end - word_start);
@@ -3513,8 +3506,7 @@ struct ExampleAppConsole
                     HistoryPos = History.Size - 1;
                 else if (HistoryPos > 0)
                     HistoryPos--;
-            }
-            else if (data->EventKey == ImGuiKey_DownArrow)
+            } else if (data->EventKey == ImGuiKey_DownArrow)
             {
                 if (HistoryPos != -1)
                     if (++HistoryPos >= History.Size)
@@ -3635,8 +3627,7 @@ struct ExampleAppLog
                 if (Filter.PassFilter(line_start, line_end))
                     ImGui::TextUnformatted(line_start, line_end);
             }
-        }
-        else
+        } else
         {
             // The simplest and easy way to display the entire buffer:
             //   ImGui::TextUnformatted(buf_begin, buf_end);
@@ -3799,8 +3790,7 @@ static void ShowExampleAppPropertyEditor(bool* p_open)
                     if (i < 2)
                     {
                         ShowDummyObject("Child", 424242);
-                    }
-                    else
+                    } else
                     {
                         // Here we use a TreeNode to highlight on hover (we could use e.g. Selectable as well)
                         ImGui::AlignTextToFramePadding();
@@ -4267,15 +4257,15 @@ void ShowExampleAppDocuments(bool* p_open)
 {
     static ExampleAppDocuments app;
 
+    // Options
+    static bool opt_reorderable = true;
+    static ImGuiTabBarFlags opt_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
+
     if (!ImGui::Begin("Example: Documents", p_open, ImGuiWindowFlags_MenuBar))
     {
         ImGui::End();
         return;
     }
-
-    // Options
-    static bool opt_reorderable = true;
-    static ImGuiTabBarFlags opt_fitting_flags = ImGuiTabBarFlags_FittingPolicyDefault_;
 
     // Menu
     if (ImGui::BeginMenuBar())
@@ -4392,8 +4382,7 @@ void ShowExampleAppDocuments(bool* p_open)
             for (int n = 0; n < close_queue.Size; n++)
                 close_queue[n]->DoForceClose();
             close_queue.clear();
-        }
-        else
+        } else
         {
             if (!ImGui::IsPopupOpen("Save?"))
                 ImGui::OpenPopup("Save?");

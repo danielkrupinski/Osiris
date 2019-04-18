@@ -63,7 +63,7 @@ struct ImDrawDataBuilder;           // Helper to build a ImDrawData instance
 struct ImDrawListSharedData;        // Data shared between all ImDrawList instances
 struct ImGuiColorMod;               // Stacked color modifier, backup of modified data so we can restore it
 struct ImGuiColumnData;             // Storage data for a single column
-struct ImGuiColumnsSet;             // Storage data for a columns set
+struct ImGuiColumns;                // Storage data for a columns set
 struct ImGuiContext;                // Main imgui context
 struct ImGuiGroupData;              // Stacked storage data for BeginGroup()/EndGroup()
 struct ImGuiInputTextState;         // Internal state of the currently focused/edited text input box
@@ -658,10 +658,10 @@ struct ImGuiColumnData
     ImGuiColumnsFlags   Flags;              // Not exposed
     ImRect              ClipRect;
 
-    ImGuiColumnData() { OffsetNorm = OffsetNormBeforeResize = 0.0f; Flags = 0; }
+    ImGuiColumnData() { OffsetNorm = OffsetNormBeforeResize = 0.0f; Flags = ImGuiColumnsFlags_None; }
 };
 
-struct ImGuiColumnsSet
+struct ImGuiColumns
 {
     ImGuiID             ID;
     ImGuiColumnsFlags   Flags;
@@ -671,23 +671,23 @@ struct ImGuiColumnsSet
     int                 Count;
     float               MinX, MaxX;
     float               LineMinY, LineMaxY;
-    float               StartPosY;          // Copy of CursorPos
-    float               StartMaxPosX;       // Copy of CursorMaxPos
+    float               BackupCursorPosY;       // Backup of CursorPos at the time of BeginColumns()
+    float               BackupCursorMaxPosX;    // Backup of CursorMaxPos at the time of BeginColumns()
     ImVector<ImGuiColumnData> Columns;
 
-    ImGuiColumnsSet() { Clear(); }
+    ImGuiColumns() { Clear(); }
     void Clear()
     {
         ID = 0;
-        Flags = 0;
+        Flags = ImGuiColumnsFlags_None;
         IsFirstFrame = false;
         IsBeingResized = false;
         Current = 0;
         Count = 1;
         MinX = MaxX = 0.0f;
         LineMinY = LineMaxY = 0.0f;
-        StartPosY = 0.0f;
-        StartMaxPosX = 0.0f;
+        BackupCursorPosY = 0.0f;
+        BackupCursorMaxPosX = 0.0f;
         Columns.clear();
     }
 };
@@ -1156,7 +1156,7 @@ struct IMGUI_API ImGuiWindowTempData
     ImVec1                  Indent;                 // Indentation / start position from left of window (increased by TreePush/TreePop, etc.)
     ImVec1                  GroupOffset;
     ImVec1                  ColumnsOffset;          // Offset to the current column (if ColumnsCurrent > 0). FIXME: This and the above should be a stack to allow use cases like Tree->Column->Tree. Need revamp columns API.
-    ImGuiColumnsSet* ColumnsSet;             // Current columns set
+    ImGuiColumns* CurrentColumns;         // Current columns set
 
     ImGuiWindowTempData()
     {
@@ -1187,7 +1187,7 @@ struct IMGUI_API ImGuiWindowTempData
         Indent = ImVec1(0.0f);
         GroupOffset = ImVec1(0.0f);
         ColumnsOffset = ImVec1(0.0f);
-        ColumnsSet = NULL;
+        CurrentColumns = NULL;
     }
 };
 
@@ -1221,7 +1221,7 @@ struct IMGUI_API ImGuiWindow
     bool                    WantCollapseToggle;
     bool                    SkipItems;                          // Set when items can safely be all clipped (e.g. window not visible or collapsed)
     bool                    Appearing;                          // Set during the frame where the window is appearing (or re-appearing)
-    bool                    Hidden;                             // Do not display (== (HiddenFramesForResize > 0) ||
+    bool                    Hidden;                             // Do not display (== (HiddenFrames*** > 0))
     bool                    HasCloseButton;                     // Set when the window has a close button (p_open != NULL)
     signed char             ResizeBorderHeld;                   // Current border being held for resize (-1: none, otherwise 0-3)
     short                   BeginCount;                         // Number of Begin() during the current frame (generally 0 or 1, 1+ if appending via multiple Begin/End pairs)
@@ -1250,7 +1250,7 @@ struct IMGUI_API ImGuiWindow
     float                   ItemWidthDefault;
     ImGuiMenuColumns        MenuColumns;                        // Simplified columns storage for menu items
     ImGuiStorage            StateStorage;
-    ImVector<ImGuiColumnsSet> ColumnsStorage;
+    ImVector<ImGuiColumns>  ColumnsStorage;
     float                   FontWindowScale;                    // User scale multiplier per-window
     int                     SettingsIdx;                        // Index into SettingsWindow[] (indices are always valid as we only grow the array from the back)
 
@@ -1438,12 +1438,13 @@ namespace ImGui
     IMGUI_API bool          IsClippedEx(const ImRect& bb, ImGuiID id, bool clip_even_when_logged);
     IMGUI_API bool          FocusableItemRegister(ImGuiWindow* window, ImGuiID id);   // Return true if focus is requested
     IMGUI_API void          FocusableItemUnregister(ImGuiWindow* window);
-    IMGUI_API ImVec2        CalcItemSize(ImVec2 size, float default_x, float default_y);
+    IMGUI_API ImVec2        CalcItemSize(ImVec2 size, float default_w, float default_h);
     IMGUI_API float         CalcWrapWidthForPos(const ImVec2& pos, float wrap_pos_x);
     IMGUI_API void          PushMultiItemsWidths(int components, float width_full = 0.0f);
     IMGUI_API void          PushItemFlag(ImGuiItemFlags option, bool enabled);
     IMGUI_API void          PopItemFlag();
     IMGUI_API bool          IsItemToggledSelection();                                           // was the last item selection toggled? (after Selectable(), TreeNode() etc. We only returns toggle _event_ in order to handle clipping correctly)
+    IMGUI_API ImVec2        GetContentRegionMaxScreen();
 
     // Logging/Capture
     IMGUI_API void          LogBegin(ImGuiLogType type, int auto_open_depth);   // -> BeginCapture() when we design v2 api, for now stay under the radar by using the old name.
@@ -1488,6 +1489,8 @@ namespace ImGui
     IMGUI_API void          BeginColumns(const char* str_id, int count, ImGuiColumnsFlags flags = 0); // setup number of columns. use an identifier to distinguish multiple column sets. close with EndColumns().
     IMGUI_API void          EndColumns();                                                             // close columns
     IMGUI_API void          PushColumnClipRect(int column_index = -1);
+    IMGUI_API ImGuiID       GetColumnsID(const char* str_id, int count);
+    IMGUI_API ImGuiColumns * FindOrCreateColumns(ImGuiWindow * window, ImGuiID id);
 
     // Tab Bars
     IMGUI_API bool          BeginTabBarEx(ImGuiTabBar * tab_bar, const ImRect & bb, ImGuiTabBarFlags flags);

@@ -538,8 +538,7 @@ void ImDrawList::ChannelsSplit(int channels_count)
         if (i >= old_channels_count)
         {
             IM_PLACEMENT_NEW(&_Channels[i]) ImDrawChannel();
-        }
-        else
+        } else
         {
             _Channels[i].CmdBuffer.resize(0);
             _Channels[i].IdxBuffer.resize(0);
@@ -754,8 +753,7 @@ void ImDrawList::AddPolyline(const ImVec2 * points, const int points_count, ImU3
                 _VtxWritePtr[2].pos = temp_points[i * 2 + 1]; _VtxWritePtr[2].uv = uv; _VtxWritePtr[2].col = col_trans;
                 _VtxWritePtr += 3;
             }
-        }
-        else
+        } else
         {
             const float half_inner_thickness = (thickness - AA_SIZE) * 0.5f;
             if (!closed)
@@ -820,8 +818,7 @@ void ImDrawList::AddPolyline(const ImVec2 * points, const int points_count, ImU3
             }
         }
         _VtxCurrentIdx += (ImDrawIdx)vtx_count;
-    }
-    else
+    } else
     {
         // Non Anti-aliased Stroke
         const int idx_count = count * 6;
@@ -915,8 +912,7 @@ void ImDrawList::AddConvexPolyFilled(const ImVec2 * points, const int points_cou
             _IdxWritePtr += 6;
         }
         _VtxCurrentIdx += (ImDrawIdx)vtx_count;
-    }
-    else
+    } else
     {
         // Non Anti-aliased Fill
         const int idx_count = (points_count - 2) * 3;
@@ -980,8 +976,7 @@ static void PathBezierToCasteljau(ImVector<ImVec2> * path, float x1, float y1, f
     if ((d2 + d3) * (d2 + d3) < tess_tol * (dx * dx + dy * dy))
     {
         path->push_back(ImVec2(x4, y4));
-    }
-    else if (level < 10)
+    } else if (level < 10)
     {
         float x12 = (x1 + x2) * 0.5f, y12 = (y1 + y2) * 0.5f;
         float x23 = (x2 + x3) * 0.5f, y23 = (y2 + y3) * 0.5f;
@@ -1002,8 +997,7 @@ void ImDrawList::PathBezierCurveTo(const ImVec2 & p2, const ImVec2 & p3, const I
     {
         // Auto-tessellated
         PathBezierToCasteljau(&_Path, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, _Data->CurveTessellationTol, 0);
-    }
-    else
+    } else
     {
         float t_step = 1.0f / (float)num_segments;
         for (int i_step = 1; i_step <= num_segments; i_step++)
@@ -1030,8 +1024,7 @@ void ImDrawList::PathRect(const ImVec2 & a, const ImVec2 & b, float rounding, in
         PathLineTo(ImVec2(b.x, a.y));
         PathLineTo(b);
         PathLineTo(ImVec2(a.x, b.y));
-    }
-    else
+    } else
     {
         const float rounding_tl = (rounding_corners & ImDrawCornerFlags_TopLeft) ? rounding : 0.0f;
         const float rounding_tr = (rounding_corners & ImDrawCornerFlags_TopRight) ? rounding : 0.0f;
@@ -1073,8 +1066,7 @@ void ImDrawList::AddRectFilled(const ImVec2 & a, const ImVec2 & b, ImU32 col, fl
     {
         PathRect(a, b, rounding, rounding_corners_flags);
         PathFillConvex(col);
-    }
-    else
+    } else
     {
         PrimReserve(6, 4);
         PrimRect(a, b, col);
@@ -1343,8 +1335,7 @@ void ImGui::ShadeVertsLinearUV(ImDrawList * draw_list, int vert_start_idx, int v
         const ImVec2 max = ImMax(uv_a, uv_b);
         for (ImDrawVert* vertex = vert_start; vertex < vert_end; ++vertex)
             vertex->uv = ImClamp(uv_a + ImMul(ImVec2(vertex->pos.x, vertex->pos.y) - a, scale), min, max);
-    }
-    else
+    } else
     {
         for (ImDrawVert* vertex = vert_start; vertex < vert_end; ++vertex)
             vertex->uv = uv_a + ImMul(ImVec2(vertex->pos.x, vertex->pos.y) - a, scale);
@@ -2111,8 +2102,7 @@ static void ImFontAtlasBuildRenderDefaultTexData(ImFontAtlas * atlas)
                 atlas->TexPixelsAlpha8[offset0] = FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS[n] == '.' ? 0xFF : 0x00;
                 atlas->TexPixelsAlpha8[offset1] = FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS[n] == 'X' ? 0xFF : 0x00;
             }
-    }
-    else
+    } else
     {
         IM_ASSERT(r.Width == 2 && r.Height == 2);
         const int offset = (int)(r.X) + (int)(r.Y) * w;
@@ -2620,15 +2610,13 @@ const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const c
             }
             blank_width += char_width;
             inside_word = false;
-        }
-        else
+        } else
         {
             word_width += char_width;
             if (inside_word)
             {
                 word_end = next_s;
-            }
-            else
+            } else
             {
                 prev_word_end = word_end;
                 line_width += word_width + blank_width;
@@ -2693,9 +2681,7 @@ ImVec2 ImFont::CalcTextSizeA(float size, float max_width, float wrap_width, cons
                 while (s < text_end)
                 {
                     const char c = *s;
-                    if (ImCharIsBlankA(c)) { s++; }
-                    else if (c == '\n') { s++; break; }
-                    else { break; }
+                    if (ImCharIsBlankA(c)) { s++; } else if (c == '\n') { s++; break; } else { break; }
                 }
                 continue;
             }
@@ -2707,8 +2693,7 @@ ImVec2 ImFont::CalcTextSizeA(float size, float max_width, float wrap_width, cons
         if (c < 0x80)
         {
             s += 1;
-        }
-        else
+        } else
         {
             s += ImTextCharFromUtf8(&c, s, text_end);
             if (c == 0) // Malformed UTF-8?
@@ -2841,9 +2826,7 @@ void ImFont::RenderText(ImDrawList * draw_list, float size, ImVec2 pos, ImU32 co
                 while (s < text_end)
                 {
                     const char c = *s;
-                    if (ImCharIsBlankA(c)) { s++; }
-                    else if (c == '\n') { s++; break; }
-                    else { break; }
+                    if (ImCharIsBlankA(c)) { s++; } else if (c == '\n') { s++; break; } else { break; }
                 }
                 continue;
             }
@@ -2854,8 +2837,7 @@ void ImFont::RenderText(ImDrawList * draw_list, float size, ImVec2 pos, ImU32 co
         if (c < 0x80)
         {
             s += 1;
-        }
-        else
+        } else
         {
             s += ImTextCharFromUtf8(&c, s, text_end);
             if (c == 0) // Malformed UTF-8?
@@ -3037,13 +3019,11 @@ void ImGui::RenderRectFilledRangeH(ImDrawList * draw_list, const ImRect & rect, 
     {
         draw_list->PathLineTo(ImVec2(x0, p1.y));
         draw_list->PathLineTo(ImVec2(x0, p0.y));
-    }
-    else if (arc0_b == 0.0f && arc0_e == half_pi)
+    } else if (arc0_b == 0.0f && arc0_e == half_pi)
     {
         draw_list->PathArcToFast(ImVec2(x0, p1.y - rounding), rounding, 3, 6); // BL
         draw_list->PathArcToFast(ImVec2(x0, p0.y + rounding), rounding, 6, 9); // TR
-    }
-    else
+    } else
     {
         draw_list->PathArcTo(ImVec2(x0, p1.y - rounding), rounding, IM_PI - arc0_e, IM_PI - arc0_b, 3); // BL
         draw_list->PathArcTo(ImVec2(x0, p0.y + rounding), rounding, IM_PI + arc0_b, IM_PI + arc0_e, 3); // TR
@@ -3057,13 +3037,11 @@ void ImGui::RenderRectFilledRangeH(ImDrawList * draw_list, const ImRect & rect, 
         {
             draw_list->PathLineTo(ImVec2(x1, p0.y));
             draw_list->PathLineTo(ImVec2(x1, p1.y));
-        }
-        else if (arc1_b == 0.0f && arc1_e == half_pi)
+        } else if (arc1_b == 0.0f && arc1_e == half_pi)
         {
             draw_list->PathArcToFast(ImVec2(x1, p0.y + rounding), rounding, 9, 12); // TR
             draw_list->PathArcToFast(ImVec2(x1, p1.y - rounding), rounding, 0, 3);  // BR
-        }
-        else
+        } else
         {
             draw_list->PathArcTo(ImVec2(x1, p0.y + rounding), rounding, -arc1_e, -arc1_b, 3); // TR
             draw_list->PathArcTo(ImVec2(x1, p1.y - rounding), rounding, +arc1_b, +arc1_e, 3); // BR
@@ -3129,8 +3107,7 @@ static const unsigned char* stb_decompress_token(const unsigned char* i)
         if (*i >= 0x80)       stb__match(stb__dout - i[1] - 1, i[0] - 0x80 + 1), i += 2;
         else if (*i >= 0x40)  stb__match(stb__dout - (stb__in2(0) - 0x4000 + 1), i[2] + 1), i += 3;
         else /* *i >= 0x20 */ stb__lit(i + 1, i[0] - 0x20 + 1), i += 1 + (i[0] - 0x20 + 1);
-    }
-    else { // more ifs for cases that expand large, since overhead is amortized
+    } else { // more ifs for cases that expand large, since overhead is amortized
         if (*i >= 0x18)       stb__match(stb__dout - (stb__in3(0) - 0x180000 + 1), i[3] + 1), i += 4;
         else if (*i >= 0x10)  stb__match(stb__dout - (stb__in3(0) - 0x100000 + 1), stb__in2(3) + 1), i += 5;
         else if (*i >= 0x08)  stb__lit(i + 2, stb__in2(0) - 0x0800 + 1), i += 2 + (stb__in2(0) - 0x0800 + 1);
@@ -3194,8 +3171,7 @@ static unsigned int stb_decompress(unsigned char* output, const unsigned char* i
                 if (stb_adler32(1, output, olen) != (unsigned int)stb__in4(2))
                     return 0;
                 return olen;
-            }
-            else {
+            } else {
                 IM_ASSERT(0); /* NOTREACHED */
                 return 0;
             }
