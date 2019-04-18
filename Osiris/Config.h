@@ -133,11 +133,17 @@ public:
 
     struct {
         bool enabled{ false };
-        bool reserved{ false };
+        bool reserved{ false }; // reserved for future use
         bool reserved1{ false };
         bool reserved2{ false };
         bool reserved3{ false };
         bool reserved4{ false };
+
+        template <class Archive>
+        constexpr void serialize(Archive& archive) noexcept
+        {
+            archive(enabled, reserved, reserved1, reserved2, reserved3, reserved4);
+        }
     } esp;
 
     struct {
