@@ -36,7 +36,7 @@ public:
 
     auto getScreenSize() noexcept
     {
-        static int width, height;
+        int width, height;
         callVirtualFunction<void(__thiscall*)(void*, int&, int&)>(this, 44)(this, width, height);
         return std::make_pair(width, height);
     }
