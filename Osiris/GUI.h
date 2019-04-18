@@ -11,6 +11,7 @@ private:
     void renderTriggerbotWindow() noexcept;
     void renderGlowWindow() noexcept;
     void renderChamsWindow() noexcept;
+    void renderEspWindow() noexcept;
     void renderVisualsWindow() noexcept;
     void renderKnifeChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
@@ -20,6 +21,7 @@ private:
         bool triggerbot{ false };
         bool glow{ false };
         bool chams{ false };
+        bool esp{ false };
         bool visuals{ false };
         bool knifeChanger{ false };
         bool misc{ false };

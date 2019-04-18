@@ -287,6 +287,15 @@ void GUI::renderChamsWindow() noexcept
     }
 }
 
+void GUI::renderEspWindow() noexcept
+{
+    if (window.esp) {
+        ImGui::SetNextWindowSize({ 100.0f, 100.0f });
+        ImGui::Begin("Esp", &window.esp, windowFlags);
+        ImGui::End();
+    }
+}
+
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
