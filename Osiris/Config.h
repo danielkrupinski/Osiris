@@ -195,7 +195,7 @@ public:
     } skinChanger;
 
     struct {
-        int menuKey{ VK_INSERT };
+        int menuKey{ 0x2D }; // VK_INSERT
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
