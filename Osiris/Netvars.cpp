@@ -48,6 +48,7 @@ static void modelIndexHook(recvProxyData& data, void* arg2, void* arg3) noexcept
         int talon{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_widowmaker.mdl") };
         int ursus{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ursus.mdl") };
         int golden{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gg.mdl") };
+        int ghost{ interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ghost.mdl") };
         int hostageArm{ interfaces.modelInfo->getModelIndex("models/hostage/v_hostage_arm.mdl") };
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
@@ -100,6 +101,9 @@ static void modelIndexHook(recvProxyData& data, void* arg2, void* arg3) noexcept
                 case 15:
                     activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::GoldenKnife);
                     return golden;
+                case 16:
+                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::GhostKnife);
+                    return ghost;
                 }}(config.knifeChanger.knife);
     }
     proxies["m_nModelIndex"](data, arg2, arg3);
