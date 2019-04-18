@@ -195,6 +195,7 @@ public:
     } skinChanger;
 
     struct {
+        int menuKey{ VK_INSERT };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool animatedClanTag{ false };
@@ -211,7 +212,7 @@ public:
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(autoStrafe, bunnyHop, animatedClanTag, fastDuck,
+            archive(menuKey, autoStrafe, bunnyHop, animatedClanTag, fastDuck,
                 sniperCrosshair, recoilCrosshair, autoPistol,
                 autoAccept, radarHack, revealRanks, spectatorList, watermark);
         }
