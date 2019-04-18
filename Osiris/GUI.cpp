@@ -338,7 +338,7 @@ void GUI::renderKnifeChangerWindow() noexcept
         ImGui::Begin("Knife changer", &window.knifeChanger, windowFlags);
         ImGui::PushItemWidth(130.0f);
         ImGui::Checkbox("Enabled", &config.knifeChanger.enabled);
-        ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden");
+        ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden\0Ghost");
         ImGui::End();
     }
 }
