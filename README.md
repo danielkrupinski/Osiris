@@ -1,13 +1,18 @@
-# Osiris ![](https://img.shields.io/badge/language-C%2B%2B-%23f34b7d.svg) ![](https://img.shields.io/badge/game-CS%3AGO-yellow.svg) [![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg)](https://en.wikipedia.org/wiki/Microsoft_Windows) [![x86](https://img.shields.io/badge/arch-x86-red.svg)](https://en.wikipedia.org/wiki/X86) [![License](https://img.shields.io/github/license/danielkrupinski/Osiris.svg)](LICENSE)
+# Osiris [![C++](https://img.shields.io/badge/language-C%2B%2B-%23f34b7d.svg)](https://en.wikipedia.org/wiki/C%2B%2B) [![CS:GO](https://img.shields.io/badge/game-CS%3AGO-yellow.svg)](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/) [![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg)](https://en.wikipedia.org/wiki/Microsoft_Windows) [![x86](https://img.shields.io/badge/arch-x86-red.svg)](https://en.wikipedia.org/wiki/X86) [![License](https://img.shields.io/github/license/danielkrupinski/Osiris.svg)](LICENSE)
 
-Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - injectable DLL. Compatible with the latest version of the game on Steam.
+Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the latest version of the game on Steam.
 
 ## Features
 * **Aimbot** - aim assistance
     * **Enable** - on / off master switch
     * **Silent** - aimbot is not visible on your screen (client-sided only)
+    * **Friendly fire** - treat allies as enemies
     * **Visible only** - aim only on visible players
+    * **Scoped only** - aimbot works only when using scope (applies only to sniper rifles)
+    * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
+    * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
     * **Auto shot** - shoot automatically when target found
+    * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Bone** - bone which aimbot aims at
@@ -17,6 +22,11 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enable** - on / off triggerbot master switch
     * **On key [ key ]** - triggerbot works only when chosen key is being held
+    * **Friendly fire** - treat allies as enemies
+    * **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
+    * **Ignore flash** -ignore flashbang i.e. shoot when local player is flashed
+    * **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
+    * **Hitgroup** - body parts on which triggerbot works
     * **Shot delay** - delay time in ms (milliseconds)
 
 * **Glow** - render glow effect on entities
@@ -46,9 +56,12 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
-    * **No sleeves** - removes sleeves model from first-person view
-    * **No hands** - removes arms / hands model from first-person view
-    * **No weapons** - removes weapons model from first-person view
+    * **No fog** - remove fog from map for better visibility
+    * **No 3d sky** - remove 3d skybox from map - increases FPS
+    * **No visual recoil** - remove visual recoil punch effect
+    * **No hands** - remove arms / hands model from first-person view
+    * **No sleeves** - remove sleeves model from first-person view
+    * **No weapons** - remove weapons model from first-person view
     * **No smoke** - remove smoke grenade effect
     * **No blur** - remove blur
     * **No scope overlay** - remove black overlay while scoping
@@ -59,31 +72,36 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
 
-* **Knife changer** - change knife model
+* **Knife changer** - change knife model in first-person view
     * **Enabled** - enable / disable knife changer
     * **Knife** - desired knife model
 
 * **Misc** - miscellaneous features
+    * **Auto strafe** - automatically strafe in air following mouse movement
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
     * **Animated clan tag** - animate clan tag
     * **Fast duck** - remove crouch delay
     * **Sniper crosshair** - draw crosshair while holding sniper rifle
     * **Recoil crosshair** - crosshair follows recoil pattern
-    * **Auto pistol** - add ability of firing pistols like automatic rifles
+    * **Auto pistol** - fire pistols like automatic rifles
+    * **Auto accept** - automatically accept competitive match
+    * **Radar hack** - show enemies positions on radar
+    * **Reveal ranks** - show player ranks in scoreboard in competitive modes
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner
-    * **Reveal ranks** - reveal player ranks in competitive modes
 
 * **Config** - configuration system based on cereal binary serialization
-    * **Load** - load configuration file from disk
-    * **Save** - save configuration file to disk
-    * **Reset** - restore default configuration settings (does not touch saved configuration)
+    * **Create config** - create new configuration file
+    * **Reset config** - restore default configuration settings (does not touch saved configuration)
+    * **Load selected** - load selected configuration file
+    * **Save selected** - save selected configuration file
+    * **Delete selected** - delete selected configuration file
 
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2019 16.0.0 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2019 (preferably latest version i.e. 16.0.1), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
