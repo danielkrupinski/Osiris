@@ -55,6 +55,13 @@ public:
 		return callVirtualFunction<bool(__thiscall*)(void*)>(this, 26)(this);
 	}
 
+    using Matrix = float[4][4];
+
+    constexpr auto worldToScreenMatrix() noexcept
+    {
+        return callVirtualFunction<const Matrix&(__thiscall*)(void*)>(this, 37)(this);
+    }
+
     constexpr auto getNetworkChannel() noexcept
     {
         return callVirtualFunction<NetworkChannel*(__thiscall*)(void*)>(this, 78)(this);
