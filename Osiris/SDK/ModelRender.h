@@ -9,13 +9,6 @@ using matrix3x4 = float[3][4];
 struct Model {
     void* handle;
     char name[260];
-    int loadFlags;
-    int serverCount;
-    int type;
-    int flags;
-    Vector  vecMins;
-    Vector  vecMaxs;
-    float   radius;
 };
 
 struct ModelRenderInfo {
@@ -29,10 +22,6 @@ struct ModelRenderInfo {
     const Vector* lightingOrigin;
     int flags;
     int entityIndex;
-    int skin;
-    int body;
-    int hitboxset;
-    // ModelInstanceHandle_t   instance;
 };
 
 class ModelRender {
