@@ -124,6 +124,10 @@ Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) a
 
 When injected, menu is openable under `INSERT` key.
 
+
+### Further optimizations
+If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
+
 ## FAQ
 
 ### How do I open menu?
