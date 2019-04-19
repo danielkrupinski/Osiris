@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-template<typename T>
+template<typename T, typename ...Args>
 constexpr auto callVirtualFunction(void* classBase, int index) noexcept
 {
-    return reinterpret_cast<T>((*reinterpret_cast<std::uintptr_t**>(classBase))[index]);
+    return reinterpret_cast<T(__thiscall*)(Args...)>((*reinterpret_cast<uintptr_t**>(classBase))[index]);
 }
