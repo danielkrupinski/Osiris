@@ -30,11 +30,11 @@ void GUI::hotkey(int& key) noexcept
     if (ImGui::IsItemHovered()) {
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
-            if (ImGui::IsKeyPressed(i) && i != VK_INSERT)
+            if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
                 key = i != VK_ESCAPE ? i : 0;
 
         for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            if (ImGui::IsMouseDown(i))
+            if (ImGui::IsMouseDown(i) && i != config.misc.menuKey)
                 key = i + (i > 1 ? 2 : 1);
     }
 }
