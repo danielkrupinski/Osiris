@@ -23,6 +23,19 @@ static bool screenTransform(const Vector& in, Vector& out) noexcept
     return true;
 }
 
+static bool worldToScreen(const Vector& in, Vector& out) noexcept
+{
+    if (screenTransform(in, out)) {
+        const auto [width, height] = interfaces.surface->getScreenSize();
+
+        out.x = (width / 2.0f) + (out.x * width) / 2.0f;
+        out.y = (height / 2.0f) - (out.y * height) / 2.0f;
+
+        return true;
+    }
+    return false;
+}
+
 void Esp::render() noexcept
 {
 
