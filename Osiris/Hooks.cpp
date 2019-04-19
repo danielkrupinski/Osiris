@@ -22,6 +22,7 @@
 #include "Hacks/Glow.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Chams.h"
+#include "Hacks/Esp.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -166,6 +167,7 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
         Misc::spectatorList();
+        Esp::render();
     }
 }
 
