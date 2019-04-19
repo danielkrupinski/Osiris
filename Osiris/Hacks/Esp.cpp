@@ -1,5 +1,7 @@
 #include "Esp.h"
+#include "../Config.h"
 #include "../Interfaces.h"
+#include "../SDK/Entity.h"
 #include "../SDK/Vector.h"
 
 static bool screenTransform(const Vector& in, Vector& out) noexcept
@@ -38,5 +40,20 @@ static bool worldToScreen(const Vector& in, Vector& out) noexcept
 
 void Esp::render() noexcept
 {
+    if (config.esp.enabled && interfaces.engine->isInGame()) {
+        interfaces.surface->setDrawColor(51, 153, 255, 255);
+        const auto [width, height] = interfaces.surface->getScreenSize();
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity == localPlayer || entity->isDormant()
+                || !entity->isAlive())
+                continue;
+            Vector position;
+            if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), position)) {
+                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+            }
+        }
+    }
 }
