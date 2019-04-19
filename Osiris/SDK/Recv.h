@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+#include <type_traits>
 #include "Vector.h"
 
 struct recvProxyData {
