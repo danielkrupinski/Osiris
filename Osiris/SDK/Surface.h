@@ -14,6 +14,11 @@ public:
         callVirtualFunction<void, void*, int, int, int, int>(this, 16)(this, x0, y0, x1, y1);
     }
 
+    constexpr void drawLine(int x0, int y0, int x1, int y1) noexcept
+    {
+        callVirtualFunction<void, void*, int, int, int, int>(this, 19)(this, x0, y0, x1, y1);
+    }
+
     constexpr void setTextFont(unsigned font) noexcept
     {
         callVirtualFunction<void, void*, unsigned>(this, 23)(this, font);
