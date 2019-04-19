@@ -57,7 +57,7 @@ public:
 
     using Matrix = float[4][4];
 
-    constexpr auto worldToScreenMatrix() noexcept
+    constexpr const Matrix& worldToScreenMatrix() noexcept
     {
         return callVirtualFunction<const Matrix&(__thiscall*)(void*)>(this, 37)(this);
     }
