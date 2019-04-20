@@ -12,27 +12,27 @@ class Material final {
 public:
     constexpr auto getName() noexcept
     {
-        return std::string_view{ callVirtualFunction<const char*>(this, 0)(this) };
+        return std::string_view{ callVirtualFunction<const char*>(this, 0) };
     }
 
     constexpr int incrementReferenceCount() noexcept
     {
-        callVirtualFunction<void>(this, 12)(this);
+        callVirtualFunction<void>(this, 12);
         return 0;
     }
 
     constexpr void alphaModulate(float alpha) noexcept
     {
-        callVirtualFunction<void, float>(this, 27)(this, alpha);
+        callVirtualFunction<void, float>(this, 27, alpha);
     }
 
     constexpr void colorModulate(float color[3]) noexcept
     {
-        callVirtualFunction<void, float, float, float>(this, 28)(this, color[0], color[1], color[2]);
+        callVirtualFunction<void, float, float, float>(this, 28, color[0], color[1], color[2]);
     }
 
     constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
     {
-        callVirtualFunction<void, MaterialVar, bool>(this, 29)(this, flag, on);
+        callVirtualFunction<void, MaterialVar, bool>(this, 29, flag, on);
     }
 };

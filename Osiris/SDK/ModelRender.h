@@ -28,11 +28,11 @@ class ModelRender {
 public:
     constexpr void forceMaterialOverride(Material* newMaterial) noexcept
     {
-        callVirtualFunction<void, Material*, int, int>(this, 1)(this, newMaterial, 0, 0);
+        callVirtualFunction<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
     }
 
     constexpr bool isMaterialOverriden() noexcept
     {
-        return callVirtualFunction<bool>(this, 2)(this);
+        return callVirtualFunction<bool>(this, 2);
     }
 };

@@ -6,7 +6,7 @@
 
 static bool worldToScreen(const Vector& in, Vector& out) noexcept
 {
-    static auto& matrix = interfaces.engine->worldToScreenMatrix();
+    static auto matrix = interfaces.engine->worldToScreenMatrix();
     float w = matrix[3][0] * in.x + matrix[3][1] * in.y + matrix[3][2] * in.z + matrix[3][3];
 
     if (w > 0.001f) {
