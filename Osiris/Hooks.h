@@ -16,6 +16,7 @@ public:
     class Vmt {
     public:
         explicit Vmt(void* const) noexcept;
+        void restore() noexcept;
 
         template<typename T>
         void hookAt(size_t index, T fun) const noexcept
@@ -32,6 +33,7 @@ public:
     private:
         static uintptr_t* findFreeDataPage(void* const, size_t) noexcept;
         static auto calculateLength(uintptr_t*) noexcept;
+        void* base;
         uintptr_t* oldVmt;
         uintptr_t* newVmt;
         size_t length;

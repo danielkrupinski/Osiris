@@ -291,6 +291,7 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
 
 Hooks::Vmt::Vmt(void* const base) noexcept
 {
+    this->base = base;
     oldVmt = *reinterpret_cast<uintptr_t**>(base);
     length = calculateLength(oldVmt) + 1;
 
@@ -298,4 +299,10 @@ Hooks::Vmt::Vmt(void* const base) noexcept
         std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
         *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
     }
+}
+
+void Hooks::Vmt::restore() noexcept
+{
+    *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+    ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
