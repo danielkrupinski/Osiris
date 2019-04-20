@@ -27,43 +27,43 @@ class Engine {
 public:
     constexpr auto getPlayerInfo(int entityIndex, const PlayerInfo& playerInfo) noexcept
     {
-        return callVirtualFunction<bool, void*, int, const PlayerInfo&>(this, 8)(this, entityIndex, playerInfo);
+        return callVirtualFunction<bool, int, const PlayerInfo&>(this, 8)(this, entityIndex, playerInfo);
     }
 
     constexpr auto getLocalPlayer() noexcept
     {
-        return callVirtualFunction<int, void*>(this, 12)(this);
+        return callVirtualFunction<int>(this, 12)(this);
     }
 
     constexpr auto getViewAngles(Vector& angles) noexcept
     {
-        callVirtualFunction<void, void*, Vector&>(this, 18)(this, angles);
+        callVirtualFunction<void, Vector&>(this, 18)(this, angles);
     }
 
     constexpr auto setViewAngles(const Vector& angles) noexcept
     {
-        callVirtualFunction<void, void*, const Vector&>(this, 19)(this, angles);
+        callVirtualFunction<void, const Vector&>(this, 19)(this, angles);
     }
 
 	constexpr auto getMaxClients() noexcept
 	{
-		return callVirtualFunction<int, void*>(this, 20)(this);
+		return callVirtualFunction<int>(this, 20)(this);
 	}
 
 	constexpr auto isInGame() noexcept
 	{
-		return callVirtualFunction<bool, void*>(this, 26)(this);
+		return callVirtualFunction<bool>(this, 26)(this);
 	}
 
     using Matrix = float[4][4];
 
     constexpr const Matrix& worldToScreenMatrix() noexcept
     {
-        return callVirtualFunction<const Matrix&, void*>(this, 37)(this);
+        return callVirtualFunction<const Matrix&>(this, 37)(this);
     }
 
     constexpr auto getNetworkChannel() noexcept
     {
-        return callVirtualFunction<NetworkChannel*, void*>(this, 78)(this);
+        return callVirtualFunction<NetworkChannel*>(this, 78)(this);
     }
 };

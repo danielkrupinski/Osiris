@@ -6,11 +6,11 @@ class InputSystem {
 public:
     constexpr void enableInput(bool enable) noexcept
     {
-        callVirtualFunction<void, void*, bool>(this, 11)(this, enable);
+        callVirtualFunction<void, bool>(this, 11)(this, enable);
     }
 
     constexpr void resetInputState() noexcept
     {
-        callVirtualFunction<void, void*>(this, 39)(this);
+        callVirtualFunction<void>(this, 39)(this);
     }
 };

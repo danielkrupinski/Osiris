@@ -37,6 +37,6 @@ class EngineTrace {
 public:
     constexpr void traceRay(const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace) noexcept
     {
-        callVirtualFunction<void, void*, const Ray&, unsigned int, const TraceFilter& , Trace&>(this, 5)(this, ray, mask, filter, trace);
+        callVirtualFunction<void, const Ray&, unsigned int, const TraceFilter& , Trace&>(this, 5)(this, ray, mask, filter, trace);
     }
 };
