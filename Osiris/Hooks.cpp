@@ -261,6 +261,20 @@ Hooks::Hooks() noexcept
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
+void Hooks::restore() noexcept
+{
+    client.restore();
+    clientMode.restore();
+    modelRender.restore();
+    panel.restore();
+    sound.restore();
+    svCheats.restore();
+
+    SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    **reinterpret_cast<void***>(memory.present) = originalPresent;
+    **reinterpret_cast<void***>(memory.reset) = originalReset;
+}
+
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
 {
     MEMORY_BASIC_INFORMATION mbi;

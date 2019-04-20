@@ -9,6 +9,8 @@
 class Hooks final {
 public:
     Hooks() noexcept;
+    void restore() noexcept;
+
     WNDPROC originalWndProc;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
