@@ -134,15 +134,12 @@ public:
     struct {
         bool enabled{ false };
         bool snaplines{ false };
-        bool reserved1{ false };
-        bool reserved2{ false };
-        bool reserved3{ false };
-        bool reserved4{ false };
+        float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(enabled, snaplines, reserved1, reserved2, reserved3, reserved4);
+            archive(enabled, snaplines, snaplinesColor);
         }
     } esp;
 
