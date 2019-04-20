@@ -11,7 +11,7 @@ public:
 
     constexpr void setDrawColor(float color[3], int a) noexcept
     {
-        callVirtualFunction<void, int, int, int, int>(this, 15, static_cast<int>(color[0]), static_cast<int>(color[1]), static_cast<int>(color[2]), a);
+        callVirtualFunction<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
     }
 
     constexpr void drawFilledRect(int x0, int y0, int x1, int y1) noexcept
@@ -44,9 +44,9 @@ public:
         callVirtualFunction<void, const wchar_t*, int, int>(this, 28, text.data(), text.length(), drawType);
     }
 
-    auto getScreenSize() noexcept
+    constexpr auto getScreenSize() noexcept
     {
-        int width, height;
+        int width{ }, height{ };
         callVirtualFunction<void, int&, int&>(this, 44, width, height);
         return std::make_pair(width, height);
     }
