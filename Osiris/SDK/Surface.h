@@ -9,6 +9,11 @@ public:
         callVirtualFunction<void, void*, int, int, int, int>(this, 15)(this, r, g, b, a);
     }
 
+    constexpr void setDrawColor(float color[3], int a) noexcept
+    {
+        callVirtualFunction<void, void*, int, int, int, int>(this, 15)(this, static_cast<int>(color[0]), static_cast<int>(color[1]), static_cast<int>(color[2]), a);
+    }
+
     constexpr void drawFilledRect(int x0, int y0, int x1, int y1) noexcept
     {
         callVirtualFunction<void, void*, int, int, int, int>(this, 16)(this, x0, y0, x1, y1);
