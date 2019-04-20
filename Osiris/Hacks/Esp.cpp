@@ -39,7 +39,7 @@ static bool worldToScreen(const Vector& in, Vector& out) noexcept
 
 void Esp::render() noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (config.esp.enabled && interfaces.engine->isInGame()) {
         interfaces.surface->setDrawColor(51, 153, 255, 255);
         const auto [width, height] = interfaces.surface->getScreenSize();
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
@@ -51,7 +51,8 @@ void Esp::render() noexcept
                 continue;
             Vector position;
             if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), position)) {
-                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                if (config.esp.snaplines)
+                    interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
             }
         }
     }
