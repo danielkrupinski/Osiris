@@ -21,6 +21,11 @@ constexpr void hookProperty(RecvProp& prop, recvProxy proxy) noexcept
     }
 }
 
+static void unhookProperty(RecvProp& prop) noexcept
+{
+    prop.proxy = proxies[prop.name];
+}
+
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
