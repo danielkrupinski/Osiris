@@ -142,7 +142,7 @@ public:
             {
                 archive(enabled, snaplines, snaplinesColor);
             }
-        } esp[2];
+        } esp[4];
 
         constexpr auto& operator[](size_t index) noexcept
         {
