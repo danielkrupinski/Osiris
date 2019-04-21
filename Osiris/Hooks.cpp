@@ -270,6 +270,8 @@ void Hooks::restore() noexcept
     sound.restore();
     svCheats.restore();
 
+    netvars.restore();
+
     SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
