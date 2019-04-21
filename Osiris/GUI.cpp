@@ -69,7 +69,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Esp", nullptr, &window.esp);
+        // ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
@@ -321,7 +321,7 @@ void GUI::renderEspWindow() noexcept
         ImGui::Combo("", &currentCategory, "Allies\0Enemies");
         ImGui::PopID();
         ImGui::Checkbox("Enabled", &config.esp[currentCategory].enabled);
-        ImGui::Checkbox("Snaplines", &config.esp[currentCategory].snaplines);
+        checkboxedColorPicker("Snaplines", &config.esp[currentCategory].snaplines, config.esp[currentCategory].snaplinesColor);
         ImGui::End();
     }
 }
