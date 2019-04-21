@@ -41,19 +41,11 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    static bool isMenuToggled{ false };
-
     if (gui.isOpen) {
         device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
         IDirect3DVertexDeclaration9 * vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
 
-        if (!isMenuToggled) {
-            memory.input->isMouseInitialized = false;
-            memory.input->isMouseActive = false;
-            interfaces.inputSystem->enableInput(false);
-            isMenuToggled = true;
-        }
         ImGui_ImplDX9_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
@@ -65,11 +57,6 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
         device->SetVertexDeclaration(vertexDeclaration);
-    } else if (isMenuToggled) {
-        memory.input->isMouseInitialized = true;
-        interfaces.inputSystem->enableInput(true);
-        interfaces.inputSystem->resetInputState();
-        isMenuToggled = false;
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -203,6 +190,13 @@ static bool __stdcall hookedShouldDrawFog() noexcept
     return !config.visuals.noFog;
 }
 
+static void __stdcall hookedLockCursor() noexcept
+{
+    if (gui.isOpen)
+        return interfaces.surface->unlockCursor();
+    return hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
+}
+
 Hooks::Hooks() noexcept
 {
     ImGui::CreateContext();
@@ -244,18 +238,14 @@ Hooks::Hooks() noexcept
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
 
     client.hookAt(37, hookedFrameStageNotify);
-
     clientMode.hookAt(17, hookedShouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
-
     modelRender.hookAt(21, hookedDrawModelExecute);
-
     panel.hookAt(41, hookedPaintTraverse);
-
     sound.hookAt(5, hookedEmitSound);
-
+    surface.hookAt(67, hookedLockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
@@ -268,6 +258,7 @@ void Hooks::restore() noexcept
     modelRender.restore();
     panel.restore();
     sound.restore();
+    surface.restore();
     svCheats.restore();
 
     netvars.restore();
