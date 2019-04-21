@@ -26,6 +26,27 @@ void GUI::render() noexcept
     renderConfigWindow();
 }
 
+void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* color) noexcept
+{
+    ImGui::Checkbox(("##" + name).c_str(), enable);
+    ImGui::SameLine(0.0f, 5.0f);
+    ImGui::PushID(0);
+    bool openPopup = ImGui::ColorButton(("##" + name).c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
+    ImGui::PopID();
+    ImGui::SameLine(0.0f, 5.0f);
+    ImGui::Text(name.c_str());
+    ImGui::PushID(1);
+    if (openPopup)
+        ImGui::OpenPopup(("##" + name).c_str());
+    if (ImGui::BeginPopup(("##" + name).c_str())) {
+        ImGui::PushID(2);
+        ImGui::ColorPicker3(("##" + name).c_str(), color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+        ImGui::PopID();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+}
+
 void GUI::hotkey(int& key) noexcept
 {
     ImGui::Text("[ %s ]",  key ? std::to_string(key).c_str() : "key");
