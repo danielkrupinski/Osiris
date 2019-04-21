@@ -33,14 +33,37 @@ void Esp::render() noexcept
             Vector position;
             if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), position)) {
                 if (!entity->isEnemy()) {
-                    if (config.esp[0].enabled) {
-                        interfaces.surface->setDrawColor(config.esp[0].snaplinesColor, 255);
-                        interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                    if (entity->isVisible()) {
+                        if (config.esp[0].enabled) {
+                            if (config.esp[0].snaplines) {
+                                interfaces.surface->setDrawColor(config.esp[0].snaplinesColor, 255);
+                                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                            }
+                        }
+                    } else {
+                        if (config.esp[1].enabled) {
+                            if (config.esp[1].snaplines) {
+                                interfaces.surface->setDrawColor(config.esp[1].snaplinesColor, 255);
+                                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                            }
+                        }
                     }
+                    
                 } else {
-                    if (config.esp[1].enabled) {
-                        interfaces.surface->setDrawColor(config.esp[1].snaplinesColor, 255);
-                        interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                    if (entity->isVisible()) {
+                        if (config.esp[2].enabled) {
+                            if (config.esp[2].snaplines) {
+                                interfaces.surface->setDrawColor(config.esp[2].snaplinesColor, 255);
+                                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                            }
+                        }
+                    } else {
+                        if (config.esp[3].enabled) {
+                            if (config.esp[3].snaplines) {
+                                interfaces.surface->setDrawColor(config.esp[3].snaplinesColor, 255);
+                                interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+                            }
+                        }
                     }
                 }
             }

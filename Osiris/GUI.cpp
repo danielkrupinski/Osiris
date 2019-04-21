@@ -313,15 +313,21 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
-        ImGui::SetNextWindowSize({ 200.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 190.0f });
         ImGui::Begin("Esp", &window.esp, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
         ImGui::Combo("", &currentCategory, "Allies\0Enemies");
         ImGui::PopID();
-        ImGui::Checkbox("Enabled", &config.esp[currentCategory].enabled);
-        checkboxedColorPicker("Snaplines", &config.esp[currentCategory].snaplines, config.esp[currentCategory].snaplinesColor);
+        ImGui::SameLine();
+        static int currentType{ 0 };
+        ImGui::PushID(1);
+        ImGui::Combo("", &currentType, "Visible\0Occluded");
+        ImGui::PopID();
+        int currentItem = currentCategory * 2 + currentType;
+        ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
+        checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
         ImGui::End();
     }
 }
