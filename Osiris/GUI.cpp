@@ -7,6 +7,7 @@
 #include "Config.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Visuals.h"
+#include "Hooks.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -359,7 +360,7 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 385.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 415.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Text("Menu key");
         ImGui::SameLine();
@@ -384,6 +385,8 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         ImGui::Checkbox("Watermark", &config.misc.watermark);
+        if (ImGui::Button("Unhook"))
+            hooks.restore();
         ImGui::End();
     }
 }
