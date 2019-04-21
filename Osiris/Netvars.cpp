@@ -194,6 +194,15 @@ Netvars::Netvars() noexcept
         loadTable(clientClass->recvTable);
 }
 
+void Netvars::restore() noexcept
+{
+    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+        unloadTable(clientClass->recvTable);
+
+    proxies.clear();
+    offsets.clear();
+}
+
 void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {

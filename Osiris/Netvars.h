@@ -13,6 +13,8 @@ public:
     {
         return offsets[netvar];
     }
+
+    void restore() noexcept;
 private:
     void loadTable(RecvTable*, const std::size_t = 0) noexcept;
     void unloadTable(RecvTable*) noexcept;
