@@ -132,14 +132,27 @@ public:
     } chams;
 
     struct {
-        bool enabled{ false };
-        bool snaplines{ false };
-        float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+        struct {
+            bool enabled{ false };
+            bool snaplines{ false };
+            float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+
+            template <class Archive>
+            constexpr void serialize(Archive& archive) noexcept
+            {
+                archive(enabled, snaplines, snaplinesColor);
+            }
+        } esp[2];
+
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return esp[index];
+        }
 
         template <class Archive>
         constexpr void serialize(Archive& archive) noexcept
         {
-            archive(enabled, snaplines, snaplinesColor);
+            archive(esp);
         }
     } esp;
 
