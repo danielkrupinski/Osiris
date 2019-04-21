@@ -51,6 +51,11 @@ public:
         return std::make_pair(width, height);
     }
 
+    constexpr void unlockCursor() noexcept
+    {
+        callVirtualFunction<void>(this, 66);
+    }
+
     constexpr unsigned createFont() noexcept
     {
         return callVirtualFunction<unsigned>(this, 71);
