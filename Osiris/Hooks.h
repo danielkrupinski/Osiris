@@ -32,6 +32,12 @@ public:
         {
             return reinterpret_cast<T>(oldVmt[index]);
         }
+
+        template<typename T, typename ...Args>
+        constexpr auto callOriginal(size_t index, Args... args) const noexcept
+        {
+            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(oldVmt[index])(base, args...);
+        }
     private:
         static uintptr_t* findFreeDataPage(void* const, size_t) noexcept;
         static auto calculateLength(uintptr_t*) noexcept;
