@@ -15,6 +15,7 @@ public:
     }
 private:
     void loadTable(RecvTable*, const std::size_t = 0) noexcept;
+    void unloadTable(RecvTable*) noexcept;
     mutable std::unordered_map<std::string_view, std::size_t> offsets;
 };
 

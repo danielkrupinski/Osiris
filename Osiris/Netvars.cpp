@@ -217,3 +217,26 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
         }
     }
 }
+
+void Netvars::unloadTable(RecvTable* recvTable) noexcept
+{
+    for (int i = 0; i < recvTable->propCount; ++i) {
+        auto& prop = recvTable->props[i];
+
+        if (isdigit(prop.name[0]))
+            continue;
+
+        if (prop.dataTable)
+            unloadTable(prop.dataTable);
+        else {
+            std::string_view name{ prop.name };
+            std::string_view tableName{ recvTable->netTableName };
+            if (name == "m_bSpotted")
+                unhookProperty(prop);
+            else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
+                unhookProperty(prop);
+            else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
+                unhookProperty(prop);
+        }
+    }
+}
