@@ -44,7 +44,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
             if (config.chams[5].enabled) {
                 applyChams(config.chams[5], true);
-                hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[4].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
@@ -53,7 +53,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         } else if (entity->getProperty<bool>("m_bIsDefusing")) {
             if (config.chams[7].enabled) {
                 applyChams(config.chams[7], true);
-                hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[6].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
@@ -65,7 +65,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         } else if (entity->isEnemy()) {
             if (config.chams[3].enabled) {
                 applyChams(config.chams[3], true);
-                hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[2].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
@@ -74,7 +74,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         } else {
             if (config.chams[1].enabled) {
                 applyChams(config.chams[1], true);
-                hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[0].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }

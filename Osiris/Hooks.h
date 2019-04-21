@@ -27,12 +27,6 @@ public:
                 newVmt[index + 1] = reinterpret_cast<uintptr_t>(fun);
         }
 
-        template<typename T>
-        constexpr auto getOriginal(size_t index) const noexcept
-        {
-            return reinterpret_cast<T>(oldVmt[index]);
-        }
-
         template<typename T, typename ...Args>
         constexpr auto callOriginal(size_t index, Args... args) const noexcept
         {

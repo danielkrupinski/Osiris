@@ -73,7 +73,7 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
 
 static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    auto result = hooks.clientMode.getOriginal<bool(__thiscall*)(ClientMode*, float, UserCmd*)>(24)(memory.clientMode, inputSampleTime, cmd);
+    auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
     if (!cmd->command_number)
         return result;
@@ -114,12 +114,12 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
         Visuals::remove3dSky();
         Glow::render();
     }
-    return hooks.clientMode.getOriginal<int(__thiscall*)(ClientMode*, int)>(44)(memory.clientMode, param);
+    return hooks.clientMode.callOriginal<int, int>(44, param);
 }
 
 static float __stdcall hookedGetViewModelFov() noexcept
 {
-    return hooks.clientMode.getOriginal<float(__thiscall*)(ClientMode*)>(35)(memory.clientMode) + static_cast<float>(config.visuals.viewmodelFov);
+    return hooks.clientMode.callOriginal<float>(35) + static_cast<float>(config.visuals.viewmodelFov);
 }
 
 static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
@@ -129,10 +129,10 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
             return;
         static Chams chams;
         chams.render(ctx, state, info, customBoneToWorld);
-        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
         interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
-        hooks.modelRender.getOriginal<void(__thiscall*)(ModelRender*, void*, void*, const ModelRenderInfo&, matrix3x4*)>(21)(interfaces.modelRender, ctx, state, info, customBoneToWorld);
+        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
 
 static bool __fastcall hookedSvCheatsGetBool(void* _this) noexcept
@@ -140,7 +140,7 @@ static bool __fastcall hookedSvCheatsGetBool(void* _this) noexcept
     if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
-        return hooks.svCheats.getOriginal<bool(__thiscall*)(void*)>(13)(_this);
+        return hooks.svCheats.callOriginal<bool>(13);
 }
 
 extern "C" int __stdcall updateHookData(int, bool, bool, bool&);
@@ -149,7 +149,7 @@ extern "C" int __stdcall saveHookData(int, int, int, int*, int, int&);
 static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
-        hooks.panel.getOriginal<void(__thiscall*)(Panel*, unsigned int, bool, bool)>(41)(interfaces.panel, panel, forceRepaint, allowForce);
+        hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
@@ -164,7 +164,7 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
         Visuals::removeVisualRecoil(stage);
     }
 
-    hooks.client.getOriginal<void(__thiscall*)(Client*, FrameStage)>(37)(interfaces.client, stage);
+    hooks.client.callOriginal<void, FrameStage>(37, stage);
 }
 
 struct SoundData {
@@ -182,7 +182,7 @@ static void __stdcall hookedEmitSound(SoundData data) noexcept
         FlashWindowEx(&flash);
         ShowWindow(window, SW_RESTORE);
     }
-    hooks.sound.getOriginal<void(__thiscall*)(Sound*, SoundData)>(5)(interfaces.sound, data);
+    hooks.sound.callOriginal<void, SoundData>(5, data);
 }
 
 static bool __stdcall hookedShouldDrawFog() noexcept
@@ -194,7 +194,7 @@ static void __stdcall hookedLockCursor() noexcept
 {
     if (gui.isOpen)
         return interfaces.surface->unlockCursor();
-    return hooks.surface.getOriginal<void(__thiscall*)(Surface*)>(67)(interfaces.surface);
+    return hooks.surface.callOriginal<void>(67);
 }
 
 Hooks::Hooks() noexcept
