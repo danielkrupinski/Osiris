@@ -23,12 +23,13 @@ Chams::Chams() noexcept
 
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
+    const auto isLocalPlayerAlive = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive();
     const std::string_view modelName{ info.model->name };
     if (modelName.find("models/player") != std::string_view::npos)
         renderPlayers(ctx, state, info, customBoneToWorld);
-    else if (modelName.find("arms") != std::string_view::npos)
+    else if (isLocalPlayerAlive && modelName.find("arms") != std::string_view::npos)
         renderHands();
-    else if (modelName.find("models/weapons/v_") != std::string_view::npos
+    else if (isLocalPlayerAlive && modelName.find("models/weapons/v_") != std::string_view::npos
         && modelName.find("tablet") == std::string_view::npos
         && modelName.find("parachute") == std::string_view::npos
         && modelName.find("fists") == std::string_view::npos)
