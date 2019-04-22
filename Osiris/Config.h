@@ -80,6 +80,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
+            bool healthBased{ false };
             float thickness{ 1.0f };
             float alpha{ 1.0f };
             int style{ 0 };
@@ -88,7 +89,7 @@ public:
             template <class Archive>
             constexpr void serialize(Archive& archive) noexcept
             {
-                archive(enabled, thickness, alpha, style, color);
+                archive(enabled, healthBased, thickness, alpha, style, color);
             }
         } glow[13];
 

@@ -15,14 +15,15 @@ void Glow::render() noexcept
         if (glowobject.isUnused() || !entity || entity->isDormant())
             continue;
 
-        auto applyGlow = [&glowobject](decltype(glow[0])& glow) noexcept
+        auto applyGlow = [&glowobject](decltype(glow[0])& glow, int health = 0) noexcept
         {
             glowobject.renderWhenOccluded = glow.enabled;
             if (glow.enabled) {
                 glowobject.alpha = glow.alpha;
                 glowobject.glowStyle = glow.style;
                 glowobject.bloomAmount = glow.thickness;
-                glowobject.glowColor = glow.color;
+                if (glow.healthBased && health) glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
+                else glowobject.glowColor = glow.color;
             }
         };
 
@@ -30,19 +31,19 @@ void Glow::render() noexcept
         case ClassId::CSPlayer: {
             auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
-                if (entity->isVisible()) applyGlow(glow[4]);
-                else applyGlow(glow[5]);
+                if (entity->isVisible()) applyGlow(glow[4], entity->getProperty<int>("m_iHealth"));
+                else applyGlow(glow[5], entity->getProperty<int>("m_iHealth"));
             } else if (entity->getProperty<bool>("m_bIsDefusing")) {
-                if (entity->isVisible()) applyGlow(glow[6]);
-                else applyGlow(glow[7]);
+                if (entity->isVisible()) applyGlow(glow[6], entity->getProperty<int>("m_iHealth"));
+                else applyGlow(glow[7], entity->getProperty<int>("m_iHealth"));
             } else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
-                applyGlow(glow[8]);
+                applyGlow(glow[8], entity->getProperty<int>("m_iHealth"));
             } else if (entity->isEnemy()) {
-                if (entity->isVisible()) applyGlow(glow[2]);
-                else applyGlow(glow[3]);
+                if (entity->isVisible()) applyGlow(glow[2], entity->getProperty<int>("m_iHealth"));
+                else applyGlow(glow[3], entity->getProperty<int>("m_iHealth"));
             } else {
-                if (entity->isVisible()) applyGlow(glow[0]);
-                else applyGlow(glow[1]);
+                if (entity->isVisible()) applyGlow(glow[0], entity->getProperty<int>("m_iHealth"));
+                else applyGlow(glow[1], entity->getProperty<int>("m_iHealth"));
             }
             break;
         }

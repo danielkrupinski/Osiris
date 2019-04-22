@@ -213,7 +213,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        ImGui::SetNextWindowSize({ 250.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 220.0f });
         ImGui::Begin("Glow", &window.glow, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -234,6 +234,7 @@ void GUI::renderGlowWindow() noexcept
         }
 
         ImGui::Checkbox("Enabled", &config.glow[currentItem].enabled);
+        ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
         ImGui::Text("Color");
