@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils.h"
+#include "Vector.h"
 
 enum class MaterialVar {
     NO_DRAW = 1 << 2,
@@ -29,6 +30,11 @@ public:
     constexpr void colorModulate(float color[3]) noexcept
     {
         callVirtualFunction<void, float, float, float>(this, 28, color[0], color[1], color[2]);
+    }
+
+    constexpr void colorModulate(Vector color) noexcept
+    {
+        callVirtualFunction<void, float, float, float>(this, 28, color.x, color.y, color.z);
     }
 
     constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
