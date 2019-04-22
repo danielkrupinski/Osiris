@@ -57,7 +57,7 @@ void GUI::hotkey(int& key) noexcept
                 key = i != VK_ESCAPE ? i : 0;
 
         for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            if (ImGui::IsMouseDown(i) && i != config.misc.menuKey)
+            if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config.misc.menuKey)
                 key = i + (i > 1 ? 2 : 1);
     }
 }
