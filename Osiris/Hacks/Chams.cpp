@@ -44,43 +44,43 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
         auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
             if (config.chams[5].enabled) {
-                applyChams(config.chams[5], true);
+                applyChams(config.chams[5], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[4].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[4].enabled)
-                applyChams(config.chams[4], false);
+                applyChams(config.chams[4], false, entity->getProperty<int>("m_iHealth"));
         } else if (entity->getProperty<bool>("m_bIsDefusing")) {
             if (config.chams[7].enabled) {
-                applyChams(config.chams[7], true);
+                applyChams(config.chams[7], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[6].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[6].enabled)
-                applyChams(config.chams[6], false);
+                applyChams(config.chams[6], false, entity->getProperty<int>("m_iHealth"));
         } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
             if (config.chams[8].enabled)
-                applyChams(config.chams[8], false);
+                applyChams(config.chams[8], false, entity->getProperty<int>("m_iHealth"));
         } else if (entity->isEnemy()) {
             if (config.chams[3].enabled) {
-                applyChams(config.chams[3], true);
+                applyChams(config.chams[3], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[2].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[2].enabled)
-                applyChams(config.chams[2], false);
+                applyChams(config.chams[2], false, entity->getProperty<int>("m_iHealth"));
         } else {
             if (config.chams[1].enabled) {
-                applyChams(config.chams[1], true);
+                applyChams(config.chams[1], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[0].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
             if (config.chams[0].enabled)
-                applyChams(config.chams[0], false);
+                applyChams(config.chams[0], false, entity->getProperty<int>("m_iHealth"));
         }
     }
 }

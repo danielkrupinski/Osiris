@@ -14,14 +14,15 @@ public:
     constexpr void renderHands() const noexcept
     {
         if (config.chams[10].enabled)
-            applyChams(config.chams[10], false);
+            applyChams(config.chams[10], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_iHealth"));
     }
 
     constexpr void renderWeapons() const noexcept
     {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         if (config.chams[9].enabled &&
-            !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
-            applyChams(config.chams[9], false);
+            !localPlayer->getProperty<bool>("m_bIsScoped"))
+            applyChams(config.chams[9], false, localPlayer->getProperty<int>("m_iHealth"));
     }
 
 private:
@@ -39,13 +40,14 @@ private:
         }
     }
 
-    constexpr void applyChams(decltype(config.chams[0])& params, bool ignorez) const noexcept
+    constexpr void applyChams(decltype(config.chams[0])& chams, bool ignorez, int health = 0) const noexcept
     {
-        auto material = dispatchMaterial(params.material);
-        material->colorModulate(params.color);
+        auto material = dispatchMaterial(chams.material);
+        if (chams.healthBased && health) material->colorModulate({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
+        else material->colorModulate(chams.color);
+        material->alphaModulate(chams.alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
-        material->alphaModulate(params.alpha);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, params.wireframe);
+        material->setMaterialVarFlag(MaterialVar::WIREFRAME, chams.wireframe);
         interfaces.modelRender->forceMaterialOverride(material);
     }
 };
