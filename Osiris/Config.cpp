@@ -1,7 +1,7 @@
 #include <fstream>
 #include <ShlObj.h>
 
-#include "cereal/archives/binary.hpp"
+#include "ArchiveX.h"
 
 #include "Config.h"
 
@@ -28,11 +28,7 @@ void Config::load(size_t id) noexcept
     if (!in.good())
         return;
 
-    cereal::BinaryInputArchive inputArchive{ in };
-    try {
-        inputArchive(aimbot, triggerbot, glow, chams, esp, visuals, knifeChanger, misc);
-    }
-    catch (cereal::Exception&) { }
+    ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
     in.close();
 }
 
@@ -43,11 +39,7 @@ void Config::save(size_t id) const noexcept
     if (!out.good())
         return;
 
-    cereal::BinaryOutputArchive outputArchive{ out };
-    try {
-        outputArchive(aimbot, triggerbot, glow, chams, esp, visuals, knifeChanger, misc);
-    }
-    catch (cereal::Exception&) { }
+    ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << glow << chams << esp << visuals << knifeChanger << misc;
     out.close();
 }
 
