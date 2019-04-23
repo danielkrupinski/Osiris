@@ -266,5 +266,8 @@
     <ClInclude Include="Hacks\Esp.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="ArchiveX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

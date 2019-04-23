@@ -41,6 +41,7 @@
     <ClCompile Include="Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArchiveX.h" />
     <ClInclude Include="cereal\access.hpp" />
     <ClInclude Include="cereal\archives\binary.hpp" />
     <ClInclude Include="cereal\cereal.hpp" />
