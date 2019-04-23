@@ -22,9 +22,6 @@
     <Filter Include="Hacks">
       <UniqueIdentifier>{f60a2d6f-e07f-4f71-8db1-6ec82cf1f6d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cereal">
-      <UniqueIdentifier>{a485f47b-e6e7-46f2-9245-3dd9a8954d7f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -208,39 +205,6 @@
     </ClInclude>
     <ClInclude Include="SDK\NetworkChannel.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\polymorphic_impl.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\polymorphic_impl_fwd.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\static_object.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\traits.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\util.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\macros.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\details\helpers.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\access.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\types\base_class.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\archives\binary.hpp">
-      <Filter>cereal</Filter>
-    </ClInclude>
-    <ClInclude Include="cereal\cereal.hpp">
-      <Filter>cereal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\GlobalVars.h">
       <Filter>SDK</Filter>

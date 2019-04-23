@@ -42,17 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArchiveX.h" />
-    <ClInclude Include="cereal\access.hpp" />
-    <ClInclude Include="cereal\archives\binary.hpp" />
-    <ClInclude Include="cereal\cereal.hpp" />
-    <ClInclude Include="cereal\details\helpers.hpp" />
-    <ClInclude Include="cereal\details\polymorphic_impl.hpp" />
-    <ClInclude Include="cereal\details\polymorphic_impl_fwd.hpp" />
-    <ClInclude Include="cereal\details\static_object.hpp" />
-    <ClInclude Include="cereal\details\traits.hpp" />
-    <ClInclude Include="cereal\details\util.hpp" />
-    <ClInclude Include="cereal\macros.hpp" />
-    <ClInclude Include="cereal\types\base_class.hpp" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\Chams.h" />
