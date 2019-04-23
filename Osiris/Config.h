@@ -33,21 +33,7 @@ public:
             int bone{ 0 };
             float recoilControlX{ 0.0f };
             float recoilControlY{ 0.0f };
-
-            template <class Archive>
-            constexpr void serialize(Archive& archive) noexcept
-            {
-                archive(enabled, silent, friendlyFire, visibleOnly,
-                    scopedOnly, ignoreFlash, ignoreSmoke, autoShot,
-                    recoilbasedFov, fov, smooth, bone, recoilControlX, recoilControlY);
-            }
         } weapons[35];
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(weapons);
-        }
     } aimbot;
 
     struct {
@@ -61,20 +47,7 @@ public:
             bool ignoreSmoke{ false };
             int hitgroup{ 0 };
             int shotDelay{ 0 };
-
-            template <class Archive>
-            constexpr void serialize(Archive& archive) noexcept
-            {
-                archive(enabled, onKey, key, friendlyFire, scopedOnly,
-                    ignoreFlash, ignoreSmoke, hitgroup, shotDelay);
-            }
         } weapons[35];
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(weapons);
-        }
     } triggerbot;
 
     struct {
@@ -85,23 +58,11 @@ public:
             float alpha{ 1.0f };
             int style{ 0 };
             float color[3]{ 1.0f, 1.0f, 1.0f };
-
-            template <class Archive>
-            constexpr void serialize(Archive& archive) noexcept
-            {
-                archive(enabled, healthBased, thickness, alpha, style, color);
-            }
         } glow[13];
 
         constexpr auto& operator[](size_t index) noexcept
         {
             return glow[index];
-        }
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(glow);
         }
     } glow;
 
@@ -113,23 +74,11 @@ public:
             bool wireframe{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
-
-            template <class Archive>
-            constexpr void serialize(Archive& archive) noexcept
-            {
-                archive(enabled, healthBased, material, wireframe, color, alpha);
-            }
         } chams[11];
 
         constexpr auto& operator[](size_t index) noexcept
         {
             return chams[index];
-        }
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(chams);
         }
     } chams;
 
@@ -138,23 +87,11 @@ public:
             bool enabled{ false };
             bool snaplines{ false };
             float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-
-            template <class Archive>
-            constexpr void serialize(Archive& archive) noexcept
-            {
-                archive(enabled, snaplines, snaplinesColor);
-            }
         } esp[4];
 
         constexpr auto& operator[](size_t index) noexcept
         {
             return esp[index];
-        }
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(esp);
         }
     } esp;
 
@@ -180,26 +117,11 @@ public:
         float brightness{ 0.0f };
         int skybox{ -1 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(disablePostProcessing, inverseRagdollGravity, noFog, no3dSky, noVisualRecoil, noHands,
-                noSleeves, noWeapons, noSmoke, noBlur, noScopeOverlay, noGrass, wireframeSmoke, thirdperson,
-                thirdpersonKey, thirdpersonDistance, viewmodelFov, flashReduction, brightness, skybox,
-                worldColor);
-        }
     } visuals;
 
     struct {
         bool enabled{ false };
         int knife{ 0 };
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(enabled, knife);
-        }
     } knifeChanger;
 
     struct {
@@ -220,14 +142,6 @@ public:
         bool revealRanks{ false };
         bool spectatorList{ false };
         bool watermark{ false };
-
-        template <class Archive>
-        constexpr void serialize(Archive& archive) noexcept
-        {
-            archive(menuKey, autoStrafe, bunnyHop, animatedClanTag, fastDuck,
-                sniperCrosshair, recoilCrosshair, autoPistol,
-                autoAccept, radarHack, revealRanks, spectatorList, watermark);
-        }
     } misc;
 
 private:
