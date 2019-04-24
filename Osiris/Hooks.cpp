@@ -219,7 +219,6 @@ Hooks::Hooks() noexcept
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
-    io.MouseDrawCursor = true;
     if (!checkData((PCSTR)data, 1, 16, 0, 0, 0)) {
         bool enabled = false;
         updateHookData(19, 1, 0, enabled);
