@@ -233,10 +233,10 @@ Hooks::Hooks() noexcept
         SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(hookedWndProc))
         );
 
-    originalPresent = **reinterpret_cast<decltype(&originalPresent)*>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(&hookedPresent);
-    originalReset = **reinterpret_cast<decltype(&originalReset)*>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(&hookedReset);
+    originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
+    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(hookedPresent);
+    originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
+    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(hookedReset);
 
     client.hookAt(37, hookedFrameStageNotify);
     clientMode.hookAt(17, hookedShouldDrawFog);
