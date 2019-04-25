@@ -28,9 +28,10 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (GetAsyncKeyState(config.misc.menuKey) & 1)
+    if (GetAsyncKeyState(config.misc.menuKey) & 1) {
         gui.isOpen = !gui.isOpen;
-
+        if (!gui.isOpen) interfaces.inputSystem->resetInputState();
+    }
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
     else {
