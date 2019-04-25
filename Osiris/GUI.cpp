@@ -49,7 +49,7 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
 
 void GUI::hotkey(int& key) noexcept
 {
-    ImGui::Text("[ %s ]",  key ? std::to_string(key).c_str() : "key");
+    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::Text("[ key ]");
     if (ImGui::IsItemHovered()) {
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
