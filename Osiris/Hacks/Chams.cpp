@@ -19,6 +19,20 @@ Chams::Chams() noexcept
     flat->incrementReferenceCount();
     palm = interfaces.materialSystem->findMaterial("models/props/de_dust/hr_dust/foliage/palm_bark_01");
     palm->incrementReferenceCount();
+    platinum = interfaces.materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
+    platinum->incrementReferenceCount();
+    glass = interfaces.materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
+    glass->incrementReferenceCount();
+    crystal = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/crystal_clear");
+    crystal->incrementReferenceCount();
+    chrome = interfaces.materialSystem->findMaterial("models/gibs/glass/glass");
+    chrome->incrementReferenceCount();
+    gold = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
+    gold->incrementReferenceCount();
+    plastic = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
+    plastic->incrementReferenceCount();
+    blinking = interfaces.materialSystem->findMaterial("models/inventory_items/dogtags/dogtags_outline");
+    blinking->incrementReferenceCount();
 }
 
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
