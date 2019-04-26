@@ -86,7 +86,7 @@ void GUI::renderAimbotWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -99,25 +99,25 @@ void GUI::renderAimbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
+            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver\0");
             currentWeapon = currentPistol + 1;
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
+            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev\0");
             currentWeapon = currentHeavy + 11;
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
+            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon\0");
             currentWeapon = currentSmg + 17;
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
+            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20\0");
             currentWeapon = currentRifle + 24;
             break;
         }
@@ -132,7 +132,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Ignore smoke", &config.aimbot.weapons[currentWeapon].ignoreSmoke);
         ImGui::Checkbox("Auto shot", &config.aimbot.weapons[currentWeapon].autoShot);
         ImGui::Checkbox("Recoil-based fov", &config.aimbot.weapons[currentWeapon].recoilbasedFov);
-        ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Nearest\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis");
+        ImGui::Combo("Bone", &config.aimbot.weapons[currentWeapon].bone, "Nearest\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
         ImGui::PushItemWidth(240.0f);
         ImGui::PushID(5);
         ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
@@ -158,7 +158,7 @@ void GUI::renderTriggerbotWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -170,25 +170,25 @@ void GUI::renderTriggerbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver");
+            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver\0");
             currentWeapon = currentPistol + 1;
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev");
+            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev\0");
             currentWeapon = currentHeavy + 11;
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon");
+            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon\0");
             currentWeapon = currentSmg + 17;
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20");
+            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20\0");
             currentWeapon = currentRifle + 24;
             break;
         }
@@ -203,7 +203,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Checkbox("Ignore flash", &config.triggerbot.weapons[currentWeapon].ignoreFlash);
         ImGui::Checkbox("Ignore smoke", &config.triggerbot.weapons[currentWeapon].ignoreSmoke);
         ImGui::PushItemWidth(85.0f);
-        ImGui::Combo("Hitgroup", &config.triggerbot.weapons[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg");
+        ImGui::Combo("Hitgroup", &config.triggerbot.weapons[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot.weapons[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
@@ -225,7 +225,7 @@ void GUI::renderGlowWindow() noexcept
             ImGui::SameLine();
             static int currentType{ 0 };
             ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "Visible\0Occluded");
+            ImGui::Combo("", &currentType, "Visible\0Occluded\0");
             ImGui::PopID();
             currentItem = currentCategory * 2 + currentType;
         }
@@ -278,7 +278,7 @@ void GUI::renderChamsWindow() noexcept
             ImGui::SameLine();
             static int currentType{ 0 };
             ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "Visible\0Occluded");
+            ImGui::Combo("", &currentType, "Visible\0Occluded\0");
             ImGui::PopID();
             currentItem = currentCategory * 2 + currentType;
         }
@@ -288,7 +288,7 @@ void GUI::renderChamsWindow() noexcept
 
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
-        ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm\0Platinum\0Glass\0Chrome\0Crystal\0Gold\0Plastic\0Blinking");
+        ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm\0Platinum\0Glass\0Chrome\0Crystal\0Gold\0Plastic\0Blinking\0");
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
@@ -320,12 +320,12 @@ void GUI::renderEspWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "Visible\0Occluded");
+        ImGui::Combo("", &currentType, "Visible\0Occluded\0");
         ImGui::PopID();
         int currentItem = currentCategory * 2 + currentType;
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
@@ -372,7 +372,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
         ImGui::PopID();
         ImGui::PopItemWidth();
-        ImGui::Combo("Skybox", &config.visuals.skybox, "cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam");
+        ImGui::Combo("Skybox", &config.visuals.skybox, "cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::End();
     }
@@ -385,7 +385,7 @@ void GUI::renderKnifeChangerWindow() noexcept
         ImGui::Begin("Knife changer", &window.knifeChanger, windowFlags);
         ImGui::PushItemWidth(130.0f);
         ImGui::Checkbox("Enabled", &config.knifeChanger.enabled);
-        ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden\0Ghost");
+        ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden\0Ghost\0");
         ImGui::End();
     }
 }
