@@ -87,6 +87,8 @@ public:
             bool enabled{ false };
             bool snaplines{ false };
             float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool box{ false };
+            float boxColor[3]{ 1.0f, 1.0f, 1.0f };
         } esp[4];
 
         constexpr auto& operator[](size_t index) noexcept
