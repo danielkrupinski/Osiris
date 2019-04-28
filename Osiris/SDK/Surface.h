@@ -19,6 +19,11 @@ public:
         callVirtualFunction<void, int, int, int, int>(this, 16, x0, y0, x1, y1);
     }
 
+    constexpr void drawOutlinedRect(int x0, int y0, int x1, int y1) noexcept
+    {
+        callVirtualFunction<void, int, int, int, int>(this, 18, x0, y0, x1, y1);
+    }
+
     constexpr void drawLine(int x0, int y0, int x1, int y1) noexcept
     {
         callVirtualFunction<void, int, int, int, int>(this, 19, x0, y0, x1, y1);
