@@ -151,14 +151,14 @@ extern "C" int __stdcall saveHookData(int, int, int, int*, int, int&);
 
 static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
-    if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
-        hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
-
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
         Misc::spectatorList();
         Esp::render();
     }
+
+    if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
+        hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
 
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
