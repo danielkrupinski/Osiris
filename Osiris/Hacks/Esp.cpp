@@ -63,20 +63,24 @@ void Esp::render() noexcept
                 if (entity->isVisible()) {
                     if (config.esp[0].enabled) {
                         renderSnaplines(entity, config.esp[0]);
+                        renderBox(entity, config.esp[0]);
                     }
                 } else {
                     if (config.esp[1].enabled) {
                         renderSnaplines(entity, config.esp[1]);
+                        renderBox(entity, config.esp[1]);
                     }
                 }
             } else {
                 if (entity->isVisible()) {
                     if (config.esp[2].enabled) {
                         renderSnaplines(entity, config.esp[2]);
+                        renderBox(entity, config.esp[2]);
                     }
                 } else {
                     if (config.esp[3].enabled) {
                         renderSnaplines(entity, config.esp[3]);
+                        renderBox(entity, config.esp[3]);
                     }
                 }
             }
