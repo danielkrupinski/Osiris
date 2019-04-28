@@ -31,6 +31,23 @@ static void renderSnaplines(Entity* entity, decltype(config.esp[0])& config) noe
     }
 }
 
+static void renderBox(Entity* entity, decltype(config.esp[0])& config) noexcept
+{
+    if (config.box) {
+        Vector bottom, top;
+        Vector head{ entity->getBonePosition(8) };
+        head.z += 10.0f;
+        if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && worldToScreen(head, top)) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+            float width = abs((bottom.y - top.y)) * 0.3f;
+            interfaces.surface->drawOutlinedRect(bottom.x - width, top.y, bottom.x + width, bottom.y);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(bottom.x - width + 1, top.y + 1, bottom.x + width - 1, bottom.y - 1);
+            interfaces.surface->drawOutlinedRect(bottom.x - width - 1, top.y - 1, bottom.x + width + 1, bottom.y + 1);
+        }
+    }
+}
+
 void Esp::render() noexcept
 {
     if (interfaces.engine->isInGame()) {
