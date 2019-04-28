@@ -330,6 +330,7 @@ void GUI::renderEspWindow() noexcept
         int currentItem = currentCategory * 2 + currentType;
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
+        checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
         ImGui::End();
     }
 }
