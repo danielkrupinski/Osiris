@@ -25,9 +25,10 @@ public:
         callVirtualFunction<void, int, int, int, int>(this, 18, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
-    constexpr void drawLine(int x0, int y0, int x1, int y1) noexcept
+    template <typename T>
+    constexpr void drawLine(T x0, T y0, T x1, T y1) noexcept
     {
-        callVirtualFunction<void, int, int, int, int>(this, 19, x0, y0, x1, y1);
+        callVirtualFunction<void, int, int, int, int>(this, 19, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
     constexpr void setTextFont(unsigned font) noexcept
