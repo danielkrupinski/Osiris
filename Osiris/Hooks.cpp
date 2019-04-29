@@ -81,6 +81,8 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     if (!cmd->command_number)
         return result;
 
+    bool& sendPacket = *reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
+
     Misc::sniperCrosshair();
     Misc::recoilCrosshair();
     Visuals::skybox();
