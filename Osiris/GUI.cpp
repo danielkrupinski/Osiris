@@ -394,7 +394,7 @@ void GUI::renderKnifeChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 415.0f });
+        ImGui::SetNextWindowSize({ 220.0f, 438.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Text("Menu key");
         ImGui::SameLine();
@@ -414,6 +414,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
+        ImGui::Checkbox("Auto reload", &config.misc.autoReload);
         ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
