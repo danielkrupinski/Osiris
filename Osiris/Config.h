@@ -141,6 +141,7 @@ public:
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
+        bool autoReload{ false };
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
