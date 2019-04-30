@@ -1,5 +1,6 @@
 #pragma once
 
-class NetworkChannel {
-
+struct NetworkChannel {
+    std::byte pad[44];
+    int chokedPackets;
 };
