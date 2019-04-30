@@ -92,6 +92,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     Aimbot::run(cmd, sendPacket);
     Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
+    Misc::autoReload(cmd);
     Misc::animateClanTag();
     Misc::revealRanks(cmd);
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
