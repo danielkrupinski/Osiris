@@ -70,7 +70,7 @@ public:
     Vector getEyePosition() noexcept
     {
         Vector vec;
-        callVirtualFunction<void, Vector&>(this, 279, vec);
+        callVirtualFunction<void, Vector&>(this, 281, vec);
         return vec;
     }
 
@@ -99,7 +99,7 @@ public:
 
     constexpr bool isWeapon() noexcept
     {
-        return callVirtualFunction<bool>(this, 161);
+        return callVirtualFunction<bool>(this, 163);
     }
 
     constexpr ClientClass* getClientClass() noexcept
@@ -109,7 +109,7 @@ public:
 
     constexpr bool isAlive() noexcept
     {
-        return callVirtualFunction<bool>(this, 151) && getProperty<int>("m_iHealth") > 0;
+        return callVirtualFunction<bool>(this, 153) && getProperty<int>("m_iHealth") > 0;
     }
 
     constexpr bool isInLocalTeam() noexcept
