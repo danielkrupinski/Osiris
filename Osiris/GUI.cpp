@@ -69,7 +69,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        // ImGui::MenuItem("Esp", nullptr, &window.esp);
+        ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
