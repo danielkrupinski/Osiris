@@ -85,6 +85,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Sniper crosshair** - draw crosshair while holding sniper rifle
     * **Recoil crosshair** - crosshair follows recoil pattern
     * **Auto pistol** - fire pistols like automatic rifles
+    * **Auto reload** - automatically reload if weapon has empty clip
     * **Auto accept** - automatically accept competitive match
     * **Radar hack** - show enemies positions on radar
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
@@ -126,7 +127,7 @@ When injected, menu is openable under `INSERT` key.
 
 
 ### Further optimizations
-If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
+If your CPU supports AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently AVX instructions are selected in project settings.
 
 ## FAQ
 
