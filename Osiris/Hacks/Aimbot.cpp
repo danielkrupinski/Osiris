@@ -78,14 +78,21 @@ void Aimbot::run(UserCmd* cmd, bool& sendPacket) noexcept
 
         if (bestTarget && (config.aimbot.weapons[weaponIndex].ignoreSmoke
             || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
-            if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime())
-                cmd->buttons |= UserCmd::IN_ATTACK;
-
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            bool clamped{ false };
+
+            while (config.aimbot.weapons[weaponIndex].autoShot && std::hypotf(angle.x, angle.y) > config.aimbot.weapons[weaponIndex].maxFovPerTick) {
+                angle /= 2.0f;
+                clamped = true;
+            }
+
             angle /= config.aimbot.weapons[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
                 interfaces.engine->setViewAngles(cmd->viewangles);
+
+            if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime() && !clamped)
+                cmd->buttons |= UserCmd::IN_ATTACK;
         }
     }
 }
