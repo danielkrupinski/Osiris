@@ -39,7 +39,7 @@ static void renderBox(Entity* entity, decltype(config.esp[0])& config) noexcept
         head.z += 10.0f;
         if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && worldToScreen(head, top)) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
-            float width = abs((bottom.y - top.y)) * 0.3f;
+            float width = abs(top.y - bottom.y) * 0.3f;
             interfaces.surface->drawOutlinedRect(bottom.x - width, top.y, bottom.x + width, bottom.y);
             interfaces.surface->setDrawColor(0, 0, 0, 255);
             interfaces.surface->drawOutlinedRect(bottom.x - width + 1, top.y + 1, bottom.x + width - 1, bottom.y - 1);
