@@ -4,7 +4,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 ## Features
 * **Aimbot** - aim assistance
-    * **Enable** - on / off master switch
+    * **Enabled** - on / off master switch
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Friendly fire** - treat allies as enemies
     * **Visible only** - aim only on visible players
@@ -20,7 +20,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Recoil control y** - vertical recoil control factor
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
-    * **Enable** - on / off triggerbot master switch
+    * **Enabled** - on / off triggerbot master switch
     * **On key [ key ]** - triggerbot works only when chosen key is being held
     * **Friendly fire** - treat allies as enemies
     * **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
@@ -30,7 +30,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Shot delay** - delay time in ms (milliseconds)
 
 * **Glow** - render glow effect on entities
-    * **Enable** - on / off master switch
+    * **Enabled** - on / off master switch
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [*0*-*3*]
@@ -42,9 +42,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Chickens** - glow chickens entities
 
 * **Chams** - color player models to improve visibility
-    * **Enable** - on / off master switch
+    * **Enabled** - on / off master switch
     * **Alpha** - material transparency
-    * **Flat**
+    * **Material** - material applied to model
     * **Wireframe** - render triangle mesh instead of solid material
     * **Allies** - allies chams on / off and color applied to them
     * **Visible allies** - visible allies chams on / off and color applied to them
@@ -52,6 +52,11 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Visible enemies** - visible enemies chams on / off and color applied to them
     * **Weapons** - view model weapons chams on / off and color applied to them
     * **Hands** - view model hands chams on / off and color applied to them
+
+* **Esp** - show information about player position
+    * **Enabled** - on / off master switch
+    * **Snaplines** - draw snaplines to players
+    * **Box** - draw 2D box over player model
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
@@ -127,7 +132,7 @@ When injected, menu is openable under `INSERT` key.
 
 
 ### Further optimizations
-If your CPU supports AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently AVX instructions are selected in project settings.
+If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
 
 ## FAQ
 
