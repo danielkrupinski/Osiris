@@ -30,14 +30,14 @@ static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPA
 {
     if (GetAsyncKeyState(config.misc.menuKey) & 1) {
         gui.isOpen = !gui.isOpen;
-        if (!gui.isOpen) interfaces.inputSystem->resetInputState();
+        if (!gui.isOpen) {
+            ImGui::GetIO().MouseDown[0] = false;
+            interfaces.inputSystem->resetInputState();
+        }
     }
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
-    else {
-        ImGui::GetIO().MouseDown[0] = false;
-        return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
-    }
+    return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
 static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
