@@ -46,7 +46,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
 
     if (gui.isOpen) {
         device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9 * vertexDeclaration;
+        IDirect3DVertexDeclaration9* vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
 
         ImGui_ImplDX9_NewFrame();
@@ -60,6 +60,7 @@ static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
         device->SetVertexDeclaration(vertexDeclaration);
+        vertexDeclaration->Release();
     }
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
