@@ -12,6 +12,11 @@ namespace Misc {
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
 
+    constexpr void chokePackets(bool& sendPacket) noexcept
+    {
+        sendPacket = interfaces.engine->getNetworkChannel()->chokedPackets >= config.misc.chokedPackets;
+    }
+
     constexpr void autoReload(UserCmd* cmd) noexcept
     {
         if (config.misc.autoReload) {
