@@ -60,11 +60,11 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     static unsigned font = interfaces.surface->createFont();
-                    static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 14, 700, 0, 0, 128);
+                    static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
                     const auto [width, height] = interfaces.surface->getTextSize(font, name);
                     interfaces.surface->setTextFont(font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
-                    interfaces.surface->setTextPosition(top.x - width / 2, top.y + 5 - height);
+                    interfaces.surface->setTextPosition(top.x - width / 2, top.y - 5 - height);
                     interfaces.surface->printText(name);
                 }
             }
