@@ -41,6 +41,11 @@ public:
         callVirtualFunction<void, int, int, int, int>(this, 25, r, g, b, a);
     }
 
+    constexpr void setTextColor(float color[3], int a) noexcept
+    {
+        callVirtualFunction<void, int, int, int, int>(this, 25, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
+    }
+
     constexpr void setTextPosition(int x, int y) noexcept
     {
         callVirtualFunction<void, int, int>(this, 26, x, y);
