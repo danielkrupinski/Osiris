@@ -56,44 +56,44 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     if (entity && !entity->isDormant() && entity->isAlive()) {
         auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
-            if (config.chams[CHAMS_PLANTING_OCCLUDED].enabled) {
-                applyChams(config.chams[CHAMS_PLANTING_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[PLANTING_OCCLUDED].enabled) {
+                applyChams(config.chams[PLANTING_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                if (!config.chams[CHAMS_PLANTING_VISIBLE].enabled)
+                if (!config.chams[PLANTING_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
-            if (config.chams[CHAMS_PLANTING_VISIBLE].enabled)
-                applyChams(config.chams[CHAMS_PLANTING_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[PLANTING_VISIBLE].enabled)
+                applyChams(config.chams[PLANTING_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
         } else if (entity->getProperty<bool>("m_bIsDefusing")) {
-            if (config.chams[CHAMS_DEFUSING_OCCLUDED].enabled) {
-                applyChams(config.chams[CHAMS_DEFUSING_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[DEFUSING_OCCLUDED].enabled) {
+                applyChams(config.chams[DEFUSING_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                if (!config.chams[CHAMS_DEFUSING_VISIBLE].enabled)
+                if (!config.chams[DEFUSING_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
-            if (config.chams[CHAMS_DEFUSING_VISIBLE].enabled)
-                applyChams(config.chams[CHAMS_DEFUSING_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[DEFUSING_VISIBLE].enabled)
+                applyChams(config.chams[DEFUSING_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
         } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
-            if (config.chams[CHAMS_LOCALPLAYER].enabled)
-                applyChams(config.chams[CHAMS_LOCALPLAYER], false, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[LOCALPLAYER].enabled)
+                applyChams(config.chams[LOCALPLAYER], false, entity->getProperty<int>("m_iHealth"));
         } else if (entity->isEnemy()) {
-            if (config.chams[CHAMS_ENEMIES_OCCLUDED].enabled) {
-                applyChams(config.chams[CHAMS_ENEMIES_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[ENEMIES_OCCLUDED].enabled) {
+                applyChams(config.chams[ENEMIES_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                if (!config.chams[CHAMS_ENEMIES_VISIBLE].enabled)
+                if (!config.chams[ENEMIES_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
-            if (config.chams[CHAMS_ENEMIES_VISIBLE].enabled)
-                applyChams(config.chams[CHAMS_ENEMIES_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[ENEMIES_VISIBLE].enabled)
+                applyChams(config.chams[ENEMIES_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
         } else {
-            if (config.chams[CHAMS_ALLIES_OCCLUDED].enabled) {
-                applyChams(config.chams[CHAMS_ALLIES_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[ALLIES_OCCLUDED].enabled) {
+                applyChams(config.chams[ALLIES_OCCLUDED], true, entity->getProperty<int>("m_iHealth"));
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                if (!config.chams[CHAMS_ALLIES_VISIBLE].enabled)
+                if (!config.chams[ALLIES_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
-            if (config.chams[CHAMS_ALLIES_VISIBLE].enabled)
-                applyChams(config.chams[CHAMS_ALLIES_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
+            if (config.chams[ALLIES_VISIBLE].enabled)
+                applyChams(config.chams[ALLIES_VISIBLE], false, entity->getProperty<int>("m_iHealth"));
         }
     }
 }

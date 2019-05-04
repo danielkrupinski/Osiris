@@ -5,20 +5,6 @@
 #include "../SDK/Entity.h"
 #include "../SDK/ModelRender.h"
 
-enum {
-    CHAMS_ALLIES_VISIBLE = 0,
-    CHAMS_ALLIES_OCCLUDED,
-    CHAMS_ENEMIES_VISIBLE,
-    CHAMS_ENEMIES_OCCLUDED,
-    CHAMS_PLANTING_VISIBLE,
-    CHAMS_PLANTING_OCCLUDED,
-    CHAMS_DEFUSING_VISIBLE,
-    CHAMS_DEFUSING_OCCLUDED,
-    CHAMS_LOCALPLAYER,
-    CHAMS_WEAPONS,
-    CHAMS_HANDS
-};
-
 class Chams {
 public:
     Chams() noexcept;
@@ -27,19 +13,33 @@ public:
 
     constexpr void renderHands() const noexcept
     {
-        if (config.chams[CHAMS_HANDS].enabled)
-            applyChams(config.chams[CHAMS_HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_iHealth"));
+        if (config.chams[HANDS].enabled)
+            applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_iHealth"));
     }
 
     constexpr void renderWeapons() const noexcept
     {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (config.chams[CHAMS_WEAPONS].enabled &&
+        if (config.chams[WEAPONS].enabled &&
             !localPlayer->getProperty<bool>("m_bIsScoped"))
-            applyChams(config.chams[CHAMS_WEAPONS], false, localPlayer->getProperty<int>("m_iHealth"));
+            applyChams(config.chams[WEAPONS], false, localPlayer->getProperty<int>("m_iHealth"));
     }
 
 private:
+    enum ChamsId {
+        ALLIES_VISIBLE = 0,
+        ALLIES_OCCLUDED,
+        ENEMIES_VISIBLE,
+        ENEMIES_OCCLUDED,
+        PLANTING_VISIBLE,
+        PLANTING_OCCLUDED,
+        DEFUSING_VISIBLE,
+        DEFUSING_OCCLUDED,
+        LOCALPLAYER,
+        WEAPONS,
+        HANDS
+    };
+
     Material* normal;
     Material* flat;
     Material* palm;
