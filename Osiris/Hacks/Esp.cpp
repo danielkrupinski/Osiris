@@ -95,11 +95,13 @@ void Esp::render() noexcept
                     if (config.esp[ALLIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
                         renderBox(entity, config.esp[ALLIES_VISIBLE]);
+                        renderName(i, config.esp[ALLIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ALLIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
                         renderBox(entity, config.esp[ALLIES_OCCLUDED]);
+                        renderName(i, config.esp[ALLIES_OCCLUDED]);
                     }
                 }
             } else {
@@ -107,11 +109,13 @@ void Esp::render() noexcept
                     if (config.esp[ENEMIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
                         renderBox(entity, config.esp[ENEMIES_VISIBLE]);
+                        renderName(i, config.esp[ENEMIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ENEMIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
+                        renderName(i, config.esp[ENEMIES_OCCLUDED]);
                     }
                 }
             }
