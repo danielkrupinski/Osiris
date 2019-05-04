@@ -72,6 +72,13 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
     }
 }
 
+enum EspId {
+    ALLIES_VISIBLE = 0,
+    ALLIES_OCCLUDED,
+    ENEMIES_VISIBLE,
+    ENEMIES_OCCLUDED
+};
+
 void Esp::render() noexcept
 {
     if (interfaces.engine->isInGame()) {
@@ -85,26 +92,26 @@ void Esp::render() noexcept
 
             if (!entity->isEnemy()) {
                 if (entity->isVisible()) {
-                    if (config.esp[0].enabled) {
-                        renderSnaplines(entity, config.esp[0]);
-                        renderBox(entity, config.esp[0]);
+                    if (config.esp[ALLIES_VISIBLE].enabled) {
+                        renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
+                        renderBox(entity, config.esp[ALLIES_VISIBLE]);
                     }
                 } else {
-                    if (config.esp[1].enabled) {
-                        renderSnaplines(entity, config.esp[1]);
-                        renderBox(entity, config.esp[1]);
+                    if (config.esp[ALLIES_OCCLUDED].enabled) {
+                        renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
+                        renderBox(entity, config.esp[ALLIES_OCCLUDED]);
                     }
                 }
             } else {
                 if (entity->isVisible()) {
-                    if (config.esp[2].enabled) {
-                        renderSnaplines(entity, config.esp[2]);
-                        renderBox(entity, config.esp[2]);
+                    if (config.esp[ENEMIES_VISIBLE].enabled) {
+                        renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
+                        renderBox(entity, config.esp[ENEMIES_VISIBLE]);
                     }
                 } else {
-                    if (config.esp[3].enabled) {
-                        renderSnaplines(entity, config.esp[3]);
-                        renderBox(entity, config.esp[3]);
+                    if (config.esp[ENEMIES_OCCLUDED].enabled) {
+                        renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
+                        renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
                     }
                 }
             }
