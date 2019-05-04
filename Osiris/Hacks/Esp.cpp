@@ -19,7 +19,7 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
     return false;
 }
 
-static constexpr void renderSnaplines(Entity* entity, decltype(config.esp[0])& config) noexcept
+static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     if (config.snaplines) {
         Vector position{ };
@@ -31,7 +31,7 @@ static constexpr void renderSnaplines(Entity* entity, decltype(config.esp[0])& c
     }
 }
 
-static constexpr void renderBox(Entity* entity, decltype(config.esp[0])& config) noexcept
+static constexpr void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     if (config.box) {
         Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
