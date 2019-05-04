@@ -31,11 +31,10 @@ static constexpr void renderSnaplines(Entity* entity, decltype(config.esp[0])& c
     }
 }
 
-static void renderBox(Entity* entity, decltype(config.esp[0])& config) noexcept
+static constexpr void renderBox(Entity* entity, decltype(config.esp[0])& config) noexcept
 {
     if (config.box) {
-        Vector bottom, top;
-        Vector head{ entity->getBonePosition(8) };
+        Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
         head.z += 10.0f;
         if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && worldToScreen(head, top)) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
