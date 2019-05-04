@@ -99,6 +99,9 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+        Misc::chokePackets(sendPacket);
     return false;
 }
 
