@@ -77,4 +77,11 @@ public:
     {
         return callVirtualFunction<bool, unsigned, const char*, int, int, int, int, int, int, int>(this, 72, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax);
     }
+
+    constexpr auto getTextSize(unsigned font, const wchar_t* text) noexcept
+    {
+        int width{ }, height{ };
+        callVirtualFunction<void, unsigned, const wchar_t*, int&, int&>(this, 79, font, text, width, height);
+        return std::make_pair(width, height);
+    }
 };
