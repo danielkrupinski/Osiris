@@ -20,7 +20,7 @@ static Vector calculateRelativeAngle(const Vector& source, const Vector& destina
     return angles;
 }
 
-void Aimbot::run(UserCmd* cmd, bool& sendPacket) noexcept
+void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
