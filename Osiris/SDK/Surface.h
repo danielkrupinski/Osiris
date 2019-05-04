@@ -46,9 +46,10 @@ public:
         callVirtualFunction<void, int, int, int, int>(this, 25, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
     }
 
-    constexpr void setTextPosition(int x, int y) noexcept
+    template <typename T>
+    constexpr void setTextPosition(T x, T y) noexcept
     {
-        callVirtualFunction<void, int, int>(this, 26, x, y);
+        callVirtualFunction<void, int, int>(this, 26, static_cast<int>(x), static_cast<int>(y));
     }
 
     constexpr void printText(const std::wstring_view text, int drawType = 0) noexcept
