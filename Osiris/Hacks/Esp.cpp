@@ -19,10 +19,10 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
     return false;
 }
 
-static void renderSnaplines(Entity* entity, decltype(config.esp[0])& config) noexcept
+static constexpr void renderSnaplines(Entity* entity, decltype(config.esp[0])& config) noexcept
 {
     if (config.snaplines) {
-        Vector position;
+        Vector position{ };
         if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), position)) {
             const auto [width, height] = interfaces.surface->getScreenSize();
             interfaces.surface->setDrawColor(config.snaplinesColor, 255);
