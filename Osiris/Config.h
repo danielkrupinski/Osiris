@@ -148,6 +148,7 @@ public:
         bool revealRanks{ false };
         bool spectatorList{ false };
         bool watermark{ false };
+        int chokedPackets{ 0 };
     } misc;
 
 private:
