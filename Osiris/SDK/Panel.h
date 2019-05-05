@@ -7,6 +7,6 @@ class Panel {
 public:
     constexpr auto getName(unsigned int panel) noexcept
     {
-        return std::string_view{ callVirtualFunction<const char*, unsigned int>(this, 36, panel) };
+        return std::string_view{ callVirtualMethod<const char*, unsigned int>(this, 36, panel) };
     }
 };

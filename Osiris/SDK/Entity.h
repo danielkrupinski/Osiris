@@ -55,7 +55,7 @@ public:
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
-        return callVirtualFunction<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
+        return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone) noexcept
@@ -70,7 +70,7 @@ public:
     Vector getEyePosition() noexcept
     {
         Vector vec;
-        callVirtualFunction<void, Vector&>(this, 281, vec);
+        callVirtualMethod<void, Vector&>(this, 281, vec);
         return vec;
     }
 
@@ -94,31 +94,31 @@ public:
 
     constexpr bool isDormant() noexcept
     {
-        return callVirtualFunction<bool>(this + 8, 9);
+        return callVirtualMethod<bool>(this + 8, 9);
     }
 
     constexpr bool isWeapon() noexcept
     {
-        return callVirtualFunction<bool>(this, 163);
+        return callVirtualMethod<bool>(this, 163);
     }
 
     constexpr ClientClass* getClientClass() noexcept
     {
-        return callVirtualFunction<ClientClass*>(this + 8, 2);
+        return callVirtualMethod<ClientClass*>(this + 8, 2);
     }
 
     constexpr bool isAlive() noexcept
     {
-        return callVirtualFunction<bool>(this, 153) && getProperty<int>("m_iHealth") > 0;
+        return callVirtualMethod<bool>(this, 153) && getProperty<int>("m_iHealth") > 0;
     }
 
     constexpr bool isInLocalTeam() noexcept
     {
-        return callVirtualFunction<bool>(this, 92);
+        return callVirtualMethod<bool>(this, 92);
     }
 
     constexpr float getInaccuracy() noexcept
     {
-        return callVirtualFunction<float>(this, 471);
+        return callVirtualMethod<float>(this, 471);
     }
 };

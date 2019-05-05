@@ -7,6 +7,6 @@ class MaterialSystem {
 public:
     constexpr auto findMaterial(const char* materialName) noexcept
     {
-        return callVirtualFunction<Material*, const char*, const char*, bool, const char*>(this, 84, materialName, nullptr, true, nullptr);
+        return callVirtualMethod<Material*, const char*, const char*, bool, const char*>(this, 84, materialName, nullptr, true, nullptr);
     }
 };
