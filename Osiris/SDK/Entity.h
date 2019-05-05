@@ -119,6 +119,6 @@ public:
 
     constexpr float getInaccuracy() noexcept
     {
-        return callVirtualMethod<float>(this, 471);
+        return callVirtualMethod<float>(this, 476);
     }
 };
