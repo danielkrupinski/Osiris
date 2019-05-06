@@ -5,12 +5,26 @@
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
-    void autoPistol(UserCmd*) noexcept;
     void animateClanTag(const char* = nullptr) noexcept;
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
+
+    constexpr void autoPistol(UserCmd* cmd) noexcept
+    {
+        if (config.misc.autoPistol) {
+            const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
+                interfaces.entityList->getEntity(
+                    interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+            if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
+                if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver)
+                    cmd->buttons &= ~UserCmd::IN_ATTACK2;
+                else
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+            }
+        }
+    }
 
     constexpr void chokePackets(bool& sendPacket) noexcept
     {

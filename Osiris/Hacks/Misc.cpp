@@ -10,21 +10,6 @@ void Misc::inverseRagdollGravity() noexcept
     ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
 }
 
-void Misc::autoPistol(UserCmd* cmd) noexcept
-{
-    if (config.misc.autoPistol) {
-        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
-            interfaces.entityList->getEntity(
-                interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
-        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
-            if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver)
-                cmd->buttons &= ~UserCmd::IN_ATTACK2;
-            else
-                cmd->buttons &= ~UserCmd::IN_ATTACK;
-        }
-    }
-}
-
 void Misc::animateClanTag(const char* tag) noexcept
 {
     static float lastTime{ 0.0f };
