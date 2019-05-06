@@ -55,7 +55,7 @@ struct Vector final {
         return Vector{ x * mul, y * mul, z * mul };
     }
 
-    void normalize() noexcept
+    constexpr void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
         y = std::isfinite(y) ? std::remainderf(y, 360.0f) : 0.0f;
