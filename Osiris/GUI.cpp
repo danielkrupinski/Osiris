@@ -138,7 +138,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
         ImGui::PopID();
         ImGui::PushID(6);
-        ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].maxFovPerTick, 0.0f, 255.0f, "Max fov per tick: %.2f");
+        ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "Max angle delta: %.2f");
         ImGui::PopID();
         ImGui::PushID(7);
         ImGui::SliderFloat("", &config.aimbot.weapons[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
