@@ -86,8 +86,9 @@ public:
         return std::make_pair(width, height);
     }
 
-    constexpr void drawOutlinedCircle(int x, int y, int r, int seg) noexcept
+    template <typename T>
+    constexpr void drawOutlinedCircle(T x, T y, int r, int seg) noexcept
     {
-        callVirtualMethod<void, int, int, int, int>(this, 103, x, y, r, seg);
+        callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
     }
 };
