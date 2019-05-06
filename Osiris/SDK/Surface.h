@@ -85,4 +85,9 @@ public:
         callVirtualMethod<void, unsigned, const wchar_t*, int&, int&>(this, 79, font, text, width, height);
         return std::make_pair(width, height);
     }
+
+    constexpr void drawOutlinedCircle(int x, int y, int r, int seg) noexcept
+    {
+        callVirtualMethod<void, int, int, int, int>(this, 103, x, y, r, seg);
+    }
 };
