@@ -81,9 +81,12 @@ void Aimbot::run(UserCmd* cmd) noexcept
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            while (config.aimbot.weapons[weaponIndex].autoShot && std::hypotf(angle.x, angle.y) > config.aimbot.weapons[weaponIndex].maxFovPerTick) {
-                angle /= 2.0f;
-                clamped = true;
+            if (config.aimbot.weapons[weaponIndex].autoShot
+                && (fabs(angle.x) > config.aimbot.weapons[weaponIndex].maxFovPerTick
+                || fabs(angle.y) > config.aimbot.weapons[weaponIndex].maxFovPerTick)) {
+                    angle.x = std::clamp(angle.x, -config.aimbot.weapons[weaponIndex].maxFovPerTick, config.aimbot.weapons[weaponIndex].maxFovPerTick);
+                    angle.y = std::clamp(angle.y, -config.aimbot.weapons[weaponIndex].maxFovPerTick, config.aimbot.weapons[weaponIndex].maxFovPerTick);
+                    clamped = true;
             }
 
             angle /= config.aimbot.weapons[weaponIndex].smooth;
