@@ -71,6 +71,18 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
     }
 }
 
+static void renderHeadDot(Entity* entity, const decltype(config.esp[0])& config) noexcept
+{
+    if (config.headDot) {
+        Vector head{ entity->getBonePosition(8) }, top;
+        if (worldToScreen(head, top)) {
+            interfaces.surface->setDrawColor(config.headDotColor, 255);
+            for (int i = 1; i <= 5; i++)
+                interfaces.surface->drawOutlinedCircle(top.x, top.y, i, 100);
+        }
+    }
+}
+
 enum EspId {
     ALLIES_VISIBLE = 0,
     ALLIES_OCCLUDED,
@@ -95,12 +107,14 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
                         renderBox(entity, config.esp[ALLIES_VISIBLE]);
                         renderName(i, config.esp[ALLIES_VISIBLE]);
+                        renderHeadDot(entity, config.esp[ALLIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ALLIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
                         renderBox(entity, config.esp[ALLIES_OCCLUDED]);
                         renderName(i, config.esp[ALLIES_OCCLUDED]);
+                        renderHeadDot(entity, config.esp[ALLIES_OCCLUDED]);
                     }
                 }
             } else {
@@ -109,12 +123,14 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
                         renderBox(entity, config.esp[ENEMIES_VISIBLE]);
                         renderName(i, config.esp[ENEMIES_VISIBLE]);
+                        renderHeadDot(entity, config.esp[ENEMIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ENEMIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderName(i, config.esp[ENEMIES_OCCLUDED]);
+                        renderHeadDot(entity, config.esp[ENEMIES_OCCLUDED]);
                     }
                 }
             }
