@@ -19,8 +19,10 @@ Config::Config(const char* name) noexcept
         std::filesystem::create_directory(path);
     }
 
-    for (const auto& p : std::filesystem::directory_iterator(path))
-        configs.push_back(p.path().filename().string());
+    std::transform(std::filesystem::directory_iterator{ path },
+                   std::filesystem::directory_iterator{ },
+                   std::back_inserter(configs),
+                   [](const auto& entry) { return entry.path().filename().string(); });
 }
 
 void Config::load(size_t id) noexcept
