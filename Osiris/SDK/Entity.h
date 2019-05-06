@@ -11,9 +11,9 @@
 class Entity {
 public:
     template <typename T>
-    constexpr auto getProperty(const char* name, const std::size_t offset = 0) noexcept
+    constexpr auto getProperty(const char* name, const std::size_t offset = 0) const noexcept
     {
-        return *reinterpret_cast<T*>(this + netvars[name] + offset);
+        return *reinterpret_cast<const T*>(this + netvars[name] + offset);
     }
 
     template <typename T>
