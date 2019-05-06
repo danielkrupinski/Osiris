@@ -14,8 +14,10 @@ Config::Config(const char* name) noexcept
         CoTaskMemFree(pathToDocuments);
     }
 
-    if (!std::filesystem::exists(path))
+    if (!std::filesystem::is_directory(path)) {
+        std::filesystem::remove(path);
         std::filesystem::create_directory(path);
+    }
 
     for (const auto& p : std::filesystem::directory_iterator(path))
         configs.push_back(p.path().filename().string());
@@ -23,6 +25,11 @@ Config::Config(const char* name) noexcept
 
 void Config::load(size_t id) noexcept
 {
+    if (!std::filesystem::is_directory(path)) {
+        std::filesystem::remove(path);
+        std::filesystem::create_directory(path);
+    }
+
     std::ifstream in{ path / configs[id] };
 
     if (!in.good())
@@ -34,6 +41,11 @@ void Config::load(size_t id) noexcept
 
 void Config::save(size_t id) const noexcept
 {
+    if (!std::filesystem::is_directory(path)) {
+        std::filesystem::remove(path);
+        std::filesystem::create_directory(path);
+    }
+
     std::ofstream out{ path / configs[id] };
 
     if (!out.good())
@@ -51,15 +63,13 @@ void Config::add(const char* name) noexcept
 
 void Config::remove(size_t id) noexcept
 {
-    if (std::filesystem::exists(path / configs[id]))
-        std::filesystem::remove(path / configs[id]);
+    std::filesystem::remove(path / configs[id]);
     configs.erase(configs.cbegin() + id);
 }
 
 void Config::rename(size_t item, const char* newName) noexcept
 {
-    if (std::filesystem::exists(path / configs[item]))
-        std::filesystem::rename(path / configs[item], path / newName);
+    std::filesystem::rename(path / configs[item], path / newName);
     configs[item] = newName;
 }
 
