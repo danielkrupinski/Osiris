@@ -74,11 +74,11 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
 static void renderHeadDot(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     if (config.headDot) {
-        Vector head{ entity->getBonePosition(8) }, top;
-        if (worldToScreen(head, top)) {
+        Vector head;
+        if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
             for (int i = 1; i <= 5; i++)
-                interfaces.surface->drawOutlinedCircle(top.x, top.y, i, 100);
+                interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
         }
     }
 }
