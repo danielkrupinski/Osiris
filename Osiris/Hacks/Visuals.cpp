@@ -82,7 +82,9 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
-    static auto grass = interfaces.materialSystem->findMaterial("detail/detailsprites_survival");
+    // detail/detailsprites_survival - dz_blacksite
+    // detail/dust_massive_detail_sprites - dz_sirocco
+    static auto grass = interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites");
     static auto incrementOnce = grass->incrementReferenceCount();
     grass->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
 }
