@@ -229,5 +229,8 @@
     <ClInclude Include="ArchiveX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\SkinChanger.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
