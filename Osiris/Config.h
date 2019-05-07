@@ -132,7 +132,9 @@ public:
     } knifeChanger;
 
     struct {
-        bool enabled{ false };
+        struct {
+            bool enabled{ false };
+        } weapons[35];
     } skinChanger;
 
     struct {
