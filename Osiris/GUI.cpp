@@ -269,7 +269,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize({ 250.0f, 220.0f });
+        ImGui::SetNextWindowSize({ 250.0f, 245.0f });
         ImGui::Begin("Chams", &window.chams, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -292,6 +292,7 @@ void GUI::renderChamsWindow() noexcept
 
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
+        ImGui::Checkbox("Rainbow", &config.chams[currentItem].rainbow);
         ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm\0Platinum\0Glass\0Chrome\0Crystal\0Gold\0Plastic\0Blinking\0");
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
