@@ -10,7 +10,7 @@ void SkinChanger::apply(FrameStage stage) noexcept
 
         static PlayerInfo playerInfo;
         if (interfaces.engine->getPlayerInfo(localPlayerIndex, playerInfo)) {
-            auto weapons = reinterpret_cast<int*>(localPlayer + 0x2DF8); // m_hActiveWeapon - 256
+            auto weapons = localPlayer->getWeapons();
             for (size_t i = 0; i < 64; i++) {
                 Entity* weapon = interfaces.entityList->getEntityFromHandle(weapons[i]);
                 if (!weapon)
@@ -21,7 +21,7 @@ void SkinChanger::apply(FrameStage stage) noexcept
 
                 if (weapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Ak47) {
                     weapon->setProperty<int>("m_iItemIDHigh", -1);
-                    weapon->setProperty<int>("m_nFallbackPaintKit", 180);
+                    weapon->setProperty<int>("m_nFallbackPaintKit", 801);
                     weapon->setProperty<float>("m_flFallbackWear", 0.000000001f);
                 }
             }
