@@ -99,7 +99,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner
 
-* **Config** - configuration system based on cereal binary serialization
+* **Config** - configuration system based on binary serialization
     * **Create config** - create new configuration file
     * **Reset config** - restore default configuration settings (does not touch saved configuration)
     * **Load selected** - load selected configuration file
