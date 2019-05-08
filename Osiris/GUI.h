@@ -27,6 +27,7 @@ private:
         bool esp{ false };
         bool visuals{ false };
         bool knifeChanger{ false };
+        bool skinChanger{ false };
         bool misc{ false };
         bool config{ false };
     } window;
