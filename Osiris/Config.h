@@ -72,6 +72,7 @@ public:
         struct {
             bool enabled{ false };
             bool healthBased{ false };
+            bool rainbow{ false };
             int material{ 0 };
             bool wireframe{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
