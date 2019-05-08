@@ -396,6 +396,15 @@ void GUI::renderKnifeChangerWindow() noexcept
     }
 }
 
+void GUI::renderSkinChangerWindow() noexcept
+{
+    if (window.skinChanger) {
+        ImGui::SetNextWindowSize({ 100.0f, 100.0f });
+        ImGui::Begin("Skin changer", &window.skinChanger, windowFlags);
+        ImGui::End();
+    }
+}
+
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {

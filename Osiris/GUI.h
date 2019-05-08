@@ -17,8 +17,10 @@ private:
     void renderEspWindow() noexcept;
     void renderVisualsWindow() noexcept;
     void renderKnifeChangerWindow() noexcept;
+    void renderSkinChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
     void renderConfigWindow() noexcept;
+
     struct {
         bool aimbot{ false };
         bool triggerbot{ false };
