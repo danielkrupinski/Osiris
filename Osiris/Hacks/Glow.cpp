@@ -22,8 +22,14 @@ void Glow::render() noexcept
                 glowobject.alpha = glow.alpha;
                 glowobject.glowStyle = glow.style;
                 glowobject.bloomAmount = glow.thickness;
-                if (glow.healthBased && health) glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
-                else glowobject.glowColor = glow.color;
+                if (glow.healthBased && health)
+                    glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
+                else if (glow.rainbow)
+                    glowobject.glowColor = { sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
+                                             sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
+                                             sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f };
+                else
+                    glowobject.glowColor = glow.color;
             }
         };
 
