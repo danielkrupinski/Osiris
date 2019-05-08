@@ -55,6 +55,7 @@ public:
         struct {
             bool enabled{ false };
             bool healthBased{ false };
+            bool rainbow{ false };
             float thickness{ 1.0f };
             float alpha{ 1.0f };
             int style{ 0 };
