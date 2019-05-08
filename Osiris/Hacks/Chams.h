@@ -2,6 +2,7 @@
 
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 #include "../SDK/Entity.h"
 #include "../SDK/ModelRender.h"
 
@@ -71,8 +72,14 @@ private:
     constexpr void applyChams(decltype(config.chams[0])& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
-        if (chams.healthBased && health) material->colorModulate({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
-        else material->colorModulate(chams.color);
+        if (chams.healthBased && health)
+            material->colorModulate({ 1.0f - health / 100.0f,  health / 100.0f, 0.0f });
+        else if (chams.rainbow)
+            material->colorModulate({ sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
+                                      sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
+                                      sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f });
+        else
+            material->colorModulate(chams.color);
         material->alphaModulate(chams.alpha);
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, chams.wireframe);
