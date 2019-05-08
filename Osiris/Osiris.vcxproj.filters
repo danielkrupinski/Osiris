@@ -235,5 +235,8 @@
     <ClInclude Include="Hacks\SkinChanger.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\FrameStage.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
