@@ -172,8 +172,8 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
 {
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
+        Misc::fixAnimationLOD(stage);
     }
-
     hooks.client.callOriginal<void, FrameStage>(37, stage);
 }
 
