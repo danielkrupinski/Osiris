@@ -72,6 +72,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
+        // ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
