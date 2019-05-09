@@ -11,6 +11,19 @@ namespace Misc {
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
 
+    constexpr void fixAnimationLOD() noexcept
+    {
+        if (config.misc.fixAnimationLOD) {
+            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+                if (i == interfaces.engine->getLocalPlayer()) continue;
+                Entity* entity = interfaces.entityList->getEntity(i);
+                if (!entity || entity->isDormant() || !entity->isAlive()) continue;
+                *reinterpret_cast<int*>(entity + 0xA28) = 0;
+                *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
+            }
+        }
+    }
+
     constexpr void autoPistol(UserCmd* cmd) noexcept
     {
         if (config.misc.autoPistol) {
