@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Memory.h"
+#include "../SDK/FrameStage.h"
 #include "../SDK/UserCmd.h"
 
 namespace Misc {
@@ -11,9 +12,9 @@ namespace Misc {
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
 
-    constexpr void fixAnimationLOD() noexcept
+    constexpr void fixAnimationLOD(FrameStage stage) noexcept
     {
-        if (config.misc.fixAnimationLOD) {
+        if (config.misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
             for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
                 if (i == interfaces.engine->getLocalPlayer()) continue;
                 Entity* entity = interfaces.entityList->getEntity(i);
