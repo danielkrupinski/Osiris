@@ -14,6 +14,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Auto shot** - shoot automatically when target found
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
+    * **Max angle delta** - maximum viewangles change per tick
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Bone** - bone which aimbot aims at
     * **Recoil control x** - horizontal recoil control factor
@@ -31,6 +32,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Glow** - render glow effect on entities
     * **Enabled** - on / off master switch
+    * **Health based** - color is based on player's hp
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [*0*-*3*]
@@ -43,6 +45,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Chams** - color player models to improve visibility
     * **Enabled** - on / off master switch
+    * **Health based** - color is based on player's hp
     * **Alpha** - material transparency
     * **Material** - material applied to model
     * **Wireframe** - render triangle mesh instead of solid material
@@ -99,7 +102,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner
 
-* **Config** - configuration system based on cereal binary serialization
+* **Config** - configuration system based on binary serialization
     * **Create config** - create new configuration file
     * **Reset config** - restore default configuration settings (does not touch saved configuration)
     * **Load selected** - load selected configuration file
