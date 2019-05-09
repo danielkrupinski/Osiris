@@ -139,6 +139,11 @@ public:
             int paintKit{ 0 };
             float wear{ 0.0f };
         } weapons[49];
+
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return weapons[index];
+        }
     } skinChanger;
 
     struct {
