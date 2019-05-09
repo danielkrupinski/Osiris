@@ -136,6 +136,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
+            int itemId{ 0 };
         } weapons[49];
     } skinChanger;
 
