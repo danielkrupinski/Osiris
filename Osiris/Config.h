@@ -136,7 +136,7 @@ public:
     struct {
         struct {
             bool enabled{ false };
-        } weapons[35];
+        } weapons[49];
     } skinChanger;
 
     struct {
