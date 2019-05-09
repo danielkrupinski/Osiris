@@ -154,6 +154,7 @@ public:
         bool revealRanks{ false };
         bool spectatorList{ false };
         bool watermark{ false };
+        bool fixAnimationLOD{ false };
         int chokedPackets{ 0 };
     } misc;
 
