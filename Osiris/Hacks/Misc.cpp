@@ -81,12 +81,18 @@ void Misc::recoilCrosshair() noexcept
     recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
 }
 
+#define USE_BUILTIN_FONT 1
+
 void Misc::watermark() noexcept
 {
     if (config.misc.watermark) {
+#if USE_BUILTIN_FONT == 1
+        interfaces.surface->setTextFont(0x1d);
+#else
         static unsigned font = interfaces.surface->createFont();
         static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
         interfaces.surface->setTextFont(font);
+#endif
         interfaces.surface->setTextColor(51, 153, 255, 255);
         interfaces.surface->setTextPosition(0, 0);
         interfaces.surface->printText(L"Osiris");
