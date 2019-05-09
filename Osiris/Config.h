@@ -137,6 +137,7 @@ public:
         struct {
             bool enabled{ false };
             int paintKit{ 0 };
+            float wear{ 0.0f };
         } weapons[49];
     } skinChanger;
 
