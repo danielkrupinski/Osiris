@@ -82,7 +82,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 445.0f });
+        ImGui::SetNextWindowSize({ 260.0f, 475.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -125,6 +125,9 @@ void GUI::renderAimbotWindow() noexcept
         }
         ImGui::PopID();
         ImGui::Checkbox("Enabled", &config.aimbot.weapons[currentWeapon].enabled);
+        ImGui::Checkbox("On key", &config.aimbot.weapons[currentWeapon].onKey);
+        ImGui::SameLine();
+        hotkey(config.aimbot.weapons[currentWeapon].key);
         ImGui::Checkbox("Silent", &config.aimbot.weapons[currentWeapon].silent);
         ImGui::Checkbox("Friendly fire", &config.aimbot.weapons[currentWeapon].friendlyFire);
         ImGui::Checkbox("Visible only", &config.aimbot.weapons[currentWeapon].visibleOnly);
