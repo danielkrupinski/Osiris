@@ -40,6 +40,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot.weapons[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
         return;
 
+    if (config.aimbot.weapons[weaponIndex].onKey && !GetAsyncKeyState(config.aimbot.weapons[weaponIndex].key))
+        return;
+
     if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
 
         if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
