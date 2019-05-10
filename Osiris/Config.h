@@ -45,6 +45,11 @@ public:
     } aimbot;
 
     struct {
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return weapons[index];
+        }
+    private:
         struct {
             bool enabled{ false };
             bool onKey{ false };

@@ -201,18 +201,18 @@ void GUI::renderTriggerbotWindow() noexcept
         }
         }
         ImGui::PopID();
-        ImGui::Checkbox("Enabled", &config.triggerbot.weapons[currentWeapon].enabled);
-        ImGui::Checkbox("On key", &config.triggerbot.weapons[currentWeapon].onKey);
+        ImGui::Checkbox("Enabled", &config.triggerbot[currentWeapon].enabled);
+        ImGui::Checkbox("On key", &config.triggerbot[currentWeapon].onKey);
         ImGui::SameLine();
-        hotkey(config.triggerbot.weapons[currentWeapon].key);
-        ImGui::Checkbox("Friendly fire", &config.triggerbot.weapons[currentWeapon].friendlyFire);
-        ImGui::Checkbox("Scoped only", &config.triggerbot.weapons[currentWeapon].scopedOnly);
-        ImGui::Checkbox("Ignore flash", &config.triggerbot.weapons[currentWeapon].ignoreFlash);
-        ImGui::Checkbox("Ignore smoke", &config.triggerbot.weapons[currentWeapon].ignoreSmoke);
+        hotkey(config.triggerbot[currentWeapon].key);
+        ImGui::Checkbox("Friendly fire", &config.triggerbot[currentWeapon].friendlyFire);
+        ImGui::Checkbox("Scoped only", &config.triggerbot[currentWeapon].scopedOnly);
+        ImGui::Checkbox("Ignore flash", &config.triggerbot[currentWeapon].ignoreFlash);
+        ImGui::Checkbox("Ignore smoke", &config.triggerbot[currentWeapon].ignoreSmoke);
         ImGui::PushItemWidth(85.0f);
-        ImGui::Combo("Hitgroup", &config.triggerbot.weapons[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
+        ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
-        ImGui::SliderInt("", &config.triggerbot.weapons[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
+        ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
         ImGui::End();
     }
 }
