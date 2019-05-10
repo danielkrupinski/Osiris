@@ -34,70 +34,70 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!weaponIndex)
         return;
 
-    if (!config.aimbot.weapons[weaponIndex].enabled)
+    if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config.aimbot.weapons[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
+    if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
         return;
 
-    if (config.aimbot.weapons[weaponIndex].onKey && !GetAsyncKeyState(config.aimbot.weapons[weaponIndex].key))
+    if (config.aimbot[weaponIndex].onKey && !GetAsyncKeyState(config.aimbot[weaponIndex].key))
         return;
 
-    if (config.aimbot.weapons[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot.weapons[weaponIndex].autoShot)) {
+    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot)) {
 
-        if (config.aimbot.weapons[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
+        if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
             return;
 
-        auto bestFov = config.aimbot.weapons[weaponIndex].fov;
+        auto bestFov = config.aimbot[weaponIndex].fov;
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
         auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
-        aimPunch.x *= config.aimbot.weapons[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot.weapons[weaponIndex].recoilControlX;
+        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
+        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
-                || !entity->isEnemy() && !config.aimbot.weapons[weaponIndex].friendlyFire || entity->getProperty<bool>("m_bGunGameImmunity"))
+                || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->getProperty<bool>("m_bGunGameImmunity"))
                 continue;
 
             for (int j = 8; j >= 3; j--) {
-                auto bonePosition = entity->getBonePosition(config.aimbot.weapons[weaponIndex].bone ? 9 - config.aimbot.weapons[weaponIndex].bone : j);
-                if (config.aimbot.weapons[weaponIndex].visibleOnly && !entity->isVisible(bonePosition))
+                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone ? 9 - config.aimbot[weaponIndex].bone : j);
+                if (config.aimbot[weaponIndex].visibleOnly && !entity->isVisible(bonePosition))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot.weapons[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
+                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = bonePosition;
                 }
-                if (config.aimbot.weapons[weaponIndex].bone)
+                if (config.aimbot[weaponIndex].bone)
                     break;
             }
         }
 
-        if (bestTarget && (config.aimbot.weapons[weaponIndex].ignoreSmoke
+        if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
             || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (config.aimbot.weapons[weaponIndex].autoShot
-                && (fabs(angle.x) > config.aimbot.weapons[weaponIndex].maxAngleDelta
-                || fabs(angle.y) > config.aimbot.weapons[weaponIndex].maxAngleDelta)) {
-                    angle.x = std::clamp(angle.x, -config.aimbot.weapons[weaponIndex].maxAngleDelta, config.aimbot.weapons[weaponIndex].maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config.aimbot.weapons[weaponIndex].maxAngleDelta, config.aimbot.weapons[weaponIndex].maxAngleDelta);
+            if (config.aimbot[weaponIndex].autoShot
+                && (fabs(angle.x) > config.aimbot[weaponIndex].maxAngleDelta
+                || fabs(angle.y) > config.aimbot[weaponIndex].maxAngleDelta)) {
+                    angle.x = std::clamp(angle.x, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
+                    angle.y = std::clamp(angle.y, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
                     clamped = true;
             }
 
-            angle /= config.aimbot.weapons[weaponIndex].smooth;
+            angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
-            if (!config.aimbot.weapons[weaponIndex].silent || config.aimbot.weapons[weaponIndex].smooth > 1.0f)
+            if (!config.aimbot[weaponIndex].silent || config.aimbot[weaponIndex].smooth > 1.0f)
                 interfaces.engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot.weapons[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime() && !clamped)
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime() && !clamped)
                 cmd->buttons |= UserCmd::IN_ATTACK;
         }
     }
