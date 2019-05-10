@@ -36,9 +36,10 @@ public:
         callVirtualMethod<void, unsigned>(this, 23, font);
     }
 
-    constexpr void setTextColor(int r, int g, int b, int a) noexcept
+    template <typename T>
+    constexpr void setTextColor(T r, T g, T b, T a) noexcept
     {
-        callVirtualMethod<void, int, int, int, int>(this, 25, r, g, b, a);
+        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(r), static_cast<int>(g), static_cast<int>(b), static_cast<int>(a));
     }
 
     constexpr void setTextColor(float color[3], int a) noexcept
