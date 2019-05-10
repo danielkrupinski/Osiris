@@ -93,6 +93,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     Misc::autoReload(cmd);
     Misc::animateClanTag();
     Misc::revealRanks(cmd);
+    cmd->viewangles.normalize();
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
