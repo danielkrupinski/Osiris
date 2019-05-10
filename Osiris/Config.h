@@ -64,6 +64,11 @@ public:
     } triggerbot;
 
     struct {
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return glow[index];
+        }
+    private:
         struct {
             bool enabled{ false };
             bool healthBased{ false };
@@ -73,14 +78,14 @@ public:
             int style{ 0 };
             float color[3]{ 1.0f, 1.0f, 1.0f };
         } glow[13];
-
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return glow[index];
-        }
     } glow;
 
     struct {
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return chams[index];
+        }
+    private:
         struct {
             bool enabled{ false };
             bool healthBased{ false };
@@ -90,14 +95,14 @@ public:
             float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
         } chams[11];
-
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return chams[index];
-        }
     } chams;
 
     struct {
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return esp[index];
+        }
+    private:
         struct {
             bool enabled{ false };
             bool snaplines{ false };
@@ -109,11 +114,6 @@ public:
             bool headDot{ false };
             float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
         } esp[4];
-
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return esp[index];
-        }
     } esp;
 
     struct {
@@ -146,16 +146,16 @@ public:
     } knifeChanger;
 
     struct {
+        constexpr auto& operator[](size_t index) noexcept
+        {
+            return weapons[index];
+        }
+    private:
         struct {
             bool enabled{ false };
             int paintKit{ 0 };
             float wear{ 0.0f };
         } weapons[49];
-
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return weapons[index];
-        }
     } skinChanger;
 
     struct {
