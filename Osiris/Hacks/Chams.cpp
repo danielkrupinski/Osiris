@@ -84,9 +84,9 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 if (!config.chams[ENEMIES_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
             }
-            if (config.chams[BACKTRACK].enabled) {
+            if (config.chams[BACKTRACK].enabled && config.backtrack.enabled) {
                 auto record = &Backtrack::records[info.entityIndex];
-                if (record && record->size() > 2) {
+                if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     applyChams(config.chams[BACKTRACK], false);
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
                     interfaces.modelRender->forceMaterialOverride(nullptr);

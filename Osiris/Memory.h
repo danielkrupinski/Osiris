@@ -30,9 +30,6 @@ public:
     std::add_pointer_t<bool __stdcall(const char*) noexcept> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short) noexcept> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
-    uintptr_t animationLayerCount;
-    uintptr_t animationLayer;
 
 private:
     template <typename T = uintptr_t>

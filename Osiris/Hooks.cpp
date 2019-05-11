@@ -163,16 +163,14 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
 
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
 {
-    static auto once = (Backtrack::init(), false);
+    static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
         Misc::fixAnimationLOD(stage);
-    }
-    hooks.client.callOriginal<void, FrameStage>(37, stage);
-    if (interfaces.engine->isInGame()) {
         Backtrack::update(stage);
     }
+    hooks.client.callOriginal<void, FrameStage>(37, stage);
 }
 
 struct SoundData {

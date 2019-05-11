@@ -8,23 +8,24 @@
 #include "../SDK/FrameStage.h"
 
 namespace Backtrack {
-	void init() noexcept;
-	void update(FrameStage) noexcept;
-	void run(UserCmd*) noexcept;
+    void update(FrameStage) noexcept;
+    void run(UserCmd*) noexcept;
 
-	struct Record {
-		Vector absOrigin;
-		Vector mins;
-		Vector maxs;
-		Vector head;
-		int flags;
-		float simulationTime;
+    struct Record {
+        Vector absOrigin;
+        Vector mins;
+        Vector maxs;
+        Vector head;
+        int flags;
+        float simulationTime;
         int layerOrder[15];
         int layerSequence[15];
         float layerWeight[15];
         float layerCycle[15];
         matrix3x4 matrix[128];
     };
+
+    extern std::deque<Record> records[65];
 
     struct Cvars {
         Cvar* updateRate;
@@ -40,37 +41,36 @@ namespace Backtrack {
 
     constexpr auto getLerp() noexcept
     {
-        auto ratio = cvars.interpRatio->getFloat();
-        ratio = std::clamp(ratio, (cvars.minInterpRatio->getFloat() != 1.f) ? cvars.minInterpRatio->getFloat() : 1.f, cvars.maxInterpRatio->getFloat());
+        auto ratio = std::clamp(cvars.interpRatio->getFloat(), (cvars.minInterpRatio->getFloat() != 1.f) ? cvars.minInterpRatio->getFloat() : 1.f, cvars.maxInterpRatio->getFloat());
 
         return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
     }
 
     constexpr auto valid(float simtime) noexcept
     {
-        auto lerp = getLerp();
         auto network = interfaces.engine->getNetworkChannel();
         if (!network)
             return false;
 
-        auto delta = std::clamp(network->getLatency(0) + lerp, 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->currenttime - simtime);
+        auto delta = std::clamp(network->getLatency(0) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->currenttime - simtime);
         return (std::fabsf(delta) < 0.2f);
     }
 
     constexpr auto timeToTicks(float time) noexcept
     {
-        return (int)(0.5f + (float)(time) / memory.globalVars->intervalPerTick);
+        return static_cast<int>((0.5f + (float)(time) / memory.globalVars->intervalPerTick));
     }
 
-    static auto getEntityAnimationLayerCount(Entity* entity) noexcept
+    static void init() noexcept
     {
-        return *reinterpret_cast<int*>(entity + memory.animationLayerCount);
-    }
+        records->clear();
 
-    static auto getEntityAnimationLayer(Entity* entity, int layer) noexcept
-    {
-        return &(*reinterpret_cast<AnimationLayer**>(entity + memory.animationLayer))[layer];
+        cvars.updateRate = interfaces.cvar->findVar("cl_updaterate");
+        cvars.maxUpdateRate = interfaces.cvar->findVar("sv_maxupdaterate");
+        cvars.interp = interfaces.cvar->findVar("cl_interp");
+        cvars.interpRatio = interfaces.cvar->findVar("cl_interp_ratio");
+        cvars.minInterpRatio = interfaces.cvar->findVar("sv_client_min_interp_ratio");
+        cvars.maxInterpRatio = interfaces.cvar->findVar("sv_client_max_interp_ratio");
+        cvars.maxUnlag = interfaces.cvar->findVar("sv_maxunlag");
     }
-
-    extern std::deque<Record> records[65];
 }
