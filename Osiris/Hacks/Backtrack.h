@@ -12,16 +12,11 @@ namespace Backtrack {
     void run(UserCmd*) noexcept;
 
     struct Record {
-        Vector absOrigin;
         Vector mins;
         Vector maxs;
         Vector head;
         int flags;
         float simulationTime;
-        int layerOrder[15];
-        int layerSequence[15];
-        float layerWeight[15];
-        float layerCycle[15];
         matrix3x4 matrix[128];
     };
 

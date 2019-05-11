@@ -8,9 +8,9 @@ Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	if (!config.backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
-	    if (!records->empty())
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
+        if (!records->empty())
             records->clear();
 
         return;
