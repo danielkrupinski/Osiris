@@ -138,16 +138,6 @@ public:
         return callVirtualMethod<float>(this, 476);
     }
 
-    int getAnimationLayerCount() noexcept
-    {
-        return *reinterpret_cast<int*>(this + 0x298C);
-    }
-
-    AnimationLayer* getAnimationLayer(int overlay) noexcept
-    {
-        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
-    }
-
     constexpr Vector getAbsOrigin() noexcept
     {
         Vector ret{ callVirtualMethod<Vector&>(this, 10) };

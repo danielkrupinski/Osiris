@@ -226,8 +226,8 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
-        ImGui::PushItemWidth(180.0f);
-        ImGui::SliderFloat("Time limit", &config.backtrack.timeLimit, 1.f, 200.f, "%.1f ms");
+        ImGui::PushItemWidth(220.0f);
+        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
         ImGui::End();
     }

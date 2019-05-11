@@ -51,7 +51,7 @@ void Backtrack::update(FrameStage stage) noexcept
             if (records[i].size() && (records[i].front().simulationTime == entity->getProperty<float>("m_flSimulationTime")))
                 continue;
 
-            while (records[i].size() > 3 && records[i].size() > (size_t)timeToTicks(config.backtrack.timeLimit / 1000.f))
+            while (records[i].size() > 3 && records[i].size() > (size_t)timeToTicks((float)config.backtrack.timeLimit / 1000.f))
                 records[i].pop_back();
 
             auto varmap = reinterpret_cast<uintptr_t>(entity) + 0x24;
@@ -69,8 +69,8 @@ void Backtrack::update(FrameStage stage) noexcept
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 
-            for (int i = 0; i < entity->getAnimationLayerCount(); i++) {
-                auto layer = entity->getAnimationLayer(i);
+            for (int i = 0; i < getEntityAnimationLayerCount(entity); i++) {
+                auto layer = getEntityAnimationLayer(entity, i);
                 if (!layer)
                     continue;
 
@@ -152,8 +152,8 @@ void Backtrack::run(UserCmd * cmd) noexcept
         if (bestTarget->getProperty<int>("m_fFlags") & 1)
             bestTarget->setProperty<int>("m_fFlags", record.flags);
 
-        for (int i = 0; i < bestTarget->getAnimationLayerCount(); i++) {
-            auto layer = bestTarget->getAnimationLayer(i);
+        for (int i = 0; i < getEntityAnimationLayerCount(bestTarget); i++) {
+            auto layer = getEntityAnimationLayer(bestTarget, i);
             if (!layer)
                 continue;
 

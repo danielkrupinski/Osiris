@@ -66,7 +66,7 @@ public:
     struct {
         bool enabled{ false };
         bool ignoreSmoke{ false };
-        float timeLimit{ 200.f };
+        int timeLimit{ 200 };
     } backtrack;
 
     struct {

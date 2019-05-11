@@ -38,7 +38,7 @@ namespace Backtrack {
 
     extern Cvars cvars;
 
-    constexpr float getLerp() noexcept
+    constexpr auto getLerp() noexcept
     {
         auto ratio = cvars.interpRatio->getFloat();
         ratio = std::clamp(ratio, (cvars.minInterpRatio->getFloat() != 1.f) ? cvars.minInterpRatio->getFloat() : 1.f, cvars.maxInterpRatio->getFloat());
@@ -46,7 +46,7 @@ namespace Backtrack {
         return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
     }
 
-    constexpr bool valid(float simtime) noexcept
+    constexpr auto valid(float simtime) noexcept
     {
         auto lerp = getLerp();
         auto network = interfaces.engine->getNetworkChannel();
@@ -57,9 +57,19 @@ namespace Backtrack {
         return (std::fabsf(delta) < 0.2f);
     }
 
-    constexpr int timeToTicks(float time) noexcept
+    constexpr auto timeToTicks(float time) noexcept
     {
         return (int)(0.5f + (float)(time) / memory.globalVars->intervalPerTick);
+    }
+
+    static auto getEntityAnimationLayerCount(Entity* entity) noexcept
+    {
+        return *reinterpret_cast<int*>(entity + memory.animationLayerCount);
+    }
+
+    static auto getEntityAnimationLayer(Entity* entity, int layer) noexcept
+    {
+        return &(*reinterpret_cast<AnimationLayer**>(entity + memory.animationLayer))[layer];
     }
 
     extern std::deque<Record> records[65];
