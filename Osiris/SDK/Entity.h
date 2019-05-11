@@ -10,9 +10,9 @@
 
 class AnimationLayer {
 public:
-	std::byte pad[20];
-	unsigned int order;
-	unsigned int sequence;
+    std::byte pad[20];
+    unsigned int order;
+    unsigned int sequence;
     std::byte pad2[4];
     float weight;
     std::byte pad3[8];
