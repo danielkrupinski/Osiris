@@ -38,7 +38,8 @@ private:
         DEFUSING_OCCLUDED,
         LOCALPLAYER,
         WEAPONS,
-        HANDS
+        HANDS,
+        BACKTRACK
     };
 
     Material* normal;

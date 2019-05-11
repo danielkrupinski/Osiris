@@ -22,6 +22,7 @@
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Chams.h"
 #include "Hacks/Esp.h"
+#include "Hacks/Backtrack.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -93,6 +94,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     Misc::autoReload(cmd);
     Misc::animateClanTag();
     Misc::revealRanks(cmd);
+    Backtrack::run(cmd);
     cmd->viewangles.normalize();
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
@@ -161,11 +163,16 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
 
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
 {
+    static auto once = (Backtrack::init(), false);
+
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
         Misc::fixAnimationLOD(stage);
     }
     hooks.client.callOriginal<void, FrameStage>(37, stage);
+    if (interfaces.engine->isInGame()) {
+        Backtrack::update(stage);
+    }
 }
 
 struct SoundData {

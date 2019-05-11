@@ -64,6 +64,12 @@ public:
     } triggerbot;
 
     struct {
+        bool enabled{ false };
+        bool ignoreSmoke{ false };
+        float timeLimit{ 200.f };
+    } backtrack;
+
+    struct {
         constexpr auto& operator[](size_t index) noexcept
         {
             return glow[index];
@@ -94,7 +100,7 @@ public:
             bool wireframe{ false };
             float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
-        } chams[11];
+        } chams[12];
     } chams;
 
     struct {

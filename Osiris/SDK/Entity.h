@@ -8,6 +8,17 @@
 #include "Vector.h"
 #include "WeaponId.h"
 
+class AnimationLayer {
+public:
+	std::byte pad[20];
+	unsigned int order;
+	unsigned int sequence;
+    std::byte pad2[4];
+    float weight;
+    std::byte pad3[8];
+    float cycle;
+};
+
 class Entity {
 public:
     template <typename T>
@@ -125,5 +136,21 @@ public:
     constexpr float getInaccuracy() noexcept
     {
         return callVirtualMethod<float>(this, 476);
+    }
+
+    int getAnimationLayerCount() noexcept
+    {
+        return *reinterpret_cast<int*>(this + 0x298C);
+    }
+
+    AnimationLayer* getAnimationLayer(int overlay) noexcept
+    {
+        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
+    }
+
+    constexpr Vector getAbsOrigin() noexcept
+    {
+        Vector ret{ callVirtualMethod<Vector&>(this, 10) };
+        return ret;
     }
 };

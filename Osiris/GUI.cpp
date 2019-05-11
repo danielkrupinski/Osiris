@@ -17,6 +17,7 @@ void GUI::render() noexcept
     renderMenuBar();
     renderAimbotWindow();
     renderTriggerbotWindow();
+    renderBacktrackWindow();
     renderGlowWindow();
     renderChamsWindow();
     renderEspWindow();
@@ -67,6 +68,7 @@ void GUI::renderMenuBar() noexcept
     if (ImGui::BeginMainMenuBar()) {
         ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
+        ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
         ImGui::MenuItem("Esp", nullptr, &window.esp);
@@ -217,6 +219,20 @@ void GUI::renderTriggerbotWindow() noexcept
     }
 }
 
+void GUI::renderBacktrackWindow() noexcept
+{
+    if (window.backtrack) {
+        ImGui::SetNextWindowSize({ 260.f, 125.f });
+        ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
+        ImGui::Checkbox("Enabled", &config.backtrack.enabled);
+        ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
+        ImGui::PushItemWidth(180.0f);
+        ImGui::SliderFloat("Time limit", &config.backtrack.timeLimit, 1.f, 200.f, "%.1f ms");
+        ImGui::PopItemWidth();
+        ImGui::End();
+    }
+}
+
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
@@ -278,7 +294,7 @@ void GUI::renderChamsWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0");
         ImGui::PopID();
         static int currentItem{ 0 };
 
