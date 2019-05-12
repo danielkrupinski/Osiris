@@ -161,8 +161,26 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
         Esp::render();
     }
 
-    if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
-        hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
+	if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
+	{
+		hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
+	}
+
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	if (interfaces.engine->isInGame())
+	{
+		if (localPlayer->isAlive())
+		{
+			if (localPlayer->getProperty<bool>("m_bIsScoped"))
+			{
+				const auto [screen_x, screen_y] = interfaces.surface->getScreenSize();
+				auto [center_x, center_y] = interfaces.surface->getScreenSize();
+				center_x /= 2; center_y /= 2;
+				interfaces.surface->drawLine(0, center_y, screen_x, center_y);
+				interfaces.surface->drawLine(center_x, 0, center_x, screen_y);
+			}
+		}
+	}
 }
 
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
