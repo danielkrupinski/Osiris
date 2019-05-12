@@ -43,10 +43,10 @@ void Backtrack::update(FrameStage stage) noexcept
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config.backtrack.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            auto varmap = reinterpret_cast<uintptr_t>(entity) + 0x24;
-            auto varscount = *reinterpret_cast<int*>(static_cast<uintptr_t>(varmap) + 0x14);
-            for (int j = 0; j < varscount; j++)
-                *reinterpret_cast<uintptr_t*>(*reinterpret_cast<uintptr_t*>(varmap) + j * 0xC) = 0;
+           // auto varmap = reinterpret_cast<uintptr_t>(entity) + 0x24;
+           // auto varscount = *reinterpret_cast<int*>(static_cast<uintptr_t>(varmap) + 0x14);
+           // for (int j = 0; j < varscount; j++)
+           //     *reinterpret_cast<uintptr_t*>(*reinterpret_cast<uintptr_t*>(varmap) + j * 0xC) = 0;
 
             Record record{ };
             record.mins = entity->getProperty<Vector>("m_vecMins");
