@@ -6,11 +6,12 @@
 #include "../Interfaces.h"
 #include "../SDK/Engine.h"
 #include "../SDK/Cvar.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/FrameStage.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/ModelRender.h"
+
+enum class FrameStage;
+struct UserCmd;
 
 namespace Backtrack {
     void update(FrameStage) noexcept;
