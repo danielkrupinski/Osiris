@@ -52,11 +52,11 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
 {
     if (config.name) {
         Entity* entity = interfaces.entityList->getEntity(entityIndex);
-        Vector head{ entity->getBonePosition(8) }, top;
+        Vector head{ entity->getBonePosition(8) }, bottom, top;
         head.z += 10.0f;
         if (worldToScreen(head, top)) {
             static PlayerInfo playerInfo;
-            if (interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
+            if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     static unsigned font = interfaces.surface->createFont();
@@ -64,7 +64,7 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
                     const auto [width, height] = interfaces.surface->getTextSize(font, name);
                     interfaces.surface->setTextFont(font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
-                    interfaces.surface->setTextPosition(top.x - width / 2, top.y - 5 - height);
+                    interfaces.surface->setTextPosition(bottom.x - width / 2, top.y - 5 - height);
                     interfaces.surface->printText(name);
                 }
             }
