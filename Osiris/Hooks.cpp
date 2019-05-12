@@ -169,16 +169,14 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	if (interfaces.engine->isInGame())
 	{
-		if (localPlayer->isAlive())
+		if (localPlayer->isAlive() & localPlayer->getProperty<bool>("m_bIsScoped") & config.visuals.noScopeOverlay & interfaces.panel->getName(panel) == "MatSystemTopPanel")
 		{
-			if (localPlayer->getProperty<bool>("m_bIsScoped"))
-			{
-				const auto [screen_x, screen_y] = interfaces.surface->getScreenSize();
-				auto [center_x, center_y] = interfaces.surface->getScreenSize();
-				center_x /= 2; center_y /= 2;
-				interfaces.surface->drawLine(0, center_y, screen_x, center_y);
-				interfaces.surface->drawLine(center_x, 0, center_x, screen_y);
-			}
+			const auto [screen_x, screen_y] = interfaces.surface->getScreenSize();
+			auto [center_x, center_y] = interfaces.surface->getScreenSize();
+			center_x /= 2; center_y /= 2;
+			interfaces.surface->setDrawColor(0, 0, 0, 255);
+			interfaces.surface->drawLine(0, center_y, screen_x, center_y);
+			interfaces.surface->drawLine(center_x, 0, center_x, screen_y);
 		}
 	}
 }
