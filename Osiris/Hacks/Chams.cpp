@@ -87,7 +87,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             if (config.chams[BACKTRACK].enabled && config.backtrack.enabled) {
                 auto record = &Backtrack::records[info.entityIndex];
                 if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
-                    applyChams(config.chams[BACKTRACK], false);
+                    applyChams(config.chams[BACKTRACK], false, entity->getProperty<int>("m_iHealth"));
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
                     interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
