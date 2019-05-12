@@ -23,6 +23,10 @@
 #include "Hacks/Chams.h"
 #include "Hacks/Esp.h"
 #include "Hacks/Backtrack.h"
+#include "SDK/Panel.h"
+#include "SDK/InputSystem.h"
+#include "SDK/GameUI.h"
+#include "SDK/Surface.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

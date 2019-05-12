@@ -1,13 +1,15 @@
 #pragma once
 
+#include <sstream>
 #include <string_view>
 #include <Windows.h>
 #include <Psapi.h>
 
-#include "SDK/Entity.h"
-#include "SDK/GlobalVars.h"
-#include "SDK/GlowObjectManager.h"
-#include "SDK/Input.h"
+class ClientMode;
+class Input;
+struct GlobalVars;
+struct GlowObjectManager;
+struct Vector;
 
 class Memory final {
 public:
@@ -16,7 +18,7 @@ public:
     uintptr_t present;
     uintptr_t reset;
 
-    class ClientMode* clientMode;
+    ClientMode* clientMode;
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;

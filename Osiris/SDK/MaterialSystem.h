@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Material.h"
 #include "Utils.h"
+
+class Material;
 
 class MaterialSystem {
 public:

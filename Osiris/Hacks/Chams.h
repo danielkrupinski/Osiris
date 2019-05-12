@@ -4,7 +4,9 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Entity.h"
+#include "../SDK/Material.h"
 #include "../SDK/ModelRender.h"
+#include "../SDK/GlobalVars.h"
 
 class Chams {
 public:

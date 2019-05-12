@@ -3,6 +3,8 @@
 #include "../Memory.h"
 #include "../Netvars.h"
 #include "Misc.h"
+#include "../SDK/Surface.h"
+#include "../SDK/GlobalVars.h"
 
 void Misc::inverseRagdollGravity() noexcept
 {

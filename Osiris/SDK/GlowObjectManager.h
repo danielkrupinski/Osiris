@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Entity.h"
 #include "UtlVector.h"
 #include "Vector.h"
+
+class Entity;
 
 struct GlowObjectDefinition {
     Entity* entity;

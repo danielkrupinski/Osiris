@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils.h"
+
 class NetworkChannel {
 public:
     constexpr auto getLatency(int flow) noexcept

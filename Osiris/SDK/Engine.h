@@ -1,6 +1,5 @@
 #pragma once
 
-#include "NetworkChannel.h"
 #include "Utils.h"
 #include "Vector.h"
 
@@ -22,6 +21,8 @@ struct PlayerInfo {
     unsigned int customfiles[4];
     unsigned char filesdownloaded;
 };
+
+class NetworkChannel;
 
 class Engine {
 public:

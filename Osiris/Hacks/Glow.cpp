@@ -2,6 +2,8 @@
 #include "Glow.h"
 #include "../Memory.h"
 #include "../SDK/ClientClass.h"
+#include "../SDK/GlowObjectManager.h"
+#include "../SDK/GlobalVars.h"
 
 void Glow::render() noexcept
 {

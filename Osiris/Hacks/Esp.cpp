@@ -3,6 +3,7 @@
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "../SDK/Vector.h"
+#include "../SDK/Surface.h"
 
 static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 {

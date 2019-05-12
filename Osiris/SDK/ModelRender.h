@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Material.h"
 #include "Utils.h"
 #include "Vector.h"
 
@@ -23,6 +22,8 @@ struct ModelRenderInfo {
     int flags;
     int entityIndex;
 };
+
+class Material;
 
 class ModelRender {
 public:

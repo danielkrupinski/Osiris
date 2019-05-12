@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+
 class Input {
 public:
     std::byte pad[12];

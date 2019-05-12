@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ClassId.h"
-#include "Recv.h"
+
+struct RecvTable;
 
 struct ClientClass final {
     void* createFunction;

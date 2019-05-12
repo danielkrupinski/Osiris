@@ -5,6 +5,8 @@
 #include "../Hooks.h"
 #include "../Interfaces.h"
 #include "Backtrack.h"
+#include "../SDK/Material.h"
+#include "../SDK/MaterialSystem.h"
 
 Chams::Chams() noexcept
 {

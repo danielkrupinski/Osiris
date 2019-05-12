@@ -1,6 +1,12 @@
 #include "../Config.h"
 #include "../Memory.h"
 #include "Visuals.h"
+#include "../SDK/Entity.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/Input.h"
+#include "../SDK/Material.h"
+#include "../SDK/MaterialSystem.h"
+#include "../Interfaces.h"
 
 void Visuals::colorWorld() noexcept
 {
