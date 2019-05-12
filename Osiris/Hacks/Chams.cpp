@@ -4,6 +4,7 @@
 #include "../Config.h"
 #include "../Hooks.h"
 #include "../Interfaces.h"
+#include "Backtrack.h"
 
 Chams::Chams() noexcept
 {
@@ -82,6 +83,14 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 if (!config.chams[ENEMIES_VISIBLE].enabled)
                     interfaces.modelRender->forceMaterialOverride(nullptr);
+            }
+            if (config.chams[BACKTRACK].enabled && config.backtrack.enabled) {
+                auto record = &Backtrack::records[info.entityIndex];
+                if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
+                    applyChams(config.chams[BACKTRACK], false);
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
+                    interfaces.modelRender->forceMaterialOverride(nullptr);
+                }
             }
             if (config.chams[ENEMIES_VISIBLE].enabled)
                 applyChams(config.chams[ENEMIES_VISIBLE], false, entity->getProperty<int>("m_iHealth"));

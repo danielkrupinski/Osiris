@@ -10,7 +10,7 @@
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 
-static Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
+Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta = destination - source;
     constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
