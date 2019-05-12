@@ -134,6 +134,7 @@ public:
         bool noSmoke{ false };
         bool noBlur{ false };
         bool noScopeOverlay{ false };
+        bool noscopelines{ false };
         bool noGrass{ false };
         bool wireframeSmoke{ false };
         bool thirdperson{ false };

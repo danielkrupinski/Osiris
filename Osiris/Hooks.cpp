@@ -166,17 +166,26 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
 		hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 	}
 
-	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	if (interfaces.engine->isInGame())
 	{
-		if (localPlayer->isAlive() & localPlayer->getProperty<bool>("m_bIsScoped") & config.visuals.noScopeOverlay & interfaces.panel->getName(panel) == "MatSystemTopPanel")
+		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		if (localPlayer->isAlive())
 		{
-			const auto [screen_x, screen_y] = interfaces.surface->getScreenSize();
-			auto [center_x, center_y] = interfaces.surface->getScreenSize();
-			center_x /= 2; center_y /= 2;
-			interfaces.surface->setDrawColor(0, 0, 0, 255);
-			interfaces.surface->drawLine(0, center_y, screen_x, center_y);
-			interfaces.surface->drawLine(center_x, 0, center_x, screen_y);
+			if (localPlayer->getProperty<bool>("m_bIsScoped"))
+			{
+				if (config.visuals.noScopeOverlay & config.visuals.noscopelines)
+				{
+					if (interfaces.panel->getName(panel) == "MatSystemTopPanel")
+					{
+						const auto [screen_x, screen_y] = interfaces.surface->getScreenSize();
+						auto [center_x, center_y] = interfaces.surface->getScreenSize();
+						center_x /= 2; center_y /= 2;
+						interfaces.surface->setDrawColor(0, 0, 0, 255);
+						interfaces.surface->drawLine(0, center_y, screen_x, center_y);
+						interfaces.surface->drawLine(center_x, 0, center_x, screen_y);
+					}
+				}
+			}
 		}
 	}
 }
