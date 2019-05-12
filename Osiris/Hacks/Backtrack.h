@@ -53,7 +53,7 @@ namespace Backtrack {
 
     constexpr auto timeToTicks(float time) noexcept
     {
-        return static_cast<int>((0.5f + static_cast<float>(time) / memory.globalVars->intervalPerTick));
+        return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
     }
 
     static void init() noexcept
