@@ -160,9 +160,7 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
         Misc::spectatorList();
         Esp::render();
     }
-
-    if (!config.visuals.noScopeOverlay || interfaces.panel->getName(panel) != "HudZoom")
-        hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
+    hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
 
 static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
@@ -207,6 +205,16 @@ static void __stdcall hookedLockCursor() noexcept
     return hooks.surface.callOriginal<void>(67);
 }
 
+static void __stdcall hookedSetDrawColor(int r, int g, int b, int a) noexcept
+{
+    auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
+    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens)) {
+        a = 0;
+        *memory.disablePostProcessing = true;
+    }
+    hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
+}
+
 Hooks::Hooks() noexcept
 {
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -248,6 +256,7 @@ Hooks::Hooks() noexcept
     modelRender.hookAt(21, hookedDrawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
     sound.hookAt(5, hookedEmitSound);
+    surface.hookAt(15, hookedSetDrawColor);
     surface.hookAt(67, hookedLockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
