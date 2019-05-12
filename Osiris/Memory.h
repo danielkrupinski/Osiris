@@ -32,6 +32,8 @@ public:
     std::add_pointer_t<bool __stdcall(const char*) noexcept> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short) noexcept> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
+    uintptr_t scopeArc;
+    uintptr_t scopeLens;
 
 private:
     template <typename T = uintptr_t>
