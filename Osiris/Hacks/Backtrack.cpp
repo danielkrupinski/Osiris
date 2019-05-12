@@ -57,7 +57,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 
-            records[i].emplace_front(record);
+            records[i].push_front(record);
         }
     }
 }
