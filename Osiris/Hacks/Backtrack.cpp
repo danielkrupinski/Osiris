@@ -11,8 +11,8 @@ void Backtrack::update(FrameStage stage) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (!config.backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
-        if (!records->empty())
-            records->clear();
+        for (auto& record : records)
+            record.clear();
 
         return;
     }
@@ -23,8 +23,8 @@ void Backtrack::update(FrameStage stage) noexcept
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
                 || !entity->isEnemy())
             {
-                for (auto& record : records)
-                    record.clear();
+                if (records[i].size() > 2)
+                    records[i].clear();
 
                 continue;
             }
