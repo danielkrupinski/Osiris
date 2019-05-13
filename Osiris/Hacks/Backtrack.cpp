@@ -37,7 +37,7 @@ void Backtrack::update(FrameStage stage) noexcept
                     r++;
             }
 
-            if (records[i].size() && (records[i].front().simulationTime == entity->getProperty<float>("m_flSimulationTime")))
+            if (!records[i].empty() && (records[i].front().simulationTime == entity->getProperty<float>("m_flSimulationTime")))
                 continue;
 
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config.backtrack.timeLimit) / 1000.f)))
