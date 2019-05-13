@@ -54,7 +54,7 @@ namespace Backtrack {
             return false;
 
         auto delta = std::clamp(network->getLatency(0) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->currenttime - simtime);
-        return (std::fabsf(delta) < 0.2f);
+        return std::fabsf(delta) <= 0.2f;
     }
 
     constexpr auto timeToTicks(float time) noexcept
