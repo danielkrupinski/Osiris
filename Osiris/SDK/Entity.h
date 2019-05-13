@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "Vector.h"
 #include "WeaponId.h"
+#include "VarMapping.h"
 
 class Entity {
 public:
@@ -128,5 +129,10 @@ public:
     constexpr float getInaccuracy() noexcept
     {
         return callVirtualMethod<float>(this, 476);
+    }
+    
+    VarMap* getVarMap() noexcept
+    {
+        return reinterpret_cast<VarMap*>(this + 0x24);
     }
 };

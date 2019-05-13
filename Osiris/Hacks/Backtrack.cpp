@@ -17,7 +17,7 @@ void Backtrack::update(FrameStage stage) noexcept
         return;
     }
 
-    if (stage == FrameStage::NET_UPDATE_END) {
+    if (stage == FrameStage::RENDER_END) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
@@ -43,16 +43,18 @@ void Backtrack::update(FrameStage stage) noexcept
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config.backtrack.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
-            auto varmap = reinterpret_cast<uintptr_t>(entity) + 0x24;
-            auto varscount = *reinterpret_cast<int*>(static_cast<uintptr_t>(varmap) + 0x14);
-            for (int j = 0; j < varscount; j++)
-                *reinterpret_cast<uintptr_t*>(*reinterpret_cast<uintptr_t*>(varmap) + j * 0xC) = 0;
+            auto varmap = entity->getVarMap();
+            if (!varmap) continue;
+            
+            for (int j = 0; j < varmap->interpolatedEntries; j++) {
+                auto entry = &varmap->entries[j];
+                if (!entry) continue;
+
+                entry->needsToInterpolate = false;
+            }
 
             Record record{ };
-            record.mins = entity->getProperty<Vector>("m_vecMins");
-            record.maxs = entity->getProperty<Vector>("m_vecMaxs");
             record.head = entity->getBonePosition(8);
-            record.flags = entity->getProperty<int>("m_fFlags");
             record.simulationTime = entity->getProperty<float>("m_flSimulationTime");
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
@@ -122,11 +124,6 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
-
-        bestTarget->setProperty<Vector>("m_vecMins", record.mins);
-        bestTarget->setProperty<Vector>("m_vecMaxs", record.maxs);
-        if (bestTarget->getProperty<int>("m_fFlags") & 1)
-            bestTarget->setProperty<int>("m_fFlags", record.flags);
 
         cmd->tick_count = timeToTicks(record.simulationTime);
     }
