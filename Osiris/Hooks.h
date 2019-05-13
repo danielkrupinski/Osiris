@@ -5,6 +5,7 @@
 
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/Cvar.h"
 
 class Hooks final {
 public:

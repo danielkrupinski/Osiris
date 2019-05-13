@@ -3,7 +3,11 @@
 #include <string_view>
 
 #include "../Memory.h"
+#include "../SDK/Entity.h"
+#include "../SDK/Engine.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
+#include "../Interfaces.h"
 
 namespace Visuals {
     void colorWorld() noexcept;

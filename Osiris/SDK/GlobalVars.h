@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Entity.h"
+#include "EntityList.h"
 #include "../Interfaces.h"
 
 struct GlobalVars {

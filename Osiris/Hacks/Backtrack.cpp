@@ -2,6 +2,7 @@
 #include "Aimbot.h"
 #include "Chams.h"
 #include "../Config.h"
+#include "../SDK/FrameStage.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
 Backtrack::Cvars Backtrack::cvars;
@@ -56,7 +57,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 
-            records[i].emplace_front(record);
+            records[i].push_front(record);
         }
     }
 }
@@ -100,7 +101,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetHeadPosition, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetHeadPosition, 1)))
             return;
 
         bestFov = 255.f;

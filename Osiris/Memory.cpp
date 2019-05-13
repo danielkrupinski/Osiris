@@ -17,4 +17,6 @@ Memory::Memory() noexcept
     cameraThink = findPattern<>("client_panorama", "\x85\xC0\x75\x30\x38\x86");
     acceptMatch = findPattern<decltype(acceptMatch)>("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12");
     getSequenceActivity = findPattern<decltype(getSequenceActivity)>("client_panorama", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83");
+    scopeArc = findPattern<>("client_panorama", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7", 5);
+    scopeLens = findPattern<>("client_panorama", "\xFF\x50\x3C\x8B\x4C\x24\x20", 3);
 }

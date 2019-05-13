@@ -6,6 +6,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Entity.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/WeaponId.h"
 #include "Triggerbot.h"
 

@@ -4,8 +4,14 @@
 #include <algorithm>
 #include "../Memory.h"
 #include "../Interfaces.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/FrameStage.h"
+#include "../SDK/Engine.h"
+#include "../SDK/Cvar.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/NetworkChannel.h"
+#include "../SDK/ModelRender.h"
+
+enum class FrameStage;
+struct UserCmd;
 
 namespace Backtrack {
     void update(FrameStage) noexcept;
@@ -48,12 +54,12 @@ namespace Backtrack {
             return false;
 
         auto delta = std::clamp(network->getLatency(0) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->currenttime - simtime);
-        return (std::fabsf(delta) < 0.2f);
+        return std::fabsf(delta) <= 0.2f;
     }
 
     constexpr auto timeToTicks(float time) noexcept
     {
-        return static_cast<int>((0.5f + static_cast<float>(time) / memory.globalVars->intervalPerTick));
+        return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
     }
 
     static void init() noexcept

@@ -5,19 +5,20 @@
 #include <type_traits>
 #include <Windows.h>
 
-#include "SDK/Client.h"
-#include "SDK/Cvar.h"
-#include "SDK/Engine.h"
-#include "SDK/EngineTrace.h"
-#include "SDK/EntityList.h"
-#include "SDK/GameUI.h"
-#include "SDK/InputSystem.h"
-#include "SDK/MaterialSystem.h"
-#include "SDK/ModelInfo.h"
-#include "SDK/ModelRender.h"
-#include "SDK/Panel.h"
-#include "SDK/RenderView.h"
-#include "SDK/Surface.h"
+class Client;
+class Cvar;
+class Engine;
+class EngineTrace;
+class EntityList;
+class GameUI;
+class InputSystem;
+class MaterialSystem;
+class ModelInfo;
+class ModelRender;
+class Panel;
+class RenderView;
+class Surface;
+class Sound;
 
 class Interfaces final {
 public:
@@ -36,7 +37,7 @@ public:
     Panel* panel;
     RenderView* renderView;
     Surface* surface;
-    class Sound* sound;
+    Sound* sound;
 private:
     template <typename T>
     static auto find(const char* module, const char* name)

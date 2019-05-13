@@ -3,7 +3,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "SDK/Recv.h"
+struct RecvTable;
 
 class Netvars final {
 public:

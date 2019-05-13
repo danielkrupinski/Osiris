@@ -21,14 +21,19 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Recoil control y** - vertical recoil control factor
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
-    * **Enabled** - on / off triggerbot master switch
+    * **Enabled** - on / off master switch
     * **On key [ key ]** - triggerbot works only when chosen key is being held
     * **Friendly fire** - treat allies as enemies
     * **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** -ignore flashbang i.e. shoot when local player is flashed
+    * **Ignore flash** - ignore flashbang i.e. shoot when local player is flashed
     * **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
     * **Hitgroup** - body parts on which triggerbot works
     * **Shot delay** - delay time in ms (milliseconds)
+    
+* **Backtrack** - abuse lag compensation in order to move players back in time
+    * **Enabled** - on / off master switch
+    * **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
+    * **Time limit** - limit the backtracking window [*1*-*200*ms]
 
 * **Glow** - render glow effect on entities
     * **Enabled** - on / off master switch
