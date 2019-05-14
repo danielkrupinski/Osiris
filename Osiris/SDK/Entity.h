@@ -129,4 +129,9 @@ public:
     {
         return callVirtualMethod<float>(this, 476);
     }
+
+    constexpr Vector getAbsOrigin() noexcept
+    {
+        return callVirtualMethod<Vector&>(this, 10);
+    }
 };
