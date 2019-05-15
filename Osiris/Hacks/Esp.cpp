@@ -24,7 +24,7 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
 {
     if (config.snaplines) {
         Vector position{ };
-        if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), position)) {
+        if (worldToScreen(entity->getAbsOrigin(), position)) {
             const auto [width, height] = interfaces.surface->getScreenSize();
             interfaces.surface->setDrawColor(config.snaplinesColor, 255);
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
@@ -37,7 +37,7 @@ static constexpr void renderBox(Entity* entity, const decltype(config.esp[0])& c
     if (config.box) {
         Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
         head.z += 10.0f;
-        if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && worldToScreen(head, top)) {
+        if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
             float width = abs(top.y - bottom.y) * 0.3f;
             interfaces.surface->drawOutlinedRect(bottom.x - width, top.y, bottom.x + width, bottom.y);
@@ -56,7 +56,7 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
         head.z += 10.0f;
         if (worldToScreen(head, top)) {
             static PlayerInfo playerInfo;
-            if (worldToScreen(entity->getProperty<Vector>("m_vecOrigin"), bottom) && interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
+            if (worldToScreen(entity->getAbsOrigin(), bottom) && interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     static unsigned font = interfaces.surface->createFont();
