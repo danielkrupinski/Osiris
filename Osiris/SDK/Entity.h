@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "Vector.h"
 #include "WeaponId.h"
+#include "VarMapping.h"
 
 class Entity {
 public:
@@ -129,7 +130,12 @@ public:
     {
         return callVirtualMethod<float>(this, 476);
     }
-
+    
+    VarMap* getVarMap() noexcept
+    {
+        return reinterpret_cast<VarMap*>(this + 0x24);
+    }
+    
     constexpr Vector getAbsOrigin() noexcept
     {
         return callVirtualMethod<Vector&>(this, 10);
