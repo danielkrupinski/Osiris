@@ -135,4 +135,9 @@ public:
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
     }
+    
+    constexpr Vector getAbsOrigin() noexcept
+    {
+        return callVirtualMethod<Vector&>(this, 10);
+    }
 };
