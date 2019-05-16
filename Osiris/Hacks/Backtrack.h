@@ -39,7 +39,7 @@ namespace Backtrack {
 
     constexpr auto getLerp() noexcept
     {
-        auto ratio = std::clamp(cvars.interpRatio->getFloat(), (cvars.minInterpRatio->getFloat() != 1.f) ? cvars.minInterpRatio->getFloat() : 1.f, cvars.maxInterpRatio->getFloat());
+        auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
 
         return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
     }
