@@ -1,9 +1,14 @@
 #include <fstream>
 #include <ShlObj.h>
-
+#include "Interfaces.h"
 #include "ArchiveX.h"
+#include <string>
 
 #include "Config.h"
+#include "SDK/Panel.h"
+#include "SDK/InputSystem.h"
+#include "SDK/GameUI.h"
+#include "SDK/Surface.h"
 
 Config::Config(const char* name) noexcept
 {
@@ -36,9 +41,16 @@ void Config::load(size_t id) noexcept
 
     if (!in.good())
         return;
+	int checkver = 0;
+	ArchiveX<std::ifstream>{ in } >> checkver;
+	if (checkver == version) {
+		ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
+	}
+	else {
+		interfaces.gameUI->messageBox("Config", "Config cannot be loaded due to version mismatch");
+	}
+	in.close();
 
-    ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
-    in.close();
 }
 
 void Config::save(size_t id) const noexcept
@@ -53,7 +65,7 @@ void Config::save(size_t id) const noexcept
     if (!out.good())
         return;
 
-    ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << knifeChanger << misc;
+    ArchiveX<std::ofstream>{ out } << version << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << knifeChanger << misc;
     out.close();
 }
 
