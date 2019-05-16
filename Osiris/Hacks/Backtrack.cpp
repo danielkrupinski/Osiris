@@ -17,7 +17,7 @@ void Backtrack::update(FrameStage stage) noexcept
         return;
     }
 
-    if (stage == FrameStage::RENDER_END) {
+    if (stage == FrameStage::NET_UPDATE_END) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
