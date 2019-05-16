@@ -141,13 +141,31 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
         ImGui::PushItemWidth(240.0f);
         ImGui::PushID(5);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
+		ImGui::Checkbox("Small FOV Slider", &config.aimbot[currentWeapon].fovslider);
+		if (config.aimbot[currentWeapon].fovslider) {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].fov, 0.0f, 15.0f, "Fov: %.2f");
+		}
+		else {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
+		}
         ImGui::PopID();
         ImGui::PushID(6);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "Max angle delta: %.2f");
+		ImGui::Checkbox("Small AngleDelta Slider", &config.aimbot[currentWeapon].maxAngleDeltaslider);
+		if (config.aimbot[currentWeapon].maxAngleDeltaslider) {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 15.0f, "Max angle delta: %.2f");
+		}
+		else {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "Max angle delta: %.2f");
+		}
         ImGui::PopID();
         ImGui::PushID(7);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
+		ImGui::Checkbox("Small Smooth Slider", &config.aimbot[currentWeapon].smoothslider);
+		if (config.aimbot[currentWeapon].maxAngleDeltaslider) {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 0.0f, 15.0f, "Smooth: %.2f");
+		}
+		else {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 0.0f, 100.0f, "Smooth: %.2f");
+		}
         ImGui::PopID();
         ImGui::PushID(8);
         ImGui::SliderFloat("", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil control x: %.2f");
@@ -227,7 +245,7 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
         ImGui::PushItemWidth(220.0f);
-        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
+        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 2000, "Time limit: %d ms");
         ImGui::PopItemWidth();
         ImGui::End();
     }
