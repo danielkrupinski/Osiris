@@ -18,10 +18,7 @@ namespace Backtrack {
     void run(UserCmd*) noexcept;
 
     struct Record {
-        Vector mins;
-        Vector maxs;
         Vector head;
-        int flags;
         float simulationTime;
         matrix3x4 matrix[128];
     };
