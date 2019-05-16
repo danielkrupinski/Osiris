@@ -20,12 +20,8 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_END) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
-                || !entity->isEnemy())
-            {
-                if (records[i].size() > 2)
-                    records[i].clear();
-
+            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
+                records[i].clear();
                 continue;
             }
 
