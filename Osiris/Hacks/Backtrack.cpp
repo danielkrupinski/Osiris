@@ -109,11 +109,11 @@ void Backtrack::run(UserCmd* cmd) noexcept
         bestFov = 255.f;
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
-            auto record = &records[bestTargetIndex][i];
-            if (!record || !valid(record->simulationTime))
+            auto& record = records[bestTargetIndex][i];
+            if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record->head, cmd->viewangles);
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.head, cmd->viewangles);
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
@@ -124,7 +124,6 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
-
         cmd->tick_count = timeToTicks(record.simulationTime);
     }
 }
