@@ -74,7 +74,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
-        // ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
+        ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
@@ -160,11 +160,11 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PopID();
         ImGui::PushID(7);
 		ImGui::Checkbox("Small Smooth Slider", &config.aimbot[currentWeapon].smoothslider);
-		if (config.aimbot[currentWeapon].maxAngleDeltaslider) {
-			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 0.0f, 15.0f, "Smooth: %.2f");
+		if (config.aimbot[currentWeapon].smoothslider) {
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 1.0f, 15.0f, "Smooth: %.2f");
 		}
 		else {
-			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 0.0f, 100.0f, "Smooth: %.2f");
+			ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
 		}
         ImGui::PopID();
         ImGui::PushID(8);
