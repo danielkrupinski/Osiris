@@ -11,7 +11,7 @@ public:
     void remove(size_t) noexcept;
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
-	int version = 1;
+	int version = 2;
 
     constexpr auto& getConfigs() noexcept
     {

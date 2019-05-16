@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <Windows.h>
+#include<stdlib.h>
 
 #include "imgui/imgui.h"
 #include "GUI.h"
@@ -495,11 +496,12 @@ void GUI::renderSkinChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 490.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Text("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
+		ImGui::Text(std::to_string(config.version).c_str());
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];
