@@ -18,7 +18,7 @@ namespace Backtrack {
     void run(UserCmd*) noexcept;
 
     struct Record {
-        Vector head;
+        Vector origin;
         float simulationTime;
         matrix3x4 matrix[128];
     };
