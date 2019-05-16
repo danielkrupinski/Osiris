@@ -13,10 +13,16 @@ void Visuals::colorWorld() noexcept
     static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
     static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
     static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
-
-    red->setValue(config.visuals.worldColor[0]);
-    green->setValue(config.visuals.worldColor[1]);
-    blue->setValue(config.visuals.worldColor[2]);
+	if (config.visuals.rainbowWorld) {
+		red->setValue(sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f);
+		green->setValue(sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f);
+		blue->setValue(sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
+	}
+	else {
+		red->setValue(config.visuals.worldColor[0]);
+		green->setValue(config.visuals.worldColor[1]);
+		blue->setValue(config.visuals.worldColor[2]);
+	}
 }
 
 void Visuals::modifySmoke() noexcept

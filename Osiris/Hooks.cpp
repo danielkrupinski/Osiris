@@ -260,7 +260,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, hookedLockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
+    interfaces.gameUI->messageBox("70457Y", "70457Y-Cheats were injected successfully!");
 }
 
 void Hooks::restore() noexcept

@@ -144,6 +144,7 @@ public:
         float brightness{ 0.0f };
         int skybox{ -1 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
+		bool rainbowWorld{ false };
     } visuals;
 
     struct {
