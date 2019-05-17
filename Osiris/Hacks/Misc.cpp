@@ -7,6 +7,7 @@
 #include "Misc.h"
 #include "../SDK/Surface.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/NetworkChannel.h"
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -109,11 +110,24 @@ void Misc::watermark() noexcept
         const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
         std::wstring fps{ (std::wostringstream{ } << "FPS: " << static_cast<int>(1 / frameRate)).str().c_str() };
 #if USE_BUILTIN_FONT == 1
-        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(0x1d, fps.c_str());
+        const auto [fpsWidth, fpsHeight] = interfaces.surface->getTextSize(0x1d, fps.c_str());
 #else
         const auto [textWidth, textHeight] = interfaces.surface->getTextSize(font, fps.c_str());
 #endif
-        interfaces.surface->setTextPosition(screenWidth - textWidth, 0);
+        interfaces.surface->setTextPosition(screenWidth - fpsWidth, 0);
         interfaces.surface->printText(fps.c_str());
+
+        float latency = 0.0f;
+        if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel->getLatency(0) > 0.0f)
+            latency = networkChannel->getLatency(0);
+
+        std::wstring ping{ (std::wostringstream{ } << "PING: " << static_cast<int>(latency * 1000) << " ms").str().c_str() };
+#if USE_BUILTIN_FONT == 1
+        const auto pingWidth = interfaces.surface->getTextSize(0x1d, ping.c_str()).first;
+#else
+        const auto pingWidth = interfaces.surface->getTextSize(font, ping.c_str()).first;
+#endif
+        interfaces.surface->setTextPosition(screenWidth - pingWidth, fpsHeight);
+        interfaces.surface->printText(ping.c_str());
     }
 }
