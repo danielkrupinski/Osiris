@@ -78,7 +78,7 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 3; i++)
                 interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
         }
     }
