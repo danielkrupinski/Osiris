@@ -7,7 +7,8 @@
 struct GlobalVars {
     const float realtime;
     const int framecount;
-    const std::byte pad[8];
+    const float absoluteFrameTime;
+    const std::byte pad[4];
     const float currenttime;
     const float frametime;
     const int maxClients;
