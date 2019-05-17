@@ -102,7 +102,7 @@ void Misc::watermark() noexcept
                                          sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
                                          sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
                                          255.0f);
-        interfaces.surface->setTextPosition(0, 0);
+        interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
 
         static auto frameRate = 1.0f;
@@ -114,7 +114,7 @@ void Misc::watermark() noexcept
 #else
         const auto [textWidth, textHeight] = interfaces.surface->getTextSize(font, fps.c_str());
 #endif
-        interfaces.surface->setTextPosition(screenWidth - fpsWidth, 0);
+        interfaces.surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces.surface->printText(fps.c_str());
 
         float latency = 0.0f;
@@ -127,7 +127,7 @@ void Misc::watermark() noexcept
 #else
         const auto pingWidth = interfaces.surface->getTextSize(font, ping.c_str()).first;
 #endif
-        interfaces.surface->setTextPosition(screenWidth - pingWidth, fpsHeight);
+        interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
         interfaces.surface->printText(ping.c_str());
     }
 }
