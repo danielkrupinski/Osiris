@@ -108,7 +108,7 @@ void Misc::watermark() noexcept
         interfaces.surface->printText(fps.c_str());
 
         float latency = 0.0f;
-        if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel->getLatency(0) > 0.0f)
+        if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
             latency = networkChannel->getLatency(0);
 
         std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
