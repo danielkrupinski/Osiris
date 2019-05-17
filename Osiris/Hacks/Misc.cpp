@@ -86,22 +86,16 @@ void Misc::recoilCrosshair() noexcept
     recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
 }
 
-#define USE_BUILTIN_FONT 1
-
 void Misc::watermark() noexcept
 {
     if (config.misc.watermark) {
-#if USE_BUILTIN_FONT == 1
-        interfaces.surface->setTextFont(0x1d);
-#else
-        static unsigned font = interfaces.surface->createFont();
-        static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
+        constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
         interfaces.surface->setTextFont(font);
-#endif
         interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
                                          sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
                                          sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
                                          255.0f);
+
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
 
@@ -109,11 +103,7 @@ void Misc::watermark() noexcept
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
         std::wstring fps{ (std::wostringstream{ } << "FPS: " << static_cast<int>(1 / frameRate)).str().c_str() };
-#if USE_BUILTIN_FONT == 1
-        const auto [fpsWidth, fpsHeight] = interfaces.surface->getTextSize(0x1d, fps.c_str());
-#else
-        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(font, fps.c_str());
-#endif
+        const auto [fpsWidth, fpsHeight] = interfaces.surface->getTextSize(font, fps.c_str());
         interfaces.surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces.surface->printText(fps.c_str());
 
@@ -122,11 +112,7 @@ void Misc::watermark() noexcept
             latency = networkChannel->getLatency(0);
 
         std::wstring ping{ (std::wostringstream{ } << "PING: " << static_cast<int>(latency * 1000) << " ms").str().c_str() };
-#if USE_BUILTIN_FONT == 1
-        const auto pingWidth = interfaces.surface->getTextSize(0x1d, ping.c_str()).first;
-#else
         const auto pingWidth = interfaces.surface->getTextSize(font, ping.c_str()).first;
-#endif
         interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
         interfaces.surface->printText(ping.c_str());
     }
