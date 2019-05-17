@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -101,5 +103,17 @@ void Misc::watermark() noexcept
                                          255.0f);
         interfaces.surface->setTextPosition(0, 0);
         interfaces.surface->printText(L"Osiris");
+
+        static auto frameRate = 1.0f;
+        frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
+        const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
+        std::wstring fps{ (std::wostringstream{ } << "FPS: " << static_cast<int>(1 / frameRate)).str().c_str() };
+#if USE_BUILTIN_FONT == 1
+        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(0x1d, fps.c_str());
+#else
+        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(font, fps.c_str());
+#endif
+        interfaces.surface->setTextPosition(screenWidth - textWidth, 0);
+        interfaces.surface->printText(fps.c_str());
     }
 }
