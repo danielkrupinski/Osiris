@@ -1,7 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <Windows.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <sstream>
+#include <iostream>
+
 
 #include "imgui/imgui.h"
 #include "GUI.h"
@@ -501,7 +504,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Text("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
-		ImGui::Text(std::to_string(config.version).c_str());
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         static char buffer[16];
@@ -537,8 +539,9 @@ void GUI::renderMiscWindow() noexcept
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 290.0f, 190.0f }); // this has to be specific size, as side buttons only appear on click, thus breaking auto sizing
         ImGui::Begin("Config", &window.config, windowFlags);
+		ImGui::Text("Osiris Version: %i", config.version);
 
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);

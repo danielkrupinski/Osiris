@@ -42,11 +42,12 @@ void Config::load(size_t id) noexcept
     if (!in.good())
         return;
 	int checkver = 0;
-	ArchiveX<std::ifstream>{ in } >> checkver;
+	ArchiveX<std::ifstream>{ in } >> checkver >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
 	if (checkver == version) {
-		ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
+		ArchiveX<std::ifstream>{ in } >> version >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
 	}
 	else {
+		reset();
 		interfaces.gameUI->messageBox("Config", "Config cannot be loaded due to version mismatch");
 	}
 	in.close();
