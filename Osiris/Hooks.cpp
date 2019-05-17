@@ -260,7 +260,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, hookedLockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
-    interfaces.gameUI->messageBox("Osiris", "Osiris was loaded in successfully! \n Test");
+    interfaces.gameUI->messageBox("Osiris", "Osiris was loaded in successfully!");
 }
 
 void Hooks::restore() noexcept
