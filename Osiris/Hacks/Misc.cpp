@@ -26,12 +26,12 @@ void Misc::animateClanTag(const char* tag) noexcept
             clanTag.push_back(' ');
     }
 
-    if (config.misc.animatedClanTag && clanTag.length() > 1
-        && memory.globalVars->realtime - lastTime > 0.5f) {
+    if (memory.globalVars->realtime - lastTime < 0.6f) return;
+    lastTime = memory.globalVars->realtime;
+
+    if (config.misc.animatedClanTag && !clanTag.empty())
         std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
-        setClanTag(clanTag.c_str());
-        lastTime = memory.globalVars->realtime;
-    }
+    setClanTag(clanTag.c_str());
 }
 
 void Misc::spectatorList() noexcept
