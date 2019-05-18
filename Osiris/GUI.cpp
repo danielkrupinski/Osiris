@@ -88,7 +88,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 260.0f, 475.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -184,7 +184,7 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize({ 250.0f, 270.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -244,7 +244,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderBacktrackWindow() noexcept
 {
     if (window.backtrack) {
-        ImGui::SetNextWindowSize({ 260.f, 125.f });
+        ImGui::SetNextWindowSize({ 0.f, 0.f });
         ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
@@ -258,7 +258,7 @@ void GUI::renderBacktrackWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        ImGui::SetNextWindowSize({ 250.0f, 245.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Glow", &window.glow, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -311,7 +311,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize({ 250.0f, 245.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Chams", &window.chams, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -362,7 +362,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
-        ImGui::SetNextWindowSize({ 250.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Esp", &window.esp, windowFlags);
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
@@ -387,7 +387,7 @@ void GUI::renderEspWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 365.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
@@ -432,7 +432,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderKnifeChangerWindow() noexcept
 {
     if (window.knifeChanger) {
-        ImGui::SetNextWindowSize({ 180.0f, 100.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Knife changer", &window.knifeChanger, windowFlags);
         ImGui::PushItemWidth(130.0f);
         ImGui::Checkbox("Enabled", &config.knifeChanger.enabled);
