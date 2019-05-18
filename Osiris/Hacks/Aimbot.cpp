@@ -82,6 +82,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
             || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+            static Vector lastAngles{ cmd->viewangles };
+
+            if (lastAngles)
+                cmd->viewangles = lastAngles;
+
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
@@ -92,14 +97,17 @@ void Aimbot::run(UserCmd* cmd) noexcept
                     angle.y = std::clamp(angle.y, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
                     clamped = true;
             }
-
+            
             angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
-            if (!config.aimbot[weaponIndex].silent || config.aimbot[weaponIndex].smooth > 1.0f)
+            if (!config.aimbot[weaponIndex].silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
 
             if (config.aimbot[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime() && !clamped)
                 cmd->buttons |= UserCmd::IN_ATTACK;
+
+            if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
+            else lastAngles = Vector{ };
         }
     }
 }
