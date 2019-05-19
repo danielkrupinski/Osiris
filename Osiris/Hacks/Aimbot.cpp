@@ -83,8 +83,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
             || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
+            static int lastCommand{ };
 
-            if (lastAngles)
+            if (lastCommand == cmd->command_number - 1 && lastAngles)
                 cmd->viewangles = lastAngles;
 
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
@@ -108,6 +109,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
             else lastAngles = Vector{ };
+
+            lastCommand = cmd->command_number;
         }
     }
 }
