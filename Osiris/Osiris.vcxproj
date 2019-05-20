@@ -41,6 +41,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Interfaces.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="SDK\GlobalVars.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArchiveX.h" />

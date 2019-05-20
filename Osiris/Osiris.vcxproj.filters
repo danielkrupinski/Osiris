@@ -86,6 +86,9 @@
     <ClCompile Include="Hacks\Backtrack.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="SDK\GlobalVars.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
