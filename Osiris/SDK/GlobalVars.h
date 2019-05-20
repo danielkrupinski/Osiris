@@ -4,6 +4,8 @@
 #include "EntityList.h"
 #include "../Interfaces.h"
 
+struct UserCmd;
+
 struct GlobalVars {
     const float realtime;
     const int framecount;
@@ -15,8 +17,5 @@ struct GlobalVars {
     const int tickCount;
     const float intervalPerTick;
 
-    constexpr float serverTime() noexcept
-    {
-        return interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_nTickBase") * intervalPerTick;
-    }
+    float serverTime(UserCmd* = nullptr) noexcept;
 };
