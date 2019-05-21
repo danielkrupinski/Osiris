@@ -476,7 +476,7 @@ void GUI::renderSkinChangerWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 220.0f, 490.0f });
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
         ImGui::Text("Menu key");
         ImGui::SameLine();
@@ -503,6 +503,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         ImGui::Checkbox("Watermark", &config.misc.watermark);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
+        ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::PushItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
