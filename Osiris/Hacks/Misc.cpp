@@ -117,3 +117,21 @@ void Misc::watermark() noexcept
         interfaces.surface->printText(ping.c_str());
     }
 }
+
+void Misc::prepareRevolver(UserCmd* cmd) noexcept
+{
+    constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
+    static float startTime;
+    if (config.misc.prepareRevolver) {
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
+            interfaces.entityList->getEntity(
+                interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+        if (activeWeapon && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver) {
+            if (!startTime) startTime = memory.globalVars->serverTime() + 0.234375f;
+            if (timeToTicks(startTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0)) > 0)
+                cmd->buttons |= UserCmd::IN_ATTACK;
+            else
+                startTime = 0.0f;
+        }
+    }
+}
