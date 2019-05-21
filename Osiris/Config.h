@@ -180,6 +180,7 @@ public:
         bool spectatorList{ false };
         bool watermark{ false };
         bool fixAnimationLOD{ false };
+        bool prepareRevolver{ false };
         int chokedPackets{ 0 };
     } misc;
 
