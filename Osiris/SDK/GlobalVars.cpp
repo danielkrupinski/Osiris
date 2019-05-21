@@ -1,11 +1,8 @@
 #include "GlobalVars.h"
 #include "UserCmd.h"
 
-#define FIX_TICKBASE_PREDICTION 0
-
 float GlobalVars::serverTime(UserCmd* cmd) noexcept
 {
-#if FIX_TICKBASE_PREDICTION == 1
     static int tick;
     static UserCmd* lastCmd;
 
@@ -17,7 +14,4 @@ float GlobalVars::serverTime(UserCmd* cmd) noexcept
         lastCmd = cmd;
     }
     return tick * intervalPerTick;
-#else
-    return interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_nTickBase")* intervalPerTick;
-#endif
 }
