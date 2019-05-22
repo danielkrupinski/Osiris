@@ -88,11 +88,10 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
-    // detail/detailsprites_survival - dz_blacksite
-    // detail/dust_massive_detail_sprites - dz_sirocco
-    static auto grass = interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites");
-    static auto incrementOnce = grass->incrementReferenceCount();
-    grass->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+    if (!strcmp(interfaces.engine->getLevelName(), "dz_blacksite"))
+        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+    else if (!strcmp(interfaces.engine->getLevelName(), "dz_sirocco"))
+        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
