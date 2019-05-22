@@ -69,8 +69,10 @@ namespace Misc {
 
     constexpr void autoStrafe(UserCmd* cmd) noexcept
     {
-        if (config.misc.autoStrafe
-            && !(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_fFlags") & 1)) {
+        if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+            config.misc.autoStrafe
+            && !(localPlayer->getProperty<int>("m_fFlags") & 1)
+            && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::NOCLIP) {
             if (cmd->mousedx < 0)
                 cmd->sidemove = -450.0f;
             else if (cmd->mousedx > 0)
