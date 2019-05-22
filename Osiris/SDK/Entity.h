@@ -12,6 +12,11 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 
+enum class MoveType {
+    NOCLIP = 8,
+    LADDER = 9
+};
+
 class Entity {
 public:
     template <typename T>
