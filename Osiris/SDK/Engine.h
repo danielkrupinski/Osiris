@@ -63,6 +63,11 @@ public:
         return callVirtualMethod<const Matrix&>(this, 37);
     }
 
+    constexpr auto getLevelName() noexcept
+    {
+        return callVirtualMethod<const char*>(this, 53);
+    }
+
     constexpr auto getNetworkChannel() noexcept
     {
         return callVirtualMethod<NetworkChannel*>(this, 78);
