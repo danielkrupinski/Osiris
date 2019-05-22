@@ -10,6 +10,7 @@ class Input;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
+class Entity;
 
 class Memory final {
 public:
@@ -34,6 +35,7 @@ public:
     int(__thiscall* getSequenceActivity)(void*, int);
     uintptr_t scopeArc;
     uintptr_t scopeLens;
+    bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
 
 private:
     template <typename T = uintptr_t>

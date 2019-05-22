@@ -19,4 +19,6 @@ Memory::Memory() noexcept
     getSequenceActivity = findPattern<decltype(getSequenceActivity)>("client_panorama", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83");
     scopeArc = findPattern<>("client_panorama", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7", 5);
     scopeLens = findPattern<>("client_panorama", "\xFF\x50\x3C\x8B\x4C\x24\x20", 3);
+    int* jmp = findPattern<int*>("client_panorama", "\xE8????\x02\xC0", 1);
+    isOtherEnemy = reinterpret_cast<decltype(isOtherEnemy)>(reinterpret_cast<char*>(jmp + 1) + *jmp);
 }
