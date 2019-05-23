@@ -11,6 +11,7 @@
 #include "Vector.h"
 #include "WeaponId.h"
 #include "VarMapping.h"
+#include "../Memory.h"
 
 enum class MoveType {
     NOCLIP = 8,
@@ -98,12 +99,7 @@ public:
 
     bool isEnemy() noexcept
     {
-        static auto gameMode = interfaces.cvar->findVar("game_type");
-
-        if (!isInLocalTeam() || gameMode->getInt() == 6)
-            return true;
-        else
-            return false;
+        return memory.isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
     }
 
     constexpr bool isDormant() noexcept
