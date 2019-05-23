@@ -1,6 +1,12 @@
 #include "Interfaces.h"
 #include "Memory.h"
 
+template <typename T>
+static constexpr auto relativeToAbsolute(int* address) noexcept
+{
+    return reinterpret_cast<T>(reinterpret_cast<char*>(address + 1) + *address);
+}
+
 Memory::Memory() noexcept
 {
     present = findPattern<>("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
