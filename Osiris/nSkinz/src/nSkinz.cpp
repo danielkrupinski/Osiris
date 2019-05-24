@@ -83,7 +83,7 @@ auto get_client_name() -> const char*
 	return name;
 }
 
-auto initialize(void* instance) -> void
+auto initializeNSkinz() -> void
 {
 	g_client = get_interface<sdk::IBaseClientDLL>(get_client_name(), CLIENT_DLL_INTERFACE_VERSION);
 	g_entity_list = get_interface<sdk::IClientEntityList>(get_client_name(), VCLIENTENTITYLIST_INTERFACE_VERSION);
