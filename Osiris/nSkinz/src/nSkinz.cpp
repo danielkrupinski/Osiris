@@ -24,10 +24,10 @@
 */
 #include "nSkinz.hpp"
 #include "Hooks/hooks.hpp"
-#include "render.hpp"
+//#include "render.hpp"
 #include "kit_parser.hpp"
 #include "update_check.hpp"
-#include "config.hpp"
+#include "configNSkinz.hpp"
 
 sdk::IBaseClientDLL*		g_client;
 sdk::IClientEntityList*		g_entity_list;
@@ -97,14 +97,12 @@ auto initialize(void* instance) -> void
 
 	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(g_engine, 12) + 0x10);
 
-	run_update_check();
+//	run_update_check();
 
 	// Get skins
 	game_data::initialize_kits();
 
-	g_config.load();
-
-	render::initialize();
+	//render::initialize();
 
 	//g_client_hook = new vmt_smart_hook(g_client);
 	//g_client_hook->apply_hook<hooks::FrameStageNotify>(36);
@@ -126,7 +124,7 @@ auto initialize(void* instance) -> void
 // might be already destroyed
 auto uninitialize() -> void
 {
-	render::uninitialize();
+	//render::uninitialize();
 
 	//delete g_client_hook;
 	//delete g_game_event_manager_hook;

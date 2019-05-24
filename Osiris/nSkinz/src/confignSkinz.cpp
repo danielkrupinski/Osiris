@@ -22,16 +22,19 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#pragma once
-#include <string>
-#include <vector>
+#include "configNSkinz.hpp"
+#include "SDK.hpp"
 
-struct commit_entry
+#include <fstream>
+
+config g_config;
+
+auto config::get_by_definition_index(const int definition_index) -> item_setting*
 {
-	std::string author;
-	std::string date;
-	std::string message;
-};
+	auto it = std::find_if(m_items.begin(), m_items.end(), [definition_index](const item_setting& e)
+	{
+		return e.enabled && e.definition_index == definition_index;
+	});
 
-extern bool g_update_needed;
-extern std::vector<commit_entry> g_commits_since_compile;
+	return it == m_items.end() ? nullptr : &*it;
+}
