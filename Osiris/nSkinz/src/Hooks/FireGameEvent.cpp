@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 #include "hooks.hpp"
-#include "../config.hpp"
+#include "../config_.hpp"
 #include "../nSkinz.hpp"
 
 auto __fastcall hooks::SFHudDeathNoticeAndBotStatus_FireGameEvent::hooked(void* thisptr, void*, sdk::IGameEvent* event) -> void

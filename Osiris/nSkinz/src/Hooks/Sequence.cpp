@@ -24,7 +24,7 @@
 */
 #include "hooks.hpp"
 #include "../nSkinz.hpp"
-#include "../config.hpp"
+#include "../config_.hpp"
 
 static auto random_sequence(const int low, const int high) -> int
 {

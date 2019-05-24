@@ -98,15 +98,6 @@
     <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nSkinz\src\item_definitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -119,10 +110,16 @@
     <ClCompile Include="nSkinz\src\sticker_changer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\confignSkinz.cpp">
+    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\guiNSkinz.cpp">
+    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\config_.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\gui_.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -337,9 +334,6 @@
     <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\Utilities\Platform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -364,13 +358,16 @@
     <ClInclude Include="nSkinz\src\sticker_changer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\update_check.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\src\configNSkinz.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\config_.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

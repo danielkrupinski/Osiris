@@ -29,9 +29,8 @@
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
     <ClCompile Include="Netvars.cpp" />
-    <ClCompile Include="nSkinz\src\confignSkinz.cpp" />
-    <ClCompile Include="nSkinz\src\dllmain.cpp" />
-    <ClCompile Include="nSkinz\src\guiNSkinz.cpp" />
+    <ClCompile Include="nSkinz\src\config_.cpp" />
+    <ClCompile Include="nSkinz\src\gui_.cpp" />
     <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp" />
     <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp" />
     <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp" />
@@ -68,6 +67,7 @@
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
     <ClInclude Include="Netvars.h" />
+    <ClInclude Include="nSkinz\src\config_.hpp" />
     <ClInclude Include="nSkinz\src\configNSkinz.hpp" />
     <ClInclude Include="nSkinz\src\Hooks\Hooks.hpp" />
     <ClInclude Include="nSkinz\src\item_definitions.hpp" />
@@ -92,7 +92,6 @@
     <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp" />
     <ClInclude Include="nSkinz\src\SDK\IVModelInfoClient.hpp" />
     <ClInclude Include="nSkinz\src\sticker_changer.hpp" />
-    <ClInclude Include="nSkinz\src\update_check.hpp" />
     <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp" />
     <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp" />
     <ClInclude Include="nSkinz\src\Utilities\Platform.hpp" />

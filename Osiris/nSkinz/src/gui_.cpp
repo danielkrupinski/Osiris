@@ -22,13 +22,12 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#include "configNSkinz.hpp"
+#include "config_.hpp"
 #include "item_definitions.hpp"
 #include "SDK.hpp"
 #include "kit_parser.hpp"
-#include "update_check.hpp"
-#include "../../imgui/imgui.h"
 
+#include "../../imgui/imgui.h"
 #include <functional>
 
 namespace ImGui
@@ -247,4 +246,5 @@ void draw_gui()
 
 		ImGui::End();
 	}
+
 }

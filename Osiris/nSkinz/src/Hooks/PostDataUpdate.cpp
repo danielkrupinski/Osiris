@@ -25,7 +25,7 @@
 #include "hooks.hpp"
 #include "../item_definitions.hpp"
 #include "../nSkinz.hpp"
-#include "../configNSkinz.hpp"
+#include "../config_.hpp"
 #include "../sticker_changer.hpp"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void

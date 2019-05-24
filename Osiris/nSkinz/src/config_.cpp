@@ -22,7 +22,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#include "configNSkinz.hpp"
+#include "config_.hpp"
 #include "SDK.hpp"
 
 #include <fstream>

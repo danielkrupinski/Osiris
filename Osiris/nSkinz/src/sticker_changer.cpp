@@ -24,7 +24,7 @@
 */
 #include <cstring>
 #include "SDK.hpp"
-#include "config.hpp"
+#include "config_.hpp"
 
 enum class EStickerAttributeType
 {
