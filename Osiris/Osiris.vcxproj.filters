@@ -89,6 +89,843 @@
     <ClCompile Include="SDK\GlobalVars.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\src\benchmarks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\cmake\gnu_posix_regex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\cmake\posix_regex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\cmake\std_regex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\cmake\steady_clock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\cmake\thread_safety_attributes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\benchmark.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\benchmark_register.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\colorprint.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\commandlineflags.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\complexity.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\console_reporter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\counter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\csv_reporter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\json_reporter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\reporter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\sleep.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\statistics.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\string_util.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\sysinfo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\timers.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at__object_t_key_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at__object_t_key_type_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at__size_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at__size_type_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at_json_pointer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\at_json_pointer_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\back.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__basic_json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__CompatibleType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__copyassignment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__InputIt_InputIt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__list_init_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__moveconstructor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__nullptr_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__size_type_basic_json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__value_ptr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\basic_json__value_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\begin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\cbegin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\cend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\clear.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\count.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\crbegin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\crend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\diff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\dump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\emplace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\emplace_back.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\empty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\end.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\erase__IteratorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\erase__IteratorType_IteratorType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\erase__key_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\erase__size_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\find__key_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\flatten.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\from_cbor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\from_msgpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\from_ubjson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\front.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\get__PointerType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\get__ValueType_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\get_ptr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\get_ref.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\insert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\insert__count.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\insert__ilist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\insert__range.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\insert__range_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\invalid_iterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_boolean.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_discarded.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_null.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_number.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_number_float.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_number_integer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_number_unsigned.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_primitive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\is_structured.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\iterator_wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\json_pointer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\json_pointer__to_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\max_size.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\merge_patch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\meta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__equal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__equal__nullptr_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__greater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__greaterequal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__less.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__lessequal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__notequal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__notequal__nullptr_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__value_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator__ValueType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator_deserialize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operator_serialize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorarray__key_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorarray__key_type_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorarray__size_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorarray__size_type_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorjson_pointer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\operatorjson_pointer_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\other_error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\out_of_range.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse__array__parser_callback_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse__contiguouscontainer__parser_callback_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse__istream__parser_callback_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse__iteratortype__parser_callback_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse__string__parser_callback_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\parse_error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\patch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\push_back.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\push_back__initializer_list.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\push_back__object_t__value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\rbegin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\README.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\rend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\size.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\swap__array_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\swap__object_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\swap__reference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\swap__string_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\to_cbor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\to_msgpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\to_ubjson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\type_error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\type_name.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\unflatten.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\update.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\doc\examples\update__range.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\fuzzer-driver_afl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\fuzzer-parse_cbor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\fuzzer-parse_json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\fuzzer-parse_msgpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\fuzzer-parse_ubjson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-algorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-allocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-alt-string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-capacity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-cbor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-class_const_iterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-class_iterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-class_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-class_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-comparison.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-concepts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-constructor1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-constructor2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-convenience.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-conversions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-deserialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-element_access1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-element_access2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-inspection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-iterators1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-iterators2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-json_patch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-json_pointer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-merge_patch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-meta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-modifiers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-msgpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-noexcept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-pointer_access.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-readme.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-reference_access.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-regression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-serialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-testsuites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-to_chars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-ubjson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-udt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\src\unit-unicode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\afl\afl_driver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\standalone\StandaloneFuzzTargetMain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\AbsNegAndConstant64Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\AbsNegAndConstantTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\AccumulateAllocationsTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\AFLDriverTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\BufferOverflowOnInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\CallerCalleeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\CounterTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\CustomCrossOverTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\CustomMutatorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\DivTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\DSO1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\DSO2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\DSOTestExtra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\DSOTestMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\EmptyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\FourIndependentBranchesTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\FullCoverageSetTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\FuzzerUnittest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\InitializeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\LeakTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\LeakTimeoutTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\LoadTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\MemcmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\NthRunCrashTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\NullDerefOnEmptyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\NullDerefTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\OneHugeAllocTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\OutOfMemorySingleLargeMallocTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\OutOfMemoryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\RepeatedBytesTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\RepeatedMemcmp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\ShrinkControlFlowTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\ShrinkValueProfileTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SignedIntOverflowTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SimpleCmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SimpleDictionaryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SimpleHashTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SimpleTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SimpleThreadedTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SingleMemcmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SingleStrcmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SingleStrncmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SpamyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\StrcmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\StrncmpOOBTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\StrncmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\StrstrTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SwapCmpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\Switch2Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\SwitchTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\ThreadedLeakTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\ThreadedTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\TimeoutEmptyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\TimeoutTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\TraceMallocTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\test\UninstrumentedTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerCrossOver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerExtFunctionsDlsym.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerExtFunctionsWeak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerExtFunctionsWeakAlias.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerIOPosix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerIOWindows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerMerge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerMutate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerSHA1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerTracePC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerTraceState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtilDarwin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtilLinux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtilPosix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtilWindows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Imgui_impl_dx9\imgui_impl_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\item_definitions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\kit_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\nSkinz.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\render.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\sticker_changer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\update_check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -247,5 +1084,285 @@
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\include\benchmark\benchmark.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\arraysize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\benchmark_api_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\check.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\colorprint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\commandlineflags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\complexity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\counter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\cycleclock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\internal_macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\mutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\re.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\sleep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\statistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\string_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\benchmarks\thirdparty\benchmark\src\timers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\conversions\from_json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\conversions\to_chars.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\conversions\to_json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\input\binary_reader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\input\input_adapters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\input\lexer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\input\parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\iterators\internal_iterator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\iterators\iter_impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\iterators\iteration_proxy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\iterators\json_reverse_iterator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\iterators\primitive_iterator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\output\binary_writer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\output\output_adapters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\output\serializer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\exceptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\json_pointer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\json_ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\macro_scope.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\macro_unscope.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\detail\value_t.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\adl_serializer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\include\nlohmann\json_fwd.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\single_include\nlohmann\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\catch\catch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\fifo_map\fifo_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerCorpus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerDictionary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerExtFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerInternal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerMerge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerMutate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerRandom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerSHA1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerTracePC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerValueBitMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Hooks\Hooks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\CBaseEntity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\ClientClass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\DataTable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\declarations.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IAppSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IBaseClientDLL.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IGameEvent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IGameEventManager2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IInputSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\interfaces.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IVModelInfoClient.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\Platform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\vmt_smart_hook.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\config.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\item_definitions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\kit_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\nSkinz.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\recv_proxy_hook.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\render.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\sticker_changer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\update_check.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nSkinz\deps\json\test\reports\2016-08-29-fuzz\index.html" />
+    <None Include="nSkinz\deps\json\test\reports\2016-10-02-fuzz\index.html" />
+    <None Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerExtFunctions.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="nSkinz\deps\json\test\thirdparty\Fuzzer\FuzzerFlags.def">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
