@@ -7,13 +7,13 @@
 struct recvProxyData {
     int pad;
     union {
-        float floatValue;
-        long intValue;
-        char* stringValue;
+        float _float;
+        long _int;
+        char* _string;
         void* data;
         Vector vector;
-        int64_t  int64Value;
-    };
+        int64_t int64;
+    } value;
 };
 
 using recvProxy = std::add_pointer_t<void(recvProxyData&, void*, void*)>;

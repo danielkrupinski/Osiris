@@ -32,7 +32,7 @@ static void unhookProperty(RecvProp& prop) noexcept
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
-        data.intValue = 1;
+        data.value._int = 1;
     proxies["m_bSpotted"](data, arg2, arg3);
 }
 
@@ -185,10 +185,7 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
             if (!weapon_info)
                 return;
 
-            const auto override_model = weapon_info->model;
-
-            auto& sequence = data.intValue;
-            sequence = get_new_animation(fnv::hash_runtime(override_model), sequence);
+            data.value._int = get_new_animation(fnv::hash_runtime(weapon_info->model), data.value._int);
         }
     }
 }
