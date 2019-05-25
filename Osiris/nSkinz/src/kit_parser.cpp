@@ -28,9 +28,9 @@
 
 #include <algorithm>
 
-std::vector<game_data::paint_kit> game_data::skin_kits;
-std::vector<game_data::paint_kit> game_data::glove_kits;
-std::vector<game_data::paint_kit> game_data::sticker_kits;
+std::vector<game_data::PaintKit> game_data::skin_kits;
+std::vector<game_data::PaintKit> game_data::glove_kits;
+std::vector<game_data::PaintKit> game_data::sticker_kits;
 
 class CCStrike15ItemSchema;
 class CCStrike15ItemSystem;

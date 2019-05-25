@@ -93,7 +93,7 @@ struct sticker_setting
 	template<sync_type Type>
 	void update()
 	{
-		do_sync<Type>(game_data::sticker_kits, kit_vector_index, kit, &game_data::paint_kit::id);
+		do_sync<Type>(game_data::sticker_kits, kit_vector_index, kit, &game_data::PaintKit::id);
 	}
 
 	int kit = 0;
@@ -122,7 +122,7 @@ struct item_setting
 			&game_data::quality_name::index
 		);
 
-		const std::vector<game_data::paint_kit>* kit_names;
+		const std::vector<game_data::PaintKit>* kit_names;
 		const std::vector<game_data::weapon_name>* defindex_names;
 
 		if(definition_index == GLOVE_T_SIDE)
@@ -140,7 +140,7 @@ struct item_setting
 			*kit_names,
 			paint_kit_vector_index,
 			paint_kit_index,
-			&game_data::paint_kit::id
+			&game_data::PaintKit::id
 		);
 
 		do_sync<Type>(

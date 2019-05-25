@@ -28,20 +28,19 @@
 
 namespace game_data
 {
-	struct paint_kit
-	{
+	struct PaintKit {
 		int id;
 		std::string name;
 
-		auto operator < (const paint_kit& other) const -> bool
+		auto operator<(const PaintKit& other) const noexcept
 		{
 			return name < other.name;
 		}
 	};
 
-	extern std::vector<paint_kit> skin_kits;
-	extern std::vector<paint_kit> glove_kits;
-	extern std::vector<paint_kit> sticker_kits;
+	extern std::vector<PaintKit> skin_kits;
+	extern std::vector<PaintKit> glove_kits;
+	extern std::vector<PaintKit> sticker_kits;
 
-	extern auto initialize_kits() -> void;
+	void initialize_kits();
 }
