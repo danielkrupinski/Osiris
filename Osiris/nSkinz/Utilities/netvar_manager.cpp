@@ -25,10 +25,10 @@
 #include "netvar_manager.hpp"
 #include "../SDK.hpp"
 #include <cctype>
-#include "../../../Interfaces.h"
-#include "../../../SDK/Client.h"
-#include "../../../SDK/ClientClass.h"
-#include "../../../SDK/Recv.h"
+#include "../../Interfaces.h"
+#include "../../SDK/Client.h"
+#include "../../SDK/ClientClass.h"
+#include "../../SDK/Recv.h"
 
 //#define DUMP_NETVARS
 

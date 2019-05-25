@@ -26,9 +26,9 @@
 #include "Hooks/hooks.hpp"
 #include "kit_parser.hpp"
 #include "config_.hpp"
-#include "../../Interfaces.h"
-#include "../../SDK/Engine.h"
-#include "../../SDK/EntityList.h"
+#include "../Interfaces.h"
+#include "../SDK/Engine.h"
+#include "../SDK/EntityList.h"
 
 sdk::ILocalize*				g_localize;
 sdk::CBaseClientState**		g_client_state;

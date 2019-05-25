@@ -28,12 +28,12 @@
 #include "../config_.hpp"
 #include "../sticker_changer.hpp"
 #include "../SDK/CBaseEntity.hpp"
-#include "../../../Interfaces.h"
-#include "../../../SDK/Client.h"
-#include "../../../SDK/ClientClass.h"
-#include "../../../SDK/Engine.h"
-#include "../../../SDK/ModelInfo.h"
-#include "../../../SDK/EntityList.h"
+#include "../../Interfaces.h"
+#include "../../SDK/Client.h"
+#include "../../SDK/ClientClass.h"
+#include "../../SDK/Engine.h"
+#include "../../SDK/ModelInfo.h"
+#include "../../SDK/EntityList.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
 {

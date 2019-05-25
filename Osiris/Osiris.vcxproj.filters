@@ -92,31 +92,31 @@
     <ClCompile Include="SDK\GlobalVars.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\config_.cpp">
+    <ClCompile Include="nSkinz\config_.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\gui_.cpp">
+    <ClCompile Include="nSkinz\gui_.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\item_definitions.cpp">
+    <ClCompile Include="nSkinz\item_definitions.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\kit_parser.cpp">
+    <ClCompile Include="nSkinz\kit_parser.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
+    <ClCompile Include="nSkinz\Utilities\netvar_manager.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\nSkinz.cpp">
+    <ClCompile Include="nSkinz\nSkinz.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
+    <ClCompile Include="nSkinz\Utilities\Platform.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp">
+    <ClCompile Include="nSkinz\Hooks\PostDataUpdate.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\sticker_changer.cpp">
+    <ClCompile Include="nSkinz\sticker_changer.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
   </ItemGroup>
@@ -277,74 +277,71 @@
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\vmt_smart_hook.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\sticker_changer.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\CBaseEntity.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\ClientClass.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\config_.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\configNSkinz.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\DataTable.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\declarations.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Hooks\Hooks.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IAppSystem.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IBaseClientDLL.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\interfaces.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\item_definitions.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\kit_parser.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\nSkinz.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\Platform.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\nSkinz.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Utilities\Platform.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\sticker_changer.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\kit_parser.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\interfaces.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\item_definitions.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\ILocalize.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Hooks\Hooks.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\IAppSystem.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\IBaseClientDLL.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\IClientEntity.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\config_.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\DataTable.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\declarations.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\CBaseClientState.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\CBaseEntity.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\SDK\ClientClass.hpp">
+      <Filter>nSkinz</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

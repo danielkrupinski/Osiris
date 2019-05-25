@@ -24,8 +24,8 @@
 */
 #pragma once
 #include "SDK.hpp"
-#include "../../Interfaces.h"
-#include "../../SDK/EntityList.h"
+#include "../Interfaces.h"
+#include "../SDK/EntityList.h"
 
 template <typename T>
 auto get_entity_from_handle(sdk::CBaseHandle h)

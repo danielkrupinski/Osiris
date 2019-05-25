@@ -36,9 +36,9 @@ static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
     proxies["m_bSpotted"](data, arg2, arg3);
 }
 
-#include "nSkinz/src/Hooks/Hooks.hpp"
-#include "nSkinz/src/nSkinz.hpp"
-#include "nSkinz/src/config_.hpp"
+#include "nSkinz/Hooks/Hooks.hpp"
+#include "nSkinz/nSkinz.hpp"
+#include "nSkinz/config_.hpp"
 
 static int get_new_animation(const fnv::hash model, const int sequence) noexcept
 {

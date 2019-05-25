@@ -27,7 +27,7 @@
 #include "fnv_hash.hpp"
 #include <map>
 #include <type_traits>
-#include "../../../SDK/Recv.h"
+#include "../../SDK/Recv.h"
 
 class netvar_manager
 {
