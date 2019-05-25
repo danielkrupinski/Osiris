@@ -27,7 +27,7 @@
 #include "kit_parser.hpp"
 #include "config_.hpp"
 
-sdk::IBaseClientDLL*		g_client;
+//sdk::IBaseClientDLL*		g_client;
 sdk::IClientEntityList*		g_entity_list;
 sdk::IVEngineClient*		g_engine;
 sdk::IVModelInfoClient*		g_model_info;
@@ -45,19 +45,6 @@ sdk::C_CS_PlayerResource**	g_player_resource;
 
 auto ensure_dynamic_hooks() -> void
 {
-	// find by xref to "CHudSaveStatus"
-	const auto hss = get_vfunc<char*>(g_client, 87);
-	const auto hud = *(void**)(hss + 7);
-	const auto off = *(int32_t*)(hss + 12);
-	const auto fn = (void*(__thiscall *)(void*, const char*))(hss + 16 + off);
-	const auto notice_hud = fn(hud, "SFHudDeathNoticeAndBotStatus");
-	if(notice_hud)
-	{
-		static vmt_multi_hook notice_hook;
-		if(notice_hook.initialize_and_hook_instance(notice_hud))
-			notice_hook.apply_hook<hooks::SFHudDeathNoticeAndBotStatus_FireGameEvent>(1);
-	}
-
 	const auto local_index = g_engine->GetLocalPlayer();
 	const auto local = static_cast<sdk::C_BasePlayer*>(g_entity_list->GetClientEntity(local_index));
 	if(local)
@@ -85,13 +72,12 @@ auto get_client_name() -> const char*
 
 auto initializeNSkinz() -> void
 {
-	g_client = get_interface<sdk::IBaseClientDLL>(get_client_name(), CLIENT_DLL_INTERFACE_VERSION);
+	//g_client = get_interface<sdk::IBaseClientDLL>(get_client_name(), CLIENT_DLL_INTERFACE_VERSION);
 	g_entity_list = get_interface<sdk::IClientEntityList>(get_client_name(), VCLIENTENTITYLIST_INTERFACE_VERSION);
 	g_engine = get_interface<sdk::IVEngineClient>("engine.dll", VENGINE_CLIENT_INTERFACE_VERSION);
 	g_model_info = get_interface<sdk::IVModelInfoClient>("engine.dll", VMODELINFO_CLIENT_INTERFACE_VERSION);
 	g_game_event_manager = get_interface<sdk::IGameEventManager2>("engine.dll", INTERFACEVERSION_GAMEEVENTSMANAGER2);
 	g_localize = get_interface<sdk::ILocalize>("localize.dll", ILOCALIZE_CLIENT_INTERFACE_VERSION);
-	g_input_system = get_interface<sdk::IInputSystem>("inputsystem.dll", INPUTSYSTEM_INTERFACE_VERSION);
 
 	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(g_engine, 12) + 0x10);
 
@@ -109,10 +95,10 @@ auto initializeNSkinz() -> void
 	//const auto sequence_prop = sdk::C_BaseViewModel::GetSequenceProp();
 	//g_sequence_hook = new recv_prop_hook(sequence_prop, &hooks::sequence_proxy_fn);
 
-	const auto team_arr_prop = sdk::C_CS_PlayerResource::GetTeamProp();
-	const auto team_prop = team_arr_prop->m_pDataTable->m_pProps;
-	const auto proxy_addr = std::uintptr_t(team_prop->m_ProxyFn);
-	g_player_resource = *reinterpret_cast<sdk::C_CS_PlayerResource***>(proxy_addr + 0x10);
+	//const auto team_arr_prop = sdk::C_CS_PlayerResource::GetTeamProp();
+//	const auto team_prop = team_arr_prop->m_pDataTable->m_pProps;
+	//const auto proxy_addr = std::uintptr_t(team_prop->m_ProxyFn);
+	//g_player_resource = *reinterpret_cast<sdk::C_CS_PlayerResource***>(proxy_addr + 0x10);
 }
 
 // If we aren't unloaded correctly (like when you close csgo)

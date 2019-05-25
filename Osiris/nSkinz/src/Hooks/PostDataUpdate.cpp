@@ -27,6 +27,9 @@
 #include "../nSkinz.hpp"
 #include "../config_.hpp"
 #include "../sticker_changer.hpp"
+#include "../../../Interfaces.h"
+#include "../../../SDK/Client.h"
+#include "../../../SDK/ClientClass.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
 {
@@ -110,17 +113,17 @@ static auto apply_config_on_attributable_item(sdk::C_BaseAttributableItem* item,
 	apply_sticker_changer(item);
 }
 
-static auto get_wearable_create_fn() -> sdk::CreateClientClassFn
+static auto get_wearable_create_fn() noexcept
 {
-	auto clazz = g_client->GetAllClasses();
+    auto clazz = interfaces.client->getAllClasses();
 
 	// Please, if you gonna paste it into a cheat use classids here. I use names because they
 	// won't change in the foreseeable future and i dont need high speed, but chances are
 	// you already have classids, so use them instead, they are faster.
-	while(fnv::hash_runtime(clazz->m_pNetworkName) != FNV("CEconWearable"))
-		clazz = clazz->m_pNext;
+	while (fnv::hash_runtime(clazz->networkName) != FNV("CEconWearable"))
+		clazz = clazz->next;
 
-	return clazz->m_pCreateFn;
+	return clazz->createFunction;
 }
 
 static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*

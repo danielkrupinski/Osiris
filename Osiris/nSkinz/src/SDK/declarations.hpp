@@ -35,7 +35,7 @@ namespace sdk
 	struct model_t;
 
 	using CBaseHandle = unsigned long;
-	using CreateClientClassFn = IClientNetworkable* (*)(int, int);
+	//using CreateClientClassFn = IClientNetworkable* (*)(int, int);
 	using CreateEventFn = IClientNetworkable* (*)();
 	using CreateInterfaceFn = void* (*)(const char*, int*);
 	using LocalizeStringIndex_t = unsigned;

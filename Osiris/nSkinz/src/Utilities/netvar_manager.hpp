@@ -27,13 +27,14 @@
 #include "fnv_hash.hpp"
 #include <map>
 #include <type_traits>
+#include "../../../SDK/Recv.h"
 
 class netvar_manager
 {
 private:
 	struct stored_data
 	{
-		sdk::RecvProp* prop_ptr;
+		RecvProp* prop_ptr;
 		std::uint16_t class_relative_offset;
 	};
 
@@ -50,7 +51,7 @@ public:
 		return m_props.at(hash).class_relative_offset;
 	}
 
-	auto get_prop(const fnv::hash hash) const -> sdk::RecvProp*
+	auto get_prop(const fnv::hash hash) const 
 	{
 		return m_props.at(hash).prop_ptr;
 	}
@@ -74,7 +75,7 @@ public:
 
 private:
 	netvar_manager();
-	auto dump_recursive(const char* base_class, sdk::RecvTable* table, std::uint16_t offset) -> void;
+	auto dump_recursive(const char* base_class, RecvTable* table, std::uint16_t offset) -> void;
 
 private:
 	std::map<fnv::hash, stored_data> m_props;
@@ -107,7 +108,7 @@ auto funcname() -> std::add_lvalue_reference_t<__VA_ARGS__> \
 static auto funcname() ->  RecvProp* \
 { \
 	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
-	static sdk::RecvProp* prop_ptr; \
+	static RecvProp* prop_ptr; \
 	if(!prop_ptr) prop_ptr = netvar_manager::get().get_prop(hash); \
 	return prop_ptr; \
 }

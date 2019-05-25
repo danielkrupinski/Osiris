@@ -59,13 +59,13 @@ namespace sdk
 	public:
 		NETVAR(GetOwner, "CBaseViewModel", "m_hOwner", CBaseHandle);
 		NETVAR(GetWeapon, "CBaseViewModel", "m_hWeapon", CBaseHandle);
-		NETPROP(GetSequenceProp, "CBaseViewModel", "m_nSequence");
+		//NETPROP(GetSequenceProp, "CBaseViewModel", "m_nSequence");
 	};
 
 	class C_PlayerResource
 	{
 	public:
-		NETPROP(GetTeamProp, "CPlayerResource", "m_iTeam");
+		//NETPROP(GetTeamProp, "CPlayerResource", "m_iTeam");
 	};
 
 	class C_CS_PlayerResource : public C_PlayerResource

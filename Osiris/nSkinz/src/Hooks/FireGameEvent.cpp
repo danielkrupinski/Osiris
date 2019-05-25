@@ -25,16 +25,3 @@
 #include "hooks.hpp"
 #include "../config_.hpp"
 #include "../nSkinz.hpp"
-
-auto __fastcall hooks::SFHudDeathNoticeAndBotStatus_FireGameEvent::hooked(void* thisptr, void*, sdk::IGameEvent* event) -> void
-{
-	// Filter to only the events we're interested in.
-	if(fnv::hash_runtime(event->GetName()) == FNV("player_death")
-		&& g_engine->GetPlayerForUserID(event->GetInt("attacker")) == g_engine->GetLocalPlayer())
-		if(const auto icon_override = g_config.get_icon_override(event->GetString("weapon")))
-			event->SetString("weapon", icon_override);
-
-	m_original(thisptr, nullptr, event);
-}
-
-hooks::SFHudDeathNoticeAndBotStatus_FireGameEvent::Fn* hooks::SFHudDeathNoticeAndBotStatus_FireGameEvent::m_original;

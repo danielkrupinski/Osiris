@@ -25,8 +25,5 @@ extern sdk::IGameEventManager2*				g_game_event_manager;
 #define ILOCALIZE_CLIENT_INTERFACE_VERSION	"Localize_001"
 extern sdk::ILocalize*						g_localize;
 
-#define INPUTSYSTEM_INTERFACE_VERSION		"InputSystemVersion001"
-extern sdk::IInputSystem*					g_input_system;
-
 extern sdk::CBaseClientState**				g_client_state;
-extern sdk::C_CS_PlayerResource**			g_player_resource;
+//extern sdk::C_CS_PlayerResource**			g_player_resource;
