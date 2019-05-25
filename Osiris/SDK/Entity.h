@@ -107,6 +107,11 @@ public:
         return callVirtualMethod<bool>(this + 8, 9);
     }
 
+    constexpr void release() noexcept
+    {
+        return callVirtualMethod<void>(this + 8, 1);
+    }
+
     constexpr bool isWeapon() noexcept
     {
         return callVirtualMethod<bool>(this, 163);
