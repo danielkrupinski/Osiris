@@ -123,7 +123,7 @@ auto game_data::initialize_kits() -> void
 	// lea     ecx, [eax+4]
 	// call    CEconItemSchema::GetPaintKitDefinition
 
-	const auto sig_address = platform::find_pattern(get_client_name(), "\xE8\x00\x00\x00\x00\xFF\x76\x0C\x8D\x48\x04\xE8", "x????xxxxxxx");
+	const auto sig_address = platform::find_pattern("client_panorama", "\xE8\x00\x00\x00\x00\xFF\x76\x0C\x8D\x48\x04\xE8", "x????xxxxxxx");
 
 	// Skip the opcode, read rel32 address
 	const auto item_system_offset = *reinterpret_cast<std::int32_t*>(sig_address + 1);
@@ -180,7 +180,7 @@ auto game_data::initialize_kits() -> void
 
 	// Dump sticker kits
 	{
-		const auto sticker_sig = platform::find_pattern(get_client_name(), "\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10", "xxxxx????xxx") + 4;
+		const auto sticker_sig = platform::find_pattern("client_panorama", "\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10", "xxxxx????xxx") + 4;
 
 		// Skip the opcode, read rel32 address
 		const auto get_sticker_kit_definition_offset = *reinterpret_cast<std::intptr_t*>(sticker_sig + 1);
