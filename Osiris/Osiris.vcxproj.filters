@@ -325,9 +325,6 @@
     <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

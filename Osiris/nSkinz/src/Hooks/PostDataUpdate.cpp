@@ -32,6 +32,7 @@
 #include "../../../SDK/ClientClass.h"
 #include "../../../SDK/Engine.h"
 #include "../../../SDK/ModelInfo.h"
+#include "../../../SDK/EntityList.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
 {
@@ -134,7 +135,7 @@ static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*
 
 	create_wearable_fn(entry, serial);
 
-	const auto glove = static_cast<sdk::C_BaseAttributableItem*>(g_entity_list->GetClientEntity(entry));
+    const auto glove = reinterpret_cast<sdk::C_BaseAttributableItem*>(interfaces.entityList->getEntity(entry));
 	assert(glove);
 
 	// He he
@@ -206,7 +207,7 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 			// We don't have a glove, but we should
 			if(!glove)
 			{
-				const auto entry = g_entity_list->GetHighestEntityIndex() + 1;
+				const auto entry = interfaces.entityList->getHighestEntityIndex() + 1;
 				const auto serial = rand() % 0x1000;
 				
 				glove = make_glove(entry, serial);

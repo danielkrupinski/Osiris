@@ -82,7 +82,6 @@
     <ClInclude Include="nSkinz\src\SDK\IAppSystem.hpp" />
     <ClInclude Include="nSkinz\src\SDK\IBaseClientDLL.hpp" />
     <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp" />
-    <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp" />
     <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp" />
     <ClInclude Include="nSkinz\src\SDK\interfaces.hpp" />
     <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp" />

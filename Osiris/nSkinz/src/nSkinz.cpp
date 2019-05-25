@@ -30,7 +30,6 @@
 #include "../../SDK/Engine.h"
 #include "../../SDK/EntityList.h"
 
-sdk::IClientEntityList*		g_entity_list;
 sdk::ILocalize*				g_localize;
 
 sdk::CBaseClientState**		g_client_state;
@@ -51,9 +50,8 @@ auto get_interface(const char* module, const char* name) -> T*
 	return reinterpret_cast<T*>(platform::get_interface(module, name));
 }
 
-auto initializeNSkinz() -> void
+void initializeNSkinz() noexcept
 {
-	g_entity_list = get_interface<sdk::IClientEntityList>("client_panorama", VCLIENTENTITYLIST_INTERFACE_VERSION);
 	g_localize = get_interface<sdk::ILocalize>("localize.dll", ILOCALIZE_CLIENT_INTERFACE_VERSION);
 	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(interfaces.engine, 12) + 0x10);
 
