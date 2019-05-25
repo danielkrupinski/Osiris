@@ -95,9 +95,6 @@
     <ClCompile Include="nSkinz\src\config_.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
     <ClCompile Include="nSkinz\src\gui_.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>

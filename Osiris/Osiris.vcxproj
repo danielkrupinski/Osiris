@@ -31,7 +31,6 @@
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\src\config_.cpp" />
     <ClCompile Include="nSkinz\src\gui_.cpp" />
-    <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp" />
     <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp" />
     <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp" />
     <ClCompile Include="nSkinz\src\item_definitions.cpp" />
