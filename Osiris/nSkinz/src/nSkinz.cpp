@@ -30,7 +30,7 @@
 //sdk::IBaseClientDLL*		g_client;
 sdk::IClientEntityList*		g_entity_list;
 sdk::IVEngineClient*		g_engine;
-sdk::IVModelInfoClient*		g_model_info;
+//sdk::IVModelInfoClient*		g_model_info;
 sdk::ILocalize*				g_localize;
 
 sdk::CBaseClientState**		g_client_state;
@@ -59,7 +59,7 @@ auto initializeNSkinz() -> void
 {
 	g_entity_list = get_interface<sdk::IClientEntityList>("client_panorama", VCLIENTENTITYLIST_INTERFACE_VERSION);
 	g_engine = get_interface<sdk::IVEngineClient>("engine.dll", VENGINE_CLIENT_INTERFACE_VERSION);
-	g_model_info = get_interface<sdk::IVModelInfoClient>("engine.dll", VMODELINFO_CLIENT_INTERFACE_VERSION);
+	//g_model_info = get_interface<sdk::IVModelInfoClient>("engine.dll", VMODELINFO_CLIENT_INTERFACE_VERSION);
 	g_localize = get_interface<sdk::ILocalize>("localize.dll", ILOCALIZE_CLIENT_INTERFACE_VERSION);
 
 	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(g_engine, 12) + 0x10);
@@ -67,15 +67,4 @@ auto initializeNSkinz() -> void
 
 	// Get skins
 	game_data::initialize_kits();
-}
-
-// If we aren't unloaded correctly (like when you close csgo)
-// we should just leak the hooks, since the hooked instances
-// might be already destroyed
-auto uninitialize() -> void
-{
-	//delete g_client_hook;
-	//delete g_game_event_manager_hook;
-
-	//delete g_sequence_hook;
 }

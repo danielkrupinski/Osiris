@@ -30,6 +30,7 @@
 #include "../../../Interfaces.h"
 #include "../../../SDK/Client.h"
 #include "../../../SDK/ClientClass.h"
+#include "../../../SDK/ModelInfo.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
 {
@@ -91,7 +92,7 @@ static auto apply_config_on_attributable_item(sdk::C_BaseAttributableItem* item,
 
 			// Set the weapon model index -- required for paint kits to work on replacement items after the 29/11/2016 update.
 			//item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
-			item->SetModelIndex(g_model_info->GetModelIndex(replacement_item->model));
+			item->SetModelIndex(interfaces.modelInfo->getModelIndex(replacement_item->model));
 			item->GetClientNetworkable()->PreDataUpdate(0);
 
 			// We didn't override 0, but some actual weapon, that we have data for
@@ -260,8 +261,8 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 
 	if(!override_info)
 		return;
-
-	const auto override_model_index = g_model_info->GetModelIndex(override_info->model);
+  
+	const auto override_model_index = interfaces.modelInfo->getModelIndex(override_info->model);
 	view_model->GetModelIndex() = override_model_index;
 
 	const auto world_model = get_entity_from_handle<sdk::CBaseWeaponWorldModel>(view_model_weapon->GetWeaponWorldModel());

@@ -328,15 +328,6 @@
     <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IGameEvent.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IGameEventManager2.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IInputSystem.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
@@ -347,9 +338,6 @@
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IVModelInfoClient.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\src\kit_parser.hpp">
