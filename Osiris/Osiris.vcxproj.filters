@@ -18,6 +18,9 @@
     <Filter Include="Hacks">
       <UniqueIdentifier>{f60a2d6f-e07f-4f71-8db1-6ec82cf1f6d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nSkinz">
+      <UniqueIdentifier>{6f9a1532-1c54-4497-8809-a84d6dfcb206}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -89,38 +92,38 @@
     <ClCompile Include="SDK\GlobalVars.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\item_definitions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\kit_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\nSkinz.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\sticker_changer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nSkinz\src\config_.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\FireGameEvent.cpp">
+      <Filter>nSkinz</Filter>
     </ClCompile>
     <ClCompile Include="nSkinz\src\gui_.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\item_definitions.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\kit_parser.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Utilities\netvar_manager.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\nSkinz.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Utilities\Platform.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp">
+      <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="nSkinz\src\sticker_changer.cpp">
+      <Filter>nSkinz</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,95 +283,95 @@
     <ClInclude Include="Hacks\Backtrack.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\Hooks\Hooks.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\CBaseEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\ClientClass.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\DataTable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\declarations.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IAppSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IBaseClientDLL.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IGameEvent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IGameEventManager2.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IInputSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\interfaces.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IVModelInfoClient.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\Platform.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\Utilities\vmt_smart_hook.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\item_definitions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\kit_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\nSkinz.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\recv_proxy_hook.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\src\sticker_changer.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\VarMapping.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="nSkinz\src\recv_proxy_hook.hpp">
+      <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\configNSkinz.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp">
+      <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="nSkinz\src\SDK\CBaseEntity.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\ClientClass.hpp">
+      <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\src\config_.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\configNSkinz.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\DataTable.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\declarations.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\fnv_hash.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Hooks\Hooks.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IAppSystem.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IBaseClientDLL.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IClientEntity.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IClientEntityList.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IGameEvent.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IGameEventManager2.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IInputSystem.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\ILocalize.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\interfaces.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\item_definitions.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK\IVModelInfoClient.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\kit_parser.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\netvar_manager.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\nSkinz.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\Utilities\Platform.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\src\SDK.hpp">
+      <Filter>nSkinz</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\VarMapping.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
