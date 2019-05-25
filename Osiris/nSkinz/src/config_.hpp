@@ -26,9 +26,12 @@
 #include "item_definitions.hpp"
 #include "kit_parser.hpp"
 
+#include <limits>
 #include <unordered_map>
 #include <array>
 #include <algorithm>
+
+#undef min
 
 template<typename Container, typename T1, typename T2, typename TC>
 class value_syncer
@@ -168,10 +171,10 @@ struct item_setting
 	std::array<sticker_setting, 5> stickers;
 };
 
-class config
+class config_
 {
 public:
-	config()
+	config_()
 	{
 		// Ghetto fix for possible race conditions
 		m_items.reserve(128);
@@ -179,9 +182,6 @@ public:
 		// Default config
 		m_items.push_back(item_setting());
 	}
-
-	auto save() -> void;
-	auto load() -> void;
 
 	auto get_by_definition_index(int definition_index) -> item_setting*;
 
@@ -205,4 +205,4 @@ private:
 	std::unordered_map<std::string_view, std::string_view> m_icon_overrides;
 };
 
-extern config g_config;
+extern config_ g_config;

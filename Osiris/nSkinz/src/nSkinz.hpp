@@ -24,7 +24,6 @@
 */
 #pragma once
 #include "SDK.hpp"
-#include "recv_proxy_hook.hpp"
 
 template <typename T>
 auto get_entity_from_handle(sdk::CBaseHandle h) -> T*
@@ -38,4 +37,4 @@ auto get_entity_from_handle(sdk::CBaseHandle h) -> T*
 auto ensure_dynamic_hooks() -> void;
 auto get_client_name() -> const char*;
 
-extern recv_prop_hook* g_sequence_hook;
+//extern recv_prop_hook* g_sequence_hook;

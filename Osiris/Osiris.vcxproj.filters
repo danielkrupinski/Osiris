@@ -289,9 +289,6 @@
     <ClInclude Include="nSkinz\src\sticker_changer.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\recv_proxy_hook.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

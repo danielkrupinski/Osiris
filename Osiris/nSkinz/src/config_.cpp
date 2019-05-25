@@ -27,9 +27,9 @@
 
 #include <fstream>
 
-config g_config;
+config_ g_config;
 
-auto config::get_by_definition_index(const int definition_index) -> item_setting*
+auto config_::get_by_definition_index(const int definition_index) -> item_setting*
 {
 	auto it = std::find_if(m_items.begin(), m_items.end(), [definition_index](const item_setting& e)
 	{

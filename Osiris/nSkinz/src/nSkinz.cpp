@@ -41,7 +41,7 @@ sdk::C_CS_PlayerResource**	g_player_resource;
 //vmt_smart_hook*				g_client_hook;
 //vmt_smart_hook*				g_game_event_manager_hook;
 
-recv_prop_hook*				g_sequence_hook;
+//recv_prop_hook*				g_sequence_hook;
 
 auto ensure_dynamic_hooks() -> void
 {
@@ -106,8 +106,8 @@ auto initializeNSkinz() -> void
 	//g_game_event_manager_hook = new vmt_smart_hook(g_game_event_manager);
 	//g_game_event_manager_hook->apply_hook<hooks::FireEventClientSide>(9);
 
-	const auto sequence_prop = sdk::C_BaseViewModel::GetSequenceProp();
-	g_sequence_hook = new recv_prop_hook(sequence_prop, &hooks::sequence_proxy_fn);
+	//const auto sequence_prop = sdk::C_BaseViewModel::GetSequenceProp();
+	//g_sequence_hook = new recv_prop_hook(sequence_prop, &hooks::sequence_proxy_fn);
 
 	const auto team_arr_prop = sdk::C_CS_PlayerResource::GetTeamProp();
 	const auto team_prop = team_arr_prop->m_pDataTable->m_pProps;
@@ -123,5 +123,5 @@ auto uninitialize() -> void
 	//delete g_client_hook;
 	//delete g_game_event_manager_hook;
 
-	delete g_sequence_hook;
+	//delete g_sequence_hook;
 }

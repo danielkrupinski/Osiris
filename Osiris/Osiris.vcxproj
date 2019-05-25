@@ -73,7 +73,6 @@
     <ClInclude Include="nSkinz\src\item_definitions.hpp" />
     <ClInclude Include="nSkinz\src\kit_parser.hpp" />
     <ClInclude Include="nSkinz\src\nSkinz.hpp" />
-    <ClInclude Include="nSkinz\src\recv_proxy_hook.hpp" />
     <ClInclude Include="nSkinz\src\SDK.hpp" />
     <ClInclude Include="nSkinz\src\SDK\CBaseClientState.hpp" />
     <ClInclude Include="nSkinz\src\SDK\CBaseEntity.hpp" />
