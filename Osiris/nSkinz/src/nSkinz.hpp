@@ -33,4 +33,3 @@ auto get_entity_from_handle(sdk::CBaseHandle h)
     return reinterpret_cast<T*>(interfaces.entityList->getEntityFromHandle(h));
 }
 
-void ensure_dynamic_hooks() noexcept;

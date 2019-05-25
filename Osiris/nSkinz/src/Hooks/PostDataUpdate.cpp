@@ -27,6 +27,7 @@
 #include "../nSkinz.hpp"
 #include "../config_.hpp"
 #include "../sticker_changer.hpp"
+#include "../SDK/CBaseEntity.hpp"
 #include "../../../Interfaces.h"
 #include "../../../SDK/Client.h"
 #include "../../../SDK/ClientClass.h"
@@ -267,7 +268,7 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 	const auto override_model_index = interfaces.modelInfo->getModelIndex(override_info->model);
 	view_model->GetModelIndex() = override_model_index;
 
-	const auto world_model = get_entity_from_handle<sdk::CBaseWeaponWorldModel>(view_model_weapon->GetWeaponWorldModel());
+	const auto world_model = get_entity_from_handle<sdk::C_BaseEntity>(view_model_weapon->GetWeaponWorldModel());
 
 	if(!world_model)
 		return;

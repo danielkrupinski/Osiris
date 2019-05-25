@@ -192,7 +192,6 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
 
 void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    ensure_dynamic_hooks();
     do_sequence_remapping(data, arg2);
     proxies["m_nSequence"](data, arg2, arg3);
 }

@@ -31,14 +31,7 @@
 #include "../../SDK/EntityList.h"
 
 sdk::ILocalize*				g_localize;
-
 sdk::CBaseClientState**		g_client_state;
-sdk::C_CS_PlayerResource**	g_player_resource;
-
-void ensure_dynamic_hooks() noexcept
-{
-
-}
 
 template <class T>
 auto get_interface(const char* module, const char* name) -> T*
