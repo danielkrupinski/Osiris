@@ -26,25 +26,21 @@
 #include "Hooks/hooks.hpp"
 #include "kit_parser.hpp"
 #include "config_.hpp"
+#include "../../Interfaces.h"
+#include "../../SDK/Engine.h"
+#include "../../SDK/EntityList.h"
 
-//sdk::IBaseClientDLL*		g_client;
 sdk::IClientEntityList*		g_entity_list;
-sdk::IVEngineClient*		g_engine;
-//sdk::IVModelInfoClient*		g_model_info;
 sdk::ILocalize*				g_localize;
 
 sdk::CBaseClientState**		g_client_state;
 sdk::C_CS_PlayerResource**	g_player_resource;
 
-auto ensure_dynamic_hooks() -> void
+void ensure_dynamic_hooks() noexcept
 {
-	const auto local_index = g_engine->GetLocalPlayer();
-	const auto local = static_cast<sdk::C_BasePlayer*>(g_entity_list->GetClientEntity(local_index));
-	if(local)
-	{
+	if (const auto local = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
 		static vmt_multi_hook player_hook;
-		const auto networkable = static_cast<sdk::IClientNetworkable*>(local);
-		if(player_hook.initialize_and_hook_instance(networkable))
+		if (player_hook.initialize_and_hook_instance(local))
 			player_hook.apply_hook<hooks::CCSPlayer_PostDataUpdate>(7);
 	}
 }
@@ -58,13 +54,8 @@ auto get_interface(const char* module, const char* name) -> T*
 auto initializeNSkinz() -> void
 {
 	g_entity_list = get_interface<sdk::IClientEntityList>("client_panorama", VCLIENTENTITYLIST_INTERFACE_VERSION);
-	g_engine = get_interface<sdk::IVEngineClient>("engine.dll", VENGINE_CLIENT_INTERFACE_VERSION);
-	//g_model_info = get_interface<sdk::IVModelInfoClient>("engine.dll", VMODELINFO_CLIENT_INTERFACE_VERSION);
 	g_localize = get_interface<sdk::ILocalize>("localize.dll", ILOCALIZE_CLIENT_INTERFACE_VERSION);
+	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(interfaces.engine, 12) + 0x10);
 
-	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(g_engine, 12) + 0x10);
-
-
-	// Get skins
 	game_data::initialize_kits();
 }

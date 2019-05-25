@@ -233,16 +233,14 @@ void draw_gui()
 			const auto button_size = ImVec2(ImGui::GetColumnWidth() - 1, 20);
 
 			if(ImGui::Button("Update", button_size))
-				//(*g_client_state)->ForceFullUpdate();
-				g_engine->ClientCmd_Unrestricted("record x;stop"); //this will be changed at a later date.		
+				(*g_client_state)->ForceFullUpdate();
+				//g_engine->ClientCmd_Unrestricted("record x;stop"); //this will be changed at a later date.		
 		}
 
 		ImGui::PopItemWidth();
 		ImGui::Columns(1);
 
 		ImGui::Text("nSkinz by namazso");
-		ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize("https://skinchanger.download").x - 20);
-		ImGui::Text("https://skinchanger.download");
 
 		ImGui::End();
 	}

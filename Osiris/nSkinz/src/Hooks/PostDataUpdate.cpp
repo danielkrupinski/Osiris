@@ -30,6 +30,7 @@
 #include "../../../Interfaces.h"
 #include "../../../SDK/Client.h"
 #include "../../../SDK/ClientClass.h"
+#include "../../../SDK/Engine.h"
 #include "../../../SDK/ModelInfo.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
@@ -162,8 +163,8 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 		player_resource->GetWins()[local_index] = 1337;
 	}*/
 
-	sdk::player_info_t player_info;
-	if(!g_engine->GetPlayerInfo(local_index, &player_info))
+    PlayerInfo player_info;
+	if(!interfaces.engine->getPlayerInfo(local_index, player_info))
 		return;
 
 	// Handle glove config
@@ -219,7 +220,7 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 			// Thanks, Beakers
 			glove->GetIndex() = -1;
 
-			apply_config_on_attributable_item(glove, glove_config, player_info.xuid_low);
+			apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
 		}
 	}
 
@@ -241,7 +242,7 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 
 			// All knives are terrorist knives.
 			if(const auto active_conf = g_config.get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
-				apply_config_on_attributable_item(weapon, active_conf, player_info.xuid_low);
+				apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
 			else
 				erase_override_if_exists_by_index(definition_index);
 		}

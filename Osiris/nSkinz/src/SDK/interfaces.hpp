@@ -11,9 +11,6 @@ extern sdk::IBaseClientDLL*					g_client;
 #define VCLIENTENTITYLIST_INTERFACE_VERSION "VClientEntityList003"
 extern sdk::IClientEntityList*				g_entity_list;
 
-#define VENGINE_CLIENT_INTERFACE_VERSION	"VEngineClient014"
-extern sdk::IVEngineClient*					g_engine;
-
 #define ILOCALIZE_CLIENT_INTERFACE_VERSION	"Localize_001"
 extern sdk::ILocalize*						g_localize;
 

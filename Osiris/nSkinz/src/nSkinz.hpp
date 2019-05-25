@@ -24,17 +24,13 @@
 */
 #pragma once
 #include "SDK.hpp"
+#include "../../Interfaces.h"
+#include "../../SDK/EntityList.h"
 
 template <typename T>
-auto get_entity_from_handle(sdk::CBaseHandle h) -> T*
+auto get_entity_from_handle(sdk::CBaseHandle h)
 {
-	if(h == sdk::INVALID_EHANDLE_INDEX)
-		return nullptr;
-
-	return static_cast<T*>(g_entity_list->GetClientEntityFromHandle(h));
+    return reinterpret_cast<T*>(interfaces.entityList->getEntityFromHandle(h));
 }
 
-auto ensure_dynamic_hooks() -> void;
-auto get_client_name() -> const char*;
-
-//extern recv_prop_hook* g_sequence_hook;
+void ensure_dynamic_hooks() noexcept;
