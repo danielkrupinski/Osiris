@@ -217,8 +217,11 @@ static void __stdcall hookedSetDrawColor(int r, int g, int b, int a) noexcept
     hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
 }
 
+extern void initializeNSkinz();
+
 Hooks::Hooks() noexcept
 {
+    initializeNSkinz();
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
     ImGui::CreateContext();

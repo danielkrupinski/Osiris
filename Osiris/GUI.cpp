@@ -23,6 +23,7 @@ void GUI::render() noexcept
     renderEspWindow();
     renderVisualsWindow();
     renderKnifeChangerWindow();
+    renderSkinChangerWindow();
     renderMiscWindow();
     renderConfigWindow();
 }
@@ -74,7 +75,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
-        // ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
+        ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
@@ -418,58 +419,12 @@ void GUI::renderKnifeChangerWindow() noexcept
     }
 }
 
+extern void draw_gui();
+
 void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
-        ImGui::SetNextWindowSize({ 260.0f, 445.0f });
-        ImGui::Begin("Skin changer", &window.skinChanger, windowFlags);
-        static int currentCategory{ 0 };
-        ImGui::PushItemWidth(110.0f);
-        ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Pistols\0Heavy\0SMG\0Rifles\0Knives\0");
-        ImGui::PopID();
-        ImGui::SameLine();
-        static int currentWeapon{ 0 };
-        ImGui::PushID(1);
-
-        switch (currentCategory) {
-        case 0: {
-            static int currentPistol{ 0 };
-            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver\0");
-            currentWeapon = currentPistol + 1;
-            break;
-        }
-        case 1: {
-            static int currentHeavy{ 0 };
-            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev\0");
-            currentWeapon = currentHeavy + 11;
-            break;
-        }
-        case 2: {
-            static int currentSmg{ 0 };
-            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon\0");
-            currentWeapon = currentSmg + 17;
-            break;
-        }
-        case 3: {
-            static int currentRifle{ 0 };
-            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20\0");
-            currentWeapon = currentRifle + 24;
-            break;
-        }
-        case 4: {
-            static int currentKnife{ 0 };
-            ImGui::Combo("", &currentKnife, "Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0");
-            currentWeapon = currentKnife + 35;
-            break;
-        }
-        }
-        ImGui::PopID();
-        ImGui::Checkbox("Enabled", &config.skinChanger[currentWeapon].enabled);
-        ImGui::PushItemWidth(90.0f);
-        ImGui::InputInt("Paint kit", &config.skinChanger[currentWeapon].paintKit, 1, 5);
-        ImGui::SliderFloat("", &config.skinChanger[currentWeapon].wear, 0.0f, 1.0f, "Wear: %.2f");
-        ImGui::End();
+        draw_gui();
     }
 }
 
