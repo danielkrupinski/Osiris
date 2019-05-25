@@ -206,10 +206,10 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
             offsets[prop.name] = prop.offset + offset;
             if (name == "m_bSpotted")
                 hookProperty(prop, spottedHook);
-            else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
-                hookProperty(prop, modelIndexHook);
-            else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
-                hookProperty(prop, viewModelSequenceHook);
+           // else if (tableName == "DT_BaseViewModel" && name == "m_nModelIndex")
+           //     hookProperty(prop, modelIndexHook);
+           // else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
+           //     hookProperty(prop, viewModelSequenceHook);
         }
     }
 }
