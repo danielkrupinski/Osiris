@@ -112,6 +112,11 @@ public:
         return callVirtualMethod<void>(this + 8, 1);
     }
 
+    constexpr void setDestroyedOnRecreateEntities() noexcept
+    {
+        return callVirtualMethod<void>(this + 8, 13);
+    }
+
     constexpr bool isWeapon() noexcept
     {
         return callVirtualMethod<bool>(this, 163);
