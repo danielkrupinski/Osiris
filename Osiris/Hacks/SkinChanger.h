@@ -3,5 +3,5 @@
 #include "../SDK/FrameStage.h"
 
 namespace SkinChanger {
-    void apply(FrameStage) noexcept;
+    void run(FrameStage) noexcept;
 }

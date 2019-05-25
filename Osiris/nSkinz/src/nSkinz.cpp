@@ -37,11 +37,7 @@ sdk::C_CS_PlayerResource**	g_player_resource;
 
 void ensure_dynamic_hooks() noexcept
 {
-	if (const auto local = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
-		static vmt_multi_hook player_hook;
-		if (player_hook.initialize_and_hook_instance(local))
-			player_hook.apply_hook<hooks::CCSPlayer_PostDataUpdate>(7);
-	}
+
 }
 
 template <class T>

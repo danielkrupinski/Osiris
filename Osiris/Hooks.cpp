@@ -27,6 +27,7 @@
 #include "SDK/InputSystem.h"
 #include "SDK/GameUI.h"
 #include "SDK/Surface.h"
+#include "Hacks/SkinChanger.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -173,6 +174,7 @@ static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
         Visuals::removeVisualRecoil(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
+        SkinChanger::run(stage);
     }
     hooks.client.callOriginal<void, FrameStage>(37, stage);
 }

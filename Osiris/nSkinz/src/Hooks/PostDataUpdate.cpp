@@ -152,7 +152,7 @@ static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*
 	return glove;
 }
 
-static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
+auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 {
 	const auto local_index = local->GetIndex();
 
@@ -274,12 +274,3 @@ static auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 
 	world_model->GetModelIndex() = override_model_index + 1;
 }
-
-auto __fastcall hooks::CCSPlayer_PostDataUpdate::hooked(sdk::IClientNetworkable* thisptr, void*, int update_type) -> void
-{
-	post_data_update_start(static_cast<sdk::C_BasePlayer*>(thisptr));
-
-	return m_original(thisptr, nullptr, update_type);
-}
-
-hooks::CCSPlayer_PostDataUpdate::Fn* hooks::CCSPlayer_PostDataUpdate::m_original;
