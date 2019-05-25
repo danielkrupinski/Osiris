@@ -116,9 +116,6 @@
     <ClCompile Include="nSkinz\src\Hooks\PostDataUpdate.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\src\Hooks\Sequence.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
     <ClCompile Include="nSkinz\src\sticker_changer.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
