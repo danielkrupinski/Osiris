@@ -36,71 +36,6 @@ static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
     proxies["m_bSpotted"](data, arg2, arg3);
 }
 
-static void modelIndexHook(recvProxyData& data, void* arg2, void* arg3) noexcept
-{
-    if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-        if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")))
-            if (data.intValue != interfaces.modelInfo->getModelIndex("models/hostage/v_hostage_arm.mdl")
-                && activeWeapon->getClientClass()->classId == ClassId::Knife
-                || activeWeapon->getClientClass()->classId == ClassId::KnifeGG)
-                data.intValue = [=](int id) {
-                switch (id) {
-                default:
-                case 1:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Bayonet);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_bayonet.mdl");
-                case 2:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Bowie);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_survival_bowie.mdl");
-                case 3:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Butterfly);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_butterfly.mdl");
-                case 4:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Falchion);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_falchion_advanced.mdl");
-                case 5:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Flip);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_flip.mdl");
-                case 6:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Gut);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gut.mdl");
-                case 7:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Huntsman);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_tactical.mdl");
-                case 8:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Karambit);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_karam.mdl");
-                case 9:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::M9Bayonet);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_m9_bay.mdl");
-                case 10:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Daggers);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_push.mdl");
-                case 11:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Navaja);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl");
-                case 12:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Stiletto);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_stiletto.mdl");
-                case 13:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Talon);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_widowmaker.mdl");
-                case 14:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::Ursus);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ursus.mdl");
-                case 15:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::GoldenKnife);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_gg.mdl");
-                case 16:
-                    activeWeapon->setProperty<WeaponId>("m_iItemDefinitionIndex", WeaponId::GhostKnife);
-                    return interfaces.modelInfo->getModelIndex("models/weapons/v_knife_ghost.mdl");
-                }}(config.knifeChanger.knife);
-    }
-    proxies["m_nModelIndex"](data, arg2, arg3);
-}
-
 static void viewModelSequenceHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (interfaces.engine->isInGame() && config.knifeChanger.enabled && config.knifeChanger.knife) {
@@ -332,7 +267,6 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
     }
 }
 
-// Replacement function that will be called when the view model animation sequence changes.
 void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     ensure_dynamic_hooks();
