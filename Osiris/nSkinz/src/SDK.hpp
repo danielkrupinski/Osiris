@@ -7,7 +7,6 @@
 #include "SDK/CBaseEntity.hpp"
 
 #include "SDK/IBaseClientDLL.hpp"
-#include "SDK/IVEngineClient.hpp"
 #include "SDK/ILocalize.hpp"
 
 #include "SDK/interfaces.hpp"

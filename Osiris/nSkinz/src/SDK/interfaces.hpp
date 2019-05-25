@@ -2,7 +2,6 @@
 #include "CBaseClientState.hpp"
 #include "IBaseClientDLL.hpp"
 #include "ILocalize.hpp"
-#include "IVEngineClient.hpp"
 
 #define CLIENT_DLL_INTERFACE_VERSION		"VClient018"
 extern sdk::IBaseClientDLL*					g_client;

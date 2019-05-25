@@ -328,9 +328,6 @@
     <ClInclude Include="nSkinz\src\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\src\SDK\IVEngineClient.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\src\kit_parser.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
