@@ -39,6 +39,8 @@ public:
         return callVirtualMethod<Cvar*, const char*>(this, 15, name);
     }
 
-    std::byte pad[68];
-    void* onChangeCallback;
+    constexpr void callBack() noexcept
+    {
+        (*reinterpret_cast<void(**)()>(this + 0x18))();
+    }
 };
