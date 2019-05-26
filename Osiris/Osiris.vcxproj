@@ -111,6 +111,7 @@
     <ClInclude Include="SDK\GlowObjectManager.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\InputSystem.h" />
+    <ClInclude Include="SDK\Localize.h" />
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\MaterialSystem.h" />
     <ClInclude Include="SDK\ModelInfo.h" />

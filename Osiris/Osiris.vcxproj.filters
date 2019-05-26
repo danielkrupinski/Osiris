@@ -340,5 +340,8 @@
     <ClInclude Include="nSkinz\SDK\ClientClass.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Localize.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
