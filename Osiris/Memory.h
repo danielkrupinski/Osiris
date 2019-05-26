@@ -37,6 +37,7 @@ public:
     uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
+    uintptr_t(__thiscall* findHudElement)(uintptr_t, const char*);
 
 private:
     template <typename T = uintptr_t>
