@@ -4,6 +4,8 @@
 
 class Surface final {
 public:
+    static constexpr unsigned font{ 0x1d };
+
     constexpr void setDrawColor(int r, int g, int b, int a) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, r, g, b, a);
