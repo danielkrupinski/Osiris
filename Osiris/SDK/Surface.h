@@ -4,7 +4,7 @@
 
 class Surface final {
 public:
-    static constexpr unsigned font{ 0x1d };
+    static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
     constexpr void setDrawColor(int r, int g, int b, int a) noexcept
     {
