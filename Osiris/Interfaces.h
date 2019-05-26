@@ -12,6 +12,7 @@ class EngineTrace;
 class EntityList;
 class GameUI;
 class InputSystem;
+class Localize;
 class MaterialSystem;
 class ModelInfo;
 class ModelRender;
@@ -31,6 +32,7 @@ public:
     EntityList* entityList;
     GameUI* gameUI;
     InputSystem* inputSystem;
+    Localize* localize;
     MaterialSystem* materialSystem;
     ModelInfo* modelInfo;
     ModelRender* modelRender;

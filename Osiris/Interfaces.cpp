@@ -9,6 +9,7 @@ Interfaces::Interfaces() noexcept
     entityList = find<EntityList>("client_panorama", "VClientEntityList003");
     gameUI = find<GameUI>("client_panorama", "GameUI011");
     inputSystem = find<InputSystem>("inputsystem", "InputSystemVersion001");
+    localize = find<Localize>("localize", "Localize_001");
     materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem080");
     modelInfo = find<ModelInfo>("engine", "VModelInfoClient004");
     modelRender = find<ModelRender>("engine", "VEngineModel016");
