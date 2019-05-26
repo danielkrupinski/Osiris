@@ -51,7 +51,16 @@ enum class WeaponId : short {
     Ursus = 519,
     Navaja,
     Stiletto = 522,
-    Talon
+    Talon,
+    GloveStuddedBloodhound = 5027,
+    GloveT,
+    GloveCT,
+    GloveSporty,
+    GloveSlick,
+    GloveLeatherWrap,
+    GloveMotorcycle,
+    GloveSpecialist,
+    GloveHydra
 };
 
 constexpr int getWeaponIndex(WeaponId weaponId) noexcept
