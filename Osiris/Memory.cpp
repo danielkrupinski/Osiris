@@ -29,4 +29,5 @@ Memory::Memory() noexcept
     auto temp = findPattern<uintptr_t*>("client_panorama", "\xB9????\xE8????\x8B\x5D\x08", 1);
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
+    clearHudWeapon = findPattern<decltype(clearHudWeapon)>("client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C");
 }
