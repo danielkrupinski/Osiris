@@ -26,4 +26,6 @@ Memory::Memory() noexcept
     scopeArc = findPattern<>("client_panorama", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7", 5);
     scopeLens = findPattern<>("client_panorama", "\xFF\x50\x3C\x8B\x4C\x24\x20", 3);
     isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern<int*>("client_panorama", "\xE8????\x02\xC0", 1));
+    auto temp = findPattern<uintptr_t*>("client_panorama", "\xB9????\xE8????\x8B\x5D\x08", 1);
+    hud = *temp;
 }
