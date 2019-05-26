@@ -298,9 +298,6 @@
     <ClInclude Include="nSkinz\kit_parser.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\interfaces.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
@@ -320,9 +317,6 @@
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK\declarations.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\SDK\CBaseClientState.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK\CBaseEntity.hpp">

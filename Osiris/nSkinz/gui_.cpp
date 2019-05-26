@@ -26,6 +26,8 @@
 #include "item_definitions.hpp"
 #include "SDK.hpp"
 #include "kit_parser.hpp"
+#include "../Interfaces.h"
+#include "../SDK/Cvar.h"
 
 #include "../imgui/imgui.h"
 #include <functional>
@@ -232,9 +234,8 @@ void draw_gui()
 		{
 			const auto button_size = ImVec2(ImGui::GetColumnWidth() - 1, 20);
 
-			if(ImGui::Button("Update", button_size))
-				(*g_client_state)->ForceFullUpdate();
-				//g_engine->ClientCmd_Unrestricted("record x;stop"); //this will be changed at a later date.		
+            if (ImGui::Button("Update", button_size))
+                interfaces.cvar->findVar("cl_fullupdate")->callBack();	
 		}
 
 		ImGui::PopItemWidth();

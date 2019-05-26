@@ -30,12 +30,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/EntityList.h"
 
-sdk::CBaseClientState**		g_client_state;
-
 void initializeNSkinz() noexcept
 {
-	//g_localize = get_interface<sdk::ILocalize>("localize.dll", ILOCALIZE_CLIENT_INTERFACE_VERSION);
-	g_client_state = *reinterpret_cast<sdk::CBaseClientState***>(get_vfunc<std::uintptr_t>(interfaces.engine, 12) + 0x10);
-
 	game_data::initialize_kits();
 }
