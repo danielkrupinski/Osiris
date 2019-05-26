@@ -313,9 +313,6 @@
     <ClInclude Include="nSkinz\Hooks\Hooks.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\IAppSystem.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\SDK\IBaseClientDLL.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

@@ -76,7 +76,6 @@
     <ClInclude Include="nSkinz\SDK\ClientClass.hpp" />
     <ClInclude Include="nSkinz\SDK\DataTable.hpp" />
     <ClInclude Include="nSkinz\SDK\declarations.hpp" />
-    <ClInclude Include="nSkinz\SDK\IAppSystem.hpp" />
     <ClInclude Include="nSkinz\SDK\IBaseClientDLL.hpp" />
     <ClInclude Include="nSkinz\SDK\IClientEntity.hpp" />
     <ClInclude Include="nSkinz\SDK\ILocalize.hpp" />

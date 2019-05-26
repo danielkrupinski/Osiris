@@ -1,5 +1,4 @@
 #pragma once
-#include "IAppSystem.hpp"
 
 namespace sdk
 {
@@ -15,7 +14,7 @@ namespace sdk
 		virtual void OnLocalizationChanged() = 0;
 	};
 
-	class ILocalize : public IAppSystem
+	class ILocalize
 	{
 	public:
 		virtual bool					AddFile(const char* fileName, const char* pPathID = nullptr, bool bIncludeFallbackSearchPaths = false) = 0;
