@@ -137,7 +137,6 @@ static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*
 	create_wearable_fn(entry, serial);
 
     const auto glove = reinterpret_cast<sdk::C_BaseAttributableItem*>(interfaces.entityList->getEntity(entry));
-	assert(glove);
 
 	// He he
 	{

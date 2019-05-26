@@ -73,12 +73,9 @@
     <ClInclude Include="nSkinz\SDK.hpp" />
     <ClInclude Include="nSkinz\SDK\CBaseClientState.hpp" />
     <ClInclude Include="nSkinz\SDK\CBaseEntity.hpp" />
-    <ClInclude Include="nSkinz\SDK\ClientClass.hpp" />
     <ClInclude Include="nSkinz\SDK\DataTable.hpp" />
     <ClInclude Include="nSkinz\SDK\declarations.hpp" />
-    <ClInclude Include="nSkinz\SDK\IBaseClientDLL.hpp" />
     <ClInclude Include="nSkinz\SDK\IClientEntity.hpp" />
-    <ClInclude Include="nSkinz\SDK\ILocalize.hpp" />
     <ClInclude Include="nSkinz\SDK\interfaces.hpp" />
     <ClInclude Include="nSkinz\sticker_changer.hpp" />
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />

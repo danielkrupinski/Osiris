@@ -280,9 +280,6 @@
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\nSkinz.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
@@ -307,13 +304,7 @@
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\ILocalize.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\Hooks\Hooks.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\SDK\IBaseClientDLL.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK\IClientEntity.hpp">
@@ -337,11 +328,11 @@
     <ClInclude Include="nSkinz\SDK\CBaseEntity.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\ClientClass.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Localize.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

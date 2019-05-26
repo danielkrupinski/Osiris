@@ -25,6 +25,7 @@
 #include <cstring>
 #include "SDK.hpp"
 #include "config_.hpp"
+#include "Utilities/vmt_smart_hook.hpp"
 
 enum class EStickerAttributeType
 {

@@ -25,6 +25,7 @@
 #include "kit_parser.hpp"
 #include "Utilities/platform.hpp"
 #include "nSkinz.hpp"
+#include "../SDK/Localize.h"
 
 #include <algorithm>
 
@@ -163,8 +164,8 @@ auto game_data::initialize_kits() -> void
 
 			if(paint_kit->id == 9001)
 				continue;
-
-			const auto wide_name = g_localize->Find(paint_kit->item_name.buffer + 1);
+           
+			const auto wide_name = interfaces.localize->find(paint_kit->item_name.buffer + 1);
 			char name[256];
 			V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
@@ -221,7 +222,7 @@ auto game_data::initialize_kits() -> void
 				sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
 			}
 
-			const auto wide_name = g_localize->Find(sticker_name_ptr);
+			const auto wide_name = interfaces.localize->find(sticker_name_ptr);
 			char name[256];
 			V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
