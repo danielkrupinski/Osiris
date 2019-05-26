@@ -332,7 +332,7 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>nSkinz</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
