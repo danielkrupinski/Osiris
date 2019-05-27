@@ -4,4 +4,5 @@
 
 namespace SkinChanger {
     void run(FrameStage) noexcept;
+    void scheduleHudUpdate() noexcept;
 }
