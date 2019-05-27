@@ -28,6 +28,7 @@
 #include "kit_parser.hpp"
 #include "../Interfaces.h"
 #include "../SDK/Cvar.h"
+#include "../Hacks/SkinChanger.h"
 
 #include "../imgui/imgui.h"
 #include <functional>
@@ -234,8 +235,10 @@ void draw_gui()
 		{
 			const auto button_size = ImVec2(ImGui::GetColumnWidth() - 1, 20);
 
-            if (ImGui::Button("Update", button_size))
-                interfaces.cvar->findVar("cl_fullupdate")->callBack();	
+            if (ImGui::Button("Update", button_size)) {
+                interfaces.cvar->findVar("cl_fullupdate")->callBack();
+                SkinChanger::scheduleHudUpdate();
+            }
 		}
 
 		ImGui::PopItemWidth();
