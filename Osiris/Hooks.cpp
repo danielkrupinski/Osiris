@@ -166,7 +166,7 @@ static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint,
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
 
-static void __stdcall hookedFrameStageNotify(FrameStage stage) noexcept
+static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
     static auto backtrackInit = (Backtrack::init(), false);
 
@@ -255,7 +255,7 @@ Hooks::Hooks() noexcept
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(hookedReset);
 
-    client.hookAt(37, hookedFrameStageNotify);
+    client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
