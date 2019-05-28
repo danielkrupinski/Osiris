@@ -185,7 +185,7 @@ struct SoundData {
     std::byte pad[56];
 };
 
-static void __stdcall hookedEmitSound(SoundData data) noexcept
+static void __stdcall emitSound(SoundData data) noexcept
 {
     if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
@@ -262,7 +262,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(35, hookedGetViewModelFov);
     modelRender.hookAt(21, hookedDrawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
-    sound.hookAt(5, hookedEmitSound);
+    sound.hookAt(5, emitSound);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
