@@ -156,7 +156,7 @@ static bool __stdcall svCheatsGetBool() noexcept
         return hooks.svCheats.callOriginal<bool>(13);
 }
 
-static void __stdcall hookedPaintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
+static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
@@ -263,7 +263,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(35, getViewModelFov);
     modelRender.hookAt(21, drawModelExecute);
-    panel.hookAt(41, hookedPaintTraverse);
+    panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
