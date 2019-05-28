@@ -147,11 +147,6 @@ public:
     } visuals;
 
     struct {
-        bool enabled{ false };
-        int knife{ 0 };
-    } knifeChanger;
-
-    struct {
         constexpr auto& operator[](size_t index) noexcept
         {
             return weapons[index];
