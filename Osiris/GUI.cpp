@@ -432,7 +432,7 @@ void GUI::renderMiscWindow() noexcept
             Misc::setClanTag(buffer);
             Misc::animateClanTag(buffer);
         }
-        ImGui::Checkbox(u8"¹êæŸ¹¿Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
