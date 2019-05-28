@@ -70,7 +70,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
-static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
+static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
     auto result = hooks.originalReset(device, params);
@@ -255,7 +255,7 @@ Hooks::Hooks() noexcept
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(hookedReset);
+    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(reset);
 
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
