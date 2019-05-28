@@ -202,7 +202,7 @@ static bool __stdcall hookedShouldDrawFog() noexcept
     return !config.visuals.noFog;
 }
 
-static void __stdcall hookedLockCursor() noexcept
+static void __stdcall lockCursor() noexcept
 {
     if (gui.isOpen)
         return interfaces.surface->unlockCursor();
@@ -264,7 +264,7 @@ Hooks::Hooks() noexcept
     panel.hookAt(41, hookedPaintTraverse);
     sound.hookAt(5, hookedEmitSound);
     surface.hookAt(15, setDrawColor);
-    surface.hookAt(67, hookedLockCursor);
+    surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
