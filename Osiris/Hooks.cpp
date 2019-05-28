@@ -78,7 +78,7 @@ static HRESULT __stdcall hookedReset(IDirect3DDevice9* device, D3DPRESENT_PARAME
     return result;
 }
 
-static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noexcept
+static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
@@ -257,7 +257,7 @@ Hooks::Hooks() noexcept
 
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
-    clientMode.hookAt(24, hookedCreateMove);
+    clientMode.hookAt(24, createMove);
     clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(35, getViewModelFov);
     modelRender.hookAt(21, drawModelExecute);
