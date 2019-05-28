@@ -45,7 +45,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
-static HRESULT __stdcall hookedPresent(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
+static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
@@ -253,7 +253,7 @@ Hooks::Hooks() noexcept
         );
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(hookedPresent);
+    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(hookedReset);
 
