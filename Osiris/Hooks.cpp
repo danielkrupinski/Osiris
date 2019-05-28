@@ -209,7 +209,7 @@ static void __stdcall hookedLockCursor() noexcept
     return hooks.surface.callOriginal<void>(67);
 }
 
-static void __stdcall hookedSetDrawColor(int r, int g, int b, int a) noexcept
+static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
     if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens)) {
@@ -263,7 +263,7 @@ Hooks::Hooks() noexcept
     modelRender.hookAt(21, hookedDrawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
     sound.hookAt(5, hookedEmitSound);
-    surface.hookAt(15, hookedSetDrawColor);
+    surface.hookAt(15, setDrawColor);
     surface.hookAt(67, hookedLockCursor);
     svCheats.hookAt(13, hookedSvCheatsGetBool);
 
