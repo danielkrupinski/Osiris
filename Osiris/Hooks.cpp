@@ -148,7 +148,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
 
-static bool __fastcall svCheatsGetBool(void* _this) noexcept
+static bool __stdcall svCheatsGetBool() noexcept
 {
     if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
