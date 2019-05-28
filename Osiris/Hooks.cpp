@@ -130,7 +130,7 @@ static int __stdcall hookedDoPostScreenEffects(int param) noexcept
     return hooks.clientMode.callOriginal<int, int>(44, param);
 }
 
-static float __stdcall hookedGetViewModelFov() noexcept
+static float __stdcall getViewModelFov() noexcept
 {
     return hooks.clientMode.callOriginal<float>(35) + static_cast<float>(config.visuals.viewmodelFov);
 }
@@ -259,7 +259,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
-    clientMode.hookAt(35, hookedGetViewModelFov);
+    clientMode.hookAt(35, getViewModelFov);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
     sound.hookAt(5, emitSound);
