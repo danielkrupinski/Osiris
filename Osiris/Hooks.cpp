@@ -242,9 +242,11 @@ Hooks::Hooks() noexcept
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
+
+    static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
     char buffer[MAX_PATH];
     if (GetWindowsDirectoryA(buffer, MAX_PATH))
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f);
+        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
 
     originalWndProc = reinterpret_cast<WNDPROC>(
         SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(hookedWndProc))
