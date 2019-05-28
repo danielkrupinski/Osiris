@@ -22,7 +22,6 @@ void GUI::render() noexcept
     renderChamsWindow();
     renderEspWindow();
     renderVisualsWindow();
-    //renderKnifeChangerWindow();
     renderSkinChangerWindow();
     renderMiscWindow();
     renderConfigWindow();
@@ -74,7 +73,6 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Chams", nullptr, &window.chams);
         ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
-     //   ImGui::MenuItem("Knife changer", nullptr, &window.knifeChanger);
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Config", nullptr, &window.config);
@@ -407,18 +405,6 @@ void GUI::renderVisualsWindow() noexcept
     }
 }
 
-void GUI::renderKnifeChangerWindow() noexcept
-{
-    if (window.knifeChanger) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Knife changer", &window.knifeChanger, windowFlags);
-        ImGui::PushItemWidth(130.0f);
-        ImGui::Checkbox("Enabled", &config.knifeChanger.enabled);
-        ImGui::Combo("Knife", &config.knifeChanger.knife, "Default\0Bayonet\0Bowie\0Butterfly\0Falchion\0Flip\0Gut\0Huntsman\0Karambit\0M9 Bayonet\0Shadow Daggers\0Navaja\0Stiletto\0Talon\0Ursus\0Golden\0Ghost\0");
-        ImGui::End();
-    }
-}
-
 extern void draw_gui();
 
 void GUI::renderSkinChangerWindow() noexcept
@@ -446,7 +432,7 @@ void GUI::renderMiscWindow() noexcept
             Misc::setClanTag(buffer);
             Misc::animateClanTag(buffer);
         }
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox(u8"¹êæŸ¹¿Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);

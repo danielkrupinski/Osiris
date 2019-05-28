@@ -17,7 +17,6 @@ private:
     void renderChamsWindow() noexcept;
     void renderEspWindow() noexcept;
     void renderVisualsWindow() noexcept;
-    void renderKnifeChangerWindow() noexcept;
     void renderSkinChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
     void renderConfigWindow() noexcept;
@@ -30,7 +29,6 @@ private:
         bool chams{ false };
         bool esp{ false };
         bool visuals{ false };
-        bool knifeChanger{ false };
         bool skinChanger{ false };
         bool misc{ false };
         bool config{ false };

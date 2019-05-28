@@ -37,7 +37,7 @@ void Config::load(size_t id) noexcept
     if (!in.good())
         return;
 
-    ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> knifeChanger >> misc;
+    ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> misc;
     in.close();
 }
 
@@ -53,7 +53,7 @@ void Config::save(size_t id) const noexcept
     if (!out.good())
         return;
 
-    ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << knifeChanger << misc;
+    ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << misc;
     out.close();
 }
 
@@ -84,6 +84,5 @@ void Config::reset() noexcept
     chams = { };
     esp = { };
     visuals = { };
-    knifeChanger = { };
     misc = { };
 }
