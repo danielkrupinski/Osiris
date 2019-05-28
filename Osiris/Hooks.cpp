@@ -148,7 +148,7 @@ static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const Model
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
 
-static bool __fastcall hookedSvCheatsGetBool(void* _this) noexcept
+static bool __fastcall svCheatsGetBool(void* _this) noexcept
 {
     if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
@@ -265,7 +265,7 @@ Hooks::Hooks() noexcept
     sound.hookAt(5, emitSound);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
-    svCheats.hookAt(13, hookedSvCheatsGetBool);
+    svCheats.hookAt(13, svCheatsGetBool);
 
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
