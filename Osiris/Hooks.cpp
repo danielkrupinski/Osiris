@@ -197,7 +197,7 @@ static void __stdcall hookedEmitSound(SoundData data) noexcept
     hooks.sound.callOriginal<void, SoundData>(5, data);
 }
 
-static bool __stdcall hookedShouldDrawFog() noexcept
+static bool __stdcall shouldDrawFog() noexcept
 {
     return !config.visuals.noFog;
 }
@@ -256,7 +256,7 @@ Hooks::Hooks() noexcept
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(hookedReset);
 
     client.hookAt(37, hookedFrameStageNotify);
-    clientMode.hookAt(17, hookedShouldDrawFog);
+    clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
