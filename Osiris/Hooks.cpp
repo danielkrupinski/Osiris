@@ -135,7 +135,7 @@ static float __stdcall hookedGetViewModelFov() noexcept
     return hooks.clientMode.callOriginal<float>(35) + static_cast<float>(config.visuals.viewmodelFov);
 }
 
-static void __stdcall hookedDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
@@ -260,7 +260,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(24, hookedCreateMove);
     clientMode.hookAt(44, hookedDoPostScreenEffects);
     clientMode.hookAt(35, hookedGetViewModelFov);
-    modelRender.hookAt(21, hookedDrawModelExecute);
+    modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
     sound.hookAt(5, emitSound);
     surface.hookAt(15, setDrawColor);
