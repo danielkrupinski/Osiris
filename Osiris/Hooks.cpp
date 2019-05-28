@@ -112,7 +112,7 @@ static bool __stdcall hookedCreateMove(float inputSampleTime, UserCmd* cmd) noex
     return false;
 }
 
-static int __stdcall hookedDoPostScreenEffects(int param) noexcept
+static int __stdcall doPostScreenEffects(int param) noexcept
 {
     if (interfaces.engine->isInGame()) {
         Visuals::modifySmoke();
@@ -258,7 +258,7 @@ Hooks::Hooks() noexcept
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(24, hookedCreateMove);
-    clientMode.hookAt(44, hookedDoPostScreenEffects);
+    clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(35, getViewModelFov);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, hookedPaintTraverse);
