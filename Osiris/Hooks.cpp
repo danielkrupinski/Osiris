@@ -31,7 +31,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-static LRESULT __stdcall hookedWndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey) {
         gui.isOpen = !gui.isOpen;
@@ -249,7 +249,7 @@ Hooks::Hooks() noexcept
         io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
 
     originalWndProc = reinterpret_cast<WNDPROC>(
-        SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(hookedWndProc))
+        SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(wndProc))
         );
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
