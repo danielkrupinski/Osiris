@@ -328,5 +328,8 @@
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\GameEventManager.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
