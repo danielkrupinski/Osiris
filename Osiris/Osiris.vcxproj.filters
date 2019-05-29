@@ -334,5 +334,8 @@
     <ClInclude Include="SDK\GameEvent.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="EventListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
