@@ -44,6 +44,7 @@ public:
 
     Vmt client{ interfaces.client };
     Vmt clientMode{ memory.clientMode };
+    Vmt gameEventManager{ interfaces.gameEventManager };
     Vmt modelRender{ interfaces.modelRender };
     Vmt panel{ interfaces.panel };
     Vmt sound{ interfaces.sound };

@@ -28,6 +28,11 @@
 #include "SDK/GameUI.h"
 #include "SDK/Surface.h"
 #include "Hacks/SkinChanger.h"
+#include "SDK/Engine.h"
+#include "SDK/Entity.h"
+#include "SDK/EntityList.h"
+#include "SDK/GameEvent.h"
+#include "SDK/GameEventManager.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -219,6 +224,16 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
     hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
 }
 
+#include "nSkinz/config_.hpp"
+static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
+{
+    if (!strcmp(event->getName(), "player_death") && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (const auto iconOverride = g_config.get_icon_override(event->getString("weapon")))
+            event->setString("weapon", iconOverride);
+    }
+    return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
+}
+
 extern void initializeNSkinz();
 
 Hooks::Hooks() noexcept
@@ -262,6 +277,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(24, createMove);
     clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(35, getViewModelFov);
+    gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
