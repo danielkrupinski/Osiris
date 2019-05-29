@@ -31,6 +31,11 @@ public:
         return callVirtualMethod<bool, int, const PlayerInfo&>(this, 8, entityIndex, playerInfo);
     }
 
+    constexpr auto getPlayerForUserID(int userId) noexcept
+    {
+        return callVirtualMethod<int, int>(this, 9, userId);
+    }
+
     constexpr auto getLocalPlayer() noexcept
     {
         return callVirtualMethod<int>(this, 12);
