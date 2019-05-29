@@ -331,5 +331,8 @@
     <ClInclude Include="SDK\GameEventManager.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\GameEvent.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
