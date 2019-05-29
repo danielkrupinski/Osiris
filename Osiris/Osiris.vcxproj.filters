@@ -119,6 +119,9 @@
     <ClCompile Include="nSkinz\sticker_changer.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
+    <ClCompile Include="EventListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
