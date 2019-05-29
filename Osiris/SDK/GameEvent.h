@@ -11,16 +11,16 @@ public:
 
     constexpr auto getInt(const char* keyName) noexcept
     {
-        return callVirtualMethod<int, const char*>(this, 6, keyName);
+        return callVirtualMethod<int, const char*, int>(this, 6, keyName, 0);
     }
 
     constexpr auto getString(const char* keyName) noexcept
     {
-        return callVirtualMethod<const char*, const char*>(this, 9, keyName);
+        return callVirtualMethod<const char*, const char*, const char*>(this, 9, keyName, "");
     }
 
     constexpr auto setString(const char* keyName, const char* value) noexcept
     {
-        callVirtualMethod<void, const char*, const char*>(this, 15, keyName, value);
+        callVirtualMethod<void, const char*, const char*>(this, 16, keyName, value);
     }
 };
