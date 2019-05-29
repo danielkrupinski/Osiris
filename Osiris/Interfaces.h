@@ -10,6 +10,7 @@ class Cvar;
 class Engine;
 class EngineTrace;
 class EntityList;
+class GameEventManager;
 class GameUI;
 class InputSystem;
 class Localize;
@@ -30,6 +31,7 @@ public:
     Engine* engine;
     EngineTrace* engineTrace;
     EntityList* entityList;
+    GameEventManager* gameEventManager;
     GameUI* gameUI;
     InputSystem* inputSystem;
     Localize* localize;
