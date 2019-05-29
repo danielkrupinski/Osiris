@@ -292,6 +292,7 @@ void Hooks::restore() noexcept
 {
     client.restore();
     clientMode.restore();
+    gameEventManager.restore();
     modelRender.restore();
     panel.restore();
     sound.restore();
