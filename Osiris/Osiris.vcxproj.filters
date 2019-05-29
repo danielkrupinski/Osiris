@@ -301,9 +301,6 @@
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Hooks\Hooks.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\SDK\IClientEntity.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

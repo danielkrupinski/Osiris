@@ -36,7 +36,6 @@ static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
     proxies["m_bSpotted"](data, arg2, arg3);
 }
 
-#include "nSkinz/Hooks/Hooks.hpp"
 #include "nSkinz/nSkinz.hpp"
 #include "nSkinz/config_.hpp"
 

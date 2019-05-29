@@ -23,7 +23,6 @@
 * SOFTWARE.
 */
 #include "nSkinz.hpp"
-#include "Hooks/hooks.hpp"
 #include "kit_parser.hpp"
 #include "config_.hpp"
 #include "../Interfaces.h"

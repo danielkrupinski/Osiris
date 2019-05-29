@@ -66,7 +66,6 @@
     <ClInclude Include="Hacks\Visuals.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nSkinz\config_.hpp" />
-    <ClInclude Include="nSkinz\Hooks\Hooks.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\kit_parser.hpp" />
     <ClInclude Include="nSkinz\nSkinz.hpp" />
