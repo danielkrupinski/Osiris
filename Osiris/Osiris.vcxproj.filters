@@ -113,12 +113,6 @@
     <ClCompile Include="nSkinz\Utilities\Platform.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\Hooks\PostDataUpdate.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\sticker_changer.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -284,9 +278,6 @@
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\sticker_changer.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp">

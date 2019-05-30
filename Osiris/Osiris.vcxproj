@@ -31,11 +31,9 @@
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
     <ClCompile Include="nSkinz\gui_.cpp" />
-    <ClCompile Include="nSkinz\Hooks\PostDataUpdate.cpp" />
     <ClCompile Include="nSkinz\item_definitions.cpp" />
     <ClCompile Include="nSkinz\kit_parser.cpp" />
     <ClCompile Include="nSkinz\nSkinz.cpp" />
-    <ClCompile Include="nSkinz\sticker_changer.cpp" />
     <ClCompile Include="nSkinz\Utilities\netvar_manager.cpp" />
     <ClCompile Include="nSkinz\Utilities\Platform.cpp" />
     <ClCompile Include="Osiris.cpp" />
@@ -71,7 +69,6 @@
     <ClInclude Include="nSkinz\SDK.hpp" />
     <ClInclude Include="nSkinz\SDK\DataTable.hpp" />
     <ClInclude Include="nSkinz\SDK\declarations.hpp" />
-    <ClInclude Include="nSkinz\sticker_changer.hpp" />
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />
     <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
