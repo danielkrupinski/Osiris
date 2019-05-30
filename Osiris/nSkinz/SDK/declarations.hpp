@@ -39,8 +39,6 @@ namespace sdk
 	using CreateEventFn = IClientNetworkable* (*)();
 	using CreateInterfaceFn = void* (*)(const char*, int*);
 	using LocalizeStringIndex_t = unsigned;
-	using RecvVarProxyFn = void(__cdecl *)(const CRecvProxyData*, void*, void*);
-	using Vector = std::array<float, 3>;
 
 	constexpr static auto INVALID_EHANDLE_INDEX = 0xFFFFFFFF;
 	constexpr static auto MAX_PLAYER_NAME_LENGTH = 128;

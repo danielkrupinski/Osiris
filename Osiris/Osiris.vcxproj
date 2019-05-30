@@ -67,7 +67,6 @@
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\kit_parser.hpp" />
     <ClInclude Include="nSkinz\SDK.hpp" />
-    <ClInclude Include="nSkinz\SDK\DataTable.hpp" />
     <ClInclude Include="nSkinz\SDK\declarations.hpp" />
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />
     <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp" />

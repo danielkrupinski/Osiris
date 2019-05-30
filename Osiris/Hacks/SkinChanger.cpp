@@ -84,7 +84,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 auto apply_sticker_changer(Entity* item) -> void
 {
     if (!s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvar_manager::get().get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
+        s_econ_item_interface_wrapper_offset = netvarManager.get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -203,9 +203,9 @@ static auto make_glove(int entry, int serial) -> Entity*
     {
         static auto set_abs_origin_addr = platform::find_pattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1", "xxxxxxxxxxxx");
 
-        const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const sdk::Vector&)>(set_abs_origin_addr);
+        const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const Vector&)>(set_abs_origin_addr);
 
-        static constexpr sdk::Vector new_pos = { 10000.f, 10000.f, 10000.f };
+        static constexpr Vector new_pos = { 10000.f, 10000.f, 10000.f };
 
         set_abs_origin_fn(glove, new_pos);
     }
@@ -235,7 +235,7 @@ static auto post_data_update_start(Entity* local) -> void
 
         const auto glove_config = g_config.get_by_definition_index(GLOVE_T_SIDE);
 
-        static auto glove_handle = sdk::CBaseHandle(0);
+        static int glove_handle;
 
         auto glove = interfaces.entityList->getEntityFromHandle(wearables[0]);
 
@@ -292,7 +292,7 @@ static auto post_data_update_start(Entity* local) -> void
 
         for (auto weapon_handle : weapons)
         {
-            if (weapon_handle == sdk::INVALID_EHANDLE_INDEX)
+            if (weapon_handle == -1)
                 break;
 
             auto weapon = interfaces.entityList->getEntityFromHandle(weapon_handle);

@@ -295,9 +295,6 @@
     <ClInclude Include="nSkinz\config_.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\DataTable.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\SDK\declarations.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

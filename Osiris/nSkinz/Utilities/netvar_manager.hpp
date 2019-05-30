@@ -23,13 +23,12 @@
 * SOFTWARE.
 */
 #pragma once
-#include "../SDK/DataTable.hpp"
 #include "fnv_hash.hpp"
 #include <map>
 #include <type_traits>
 #include "../../SDK/Recv.h"
 
-class netvar_manager
+class NetvarManager
 {
 private:
 	struct stored_data
@@ -39,54 +38,32 @@ private:
 	};
 
 public:
-	// Return a const instance, others shouldnt modify this.
-	static auto get() -> const netvar_manager&
+    NetvarManager();
+
+	auto get_offset(const fnv::hash hash) const noexcept
 	{
-		static netvar_manager instance;
-		return instance;
+		return props.at(hash).class_relative_offset;
 	}
 
-	auto get_offset(const fnv::hash hash) const -> std::uint16_t
+	auto get_prop(const fnv::hash hash) const noexcept
 	{
-		return m_props.at(hash).class_relative_offset;
-	}
-
-	auto get_prop(const fnv::hash hash) const 
-	{
-		return m_props.at(hash).prop_ptr;
-	}
-
-	// Prevent instruction cache pollution caused by automatic
-	// inlining of `get` and get_offset every netvar usage when
-	// there are a lot of netvars
-	__declspec(noinline) static auto get_offset_by_hash(const fnv::hash hash) -> std::uint16_t
-	{
-		return get().get_offset(hash);
-	}
-	
-	template<fnv::hash Hash>
-	static auto get_offset_by_hash_cached() -> std::uint16_t
-	{
-		static auto offset = std::uint16_t(0);
-		if(!offset)
-			offset = get_offset_by_hash(Hash);
-		return offset;
+		return props.at(hash).prop_ptr;
 	}
 
 private:
-	netvar_manager();
+	
 	auto dump_recursive(const char* base_class, RecvTable* table, std::uint16_t offset) -> void;
 
 private:
-	std::map<fnv::hash, stored_data> m_props;
+	std::map<fnv::hash, stored_data> props;
 };
-
+extern NetvarManager netvarManager;
 
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, ...) \
 auto funcname() -> std::add_pointer_t<__VA_ARGS__> \
 { \
 	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
-	const auto addr = std::uintptr_t(this) + offset + netvar_manager::get_offset_by_hash_cached<hash>(); \
+	const auto addr = std::uintptr_t(this) + offset + netvarManager.get_offset(hash); \
 	return reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
 }
 
@@ -97,18 +74,9 @@ auto funcname() -> std::add_pointer_t<__VA_ARGS__> \
 auto funcname() -> std::add_lvalue_reference_t<__VA_ARGS__> \
 { \
 	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
-	const auto addr = std::uintptr_t(this) + offset + netvar_manager::get_offset_by_hash_cached<hash>(); \
+	const auto addr = std::uintptr_t(this) + offset + netvarManager.get_offset(hash); \
 	return *reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
 }
 
 #define NETVAR(funcname, class_name, var_name, ...) \
 	NETVAR_OFFSET(funcname, class_name, var_name, 0, __VA_ARGS__)
-
-#define NETPROP(funcname, class_name, var_name) \
-static auto funcname() ->  RecvProp* \
-{ \
-	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
-	static RecvProp* prop_ptr; \
-	if(!prop_ptr) prop_ptr = netvar_manager::get().get_prop(hash); \
-	return prop_ptr; \
-}

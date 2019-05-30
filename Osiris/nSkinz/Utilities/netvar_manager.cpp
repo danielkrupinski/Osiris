@@ -29,47 +29,45 @@
 #include "../../SDK/Client.h"
 #include "../../SDK/ClientClass.h"
 #include "../../SDK/Recv.h"
+NetvarManager netvarManager;
 
-netvar_manager::netvar_manager()
+NetvarManager::NetvarManager()
 {
 	for (auto clazz = interfaces.client->getAllClasses(); clazz; clazz = clazz->next)
 		if (clazz->recvTable)
 			dump_recursive(clazz->networkName, clazz->recvTable, 0);
 }
 
-auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, const std::uint16_t offset) -> void
+auto NetvarManager::dump_recursive(const char* base_class, RecvTable* table, const std::uint16_t offset) -> void
 {
-	for (auto i = 0; i < table->propCount; ++i)
-	{
-		const auto prop_ptr = &table->props[i];
+	for (auto i = 0; i < table->propCount; i++) {
+		auto& prop_ptr = table->props[i];
 
-		//Skip trash array items
-		if (!prop_ptr || isdigit(prop_ptr->name[0]))
+		if (isdigit(prop_ptr.name[0]))
 			continue;
 
-		//We dont care about the base class, we already know that
-		if (fnv::hash_runtime(prop_ptr->name) == FNV("baseclass"))
+		if (fnv::hash_runtime(prop_ptr.name) == FNV("baseclass"))
 			continue;
 
-		if (prop_ptr->type == sdk::DPT_DataTable &&
-			prop_ptr->dataTable != nullptr &&
-			prop_ptr->dataTable->netTableName[0] == 'D') // Skip shitty tables
+		if (prop_ptr.type == 6 &&
+			prop_ptr.dataTable &&
+			prop_ptr.dataTable->netTableName[0] == 'D')
 		{
-			dump_recursive(base_class, prop_ptr->dataTable, std::uint16_t(offset + prop_ptr->offset));
+			dump_recursive(base_class, prop_ptr.dataTable, std::uint16_t(offset + prop_ptr.offset));
 		}
 
 		char hash_name[256];
 
 		strcpy_s(hash_name, base_class);
 		strcat_s(hash_name, "->");
-		strcat_s(hash_name, prop_ptr->name);
+		strcat_s(hash_name, prop_ptr.name);
 
 		const auto hash = fnv::hash_runtime(hash_name);
-		const auto total_offset = std::uint16_t(offset + prop_ptr->offset);
+		const auto total_offset = std::uint16_t(offset + prop_ptr.offset);
 
-		m_props[hash] =
+		props[hash] =
 		{
-			prop_ptr,
+			&prop_ptr,
 			total_offset
 		};
 	}
