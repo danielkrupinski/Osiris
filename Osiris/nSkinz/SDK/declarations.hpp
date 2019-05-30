@@ -2,12 +2,6 @@
 #include <cstddef>
 #include <array>
 
-template <typename Fn = void*>
-Fn get_vfunc(void* class_base, const std::size_t index)
-{
-	return (*reinterpret_cast<Fn**>(class_base))[index];
-}
-
 namespace sdk
 {
 	//class C_BaseEntity;

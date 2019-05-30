@@ -30,7 +30,7 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 {
 	const static std::map<int, weapon_info> info =
 	{
-		{WEAPON_KNIFE,{"models/weapons/v_knife_default_ct.mdl", "knife_default_ct"}},
+		{WEAPON_KNIFE,{"models/weapons/v_knife_default_ct.mdl", "knife"}},
 		{WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"}},
 		{WEAPON_KNIFE_BAYONET, {"models/weapons/v_knife_bayonet.mdl", "bayonet"}},
 		{WEAPON_KNIFE_FLIP, {"models/weapons/v_knife_flip.mdl", "knife_flip"}},
