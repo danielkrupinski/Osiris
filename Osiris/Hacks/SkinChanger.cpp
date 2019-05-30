@@ -29,7 +29,7 @@ struct GetStickerAttributeBySlotIndexFloat
     {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
-        const auto defindex = item->GetItemDefinitionIndex();
+        const auto defindex = item->itemDefinitionIndex();
 
         auto config = g_config.get_by_definition_index(defindex);
 
@@ -65,7 +65,7 @@ struct GetStickerAttributeBySlotIndexInt
 
         if (attribute == EStickerAttributeType::Index)
         {
-            const auto defindex = item->GetItemDefinitionIndex();
+            const auto defindex = item->itemDefinitionIndex();
 
             auto config = g_config.get_by_definition_index(defindex);
 
@@ -119,29 +119,29 @@ static auto apply_config_on_attributable_item(Entity* item, const item_setting* 
     const unsigned xuid_low) -> void
 {
     // Force fallback values to be used.
-    item->GetItemIDHigh() = -1;
+    item->itemIDHigh() = -1;
 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
-    item->GetAccountID() = xuid_low;
+    item->accountID() = xuid_low;
 
     if (config->entity_quality_index)
-        item->GetEntityQuality() = config->entity_quality_index;
+        item->entityQuality() = config->entity_quality_index;
 
     if (config->custom_name[0])
-        strcpy_s(item->GetCustomName(), config->custom_name);
+        strcpy_s(item->customName(), config->custom_name);
 
     if (config->paint_kit_index)
-        item->GetFallbackPaintKit() = config->paint_kit_index;
+        item->fallbackPaintKit() = config->paint_kit_index;
 
     if (config->seed)
-        item->GetFallbackSeed() = config->seed;
+        item->fallbackSeed() = config->seed;
 
     if (config->stat_trak)
-        item->GetFallbackStatTrak() = config->stat_trak;
+        item->fallbackStatTrak() = config->stat_trak;
 
-    item->GetFallbackWear() = config->wear;
+    item->fallbackWear() = config->wear;
 
-    auto& definition_index = item->GetItemDefinitionIndex();
+    auto& definition_index = item->itemDefinitionIndex();
 
     auto& icon_override_map = g_config.get_icon_override_map();
 
@@ -231,7 +231,7 @@ static auto post_data_update_start(Entity* local) -> void
 
     // Handle glove config
     {
-        const auto wearables = local->GetWearables();
+        const auto wearables = local->wearables();
 
         const auto glove_config = g_config.get_by_definition_index(GLOVE_T_SIDE);
 
@@ -288,7 +288,7 @@ static auto post_data_update_start(Entity* local) -> void
 
     // Handle weapon configs
     {
-        auto& weapons = local->GetWeapons();
+        auto& weapons = local->weapons();
 
         for (auto weapon_handle : weapons)
         {
@@ -300,7 +300,7 @@ static auto post_data_update_start(Entity* local) -> void
             if (!weapon)
                 continue;
 
-            auto& definition_index = weapon->GetItemDefinitionIndex();
+            auto& definition_index = weapon->itemDefinitionIndex();
 
             // All knives are terrorist knives.
             if (const auto active_conf = g_config.get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
@@ -310,30 +310,30 @@ static auto post_data_update_start(Entity* local) -> void
         }
     }
 
-    const auto view_model = interfaces.entityList->getEntityFromHandle(local->GetViewModel());
+    const auto view_model = interfaces.entityList->getEntityFromHandle(local->viewModel());
 
     if (!view_model)
         return;
 
-    const auto view_model_weapon = interfaces.entityList->getEntityFromHandle(view_model->GetWeapon());
+    const auto view_model_weapon = interfaces.entityList->getEntityFromHandle(view_model->weapon());
 
     if (!view_model_weapon)
         return;
 
-    const auto override_info = game_data::get_weapon_info(view_model_weapon->GetItemDefinitionIndex());
+    const auto override_info = game_data::get_weapon_info(view_model_weapon->itemDefinitionIndex());
 
     if (!override_info)
         return;
 
     const auto override_model_index = interfaces.modelInfo->getModelIndex(override_info->model);
-    view_model->GetModelIndex() = override_model_index;
+    view_model->modelIndex() = override_model_index;
 
-    const auto world_model = interfaces.entityList->getEntityFromHandle(view_model_weapon->GetWeaponWorldModel());
+    const auto world_model = interfaces.entityList->getEntityFromHandle(view_model_weapon->weaponWorldModel());
 
     if (!world_model)
         return;
 
-    world_model->GetModelIndex() = override_model_index + 1;
+    world_model->modelIndex() = override_model_index + 1;
 }
 
 static bool hudUpdateRequired{ false };
