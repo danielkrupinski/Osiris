@@ -24,5 +24,6 @@
 */
 #pragma once
 #include "SDK.hpp"
+#include "../SDK/Entity.h"
 
-extern auto apply_sticker_changer(sdk::C_BaseAttributableItem* item) -> void;
+void apply_sticker_changer(Entity* item);

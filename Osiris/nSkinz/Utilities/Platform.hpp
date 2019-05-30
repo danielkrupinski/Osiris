@@ -56,7 +56,6 @@ namespace platform
 		};
 	}
 
-	auto get_interface(const char* module_name, const char* interface_name) -> void*;
 	auto get_module_info(const char* module_name) -> std::pair<std::uintptr_t, std::size_t>;
 	//auto find_pattern(const char* module_name, const char* pattern, const char* mask) -> std::uintptr_t;
 	auto is_code_ptr(void* ptr) -> bool;

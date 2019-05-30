@@ -26,6 +26,7 @@
 #include "SDK.hpp"
 #include "config_.hpp"
 #include "Utilities/vmt_smart_hook.hpp"
+#include "../SDK/Entity.h"
 
 enum class EStickerAttributeType
 {
@@ -42,7 +43,7 @@ struct GetStickerAttributeBySlotIndexFloat
 	static auto __fastcall hooked(void* thisptr, void*, const int slot,
 		const EStickerAttributeType attribute, const float unknown) -> float
 	{
-		auto item = reinterpret_cast<sdk::C_BaseAttributableItem*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
+		auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
 		const auto defindex = item->GetItemDefinitionIndex();
 
@@ -76,7 +77,7 @@ struct GetStickerAttributeBySlotIndexInt
 	static auto __fastcall hooked(void* thisptr, void*, const int slot,
 		const EStickerAttributeType attribute, const int unknown) -> int
 	{
-		auto item = reinterpret_cast<sdk::C_BaseAttributableItem*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
+		auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
 		if(attribute == EStickerAttributeType::Index)
 		{
@@ -96,9 +97,9 @@ struct GetStickerAttributeBySlotIndexInt
 
 decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlotIndexInt::m_original;
 
-auto apply_sticker_changer(sdk::C_BaseAttributableItem* item) -> void
+auto apply_sticker_changer(Entity* item) -> void
 {
-	if(!s_econ_item_interface_wrapper_offset)
+	if (!s_econ_item_interface_wrapper_offset)
 		s_econ_item_interface_wrapper_offset = netvar_manager::get().get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
 
 	static vmt_multi_hook hook;

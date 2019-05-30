@@ -10,7 +10,7 @@ Fn get_vfunc(void* class_base, const std::size_t index)
 
 namespace sdk
 {
-	class C_BaseEntity;
+	//class C_BaseEntity;
 	class ClientClass;
 	class ClientClass;
 	class IClientAlphaProperty;

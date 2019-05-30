@@ -12,6 +12,7 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
+#include "../nSkinz/Utilities/netvar_manager.hpp"
 
 enum class MoveType {
     NOCLIP = 8,
@@ -107,6 +108,11 @@ public:
         return callVirtualMethod<bool>(this + 8, 9);
     }
 
+    constexpr void preDataUpdate(int updateType) noexcept
+    {
+        callVirtualMethod<void, int>(this + 8, 6, updateType);
+    }
+
     constexpr void release() noexcept
     {
         return callVirtualMethod<void>(this + 8, 1);
@@ -146,4 +152,36 @@ public:
     {
         return callVirtualMethod<Vector&>(this, 10);
     }
+
+    constexpr void setModelIndex(int index) noexcept
+    {
+        callVirtualMethod<void, int>(this, 75, index);
+    }
+
+    NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
+    NETVAR(GetModelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
+
+    NETVAR(GetWeapons, "CBaseCombatCharacter", "m_hMyWeapons", std::array<int, 48>);
+    PNETVAR(GetWearables, "CBaseCombatCharacter", "m_hMyWearables", int);
+
+    NETVAR(GetLifeState, "CBasePlayer", "m_lifeState", int);
+    NETVAR(GetViewModel, "CBasePlayer", "m_hViewModel[0]", int);
+
+    NETVAR(GetViewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
+    NETVAR(GetWorldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
+    NETVAR(GetWorldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
+    NETVAR(GetWeaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
+
+    NETVAR(GetAccountID, "CBaseAttributableItem", "m_iAccountID", int);
+    NETVAR(GetItemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
+    NETVAR(GetItemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int);
+    NETVAR(GetEntityQuality, "CBaseAttributableItem", "m_iEntityQuality", int);
+    NETVAR(GetCustomName, "CBaseAttributableItem", "m_szCustomName", char[32]);
+    NETVAR(GetFallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned);
+    NETVAR(GetFallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned);
+    NETVAR(GetFallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float);
+    NETVAR(GetFallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned);
+
+    NETVAR(GetOwner, "CBaseViewModel", "m_hOwner", int);
+    NETVAR(GetWeapon, "CBaseViewModel", "m_hWeapon", int);
 };

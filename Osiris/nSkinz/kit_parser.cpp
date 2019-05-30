@@ -24,8 +24,8 @@
 */
 #include "kit_parser.hpp"
 #include "Utilities/platform.hpp"
-#include "nSkinz.hpp"
 #include "../SDK/Localize.h"
+#include "../Interfaces.h"
 
 #include <algorithm>
 

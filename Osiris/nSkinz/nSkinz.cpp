@@ -22,7 +22,6 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#include "nSkinz.hpp"
 #include "kit_parser.hpp"
 #include "config_.hpp"
 #include "../Interfaces.h"

@@ -41,14 +41,6 @@ auto platform::get_export(const char* module_name, const char* export_name) -> v
 	return reinterpret_cast<void*>(GetProcAddress(mod, export_name));
 }
 
-auto platform::get_interface(const char* module_name, const char* interface_name) -> void*
-{
-	const auto addr = get_export(module_name, "CreateInterface");
-	const auto create_interface_fn = reinterpret_cast<sdk::CreateInterfaceFn>(addr);
-
-	return create_interface_fn(interface_name, nullptr);
-}
-
 auto platform::get_module_info(const char* module_name) -> std::pair<std::uintptr_t, std::size_t>
 {
 	const auto module = GetModuleHandleA(module_name);
@@ -58,28 +50,6 @@ auto platform::get_module_info(const char* module_name) -> std::pair<std::uintpt
 	K32GetModuleInformation(GetCurrentProcess(), module, &module_info, sizeof(MODULEINFO));
 	return { std::uintptr_t(module_info.lpBaseOfDll), module_info.SizeOfImage };
 }
-
-/*auto platform::find_pattern(const char* module_name, const char* pattern, const char* mask) -> std::uintptr_t
-{
-	MODULEINFO module_info = {};
-	K32GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module_name), &module_info, sizeof(MODULEINFO));
-
-	const auto address = reinterpret_cast<std::uint8_t*>(module_info.lpBaseOfDll);
-	const auto size = module_info.SizeOfImage;
-
-	std::vector<std::pair<std::uint8_t, bool>> signature;
-
-	for (auto i = 0u; mask[i]; i++)
-		signature.push_back(std::make_pair(pattern[i], mask[i] == 'x'));
-
-	auto ret = std::search(address, address + size, signature.begin(), signature.end(),
-		[](std::uint8_t curr, std::pair<std::uint8_t, bool> curr_pattern)
-	{
-		return (!curr_pattern.second) || curr == curr_pattern.first;
-	});
-
-	return ret == address + size ? 0 : std::uintptr_t(ret);
-}*/
 
 auto platform::is_code_ptr(void* ptr) -> bool
 {

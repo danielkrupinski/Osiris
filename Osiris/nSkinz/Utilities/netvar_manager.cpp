@@ -30,23 +30,11 @@
 #include "../../SDK/ClientClass.h"
 #include "../../SDK/Recv.h"
 
-//#define DUMP_NETVARS
-
-#ifdef DUMP_NETVARS
-#define IF_DUMPING(...) __VA_ARGS__
-#else
-#define IF_DUMPING(...)
-#endif
-
-IF_DUMPING(static FILE* s_fp;)
-
 netvar_manager::netvar_manager()
 {
-	IF_DUMPING(fopen_s(&s_fp, "netvar_dump.txt", "w");)
 	for (auto clazz = interfaces.client->getAllClasses(); clazz; clazz = clazz->next)
 		if (clazz->recvTable)
 			dump_recursive(clazz->networkName, clazz->recvTable, 0);
-	IF_DUMPING(fclose(s_fp);)
 }
 
 auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, const std::uint16_t offset) -> void
@@ -79,18 +67,10 @@ auto netvar_manager::dump_recursive(const char* base_class, RecvTable* table, co
 		const auto hash = fnv::hash_runtime(hash_name);
 		const auto total_offset = std::uint16_t(offset + prop_ptr->offset);
 
-		IF_DUMPING(fprintf(s_fp, "%s\t0x%04X\t%s\n", base_class, total_offset, prop_ptr->m_pVarName);)
-
 		m_props[hash] =
 		{
 			prop_ptr,
 			total_offset
 		};
-        //NETPROP(GetTeamProp, "CPlayerResource", "m_iTeam");
-        if (fnv::hash_runtime(base_class) == FNV("CPlayerResource") && fnv::hash_runtime(prop_ptr->name) == FNV("m_iTeam")) {
-            const auto team_prop = prop_ptr->dataTable->props;
-            const auto proxy_addr = std::uintptr_t(team_prop->proxy);
-            //g_player_resource = *reinterpret_cast<sdk::C_CS_PlayerResource***>(proxy_addr + 0x10);
-        }
 	}
 }

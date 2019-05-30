@@ -280,9 +280,6 @@
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\nSkinz.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\Utilities\Platform.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
@@ -301,9 +298,6 @@
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\SDK\IClientEntity.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
@@ -314,9 +308,6 @@
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK\declarations.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\SDK\CBaseEntity.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Localize.h">

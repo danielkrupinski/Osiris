@@ -23,16 +23,15 @@
 * SOFTWARE.
 */
 #include "../item_definitions.hpp"
-#include "../nSkinz.hpp"
 #include "../config_.hpp"
 #include "../sticker_changer.hpp"
-#include "../SDK/CBaseEntity.hpp"
 #include "../../Interfaces.h"
 #include "../../SDK/Client.h"
 #include "../../SDK/ClientClass.h"
 #include "../../SDK/Engine.h"
 #include "../../SDK/ModelInfo.h"
 #include "../../SDK/EntityList.h"
+#include "../../SDK/Entity.h"
 
 static auto erase_override_if_exists_by_index(const int definition_index) -> void
 {
@@ -52,7 +51,7 @@ static auto erase_override_if_exists_by_index(const int definition_index) -> voi
 	}
 }
 
-static auto apply_config_on_attributable_item(sdk::C_BaseAttributableItem* item, const item_setting* config,
+static auto apply_config_on_attributable_item(Entity* item, const item_setting* config,
 	const unsigned xuid_low) -> void
 {
 	// Force fallback values to be used.
@@ -94,8 +93,8 @@ static auto apply_config_on_attributable_item(sdk::C_BaseAttributableItem* item,
 
 			// Set the weapon model index -- required for paint kits to work on replacement items after the 29/11/2016 update.
 			//item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
-			item->SetModelIndex(interfaces.modelInfo->getModelIndex(replacement_item->model));
-			item->GetClientNetworkable()->PreDataUpdate(0);
+			item->setModelIndex(interfaces.modelInfo->getModelIndex(replacement_item->model));
+			item->preDataUpdate(0);
 
 			// We didn't override 0, but some actual weapon, that we have data for
 			if(old_definition_index)
@@ -129,13 +128,13 @@ static auto get_wearable_create_fn() noexcept
 	return clazz->createFunction;
 }
 
-static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*
+static auto make_glove(int entry, int serial) -> Entity*
 {
 	static auto create_wearable_fn = get_wearable_create_fn();
 
 	create_wearable_fn(entry, serial);
 
-    const auto glove = reinterpret_cast<sdk::C_BaseAttributableItem*>(interfaces.entityList->getEntity(entry));
+    const auto glove = interfaces.entityList->getEntity(entry);
 
 	// He he
 	{
@@ -151,9 +150,9 @@ static auto make_glove(int entry, int serial) -> sdk::C_BaseAttributableItem*
 	return glove;
 }
 
-auto post_data_update_start(sdk::C_BasePlayer* local) -> void
+auto post_data_update_start(Entity* local) -> void
 {
-	const auto local_index = local->GetIndex();
+	const auto local_index = local->index();
 
 	/*if(auto player_resource = *g_player_resource)
 	{
@@ -175,12 +174,12 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 
 		static auto glove_handle = sdk::CBaseHandle(0);
 
-		auto glove = get_entity_from_handle<sdk::C_BaseAttributableItem>(wearables[0]);
+		auto glove = interfaces.entityList->getEntityFromHandle(wearables[0]);
 
 		if(!glove) // There is no glove
 		{
 			// Try to get our last created glove
-			const auto our_glove = get_entity_from_handle<sdk::C_BaseAttributableItem>(glove_handle);
+			const auto our_glove = interfaces.entityList->getEntityFromHandle(glove_handle);
 
 			if(our_glove) // Our glove still exists
 			{
@@ -189,13 +188,13 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 			}
 		}
 
-		if(local->GetLifeState() != sdk::LifeState::ALIVE)
+		if (!local->isAlive())
 		{
 			// We are dead but we have a glove, destroy it
 			if(glove)
 			{
-				glove->GetClientNetworkable()->SetDestroyedOnRecreateEntities();
-				glove->GetClientNetworkable()->Release();
+				glove->setDestroyedOnRecreateEntities();
+				glove->release();
 			}
 
 			return;
@@ -218,7 +217,7 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 			}
 
 			// Thanks, Beakers
-			glove->GetIndex() = -1;
+			glove->index() = -1;
 
 			apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
 		}
@@ -233,7 +232,7 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 			if(weapon_handle == sdk::INVALID_EHANDLE_INDEX)
 				break;
 
-			auto weapon = get_entity_from_handle<sdk::C_BaseAttributableItem>(weapon_handle);
+			auto weapon = interfaces.entityList->getEntityFromHandle(weapon_handle);
 
 			if(!weapon)
 				continue;
@@ -248,12 +247,12 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 		}
 	}
 
-	const auto view_model = get_entity_from_handle<sdk::C_BaseViewModel>(local->GetViewModel());
+	const auto view_model = interfaces.entityList->getEntityFromHandle(local->GetViewModel());
 
 	if(!view_model)
 		return;
 
-	const auto view_model_weapon = get_entity_from_handle<sdk::C_BaseAttributableItem>(view_model->GetWeapon());
+	const auto view_model_weapon = interfaces.entityList->getEntityFromHandle(view_model->GetWeapon());
 
 	if(!view_model_weapon)
 		return;
@@ -266,7 +265,7 @@ auto post_data_update_start(sdk::C_BasePlayer* local) -> void
 	const auto override_model_index = interfaces.modelInfo->getModelIndex(override_info->model);
 	view_model->GetModelIndex() = override_model_index;
 
-	const auto world_model = get_entity_from_handle<sdk::C_BaseEntity>(view_model_weapon->GetWeaponWorldModel());
+	const auto world_model = interfaces.entityList->getEntityFromHandle(view_model_weapon->GetWeaponWorldModel());
 
 	if(!world_model)
 		return;
