@@ -84,7 +84,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 auto apply_sticker_changer(Entity* item) -> void
 {
     if (!s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvarManager.get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars.get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
 
     static vmt_multi_hook hook;
 

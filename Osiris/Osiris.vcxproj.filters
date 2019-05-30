@@ -104,9 +104,6 @@
     <ClCompile Include="nSkinz\kit_parser.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\Utilities\netvar_manager.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
     <ClCompile Include="nSkinz\nSkinz.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
@@ -278,9 +275,6 @@
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\SDK.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="nSkinz\kit_parser.hpp">

@@ -12,7 +12,6 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
-#include "../nSkinz/Utilities/netvar_manager.hpp"
 
 enum class MoveType {
     NOCLIP = 8,

@@ -197,7 +197,7 @@ void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        loadTable(clientClass->recvTable);
+        loadTable(clientClass->networkName, clientClass->recvTable);
 }
 
 void Netvars::restore() noexcept
@@ -209,7 +209,7 @@ void Netvars::restore() noexcept
     offsets.clear();
 }
 
-void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
+void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -217,17 +217,36 @@ void Netvars::loadTable(RecvTable* recvTable, const std::size_t offset) noexcept
         if (isdigit(prop.name[0]))
             continue;
 
-        if (prop.dataTable)
-            loadTable(prop.dataTable, prop.offset + offset);
-        else {
-            std::string_view name{ prop.name };
-            std::string_view tableName{ recvTable->netTableName };
-            offsets[prop.name] = prop.offset + offset;
-            if (name == "m_bSpotted")
-                hookProperty(prop, spottedHook);
-           else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
-               hookProperty(prop, viewModelSequence);
-        }
+        if (fnv::hash_runtime(prop.name) == FNV("baseclass"))
+            continue;
+
+        if (prop.type == 6
+            && prop.dataTable
+            && prop.dataTable->netTableName[0] == 'D')
+            loadTable(networkName, prop.dataTable, prop.offset + offset);
+
+        char hash_name[256];
+
+        strcpy_s(hash_name, networkName);
+        strcat_s(hash_name, "->");
+        strcat_s(hash_name, prop.name);
+
+        const auto hash = fnv::hash_runtime(hash_name);
+        const auto total_offset = std::uint16_t(offset + prop.offset);
+
+        props[hash] =
+        {
+            &prop,
+            total_offset
+        };
+
+        std::string_view name{ prop.name };
+        std::string_view tableName{ recvTable->netTableName };
+        offsets[prop.name] = prop.offset + offset;
+        if (name == "m_bSpotted")
+            hookProperty(prop, spottedHook);
+        else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
+            hookProperty(prop, viewModelSequence);
     }
 }
 

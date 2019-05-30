@@ -34,7 +34,6 @@
     <ClCompile Include="nSkinz\item_definitions.cpp" />
     <ClCompile Include="nSkinz\kit_parser.cpp" />
     <ClCompile Include="nSkinz\nSkinz.cpp" />
-    <ClCompile Include="nSkinz\Utilities\netvar_manager.cpp" />
     <ClCompile Include="nSkinz\Utilities\Platform.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -69,7 +68,6 @@
     <ClInclude Include="nSkinz\SDK.hpp" />
     <ClInclude Include="nSkinz\SDK\declarations.hpp" />
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />
-    <ClInclude Include="nSkinz\Utilities\netvar_manager.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
     <ClInclude Include="SDK\Client.h" />
