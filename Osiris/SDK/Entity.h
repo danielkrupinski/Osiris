@@ -32,11 +32,6 @@ public:
         *reinterpret_cast<T*>(this + netvars[name]) = value;
     }
 
-    auto getWeapons() noexcept
-    {
-        return reinterpret_cast<int*>(this + netvars["m_hActiveWeapon"] - 256);
-    }
-
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
