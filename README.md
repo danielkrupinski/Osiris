@@ -87,10 +87,6 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
 
-* **Knife changer** - change knife model in first-person view
-    * **Enabled** - enable / disable knife changer
-    * **Knife** - desired knife model
-
 * **Misc** - miscellaneous features
     * **Auto strafe** - automatically strafe in air following mouse movement
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
@@ -105,7 +101,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Radar hack** - show enemies positions on radar
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
     * **Spectator list** - show nicknames of players spectating you
-    * **Watermark** - show cheat name in upper-left screen corner
+    * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
+    * **Fix animation LOD** - 
 
 * **Config** - configuration system based on binary serialization
     * **Create config** - create new configuration file
@@ -128,7 +125,7 @@ git clone https://github.com/danielkrupinski/Osiris.git
 
 ### Compiling from source
 
-When you have equiped a copy of source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2017.
+When you have equiped a copy of source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
 
 Then change build configuration to `Release | x86` and simply press **Build solution**.
 
