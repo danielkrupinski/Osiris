@@ -29,7 +29,7 @@
 
 config_ g_config;
 
-auto config_::get_by_definition_index(const int definition_index) -> item_setting*
+item_setting* config_::get_by_definition_index(const int definition_index)
 {
 	auto it = std::find_if(m_items.begin(), m_items.end(), [definition_index](const item_setting& e)
 	{

@@ -12,8 +12,7 @@
 #include "../SDK/Entity.h"
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 
-enum class EStickerAttributeType
-{
+enum class StickerAttribute {
     Index,
     Wear,
     Scale,
@@ -22,10 +21,9 @@ enum class EStickerAttributeType
 
 static auto s_econ_item_interface_wrapper_offset = std::uint16_t(0);
 
-struct GetStickerAttributeBySlotIndexFloat
-{
+struct GetStickerAttributeBySlotIndexFloat {
     static auto __fastcall hooked(void* thisptr, void*, const int slot,
-        const EStickerAttributeType attribute, const float unknown) -> float
+        const StickerAttribute attribute, const float unknown) -> float
     {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
@@ -33,46 +31,34 @@ struct GetStickerAttributeBySlotIndexFloat
 
         auto config = g_config.get_by_definition_index(defindex);
 
-        if (config)
-        {
-            switch (attribute)
-            {
-            case EStickerAttributeType::Wear:
-                return config->stickers.at(slot).wear;
-            case EStickerAttributeType::Scale:
-                return config->stickers.at(slot).scale;
-            case EStickerAttributeType::Rotation:
-                return config->stickers.at(slot).rotation;
+        if (config) {
+            switch (attribute) {
+            case StickerAttribute::Wear:
+                return config->stickers[slot].wear;
+            case StickerAttribute::Scale:
+                return config->stickers[slot].scale;
+            case StickerAttribute::Rotation:
+                return config->stickers[slot].rotation;
             default:
                 break;
             }
         }
-
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
-
     static decltype(&hooked) m_original;
 };
 
 decltype(GetStickerAttributeBySlotIndexFloat::m_original) GetStickerAttributeBySlotIndexFloat::m_original;
 
-struct GetStickerAttributeBySlotIndexInt
-{
-    static auto __fastcall hooked(void* thisptr, void*, const int slot,
-        const EStickerAttributeType attribute, const int unknown) -> int
+struct GetStickerAttributeBySlotIndexInt {
+    static int __fastcall hooked(void* thisptr, void*, const int slot,
+        const StickerAttribute attribute, const int unknown)
     {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
-        if (attribute == EStickerAttributeType::Index)
-        {
-            const auto defindex = item->itemDefinitionIndex();
-
-            auto config = g_config.get_by_definition_index(defindex);
-
-            if (config)
-                return config->stickers.at(slot).kit;
-        }
-
+        if (attribute == StickerAttribute::Index)
+            if (auto config = g_config.get_by_definition_index(item->itemDefinitionIndex()))
+                return config->stickers[slot].kit;
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
 
@@ -81,7 +67,7 @@ struct GetStickerAttributeBySlotIndexInt
 
 decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlotIndexInt::m_original;
 
-auto apply_sticker_changer(Entity* item) -> void
+void apply_sticker_changer(Entity* item) noexcept
 {
     if (!s_econ_item_interface_wrapper_offset)
         s_econ_item_interface_wrapper_offset = netvars.get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
@@ -90,33 +76,29 @@ auto apply_sticker_changer(Entity* item) -> void
 
     const auto econ_item_interface_wrapper = std::uintptr_t(item) + s_econ_item_interface_wrapper_offset;
 
-    if (hook.initialize_and_hook_instance(reinterpret_cast<void*>(econ_item_interface_wrapper)))
-    {
+    if (hook.initialize_and_hook_instance(reinterpret_cast<void*>(econ_item_interface_wrapper))) {
         hook.apply_hook<GetStickerAttributeBySlotIndexFloat>(4);
         hook.apply_hook<GetStickerAttributeBySlotIndexInt>(5);
     }
 }
 
-static auto erase_override_if_exists_by_index(const int definition_index) -> void
+static void erase_override_if_exists_by_index(const int definition_index) noexcept
 {
     // We have info about the item not needed to be overridden
-    if (const auto original_item = game_data::get_weapon_info(definition_index))
-    {
+    if (const auto original_item = game_data::get_weapon_info(definition_index)) {
         auto& icon_override_map = g_config.get_icon_override_map();
 
         if (!original_item->icon)
             return;
 
-        const auto override_entry = icon_override_map.find(original_item->icon);
-
         // We are overriding its icon when not needed
-        if (override_entry != end(icon_override_map))
+        if (const auto override_entry = icon_override_map.find(original_item->icon); override_entry != end(icon_override_map))
             icon_override_map.erase(override_entry); // Remove the leftover override
     }
 }
 
-static auto apply_config_on_attributable_item(Entity* item, const item_setting* config,
-    const unsigned xuid_low) -> void
+static void apply_config_on_attributable_item(Entity* item, const item_setting* config,
+    const unsigned xuid_low) noexcept 
 {
     // Force fallback values to be used.
     item->itemIDHigh() = -1;
@@ -149,8 +131,7 @@ static auto apply_config_on_attributable_item(Entity* item, const item_setting* 
         && config->definition_override_index != definition_index) // It is not yet overridden
     {
         // We have info about what we gonna override it to
-        if (const auto replacement_item = game_data::get_weapon_info(config->definition_override_index))
-        {
+        if (const auto replacement_item = game_data::get_weapon_info(config->definition_override_index)) {
             const auto old_definition_index = definition_index;
 
             definition_index = config->definition_override_index;
@@ -162,13 +143,8 @@ static auto apply_config_on_attributable_item(Entity* item, const item_setting* 
 
             // We didn't override 0, but some actual weapon, that we have data for
             if (old_definition_index)
-            {
-                if (const auto original_item = game_data::get_weapon_info(old_definition_index))
-                {
-                    if (original_item->icon && replacement_item->icon)
-                        icon_override_map[original_item->icon] = replacement_item->icon;
-                }
-            }
+                if (const auto original_item = game_data::get_weapon_info(old_definition_index); original_item && original_item->icon && replacement_item->icon)
+                    icon_override_map[original_item->icon] = replacement_item->icon;
         }
     } else
     {
@@ -191,7 +167,7 @@ static auto get_wearable_create_fn() noexcept
     return clazz->createFunction;
 }
 
-static auto make_glove(int entry, int serial) -> Entity*
+static auto make_glove(int entry, int serial) noexcept
 {
     static auto create_wearable_fn = get_wearable_create_fn();
 
@@ -213,17 +189,9 @@ static auto make_glove(int entry, int serial) -> Entity*
     return glove;
 }
 
-static auto post_data_update_start(Entity* local) -> void
+static void post_data_update_start(Entity* local) noexcept
 {
     const auto local_index = local->index();
-
-    /*if(auto player_resource = *g_player_resource)
-    {
-        player_resource->GetCoins()[local_index] = 890;
-        player_resource->GetMusicKits()[local_index] = 3;
-        player_resource->GetRanks()[local_index] = 1;
-        player_resource->GetWins()[local_index] = 1337;
-    }*/
 
     PlayerInfo player_info;
     if (!interfaces.engine->getPlayerInfo(local_index, player_info))
@@ -251,15 +219,12 @@ static auto post_data_update_start(Entity* local) -> void
             }
         }
 
-        if (!local->isAlive())
-        {
+        if (!local->isAlive()) {
             // We are dead but we have a glove, destroy it
-            if (glove)
-            {
+            if (glove) {
                 glove->setDestroyedOnRecreateEntities();
                 glove->release();
             }
-
             return;
         }
 
@@ -290,8 +255,7 @@ static auto post_data_update_start(Entity* local) -> void
     {
         auto& weapons = local->weapons();
 
-        for (auto weapon_handle : weapons)
-        {
+        for (auto weapon_handle : weapons) {
             if (weapon_handle == -1)
                 break;
 

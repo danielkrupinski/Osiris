@@ -183,14 +183,14 @@ public:
 		m_items.push_back(item_setting());
 	}
 
-	auto get_by_definition_index(int definition_index) -> item_setting*;
+    item_setting* get_by_definition_index(int definition_index);
 
-	auto get_items() -> std::vector<item_setting>&
+	auto& get_items()
 	{
 		return m_items;
 	}
 
-	auto get_icon_override_map() -> std::unordered_map<std::string_view, std::string_view>&
+	auto& get_icon_override_map()
 	{
 		return m_icon_overrides;
 	}
