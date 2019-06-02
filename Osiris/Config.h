@@ -171,6 +171,7 @@ public:
         bool watermark{ false };
         bool fixAnimationLOD{ false };
         bool prepareRevolver{ false };
+        bool hitSound{ false };
         int chokedPackets{ 0 };
     } misc;
 
