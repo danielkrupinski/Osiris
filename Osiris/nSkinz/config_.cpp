@@ -23,7 +23,6 @@
 * SOFTWARE.
 */
 #include "config_.hpp"
-#include "SDK.hpp"
 #include "../Config.h"
 #include <fstream>
 

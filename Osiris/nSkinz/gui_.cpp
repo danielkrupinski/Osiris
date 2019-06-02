@@ -25,7 +25,6 @@
 #include "../Config.h"
 #include "config_.hpp"
 #include "item_definitions.hpp"
-#include "SDK.hpp"
 #include "kit_parser.hpp"
 #include "../Interfaces.h"
 #include "../SDK/Cvar.h"
