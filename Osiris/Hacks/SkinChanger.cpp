@@ -3,10 +3,10 @@
 #include "SkinChanger.h"
 #include "../Config.h"
 
-#include "../nSkinz/config_.hpp"
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/Engine.h"
+#include "../SDK/FrameStage.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/Entity.h"

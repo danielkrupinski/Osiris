@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../SDK/FrameStage.h"
-
+enum class FrameStage;
 class GameEvent;
 
 namespace SkinChanger {
