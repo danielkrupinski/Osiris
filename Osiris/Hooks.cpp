@@ -224,13 +224,9 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
     hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
 }
 
-#include "nSkinz/config_.hpp"
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
-    if (!strcmp(event->getName(), "player_death") && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        if (const auto iconOverride = g_config.get_icon_override(event->getString("weapon")))
-            event->setString("weapon", iconOverride);
-    }
+    SkinChanger::overrideHudIcon(event);
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 

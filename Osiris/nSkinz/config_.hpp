@@ -175,16 +175,16 @@ class config_ {
 public:
     item_setting* get_by_definition_index(int definition_index);
 
-	auto& get_icon_override_map()
-	{
-		return m_icon_overrides;
-	}
+	//auto& get_icon_override_map()
+//	{
+//		return m_icon_overrides;
+	//}
 
-	auto get_icon_override(const std::string_view original) const -> const char*
-	{
-		return m_icon_overrides.count(original) ? m_icon_overrides.at(original).data() : nullptr;
-	}
-	std::unordered_map<std::string_view, std::string_view> m_icon_overrides;
+//	auto get_icon_override(const std::string_view original) const -> const char*
+//	{
+//		return m_icon_overrides.count(original) ? m_icon_overrides.at(original).data() : nullptr;
+//	}
+
 };
 
 extern config_ g_config;

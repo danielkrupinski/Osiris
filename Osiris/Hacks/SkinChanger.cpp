@@ -11,6 +11,15 @@
 #include "../SDK/EntityList.h"
 #include "../SDK/Entity.h"
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
+#include "../SDK/GameEvent.h"
+
+static std::unordered_map<std::string_view, std::string_view> iconOverrides;
+
+const char* getIconOverride(const std::string_view original) noexcept
+{
+    return iconOverrides.count(original) ? iconOverrides[original].data() : nullptr;
+
+}
 
 enum class StickerAttribute {
     Index,
@@ -86,14 +95,12 @@ static void erase_override_if_exists_by_index(const int definition_index) noexce
 {
     // We have info about the item not needed to be overridden
     if (const auto original_item = game_data::get_weapon_info(definition_index)) {
-        auto& icon_override_map = g_config.get_icon_override_map();
-
         if (!original_item->icon)
             return;
 
         // We are overriding its icon when not needed
-        if (const auto override_entry = icon_override_map.find(original_item->icon); override_entry != end(icon_override_map))
-            icon_override_map.erase(override_entry); // Remove the leftover override
+        if (const auto override_entry = iconOverrides.find(original_item->icon); override_entry != end(iconOverrides))
+            iconOverrides.erase(override_entry); // Remove the leftover override
     }
 }
 
@@ -125,8 +132,6 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
     auto& definition_index = item->itemDefinitionIndex();
 
-    auto& icon_override_map = g_config.get_icon_override_map();
-
     if (config->definition_override_index // We need to override defindex
         && config->definition_override_index != definition_index) // It is not yet overridden
     {
@@ -144,7 +149,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
             // We didn't override 0, but some actual weapon, that we have data for
             if (old_definition_index)
                 if (const auto original_item = game_data::get_weapon_info(old_definition_index); original_item && original_item->icon && replacement_item->icon)
-                    icon_override_map[original_item->icon] = replacement_item->icon;
+                    iconOverrides[original_item->icon] = replacement_item->icon;
         }
     } else
     {
@@ -325,4 +330,12 @@ void SkinChanger::run(FrameStage stage) noexcept
 void SkinChanger::scheduleHudUpdate() noexcept
 {
     hudUpdateRequired = true;
+}
+
+void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
+{
+    if (!strcmp(event->getName(), "player_death") && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (const auto iconOverride = getIconOverride(event->getString("weapon")))
+            event->setString("weapon", iconOverride);
+    }
 }
