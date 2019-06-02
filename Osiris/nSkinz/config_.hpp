@@ -33,57 +33,11 @@
 
 #undef min
 
-template<typename Container, typename T1, typename T2, typename TC>
-class value_syncer
-{
-	using container_type = typename Container::value_type;
-
-	const Container& container;
-	T1& key;
-	T2& value;
-	const TC container_type::* member;
-
-public:
-	value_syncer(const Container& container, T1& key, T2& value, const TC container_type::* member)
-		: container{container}
-		, key{key}
-		, value{value}
-		, member{member}
-	{}
-
-	auto key_to_value() const -> void
-	{
-		key = std::clamp(key, T1(0), T1(container.size() - 1));
-		value = container.at(key).*member;
-	}
-
-	auto value_to_key() const -> void
-	{
-		auto it = std::find_if(std::begin(container), std::end(container), [this](const container_type& x)
-		{
-			return value == x.*member;
-		});
-
-		// Originally I wanted this to work with maps too, but fuck that
-		if(it != std::end(container))
-			key = it - std::begin(container);
-		else
-			key = T1(0);
-	}
-};
-
-template<typename Container, typename T1, typename T2, typename TC>
-static auto do_sync(const Container& container, T1& key, T2& value, TC Container::value_type::* member) -> void
-{
-	auto syncer = value_syncer<Container, T1, T2, TC>{ container, key, value, member };
-	syncer.key_to_value();
-}
-
 struct sticker_setting
 {
 	void update()
 	{
-		do_sync(game_data::sticker_kits, kit_vector_index, kit, &game_data::PaintKit::id);
+        kit = game_data::sticker_kits[kit_vector_index].id;
 	}
 
 	int kit = 0;
@@ -97,19 +51,8 @@ struct item_setting
 {
 	void update()
 	{
-		do_sync(
-			game_data::weapon_names,
-			definition_vector_index,
-			definition_index,
-			&game_data::weapon_name::definition_index
-		);
-
-		do_sync(
-			game_data::quality_names,
-			entity_quality_vector_index,
-			entity_quality_index,
-			&game_data::quality_name::index
-		);
+        definition_index = game_data::weapon_names[definition_vector_index].definition_index;
+        entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
 
 		const std::vector<game_data::PaintKit>* kit_names;
 		const std::vector<game_data::weapon_name>* defindex_names;
@@ -125,19 +68,8 @@ struct item_setting
 			defindex_names = &game_data::knife_names;
 		}
 
-		do_sync(
-			*kit_names,
-			paint_kit_vector_index,
-			paint_kit_index,
-			&game_data::PaintKit::id
-		);
-
-		do_sync(
-			*defindex_names,
-			definition_override_vector_index,
-			definition_override_index,
-			&game_data::weapon_name::definition_index
-		);
+        paint_kit_index = (*kit_names)[paint_kit_vector_index].id;
+        definition_override_index = (*defindex_names)[definition_override_vector_index].definition_index;
 
 		for(auto& sticker : stickers)
 			sticker.update();
