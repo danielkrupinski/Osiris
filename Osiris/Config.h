@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include "nSkinz/config_.hpp"
+
 class Config final {
 public:
     explicit Config(const char*) noexcept;
@@ -146,17 +148,10 @@ public:
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
     } visuals;
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return weapons[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            int paintKit{ 0 };
-            float wear{ 0.0f };
-        } weapons[49];
+    struct SkinChanger {
+    public:
+        SkinChanger() { items.push_back(item_setting{}); }
+        std::vector<item_setting> items;
     } skinChanger;
 
     struct {

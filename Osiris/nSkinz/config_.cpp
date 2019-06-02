@@ -24,17 +24,17 @@
 */
 #include "config_.hpp"
 #include "SDK.hpp"
-
+#include "../Config.h"
 #include <fstream>
 
 config_ g_config;
 
 item_setting* config_::get_by_definition_index(const int definition_index)
 {
-	auto it = std::find_if(m_items.begin(), m_items.end(), [definition_index](const item_setting& e)
+	auto it = std::find_if(config.skinChanger.items.begin(), config.skinChanger.items.end(), [definition_index](const item_setting& e)
 	{
 		return e.enabled && e.definition_index == definition_index;
 	});
 
-	return it == m_items.end() ? nullptr : &*it;
+	return it == config.skinChanger.items.end() ? nullptr : &*it;
 }

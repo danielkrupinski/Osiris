@@ -22,6 +22,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+#include "../Config.h"
 #include "config_.hpp"
 #include "item_definitions.hpp"
 #include "SDK.hpp"
@@ -56,7 +57,7 @@ void draw_gui()
 		ImGuiWindowFlags_NoSavedSettings))
 	{
 
-		auto& entries = g_config.get_items();
+		auto& entries = config.skinChanger.items;
 
 		static auto selected_id = 0;
 

@@ -171,24 +171,9 @@ struct item_setting
 	std::array<sticker_setting, 5> stickers;
 };
 
-class config_
-{
+class config_ {
 public:
-	config_()
-	{
-		// Ghetto fix for possible race conditions
-		m_items.reserve(128);
-
-		// Default config
-		m_items.push_back(item_setting());
-	}
-
     item_setting* get_by_definition_index(int definition_index);
-
-	auto& get_items()
-	{
-		return m_items;
-	}
 
 	auto& get_icon_override_map()
 	{
@@ -199,9 +184,6 @@ public:
 	{
 		return m_icon_overrides.count(original) ? m_icon_overrides.at(original).data() : nullptr;
 	}
-
-private:
-	std::vector<item_setting> m_items;
 	std::unordered_map<std::string_view, std::string_view> m_icon_overrides;
 };
 
