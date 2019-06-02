@@ -65,7 +65,6 @@
     <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\kit_parser.hpp" />
-    <ClInclude Include="nSkinz\SDK.hpp" />
     <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
