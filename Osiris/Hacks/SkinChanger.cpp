@@ -13,13 +13,7 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
-static std::unordered_map<std::string_view, std::string_view> iconOverrides;
-
-const char* getIconOverride(const std::string_view original) noexcept
-{
-    return iconOverrides.count(original) ? iconOverrides[original].data() : nullptr;
-
-}
+static std::unordered_map<std::string_view, const char*> iconOverrides;
 
 enum class StickerAttribute {
     Index,
@@ -335,7 +329,7 @@ void SkinChanger::scheduleHudUpdate() noexcept
 void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
 {
     if (!strcmp(event->getName(), "player_death") && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        if (const auto iconOverride = getIconOverride(event->getString("weapon")))
+        if (const auto iconOverride = iconOverrides[event->getString("weapon")])
             event->setString("weapon", iconOverride);
     }
 }
