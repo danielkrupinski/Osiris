@@ -72,28 +72,18 @@ public:
 	}
 };
 
-enum class sync_type
-{
-	VALUE_TO_KEY,
-	KEY_TO_VALUE
-};
-
-template<sync_type Type, typename Container, typename T1, typename T2, typename TC>
+template<typename Container, typename T1, typename T2, typename TC>
 static auto do_sync(const Container& container, T1& key, T2& value, TC Container::value_type::* member) -> void
 {
 	auto syncer = value_syncer<Container, T1, T2, TC>{ container, key, value, member };
-	if constexpr(Type == sync_type::VALUE_TO_KEY)
-		syncer.value_to_key();
-	else
-		syncer.key_to_value();
+	syncer.key_to_value();
 }
 
 struct sticker_setting
 {
-	template<sync_type Type>
 	void update()
 	{
-		do_sync<Type>(game_data::sticker_kits, kit_vector_index, kit, &game_data::PaintKit::id);
+		do_sync(game_data::sticker_kits, kit_vector_index, kit, &game_data::PaintKit::id);
 	}
 
 	int kit = 0;
@@ -105,17 +95,16 @@ struct sticker_setting
 
 struct item_setting
 {
-	template<sync_type Type>
 	void update()
 	{
-		do_sync<Type>(
+		do_sync(
 			game_data::weapon_names,
 			definition_vector_index,
 			definition_index,
 			&game_data::weapon_name::definition_index
 		);
 
-		do_sync<Type>(
+		do_sync(
 			game_data::quality_names,
 			entity_quality_vector_index,
 			entity_quality_index,
@@ -125,7 +114,7 @@ struct item_setting
 		const std::vector<game_data::PaintKit>* kit_names;
 		const std::vector<game_data::weapon_name>* defindex_names;
 
-		if(definition_index == GLOVE_T_SIDE)
+		if (definition_index == GLOVE_T_SIDE)
 		{
 			kit_names = &game_data::glove_kits;
 			defindex_names = &game_data::glove_names;
@@ -136,14 +125,14 @@ struct item_setting
 			defindex_names = &game_data::knife_names;
 		}
 
-		do_sync<Type>(
+		do_sync(
 			*kit_names,
 			paint_kit_vector_index,
 			paint_kit_index,
 			&game_data::PaintKit::id
 		);
 
-		do_sync<Type>(
+		do_sync(
 			*defindex_names,
 			definition_override_vector_index,
 			definition_override_index,
@@ -151,7 +140,7 @@ struct item_setting
 		);
 
 		for(auto& sticker : stickers)
-			sticker.update<Type>();
+			sticker.update();
 	}
 
 	char name[32] = "Default";

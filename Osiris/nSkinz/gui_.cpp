@@ -144,7 +144,7 @@ void draw_gui()
 			}, nullptr, game_data::quality_names.size(), 5);
 
 			// Yes we do it twice to decide knifes
-			selected_entry.update<sync_type::KEY_TO_VALUE>();
+			selected_entry.update();
 
 			// Item defindex override
 			if(selected_entry.definition_index == WEAPON_KNIFE)
@@ -171,7 +171,7 @@ void draw_gui()
 				ImGui::Combo("Unavailable", &unused_value, "For knives or gloves\0");
 			}
 
-			selected_entry.update<sync_type::KEY_TO_VALUE>();
+			selected_entry.update();
 
 			// Custom Name tag
 			ImGui::InputText("Name Tag", selected_entry.custom_name, 32);
