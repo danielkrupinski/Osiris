@@ -77,4 +77,9 @@ public:
     {
         return callVirtualMethod<NetworkChannel*>(this, 78);
     }
+
+    constexpr auto clientCmdUnrestricted(const char* cmd) noexcept
+    {
+        callVirtualMethod<void, const char*, bool>(this, 114, cmd, false);
+    }
 };
