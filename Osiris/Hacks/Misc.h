@@ -8,6 +8,7 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/Entity.h"
 #include "../SDK/Client.h"
+#include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 
 namespace Misc {
@@ -99,5 +100,13 @@ namespace Misc {
     constexpr void setClanTag(const char* clanTag) noexcept
     {
         memory.setClanTag(clanTag, clanTag);
+    }
+
+    constexpr void playHitSound(GameEvent* event) noexcept
+    {
+        if (config.misc.hitSound
+            && !strcmp(event->getName(), "player_hurt")
+            && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
+            interfaces.engine->clientCmdUnrestricted("play physics/metal/metal_solid_impact_bullet2");
     }
 }
