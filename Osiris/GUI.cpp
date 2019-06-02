@@ -445,6 +445,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Watermark", &config.misc.watermark);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
+        ImGui::Checkbox("Hit sound", &config.misc.hitSound);
         ImGui::PushItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
