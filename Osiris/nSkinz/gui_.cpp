@@ -97,7 +97,7 @@ void draw_gui()
 			{
 				*out_text = game_data::quality_names[idx].name;
 				return true;
-			}, nullptr, game_data::quality_names.size(), 5);
+			}, nullptr, 11, 5);
 
 			// Yes we do it twice to decide knifes
 			selected_entry.update();

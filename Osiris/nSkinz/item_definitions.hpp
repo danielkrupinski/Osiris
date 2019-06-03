@@ -143,5 +143,18 @@ namespace game_data
 	extern const std::vector<weapon_name> knife_names;
 	extern const std::vector<weapon_name> glove_names;
 	extern const std::vector<weapon_name> weapon_names;
-	extern const std::vector<quality_name> quality_names;
+
+    constexpr quality_name quality_names[]{
+        {0, "Default"},
+        {1, "Genuine"},
+        {2, "Vintage"},
+        {3, "Unusual"},
+        {5, "Community"},
+        {6, "Developer"},
+        {7, "Self-Made"},
+        {8, "Customized"},
+        {9, "Strange"},
+        {10, "Completed"},
+        {12, "Tournament"}
+    };
 }

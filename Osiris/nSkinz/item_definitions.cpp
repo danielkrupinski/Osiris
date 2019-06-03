@@ -133,18 +133,3 @@ const std::vector<game_data::weapon_name> game_data::weapon_names =
 	{61, "USP-S"},
 	{25, "XM1014"},
 };
-
-const std::vector<game_data::quality_name> game_data::quality_names =
-{
-	{0, "Default"},
-	{1, "Genuine"},
-	{2, "Vintage"},
-	{3, "Unusual"},
-	{5, "Community"},
-	{6, "Developer"},
-	{7, "Self-Made"},
-	{8, "Customized"},
-	{9, "Strange"},
-	{10, "Completed"},
-	{12, "Tournament"}
-};
