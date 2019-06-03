@@ -75,7 +75,6 @@ struct item_setting
 			sticker.update();
 	}
 
-	char name[32] = "Default";
 	bool enabled = false;
 	int definition_vector_index = 0;
 	int definition_index = 1;

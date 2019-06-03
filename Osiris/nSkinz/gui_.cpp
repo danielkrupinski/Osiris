@@ -57,7 +57,7 @@ void draw_gui()
 	{
 		ImGui::Columns(2, nullptr, false);
 
-		ImGui::NextColumn();
+		//ImGui::NextColumn();
 
         static auto itemIndex = 0;
         // Item to change skins for
@@ -72,34 +72,19 @@ void draw_gui()
         selected_entry.definition_vector_index = itemIndex;
 
 		{
-           
-			// Name
-			ImGui::InputText("Name", selected_entry.name, 32);
-
-
-			// Enabled
 			ImGui::Checkbox("Enabled", &selected_entry.enabled);
-
-			// Pattern Seed
 			ImGui::InputInt("Seed", &selected_entry.seed);
-
-			// Custom StatTrak number
 			ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
-
-			// Wear Float
 			ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
 			// Paint kit
-			if (itemIndex != 1)
-			{
+			if (itemIndex != 1) {
 				ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
 				{
 					*out_text = game_data::skin_kits[idx].name.c_str();
 					return true;
 				}, nullptr, game_data::skin_kits.size(), 10);
-			}
-			else
-			{
+			} else {
 				ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
 				{
 					*out_text = game_data::glove_kits[idx].name.c_str();
@@ -118,24 +103,19 @@ void draw_gui()
 			selected_entry.update();
 
 			// Item defindex override
-			if (itemIndex == 0)
-			{
+			if (itemIndex == 0) {
 				ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{
 					*out_text = game_data::knife_names.at(idx).name;
 					return true;
 				}, nullptr, game_data::knife_names.size(), 5);
-			}
-			else if(itemIndex == 1)
-			{
+			} else if(itemIndex == 1) {
 				ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{
 					*out_text = game_data::glove_names.at(idx).name;
 					return true;
 				}, nullptr, game_data::glove_names.size(), 5);
-			}
-			else
-			{
+			} else {
 				// We don't want to override weapons other than knives or gloves
 				static auto unused_value = 0;
 				selected_entry.definition_override_vector_index = 0;
@@ -150,12 +130,12 @@ void draw_gui()
 
 		ImGui::NextColumn();
 
-		ImGui::Columns(1, nullptr, false);
+		//ImGui::Columns(1, nullptr, false);
 
-		ImGui::Separator();
+		//ImGui::Separator();
 
 		{
-			ImGui::Columns(2, nullptr, false);
+			//ImGui::Columns(2, nullptr, false);
 
 			ImGui::PushID("sticker");
 
@@ -175,7 +155,7 @@ void draw_gui()
 			}, 5, 5);
 			ImGui::PopItemWidth();
 
-			ImGui::NextColumn();
+			//ImGui::NextColumn();
 
 			ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text)
 			{
@@ -189,7 +169,7 @@ void draw_gui()
 
 			ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.f, 360.f);
 
-			ImGui::NextColumn();
+			//ImGui::NextColumn();
 
 			ImGui::PopID();
 		}
@@ -198,22 +178,10 @@ void draw_gui()
 
 		ImGui::Separator();
 
-		ImGui::Columns(3, nullptr, false);
-
-		ImGui::PushItemWidth(-1);
-
-		// Lower buttons for modifying items and saving
-		{
-			const auto button_size = ImVec2(ImGui::GetColumnWidth() - 1, 20);
-
-            if (ImGui::Button("Update", button_size)) {
+            if (ImGui::Button("Update", { 130.0f, 30.0f })) {
                 interfaces.cvar->findVar("cl_fullupdate")->callBack();
                 SkinChanger::scheduleHudUpdate();
             }
-		}
-
-		ImGui::PopItemWidth();
-		ImGui::Columns(1);
 
 		ImGui::Text("nSkinz by namazso");
 
