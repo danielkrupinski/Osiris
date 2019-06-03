@@ -49,7 +49,7 @@ namespace ImGui
 void draw_gui()
 {
 	ImGui::SetNextWindowSize(ImVec2(700, 400));
-	if(ImGui::Begin("nSkinz", nullptr,
+	if (ImGui::Begin("nSkinz", nullptr,
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_AlwaysAutoResize |
@@ -57,15 +57,13 @@ void draw_gui()
 	{
 		ImGui::Columns(2, nullptr, false);
 
-		//ImGui::NextColumn();
-
         static auto itemIndex = 0;
         // Item to change skins for
         ImGui::Combo("Item", &itemIndex, [](void* data, int idx, const char** out_text)
             {
                 *out_text = game_data::weapon_names[idx].name;
                 return true;
-            }, nullptr, game_data::weapon_names.size(), 5);
+            }, nullptr, sizeof(game_data::weapon_names) / sizeof(game_data::weapon_name), 5);
 
 
         auto& selected_entry = config.skinChanger.items[itemIndex];
@@ -97,7 +95,7 @@ void draw_gui()
 			{
 				*out_text = game_data::quality_names[idx].name;
 				return true;
-			}, nullptr, 11, 5);
+			}, nullptr, sizeof(game_data::quality_names) / sizeof(game_data::quality_name), 5);
 
 			// Yes we do it twice to decide knifes
 			selected_entry.update();
