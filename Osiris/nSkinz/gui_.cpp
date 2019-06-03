@@ -55,56 +55,27 @@ void draw_gui()
 		ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_NoSavedSettings))
 	{
-
-		auto& entries = config.skinChanger.items;
-
-		static auto selected_id = 0;
-
 		ImGui::Columns(2, nullptr, false);
-
-		// Config selection
-		{
-			ImGui::PushItemWidth(-1);
-
-			char element_name[64];
-
-			ImGui::ListBox("##config", &selected_id, [&element_name, &entries](int idx)
-			{
-				sprintf_s(element_name, "%s (%s)", entries.at(idx).name, game_data::weapon_names.at(entries.at(idx).definition_vector_index).name);
-				return element_name;
-			}, entries.size(), 11);
-
-			const auto button_size = ImVec2(ImGui::GetColumnWidth() / 2 - 12.5f, 31);
-
-			if(ImGui::Button("Add", button_size))
-			{
-				entries.push_back(item_setting());
-				selected_id = entries.size() - 1;
-			}
-			ImGui::SameLine();
-
-			if(ImGui::Button("Remove", button_size) && entries.size() > 1)
-				entries.erase(entries.begin() + selected_id);
-
-			ImGui::PopItemWidth();
-		}
 
 		ImGui::NextColumn();
 
-		selected_id = selected_id < int(entries.size()) ? selected_id : entries.size() - 1;
+        static auto itemIndex = 0;
+        // Item to change skins for
+        ImGui::Combo("Item", &itemIndex, [](void* data, int idx, const char** out_text)
+            {
+                *out_text = game_data::weapon_names[idx].name;
+                return true;
+            }, nullptr, game_data::weapon_names.size(), 5);
 
-		auto& selected_entry = entries[selected_id];
+
+        auto& selected_entry = config.skinChanger.items[itemIndex];
+        selected_entry.definition_vector_index = itemIndex;
 
 		{
+           
 			// Name
 			ImGui::InputText("Name", selected_entry.name, 32);
 
-			// Item to change skins for
-			ImGui::Combo("Item", &selected_entry.definition_vector_index, [](void* data, int idx, const char** out_text)
-			{
-				*out_text = game_data::weapon_names[idx].name;
-				return true;
-			}, nullptr, game_data::weapon_names.size(), 5);
 
 			// Enabled
 			ImGui::Checkbox("Enabled", &selected_entry.enabled);
@@ -119,7 +90,7 @@ void draw_gui()
 			ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
 			// Paint kit
-			if(selected_entry.definition_index != GLOVE_T_SIDE)
+			if (itemIndex != 1)
 			{
 				ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
 				{
@@ -147,7 +118,7 @@ void draw_gui()
 			selected_entry.update();
 
 			// Item defindex override
-			if(selected_entry.definition_index == WEAPON_KNIFE)
+			if (itemIndex == 0)
 			{
 				ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{
@@ -155,7 +126,7 @@ void draw_gui()
 					return true;
 				}, nullptr, game_data::knife_names.size(), 5);
 			}
-			else if(selected_entry.definition_index == GLOVE_T_SIDE)
+			else if(itemIndex == 1)
 			{
 				ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{

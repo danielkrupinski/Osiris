@@ -148,10 +148,8 @@ public:
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
     } visuals;
 
-    struct SkinChanger {
-    public:
-        SkinChanger() { items.push_back(item_setting{}); }
-        std::vector<item_setting> items;
+    struct {
+        item_setting items[36];
     } skinChanger;
 
     struct {
