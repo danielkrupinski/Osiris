@@ -68,6 +68,11 @@ public:
         return callVirtualMethod<const Matrix&>(this, 37);
     }
 
+    constexpr auto getBSPTreeQuery() noexcept
+    {
+        return callVirtualMethod<void*>(this, 43);
+    }
+
     constexpr auto getLevelName() noexcept
     {
         return callVirtualMethod<const char*>(this, 53);
