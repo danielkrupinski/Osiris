@@ -26,6 +26,7 @@
 #include "Utilities/platform.hpp"
 #include "../SDK/Localize.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 
 #include <algorithm>
 
@@ -116,47 +117,11 @@ struct CStickerKit
 auto game_data::initialize_kits() -> void
 {
 	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
-
-	// Search the relative calls
-
-	// call    ItemSystem
-	// push    dword ptr [esi+0Ch]
-	// lea     ecx, [eax+4]
-	// call    CEconItemSchema::GetPaintKitDefinition
-
-	const auto sig_address = platform::find_pattern("client_panorama", "\xE8\x00\x00\x00\x00\xFF\x76\x0C\x8D\x48\x04\xE8", "x????xxxxxxx");
-
-	// Skip the opcode, read rel32 address
-	const auto item_system_offset = *reinterpret_cast<std::int32_t*>(sig_address + 1);
-
-	// Add the offset to the end of the instruction
-	const auto item_system_fn = reinterpret_cast<CCStrike15ItemSystem* (*)()>(sig_address + 5 + item_system_offset);
-
-	// Skip VTable, first member variable of ItemSystem is ItemSchema
-	const auto item_schema = reinterpret_cast<CCStrike15ItemSchema*>(std::uintptr_t(item_system_fn()) + sizeof(void*));
+	const auto itemSchema = memory.itemSystem() + 4;
 
 	// Dump paint kits
 	{
-		// Skip the instructions between, skip the opcode, read rel32 address
-		const auto get_paint_kit_definition_offset = *reinterpret_cast<std::int32_t*>(sig_address + 11 + 1);
-
-		// Add the offset to the end of the instruction
-		const auto get_paint_kit_definition_fn = reinterpret_cast<CPaintKit*(__thiscall*)(CCStrike15ItemSchema*, int)>(sig_address + 11 + 5 + get_paint_kit_definition_offset);
-
-		// The last offset is start_element, we need that
-
-		// push    ebp
-		// mov     ebp, esp
-		// sub     esp, 0Ch
-		// mov     eax, [ecx+298h]
-
-		// Skip instructions, skip opcode, read offset
-		const auto start_element_offset = *reinterpret_cast<std::intptr_t*>(std::uintptr_t(get_paint_kit_definition_fn) + 8 + 2);
-
-		// Calculate head base from start_element's offset
-		const auto head_offset = start_element_offset - 12;
-
-		const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(std::uintptr_t(item_schema) + head_offset);
+		const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(std::uintptr_t(itemSchema) + 0x28C);
 
 		for(auto i = 0; i <= map_head->last_element; ++i)
 		{
@@ -205,7 +170,7 @@ auto game_data::initialize_kits() -> void
 		// Calculate head base from start_element's offset
 		const auto head_offset = start_element_offset - 12;
 
-		const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(std::uintptr_t(item_schema) + head_offset);
+		const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(std::uintptr_t(itemSchema) + head_offset);
 
 		for(auto i = 0; i <= map_head->last_element; ++i)
 		{
