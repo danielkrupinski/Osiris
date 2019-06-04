@@ -40,138 +40,135 @@ class CCStrike15ItemSystem;
 template <typename Key, typename Value>
 struct Node_t
 {
-	int previous_id;		//0x0000
-	int next_id;			//0x0004
-	void* _unknown_ptr;		//0x0008
-	int _unknown;			//0x000C
-	Key key;				//0x0010
-	Value value;			//0x0014
+    int previous_id;		//0x0000
+    int next_id;			//0x0004
+    void* _unknown_ptr;		//0x0008
+    int _unknown;			//0x000C
+    Key key;				//0x0010
+    Value value;			//0x0014
 };
 
 template <typename Key, typename Value>
 struct Head_t
 {
-	Node_t<Key, Value>* memory;		//0x0000
-	int allocation_count;			//0x0004
-	int grow_size;					//0x0008
-	int start_element;				//0x000C
-	int next_available;				//0x0010
-	int _unknown;					//0x0014
-	int last_element;				//0x0018
+    Node_t<Key, Value>* memory;		//0x0000
+    int allocation_count;			//0x0004
+    int grow_size;					//0x0008
+    int start_element;				//0x000C
+    int next_available;				//0x0010
+    int _unknown;					//0x0014
+    int last_element;				//0x0018
 }; //Size=0x001C
 
 // could use CUtlString but this is just easier and CUtlString isn't needed anywhere else
 struct String_t
 {
-	char* buffer;	//0x0000
-	int capacity;	//0x0004
-	int grow_size;	//0x0008
-	int length;		//0x000C
+    char* buffer;	//0x0000
+    int capacity;	//0x0004
+    int grow_size;	//0x0008
+    int length;		//0x000C
 }; //Size=0x0010
 
 struct CPaintKit
 {
-	int id;						//0x0000
+    int id;						//0x0000
 
-	String_t name;				//0x0004
-	String_t description;		//0x0014
-	String_t item_name;			//0x0024
-	String_t material_name;		//0x0034
-	String_t image_inventory;	//0x0044
+    String_t name;				//0x0004
+    String_t description;		//0x0014
+    String_t item_name;			//0x0024
+    String_t material_name;		//0x0034
+    String_t image_inventory;	//0x0044
 
-	char pad_0x0054[0x8C];		//0x0054
+    char pad_0x0054[0x8C];		//0x0054
 }; //Size=0x00E0
 
 struct CStickerKit
 {
-	int id;
+    int id;
 
-	int item_rarity;
+    int item_rarity;
 
-	String_t name;
-	String_t description;
-	String_t item_name;
-	String_t material_name;
-	String_t image_inventory;
+    String_t name;
+    String_t description;
+    String_t item_name;
+    String_t material_name;
+    String_t image_inventory;
 
-	int tournament_event_id;
-	int tournament_team_id;
-	int tournament_player_id;
-	bool is_custom_sticker_material;
+    int tournament_event_id;
+    int tournament_team_id;
+    int tournament_player_id;
+    bool is_custom_sticker_material;
 
-	float rotate_end;
-	float rotate_start;
+    float rotate_end;
+    float rotate_start;
 
-	float scale_min;
-	float scale_max;
+    float scale_min;
+    float scale_max;
 
-	float wear_min;
-	float wear_max;
+    float wear_min;
+    float wear_max;
 
-	String_t image_inventory2;
-	String_t image_inventory_large;
+    String_t image_inventory2;
+    String_t image_inventory_large;
 
-	std::uint32_t pad0[4];
+    std::uint32_t pad0[4];
 };
 
 auto game_data::initialize_kits() -> void
 {
-	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
-	const uintptr_t itemSchema = memory.itemSystem() + 4;
+    const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
+    const uintptr_t itemSchema = memory.itemSystem() + 4;
 
-	// Dump paint kits
-	{
-		const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(itemSchema + 0x28C);
+    // Dump paint kits
+    {
+        const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(itemSchema + 0x28C);
 
-		for(auto i = 0; i <= map_head->last_element; ++i)
-		{
-			const auto paint_kit = map_head->memory[i].value;
+        for (int i = 0; i <= map_head->last_element; i++) {
+            const auto paint_kit = map_head->memory[i].value;
 
-			if(paint_kit->id == 9001)
-				continue;
-           
-			const auto wide_name = interfaces.localize->find(paint_kit->item_name.buffer + 1);
-			char name[256];
-			V_UCS2ToUTF8(wide_name, name, sizeof(name));
+            if (paint_kit->id == 9001)
+                continue;
 
-			if(paint_kit->id < 10000)
-				game_data::skin_kits.push_back({ paint_kit->id, name });
-			else
-				game_data::glove_kits.push_back({ paint_kit->id, name });
-		}
+            const auto wide_name = interfaces.localize->find(paint_kit->item_name.buffer + 1);
+            char name[256];
+            V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
-		std::sort(game_data::skin_kits.begin(), game_data::skin_kits.end());
-		std::sort(game_data::glove_kits.begin(), game_data::glove_kits.end());
-	}
+            if (paint_kit->id < 10000)
+                game_data::skin_kits.push_back({ paint_kit->id, name });
+            else
+                game_data::glove_kits.push_back({ paint_kit->id, name });
+        }
 
-	// Dump sticker kits
-	{
-		const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(itemSchema + 0x2B0);
+        std::sort(game_data::skin_kits.begin(), game_data::skin_kits.end());
+        std::sort(game_data::glove_kits.begin(), game_data::glove_kits.end());
+    }
 
-		for(auto i = 0; i <= map_head->last_element; ++i)
-		{
-			const auto sticker_kit = map_head->memory[i].value;
+    // Dump sticker kits
+    {
+        const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(itemSchema + 0x2B0);
 
-			char sticker_name_if_valve_fucked_up_their_translations[64];
+        for (int i = 0; i <= map_head->last_element; i++) {
+            const auto sticker_kit = map_head->memory[i].value;
 
-			auto sticker_name_ptr = sticker_kit->item_name.buffer + 1;
+            char sticker_name_if_valve_fucked_up_their_translations[64];
 
-			if(strstr(sticker_name_ptr, "StickerKit_dhw2014_dignitas"))
-			{
-				strcpy_s(sticker_name_if_valve_fucked_up_their_translations, "StickerKit_dhw2014_teamdignitas");
-				strcat_s(sticker_name_if_valve_fucked_up_their_translations, sticker_name_ptr + 27);
-				sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
-			}
+            auto sticker_name_ptr = sticker_kit->item_name.buffer + 1;
 
-			const auto wide_name = interfaces.localize->find(sticker_name_ptr);
-			char name[256];
-			V_UCS2ToUTF8(wide_name, name, sizeof(name));
+            if (strstr(sticker_name_ptr, "StickerKit_dhw2014_dignitas")) {
+                strcpy_s(sticker_name_if_valve_fucked_up_their_translations, "StickerKit_dhw2014_teamdignitas");
+                strcat_s(sticker_name_if_valve_fucked_up_their_translations, sticker_name_ptr + 27);
+                sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
+            }
 
-			game_data::sticker_kits.push_back({ sticker_kit->id, name });
-		}
+            const auto wide_name = interfaces.localize->find(sticker_name_ptr);
+            char name[256];
+            V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
-		std::sort(game_data::sticker_kits.begin(), game_data::sticker_kits.end());
+            game_data::sticker_kits.push_back({ sticker_kit->id, name });
+        }
 
-		game_data::sticker_kits.insert(game_data::sticker_kits.begin(), { 0, "None" });
-	}
+        std::sort(game_data::sticker_kits.begin(), game_data::sticker_kits.end());
+
+        game_data::sticker_kits.insert(game_data::sticker_kits.begin(), { 0, "None" });
+    }
 }
