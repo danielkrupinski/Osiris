@@ -39,6 +39,7 @@ public:
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
+    std::add_pointer_t<uintptr_t()> itemSystem;
 
 private:
     template <typename T = uintptr_t>
