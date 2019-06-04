@@ -313,7 +313,7 @@ static constexpr void updateHud() noexcept
 void SkinChanger::run(FrameStage stage) noexcept
 {
     if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer && localPlayer->isAlive()) {
+        if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
             post_data_update_start(localPlayer);
             if (hudUpdateRequired && !localPlayer->isDormant())
                 updateHud();
