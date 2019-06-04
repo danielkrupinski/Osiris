@@ -104,15 +104,15 @@ void draw_gui()
 			if (itemIndex == 0) {
 				ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{
-					*out_text = game_data::knife_names.at(idx).name;
+					*out_text = game_data::knife_names[idx].name;
 					return true;
-				}, nullptr, game_data::knife_names.size(), 5);
+				}, nullptr, sizeof(game_data::knife_names) / sizeof(game_data::weapon_name), 5);
 			} else if(itemIndex == 1) {
 				ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text)
 				{
-					*out_text = game_data::glove_names.at(idx).name;
+					*out_text = game_data::glove_names[idx].name;
 					return true;
-				}, nullptr, game_data::glove_names.size(), 5);
+				}, nullptr, sizeof(game_data::glove_names) / sizeof(game_data::weapon_name), 5);
 			} else {
 				// We don't want to override weapons other than knives or gloves
 				static auto unused_value = 0;

@@ -55,21 +55,21 @@ struct item_setting
         entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
 
 		const std::vector<game_data::PaintKit>* kit_names;
-		const std::vector<game_data::weapon_name>* defindex_names;
+		const game_data::weapon_name* defindex_names;
 
 		if (definition_index == GLOVE_T_SIDE)
 		{
 			kit_names = &game_data::glove_kits;
-			defindex_names = &game_data::glove_names;
+			defindex_names = game_data::glove_names;
 		}
 		else
 		{
 			kit_names = &game_data::skin_kits;
-			defindex_names = &game_data::knife_names;
+			defindex_names = game_data::knife_names;
 		}
 
         paint_kit_index = (*kit_names)[paint_kit_vector_index].id;
-        definition_override_index = (*defindex_names)[definition_override_vector_index].definition_index;
+        definition_override_index = defindex_names[definition_override_vector_index].definition_index;
 
 		for(auto& sticker : stickers)
 			sticker.update();

@@ -60,36 +60,3 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 	const auto entry = info.find(defindex);
 	return entry == end(info) ? nullptr : &entry->second;
 }
-
-const std::vector<game_data::weapon_name> game_data::knife_names =
-{
-	{0, "Default"},
-	{WEAPON_KNIFE_BAYONET, "Bayonet"},
-	{WEAPON_KNIFE_FLIP, "Flip Knife"},
-	{WEAPON_KNIFE_GUT, "Gut Knife"},
-	{WEAPON_KNIFE_KARAMBIT, "Karambit"},
-	{WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet"},
-	{WEAPON_KNIFE_TACTICAL, "Huntsman Knife"},
-	{WEAPON_KNIFE_FALCHION, "Falchion Knife"},
-	{WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife"},
-	{WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife"},
-	{WEAPON_KNIFE_PUSH, "Shadow Daggers"},
-	{WEAPON_KNIFE_URSUS, "Ursus Knife"},
-	{WEAPON_KNIFE_GYPSY_JACKKNIFE, "Navaja Knife"},
-	{WEAPON_KNIFE_STILETTO, "Stiletto Knife"},
-	{WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"}
-};
-
-const std::vector<game_data::weapon_name> game_data::glove_names =
-{
-	{0, "Default"},
-	{GLOVE_STUDDED_BLOODHOUND, "Bloodhound"},
-	{GLOVE_T_SIDE, "Default (Terrorists)"},
-	{GLOVE_CT_SIDE, "Default (Counter-Terrorists)"},
-	{GLOVE_SPORTY, "Sporty"},
-	{GLOVE_SLICK, "Slick"},
-	{GLOVE_LEATHER_WRAP, "Handwrap"},
-	{GLOVE_MOTORCYCLE, "Motorcycle"},
-	{GLOVE_SPECIALIST, "Specialist"},
-	{GLOVE_HYDRA, "Hydra"}
-};

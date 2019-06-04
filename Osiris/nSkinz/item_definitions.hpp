@@ -140,8 +140,38 @@ namespace game_data
 	};
 
 	const weapon_info* get_weapon_info(int defindex);
-	extern const std::vector<weapon_name> knife_names;
-	extern const std::vector<weapon_name> glove_names;
+
+    constexpr weapon_name knife_names[]{
+        {0, "Default"},
+        {WEAPON_KNIFE_BAYONET, "Bayonet"},
+        {WEAPON_KNIFE_FLIP, "Flip Knife"},
+        {WEAPON_KNIFE_GUT, "Gut Knife"},
+        {WEAPON_KNIFE_KARAMBIT, "Karambit"},
+        {WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet"},
+        {WEAPON_KNIFE_TACTICAL, "Huntsman Knife"},
+        {WEAPON_KNIFE_FALCHION, "Falchion Knife"},
+        {WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife"},
+        {WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife"},
+        {WEAPON_KNIFE_PUSH, "Shadow Daggers"},
+        {WEAPON_KNIFE_URSUS, "Ursus Knife"},
+        {WEAPON_KNIFE_GYPSY_JACKKNIFE, "Navaja Knife"},
+        {WEAPON_KNIFE_STILETTO, "Stiletto Knife"},
+        {WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"}
+    };
+
+
+    constexpr weapon_name glove_names[]{
+        {0, "Default"},
+        {GLOVE_STUDDED_BLOODHOUND, "Bloodhound"},
+        {GLOVE_T_SIDE, "Default (Terrorists)"},
+        {GLOVE_CT_SIDE, "Default (Counter-Terrorists)"},
+        {GLOVE_SPORTY, "Sporty"},
+        {GLOVE_SLICK, "Slick"},
+        {GLOVE_LEATHER_WRAP, "Handwrap"},
+        {GLOVE_MOTORCYCLE, "Motorcycle"},
+        {GLOVE_SPECIALIST, "Specialist"},
+        {GLOVE_HYDRA, "Hydra"}
+    };
 
     constexpr weapon_name weapon_names[]{
         {WEAPON_KNIFE, "Knife"},
