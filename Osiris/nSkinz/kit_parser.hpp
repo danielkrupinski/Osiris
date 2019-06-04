@@ -29,6 +29,7 @@
 namespace game_data
 {
 	struct PaintKit {
+        PaintKit(int id, const char* name) noexcept : id(id), name(name) { }
 		int id;
 		std::string name;
 

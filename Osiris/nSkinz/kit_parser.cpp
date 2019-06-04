@@ -134,9 +134,9 @@ auto game_data::initialize_kits() -> void
             V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
             if (paint_kit->id < 10000)
-                game_data::skin_kits.push_back({ paint_kit->id, name });
+                game_data::skin_kits.emplace_back(paint_kit->id, name);
             else
-                game_data::glove_kits.push_back({ paint_kit->id, name });
+                game_data::glove_kits.emplace_back(paint_kit->id, name);
         }
 
         std::sort(game_data::skin_kits.begin(), game_data::skin_kits.end());
@@ -164,9 +164,8 @@ auto game_data::initialize_kits() -> void
             char name[256];
             V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
-            game_data::sticker_kits.push_back({ sticker_kit->id, name });
+            game_data::sticker_kits.emplace_back(sticker_kit->id, name);
         }
-
         std::sort(game_data::sticker_kits.begin(), game_data::sticker_kits.end());
 
         game_data::sticker_kits.insert(game_data::sticker_kits.begin(), { 0, "None" });
