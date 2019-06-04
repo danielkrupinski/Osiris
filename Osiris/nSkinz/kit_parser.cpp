@@ -147,6 +147,8 @@ auto game_data::initialize_kits() -> void
     {
         const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(itemSchema + 0x2B0);
 
+        game_data::sticker_kits.emplace_back(0, "None");
+
         for (int i = 0; i <= map_head->last_element; i++) {
             const auto sticker_kit = map_head->memory[i].value;
 
@@ -166,8 +168,6 @@ auto game_data::initialize_kits() -> void
 
             game_data::sticker_kits.emplace_back(sticker_kit->id, name);
         }
-        std::sort(game_data::sticker_kits.begin(), game_data::sticker_kits.end());
-
-        game_data::sticker_kits.insert(game_data::sticker_kits.begin(), { 0, "None" });
+        std::sort(std::next(game_data::sticker_kits.begin()), game_data::sticker_kits.end());
     }
 }
