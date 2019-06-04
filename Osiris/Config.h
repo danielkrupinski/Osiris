@@ -142,6 +142,7 @@ public:
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
+        int fov{ 0 };
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ -1 };
