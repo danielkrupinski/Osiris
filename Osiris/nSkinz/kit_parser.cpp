@@ -117,11 +117,11 @@ struct CStickerKit
 auto game_data::initialize_kits() -> void
 {
 	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
-	const auto itemSchema = memory.itemSystem() + 4;
+	const uintptr_t itemSchema = memory.itemSystem() + 4;
 
 	// Dump paint kits
 	{
-		const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(std::uintptr_t(itemSchema) + 0x28C);
+		const auto map_head = reinterpret_cast<Head_t<int, CPaintKit*>*>(itemSchema + 0x28C);
 
 		for(auto i = 0; i <= map_head->last_element; ++i)
 		{
@@ -146,31 +146,7 @@ auto game_data::initialize_kits() -> void
 
 	// Dump sticker kits
 	{
-		const auto sticker_sig = platform::find_pattern("client_panorama", "\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10", "xxxxx????xxx") + 4;
-
-		// Skip the opcode, read rel32 address
-		const auto get_sticker_kit_definition_offset = *reinterpret_cast<std::intptr_t*>(sticker_sig + 1);
-
-		// Add the offset to the end of the instruction
-		const auto get_sticker_kit_definition_fn = reinterpret_cast<CPaintKit*(__thiscall*)(CCStrike15ItemSchema*, int)>(sticker_sig + 5 + get_sticker_kit_definition_offset);
-
-		// The last offset is head_element, we need that
-
-		//	push    ebp
-		//	mov     ebp, esp
-		//	push    ebx
-		//	push    esi
-		//	push    edi
-		//	mov     edi, ecx
-		//	mov     eax, [edi + 2BCh]
-
-		// Skip instructions, skip opcode, read offset
-		const auto start_element_offset = *reinterpret_cast<intptr_t*>(std::uintptr_t(get_sticker_kit_definition_fn) + 8 + 2);
-
-		// Calculate head base from start_element's offset
-		const auto head_offset = start_element_offset - 12;
-
-		const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(std::uintptr_t(itemSchema) + head_offset);
+		const auto map_head = reinterpret_cast<Head_t<int, CStickerKit*>*>(itemSchema + 0x2B0);
 
 		for(auto i = 0; i <= map_head->last_element; ++i)
 		{
