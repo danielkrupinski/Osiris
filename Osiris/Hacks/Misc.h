@@ -104,9 +104,15 @@ namespace Misc {
 
     constexpr void playHitSound(GameEvent* event) noexcept
     {
+        constexpr const char* hitSounds[]{
+            "play physics/metal/metal_solid_impact_bullet2",
+            "play buttons/arena_switch_press_02",
+            "play training/timer_bell"
+        };
+
         if (config.misc.hitSound
             && !strcmp(event->getName(), "player_hurt")
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
-            interfaces.engine->clientCmdUnrestricted("play physics/metal/metal_solid_impact_bullet2");
+            interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
 }

@@ -171,7 +171,7 @@ public:
         bool fixAnimationLOD{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
-        bool hitSound{ false };
+        int hitSound{ 0 };
         int chokedPackets{ 0 };
     } misc;
 
