@@ -233,6 +233,19 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 
+struct ViewSetup {
+    std::byte pad[176];
+    float fov;
+};
+
+static void __stdcall overrideView(ViewSetup* setup) noexcept
+{
+    if (interfaces.engine->isInGame()
+        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
+        setup->fov += config.visuals.fov;
+    hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
+}
+
 extern void initializeNSkinz();
 
 Hooks::Hooks() noexcept
@@ -273,6 +286,7 @@ Hooks::Hooks() noexcept
 
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
+    clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
     clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(35, getViewModelFov);
