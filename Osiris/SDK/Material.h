@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils.h"
-#include "Vector.h"
 
 enum class MaterialVar {
     NO_DRAW = 1 << 2,
@@ -11,11 +10,6 @@ enum class MaterialVar {
 
 class Material final {
 public:
-    constexpr auto getName() noexcept
-    {
-        return std::string_view{ callVirtualMethod<const char*>(this, 0) };
-    }
-
     constexpr int incrementReferenceCount() noexcept
     {
         callVirtualMethod<void>(this, 12);
