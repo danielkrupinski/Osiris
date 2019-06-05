@@ -120,14 +120,17 @@ void Misc::watermark() noexcept
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
+    constexpr float revolverPrepareTime{ 0.234375f };
+
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
         const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
             interfaces.entityList->getEntity(
                 interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
         if (activeWeapon && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver) {
-            if (!readyTime) readyTime = memory.globalVars->serverTime() + 0.234375f;
-            if (timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0)) > 0)
+            if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
+            auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0));
+            if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))
                 cmd->buttons |= UserCmd::IN_ATTACK;
             else
                 readyTime = 0.0f;
