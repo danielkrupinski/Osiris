@@ -157,6 +157,7 @@ public:
         int menuKey{ 0x2D }; // VK_INSERT
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool sniperCrosshair{ false };

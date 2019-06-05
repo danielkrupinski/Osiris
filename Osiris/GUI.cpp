@@ -427,13 +427,12 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        static char buffer[16];
         ImGui::PushItemWidth(120.0f);
-        ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer));
+        ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag));
         ImGui::SameLine();
         if (ImGui::Button("Set clantag")) {
-            Misc::setClanTag(buffer);
-            Misc::animateClanTag(buffer);
+            Misc::setClanTag(config.misc.clanTag);
+            Misc::animateClanTag(config.misc.clanTag);
         }
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
