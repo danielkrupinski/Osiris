@@ -13,4 +13,10 @@ public:
     {
         return callVirtualMethod<void, const float*>(this, 6, colors);
     }
+
+    constexpr void setColorModulation(float r, float g, float b) noexcept
+    {
+        float color[3]{ r, g, b };
+        return callVirtualMethod<void, const float*>(this, 6, color);
+    }
 };
