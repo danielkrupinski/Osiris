@@ -40,14 +40,14 @@ auto platform::get_export(const char* module_name, const char* export_name) -> v
 	return reinterpret_cast<void*>(GetProcAddress(mod, export_name));
 }
 
-auto platform::get_module_info(const char* module_name) -> std::pair<std::uintptr_t, std::size_t>
+std::pair<std::uintptr_t, std::size_t> platform::get_module_info(const char* module_name)
 {
 	const auto module = GetModuleHandleA(module_name);
 	if (!module)
-		return { 0, 0 };
+		return std::make_pair(0, 0);
 	MODULEINFO module_info;
 	K32GetModuleInformation(GetCurrentProcess(), module, &module_info, sizeof(MODULEINFO));
-	return { std::uintptr_t(module_info.lpBaseOfDll), module_info.SizeOfImage };
+	return std::make_pair(std::uintptr_t(module_info.lpBaseOfDll), module_info.SizeOfImage);
 }
 
 auto platform::is_code_ptr(void* ptr) -> bool
