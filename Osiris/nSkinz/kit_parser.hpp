@@ -43,5 +43,5 @@ namespace game_data
 	extern std::vector<PaintKit> glove_kits;
 	extern std::vector<PaintKit> sticker_kits;
 
-	void initialize_kits();
+	void initialize_kits() noexcept;
 }

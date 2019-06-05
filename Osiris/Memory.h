@@ -7,6 +7,7 @@
 
 class ClientMode;
 class Input;
+class ItemSchema;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
@@ -39,7 +40,7 @@ public:
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
-    std::add_pointer_t<uintptr_t()> itemSystem;
+    std::add_pointer_t<ItemSchema*()> itemSchema;
 
 private:
     template <typename T = uintptr_t>
