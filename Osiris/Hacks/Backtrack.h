@@ -50,7 +50,7 @@ namespace Backtrack {
         if (!network)
             return false;
 
-        auto delta = std::clamp(network->getLatency(0) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->currenttime - simtime);
+        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->serverTime() - simtime);
         return std::fabsf(delta) <= 0.2f;
     }
 

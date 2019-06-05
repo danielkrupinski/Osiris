@@ -17,7 +17,7 @@ void Backtrack::update(FrameStage stage) noexcept
         return;
     }
 
-    if (stage == FrameStage::NET_UPDATE_END) {
+    if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
@@ -28,18 +28,8 @@ void Backtrack::update(FrameStage stage) noexcept
             if (!records[i].empty() && (records[i].front().simulationTime == entity->getProperty<float>("m_flSimulationTime")))
                 continue;
 
-            auto varmap = entity->getVarMap();
-            if (!varmap) continue;
-            
-            for (int j = 0; j < varmap->interpolatedEntries; j++) {
-                auto entry = &varmap->entries[j];
-                if (!entry) continue;
-
-                entry->needsToInterpolate = false;
-            }
-
             Record record{ };
-            record.origin = entity->getProperty<Vector>("m_vecOrigin");
+            record.origin = entity->getAbsOrigin();
             record.simulationTime = entity->getProperty<float>("m_flSimulationTime");
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
@@ -115,6 +105,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
-        cmd->tick_count = timeToTicks(record.simulationTime);
+        memory.setAbsOrigin(bestTarget, record.origin);
+        cmd->tick_count = timeToTicks(record.simulationTime + getLerp());
     }
 }
