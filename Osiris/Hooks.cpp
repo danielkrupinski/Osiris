@@ -228,6 +228,7 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
+    Misc::killMessage(event);
     Misc::playHitSound(event);
     SkinChanger::overrideHudIcon(event);
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
