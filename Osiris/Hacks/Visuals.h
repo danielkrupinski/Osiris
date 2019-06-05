@@ -32,7 +32,7 @@ namespace Visuals {
 
     constexpr bool removeHands(const char* modelName) noexcept
     {
-        return config.visuals.noHands && strstr(modelName, "arms");
+        return config.visuals.noHands && strstr(modelName, "arms") && !strstr(modelName, "sleeve");
     }
 
     constexpr bool removeSleeves(const char* modelName) noexcept
