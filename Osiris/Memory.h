@@ -41,6 +41,7 @@ public:
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSchema*()> itemSchema;
+    void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
 
 private:
     template <typename T = uintptr_t>

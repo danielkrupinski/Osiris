@@ -176,13 +176,13 @@ static auto make_glove(int entry, int serial) noexcept
 
     // He he
     {
-        static auto set_abs_origin_addr = platform::find_pattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1", "xxxxxxxxxxxx");
+      //  static auto set_abs_origin_addr = platform::find_pattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1", "xxxxxxxxxxxx");
 
-        const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const Vector&)>(set_abs_origin_addr);
+        //const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const Vector&)>(set_abs_origin_addr);
 
         static constexpr Vector new_pos = { 10000.f, 10000.f, 10000.f };
 
-        set_abs_origin_fn(glove, new_pos);
+        memory.setAbsOrigin(glove, new_pos);
     }
 
     return glove;
