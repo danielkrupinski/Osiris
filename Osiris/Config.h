@@ -169,6 +169,7 @@ public:
         bool spectatorList{ false };
         bool watermark{ false };
         bool fixAnimationLOD{ false };
+        bool killMessage{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
