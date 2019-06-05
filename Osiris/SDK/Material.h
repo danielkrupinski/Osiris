@@ -32,9 +32,9 @@ public:
         callVirtualMethod<void, float, float, float>(this, 28, color[0], color[1], color[2]);
     }
 
-    constexpr void colorModulate(Vector color) noexcept
+    constexpr void colorModulate(float r, float g, float b) noexcept
     {
-        callVirtualMethod<void, float, float, float>(this, 28, color.x, color.y, color.z);
+        callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
     }
 
     constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
