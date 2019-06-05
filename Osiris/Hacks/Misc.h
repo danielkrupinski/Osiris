@@ -115,4 +115,14 @@ namespace Misc {
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
             interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
+
+    constexpr void killMessage(GameEvent* event) noexcept
+    {
+        auto localPlayer = interfaces.engine->getLocalPlayer();
+        if (config.misc.killMessage
+            && !strcmp(event->getName(), "player_death")
+            && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
+            && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
+            interfaces.engine->clientCmdUnrestricted("say Gotcha!");
+    }
 }
