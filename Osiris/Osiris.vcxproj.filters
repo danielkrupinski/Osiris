@@ -301,5 +301,8 @@
     <ClInclude Include="SDK\ItemSchema.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ConVar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
