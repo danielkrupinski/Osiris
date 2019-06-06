@@ -71,7 +71,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             || !entity->isEnemy())
             continue;
 
-        auto origin = entity->getProperty<Vector>("m_vecOrigin");
+        auto origin = entity->getAbsOrigin();
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles);
         auto fov = std::hypotf(angle.x, angle.y);
