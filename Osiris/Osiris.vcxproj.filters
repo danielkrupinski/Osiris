@@ -302,7 +302,7 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\ConVar.h">
-      <Filter>Header Files</Filter>
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

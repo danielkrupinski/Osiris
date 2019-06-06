@@ -5,6 +5,7 @@
 #include "../Memory.h"
 #include "../Interfaces.h"
 #include "../SDK/Engine.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
@@ -26,13 +27,13 @@ namespace Backtrack {
     extern std::deque<Record> records[65];
 
     struct Cvars {
-        Cvar* updateRate;
-        Cvar* maxUpdateRate;
-        Cvar* interp;
-        Cvar* interpRatio;
-        Cvar* minInterpRatio;
-        Cvar* maxInterpRatio;
-        Cvar* maxUnlag;
+        ConVar* updateRate;
+        ConVar* maxUpdateRate;
+        ConVar* interp;
+        ConVar* interpRatio;
+        ConVar* minInterpRatio;
+        ConVar* maxInterpRatio;
+        ConVar* maxUnlag;
     };
 
     extern Cvars cvars;

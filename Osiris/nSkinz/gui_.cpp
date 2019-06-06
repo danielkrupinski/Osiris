@@ -27,6 +27,7 @@
 #include "item_definitions.hpp"
 #include "kit_parser.hpp"
 #include "../Interfaces.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Cvar.h"
 #include "../Hacks/SkinChanger.h"
 

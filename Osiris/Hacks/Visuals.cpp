@@ -1,6 +1,7 @@
 #include "../Config.h"
 #include "../Memory.h"
 #include "Visuals.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Input.h"

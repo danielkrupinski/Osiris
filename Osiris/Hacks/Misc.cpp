@@ -5,6 +5,7 @@
 #include "../Memory.h"
 #include "../Netvars.h"
 #include "Misc.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Surface.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"

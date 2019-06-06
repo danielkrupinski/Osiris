@@ -5,6 +5,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
