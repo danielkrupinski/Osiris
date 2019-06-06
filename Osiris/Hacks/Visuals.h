@@ -1,13 +1,13 @@
 #pragma once
 
-#include <string_view>
-
+#include "../Config.h"
+#include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Entity.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EntityList.h"
-#include "../SDK/FrameStage.h"
-#include "../Interfaces.h"
+
+enum class FrameStage;
 
 namespace Visuals {
     void colorWorld() noexcept;
