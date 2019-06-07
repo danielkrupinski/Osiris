@@ -170,6 +170,7 @@ public:
         bool spectatorList{ false };
         bool watermark{ false };
         bool fixAnimationLOD{ false };
+        bool fixBoneMatrix{ false };
         bool killMessage{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };

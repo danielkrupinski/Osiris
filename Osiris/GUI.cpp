@@ -446,6 +446,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
         ImGui::Checkbox("Watermark", &config.misc.watermark);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
+        ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
