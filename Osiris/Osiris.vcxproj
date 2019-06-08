@@ -30,7 +30,6 @@
     <ClCompile Include="Hacks\Visuals.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
-    <ClCompile Include="nSkinz\gui_.cpp" />
     <ClCompile Include="nSkinz\item_definitions.cpp" />
     <ClCompile Include="nSkinz\kit_parser.cpp" />
     <ClCompile Include="nSkinz\nSkinz.cpp" />
