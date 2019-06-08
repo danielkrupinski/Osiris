@@ -19,12 +19,12 @@ public:
 
     void restore() noexcept;
 
-    auto get_offset(const fnv::hash hash) const noexcept
+    auto get_offset(const uint32_t hash) const noexcept
     {
         return props.at(hash).offset;
     }
 
-    auto get_prop(const fnv::hash hash) const noexcept
+    auto get_prop(const uint32_t hash) const noexcept
     {
         return props.at(hash).prop;
     }
@@ -37,7 +37,7 @@ private:
         RecvProp* prop;
         uint16_t offset;
     };
-    std::unordered_map<fnv::hash, recvData> props;
+    std::unordered_map<uint32_t, recvData> props;
 };
 
 extern Netvars netvars;
@@ -45,7 +45,7 @@ extern Netvars netvars;
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, ...) \
 auto funcname() -> std::add_pointer_t<__VA_ARGS__> \
 { \
-	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
+	constexpr auto hash = fnv::hash(class_name "->" var_name); \
 	const auto addr = std::uintptr_t(this) + offset + netvars.get_offset(hash); \
 	return reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
 }
@@ -56,7 +56,7 @@ auto funcname() -> std::add_pointer_t<__VA_ARGS__> \
 #define NETVAR_OFFSET(funcname, class_name, var_name, offset, ...) \
 auto funcname() -> std::add_lvalue_reference_t<__VA_ARGS__> \
 { \
-	constexpr auto hash = fnv::hash_constexpr(class_name "->" var_name); \
+	constexpr auto hash = fnv::hash(class_name "->" var_name); \
 	const auto addr = std::uintptr_t(this) + offset + netvars.get_offset(hash); \
 	return *reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
 }

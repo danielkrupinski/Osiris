@@ -38,7 +38,7 @@ static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 
 #include "nSkinz/config_.hpp"
 
-static int get_new_animation(const fnv::hash model, const int sequence) noexcept
+static int get_new_animation(const uint32_t model, const int sequence) noexcept
 {
     enum Sequence
     {
@@ -73,9 +73,8 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
     };
 
     // Hashes for best performance.
-    switch (model)
-    {
-    case FNV("models/weapons/v_knife_butterfly.mdl"):
+    switch (model) {
+    case fnv::hash("models/weapons/v_knife_butterfly.mdl"):
     {
         switch (sequence)
         {
@@ -87,7 +86,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return sequence + 1;
         }
     }
-    case FNV("models/weapons/v_knife_falchion_advanced.mdl"):
+    case fnv::hash("models/weapons/v_knife_falchion_advanced.mdl"):
     {
         switch (sequence)
         {
@@ -104,7 +103,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return sequence - 1;
         }
     }
-    case FNV("models/weapons/v_knife_push.mdl"):
+    case fnv::hash("models/weapons/v_knife_push.mdl"):
     {
         switch (sequence)
         {
@@ -126,7 +125,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return sequence + 2;
         }
     }
-    case FNV("models/weapons/v_knife_survival_bowie.mdl"):
+    case fnv::hash("models/weapons/v_knife_survival_bowie.mdl"):
     {
         switch (sequence)
         {
@@ -139,7 +138,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return sequence - 1;
         }
     }
-    case FNV("models/weapons/v_knife_ursus.mdl"):
+    case fnv::hash("models/weapons/v_knife_ursus.mdl"):
     {
         switch (sequence)
         {
@@ -151,7 +150,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return sequence + 1;
         }
     }
-    case FNV("models/weapons/v_knife_stiletto.mdl"):
+    case fnv::hash("models/weapons/v_knife_stiletto.mdl"):
     {
         switch (sequence)
         {
@@ -159,7 +158,7 @@ static int get_new_animation(const fnv::hash model, const int sequence) noexcept
             return random(12, 13);
         }
     }
-    case FNV("models/weapons/v_knife_widowmaker.mdl"):
+    case fnv::hash("models/weapons/v_knife_widowmaker.mdl"):
     {
         switch (sequence)
         {
@@ -183,7 +182,7 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
             if (!weapon_info)
                 return;
 
-            data.value._int = get_new_animation(fnv::hash_runtime(weapon_info->model), data.value._int);
+            data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
         }
     }
 }
@@ -217,7 +216,7 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
         if (isdigit(prop.name[0]))
             continue;
 
-        if (fnv::hash_runtime(prop.name) == FNV("baseclass"))
+        if (fnv::hashRuntime(prop.name) == fnv::hash("baseclass"))
             continue;
 
         if (prop.type == 6
@@ -231,7 +230,7 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
         strcat_s(hash_name, "->");
         strcat_s(hash_name, prop.name);
 
-        const auto hash = fnv::hash_runtime(hash_name);
+        const auto hash = fnv::hashRuntime(hash_name);
         const auto total_offset = std::uint16_t(offset + prop.offset);
 
         props[hash] =

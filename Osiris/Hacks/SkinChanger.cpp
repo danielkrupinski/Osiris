@@ -73,7 +73,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 void apply_sticker_changer(Entity* item) noexcept
 {
     if (!s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars.get_offset(FNV("CBaseAttributableItem->m_Item")) + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars.get_offset(fnv::hash("CBaseAttributableItem->m_Item")) + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -160,7 +160,7 @@ static auto get_wearable_create_fn() noexcept
     // Please, if you gonna paste it into a cheat use classids here. I use names because they
     // won't change in the foreseeable future and i dont need high speed, but chances are
     // you already have classids, so use them instead, they are faster.
-    while (fnv::hash_runtime(clazz->networkName) != FNV("CEconWearable"))
+    while (fnv::hash(clazz->networkName) != fnv::hash("CEconWearable"))
         clazz = clazz->next;
 
     return clazz->createFunction;
