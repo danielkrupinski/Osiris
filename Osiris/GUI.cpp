@@ -508,7 +508,7 @@ void GUI::renderSkinChangerWindow() noexcept
 
             ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text)
                 {
-                    *out_text = game_data::sticker_kits.at(idx).name.c_str();
+                    *out_text = game_data::sticker_kits[idx].name.c_str();
                     return true;
                 }, nullptr, game_data::sticker_kits.size(), 10);
 
