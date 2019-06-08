@@ -493,14 +493,16 @@ void GUI::renderSkinChangerWindow() noexcept
 
             char elementName[64];
 
+            std::function<const char* (int)> getItem = [&selected_entry, &elementName](int idx) {
+                auto kit_vector_index = selected_entry.stickers[idx].kit_vector_index;
+                sprintf_s(elementName, "#%d (%s)", idx + 1, game_data::sticker_kits[kit_vector_index].name.c_str());
+                return elementName;
+            };
+
             ImGui::ListBox("", &selectedStickerSlot, [](void* data, int idx, const char** out_text) {
                 *out_text = (*reinterpret_cast<std::function<const char* (int)>*>(data))(idx);
                 return true;
-                }, &[&selected_entry, &elementName](int idx) {
-                    auto kit_vector_index = selected_entry.stickers[idx].kit_vector_index;
-                    sprintf_s(elementName, "#%d (%s)", idx + 1, game_data::sticker_kits[kit_vector_index].name.c_str());
-                    return elementName;
-                }, 5, 5);
+                }, &getItem, 5, 5);
 
             ImGui::PopItemWidth();
 
