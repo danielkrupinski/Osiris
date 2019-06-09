@@ -2045,7 +2045,8 @@ enum ImFontAtlasFlags_
 {
     ImFontAtlasFlags_None               = 0,
     ImFontAtlasFlags_NoPowerOfTwoHeight = 1 << 0,   // Don't round the height to next power of two
-    ImFontAtlasFlags_NoMouseCursors     = 1 << 1    // Don't build software mouse cursors into the atlas
+    ImFontAtlasFlags_NoMouseCursors     = 1 << 1,   // Don't build software mouse cursors into the atlas
+    ImFontAtlasFlags_NoRoundCorners     = 1 << 2    // Don't use software rendered quads for round corners
 };
 
 // Load and rasterize multiple TTF/OTF fonts into a same texture. The font atlas will build a single texture holding:
@@ -2157,6 +2158,12 @@ struct ImFontAtlas
     ImVector<CustomRect>        CustomRects;        // Rectangles for packing custom texture data into the atlas.
     ImVector<ImFontConfig>      ConfigData;         // Internal data
     int                         CustomRectIds[1];   // Identifiers of custom texture rectangle used by ImFontAtlas/ImDrawList
+
+    // FIXME-ROUND-SHAPES: WIP
+    int                     RoundCornersMaxSize;    // Max pixel size of round corner textures to generate
+    ImVector<int>           RoundCornersRectIds;    // Ids of custom rects for round corners indexed by size [0] is 1px, [n] is (n+1)px (index up to RoundCornersMaxSize - 1).
+    ImVector<ImVec4>        TexUvRoundCornerFilled; // Texture coordinates to filled round corner quads
+    ImVector<ImVec4>        TexUvRoundCornerStroked;// Texture coordinates to stroked round corner quads
 
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
     typedef ImFontGlyphRangesBuilder GlyphRangesBuilder; // OBSOLETED in 1.67+
