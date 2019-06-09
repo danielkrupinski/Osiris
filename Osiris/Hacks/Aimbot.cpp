@@ -27,6 +27,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
         return;
+    
+    if (!(localPlayer->getProperty<int>("m_fFlags") & (1 << 0)))
+		return;
 
     const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
     if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1"))
