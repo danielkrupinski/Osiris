@@ -6,6 +6,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/Cvar.h"
+#include "SDK/Engine.h"
 
 class Hooks final {
 public:
@@ -42,6 +43,7 @@ public:
         size_t length;
     };
 
+    Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
     Vmt client{ interfaces.client };
     Vmt clientMode{ memory.clientMode };
     Vmt gameEventManager{ interfaces.gameEventManager };
