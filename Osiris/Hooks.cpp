@@ -247,6 +247,32 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
 
+struct RenderableInfo {
+    void* renderable;
+    std::byte pad[18];
+    uint16_t flags;
+    uint16_t flags2;
+};
+
+static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
+{
+    if (false && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
+        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
+            if (auto ent = callVirtualMethod<Entity*>(callVirtualMethod<Entity*>(info->renderable, 0), 7); ent && ent->isPlayer()) {
+                info->flags &= ~0x100;
+                info->flags2 |= 0xC0;
+
+                constexpr float maxCoord{ 16384.0f };
+                constexpr float minCoord{ -maxCoord };
+                constexpr Vector min{ minCoord, minCoord, minCoord };
+                constexpr Vector max{ maxCoord, maxCoord, maxCoord };
+                return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, min, max, list, listMax);
+            }
+        }
+    }
+    return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, mins, maxs, list, listMax);
+}
+
 extern void initializeNSkinz();
 
 Hooks::Hooks() noexcept
@@ -285,6 +311,7 @@ Hooks::Hooks() noexcept
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
     **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(reset);
 
+    bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(18, overrideView);
@@ -304,6 +331,7 @@ Hooks::Hooks() noexcept
 
 void Hooks::restore() noexcept
 {
+    bspQuery.restore();
     client.restore();
     clientMode.restore();
     gameEventManager.restore();
