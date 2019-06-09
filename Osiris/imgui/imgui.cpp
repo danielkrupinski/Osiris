@@ -289,7 +289,7 @@ CODE
              const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
              if (pcmd->UserCallback)
              {
-                 pcmd->UserCallback(cmd_list, pcmd);
+                 pcmd->UserCallback(cmd_list, pcmd, NULL);
              }
              else
              {
@@ -373,6 +373,14 @@ CODE
                        overlapping child windows in a same parent, and relied on their relative z-order to be mapped to their submission order, this will affect your rendering.
                        This optimization is disabled if the parent window has no visual output, because it appears to be the most common situation leading to the creation of overlapping child windows.
                        Please reach out if you are affected.
+ - 2019/06/05 (1.71) - added an extra 'void* renderer_user_data' parameter to ImDrawCallback (stored in ImDrawCmd::UserCallback).
+                       this allows custom rendering back-ends to pass custom local rendering information to the callback.
+                       if you use an renderer back-end based on or copied from one before version 1.71, compilation will fail on this line:
+                           pcmd->UserCallback(cmd_list, pcmd);
+                       you can fix it by adding a trailing NULL parameter:
+                           pcmd->UserCallback(cmd_list, pcmd, NULL);
+                       if your back-end needs to support multiple versions, you can use a '#if (IMGUI_VERSION_NUM >= 17004)' test.
+                       if you are using an old copied back-end, consider building the one directly in the imgui repository.
  - 2019/05/13 (1.71) - renamed SetNextTreeNodeOpen() to SetNextItemOpen(). Kept inline redirection function (will obsolete).
  - 2019/05/11 (1.71) - changed io.AddInputCharacter(unsigned short c) signature to io.AddInputCharacter(unsigned int c).
  - 2019/04/29 (1.70) - improved ImDrawList thick strokes (>1.0f) preserving correct thickness up to 90 degrees angles (e.g. rectangles). If you have custom rendering using thick lines, they will appear thicker now.
