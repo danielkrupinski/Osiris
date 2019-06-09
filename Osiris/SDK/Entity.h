@@ -144,6 +144,11 @@ public:
         return callVirtualMethod<bool>(this, 153) && getProperty<int>("m_iHealth") > 0;
     }
 
+    constexpr bool isPlayer() noexcept
+    {
+        return callVirtualMethod<bool>(this, 155);
+    }
+
     constexpr float getInaccuracy() noexcept
     {
         return callVirtualMethod<float>(this, 476);
