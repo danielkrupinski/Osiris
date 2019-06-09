@@ -42,6 +42,7 @@ public:
     int(__thiscall* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSchema*()> itemSchema;
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
+    uintptr_t listLeaves;
 
 private:
     template <typename T = uintptr_t>
