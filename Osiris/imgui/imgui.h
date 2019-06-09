@@ -1242,6 +1242,8 @@ struct ImVector
     inline int          capacity() const                    { return Capacity; }
     inline T&           operator[](int i)                   { IM_ASSERT(i < Size); return Data[i]; }
     inline const T&     operator[](int i) const             { IM_ASSERT(i < Size); return Data[i]; }
+	inline T&           operator[](size_t i)                { IM_ASSERT(i < (size_t)Size); return Data[i]; }
+    inline const T&     operator[](size_t i) const          { IM_ASSERT(i < (size_t)Size); return Data[i]; }
 
     inline void         clear()                             { if (Data) { Size = Capacity = 0; IM_FREE(Data); Data = NULL; } }
     inline T*           begin()                             { return Data; }
