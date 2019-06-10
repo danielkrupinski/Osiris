@@ -232,7 +232,18 @@ static void post_data_update_start(Entity* local) noexcept
             // We don't have a glove, but we should
             if (!glove)
             {
-                const auto entry = interfaces.entityList->getHighestEntityIndex() + 1;
+                auto entry = interfaces.entityList->getHighestEntityIndex() + 1;
+#define HIJACK_ENTITY 1
+#if HIJACK_ENTITY == 1
+                for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+                    auto entity = interfaces.entityList->getEntity(i);
+
+                    if (entity && entity->getClientClass()->classId == ClassId{ 70 }) {
+                        entry = i;
+                        break;
+                    }
+                }
+#endif
                 const auto serial = rand() % 0x1000;
 
                 glove = make_glove(entry, serial);
