@@ -248,7 +248,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
 }
 
 struct RenderableInfo {
-    void* renderable;
+    Entity* renderable;
     std::byte pad[18];
     uint16_t flags;
     uint16_t flags2;
@@ -256,9 +256,9 @@ struct RenderableInfo {
 
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    if (false && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
+    if (config.misc.disableModelOcclusion && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
         if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
-            if (auto ent = callVirtualMethod<Entity*>(callVirtualMethod<Entity*>(info->renderable, 0), 7); ent && ent->isPlayer()) {
+            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
                 info->flags &= ~0x100;
                 info->flags2 |= 0xC0;
 
