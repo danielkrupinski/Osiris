@@ -139,7 +139,13 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 
 static float __stdcall getViewModelFov() noexcept
 {
-    return hooks.clientMode.callOriginal<float>(35) + static_cast<float>(config.visuals.viewmodelFov);
+    float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
+    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+        if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+            additionalFov = 0.0f;
+    }
+
+    return hooks.clientMode.callOriginal<float>(35) + additionalFov;
 }
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
