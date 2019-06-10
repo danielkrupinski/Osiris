@@ -171,6 +171,7 @@ public:
         bool watermark{ false };
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
+        bool disableModelOcclusion{ false };
         bool killMessage{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
