@@ -8,6 +8,7 @@ enum class ClassId {
     Knife = 107,
     KnifeGG,
     PlantedC4 = 128,
+    PropDoorRotating = 142,
     Tablet = 171,
     Aug = 231,
     Awp,
