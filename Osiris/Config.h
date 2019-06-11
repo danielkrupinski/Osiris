@@ -173,6 +173,7 @@ public:
         bool fixBoneMatrix{ false };
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
+        bool fastPlant{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
