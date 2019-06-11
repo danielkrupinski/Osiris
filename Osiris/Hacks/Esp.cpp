@@ -48,8 +48,6 @@ static constexpr void renderBox(Entity* entity, const decltype(config.esp[0])& c
     }
 }
 
-#define USE_BUILTIN_FONT 1
-
 static void renderName(int entityIndex, const decltype(config.esp[0])& config) noexcept
 {
     if (config.name) {
@@ -61,14 +59,8 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
             if (worldToScreen(entity->getAbsOrigin(), bottom) && interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-#if USE_BUILTIN_FONT == 1
-                    constexpr unsigned font{ 0x1d };
-#else
-                    static unsigned font = interfaces.surface->createFont();
-                    static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
-#endif
-                    const auto [width, height] = interfaces.surface->getTextSize(font, name);
-                    interfaces.surface->setTextFont(font);
+                    const auto [width, height] = interfaces.surface->getTextSize(Surface::font, name);
+                    interfaces.surface->setTextFont(Surface::font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
                     interfaces.surface->setTextPosition(bottom.x - width / 2, top.y - 5 - height);
                     interfaces.surface->printText(name);
