@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <sstream>
 
 #include "../Config.h"
@@ -136,5 +138,30 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
             else
                 readyTime = 0.0f;
         }
+    }
+}
+
+void Misc::fastPlant(UserCmd* cmd) noexcept
+{
+    if (config.misc.fastPlant) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
+
+        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
+        if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+            return;
+
+        cmd->buttons &= ~UserCmd::IN_ATTACK;
+
+        constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
+        constexpr float doorRange{ 200.0f };
+        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
+                           cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
+                          -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
+        static Trace trace;
+        interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer, trace);
+
+        if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+            cmd->buttons &= ~UserCmd::IN_USE;
     }
 }

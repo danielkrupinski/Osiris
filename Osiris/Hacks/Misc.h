@@ -19,6 +19,7 @@ namespace Misc {
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
+    void fastPlant(UserCmd*) noexcept;
 
     constexpr void fixAnimationLOD(FrameStage stage) noexcept
     {
