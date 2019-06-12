@@ -82,6 +82,22 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
     }
 }
 
+static void renderMoney(Entity* entity, const decltype(config.esp[0])& config) noexcept
+{
+    if (config.money) {
+        Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
+        head.z += 10.0f;
+        if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
+            float width = abs(top.y - bottom.y) * 0.3f;
+            std::wstring money{ L"$" + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(config.moneyColor, 255);
+            interfaces.surface->setTextPosition(bottom.x + width + 5, top.y);
+            interfaces.surface->printText(money.c_str());
+        }
+    }
+}
+
 enum EspId {
     ALLIES_VISIBLE = 0,
     ALLIES_OCCLUDED,
@@ -106,6 +122,7 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
                         renderBox(entity, config.esp[ALLIES_VISIBLE]);
                         renderName(i, config.esp[ALLIES_VISIBLE]);
+                        renderMoney(entity, config.esp[ALLIES_VISIBLE]);
                         renderHeadDot(entity, config.esp[ALLIES_VISIBLE]);
                     }
                 } else {
@@ -113,6 +130,7 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
                         renderBox(entity, config.esp[ALLIES_OCCLUDED]);
                         renderName(i, config.esp[ALLIES_OCCLUDED]);
+                        renderMoney(entity, config.esp[ALLIES_OCCLUDED]);
                         renderHeadDot(entity, config.esp[ALLIES_OCCLUDED]);
                     }
                 }
@@ -122,6 +140,7 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
                         renderBox(entity, config.esp[ENEMIES_VISIBLE]);
                         renderName(i, config.esp[ENEMIES_VISIBLE]);
+                        renderMoney(entity, config.esp[ENEMIES_VISIBLE]);
                         renderHeadDot(entity, config.esp[ENEMIES_VISIBLE]);
                     }
                 } else {
@@ -129,6 +148,7 @@ void Esp::render() noexcept
                         renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderName(i, config.esp[ENEMIES_OCCLUDED]);
+                        renderMoney(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderHeadDot(entity, config.esp[ENEMIES_OCCLUDED]);
                     }
                 }

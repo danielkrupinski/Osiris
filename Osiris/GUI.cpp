@@ -359,6 +359,7 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
         checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
+        checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
         ImGui::End();
     }
