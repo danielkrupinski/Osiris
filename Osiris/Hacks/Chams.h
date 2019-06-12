@@ -54,7 +54,6 @@ private:
     Material* chrome;
     Material* gold;
     Material* plastic;
-    Material* blinking;
 
     constexpr auto dispatchMaterial(int id) const noexcept
     {
@@ -69,7 +68,6 @@ private:
         case 6: return crystal;
         case 7: return gold;
         case 8: return plastic;
-        case 9: return blinking;
         }
     }
 
@@ -77,27 +75,15 @@ private:
     {
         auto material = dispatchMaterial(chams.material);
 
-        if (material == blinking) {
-            if (chams.healthBased && health)
-                interfaces.renderView->setColorModulation(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            else if (chams.rainbow)
-                interfaces.renderView->setColorModulation(sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
-                                                          sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
-                                                          sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
-            else
-                interfaces.renderView->setColorModulation(chams.color);
-            interfaces.renderView->setBlend(chams.alpha);
-        } else {
-            if (chams.healthBased && health)
-                material->colorModulate(1.0f - health / 100.0f,  health / 100.0f, 0.0f);
-            else if (chams.rainbow)
-                material->colorModulate(sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
-                                        sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
-                                        sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
-            else
-                material->colorModulate(chams.color);
-            material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
-        }
+        if (chams.healthBased && health)
+            material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+        else if (chams.rainbow)
+            material->colorModulate(sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
+                sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
+                sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
+        else
+            material->colorModulate(chams.color);
+        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVar::WIREFRAME, chams.wireframe);

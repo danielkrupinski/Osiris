@@ -34,8 +34,6 @@ Chams::Chams() noexcept
     gold->incrementReferenceCount();
     plastic = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
     plastic->incrementReferenceCount();
-    blinking = interfaces.materialSystem->findMaterial("models/inventory_items/dogtags/dogtags_outline");
-    blinking->incrementReferenceCount();
 }
 
 void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
