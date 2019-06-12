@@ -315,6 +315,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.chams[currentItem].rainbow);
+        ImGui::Checkbox("Blinking", &config.chams[currentItem].blinking);
         ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Palm\0Platinum\0Glass\0Chrome\0Crystal\0Gold\0Plastic\0Blinking\0");
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
