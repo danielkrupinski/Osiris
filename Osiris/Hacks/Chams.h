@@ -96,7 +96,7 @@ private:
                                         sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
             else
                 material->colorModulate(chams.color);
-            material->alphaModulate(chams.alpha);
+            material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
         }
 
         material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
