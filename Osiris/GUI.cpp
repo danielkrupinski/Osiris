@@ -401,9 +401,12 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FOV: %d");
         ImGui::PopID();
         ImGui::PushID(3);
-        ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
         ImGui::PushID(4);
+        ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::PopID();
+        ImGui::PushID(5);
         ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
         ImGui::PopID();
         ImGui::PopItemWidth();
