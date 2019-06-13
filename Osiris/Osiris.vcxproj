@@ -31,7 +31,6 @@
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
     <ClCompile Include="nSkinz\item_definitions.cpp" />
-    <ClCompile Include="nSkinz\nSkinz.cpp" />
     <ClCompile Include="nSkinz\Utilities\Platform.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
