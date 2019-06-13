@@ -144,6 +144,10 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
     if (config.misc.fastPlant) {
+        static auto gameType = interfaces.cvar->findVar("game_type");
+
+        if (gameType->getInt() == 6) return;
+
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
 
