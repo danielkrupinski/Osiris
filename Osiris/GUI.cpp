@@ -441,15 +441,15 @@ void GUI::renderSkinChangerWindow() noexcept
             if (itemIndex != 1) {
                 ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
                     {
-                        *out_text = game_data::skin_kits[idx].name.c_str();
+                        *out_text = SkinChanger::skinKits[idx].name.c_str();
                         return true;
-                    }, nullptr, game_data::skin_kits.size(), 10);
+                    }, nullptr, SkinChanger::skinKits.size(), 10);
             } else {
                 ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
                     {
-                        *out_text = game_data::glove_kits[idx].name.c_str();
+                        *out_text = SkinChanger::gloveKits[idx].name.c_str();
                         return true;
-                    }, nullptr, game_data::glove_kits.size(), 10);
+                    }, nullptr, SkinChanger::gloveKits.size(), 10);
             }
 
             // Quality
@@ -497,7 +497,7 @@ void GUI::renderSkinChangerWindow() noexcept
 
             std::function<const char* (int)> getItem = [&selected_entry, &elementName](int idx) {
                 auto kit_vector_index = selected_entry.stickers[idx].kit_vector_index;
-                sprintf_s(elementName, "#%d (%s)", idx + 1, game_data::sticker_kits[kit_vector_index].name.c_str());
+                sprintf_s(elementName, "#%d (%s)", idx + 1, SkinChanger::stickerKits[kit_vector_index].name.c_str());
                 return elementName;
             };
 
@@ -512,9 +512,9 @@ void GUI::renderSkinChangerWindow() noexcept
 
             ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text)
                 {
-                    *out_text = game_data::sticker_kits[idx].name.c_str();
+                    *out_text = SkinChanger::stickerKits[idx].name.c_str();
                     return true;
-                }, nullptr, game_data::sticker_kits.size(), 10);
+                }, nullptr, SkinChanger::stickerKits.size(), 10);
 
             ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.f, "%.10f", 5);
 

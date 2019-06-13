@@ -22,13 +22,8 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#include "kit_parser.hpp"
 #include "config_.hpp"
 #include "../Interfaces.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EntityList.h"
 
-void initializeNSkinz() noexcept
-{
-	game_data::initialize_kits();
-}
