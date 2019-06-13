@@ -244,6 +244,8 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 struct ViewSetup {
     std::byte pad[176];
     float fov;
+    std::byte pad1[32];
+    float farZ;
 };
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
