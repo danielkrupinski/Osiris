@@ -24,8 +24,7 @@
 */
 #pragma once
 #include "item_definitions.hpp"
-#include "kit_parser.hpp"
-
+#include "../Hacks/SkinChanger.h"
 #include <limits>
 #include <unordered_map>
 #include <array>
@@ -37,7 +36,7 @@ struct sticker_setting
 {
 	void update()
 	{
-        kit = game_data::sticker_kits[kit_vector_index].id;
+        kit = SkinChanger::stickerKits[kit_vector_index].id;
 	}
 
 	int kit = 0;
@@ -54,17 +53,17 @@ struct item_setting
         definition_index = game_data::weapon_names[definition_vector_index].definition_index;
         entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
 
-		const std::vector<game_data::PaintKit>* kit_names;
+		const std::vector<SkinChanger::PaintKit>* kit_names;
 		const game_data::weapon_name* defindex_names;
 
 		if (definition_index == GLOVE_T_SIDE)
 		{
-			kit_names = &game_data::glove_kits;
+			kit_names = &SkinChanger::gloveKits;
 			defindex_names = game_data::glove_names;
 		}
 		else
 		{
-			kit_names = &game_data::skin_kits;
+			kit_names = &SkinChanger::skinKits;
 			defindex_names = game_data::knife_names;
 		}
 

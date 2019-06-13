@@ -7,11 +7,65 @@
 #include "../SDK/ClientClass.h"
 #include "../SDK/Engine.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/ItemSchema.h"
+#include "../SDK/Localize.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/Entity.h"
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
+
+#include <algorithm>
+
+std::vector<SkinChanger::PaintKit> SkinChanger::skinKits;
+std::vector<SkinChanger::PaintKit> SkinChanger::gloveKits;
+std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
+
+void SkinChanger::initializeKits() noexcept
+{
+    const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
+
+    for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
+        const auto paint_kit = memory.itemSchema()->paintKits.memory[i].value;
+
+        if (paint_kit->id == 9001)
+            continue;
+
+        const auto wide_name = interfaces.localize->find(paint_kit->itemName.buffer + 1);
+        char name[256];
+        V_UCS2ToUTF8(wide_name, name, sizeof(name));
+
+        if (paint_kit->id < 10000)
+            skinKits.emplace_back(paint_kit->id, name);
+        else
+            gloveKits.emplace_back(paint_kit->id, name);
+    }
+
+    std::sort(skinKits.begin(), skinKits.end());
+    std::sort(gloveKits.begin(), gloveKits.end());
+
+    for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
+        const auto sticker_kit = memory.itemSchema()->stickerKits.memory[i].value;
+
+        char sticker_name_if_valve_fucked_up_their_translations[64];
+
+        auto sticker_name_ptr = sticker_kit->itemName.buffer + 1;
+
+        if (strstr(sticker_name_ptr, "StickerKit_dhw2014_dignitas")) {
+            strcpy_s(sticker_name_if_valve_fucked_up_their_translations, "StickerKit_dhw2014_teamdignitas");
+            strcat_s(sticker_name_if_valve_fucked_up_their_translations, sticker_name_ptr + 27);
+            sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
+        }
+
+        const auto wide_name = interfaces.localize->find(sticker_name_ptr);
+        char name[256];
+        V_UCS2ToUTF8(wide_name, name, sizeof(name));
+
+        stickerKits.emplace_back(sticker_kit->id, name);
+    }
+    std::sort(std::next(stickerKits.begin()), stickerKits.end());
+}
+
 
 static std::unordered_map<std::string_view, const char*> iconOverrides;
 

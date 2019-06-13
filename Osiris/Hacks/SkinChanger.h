@@ -1,10 +1,29 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 enum class FrameStage;
 class GameEvent;
 
 namespace SkinChanger {
+    void initializeKits() noexcept;
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
     void overrideHudIcon(GameEvent*) noexcept;
+
+    struct PaintKit {
+        PaintKit(int id, const char* name) noexcept : id(id), name(name) { }
+        int id;
+        std::string name;
+
+        auto operator<(const PaintKit& other) const noexcept
+        {
+            return name < other.name;
+        }
+    };
+
+    extern std::vector<PaintKit> skinKits;
+    extern std::vector<PaintKit> gloveKits;
+    extern std::vector<PaintKit> stickerKits;
 }
