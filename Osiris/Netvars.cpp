@@ -239,12 +239,10 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
             total_offset
         };
 
-        std::string_view name{ prop.name };
-        std::string_view tableName{ recvTable->netTableName };
         offsets[prop.name] = prop.offset + offset;
-        if (name == "m_bSpotted")
+        if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
             hookProperty(prop, spottedHook);
-        else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
+        else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
             hookProperty(prop, viewModelSequence);
     }
 }
@@ -260,12 +258,8 @@ void Netvars::unloadTable(RecvTable* recvTable) noexcept
         if (prop.dataTable)
             unloadTable(prop.dataTable);
         else {
-            std::string_view name{ prop.name };
-            std::string_view tableName{ recvTable->netTableName };
-            if (name == "m_bSpotted")
-                unhookProperty(prop);
-            else if (tableName == "DT_BaseViewModel" && name == "m_nSequence")
-                unhookProperty(prop);
+            unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
+            unhookProperty(*props[fnv::hash("CBaseViewModel->m_nSequence")].prop);
         }
     }
 }
