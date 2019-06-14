@@ -47,6 +47,13 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 1, top.y - 1, bottom.x + boxWidth + 1, bottom.y + 1);
         }
 
+        if (config.healthBar) {
+            interfaces.surface->setDrawColor(config.healthBarColor, 255);
+            interfaces.surface->drawFilledRect(bottom.x - boxWidth - 8, top.y, bottom.x - boxWidth - 5, bottom.y);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 9, top.y - 1, bottom.x - boxWidth - 4, bottom.y + 1);
+        }
+
         if (config.name) {
             static PlayerInfo playerInfo;
             if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
