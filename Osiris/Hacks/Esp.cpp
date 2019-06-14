@@ -32,6 +32,15 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
     }
 }
 
+static constexpr void renderPositionedText(const wchar_t* text, float color[3], std::pair<float, float&> position) noexcept
+{
+    interfaces.surface->setTextFont(Surface::font);
+    interfaces.surface->setTextColor(color, 255);
+    interfaces.surface->setTextPosition(position.first, position.second);
+    position.second += interfaces.surface->getTextSize(Surface::font, text).second;
+    interfaces.surface->printText(text);
+}
+
 static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
@@ -70,23 +79,11 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
         float drawPositionY = top.y;
 
-        if (config.health) {
-            std::wstring health{ std::to_wstring(entity->getProperty<int>("m_iHealth")) + L" HP" };
-            interfaces.surface->setTextFont(Surface::font);
-            interfaces.surface->setTextColor(config.healthColor, 255);
-            interfaces.surface->setTextPosition(bottom.x + boxWidth + 5, drawPositionY);
-            drawPositionY += interfaces.surface->getTextSize(Surface::font, health.c_str()).second;
-            interfaces.surface->printText(health.c_str());
-        }
+        if (config.health)
+            renderPositionedText((std::to_wstring(entity->getProperty<int>("m_iHealth")) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
 
-        if (config.money) {
-            std::wstring money{ L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
-            interfaces.surface->setTextFont(Surface::font);
-            interfaces.surface->setTextColor(config.moneyColor, 255);
-            interfaces.surface->setTextPosition(bottom.x + boxWidth + 5, drawPositionY);
-            drawPositionY += interfaces.surface->getTextSize(Surface::font, money.c_str()).second;
-            interfaces.surface->printText(money.c_str());
-        }
+        if (config.money)
+            renderPositionedText((L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount"))).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
     }
 }
 
