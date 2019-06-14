@@ -124,6 +124,8 @@ public:
             float healthColor[3]{ 1.0f, 1.0f, 1.0f };
             bool healthBar{ false };
             float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool armor{ false };
+            float armorColor[3]{ 1.0f, 1.0f, 1.0f };
             bool money{ false };
             float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
             bool headDot{ false };

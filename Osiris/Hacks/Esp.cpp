@@ -82,6 +82,9 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         if (config.health)
             renderPositionedText((std::to_wstring(entity->getProperty<int>("m_iHealth")) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
 
+        if (config.armor)
+            renderPositionedText((std::to_wstring(entity->getProperty<int>("m_ArmorValue")) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
+
         if (config.money)
             renderPositionedText((L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount"))).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
     }

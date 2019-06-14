@@ -362,6 +362,7 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);
         checkboxedColorPicker("Health bar", &config.esp[currentItem].healthBar, config.esp[currentItem].healthBarColor);
+        checkboxedColorPicker("Armor", &config.esp[currentItem].armor, config.esp[currentItem].armorColor);
         checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
         ImGui::End();
