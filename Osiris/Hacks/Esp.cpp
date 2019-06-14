@@ -32,31 +32,24 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
     }
 }
 
-static constexpr void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
+static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
-    if (config.box) {
-        Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
-        head.z += 10.0f;
-        if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
-            interfaces.surface->setDrawColor(config.boxColor, 255);
-            float width = abs(top.y - bottom.y) * 0.3f;
-            interfaces.surface->drawOutlinedRect(bottom.x - width, top.y, bottom.x + width, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(bottom.x - width + 1, top.y + 1, bottom.x + width - 1, bottom.y - 1);
-            interfaces.surface->drawOutlinedRect(bottom.x - width - 1, top.y - 1, bottom.x + width + 1, bottom.y + 1);
-        }
-    }
-}
+    Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
+    head.z += 10.0f;
+    if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
+        const float boxWidth = abs(top.y - bottom.y) * 0.3f;
 
-static void renderName(int entityIndex, const decltype(config.esp[0])& config) noexcept
-{
-    if (config.name) {
-        Entity* entity = interfaces.entityList->getEntity(entityIndex);
-        Vector head{ entity->getBonePosition(8) }, bottom, top;
-        head.z += 10.0f;
-        if (worldToScreen(head, top)) {
+        if (config.box) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth, top.y, bottom.x + boxWidth, bottom.y);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth + 1, top.y + 1, bottom.x + boxWidth - 1, bottom.y - 1);
+            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 1, top.y - 1, bottom.x + boxWidth + 1, bottom.y + 1);
+        }
+
+        if (config.name) {
             static PlayerInfo playerInfo;
-            if (worldToScreen(entity->getAbsOrigin(), bottom) && interfaces.engine->getPlayerInfo(entityIndex, playerInfo)) {
+            if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [width, height] = interfaces.surface->getTextSize(Surface::font, name);
@@ -66,6 +59,17 @@ static void renderName(int entityIndex, const decltype(config.esp[0])& config) n
                     interfaces.surface->printText(name);
                 }
             }
+        }
+
+        float drawPositionY = top.y;
+
+        if (config.money) {
+            std::wstring money{ L"$" + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(config.moneyColor, 255);
+            interfaces.surface->setTextPosition(bottom.x + boxWidth + 5, drawPositionY);
+            drawPositionY += interfaces.surface->getTextSize(Surface::font, money.c_str()).second;
+            interfaces.surface->printText(money.c_str());
         }
     }
 }
@@ -78,22 +82,6 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
             interfaces.surface->setDrawColor(config.headDotColor, 255);
             for (int i = 1; i <= 3; i++)
                 interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
-        }
-    }
-}
-
-static void renderMoney(Entity* entity, const decltype(config.esp[0])& config) noexcept
-{
-    if (config.money) {
-        Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
-        head.z += 10.0f;
-        if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
-            float width = abs(top.y - bottom.y) * 0.3f;
-            std::wstring money{ L"$" + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
-            interfaces.surface->setTextFont(Surface::font);
-            interfaces.surface->setTextColor(config.moneyColor, 255);
-            interfaces.surface->setTextPosition(bottom.x + width + 5, top.y);
-            interfaces.surface->printText(money.c_str());
         }
     }
 }
@@ -121,16 +109,12 @@ void Esp::render() noexcept
                     if (config.esp[ALLIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
                         renderBox(entity, config.esp[ALLIES_VISIBLE]);
-                        renderName(i, config.esp[ALLIES_VISIBLE]);
-                        renderMoney(entity, config.esp[ALLIES_VISIBLE]);
                         renderHeadDot(entity, config.esp[ALLIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ALLIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
                         renderBox(entity, config.esp[ALLIES_OCCLUDED]);
-                        renderName(i, config.esp[ALLIES_OCCLUDED]);
-                        renderMoney(entity, config.esp[ALLIES_OCCLUDED]);
                         renderHeadDot(entity, config.esp[ALLIES_OCCLUDED]);
                     }
                 }
@@ -139,16 +123,12 @@ void Esp::render() noexcept
                     if (config.esp[ENEMIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
                         renderBox(entity, config.esp[ENEMIES_VISIBLE]);
-                        renderName(i, config.esp[ENEMIES_VISIBLE]);
-                        renderMoney(entity, config.esp[ENEMIES_VISIBLE]);
                         renderHeadDot(entity, config.esp[ENEMIES_VISIBLE]);
                     }
                 } else {
                     if (config.esp[ENEMIES_OCCLUDED].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
-                        renderName(i, config.esp[ENEMIES_OCCLUDED]);
-                        renderMoney(entity, config.esp[ENEMIES_OCCLUDED]);
                         renderHeadDot(entity, config.esp[ENEMIES_OCCLUDED]);
                     }
                 }
