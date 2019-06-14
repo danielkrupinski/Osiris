@@ -16,9 +16,10 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
     }
 
-    constexpr void drawFilledRect(int x0, int y0, int x1, int y1) noexcept
+    template <typename T>
+    constexpr void drawFilledRect(T x0, T y0, T x1, T y1) noexcept
     {
-        callVirtualMethod<void, int, int, int, int>(this, 16, x0, y0, x1, y1);
+        callVirtualMethod<void, int, int, int, int>(this, 16, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
     template <typename T>
