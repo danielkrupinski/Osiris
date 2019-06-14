@@ -63,8 +63,17 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
         float drawPositionY = top.y;
 
+        if (config.health) {
+            std::wstring health{ std::to_wstring(entity->getProperty<int>("m_iHealth")) + L" HP" };
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(config.healthColor, 255);
+            interfaces.surface->setTextPosition(bottom.x + boxWidth + 5, drawPositionY);
+            drawPositionY += interfaces.surface->getTextSize(Surface::font, health.c_str()).second;
+            interfaces.surface->printText(health.c_str());
+        }
+
         if (config.money) {
-            std::wstring money{ L"$" + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
+            std::wstring money{ L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount")) };
             interfaces.surface->setTextFont(Surface::font);
             interfaces.surface->setTextColor(config.moneyColor, 255);
             interfaces.surface->setTextPosition(bottom.x + boxWidth + 5, drawPositionY);
