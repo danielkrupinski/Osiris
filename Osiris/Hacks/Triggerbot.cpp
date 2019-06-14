@@ -5,6 +5,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/WeaponId.h"
@@ -36,9 +37,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
             constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
             constexpr float maxRange{ 8192.0f };
-            Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * maxRange,
-                               cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * maxRange,
-                              -sin(degreesToRadians(cmd->viewangles.x)) * maxRange };
+
+            static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+            auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+
+            Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
+                               cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
+                              -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * maxRange };
             static Trace trace;
             interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
             if (trace.entity->getClientClass()->classId == ClassId::CSPlayer
