@@ -85,7 +85,7 @@ public:
             float alpha{ 1.0f };
             int style{ 0 };
             float color[3]{ 1.0f, 1.0f, 1.0f };
-        } glow[13];
+        } glow[17];
     } glow;
 
     struct {
