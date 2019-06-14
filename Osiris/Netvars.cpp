@@ -177,7 +177,7 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"))) {
-            const auto weapon_info = game_data::get_weapon_info(activeWeapon->getProperty<int>("m_iItemDefinitionIndex"));
+            const auto weapon_info = game_data::get_weapon_info(activeWeapon->getProperty<short>("m_iItemDefinitionIndex"));
 
             if (!weapon_info)
                 return;
