@@ -148,6 +148,7 @@ public:
         bool noBlur{ false };
         bool noScopeOverlay{ false };
         bool noGrass{ false };
+        bool noShadows{ false };
         bool wireframeSmoke{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
