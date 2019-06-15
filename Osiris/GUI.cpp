@@ -437,7 +437,7 @@ void GUI::renderSkinChangerWindow() noexcept
             }, nullptr, IM_ARRAYSIZE(game_data::weapon_names), 5);
 
 
-        auto& selected_entry = config.skinChanger.items[itemIndex];
+        auto& selected_entry = config.skinChanger[itemIndex];
         selected_entry.definition_vector_index = itemIndex;
 
         {

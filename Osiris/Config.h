@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <filesystem>
 
 #include "nSkinz/config_.hpp"
@@ -19,51 +20,39 @@ public:
         return configs;
     }
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return weapons[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            bool onKey{ false };
-            int key{ 0 };
-            bool silent{ false };
-            bool friendlyFire{ false };
-            bool visibleOnly{ true };
-            bool scopedOnly{ true };
-            bool ignoreFlash{ false };
-            bool ignoreSmoke{ false };
-            bool autoShot{ false };
-            bool recoilbasedFov{ false };
-            float fov{ 0.0f };
-            float maxAngleDelta{ 0.0f };
-            float smooth{ 1.0f };
-            int bone{ 0 };
-            float recoilControlX{ 0.0f };
-            float recoilControlY{ 0.0f };
-        } weapons[35];
-    } aimbot;
+    struct Aimbot {
+        bool enabled{ false };
+        bool onKey{ false };
+        int key{ 0 };
+        bool silent{ false };
+        bool friendlyFire{ false };
+        bool visibleOnly{ true };
+        bool scopedOnly{ true };
+        bool ignoreFlash{ false };
+        bool ignoreSmoke{ false };
+        bool autoShot{ false };
+        bool recoilbasedFov{ false };
+        float fov{ 0.0f };
+        float maxAngleDelta{ 0.0f };
+        float smooth{ 1.0f };
+        int bone{ 0 };
+        float recoilControlX{ 0.0f };
+        float recoilControlY{ 0.0f };
+    };
+    std::array<Aimbot, 35> aimbot;
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return weapons[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            bool onKey{ false };
-            int key{ 0 };
-            bool friendlyFire{ false };
-            bool scopedOnly{ true };
-            bool ignoreFlash{ false };
-            bool ignoreSmoke{ false };
-            int hitgroup{ 0 };
-            int shotDelay{ 0 };
-        } weapons[35];
-    } triggerbot;
+    struct Triggerbot {
+        bool enabled{ false };
+        bool onKey{ false };
+        int key{ 0 };
+        bool friendlyFire{ false };
+        bool scopedOnly{ true };
+        bool ignoreFlash{ false };
+        bool ignoreSmoke{ false };
+        int hitgroup{ 0 };
+        int shotDelay{ 0 };
+    };
+    std::array<Triggerbot, 35> triggerbot;
 
     struct {
         bool enabled{ false };
@@ -71,69 +60,53 @@ public:
         int timeLimit{ 200 };
     } backtrack;
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return glow[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            bool healthBased{ false };
-            bool rainbow{ false };
-            float thickness{ 1.0f };
-            float alpha{ 1.0f };
-            int style{ 0 };
-            float color[3]{ 1.0f, 1.0f, 1.0f };
-        } glow[17];
-    } glow;
+    struct Glow {
+        bool enabled{ false };
+        bool healthBased{ false };
+        bool rainbow{ false };
+        float thickness{ 1.0f };
+        float alpha{ 1.0f };
+        int style{ 0 };
+        float color[3]{ 1.0f, 1.0f, 1.0f };
+    };
+    std::array<Glow, 17> glow;
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return chams[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            bool healthBased{ false };
-            bool rainbow{ false };
-            bool blinking{ false };
-            int material{ 0 };
-            bool wireframe{ false };
-            float color[3]{ 1.0f, 1.0f, 1.0f };
-            float alpha{ 1.0f };
-        } chams[12];
-    } chams;
+    struct Chams {
+        bool enabled{ false };
+        bool healthBased{ false };
+        bool rainbow{ false };
+        bool blinking{ false };
+        int material{ 0 };
+        bool wireframe{ false };
+        float color[3]{ 1.0f, 1.0f, 1.0f };
+        float alpha{ 1.0f };
+    };
 
-    struct {
-        constexpr auto& operator[](size_t index) noexcept
-        {
-            return esp[index];
-        }
-    private:
-        struct {
-            bool enabled{ false };
-            bool snaplines{ false };
-            float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool box{ false };
-            float boxColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool name{ false };
-            float nameColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool health { false };
-            float healthColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool healthBar{ false };
-            float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armor{ false };
-            float armorColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armorBar{ false };
-            float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool money{ false };
-            float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool headDot{ false };
-            float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
-        } esp[4];
-    } esp;
+    std::array<Chams, 17> chams;
+
+    struct Esp {
+        bool enabled{ false };
+        bool snaplines{ false };
+        float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool box{ false };
+        float boxColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool name{ false };
+        float nameColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool health{ false };
+        float healthColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool healthBar{ false };
+        float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool armor{ false };
+        float armorColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool armorBar{ false };
+        float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool money{ false };
+        float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool headDot{ false };
+        float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
+    };
+
+    std::array<Esp, 4> esp;
 
     struct {
         bool disablePostProcessing{ false };
@@ -162,9 +135,7 @@ public:
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
     } visuals;
 
-    struct {
-        item_setting items[36];
-    } skinChanger;
+    std::array<item_setting, 36> skinChanger;
 
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
