@@ -28,6 +28,8 @@ Chams::Chams() noexcept
     crystal->incrementReferenceCount();
     chrome = interfaces.materialSystem->findMaterial("models/gibs/glass/glass");
     chrome->incrementReferenceCount();
+    silver = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/silver_plain");
+    silver->incrementReferenceCount();
     gold = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
     gold->incrementReferenceCount();
     plastic = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");

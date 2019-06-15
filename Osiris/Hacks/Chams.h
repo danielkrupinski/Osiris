@@ -51,6 +51,7 @@ private:
     Material* glass;
     Material* crystal;
     Material* chrome;
+    Material* silver;
     Material* gold;
     Material* plastic;
 
@@ -64,8 +65,9 @@ private:
         case 3: return glass;
         case 4: return chrome;
         case 5: return crystal;
-        case 6: return gold;
-        case 7: return plastic;
+        case 6: return silver;
+        case 7: return gold;
+        case 8: return plastic;
         }
     }
 
