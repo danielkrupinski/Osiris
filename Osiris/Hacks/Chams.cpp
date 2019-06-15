@@ -20,8 +20,6 @@ Chams::Chams() noexcept
     normal->incrementReferenceCount();
     flat = interfaces.materialSystem->findMaterial("chamsFlat");
     flat->incrementReferenceCount();
-    palm = interfaces.materialSystem->findMaterial("models/props/de_dust/hr_dust/foliage/palm_bark_01");
-    palm->incrementReferenceCount();
     platinum = interfaces.materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
     platinum->incrementReferenceCount();
     glass = interfaces.materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
