@@ -98,3 +98,9 @@ void Visuals::remove3dSky() noexcept
     static auto sky = interfaces.cvar->findVar("r_3dsky");
     sky->setValue(!config.visuals.no3dSky);
 }
+
+void Visuals::removeShadows() noexcept
+{
+    static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
+    shadows->setValue(!config.visuals.noShadows);
+}

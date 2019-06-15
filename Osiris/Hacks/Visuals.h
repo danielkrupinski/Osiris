@@ -18,6 +18,7 @@ namespace Visuals {
     void updateBrightness() noexcept;
     void removeGrass() noexcept;
     void remove3dSky() noexcept;
+    void removeShadows() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
