@@ -99,6 +99,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::prepareRevolver(cmd);
     Misc::sniperCrosshair();
     Misc::recoilCrosshair();
+    Visuals::removeShadows();
     Visuals::skybox();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
