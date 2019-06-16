@@ -78,6 +78,13 @@ void Config::load(size_t id) noexcept
         triggerbotConfig.shotDelay = triggerbotJson["shotDelay"].asInt();
     }
 
+    {
+        const auto& backtrackJson = json["backtrack"];
+        backtrack.enabled = backtrackJson["enabled"].asBool();
+        backtrack.ignoreSmoke = backtrackJson["ignoreSmoke"].asBool();
+        backtrack.timeLimit = backtrackJson["timeLimit"].asInt();
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -132,6 +139,13 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["ignoreSmoke"] = triggerbotConfig.ignoreSmoke;
         triggerbotJson["hitgroup"] = triggerbotConfig.hitgroup;
         triggerbotJson["shotDelay"] = triggerbotConfig.shotDelay;
+    }
+
+    {
+        auto& backtrackJson = json["backtrack"];
+        backtrackJson["enabled"] = backtrack.enabled;
+        backtrackJson["ignoreSmoke"] = backtrack.ignoreSmoke;
+        backtrackJson["timeLimit"] = backtrack.timeLimit;
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
