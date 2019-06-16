@@ -85,6 +85,21 @@ void Config::load(size_t id) noexcept
         backtrack.timeLimit = backtrackJson["timeLimit"].asInt();
     }
 
+    for (size_t i = 0; i < glow.size(); i++) {
+        const auto& glowJson = json["glow"][i];
+        auto& glowConfig = glow[i];
+
+        glowConfig.enabled = glowJson["enabled"].asBool();
+        glowConfig.healthBased = glowJson["healthBased"].asBool();
+        glowConfig.rainbow = glowJson["rainbow"].asBool();
+        glowConfig.thickness = glowJson["thickness"].asFloat();
+        glowConfig.alpha = glowJson["alpha"].asFloat();
+        glowConfig.style = glowJson["style"].asInt();
+        glowConfig.color[0] = glowJson["color"][0].asFloat();
+        glowConfig.color[1] = glowJson["color"][1].asFloat();
+        glowConfig.color[2] = glowJson["color"][2].asFloat();
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -146,6 +161,21 @@ void Config::save(size_t id) const noexcept
         backtrackJson["enabled"] = backtrack.enabled;
         backtrackJson["ignoreSmoke"] = backtrack.ignoreSmoke;
         backtrackJson["timeLimit"] = backtrack.timeLimit;
+    }
+
+    for (size_t i = 0; i < glow.size(); i++) {
+        auto& glowJson = json["glow"][i];
+        const auto& glowConfig = glow[i];
+
+        glowJson["enabled"] = glowConfig.enabled;
+        glowJson["healthBased"] = glowConfig.healthBased;
+        glowJson["rainbow"] = glowConfig.rainbow;
+        glowJson["thickness"] = glowConfig.thickness;
+        glowJson["alpha"] = glowConfig.alpha;
+        glowJson["style"] = glowConfig.style;
+        glowJson["color"][0] = glowConfig.color[0];
+        glowJson["color"][1] = glowConfig.color[1];
+        glowJson["color"][2] = glowConfig.color[2];
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
