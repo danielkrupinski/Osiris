@@ -302,7 +302,7 @@ msvc_pre1900_c99_snprintf(char* outBuf, size_t size, const char* format, ...);
 // If JSON_NO_INT64 is defined, then Json only support C++ "int" type for
 // integer
 // Storages, and 64 bits integer support is disabled.
-// #define JSON_NO_INT64 1
+#define JSON_NO_INT64 1
 
 // JSONCPP_OVERRIDE is maintained for backwards compatibility of external tools.
 // C++11 should be used directly in JSONCPP.
