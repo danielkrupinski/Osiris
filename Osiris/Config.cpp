@@ -100,6 +100,22 @@ void Config::load(size_t id) noexcept
         glowConfig.color[2] = glowJson["color"][2].asFloat();
     }
 
+    for (size_t i = 0; i < chams.size(); i++) {
+        const auto& chamsJson = json["chams"][i];
+        auto& chamsConfig = chams[i];
+
+        chamsConfig.enabled = chamsJson["enabled"].asBool();
+        chamsConfig.healthBased = chamsJson["healthBased"].asBool();
+        chamsConfig.rainbow = chamsJson["rainbow"].asBool();
+        chamsConfig.blinking = chamsJson["blinking"].asBool();
+        chamsConfig.material = chamsJson["material"].asInt();
+        chamsConfig.wireframe = chamsJson["wireframe"].asBool();
+        chamsConfig.color[0] = chamsJson["color"][0].asFloat();
+        chamsConfig.color[1] = chamsJson["color"][1].asFloat();
+        chamsConfig.color[2] = chamsJson["color"][2].asFloat();
+        chamsConfig.alpha = chamsJson["alpha"].asFloat();
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -176,6 +192,22 @@ void Config::save(size_t id) const noexcept
         glowJson["color"][0] = glowConfig.color[0];
         glowJson["color"][1] = glowConfig.color[1];
         glowJson["color"][2] = glowConfig.color[2];
+    }
+
+    for (size_t i = 0; i < chams.size(); i++) {
+        auto& chamsJson = json["chams"][i];
+        const auto& chamsConfig = chams[i];
+
+        chamsJson["enabled"] = chamsConfig.enabled;
+        chamsJson["healthBased"] = chamsConfig.healthBased;
+        chamsJson["rainbow"] = chamsConfig.rainbow;
+        chamsJson["blinking"] = chamsConfig.blinking;
+        chamsJson["material"] = chamsConfig.material;
+        chamsJson["wireframe"] = chamsConfig.wireframe;
+        chamsJson["color"][0] = chamsConfig.color[0];
+        chamsJson["color"][1] = chamsConfig.color[1];
+        chamsJson["color"][2] = chamsConfig.color[2];
+        chamsJson["alpha"] = chamsConfig.alpha;
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
