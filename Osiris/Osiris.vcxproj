@@ -58,7 +58,6 @@
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
-    <ClInclude Include="json.hpp" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
