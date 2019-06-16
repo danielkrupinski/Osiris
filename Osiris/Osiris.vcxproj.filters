@@ -21,6 +21,9 @@
     <Filter Include="nSkinz">
       <UniqueIdentifier>{6f9a1532-1c54-4497-8809-a84d6dfcb206}</UniqueIdentifier>
     </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{a5ac10c7-4d96-4bca-80b2-b5e98f0d672a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="nSkinz\Utilities\Platform.cpp">
       <Filter>nSkinz</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp.cpp">
+      <Filter>json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +297,12 @@
     </ClInclude>
     <ClInclude Include="SDK\ConVar.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json-forwards.h">
+      <Filter>json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
