@@ -159,6 +159,36 @@ void Config::load(size_t id) noexcept
         espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
     }
 
+    {
+        const auto& visualsJson = json["visuals"];
+        visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
+        visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
+        visuals.noFog = visualsJson["noFog"].asBool();
+        visuals.no3dSky = visualsJson["no3dSky"].asBool();
+        visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
+        visuals.noHands = visualsJson["noHands"].asBool();
+        visuals.noSleeves = visualsJson["noSleeves"].asBool();
+        visuals.noWeapons = visualsJson["noWeapons"].asBool();
+        visuals.noSmoke = visualsJson["noSmoke"].asBool();
+        visuals.noBlur = visualsJson["noBlur"].asBool();
+        visuals.noScopeOverlay = visualsJson["noScopeOverlay"].asBool();
+        visuals.noGrass = visualsJson["noGrass"].asBool();
+        visuals.noShadows = visualsJson["noShadows"].asBool();
+        visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
+        visuals.thirdperson = visualsJson["thirdperson"].asBool();
+        visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
+        visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
+        visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
+        visuals.fov = visualsJson["fov"].asInt();
+        visuals.farZ = visualsJson["farZ"].asInt();
+        visuals.flashReduction = visualsJson["flashReduction"].asInt();
+        visuals.brightness = visualsJson["brightness"].asFloat();
+        visuals.skybox = visualsJson["skybox"].asInt();
+        visuals.worldColor[0] = visualsJson["worldColor"][0].asFloat();
+        visuals.worldColor[1] = visualsJson["worldColor"][1].asFloat();
+        visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -294,6 +324,36 @@ void Config::save(size_t id) const noexcept
         espJson["headDotColor"][0] = espConfig.headDotColor[0];
         espJson["headDotColor"][1] = espConfig.headDotColor[1];
         espJson["headDotColor"][2] = espConfig.headDotColor[2];
+    }
+
+    {
+        auto& visualsJson = json["visuals"];
+        visualsJson["disablePostProcessing"] = visuals.disablePostProcessing;
+        visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
+        visualsJson["noFog"] = visuals.noFog;
+        visualsJson["no3dSky"] = visuals.no3dSky;
+        visualsJson["noVisualRecoil"] = visuals.noVisualRecoil;
+        visualsJson["noHands"] = visuals.noHands;
+        visualsJson["noSleeves"] = visuals.noSleeves;
+        visualsJson["noWeapons"] = visuals.noWeapons;
+        visualsJson["noSmoke"] = visuals.noSmoke;
+        visualsJson["noBlur"] = visuals.noBlur;
+        visualsJson["noScopeOverlay"] = visuals.noScopeOverlay;
+        visualsJson["noGrass"] = visuals.noGrass;
+        visualsJson["noShadows"] = visuals.noShadows;
+        visualsJson["wireframeSmoke"] = visuals.wireframeSmoke;
+        visualsJson["thirdperson"] = visuals.thirdperson;
+        visualsJson["thirdpersonKey"] = visuals.thirdpersonKey;
+        visualsJson["thirdpersonDistance"] = visuals.thirdpersonDistance;
+        visualsJson["viewmodelFov"] = visuals.viewmodelFov;
+        visualsJson["fov"] = visuals.fov;
+        visualsJson["farZ"] = visuals.farZ;
+        visualsJson["flashReduction"] = visuals.flashReduction;
+        visualsJson["brightness"] = visuals.brightness;
+        visualsJson["skybox"] = visuals.skybox;
+        visualsJson["worldColor"][0] = visuals.worldColor[0];
+        visualsJson["worldColor"][1] = visuals.worldColor[1];
+        visualsJson["worldColor"][2] = visuals.worldColor[2];
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
