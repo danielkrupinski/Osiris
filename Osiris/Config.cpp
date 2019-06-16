@@ -41,7 +41,7 @@ void Config::load(size_t id) noexcept
     Json::Value json;
 
     for (size_t i = 0; i < aimbot.size(); i++) {
-        auto& aimbotJson = json["aimbot"][i];
+        const auto& aimbotJson = json["aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
         aimbotConfig.enabled = aimbotJson["enabled"].asBool();
@@ -61,6 +61,21 @@ void Config::load(size_t id) noexcept
         aimbotConfig.bone = aimbotJson["bone"].asInt();
         aimbotConfig.recoilControlX = aimbotJson["recoilControlX"].asFloat();
         aimbotConfig.recoilControlY = aimbotJson["recoilControlY"].asFloat();
+    }
+
+    for (size_t i = 0; i < triggerbot.size(); i++) {
+        const auto& triggerbotJson = json["triggerbot"][i];
+        auto& triggerbotConfig = triggerbot[i];
+
+        triggerbotConfig.enabled = triggerbotJson["enabled"].asBool();
+        triggerbotConfig.onKey = triggerbotJson["onKey"].asBool();
+        triggerbotConfig.key = triggerbotJson["key"].asInt();
+        triggerbotConfig.friendlyFire = triggerbotJson["friendlyFire"].asBool();
+        triggerbotConfig.scopedOnly = triggerbotJson["scopedOnly"].asBool();
+        triggerbotConfig.ignoreFlash = triggerbotJson["ignoreFlash"].asBool();
+        triggerbotConfig.ignoreSmoke = triggerbotJson["ignoreSmoke"].asBool();
+        triggerbotConfig.hitgroup = triggerbotJson["hitgroup"].asInt();
+        triggerbotConfig.shotDelay = triggerbotJson["shotDelay"].asInt();
     }
 
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
@@ -102,6 +117,21 @@ void Config::save(size_t id) const noexcept
         aimbotJson["bone"] = aimbotConfig.bone;
         aimbotJson["recoilControlX"] = aimbotConfig.recoilControlX;
         aimbotJson["recoilControlY"] = aimbotConfig.recoilControlY;
+    }
+
+    for (size_t i = 0; i < triggerbot.size(); i++) {
+        auto& triggerbotJson = json["triggerbot"][i];
+        const auto& triggerbotConfig = triggerbot[i];
+
+        triggerbotJson["enabled"] = triggerbotConfig.enabled;
+        triggerbotJson["onKey"] = triggerbotConfig.onKey;
+        triggerbotJson["key"] = triggerbotConfig.key;
+        triggerbotJson["friendlyFire"] = triggerbotConfig.friendlyFire;
+        triggerbotJson["scopedOnly"] = triggerbotConfig.scopedOnly;
+        triggerbotJson["ignoreFlash"] = triggerbotConfig.ignoreFlash;
+        triggerbotJson["ignoreSmoke"] = triggerbotConfig.ignoreSmoke;
+        triggerbotJson["hitgroup"] = triggerbotConfig.hitgroup;
+        triggerbotJson["shotDelay"] = triggerbotConfig.shotDelay;
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
