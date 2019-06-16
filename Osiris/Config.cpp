@@ -116,6 +116,49 @@ void Config::load(size_t id) noexcept
         chamsConfig.alpha = chamsJson["alpha"].asFloat();
     }
 
+    for (size_t i = 0; i < esp.size(); i++) {
+        const auto& espJson = json["esp"][i];
+        auto& espConfig = esp[i];
+        
+        espConfig.enabled = espJson["enabled"].asBool();
+        espConfig.snaplines = espJson["snaplines"].asBool();
+        espConfig.snaplinesColor[0] = espJson["snaplinesColor"][0].asFloat();
+        espConfig.snaplinesColor[1] = espJson["snaplinesColor"][1].asFloat();
+        espConfig.snaplinesColor[2] = espJson["snaplinesColor"][2].asFloat();
+        espConfig.box = espJson["box"].asBool();
+        espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
+        espConfig.boxColor[1] = espJson["boxColor"][1].asFloat();
+        espConfig.boxColor[2] = espJson["boxColor"][2].asFloat();
+        espConfig.name = espJson["name"].asBool();
+        espConfig.nameColor[0] = espJson["nameColor"][0].asFloat();
+        espConfig.nameColor[1] = espJson["nameColor"][1].asFloat();
+        espConfig.nameColor[2] = espJson["nameColor"][2].asFloat();
+        espConfig.health = espJson["health"].asBool();
+        espConfig.healthColor[0] = espJson["healthColor"][0].asFloat();
+        espConfig.healthColor[1] = espJson["healthColor"][1].asFloat();
+        espConfig.healthColor[2] = espJson["healthColor"][2].asFloat();
+        espConfig.healthBar = espJson["healthBar"].asBool();
+        espConfig.healthBarColor[0] = espJson["healthBarColor"][0].asFloat();
+        espConfig.healthBarColor[1] = espJson["healthBarColor"][1].asFloat();
+        espConfig.healthBarColor[2] = espJson["healthBarColor"][2].asFloat();
+        espConfig.armor = espJson["armor"].asBool();
+        espConfig.armorColor[0] = espJson["armorColor"][0].asFloat();
+        espConfig.armorColor[1] = espJson["armorColor"][1].asFloat();
+        espConfig.armorColor[2] = espJson["armorColor"][2].asFloat();
+        espConfig.armorBar = espJson["armorBar"].asBool();
+        espConfig.armorBarColor[0] = espJson["armorBarColor"][0].asFloat();
+        espConfig.armorBarColor[1] = espJson["armorBarColor"][1].asFloat();
+        espConfig.armorBarColor[2] = espJson["armorBarColor"][2].asFloat();
+        espConfig.money = espJson["money"].asBool();
+        espConfig.moneyColor[0] = espJson["moneyColor"][0].asFloat();
+        espConfig.moneyColor[1] = espJson["moneyColor"][1].asFloat();
+        espConfig.moneyColor[2] = espJson["moneyColor"][2].asFloat();
+        espConfig.headDot = espJson["headDot"].asBool();
+        espConfig.headDotColor[0] = espJson["headDotColor"][0].asFloat();
+        espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
+        espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -208,6 +251,49 @@ void Config::save(size_t id) const noexcept
         chamsJson["color"][1] = chamsConfig.color[1];
         chamsJson["color"][2] = chamsConfig.color[2];
         chamsJson["alpha"] = chamsConfig.alpha;
+    }
+
+    for (size_t i = 0; i < esp.size(); i++) {
+        auto& espJson = json["esp"][i];
+        const auto& espConfig = esp[i];
+
+        espJson["enabled"] = espConfig.enabled;
+        espJson["snaplines"] = espConfig.snaplines;
+        espJson["snaplinesColor"][0] = espConfig.snaplinesColor[0];
+        espJson["snaplinesColor"][1] = espConfig.snaplinesColor[1];
+        espJson["snaplinesColor"][2] = espConfig.snaplinesColor[2];
+        espJson["box"] = espConfig.box;
+        espJson["boxColor"][0] = espConfig.boxColor[0];
+        espJson["boxColor"][1] = espConfig.boxColor[1];
+        espJson["boxColor"][2] = espConfig.boxColor[2];
+        espJson["name"] = espConfig.name;
+        espJson["nameColor"][0] = espConfig.nameColor[0];
+        espJson["nameColor"][1] = espConfig.nameColor[1];
+        espJson["nameColor"][2] = espConfig.nameColor[2];
+        espJson["health"] = espConfig.health;
+        espJson["healthColor"][0] = espConfig.healthColor[0];
+        espJson["healthColor"][1] = espConfig.healthColor[1];
+        espJson["healthColor"][2] = espConfig.healthColor[2];
+        espJson["healthBar"] = espConfig.healthBar;
+        espJson["healthBarColor"][0] = espConfig.healthBarColor[0];
+        espJson["healthBarColor"][1] = espConfig.healthBarColor[1];
+        espJson["healthBarColor"][2] = espConfig.healthBarColor[2];
+        espJson["armor"] = espConfig.armor;
+        espJson["armorColor"][0] = espConfig.armorColor[0];
+        espJson["armorColor"][1] = espConfig.armorColor[1];
+        espJson["armorColor"][2] = espConfig.armorColor[2];
+        espJson["armorBar"] = espConfig.armorBar;
+        espJson["armorBarColor"][0] = espConfig.armorBarColor[0];
+        espJson["armorBarColor"][1] = espConfig.armorBarColor[1];
+        espJson["armorBarColor"][2] = espConfig.armorBarColor[2];
+        espJson["money"] = espConfig.money;
+        espJson["moneyColor"][0] = espConfig.moneyColor[0];
+        espJson["moneyColor"][1] = espConfig.moneyColor[1];
+        espJson["moneyColor"][2] = espConfig.moneyColor[2];
+        espJson["headDot"] = espConfig.headDot;
+        espJson["headDotColor"][0] = espConfig.headDotColor[0];
+        espJson["headDotColor"][1] = espConfig.headDotColor[1];
+        espJson["headDotColor"][2] = espConfig.headDotColor[2];
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
