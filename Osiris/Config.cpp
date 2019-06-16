@@ -40,6 +40,9 @@ void Config::load(size_t id) noexcept
 
     Json::Value json;
 
+    in >> json;
+    in.close();
+
     for (size_t i = 0; i < aimbot.size(); i++) {
         const auto& aimbotJson = json["aimbot"][i];
         auto& aimbotConfig = aimbot[i];
@@ -218,9 +221,6 @@ void Config::load(size_t id) noexcept
             stickerConfig.rotation = stickerJson["rotation"].asFloat();
         }
     }
-
-    ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
-    in.close();
 }
 
 void Config::save(size_t id) const noexcept
@@ -416,7 +416,7 @@ void Config::save(size_t id) const noexcept
         }
     }
 
-    ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
+    out << json;
     out.close();
 }
 
