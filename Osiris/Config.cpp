@@ -189,6 +189,36 @@ void Config::load(size_t id) noexcept
         visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
     }
 
+    for (size_t i = 0; i < skinChanger.size(); i++) {
+        const auto& skinChangerJson = json["skinChanger"][i];
+        auto& skinChangerConfig = skinChanger[i];
+
+        skinChangerConfig.enabled = skinChangerJson["enabled"].asBool();
+        skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
+        skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
+        skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
+        skinChangerConfig.entity_quality_index = skinChangerJson["entity_quality_index"].asInt();
+        skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
+        skinChangerConfig.paint_kit_index = skinChangerJson["paint_kit_index"].asInt();
+        skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
+        skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
+        skinChangerConfig.seed = skinChangerJson["seed"].asInt();
+        skinChangerConfig.stat_trak = skinChangerJson["stat_trak"].asInt();
+        skinChangerConfig.wear = skinChangerJson["wear"].asFloat();
+        strcpy_s(skinChangerConfig.custom_name, 32, skinChangerJson["custom_name"].asCString());
+
+        for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
+            const auto& stickerJson = skinChangerJson["stickers"][j];
+            auto& stickerConfig = skinChangerConfig.stickers[j];
+
+            stickerConfig.kit = stickerJson["kit"].asInt();
+            stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
+            stickerConfig.wear = stickerJson["wear"].asFloat();
+            stickerConfig.scale = stickerJson["scale"].asFloat();
+            stickerConfig.rotation = stickerJson["rotation"].asFloat();
+        }
+    }
+
     ArchiveX<std::ifstream>{ in } >> aimbot >> triggerbot >> backtrack >> glow >> chams >> esp >> visuals >> skinChanger >> misc;
     in.close();
 }
@@ -354,6 +384,36 @@ void Config::save(size_t id) const noexcept
         visualsJson["worldColor"][0] = visuals.worldColor[0];
         visualsJson["worldColor"][1] = visuals.worldColor[1];
         visualsJson["worldColor"][2] = visuals.worldColor[2];
+    }
+
+    for (size_t i = 0; i < skinChanger.size(); i++) {
+        auto& skinChangerJson = json["skinChanger"][i];
+        const auto& skinChangerConfig = skinChanger[i];
+
+        skinChangerJson["enabled"] = skinChangerConfig.enabled;
+        skinChangerJson["definition_vector_index"] = skinChangerConfig.definition_vector_index;
+        skinChangerJson["definition_index"] = skinChangerConfig.definition_index;
+        skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
+        skinChangerJson["entity_quality_index"] = skinChangerConfig.entity_quality_index;
+        skinChangerJson["paint_kit_vector_index"] = skinChangerConfig.paint_kit_vector_index;
+        skinChangerJson["paint_kit_index"] = skinChangerConfig.paint_kit_index;
+        skinChangerJson["definition_override_vector_index"] = skinChangerConfig.definition_override_vector_index;
+        skinChangerJson["definition_override_index"] = skinChangerConfig.definition_override_index;
+        skinChangerJson["seed"] = skinChangerConfig.seed;
+        skinChangerJson["stat_trak"] = skinChangerConfig.stat_trak;
+        skinChangerJson["wear"] = skinChangerConfig.wear;
+        skinChangerJson["custom_name"] = skinChangerConfig.custom_name;
+
+        for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
+            auto& stickerJson = skinChangerJson["stickers"][j];
+            const auto& stickerConfig = skinChangerConfig.stickers[j];
+
+            stickerJson["kit"] = stickerConfig.kit;
+            stickerJson["kit_vector_index"] = stickerConfig.kit_vector_index;
+            stickerJson["wear"] = stickerConfig.wear;
+            stickerJson["scale"] = stickerConfig.scale;
+            stickerJson["rotation"] = stickerConfig.rotation;
+        }
     }
 
     ArchiveX<std::ofstream>{ out } << aimbot << triggerbot << backtrack << glow << chams << esp << visuals << skinChanger << misc;
