@@ -425,7 +425,7 @@ void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
         ImGui::SetNextWindowSize(ImVec2(700, 400));
-        ImGui::Begin("nSkinz", nullptr, windowFlags);
+        ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
 
         ImGui::Columns(2, nullptr, false);
 
