@@ -250,7 +250,7 @@ void GUI::renderGlowWindow() noexcept
             ImGui::SameLine();
             static int currentType{ 0 };
             ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "Both\0Visible\0Occluded\0");
+            ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
             ImGui::PopID();
             currentItem = currentCategory * 3 + currentType;
         }
