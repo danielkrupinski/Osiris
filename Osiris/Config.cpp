@@ -44,41 +44,41 @@ void Config::load(size_t id) noexcept
     in.close();
 
     for (size_t i = 0; i < aimbot.size(); i++) {
-        const auto& aimbotJson = json["aimbot"][i];
+        const auto& aimbotJson = json["Aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
         aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
-        aimbotConfig.onKey = aimbotJson["onKey"].asBool();
-        aimbotConfig.key = aimbotJson["key"].asInt();
-        aimbotConfig.silent = aimbotJson["silent"].asBool();
-        aimbotConfig.friendlyFire = aimbotJson["friendlyFire"].asBool();
-        aimbotConfig.visibleOnly = aimbotJson["visibleOnly"].asBool();
-        aimbotConfig.scopedOnly = aimbotJson["scopedOnly"].asBool();
-        aimbotConfig.ignoreFlash = aimbotJson["ignoreFlash"].asBool();
+        aimbotConfig.onKey = aimbotJson["On key"].asBool();
+        aimbotConfig.key = aimbotJson["Key"].asInt();
+        aimbotConfig.silent = aimbotJson["Silent"].asBool();
+        aimbotConfig.friendlyFire = aimbotJson["Friendly fire"].asBool();
+        aimbotConfig.visibleOnly = aimbotJson["Visible only"].asBool();
+        aimbotConfig.scopedOnly = aimbotJson["Scoped only"].asBool();
+        aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
         aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
-        aimbotConfig.autoShot = aimbotJson["autoShot"].asBool();
-        aimbotConfig.recoilbasedFov = aimbotJson["recoilbasedFov"].asBool();
-        aimbotConfig.fov = aimbotJson["fov"].asFloat();
-        aimbotConfig.maxAngleDelta = aimbotJson["maxAngleDelta"].asFloat();
-        aimbotConfig.smooth = aimbotJson["smooth"].asFloat();
-        aimbotConfig.bone = aimbotJson["bone"].asInt();
-        aimbotConfig.recoilControlX = aimbotJson["recoilControlX"].asFloat();
-        aimbotConfig.recoilControlY = aimbotJson["recoilControlY"].asFloat();
+        aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
+        aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
+        aimbotConfig.fov = aimbotJson["Fov"].asFloat();
+        aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
+        aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
+        aimbotConfig.bone = aimbotJson["Bone"].asInt();
+        aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
+        aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
-        const auto& triggerbotJson = json["triggerbot"][i];
+        const auto& triggerbotJson = json["Triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
 
         triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
-        triggerbotConfig.onKey = triggerbotJson["onKey"].asBool();
-        triggerbotConfig.key = triggerbotJson["key"].asInt();
-        triggerbotConfig.friendlyFire = triggerbotJson["friendlyFire"].asBool();
-        triggerbotConfig.scopedOnly = triggerbotJson["scopedOnly"].asBool();
-        triggerbotConfig.ignoreFlash = triggerbotJson["ignoreFlash"].asBool();
+        triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
+        triggerbotConfig.key = triggerbotJson["Key"].asInt();
+        triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
+        triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
+        triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
         triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
-        triggerbotConfig.hitgroup = triggerbotJson["hitgroup"].asInt();
-        triggerbotConfig.shotDelay = triggerbotJson["shotDelay"].asInt();
+        triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
+        triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
     }
 
     {
@@ -182,7 +182,7 @@ void Config::load(size_t id) noexcept
         visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
         visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
         visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
-        visuals.fov = visualsJson["fov"].asInt();
+        visuals.fov = visualsJson["Fov"].asInt();
         visuals.farZ = visualsJson["farZ"].asInt();
         visuals.flashReduction = visualsJson["flashReduction"].asInt();
         visuals.brightness = visualsJson["brightness"].asFloat();
@@ -267,41 +267,41 @@ void Config::save(size_t id) const noexcept
     Json::Value json;
 
     for (size_t i = 0; i < aimbot.size(); i++) {
-        auto& aimbotJson = json["aimbot"][i];
+        auto& aimbotJson = json["Aimbot"][i];
         const auto& aimbotConfig = aimbot[i];
 
         aimbotJson["Enabled"] = aimbotConfig.enabled;
-        aimbotJson["onKey"] = aimbotConfig.onKey;
-        aimbotJson["key"] = aimbotConfig.key;
-        aimbotJson["silent"] = aimbotConfig.silent;
-        aimbotJson["friendlyFire"] = aimbotConfig.friendlyFire;
-        aimbotJson["visibleOnly"] = aimbotConfig.visibleOnly;
-        aimbotJson["scopedOnly"] = aimbotConfig.scopedOnly;
-        aimbotJson["ignoreFlash"] = aimbotConfig.ignoreFlash;;
+        aimbotJson["On key"] = aimbotConfig.onKey;
+        aimbotJson["Key"] = aimbotConfig.key;
+        aimbotJson["Silent"] = aimbotConfig.silent;
+        aimbotJson["Friendly fire"] = aimbotConfig.friendlyFire;
+        aimbotJson["Visible only"] = aimbotConfig.visibleOnly;
+        aimbotJson["Scoped only"] = aimbotConfig.scopedOnly;
+        aimbotJson["Ignore flash"] = aimbotConfig.ignoreFlash;;
         aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
-        aimbotJson["autoShot"] = aimbotConfig.autoShot;
-        aimbotJson["recoilbasedFov"] = aimbotConfig.recoilbasedFov;
-        aimbotJson["fov"] = aimbotConfig.fov;
-        aimbotJson["maxAngleDelta"] = aimbotConfig.maxAngleDelta;
-        aimbotJson["smooth"] = aimbotConfig.smooth;
-        aimbotJson["bone"] = aimbotConfig.bone;
-        aimbotJson["recoilControlX"] = aimbotConfig.recoilControlX;
-        aimbotJson["recoilControlY"] = aimbotConfig.recoilControlY;
+        aimbotJson["Auto shot"] = aimbotConfig.autoShot;
+        aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
+        aimbotJson["Fov"] = aimbotConfig.fov;
+        aimbotJson["Max angle delta"] = aimbotConfig.maxAngleDelta;
+        aimbotJson["Smooth"] = aimbotConfig.smooth;
+        aimbotJson["Bone"] = aimbotConfig.bone;
+        aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
+        aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
-        auto& triggerbotJson = json["triggerbot"][i];
+        auto& triggerbotJson = json["Triggerbot"][i];
         const auto& triggerbotConfig = triggerbot[i];
 
         triggerbotJson["Enabled"] = triggerbotConfig.enabled;
-        triggerbotJson["onKey"] = triggerbotConfig.onKey;
-        triggerbotJson["key"] = triggerbotConfig.key;
-        triggerbotJson["friendlyFire"] = triggerbotConfig.friendlyFire;
-        triggerbotJson["scopedOnly"] = triggerbotConfig.scopedOnly;
-        triggerbotJson["ignoreFlash"] = triggerbotConfig.ignoreFlash;
+        triggerbotJson["On key"] = triggerbotConfig.onKey;
+        triggerbotJson["Key"] = triggerbotConfig.key;
+        triggerbotJson["Friendly fire"] = triggerbotConfig.friendlyFire;
+        triggerbotJson["Scoped only"] = triggerbotConfig.scopedOnly;
+        triggerbotJson["Ignore flash"] = triggerbotConfig.ignoreFlash;
         triggerbotJson["Ignore smoke"] = triggerbotConfig.ignoreSmoke;
-        triggerbotJson["hitgroup"] = triggerbotConfig.hitgroup;
-        triggerbotJson["shotDelay"] = triggerbotConfig.shotDelay;
+        triggerbotJson["Hitgroup"] = triggerbotConfig.hitgroup;
+        triggerbotJson["Shot delay"] = triggerbotConfig.shotDelay;
     }
 
     {
@@ -405,7 +405,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["thirdpersonKey"] = visuals.thirdpersonKey;
         visualsJson["thirdpersonDistance"] = visuals.thirdpersonDistance;
         visualsJson["viewmodelFov"] = visuals.viewmodelFov;
-        visualsJson["fov"] = visuals.fov;
+        visualsJson["Fov"] = visuals.fov;
         visualsJson["farZ"] = visuals.farZ;
         visualsJson["flashReduction"] = visuals.flashReduction;
         visualsJson["brightness"] = visuals.brightness;
