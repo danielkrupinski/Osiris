@@ -304,12 +304,12 @@ void GUI::renderChamsWindow() noexcept
             ImGui::SameLine();
             static int currentType{ 0 };
             ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "Visible\0Occluded\0");
+            ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
             ImGui::PopID();
-            currentItem = currentCategory * 2 + currentType;
+            currentItem = currentCategory * 3 + currentType;
         }
         else {
-            currentItem = currentCategory + 4;
+            currentItem = currentCategory + 8;
         }
 
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
