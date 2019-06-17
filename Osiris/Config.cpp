@@ -223,32 +223,32 @@ void Config::load(size_t id) noexcept
     }
 
     {
-        const auto& miscJson = json["misc"];
+        const auto& miscJson = json["Misc"];
 
-        misc.menuKey = miscJson["menuKey"].asInt();
-        misc.autoStrafe = miscJson["autoStrafe"].asBool();
-        misc.bunnyHop = miscJson["bunnyHop"].asBool();
-        strcpy_s(misc.clanTag, 16, miscJson["clanTag"].asCString());
-        misc.animatedClanTag = miscJson["animatedClanTag"].asBool();
-        misc.fastDuck = miscJson["fastDuck"].asBool();
-        misc.sniperCrosshair = miscJson["sniperCrosshair"].asBool();
-        misc.recoilCrosshair = miscJson["recoilCrosshair"].asBool();
-        misc.autoPistol = miscJson["autoPistol"].asBool();
-        misc.autoReload = miscJson["autoReload"].asBool();
-        misc.autoAccept = miscJson["autoAccept"].asBool();
-        misc.radarHack = miscJson["radarHack"].asBool();
-        misc.revealRanks = miscJson["revealRanks"].asBool();
-        misc.spectatorList = miscJson["spectatorList"].asBool();
-        misc.watermark = miscJson["watermark"].asBool();
-        misc.fixAnimationLOD = miscJson["fixAnimationLOD"].asBool();
-        misc.fixBoneMatrix = miscJson["fixBoneMatrix"].asBool();
-        misc.disableModelOcclusion = miscJson["disableModelOcclusion"].asBool();
-        misc.killMessage = miscJson["killMessage"].asBool();
-        misc.fastPlant = miscJson["fastPlant"].asBool();
-        misc.prepareRevolver = miscJson["prepareRevolver"].asBool();
-        misc.prepareRevolverKey = miscJson["prepareRevolverKey"].asInt();
-        misc.hitSound = miscJson["hitSound"].asInt();
-        misc.chokedPackets = miscJson["chokedPackets"].asInt();
+        misc.menuKey = miscJson["Menu key"].asInt();
+        misc.autoStrafe = miscJson["Auto strafe"].asBool();
+        misc.bunnyHop = miscJson["Bunny hop"].asBool();
+        strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
+        misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
+        misc.fastDuck = miscJson["Fast duck"].asBool();
+        misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
+        misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
+        misc.autoPistol = miscJson["Auto pistol"].asBool();
+        misc.autoReload = miscJson["Auto reload"].asBool();
+        misc.autoAccept = miscJson["Auto accept"].asBool();
+        misc.radarHack = miscJson["Radar hack"].asBool();
+        misc.revealRanks = miscJson["Reveal ranks"].asBool();
+        misc.spectatorList = miscJson["Spectator list"].asBool();
+        misc.watermark = miscJson["Watermark"].asBool();
+        misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
+        misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
+        misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
+        misc.killMessage = miscJson["Kill message"].asBool();
+        misc.fastPlant = miscJson["Fast plant"].asBool();
+        misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
+        misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
+        misc.hitSound = miscJson["Hit sound"].asInt();
+        misc.chokedPackets = miscJson["Choked packets"].asInt();
     }
 }
 
@@ -446,32 +446,32 @@ void Config::save(size_t id) const noexcept
     }
 
     {
-        auto& miscJson = json["misc"];
+        auto& miscJson = json["Misc"];
         
-        miscJson["menuKey"] = misc.menuKey;
-        miscJson["autoStrafe"] = misc.autoStrafe;
-        miscJson["bunnyHop"] = misc.bunnyHop;
-        miscJson["clanTag"] = misc.clanTag;
-        miscJson["animatedClanTag"] = misc.animatedClanTag;
-        miscJson["fastDuck"] = misc.fastDuck;
-        miscJson["sniperCrosshair"] = misc.sniperCrosshair;
-        miscJson["recoilCrosshair"] = misc.recoilCrosshair;
-        miscJson["autoPistol"] = misc.autoPistol;
-        miscJson["autoReload"] = misc.autoReload;
-        miscJson["autoAccept"] = misc.autoAccept;
-        miscJson["radarHack"] = misc.radarHack;
-        miscJson["revealRanks"] = misc.revealRanks;
-        miscJson["spectatorList"] = misc.spectatorList;
-        miscJson["watermark"] = misc.watermark;
-        miscJson["fixAnimationLOD"] = misc.fixAnimationLOD;
-        miscJson["fixBoneMatrix"] = misc.fixBoneMatrix;
-        miscJson["disableModelOcclusion"] = misc.disableModelOcclusion;
-        miscJson["killMessage"] = misc.killMessage;
-        miscJson["fastPlant"] = misc.fastPlant;
-        miscJson["prepareRevolver"] = misc.prepareRevolver;
-        miscJson["prepareRevolverKey"] = misc.prepareRevolverKey;
-        miscJson["hitSound"] = misc.hitSound;
-        miscJson["chokedPackets"] = misc.chokedPackets;
+        miscJson["Menu key"] = misc.menuKey;
+        miscJson["Auto strafe"] = misc.autoStrafe;
+        miscJson["Bunny hop"] = misc.bunnyHop;
+        miscJson["Clan tag"] = misc.clanTag;
+        miscJson["Animated clan tag"] = misc.animatedClanTag;
+        miscJson["Fast duck"] = misc.fastDuck;
+        miscJson["Sniper crosshair"] = misc.sniperCrosshair;
+        miscJson["Recoil crosshair"] = misc.recoilCrosshair;
+        miscJson["Auto pistol"] = misc.autoPistol;
+        miscJson["Auto reload"] = misc.autoReload;
+        miscJson["Auto accept"] = misc.autoAccept;
+        miscJson["Radar hack"] = misc.radarHack;
+        miscJson["Reveal ranks"] = misc.revealRanks;
+        miscJson["Spectator list"] = misc.spectatorList;
+        miscJson["Watermark"] = misc.watermark;
+        miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
+        miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
+        miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
+        miscJson["Kill message"] = misc.killMessage;
+        miscJson["Fast plant"] = misc.fastPlant;
+        miscJson["Prepare revolver"] = misc.prepareRevolver;
+        miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
+        miscJson["Hit sound"] = misc.hitSound;
+        miscJson["Choked packets"] = misc.chokedPackets;
     }
 
     out << json;
