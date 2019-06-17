@@ -47,7 +47,7 @@ void Config::load(size_t id) noexcept
         const auto& aimbotJson = json["aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
-        aimbotConfig.enabled = aimbotJson["enabled"].asBool();
+        aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
         aimbotConfig.onKey = aimbotJson["onKey"].asBool();
         aimbotConfig.key = aimbotJson["key"].asInt();
         aimbotConfig.silent = aimbotJson["silent"].asBool();
@@ -55,7 +55,7 @@ void Config::load(size_t id) noexcept
         aimbotConfig.visibleOnly = aimbotJson["visibleOnly"].asBool();
         aimbotConfig.scopedOnly = aimbotJson["scopedOnly"].asBool();
         aimbotConfig.ignoreFlash = aimbotJson["ignoreFlash"].asBool();
-        aimbotConfig.ignoreSmoke = aimbotJson["ignoreSmoke"].asBool();
+        aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
         aimbotConfig.autoShot = aimbotJson["autoShot"].asBool();
         aimbotConfig.recoilbasedFov = aimbotJson["recoilbasedFov"].asBool();
         aimbotConfig.fov = aimbotJson["fov"].asFloat();
@@ -70,29 +70,29 @@ void Config::load(size_t id) noexcept
         const auto& triggerbotJson = json["triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
 
-        triggerbotConfig.enabled = triggerbotJson["enabled"].asBool();
+        triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
         triggerbotConfig.onKey = triggerbotJson["onKey"].asBool();
         triggerbotConfig.key = triggerbotJson["key"].asInt();
         triggerbotConfig.friendlyFire = triggerbotJson["friendlyFire"].asBool();
         triggerbotConfig.scopedOnly = triggerbotJson["scopedOnly"].asBool();
         triggerbotConfig.ignoreFlash = triggerbotJson["ignoreFlash"].asBool();
-        triggerbotConfig.ignoreSmoke = triggerbotJson["ignoreSmoke"].asBool();
+        triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
         triggerbotConfig.hitgroup = triggerbotJson["hitgroup"].asInt();
         triggerbotConfig.shotDelay = triggerbotJson["shotDelay"].asInt();
     }
 
     {
-        const auto& backtrackJson = json["backtrack"];
-        backtrack.enabled = backtrackJson["enabled"].asBool();
-        backtrack.ignoreSmoke = backtrackJson["ignoreSmoke"].asBool();
-        backtrack.timeLimit = backtrackJson["timeLimit"].asInt();
+        const auto& backtrackJson = json["Backtrack"];
+        backtrack.enabled = backtrackJson["Enabled"].asBool();
+        backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
+        backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
         const auto& glowJson = json["glow"][i];
         auto& glowConfig = glow[i];
 
-        glowConfig.enabled = glowJson["enabled"].asBool();
+        glowConfig.enabled = glowJson["Enabled"].asBool();
         glowConfig.healthBased = glowJson["healthBased"].asBool();
         glowConfig.rainbow = glowJson["rainbow"].asBool();
         glowConfig.thickness = glowJson["thickness"].asFloat();
@@ -107,7 +107,7 @@ void Config::load(size_t id) noexcept
         const auto& chamsJson = json["chams"][i];
         auto& chamsConfig = chams[i];
 
-        chamsConfig.enabled = chamsJson["enabled"].asBool();
+        chamsConfig.enabled = chamsJson["Enabled"].asBool();
         chamsConfig.healthBased = chamsJson["healthBased"].asBool();
         chamsConfig.rainbow = chamsJson["rainbow"].asBool();
         chamsConfig.blinking = chamsJson["blinking"].asBool();
@@ -123,7 +123,7 @@ void Config::load(size_t id) noexcept
         const auto& espJson = json["esp"][i];
         auto& espConfig = esp[i];
         
-        espConfig.enabled = espJson["enabled"].asBool();
+        espConfig.enabled = espJson["Enabled"].asBool();
         espConfig.snaplines = espJson["snaplines"].asBool();
         espConfig.snaplinesColor[0] = espJson["snaplinesColor"][0].asFloat();
         espConfig.snaplinesColor[1] = espJson["snaplinesColor"][1].asFloat();
@@ -196,7 +196,7 @@ void Config::load(size_t id) noexcept
         const auto& skinChangerJson = json["skinChanger"][i];
         auto& skinChangerConfig = skinChanger[i];
 
-        skinChangerConfig.enabled = skinChangerJson["enabled"].asBool();
+        skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
         skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
         skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
         skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
@@ -270,7 +270,7 @@ void Config::save(size_t id) const noexcept
         auto& aimbotJson = json["aimbot"][i];
         const auto& aimbotConfig = aimbot[i];
 
-        aimbotJson["enabled"] = aimbotConfig.enabled;
+        aimbotJson["Enabled"] = aimbotConfig.enabled;
         aimbotJson["onKey"] = aimbotConfig.onKey;
         aimbotJson["key"] = aimbotConfig.key;
         aimbotJson["silent"] = aimbotConfig.silent;
@@ -278,7 +278,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["visibleOnly"] = aimbotConfig.visibleOnly;
         aimbotJson["scopedOnly"] = aimbotConfig.scopedOnly;
         aimbotJson["ignoreFlash"] = aimbotConfig.ignoreFlash;;
-        aimbotJson["ignoreSmoke"] = aimbotConfig.ignoreSmoke;
+        aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
         aimbotJson["autoShot"] = aimbotConfig.autoShot;
         aimbotJson["recoilbasedFov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["fov"] = aimbotConfig.fov;
@@ -293,29 +293,29 @@ void Config::save(size_t id) const noexcept
         auto& triggerbotJson = json["triggerbot"][i];
         const auto& triggerbotConfig = triggerbot[i];
 
-        triggerbotJson["enabled"] = triggerbotConfig.enabled;
+        triggerbotJson["Enabled"] = triggerbotConfig.enabled;
         triggerbotJson["onKey"] = triggerbotConfig.onKey;
         triggerbotJson["key"] = triggerbotConfig.key;
         triggerbotJson["friendlyFire"] = triggerbotConfig.friendlyFire;
         triggerbotJson["scopedOnly"] = triggerbotConfig.scopedOnly;
         triggerbotJson["ignoreFlash"] = triggerbotConfig.ignoreFlash;
-        triggerbotJson["ignoreSmoke"] = triggerbotConfig.ignoreSmoke;
+        triggerbotJson["Ignore smoke"] = triggerbotConfig.ignoreSmoke;
         triggerbotJson["hitgroup"] = triggerbotConfig.hitgroup;
         triggerbotJson["shotDelay"] = triggerbotConfig.shotDelay;
     }
 
     {
-        auto& backtrackJson = json["backtrack"];
-        backtrackJson["enabled"] = backtrack.enabled;
-        backtrackJson["ignoreSmoke"] = backtrack.ignoreSmoke;
-        backtrackJson["timeLimit"] = backtrack.timeLimit;
+        auto& backtrackJson = json["Backtrack"];
+        backtrackJson["Enabled"] = backtrack.enabled;
+        backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
+        backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
         auto& glowJson = json["glow"][i];
         const auto& glowConfig = glow[i];
 
-        glowJson["enabled"] = glowConfig.enabled;
+        glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
         glowJson["rainbow"] = glowConfig.rainbow;
         glowJson["thickness"] = glowConfig.thickness;
@@ -330,7 +330,7 @@ void Config::save(size_t id) const noexcept
         auto& chamsJson = json["chams"][i];
         const auto& chamsConfig = chams[i];
 
-        chamsJson["enabled"] = chamsConfig.enabled;
+        chamsJson["Enabled"] = chamsConfig.enabled;
         chamsJson["healthBased"] = chamsConfig.healthBased;
         chamsJson["rainbow"] = chamsConfig.rainbow;
         chamsJson["blinking"] = chamsConfig.blinking;
@@ -346,7 +346,7 @@ void Config::save(size_t id) const noexcept
         auto& espJson = json["esp"][i];
         const auto& espConfig = esp[i];
 
-        espJson["enabled"] = espConfig.enabled;
+        espJson["Enabled"] = espConfig.enabled;
         espJson["snaplines"] = espConfig.snaplines;
         espJson["snaplinesColor"][0] = espConfig.snaplinesColor[0];
         espJson["snaplinesColor"][1] = espConfig.snaplinesColor[1];
@@ -419,7 +419,7 @@ void Config::save(size_t id) const noexcept
         auto& skinChangerJson = json["skinChanger"][i];
         const auto& skinChangerConfig = skinChanger[i];
 
-        skinChangerJson["enabled"] = skinChangerConfig.enabled;
+        skinChangerJson["Enabled"] = skinChangerConfig.enabled;
         skinChangerJson["definition_vector_index"] = skinChangerConfig.definition_vector_index;
         skinChangerJson["definition_index"] = skinChangerConfig.definition_index;
         skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
