@@ -16,10 +16,15 @@ Chams::Chams() noexcept
     std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
         "UnlitGeneric { }";
 
+    std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
+        "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
+
     normal = interfaces.materialSystem->findMaterial("chamsNormal");
     normal->incrementReferenceCount();
     flat = interfaces.materialSystem->findMaterial("chamsFlat");
     flat->incrementReferenceCount();
+    animated = interfaces.materialSystem->findMaterial("chamsAnimated");
+    animated->incrementReferenceCount();
     platinum = interfaces.materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
     platinum->incrementReferenceCount();
     glass = interfaces.materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");

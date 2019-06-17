@@ -316,7 +316,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.chams[currentItem].rainbow);
         ImGui::Checkbox("Blinking", &config.chams[currentItem].blinking);
-        ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+        ImGui::Combo("Material", &config.chams[currentItem].material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &config.chams[currentItem].wireframe);
 
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].color }, ImGuiColorEditFlags_NoTooltip);

@@ -47,6 +47,7 @@ private:
 
     Material* normal;
     Material* flat;
+    Material* animated;
     Material* platinum;
     Material* glass;
     Material* crystal;
@@ -61,13 +62,14 @@ private:
         default:
         case 0: return normal;
         case 1: return flat;
-        case 2: return platinum;
-        case 3: return glass;
-        case 4: return chrome;
-        case 5: return crystal;
-        case 6: return silver;
-        case 7: return gold;
-        case 8: return plastic;
+        case 2: return animated;
+        case 3: return platinum;
+        case 4: return glass;
+        case 5: return chrome;
+        case 6: return crystal;
+        case 7: return silver;
+        case 8: return gold;
+        case 9: return plastic;
         }
     }
 
