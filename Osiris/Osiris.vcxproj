@@ -48,7 +48,6 @@
     <ClCompile Include="SDK\GlobalVars.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArchiveX.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\Backtrack.h" />

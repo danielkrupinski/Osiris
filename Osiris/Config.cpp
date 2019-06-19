@@ -1,7 +1,6 @@
 #include <fstream>
 #include <ShlObj.h>
 
-#include "ArchiveX.h"
 #include "json/json.h"
 
 #include "Config.h"
