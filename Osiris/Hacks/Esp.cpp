@@ -60,7 +60,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
         if (config.healthBar) {
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (100.0f - entity->getProperty<int>("m_iHealth")) / 100.0f, drawPositionX, bottom.y);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (100.0f - entity->health()) / 100.0f, drawPositionX, bottom.y);
             interfaces.surface->setDrawColor(0, 0, 0, 255);
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
             drawPositionX -= 7;
@@ -91,7 +91,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         float drawPositionY = top.y;
 
         if (config.health)
-            renderPositionedText((std::to_wstring(entity->getProperty<int>("m_iHealth")) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText((std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
 
         if (config.armor)
             renderPositionedText((std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });

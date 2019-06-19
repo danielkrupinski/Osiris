@@ -141,7 +141,7 @@ public:
 
     constexpr bool isAlive() noexcept
     {
-        return callVirtualMethod<bool>(this, 153) && getProperty<int>("m_iHealth") > 0;
+        return callVirtualMethod<bool>(this, 153) && health() > 0;
     }
 
     constexpr bool isPlayer() noexcept
@@ -176,6 +176,7 @@ public:
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int);
+    NETVAR(health, "CBasePlayer", "m_iHealth", int);
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
 

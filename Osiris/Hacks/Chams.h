@@ -19,7 +19,7 @@ private:
     constexpr void renderHands() const noexcept
     {
         if (config.chams[HANDS].enabled)
-            applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_iHealth"));
+            applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
     }
 
     constexpr void renderWeapons() const noexcept
@@ -27,7 +27,7 @@ private:
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         if (config.chams[WEAPONS].enabled &&
             !localPlayer->getProperty<bool>("m_bIsScoped"))
-            applyChams(config.chams[WEAPONS], false, localPlayer->getProperty<int>("m_iHealth"));
+            applyChams(config.chams[WEAPONS], false, localPlayer->health());
     }
 
     enum ChamsId {
