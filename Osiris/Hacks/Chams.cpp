@@ -17,7 +17,7 @@ Chams::Chams() noexcept
         "UnlitGeneric { }";
 
     std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
-        "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
+        "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
 
     normal = interfaces.materialSystem->findMaterial("chamsNormal");
     normal->incrementReferenceCount();
