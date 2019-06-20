@@ -106,7 +106,7 @@ public:
         float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
     };
 
-    std::array<Esp, 4> esp;
+    std::array<Esp, 6> esp;
 
     struct {
         bool disablePostProcessing{ false };
