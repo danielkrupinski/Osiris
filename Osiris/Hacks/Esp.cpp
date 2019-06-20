@@ -114,8 +114,11 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
 }
 
 enum EspId {
-    ALLIES_VISIBLE = 0,
+    ALLIES_ALL = 0,
+    ALLIES_VISIBLE,
     ALLIES_OCCLUDED,
+
+    ENEMIES_ALL,
     ENEMIES_VISIBLE,
     ENEMIES_OCCLUDED
 };
@@ -132,7 +135,11 @@ void Esp::render() noexcept
                 continue;
 
             if (!entity->isEnemy()) {
-                if (entity->isVisible()) {
+                if (config.esp[ALLIES_ALL].enabled) {
+                    renderSnaplines(entity, config.esp[ALLIES_ALL]);
+                    renderBox(entity, config.esp[ALLIES_ALL]);
+                    renderHeadDot(entity, config.esp[ALLIES_ALL]);
+                } else if (entity->isVisible()) {
                     if (config.esp[ALLIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
                         renderBox(entity, config.esp[ALLIES_VISIBLE]);
@@ -146,7 +153,11 @@ void Esp::render() noexcept
                     }
                 }
             } else {
-                if (entity->isVisible()) {
+                if (config.esp[ENEMIES_ALL].enabled) {
+                    renderSnaplines(entity, config.esp[ENEMIES_ALL]);
+                    renderBox(entity, config.esp[ENEMIES_ALL]);
+                    renderHeadDot(entity, config.esp[ENEMIES_ALL]);
+                } else if (entity->isVisible()) {
                     if (config.esp[ENEMIES_VISIBLE].enabled) {
                         renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
                         renderBox(entity, config.esp[ENEMIES_VISIBLE]);

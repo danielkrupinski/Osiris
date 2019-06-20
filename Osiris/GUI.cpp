@@ -353,9 +353,9 @@ void GUI::renderEspWindow() noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "Visible\0Occluded\0");
+        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
         ImGui::PopID();
-        int currentItem = currentCategory * 2 + currentType;
+        int currentItem = currentCategory * 3 + currentType;
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
