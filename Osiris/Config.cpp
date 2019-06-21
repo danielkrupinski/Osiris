@@ -248,6 +248,7 @@ void Config::load(size_t id) noexcept
         misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         misc.hitSound = miscJson["Hit sound"].asInt();
         misc.chokedPackets = miscJson["Choked packets"].asInt();
+        misc.headshotSoundVolume = miscJson["Headshot sound volume"].asInt();
     }
 }
 
@@ -471,6 +472,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;
         miscJson["Choked packets"] = misc.chokedPackets;
+        miscJson["Headshot sound volume"] = misc.headshotSoundVolume;
     }
 
     out << json;
