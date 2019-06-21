@@ -293,6 +293,9 @@ static bool __stdcall getParametersForSoundEx(const char* soundName, int& handle
 {
     auto result = hooks.soundEmitter.callOriginal<bool, const char*, int&, SoundParameters&, int, int>(43, soundName, handle, params, unknown, unknown1);
 
+    if (strstr(soundName, "Player.DamageHelmet"))
+        params.volume *= config.misc.headshotSoundVolume / 100.0f;
+
     return result;
 }
 
