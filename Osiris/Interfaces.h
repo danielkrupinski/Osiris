@@ -21,6 +21,7 @@ class Panel;
 class RenderView;
 class Surface;
 class Sound;
+class SoundEmitter;
 
 class Interfaces final {
 public:
@@ -42,6 +43,7 @@ public:
     RenderView* renderView;
     Surface* surface;
     Sound* sound;
+    SoundEmitter* soundEmitter;
 private:
     template <typename T>
     static auto find(const char* module, const char* name)

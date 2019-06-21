@@ -18,4 +18,5 @@ Interfaces::Interfaces() noexcept
     renderView = find<RenderView>("engine", "VEngineRenderView014");
     surface = find<Surface>("vguimatsurface", "VGUI_Surface031");
     sound = find<Sound>("engine", "IEngineSoundClient003");
+    soundEmitter = find<SoundEmitter>("soundemittersystem", "VSoundEmitter003");
 }
