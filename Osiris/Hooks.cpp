@@ -284,6 +284,18 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
     return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, mins, maxs, list, listMax);
 }
 
+struct SoundParameters {
+    int channel;
+    float volume;
+};
+
+static bool __stdcall getParametersForSoundEx(const char* soundName, int& handle, SoundParameters& params, int unknown, int unknown1) noexcept
+{
+    auto result = hooks.soundEmitter.callOriginal<bool, const char*, int&, SoundParameters&, int, int>(43, soundName, handle, params, unknown, unknown1);
+
+    return result;
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -331,6 +343,7 @@ Hooks::Hooks() noexcept
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
+    soundEmitter.hookAt(43, getParametersForSoundEx);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
@@ -347,6 +360,7 @@ void Hooks::restore() noexcept
     modelRender.restore();
     panel.restore();
     sound.restore();
+    soundEmitter.restore();
     surface.restore();
     svCheats.restore();
 
