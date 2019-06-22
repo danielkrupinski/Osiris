@@ -8,6 +8,8 @@
 #include "SDK/Cvar.h"
 #include "SDK/Engine.h"
 
+struct SoundInfo;
+
 class Hooks final {
 public:
     Hooks() noexcept;
@@ -16,6 +18,7 @@ public:
     WNDPROC originalWndProc;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
+    std::add_pointer_t<int __fastcall(SoundInfo&)> originalDispatchSound;
 
     class Vmt {
     public:

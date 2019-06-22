@@ -33,6 +33,7 @@
 #include "SDK/InputSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
+#include "SDK/SoundInfo.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -299,6 +300,15 @@ static bool __stdcall getParametersForSoundEx(const char* soundName, int& handle
     return result;
 }
 
+static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
+{
+    if (const char* soundName = hooks.soundEmitter.callOriginal<const char*, int>(46, soundInfo.soundIndex)) {
+        if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
+            soundInfo.volume *= config.misc.headshotSoundVolume / 100.0f;
+    }
+    return hooks.originalDispatchSound(soundInfo);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -351,6 +361,12 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
 
+    DWORD oldProtection;
+    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
+    originalDispatchSound = reinterpret_cast<decltype(originalDispatchSound)>(reinterpret_cast<uintptr_t>(memory.dispatchSound + 1) + *memory.dispatchSound);
+    *memory.dispatchSound = reinterpret_cast<uintptr_t>(&dispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
+    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
@@ -372,6 +388,11 @@ void Hooks::restore() noexcept
     SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
+
+    DWORD oldProtection;
+    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
+    *memory.dispatchSound = reinterpret_cast<uintptr_t>(originalDispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
+    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
