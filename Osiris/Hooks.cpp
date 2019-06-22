@@ -364,7 +364,6 @@ void Hooks::restore() noexcept
     modelRender.restore();
     panel.restore();
     sound.restore();
-    soundEmitter.restore();
     surface.restore();
     svCheats.restore();
 
