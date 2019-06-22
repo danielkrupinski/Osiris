@@ -33,5 +33,5 @@ Memory::Memory() noexcept
     itemSchema = relativeToAbsolute<decltype(itemSchema)>(findPattern<int*>("client_panorama", "\xE8????\x0F\xB7\x0F", 1));
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern<int*>("client_panorama", "\xE8????\xEB\x19\x8B\x07", 1));
     listLeaves = findPattern<>("client_panorama", "\x52\x8B\x55\x0C\x8B\x01\x56\x52\xFF\x50\x18\x89\x44\x24\x14", 11);
-    dispatchSound = findPattern<>("engine", "\x74\x0B\xE8????\x8B\x3D", 3);
+    dispatchSound = findPattern<int*>("engine", "\x74\x0B\xE8????\x8B\x3D", 3);
 }
