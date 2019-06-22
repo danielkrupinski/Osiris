@@ -34,6 +34,7 @@
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
 #include "SDK/SoundInfo.h"
+#include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -302,7 +303,7 @@ static bool __stdcall getParametersForSoundEx(const char* soundName, int& handle
 
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
-    if (const char* soundName = hooks.soundEmitter.callOriginal<const char*, int>(46, soundInfo.soundIndex)) {
+    if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
         if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
             soundInfo.volume *= config.misc.headshotSoundVolume / 100.0f;
     }
