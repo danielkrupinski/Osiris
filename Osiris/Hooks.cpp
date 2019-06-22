@@ -197,14 +197,18 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 }
 
 struct SoundData {
-    std::byte data[12];
+    std::byte pad[12];
     const char* soundEntry;
-    std::byte pad[56];
+    std::byte pad1[8];
+    float volume;
+    std::byte pad2[44];
 };
 
 static void __stdcall emitSound(SoundData data) noexcept
 {
-    if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
+    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single"))
+       data.volume *= config.misc.weaponSoundsVolume / 100.0f;
+    else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
         auto window = FindWindowA("Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
