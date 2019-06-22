@@ -249,6 +249,7 @@ void Config::load(size_t id) noexcept
         misc.hitSound = miscJson["Hit sound"].asInt();
         misc.chokedPackets = miscJson["Choked packets"].asInt();
         misc.headshotSoundVolume = miscJson["Headshot sound volume"].asInt();
+        misc.weaponSoundsVolume = miscJson["Weapon sounds volume"].asInt();
     }
 }
 
@@ -473,6 +474,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Hit sound"] = misc.hitSound;
         miscJson["Choked packets"] = misc.chokedPackets;
         miscJson["Headshot sound volume"] = misc.headshotSoundVolume;
+        miscJson["Weapon sounds volume"] = misc.weaponSoundsVolume;
     }
 
     out << json;
