@@ -286,21 +286,6 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
     return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, mins, maxs, list, listMax);
 }
 
-struct SoundParameters {
-    int channel;
-    float volume;
-};
-
-static bool __stdcall getParametersForSoundEx(const char* soundName, int& handle, SoundParameters& params, int unknown, int unknown1) noexcept
-{
-    auto result = hooks.soundEmitter.callOriginal<bool, const char*, int&, SoundParameters&, int, int>(43, soundName, handle, params, unknown, unknown1);
-
-    if (strstr(soundName, "Player.DamageHelmet"))
-        params.volume *= config.misc.headshotSoundVolume / 100.0f;
-
-    return result;
-}
-
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
@@ -357,7 +342,6 @@ Hooks::Hooks() noexcept
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
-    soundEmitter.hookAt(43, getParametersForSoundEx);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
