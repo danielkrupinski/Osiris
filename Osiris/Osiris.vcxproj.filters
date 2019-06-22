@@ -304,5 +304,8 @@
     <ClInclude Include="SDK\SoundInfo.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\SoundEmitter.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
