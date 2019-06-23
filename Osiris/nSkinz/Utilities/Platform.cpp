@@ -31,15 +31,6 @@
 #include <Windows.h>
 #include <psapi.h>
 
-auto platform::get_export(const char* module_name, const char* export_name) -> void*
-{
-	HMODULE mod;
-	while(!((mod = GetModuleHandleA(module_name))))
-		Sleep(100);
-
-	return reinterpret_cast<void*>(GetProcAddress(mod, export_name));
-}
-
 std::pair<std::uintptr_t, std::size_t> platform::get_module_info(const char* module_name)
 {
 	const auto module = GetModuleHandleA(module_name);

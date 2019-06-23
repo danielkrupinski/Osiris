@@ -210,7 +210,7 @@ static void __stdcall emitSound(SoundData data) noexcept
        data.volume *= config.misc.weaponSoundsVolume / 100.0f;
     else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
-        auto window = FindWindowA("Valve001", NULL);
+        auto window = FindWindowW(L"Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
         FlashWindowEx(&flash);
         ShowWindow(window, SW_RESTORE);
@@ -373,7 +373,7 @@ void Hooks::restore() noexcept
 
     netvars.restore();
 
-    SetWindowLongPtr(FindWindowA("Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
 

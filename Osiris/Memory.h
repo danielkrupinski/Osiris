@@ -47,11 +47,11 @@ public:
 
 private:
     template <typename T = uintptr_t>
-    static auto findPattern(const char* module, std::string_view pattern, size_t offset = 0) noexcept
+    static auto findPattern(const wchar_t* module, std::string_view pattern, size_t offset = 0) noexcept
     {
         MODULEINFO moduleInfo;
 
-        if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(module), &moduleInfo, sizeof(moduleInfo))) {
+        if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
             char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
             char* end = begin + moduleInfo.SizeOfImage - pattern.length() + 1;
 

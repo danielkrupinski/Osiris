@@ -46,9 +46,9 @@ public:
     SoundEmitter* soundEmitter;
 private:
     template <typename T>
-    static auto find(const char* module, const char* name)
+    static auto find(const wchar_t* module, const char* name)
     {
-        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module), "CreateInterface"));
+        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface"));
 
         T* foundInterface{ nullptr };
 

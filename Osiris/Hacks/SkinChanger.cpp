@@ -23,7 +23,7 @@ std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
 
 void SkinChanger::initializeKits() noexcept
 {
-    const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(platform::get_export("vstdlib.dll", "V_UCS2ToUTF8"));
+    const auto V_UCS2ToUTF8 = reinterpret_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "V_UCS2ToUTF8"));
 
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
         const auto paint_kit = memory.itemSchema()->paintKits.memory[i].value;

@@ -2,21 +2,21 @@
 
 Interfaces::Interfaces() noexcept
 {
-    client = find<Client>("client_panorama", "VClient018");
-    cvar = find<Cvar>("vstdlib", "VEngineCvar007");
-    engine = find<Engine>("engine", "VEngineClient014");
-    engineTrace = find<EngineTrace>("engine", "EngineTraceClient004");
-    entityList = find<EntityList>("client_panorama", "VClientEntityList003");
-    gameEventManager = find<GameEventManager>("engine", "GAMEEVENTSMANAGER002");
-    gameUI = find<GameUI>("client_panorama", "GameUI011");
-    inputSystem = find<InputSystem>("inputsystem", "InputSystemVersion001");
-    localize = find<Localize>("localize", "Localize_001");
-    materialSystem = find<MaterialSystem>("materialsystem", "VMaterialSystem080");
-    modelInfo = find<ModelInfo>("engine", "VModelInfoClient004");
-    modelRender = find<ModelRender>("engine", "VEngineModel016");
-    panel = find<Panel>("vgui2", "VGUI_Panel009");
-    renderView = find<RenderView>("engine", "VEngineRenderView014");
-    surface = find<Surface>("vguimatsurface", "VGUI_Surface031");
-    sound = find<Sound>("engine", "IEngineSoundClient003");
-    soundEmitter = find<SoundEmitter>("soundemittersystem", "VSoundEmitter003");
+    client = find<Client>(L"client_panorama", "VClient018");
+    cvar = find<Cvar>(L"vstdlib", "VEngineCvar007");
+    engine = find<Engine>(L"engine", "VEngineClient014");
+    engineTrace = find<EngineTrace>(L"engine", "EngineTraceClient004");
+    entityList = find<EntityList>(L"client_panorama", "VClientEntityList003");
+    gameEventManager = find<GameEventManager>(L"engine", "GAMEEVENTSMANAGER002");
+    gameUI = find<GameUI>(L"client_panorama", "GameUI011");
+    inputSystem = find<InputSystem>(L"inputsystem", "InputSystemVersion001");
+    localize = find<Localize>(L"localize", "Localize_001");
+    materialSystem = find<MaterialSystem>(L"materialsystem", "VMaterialSystem080");
+    modelInfo = find<ModelInfo>(L"engine", "VModelInfoClient004");
+    modelRender = find<ModelRender>(L"engine", "VEngineModel016");
+    panel = find<Panel>(L"vgui2", "VGUI_Panel009");
+    renderView = find<RenderView>(L"engine", "VEngineRenderView014");
+    surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
+    sound = find<Sound>(L"engine", "IEngineSoundClient003");
+    soundEmitter = find<SoundEmitter>(L"soundemittersystem", "VSoundEmitter003");
 }
