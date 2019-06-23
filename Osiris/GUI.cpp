@@ -397,8 +397,8 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.misc.menuStyle) {
-            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-            ImGui::Begin("Visuals", &window.visuals, windowFlags | ImGuiWindowFlags_AlwaysAutoResize);
+            ImGui::SetNextWindowSize({ 520.0f, 400.0f });
+            ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
