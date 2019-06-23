@@ -20,6 +20,7 @@ private:
     void renderSkinChangerWindow() noexcept;
     void renderMiscWindow() noexcept;
     void renderConfigWindow() noexcept;
+    void renderGuiStyle2() noexcept;
 
     struct {
         bool aimbot{ false };

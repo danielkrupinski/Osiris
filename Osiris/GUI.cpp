@@ -17,17 +17,21 @@ constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoRe
 
 void GUI::render() noexcept
 {
-    renderMenuBar();
-    renderAimbotWindow();
-    renderTriggerbotWindow();
-    renderBacktrackWindow();
-    renderGlowWindow();
-    renderChamsWindow();
-    renderEspWindow();
-    renderVisualsWindow();
-    renderSkinChangerWindow();
-    renderMiscWindow();
-    renderConfigWindow();
+    if (!config.misc.menuStyle) {
+        renderMenuBar();
+        renderAimbotWindow();
+        renderTriggerbotWindow();
+        renderBacktrackWindow();
+        renderGlowWindow();
+        renderChamsWindow();
+        renderEspWindow();
+        renderVisualsWindow();
+        renderSkinChangerWindow();
+        renderMiscWindow();
+        renderConfigWindow();
+    } else {
+        renderGuiStyle2();
+    }
 }
 
 void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* color) noexcept
@@ -86,8 +90,10 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
+        }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -157,15 +163,18 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PushID(9);
         ImGui::SliderFloat("", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil control y: %.2f");
         ImGui::PopID();
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
+        }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -217,29 +226,35 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderBacktrackWindow() noexcept
 {
     if (window.backtrack) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
+        }
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Glow", &window.glow, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Glow", &window.glow, windowFlags);
+        }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -284,15 +299,18 @@ void GUI::renderGlowWindow() noexcept
         ImGui::PushID(6);
         ImGui::SliderInt("", &config.glow[currentItem].style, 0, 3, "Style: %d");
         ImGui::PopID();
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Chams", &window.chams, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Chams", &window.chams, windowFlags);
+        }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -336,15 +354,19 @@ void GUI::renderChamsWindow() noexcept
         ImGui::PushID(4);
         ImGui::SliderFloat("", &config.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::PopID();
-        ImGui::End();
+        if (!config.misc.menuStyle) {
+            ImGui::End();
+        }
     }
 }
 
 void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Esp", &window.esp, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Esp", &window.esp, windowFlags);
+        }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
@@ -366,15 +388,18 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
         checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        ImGui::SetNextWindowSize({ 520.0f, 400.0f });
-        ImGui::Begin("Visuals", &window.visuals, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Visuals", &window.visuals, windowFlags | ImGuiWindowFlags_AlwaysAutoResize);
+        }
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
@@ -417,16 +442,18 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
-        ImGui::SetNextWindowSize(ImVec2(700, 400));
-        ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
-
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize(ImVec2(700, 400));
+            ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
+        } 
         ImGui::Columns(2, nullptr, false);
 
         static auto itemIndex = 0;
@@ -544,18 +571,23 @@ void GUI::renderSkinChangerWindow() noexcept
 
         ImGui::Text("nSkinz by namazso");
 
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Misc", &window.misc, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Misc", &window.misc, windowFlags);
+        }
         ImGui::Text("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
+        if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
+            window = { };
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::PushItemWidth(120.0f);
@@ -594,15 +626,19 @@ void GUI::renderMiscWindow() noexcept
 
         if (ImGui::Button("Unhook"))
             hooks.restore();
-        ImGui::End();
+
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
 }
 
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
-        ImGui::Begin("Config", &window.config, windowFlags);
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+            ImGui::Begin("Config", &window.config, windowFlags);
+        }
 
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 170.0f);
@@ -648,6 +684,78 @@ void GUI::renderConfigWindow() noexcept
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
                 config.remove(currentConfig);
         }
-        ImGui::End();
+        if (!config.misc.menuStyle)
+            ImGui::End();
     }
+}
+
+void GUI::renderGuiStyle2() noexcept
+{
+    ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+
+    if (ImGui::Button("Aimbot")) {
+        window = { };
+        window.aimbot = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Triggerbot")) {
+        window = { };
+        window.triggerbot = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Backtrack")) {
+        window = { };
+        window.backtrack = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Glow")) {
+        window = { };
+        window.glow = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Chams")) {
+        window = { };
+        window.chams = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Esp")) {
+        window = { };
+        window.esp = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Visuals")) {
+        window = { };
+        window.visuals = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Skin changer")) {
+        window = { };
+        window.skinChanger = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Misc")) {
+        window = { };
+        window.misc = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Config")) {
+        window = { };
+        window.config = true;
+    }
+
+    ImGui::NewLine();
+
+    renderAimbotWindow();
+    renderTriggerbotWindow();
+    renderBacktrackWindow();
+    renderGlowWindow();
+    renderChamsWindow();
+    renderEspWindow();
+    renderVisualsWindow();
+    renderSkinChangerWindow();
+    renderMiscWindow();
+    renderConfigWindow();
+
+    ImGui::End();
 }
