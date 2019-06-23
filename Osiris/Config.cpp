@@ -225,6 +225,7 @@ void Config::load(size_t id) noexcept
         const auto& miscJson = json["Misc"];
 
         misc.menuKey = miscJson["Menu key"].asInt();
+        misc.menuStyle = miscJson["Menu style"].asInt();
         misc.autoStrafe = miscJson["Auto strafe"].asBool();
         misc.bunnyHop = miscJson["Bunny hop"].asBool();
         strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
@@ -450,6 +451,7 @@ void Config::save(size_t id) const noexcept
         auto& miscJson = json["Misc"];
         
         miscJson["Menu key"] = misc.menuKey;
+        miscJson["Menu style"] = misc.menuStyle;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Clan tag"] = misc.clanTag;
