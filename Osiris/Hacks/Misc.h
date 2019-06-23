@@ -37,9 +37,7 @@ namespace Misc {
     constexpr void autoPistol(UserCmd* cmd) noexcept
     {
         if (config.misc.autoPistol) {
-            const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
-                interfaces.entityList->getEntity(
-                    interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+            const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
             if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
                 if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
@@ -57,7 +55,7 @@ namespace Misc {
     constexpr void autoReload(UserCmd* cmd) noexcept
     {
         if (config.misc.autoReload) {
-            const auto activeWeapon = interfaces.entityList->getEntityFromHandle(interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+            const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
             if (activeWeapon && getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex")) && !activeWeapon->getProperty<int>("m_iClip1"))
                 cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }

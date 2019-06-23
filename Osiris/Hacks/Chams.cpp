@@ -60,7 +60,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
-        auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
+        auto activeWeapon = entity->getActiveWeapon();
         if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
             if (config.chams[PLANTING_ALL].enabled) {
                 applyChams(config.chams[PLANTING_ALL], true, entity->health());

@@ -127,9 +127,7 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
-        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(
-            interfaces.entityList->getEntity(
-                interfaces.engine->getLocalPlayer())->getProperty<int>("m_hActiveWeapon"));
+        const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
         if (activeWeapon && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
             auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0));
@@ -151,7 +149,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
 
-        const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon"));
+        const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
             return;
 

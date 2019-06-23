@@ -37,7 +37,7 @@ void Glow::render() noexcept
 
         switch (entity->getClientClass()->classId) {
         case ClassId::CSPlayer: {
-            auto activeWeapon = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hActiveWeapon"));
+            auto activeWeapon = entity->getActiveWeapon();
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
                 if (glow[6].enabled) applyGlow(glow[6], entity->health());
                 else if (entity->isVisible()) applyGlow(glow[7], entity->health());

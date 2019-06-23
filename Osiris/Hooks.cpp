@@ -145,7 +145,7 @@ static float __stdcall getViewModelFov() noexcept
 {
     float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
     if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
-        if (const auto activeWeapon = interfaces.entityList->getEntityFromHandle(localPlayer->getProperty<int>("m_hActiveWeapon")); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 
