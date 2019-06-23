@@ -123,6 +123,16 @@ enum EspId {
     ENEMIES_OCCLUDED
 };
 
+static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
+{
+    if (config.esp[id].enabled) {
+        renderSnaplines(entity, config.esp[id]);
+        renderBox(entity, config.esp[id]);
+        renderHeadDot(entity, config.esp[id]);
+    }
+    return config.esp[id].enabled;
+}
+
 void Esp::render() noexcept
 {
     if (interfaces.engine->isInGame()) {
@@ -135,41 +145,17 @@ void Esp::render() noexcept
                 continue;
 
             if (!entity->isEnemy()) {
-                if (config.esp[ALLIES_ALL].enabled) {
-                    renderSnaplines(entity, config.esp[ALLIES_ALL]);
-                    renderBox(entity, config.esp[ALLIES_ALL]);
-                    renderHeadDot(entity, config.esp[ALLIES_ALL]);
-                } else if (entity->isVisible()) {
-                    if (config.esp[ALLIES_VISIBLE].enabled) {
-                        renderSnaplines(entity, config.esp[ALLIES_VISIBLE]);
-                        renderBox(entity, config.esp[ALLIES_VISIBLE]);
-                        renderHeadDot(entity, config.esp[ALLIES_VISIBLE]);
-                    }
-                } else {
-                    if (config.esp[ALLIES_OCCLUDED].enabled) {
-                        renderSnaplines(entity, config.esp[ALLIES_OCCLUDED]);
-                        renderBox(entity, config.esp[ALLIES_OCCLUDED]);
-                        renderHeadDot(entity, config.esp[ALLIES_OCCLUDED]);
-                    }
+                if (!renderEspForEntity(entity, ALLIES_ALL)) {
+                    if (entity->isVisible())
+                        renderEspForEntity(entity, ALLIES_VISIBLE);
+                    else
+                        renderEspForEntity(entity, ALLIES_OCCLUDED);
                 }
-            } else {
-                if (config.esp[ENEMIES_ALL].enabled) {
-                    renderSnaplines(entity, config.esp[ENEMIES_ALL]);
-                    renderBox(entity, config.esp[ENEMIES_ALL]);
-                    renderHeadDot(entity, config.esp[ENEMIES_ALL]);
-                } else if (entity->isVisible()) {
-                    if (config.esp[ENEMIES_VISIBLE].enabled) {
-                        renderSnaplines(entity, config.esp[ENEMIES_VISIBLE]);
-                        renderBox(entity, config.esp[ENEMIES_VISIBLE]);
-                        renderHeadDot(entity, config.esp[ENEMIES_VISIBLE]);
-                    }
-                } else {
-                    if (config.esp[ENEMIES_OCCLUDED].enabled) {
-                        renderSnaplines(entity, config.esp[ENEMIES_OCCLUDED]);
-                        renderBox(entity, config.esp[ENEMIES_OCCLUDED]);
-                        renderHeadDot(entity, config.esp[ENEMIES_OCCLUDED]);
-                    }
-                }
+            } else if (!renderEspForEntity(entity, ENEMIES_ALL)) {
+                if (entity->isVisible())
+                    renderEspForEntity(entity, ENEMIES_VISIBLE);
+                else
+                    renderEspForEntity(entity, ENEMIES_OCCLUDED);
             }
         }
     }
