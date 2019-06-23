@@ -149,6 +149,11 @@ public:
         return callVirtualMethod<bool>(this, 155);
     }
 
+    constexpr Entity* getActiveWeapon() noexcept
+    {
+        return callVirtualMethod<Entity*>(this, 265);
+    }
+
     constexpr float getInaccuracy() noexcept
     {
         return callVirtualMethod<float>(this, 476);
