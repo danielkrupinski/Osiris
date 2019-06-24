@@ -307,5 +307,8 @@
     <ClInclude Include="SDK\SoundEmitter.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\PhysicsSurfaceProps.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
