@@ -35,26 +35,28 @@ void Glow::render() noexcept
             }
         };
 
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
         switch (entity->getClientClass()->classId) {
         case ClassId::CSPlayer: {
             auto activeWeapon = entity->getActiveWeapon();
             if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
                 if (glow[6].enabled) applyGlow(glow[6], entity->health());
-                else if (entity->isVisible()) applyGlow(glow[7], entity->health());
+                else if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[7], entity->health());
                 else applyGlow(glow[8], entity->health());
             } else if (entity->getProperty<bool>("m_bIsDefusing")) {
                 if (glow[9].enabled) applyGlow(glow[9], entity->health());
-                if (entity->isVisible()) applyGlow(glow[10], entity->health());
+                if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[10], entity->health());
                 else applyGlow(glow[11], entity->health());
             } else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
                 applyGlow(glow[12], entity->health());
             } else if (entity->isEnemy()) {
                 if (glow[3].enabled) applyGlow(glow[3], entity->health());
-                else if (entity->isVisible()) applyGlow(glow[4], entity->health());
+                else if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[4], entity->health());
                 else applyGlow(glow[5], entity->health());
             } else {
                 if (glow[0].enabled) applyGlow(glow[0], entity->health());
-                else if (entity->isVisible()) applyGlow(glow[1], entity->health());
+                else if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[1], entity->health());
                 else applyGlow(glow[2], entity->health());
             }
             break;
