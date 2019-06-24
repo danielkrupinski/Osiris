@@ -73,9 +73,9 @@ namespace Misc {
             config.misc.autoStrafe
             && !(localPlayer->getProperty<int>("m_fFlags") & 1)
             && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::NOCLIP) {
-            if (cmd->mousedx < 0)
+            if (cmd->mousedx < -20)
                 cmd->sidemove = -450.0f;
-            else if (cmd->mousedx > 0)
+            else if (cmd->mousedx > 20)
                 cmd->sidemove = 450.0f;
         }
     }
