@@ -48,8 +48,11 @@ void SkinChanger::initializeKits() noexcept
             }
             skinKits.emplace_back(paint_kit->id, name);
         }
-        else
+        else {
+            std::string_view gloveName{ paint_kit->name.buffer };
+            sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + std::string{ gloveName.substr(0, gloveName.find('_')) } +')').c_str());
             gloveKits.emplace_back(paint_kit->id, name);
+        }
     }
 
     std::sort(skinKits.begin(), skinKits.end());
