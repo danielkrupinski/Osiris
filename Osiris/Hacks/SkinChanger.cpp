@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <fstream>
+
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "SkinChanger.h"
@@ -15,8 +18,6 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
-#include <algorithm>
-
 std::vector<SkinChanger::PaintKit> SkinChanger::skinKits;
 std::vector<SkinChanger::PaintKit> SkinChanger::gloveKits;
 std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
@@ -24,6 +25,10 @@ std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
 void SkinChanger::initializeKits() noexcept
 {
     const auto V_UCS2ToUTF8 = reinterpret_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "V_UCS2ToUTF8"));
+
+    std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
+    std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
+    items.close();
 
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
         const auto paint_kit = memory.itemSchema()->paintKits.memory[i].value;
@@ -35,8 +40,14 @@ void SkinChanger::initializeKits() noexcept
         char name[256];
         V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
-        if (paint_kit->id < 10000)
+        if (paint_kit->id < 10000) {
+            if (auto pos = gameItems.find('_' + std::string{ paint_kit->name.buffer } +'='); pos != std::string::npos && gameItems.substr(pos + paint_kit->name.length).find('_' + std::string{ paint_kit->name.buffer } +'=') == std::string::npos) {
+                if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos) {
+                    sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')').c_str());
+                }
+            }
             skinKits.emplace_back(paint_kit->id, name);
+        }
         else
             gloveKits.emplace_back(paint_kit->id, name);
     }
