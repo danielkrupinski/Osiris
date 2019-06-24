@@ -32,7 +32,8 @@ struct String {
 
 struct PaintKit {
     int id;
-    std::byte pad[32];
+    String name;
+    String description;
     String itemName;
 };
 
