@@ -18,6 +18,7 @@ class MaterialSystem;
 class ModelInfo;
 class ModelRender;
 class Panel;
+class PhysicsSurfaceProps;
 class RenderView;
 class Surface;
 class Sound;
@@ -40,6 +41,7 @@ public:
     ModelInfo* modelInfo;
     ModelRender* modelRender;
     Panel* panel;
+    PhysicsSurfaceProps* physicsSurfaceProps;
     RenderView* renderView;
     Surface* surface;
     Sound* sound;

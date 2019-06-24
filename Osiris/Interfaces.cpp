@@ -15,6 +15,7 @@ Interfaces::Interfaces() noexcept
     modelInfo = find<ModelInfo>(L"engine", "VModelInfoClient004");
     modelRender = find<ModelRender>(L"engine", "VEngineModel016");
     panel = find<Panel>(L"vgui2", "VGUI_Panel009");
+    physicsSurfaceProps = find<PhysicsSurfaceProps>(L"vphysics", "VPhysicsSurfaceProps001");
     renderView = find<RenderView>(L"engine", "VEngineRenderView014");
     surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
     sound = find<Sound>(L"engine", "IEngineSoundClient003");
