@@ -60,18 +60,7 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
         const auto sticker_kit = memory.itemSchema()->stickerKits.memory[i].value;
-
-        char sticker_name_if_valve_fucked_up_their_translations[64];
-
-        auto sticker_name_ptr = sticker_kit->itemName.buffer + 1;
-
-        if (strstr(sticker_name_ptr, "StickerKit_dhw2014_dignitas")) {
-            strcpy_s(sticker_name_if_valve_fucked_up_their_translations, "StickerKit_dhw2014_teamdignitas");
-            strcat_s(sticker_name_if_valve_fucked_up_their_translations, sticker_name_ptr + 27);
-            sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
-        }
-
-        const auto wide_name = interfaces.localize->find(sticker_name_ptr);
+        const auto wide_name = interfaces.localize->find(sticker_kit->itemName.buffer + 1);
         char name[256];
         V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
