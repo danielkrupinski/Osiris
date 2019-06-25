@@ -46,211 +46,235 @@ void Config::load(size_t id) noexcept
         const auto& aimbotJson = json["Aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
-        aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
-        aimbotConfig.onKey = aimbotJson["On key"].asBool();
-        aimbotConfig.key = aimbotJson["Key"].asInt();
-        aimbotConfig.silent = aimbotJson["Silent"].asBool();
-        aimbotConfig.friendlyFire = aimbotJson["Friendly fire"].asBool();
-        aimbotConfig.visibleOnly = aimbotJson["Visible only"].asBool();
-        aimbotConfig.scopedOnly = aimbotJson["Scoped only"].asBool();
-        aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
-        aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
-        aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
-        aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
-        aimbotConfig.fov = aimbotJson["Fov"].asFloat();
-        aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
-        aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
-        aimbotConfig.bone = aimbotJson["Bone"].asInt();
-        aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
-        aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
+        if (aimbotJson.isMember("Enabled")) aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
+        if (aimbotJson.isMember("On key")) aimbotConfig.onKey = aimbotJson["On key"].asBool();
+        if (aimbotJson.isMember("Key")) aimbotConfig.key = aimbotJson["Key"].asInt();
+        if (aimbotJson.isMember("Silent")) aimbotConfig.silent = aimbotJson["Silent"].asBool();
+        if (aimbotJson.isMember("Friendly fire")) aimbotConfig.friendlyFire = aimbotJson["Friendly fire"].asBool();
+        if (aimbotJson.isMember("Visible only")) aimbotConfig.visibleOnly = aimbotJson["Visible only"].asBool();
+        if (aimbotJson.isMember("Scoped only")) aimbotConfig.scopedOnly = aimbotJson["Scoped only"].asBool();
+        if (aimbotJson.isMember("Ignore flash")) aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
+        if (aimbotJson.isMember("Ignore smoke")) aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
+        if (aimbotJson.isMember("Auto shot")) aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
+        if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
+        if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
+        if (aimbotJson.isMember("Max angle delta")) aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
+        if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
+        if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
+        if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
+        if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
         const auto& triggerbotJson = json["Triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
 
-        triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
-        triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
-        triggerbotConfig.key = triggerbotJson["Key"].asInt();
-        triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
-        triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
-        triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
-        triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
-        triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
-        triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
+        if (triggerbotJson.isMember("Enabled")) triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
+        if (triggerbotJson.isMember("On key")) triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
+        if (triggerbotJson.isMember("Key")) triggerbotConfig.key = triggerbotJson["Key"].asInt();
+        if (triggerbotJson.isMember("Friendly fire")) triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
+        if (triggerbotJson.isMember("Scoped only")) triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
+        if (triggerbotJson.isMember("Ignore flash")) triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
+        if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
+        if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
+        if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
     }
 
     {
         const auto& backtrackJson = json["Backtrack"];
-        backtrack.enabled = backtrackJson["Enabled"].asBool();
-        backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
-        backtrack.timeLimit = backtrackJson["Time limit"].asInt();
+        if (backtrackJson.isMember("Enabled")) backtrack.enabled = backtrackJson["Enabled"].asBool();
+        if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
+        if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
         const auto& glowJson = json["glow"][i];
         auto& glowConfig = glow[i];
 
-        glowConfig.enabled = glowJson["Enabled"].asBool();
-        glowConfig.healthBased = glowJson["healthBased"].asBool();
-        glowConfig.rainbow = glowJson["rainbow"].asBool();
-        glowConfig.thickness = glowJson["thickness"].asFloat();
-        glowConfig.alpha = glowJson["alpha"].asFloat();
-        glowConfig.style = glowJson["style"].asInt();
-        glowConfig.color[0] = glowJson["color"][0].asFloat();
-        glowConfig.color[1] = glowJson["color"][1].asFloat();
-        glowConfig.color[2] = glowJson["color"][2].asFloat();
+        if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
+        if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
+        if (glowJson.isMember("rainbow")) glowConfig.rainbow = glowJson["rainbow"].asBool();
+        if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
+        if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
+        if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
+        if (glowJson.isMember("color")) {
+            glowConfig.color[0] = glowJson["color"][0].asFloat();
+            glowConfig.color[1] = glowJson["color"][1].asFloat();
+            glowConfig.color[2] = glowJson["color"][2].asFloat();
+        }
     }
 
     for (size_t i = 0; i < chams.size(); i++) {
         const auto& chamsJson = json["chams"][i];
         auto& chamsConfig = chams[i];
 
-        chamsConfig.enabled = chamsJson["Enabled"].asBool();
-        chamsConfig.healthBased = chamsJson["healthBased"].asBool();
-        chamsConfig.rainbow = chamsJson["rainbow"].asBool();
-        chamsConfig.blinking = chamsJson["blinking"].asBool();
-        chamsConfig.material = chamsJson["material"].asInt();
-        chamsConfig.wireframe = chamsJson["wireframe"].asBool();
-        chamsConfig.color[0] = chamsJson["color"][0].asFloat();
-        chamsConfig.color[1] = chamsJson["color"][1].asFloat();
-        chamsConfig.color[2] = chamsJson["color"][2].asFloat();
-        chamsConfig.alpha = chamsJson["alpha"].asFloat();
+        if (chamsJson.isMember("Enabled")) chamsConfig.enabled = chamsJson["Enabled"].asBool();
+        if (chamsJson.isMember("healthBased")) chamsConfig.healthBased = chamsJson["healthBased"].asBool();
+        if (chamsJson.isMember("rainbow")) chamsConfig.rainbow = chamsJson["rainbow"].asBool();
+        if (chamsJson.isMember("blinking")) chamsConfig.blinking = chamsJson["blinking"].asBool();
+        if (chamsJson.isMember("material")) chamsConfig.material = chamsJson["material"].asInt();
+        if (chamsJson.isMember("wireframe")) chamsConfig.wireframe = chamsJson["wireframe"].asBool();
+        if (chamsJson.isMember("color")) {
+            chamsConfig.color[0] = chamsJson["color"][0].asFloat();
+            chamsConfig.color[1] = chamsJson["color"][1].asFloat();
+            chamsConfig.color[2] = chamsJson["color"][2].asFloat();
+        }
+        if (chamsJson.isMember("alpha")) chamsConfig.alpha = chamsJson["alpha"].asFloat();
     }
 
     for (size_t i = 0; i < esp.size(); i++) {
         const auto& espJson = json["esp"][i];
         auto& espConfig = esp[i];
         
-        espConfig.enabled = espJson["Enabled"].asBool();
-        espConfig.snaplines = espJson["snaplines"].asBool();
-        espConfig.snaplinesColor[0] = espJson["snaplinesColor"][0].asFloat();
-        espConfig.snaplinesColor[1] = espJson["snaplinesColor"][1].asFloat();
-        espConfig.snaplinesColor[2] = espJson["snaplinesColor"][2].asFloat();
-        espConfig.box = espJson["box"].asBool();
-        espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
-        espConfig.boxColor[1] = espJson["boxColor"][1].asFloat();
-        espConfig.boxColor[2] = espJson["boxColor"][2].asFloat();
-        espConfig.name = espJson["name"].asBool();
-        espConfig.nameColor[0] = espJson["nameColor"][0].asFloat();
-        espConfig.nameColor[1] = espJson["nameColor"][1].asFloat();
-        espConfig.nameColor[2] = espJson["nameColor"][2].asFloat();
-        espConfig.health = espJson["health"].asBool();
-        espConfig.healthColor[0] = espJson["healthColor"][0].asFloat();
-        espConfig.healthColor[1] = espJson["healthColor"][1].asFloat();
-        espConfig.healthColor[2] = espJson["healthColor"][2].asFloat();
-        espConfig.healthBar = espJson["healthBar"].asBool();
-        espConfig.healthBarColor[0] = espJson["healthBarColor"][0].asFloat();
-        espConfig.healthBarColor[1] = espJson["healthBarColor"][1].asFloat();
-        espConfig.healthBarColor[2] = espJson["healthBarColor"][2].asFloat();
-        espConfig.armor = espJson["armor"].asBool();
-        espConfig.armorColor[0] = espJson["armorColor"][0].asFloat();
-        espConfig.armorColor[1] = espJson["armorColor"][1].asFloat();
-        espConfig.armorColor[2] = espJson["armorColor"][2].asFloat();
-        espConfig.armorBar = espJson["armorBar"].asBool();
-        espConfig.armorBarColor[0] = espJson["armorBarColor"][0].asFloat();
-        espConfig.armorBarColor[1] = espJson["armorBarColor"][1].asFloat();
-        espConfig.armorBarColor[2] = espJson["armorBarColor"][2].asFloat();
-        espConfig.money = espJson["money"].asBool();
-        espConfig.moneyColor[0] = espJson["moneyColor"][0].asFloat();
-        espConfig.moneyColor[1] = espJson["moneyColor"][1].asFloat();
-        espConfig.moneyColor[2] = espJson["moneyColor"][2].asFloat();
-        espConfig.headDot = espJson["headDot"].asBool();
-        espConfig.headDotColor[0] = espJson["headDotColor"][0].asFloat();
-        espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
-        espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
+        if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
+        if (espJson.isMember("snaplines")) espConfig.snaplines = espJson["snaplines"].asBool();
+        if (espJson.isMember("snaplinesColor")) {
+            espConfig.snaplinesColor[0] = espJson["snaplinesColor"][0].asFloat();
+            espConfig.snaplinesColor[1] = espJson["snaplinesColor"][1].asFloat();
+            espConfig.snaplinesColor[2] = espJson["snaplinesColor"][2].asFloat();
+        }
+        if (espJson.isMember("box")) espConfig.box = espJson["box"].asBool();
+        if (espJson.isMember("boxColor")) {
+            espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
+            espConfig.boxColor[1] = espJson["boxColor"][1].asFloat();
+            espConfig.boxColor[2] = espJson["boxColor"][2].asFloat();
+        }
+        if (espJson.isMember("name")) espConfig.name = espJson["name"].asBool();
+        if (espJson.isMember("nameColor")) {
+            espConfig.nameColor[0] = espJson["nameColor"][0].asFloat();
+            espConfig.nameColor[1] = espJson["nameColor"][1].asFloat();
+            espConfig.nameColor[2] = espJson["nameColor"][2].asFloat();
+        }
+        if (espJson.isMember("health")) espConfig.health = espJson["health"].asBool();
+        if (espJson.isMember("healthColor")) {
+            espConfig.healthColor[0] = espJson["healthColor"][0].asFloat();
+            espConfig.healthColor[1] = espJson["healthColor"][1].asFloat();
+            espConfig.healthColor[2] = espJson["healthColor"][2].asFloat();
+        }
+        if (espJson.isMember("healthBar")) espConfig.healthBar = espJson["healthBar"].asBool();
+        if (espJson.isMember("healthBarColor")) {
+            espConfig.healthBarColor[0] = espJson["healthBarColor"][0].asFloat();
+            espConfig.healthBarColor[1] = espJson["healthBarColor"][1].asFloat();
+            espConfig.healthBarColor[2] = espJson["healthBarColor"][2].asFloat();
+        }
+        if (espJson.isMember("armor")) espConfig.armor = espJson["armor"].asBool();
+        if (espJson.isMember("armorColor")) {
+            espConfig.armorColor[0] = espJson["armorColor"][0].asFloat();
+            espConfig.armorColor[1] = espJson["armorColor"][1].asFloat();
+            espConfig.armorColor[2] = espJson["armorColor"][2].asFloat();
+        }
+        if (espJson.isMember("armorBar")) espConfig.armorBar = espJson["armorBar"].asBool();
+        if (espJson.isMember("armorBarColor")) {
+            espConfig.armorBarColor[0] = espJson["armorBarColor"][0].asFloat();
+            espConfig.armorBarColor[1] = espJson["armorBarColor"][1].asFloat();
+            espConfig.armorBarColor[2] = espJson["armorBarColor"][2].asFloat();
+        }
+        if (espJson.isMember("money")) espConfig.money = espJson["money"].asBool();
+        if (espJson.isMember("moneyColor")) {
+            espConfig.moneyColor[0] = espJson["moneyColor"][0].asFloat();
+            espConfig.moneyColor[1] = espJson["moneyColor"][1].asFloat();
+            espConfig.moneyColor[2] = espJson["moneyColor"][2].asFloat();
+        }
+        if (espJson.isMember("headDot")) espConfig.headDot = espJson["headDot"].asBool();
+        if (espJson.isMember("headDotColor")) {
+            espConfig.headDotColor[0] = espJson["headDotColor"][0].asFloat();
+            espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
+            espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
+        }
     }
 
     {
         const auto& visualsJson = json["visuals"];
-        visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
-        visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
-        visuals.noFog = visualsJson["noFog"].asBool();
-        visuals.no3dSky = visualsJson["no3dSky"].asBool();
-        visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
-        visuals.noHands = visualsJson["noHands"].asBool();
-        visuals.noSleeves = visualsJson["noSleeves"].asBool();
-        visuals.noWeapons = visualsJson["noWeapons"].asBool();
-        visuals.noSmoke = visualsJson["noSmoke"].asBool();
-        visuals.noBlur = visualsJson["noBlur"].asBool();
-        visuals.noScopeOverlay = visualsJson["noScopeOverlay"].asBool();
-        visuals.noGrass = visualsJson["noGrass"].asBool();
-        visuals.noShadows = visualsJson["noShadows"].asBool();
-        visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
-        visuals.thirdperson = visualsJson["thirdperson"].asBool();
-        visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
-        visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
-        visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
-        visuals.fov = visualsJson["Fov"].asInt();
-        visuals.farZ = visualsJson["farZ"].asInt();
-        visuals.flashReduction = visualsJson["flashReduction"].asInt();
-        visuals.brightness = visualsJson["brightness"].asFloat();
-        visuals.skybox = visualsJson["skybox"].asInt();
-        visuals.worldColor[0] = visualsJson["worldColor"][0].asFloat();
-        visuals.worldColor[1] = visualsJson["worldColor"][1].asFloat();
-        visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
+        if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
+        if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
+        if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
+        if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
+        if (visualsJson.isMember("noVisualRecoil")) visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
+        if (visualsJson.isMember("noHands")) visuals.noHands = visualsJson["noHands"].asBool();
+        if (visualsJson.isMember("noSleeves")) visuals.noSleeves = visualsJson["noSleeves"].asBool();
+        if (visualsJson.isMember("noWeapons")) visuals.noWeapons = visualsJson["noWeapons"].asBool();
+        if (visualsJson.isMember("noSmoke")) visuals.noSmoke = visualsJson["noSmoke"].asBool();
+        if (visualsJson.isMember("noBlur")) visuals.noBlur = visualsJson["noBlur"].asBool();
+        if (visualsJson.isMember("noScopeOverlay")) visuals.noScopeOverlay = visualsJson["noScopeOverlay"].asBool();
+        if (visualsJson.isMember("noGrass")) visuals.noGrass = visualsJson["noGrass"].asBool();
+        if (visualsJson.isMember("noShadows")) visuals.noShadows = visualsJson["noShadows"].asBool();
+        if (visualsJson.isMember("wireframeSmoke")) visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
+        if (visualsJson.isMember("thirdperson")) visuals.thirdperson = visualsJson["thirdperson"].asBool();
+        if (visualsJson.isMember("thirdpersonKey")) visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
+        if (visualsJson.isMember("thirdpersonDistance")) visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
+        if (visualsJson.isMember("viewmodelFov")) visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
+        if (visualsJson.isMember("Fov")) visuals.fov = visualsJson["Fov"].asInt();
+        if (visualsJson.isMember("farZ")) visuals.farZ = visualsJson["farZ"].asInt();
+        if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
+        if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
+        if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
+        if (visualsJson.isMember("worldColor")) {
+            visuals.worldColor[0] = visualsJson["worldColor"][0].asFloat();
+            visuals.worldColor[1] = visualsJson["worldColor"][1].asFloat();
+            visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
+        }
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
         const auto& skinChangerJson = json["skinChanger"][i];
         auto& skinChangerConfig = skinChanger[i];
 
-        skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
-        skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
-        skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
-        skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
-        skinChangerConfig.entity_quality_index = skinChangerJson["entity_quality_index"].asInt();
-        skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
-        skinChangerConfig.paint_kit_index = skinChangerJson["paint_kit_index"].asInt();
-        skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
-        skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
-        skinChangerConfig.seed = skinChangerJson["seed"].asInt();
-        skinChangerConfig.stat_trak = skinChangerJson["stat_trak"].asInt();
-        skinChangerConfig.wear = skinChangerJson["wear"].asFloat();
+        if (skinChangerJson.isMember("Enabled")) skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
+        if (skinChangerJson.isMember("definition_vector_index")) skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
+        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
+        if (skinChangerJson.isMember("entity_quality_vector_index")) skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
+        if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.entity_quality_index = skinChangerJson["entity_quality_index"].asInt();
+        if (skinChangerJson.isMember("paint_kit_vector_index")) skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
+        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paint_kit_index = skinChangerJson["paint_kit_index"].asInt();
+        if (skinChangerJson.isMember("definition_override_vector_index")) skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
+        if (skinChangerJson.isMember("definition_override_index")) skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
+        if (skinChangerJson.isMember("seed")) skinChangerConfig.seed = skinChangerJson["seed"].asInt();
+        if (skinChangerJson.isMember("stat_trak")) skinChangerConfig.stat_trak = skinChangerJson["stat_trak"].asInt();
+        if (skinChangerJson.isMember("wear")) skinChangerConfig.wear = skinChangerJson["wear"].asFloat();
         strcpy_s(skinChangerConfig.custom_name, 32, skinChangerJson["custom_name"].asCString());
 
         for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
             const auto& stickerJson = skinChangerJson["stickers"][j];
             auto& stickerConfig = skinChangerConfig.stickers[j];
 
-            stickerConfig.kit = stickerJson["kit"].asInt();
-            stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
-            stickerConfig.wear = stickerJson["wear"].asFloat();
-            stickerConfig.scale = stickerJson["scale"].asFloat();
-            stickerConfig.rotation = stickerJson["rotation"].asFloat();
+            if (stickerJson.isMember("kit")) stickerConfig.kit = stickerJson["kit"].asInt();
+            if (stickerJson.isMember("kit_vector_index")) stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
+            if (stickerJson.isMember("wear")) stickerConfig.wear = stickerJson["wear"].asFloat();
+            if (stickerJson.isMember("scale")) stickerConfig.scale = stickerJson["scale"].asFloat();
+            if (stickerJson.isMember("rotation")) stickerConfig.rotation = stickerJson["rotation"].asFloat();
         }
     }
 
     {
         const auto& miscJson = json["Misc"];
 
-        misc.menuKey = miscJson["Menu key"].asInt();
-        misc.menuStyle = miscJson["Menu style"].asInt();
-        misc.autoStrafe = miscJson["Auto strafe"].asBool();
-        misc.bunnyHop = miscJson["Bunny hop"].asBool();
+        if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
+        if (miscJson.isMember("Menu style")) misc.menuStyle = miscJson["Menu style"].asInt();
+        if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
+        if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
-        misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
-        misc.fastDuck = miscJson["Fast duck"].asBool();
-        misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
-        misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
-        misc.autoPistol = miscJson["Auto pistol"].asBool();
-        misc.autoReload = miscJson["Auto reload"].asBool();
-        misc.autoAccept = miscJson["Auto accept"].asBool();
-        misc.radarHack = miscJson["Radar hack"].asBool();
-        misc.revealRanks = miscJson["Reveal ranks"].asBool();
-        misc.spectatorList = miscJson["Spectator list"].asBool();
-        misc.watermark = miscJson["Watermark"].asBool();
-        misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
-        misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
-        misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
-        misc.killMessage = miscJson["Kill message"].asBool();
-        misc.fastPlant = miscJson["Fast plant"].asBool();
-        misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
-        misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
-        misc.hitSound = miscJson["Hit sound"].asInt();
-        misc.chokedPackets = miscJson["Choked packets"].asInt();
-        misc.headshotSoundVolume = miscJson["Headshot sound volume"].asInt();
-        misc.weaponSoundsVolume = miscJson["Weapon sounds volume"].asInt();
+        if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
+        if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
+        if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
+        if (miscJson.isMember("Recoil crosshair")) misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
+        if (miscJson.isMember("Auto pistol")) misc.autoPistol = miscJson["Auto pistol"].asBool();
+        if (miscJson.isMember("Auto reload")) misc.autoReload = miscJson["Auto reload"].asBool();
+        if (miscJson.isMember("Auto accept")) misc.autoAccept = miscJson["Auto accept"].asBool();
+        if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
+        if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
+        if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
+        if (miscJson.isMember("Watermark")) misc.watermark = miscJson["Watermark"].asBool();
+        if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
+        if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
+        if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
+        if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
+        if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
+        if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
+        if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
+        if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
+        if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
+        if (miscJson.isMember("Headshot sound volume")) misc.headshotSoundVolume = miscJson["Headshot sound volume"].asInt();
+        if (miscJson.isMember("Weapon sounds volume")) misc.weaponSoundsVolume = miscJson["Weapon sounds volume"].asInt();
     }
 }
 
