@@ -138,6 +138,18 @@ public:
     std::array<item_setting, 36> skinChanger;
 
     struct {
+        int chickenVolume{ 100 };
+
+        struct Player {
+            int headshotVolume{ 100 };
+            int weaponVolume{ 100 };
+            int footstepVolume{ 100 };
+        };
+
+        std::array<Player, 2> players;
+    } sound;
+
+    struct {
         int menuKey{ 0x2D }; // VK_INSERT
         int menuStyle{ 0 };
         bool autoStrafe{ false };
