@@ -197,7 +197,9 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 }
 
 struct SoundData {
-    std::byte pad[12];
+    std::byte pad[4];
+    int entityIndex;
+    int channel;
     const char* soundEntry;
     std::byte pad1[8];
     float volume;
@@ -206,9 +208,16 @@ struct SoundData {
 
 static void __stdcall emitSound(SoundData data) noexcept
 {
-    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single"))
-       data.volume *= config.misc.weaponSoundsVolume / 100.0f;
-    else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
+    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
+        if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
+            if (data.entityIndex == interfaces.engine->getLocalPlayer())
+                data.volume *= config.sound.players[0].weaponVolume / 100.0f;
+            else if (!entity->isEnemy())
+                data.volume *= config.sound.players[1].weaponVolume / 100.0f;
+            else
+                data.volume *= config.sound.players[2].weaponVolume / 100.0f;
+        }
+    } else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
         auto window = FindWindowW(L"Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
@@ -293,8 +302,28 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
-            soundInfo.volume *= config.misc.headshotSoundVolume / 100.0f;
+
+        if (!strcmp(soundName, "Player.DamageHelmetFeedback")) {
+            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
+                    soundInfo.volume *= config.sound.players[0].headshotVolume / 100.0f;
+                else if (!entity->isEnemy())
+                    soundInfo.volume *= config.sound.players[1].headshotVolume / 100.0f;
+                else
+                    soundInfo.volume *= config.sound.players[2].headshotVolume / 100.0f;
+            }
+        } else if (strstr(soundName, "Step")) {
+            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
+                    soundInfo.volume *= config.sound.players[0].footstepVolume / 100.0f;
+                else if (!entity->isEnemy())
+                    soundInfo.volume *= config.sound.players[1].footstepVolume / 100.0f;
+                else
+                    soundInfo.volume *= config.sound.players[2].footstepVolume / 100.0f;
+            }
+        } else if (strstr(soundName, "Chicken")) {
+            soundInfo.volume *= config.sound.chickenVolume / 100.0f;
+        }
     }
     return hooks.originalDispatchSound(soundInfo);
 }
