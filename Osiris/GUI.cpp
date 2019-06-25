@@ -591,6 +591,7 @@ void GUI::renderSoundWindow() noexcept
         ImGui::PushItemWidth(110.0f);
         ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
         ImGui::PopItemWidth();
+        ImGui::SliderInt("Master volume", &config.sound.players[currentCategory].masterVolume, 0, 100, "%d%%");
         ImGui::SliderInt("Headshot volume", &config.sound.players[currentCategory].headshotVolume, 0, 100, "%d%%");
         ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 100, "%d%%");
         ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 100, "%d%%");
