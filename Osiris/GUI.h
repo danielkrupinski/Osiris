@@ -18,6 +18,7 @@ private:
     void renderEspWindow() noexcept;
     void renderVisualsWindow() noexcept;
     void renderSkinChangerWindow() noexcept;
+    void renderSoundWindow() noexcept;
     void renderMiscWindow() noexcept;
     void renderConfigWindow() noexcept;
     void renderGuiStyle2() noexcept;
@@ -31,6 +32,7 @@ private:
         bool esp{ false };
         bool visuals{ false };
         bool skinChanger{ false };
+        bool sound{ false };
         bool misc{ false };
         bool config{ false };
     } window;

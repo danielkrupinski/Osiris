@@ -27,6 +27,7 @@ void GUI::render() noexcept
         renderEspWindow();
         renderVisualsWindow();
         renderSkinChangerWindow();
+        renderSoundWindow();
         renderMiscWindow();
         renderConfigWindow();
     } else {
@@ -576,6 +577,20 @@ void GUI::renderSkinChangerWindow() noexcept
     }
 }
 
+void GUI::renderSoundWindow() noexcept
+{
+    if (window.sound) {
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Sound", &window.sound, windowFlags);
+        }
+
+
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
@@ -734,6 +749,11 @@ void GUI::renderGuiStyle2() noexcept
         window.skinChanger = true;
     }
     ImGui::SameLine();
+    if (ImGui::Button("Sound")) {
+        window = { };
+        window.sound = true;
+    }
+    ImGui::SameLine();
     if (ImGui::Button("Misc")) {
         window = { };
         window.misc = true;
@@ -754,6 +774,7 @@ void GUI::renderGuiStyle2() noexcept
     renderEspWindow();
     renderVisualsWindow();
     renderSkinChangerWindow();
+    renderSoundWindow();
     renderMiscWindow();
     renderConfigWindow();
 
