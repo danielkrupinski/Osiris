@@ -141,6 +141,7 @@ public:
         int chickenVolume{ 100 };
 
         struct Player {
+            int masterVolume{ 100 };
             int headshotVolume{ 100 };
             int weaponVolume{ 100 };
             int footstepVolume{ 100 };
