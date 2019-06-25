@@ -208,6 +208,15 @@ struct SoundData {
 
 static void __stdcall emitSound(SoundData data) noexcept
 {
+    if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
+        if (data.entityIndex == interfaces.engine->getLocalPlayer())
+            data.volume *= config.sound.players[0].masterVolume / 100.0f;
+        else if (!entity->isEnemy())
+            data.volume *= config.sound.players[1].masterVolume / 100.0f;
+        else
+            data.volume *= config.sound.players[2].masterVolume / 100.0f;
+    }
+
     if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
         if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
             if (data.entityIndex == interfaces.engine->getLocalPlayer())
@@ -302,6 +311,14 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
+        if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+            if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
+                soundInfo.volume *= config.sound.players[0].masterVolume / 100.0f;
+            else if (!entity->isEnemy())
+                soundInfo.volume *= config.sound.players[1].masterVolume / 100.0f;
+            else
+                soundInfo.volume *= config.sound.players[2].masterVolume / 100.0f;
+        }
 
         if (!strcmp(soundName, "Player.DamageHelmetFeedback")) {
             if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
