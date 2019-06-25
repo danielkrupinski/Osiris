@@ -146,7 +146,7 @@ public:
             int footstepVolume{ 100 };
         };
 
-        std::array<Player, 2> players;
+        std::array<Player, 3> players;
     } sound;
 
     struct {
