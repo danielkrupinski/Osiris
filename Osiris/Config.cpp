@@ -248,6 +248,24 @@ void Config::load(size_t id) noexcept
     }
 
     {
+        const auto& soundJson = json["Sound"];
+
+        if (soundJson.isMember("Chicken volume")) sound.chickenVolume = soundJson["Chicken volume"].asInt();
+
+        if (soundJson.isMember("Players")) {
+            for (size_t i = 0; i < sound.players.size(); i++) {
+                const auto& playerJson = soundJson["Players"][i];
+                auto& playerConfig = sound.players[i];
+
+                if (playerJson.isMember("Master volume")) playerConfig.masterVolume = playerJson["Master volume"].asInt();
+                if (playerJson.isMember("Headshot volume")) playerConfig.headshotVolume = playerJson["Headshot volume"].asInt();
+                if (playerJson.isMember("Weapon volume")) playerConfig.weaponVolume = playerJson["Weapon volume"].asInt();
+                if (playerJson.isMember("Footstep volume")) playerConfig.footstepVolume = playerJson["Footstep volume"].asInt();
+            }
+        }
+    }
+
+    {
         const auto& miscJson = json["Misc"];
 
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
@@ -472,6 +490,22 @@ void Config::save(size_t id) const noexcept
     }
 
     {
+        auto& soundJson = json["Sound"];
+
+        soundJson["Chicken volume"] = sound.chickenVolume;
+
+        for (size_t i = 0; i < sound.players.size(); i++) {
+            auto& playerJson = soundJson["Players"][i];
+            const auto& playerConfig = sound.players[i];
+
+            playerJson["Master volume"] = playerConfig.masterVolume;
+            playerJson["Headshot volume"] = playerConfig.headshotVolume;
+            playerJson["Weapon volume"] = playerConfig.weaponVolume;
+            playerJson["Footstep volume"] = playerConfig.footstepVolume;
+        }
+    }
+
+    {
         auto& miscJson = json["Misc"];
         
         miscJson["Menu key"] = misc.menuKey;
@@ -533,5 +567,6 @@ void Config::reset() noexcept
     esp = { };
     visuals = { };
     skinChanger = { };
+    sound = { };
     misc = { };
 }
