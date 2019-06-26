@@ -199,6 +199,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("noGrass")) visuals.noGrass = visualsJson["noGrass"].asBool();
         if (visualsJson.isMember("noShadows")) visuals.noShadows = visualsJson["noShadows"].asBool();
         if (visualsJson.isMember("wireframeSmoke")) visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
+        if (visualsJson.isMember("Zoom")) visuals.zoom = visualsJson["Zoom"].asBool();
+        if (visualsJson.isMember("Zoom key")) visuals.zoomKey = visualsJson["Zoom key"].asInt();
         if (visualsJson.isMember("thirdperson")) visuals.thirdperson = visualsJson["thirdperson"].asBool();
         if (visualsJson.isMember("thirdpersonKey")) visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
         if (visualsJson.isMember("thirdpersonDistance")) visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
@@ -445,6 +447,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["noGrass"] = visuals.noGrass;
         visualsJson["noShadows"] = visuals.noShadows;
         visualsJson["wireframeSmoke"] = visuals.wireframeSmoke;
+        visualsJson["Zoom"] = visuals.zoom;
+        visualsJson["Zoom key"] = visuals.zoomKey;
         visualsJson["thirdperson"] = visuals.thirdperson;
         visualsJson["thirdpersonKey"] = visuals.thirdpersonKey;
         visualsJson["thirdpersonDistance"] = visuals.thirdpersonDistance;
