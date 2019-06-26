@@ -123,6 +123,8 @@ public:
         bool noGrass{ false };
         bool noShadows{ false };
         bool wireframeSmoke{ false };
+        bool zoom{ false };
+        int zoomKey{ 0 };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
