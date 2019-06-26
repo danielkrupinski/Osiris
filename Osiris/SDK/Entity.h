@@ -182,6 +182,8 @@ public:
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int);
     NETVAR(health, "CBasePlayer", "m_iHealth", int);
+    NETVAR(fov, "CBasePlayer", "m_iFOV", int);
+    NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
 
