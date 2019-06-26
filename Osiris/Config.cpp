@@ -231,17 +231,19 @@ void Config::load(size_t id) noexcept
         if (skinChangerJson.isMember("seed")) skinChangerConfig.seed = skinChangerJson["seed"].asInt();
         if (skinChangerJson.isMember("stat_trak")) skinChangerConfig.stat_trak = skinChangerJson["stat_trak"].asInt();
         if (skinChangerJson.isMember("wear")) skinChangerConfig.wear = skinChangerJson["wear"].asFloat();
-        strcpy_s(skinChangerConfig.custom_name, 32, skinChangerJson["custom_name"].asCString());
+        if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, 32, skinChangerJson["custom_name"].asCString());
 
-        for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
-            const auto& stickerJson = skinChangerJson["stickers"][j];
-            auto& stickerConfig = skinChangerConfig.stickers[j];
+        if (skinChangerJson.isMember("stickers")) {
+            for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
+                const auto& stickerJson = skinChangerJson["stickers"][j];
+                auto& stickerConfig = skinChangerConfig.stickers[j];
 
-            if (stickerJson.isMember("kit")) stickerConfig.kit = stickerJson["kit"].asInt();
-            if (stickerJson.isMember("kit_vector_index")) stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
-            if (stickerJson.isMember("wear")) stickerConfig.wear = stickerJson["wear"].asFloat();
-            if (stickerJson.isMember("scale")) stickerConfig.scale = stickerJson["scale"].asFloat();
-            if (stickerJson.isMember("rotation")) stickerConfig.rotation = stickerJson["rotation"].asFloat();
+                if (stickerJson.isMember("kit")) stickerConfig.kit = stickerJson["kit"].asInt();
+                if (stickerJson.isMember("kit_vector_index")) stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
+                if (stickerJson.isMember("wear")) stickerConfig.wear = stickerJson["wear"].asFloat();
+                if (stickerJson.isMember("scale")) stickerConfig.scale = stickerJson["scale"].asFloat();
+                if (stickerJson.isMember("rotation")) stickerConfig.rotation = stickerJson["rotation"].asFloat();
+            }
         }
     }
 
@@ -252,7 +254,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Menu style")) misc.menuStyle = miscJson["Menu style"].asInt();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
-        strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
+        if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
