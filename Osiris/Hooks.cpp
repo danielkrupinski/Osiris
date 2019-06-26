@@ -241,6 +241,13 @@ static bool __stdcall shouldDrawFog() noexcept
     return !config.visuals.noFog;
 }
 
+static bool __stdcall shouldDrawViewModel() noexcept
+{
+    if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45)
+        return false;
+    return hooks.clientMode.callOriginal<bool>(27);
+}
+
 static void __stdcall lockCursor() noexcept
 {
     if (gui.isOpen)
@@ -386,8 +393,9 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
-    clientMode.hookAt(44, doPostScreenEffects);
+    clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
+    clientMode.hookAt(44, doPostScreenEffects);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
