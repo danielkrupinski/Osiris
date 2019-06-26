@@ -104,3 +104,19 @@ void Visuals::removeShadows() noexcept
     static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
     shadows->setValue(!config.visuals.noShadows);
 }
+
+void Visuals::applyZoom(FrameStage stage) noexcept
+{
+    if (config.visuals.zoom) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (stage == FrameStage::RENDER_START && localPlayer && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
+            static bool scoped{ false };
+
+            if (GetAsyncKeyState(config.visuals.zoomKey) & 1)
+                scoped = !scoped;
+
+            if (scoped)
+                localPlayer->fov() = 40;
+        }
+    }
+}
