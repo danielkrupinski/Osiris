@@ -189,6 +189,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
+        Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);
