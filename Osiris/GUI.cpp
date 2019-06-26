@@ -646,8 +646,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::PushItemWidth(290.0f);
-        ImGui::SliderInt("##1", &config.misc.headshotSoundVolume, 0, 100, "Headshot sound volume: %d%%");
-        ImGui::SliderInt("##2", &config.misc.weaponSoundsVolume, 0, 100, "Weapon sounds volume: %d%%");
 
         if (ImGui::Button("Unhook"))
             hooks.restore();
