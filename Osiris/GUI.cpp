@@ -419,6 +419,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No shadows", &config.visuals.noShadows);
         ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
         ImGui::NextColumn();
+        ImGui::Checkbox("Zoom", &config.visuals.zoom);
+        ImGui::SameLine();
+        hotkey(config.visuals.zoomKey);
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
         ImGui::SameLine();
         hotkey(config.visuals.thirdpersonKey);
