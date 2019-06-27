@@ -86,6 +86,7 @@ public:
 
     struct Esp {
         bool enabled{ false };
+        int font{ 0x1d };
         bool snaplines{ false };
         float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
         bool box{ false };
