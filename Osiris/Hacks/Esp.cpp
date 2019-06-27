@@ -32,12 +32,12 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
     }
 }
 
-static constexpr void renderPositionedText(const wchar_t* text, float color[3], std::pair<float, float&> position) noexcept
+static constexpr void renderPositionedText(unsigned font, const wchar_t* text, float color[3], std::pair<float, float&> position) noexcept
 {
-    interfaces.surface->setTextFont(Surface::font);
+    interfaces.surface->setTextFont(font);
     interfaces.surface->setTextColor(color, 255);
     interfaces.surface->setTextPosition(position.first, position.second);
-    position.second += interfaces.surface->getTextSize(Surface::font, text).second;
+    position.second += interfaces.surface->getTextSize(font, text).second;
     interfaces.surface->printText(text);
 }
 
@@ -79,8 +79,8 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                    const auto [width, height] = interfaces.surface->getTextSize(Surface::font, name);
-                    interfaces.surface->setTextFont(Surface::font);
+                    const auto [width, height] = interfaces.surface->getTextSize(config.font, name);
+                    interfaces.surface->setTextFont(config.font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
                     interfaces.surface->setTextPosition(bottom.x - width / 2, top.y - 5 - height);
                     interfaces.surface->printText(name);
@@ -91,13 +91,13 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         float drawPositionY = top.y;
 
         if (config.health)
-            renderPositionedText((std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
 
         if (config.armor)
-            renderPositionedText((std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
 
         if (config.money)
-            renderPositionedText((L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount"))).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount"))).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
     }
 }
 
