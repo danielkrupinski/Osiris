@@ -381,6 +381,8 @@ void GUI::renderEspWindow() noexcept
         ImGui::PopID();
         int currentItem = currentCategory * 3 + currentType;
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
+        ImGui::InputInt("Font", &config.esp[currentItem].font, 1, 294);
+        config.esp[currentItem].font = std::clamp(config.esp[currentItem].font, 1, 294);
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
         checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
