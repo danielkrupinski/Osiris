@@ -127,6 +127,7 @@ void Config::load(size_t id) noexcept
         auto& espConfig = esp[i];
         
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
+        if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
         if (espJson.isMember("snaplines")) espConfig.snaplines = espJson["snaplines"].asBool();
         if (espJson.isMember("snaplinesColor")) {
             espConfig.snaplinesColor[0] = espJson["snaplinesColor"][0].asFloat();
@@ -393,6 +394,7 @@ void Config::save(size_t id) const noexcept
         const auto& espConfig = esp[i];
 
         espJson["Enabled"] = espConfig.enabled;
+        espJson["Font"] = espConfig.font;
         espJson["snaplines"] = espConfig.snaplines;
         espJson["snaplinesColor"][0] = espConfig.snaplinesColor[0];
         espJson["snaplinesColor"][1] = espConfig.snaplinesColor[1];
