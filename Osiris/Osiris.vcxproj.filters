@@ -310,5 +310,8 @@
     <ClInclude Include="SDK\PhysicsSurfaceProps.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\WeaponInfo.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
