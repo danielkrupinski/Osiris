@@ -11,6 +11,8 @@
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/PhysicsSurfaceProps.h"
+#include "../SDK/WeaponData.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -20,6 +22,37 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
                    radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
     angles.normalize();
     return angles;
+}
+
+static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData) noexcept
+{
+    float damage{ static_cast<float>(weaponData->damage) };
+    float rangeRemaining{ weaponData->range };
+
+    Vector start{ localPlayer->getEyePosition() };
+
+    int hitsLeft = 4;
+
+    while (damage > 0.0f) {
+        static Trace trace;
+        interfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer, trace);
+
+        if (trace.fraction == 1.0f)
+            break;
+
+        rangeRemaining *= 1.0f - trace.fraction;
+
+        damage *= std::pow(weaponData->rangeModifier, rangeRemaining / 500.0f);
+
+        if (trace.entity && trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
+            return true;
+
+        const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+
+        if (rangeRemaining < 3000.0f || surfaceData->penetrationmodifier < 0.1f)
+            hitsLeft = 0;
+    }
+    return false;
 }
 
 void Aimbot::run(UserCmd* cmd) noexcept
@@ -68,6 +101,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
             for (int j = 8; j >= 3; j--) {
                 auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone ? 9 - config.aimbot[weaponIndex].bone : j);
                 if (config.aimbot[weaponIndex].visibleOnly && !entity->isVisible(bonePosition))
+                    continue;
+
+                if (!config.aimbot[weaponIndex].visibleOnly && !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData()))
                     continue;
 
                 auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
