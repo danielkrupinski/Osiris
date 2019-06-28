@@ -26,14 +26,18 @@ struct TraceFilter {
 struct Trace {
     std::byte pad[44];
     float fraction;
-    std::byte pad1[12];
+    int contents;
+    unsigned short dispFlags;
+    bool allSolid;
+    bool startSolid;
+    std::byte pad1[4];
     struct Surface {
         const char* name;
         short surfaceProps;
         unsigned short flags;
     } surface;
     int hitgroup;
-    int pad2;
+    std::byte pad2[4];
     Entity* entity;
     int hitbox;
 };
