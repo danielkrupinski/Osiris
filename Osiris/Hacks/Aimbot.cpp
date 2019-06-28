@@ -26,6 +26,7 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 
 static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData) noexcept
 {
+    return true;
     float damage{ static_cast<float>(weaponData->damage) };
     float rangeRemaining{ weaponData->range };
 
