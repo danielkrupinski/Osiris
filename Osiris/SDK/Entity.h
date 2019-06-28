@@ -14,6 +14,8 @@
 #include "VarMapping.h"
 #include "../Memory.h"
 
+struct WeaponData;
+
 enum class MoveType {
     NOCLIP = 8,
     LADDER = 9
@@ -152,6 +154,11 @@ public:
     constexpr Entity* getActiveWeapon() noexcept
     {
         return callVirtualMethod<Entity*>(this, 265);
+    }
+
+    constexpr WeaponData* getWeaponData() noexcept
+    {
+        return callVirtualMethod<WeaponData*>(this, 454);
     }
 
     constexpr float getInaccuracy() noexcept
