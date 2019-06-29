@@ -646,7 +646,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
-        ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0");
+        ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
         ImGui::PushItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);

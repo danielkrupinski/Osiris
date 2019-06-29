@@ -106,7 +106,8 @@ namespace Misc {
         constexpr const char* hitSounds[]{
             "play physics/metal/metal_solid_impact_bullet2",
             "play buttons/arena_switch_press_02",
-            "play training/timer_bell"
+            "play training/timer_bell",
+            "play physics/glass/glass_impact_bullet1"
         };
 
         if (config.misc.hitSound
