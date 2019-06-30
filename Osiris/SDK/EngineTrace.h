@@ -24,7 +24,9 @@ struct TraceFilter {
 };
 
 struct Trace {
-    std::byte pad[44];
+    Vector startpos;
+    Vector endpos;
+    std::byte pad[20];
     float fraction;
     int contents;
     unsigned short dispFlags;
