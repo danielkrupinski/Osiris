@@ -28,30 +28,30 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 {
     return true;
     float damage{ static_cast<float>(weaponData->damage) };
-    float rangeRemaining{ weaponData->range };
 
     Vector start{ localPlayer->getEyePosition() };
+    Vector direction{ destination - start };
 
     int hitsLeft = 4;
 
-    while (damage > 0.0f) {
+    while (damage >= 1.0f && hitsLeft) {
         static Trace trace;
         interfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer, trace);
 
         if (trace.fraction == 1.0f)
             break;
 
-        rangeRemaining *= 1.0f - trace.fraction;
-
-        damage *= std::pow(weaponData->rangeModifier, rangeRemaining / 500.0f);
+        //damage *= std::pow(weaponData->rangeModifier, rangeRemaining / 500.0f);
 
         if (trace.entity && trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
             return true;
 
         const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
 
-        if (rangeRemaining < 3000.0f || surfaceData->penetrationmodifier < 0.1f)
-            hitsLeft = 0;
+        if (surfaceData->penetrationmodifier < 0.1f)
+            break;
+
+
     }
     return false;
 }
