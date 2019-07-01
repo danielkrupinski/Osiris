@@ -62,5 +62,10 @@ struct Vector final {
         z = 0.0f;
     }
 
+    auto length() noexcept
+    {
+        return sqrtf(x * x + y * y + z * z);
+    }
+
     float x, y, z;
 };
