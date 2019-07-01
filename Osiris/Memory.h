@@ -11,6 +11,7 @@ class ItemSchema;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
+struct Trace;
 class Entity;
 
 class Memory final {
@@ -44,6 +45,7 @@ public:
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
     uintptr_t listLeaves;
     int* dispatchSound;
+    std::add_pointer_t<bool __cdecl(float, float, float, float, float, float, Trace&) noexcept> traceToExit;
 
 private:
     template <typename T = uintptr_t>
