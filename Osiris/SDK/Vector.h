@@ -67,5 +67,10 @@ struct Vector final {
         return sqrtf(x * x + y * y + z * z);
     }
 
+    constexpr auto squareLength() noexcept
+    {
+        return x * x + y * y + z * z;
+    }
+
     float x, y, z;
 };
