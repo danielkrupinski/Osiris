@@ -46,7 +46,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                               -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * maxRange };
             static Trace trace;
             interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
-            if (trace.entity->getClientClass()->classId == ClassId::CSPlayer
+            if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
                 && (config.triggerbot[weaponIndex].friendlyFire
                     || trace.entity->isEnemy())
                 && !trace.entity->getProperty<bool>("m_bGunGameImmunity")
