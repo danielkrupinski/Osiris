@@ -271,9 +271,6 @@
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\config_.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>

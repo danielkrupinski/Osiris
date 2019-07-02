@@ -3,7 +3,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "nSkinz/Utilities/fnv_hash.hpp"
+#include "fnv.h"
 
 struct RecvProp;
 struct RecvTable;

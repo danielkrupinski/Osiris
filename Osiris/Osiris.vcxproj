@@ -64,7 +64,6 @@
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
-    <ClInclude Include="nSkinz\Utilities\fnv_hash.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
     <ClInclude Include="SDK\Client.h" />
