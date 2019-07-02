@@ -244,7 +244,7 @@ static bool __stdcall shouldDrawFog() noexcept
 
 static bool __stdcall shouldDrawViewModel() noexcept
 {
-    if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45)
+    if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks.clientMode.callOriginal<bool>(27);
 }

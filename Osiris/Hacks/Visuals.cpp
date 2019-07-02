@@ -115,8 +115,10 @@ void Visuals::applyZoom(FrameStage stage) noexcept
             if (GetAsyncKeyState(config.visuals.zoomKey) & 1)
                 scoped = !scoped;
 
-            if (scoped)
+            if (scoped) {
                 localPlayer->fov() = 40;
+                localPlayer->fovStart() = 40;
+            }
         }
     }
 }
