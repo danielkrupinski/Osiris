@@ -24,13 +24,49 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return angles;
 }
 
+static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
+{
+    Vector end;
+    Trace exitTrace;
+    __asm {
+        mov ecx, end
+        mov edx, enterTrace
+    }
+    if (!memory.traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
+        return -1.0f;
+
+    SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
+
+    float damageModifier = 0.16f;
+    float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
+
+    if (enterSurfaceData->material == 71 || enterSurfaceData->material == 89) {
+        damageModifier = 0.05f;
+        penetrationModifier = 3.0f;
+    } else if (enterTrace.contents >> 3 & 1 || enterTrace.surface.flags >> 7 & 1) {
+        penetrationModifier = 1.0f;
+    }
+
+    if (enterSurfaceData->material == exitSurfaceData->material) {
+        if (exitSurfaceData->material == 85 || exitSurfaceData->material == 87)
+            penetrationModifier = 3.0f;
+        else if (exitSurfaceData->material == 76)
+            penetrationModifier = 2.0f;
+    }
+
+    damage -= 11.25f / penetration / penetrationModifier + damage * damageModifier + (exitTrace.endpos - enterTrace.endpos).squareLength() / 24.0f / penetrationModifier;
+
+    result = exitTrace.endpos;
+    return damage;
+}
+
 static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData) noexcept
 {
-    return true;
     float damage{ static_cast<float>(weaponData->damage) };
 
     Vector start{ localPlayer->getEyePosition() };
     Vector direction{ destination - start };
+    direction /= direction.length();
 
     int hitsLeft = 4;
 
@@ -41,9 +77,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
         if (trace.fraction == 1.0f)
             break;
 
-        //damage *= std::pow(weaponData->rangeModifier, rangeRemaining / 500.0f);
-
-        if (trace.entity && trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
+        if (trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
             return true;
 
         const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
@@ -51,7 +85,8 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
         if (surfaceData->penetrationmodifier < 0.1f)
             break;
 
-
+        damage = handleBulletPenetration(surfaceData, trace, direction, start, weaponData->penetration, damage);
+        hitsLeft--;
     }
     return false;
 }
@@ -101,10 +136,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             for (int j = 8; j >= 3; j--) {
                 auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone ? 9 - config.aimbot[weaponIndex].bone : j);
-                if (config.aimbot[weaponIndex].visibleOnly && !entity->isVisible(bonePosition))
-                    continue;
-
-                if (!config.aimbot[weaponIndex].visibleOnly && !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData()))
+                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData())))
                     continue;
 
                 auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
