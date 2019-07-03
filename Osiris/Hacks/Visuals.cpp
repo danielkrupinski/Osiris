@@ -1,4 +1,6 @@
+#include "../fnv.h"
 #include "Visuals.h"
+
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
@@ -87,9 +89,10 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
-    if (!strcmp(interfaces.engine->getLevelName(), "dz_blacksite"))
+    auto mapName = fnv::hashRuntime(interfaces.engine->getLevelName());
+    if (mapName == fnv::hash("dz_blacksite"))
         interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
-    else if (!strcmp(interfaces.engine->getLevelName(), "dz_sirocco"))
+    else if (mapName == fnv::hash("dz_sirocco"))
         interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
 }
 
