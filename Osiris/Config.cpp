@@ -216,6 +216,7 @@ void Config::load(size_t id) noexcept
             visuals.worldColor[1] = visualsJson["worldColor"][1].asFloat();
             visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
         }
+        if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -463,6 +464,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["worldColor"][0] = visuals.worldColor[0];
         visualsJson["worldColor"][1] = visuals.worldColor[1];
         visualsJson["worldColor"][2] = visuals.worldColor[2];
+        visualsJson["Deagle spinner"] = visuals.deagleSpinner;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
