@@ -721,7 +721,7 @@ void GUI::renderConfigWindow() noexcept
 void GUI::renderGuiStyle2() noexcept
 {
     ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Jweega", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::Button("Aimbot")) {
         window = { };

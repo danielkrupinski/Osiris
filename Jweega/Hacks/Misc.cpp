@@ -99,7 +99,7 @@ void Misc::watermark() noexcept
                                          255.0f);
 
         interfaces.surface->setTextPosition(5, 0);
-        interfaces.surface->printText(L"Osiris");
+        interfaces.surface->printText(L"Jweega");
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;

@@ -411,7 +411,7 @@ Hooks::Hooks() noexcept
     *memory.dispatchSound = reinterpret_cast<uintptr_t>(&dispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
     VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
 
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
+    interfaces.gameUI->messageBox("This was a triumph!", "Jweega has been successfully loaded.");
 }
 
 void Hooks::restore() noexcept
