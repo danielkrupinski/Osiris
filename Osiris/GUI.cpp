@@ -148,7 +148,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Ignore smoke", &config.aimbot[currentWeapon].ignoreSmoke);
         ImGui::Checkbox("Auto shot", &config.aimbot[currentWeapon].autoShot);
         ImGui::Checkbox("Recoil-based fov", &config.aimbot[currentWeapon].recoilbasedFov);
-        ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+        ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
         ImGui::PushItemWidth(240.0f);
         ImGui::PushID(5);
         ImGui::SliderFloat("", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");

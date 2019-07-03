@@ -134,19 +134,34 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->getProperty<bool>("m_bGunGameImmunity"))
                 continue;
 
-            for (int j = 8; j >= 3; j--) {
-                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone ? 9 - config.aimbot[weaponIndex].bone : j);
-                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData())))
-                    continue;
-
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
-                auto fov = std::hypotf(angle.x, angle.y);
-                if (fov < bestFov) {
-                    bestFov = fov;
-                    bestTarget = bonePosition;
-                }
-                if (config.aimbot[weaponIndex].bone)
+            if (config.aimbot[weaponIndex].bone == 1) {
+                for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
+                    auto bonePosition = entity->getBonePosition(bone);
+                    if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData())))
+                        continue;
+                    auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
+                    auto fov = std::hypotf(angle.x, angle.y);
+                    if (fov < bestFov) {
+                        bestFov = fov;
+                        bestTarget = bonePosition;
+                    }
                     break;
+                }
+            } else {
+                for (int j = 8; j >= 3; j--) {
+                    auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : j);
+                    if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData())))
+                        continue;
+
+                    auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
+                    auto fov = std::hypotf(angle.x, angle.y);
+                    if (fov < bestFov) {
+                        bestFov = fov;
+                        bestTarget = bonePosition;
+                    }
+                    if (config.aimbot[weaponIndex].bone > 1)
+                        break;
+                }
             }
         }
 
