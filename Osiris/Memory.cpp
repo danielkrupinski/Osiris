@@ -32,7 +32,7 @@ Memory::Memory() noexcept
     clearHudWeapon = findPattern<decltype(clearHudWeapon)>(L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C");
     itemSchema = relativeToAbsolute<decltype(itemSchema)>(findPattern<int*>(L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern<int*>(L"client_panorama", "\xE8????\xEB\x19\x8B\x07", 1));
-    listLeaves = findPattern<>(L"client_panorama", "\x52\x8B\x55\x0C\x8B\x01\x56\x52\xFF\x50\x18\x89\x44\x24\x14", 11);
+    listLeaves = findPattern<>(L"client_panorama", "\x56\x52\xFF\x50\x18", 5);
     dispatchSound = findPattern<int*>(L"engine", "\x74\x0B\xE8????\x8B\x3D", 3);
     traceToExit = findPattern<decltype(traceToExit)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
 }
