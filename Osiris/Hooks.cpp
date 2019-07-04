@@ -359,7 +359,7 @@ Hooks::Hooks() noexcept
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
     ImGui::CreateContext();
-    auto window = FindWindowA("Valve001", NULL);
+    auto window = FindWindowW(L"Valve001", NULL);
     ImGui_ImplWin32_Init(window);
 
     ImGui::StyleColorsDark();
