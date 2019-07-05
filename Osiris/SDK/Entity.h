@@ -193,6 +193,7 @@ public:
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
+    NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
