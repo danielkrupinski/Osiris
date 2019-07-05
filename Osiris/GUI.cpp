@@ -62,6 +62,15 @@ void GUI::render() noexcept
     }
 }
 
+void GUI::updateColors() const noexcept
+{
+    switch (config.misc.menuColors) {
+    case 0: ImGui::StyleColorsDark(); break;
+    case 1: ImGui::StyleColorsLight(); break;
+    case 2: ImGui::StyleColorsClassic(); break;
+    }
+}
+
 void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* color) noexcept
 {
     ImGui::Checkbox(("##" + name).c_str(), enable);
@@ -646,6 +655,9 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
         if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
             window = { };
+        if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0"))
+            updateColors();
+
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::PushItemWidth(120.0f);
@@ -729,12 +741,15 @@ void GUI::renderConfigWindow() noexcept
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config.add(buffer);
 
-        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
+        if (ImGui::Button("Reset config", { 100.0f, 25.0f })) {
             config.reset();
-
+            updateColors();
+        }
         if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config.load(currentConfig);
+                updateColors();
+            }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config.save(currentConfig);
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))

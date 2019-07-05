@@ -10,6 +10,7 @@ public:
 private:
     static void checkboxedColorPicker(const std::string&, bool*, float*) noexcept;
     static void hotkey(int&) noexcept;
+    void updateColors() const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;
     void renderTriggerbotWindow() noexcept;
