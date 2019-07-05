@@ -358,30 +358,9 @@ Hooks::Hooks() noexcept
     SkinChanger::initializeKits();
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
-    ImGui::CreateContext();
-    auto window = FindWindowW(L"Valve001", NULL);
-    ImGui_ImplWin32_Init(window);
-
-    ImGui::StyleColorsDark();
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 5.0f;
-    style.WindowBorderSize = 0.0f;
-    style.ChildBorderSize = 0.0f;
-    style.GrabMinSize = 7.0f;
-    style.GrabRounding = 5.0f;
-    style.FrameRounding = 5.0f;
-    style.PopupRounding = 5.0f;
-    ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = nullptr;
-    io.LogFilename = nullptr;
-
-    static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
-    char buffer[MAX_PATH];
-    if (GetWindowsDirectoryA(buffer, MAX_PATH))
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
 
     originalWndProc = reinterpret_cast<WNDPROC>(
-        SetWindowLongPtr(window, GWLP_WNDPROC, LONG_PTR(wndProc))
+        SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(wndProc))
         );
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);

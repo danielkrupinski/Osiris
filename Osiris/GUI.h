@@ -4,6 +4,7 @@
 
 class GUI final {
 public:
+    GUI() noexcept;
     void render() noexcept;
     bool isOpen{ false };
 private:
