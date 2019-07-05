@@ -157,6 +157,7 @@ public:
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
         int menuStyle{ 0 };
+        int menuColors{ 0 };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         char clanTag[16]{ "" };

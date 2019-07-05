@@ -274,6 +274,7 @@ void Config::load(size_t id) noexcept
 
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Menu style")) misc.menuStyle = miscJson["Menu style"].asInt();
+        if (miscJson.isMember("Menu colors")) misc.menuColors = miscJson["Menu colors"].asInt();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
@@ -518,6 +519,7 @@ void Config::save(size_t id) const noexcept
         
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Menu style"] = misc.menuStyle;
+        miscJson["Menu colors"] = misc.menuColors;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Clan tag"] = misc.clanTag;
