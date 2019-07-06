@@ -134,6 +134,12 @@ void Config::load(size_t id) noexcept
             espConfig.snaplinesColor[1] = espJson["snaplinesColor"][1].asFloat();
             espConfig.snaplinesColor[2] = espJson["snaplinesColor"][2].asFloat();
         }
+        if (espJson.isMember("Eye traces")) espConfig.eyeTraces = espJson["Eye traces"].asBool();
+        if (espJson.isMember("Eye traces color")) {
+            espConfig.eyeTracesColor[0] = espJson["Eye traces color"][0].asFloat();
+            espConfig.eyeTracesColor[1] = espJson["Eye traces color"][1].asFloat();
+            espConfig.eyeTracesColor[2] = espJson["Eye traces color"][2].asFloat();
+        }
         if (espJson.isMember("box")) espConfig.box = espJson["box"].asBool();
         if (espJson.isMember("boxColor")) {
             espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
@@ -274,6 +280,7 @@ void Config::load(size_t id) noexcept
 
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Menu style")) misc.menuStyle = miscJson["Menu style"].asInt();
+        if (miscJson.isMember("Menu colors")) misc.menuColors = miscJson["Menu colors"].asInt();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
@@ -400,6 +407,10 @@ void Config::save(size_t id) const noexcept
         espJson["snaplinesColor"][0] = espConfig.snaplinesColor[0];
         espJson["snaplinesColor"][1] = espConfig.snaplinesColor[1];
         espJson["snaplinesColor"][2] = espConfig.snaplinesColor[2];
+        espJson["Eye traces"] = espConfig.eyeTraces;
+        espJson["Eye traces color"][0] = espConfig.eyeTracesColor[0];
+        espJson["Eye traces color"][1] = espConfig.eyeTracesColor[1];
+        espJson["Eye traces color"][2] = espConfig.eyeTracesColor[2];
         espJson["box"] = espConfig.box;
         espJson["boxColor"][0] = espConfig.boxColor[0];
         espJson["boxColor"][1] = espConfig.boxColor[1];
@@ -518,6 +529,7 @@ void Config::save(size_t id) const noexcept
         
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Menu style"] = misc.menuStyle;
+        miscJson["Menu colors"] = misc.menuColors;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Clan tag"] = misc.clanTag;
