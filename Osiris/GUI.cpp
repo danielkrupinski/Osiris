@@ -285,7 +285,7 @@ void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
         if (!config.misc.menuStyle) {
-            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 450.0f, 0.0f });
             ImGui::Begin("Glow", &window.glow, windowFlags);
         }
         static int currentCategory{ 0 };
@@ -306,7 +306,11 @@ void GUI::renderGlowWindow() noexcept
             currentItem = currentCategory + 8;
         }
 
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.glow[currentItem].enabled);
+        ImGui::Separator();
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
@@ -322,16 +326,11 @@ void GUI::renderGlowWindow() noexcept
             ImGui::EndPopup();
         }
         ImGui::PopID();
+        ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
-        ImGui::PushID(4);
-        ImGui::SliderFloat("", &config.glow[currentItem].thickness, 0.0f, 1.0f, "Thickness: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(5);
-        ImGui::SliderFloat("", &config.glow[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(6);
-        ImGui::SliderInt("", &config.glow[currentItem].style, 0, 3, "Style: %d");
-        ImGui::PopID();
+        ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderFloat("Alpha", &config.glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderInt("Style", &config.glow[currentItem].style, 0, 3);
         if (!config.misc.menuStyle)
             ImGui::End();
     }
