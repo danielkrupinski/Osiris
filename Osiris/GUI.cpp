@@ -758,65 +758,67 @@ void GUI::renderConfigWindow() noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 625.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
-    if (ImGui::Button("Aimbot")) {
-        window = { };
-        window.aimbot = true;
+    if (ImGui::BeginTabBar("TabBar")) {
+        if (ImGui::BeginTabItem("Aimbot")) {
+            window = { };
+            window.aimbot = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Triggerbot")) {
+            window = { };
+            window.triggerbot = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Backtrack")) {
+            window = { };
+            window.backtrack = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Glow")) {
+            window = { };
+            window.glow = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Chams")) {
+            window = { };
+            window.chams = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Esp")) {
+            window = { };
+            window.esp = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Visuals")) {
+            window = { };
+            window.visuals = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Skin changer")) {
+            window = { };
+            window.skinChanger = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Sound")) {
+            window = { };
+            window.sound = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Misc")) {
+            window = { };
+            window.misc = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Config")) {
+            window = { };
+            window.config = true;
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
     }
-    ImGui::SameLine();
-    if (ImGui::Button("Triggerbot")) {
-        window = { };
-        window.triggerbot = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Backtrack")) {
-        window = { };
-        window.backtrack = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Glow")) {
-        window = { };
-        window.glow = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Chams")) {
-        window = { };
-        window.chams = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Esp")) {
-        window = { };
-        window.esp = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Visuals")) {
-        window = { };
-        window.visuals = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Skin changer")) {
-        window = { };
-        window.skinChanger = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Sound")) {
-        window = { };
-        window.sound = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Misc")) {
-        window = { };
-        window.misc = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Config")) {
-        window = { };
-        window.config = true;
-    }
-
-    ImGui::NewLine();
 
     renderAimbotWindow();
     renderTriggerbotWindow();
