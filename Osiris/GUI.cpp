@@ -420,6 +420,7 @@ void GUI::renderEspWindow() noexcept
         ImGui::InputInt("Font", &config.esp[currentItem].font, 1, 294);
         config.esp[currentItem].font = std::clamp(config.esp[currentItem].font, 1, 294);
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
+        checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
         checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);

@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -28,6 +30,27 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
             const auto [width, height] = interfaces.surface->getScreenSize();
             interfaces.surface->setDrawColor(config.snaplinesColor, 255);
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
+        }
+    }
+}
+
+static void renderEyeTraces(Entity* entity, const decltype(config.esp[0])& config) noexcept
+{
+    if (config.eyeTraces) {
+        constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
+        constexpr float maxRange{ 8192.0f };
+
+        auto eyeAngles = entity->eyeAngles();
+        Vector viewAngles{ cos(degreesToRadians(eyeAngles.x)) * cos(degreesToRadians(eyeAngles.y)) * maxRange,
+                           cos(degreesToRadians(eyeAngles.x)) * sin(degreesToRadians(eyeAngles.y)) * maxRange,
+                          -sin(degreesToRadians(eyeAngles.x)) * maxRange };
+        static Trace trace;
+        Vector headPosition{ entity->getBonePosition(8) };
+        interfaces.engineTrace->traceRay({ headPosition, headPosition + viewAngles }, 0x46004009, { entity }, trace);
+        Vector start, end;
+        if (worldToScreen(trace.startpos, start) && worldToScreen(trace.endpos, end)) {
+            interfaces.surface->setDrawColor(config.eyeTracesColor, 255);
+            interfaces.surface->drawLine(start.x, start.y, end.x, end.y);
         }
     }
 }
@@ -127,6 +150,7 @@ static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
 {
     if (config.esp[id].enabled) {
         renderSnaplines(entity, config.esp[id]);
+        renderEyeTraces(entity, config.esp[id]);
         renderBox(entity, config.esp[id]);
         renderHeadDot(entity, config.esp[id]);
     }
