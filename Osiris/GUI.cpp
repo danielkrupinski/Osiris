@@ -247,7 +247,9 @@ void GUI::renderTriggerbotWindow() noexcept
         }
         }
         ImGui::PopID();
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.triggerbot[currentWeapon].enabled);
+        ImGui::Separator();
         ImGui::Checkbox("On key", &config.triggerbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.triggerbot[currentWeapon].key);
