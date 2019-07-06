@@ -129,7 +129,7 @@ void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
         if (!config.misc.menuStyle) {
-            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 600.0f, 0.0f });
             ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         }
         static int currentCategory{ 0 };
@@ -172,7 +172,11 @@ void GUI::renderAimbotWindow() noexcept
         }
         }
         ImGui::PopID();
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.aimbot[currentWeapon].enabled);
+        ImGui::Separator();
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 220.0f);
         ImGui::Checkbox("On key", &config.aimbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.aimbot[currentWeapon].key);
@@ -185,22 +189,13 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Auto shot", &config.aimbot[currentWeapon].autoShot);
         ImGui::Checkbox("Recoil-based fov", &config.aimbot[currentWeapon].recoilbasedFov);
         ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+        ImGui::NextColumn();
         ImGui::PushItemWidth(240.0f);
-        ImGui::PushID(5);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "Fov: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(6);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "Max angle delta: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(7);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "Smooth: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(8);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "Recoil control x: %.2f");
-        ImGui::PopID();
-        ImGui::PushID(9);
-        ImGui::SliderFloat("", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "Recoil control y: %.2f");
-        ImGui::PopID();
+        ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f");
+        ImGui::SliderFloat("Max angle delta", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "%.2f");
+        ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+        ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
         if (!config.misc.menuStyle)
             ImGui::End();
     }
