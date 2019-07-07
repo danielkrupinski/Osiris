@@ -210,24 +210,21 @@ struct SoundData {
 
 static void __stdcall emitSound(SoundData data) noexcept
 {
-    if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
-        if (data.entityIndex == interfaces.engine->getLocalPlayer())
-            data.volume *= config.sound.players[0].masterVolume / 100.0f;
-        else if (!entity->isEnemy())
-            data.volume *= config.sound.players[1].masterVolume / 100.0f;
-        else
-            data.volume *= config.sound.players[2].masterVolume / 100.0f;
-    }
-
-    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
+    auto modulateVolume = [&data](std::function<int(int)> get) {
         if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
             if (data.entityIndex == interfaces.engine->getLocalPlayer())
-                data.volume *= config.sound.players[0].weaponVolume / 100.0f;
+                data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
-                data.volume *= config.sound.players[1].weaponVolume / 100.0f;
+                data.volume *= get(1) / 100.0f;
             else
-                data.volume *= config.sound.players[2].weaponVolume / 100.0f;
+                data.volume *= get(2) / 100.0f;
         }
+    };
+
+    modulateVolume([](int index) { return config.sound.players[index].masterVolume; });
+
+    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
+        modulateVolume([](int index) { return config.sound.players[index].weaponVolume; });
     } else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory.acceptMatch("");
         auto window = FindWindowW(L"Valve001", NULL);
