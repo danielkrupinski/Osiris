@@ -412,7 +412,9 @@ void GUI::renderEspWindow() noexcept
         ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
         ImGui::PopID();
         int currentItem = currentCategory * 3 + currentType;
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
+        ImGui::Separator();
         ImGui::InputInt("Font", &config.esp[currentItem].font, 1, 294);
         config.esp[currentItem].font = std::clamp(config.esp[currentItem].font, 1, 294);
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
