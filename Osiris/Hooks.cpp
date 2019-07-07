@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <functional>
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -319,37 +320,27 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
-            if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
-                soundInfo.volume *= config.sound.players[0].masterVolume / 100.0f;
-            else if (!entity->isEnemy())
-                soundInfo.volume *= config.sound.players[1].masterVolume / 100.0f;
-            else
-                soundInfo.volume *= config.sound.players[2].masterVolume / 100.0f;
-        }
+        auto modulateVolume = [&soundInfo](std::function<int(int)> get) {
+            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
+                    soundInfo.volume *= get(0) / 100.0f;
+                else if (!entity->isEnemy())
+                    soundInfo.volume *= get(1) / 100.0f;
+                else
+                    soundInfo.volume *= get(2) / 100.0f;
+            }
+        };
 
-        if (!strcmp(soundName, "Player.DamageHelmetFeedback")) {
-            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
-                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
-                    soundInfo.volume *= config.sound.players[0].headshotVolume / 100.0f;
-                else if (!entity->isEnemy())
-                    soundInfo.volume *= config.sound.players[1].headshotVolume / 100.0f;
-                else
-                    soundInfo.volume *= config.sound.players[2].headshotVolume / 100.0f;
-            }
-        } else if (strstr(soundName, "Step")) {
-            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
-                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
-                    soundInfo.volume *= config.sound.players[0].footstepVolume / 100.0f;
-                else if (!entity->isEnemy())
-                    soundInfo.volume *= config.sound.players[1].footstepVolume / 100.0f;
-                else
-                    soundInfo.volume *= config.sound.players[2].footstepVolume / 100.0f;
-            }
-        } else if (strstr(soundName, "Chicken")) {
+        modulateVolume([](int index) { return config.sound.players[index].masterVolume; });
+
+        if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
+            modulateVolume([](int index) { return config.sound.players[index].headshotVolume; });
+        else if (strstr(soundName, "Step"))
+            modulateVolume([](int index) { return config.sound.players[index].footstepVolume; });
+        else if (strstr(soundName, "Chicken"))
             soundInfo.volume *= config.sound.chickenVolume / 100.0f;
-        }
     }
+    soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     return hooks.originalDispatchSound(soundInfo);
 }
 
