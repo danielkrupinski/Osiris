@@ -235,6 +235,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         FlashWindowEx(&flash);
         ShowWindow(window, SW_RESTORE);
     }
+    data.volume = std::clamp(data.volume, 0.0f, 1.0f);
     hooks.sound.callOriginal<void, SoundData>(5, data);
 }
 
