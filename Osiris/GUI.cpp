@@ -605,16 +605,16 @@ void GUI::renderSoundWindow() noexcept
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Sound", &window.sound, windowFlags);
         }
-        ImGui::SliderInt("Chicken volume", &config.sound.chickenVolume, 0, 100, "%d%%");
+        ImGui::SliderInt("Chicken volume", &config.sound.chickenVolume, 0, 200, "%d%%");
 
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
         ImGui::PopItemWidth();
-        ImGui::SliderInt("Master volume", &config.sound.players[currentCategory].masterVolume, 0, 100, "%d%%");
-        ImGui::SliderInt("Headshot volume", &config.sound.players[currentCategory].headshotVolume, 0, 100, "%d%%");
-        ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 100, "%d%%");
-        ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 100, "%d%%");
+        ImGui::SliderInt("Master volume", &config.sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Headshot volume", &config.sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
 
         if (!config.misc.menuStyle)
             ImGui::End();
