@@ -23,6 +23,19 @@ struct TraceFilter {
     const void* skip;
 };
 
+enum class HitGroup {
+    Invalid = -1,
+    Generic,
+    Head,
+    Chest,
+    Stomach,
+    LeftArm,
+    RightArm,
+    LeftLeg,
+    RightLeg,
+    Gear = 10
+};
+
 struct Trace {
     Vector startpos;
     Vector endpos;
