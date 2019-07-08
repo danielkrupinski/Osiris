@@ -42,24 +42,20 @@ private:
 
 extern Netvars netvars;
 
-#define PNETVAR_OFFSET(funcname, class_name, var_name, offset, ...) \
-auto funcname() -> std::add_pointer_t<__VA_ARGS__> \
+#define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
+auto funcname() noexcept \
 { \
-	constexpr auto hash = fnv::hash(class_name "->" var_name); \
-	const auto addr = std::uintptr_t(this) + offset + netvars.get_offset(hash); \
-	return reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
+	return reinterpret_cast<std::add_pointer_t<type>>(this + netvars.get_offset(fnv::hash(class_name "->" var_name)) + offset); \
 }
 
-#define PNETVAR(funcname, class_name, var_name, ...) \
-	PNETVAR_OFFSET(funcname, class_name, var_name, 0, __VA_ARGS__)
+#define PNETVAR(funcname, class_name, var_name, type) \
+	PNETVAR_OFFSET(funcname, class_name, var_name, 0, type)
 
-#define NETVAR_OFFSET(funcname, class_name, var_name, offset, ...) \
-auto funcname() -> std::add_lvalue_reference_t<__VA_ARGS__> \
+#define NETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
+std::add_lvalue_reference_t<type> funcname() noexcept \
 { \
-	constexpr auto hash = fnv::hash(class_name "->" var_name); \
-	const auto addr = std::uintptr_t(this) + offset + netvars.get_offset(hash); \
-	return *reinterpret_cast<std::add_pointer_t<__VA_ARGS__>>(addr); \
+	return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars.get_offset(fnv::hash(class_name "->" var_name)) + offset); \
 }
 
-#define NETVAR(funcname, class_name, var_name, ...) \
-	NETVAR_OFFSET(funcname, class_name, var_name, 0, __VA_ARGS__)
+#define NETVAR(funcname, class_name, var_name, type) \
+	NETVAR_OFFSET(funcname, class_name, var_name, 0, type)

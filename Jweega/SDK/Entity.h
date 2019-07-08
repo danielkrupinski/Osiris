@@ -184,7 +184,7 @@ public:
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", std::array<int, 48>);
+    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int);
