@@ -313,5 +313,8 @@
     <ClInclude Include="fnv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\AnimState.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
