@@ -14,6 +14,7 @@
 #include "VarMapping.h"
 #include "../Memory.h"
 
+struct AnimState;
 struct WeaponData;
 
 enum class MoveType {
@@ -179,6 +180,11 @@ public:
     constexpr void setModelIndex(int index) noexcept
     {
         callVirtualMethod<void, int>(this, 75, index);
+    }
+
+    AnimState* getAnimstate() noexcept
+    {
+        return *reinterpret_cast<AnimState**>(this + 0x3900);
     }
 
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
