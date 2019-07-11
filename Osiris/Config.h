@@ -60,6 +60,10 @@ public:
         int timeLimit{ 200 };
     } backtrack;
 
+    struct {
+        bool enabled{ false };
+    } antiAim;
+
     struct Glow {
         bool enabled{ false };
         bool healthBased{ false };
