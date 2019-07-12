@@ -727,6 +727,8 @@ void GUI::renderConfigWindow() noexcept
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config.load(currentConfig);
                 updateColors();
+                interfaces.cvar->findVar("cl_fullupdate")->callBack();
+                SkinChanger::scheduleHudUpdate();
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config.save(currentConfig);
