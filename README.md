@@ -5,6 +5,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Features
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
+    * **On key [ key ]** - aimbot works only when chosen key is being held
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Friendly fire** - treat allies as enemies
     * **Visible only** - aim only on visible players
@@ -13,10 +14,10 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
     * **Auto shot** - shoot automatically when target found
     * **Recoil-based fov** - aimbot uses recoil as fov origin
+    * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
     * **Max angle delta** - maximum viewangles change per tick
     * **Smooth** - smooth aimbot movement in order to seem more human-like
-    * **Bone** - bone which aimbot aims at
     * **Recoil control x** - horizontal recoil control factor
     * **Recoil control y** - vertical recoil control factor
 
@@ -36,30 +37,25 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Time limit** - limit the backtracking window [*1*-*200*ms]
 
 * **Glow** - render glow effect on entities
+
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens* **/** *All, Visible, Occluded*
+
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [*0*-*3*]
-    * **Allies** - glow allies entities
-    * **Enemies** - glow enemies entities
-    * **Weapons** - glow dropped weapons
-    * **C4** - glow dropped C4 explosive
-    * **Planted C4** - glow planted bomb
-    * **Chickens** - glow chickens entities
 
 * **Chams** - color player models to improve visibility
+
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled)* **/** *All, Visible, Occluded*
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
-    * **Alpha** - material transparency
-    * **Material** - material applied to model
+    * **Rainbow** - change color frequently
+    * **Blinking** - change transparency frequently
+    * **Material** - material applied to model (*Normal, Flat, Animated, Platinum,Glass, Chrome, Crystal, Silver, Gold, Plastic*)
     * **Wireframe** - render triangle mesh instead of solid material
-    * **Allies** - allies chams on / off and color applied to them
-    * **Visible allies** - visible allies chams on / off and color applied to them
-    * **Enemies** - enemies chams on / off and color applied to them
-    * **Visible enemies** - visible enemies chams on / off and color applied to them
-    * **Weapons** - view model weapons chams on / off and color applied to them
-    * **Hands** - view model hands chams on / off and color applied to them
+    * **Alpha** - maximum material transparency
 
 * **Esp** - show information about player position
     * **Enabled** - on / off master switch
