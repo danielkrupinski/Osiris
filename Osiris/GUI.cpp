@@ -363,7 +363,9 @@ void GUI::renderChamsWindow() noexcept
             currentItem = currentCategory + 8;
         }
 
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
+        ImGui::Separator();
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.chams[currentItem].rainbow);
         ImGui::Checkbox("Blinking", &config.chams[currentItem].blinking);
