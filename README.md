@@ -113,6 +113,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Footstep volume** - volume of player footsteps
 
 * **Misc** - miscellaneous features
+    * **Menu key [ key ]** - 
+    * **Menu style** - menu style toggle (*Classic* **/** *One window*)
+    * **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
     * **Auto strafe** - automatically strafe in air following mouse movement
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
@@ -127,7 +130,15 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
-    * **Fix animation LOD** - 
+    * **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
+    * **Fix bone matrix** - correct client bone matrix to be closer to server one
+    * **Disable model occlusion** - draw player models even if they are behind thick walls
+    * **Kill message** - print message to chat after killing an enemy
+    * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
+    * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
+    * **Hit Sound** - sound emitted when hurting enemy
+    * **Chocked packets** - length of sequence of chocked ticks
+    * **Unhook** - unload cheat
 
 * **Config** - configuration system based on binary serialization
     * **Create config** - create new configuration file
