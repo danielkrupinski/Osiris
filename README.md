@@ -89,11 +89,28 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **No grass** - remove grass from map in Danger Zone mode (`dz_blacksite` and `dz_sirocco` maps)
     * **No shadows** - disable dynamic shadows
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
-    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
+    * **Zoom [ key ]** - enable zoom on unzoomable weapons
+    * **Thirdperson** - thirdperson view
+    * **Thirdperson distance** - camera distance in thirdperson view
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
+    * **FOV** - change view FOV [*-60*-*0*-*60*] (0 - actual view fov, negative values - decreased, positive values - increased)
+    * **Far Z** - far clipping range, useful after disabling fog on large maps (e.g `dz_sirocco`) to render distant buildings
+    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **Brightness** - control game brightness [*0.0*-*1.0*]
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
+    * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
+
+* **Skin changer** - change skins, knives and stickers
+
+* **Sound** - modify volume of certain sound effects
+    * **Chicken volume** - volume of chicken sounds
+
+    *Local player, Allies, Enemies*
+    * **Master volume** - overall volume of sounds emitted by player
+    * **Headshot volume** - volume of headshot sound (when player gets headshoted)
+    * **Weapon volume** - volume of player weapon shots
+    * **Footstep volume** - volume of player footsteps
 
 * **Misc** - miscellaneous features
     * **Auto strafe** - automatically strafe in air following mouse movement
@@ -122,7 +139,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2019 (preferably latest version i.e. 16.0.3), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2019 (preferably latest version i.e. 16.1.6), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Cloning
 The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
