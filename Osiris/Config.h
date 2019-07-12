@@ -187,6 +187,7 @@ public:
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
+        int chokedPacketsKey{ 0 };
     } misc;
 
 private:
