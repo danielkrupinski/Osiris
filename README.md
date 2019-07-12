@@ -58,10 +58,20 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Alpha** - maximum material transparency
 
 * **Esp** - show information about player position
+
+    *Allies, Enemies* **/** *All, Visible, Occluded*
+
     * **Enabled** - on / off master switch
-    * **Snaplines** - draw snaplines to players
+    * **Font** - esp text font number (from `vgui_spew_fonts` command)
+    * **Snaplines** - draw snapline to player
+    * **Eye traces** - draw player eye traces (shows where player looks)
     * **Box** - draw 2D box over player model
     * **Name** - draw player name
+    * **Health** - draw player health
+    * **Health bar** - draw rectangle indicating player health
+    * **Armor** - draw player armor
+    * **Armor bar** - draw rectangle indicating player armor
+    * **Money** - draw player money
     * **Head dot** - draw dot on player's head
 
 * **Visuals** - miscellaneous visual options
@@ -76,8 +86,10 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **No smoke** - remove smoke grenade effect
     * **No blur** - remove blur
     * **No scope overlay** - remove black overlay while scoping
+    * **No grass** - remove grass from map in Danger Zone mode (`dz_blacksite` and `dz_sirocco` maps)
+    * **No shadows** - disable dynamic shadows
     * **Wireframe smoke** - render smoke skeleton instead of particle effect
-   * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
+    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
     * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
     * **Brightness** - control game brightness [*0.0*-*1.0*]
     * **Skybox** - change sky(box)
