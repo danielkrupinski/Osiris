@@ -87,6 +87,11 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
+    {
+        const auto& antiAimJson = json["Anti aim"];
+        if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
+    }
+
     for (size_t i = 0; i < glow.size(); i++) {
         const auto& glowJson = json["glow"][i];
         auto& glowConfig = glow[i];
@@ -364,6 +369,11 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Enabled"] = backtrack.enabled;
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Time limit"] = backtrack.timeLimit;
+    }
+
+    {
+        auto& antiAimJson = json["Anti aim"];
+        antiAimJson["Enabled"] = antiAim.enabled;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {

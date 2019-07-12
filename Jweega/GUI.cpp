@@ -11,7 +11,6 @@
 #include "Hacks/Misc.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
-#include "SDK/Convar.h"
 #include "Hooks.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
@@ -585,10 +584,8 @@ void GUI::renderSkinChangerWindow() noexcept
 
         ImGui::Separator();
 
-        if (ImGui::Button("Update", { 130.0f, 30.0f })) {
-            interfaces.cvar->findVar("cl_fullupdate")->callBack();
+        if (ImGui::Button("Update", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
-        }
 
         ImGui::Text("nSkinz by namazso");
 
@@ -726,6 +723,7 @@ void GUI::renderConfigWindow() noexcept
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config.load(currentConfig);
                 updateColors();
+                SkinChanger::scheduleHudUpdate();
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config.save(currentConfig);

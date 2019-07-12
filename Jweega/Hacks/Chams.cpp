@@ -41,11 +41,11 @@ Chams::Chams() noexcept
     plastic->incrementReferenceCount();
 }
 
-void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
+bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     const auto isLocalPlayerAlive = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive();
     if (strstr(info.model->name, "models/player"))
-        renderPlayers(ctx, state, info, customBoneToWorld);
+        return renderPlayers(ctx, state, info, customBoneToWorld);
     else if (isLocalPlayerAlive && strstr(info.model->name, "arms"))
         renderHands();
     else if (isLocalPlayerAlive && strstr(info.model->name, "models/weapons/v_")
@@ -53,10 +53,12 @@ void Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         && !strstr(info.model->name, "parachute")
         && !strstr(info.model->name, "fists"))
         renderWeapons();
+    return true;
 }
 
-void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
+bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
+    bool needRedraw = true;
     auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
@@ -99,6 +101,8 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 applyChams(config.chams[ENEMIES_ALL], true, entity->health());
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                 applyChams(config.chams[ENEMIES_ALL], false, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                needRedraw = false;
             } else {
                 if (config.chams[ENEMIES_OCCLUDED].enabled) {
                     applyChams(config.chams[ENEMIES_OCCLUDED], true, entity->health());
@@ -106,8 +110,11 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     if (!config.chams[ENEMIES_VISIBLE].enabled)
                         interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
-                if (config.chams[ENEMIES_VISIBLE].enabled)
+                if (config.chams[ENEMIES_VISIBLE].enabled) {
                     applyChams(config.chams[ENEMIES_VISIBLE], false, entity->health());
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    needRedraw = false;
+                }
             }
 
             if (config.chams[BACKTRACK].enabled && config.backtrack.enabled) {
@@ -115,7 +122,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     applyChams(config.chams[BACKTRACK], false, entity->health());
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
-                    interfaces.modelRender->forceMaterialOverride(nullptr);
+                    needRedraw = false;
                 }
             }
         } else {
@@ -135,4 +142,5 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
         }
     }
+    return needRedraw;
 }

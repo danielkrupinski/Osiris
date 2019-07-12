@@ -5,6 +5,8 @@
 #include "../SDK/Entity.h"
 #include "SkinChanger.h"
 #include "../Config.h"
+#include "../SDK/Cvar.h"
+#include "../SDK/ConVar.h"
 
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
@@ -391,6 +393,7 @@ void SkinChanger::run(FrameStage stage) noexcept
 
 void SkinChanger::scheduleHudUpdate() noexcept
 {
+    interfaces.cvar->findVar("cl_fullupdate")->callBack();
     hudUpdateRequired = true;
 }
 

@@ -12,9 +12,9 @@
 class Chams {
 public:
     Chams() noexcept;
-    void render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 private:
-    void renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 
     constexpr void renderHands() const noexcept
     {
