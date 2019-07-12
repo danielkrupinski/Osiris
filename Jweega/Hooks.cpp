@@ -179,6 +179,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
         Misc::spectatorList();
+        Misc::drawFov();
         Esp::render();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
@@ -286,6 +287,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
+    Misc::actualFov = setup->fov;
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
 
