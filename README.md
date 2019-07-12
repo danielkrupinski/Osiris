@@ -4,6 +4,21 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 ## Features
 * **Aimbot** - aim assistance
+* **Triggerbot** - automatically fires when crosshair is on enemy
+* **Backtrack** - abuse lag compensation to move players back in time
+* **Glow** - render glow effect on entities
+* **Chams** - color player models to improve visibility
+* **Esp** - show information about players
+* **Visuals** - miscellaneous visual options
+* **Skin changer** - change weapon skins, knives and stickers
+* **Sound** - modify volume of certain sound effects
+* **Misc** - miscellaneous features
+* **Config** - JSON-based configuration system
+
+<details>
+<summary>Features in depth</summary>
+
+* **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
     * **On key [ key ]** - aimbot works only when chosen key is being held
     * **Silent** - aimbot is not visible on your screen (client-sided only)
@@ -57,7 +72,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Wireframe** - render triangle mesh instead of solid material
     * **Alpha** - maximum material transparency
 
-* **Esp** - show information about player position
+* **Esp** - show information about players
 
     *Allies, Enemies* **/** *All, Visible, Occluded*
 
@@ -101,7 +116,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **World color** - set world material ambient light color
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
 
-* **Skin changer** - change skins, knives and stickers
+* **Skin changer** - change weapon skins, knives and stickers
 
 * **Sound** - modify volume of certain sound effects
     * **Chicken volume** - volume of chicken sounds
@@ -140,12 +155,13 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Chocked packets** - length of sequence of chocked ticks
     * **Unhook** - unload cheat
 
-* **Config** - configuration system based on binary serialization
+* **Config** - JSON-based configuration system
     * **Create config** - create new configuration file
     * **Reset config** - restore default configuration settings (does not touch saved configuration)
     * **Load selected** - load selected configuration file
     * **Save selected** - save selected configuration file
     * **Delete selected** - delete selected configuration file
+</details>
 
 ## Getting started
 
