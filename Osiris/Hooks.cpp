@@ -98,6 +98,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     bool& sendPacket = *reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
 
     memory.globalVars->serverTime(cmd);
+    Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
     Misc::prepareRevolver(cmd);
     Misc::sniperCrosshair();
