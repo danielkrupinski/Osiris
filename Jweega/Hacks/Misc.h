@@ -12,7 +12,9 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
 
-#define DEG2RAD(x) ((x) * 3.14159265358979323846 / 180)
+static constexpr auto PI = 3.14159265358979323846;
+template<typename T>
+static constexpr auto DEG2RAD(T x) { return ((x) * PI / 180); }
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
@@ -142,8 +144,8 @@ namespace Misc {
             auto screenSize = interfaces.surface->getScreenSize();
             if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
-            int radius = static_cast<int>(std::tan(DEG2RAD(config.aimbot[weaponId].fov) / 2.f) / std::tan(DEG2RAD(actualFov) / 2.f) * screenSize.first);
-            interfaces.surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, radius, 100);
+            auto radius = std::tan(DEG2RAD(config.aimbot[weaponId].fov) / 2.f) / std::tan(DEG2RAD(actualFov) / 2.f) * screenSize.first;
+            interfaces.surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, static_cast<int>(radius), 100);
         }
     }
 }
