@@ -55,7 +55,8 @@ namespace Misc {
 
     constexpr void chokePackets(bool& sendPacket) noexcept
     {
-        sendPacket = interfaces.engine->getNetworkChannel()->chokedPackets >= config.misc.chokedPackets;
+        if (!config.misc.chokedPacketsKey || GetAsyncKeyState(config.misc.chokedPacketsKey))
+            sendPacket = interfaces.engine->getNetworkChannel()->chokedPackets >= config.misc.chokedPackets;
     }
 
     constexpr void autoReload(UserCmd* cmd) noexcept

@@ -362,7 +362,9 @@ void GUI::renderChamsWindow() noexcept
             currentItem = currentCategory + 8;
         }
 
+        ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.chams[currentItem].enabled);
+        ImGui::Separator();
         ImGui::Checkbox("Health based", &config.chams[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.chams[currentItem].rainbow);
         ImGui::Checkbox("Blinking", &config.chams[currentItem].blinking);
@@ -665,6 +667,8 @@ void GUI::renderMiscWindow() noexcept
         ImGui::PushItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
+        ImGui::SameLine();
+        hotkey(config.misc.chokedPacketsKey);
         ImGui::PushItemWidth(290.0f);
 
         if (ImGui::Button("Unhook"))

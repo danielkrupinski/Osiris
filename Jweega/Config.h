@@ -188,6 +188,7 @@ public:
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         bool drawFOV{ false };
+        int chokedPacketsKey{ 0 };
     } misc;
 
 private:
