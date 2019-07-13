@@ -635,6 +635,7 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0"))
             updateColors();
 
+        ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::PushItemWidth(120.0f);
