@@ -131,6 +131,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Menu key [ key ]** - 
     * **Menu style** - menu style toggle (*Classic* **/** *One window*)
     * **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
+    * **Anti AFK kick** - avoid auto-kick by server for inactivity
     * **Auto strafe** - automatically strafe in air following mouse movement
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
     * **Clan tag** - set custom clan tag
