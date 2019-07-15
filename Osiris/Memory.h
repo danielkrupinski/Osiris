@@ -13,6 +13,7 @@ struct GlowObjectManager;
 struct Vector;
 struct Trace;
 class Entity;
+class ViewRender;
 
 class Memory final {
 public:
@@ -46,6 +47,7 @@ public:
     uintptr_t listLeaves;
     int* dispatchSound;
     std::add_pointer_t<bool __cdecl(float, float, float, float, float, float, Trace&) noexcept> traceToExit;
+    ViewRender* viewRender;
 
 private:
     template <typename T = uintptr_t>
