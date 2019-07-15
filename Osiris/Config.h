@@ -143,6 +143,7 @@ public:
         int skybox{ -1 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
+        int screenEffect{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
