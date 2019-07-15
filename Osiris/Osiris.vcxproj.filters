@@ -316,5 +316,8 @@
     <ClInclude Include="SDK\AnimState.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\RenderContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
