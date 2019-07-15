@@ -36,4 +36,5 @@ Memory::Memory() noexcept
     dispatchSound = findPattern<int*>(L"engine", "\x74\x0B\xE8????\x8B\x3D", 3);
     traceToExit = findPattern<decltype(traceToExit)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
     viewRender = **findPattern<ViewRender***>(L"client_panorama", "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08", 2);
+    drawScreenEffectMaterial = relativeToAbsolute<decltype(drawScreenEffectMaterial)>(findPattern<int*>(L"client_panorama", "\xE8????\x83\xC4\x0C\x8D\x4D\xF8", 1));
 }
