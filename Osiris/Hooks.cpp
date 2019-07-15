@@ -32,8 +32,10 @@
 #include "SDK/GameEventManager.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
+#include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
+#include "SDK/RenderContext.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
@@ -343,6 +345,36 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
     return hooks.originalDispatchSound(soundInfo);
 }
 
+static int __stdcall render2dEffectsPreHud(int param) noexcept
+{
+    if (config.visuals.screenEffect) {
+        static constexpr const char* effects[]{
+            "effects/dronecam",
+            "effects/underwater_overlay"
+        };
+
+        auto renderContext = interfaces.materialSystem->getRenderContext();
+        renderContext->beginRender();
+        int x, y, width, height;
+        renderContext->getViewport(x, y, width, height);
+        auto material = interfaces.materialSystem->findMaterial(effects[config.visuals.screenEffect - 1]);
+
+        __asm {
+            mov ecx, material
+            xor edx, edx
+            push height
+            push width
+            push 0
+            call memory.drawScreenEffectMaterial
+            add esp, 12
+        }
+
+        renderContext->endRender();
+        renderContext->release();
+    }
+    return hooks.viewRender.callOriginal<int, int>(39, param);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -373,6 +405,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
+    viewRender.hookAt(39, render2dEffectsPreHud);
 
     DWORD oldProtection;
     VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
@@ -394,6 +427,7 @@ void Hooks::restore() noexcept
     sound.restore();
     surface.restore();
     svCheats.restore();
+    viewRender.restore();
 
     netvars.restore();
 

@@ -55,6 +55,7 @@ public:
     Vmt sound{ interfaces.sound };
     Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
+    Vmt viewRender{ memory.viewRender };
 };
 
 extern Hooks hooks;
