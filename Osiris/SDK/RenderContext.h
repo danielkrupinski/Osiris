@@ -20,10 +20,8 @@ public:
         callVirtualMethod<void>(this, 3);
     }
 
-    constexpr auto getViewport() noexcept
+    constexpr auto getViewport(int& x, int& y, int& width, int& height) noexcept
     {
-        int x{ }, y{ }, width{ }, height{ };
         callVirtualMethod<void, int&, int&, int&, int&>(this, 41, x, y, width, height);
-        return std::make_pair(width, height);
     }
 };
