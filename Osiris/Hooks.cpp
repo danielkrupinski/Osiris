@@ -36,6 +36,7 @@
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
 #include "SDK/RenderContext.h"
+#include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
@@ -446,6 +447,8 @@ void Hooks::restore() noexcept
     VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
     *memory.dispatchSound = reinterpret_cast<uintptr_t>(originalDispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
     VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+
+    interfaces.resourceAccessControl->accessingThreadCount--;
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
