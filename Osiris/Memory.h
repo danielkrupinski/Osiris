@@ -48,7 +48,7 @@ public:
     int* dispatchSound;
     std::add_pointer_t<bool __cdecl(float, float, float, float, float, float, Trace&) noexcept> traceToExit;
     ViewRender* viewRender;
-    std::add_pointer_t<void __fastcall(void*, int, int, int, int) noexcept> drawScreenEffectMaterial;
+    uintptr_t drawScreenEffectMaterial;
 
 private:
     template <typename T = uintptr_t>
