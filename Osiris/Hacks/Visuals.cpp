@@ -31,8 +31,8 @@ void Visuals::modifySmoke() noexcept
 
     for (const auto mat : smokeMaterials) {
         auto material = interfaces.materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.visuals.wireframeSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
     }
 
     if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
@@ -78,7 +78,7 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 void Visuals::removeBlur() noexcept
 {
     static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noBlur);
+    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
@@ -91,9 +91,9 @@ void Visuals::removeGrass() noexcept
 {
     auto mapName = fnv::hashRuntime(interfaces.engine->getLevelName());
     if (mapName == fnv::hash("dz_blacksite"))
-        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
     else if (mapName == fnv::hash("dz_sirocco"))
-        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept

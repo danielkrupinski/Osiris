@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 
-enum class MaterialVar {
+enum class MaterialVarFlag {
     NO_DRAW = 1 << 2,
     IGNOREZ = 1 << 15,
     WIREFRAME = 1 << 28
@@ -31,8 +31,8 @@ public:
         callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
     }
 
-    constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
+    constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
     {
-        callVirtualMethod<void, MaterialVar, bool>(this, 29, flag, on);
+        callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
     }
 };
