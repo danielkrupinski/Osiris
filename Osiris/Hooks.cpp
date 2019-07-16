@@ -345,6 +345,23 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
     return hooks.originalDispatchSound(soundInfo);
 }
 
+static  __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        push height
+        push width
+        push y
+        mov edx, x
+        mov ecx, material
+        call memory.drawScreenEffectMaterial
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     if (config.visuals.screenEffect) {
@@ -358,17 +375,7 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
         int x, y, width, height;
         renderContext->getViewport(x, y, width, height);
         auto material = interfaces.materialSystem->findMaterial(effects[config.visuals.screenEffect - 1]);
-
-        __asm {
-            mov ecx, material
-            xor edx, edx
-            push height
-            push width
-            push 0
-            call memory.drawScreenEffectMaterial
-            add esp, 12
-        }
-
+        drawScreenEffectMaterial(material, 0, 0, width, height);
         renderContext->endRender();
         renderContext->release();
     }
