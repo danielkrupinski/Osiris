@@ -319,5 +319,8 @@
     <ClInclude Include="SDK\RenderContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\AntiAim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
