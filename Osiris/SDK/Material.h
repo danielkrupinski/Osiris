@@ -18,6 +18,11 @@ enum class MaterialVarFlag {
 
 class Material final {
 public:
+    constexpr auto findVar(const char* name) noexcept
+    {
+        return callVirtualMethod<MaterialVar*, const char*, bool*, bool>(this, 11, name, nullptr, false);
+    }
+
     constexpr int incrementReferenceCount() noexcept
     {
         callVirtualMethod<void>(this, 12);
