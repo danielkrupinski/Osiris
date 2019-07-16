@@ -27,6 +27,12 @@ namespace Misc {
     void fastPlant(UserCmd*) noexcept;
     static float actualFov = 0.0f;
 
+    constexpr void antiAfkKick(UserCmd* cmd) noexcept
+    {
+        if (config.misc.antiAfkKick && cmd->command_number % 2)
+            cmd->buttons |= 1 << 26;
+    }
+
     constexpr void fixAnimationLOD(FrameStage stage) noexcept
     {
         if (config.misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {

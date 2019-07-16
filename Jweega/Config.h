@@ -143,6 +143,7 @@ public:
         int skybox{ -1 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
+        int screenEffect{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -164,6 +165,7 @@ public:
         int menuKey{ 0x2D }; // VK_INSERT
         int menuStyle{ 0 };
         int menuColors{ 0 };
+        bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         char clanTag[16]{ "" };

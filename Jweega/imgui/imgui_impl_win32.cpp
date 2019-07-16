@@ -146,7 +146,7 @@ static void ImGui_ImplWin32_UpdateMousePos()
 }
 
 #ifdef _MSC_VER
-#pragma comment(lib, "xinput")
+// #pragma comment(lib, "xinput")
 #endif
 
 // Gamepad navigation mapping
@@ -231,7 +231,7 @@ void    ImGui_ImplWin32_NewFrame()
     }
 
     // Update game controllers (if enabled and available)
-    ImGui_ImplWin32_UpdateGamepads();
+    // ImGui_ImplWin32_UpdateGamepads();
 }
 
 // Allow compilation with old Windows SDK. MinGW doesn't have default _WIN32_WINNT/WINVER versions.
