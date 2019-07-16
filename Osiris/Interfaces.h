@@ -20,6 +20,7 @@ class ModelRender;
 class Panel;
 class PhysicsSurfaceProps;
 class RenderView;
+class ResourceAccessControl;
 class Surface;
 class Sound;
 class SoundEmitter;
@@ -43,6 +44,7 @@ public:
     Panel* panel;
     PhysicsSurfaceProps* physicsSurfaceProps;
     RenderView* renderView;
+    ResourceAccessControl* resourceAccessControl;
     Surface* surface;
     Sound* sound;
     SoundEmitter* soundEmitter;
