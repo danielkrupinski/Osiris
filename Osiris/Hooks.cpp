@@ -369,13 +369,13 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
         constexpr auto getEffectMaterial = []{
             static constexpr const char* effects[]{
             "effects/dronecam",
-            "effects/underwater_overlay"
+            "effects/underwater_overlay",
+            "effects/healthboost"
             };
 
-            if (config.visuals.screenEffect == 3)
-                return effects[1];
-            else
+            if (config.visuals.screenEffect <= 2)
                 return effects[0];
+            return effects[config.visuals.screenEffect - 2];
         };
 
         auto renderContext = interfaces.materialSystem->getRenderContext();
@@ -385,8 +385,10 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
         auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
         if (config.visuals.screenEffect == 1)
             material->findVar("$c0_x")->setValue(0.0f);
-        else if(config.visuals.screenEffect == 2)
+        else if (config.visuals.screenEffect == 2)
             material->findVar("$c0_x")->setValue(0.1f);
+        else if (config.visuals.screenEffect == 4)
+            material->findVar("$c0_x")->setValue(1.0f);
         drawScreenEffectMaterial(material, 0, 0, width, height);
         renderContext->endRender();
         renderContext->release();
