@@ -2,6 +2,14 @@
 
 #include "Utils.h"
 
+class MaterialVar {
+public:
+    constexpr auto setValue(float value) noexcept
+    {
+        callVirtualMethod<void, float>(this, 4, value);
+    }
+};
+
 enum class MaterialVarFlag {
     NO_DRAW = 1 << 2,
     IGNOREZ = 1 << 15,
