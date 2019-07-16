@@ -366,16 +366,27 @@ static  __declspec(naked) void drawScreenEffectMaterial(Material* material, int 
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     if (config.visuals.screenEffect) {
-        static constexpr const char* effects[]{
+        constexpr auto getEffectMaterial = []{
+            static constexpr const char* effects[]{
             "effects/dronecam",
             "effects/underwater_overlay"
+            };
+
+            if (config.visuals.screenEffect == 3)
+                return effects[1];
+            else
+                return effects[0];
         };
 
         auto renderContext = interfaces.materialSystem->getRenderContext();
         renderContext->beginRender();
         int x, y, width, height;
         renderContext->getViewport(x, y, width, height);
-        auto material = interfaces.materialSystem->findMaterial(effects[config.visuals.screenEffect - 1]);
+        auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+        if (config.visuals.screenEffect == 1)
+            material->findVar("$c0_x")->setValue(0.0f);
+        else if(config.visuals.screenEffect == 2)
+            material->findVar("$c0_x")->setValue(0.1f);
         drawScreenEffectMaterial(material, 0, 0, width, height);
         renderContext->endRender();
         renderContext->release();
