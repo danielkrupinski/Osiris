@@ -107,6 +107,9 @@
     <ClCompile Include="jsoncpp.cpp">
       <Filter>json</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\AntiAim.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -320,7 +323,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\AntiAim.h">
-      <Filter>Header Files</Filter>
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
