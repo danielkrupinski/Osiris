@@ -20,6 +20,7 @@ namespace Visuals {
     void remove3dSky() noexcept;
     void removeShadows() noexcept;
     void applyZoom(FrameStage) noexcept;
+    void applyScreenEffects() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {

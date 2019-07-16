@@ -125,3 +125,8 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         }
     }
 }
+
+void Visuals::applyScreenEffects() noexcept
+{
+
+}
