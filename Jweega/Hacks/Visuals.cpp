@@ -8,6 +8,7 @@
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/RenderContext.h"
 
 void Visuals::colorWorld() noexcept
 {
@@ -31,8 +32,8 @@ void Visuals::modifySmoke() noexcept
 
     for (const auto mat : smokeMaterials) {
         auto material = interfaces.materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, config.visuals.wireframeSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
     }
 
     if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
@@ -78,7 +79,7 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 void Visuals::removeBlur() noexcept
 {
     static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noBlur);
+    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
@@ -91,9 +92,9 @@ void Visuals::removeGrass() noexcept
 {
     auto mapName = fnv::hashRuntime(interfaces.engine->getLevelName());
     if (mapName == fnv::hash("dz_blacksite"))
-        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
     else if (mapName == fnv::hash("dz_sirocco"))
-        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVar::NO_DRAW, config.visuals.noGrass);
+        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
@@ -123,5 +124,55 @@ void Visuals::applyZoom(FrameStage stage) noexcept
                 localPlayer->fovStart() = 40;
             }
         }
+    }
+}
+
+static  __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        push height
+        push width
+        push y
+        mov edx, x
+        mov ecx, material
+        call memory.drawScreenEffectMaterial
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+
+void Visuals::applyScreenEffects() noexcept
+{
+    if (config.visuals.screenEffect) {
+        constexpr auto getEffectMaterial = [] {
+            static constexpr const char* effects[]{
+            "effects/dronecam",
+            "effects/underwater_overlay",
+            "effects/healthboost",
+            "effects/dangerzone_screen"
+            };
+
+            if (config.visuals.screenEffect <= 2)
+                return effects[0];
+            return effects[config.visuals.screenEffect - 2];
+        };
+
+        auto renderContext = interfaces.materialSystem->getRenderContext();
+        renderContext->beginRender();
+        int x, y, width, height;
+        renderContext->getViewport(x, y, width, height);
+        auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+        if (config.visuals.screenEffect == 1)
+            material->findVar("$c0_x")->setValue(0.0f);
+        else if (config.visuals.screenEffect == 2)
+            material->findVar("$c0_x")->setValue(0.1f);
+        else if (config.visuals.screenEffect >= 4)
+            material->findVar("$c0_x")->setValue(1.0f);
+        drawScreenEffectMaterial(material, 0, 0, width, height);
+        renderContext->endRender();
+        renderContext->release();
     }
 }

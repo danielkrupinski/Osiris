@@ -36,6 +36,7 @@
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
 #include "SDK/RenderContext.h"
+#include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
@@ -117,13 +118,15 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::animateClanTag();
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
+
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+        Misc::chokePackets(sendPacket);
+
     cmd->viewangles.normalize();
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
-        Misc::chokePackets(sendPacket);
     return false;
 }
 
@@ -271,9 +274,16 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
-    Misc::killMessage(event);
-    Misc::playHitSound(event);
-    SkinChanger::overrideHudIcon(event);
+    switch (fnv::hashRuntime(event->getName())) {
+    case fnv::hash("player_death"):
+        Misc::killMessage(event);
+        SkinChanger::overrideHudIcon(event);
+        break;
+    case fnv::hash("player_hurt"):
+        Misc::playHitSound(event);
+        break;
+
+    }
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 
@@ -349,31 +359,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
-    if (config.visuals.screenEffect) {
-        static constexpr const char* effects[]{
-            "effects/dronecam",
-            "effects/underwater_overlay"
-        };
-
-        auto renderContext = interfaces.materialSystem->getRenderContext();
-        renderContext->beginRender();
-        int x, y, width, height;
-        renderContext->getViewport(x, y, width, height);
-        auto material = interfaces.materialSystem->findMaterial(effects[config.visuals.screenEffect - 1]);
-
-        __asm {
-            mov ecx, material
-            xor edx, edx
-            push height
-            push width
-            push 0
-            call memory.drawScreenEffectMaterial
-            add esp, 12
-        }
-
-        renderContext->endRender();
-        renderContext->release();
-    }
+    Visuals::applyScreenEffects();
     return hooks.viewRender.callOriginal<int, int>(39, param);
 }
 
@@ -441,6 +427,8 @@ void Hooks::restore() noexcept
     VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
     *memory.dispatchSound = reinterpret_cast<uintptr_t>(originalDispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
     VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+
+    interfaces.resourceAccessControl->accessingThreadCount--;
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept

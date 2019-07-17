@@ -2,7 +2,15 @@
 
 #include "Utils.h"
 
-enum class MaterialVar {
+class MaterialVar {
+public:
+    constexpr auto setValue(float value) noexcept
+    {
+        callVirtualMethod<void, float>(this, 4, value);
+    }
+};
+
+enum class MaterialVarFlag {
     NO_DRAW = 1 << 2,
     IGNOREZ = 1 << 15,
     WIREFRAME = 1 << 28
@@ -10,6 +18,11 @@ enum class MaterialVar {
 
 class Material final {
 public:
+    constexpr auto findVar(const char* name) noexcept
+    {
+        return callVirtualMethod<MaterialVar*, const char*, bool*, bool>(this, 11, name, nullptr, false);
+    }
+
     constexpr int incrementReferenceCount() noexcept
     {
         callVirtualMethod<void>(this, 12);
@@ -31,8 +44,8 @@ public:
         callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
     }
 
-    constexpr void setMaterialVarFlag(MaterialVar flag, bool on) noexcept
+    constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
     {
-        callVirtualMethod<void, MaterialVar, bool>(this, 29, flag, on);
+        callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
     }
 };

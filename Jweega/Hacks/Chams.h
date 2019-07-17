@@ -95,8 +95,8 @@ private:
             material->colorModulate(chams.color);
         material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
-        material->setMaterialVarFlag(MaterialVar::IGNOREZ, ignorez);
-        material->setMaterialVarFlag(MaterialVar::WIREFRAME, chams.wireframe);
+        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
         interfaces.modelRender->forceMaterialOverride(material);
     }
 };

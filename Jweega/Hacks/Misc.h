@@ -26,6 +26,21 @@ namespace Misc {
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     static float actualFov = 0.0f;
+    
+    constexpr void fixMovement(UserCmd* cmd, const Vector& oldAngles) noexcept
+    {
+        if (config.misc.fixMovement) {
+            float oldYaw = oldAngles.y + (oldAngles.y < 0.0f ? 360.0f : 0.0f);
+            float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
+            float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
+            yawDelta = 360.0f - yawDelta;
+
+            const float forwardmove = cmd->forwardmove;
+            const float sidemove = cmd->sidemove;
+            cmd->forwardmove = std::clamp(cos(degreesToRadians(yawDelta)) * forwardmove + cos(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
+            cmd->sidemove = std::clamp(sin(degreesToRadians(yawDelta)) * forwardmove + sin(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
+        }
+    }
 
     constexpr void antiAfkKick(UserCmd* cmd) noexcept
     {
@@ -124,7 +139,6 @@ namespace Misc {
         };
 
         if (config.misc.hitSound
-            && !strcmp(event->getName(), "player_hurt")
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
             interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
@@ -133,7 +147,6 @@ namespace Misc {
     {
         auto localPlayer = interfaces.engine->getLocalPlayer();
         if (config.misc.killMessage
-            && !strcmp(event->getName(), "player_death")
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
             interfaces.engine->clientCmdUnrestricted("say Gotcha!");

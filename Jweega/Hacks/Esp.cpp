@@ -1,5 +1,3 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -37,7 +35,6 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
 static void renderEyeTraces(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     if (config.eyeTraces) {
-        constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
         constexpr float maxRange{ 8192.0f };
 
         auto eyeAngles = entity->eyeAngles();
