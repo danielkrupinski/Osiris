@@ -399,7 +399,7 @@ void SkinChanger::scheduleHudUpdate() noexcept
 
 void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
 {
-    if (!strcmp(event->getName(), "player_death") && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
         if (const auto iconOverride = iconOverrides[event->getString("weapon")])
             event->setString("weapon", iconOverride);
     }

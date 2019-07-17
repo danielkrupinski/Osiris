@@ -133,7 +133,6 @@ namespace Misc {
         };
 
         if (config.misc.hitSound
-            && !strcmp(event->getName(), "player_hurt")
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
             interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
@@ -142,7 +141,6 @@ namespace Misc {
     {
         auto localPlayer = interfaces.engine->getLocalPlayer();
         if (config.misc.killMessage
-            && !strcmp(event->getName(), "player_death")
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
             interfaces.engine->clientCmdUnrestricted("say Gotcha!");
