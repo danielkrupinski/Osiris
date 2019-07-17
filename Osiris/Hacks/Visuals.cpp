@@ -151,7 +151,8 @@ void Visuals::applyScreenEffects() noexcept
             static constexpr const char* effects[]{
             "effects/dronecam",
             "effects/underwater_overlay",
-            "effects/healthboost"
+            "effects/healthboost",
+            "effects/dangerzone_screen"
             };
 
             if (config.visuals.screenEffect <= 2)
@@ -168,7 +169,7 @@ void Visuals::applyScreenEffects() noexcept
             material->findVar("$c0_x")->setValue(0.0f);
         else if (config.visuals.screenEffect == 2)
             material->findVar("$c0_x")->setValue(0.1f);
-        else if (config.visuals.screenEffect == 4)
+        else if (config.visuals.screenEffect >= 4)
             material->findVar("$c0_x")->setValue(1.0f);
         drawScreenEffectMaterial(material, 0, 0, width, height);
         renderContext->endRender();
