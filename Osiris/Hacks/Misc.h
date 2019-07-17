@@ -20,6 +20,21 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
+    
+    constexpr void fixMovement(UserCmd* cmd, const Vector& oldAngles) noexcept
+    {
+        if (config.misc.fixMovement) {
+            float oldYaw = oldAngles.y + (oldAngles.y < 0.0f ? 360.0f : 0.0f);
+            float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
+            float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
+            yawDelta = 360.0f - yawDelta;
+
+            const float forwardmove = cmd->forwardmove;
+            const float sidemove = cmd->sidemove;
+            cmd->forwardmove = std::clamp(cos(degreesToRadians(yawDelta)) * forwardmove + cos(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
+            cmd->sidemove = std::clamp(sin(degreesToRadians(yawDelta)) * forwardmove + sin(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
+        }
+    }
 
     constexpr void antiAfkKick(UserCmd* cmd) noexcept
     {
