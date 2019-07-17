@@ -182,6 +182,7 @@ public:
         bool watermark{ false };
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
+        bool fixMovement{ false };
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         bool fastPlant{ false };
