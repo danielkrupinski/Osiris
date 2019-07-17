@@ -1,6 +1,3 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
-
 #include "Aimbot.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -17,7 +14,6 @@
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta = destination - source;
-    constexpr auto radiansToDegrees = [](float radians) noexcept { return radians * 180 / static_cast<float>(M_PI); };
     Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
                    radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
     angles.normalize();

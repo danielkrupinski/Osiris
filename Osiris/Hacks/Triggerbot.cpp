@@ -1,5 +1,3 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <Windows.h>
 
 #include "../Config.h"
@@ -35,7 +33,6 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         if ((GetAsyncKeyState(config.triggerbot[weaponIndex].key) || !config.triggerbot[weaponIndex].onKey)
             && now - lastTime >= config.triggerbot[weaponIndex].shotDelay / 1000.0f) {
 
-            constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
             constexpr float maxRange{ 8192.0f };
 
             static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");

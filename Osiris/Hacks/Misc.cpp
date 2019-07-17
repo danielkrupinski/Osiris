@@ -1,5 +1,3 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <sstream>
 
 #include "../Config.h"
@@ -155,7 +153,6 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
         cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-        constexpr auto degreesToRadians = [](float degrees) noexcept { return degrees * static_cast<float>(M_PI) / 180; };
         constexpr float doorRange{ 200.0f };
         Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
                            cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
