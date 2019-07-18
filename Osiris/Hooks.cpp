@@ -16,6 +16,7 @@
 #include "Memory.h"
 
 #include "Hacks/Aimbot.h"
+#include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
 #include "Hacks/Esp.h"
@@ -93,13 +94,16 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
+    uintptr_t* framePointer;
+    __asm mov framePointer, ebp;
+    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
+
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
     if (!cmd->command_number)
         return result;
 
-    bool& sendPacket = *reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
-
+    const float oldYaw = cmd->viewangles.y;
     memory.globalVars->serverTime(cmd);
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -122,7 +126,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
         Misc::chokePackets(sendPacket);
 
+    AntiAim::run(cmd, oldYaw, sendPacket);
     cmd->viewangles.normalize();
+    Misc::fixMovement(cmd, oldYaw);
+
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
