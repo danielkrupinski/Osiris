@@ -3,5 +3,5 @@
 struct UserCmd;
 
 namespace AntiAim {
-    void run(UserCmd*, float, bool&) noexcept;
+    void run(UserCmd*, const float, bool&) noexcept;
 }
