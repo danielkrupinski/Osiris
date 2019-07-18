@@ -46,6 +46,7 @@ void GUI::render() noexcept
     if (!config.misc.menuStyle) {
         renderMenuBar();
         renderAimbotWindow();
+        renderAntiAimWindow();
         renderTriggerbotWindow();
         renderBacktrackWindow();
         renderGlowWindow();
@@ -110,6 +111,7 @@ void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
+        ImGui::MenuItem("Anti aim", nullptr, &window.antiAim);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
@@ -195,6 +197,19 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
+void GUI::renderAntiAimWindow() noexcept
+{
+    if (window.antiAim) {
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
+        }
+        ImGui::Checkbox("Enabled", &config.antiAim.enabled);
         if (!config.misc.menuStyle)
             ImGui::End();
     }
@@ -746,13 +761,18 @@ void GUI::renderConfigWindow() noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 625.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 700.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar")) {
         if (ImGui::BeginTabItem("Aimbot")) {
             window = { };
             window.aimbot = true;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Anti aim")) {
+            window = { };
+            window.antiAim = true;
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Triggerbot")) {
@@ -809,6 +829,7 @@ void GUI::renderGuiStyle2() noexcept
     }
 
     renderAimbotWindow();
+    renderAntiAimWindow();
     renderTriggerbotWindow();
     renderBacktrackWindow();
     renderGlowWindow();

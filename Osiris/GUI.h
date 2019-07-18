@@ -13,6 +13,7 @@ private:
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow() noexcept;
+    void renderAntiAimWindow() noexcept;
     void renderTriggerbotWindow() noexcept;
     void renderBacktrackWindow() noexcept;
     void renderGlowWindow() noexcept;
@@ -27,6 +28,7 @@ private:
 
     struct {
         bool aimbot{ false };
+        bool antiAim{ false };
         bool triggerbot{ false };
         bool backtrack{ false };
         bool glow{ false };
