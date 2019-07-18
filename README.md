@@ -215,3 +215,6 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 > Copyright (c) 2018-2019 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
+
+## See also
+- [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
