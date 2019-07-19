@@ -27,10 +27,10 @@ namespace Misc {
     void fastPlant(UserCmd*) noexcept;
     static float actualFov = 0.0f;
     
-    constexpr void fixMovement(UserCmd* cmd, const Vector& oldAngles) noexcept
+    constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
-            float oldYaw = oldAngles.y + (oldAngles.y < 0.0f ? 360.0f : 0.0f);
+            float oldYaw = yaw + (yaw < 0.0f ? 360.0f : 0.0f);
             float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
             float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
             yawDelta = 360.0f - yawDelta;

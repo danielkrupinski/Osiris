@@ -115,6 +115,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
+    * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
 
 * **Skin changer** - change weapon skins, knives and stickers
 
@@ -215,3 +216,6 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 > Copyright (c) 2018-2019 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
+
+## See also
+- [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
