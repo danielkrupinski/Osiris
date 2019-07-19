@@ -115,6 +115,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Skybox** - change sky(box)
     * **World color** - set world material ambient light color
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
+    * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
 
 * **Skin changer** - change weapon skins, knives and stickers
 
