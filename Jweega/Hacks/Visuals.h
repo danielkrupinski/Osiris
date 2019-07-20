@@ -8,6 +8,7 @@
 #include "../SDK/EntityList.h"
 
 enum class FrameStage;
+class GameEvent;
 
 namespace Visuals {
     void colorWorld() noexcept;
@@ -21,6 +22,7 @@ namespace Visuals {
     void removeShadows() noexcept;
     void applyZoom(FrameStage) noexcept;
     void applyScreenEffects() noexcept;
+    void hitMarker(GameEvent* = nullptr) noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
