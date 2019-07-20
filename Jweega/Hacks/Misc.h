@@ -12,9 +12,8 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
 
-static constexpr auto PI = 3.14159265358979323846;
 template<typename T>
-static constexpr auto DEG2RAD(T x) { return ((x) * PI / 180); }
+static constexpr auto DEG2RAD(T x) { return ((x) * M_PI / 180); }
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
