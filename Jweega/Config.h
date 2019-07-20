@@ -144,6 +144,8 @@ public:
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
+        int hitMarker{ 0 };
+        float hitMarkerTime{ 0.6f };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;

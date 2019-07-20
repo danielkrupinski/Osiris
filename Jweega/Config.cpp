@@ -229,6 +229,8 @@ void Config::load(size_t id) noexcept
         }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
+        if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
+        if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -492,6 +494,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["worldColor"][2] = visuals.worldColor[2];
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
+        visualsJson["Hit marker"] = visuals.hitMarker;
+        visualsJson["Hit marker time"] = visuals.hitMarkerTime;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
