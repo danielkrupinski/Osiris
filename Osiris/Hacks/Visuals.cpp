@@ -4,6 +4,7 @@
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
@@ -174,5 +175,47 @@ void Visuals::applyScreenEffects() noexcept
         drawScreenEffectMaterial(material, 0, 0, width, height);
         renderContext->endRender();
         renderContext->release();
+    }
+}
+
+void Visuals::hitMarker(GameEvent* event) noexcept
+{
+    if (config.visuals.hitMarker) {
+        static float lastHitTime = 0.0f;
+
+        if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+            lastHitTime = memory.globalVars->realtime;
+            return;
+        }
+
+        if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
+            constexpr auto getEffectMaterial = [] {
+                static constexpr const char* effects[]{
+                "effects/dronecam",
+                "effects/underwater_overlay",
+                "effects/healthboost",
+                "effects/dangerzone_screen"
+                };
+
+                if (config.visuals.hitMarker <= 2)
+                    return effects[0];
+                return effects[config.visuals.hitMarker - 2];
+            };
+
+            auto renderContext = interfaces.materialSystem->getRenderContext();
+            renderContext->beginRender();
+            int x, y, width, height;
+            renderContext->getViewport(x, y, width, height);
+            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+            if (config.visuals.hitMarker == 1)
+                material->findVar("$c0_x")->setValue(0.0f);
+            else if (config.visuals.hitMarker == 2)
+                material->findVar("$c0_x")->setValue(0.1f);
+            else if (config.visuals.hitMarker >= 4)
+                material->findVar("$c0_x")->setValue(1.0f);
+            drawScreenEffectMaterial(material, 0, 0, width, height);
+            renderContext->endRender();
+            renderContext->release();
+        }
     }
 }
