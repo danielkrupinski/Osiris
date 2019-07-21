@@ -65,7 +65,7 @@ void Misc::spectatorList() noexcept
                 if (target == localPlayer) {
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                        interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20));
+                        interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20.0));
                         interfaces.surface->printText(name);
                         spectatorsCount++;
                     }
