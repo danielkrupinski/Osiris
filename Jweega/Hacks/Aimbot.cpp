@@ -20,20 +20,6 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return angles;
 }
 
-auto Aimbot::calculateDistance(const Vector& localPlayer, const Vector& Entity) noexcept
-{
-    Vector delta = Entity - localPlayer;
-    return sqrt(powf(delta.x, 2.f) + powf(delta.y, 2.f) + powf(delta.z, 2.f));
-}
-
-auto Aimbot::calculateAngleDifference(const Vector& viewAngles, const Vector& destination, float distance)
-{
-    auto pitch = sin(degreesToRadians(viewAngles.x - destination.x)) * distance;
-    auto yaw = sin(degreesToRadians(viewAngles.y - destination.y)) * distance;
-
-    return sqrt(powf(pitch, 2.0) + powf(yaw, 2.0));
-}
-
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
