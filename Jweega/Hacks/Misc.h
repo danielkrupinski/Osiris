@@ -159,12 +159,13 @@ namespace Misc {
             if (!config.aimbot[weaponId].enabled) return;
 
             auto [width, height] = interfaces.surface->getScreenSize();
-            auto actualFov = 2.f * std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tan(degreesToRadians(local->getProperty<bool>("m_bIsScoped") ? static_cast<float>(local->fovStart()) : (static_cast<float>(local->fovStart()) + config.visuals.fov)) / 2.f));
 
+            auto actualFov = std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(local->getProperty<bool>("m_bIsScoped") ? static_cast<float>(local->fovStart()) : (static_cast<float>(local->fovStart()) + config.visuals.fov)) / 2.f));
+            
             if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
-            auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(actualFov) / 2.f) * width;
-            interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 100);
+            auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tanf(actualFov) * width;
+            interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 1);
         }
     }
 }
