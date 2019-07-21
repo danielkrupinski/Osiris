@@ -307,7 +307,6 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
-    Misc::actualFov = setup->fov;
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
 

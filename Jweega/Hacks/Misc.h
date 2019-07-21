@@ -11,6 +11,7 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
+#include "../SDK/ConVar.h"
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
@@ -21,8 +22,7 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
-    static float actualFov = 0.0f;
-    
+        
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
@@ -157,11 +157,14 @@ namespace Misc {
             int weaponId = getWeaponIndex(local->getActiveWeapon()->getProperty<WeaponId>("m_iItemDefinitionIndex"));
             if (!config.aimbot[weaponId].enabled) weaponId = 0;
             if (!config.aimbot[weaponId].enabled) return;
-            auto screenSize = interfaces.surface->getScreenSize();
+
+            auto [width, height] = interfaces.surface->getScreenSize();
+            auto actualFov = 2.f * std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tan(degreesToRadians(local->getProperty<bool>("m_bIsScoped") ? static_cast<float>(local->fovStart()) : (static_cast<float>(local->fovStart()) + config.visuals.fov)) / 2.f));
+
             if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
-            auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(actualFov) / 2.f) * screenSize.first;
-            interfaces.surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, static_cast<int>(radius), 100);
+            auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(actualFov) / 2.f) * width;
+            interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 100);
         }
     }
 }
