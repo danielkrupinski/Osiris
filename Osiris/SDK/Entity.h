@@ -75,7 +75,7 @@ public:
             int backup = *render;
             Vector absOrigin = getAbsOrigin();
             *render = 0;
-            memory.setAbsOrigin(this, getProperty<Vector>("m_vecOrigin"));
+            memory.setAbsOrigin(this, origin());
             auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
             memory.setAbsOrigin(this, absOrigin);
             *render = backup;
@@ -203,6 +203,7 @@ public:
 
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
+    NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
