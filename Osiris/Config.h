@@ -24,6 +24,7 @@ public:
         bool enabled{ false };
         bool onKey{ false };
         int key{ 0 };
+        int keyMode{ 0 };
         bool silent{ false };
         bool friendlyFire{ false };
         bool visibleOnly{ true };
