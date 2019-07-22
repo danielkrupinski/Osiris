@@ -48,7 +48,7 @@ void Misc::spectatorList() noexcept
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
-        int spectatorsCount{ 0 };
+        int textPositionY{ static_cast<int>(0.67f * height) };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
@@ -63,9 +63,10 @@ void Misc::spectatorList() noexcept
                 if (target == localPlayer) {
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                        interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20));
+                        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
+                        interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
+                        textPositionY -= textHeight;
                         interfaces.surface->printText(name);
-                        spectatorsCount++;
                     }
                 }
             }
