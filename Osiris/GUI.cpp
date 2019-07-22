@@ -181,6 +181,12 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("On key", &config.aimbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.aimbot[currentWeapon].key);
+        ImGui::SameLine();
+        ImGui::PushID(2);
+        ImGui::PushItemWidth(70.0f);
+        ImGui::Combo("", &config.aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
+        ImGui::PopItemWidth();
+        ImGui::PopID();
         ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
         ImGui::Checkbox("Friendly fire", &config.aimbot[currentWeapon].friendlyFire);
         ImGui::Checkbox("Visible only", &config.aimbot[currentWeapon].visibleOnly);

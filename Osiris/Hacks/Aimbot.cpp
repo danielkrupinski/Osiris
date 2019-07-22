@@ -107,8 +107,18 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
         return;
 
-    if (config.aimbot[weaponIndex].onKey && !GetAsyncKeyState(config.aimbot[weaponIndex].key))
-        return;
+    if (config.aimbot[weaponIndex].onKey) {
+        if (!config.aimbot[weaponIndex].keyMode) {
+            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
+                return;
+        } else {
+            static bool toggle = true;
+            if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1)
+                toggle = !toggle;
+            if (!toggle)
+                return;
+        }
+    }
 
     if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot)) {
 
