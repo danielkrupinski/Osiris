@@ -49,6 +49,7 @@ public:
     Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
     Vmt client{ interfaces.client };
     Vmt clientMode{ memory.clientMode };
+    Vmt engine{ interfaces.engine };
     Vmt gameEventManager{ interfaces.gameEventManager };
     Vmt modelRender{ interfaces.modelRender };
     Vmt panel{ interfaces.panel };
