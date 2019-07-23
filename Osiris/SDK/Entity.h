@@ -223,6 +223,7 @@ public:
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
+    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId);
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int);
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int);
     NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32]);

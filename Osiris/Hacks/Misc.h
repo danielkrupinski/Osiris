@@ -60,7 +60,7 @@ namespace Misc {
         if (config.misc.autoPistol) {
             const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
             if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
-                if (activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver)
+                if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
                 else
                     cmd->buttons &= ~UserCmd::IN_ATTACK;
@@ -78,7 +78,7 @@ namespace Misc {
     {
         if (config.misc.autoReload) {
             const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
-            if (activeWeapon && getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex")) && !activeWeapon->getProperty<int>("m_iClip1"))
+            if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->getProperty<int>("m_iClip1"))
                 cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }
     }

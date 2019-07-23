@@ -97,7 +97,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1"))
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex"));
+    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
     if (!weaponIndex)
         return;
 
