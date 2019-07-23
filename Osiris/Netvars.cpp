@@ -227,22 +227,11 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
             && prop.dataTable->netTableName[0] == 'D')
             loadTable(networkName, prop.dataTable, prop.offset + offset);
 
-        char hash_name[256];
+        const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
-        strcpy_s(hash_name, networkName);
-        strcat_s(hash_name, "->");
-        strcat_s(hash_name, prop.name);
-
-        const auto hash = fnv::hashRuntime(hash_name);
-        const auto total_offset = std::uint16_t(offset + prop.offset);
-
-        props[hash] =
-        {
-            &prop,
-            total_offset
-        };
-
+        props[hash] = { &prop, uint16_t(offset + prop.offset) };
         offsets[prop.name] = prop.offset + offset;
+
         if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
             hookProperty(prop, spottedHook);
         else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
