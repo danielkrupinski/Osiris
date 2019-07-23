@@ -48,7 +48,7 @@ void Misc::spectatorList() noexcept
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
-        int textPositionY{ static_cast<int>(0.67f * height) };
+        int textPositionY{ static_cast<int>(0.5f * height) };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
@@ -57,17 +57,13 @@ void Misc::spectatorList() noexcept
 
             static PlayerInfo playerInfo;
 
-            if (interfaces.engine->getPlayerInfo(i, playerInfo)) {
-                auto target = interfaces.entityList->getEntityFromHandle(entity->getProperty<int>("m_hObserverTarget"));
-
-                if (target == localPlayer) {
-                    static wchar_t name[128];
-                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
-                        interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
-                        textPositionY -= textHeight;
-                        interfaces.surface->printText(name);
-                    }
+            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
+                static wchar_t name[128];
+                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                    const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
+                    interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
+                    textPositionY -= textHeight;
+                    interfaces.surface->printText(name);
                 }
             }
         }
@@ -96,7 +92,8 @@ void Misc::watermark() noexcept
                                          255.0f);
 
         interfaces.surface->setTextPosition(5, 0);
-        interfaces.surface->printText(L"Osiris");
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        interfaces.surface->printText((std::to_wstring(int(localPlayer->getObserverTarget())) + L" : " + std::to_wstring(int(localPlayer)).c_str()));
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
