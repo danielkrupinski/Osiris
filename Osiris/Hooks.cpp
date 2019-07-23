@@ -224,7 +224,7 @@ struct SoundData {
 static void __stdcall emitSound(SoundData data) noexcept
 {
     auto modulateVolume = [&data](std::function<int(int)> get) {
-        if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
+        if (auto entity{ interfaces.entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
             if (data.entityIndex == interfaces.engine->getLocalPlayer())
                 data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
@@ -339,7 +339,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
         auto modulateVolume = [&soundInfo](std::function<int(int)> get) {
-            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+            if (auto entity{ interfaces.entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
                     soundInfo.volume *= get(0) / 100.0f;
                 else if (!entity->isEnemy())
