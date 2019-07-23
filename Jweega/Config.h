@@ -182,6 +182,7 @@ public:
         bool revealRanks{ false };
         bool spectatorList{ false };
         bool watermark{ false };
+        bool drawBombTimer{ false };
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };

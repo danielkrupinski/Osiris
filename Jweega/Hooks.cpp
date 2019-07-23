@@ -194,6 +194,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::spectatorList();
         Misc::drawFov();
         Esp::render();
+        Misc::drawTimer();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -295,6 +296,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
         break;
 
     }
+    Misc::bombEvents(event);
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 
