@@ -180,6 +180,12 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("On key", &config.aimbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.aimbot[currentWeapon].key);
+        ImGui::SameLine();
+        ImGui::PushID(2);
+        ImGui::PushItemWidth(70.0f);
+        ImGui::Combo("", &config.aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
+        ImGui::PopItemWidth();
+        ImGui::PopID();
         ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
         ImGui::Checkbox("Friendly fire", &config.aimbot[currentWeapon].friendlyFire);
         ImGui::Checkbox("Visible only", &config.aimbot[currentWeapon].visibleOnly);
@@ -501,6 +507,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
 
         if (!config.misc.menuStyle)
             ImGui::End();

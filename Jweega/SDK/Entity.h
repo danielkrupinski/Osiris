@@ -26,13 +26,13 @@ enum class MoveType {
 class Entity {
 public:
     template <typename T>
-    constexpr auto getProperty(const char* name, const std::size_t offset = 0) const noexcept
+    [[deprecated]] constexpr auto getProperty(const char* name, const std::size_t offset = 0) const noexcept
     {
         return *reinterpret_cast<const T*>(this + netvars[name] + offset);
     }
 
     template <typename T>
-    constexpr void setProperty(const char* name, const T& value) noexcept
+    [[deprecated]] constexpr void setProperty(const char* name, const T& value) noexcept
     {
         *reinterpret_cast<T*>(this + netvars[name]) = value;
     }
@@ -75,7 +75,7 @@ public:
             int backup = *render;
             Vector absOrigin = getAbsOrigin();
             *render = 0;
-            memory.setAbsOrigin(this, getProperty<Vector>("m_vecOrigin"));
+            memory.setAbsOrigin(this, origin());
             auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
             memory.setAbsOrigin(this, absOrigin);
             *render = backup;
@@ -203,6 +203,7 @@ public:
 
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
+    NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
@@ -222,6 +223,7 @@ public:
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
+    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId);
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int);
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int);
     NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32]);

@@ -43,14 +43,12 @@ void Misc::spectatorList() noexcept
         if (!localPlayer->isAlive())
             return;
 
-        static unsigned font = interfaces.surface->createFont();
-        static bool init = interfaces.surface->setFontGlyphSet(font, "Tahoma", 12, 700, 0, 0, 128);
-        interfaces.surface->setTextFont(font);
+        interfaces.surface->setTextFont(Surface::font);
         interfaces.surface->setTextColor(51, 153, 255, 255);
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
-        int spectatorsCount{ 0 };
+        int textPositionY{ static_cast<int>(0.67f * height) };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
@@ -65,9 +63,10 @@ void Misc::spectatorList() noexcept
                 if (target == localPlayer) {
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                        interfaces.surface->setTextPosition(static_cast<int>(0.85 * width), static_cast<int>(0.7 * height - spectatorsCount * 20.0));
+                        const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
+                        interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
+                        textPositionY -= textHeight;
                         interfaces.surface->printText(name);
-                        spectatorsCount++;
                     }
                 }
             }
@@ -126,7 +125,7 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
         const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
-        if (activeWeapon && activeWeapon->getProperty<WeaponId>("m_iItemDefinitionIndex") == WeaponId::Revolver) {
+        if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
             auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0));
             if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))

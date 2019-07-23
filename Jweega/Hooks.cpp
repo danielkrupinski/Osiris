@@ -226,7 +226,7 @@ struct SoundData {
 static void __stdcall emitSound(SoundData data) noexcept
 {
     auto modulateVolume = [&data](std::function<int(int)> get) {
-        if (auto entity = interfaces.entityList->getEntity(data.entityIndex)) {
+        if (auto entity{ interfaces.entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
             if (data.entityIndex == interfaces.engine->getLocalPlayer())
                 data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
@@ -293,8 +293,8 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
         break;
     case fnv::hash("player_hurt"):
         Misc::playHitSound(event);
+        Visuals::hitMarker(event);
         break;
-
     }
     Misc::bombEvents(event);
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
@@ -346,7 +346,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
         auto modulateVolume = [&soundInfo](std::function<int(int)> get) {
-            if (auto entity = interfaces.entityList->getEntity(soundInfo.entityIndex)) {
+            if (auto entity{ interfaces.entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
                     soundInfo.volume *= get(0) / 100.0f;
                 else if (!entity->isEnemy())
@@ -372,6 +372,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     Visuals::applyScreenEffects();
+    Visuals::hitMarker();
     return hooks.viewRender.callOriginal<int, int>(39, param);
 }
 

@@ -180,7 +180,7 @@ static void do_sequence_remapping(recvProxyData& data, void* entity)
             if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && !data.value._int)
                 data.value._int = 8;
 
-            const auto weapon_info = game_data::get_weapon_info(activeWeapon->getProperty<short>("m_iItemDefinitionIndex"));
+            const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex());
 
             if (!weapon_info)
                 return;
