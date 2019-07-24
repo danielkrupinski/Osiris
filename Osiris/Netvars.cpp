@@ -234,20 +234,3 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         }
     }
 }
-
-void Netvars::unloadTable(RecvTable* recvTable) noexcept
-{
-    for (int i = 0; i < recvTable->propCount; ++i) {
-        auto& prop = recvTable->props[i];
-
-        if (isdigit(prop.name[0]))
-            continue;
-
-        if (prop.dataTable)
-            unloadTable(prop.dataTable);
-        else {
-            unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
-            unhookProperty(*props[fnv::hash("CBaseViewModel->m_nSequence")].prop);
-        }
-    }
-}
