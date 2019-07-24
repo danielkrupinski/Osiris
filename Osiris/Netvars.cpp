@@ -171,28 +171,17 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-static void do_sequence_remapping(recvProxyData& data, void* entity)
+static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+        if (const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon()) {
             if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && !data.value._int)
                 data.value._int = 8;
 
-            const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex());
-
-            if (!weapon_info)
-                return;
-
-            data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
+            if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))
+                data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
         }
     }
-}
-
-void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
-{
-    do_sequence_remapping(data, arg2);
     proxies["m_nSequence"](data, arg2, arg3);
 }
 
