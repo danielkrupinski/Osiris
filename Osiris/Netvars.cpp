@@ -188,7 +188,7 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        loadTable(clientClass->networkName, clientClass->recvTable);
+        walkTable(clientClass->networkName, clientClass->recvTable);
 }
 
 void Netvars::restore() noexcept
@@ -200,7 +200,7 @@ void Netvars::restore() noexcept
     offsets.clear();
 }
 
-void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
+void Netvars::walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -214,7 +214,7 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
         if (prop.type == 6
             && prop.dataTable
             && prop.dataTable->netTableName[0] == 'D')
-            loadTable(networkName, prop.dataTable, prop.offset + offset);
+            walkTable(networkName, prop.dataTable, prop.offset + offset);
 
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
