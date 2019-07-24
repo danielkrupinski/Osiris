@@ -46,7 +46,7 @@ void Glow::render() noexcept
                 else applyGlow(glow[8], entity->health());
             } else if (entity->getProperty<bool>("m_bIsDefusing")) {
                 if (glow[9].enabled) applyGlow(glow[9], entity->health());
-                if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[10], entity->health());
+                else if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glow[10], entity->health());
                 else applyGlow(glow[11], entity->health());
             } else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
                 applyGlow(glow[12], entity->health());
