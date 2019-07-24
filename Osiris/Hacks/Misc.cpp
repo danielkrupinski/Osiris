@@ -92,8 +92,7 @@ void Misc::watermark() noexcept
                                          255.0f);
 
         interfaces.surface->setTextPosition(5, 0);
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        interfaces.surface->printText((std::to_wstring(int(localPlayer->getObserverTarget())) + L" : " + std::to_wstring(int(localPlayer)).c_str()));
+        interfaces.surface->printText(L"Osiris");
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
