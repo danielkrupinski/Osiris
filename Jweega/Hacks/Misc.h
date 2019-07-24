@@ -172,7 +172,7 @@ namespace Misc {
             if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
             auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tanf(actualFov) * width;
-            interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 10);
+            interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 20);
         }
     }
 
