@@ -663,13 +663,13 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        ImGui::PushItemWidth(120.0f);
-        ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag));
+        ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
-        if (ImGui::Button("Set clantag")) {
-            Misc::setClanTag(config.misc.clanTag);
-            Misc::animateClanTag(config.misc.clanTag);
-        }
+        ImGui::PushItemWidth(120.0f);
+        ImGui::PushID(0);
+        if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
+            Misc::updateClanTag(true);
+        ImGui::PopID();
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
@@ -750,12 +750,14 @@ void GUI::renderConfigWindow() noexcept
         if (ImGui::Button("Reset config", { 100.0f, 25.0f })) {
             config.reset();
             updateColors();
+            Misc::updateClanTag(true);
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
                 config.load(currentConfig);
                 updateColors();
                 SkinChanger::scheduleHudUpdate();
+                Misc::updateClanTag(true);
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config.save(currentConfig);

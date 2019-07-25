@@ -13,7 +13,7 @@
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
-    void animateClanTag(const char* = nullptr) noexcept;
+    void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;
     void recoilCrosshair() noexcept;
@@ -116,11 +116,6 @@ namespace Misc {
     {
         if (config.misc.fastDuck)
             cmd->buttons |= UserCmd::IN_BULLRUSH;
-    }
-
-    constexpr void setClanTag(const char* clanTag) noexcept
-    {
-        memory.setClanTag(clanTag, clanTag);
     }
 
     constexpr void playHitSound(GameEvent* event) noexcept
