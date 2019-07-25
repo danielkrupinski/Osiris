@@ -23,6 +23,7 @@ public:
     struct Aimbot {
         bool enabled{ false };
         bool onKey{ false };
+		bool whileShooting{ true };		// If enabled, the aimbot will only trigger while shooting.
         int key{ 0 };
         int keyMode{ 0 };
         bool silent{ false };
