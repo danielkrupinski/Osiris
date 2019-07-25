@@ -376,6 +376,15 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
     return hooks.viewRender.callOriginal<int, int>(39, param);
 }
 
+static void* __stdcall getDemoPlaybackParameters() noexcept
+{
+    auto result = hooks.engine.callOriginal<void*>(218);
+    constexpr bool overwatchRevealTest = true;
+    if constexpr (overwatchRevealTest)
+        return nullptr;
+    return result;
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -399,6 +408,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
@@ -422,6 +432,7 @@ void Hooks::restore() noexcept
     bspQuery.restore();
     client.restore();
     clientMode.restore();
+    engine.restore();
     gameEventManager.restore();
     modelRender.restore();
     panel.restore();

@@ -201,6 +201,11 @@ public:
         return 0.0f;
     }
 
+    constexpr Entity* getObserverTarget() noexcept
+    {
+        return callVirtualMethod<Entity*>(this, 291);
+    }
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);

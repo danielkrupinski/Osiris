@@ -29,8 +29,7 @@ public:
         return props.at(hash).prop;
     }
 private:
-    void loadTable(const char*, RecvTable*, const std::size_t = 0) noexcept;
-    void unloadTable(RecvTable*) noexcept;
+    void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
     mutable std::unordered_map<std::string_view, std::size_t> offsets;
 
     struct recvData {

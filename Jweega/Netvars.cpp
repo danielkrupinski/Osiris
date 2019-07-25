@@ -171,47 +171,36 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-static void do_sequence_remapping(recvProxyData& data, void* entity)
+static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+        if (const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon()) {
             if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && !data.value._int)
                 data.value._int = 8;
 
-            const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex());
-
-            if (!weapon_info)
-                return;
-
-            data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
+            if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))
+                data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
         }
     }
-}
-
-void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
-{
-    do_sequence_remapping(data, arg2);
     proxies["m_nSequence"](data, arg2, arg3);
 }
 
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        loadTable(clientClass->networkName, clientClass->recvTable);
+        walkTable(false, clientClass->networkName, clientClass->recvTable);
 }
 
 void Netvars::restore() noexcept
 {
     for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        unloadTable(clientClass->recvTable);
+        walkTable(true, clientClass->networkName, clientClass->recvTable);
 
     proxies.clear();
     offsets.clear();
 }
 
-void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
+void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -225,44 +214,23 @@ void Netvars::loadTable(const char* networkName, RecvTable* recvTable, const std
         if (prop.type == 6
             && prop.dataTable
             && prop.dataTable->netTableName[0] == 'D')
-            loadTable(networkName, prop.dataTable, prop.offset + offset);
+            walkTable(unload, networkName, prop.dataTable, prop.offset + offset);
 
-        char hash_name[256];
+        const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
-        strcpy_s(hash_name, networkName);
-        strcat_s(hash_name, "->");
-        strcat_s(hash_name, prop.name);
+        if (!unload) {
+            props[hash] = { &prop, uint16_t(offset + prop.offset) };
+            offsets[prop.name] = prop.offset + offset;
 
-        const auto hash = fnv::hashRuntime(hash_name);
-        const auto total_offset = std::uint16_t(offset + prop.offset);
-
-        props[hash] =
-        {
-            &prop,
-            total_offset
-        };
-
-        offsets[prop.name] = prop.offset + offset;
-        if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-            hookProperty(prop, spottedHook);
-        else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-            hookProperty(prop, viewModelSequence);
-    }
-}
-
-void Netvars::unloadTable(RecvTable* recvTable) noexcept
-{
-    for (int i = 0; i < recvTable->propCount; ++i) {
-        auto& prop = recvTable->props[i];
-
-        if (isdigit(prop.name[0]))
-            continue;
-
-        if (prop.dataTable)
-            unloadTable(prop.dataTable);
-        else {
-            unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
-            unhookProperty(*props[fnv::hash("CBaseViewModel->m_nSequence")].prop);
+            if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
+                hookProperty(prop, spottedHook);
+            else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
+                hookProperty(prop, viewModelSequence);
+        } else {
+            if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
+                unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
+            else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
+                unhookProperty(*props[fnv::hash("CBaseViewModel->m_nSequence")].prop);
         }
     }
 }
