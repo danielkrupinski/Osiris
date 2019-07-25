@@ -171,6 +171,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        bool customClanTag{ false };
         char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
