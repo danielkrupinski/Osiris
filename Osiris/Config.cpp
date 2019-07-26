@@ -48,7 +48,7 @@ void Config::load(size_t id) noexcept
 
         if (aimbotJson.isMember("Enabled")) aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
         if (aimbotJson.isMember("On key")) aimbotConfig.onKey = aimbotJson["On key"].asBool();
-		if (aimbotJson.isMember("Only while shooting")) aimbotConfig.whileShooting = aimbotJson["On shoot"].asBool();
+        if (aimbotJson.isMember("Aimlock")) aimbotConfig.aimlock = aimbotJson["Aimlock"].asBool();
         if (aimbotJson.isMember("Key")) aimbotConfig.key = aimbotJson["Key"].asInt();
         if (aimbotJson.isMember("Key mode")) aimbotConfig.keyMode = aimbotJson["Key mode"].asInt();
         if (aimbotJson.isMember("Silent")) aimbotConfig.silent = aimbotJson["Silent"].asBool();
@@ -340,7 +340,7 @@ void Config::save(size_t id) const noexcept
 
         aimbotJson["Enabled"] = aimbotConfig.enabled;
         aimbotJson["On key"] = aimbotConfig.onKey;
-		aimbotJson["Only while shooting"] = aimbotConfig.whileShooting;
+        aimbotJson["Aimlock"] = aimbotConfig.aimlock;
         aimbotJson["Key"] = aimbotConfig.key;
         aimbotJson["Key mode"] = aimbotConfig.keyMode;
         aimbotJson["Silent"] = aimbotConfig.silent;

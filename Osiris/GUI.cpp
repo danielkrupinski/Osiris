@@ -187,7 +187,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Combo("", &config.aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
         ImGui::PopItemWidth();
         ImGui::PopID();
-		ImGui::Checkbox("Only while shooting", &config.aimbot[currentWeapon].whileShooting);
+        ImGui::Checkbox("Aimlock", &config.aimbot[currentWeapon].aimlock);
         ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
         ImGui::Checkbox("Friendly fire", &config.aimbot[currentWeapon].friendlyFire);
         ImGui::Checkbox("Visible only", &config.aimbot[currentWeapon].visibleOnly);
