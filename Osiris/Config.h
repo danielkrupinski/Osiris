@@ -23,9 +23,9 @@ public:
     struct Aimbot {
         bool enabled{ false };
         bool onKey{ false };
-        bool aimlock{ true };
         int key{ 0 };
         int keyMode{ 0 };
+        bool aimlock{ false };
         bool silent{ false };
         bool friendlyFire{ false };
         bool visibleOnly{ true };
