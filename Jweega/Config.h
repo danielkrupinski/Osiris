@@ -25,6 +25,7 @@ public:
         bool onKey{ false };
         int key{ 0 };
         int keyMode{ 0 };
+        bool aimlock{ false };
         bool silent{ false };
         bool friendlyFire{ false };
         bool visibleOnly{ true };
@@ -171,6 +172,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        bool customClanTag{ false };
         char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };

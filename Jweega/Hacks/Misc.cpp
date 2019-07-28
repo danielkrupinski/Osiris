@@ -16,23 +16,26 @@ void Misc::inverseRagdollGravity() noexcept
     ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
 }
 
-void Misc::animateClanTag(const char* tag) noexcept
+void Misc::updateClanTag(bool tagChanged) noexcept
 {
-    static float lastTime{ 0.0f };
-    static std::string clanTag;
+    if (config.misc.customClanTag) {
+        static std::string clanTag;
 
-    if (tag) {
-        clanTag = tag;
-        if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
-            clanTag.push_back(' ');
+        if (tagChanged) {
+            clanTag = config.misc.clanTag;
+            if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
+                clanTag.push_back(' ');
+        }
+
+        static auto lastTime{ 0.0f };
+        if (memory.globalVars->realtime - lastTime < 0.6f) return;
+        lastTime = memory.globalVars->realtime;
+
+        if (config.misc.animatedClanTag && !clanTag.empty())
+            std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
+
+        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
     }
-
-    if (memory.globalVars->realtime - lastTime < 0.6f) return;
-    lastTime = memory.globalVars->realtime;
-
-    if (config.misc.animatedClanTag && !clanTag.empty())
-        std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
-    setClanTag(clanTag.c_str());
 }
 
 void Misc::spectatorList() noexcept

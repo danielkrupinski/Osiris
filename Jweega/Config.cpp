@@ -50,6 +50,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("On key")) aimbotConfig.onKey = aimbotJson["On key"].asBool();
         if (aimbotJson.isMember("Key")) aimbotConfig.key = aimbotJson["Key"].asInt();
         if (aimbotJson.isMember("Key mode")) aimbotConfig.keyMode = aimbotJson["Key mode"].asInt();
+        if (aimbotJson.isMember("Aimlock")) aimbotConfig.aimlock = aimbotJson["Aimlock"].asBool();
         if (aimbotJson.isMember("Silent")) aimbotConfig.silent = aimbotJson["Silent"].asBool();
         if (aimbotJson.isMember("Friendly fire")) aimbotConfig.friendlyFire = aimbotJson["Friendly fire"].asBool();
         if (aimbotJson.isMember("Visible only")) aimbotConfig.visibleOnly = aimbotJson["Visible only"].asBool();
@@ -293,6 +294,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
+        if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, 16, miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
@@ -343,6 +345,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["On key"] = aimbotConfig.onKey;
         aimbotJson["Key"] = aimbotConfig.key;
         aimbotJson["Key mode"] = aimbotConfig.keyMode;
+        aimbotJson["Aimlock"] = aimbotConfig.aimlock;
         aimbotJson["Silent"] = aimbotConfig.silent;
         aimbotJson["Friendly fire"] = aimbotConfig.friendlyFire;
         aimbotJson["Visible only"] = aimbotConfig.visibleOnly;
@@ -556,6 +559,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
+        miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Clan tag"] = misc.clanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;
         miscJson["Fast duck"] = misc.fastDuck;

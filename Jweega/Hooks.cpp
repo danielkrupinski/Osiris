@@ -119,7 +119,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
-    Misc::animateClanTag();
+    Misc::updateClanTag();
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
 
