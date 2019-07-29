@@ -20,8 +20,8 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
-	void bombEvents(GameEvent*) noexcept;
-	void drawTextTimer() noexcept;
+    void bombEvents(GameEvent*) noexcept;
+    void drawTextTimer() noexcept;
     
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
