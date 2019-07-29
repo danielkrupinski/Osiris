@@ -163,17 +163,21 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     }
 }
 
+static bool plantingBomb = false;
+static bool defusingBomb = false;
+static bool haveDefusers = false;
+static float plantedTime = 0.0f;
+static float defusingTime = 0.0f;
+
 void Misc::bombEvents(GameEvent* event) noexcept
 {
     if (!config.misc.drawBombTimer) return;
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("bomb_beginplant"):
             plantingBomb = true;
-            bombsiteIndex = event->getInt("site");
             break;
         case fnv::hash("bomb_abortplant"):
             plantingBomb = false;
-            bombsiteIndex = 0;
             break;
         case fnv::hash("bomb_planted"):
             plantedTime = memory.globalVars->currenttime;
@@ -218,10 +222,6 @@ void Misc::drawTextTimer() noexcept
                 interfaces.surface->setTextColor(0, 255, 0, 255);
             }
             interfaces.surface->printText(plantingText.c_str());
-            interfaces.surface->setTextPosition(5, (screen.second / 2) + 10);
-            std::wstring bombsite(L"Bombsite Index:");
-            bombsite += std::to_wstring(bombsiteIndex);
-            interfaces.surface->printText(bombsite.c_str());
         }
         if (plantedTime > 0.0f) {
             float blowTime = plantedTime + interfaces.cvar->findVar("mp_c4timer")->getInt();
