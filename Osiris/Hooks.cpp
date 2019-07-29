@@ -192,6 +192,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
         Misc::watermark();
         Misc::spectatorList();
+        Misc::drawTextTimer();
         Esp::render();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
@@ -290,6 +291,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
         Visuals::hitMarker(event);
         break;
     }
+    Misc::bombEvents(event);
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 
