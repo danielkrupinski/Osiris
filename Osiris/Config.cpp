@@ -320,6 +320,14 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
     }
+	
+    {
+        auto& messagesJson = json["Messages"];
+
+        if(messagesJson.isMember("Kill message"))strcpy_s(messages.kill, 256, messagesJson["Kill message"].asCString());
+        if(messagesJson.isMember("Headshot message"))strcpy_s(messages.headshot, 256, messagesJson["Headshot message"].asCString());
+    }
+	
 }
 
 void Config::save(size_t id) const noexcept
@@ -583,6 +591,13 @@ void Config::save(size_t id) const noexcept
         miscJson["Hit sound"] = misc.hitSound;
         miscJson["Choked packets"] = misc.chokedPackets;
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
+    }
+    
+    {
+        auto& messagesJson = json["Messages"];
+
+        messagesJson["Kill message"] = messages.kill;
+        messagesJson["Headshot message"] = messages.headshot;
     }
 
     out << json;

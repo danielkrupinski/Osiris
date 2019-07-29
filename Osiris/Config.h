@@ -198,6 +198,11 @@ public:
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
     } misc;
+    
+    struct{
+        char kill[256];
+        char headshot[256];
+    } messages;
 
 private:
     std::filesystem::path path;
