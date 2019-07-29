@@ -162,3 +162,99 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
             cmd->buttons &= ~UserCmd::IN_USE;
     }
 }
+
+void Misc::bombEvents(GameEvent* event) noexcept
+{
+    if (!config.misc.drawBombTimer) return;
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("bomb_beginplant"):
+            plantingBomb = true;
+            bombsiteIndex = event->getInt("site");
+            break;
+        case fnv::hash("bomb_abortplant"):
+            plantingBomb = false;
+            bombsiteIndex = 0;
+            break;
+        case fnv::hash("bomb_planted"):
+            plantedTime = memory.globalVars->currenttime;
+            plantingBomb = false;
+            break;
+        case fnv::hash("bomb_begindefuse"):
+            defusingBomb = true;
+            defusingTime = memory.globalVars->currenttime;
+            haveDefusers = event->getBool("haskit");
+            break;
+        case fnv::hash("bomb_abortdefuse"):
+            defusingTime = 0.0f;
+            defusingBomb = false;
+            break;
+        case fnv::hash("round_start"):
+        case fnv::hash("bomb_exploded"):
+        case fnv::hash("bomb_defused"):
+            plantingBomb = false;
+            defusingBomb = false;
+            haveDefusers = false;
+            plantedTime = 0.0f;
+            defusingTime = 0.0f;
+            break;
+        }
+}
+
+void Misc::drawTextTimer() noexcept
+{
+    if(!config.misc.bombTimer || !interfaces.engine->isInGame()) return;
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer) return;
+    static auto screen = interfaces.surface->getScreenSize();
+    if (plantingBomb) {
+            std::wstring plantingText(L"Bomb is planting!");
+            static auto text = interfaces.surface->getTextSize(Surface::font, plantingText.c_str());
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextPosition(5, (screen.second / 2) - (text.second / 2));
+            if (local->getProperty<int>("m_iTeamNum") == 3) {
+                interfaces.surface->setTextColor(255, 0, 0, 255);
+            }
+            else {
+                interfaces.surface->setTextColor(0, 255, 0, 255);
+            }
+            interfaces.surface->printText(plantingText.c_str());
+            interfaces.surface->setTextPosition(5, (screen.second / 2) + 10);
+            std::wstring bombsite(L"Bombsite Index:");
+            bombsite += std::to_wstring(bombsiteIndex);
+            interfaces.surface->printText(bombsite.c_str());
+        }
+        if (plantedTime > 0.0f) {
+            float blowTime = plantedTime + interfaces.cvar->findVar("mp_c4timer")->getInt();
+            float timer = blowTime - memory.globalVars->currenttime;
+
+            if (timer > 0.0000f) {
+                std::wstring timerText(L"Bomb timer: ");
+                timerText += std::to_wstring(timer);
+                static auto textSize = interfaces.surface->getTextSize(Surface::font, timerText.c_str());
+                interfaces.surface->setTextFont(Surface::font);
+                interfaces.surface->setTextPosition(5, (screen.second / 2) - textSize.second);
+                if (local->getProperty<int>("m_iTeamNum") == 3) {
+                    interfaces.surface->setTextColor(255, 0, 0, 255);
+                }
+                else {
+                    interfaces.surface->setTextColor(0, 255, 0, 255);
+                }
+                interfaces.surface->printText(timerText.c_str());
+                if(defusingBomb){
+                    float defusedTime = (defusingTime + (haveDefusers ? 5 : 10));
+                    float defuse = defusedTime - memory.globalVars->currenttime;
+                    std::wstring defuseTimer(L"Defuse timer: ");
+                    defuseTimer += std::to_wstring(defuse);
+                    interfaces.surface->setTextFont(Surface::font);
+                    interfaces.surface->setTextPosition(5, screen.second / 2);
+                    if (local->getProperty<int>("m_iTeamNum") == 3) {
+                        interfaces.surface->setTextColor(0, 255, 0, 255);
+                    }
+                    else {
+                        interfaces.surface->setTextColor(255, 0, 0, 255);
+                    }
+                    interfaces.surface->printText(defuseTimer.c_str());
+                }
+            }
+        }
+}
