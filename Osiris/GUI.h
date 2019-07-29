@@ -23,6 +23,7 @@ private:
     void renderSkinChangerWindow() noexcept;
     void renderSoundWindow() noexcept;
     void renderMiscWindow() noexcept;
+	void renderMessagesWindow() noexcept;
     void renderConfigWindow() noexcept;
     void renderGuiStyle2() noexcept;
 

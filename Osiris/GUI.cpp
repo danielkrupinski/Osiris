@@ -56,6 +56,7 @@ void GUI::render() noexcept
         renderSkinChangerWindow();
         renderSoundWindow();
         renderMiscWindow();
+        renderMessagesWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -121,6 +122,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
+        ImGui::MenuItem("Messages", nullptr, &window.messages);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
@@ -708,6 +710,20 @@ void GUI::renderMiscWindow() noexcept
     }
 }
 
+void GUI::renderMessagesWindow() noexcept
+{
+    if(window.messages) {
+        if(!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Messages", &window.messages, windowFlags);
+        }
+        ImGui::InputText("Kill message", config.messages.kill, IM_ARRAYSIZE(config.messages.kill));
+        ImGui::InputText("Headshot message", config.messages.headshot, IM_ARRAYSIZE(config.messages.headshot));
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
@@ -832,6 +848,11 @@ void GUI::renderGuiStyle2() noexcept
             window.misc = true;
             ImGui::EndTabItem();
         }
+		if(ImGui::BeginTabItem("Messages")) {
+            window = { };
+            window.misc = true;
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Config")) {
             window = { };
             window.config = true;
@@ -851,6 +872,7 @@ void GUI::renderGuiStyle2() noexcept
     renderSkinChangerWindow();
     renderSoundWindow();
     renderMiscWindow();
+    renderMessagesWindow();
     renderConfigWindow();
 
     ImGui::End();
