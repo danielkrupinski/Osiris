@@ -186,7 +186,8 @@ public:
         bool spectatorList{ false };
         bool watermark{ false };
         bool fixAnimationLOD{ false };
-		bool bombTimer{ false };
+        bool drawAimbotFov{ false };
+        bool bombTimer{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };

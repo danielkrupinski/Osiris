@@ -308,6 +308,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
         if (miscJson.isMember("Watermark")) misc.watermark = miscJson["Watermark"].asBool();
         if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
+        if (miscJson.isMember("Draw aimbot FOV")) misc.drawAimbotFov = miscJson["Draw aimbot FOV"].asBool();
         if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
@@ -580,7 +581,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Spectator list"] = misc.spectatorList;
         miscJson["Watermark"] = misc.watermark;
         miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
-		miscJson["Bomb timer"] = misc.bombTimer;
+        miscJson["Draw aimbot FOV"] = misc.drawAimbotFov;
+        miscJson["Bomb timer"] = misc.bombTimer;
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;
         miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
