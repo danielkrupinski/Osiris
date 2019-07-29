@@ -193,6 +193,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::watermark();
         Misc::spectatorList();
         Misc::drawTextTimer();
+        Misc::drawAimbotFov();
         Esp::render();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
@@ -307,6 +308,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
     if (interfaces.engine->isInGame()
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
         setup->fov += config.visuals.fov;
+    Misc::actualFov = setup->fov;
     setup->farZ += config.visuals.farZ * 10;
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
