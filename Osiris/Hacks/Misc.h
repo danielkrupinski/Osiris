@@ -134,7 +134,7 @@ namespace Misc {
             interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
 
-    constexpr void killMessage(GameEvent* event) noexcept
+    static void killMessage(GameEvent* event) noexcept
     {
         auto localPlayer = interfaces.engine->getLocalPlayer();
         if (config.misc.killMessage

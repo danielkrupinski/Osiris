@@ -39,6 +39,7 @@ private:
         bool skinChanger{ false };
         bool sound{ false };
         bool misc{ false };
+        bool messages{ false };
         bool config{ false };
     } window;
 };

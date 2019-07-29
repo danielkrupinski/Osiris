@@ -171,7 +171,7 @@ static float defusingTime = 0.0f;
 
 void Misc::bombEvents(GameEvent* event) noexcept
 {
-    if (!config.misc.drawBombTimer) return;
+    if (!config.misc.bombTimer) return;
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("bomb_beginplant"):
             plantingBomb = true;
@@ -215,7 +215,7 @@ void Misc::drawTextTimer() noexcept
             static auto text = interfaces.surface->getTextSize(Surface::font, plantingText.c_str());
             interfaces.surface->setTextFont(Surface::font);
             interfaces.surface->setTextPosition(5, (screen.second / 2) - (text.second / 2));
-            if (local->getProperty<int>("m_iTeamNum") == 3) {
+            if (localPlayer->getProperty<int>("m_iTeamNum") == 3) {
                 interfaces.surface->setTextColor(255, 0, 0, 255);
             }
             else {
@@ -233,7 +233,7 @@ void Misc::drawTextTimer() noexcept
                 static auto textSize = interfaces.surface->getTextSize(Surface::font, timerText.c_str());
                 interfaces.surface->setTextFont(Surface::font);
                 interfaces.surface->setTextPosition(5, (screen.second / 2) - textSize.second);
-                if (local->getProperty<int>("m_iTeamNum") == 3) {
+                if (localPlayer->getProperty<int>("m_iTeamNum") == 3) {
                     interfaces.surface->setTextColor(255, 0, 0, 255);
                 }
                 else {
@@ -247,7 +247,7 @@ void Misc::drawTextTimer() noexcept
                     defuseTimer += std::to_wstring(defuse);
                     interfaces.surface->setTextFont(Surface::font);
                     interfaces.surface->setTextPosition(5, screen.second / 2);
-                    if (local->getProperty<int>("m_iTeamNum") == 3) {
+                    if (localPlayer->getProperty<int>("m_iTeamNum") == 3) {
                         interfaces.surface->setTextColor(0, 255, 0, 255);
                     }
                     else {
