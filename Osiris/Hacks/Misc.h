@@ -138,8 +138,19 @@ namespace Misc {
     {
         auto localPlayer = interfaces.engine->getLocalPlayer();
         if (config.misc.killMessage
-            && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
-            && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
-            interfaces.engine->clientCmdUnrestricted("say Gotcha!");
+	    && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
+	    && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
+        {
+            std::string msg("say ");
+            if(!event->getBool("headshot"))
+            {
+            msg += config.messages.kill;
+            interfaces.engine->clientCmdUnrestricted(msg.c_str());
+            }else
+            {
+                msg += config.messages.headshot;
+                interfaces.engine->clientCmdUnrestricted(msg.c_str());
+            }
+        }
     }
 }
