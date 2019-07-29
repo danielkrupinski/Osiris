@@ -258,3 +258,38 @@ void Misc::drawTextTimer() noexcept
             }
         }
 }
+
+void Misc::drawAimbotFov() noexcept
+{
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.misc.drawAimbotFov || actualFov == 0.0f || !interfaces.engine->isInGame() || !localPlayer || !localPlayer->getActiveWeapon()) return;
+    int weaponId = getWeaponIndex(localPlayer->getActiveWeapon()->getProperty<WeaponId>("m_iItemDefinitionIndex"));
+    if (!config.aimbot[weaponId].enabled) weaponId = 0;
+    if (!config.aimbot[weaponId].enabled) return;
+    auto screenSize = interfaces.surface->getScreenSize();
+    if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
+    else interfaces.surface->setDrawColor(10, 255, 10, 255);
+    float radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(actualFov) / 2.f) * screenSize.first;
+    interfaces.surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, radius, 100);
+}
+
+void Misc::killMessage(GameEvent* event) noexcept
+{
+    auto localPlayer = interfaces.engine->getLocalPlayer();
+    if (config.misc.killMessage
+        && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
+        && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
+    {
+        std::string msg("say ");
+        if (!event->getBool("headshot"))
+        {
+            msg += config.messages.kill;
+            interfaces.engine->clientCmdUnrestricted(msg.c_str());
+        }
+        else
+        {
+            msg += config.messages.headshot;
+            interfaces.engine->clientCmdUnrestricted(msg.c_str());
+        }
+    }
+}
