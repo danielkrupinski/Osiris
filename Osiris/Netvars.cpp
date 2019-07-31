@@ -16,11 +16,6 @@ static int random(int min, int max) noexcept
 
 static std::unordered_map<std::string_view, recvProxy> proxies;
 
-static void unhookProperty(RecvProp& prop) noexcept
-{
-    prop.proxy = proxies[prop.name];
-}
-
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
@@ -226,6 +221,11 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
                 hookProperty(prop, viewModelSequence);
         } else {
+
+            constexpr auto unhookProperty{ [](RecvProp& prop) noexcept {
+                prop.proxy = proxies[prop.name];
+            } };
+
             if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
                 unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
