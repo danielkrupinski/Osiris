@@ -4,7 +4,7 @@
 
 class ResourceAccessControl {
 private:
-    std::byte pad[152];
+	std::byte pad[152];
 public:
-    int accessingThreadCount;
+	int accessingThreadCount;
 };

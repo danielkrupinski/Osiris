@@ -1,6 +1,5 @@
 #pragma once
 
 namespace Glow {
-    void render() noexcept;
+	void render() noexcept;
 }
-

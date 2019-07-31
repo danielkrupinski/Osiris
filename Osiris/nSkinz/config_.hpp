@@ -36,7 +36,7 @@ struct sticker_setting
 {
 	void update()
 	{
-        kit = SkinChanger::stickerKits[kit_vector_index].id;
+		kit = SkinChanger::stickerKits[kit_vector_index].id;
 	}
 
 	int kit = 0;
@@ -50,8 +50,8 @@ struct item_setting
 {
 	void update()
 	{
-        definition_index = game_data::weapon_names[definition_vector_index].definition_index;
-        entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
+		definition_index = game_data::weapon_names[definition_vector_index].definition_index;
+		entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
 
 		const std::vector<SkinChanger::PaintKit>* kit_names;
 		const game_data::weapon_name* defindex_names;
@@ -67,10 +67,10 @@ struct item_setting
 			defindex_names = game_data::knife_names;
 		}
 
-        paint_kit_index = (*kit_names)[paint_kit_vector_index].id;
-        definition_override_index = defindex_names[definition_override_vector_index].definition_index;
+		paint_kit_index = (*kit_names)[paint_kit_vector_index].id;
+		definition_override_index = defindex_names[definition_override_vector_index].definition_index;
 
-		for(auto& sticker : stickers)
+		for (auto& sticker : stickers)
 			sticker.update();
 	}
 
@@ -92,7 +92,7 @@ struct item_setting
 
 class config_ {
 public:
-    item_setting* get_by_definition_index(int definition_index);
+	item_setting* get_by_definition_index(int definition_index);
 };
 
 extern config_ g_config;

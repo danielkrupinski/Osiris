@@ -7,28 +7,28 @@
 // //////////////////////////////////////////////////////////////////////
 
 /*
-The JsonCpp library's source code, including accompanying documentation, 
+The JsonCpp library's source code, including accompanying documentation,
 tests and demonstration applications, are licensed under the following
 conditions...
 
-Baptiste Lepilleur and The JsonCpp Authors explicitly disclaim copyright in all 
-jurisdictions which recognize such a disclaimer. In such jurisdictions, 
+Baptiste Lepilleur and The JsonCpp Authors explicitly disclaim copyright in all
+jurisdictions which recognize such a disclaimer. In such jurisdictions,
 this software is released into the Public Domain.
 
 In jurisdictions which do not recognize Public Domain property (e.g. Germany as of
 2010), this software is Copyright (c) 2007-2010 by Baptiste Lepilleur and
 The JsonCpp Authors, and is released under the terms of the MIT License (see below).
 
-In jurisdictions which recognize Public Domain property, the user of this 
-software may choose to accept it either as 1) Public Domain, 2) under the 
-conditions of the MIT License (see below), or 3) under the terms of dual 
+In jurisdictions which recognize Public Domain property, the user of this
+software may choose to accept it either as 1) Public Domain, 2) under the
+conditions of the MIT License (see below), or 3) under the terms of dual
 Public Domain/MIT License conditions described here, as they choose.
 
 The MIT License is about as close to Public Domain as a license can get, and is
 described in clear, concise terms at:
 
    http://en.wikipedia.org/wiki/MIT_License
-   
+
 The full text of the MIT License follows:
 
 ========================================================================
@@ -68,10 +68,6 @@ license you like.
 // //////////////////////////////////////////////////////////////////////
 // End of content of file: LICENSE
 // //////////////////////////////////////////////////////////////////////
-
-
-
-
 
 #ifndef JSON_FORWARD_AMALGAMATED_H_INCLUDED
 # define JSON_FORWARD_AMALGAMATED_H_INCLUDED
@@ -214,39 +210,39 @@ msvc_pre1900_c99_snprintf(char* outBuf, size_t size, const char* format, ...);
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {
-typedef int Int;
-typedef unsigned int UInt;
+	typedef int Int;
+	typedef unsigned int UInt;
 #if defined(JSON_NO_INT64)
-typedef int LargestInt;
-typedef unsigned int LargestUInt;
+	typedef int LargestInt;
+	typedef unsigned int LargestUInt;
 #undef JSON_HAS_INT64
 #else                 // if defined(JSON_NO_INT64)
-// For Microsoft Visual use specific types as long long is not supported
+	// For Microsoft Visual use specific types as long long is not supported
 #if defined(_MSC_VER) // Microsoft Visual Studio
-typedef __int64 Int64;
-typedef unsigned __int64 UInt64;
+	typedef __int64 Int64;
+	typedef unsigned __int64 UInt64;
 #else                 // if defined(_MSC_VER) // Other platforms, use long long
-typedef int64_t Int64;
-typedef uint64_t UInt64;
+	typedef int64_t Int64;
+	typedef uint64_t UInt64;
 #endif                // if defined(_MSC_VER)
-typedef Int64 LargestInt;
-typedef UInt64 LargestUInt;
+	typedef Int64 LargestInt;
+	typedef UInt64 LargestUInt;
 #define JSON_HAS_INT64
 #endif // if defined(JSON_NO_INT64)
 
-template <typename T>
-using Allocator = typename std::conditional<JSONCPP_USING_SECURE_MEMORY,
-                                            SecureAllocator<T>,
-                                            std::allocator<T>>::type;
-using String = std::basic_string<char, std::char_traits<char>, Allocator<char>>;
-using IStringStream = std::basic_istringstream<String::value_type,
-                                               String::traits_type,
-                                               String::allocator_type>;
-using OStringStream = std::basic_ostringstream<String::value_type,
-                                               String::traits_type,
-                                               String::allocator_type>;
-using IStream = std::istream;
-using OStream = std::ostream;
+	template <typename T>
+	using Allocator = typename std::conditional<JSONCPP_USING_SECURE_MEMORY,
+		SecureAllocator<T>,
+		std::allocator<T>>::type;
+	using String = std::basic_string<char, std::char_traits<char>, Allocator<char>>;
+	using IStringStream = std::basic_istringstream<String::value_type,
+		String::traits_type,
+		String::allocator_type>;
+	using OStringStream = std::basic_ostringstream<String::value_type,
+		String::traits_type,
+		String::allocator_type>;
+	using IStream = std::istream;
+	using OStream = std::ostream;
 } // namespace Json
 
 // Legacy names (formerly macros).
@@ -261,11 +257,6 @@ using JSONCPP_OSTREAM = Json::OStream;
 // //////////////////////////////////////////////////////////////////////
 // End of content of file: include/json/config.h
 // //////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 // //////////////////////////////////////////////////////////////////////
 // Beginning of content of file: include/json/forwards.h
@@ -284,27 +275,25 @@ using JSONCPP_OSTREAM = Json::OStream;
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {
+	// writer.h
+	class FastWriter;
+	class StyledWriter;
 
-// writer.h
-class FastWriter;
-class StyledWriter;
+	// reader.h
+	class Reader;
 
-// reader.h
-class Reader;
+	// features.h
+	class Features;
 
-// features.h
-class Features;
-
-// value.h
-typedef unsigned int ArrayIndex;
-class StaticString;
-class Path;
-class PathArgument;
-class Value;
-class ValueIteratorBase;
-class ValueIterator;
-class ValueConstIterator;
-
+	// value.h
+	typedef unsigned int ArrayIndex;
+	class StaticString;
+	class Path;
+	class PathArgument;
+	class Value;
+	class ValueIteratorBase;
+	class ValueIterator;
+	class ValueConstIterator;
 } // namespace Json
 
 #endif // JSON_FORWARDS_H_INCLUDED
@@ -312,9 +301,5 @@ class ValueConstIterator;
 // //////////////////////////////////////////////////////////////////////
 // End of content of file: include/json/forwards.h
 // //////////////////////////////////////////////////////////////////////
-
-
-
-
 
 #endif //ifndef JSON_FORWARD_AMALGAMATED_H_INCLUDED

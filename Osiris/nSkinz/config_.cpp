@@ -31,9 +31,9 @@ config_ g_config;
 item_setting* config_::get_by_definition_index(const int definition_index)
 {
 	auto it = std::find_if(std::begin(config.skinChanger), std::end(config.skinChanger), [definition_index](const item_setting& e)
-	{
-		return e.enabled && e.definition_index == definition_index;
-	});
+		{
+			return e.enabled && e.definition_index == definition_index;
+		});
 
 	return it == std::end(config.skinChanger) ? nullptr : &*it;
 }

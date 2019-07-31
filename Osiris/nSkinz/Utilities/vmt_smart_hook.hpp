@@ -31,13 +31,13 @@ class table_hook
 {
 public:
 	constexpr table_hook()
-		: m_new_vmt{nullptr}
-		, m_old_vmt{nullptr} {}
+		: m_new_vmt{ nullptr }
+		, m_old_vmt{ nullptr } {}
 
 	~table_hook()
 	{
-		if(m_new_vmt)
-			delete[] (m_new_vmt - 1);
+		if (m_new_vmt)
+			delete[](m_new_vmt - 1);
 	}
 
 protected:
@@ -46,10 +46,10 @@ protected:
 		m_old_vmt = original_table;
 
 		size_t size = 0;
-		while(m_old_vmt[size] && platform::is_code_ptr(m_old_vmt[size]))
+		while (m_old_vmt[size] && platform::is_code_ptr(m_old_vmt[size]))
 			++size;
 
-		m_new_vmt = (new void*[size + 1]) + 1;
+		m_new_vmt = (new void* [size + 1]) + 1;
 		//std::copy(m_old_vmt - 1, m_old_vmt + size, m_new_vmt - 1);
 		memcpy(m_new_vmt - 1, m_old_vmt - 1, sizeof(void*) * (size + 1));
 	}
@@ -77,7 +77,7 @@ protected:
 	{
 		auto& vtbl = *reinterpret_cast<void***>(inst);
 		auto initialized = false;
-		if(!m_old_vmt)
+		if (!m_old_vmt)
 		{
 			initialized = true;
 			initialize(vtbl);
@@ -114,7 +114,7 @@ class vmt_smart_hook : table_hook
 {
 public:
 	vmt_smart_hook(void* class_base)
-		: m_class{class_base}
+		: m_class{ class_base }
 	{
 		initialize_and_hook_instance(class_base);
 	}
