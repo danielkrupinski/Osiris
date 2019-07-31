@@ -209,17 +209,17 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
             props[hash] = { &prop, uint16_t(offset + prop.offset) };
             offsets[prop.name] = prop.offset + offset;
 
-            constexpr auto hookProperty{ [](RecvProp& prop, recvProxy proxy) noexcept {
-                if (prop.proxy != proxy) {
-                    proxies[prop.name] = prop.proxy;
-                    prop.proxy = proxy;
+            constexpr auto hookProperty{ [](RecvProp& prop, recvProxy& originalProxy, recvProxy proxy) noexcept {
+                if (originalProxy != proxy) {
+                    proxies[prop.name] = originalProxy;
+                    originalProxy = proxy;
                 }
             } };
 
             if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                hookProperty(prop, spottedHook);
+                hookProperty(prop, prop.proxy, spottedHook);
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-                hookProperty(prop, viewModelSequence);
+                hookProperty(prop, prop.proxy, viewModelSequence);
         } else {
 
             constexpr auto unhookProperty{ [](RecvProp& prop) noexcept {
