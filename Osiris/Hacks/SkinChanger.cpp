@@ -26,10 +26,8 @@ std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
 
 void SkinChanger::initializeKits() noexcept
 {
-    const auto V_UCS2ToUTF8 = reinterpret_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(GetProcAddress(GetModuleHandleW(L"vstdlib"), "V_UCS2ToUTF8"));
-
     std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
-    std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
+    const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
@@ -38,22 +36,19 @@ void SkinChanger::initializeKits() noexcept
         if (paint_kit->id == 9001)
             continue;
 
-        const auto wide_name = interfaces.localize->find(paint_kit->itemName.buffer + 1);
-        char name[256];
-        V_UCS2ToUTF8(wide_name, name, sizeof(name));
-
-        if (paint_kit->id < 10000) {
-            if (auto pos = gameItems.find('_' + std::string{ paint_kit->name.buffer } +'='); pos != std::string::npos && gameItems.substr(pos + paint_kit->name.length).find('_' + std::string{ paint_kit->name.buffer } +'=') == std::string::npos) {
-                if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos) {
-                    sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')').c_str());
+        if (char name[256]; WideCharToMultiByte(CP_UTF8, 0, interfaces.localize->find(paint_kit->itemName.buffer + 1), -1, name, sizeof(name), nullptr, nullptr)) {
+            if (paint_kit->id < 10000) {
+                if (auto pos = gameItems.find('_' + std::string{ paint_kit->name.buffer } + '='); pos != std::string::npos && gameItems.substr(pos + paint_kit->name.length).find('_' + std::string{ paint_kit->name.buffer } +'=') == std::string::npos) {
+                    if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos) {
+                        sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')').c_str());
+                    }
                 }
+                skinKits.emplace_back(paint_kit->id, name);
+            } else {
+                std::string_view gloveName{ paint_kit->name.buffer };
+                sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + std::string{ gloveName.substr(0, gloveName.find('_')) } +')').c_str());
+                gloveKits.emplace_back(paint_kit->id, name);
             }
-            skinKits.emplace_back(paint_kit->id, name);
-        }
-        else {
-            std::string_view gloveName{ paint_kit->name.buffer };
-            sprintf_s(name + strlen(name), 255 - strlen(name), (" (" + std::string{ gloveName.substr(0, gloveName.find('_')) } +')').c_str());
-            gloveKits.emplace_back(paint_kit->id, name);
         }
     }
 
@@ -62,15 +57,11 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
         const auto sticker_kit = memory.itemSchema()->stickerKits.memory[i].value;
-        const auto wide_name = interfaces.localize->find(sticker_kit->itemName.buffer + 1);
-        char name[256];
-        V_UCS2ToUTF8(wide_name, name, sizeof(name));
-
-        stickerKits.emplace_back(sticker_kit->id, name);
+        if (char name[256]; WideCharToMultiByte(CP_UTF8, 0, interfaces.localize->find(sticker_kit->itemName.buffer + 1), -1, name, sizeof(name), nullptr, nullptr))
+            stickerKits.emplace_back(sticker_kit->id, name);
     }
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
 }
-
 
 static std::unordered_map<std::string_view, const char*> iconOverrides;
 
