@@ -138,6 +138,6 @@ namespace Misc {
         if (config.misc.killMessage
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
-            interfaces.engine->clientCmdUnrestricted("say Gotcha!");
+            interfaces.engine->clientCmdUnrestricted((std::string{ "say " } + config.misc.killMessageString).c_str());
     }
 }
