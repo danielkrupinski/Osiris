@@ -664,10 +664,13 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
+		ImGui::PushID(0);
+		ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Bunny hop hitchance: %d%");
+		ImGui::PopID();
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(0);
+        ImGui::PushID(1);
         if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
             Misc::updateClanTag(true);
         ImGui::PopID();
