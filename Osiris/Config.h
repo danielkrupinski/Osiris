@@ -196,6 +196,7 @@ public:
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
+		int hopsHitchance{ 100 };
     } misc;
 
 private:
