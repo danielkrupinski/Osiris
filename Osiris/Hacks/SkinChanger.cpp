@@ -42,13 +42,16 @@ void SkinChanger::initializeKits() noexcept
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr)) {
             if (paintKit->id < 10000) {
                 if (auto pos = gameItems.find('_' + std::string{ paintKit->name.buffer } + '='); pos != std::string::npos && gameItems.substr(pos + paintKit->name.length).find('_' + std::string{ paintKit->name.buffer } + '=') == std::string::npos) {
-                    if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos)
-                        name += " (" + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')';
+                    if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos) {
+                        name.back() = ' ';
+                        name += '(' + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')';
+                    }
                 }
                 skinKits.emplace_back(paintKit->id, std::move(name));
             } else {
                 std::string_view gloveName{ paintKit->name.buffer };
-                name += " (" + std::string{ gloveName.substr(0, gloveName.find('_')) } +')';
+                name.back() = ' ';
+                name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } +')';
                 gloveKits.emplace_back(paintKit->id, std::move(name));
             }
         }
