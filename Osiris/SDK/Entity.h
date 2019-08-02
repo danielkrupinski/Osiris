@@ -219,6 +219,7 @@ public:
     NETVAR(fov, "CBasePlayer", "m_iFOV", int);
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
     NETVAR(flags, "CBasePlayer", "m_fFlags", int);
+    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
