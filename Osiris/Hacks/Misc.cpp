@@ -162,3 +162,19 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
             cmd->buttons &= ~UserCmd::IN_USE;
     }
 }
+
+void Misc::drawBombTimer() noexcept
+{
+    if (config.misc.bombTimer) {
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
+
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(250.0f, 0.0f, 0.0f, 255.0f);
+            interfaces.surface->setTextPosition(5, interfaces.surface->getScreenSize().second / 2);
+            interfaces.surface->printText((std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+        }
+    }
+}

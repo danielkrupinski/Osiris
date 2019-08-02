@@ -20,7 +20,8 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
-    
+    void drawBombTimer() noexcept;
+
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
