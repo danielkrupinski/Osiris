@@ -314,6 +314,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) strcpy_s(misc.killMessageString, sizeof(misc.killMessageString), miscJson["Kill message string"].asCString());
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
+        if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
@@ -578,6 +579,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Kill message"] = misc.killMessage;
         miscJson["Kill message string"] = misc.killMessageString;
         miscJson["Fast plant"] = misc.fastPlant;
+        miscJson["Bomb timer"] = misc.bombTimer;
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;
