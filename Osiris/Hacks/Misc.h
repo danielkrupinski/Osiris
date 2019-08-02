@@ -93,7 +93,7 @@ namespace Misc {
     {
         if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             config.misc.autoStrafe
-            && !(localPlayer->getProperty<int>("m_fFlags") & 1)
+            && !(localPlayer->flags() & 1)
             && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::NOCLIP) {
             if (cmd->mousedx < -20)
                 cmd->sidemove = -450.0f;
@@ -106,7 +106,7 @@ namespace Misc {
     {
         if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             config.misc.bunnyHop
-            && !(localPlayer->getProperty<int>("m_fFlags") & 1)
+            && !(localPlayer->flags() & 1)
             && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::LADDER) {
             cmd->buttons &= ~UserCmd::IN_JUMP;
         }
