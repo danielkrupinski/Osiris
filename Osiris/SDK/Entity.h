@@ -209,6 +209,7 @@ public:
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
+    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
