@@ -9,11 +9,6 @@ public:
         return callVirtualMethod<const char*>(this, 1);
     }
 
-    constexpr auto getBool(const char* keyName) noexcept
-    {
-        return callVirtualMethod<bool, const char*, bool>(this, 5, keyName, false);
-    }
-
     constexpr auto getInt(const char* keyName) noexcept
     {
         return callVirtualMethod<int, const char*, int>(this, 6, keyName, 0);
