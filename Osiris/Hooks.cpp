@@ -302,7 +302,7 @@ struct ViewSetup {
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
     if (interfaces.engine->isInGame()
-        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
+        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);

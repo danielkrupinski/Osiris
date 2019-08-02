@@ -55,7 +55,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     || !localPlayer->getProperty<float>("m_flFlashDuration"))
                 && (!config.triggerbot[weaponIndex].scopedOnly
                     || !activeWeapon->isSniperRifle()
-                    || activeWeapon->isSniperRifle() && localPlayer->getProperty<bool>("m_bIsScoped"))) {
+                    || activeWeapon->isSniperRifle() && localPlayer->isScoped())) {
                 cmd->buttons |= UserCmd::IN_ATTACK;
                 lastTime = 0.0f;
             }
