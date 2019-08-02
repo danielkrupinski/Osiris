@@ -246,4 +246,5 @@ public:
 
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
+    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool);
 };
