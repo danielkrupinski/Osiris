@@ -245,4 +245,5 @@ public:
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
 
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
+    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
 };
