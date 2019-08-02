@@ -22,13 +22,6 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
-    void drawTimer() noexcept;
-
-    static float plantedTime = 0.0f;
-    static float defusingTime = 0.0f;
-    static bool plantingBomb = false;
-    static bool defusingBomb = false;
-    static bool haveDefusers = false;
         
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -168,96 +161,6 @@ namespace Misc {
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
             auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tanf(actualFov) * width;
             interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 20);
-        }
-    }
-
-    constexpr void bombEvents(GameEvent* event) noexcept
-    {
-        if (!config.misc.drawBombTimer) return;
-        switch (fnv::hashRuntime(event->getName())) {
-        case fnv::hash("bomb_beginplant"):
-            plantingBomb = true;
-            break;
-        case fnv::hash("bomb_abortplant"):
-            plantingBomb = false;
-            break;
-        case fnv::hash("bomb_planted"):
-            plantedTime = memory.globalVars->currenttime;
-            plantingBomb = false;
-            break;
-        case fnv::hash("bomb_begindefuse"):
-            defusingBomb = true;
-            defusingTime = memory.globalVars->currenttime;
-            haveDefusers = event->getBool("haskit");
-            break;
-        case fnv::hash("bomb_abortdefuse"):
-            defusingTime = 0.0f;
-            defusingBomb = false;
-            break;
-        case fnv::hash("round_start"):
-        case fnv::hash("bomb_exploded"):
-        case fnv::hash("bomb_defused"):
-            plantingBomb = false;
-            defusingBomb = false;
-            haveDefusers = false;
-            plantedTime = 0.0f;
-            defusingTime = 0.0f;
-            break;
-        }
-    }
-
-    static void drawTimer() noexcept
-    {
-
-        if (!interfaces.engine->isInGame()) return;
-        auto local = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!local) return;
-        static auto screen = interfaces.surface->getScreenSize();
-        if (plantingBomb) {
-            static auto text = interfaces.surface->getTextSize(Surface::font, L"Bomb is planting!");
-            interfaces.surface->setTextFont(Surface::font);
-            interfaces.surface->setTextPosition(5, (screen.second / 2) - (text.second / 2));
-            if (local->getProperty<int>("m_iTeamNum") == 3) {
-                interfaces.surface->setTextColor(255, 0, 0, 255);
-            }
-            else {
-                interfaces.surface->setTextColor(0, 255, 0, 255);
-            }
-            interfaces.surface->printText(L"Bomb is planting!");
-        }
-        if (plantedTime > 0.0f) {
-            float blowTime = plantedTime + interfaces.cvar->findVar("mp_c4timer")->getInt();
-            float timer = blowTime - memory.globalVars->currenttime;
-
-            if (timer > 0.0000f) {
-                std::wstring timerText(L"Bomb timer: ");
-                timerText += std::to_wstring(timer);
-                static auto textSize = interfaces.surface->getTextSize(Surface::font, timerText.c_str());
-                interfaces.surface->setTextFont(Surface::font);
-                interfaces.surface->setTextPosition(5, (screen.second / 2) - textSize.second);
-                if (local->getProperty<int>("m_iTeamNum") == 3) {
-                    interfaces.surface->setTextColor(255, 0, 0, 255);
-                }
-                else {
-                    interfaces.surface->setTextColor(0, 255, 0, 255);
-                }
-                interfaces.surface->printText(timerText.c_str());
-                if (defusingBomb) {
-                    float defusedTime = (defusingTime + (haveDefusers ? 5 : 10));
-                    float defuse = defusedTime - memory.globalVars->currenttime;
-                    std::wstring defuseTimer(L"Defuse timer: ");
-                    defuseTimer += std::to_wstring(defuse);
-                    interfaces.surface->setTextFont(Surface::font);
-                    interfaces.surface->setTextPosition(5, screen.second / 2);
-                    if (local->getProperty<int>("m_iTeamNum") == 3) {
-                        interfaces.surface->setTextColor(0, 255, 0, 255);
-                    }
-                    else {
-                        interfaces.surface->setTextColor(255, 0, 0, 255);
-                    }
-                    interfaces.surface->printText(defuseTimer.c_str());
-                }
-            }
         }
     }
 

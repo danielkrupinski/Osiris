@@ -307,7 +307,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
         if (miscJson.isMember("Watermark")) misc.watermark = miscJson["Watermark"].asBool();
-        if (miscJson.isMember("Draw bomb timer"))misc.drawBombTimer = miscJson["Draw bomb timer"].asBool();
         if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
@@ -572,7 +571,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Reveal ranks"] = misc.revealRanks;
         miscJson["Spectator list"] = misc.spectatorList;
         miscJson["Watermark"] = misc.watermark;
-        miscJson["Draw bomb timer"] = misc.drawBombTimer;
         miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;
