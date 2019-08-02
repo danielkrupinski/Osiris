@@ -686,8 +686,14 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
+        ImGui::SameLine();
+        ImGui::PushItemWidth(120.0f);
+        ImGui::PushID(1);
+        ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
+        ImGui::PopID();
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Draw FOV", &config.misc.drawFOV);
+        ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);

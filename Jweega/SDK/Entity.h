@@ -209,6 +209,7 @@ public:
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
+    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
@@ -217,9 +218,12 @@ public:
     NETVAR(health, "CBasePlayer", "m_iHealth", int);
     NETVAR(fov, "CBasePlayer", "m_iFOV", int);
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
+    NETVAR(flags, "CBasePlayer", "m_fFlags", int);
+    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
 
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
+    NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
@@ -239,4 +243,8 @@ public:
 
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int);
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
+
+    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
+    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
+    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool);
 };

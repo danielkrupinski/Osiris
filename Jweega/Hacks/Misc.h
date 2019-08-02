@@ -22,7 +22,8 @@ namespace Misc {
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
-        
+    void drawBombTimer() noexcept;
+
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
@@ -95,8 +96,8 @@ namespace Misc {
     {
         if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             config.misc.autoStrafe
-            && !(localPlayer->getProperty<int>("m_fFlags") & 1)
-            && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::NOCLIP) {
+            && !(localPlayer->flags() & 1)
+            && localPlayer->moveType() != MoveType::NOCLIP) {
             if (cmd->mousedx < -20)
                 cmd->sidemove = -450.0f;
             else if (cmd->mousedx > 20)
@@ -108,8 +109,8 @@ namespace Misc {
     {
         if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             config.misc.bunnyHop
-            && !(localPlayer->getProperty<int>("m_fFlags") & 1)
-            && localPlayer->getProperty<MoveType>("m_nRenderMode", 1) != MoveType::LADDER) {
+            && !(localPlayer->flags() & 1)
+            && localPlayer->moveType() != MoveType::LADDER) {
             cmd->buttons &= ~UserCmd::IN_JUMP;
         }
     }
@@ -140,7 +141,7 @@ namespace Misc {
         if (config.misc.killMessage
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
-            interfaces.engine->clientCmdUnrestricted("say Gotcha!");
+            interfaces.engine->clientCmdUnrestricted((std::string{ "say " } + config.misc.killMessageString).c_str());
     }
 
     constexpr void drawFov() noexcept

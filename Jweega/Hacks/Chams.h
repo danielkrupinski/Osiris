@@ -26,7 +26,7 @@ private:
     {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         if (config.chams[WEAPONS].enabled &&
-            !localPlayer->getProperty<bool>("m_bIsScoped"))
+            !localPlayer->isScoped())
             applyChams(config.chams[WEAPONS], false, localPlayer->health());
     }
 

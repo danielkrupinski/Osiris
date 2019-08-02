@@ -76,7 +76,7 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped") ? 3 : 0);
+    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
 }
 
 void Misc::recoilCrosshair() noexcept
@@ -160,5 +160,21 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
         if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
             cmd->buttons &= ~UserCmd::IN_USE;
+    }
+}
+
+void Misc::drawBombTimer() noexcept
+{
+    if (config.misc.bombTimer) {
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
+
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(250.0f, 0.0f, 0.0f, 255.0f);
+            interfaces.surface->setTextPosition(5, interfaces.surface->getScreenSize().second / 2);
+            interfaces.surface->printText((std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+        }
     }
 }
