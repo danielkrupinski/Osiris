@@ -173,8 +173,16 @@ void Misc::drawBombTimer() noexcept
 
             interfaces.surface->setTextFont(Surface::font);
             interfaces.surface->setTextColor(250.0f, 0.0f, 0.0f, 255.0f);
-            interfaces.surface->setTextPosition(5, interfaces.surface->getScreenSize().second / 2);
-            interfaces.surface->printText((std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+            auto drawPositionY{ interfaces.surface->getScreenSize().second / 2 };
+            interfaces.surface->setTextPosition(5, drawPositionY);
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            drawPositionY += interfaces.surface->getTextSize(Surface::font, bombText.c_str()).second;
+            interfaces.surface->printText(bombText.c_str());
+            if (entity->c4Defuser() != -1) {
+                interfaces.surface->setTextColor(0.0f, 0.0f, 255.0f, 255.0f);
+                interfaces.surface->setTextPosition(5, drawPositionY);
+                interfaces.surface->printText((std::wstringstream{ } << L"Defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+            }
         }
     }
 }
