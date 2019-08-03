@@ -51,7 +51,7 @@ struct Trace {
         short surfaceProps;
         unsigned short flags;
     } surface;
-    int hitgroup;
+    HitGroup hitgroup;
     std::byte pad2[4];
     Entity* entity;
     int hitbox;
