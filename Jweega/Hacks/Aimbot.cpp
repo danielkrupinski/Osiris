@@ -73,7 +73,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
         if (trace.fraction == 1.0f)
             break;
 
-        if (trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
+        if (trace.entity == entity && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg)
             return true;
 
         const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
