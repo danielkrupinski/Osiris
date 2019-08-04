@@ -36,7 +36,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             constexpr float maxRange{ 8192.0f };
 
             static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-            auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+            auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
 
             Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                                cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
