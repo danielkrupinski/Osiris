@@ -206,7 +206,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
         if (!unload) {
-            props[hash] = { &prop, uint16_t(offset + prop.offset) };
+            props[hash] = uint16_t(offset + prop.offset);
 
             constexpr auto hookProperty{ [](RecvProp& prop, recvProxy& originalProxy, recvProxy proxy) noexcept {
                 if (originalProxy != proxy) {

@@ -16,21 +16,12 @@ public:
 
     auto get_offset(const uint32_t hash) const noexcept
     {
-        return props.at(hash).offset;
-    }
-
-    auto get_prop(const uint32_t hash) const noexcept
-    {
-        return props.at(hash).prop;
+        return props.at(hash);
     }
 private:
     void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
 
-    struct recvData {
-        RecvProp* prop;
-        uint16_t offset;
-    };
-    std::unordered_map<uint32_t, recvData> props;
+    std::unordered_map<uint32_t, uint16_t> props;
 };
 
 extern Netvars netvars;
