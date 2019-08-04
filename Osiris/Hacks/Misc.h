@@ -79,7 +79,7 @@ namespace Misc {
     {
         if (config.misc.autoReload) {
             const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
-            if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->getProperty<int>("m_iClip1"))
+            if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->clip())
                 cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }
     }

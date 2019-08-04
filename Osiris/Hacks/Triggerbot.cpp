@@ -12,11 +12,11 @@
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
+    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1") || activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime())
+    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime())
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());

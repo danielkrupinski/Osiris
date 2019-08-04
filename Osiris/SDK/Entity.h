@@ -210,6 +210,7 @@ public:
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
+    NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
@@ -230,6 +231,9 @@ public:
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
+    NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
+
+    NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
