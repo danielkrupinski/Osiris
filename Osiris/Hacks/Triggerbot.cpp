@@ -46,7 +46,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
                 && (config.triggerbot[weaponIndex].friendlyFire
                     || trace.entity->isEnemy())
-                && !trace.entity->getProperty<bool>("m_bGunGameImmunity")
+                && !trace.entity->gunGameImmunity()
                 && (!config.triggerbot[weaponIndex].hitgroup
                     || trace.hitgroup == HitGroup{ config.triggerbot[weaponIndex].hitgroup })
                 && (config.triggerbot[weaponIndex].ignoreSmoke
