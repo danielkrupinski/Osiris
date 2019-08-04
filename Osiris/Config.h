@@ -15,61 +15,6 @@ public:
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
 
-    constexpr void resetAimbot() noexcept
-    {
-        aimbot = { };
-    }
-
-    constexpr void resetTriggerbot() noexcept
-    {
-        triggerbot = { };
-    }
-
-    constexpr void resetBacktrack() noexcept
-    {
-        backtrack = { };
-    }
-
-    constexpr void resetAntiAim() noexcept
-    {
-        antiAim = { };
-    }
-
-    constexpr void resetGlow() noexcept
-    {
-        glow = { };
-    }
-
-    constexpr void resetChams() noexcept
-    {
-        chams = { };
-    }
-
-    constexpr void resetEsp() noexcept
-    {
-        esp = { };
-    }
-
-    constexpr void resetVisuals() noexcept
-    {
-        visuals = { };
-    }
-
-    constexpr void resetSkinChanger() noexcept
-    {
-        skinChanger = { };
-    }
-
-    constexpr void resetSound() noexcept
-    {
-        sound = { };
-    }
-
-    constexpr void resetMisc() noexcept
-    {
-        misc = { };
-    }
-
     constexpr auto& getConfigs() noexcept
     {
         return configs;
