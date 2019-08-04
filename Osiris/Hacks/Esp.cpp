@@ -117,7 +117,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
 
         if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->getProperty<int>("m_iAccount"))).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
     }
 }
 
