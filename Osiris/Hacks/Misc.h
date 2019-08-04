@@ -60,7 +60,7 @@ namespace Misc {
     {
         if (config.misc.autoPistol) {
             const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
-            if (activeWeapon && activeWeapon->isPistol() && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime()) {
+            if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime()) {
                 if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
                 else
