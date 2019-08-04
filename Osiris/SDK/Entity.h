@@ -253,6 +253,8 @@ public:
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int);
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
 
+    NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool);
+
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
     NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool);
