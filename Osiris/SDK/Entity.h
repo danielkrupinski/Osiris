@@ -25,18 +25,6 @@ enum class MoveType {
 
 class Entity {
 public:
-    template <typename T>
-    [[deprecated]] constexpr auto getProperty(const char* name, const std::size_t offset = 0) const noexcept
-    {
-        return *reinterpret_cast<const T*>(this + netvars[name] + offset);
-    }
-
-    template <typename T>
-    [[deprecated]] constexpr void setProperty(const char* name, const T& value) noexcept
-    {
-        *reinterpret_cast<T*>(this + netvars[name]) = value;
-    }
-
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
