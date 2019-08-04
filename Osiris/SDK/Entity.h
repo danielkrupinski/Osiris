@@ -231,6 +231,7 @@ public:
     NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float);
     NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool);
     NETVAR(account, "CCSPlayer", "m_iAccount", int);
+    NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);

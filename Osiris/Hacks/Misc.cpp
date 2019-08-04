@@ -143,7 +143,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         if (plantAnywhere->getInt()) return;
 
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
+        if (!localPlayer->isAlive() || localPlayer->inBombZone()) return;
 
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
