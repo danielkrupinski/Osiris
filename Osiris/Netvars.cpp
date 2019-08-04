@@ -14,13 +14,13 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
-static std::unordered_map<std::string_view, recvProxy> proxies;
+static std::unordered_map<uint32_t, recvProxy> proxies;
 
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
         data.value._int = 1;
-    proxies["m_bSpotted"](data, arg2, arg3);
+    proxies[fnv::hash("CBaseEntity->m_bSpotted")](data, arg2, arg3);
 }
 
 #include "nSkinz/config_.hpp"
@@ -169,7 +169,7 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
                 data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
         }
     }
-    proxies["m_nSequence"](data, arg2, arg3);
+    proxies[fnv::hash("CBaseViewModel->m_nSequence")](data, arg2, arg3);
 }
 
 Netvars::Netvars() noexcept
@@ -208,27 +208,26 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         if (!unload) {
             props[hash] = uint16_t(offset + prop.offset);
 
-            constexpr auto hookProperty{ [](RecvProp& prop, recvProxy& originalProxy, recvProxy proxy) noexcept {
+            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
                 if (originalProxy != proxy) {
-                    proxies[prop.name] = originalProxy;
+                    proxies[hash] = originalProxy;
                     originalProxy = proxy;
                 }
             } };
 
             if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                hookProperty(prop, prop.proxy, spottedHook);
+                hookProperty(hash, prop.proxy, spottedHook);
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-                hookProperty(prop, prop.proxy, viewModelSequence);
+                hookProperty(hash, prop.proxy, viewModelSequence);
         } else {
-
-            constexpr auto unhookProperty{ [](RecvProp& prop) noexcept {
-                prop.proxy = proxies[prop.name];
+            constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) noexcept {
+                proxy = proxies[hash];
             } };
 
             if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                unhookProperty(prop);
+                unhookProperty(prop.proxy, hash);
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-                unhookProperty(prop);
+                unhookProperty(prop.proxy, hash);
         }
     }
 }
