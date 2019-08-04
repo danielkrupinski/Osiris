@@ -184,7 +184,7 @@ void Netvars::restore() noexcept
         walkTable(true, clientClass->networkName, clientClass->recvTable);
 
     proxies.clear();
-    offsets.clear();
+    props.clear();
 }
 
 void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
@@ -207,7 +207,6 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
 
         if (!unload) {
             props[hash] = { &prop, uint16_t(offset + prop.offset) };
-            offsets[prop.name] = prop.offset + offset;
 
             constexpr auto hookProperty{ [](RecvProp& prop, recvProxy& originalProxy, recvProxy proxy) noexcept {
                 if (originalProxy != proxy) {
@@ -227,9 +226,9 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
             } };
 
             if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                unhookProperty(*props[fnv::hash("CBaseEntity->m_bSpotted")].prop);
+                unhookProperty(prop);
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-                unhookProperty(*props[fnv::hash("CBaseViewModel->m_nSequence")].prop);
+                unhookProperty(prop);
         }
     }
 }
