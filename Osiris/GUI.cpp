@@ -96,6 +96,7 @@ void GUI::hotkey(int& key) noexcept
 {
     key ? ImGui::Text("[ 0x%x ]", key) : ImGui::Text("[ key ]");
     if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
