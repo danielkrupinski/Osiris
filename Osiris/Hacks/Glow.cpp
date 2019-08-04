@@ -47,7 +47,7 @@ void Glow::render() noexcept
         case ClassId::CSPlayer:
             if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming"))
                 applyPlayerGlow(glow[6], glow[7], glow[8], entity);
-            else if (entity->getProperty<bool>("m_bIsDefusing"))
+            else if (entity->isDefusing())
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
             else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()))
                 applyGlow(glow[12], entity->health());
