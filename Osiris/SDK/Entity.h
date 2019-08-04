@@ -227,6 +227,7 @@ public:
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool);
     NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool);
+    NETVAR(flashDuration, "CCSPlayer", "m_flFlashDuration", float);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);

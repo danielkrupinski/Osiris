@@ -52,7 +52,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                 && (config.triggerbot[weaponIndex].ignoreSmoke
                     || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
                 && (config.triggerbot[weaponIndex].ignoreFlash
-                    || !localPlayer->getProperty<float>("m_flFlashDuration"))
+                    || !localPlayer->flashDuration())
                 && (!config.triggerbot[weaponIndex].scopedOnly
                     || !activeWeapon->isSniperRifle()
                     || activeWeapon->isSniperRifle() && localPlayer->isScoped())) {
