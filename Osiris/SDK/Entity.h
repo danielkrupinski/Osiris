@@ -222,7 +222,8 @@ public:
     NETVAR(flags, "CBasePlayer", "m_fFlags", int);
     NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector);
-
+    NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector);
+    
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool);
