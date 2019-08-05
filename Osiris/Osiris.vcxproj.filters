@@ -328,5 +328,8 @@
     <ClInclude Include="SDK\ResourceAccessControl.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Reportbot.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

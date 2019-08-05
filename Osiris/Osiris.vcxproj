@@ -58,6 +58,7 @@
     <ClInclude Include="Hacks\Esp.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
+    <ClInclude Include="Hacks\Reportbot.h" />
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
