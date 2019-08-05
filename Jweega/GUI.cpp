@@ -95,6 +95,7 @@ void GUI::hotkey(int& key) noexcept
 {
     key ? ImGui::Text("[ 0x%x ]", key) : ImGui::Text("[ key ]");
     if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
@@ -754,10 +755,30 @@ void GUI::renderConfigWindow() noexcept
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config.add(buffer);
 
-        if (ImGui::Button("Reset config", { 100.0f, 25.0f })) {
-            config.reset();
-            updateColors();
-            Misc::updateClanTag(true);
+        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
+                ImGui::OpenPopup("Config to reset");
+
+        if (ImGui::BeginPopup("Config to reset")) {
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc" };
+            for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+                if (ImGui::Selectable(names[i])) {
+                    switch (i) {
+                    case 0: config.reset(); break;
+                    case 1: config.aimbot = { }; break;
+                    case 2: config.triggerbot = { }; break;
+                    case 3: config.backtrack = { }; break;
+                    case 4: config.antiAim = { }; break;
+                    case 5: config.glow = { }; break;
+                    case 6: config.chams = { }; break;
+                    case 7: config.esp = { }; break;
+                    case 8: config.visuals = { }; break;
+                    case 9: config.skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
+                    case 10: config.sound = { }; break;
+                    case 11: config.misc = { }; updateColors(); Misc::updateClanTag(true); break;
+                    }
+                }
+            }
+            ImGui::EndPopup();
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {

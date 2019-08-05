@@ -25,12 +25,12 @@ void Backtrack::update(FrameStage stage) noexcept
                 continue;
             }
 
-            if (!records[i].empty() && (records[i].front().simulationTime == entity->getProperty<float>("m_flSimulationTime")))
+            if (!records[i].empty() && (records[i].front().simulationTime == entity->simulationTime()))
                 continue;
 
             Record record{ };
             record.origin = entity->getAbsOrigin();
-            record.simulationTime = entity->getProperty<float>("m_flSimulationTime");
+            record.simulationTime = entity->simulationTime();
 
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 

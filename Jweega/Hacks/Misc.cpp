@@ -143,7 +143,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         if (plantAnywhere->getInt()) return;
 
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
+        if (!localPlayer->isAlive() || localPlayer->inBombZone()) return;
 
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
@@ -181,7 +181,13 @@ void Misc::drawBombTimer() noexcept
             if (entity->c4Defuser() != -1) {
                 interfaces.surface->setTextColor(0.0f, 0.0f, 255.0f, 255.0f);
                 interfaces.surface->setTextPosition(5, drawPositionY);
-                interfaces.surface->printText((std::wstringstream{ } << L"Defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                static PlayerInfo playerInfo;
+                if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
+                    static wchar_t name[128];
+                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                    }
+                }
             }
         }
     }

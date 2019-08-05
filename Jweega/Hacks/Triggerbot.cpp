@@ -12,11 +12,11 @@
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
+    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1") || activeWeapon->getProperty<float>("m_flNextPrimaryAttack") > memory.globalVars->serverTime())
+    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
@@ -36,7 +36,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             constexpr float maxRange{ 8192.0f };
 
             static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-            auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+            auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
 
             Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                                cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
@@ -46,13 +46,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
                 && (config.triggerbot[weaponIndex].friendlyFire
                     || trace.entity->isEnemy())
-                && !trace.entity->getProperty<bool>("m_bGunGameImmunity")
+                && !trace.entity->gunGameImmunity()
                 && (!config.triggerbot[weaponIndex].hitgroup
                     || trace.hitgroup == HitGroup{ config.triggerbot[weaponIndex].hitgroup })
                 && (config.triggerbot[weaponIndex].ignoreSmoke
                     || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
                 && (config.triggerbot[weaponIndex].ignoreFlash
-                    || !localPlayer->getProperty<float>("m_flFlashDuration"))
+                    || !localPlayer->flashDuration())
                 && (!config.triggerbot[weaponIndex].scopedOnly
                     || !activeWeapon->isSniperRifle()
                     || activeWeapon->isSniperRifle() && localPlayer->isScoped())) {

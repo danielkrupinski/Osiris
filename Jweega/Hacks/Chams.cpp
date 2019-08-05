@@ -63,7 +63,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
     if (entity && !entity->isDormant() && entity->isAlive()) {
         auto activeWeapon = entity->getActiveWeapon();
-        if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->getProperty<bool>("m_bStartedArming")) {
+        if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
             if (config.chams[PLANTING_ALL].enabled) {
                 applyChams(config.chams[PLANTING_ALL], true, entity->health());
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
@@ -78,7 +78,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 if (config.chams[PLANTING_VISIBLE].enabled)
                     applyChams(config.chams[PLANTING_VISIBLE], false, entity->health());
             }
-        } else if (entity->getProperty<bool>("m_bIsDefusing")) {
+        } else if (entity->isDefusing()) {
             if (config.chams[DEFUSING_ALL].enabled) {
                 applyChams(config.chams[DEFUSING_ALL], true, entity->health());
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
