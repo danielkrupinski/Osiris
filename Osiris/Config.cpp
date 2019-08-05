@@ -601,6 +601,20 @@ void Config::save(size_t id) const noexcept
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
     }
 
+    {
+        auto& reportbotJson = json["Reportbot"];
+
+        reportbotJson["Enabled"] = reportbot.enabled;
+        reportbotJson["Target"] = reportbot.target;
+        reportbotJson["Delay"] = reportbot.delay;
+        reportbotJson["Aimbot"] = reportbot.aimbot;
+        reportbotJson["Wallhack"] = reportbot.wallhack;
+        reportbotJson["Other"] = reportbot.other;
+        reportbotJson["Other"] = reportbot.griefing;
+        reportbotJson["Voice abuse"] = reportbot.voiceAbuse;
+        reportbotJson["Text abuse"] = reportbot.textAbuse;
+    }
+
     out << json;
     out.close();
 }
