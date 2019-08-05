@@ -782,7 +782,7 @@ void GUI::renderConfigWindow() noexcept
                 ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
@@ -798,6 +798,7 @@ void GUI::renderConfigWindow() noexcept
                     case 9: config.skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
                     case 10: config.sound = { }; break;
                     case 11: config.misc = { }; updateColors(); Misc::updateClanTag(true); break;
+                    case 12: config.reportbot = { }; break;
                     }
                 }
             }
@@ -822,7 +823,7 @@ void GUI::renderConfigWindow() noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 700.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 750.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar")) {

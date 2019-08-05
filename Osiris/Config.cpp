@@ -621,4 +621,5 @@ void Config::reset() noexcept
     skinChanger = { };
     sound = { };
     misc = { };
+    reportbot = { };
 }
