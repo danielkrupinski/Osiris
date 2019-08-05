@@ -55,6 +55,7 @@ void GUI::render() noexcept
         renderSkinChangerWindow();
         renderSoundWindow();
         renderMiscWindow();
+        renderReportbotWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -121,6 +122,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
+        ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
@@ -717,6 +719,28 @@ void GUI::renderMiscWindow() noexcept
     }
 }
 
+void GUI::renderReportbotWindow() noexcept
+{
+    if (window.reportbot) {
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
+        }
+        ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+        ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All");
+        ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
+        config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
+        ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
+        ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
+        ImGui::Checkbox("Other", &config.reportbot.other);
+        ImGui::Checkbox("Griefing", &config.reportbot.griefing);
+        ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
+        ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
@@ -762,7 +786,7 @@ void GUI::renderConfigWindow() noexcept
                 ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
@@ -778,6 +802,7 @@ void GUI::renderConfigWindow() noexcept
                     case 9: config.skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
                     case 10: config.sound = { }; break;
                     case 11: config.misc = { }; updateColors(); Misc::updateClanTag(true); break;
+                    case 12: config.reportbot = { }; break;
                     }
                 }
             }
@@ -802,7 +827,7 @@ void GUI::renderConfigWindow() noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 700.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 750.0f, 0.0f });
     ImGui::Begin("Jweega", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar")) {
@@ -861,6 +886,11 @@ void GUI::renderGuiStyle2() noexcept
             window.misc = true;
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Reportbot")) {
+            window = { };
+            window.reportbot = true;
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Config")) {
             window = { };
             window.config = true;
@@ -880,6 +910,7 @@ void GUI::renderGuiStyle2() noexcept
     renderSkinChangerWindow();
     renderSoundWindow();
     renderMiscWindow();
+    renderReportbotWindow();
     renderConfigWindow();
 
     ImGui::End();

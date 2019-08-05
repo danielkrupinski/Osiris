@@ -110,6 +110,9 @@
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Reportbot.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -327,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="SDK\ResourceAccessControl.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Reportbot.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

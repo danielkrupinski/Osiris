@@ -122,7 +122,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     applyChams(config.chams[BACKTRACK], false, entity->health());
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
-                    needRedraw = false;
+                    interfaces.modelRender->forceMaterialOverride(nullptr);
                 }
             }
         } else {

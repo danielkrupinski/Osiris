@@ -202,6 +202,17 @@ public:
         int fakeDuckKey{ 0 };
     } misc;
 
+    struct {
+        bool enabled{ false };
+        int target{ 0 };
+        int delay{ 10 };
+        bool aimbot{ false };
+        bool wallhack{ false };
+        bool other{ false };
+        bool griefing{ false };
+        bool voiceAbuse{ false };
+        bool textAbuse{ false };
+    } reportbot;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;
