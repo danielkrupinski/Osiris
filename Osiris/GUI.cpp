@@ -56,6 +56,7 @@ void GUI::render() noexcept
         renderSkinChangerWindow();
         renderSoundWindow();
         renderMiscWindow();
+        renderReportbotWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -122,6 +123,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
+        ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
         ImGui::MenuItem("Config", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
@@ -723,7 +725,7 @@ void GUI::renderReportbotWindow() noexcept
         }
         ImGui::Checkbox("Enabled", &config.reportbot.enabled);
         ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
-
+        config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
         ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
         ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
         ImGui::Checkbox("Other", &config.reportbot.other);
@@ -879,6 +881,11 @@ void GUI::renderGuiStyle2() noexcept
             window.misc = true;
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Reportbot")) {
+            window = { };
+            window.reportbot = true;
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Config")) {
             window = { };
             window.config = true;
@@ -898,6 +905,7 @@ void GUI::renderGuiStyle2() noexcept
     renderSkinChangerWindow();
     renderSoundWindow();
     renderMiscWindow();
+    renderReportbotWindow();
     renderConfigWindow();
 
     ImGui::End();
