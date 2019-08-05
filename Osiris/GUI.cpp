@@ -714,6 +714,27 @@ void GUI::renderMiscWindow() noexcept
     }
 }
 
+void GUI::renderReportbotWindow() noexcept
+{
+    if (window.reportbot) {
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
+        }
+        ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+        ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
+
+        ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
+        ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
+        ImGui::Checkbox("Other", &config.reportbot.other);
+        ImGui::Checkbox("Griefing", &config.reportbot.griefing);
+        ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
+        ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
