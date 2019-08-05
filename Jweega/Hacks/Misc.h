@@ -168,6 +168,7 @@ namespace Misc {
 
     constexpr void fakeDuck(UserCmd* cmd) noexcept {
         if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
+            const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             auto choked = interfaces.engine->getNetworkChannel()->chokedPackets;
             bool should_duck = choked >= (config.misc.chokedPackets / 2);
             if (should_duck) {
@@ -175,6 +176,8 @@ namespace Misc {
             }  else {
                 cmd->buttons &= ~UserCmd::IN_DUCK;
             }
+
+            cmd->viewangles.z = localPlayer->getAbsOrigin().z + localPlayer->getEyePosition().z;
         }
     }
 
