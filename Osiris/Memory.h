@@ -49,6 +49,7 @@ public:
     std::add_pointer_t<bool __cdecl(float, float, float, float, float, float, Trace&) noexcept> traceToExit;
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
+    std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
 
 private:
     template <typename T = uintptr_t>
