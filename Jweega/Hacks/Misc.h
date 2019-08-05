@@ -150,17 +150,18 @@ namespace Misc {
             auto local = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             if (!local || !local->isAlive()) return;
             if (!local->getActiveWeapon()) return;
-            int weaponId = getWeaponIndex(local->getActiveWeapon()->getProperty<WeaponId>("m_iItemDefinitionIndex"));
+            const auto activeWeapon = local->getActiveWeapon();
+            auto weaponId = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
             if (!config.aimbot[weaponId].enabled) weaponId = 0;
             if (!config.aimbot[weaponId].enabled) return;
 
-            auto [width, height] = interfaces.surface->getScreenSize();
+            const auto [width, height] = interfaces.surface->getScreenSize();
 
-            auto actualFov = std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(local->getProperty<bool>("m_bIsScoped") ? static_cast<float>(local->fovStart()) : (static_cast<float>(local->fovStart()) + config.visuals.fov)) / 2.f));
+            const auto actualFov = std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(local->isScoped() ? static_cast<float>(local->fovStart()) : (static_cast<float>(local->fovStart()) + config.visuals.fov)) / 2.f));
             
             if (config.aimbot[weaponId].silent) interfaces.surface->setDrawColor(255, 10, 10, 255);
             else interfaces.surface->setDrawColor(10, 255, 10, 255);
-            auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tanf(actualFov) * width;
+            const auto radius = std::tan(degreesToRadians(config.aimbot[weaponId].fov) / 2.f) / std::tanf(actualFov) * width;
             interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), 20);
         }
     }
