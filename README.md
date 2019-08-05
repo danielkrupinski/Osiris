@@ -13,6 +13,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Skin changer** - change weapon skins, knives and stickers
 * **Sound** - modify volume of certain sound effects
 * **Misc** - miscellaneous features
+* **Reportbot** - automatically report players on server for cheating or other abusive actions
 * **Config** - JSON-based configuration system
 
 <details>
