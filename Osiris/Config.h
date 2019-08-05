@@ -190,7 +190,9 @@ public:
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
+        char killMessageString[230]{ "Gotcha!" };
         bool fastPlant{ false };
+        bool bombTimer{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };

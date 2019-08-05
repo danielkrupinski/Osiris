@@ -30,10 +30,10 @@ namespace Visuals {
             *memory.disablePostProcessing = config.visuals.disablePostProcessing;
     }
 
-    constexpr void reduceFlashEffect() noexcept
+    constexpr auto reduceFlashEffect = []() noexcept
     {
-        interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->setProperty("m_flFlashMaxAlpha", 255.0f - config.visuals.flashReduction * 2.55f);
-    }
+        interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->flashMaxAlpha() = 255.0f - config.visuals.flashReduction * 2.55f;
+    };
 
     constexpr bool removeHands(const char* modelName) noexcept
     {

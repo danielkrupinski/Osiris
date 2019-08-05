@@ -1,5 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <functional>
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -190,6 +189,7 @@ static bool __stdcall svCheatsGetBool() noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
+        Misc::drawBombTimer();
         Misc::watermark();
         Misc::spectatorList();
         Esp::render();
@@ -223,7 +223,7 @@ struct SoundData {
 
 static void __stdcall emitSound(SoundData data) noexcept
 {
-    auto modulateVolume = [&data](std::function<int(int)> get) {
+    auto modulateVolume = [&data](int(*get)(int)) {
         if (auto entity{ interfaces.entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
             if (data.entityIndex == interfaces.engine->getLocalPlayer())
                 data.volume *= get(0) / 100.0f;
@@ -303,7 +303,7 @@ struct ViewSetup {
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
     if (interfaces.engine->isInGame()
-        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped"))
+        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
@@ -338,7 +338,7 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        auto modulateVolume = [&soundInfo](std::function<int(int)> get) {
+        auto modulateVolume = [&soundInfo](int(*get)(int)) {
             if (auto entity{ interfaces.entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
                     soundInfo.volume *= get(0) / 100.0f;

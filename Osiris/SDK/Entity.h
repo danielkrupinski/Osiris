@@ -25,18 +25,6 @@ enum class MoveType {
 
 class Entity {
 public:
-    template <typename T>
-    [[deprecated]] constexpr auto getProperty(const char* name, const std::size_t offset = 0) const noexcept
-    {
-        return *reinterpret_cast<const T*>(this + netvars[name] + offset);
-    }
-
-    template <typename T>
-    [[deprecated]] constexpr void setProperty(const char* name, const T& value) noexcept
-    {
-        *reinterpret_cast<T*>(this + netvars[name]) = value;
-    }
-
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
@@ -209,6 +197,8 @@ public:
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
+    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
+    NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
@@ -217,14 +207,29 @@ public:
     NETVAR(health, "CBasePlayer", "m_iHealth", int);
     NETVAR(fov, "CBasePlayer", "m_iFOV", int);
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
-
+    NETVAR(flags, "CBasePlayer", "m_fFlags", int);
+    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
+    NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector);
+    NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector);
+    
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
+    NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool);
+    NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool);
+    NETVAR(flashDuration, "CCSPlayer", "m_flFlashDuration", float);
+    NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float);
+    NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool);
+    NETVAR(account, "CCSPlayer", "m_iAccount", int);
+    NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
+    NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
+    NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
+
+    NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
@@ -239,4 +244,12 @@ public:
 
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int);
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
+
+    NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool);
+
+    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
+    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
+    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool);
+    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float);
+    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int);
 };

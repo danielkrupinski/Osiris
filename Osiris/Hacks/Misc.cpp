@@ -76,7 +76,7 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getProperty<bool>("m_bIsScoped") ? 3 : 0);
+    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
 }
 
 void Misc::recoilCrosshair() noexcept
@@ -143,7 +143,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         if (plantAnywhere->getInt()) return;
 
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!localPlayer->isAlive() || localPlayer->getProperty<bool>("m_bInBombZone")) return;
+        if (!localPlayer->isAlive() || localPlayer->inBombZone()) return;
 
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
@@ -160,5 +160,35 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
         if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
             cmd->buttons &= ~UserCmd::IN_USE;
+    }
+}
+
+void Misc::drawBombTimer() noexcept
+{
+    if (config.misc.bombTimer) {
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
+
+            interfaces.surface->setTextFont(Surface::font);
+            interfaces.surface->setTextColor(250.0f, 0.0f, 0.0f, 255.0f);
+            auto drawPositionY{ interfaces.surface->getScreenSize().second / 2 };
+            interfaces.surface->setTextPosition(5, drawPositionY);
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            drawPositionY += interfaces.surface->getTextSize(Surface::font, bombText.c_str()).second;
+            interfaces.surface->printText(bombText.c_str());
+            if (entity->c4Defuser() != -1) {
+                interfaces.surface->setTextColor(0.0f, 0.0f, 255.0f, 255.0f);
+                interfaces.surface->setTextPosition(5, drawPositionY);
+                static PlayerInfo playerInfo;
+                if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
+                    static wchar_t name[128];
+                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                    }
+                }
+            }
+        }
     }
 }

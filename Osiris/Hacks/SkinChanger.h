@@ -13,7 +13,7 @@ namespace SkinChanger {
     void overrideHudIcon(GameEvent*) noexcept;
 
     struct PaintKit {
-        PaintKit(int id, const char* name) noexcept : id(id), name(name) { }
+        PaintKit(int id, std::string&& name) noexcept : id(id), name(name) { }
         int id;
         std::string name;
 

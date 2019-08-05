@@ -73,7 +73,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
         if (trace.fraction == 1.0f)
             break;
 
-        if (trace.entity == entity && trace.hitgroup > 0 && trace.hitgroup <= 7)
+        if (trace.entity == entity && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg)
             return true;
 
         const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
@@ -90,11 +90,11 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->getProperty<float>("m_flNextAttack") > memory.globalVars->serverTime())
+    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->getProperty<int>("m_iClip1"))
+    if (!activeWeapon || !activeWeapon->clip())
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
@@ -104,7 +104,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->getProperty<float>("m_flFlashDuration"))
+    if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
         return;
 
     if (config.aimbot[weaponIndex].onKey) {
@@ -122,7 +122,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock)) {
 
-        if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->getProperty<bool>("m_bIsScoped"))
+        if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
             return;
 
         auto bestFov = config.aimbot[weaponIndex].fov;
@@ -130,14 +130,14 @@ void Aimbot::run(UserCmd* cmd) noexcept
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->getProperty<Vector>("m_aimPunchAngle") * weaponRecoilScale->getFloat();
+        auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
         aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
-                || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->getProperty<bool>("m_bGunGameImmunity"))
+                || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
             auto boneList = config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
@@ -182,7 +182,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (!config.aimbot[weaponIndex].silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->getProperty<float>("m_flNextPrimaryAttack") <= memory.globalVars->serverTime() && !clamped)
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
