@@ -199,6 +199,7 @@ public:
         int chokedPackets{ 0 };
         bool drawFOV{ false };
         int chokedPacketsKey{ 0 };
+        int fakeDuckKey{ 0 };
     } misc;
 
 private:

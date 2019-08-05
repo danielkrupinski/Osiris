@@ -166,4 +166,16 @@ namespace Misc {
         }
     }
 
+    constexpr void fakeDuck(UserCmd* cmd) noexcept {
+        if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
+            auto choked = interfaces.engine->getNetworkChannel()->chokedPackets;
+            bool should_duck = choked >= (config.misc.chokedPackets / 2);
+            if (should_duck) {
+                cmd->buttons |= UserCmd::IN_DUCK;
+            }  else {
+                cmd->buttons &= ~UserCmd::IN_DUCK;
+            }
+        }
+    }
+
 }
