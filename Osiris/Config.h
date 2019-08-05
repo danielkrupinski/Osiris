@@ -200,6 +200,16 @@ public:
         int chokedPacketsKey{ 0 };
     } misc;
 
+    struct {
+        bool enabled{ false };
+        int players{ 0 };
+        bool aimbot{ false };
+        bool wallhack{ false };
+        bool other{ false };
+        bool griefing{ false };
+        bool voiceAbuse{ false };
+        bool textAbuse{ false };
+    } reportbot;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;
