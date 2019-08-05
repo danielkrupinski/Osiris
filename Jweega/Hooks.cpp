@@ -241,7 +241,6 @@ static void __stdcall emitSound(SoundData data) noexcept
     if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
         modulateVolume([](int index) { return config.sound.players[index].weaponVolume; });
     } else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
-        memory.acceptMatch("");
         auto window = FindWindowW(L"Valve001", NULL);
         RECT lprect;
         GetClientRect(window, &lprect);
@@ -250,6 +249,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         ShowWindow(window, SW_RESTORE);
         SendMessage(window, WM_MOUSEMOVE, 0, MAKELPARAM(lprect.right / 2, lprect.bottom / 2));
         mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        memory.acceptMatch("");
     }
     data.volume = std::clamp(data.volume, 0.0f, 1.0f);
     hooks.sound.callOriginal<void, SoundData>(5, data);
