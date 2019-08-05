@@ -202,7 +202,8 @@ public:
 
     struct {
         bool enabled{ false };
-        int players{ 0 };
+        int target{ 0 };
+        int delay{ 10 };
         bool aimbot{ false };
         bool wallhack{ false };
         bool other{ false };
