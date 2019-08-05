@@ -38,6 +38,7 @@ private:
         bool skinChanger{ false };
         bool sound{ false };
         bool misc{ false };
+        bool reportbot{ false };
         bool config{ false };
     } window;
 };
