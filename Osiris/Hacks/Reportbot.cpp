@@ -18,7 +18,7 @@ void Reportbot::run()
 
         if (lastReportTime + config.reportbot.delay <= memory.globalVars->realtime) {
             for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-                if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
+                if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer && (config.reportbot.target == 2 || (config.reportbot.target ? !entity->isEnemy() : entity->isEnemy()))) {
                     static PlayerInfo playerInfo;
                     static std::vector<__int64> reportedPlayers;
                     if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && std::find(std::begin(reportedPlayers), std::end(reportedPlayers), playerInfo.steamID64) == std::end(reportedPlayers)) {

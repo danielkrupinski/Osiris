@@ -724,6 +724,7 @@ void GUI::renderReportbotWindow() noexcept
             ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+        ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All");
         ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
         config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
         ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
