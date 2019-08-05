@@ -321,6 +321,20 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
     }
+
+    {
+        const auto& reportbotJson = json["Reportbot"];
+
+        if (reportbotJson.isMember("Enabled")) reportbot.enabled = reportbotJson["Enabled"].asBool();
+        if (reportbotJson.isMember("Target")) reportbot.target = reportbotJson["Target"].asInt();
+        if (reportbotJson.isMember("Delay")) reportbot.delay = reportbotJson["Delay"].asInt();
+        if (reportbotJson.isMember("Aimbot")) reportbot.aimbot = reportbotJson["Aimbot"].asBool();
+        if (reportbotJson.isMember("Wallhack")) reportbot.wallhack = reportbotJson["Wallhack"].asBool();
+        if (reportbotJson.isMember("Other")) reportbot.other = reportbotJson["Other"].asBool();
+        if (reportbotJson.isMember("Griefing")) reportbot.griefing = reportbotJson["Griefing"].asBool();
+        if (reportbotJson.isMember("Voice abuse")) reportbot.voiceAbuse = reportbotJson["Voice abuse"].asBool();
+        if (reportbotJson.isMember("Text abuse")) reportbot.textAbuse = reportbotJson["Text abuse"].asBool();
+    }
 }
 
 void Config::save(size_t id) const noexcept
