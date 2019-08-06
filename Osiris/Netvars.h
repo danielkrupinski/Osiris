@@ -14,9 +14,9 @@ public:
 
     void restore() noexcept;
 
-    auto get_offset(const uint32_t hash) const noexcept
+    auto operator[](const uint32_t hash) noexcept
     {
-        return props.at(hash);
+        return props[hash];
     }
 private:
     void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
@@ -29,7 +29,7 @@ extern Netvars netvars;
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 auto funcname() noexcept \
 { \
-	return reinterpret_cast<std::add_pointer_t<type>>(this + netvars.get_offset(fnv::hash(class_name "->" var_name)) + offset); \
+	return reinterpret_cast<std::add_pointer_t<type>>(this + netvars[fnv::hash(class_name "->" var_name)] + offset); \
 }
 
 #define PNETVAR(funcname, class_name, var_name, type) \
@@ -38,7 +38,7 @@ auto funcname() noexcept \
 #define NETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 std::add_lvalue_reference_t<type> funcname() noexcept \
 { \
-	return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars.get_offset(fnv::hash(class_name "->" var_name)) + offset); \
+	return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars[fnv::hash(class_name "->" var_name)] + offset); \
 }
 
 #define NETVAR(funcname, class_name, var_name, type) \
