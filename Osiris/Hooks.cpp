@@ -374,9 +374,12 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 static void* __stdcall getDemoPlaybackParameters() noexcept
 {
     auto result = hooks.engine.callOriginal<void*>(218);
+
     constexpr bool overwatchRevealTest = true;
-    if constexpr (overwatchRevealTest)
-        return nullptr;
+    if constexpr (overwatchRevealTest) {
+        if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); returnAddress == memory.test || returnAddress == memory.test2)
+            return nullptr;
+    }
     return result;
 }
 
