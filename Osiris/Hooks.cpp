@@ -100,7 +100,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
-    if (!cmd->command_number)
+    if (!cmd->commandNumber)
         return result;
 
     const float oldYaw = cmd->viewangles.y;

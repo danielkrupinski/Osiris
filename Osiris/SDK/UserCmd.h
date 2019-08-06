@@ -12,7 +12,7 @@ struct UserCmd final {
         IN_BULLRUSH = 1 << 22
     };
     int pad;
-    int command_number;
+    int commandNumber;
     int tick_count;
     Vector viewangles;
     Vector aimdirection;
