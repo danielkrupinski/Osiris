@@ -16,12 +16,12 @@ public:
 
     auto operator[](const uint32_t hash) noexcept
     {
-        return props[hash];
+        return offsets[hash];
     }
 private:
     void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
 
-    std::unordered_map<uint32_t, uint16_t> props;
+    std::unordered_map<uint32_t, uint16_t> offsets;
 };
 
 extern Netvars netvars;
