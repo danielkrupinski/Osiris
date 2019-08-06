@@ -142,7 +142,7 @@ public:
         int farZ{ 0 };
         int flashReduction{ 0 };
         float brightness{ 0.0f };
-        int skybox{ -1 };
+        int skybox{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
         int screenEffect{ 0 };

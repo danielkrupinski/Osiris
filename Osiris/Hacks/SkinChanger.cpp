@@ -392,7 +392,7 @@ void SkinChanger::run(FrameStage stage) noexcept
 
 void SkinChanger::scheduleHudUpdate() noexcept
 {
-    interfaces.cvar->findVar("cl_fullupdate")->callBack();
+    interfaces.cvar->findVar("cl_fullupdate")->changeCallback();
     hudUpdateRequired = true;
 }
 
