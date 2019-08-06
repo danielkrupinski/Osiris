@@ -3,11 +3,6 @@
 #include "Utils.h"
 
 struct ConVar {
-    constexpr auto getString() noexcept
-    {
-        return callVirtualMethod<const char*>(this, 11);
-    }
-
     constexpr float getFloat() noexcept
     {
         return callVirtualMethod<float>(this, 12);
