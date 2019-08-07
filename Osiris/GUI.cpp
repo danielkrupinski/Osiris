@@ -667,7 +667,7 @@ void GUI::renderStyleWindow() noexcept
             window = { };
         if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
             updateColors();
-        ImGui::PopID();
+        ImGui::PopItemWidth();
 
         if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
