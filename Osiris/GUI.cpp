@@ -869,7 +869,7 @@ void GUI::renderGuiStyle2() noexcept
     ImGui::SetNextWindowSize({ 800.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
-    if (ImGui::BeginTabBar("TabBar")) {
+    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable)) {
         if (ImGui::BeginTabItem("Aimbot")) {
             window = { };
             window.aimbot = true;
