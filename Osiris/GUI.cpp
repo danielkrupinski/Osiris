@@ -43,7 +43,7 @@ GUI::GUI() noexcept
 
 void GUI::render() noexcept
 {
-    if (!config.misc.menuStyle) {
+    if (!config.style.menuStyle) {
         renderMenuBar();
         renderAimbotWindow();
         renderAntiAimWindow();
@@ -66,7 +66,7 @@ void GUI::render() noexcept
 
 void GUI::updateColors() const noexcept
 {
-    switch (config.misc.menuColors) {
+    switch (config.style.menuColors) {
     case 0: ImGui::StyleColorsDark(); break;
     case 1: ImGui::StyleColorsLight(); break;
     case 2: ImGui::StyleColorsClassic(); break;
@@ -134,7 +134,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 600.0f, 0.0f });
             ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         }
@@ -210,7 +210,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
         ImGui::Columns(1);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -218,12 +218,12 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderAntiAimWindow() noexcept
 {
     if (window.antiAim) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -231,7 +231,7 @@ void GUI::renderAntiAimWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
         }
@@ -288,7 +288,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -296,7 +296,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderBacktrackWindow() noexcept
 {
     if (window.backtrack) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
         }
@@ -305,7 +305,7 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -313,7 +313,7 @@ void GUI::renderBacktrackWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 450.0f, 0.0f });
             ImGui::Begin("Glow", &window.glow, windowFlags);
         }
@@ -361,7 +361,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat("Alpha", &config.glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
         ImGui::SliderInt("Style", &config.glow[currentItem].style, 0, 3);
         ImGui::Columns(1);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -369,7 +369,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Chams", &window.chams, windowFlags);
         }
@@ -418,7 +418,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::PushID(4);
         ImGui::SliderFloat("", &config.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::PopID();
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::End();
         }
     }
@@ -427,7 +427,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
@@ -457,7 +457,7 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
         checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -465,7 +465,7 @@ void GUI::renderEspWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 520.0f, 400.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
@@ -520,7 +520,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Columns(1);
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -528,7 +528,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 700.0f, 0.0f });
             ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
         } 
@@ -626,7 +626,7 @@ void GUI::renderSkinChangerWindow() noexcept
 
         ImGui::TextUnformatted("nSkinz by namazso");
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -634,7 +634,7 @@ void GUI::renderSkinChangerWindow() noexcept
 void GUI::renderSoundWindow() noexcept
 {
     if (window.sound) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Sound", &window.sound, windowFlags);
         }
@@ -649,7 +649,7 @@ void GUI::renderSoundWindow() noexcept
         ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
         ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -657,19 +657,19 @@ void GUI::renderSoundWindow() noexcept
 void GUI::renderStyleWindow() noexcept
 {
     if (window.style) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Style", &window.style, windowFlags);
         }
 
         ImGui::PushItemWidth(150.0f);
-        if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
+        if (ImGui::Combo("Menu style", &config.style.menuStyle, "Classic\0One window\0"))
             window = { };
-        if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+        if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
             updateColors();
         ImGui::PopID();
 
-        if (config.misc.menuColors == 3) {
+        if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
             for (int i = 0; i < ImGuiCol_COUNT; i++) {
                 if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
@@ -689,7 +689,7 @@ void GUI::renderStyleWindow() noexcept
             }
         }
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -697,7 +697,7 @@ void GUI::renderStyleWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
@@ -752,7 +752,7 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::Button("Unhook"))
             hooks.restore();
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -760,7 +760,7 @@ void GUI::renderMiscWindow() noexcept
 void GUI::renderReportbotWindow() noexcept
 {
     if (window.reportbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
         }
@@ -774,7 +774,7 @@ void GUI::renderReportbotWindow() noexcept
         ImGui::Checkbox("Griefing", &config.reportbot.griefing);
         ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
         ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -782,7 +782,7 @@ void GUI::renderReportbotWindow() noexcept
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 290.0f, 190.0f });
             ImGui::Begin("Config", &window.config, windowFlags);
         }
@@ -860,7 +860,7 @@ void GUI::renderConfigWindow() noexcept
                 config.remove(currentConfig);
         }
         ImGui::Columns(1);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
