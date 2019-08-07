@@ -285,6 +285,27 @@ void Config::load(size_t id) noexcept
         }
     }
 
+
+    {
+        const auto& styleJson = json["Style"];
+
+        if (styleJson.isMember("Colors")) {
+            const auto& colorsJson = styleJson["Colors"];
+
+            ImGuiStyle& style = ImGui::GetStyle();
+
+            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+                if (const char* name = ImGui::GetStyleColorName(i); colorsJson.isMember(name)) {
+                    const auto& colorJson = styleJson["Colors"][name];
+                    style.Colors[i].x = colorJson[0].asFloat();
+                    style.Colors[i].y = colorJson[1].asFloat();
+                    style.Colors[i].z = colorJson[2].asFloat();
+                    style.Colors[i].w = colorJson[3].asFloat();
+                }
+            }
+        }
+    }
+
     {
         const auto& miscJson = json["Misc"];
 
@@ -561,6 +582,22 @@ void Config::save(size_t id) const noexcept
             playerJson["Headshot volume"] = playerConfig.headshotVolume;
             playerJson["Weapon volume"] = playerConfig.weaponVolume;
             playerJson["Footstep volume"] = playerConfig.footstepVolume;
+        }
+    }
+
+    {
+        auto& styleJson = json["Style"];
+
+        auto& colorsJson = styleJson["Colors"];
+
+        const ImGuiStyle& style = ImGui::GetStyle();
+
+        for (int i = 0; i < ImGuiCol_COUNT; i++) {
+            auto& colorJson = styleJson["Colors"][ImGui::GetStyleColorName(i)];
+            colorJson[0] = style.Colors[i].x;
+            colorJson[1] = style.Colors[i].y;
+            colorJson[2] = style.Colors[i].z;
+            colorJson[3] = style.Colors[i].w;
         }
     }
 
