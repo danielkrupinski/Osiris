@@ -3,6 +3,7 @@
 #include <array>
 #include <filesystem>
 
+#include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 
 class Config final {
@@ -142,7 +143,7 @@ public:
         int farZ{ 0 };
         int flashReduction{ 0 };
         float brightness{ 0.0f };
-        int skybox{ -1 };
+        int skybox{ 0 };
         float worldColor[3]{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
@@ -164,6 +165,10 @@ public:
 
         std::array<Player, 3> players;
     } sound;
+
+    struct {
+        std::array<ImVec4, ImGuiCol_COUNT> colors;
+    } style;
 
     struct {
         int menuKey{ 0x2D }; // VK_INSERT

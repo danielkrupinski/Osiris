@@ -1,15 +1,8 @@
 #pragma once
 
-#include <string_view>
-
 #include "Utils.h"
 
 struct ConVar {
-    constexpr auto getString() noexcept
-    {
-        return std::string_view{ callVirtualMethod<const char*>(this, 11) };
-    }
-
     constexpr float getFloat() noexcept
     {
         return callVirtualMethod<float>(this, 12);
@@ -35,8 +28,9 @@ struct ConVar {
         callVirtualMethod<void, int>(this, 16, value);
     }
 
-    constexpr void callBack() noexcept
-    {
-        (*reinterpret_cast<void(**)()>(this + 0x18))();
-    }
+    std::byte pad[24];
+    std::add_pointer_t<void()> changeCallback;
+    ConVar* parent;
+    const char* defaultValue;
+    char* string;
 };

@@ -3,6 +3,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EntityList.h"
@@ -56,7 +57,9 @@ namespace Visuals {
     {
         constexpr const char* skyboxes[]{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
 
-        if (config.visuals.skybox != -1)
-            memory.loadSky(skyboxes[config.visuals.skybox]);
+        if (config.visuals.skybox)
+            memory.loadSky(skyboxes[config.visuals.skybox - 1]);
+        else
+            memory.loadSky(interfaces.cvar->findVar("sv_skyname")->string);
     }
 };

@@ -41,7 +41,7 @@ namespace Misc {
 
     constexpr void antiAfkKick(UserCmd* cmd) noexcept
     {
-        if (config.misc.antiAfkKick && cmd->command_number % 2)
+        if (config.misc.antiAfkKick && cmd->commandNumber % 2)
             cmd->buttons |= 1 << 26;
     }
 

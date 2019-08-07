@@ -50,6 +50,8 @@ public:
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
+    uintptr_t test;
+    uintptr_t test2;
 
 private:
     template <typename T = uintptr_t>
