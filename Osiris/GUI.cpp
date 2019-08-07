@@ -55,6 +55,7 @@ void GUI::render() noexcept
         renderVisualsWindow();
         renderSkinChangerWindow();
         renderSoundWindow();
+        renderStyleWindow();
         renderMiscWindow();
         renderReportbotWindow();
         renderConfigWindow();
@@ -122,6 +123,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
+        ImGui::MenuItem("Style", nullptr, &window.style);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
         ImGui::MenuItem("Config", nullptr, &window.config);
@@ -649,6 +651,46 @@ void GUI::renderSoundWindow() noexcept
     }
 }
 
+void GUI::renderStyleWindow() noexcept
+{
+    if (window.style) {
+        if (!config.misc.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Style", &window.style, windowFlags);
+        }
+
+        ImGui::PushItemWidth(150.0f);
+        if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
+            window = { };
+        if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+            updateColors();
+        ImGui::PopID();
+
+        if (config.misc.menuColors == 3) {
+            ImGuiStyle& style = ImGui::GetStyle();
+            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+                if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
+
+                const char* name = ImGui::GetStyleColorName(i);
+                ImGui::PushID(i);
+                bool openPopup = ImGui::ColorButton("##colorbutton", style.Colors[i], ImGuiColorEditFlags_NoTooltip);
+                ImGui::SameLine(0.0f, 5.0f);
+                ImGui::TextUnformatted(name);
+                if (openPopup)
+                    ImGui::OpenPopup(name);
+                if (ImGui::BeginPopup(name)) {
+                    ImGui::ColorPicker3("##colorpicker", (float*)& style.Colors[i], ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+                    ImGui::EndPopup();
+                }
+                ImGui::PopID();
+            }
+        }
+
+        if (!config.misc.menuStyle)
+            ImGui::End();
+    }
+}
+
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
@@ -659,10 +701,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::TextUnformatted("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
-        if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
-            window = { };
-        if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0"))
-            updateColors();
 
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
@@ -824,7 +862,7 @@ void GUI::renderConfigWindow() noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 750.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 800.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar")) {
@@ -878,6 +916,11 @@ void GUI::renderGuiStyle2() noexcept
             window.sound = true;
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Style")) {
+            window = { };
+            window.style = true;
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Misc")) {
             window = { };
             window.misc = true;
@@ -906,6 +949,7 @@ void GUI::renderGuiStyle2() noexcept
     renderVisualsWindow();
     renderSkinChangerWindow();
     renderSoundWindow();
+    renderStyleWindow();
     renderMiscWindow();
     renderReportbotWindow();
     renderConfigWindow();

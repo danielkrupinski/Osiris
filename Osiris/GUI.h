@@ -22,6 +22,7 @@ private:
     void renderVisualsWindow() noexcept;
     void renderSkinChangerWindow() noexcept;
     void renderSoundWindow() noexcept;
+    void renderStyleWindow() noexcept;
     void renderMiscWindow() noexcept;
     void renderReportbotWindow() noexcept;
     void renderConfigWindow() noexcept;
@@ -38,6 +39,7 @@ private:
         bool visuals{ false };
         bool skinChanger{ false };
         bool sound{ false };
+        bool style{ false };
         bool misc{ false };
         bool reportbot{ false };
         bool config{ false };
