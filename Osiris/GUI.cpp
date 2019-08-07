@@ -209,6 +209,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+        ImGui::Columns(1);
         if (!config.misc.menuStyle)
             ImGui::End();
     }
@@ -359,6 +360,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Alpha", &config.glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
         ImGui::SliderInt("Style", &config.glow[currentItem].style, 0, 3);
+        ImGui::Columns(1);
         if (!config.misc.menuStyle)
             ImGui::End();
     }
@@ -516,6 +518,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+        ImGui::Columns(1);
 
         if (!config.misc.menuStyle)
             ImGui::End();
@@ -614,7 +617,7 @@ void GUI::renderSkinChangerWindow() noexcept
         }
         selected_entry.update();
 
-        ImGui::Columns(1, nullptr, false);
+        ImGui::Columns(1);
 
         ImGui::Separator();
 
@@ -855,6 +858,7 @@ void GUI::renderConfigWindow() noexcept
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
                 config.remove(currentConfig);
         }
+        ImGui::Columns(1);
         if (!config.misc.menuStyle)
             ImGui::End();
     }
