@@ -444,19 +444,29 @@ void GUI::renderEspWindow() noexcept
         int currentItem = currentCategory * 3 + currentType;
         ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
-        ImGui::Separator();
+        ImGui::SameLine(0.0f, 50.0f);
         ImGui::InputInt("Font", &config.esp[currentItem].font, 1, 294);
         config.esp[currentItem].font = std::clamp(config.esp[currentItem].font, 1, 294);
+        
+        ImGui::Separator();
+
+        constexpr auto spacing{ 200.0f };
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
-        checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
+        ImGui::SameLine(spacing);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
-        checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
+        checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
+        ImGui::SameLine(spacing);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);
-        checkboxedColorPicker("Health bar", &config.esp[currentItem].healthBar, config.esp[currentItem].healthBarColor);
-        checkboxedColorPicker("Armor", &config.esp[currentItem].armor, config.esp[currentItem].armorColor);
-        checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
-        checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Health bar", &config.esp[currentItem].healthBar, config.esp[currentItem].healthBarColor);
+        checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Armor", &config.esp[currentItem].armor, config.esp[currentItem].armorColor);
+        checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
+
         if (!config.style.menuStyle)
             ImGui::End();
     }
