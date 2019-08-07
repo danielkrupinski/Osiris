@@ -826,6 +826,8 @@ void GUI::renderConfigWindow() noexcept
         if (ImGui::BeginPopup("Config to reset")) {
             static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+                if (i == 1) ImGui::Separator();
+
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
                     case 0: config.reset(); updateColors(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
