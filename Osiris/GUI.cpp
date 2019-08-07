@@ -80,7 +80,7 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
     bool openPopup = ImGui::ColorButton(("##" + name).c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
     ImGui::PopID();
     ImGui::SameLine(0.0f, 5.0f);
-    ImGui::Text(name.c_str());
+    ImGui::TextUnformatted(name.c_str());
     ImGui::PushID(1);
     if (openPopup)
         ImGui::OpenPopup(("##" + name).c_str());
@@ -95,7 +95,7 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::Text("[ key ]");
+    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
@@ -341,7 +341,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
-        ImGui::Text("Color");
+        ImGui::TextUnformatted("Color");
         ImGui::PushID(2);
         if (openPopup)
             ImGui::OpenPopup("");
@@ -399,7 +399,7 @@ void GUI::renderChamsWindow() noexcept
 
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
-        ImGui::Text("Color");
+        ImGui::TextUnformatted("Color");
         ImGui::PushID(2);
         if (openPopup)
             ImGui::OpenPopup("");
@@ -619,7 +619,7 @@ void GUI::renderSkinChangerWindow() noexcept
         if (ImGui::Button("Update", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
 
-        ImGui::Text("nSkinz by namazso");
+        ImGui::TextUnformatted("nSkinz by namazso");
 
         if (!config.misc.menuStyle)
             ImGui::End();
@@ -656,7 +656,7 @@ void GUI::renderMiscWindow() noexcept
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
-        ImGui::Text("Menu key");
+        ImGui::TextUnformatted("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
         if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
