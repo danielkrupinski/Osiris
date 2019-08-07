@@ -821,14 +821,14 @@ void GUI::renderConfigWindow() noexcept
             config.add(buffer);
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
-                ImGui::OpenPopup("Config to reset");
+            ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(); break;
+                    case 0: config.reset(); updateColors(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: config.backtrack = { }; break;
@@ -839,8 +839,9 @@ void GUI::renderConfigWindow() noexcept
                     case 8: config.visuals = { }; break;
                     case 9: config.skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
                     case 10: config.sound = { }; break;
-                    case 11: config.misc = { }; updateColors(); Misc::updateClanTag(true); break;
-                    case 12: config.reportbot = { }; break;
+                    case 11: config.style = { }; updateColors(); break;
+                    case 12: config.misc = { };  Misc::updateClanTag(true); break;
+                    case 13: config.reportbot = { }; break;
                     }
                 }
             }
