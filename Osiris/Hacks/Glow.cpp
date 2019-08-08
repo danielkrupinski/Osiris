@@ -5,13 +5,15 @@
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/GlobalVars.h"
 
+static std::vector<std::pair<int, int>> customGlowEntities;
+
 void Glow::render() noexcept
 {
     constexpr auto& glow = config.glow;
 
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        static std::vector<std::pair<int, int>> customGlowEntities;
+    Glow::clearCustomObjects();
 
+    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
         if (auto entity = interfaces.entityList->getEntity(i)) {
             switch (entity->getClientClass()->classId) {
             case ClassId::EconEntity:
@@ -28,9 +30,6 @@ void Glow::render() noexcept
                         customGlowEntities.emplace_back(i, index);
                 }
             }
-        } else if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
-            memory.glowObjectManager->unregisterGlowObject(it->second);
-            customGlowEntities.erase(it);
         }
     }
 
@@ -99,6 +98,18 @@ void Glow::render() noexcept
            if (entity->isWeapon()) {
                 applyGlow(glow[13]);
                 if (!glow[13].enabled) glowobject.renderWhenOccluded = false;
+            }
+        }
+    }
+}
+
+void Glow::clearCustomObjects() noexcept
+{
+    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        if (!interfaces.entityList->getEntity(i)) {
+            if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
+                memory.glowObjectManager->unregisterGlowObject(it->second);
+                customGlowEntities.erase(it);
             }
         }
     }
