@@ -76,7 +76,7 @@ public:
         int style{ 0 };
         float color[3]{ 1.0f, 1.0f, 1.0f };
     };
-    std::array<Glow, 17> glow;
+    std::array<Glow, 19> glow;
 
     struct Chams {
         bool enabled{ false };
@@ -168,12 +168,12 @@ public:
 
     struct {
         std::array<ImVec4, ImGuiCol_COUNT> colors;
+        int menuStyle{ 0 };
+        int menuColors{ 0 };
     } style;
 
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
-        int menuStyle{ 0 };
-        int menuColors{ 0 };
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };

@@ -285,12 +285,34 @@ void Config::load(size_t id) noexcept
         }
     }
 
+
+    {
+        const auto& styleJson = json["Style"];
+
+        if (styleJson.isMember("Menu style")) style.menuStyle = styleJson["Menu style"].asInt();
+        if (styleJson.isMember("Menu colors")) style.menuColors = styleJson["Menu colors"].asInt();
+
+        if (styleJson.isMember("Colors")) {
+            const auto& colorsJson = styleJson["Colors"];
+
+            ImGuiStyle& style = ImGui::GetStyle();
+
+            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+                if (const char* name = ImGui::GetStyleColorName(i); colorsJson.isMember(name)) {
+                    const auto& colorJson = styleJson["Colors"][name];
+                    style.Colors[i].x = colorJson[0].asFloat();
+                    style.Colors[i].y = colorJson[1].asFloat();
+                    style.Colors[i].z = colorJson[2].asFloat();
+                    style.Colors[i].w = colorJson[3].asFloat();
+                }
+            }
+        }
+    }
+
     {
         const auto& miscJson = json["Misc"];
 
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
-        if (miscJson.isMember("Menu style")) misc.menuStyle = miscJson["Menu style"].asInt();
-        if (miscJson.isMember("Menu colors")) misc.menuColors = miscJson["Menu colors"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
@@ -567,11 +589,28 @@ void Config::save(size_t id) const noexcept
     }
 
     {
+        auto& styleJson = json["Style"];
+
+        styleJson["Menu style"] = style.menuStyle;
+        styleJson["Menu colors"] = style.menuColors;
+
+        auto& colorsJson = styleJson["Colors"];
+
+        const ImGuiStyle& style = ImGui::GetStyle();
+
+        for (int i = 0; i < ImGuiCol_COUNT; i++) {
+            auto& colorJson = styleJson["Colors"][ImGui::GetStyleColorName(i)];
+            colorJson[0] = style.Colors[i].x;
+            colorJson[1] = style.Colors[i].y;
+            colorJson[2] = style.Colors[i].z;
+            colorJson[3] = style.Colors[i].w;
+        }
+    }
+
+    {
         auto& miscJson = json["Misc"];
         
         miscJson["Menu key"] = misc.menuKey;
-        miscJson["Menu style"] = misc.menuStyle;
-        miscJson["Menu colors"] = misc.menuColors;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
@@ -652,6 +691,7 @@ void Config::reset() noexcept
     visuals = { };
     skinChanger = { };
     sound = { };
+    style = { };
     misc = { };
     reportbot = { };
 }

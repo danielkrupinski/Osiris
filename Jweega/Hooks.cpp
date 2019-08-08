@@ -447,6 +447,8 @@ void Hooks::restore() noexcept
 
     netvars.restore();
 
+    Glow::clearCustomObjects();
+
     SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;

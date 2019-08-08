@@ -5,9 +5,33 @@
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/GlobalVars.h"
 
+static std::vector<std::pair<int, int>> customGlowEntities;
+
 void Glow::render() noexcept
 {
     constexpr auto& glow = config.glow;
+
+    Glow::clearCustomObjects();
+
+    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        if (auto entity = interfaces.entityList->getEntity(i)) {
+            switch (entity->getClientClass()->classId) {
+            case ClassId::EconEntity:
+            case ClassId::BaseCSGrenadeProjectile:
+            case ClassId::BreachChargeProjectile:
+            case ClassId::BumpMineProjectile:
+            case ClassId::DecoyProjectile:
+            case ClassId::MolotovProjectile:
+            case ClassId::SensorGrenadeProjectile:
+            case ClassId::SmokeGrenadeProjectile:
+            case ClassId::SnowballProjectile:
+                if (!memory.glowObjectManager->hasGlowEffect(entity)) {
+                    if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
+                        customGlowEntities.emplace_back(i, index);
+                }
+            }
+        }
+    }
 
     for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
@@ -56,13 +80,36 @@ void Glow::render() noexcept
             else
                 applyPlayerGlow(glow[0], glow[1], glow[2], entity);
             break;
-        case ClassId::Chicken: applyGlow(glow[16]); break;
         case ClassId::C4: applyGlow(glow[14]); break;
         case ClassId::PlantedC4: applyGlow(glow[15]); break;
+        case ClassId::Chicken: applyGlow(glow[16]); break;
+        case ClassId::EconEntity: applyGlow(glow[17]); break;
+
+        case ClassId::BaseCSGrenadeProjectile:
+        case ClassId::BreachChargeProjectile:
+        case ClassId::BumpMineProjectile:
+        case ClassId::DecoyProjectile:
+        case ClassId::MolotovProjectile:
+        case ClassId::SensorGrenadeProjectile:
+        case ClassId::SmokeGrenadeProjectile:
+        case ClassId::SnowballProjectile:
+            applyGlow(glow[18]); break;
         default:
-            if (entity->isWeapon()) {
+           if (entity->isWeapon()) {
                 applyGlow(glow[13]);
                 if (!glow[13].enabled) glowobject.renderWhenOccluded = false;
+            }
+        }
+    }
+}
+
+void Glow::clearCustomObjects() noexcept
+{
+    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        if (!interfaces.entityList->getEntity(i)) {
+            if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
+                memory.glowObjectManager->unregisterGlowObject(it->second);
+                customGlowEntities.erase(it);
             }
         }
     }

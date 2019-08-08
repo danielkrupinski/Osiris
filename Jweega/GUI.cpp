@@ -42,7 +42,7 @@ GUI::GUI() noexcept
 
 void GUI::render() noexcept
 {
-    if (!config.misc.menuStyle) {
+    if (!config.style.menuStyle) {
         renderMenuBar();
         renderAimbotWindow();
         renderAntiAimWindow();
@@ -54,6 +54,7 @@ void GUI::render() noexcept
         renderVisualsWindow();
         renderSkinChangerWindow();
         renderSoundWindow();
+        renderStyleWindow();
         renderMiscWindow();
         renderReportbotWindow();
         renderConfigWindow();
@@ -64,7 +65,7 @@ void GUI::render() noexcept
 
 void GUI::updateColors() const noexcept
 {
-    switch (config.misc.menuColors) {
+    switch (config.style.menuColors) {
     case 0: ImGui::StyleColorsDark(); break;
     case 1: ImGui::StyleColorsLight(); break;
     case 2: ImGui::StyleColorsClassic(); break;
@@ -79,7 +80,7 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
     bool openPopup = ImGui::ColorButton(("##" + name).c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
     ImGui::PopID();
     ImGui::SameLine(0.0f, 5.0f);
-    ImGui::Text(name.c_str());
+    ImGui::TextUnformatted(name.c_str());
     ImGui::PushID(1);
     if (openPopup)
         ImGui::OpenPopup(("##" + name).c_str());
@@ -94,7 +95,7 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::Text("[ key ]");
+    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
@@ -121,6 +122,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
+        ImGui::MenuItem("Style", nullptr, &window.style);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
         ImGui::MenuItem("Config", nullptr, &window.config);
@@ -131,7 +133,7 @@ void GUI::renderMenuBar() noexcept
 void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 600.0f, 0.0f });
             ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         }
@@ -206,7 +208,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
-        if (!config.misc.menuStyle)
+        ImGui::Columns(1);
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -214,12 +217,12 @@ void GUI::renderAimbotWindow() noexcept
 void GUI::renderAntiAimWindow() noexcept
 {
     if (window.antiAim) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -227,7 +230,7 @@ void GUI::renderAntiAimWindow() noexcept
 void GUI::renderTriggerbotWindow() noexcept
 {
     if (window.triggerbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
         }
@@ -284,7 +287,7 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -292,7 +295,7 @@ void GUI::renderTriggerbotWindow() noexcept
 void GUI::renderBacktrackWindow() noexcept
 {
     if (window.backtrack) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
         }
@@ -301,7 +304,7 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -309,14 +312,14 @@ void GUI::renderBacktrackWindow() noexcept
 void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 450.0f, 0.0f });
             ImGui::Begin("Glow", &window.glow, windowFlags);
         }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0Defuse kits\0Projectiles");
         ImGui::PopID();
         static int currentItem{ 0 };
         if (currentCategory <= 3) {
@@ -340,7 +343,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
-        ImGui::Text("Color");
+        ImGui::TextUnformatted("Color");
         ImGui::PushID(2);
         if (openPopup)
             ImGui::OpenPopup("");
@@ -356,7 +359,8 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Alpha", &config.glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
         ImGui::SliderInt("Style", &config.glow[currentItem].style, 0, 3);
-        if (!config.misc.menuStyle)
+        ImGui::Columns(1);
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -364,7 +368,7 @@ void GUI::renderGlowWindow() noexcept
 void GUI::renderChamsWindow() noexcept
 {
     if (window.chams) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Chams", &window.chams, windowFlags);
         }
@@ -398,7 +402,7 @@ void GUI::renderChamsWindow() noexcept
 
         bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
         ImGui::SameLine(0.0f, 5.0f);
-        ImGui::Text("Color");
+        ImGui::TextUnformatted("Color");
         ImGui::PushID(2);
         if (openPopup)
             ImGui::OpenPopup("");
@@ -413,7 +417,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::PushID(4);
         ImGui::SliderFloat("", &config.chams[currentItem].alpha, 0.0f, 1.0f, "Alpha: %.2f");
         ImGui::PopID();
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::End();
         }
     }
@@ -422,7 +426,7 @@ void GUI::renderChamsWindow() noexcept
 void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
@@ -439,20 +443,30 @@ void GUI::renderEspWindow() noexcept
         int currentItem = currentCategory * 3 + currentType;
         ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.esp[currentItem].enabled);
-        ImGui::Separator();
+        ImGui::SameLine(0.0f, 50.0f);
         ImGui::InputInt("Font", &config.esp[currentItem].font, 1, 294);
         config.esp[currentItem].font = std::clamp(config.esp[currentItem].font, 1, 294);
+        
+        ImGui::Separator();
+
+        constexpr auto spacing{ 200.0f };
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
-        checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
+        ImGui::SameLine(spacing);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
-        checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
+        checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
+        ImGui::SameLine(spacing);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);
-        checkboxedColorPicker("Health bar", &config.esp[currentItem].healthBar, config.esp[currentItem].healthBarColor);
-        checkboxedColorPicker("Armor", &config.esp[currentItem].armor, config.esp[currentItem].armorColor);
-        checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
-        checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         checkboxedColorPicker("Head dot", &config.esp[currentItem].headDot, config.esp[currentItem].headDotColor);
-        if (!config.misc.menuStyle)
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Health bar", &config.esp[currentItem].healthBar, config.esp[currentItem].healthBarColor);
+        checkboxedColorPicker("Name", &config.esp[currentItem].name, config.esp[currentItem].nameColor);
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Armor", &config.esp[currentItem].armor, config.esp[currentItem].armorColor);
+        checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
+        ImGui::SameLine(spacing);
+        checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
+
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -460,7 +474,7 @@ void GUI::renderEspWindow() noexcept
 void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 520.0f, 400.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
@@ -513,8 +527,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+        ImGui::Columns(1);
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -522,7 +537,7 @@ void GUI::renderVisualsWindow() noexcept
 void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 700.0f, 0.0f });
             ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
         } 
@@ -611,16 +626,16 @@ void GUI::renderSkinChangerWindow() noexcept
         }
         selected_entry.update();
 
-        ImGui::Columns(1, nullptr, false);
+        ImGui::Columns(1);
 
         ImGui::Separator();
 
         if (ImGui::Button("Update", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
 
-        ImGui::Text("nSkinz by namazso");
+        ImGui::TextUnformatted("nSkinz by namazso");
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -628,7 +643,7 @@ void GUI::renderSkinChangerWindow() noexcept
 void GUI::renderSoundWindow() noexcept
 {
     if (window.sound) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Sound", &window.sound, windowFlags);
         }
@@ -643,7 +658,47 @@ void GUI::renderSoundWindow() noexcept
         ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
         ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
+            ImGui::End();
+    }
+}
+
+void GUI::renderStyleWindow() noexcept
+{
+    if (window.style) {
+        if (!config.style.menuStyle) {
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::Begin("Style", &window.style, windowFlags);
+        }
+
+        ImGui::PushItemWidth(150.0f);
+        if (ImGui::Combo("Menu style", &config.style.menuStyle, "Classic\0One window\0"))
+            window = { };
+        if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+            updateColors();
+        ImGui::PopItemWidth();
+
+        if (config.style.menuColors == 3) {
+            ImGuiStyle& style = ImGui::GetStyle();
+            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+                if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
+
+                const char* name = ImGui::GetStyleColorName(i);
+                ImGui::PushID(i);
+                bool openPopup = ImGui::ColorButton("##colorbutton", style.Colors[i], ImGuiColorEditFlags_NoTooltip);
+                ImGui::SameLine(0.0f, 5.0f);
+                ImGui::TextUnformatted(name);
+                if (openPopup)
+                    ImGui::OpenPopup(name);
+                if (ImGui::BeginPopup(name)) {
+                    ImGui::ColorPicker3("##colorpicker", (float*)& style.Colors[i], ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+                    ImGui::EndPopup();
+                }
+                ImGui::PopID();
+            }
+        }
+
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -651,17 +706,13 @@ void GUI::renderSoundWindow() noexcept
 void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
-        ImGui::Text("Menu key");
+        ImGui::TextUnformatted("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
-        if (ImGui::Combo("Menu style", &config.misc.menuStyle, "Classic\0One window\0"))
-            window = { };
-        if (ImGui::Combo("Menu colors", &config.misc.menuColors, "Dark\0Light\0Classic\0"))
-            updateColors();
 
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
@@ -714,7 +765,7 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::Button("Unhook"))
             hooks.restore();
 
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -722,7 +773,7 @@ void GUI::renderMiscWindow() noexcept
 void GUI::renderReportbotWindow() noexcept
 {
     if (window.reportbot) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
         }
@@ -736,7 +787,7 @@ void GUI::renderReportbotWindow() noexcept
         ImGui::Checkbox("Griefing", &config.reportbot.griefing);
         ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
         ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
-        if (!config.misc.menuStyle)
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
@@ -744,7 +795,7 @@ void GUI::renderReportbotWindow() noexcept
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        if (!config.misc.menuStyle) {
+        if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 290.0f, 190.0f });
             ImGui::Begin("Config", &window.config, windowFlags);
         }
@@ -783,14 +834,16 @@ void GUI::renderConfigWindow() noexcept
             config.add(buffer);
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
-                ImGui::OpenPopup("Config to reset");
+            ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+                if (i == 1) ImGui::Separator();
+
                 if (ImGui::Selectable(names[i])) {
                     switch (i) {
-                    case 0: config.reset(); break;
+                    case 0: config.reset(); updateColors(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
                     case 1: config.aimbot = { }; break;
                     case 2: config.triggerbot = { }; break;
                     case 3: config.backtrack = { }; break;
@@ -801,8 +854,9 @@ void GUI::renderConfigWindow() noexcept
                     case 8: config.visuals = { }; break;
                     case 9: config.skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
                     case 10: config.sound = { }; break;
-                    case 11: config.misc = { }; updateColors(); Misc::updateClanTag(true); break;
-                    case 12: config.reportbot = { }; break;
+                    case 11: config.style = { }; updateColors(); break;
+                    case 12: config.misc = { };  Misc::updateClanTag(true); break;
+                    case 13: config.reportbot = { }; break;
                     }
                 }
             }
@@ -820,17 +874,18 @@ void GUI::renderConfigWindow() noexcept
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
                 config.remove(currentConfig);
         }
-        if (!config.misc.menuStyle)
+        ImGui::Columns(1);
+        if (!config.style.menuStyle)
             ImGui::End();
     }
 }
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 750.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 800.0f, 0.0f });
     ImGui::Begin("Jweega", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
-    if (ImGui::BeginTabBar("TabBar")) {
+    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable)) {
         if (ImGui::BeginTabItem("Aimbot")) {
             window = { };
             window.aimbot = true;
@@ -881,6 +936,11 @@ void GUI::renderGuiStyle2() noexcept
             window.sound = true;
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Style")) {
+            window = { };
+            window.style = true;
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Misc")) {
             window = { };
             window.misc = true;
@@ -909,6 +969,7 @@ void GUI::renderGuiStyle2() noexcept
     renderVisualsWindow();
     renderSkinChangerWindow();
     renderSoundWindow();
+    renderStyleWindow();
     renderMiscWindow();
     renderReportbotWindow();
     renderConfigWindow();
