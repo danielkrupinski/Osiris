@@ -757,7 +757,7 @@ void GUI::renderMiscWindow() noexcept
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
         hotkey(config.misc.chokedPacketsKey);
-        ImGui::Text("Fake Duck Key");
+        ImGui::TextUnformatted("Fake Duck Key");
         ImGui::SameLine();
         hotkey(config.misc.fakeDuckKey);
         ImGui::PushItemWidth(290.0f);
