@@ -1,13 +1,14 @@
 #pragma once
 
 enum class ClassId {
-    BaseAnimating = 2,
+    BaseCSGrenadeProjectile = 9,
     C4 = 34,
     Chicken = 36,
     CSPlayer = 40,
     Deagle = 46,
     Drone = 49,
     Dronegun,
+    EconEntity = 53,
     Knife = 107,
     KnifeGG,
     PlantedC4 = 128,
