@@ -54,5 +54,12 @@ struct GlowObjectManager {
         return index;
     }
 
+    constexpr void unregisterGlowObject(int index) noexcept
+    {
+        glowObjectDefinitions[index].nextFreeSlot = firstFreeSlot;
+        glowObjectDefinitions[index].entity = nullptr;
+        firstFreeSlot = index;
+    }
+
     int firstFreeSlot;
 };
