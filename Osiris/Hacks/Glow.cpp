@@ -12,10 +12,21 @@ void Glow::render() noexcept
     for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
         static std::vector<std::pair<int, int>> customGlowEntities;
 
-        if (auto entity = interfaces.entityList->getEntity(i); entity && entity->getClientClass()->classId == ClassId::EconEntity) {
-            if (!memory.glowObjectManager->hasGlowEffect(entity)) {
-                if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
-                    customGlowEntities.emplace_back(i, index);
+        if (auto entity = interfaces.entityList->getEntity(i)) {
+            switch (entity->getClientClass()->classId) {
+            case ClassId::EconEntity:
+            case ClassId::BaseCSGrenadeProjectile:
+            case ClassId::BreachChargeProjectile:
+            case ClassId::BumpMineProjectile:
+            case ClassId::DecoyProjectile:
+            case ClassId::MolotovProjectile:
+            case ClassId::SensorGrenadeProjectile:
+            case ClassId::SmokeGrenadeProjectile:
+            case ClassId::SnowballProjectile:
+                if (!memory.glowObjectManager->hasGlowEffect(entity)) {
+                    if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
+                        customGlowEntities.emplace_back(i, index);
+                }
             }
         } else if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
             memory.glowObjectManager->unregisterGlowObject(it->second);
@@ -74,6 +85,16 @@ void Glow::render() noexcept
         case ClassId::PlantedC4: applyGlow(glow[15]); break;
         case ClassId::Chicken: applyGlow(glow[16]); break;
         case ClassId::EconEntity: applyGlow(glow[17]); break;
+
+        case ClassId::BaseCSGrenadeProjectile:
+        case ClassId::BreachChargeProjectile:
+        case ClassId::BumpMineProjectile:
+        case ClassId::DecoyProjectile:
+        case ClassId::MolotovProjectile:
+        case ClassId::SensorGrenadeProjectile:
+        case ClassId::SmokeGrenadeProjectile:
+        case ClassId::SnowballProjectile:
+            applyGlow(glow[18]); break;
         default:
            if (entity->isWeapon()) {
                 applyGlow(glow[13]);
