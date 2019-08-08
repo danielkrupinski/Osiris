@@ -31,7 +31,6 @@ struct GlowObjectDefinition {
 struct GlowObjectManager {
     UtlVector<GlowObjectDefinition> glowObjectDefinitions;
 
-
     constexpr bool hasGlowEffect(Entity* entity) noexcept
     {
         for (int i = 0; i < glowObjectDefinitions.size; i++)
@@ -39,8 +38,21 @@ struct GlowObjectManager {
                 return true;
 
         return false;
-    };
+    }
 
+    constexpr int registerGlowObject(Entity* entity) noexcept
+    {
+        int index = firstFreeSlot;
+        if (index != -1) {
+            firstFreeSlot = glowObjectDefinitions[index].nextFreeSlot;
+            glowObjectDefinitions[index].entity = entity;
+            glowObjectDefinitions[index].fullBloomRender = false;
+            glowObjectDefinitions[index].fullBloomStencilTestValue = 0;
+            glowObjectDefinitions[index].splitScreenSlot = -1;
+            glowObjectDefinitions[index].nextFreeSlot = -2;
+        }
+        return index;
+    }
 
     int firstFreeSlot;
 };
