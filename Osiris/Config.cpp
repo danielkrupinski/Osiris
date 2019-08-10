@@ -649,7 +649,7 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Aimbot"] = reportbot.aimbot;
         reportbotJson["Wallhack"] = reportbot.wallhack;
         reportbotJson["Other"] = reportbot.other;
-        reportbotJson["Other"] = reportbot.griefing;
+        reportbotJson["Griefing"] = reportbot.griefing;
         reportbotJson["Voice abuse"] = reportbot.voiceAbuse;
         reportbotJson["Text abuse"] = reportbot.textAbuse;
     }
