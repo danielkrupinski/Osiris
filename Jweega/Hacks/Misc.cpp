@@ -44,10 +44,9 @@ void Misc::spectatorList() noexcept
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (!localPlayer->isAlive()) {
-            const auto observerTarget = localPlayer->getObserverTarget();
-            if (!observerTarget)
+            if (!localPlayer->getObserverTarget())
                 return;
-            localPlayer = observerTarget;
+            localPlayer = localPlayer->getObserverTarget();
         }
 
         interfaces.surface->setTextFont(Surface::font);
