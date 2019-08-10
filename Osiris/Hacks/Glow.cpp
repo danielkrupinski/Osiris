@@ -14,7 +14,7 @@ void Glow::render() noexcept
     Glow::clearCustomObjects();
 
     for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (auto entity = interfaces.entityList->getEntity(i)) {
+        if (auto entity = interfaces.entityList->getEntity(i); entity && !entity->isDormant()) {
             switch (entity->getClientClass()->classId) {
             case ClassId::EconEntity:
             case ClassId::BaseCSGrenadeProjectile:
