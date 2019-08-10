@@ -11,33 +11,32 @@
 
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
     if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
+    const auto activeWeapon{ localPlayer->getActiveWeapon() };
     if (!activeWeapon || !activeWeapon->clip() || activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+    auto weaponIndex{ getWeaponIndex(activeWeapon->itemDefinitionIndex2()) };
     if (!weaponIndex)
         return;
 
     if (!config.triggerbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    static float lastTime{ 0.0f };
-    const auto now = memory.globalVars->realtime;
-
+    static auto lastTime{ 0.0f };
+    
     if (config.triggerbot[weaponIndex].enabled) {
-        if ((GetAsyncKeyState(config.triggerbot[weaponIndex].key) || !config.triggerbot[weaponIndex].onKey)
+        if (const auto now{ memory.globalVars->realtime };
+            (GetAsyncKeyState(config.triggerbot[weaponIndex].key) || !config.triggerbot[weaponIndex].onKey)
             && now - lastTime >= config.triggerbot[weaponIndex].shotDelay / 1000.0f) {
 
-            constexpr float maxRange{ 8192.0f };
+            static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
+            auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
 
-            static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-            auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
-
+            constexpr auto maxRange{ 8192.0f };
             Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                                cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                               -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * maxRange };
@@ -55,11 +54,10 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     || !localPlayer->flashDuration())
                 && (!config.triggerbot[weaponIndex].scopedOnly
                     || !activeWeapon->isSniperRifle()
-                    || activeWeapon->isSniperRifle() && localPlayer->isScoped())) {
+                    || localPlayer->isScoped())) {
                 cmd->buttons |= UserCmd::IN_ATTACK;
                 lastTime = 0.0f;
-            }
-            else {
+            } else {
                 lastTime = now;
             }
         }
