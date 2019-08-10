@@ -14,7 +14,7 @@ void Glow::render() noexcept
     Glow::clearCustomObjects();
 
     for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (auto entity = interfaces.entityList->getEntity(i)) {
+        if (auto entity = interfaces.entityList->getEntity(i); entity && !entity->isDormant()) {
             switch (entity->getClientClass()->classId) {
             case ClassId::EconEntity:
             case ClassId::BaseCSGrenadeProjectile:
@@ -25,6 +25,8 @@ void Glow::render() noexcept
             case ClassId::SensorGrenadeProjectile:
             case ClassId::SmokeGrenadeProjectile:
             case ClassId::SnowballProjectile:
+            case ClassId::Hostage:
+            case ClassId::CSRagdoll:
                 if (!memory.glowObjectManager->hasGlowEffect(entity)) {
                     if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
                         customGlowEntities.emplace_back(i, index);
@@ -94,6 +96,9 @@ void Glow::render() noexcept
         case ClassId::SmokeGrenadeProjectile:
         case ClassId::SnowballProjectile:
             applyGlow(glow[18]); break;
+
+        case ClassId::Hostage: applyGlow(glow[19]); break;
+        case ClassId::CSRagdoll: applyGlow(glow[20]); break;
         default:
            if (entity->isWeapon()) {
                 applyGlow(glow[13]);
@@ -105,12 +110,8 @@ void Glow::render() noexcept
 
 void Glow::clearCustomObjects() noexcept
 {
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (!interfaces.entityList->getEntity(i)) {
-            if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
-                memory.glowObjectManager->unregisterGlowObject(it->second);
-                customGlowEntities.erase(it);
-            }
-        }
-    }
+    for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
+        memory.glowObjectManager->unregisterGlowObject(glowObjectIndex);
+
+    customGlowEntities.clear();
 }

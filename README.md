@@ -58,6 +58,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
+    * **Rainbow** - change color frequently
     * **Thickness** - outline thickness
     * **Alpha** - outline alpha
     * **Style** - glow style [*0*-*3*]
