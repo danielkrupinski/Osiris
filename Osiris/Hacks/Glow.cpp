@@ -105,12 +105,8 @@ void Glow::render() noexcept
 
 void Glow::clearCustomObjects() noexcept
 {
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (!interfaces.entityList->getEntity(i)) {
-            if (auto it{ std::find_if(std::begin(customGlowEntities), std::end(customGlowEntities), [i](const auto& pair) { return pair.first == i; }) }; it != std::end(customGlowEntities)) {
-                memory.glowObjectManager->unregisterGlowObject(it->second);
-                customGlowEntities.erase(it);
-            }
-        }
-    }
+    for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
+        memory.glowObjectManager->unregisterGlowObject(glowObjectIndex);
+
+    customGlowEntities.clear();
 }
