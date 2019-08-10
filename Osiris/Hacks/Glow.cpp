@@ -25,6 +25,7 @@ void Glow::render() noexcept
             case ClassId::SensorGrenadeProjectile:
             case ClassId::SmokeGrenadeProjectile:
             case ClassId::SnowballProjectile:
+            case ClassId::Hostage:
                 if (!memory.glowObjectManager->hasGlowEffect(entity)) {
                     if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
                         customGlowEntities.emplace_back(i, index);
@@ -94,6 +95,8 @@ void Glow::render() noexcept
         case ClassId::SmokeGrenadeProjectile:
         case ClassId::SnowballProjectile:
             applyGlow(glow[18]); break;
+
+        case ClassId::Hostage: applyGlow(glow[19]); break;
         default:
            if (entity->isWeapon()) {
                 applyGlow(glow[13]);
