@@ -58,6 +58,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Ignore flash")) aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
         if (aimbotJson.isMember("Ignore smoke")) aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
         if (aimbotJson.isMember("Auto shot")) aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
+        if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
         if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
         if (aimbotJson.isMember("Max angle delta")) aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
@@ -391,6 +392,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Ignore flash"] = aimbotConfig.ignoreFlash;;
         aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
         aimbotJson["Auto shot"] = aimbotConfig.autoShot;
+        aimbotJson["Auto scope"] = aimbotConfig.autoScope;
         aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["Fov"] = aimbotConfig.fov;
         aimbotJson["Max angle delta"] = aimbotConfig.maxAngleDelta;
