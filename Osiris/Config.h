@@ -41,6 +41,7 @@ public:
         int bone{ 0 };
         float recoilControlX{ 0.0f };
         float recoilControlY{ 0.0f };
+        bool killshot{ false };
     };
     std::array<Aimbot, 35> aimbot;
 

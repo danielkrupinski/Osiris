@@ -65,6 +65,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
         if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
         if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
+        if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -396,6 +397,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
         aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
+        aimbotJson["Killshot"] = aimbotConfig.killshot;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
