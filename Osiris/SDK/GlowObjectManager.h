@@ -58,6 +58,8 @@ struct GlowObjectManager {
     {
         glowObjectDefinitions[index].nextFreeSlot = firstFreeSlot;
         glowObjectDefinitions[index].entity = nullptr;
+        glowObjectDefinitions[index].renderWhenOccluded = false;
+        glowObjectDefinitions[index].renderWhenUnoccluded = false;
         firstFreeSlot = index;
     }
 

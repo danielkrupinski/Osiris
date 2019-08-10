@@ -76,7 +76,7 @@ public:
         int style{ 0 };
         float color[3]{ 1.0f, 1.0f, 1.0f };
     };
-    std::array<Glow, 19> glow;
+    std::array<Glow, 21> glow;
 
     struct Chams {
         bool enabled{ false };
