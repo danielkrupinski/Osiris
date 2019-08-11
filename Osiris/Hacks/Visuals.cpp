@@ -88,8 +88,7 @@ void Visuals::removeAimPunch(FrameStage stage) noexcept
 			localPlayer->viewPunchAngle() = Vector{ };
 			if (!config.misc.recoilCrosshair)
 				localPlayer->viewPunchAngle() = Vector{ };
-		}
-		else if (stage == FrameStage::RENDER_END) {
+		} else if (stage == FrameStage::RENDER_END) {
 			localPlayer->aimPunchAngle() = aimPunch;
 			localPlayer->viewPunchAngle() = viewPunch;
 		}
