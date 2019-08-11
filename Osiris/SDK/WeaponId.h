@@ -107,3 +107,48 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
     }
 }
+
+constexpr int getWeaponClass(WeaponId weaponId) noexcept
+{
+    switch (weaponId) {
+    default: return 0;
+
+    case WeaponId::Glock:
+    case WeaponId::Hkp2000:
+    case WeaponId::Usp_s:
+    case WeaponId::Elite:
+    case WeaponId::P250:
+    case WeaponId::Tec9:
+    case WeaponId::Fiveseven:
+    case WeaponId::Cz75a:
+    case WeaponId::Deagle:
+    case WeaponId::Revolver: return 35;
+
+    case WeaponId::Nova:
+    case WeaponId::Xm1014:
+    case WeaponId::Sawedoff:
+    case WeaponId::Mag7:
+    case WeaponId::M249:
+    case WeaponId::Negev: return 36;
+
+    case WeaponId::Mac10:
+    case WeaponId::Mp9:
+    case WeaponId::Mp7:
+    case WeaponId::Mp5sd:
+    case WeaponId::Ump45:
+    case WeaponId::P90:
+    case WeaponId::Bizon: return 37;
+
+    case WeaponId::GalilAr:
+    case WeaponId::Famas:
+    case WeaponId::Ak47:
+    case WeaponId::M4A1:
+    case WeaponId::M4a1_s:
+    case WeaponId::Ssg08:
+    case WeaponId::Sg553:
+    case WeaponId::Aug:
+    case WeaponId::Awp:
+    case WeaponId::G3SG1:
+    case WeaponId::Scar20: return 38;
+    }
+}
