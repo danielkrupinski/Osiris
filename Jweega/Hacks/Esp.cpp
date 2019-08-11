@@ -1,6 +1,7 @@
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/Vector.h"
 #include "../SDK/Surface.h"
@@ -79,8 +80,11 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         float drawPositionX = bottom.x - boxWidth - 5;
 
         if (config.healthBar) {
+            static auto gameType{ interfaces.cvar->findVar("game_type") };
+            const auto maxHealth{ gameType->getInt() == 6 ? 120.0f : 100.0f };
+
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (100.0f - entity->health()) / 100.0f, drawPositionX, bottom.y);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / maxHealth, drawPositionX, bottom.y);
             interfaces.surface->setDrawColor(0, 0, 0, 255);
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
             drawPositionX -= 7;
