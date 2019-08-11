@@ -59,11 +59,9 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     bool needRedraw = true;
-    auto entity = interfaces.entityList->getEntity(info.entityIndex);
 
-    if (entity && !entity->isDormant() && entity->isAlive()) {
-        auto activeWeapon = entity->getActiveWeapon();
-        if (activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
+    if (auto entity{ interfaces.entityList->getEntity(info.entityIndex) }; entity && !entity->isDormant() && entity->isAlive()) {
+        if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
             if (config.chams[PLANTING_ALL].enabled) {
                 applyChams(config.chams[PLANTING_ALL], true, entity->health());
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
