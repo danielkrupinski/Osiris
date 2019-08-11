@@ -147,15 +147,15 @@ namespace Misc {
     constexpr void drawFov() noexcept
     {
         if (config.misc.drawFOV && interfaces.engine->isInGame()) {
-            const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+            const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
             if (!localPlayer || !localPlayer->isAlive())
                 return;
 
-            const auto activeWeapon = localPlayer->getActiveWeapon();
+            const auto activeWeapon{ localPlayer->getActiveWeapon() };
             if (!activeWeapon)
                 return;
 
-            auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+            auto weaponIndex{ getWeaponIndex(activeWeapon->itemDefinitionIndex2()) };
             if (!weaponIndex)
                 return;
 
@@ -164,7 +164,7 @@ namespace Misc {
 
             if (config.aimbot[weaponIndex].enabled) {
 
-                const auto [width, height] = interfaces.surface->getScreenSize();
+                const auto [width, height]{ interfaces.surface->getScreenSize() };
 
                 const auto actualFov = std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(localPlayer->isScoped() ? static_cast<float>(localPlayer->fovStart()) : (static_cast<float>(localPlayer->fovStart()) + config.visuals.fov)) / 2.f));
 
