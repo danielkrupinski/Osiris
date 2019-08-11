@@ -476,7 +476,7 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 560.0f, 400.0f });
+            ImGui::SetNextWindowSize({ 520.0f, 440.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
