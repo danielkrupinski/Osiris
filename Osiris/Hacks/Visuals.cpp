@@ -76,6 +76,26 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
     }
 }
 
+void Visuals::removeAimPunch(FrameStage stage) noexcept
+{
+	if (config.visuals.noAimPunch) {
+		static Vector aimPunch;
+		static Vector viewPunch;
+		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		if (stage == FrameStage::RENDER_START) {
+			aimPunch = localPlayer->aimPunchAngle();
+			viewPunch = localPlayer->viewPunchAngle();
+			localPlayer->viewPunchAngle() = Vector{ };
+			if (!config.misc.recoilCrosshair)
+				localPlayer->viewPunchAngle() = Vector{ };
+		}
+		else if (stage == FrameStage::RENDER_END) {
+			localPlayer->aimPunchAngle() = aimPunch;
+			localPlayer->viewPunchAngle() = viewPunch;
+		}
+	}
+}
+
 void Visuals::removeBlur() noexcept
 {
     static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");

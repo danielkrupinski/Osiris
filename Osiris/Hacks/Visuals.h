@@ -16,6 +16,7 @@ namespace Visuals {
     void modifySmoke() noexcept;
     void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage) noexcept;
+	void removeAimPunch(FrameStage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;
     void removeGrass() noexcept;

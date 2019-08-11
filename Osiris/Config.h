@@ -125,6 +125,7 @@ public:
         bool noFog{ false };
         bool no3dSky{ false };
         bool noVisualRecoil{ false };
+		bool noAimPunch{ false };
         bool noHands{ false };
         bool noSleeves{ false };
         bool noWeapons{ false };

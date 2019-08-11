@@ -204,8 +204,9 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
         if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
-        if (visualsJson.isMember("noVisualRecoil")) visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
-        if (visualsJson.isMember("noHands")) visuals.noHands = visualsJson["noHands"].asBool();
+		if (visualsJson.isMember("noVisualRecoil")) visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
+		if (visualsJson.isMember("noAimPunch")) visuals.noAimPunch = visualsJson["noAimPunch"].asBool();
+		if (visualsJson.isMember("noHands")) visuals.noHands = visualsJson["noHands"].asBool();
         if (visualsJson.isMember("noSleeves")) visuals.noSleeves = visualsJson["noSleeves"].asBool();
         if (visualsJson.isMember("noWeapons")) visuals.noWeapons = visualsJson["noWeapons"].asBool();
         if (visualsJson.isMember("noSmoke")) visuals.noSmoke = visualsJson["noSmoke"].asBool();
@@ -513,6 +514,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["noVisualRecoil"] = visuals.noVisualRecoil;
+		visualsJson["noAimPunch"] = visuals.noAimPunch;
         visualsJson["noHands"] = visuals.noHands;
         visualsJson["noSleeves"] = visuals.noSleeves;
         visualsJson["noWeapons"] = visuals.noWeapons;

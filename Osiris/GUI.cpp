@@ -476,7 +476,7 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 400.0f });
+            ImGui::SetNextWindowSize({ 560.0f, 400.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
@@ -486,6 +486,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3d sky", &config.visuals.no3dSky);
         ImGui::Checkbox("No visual recoil", &config.visuals.noVisualRecoil);
+		ImGui::Checkbox("No aim punch", &config.visuals.noAimPunch);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No weapons", &config.visuals.noWeapons);

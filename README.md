@@ -96,7 +96,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     * **No fog** - remove fog from map for better visibility
     * **No 3d sky** - remove 3d skybox from map - increases FPS
-    * **No visual recoil** - remove visual recoil punch effect
+	* **No visual recoil** - remove visual recoil effect
+    * **No aim punch** - remove visual damage punch effect
     * **No hands** - remove arms / hands model from first-person view
     * **No sleeves** - remove sleeves model from first-person view
     * **No weapons** - remove weapons model from first-person view
