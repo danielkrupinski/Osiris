@@ -208,7 +208,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         if (!unload) {
             offsets[hash] = uint16_t(offset + prop.offset);
 
-            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) constexpr noexcept {
+            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
                 if (originalProxy != proxy) {
                     proxies[hash] = originalProxy;
                     originalProxy = proxy;
@@ -220,7 +220,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
             else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
                 hookProperty(hash, prop.proxy, viewModelSequence);
         } else {
-            constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) constexpr noexcept {
+            constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) noexcept {
                 proxy = proxies[hash];
             } };
 

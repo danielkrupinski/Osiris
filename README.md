@@ -54,7 +54,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Glow** - render glow effect on entities
 
-    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens* **/** *All, Visible, Occluded*
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens, Defuse kits, Projectiles, Hostages, Ragdolls* **/** *All, Visible, Occluded*
 
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp

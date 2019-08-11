@@ -124,10 +124,11 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
+        AntiAim::run(cmd, oldYaw, sendPacket);
+    }
 
-    AntiAim::run(cmd, oldYaw, sendPacket);
     cmd->viewangles.normalize();
     Misc::fixMovement(cmd, oldYaw);
 
