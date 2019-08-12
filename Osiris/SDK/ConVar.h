@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils.h"
+#include "UtlVector.h"
 
 struct ConVar {
     constexpr float getFloat() noexcept
@@ -33,4 +34,6 @@ struct ConVar {
     ConVar* parent;
     const char* defaultValue;
     char* string;
+    std::byte pad1[28];
+    UtlVector<void()> onChangeCallbacks;
 };
