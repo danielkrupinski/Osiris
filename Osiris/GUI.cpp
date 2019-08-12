@@ -746,6 +746,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::PushID(1);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
+        ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
