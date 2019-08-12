@@ -67,6 +67,11 @@ struct Vector final {
         return sqrtf(x * x + y * y + z * z);
     }
 
+    auto length2D() noexcept
+    {
+        return sqrtf(x * x + y * y);
+    }
+
     constexpr auto squareLength() noexcept
     {
         return x * x + y * y + z * z;
