@@ -197,6 +197,7 @@ public:
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
+        bool nameStealer{ false };
         bool fastPlant{ false };
         bool bombTimer{ false };
         bool prepareRevolver{ false };
