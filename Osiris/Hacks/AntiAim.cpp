@@ -6,16 +6,19 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-void AntiAim::run(UserCmd* cmd, const float oldYaw, bool& sendPacket) noexcept
-{
-    if (config.antiAim.enabled) {
-        static auto lastYaw{ 0.0f };
+void AntiAim::run(UserCmd* cmd, const float oldYaw, bool& sendPacket) noexcept {
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	const auto activeWeapon = localPlayer->getActiveWeapon();
+	auto itemindex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+	if (config.antiAim.enabled && !activeWeapon->isInThrow()) {
+		static auto lastYaw{ 0.0f };
 
-        if (!sendPacket) {
-            cmd->viewangles.normalize();
-            lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-        } else {
-            cmd->viewangles.y = lastYaw + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
-        }
-    }
+		if (!sendPacket) {
+			cmd->viewangles.normalize();
+			lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+		}
+		else {
+			cmd->viewangles.y = lastYaw + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+		}
+	}
 }

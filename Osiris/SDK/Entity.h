@@ -194,6 +194,15 @@ public:
         return callVirtualMethod<Entity*>(this, 291);
     }
 
+	bool isInThrow() noexcept {
+		if (!m_bPinPulled()) {
+			float throwTime = m_fThrowTime();
+			if (throwTime > 0)
+				return 1;
+		}
+		return 0;
+	}
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
@@ -228,6 +237,9 @@ public:
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
+
+	NETVAR(m_bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+	NETVAR(m_fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float_t);
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
 
