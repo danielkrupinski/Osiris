@@ -44,7 +44,7 @@ public:
         float recoilControlY{ 0.0f };
         bool killshot{ false };
     };
-    std::array<Aimbot, 35> aimbot;
+    std::array<Aimbot, 39> aimbot;
 
     struct Triggerbot {
         bool enabled{ false };
@@ -57,7 +57,7 @@ public:
         int hitgroup{ 0 };
         int shotDelay{ 0 };
     };
-    std::array<Triggerbot, 35> triggerbot;
+    std::array<Triggerbot, 39> triggerbot;
 
     struct {
         bool enabled{ false };
