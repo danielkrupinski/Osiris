@@ -153,11 +153,15 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Fix bone matrix** - correct client bone matrix to be closer to server one
     * **Disable model occlusion** - draw player models even if they are behind thick walls
     * **Kill message** - print message to chat after killing an enemy
+    * **Name stealer** - mimic other players names
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
     * **Unhook** - unload cheat
+
+* **Reportbot** - automatically report players on server for cheating or other abusive actions
+    * **Enabled**
 
 * **Config** - JSON-based configuration system
     * **Create config** - create new configuration file
