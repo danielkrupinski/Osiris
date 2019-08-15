@@ -56,6 +56,21 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     return damage;
 }
 
+static constexpr float getHitGroupDamageMultiplier(HitGroup hitGroup) noexcept
+{
+    switch (hitGroup) {
+    case HitGroup::Head:
+        return 4.0f;
+    case HitGroup::Stomach:
+        return 1.25f;
+    case HitGroup::LeftLeg:
+    case HitGroup::RightLeg:
+        return 0.75f;
+    default:
+        return 1.0f;
+    }
+}
+
 static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData) noexcept
 {
     float damage{ static_cast<float>(weaponData->damage) };
@@ -100,6 +115,10 @@ void Aimbot::run(UserCmd* cmd) noexcept
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
     if (!weaponIndex)
         return;
+
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+    if (!config.aimbot[weaponIndex].enabled)
+        weaponIndex = weaponClass;
 
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;

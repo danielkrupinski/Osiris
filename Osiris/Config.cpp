@@ -336,6 +336,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) strcpy_s(misc.killMessageString, sizeof(misc.killMessageString), miscJson["Kill message string"].asCString());
+        if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
         if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
@@ -633,6 +634,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
         miscJson["Kill message"] = misc.killMessage;
         miscJson["Kill message string"] = misc.killMessageString;
+        miscJson["Name stealer"] = misc.nameStealer;
         miscJson["Fast plant"] = misc.fastPlant;
         miscJson["Bomb timer"] = misc.bombTimer;
         miscJson["Prepare revolver"] = misc.prepareRevolver;

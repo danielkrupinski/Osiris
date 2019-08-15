@@ -139,9 +139,23 @@ void GUI::renderAimbotWindow() noexcept
             ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         }
         static int currentCategory{ 0 };
+        const char *categories[] = { "All", "Pistols", "Heavy", "SMG", "Rifles" };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+
+        if (ImGui::BeginCombo("", categories[currentCategory]))
+        {
+            for (int n = 0; n < IM_ARRAYSIZE(categories); n++)
+            {
+                bool isSelected = categories[currentCategory] == categories[n];
+                if (ImGui::Selectable(categories[n], isSelected))
+                    currentCategory = n;
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -154,26 +168,82 @@ void GUI::renderAimbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver\0");
-            currentWeapon = currentPistol + 1;
+            const char* pistols[] = { "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+
+            if (ImGui::BeginCombo("", pistols[currentPistol]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(pistols); n++)
+                {
+                    bool isSelected = pistols[currentPistol] == pistols[n];
+                    if (ImGui::Selectable(pistols[n], isSelected))
+                        currentPistol = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentPistol == 0 ? 35 : currentPistol);
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev\0");
-            currentWeapon = currentHeavy + 11;
+            const char* heavies[] = { "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+
+            if (ImGui::BeginCombo("", heavies[currentHeavy]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(heavies); n++)
+                {
+                    bool isSelected = heavies[currentHeavy] == heavies[n];
+                    if (ImGui::Selectable(heavies[n], isSelected))
+                        currentHeavy = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentHeavy == 0 ? 36 : currentHeavy + 10);
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon\0");
-            currentWeapon = currentSmg + 17;
+            const char* smgs[] = { "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+
+            if (ImGui::BeginCombo("", smgs[currentSmg]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(smgs); n++)
+                {
+                    bool isSelected = smgs[currentSmg] == smgs[n];
+                    if (ImGui::Selectable(smgs[n], isSelected))
+                        currentSmg = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentSmg == 0 ? 37 : currentSmg + 16);
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20\0");
-            currentWeapon = currentRifle + 24;
+            const char* rifles[] = { "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+
+            if (ImGui::BeginCombo("", rifles[currentRifle]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(rifles); n++)
+                {
+                    bool isSelected = rifles[currentRifle] == rifles[n];
+                    if (ImGui::Selectable(rifles[n], isSelected))
+                        currentRifle = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentRifle == 0 ? 38 : currentRifle + 23);
             break;
         }
         }
@@ -250,26 +320,82 @@ void GUI::renderTriggerbotWindow() noexcept
             break;
         case 1: {
             static int currentPistol{ 0 };
-            ImGui::Combo("", &currentPistol, "Glock-18\0P2000\0USP-S\0Dual Berettas\0P250\0Tec-9\0Five-Seven\0CZ-75\0Desert Eagle\0Revolver\0");
-            currentWeapon = currentPistol + 1;
+            const char* pistols[] = { "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+
+            if (ImGui::BeginCombo("", pistols[currentPistol]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(pistols); n++)
+                {
+                    bool isSelected = pistols[currentPistol] == pistols[n];
+                    if (ImGui::Selectable(pistols[n], isSelected))
+                        currentPistol = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentPistol == 0 ? 35 : currentPistol);
             break;
         }
         case 2: {
             static int currentHeavy{ 0 };
-            ImGui::Combo("", &currentHeavy, "Nova\0XM1014\0Sawed-off\0MAG-7\0M249\0Negev\0");
-            currentWeapon = currentHeavy + 11;
+            const char* heavies[] = { "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+
+            if (ImGui::BeginCombo("", heavies[currentHeavy]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(heavies); n++)
+                {
+                    bool isSelected = heavies[currentHeavy] == heavies[n];
+                    if (ImGui::Selectable(heavies[n], isSelected))
+                        currentHeavy = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentHeavy == 0 ? 36 : currentHeavy + 10);
             break;
         }
         case 3: {
             static int currentSmg{ 0 };
-            ImGui::Combo("", &currentSmg, "Mac-10\0MP9\0MP7\0MP5-SD\0UMP-45\0P90\0PP-Bizon\0");
-            currentWeapon = currentSmg + 17;
+            const char* smgs[] = { "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+
+            if (ImGui::BeginCombo("", smgs[currentSmg]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(smgs); n++)
+                {
+                    bool isSelected = smgs[currentSmg] == smgs[n];
+                    if (ImGui::Selectable(smgs[n], isSelected))
+                        currentSmg = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentSmg == 0 ? 37 : currentSmg + 16);
             break;
         }
         case 4: {
             static int currentRifle{ 0 };
-            ImGui::Combo("", &currentRifle, "Galil AR\0Famas\0AK-47\0M4A4\0M4A1-S\0SSG-08\0SG-553\0AUG\0AWP\0G3SG1\0SCAR-20\0");
-            currentWeapon = currentRifle + 24;
+            const char* rifles[] = { "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+
+            if (ImGui::BeginCombo("", rifles[currentRifle]))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(rifles); n++)
+                {
+                    bool isSelected = rifles[currentRifle] == rifles[n];
+                    if (ImGui::Selectable(rifles[n], isSelected))
+                        currentRifle = n;
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            currentWeapon = (currentRifle == 0 ? 38 : currentRifle + 23);
             break;
         }
         }
@@ -746,6 +872,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::PushID(1);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
+        ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);

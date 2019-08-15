@@ -21,6 +21,7 @@ namespace Misc {
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
+    void stealNames() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
