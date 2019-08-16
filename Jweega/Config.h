@@ -169,7 +169,6 @@ public:
     } sound;
 
     struct {
-        std::array<ImVec4, ImGuiCol_COUNT> colors;
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
