@@ -1,7 +1,7 @@
 #include "grenadeprediction.h"
 #include "Core\options.h"
 
-void grenade_prediction::Tick(int buttons)
+void grenadePrediction::Tick(int buttons)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -13,7 +13,7 @@ void grenade_prediction::Tick(int buttons)
 		(in_attack) ? ACT_THROW :
 		ACT_NONE;
 }
-void grenade_prediction::View(CViewSetup* setup)
+void grenadePrediction::View(CViewSetup* setup)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -33,7 +33,7 @@ void grenade_prediction::View(CViewSetup* setup)
 	}
 }
 
-void grenade_prediction::Paint()
+void grenadePrediction::Paint()
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -88,7 +88,7 @@ void angle_vectors2(const Vector &angles, Vector *forward, Vector *right, Vector
 		up->z = cr * cp;
 	}
 }
-void grenade_prediction::Setup(Vector& vecSrc, Vector& vecThrow, QAngle viewangles)
+void grenadePrediction::Setup(Vector& vecSrc, Vector& vecThrow, QAngle viewangles)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -148,7 +148,7 @@ void grenade_prediction::Setup(Vector& vecSrc, Vector& vecThrow, QAngle viewangl
 	vecThrow += vForward * flVel; //	vecThrow.MultAdd(vForward, flVel);
 }
 
-void grenade_prediction::Simulate(CViewSetup* setup)
+void grenadePrediction::Simulate(CViewSetup* setup)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -179,7 +179,7 @@ void grenade_prediction::Simulate(CViewSetup* setup)
 	path.push_back(vecSrc);
 }
 
-int grenade_prediction::Step(Vector& vecSrc, Vector& vecThrow, int tick, float interval)
+int grenadePrediction::Step(Vector& vecSrc, Vector& vecThrow, int tick, float interval)
 {
 	// Apply gravity
 	Vector move;
@@ -210,7 +210,7 @@ int grenade_prediction::Step(Vector& vecSrc, Vector& vecThrow, int tick, float i
 }
 
 
-bool grenade_prediction::CheckDetonate(const Vector& vecThrow, const trace_t& tr, int tick, float interval)
+bool grenadePrediction::CheckDetonate(const Vector& vecThrow, const trace_t& tr, int tick, float interval)
 {
 	switch (type)
 	{
@@ -242,7 +242,7 @@ bool grenade_prediction::CheckDetonate(const Vector& vecThrow, const trace_t& tr
 	}
 }
 
-void grenade_prediction::TraceHull(Vector& src, Vector& end, trace_t& tr)
+void grenadePrediction::TraceHull(Vector& src, Vector& end, trace_t& tr)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -256,7 +256,7 @@ void grenade_prediction::TraceHull(Vector& src, Vector& end, trace_t& tr)
 	g_EngineTrace->TraceRay(ray, 0x200400B, &filter, &tr);
 }
 
-void grenade_prediction::AddGravityMove(Vector& move, Vector& vel, float frametime, bool onground)
+void grenadePrediction::AddGravityMove(Vector& move, Vector& vel, float frametime, bool onground)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -281,7 +281,7 @@ void grenade_prediction::AddGravityMove(Vector& move, Vector& vel, float frameti
 	}
 }
 
-void grenade_prediction::PushEntity(Vector& src, const Vector& move, trace_t& tr)
+void grenadePrediction::PushEntity(Vector& src, const Vector& move, trace_t& tr)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -292,7 +292,7 @@ void grenade_prediction::PushEntity(Vector& src, const Vector& move, trace_t& tr
 	TraceHull(src, vecAbsEnd, tr);
 }
 
-void grenade_prediction::ResolveFlyCollisionCustom(trace_t& tr, Vector& vecVelocity, float interval)
+void grenadePrediction::ResolveFlyCollisionCustom(trace_t& tr, Vector& vecVelocity, float interval)
 {
 	if (!g_Options.MISC_GrenadeTrajectory)
 		return;
@@ -332,7 +332,7 @@ void grenade_prediction::ResolveFlyCollisionCustom(trace_t& tr, Vector& vecVeloc
 	}
 }
 
-int grenade_prediction::PhysicsClipVelocity(const Vector& in, const Vector& normal, Vector& out, float overbounce)
+int grenadePrediction::PhysicsClipVelocity(const Vector& in, const Vector& normal, Vector& out, float overbounce)
 {
 	static const float STOP_EPSILON = 0.1f;
 
