@@ -34,6 +34,7 @@ public:
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
         bool autoShot{ false };
+        bool autoScope{ false };
         bool recoilbasedFov{ false };
         float fov{ 0.0f };
         float maxAngleDelta{ 0.0f };
