@@ -176,7 +176,8 @@ void Misc::drawBombTimer() noexcept
 			interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
 			auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
 			auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
-			interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2), drawPositionY);
+			static auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
+			interfaces.surface->setTextPosition(bombTextX, drawPositionY);
 			drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
 			interfaces.surface->printText(bombText.c_str());
 			static auto progressBarX{ interfaces.surface->getScreenSize().first / 3 };
@@ -196,7 +197,8 @@ void Misc::drawBombTimer() noexcept
 					static wchar_t name[128];
 					if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
 						drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-						interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, (std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str())).first / 2), drawPositionY);
+						static auto defuseTimeX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, (std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str())).first / 2) };
+						interfaces.surface->setTextPosition(defuseTimeX, drawPositionY);
 						interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
 						interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
 						drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
