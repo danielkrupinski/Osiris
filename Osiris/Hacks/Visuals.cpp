@@ -11,6 +11,8 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 
+
+
 void Visuals::colorWorld() noexcept
 {
     static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
