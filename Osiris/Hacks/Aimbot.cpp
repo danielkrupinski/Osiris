@@ -204,7 +204,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped)
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
