@@ -32,12 +32,36 @@ GUI::GUI() noexcept
     style.PopupRounding = 5.0f;
 
     ImGuiIO& io = ImGui::GetIO();
+    ImFontConfig fontConfig;
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
 
     char buffer[MAX_PATH];
-    if (GetWindowsDirectoryA(buffer, MAX_PATH))
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+    static ImWchar ranges[] = {
+        0x0020, 0x007E, // Basic Latin
+        0x00A0, 0x00FF, // Latin-1 Supplement
+        0x0100, 0x017F, // Latin Extended-A
+        0x0180, 0x024F, // Latin Extended-B
+        0x0370, 0x03FF, // Greek and Coptic
+        0x0400, 0x04FF, // Cyrillic
+        0x0500, 0x052F, // Cyrillic Supplementary
+        0
+    };
+
+    static ImWchar KaiGenGothicCNRegular_ranges[] = {
+        0x3000, 0x30FF, // Punctuations, Hiragana, Katakana
+        0x31F0, 0x31FF, // Katakana Phonetic Extensions
+        0xFF00, 0xFFEF, // Half-width characters
+        0x4E00, 0x9FAF, // CJK Ideograms
+        0
+    };
+
+    if (GetWindowsDirectoryA(buffer, MAX_PATH)) {
+        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, &fontConfig, ranges);
+        fontConfig.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/KaiGenGothicCN-Regular.ttf"), 14.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
+        io.Fonts->Build();
+    }
 }
 
 void GUI::render() noexcept
