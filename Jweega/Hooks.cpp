@@ -42,6 +42,7 @@
 #include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/ViewSetup.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -298,15 +299,6 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     }
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
-
-struct ViewSetup {
-    std::byte pad[176];
-    float fov;
-    float fovViewModel;
-    Vector origin;
-    std::byte pad1[16];
-    float farZ;
-};
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
