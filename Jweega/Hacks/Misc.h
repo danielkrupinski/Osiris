@@ -188,10 +188,11 @@ namespace Misc {
         if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
             const auto choked{ interfaces.engine->getNetworkChannel()->chokedPackets };
             const auto should_duck = choked >= (config.misc.chokedPackets / 2);
-            doFakeDuck = should_duck;
             if (should_duck) {
+                doFakeDuck = true;
                 cmd->buttons |= UserCmd::IN_DUCK;
             }  else {
+                doFakeDuck = false;
                 cmd->buttons &= ~UserCmd::IN_DUCK;
             }
         }
