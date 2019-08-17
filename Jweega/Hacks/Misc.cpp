@@ -63,10 +63,7 @@ void Misc::spectatorList() noexcept
 
             static PlayerInfo playerInfo;
 
-            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
-                if (playerInfo.fakeplayer)
-                    continue;
-
+            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer && !playerInfo.fakeplayer) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
