@@ -20,7 +20,7 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
         static float lastCheck{ 0.0f };
 
         if (config.antiAim.lbyBreaker) {
-            if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer->vecVelocity().length2D >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
+            if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer->vecVelocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
                 lbyBreak = false;
                 lastCheck = memory.globalVars->serverTime();
             }
