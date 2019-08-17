@@ -13,6 +13,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ConVar.h"
+#include "../SDK/ViewSetup.h"
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
@@ -25,6 +26,8 @@ namespace Misc {
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
     void stealNames() noexcept;
+
+    static auto doFakeDuck{ false };
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -183,16 +186,20 @@ namespace Misc {
 
     constexpr void fakeDuck(UserCmd* cmd) noexcept {
         if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
-            const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
             const auto choked{ interfaces.engine->getNetworkChannel()->chokedPackets };
             const auto should_duck = choked >= (config.misc.chokedPackets / 2);
+            doFakeDuck = should_duck;
             if (should_duck) {
                 cmd->buttons |= UserCmd::IN_DUCK;
-                cmd->viewangles.z = localPlayer->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
             }  else {
                 cmd->buttons &= ~UserCmd::IN_DUCK;
             }
         }
+    }
+
+    constexpr void fakeDuckFix(ViewSetup* setup) noexcept {
+        if (doFakeDuck)
+            setup->origin.z = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
     }
 
 }
