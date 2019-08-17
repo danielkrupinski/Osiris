@@ -302,7 +302,9 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 struct ViewSetup {
     std::byte pad[176];
     float fov;
-    std::byte pad1[32];
+    float fovViewModel;
+    Vector origin;
+    std::byte pad1[16];
     float farZ;
 };
 
