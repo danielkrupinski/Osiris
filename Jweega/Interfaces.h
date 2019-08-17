@@ -11,6 +11,7 @@ class Engine;
 class EngineTrace;
 class EntityList;
 class GameEventManager;
+class GameMovement;
 class GameUI;
 class InputSystem;
 class Localize;
@@ -35,6 +36,7 @@ public:
     EngineTrace* engineTrace;
     EntityList* entityList;
     GameEventManager* gameEventManager;
+    GameMovement* gameMovement;
     GameUI* gameUI;
     InputSystem* inputSystem;
     Localize* localize;

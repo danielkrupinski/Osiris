@@ -8,6 +8,7 @@ Interfaces::Interfaces() noexcept
     engineTrace = find<EngineTrace>(L"engine", "EngineTraceClient004");
     entityList = find<EntityList>(L"client_panorama", "VClientEntityList003");
     gameEventManager = find<GameEventManager>(L"engine", "GAMEEVENTSMANAGER002");
+    gameMovement = find<GameMovement>(L"client_panorama", "GameMovement001");
     gameUI = find<GameUI>(L"client_panorama", "GameUI011");
     inputSystem = find<InputSystem>(L"inputsystem", "InputSystemVersion001");
     localize = find<Localize>(L"localize", "Localize_001");
