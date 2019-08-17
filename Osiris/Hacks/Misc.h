@@ -104,15 +104,33 @@ namespace Misc {
         }
     }
 
-    constexpr void bunnyHop(UserCmd* cmd) noexcept
-    {
-        if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            config.misc.bunnyHop
-            && !(localPlayer->flags() & 1)
-            && localPlayer->moveType() != MoveType::LADDER) {
-            cmd->buttons &= ~UserCmd::IN_JUMP;
-        }
-    }
+	constexpr void bunnyHop(UserCmd* cmd) noexcept
+	{
+		auto bLastJumped = false;
+		auto bShouldFake = false;
+		if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) ; config.misc.bunnyHop)
+		if (!bLastJumped && bShouldFake)
+		{
+			bShouldFake = false;
+			cmd->buttons |= UserCmd::IN_JUMP;
+		}
+		else if (cmd->buttons& UserCmd::IN_JUMP) 
+		{
+			if (localPlayer->flags() & 1 << 0)    
+			{
+				bLastJumped = true;
+				bShouldFake = true;
+			}
+			else {
+				cmd->buttons &= ~UserCmd::IN_JUMP;
+				bLastJumped = false;
+			}
+		}
+		else {
+			bLastJumped = false;
+			bShouldFake = false;
+		}
+	}
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
