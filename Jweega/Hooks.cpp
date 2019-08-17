@@ -127,7 +127,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, oldYaw, sendPacket);
+        AntiAim::run(cmd, sendPacket);
         Misc::fakeDuck(cmd);
     }
 
