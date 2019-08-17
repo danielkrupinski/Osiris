@@ -112,6 +112,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::recoilCrosshair();
     Visuals::removeShadows();
     Visuals::skybox();
+    Visuals::grenadePrediction()
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -121,13 +122,15 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
+    Misc::stealNames();
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
+        AntiAim::run(cmd, oldYaw, sendPacket);
+    }
 
-    AntiAim::run(cmd, oldYaw, sendPacket);
     cmd->viewangles.normalize();
     Misc::fixMovement(cmd, oldYaw);
 

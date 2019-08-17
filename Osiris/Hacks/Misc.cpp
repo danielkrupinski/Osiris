@@ -175,7 +175,7 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextColor(250.0f, 0.0f, 0.0f, 255.0f);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 2 };
             interfaces.surface->setTextPosition(5, drawPositionY);
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             drawPositionY += interfaces.surface->getTextSize(Surface::font, bombText.c_str()).second;
             interfaces.surface->printText(bombText.c_str());
             if (entity->c4Defuser() != -1) {
@@ -185,10 +185,52 @@ void Misc::drawBombTimer() noexcept
                 if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::showpoint << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
                     }
                 }
             }
+        }
+    }
+}
+
+void Misc::stealNames() noexcept
+{
+    if (config.misc.nameStealer) {
+        static auto lastChangeTime{ 0.0f };
+        static NetworkChannel* lastNetworkChannel{ nullptr };
+        static float lastServerTime{ memory.globalVars->currenttime };
+
+        auto name = interfaces.cvar->findVar("name");
+
+        if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || memory.globalVars->currenttime < lastServerTime) {
+            name->onChangeCallbacks.size = 0;
+            name->setValue("\n\xAD\xAD\xAD");
+            lastChangeTime = memory.globalVars->realtime + 5.0f;
+            lastNetworkChannel = currentNetworkChannel;
+            lastServerTime = memory.globalVars->currenttime;
+            return;
+        }
+
+        if (lastChangeTime + 1.0f <= memory.globalVars->realtime) {
+            const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+            bool allNamesStolen = true;
+            static std::vector<int> stolenIds;
+            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+                if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
+                    static PlayerInfo playerInfo;
+                    if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
+                        allNamesStolen = false;
+                        name->setValue((std::string(playerInfo.name) + '\n').c_str());
+                        stolenIds.push_back(playerInfo.userId);
+                        break;
+                    }
+                }
+            }
+            if (allNamesStolen)
+                stolenIds.clear();
+
+            lastChangeTime = memory.globalVars->realtime;
         }
     }
 }

@@ -29,6 +29,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
     * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
     * **Auto shot** - shoot automatically when target found
+    * **Auto scope** - automatically scopes sniper rifle before shooting
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
@@ -36,6 +37,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Recoil control x** - horizontal recoil control factor
     * **Recoil control y** - vertical recoil control factor
+    * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enabled** - on / off master switch
@@ -54,7 +56,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Glow** - render glow effect on entities
 
-    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens* **/** *All, Visible, Occluded*
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens, Defuse kits, Projectiles, Hostages, Ragdolls* **/** *All, Visible, Occluded*
 
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
@@ -154,11 +156,23 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Fix bone matrix** - correct client bone matrix to be closer to server one
     * **Disable model occlusion** - draw player models even if they are behind thick walls
     * **Kill message** - print message to chat after killing an enemy
+    * **Name stealer** - mimic other players names
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
     * **Unhook** - unload cheat
+
+* **Reportbot** - automatically report players on server for cheating or other abusive actions
+    * **Enabled** - on / off master switch
+    * **Target** - report target *Enemies/Allies/All*
+    * **Delay** - delay between reports, in seconds
+    * **Aimbot** - report for aim assistance
+    * **Wallhack** - report for visual assistance
+    * **Other** - report for other assistance
+    * **Griefing** - report for griefing
+    * **Voice abuse** - report for voice abuse
+    * **Text abuse** - report for text abuse
 
 * **Config** - JSON-based configuration system
     * **Create config** - create new configuration file

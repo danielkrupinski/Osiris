@@ -34,6 +34,7 @@ public:
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
         bool autoShot{ false };
+        bool autoScope{ false };
         bool recoilbasedFov{ false };
         float fov{ 0.0f };
         float maxAngleDelta{ 0.0f };
@@ -41,9 +42,11 @@ public:
         int bone{ 0 };
         float recoilControlX{ 0.0f };
         float recoilControlY{ 0.0f };
+        float maxAimInaccuracy{ 1.0f };
+        float maxShotInaccuracy{ 1.0f };
         bool killshot{ false };
     };
-    std::array<Aimbot, 35> aimbot;
+    std::array<Aimbot, 39> aimbot;
 
     struct Triggerbot {
         bool enabled{ false };
@@ -56,7 +59,7 @@ public:
         int hitgroup{ 0 };
         int shotDelay{ 0 };
     };
-    std::array<Triggerbot, 35> triggerbot;
+    std::array<Triggerbot, 39> triggerbot;
 
     struct {
         bool enabled{ false };
@@ -169,7 +172,6 @@ public:
     } sound;
 
     struct {
-        std::array<ImVec4, ImGuiCol_COUNT> colors;
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
@@ -198,6 +200,7 @@ public:
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
+        bool nameStealer{ false };
         bool fastPlant{ false };
         bool bombTimer{ false };
         bool prepareRevolver{ false };
