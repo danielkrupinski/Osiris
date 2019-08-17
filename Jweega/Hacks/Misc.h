@@ -9,6 +9,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/Client.h"
 #include "../SDK/GameEvent.h"
+#include "../SDK/GameMovement.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ConVar.h"
@@ -187,7 +188,7 @@ namespace Misc {
             const auto should_duck = choked >= (config.misc.chokedPackets / 2);
             if (should_duck) {
                 cmd->buttons |= UserCmd::IN_DUCK;
-                cmd->viewangles.z = localPlayer->getAbsOrigin().z + 64.f;
+                cmd->viewangles.z = localPlayer->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
             }  else {
                 cmd->buttons &= ~UserCmd::IN_DUCK;
             }
