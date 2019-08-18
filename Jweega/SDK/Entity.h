@@ -194,6 +194,16 @@ public:
         return callVirtualMethod<Entity*>(this, 291);
     }
 
+    bool isInThrow() noexcept
+    {
+        if (!bPinPulled()) {
+            float throwTime = fThrowTime();
+            if (throwTime > 0)
+                return true;
+        }
+        return false;
+    }
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
