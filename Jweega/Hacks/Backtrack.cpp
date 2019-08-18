@@ -65,6 +65,9 @@ void Backtrack::run(UserCmd* cmd) noexcept
     Vector bestTargetOrigin{ };
     int bestRecord{ };
 
+    static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
+    const auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
+
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
@@ -73,7 +76,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
         auto origin = entity->getAbsOrigin();
 
-        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles);
+        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config.backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
@@ -94,7 +97,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles);
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config.backtrack.recoilBasedFov ? aimPunch : Vector{ }));
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
