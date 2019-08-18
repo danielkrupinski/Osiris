@@ -211,6 +211,7 @@ public:
     NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector);
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector);
+    NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector);
     
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
