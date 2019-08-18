@@ -14,6 +14,8 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
+#include "WeaponData.h"
+#include "WeaponType.h"
 
 struct AnimState;
 struct WeaponData;
@@ -52,6 +54,23 @@ public:
         default:
             return false;
         }
+    }
+
+    constexpr bool isGrenade() noexcept
+    {
+        if (getWeaponData()->type == WeaponType::Grenade)
+            return true;
+        else
+            return false;
+    }
+
+    bool isInThrow() noexcept
+    {
+        if (!bPinPulled())
+            if (fThrowTime() > 0)
+                return true;
+
+        return false;
     }
 
     using matrix3x4 = float[3][4];
@@ -192,16 +211,6 @@ public:
     constexpr Entity* getObserverTarget() noexcept
     {
         return callVirtualMethod<Entity*>(this, 291);
-    }
-
-    bool isInThrow() noexcept
-    {
-        if (!bPinPulled()) {
-            float throwTime = fThrowTime();
-            if (throwTime > 0)
-                return true;
-        }
-        return false;
     }
 
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);

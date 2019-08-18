@@ -1,10 +1,11 @@
 #pragma once
 
 #include <cstddef>
+#include "WeaponType.h"
 
 struct WeaponData {
     std::byte pad[200];
-    int type;
+    WeaponType type;
     std::byte pad1[32];
     bool fullAuto;
     std::byte pad2[3];
