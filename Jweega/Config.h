@@ -70,10 +70,9 @@ public:
     struct {
         bool enabled{ false };
         bool lbyBreaker{ false };
-        float lbyBreakerOffset{ 180.0f };
-        int fakeYawType{ 0 };
-        int realYawType{ 0 };
-        int realPitchType{ 0 };
+        int yawType{ 0 };
+        int pitchType{ 0 };
+        int key{ 0 };
     } antiAim;
 
     struct Glow {

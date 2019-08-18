@@ -97,10 +97,9 @@ void Config::load(size_t id) noexcept
         const auto& antiAimJson = json["Anti aim"];
         if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
         if (antiAimJson.isMember("LBY Breaker")) antiAim.lbyBreaker = antiAimJson["LBY Breaker"].asBool();
-        if (antiAimJson.isMember("LBY Breaker Offset")) antiAim.lbyBreakerOffset = antiAimJson["LBY Breaker Offset"].asFloat();
-        if (antiAimJson.isMember("Fake Yaw Type")) antiAim.fakeYawType = antiAimJson["Fake Yaw Type"].asInt();
-        if (antiAimJson.isMember("Real Yaw Type")) antiAim.realYawType = antiAimJson["Real Yaw Type"].asInt();
-        if (antiAimJson.isMember("Real Pitch Type")) antiAim.realPitchType = antiAimJson["Real Pitch Type"].asInt();
+        if (antiAimJson.isMember("Yaw Type")) antiAim.yawType = antiAimJson["Yaw Type"].asInt();
+        if (antiAimJson.isMember("Key")) antiAim.key = antiAimJson["Key"].asInt();
+        if (antiAimJson.isMember("Pitch Type")) antiAim.pitchType = antiAimJson["Pitch Type"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -440,10 +439,9 @@ void Config::save(size_t id) const noexcept
         auto& antiAimJson = json["Anti aim"];
         antiAimJson["Enabled"] = antiAim.enabled;
         antiAimJson["LBY Breaker"] = antiAim.lbyBreaker;
-        antiAimJson["LBY Breaker"] = antiAim.lbyBreakerOffset;
-        antiAimJson["Fake Yaw Type"] = antiAim.fakeYawType;
-        antiAimJson["Real Yaw Type"] = antiAim.realYawType;
-        antiAimJson["Real Pitch Type"] = antiAim.realPitchType;
+        antiAimJson["Yaw Type"] = antiAim.yawType;
+        antiAimJson["Key"] = antiAim.key;
+        antiAimJson["Pitch Type"] = antiAim.pitchType;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
