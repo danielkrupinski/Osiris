@@ -232,6 +232,9 @@ public:
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
 
+    NETVAR(bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float);
+
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
