@@ -115,6 +115,11 @@ license you like.
 #define JSON_USE_EXCEPTION 1
 #endif
 
+// Temporary, tracked for removal with issue #982.
+#ifndef JSON_USE_NULLREF
+#define JSON_USE_NULLREF 1
+#endif
+
 /// If defined, indicates that the source file is amalgamated
 /// to prevent private header inclusion.
 /// Remarks: it is automatically defined in the generated amalgamated header.
@@ -193,8 +198,9 @@ msvc_pre1900_c99_snprintf(char* outBuf, size_t size, const char* format, ...);
 #define JSONCPP_DEPRECATED(message) __attribute__((deprecated(message)))
 #elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
 #define JSONCPP_DEPRECATED(message) __attribute__((__deprecated__))
-#endif // GNUC version
-#elif defined(_MSC_VER) // MSVC (after clang because clang on Windows emulates MSVC)
+#endif                  // GNUC version
+#elif defined(_MSC_VER) // MSVC (after clang because clang on Windows emulates
+                        // MSVC)
 #define JSONCPP_DEPRECATED(message) __declspec(deprecated(message))
 #endif // __clang__ || __GNUC__ || _MSC_VER
 
@@ -286,11 +292,17 @@ using JSONCPP_OSTREAM = Json::OStream;
 namespace Json {
 
 // writer.h
+class StreamWriter;
+class StreamWriterBuilder;
+class Writer;
 class FastWriter;
 class StyledWriter;
+class StyledStreamWriter;
 
 // reader.h
 class Reader;
+class CharReader;
+class CharReaderBuilder;
 
 // features.h
 class Features;
