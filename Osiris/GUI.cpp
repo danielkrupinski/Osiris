@@ -401,6 +401,7 @@ void GUI::renderBacktrackWindow() noexcept
         }
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
+        ImGui::Checkbox("Recoil based fov", &config.backtrack.recoilBasedFov);
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
