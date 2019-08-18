@@ -90,6 +90,7 @@ void Config::load(size_t id) noexcept
         const auto& backtrackJson = json["Backtrack"];
         if (backtrackJson.isMember("Enabled")) backtrack.enabled = backtrackJson["Enabled"].asBool();
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
+        if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -426,6 +427,7 @@ void Config::save(size_t id) const noexcept
         auto& backtrackJson = json["Backtrack"];
         backtrackJson["Enabled"] = backtrack.enabled;
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
+        backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
