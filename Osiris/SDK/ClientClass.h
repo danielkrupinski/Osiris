@@ -6,7 +6,7 @@
 class Entity;
 struct RecvTable;
 
-struct ClientClass final {
+struct ClientClass {
     std::add_pointer_t<Entity* (int, int)> createFunction;
     void* createEventFunction;
     char* networkName;

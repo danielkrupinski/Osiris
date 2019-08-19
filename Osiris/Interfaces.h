@@ -25,7 +25,7 @@ class Surface;
 class Sound;
 class SoundEmitter;
 
-class Interfaces final {
+class Interfaces {
 public:
     Interfaces() noexcept;
 

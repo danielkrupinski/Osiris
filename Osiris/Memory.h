@@ -15,7 +15,7 @@ struct Trace;
 class Entity;
 class ViewRender;
 
-class Memory final {
+class Memory {
 public:
     Memory() noexcept;
 

@@ -6,7 +6,7 @@
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 
-class Config final {
+class Config {
 public:
     explicit Config(const char*) noexcept;
     void load(size_t) noexcept;

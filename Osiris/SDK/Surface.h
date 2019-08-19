@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 
-class Surface final {
+class Surface {
 public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
