@@ -58,6 +58,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Ignore flash")) aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
         if (aimbotJson.isMember("Ignore smoke")) aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
         if (aimbotJson.isMember("Auto shot")) aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
+        if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
         if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
         if (aimbotJson.isMember("Max angle delta")) aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
@@ -65,6 +66,8 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
         if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
         if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
+        if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
+        if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
     }
 
@@ -87,6 +90,7 @@ void Config::load(size_t id) noexcept
         const auto& backtrackJson = json["Backtrack"];
         if (backtrackJson.isMember("Enabled")) backtrack.enabled = backtrackJson["Enabled"].asBool();
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
+        if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -391,6 +395,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Ignore flash"] = aimbotConfig.ignoreFlash;;
         aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
         aimbotJson["Auto shot"] = aimbotConfig.autoShot;
+        aimbotJson["Auto scope"] = aimbotConfig.autoScope;
         aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["Fov"] = aimbotConfig.fov;
         aimbotJson["Max angle delta"] = aimbotConfig.maxAngleDelta;
@@ -398,6 +403,8 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
         aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
+        aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
+        aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
     }
 
@@ -420,6 +427,7 @@ void Config::save(size_t id) const noexcept
         auto& backtrackJson = json["Backtrack"];
         backtrackJson["Enabled"] = backtrack.enabled;
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
+        backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 

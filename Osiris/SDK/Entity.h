@@ -211,6 +211,7 @@ public:
     NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector);
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector);
+    NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector);
     
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
@@ -223,6 +224,7 @@ public:
     NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool);
     NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool);
+    NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);

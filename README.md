@@ -29,6 +29,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
     * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
     * **Auto shot** - shoot automatically when target found
+    * **Auto scope** - automatically scopes sniper rifle before shooting
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
@@ -36,6 +37,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Recoil control x** - horizontal recoil control factor
     * **Recoil control y** - vertical recoil control factor
+    * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enabled** - on / off master switch
@@ -161,7 +163,15 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Unhook** - unload cheat
 
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
-    * **Enabled**
+    * **Enabled** - on / off master switch
+    * **Target** - report target *Enemies/Allies/All*
+    * **Delay** - delay between reports, in seconds
+    * **Aimbot** - report for aim assistance
+    * **Wallhack** - report for visual assistance
+    * **Other** - report for other assistance
+    * **Griefing** - report for griefing
+    * **Voice abuse** - report for voice abuse
+    * **Text abuse** - report for text abuse
 
 * **Config** - JSON-based configuration system
     * **Create config** - create new configuration file

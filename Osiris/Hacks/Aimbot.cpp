@@ -139,7 +139,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
     }
 
-    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock)) {
+    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
 
         if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
             return;
@@ -201,7 +201,10 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (!config.aimbot[weaponIndex].silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped)
+            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+                cmd->buttons |= UserCmd::IN_ATTACK2;
+
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
