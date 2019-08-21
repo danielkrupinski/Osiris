@@ -3,18 +3,20 @@
 #include <cstddef>
 
 struct WeaponData {
-    std::byte pad[200];
+    std::byte pad[20];
+    int maxClip;
+    std::byte pad1[176];
     int type;
-    std::byte pad1[32];
+    std::byte pad2[32];
     bool fullAuto;
-    std::byte pad2[3];
+    std::byte pad3[3];
     int damage;
     float armorRatio;
     int bullets;
     float penetration;
-    std::byte pad3[8];
+    std::byte pad4[8];
     float range;
     float rangeModifier;
-    std::byte pad4[16];
+    std::byte pad5[16];
     bool hasSilencer;
 };
