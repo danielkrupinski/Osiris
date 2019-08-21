@@ -129,7 +129,7 @@ public:
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
-        bool noVisualRecoil{ false };
+        bool noViewPunch{ false };
         bool noHands{ false };
         bool noSleeves{ false };
         bool noWeapons{ false };
