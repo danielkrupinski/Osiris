@@ -204,6 +204,7 @@ public:
         bool nameStealer{ false };
         bool fastPlant{ false };
         bool bombTimer{ false };
+        bool quickReload{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };

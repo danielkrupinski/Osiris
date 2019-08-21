@@ -344,6 +344,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
         if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
+        if (miscJson.isMember("Quick reload")) misc.quickReload = miscJson["Quick reload"].asBool();
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
@@ -647,6 +648,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Name stealer"] = misc.nameStealer;
         miscJson["Fast plant"] = misc.fastPlant;
         miscJson["Bomb timer"] = misc.bombTimer;
+        miscJson["Quick reload"] = misc.quickReload;
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;
