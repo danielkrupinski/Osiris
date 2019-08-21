@@ -62,7 +62,7 @@ private:
         if (foundInterface)
             return foundInterface;
         else {
-            MessageBox(NULL, (std::ostringstream{ } << "Failed to find " << name << " in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+            MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Error", MB_OK | MB_ICONERROR);
             exit(EXIT_FAILURE);
         }
     }
