@@ -22,6 +22,7 @@ namespace Misc {
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
     void stealNames() noexcept;
+    void quickReload(UserCmd*) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
