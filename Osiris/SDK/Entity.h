@@ -146,6 +146,11 @@ public:
         return callVirtualMethod<Entity*>(this, 265);
     }
 
+    constexpr int getWeaponSubType() noexcept
+    {
+        return callVirtualMethod<int>(this, 277);
+    }
+
     constexpr WeaponData* getWeaponData() noexcept
     {
         return callVirtualMethod<WeaponData*>(this, 454);
