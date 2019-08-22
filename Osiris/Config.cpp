@@ -97,6 +97,7 @@ void Config::load(size_t id) noexcept
     {
         const auto& antiAimJson = json["Anti aim"];
         if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
+        if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -436,6 +437,7 @@ void Config::save(size_t id) const noexcept
     {
         auto& antiAimJson = json["Anti aim"];
         antiAimJson["Enabled"] = antiAim.enabled;
+        antiAimJson["Pitch"] = antiAim.pitch;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {

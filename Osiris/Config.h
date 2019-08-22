@@ -70,6 +70,7 @@ public:
 
     struct {
         bool enabled{ false };
+        bool pitch{ false };
     } antiAim;
 
     struct Glow {
