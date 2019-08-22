@@ -59,20 +59,22 @@ void Visuals::thirdperson() noexcept
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
-    if (config.visuals.noVisualRecoil) {
-        static Vector aimPunch;
-        static Vector viewPunch;
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (stage == FrameStage::RENDER_START) {
-            aimPunch = localPlayer->aimPunchAngle();
-            viewPunch = localPlayer->viewPunchAngle();
+    static Vector aimPunch;
+    static Vector viewPunch;
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (stage == FrameStage::RENDER_START) {
+        aimPunch = localPlayer->aimPunchAngle();
+        viewPunch = localPlayer->viewPunchAngle();
+
+        if (config.visuals.noAimPunch && !config.misc.recoilCrosshair)
+            localPlayer->aimPunchAngle() = Vector{ };
+
+        if (config.visuals.noViewPunch)
             localPlayer->viewPunchAngle() = Vector{ };
-            if (!config.misc.recoilCrosshair)
-                localPlayer->aimPunchAngle() = Vector{ };
-        } else if (stage == FrameStage::RENDER_END) {
-            localPlayer->aimPunchAngle() = aimPunch;
-            localPlayer->viewPunchAngle() = viewPunch;
-        }
+
+    } else if (stage == FrameStage::RENDER_END) {
+        localPlayer->aimPunchAngle() = aimPunch;
+        localPlayer->viewPunchAngle() = viewPunch;
     }
 }
 

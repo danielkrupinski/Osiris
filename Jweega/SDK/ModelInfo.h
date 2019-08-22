@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 
-class ModelInfo final {
+class ModelInfo {
 public:
     constexpr auto getModelIndex(const char* name) noexcept
     {

@@ -125,6 +125,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::stealNames();
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
+    Misc::quickReload(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);

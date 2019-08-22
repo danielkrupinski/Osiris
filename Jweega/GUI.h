@@ -2,7 +2,7 @@
 
 #include <string>
 
-class GUI final {
+class GUI {
 public:
     GUI() noexcept;
     void render() noexcept;

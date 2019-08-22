@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-struct Vector final {
+struct Vector {
     constexpr operator bool() const noexcept
     {
         return x || y || z;

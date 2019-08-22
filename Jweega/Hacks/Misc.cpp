@@ -9,6 +9,7 @@
 #include "../SDK/Surface.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
+#include "../SDK/WeaponData.h"
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -234,6 +235,36 @@ void Misc::stealNames() noexcept
                 stolenIds.clear();
 
             lastChangeTime = memory.globalVars->realtime;
+        }
+    }
+}
+
+void Misc::quickReload(UserCmd* cmd) noexcept
+{
+    if (config.misc.quickReload) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        static Entity* reloadedWeapon{ nullptr };
+
+        if (reloadedWeapon) {
+            cmd->weaponselect = reloadedWeapon->index();
+            cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+            reloadedWeapon = nullptr;
+        }
+
+        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->isInReload() && activeWeapon->clip() == activeWeapon->getWeaponData()->maxClip) {
+            reloadedWeapon = activeWeapon;
+
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (auto weapon{ interfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon != reloadedWeapon) {
+                    cmd->weaponselect = weapon->index();
+                    cmd->weaponsubtype = weapon->getWeaponSubType();
+                    break;
+                }
+            }
+
         }
     }
 }

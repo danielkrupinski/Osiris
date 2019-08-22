@@ -8,7 +8,7 @@
 struct RecvProp;
 struct RecvTable;
 
-class Netvars final {
+class Netvars {
 public:
     Netvars() noexcept;
 

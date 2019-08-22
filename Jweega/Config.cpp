@@ -212,7 +212,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
         if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
-        if (visualsJson.isMember("noVisualRecoil")) visuals.noVisualRecoil = visualsJson["noVisualRecoil"].asBool();
+        if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
+        if (visualsJson.isMember("No view punch")) visuals.noViewPunch = visualsJson["No view punch"].asBool();
         if (visualsJson.isMember("noHands")) visuals.noHands = visualsJson["noHands"].asBool();
         if (visualsJson.isMember("noSleeves")) visuals.noSleeves = visualsJson["noSleeves"].asBool();
         if (visualsJson.isMember("noWeapons")) visuals.noWeapons = visualsJson["noWeapons"].asBool();
@@ -348,6 +349,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
         if (miscJson.isMember("Draw FOV")) misc.drawFOV = miscJson["Draw FOV"].asBool();
         if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
+        if (miscJson.isMember("Quick reload")) misc.quickReload = miscJson["Quick reload"].asBool();
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
@@ -531,7 +533,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
-        visualsJson["noVisualRecoil"] = visuals.noVisualRecoil;
+        visualsJson["No aim punch"] = visuals.noAimPunch;
+        visualsJson["No view punch"] = visuals.noViewPunch;
         visualsJson["noHands"] = visuals.noHands;
         visualsJson["noSleeves"] = visuals.noSleeves;
         visualsJson["noWeapons"] = visuals.noWeapons;
@@ -656,6 +659,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Fast plant"] = misc.fastPlant;
         miscJson["Draw FOV"] = misc.drawFOV;
         miscJson["Bomb timer"] = misc.bombTimer;
+        miscJson["Quick reload"] = misc.quickReload;
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;

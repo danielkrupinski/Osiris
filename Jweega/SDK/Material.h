@@ -16,7 +16,7 @@ enum class MaterialVarFlag {
     WIREFRAME = 1 << 28
 };
 
-class Material final {
+class Material {
 public:
     constexpr auto findVar(const char* name) noexcept
     {

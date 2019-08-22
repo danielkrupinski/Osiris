@@ -26,6 +26,7 @@ namespace Misc {
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
     void stealNames() noexcept;
+    void quickReload(UserCmd*) noexcept;
 
     static auto doFakeDuck{ false };
 

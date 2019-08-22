@@ -6,7 +6,7 @@
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 
-class Config final {
+class Config {
 public:
     explicit Config(const char*) noexcept;
     void load(size_t) noexcept;
@@ -132,7 +132,8 @@ public:
         bool inverseRagdollGravity{ false };
         bool noFog{ false };
         bool no3dSky{ false };
-        bool noVisualRecoil{ false };
+        bool noAimPunch{ false };
+        bool noViewPunch{ false };
         bool noHands{ false };
         bool noSleeves{ false };
         bool noWeapons{ false };
@@ -207,6 +208,7 @@ public:
         bool nameStealer{ false };
         bool fastPlant{ false };
         bool bombTimer{ false };
+        bool quickReload{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };

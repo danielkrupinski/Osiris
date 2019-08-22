@@ -2,7 +2,7 @@
 
 #include "Vector.h"
 
-struct UserCmd final {
+struct UserCmd {
     enum {
         IN_ATTACK = 1 << 0,
         IN_JUMP = 1 << 1,

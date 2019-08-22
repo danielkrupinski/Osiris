@@ -10,7 +10,7 @@
 
 struct SoundInfo;
 
-class Hooks final {
+class Hooks {
 public:
     Hooks() noexcept;
     void restore() noexcept;

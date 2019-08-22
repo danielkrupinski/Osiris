@@ -607,7 +607,7 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 400.0f });
+            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
@@ -616,7 +616,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3d sky", &config.visuals.no3dSky);
-        ImGui::Checkbox("No visual recoil", &config.visuals.noVisualRecoil);
+        ImGui::Checkbox("No aim punch", &config.visuals.noAimPunch);
+        ImGui::Checkbox("No view punch", &config.visuals.noViewPunch);
         ImGui::Checkbox("No hands", &config.visuals.noHands);
         ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No weapons", &config.visuals.noWeapons);
@@ -881,6 +882,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Draw FOV", &config.misc.drawFOV);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
+        ImGui::Checkbox("Quick reload", &config.misc.quickReload);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);

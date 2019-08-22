@@ -26,7 +26,7 @@ class Surface;
 class Sound;
 class SoundEmitter;
 
-class Interfaces final {
+class Interfaces {
 public:
     Interfaces() noexcept;
 
@@ -64,7 +64,7 @@ private:
         if (foundInterface)
             return foundInterface;
         else {
-            MessageBox(NULL, (std::ostringstream{ } << "Failed to find " << name << " in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+            MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Error", MB_OK | MB_ICONERROR);
             exit(EXIT_FAILURE);
         }
     }

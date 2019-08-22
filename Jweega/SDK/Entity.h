@@ -165,6 +165,11 @@ public:
         return callVirtualMethod<Entity*>(this, 265);
     }
 
+    constexpr int getWeaponSubType() noexcept
+    {
+        return callVirtualMethod<int>(this, 277);
+    }
+
     constexpr WeaponData* getWeaponData() noexcept
     {
         return callVirtualMethod<WeaponData*>(this, 454);
@@ -213,6 +218,11 @@ public:
         return callVirtualMethod<Entity*>(this, 291);
     }
 
+    bool isInReload() noexcept
+    {
+        return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
+    }
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
@@ -249,6 +259,7 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
+    //NETVAR(state, "CBaseCombatWeapon", "m_iState", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
 
     NETVAR(bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);

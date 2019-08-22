@@ -4,7 +4,7 @@
 
 struct ClientClass;
 
-class Client final {
+class Client {
 public:
     constexpr auto getAllClasses() noexcept
     {
