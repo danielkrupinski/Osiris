@@ -103,7 +103,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     if (!cmd->commandNumber)
         return result;
 
-    const float oldYaw = cmd->viewangles.y;
+    static auto previousViewAngles{ cmd->viewangles };
+
     memory.globalVars->serverTime(cmd);
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -128,15 +129,17 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, oldYaw, sendPacket);
+        AntiAim::run(cmd, previousViewAngles.y, sendPacket);
     }
 
     cmd->viewangles.normalize();
-    Misc::fixMovement(cmd, oldYaw);
+    Misc::fixMovement(cmd, previousViewAngles.y);
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+
+    previousViewAngles = cmd->viewangles;
 
     return false;
 }
