@@ -71,6 +71,7 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
+        bool yaw{ false };
     } antiAim;
 
     struct Glow {
