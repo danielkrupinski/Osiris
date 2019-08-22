@@ -157,6 +157,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Kill message** - print message to chat after killing an enemy
     * **Name stealer** - mimic other players names
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
+    * **Quick reload** - perform quick weapon switch during reload for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
