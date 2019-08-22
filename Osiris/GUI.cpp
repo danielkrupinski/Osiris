@@ -275,6 +275,7 @@ void GUI::renderAntiAimWindow() noexcept
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
         ImGui::Checkbox("Pitch", &config.antiAim.pitch);
+        ImGui::Checkbox("Yaw", &config.antiAim.yaw);
         if (!config.style.menuStyle)
             ImGui::End();
     }
