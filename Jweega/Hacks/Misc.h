@@ -28,8 +28,6 @@ namespace Misc {
     void stealNames() noexcept;
     void quickReload(UserCmd*) noexcept;
 
-    static auto doFakeDuck{ false };
-
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
@@ -188,21 +186,21 @@ namespace Misc {
 
     constexpr void fakeDuck(UserCmd* cmd) noexcept {
         if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
-            const auto choked{ interfaces.engine->getNetworkChannel()->chokedPackets };
-            const auto should_duck = choked >= (config.misc.chokedPackets / 2);
-            if (should_duck) {
-                doFakeDuck = true;
-                cmd->buttons |= UserCmd::IN_DUCK;
+            const auto animState = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAnimstate();
+            if (interfaces.engine->getNetworkChannel()->chokedPackets >= (config.misc.chokedPackets / 2)) {
+                if (animState->duckAmount < 1.0f)
+                    cmd->buttons |= UserCmd::IN_DUCK;
             }  else {
-                doFakeDuck = false;
-                cmd->buttons &= ~UserCmd::IN_DUCK;
+                if (animState->duckAmount > 0.0f)
+                    cmd->buttons &= ~UserCmd::IN_DUCK;
             }
         }
     }
 
     constexpr void fakeDuckFix(ViewSetup* setup) noexcept {
-        if (doFakeDuck)
-            setup->origin.z = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
+        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+        if (localPlayer && localPlayer->isAlive() && config.misc.fakeDuckKey && config.misc.chokedPackets > 1 && GetAsyncKeyState(config.misc.fakeDuckKey) && localPlayer->flags() & 1) 
+            setup->origin.z = localPlayer->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
     }
 
 }
