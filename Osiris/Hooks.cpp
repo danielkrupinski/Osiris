@@ -105,6 +105,12 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     static auto previousViewAngles{ cmd->viewangles };
 
+    constexpr bool anglesClampingTest = false;
+
+    if constexpr (anglesClampingTest) {
+        const auto currentViewAngles{ cmd->viewangles };
+    }
+
     memory.globalVars->serverTime(cmd);
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -130,6 +136,15 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles.y, sendPacket);
+    }
+
+    if constexpr (anglesClampingTest) {
+        auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
+        viewAnglesDelta.normalize();
+        viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+        viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+
+        cmd->viewangles = previousViewAngles + viewAnglesDelta;
     }
 
     cmd->viewangles.normalize();
