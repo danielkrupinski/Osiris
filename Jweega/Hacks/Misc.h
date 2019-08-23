@@ -163,6 +163,10 @@ namespace Misc {
             if (!weaponIndex)
                 return;
 
+            auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+            if (!config.aimbot[weaponIndex].enabled)
+                weaponIndex = weaponClass;
+
             if (!config.aimbot[weaponIndex].enabled)
                 weaponIndex = 0;
 
