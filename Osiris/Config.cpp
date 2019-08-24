@@ -98,6 +98,7 @@ void Config::load(size_t id) noexcept
         const auto& antiAimJson = json["Anti aim"];
         if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
+        if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
     }
 
@@ -439,6 +440,7 @@ void Config::save(size_t id) const noexcept
         auto& antiAimJson = json["Anti aim"];
         antiAimJson["Enabled"] = antiAim.enabled;
         antiAimJson["Pitch"] = antiAim.pitch;
+        antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
     }
 

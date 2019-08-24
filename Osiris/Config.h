@@ -71,6 +71,7 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
+        float pitchAngle{ 0.0f };
         bool yaw{ false };
     } antiAim;
 
