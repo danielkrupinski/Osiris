@@ -6,6 +6,7 @@ struct UserCmd {
     enum {
         IN_ATTACK = 1 << 0,
         IN_JUMP = 1 << 1,
+        IN_DUCK = 1 << 2,
         IN_USE = 1 << 5,
         IN_ATTACK2 = 1 << 11,
         IN_SCORE = 1 << 16,
