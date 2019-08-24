@@ -6,19 +6,18 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/GlobalVars.h"
-#include "../SDK/Surface.h"
 
 void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
 {
     if (config.antiAim.enabled) {
+        bool lbyFlick{ false };
         static auto lastYaw{ 0.0f };
         static auto pitchDance{ 0.0f };
-        static auto yawFlick{ 1.0f };
+        static bool yawFlick{ false };
+        static bool lbyBreak{ false };
+        static float lastCheck{ 0.0f };
 
         if (config.antiAim.lbyBreaker) {
-            static auto lbyBreak{ false };
-            static auto lastCheck{ 0.0f };
-
             if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer->vecVelocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
                 lbyBreak = false;
                 lastCheck = memory.globalVars->currenttime;
@@ -26,65 +25,61 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
             else {
                 if (!lbyBreak && (memory.globalVars->currenttime - lastCheck) > 0.22f) {
                     sendPacket = false;
+                    cmd->viewangles.y -= config.antiAim.lbyBreakerOffset;
                     lbyBreak = true;
                     lastCheck = memory.globalVars->currenttime;
+                    lbyFlick = true;
                 }
                 else if (lbyBreak && (memory.globalVars->currenttime - lastCheck) > 1.1f) {
                     sendPacket = false;
+                    cmd->viewangles.y -= config.antiAim.lbyBreakerOffset;
                     lbyBreak = true;
                     lastCheck = memory.globalVars->currenttime;
+                    lbyFlick = true;
                 }
             }
         }
 
-        if (config.antiAim.yawType == 4 && GetAsyncKeyState(config.antiAim.key) & 1)
-            toggle = -toggle;
+        if (!lbyFlick) {
+            yawFlick = !yawFlick;
+            const auto maxDesyncAngle{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() };
+            if (!sendPacket) {
 
-        const auto maxDesyncAngle{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() };
-        if (!sendPacket) {
-            cmd->viewangles.normalize();
-            lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+                switch (config.antiAim.realYawType) {
+                case 1:
+                    cmd->viewangles.y -= maxDesyncAngle;
+                    break;
+                case 2:
+                    cmd->viewangles.y += maxDesyncAngle;
+                    break;
+                case 3:
+                    cmd->viewangles.y -= yawFlick ? maxDesyncAngle : -maxDesyncAngle;
+                    break;
+                default:
+                    break;
+                }
 
-            switch (config.antiAim.yawType) {
-            case 1:
-                cmd->viewangles.y = lastYaw - maxDesyncAngle;
-                break;
-            case 2:
-                cmd->viewangles.y = lastYaw + maxDesyncAngle;
-                break;
-            case 3:
-                yawFlick = -yawFlick;
-                cmd->viewangles.y = lastYaw + (maxDesyncAngle * yawFlick);
-                break;
-            case 4:
-                cmd->viewangles.y = lastYaw - (maxDesyncAngle * toggle);
-                break;
-            default:
-                break;
+                cmd->viewangles.normalize();
+                lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
             }
-
-        }
-        else {
-            switch (config.antiAim.yawType) {
-            case 1:
-                cmd->viewangles.y = lastYaw + maxDesyncAngle;
-                break;
-            case 2:
-                cmd->viewangles.y = lastYaw - maxDesyncAngle;
-                break;
-            case 3:
-                yawFlick = -yawFlick;
-                cmd->viewangles.y = lastYaw - (maxDesyncAngle * yawFlick);
-                break;
-            case 4:
-                cmd->viewangles.y = lastYaw + (maxDesyncAngle * toggle);
-                break;
-            default:
-                break;
+            else {
+                switch (config.antiAim.fakeYawType) {
+                case 1:
+                    cmd->viewangles.y = lastYaw - maxDesyncAngle;
+                    break;
+                case 2:
+                    cmd->viewangles.y = lastYaw + maxDesyncAngle;
+                    break;
+                case 3:
+                    cmd->viewangles.y = lastYaw - yawFlick ? maxDesyncAngle : -maxDesyncAngle;
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
-        switch (config.antiAim.pitchType) {
+        switch (config.antiAim.realPitchType) {
         case 1:
             cmd->viewangles.x = -89.0f;
             break;
@@ -103,33 +98,5 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
             break;
         }
 
-    }
-}
-
-void AntiAim::drawYaw() noexcept {
-    if (config.antiAim.yawType == 4 && interfaces.engine->isInGame()) {
-
-        if (auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; !localPlayer->isAlive())
-            return;
-
-        constexpr unsigned font{ 0x1e };
-
-        interfaces.surface->setTextFont(font);
-        interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
-            255.0f);
-
-        const auto [width, height] { interfaces.surface->getScreenSize() };
-        const auto drawPositionY{ height - (height / 12) };
-        const auto leftText{ toggle > 0.0f ? L"REAL" : L"FAKE" };
-        const auto rightText{ toggle < 0.0f ? L"REAL" : L"FAKE" };
-
-        interfaces.surface->setTextPosition(5, drawPositionY);
-        interfaces.surface->printText(leftText);
-
-        const auto textWidth{ interfaces.surface->getTextSize(font, rightText).first };
-        interfaces.surface->setTextPosition(width - textWidth - 5, drawPositionY);
-        interfaces.surface->printText(rightText);
     }
 }

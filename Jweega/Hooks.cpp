@@ -127,7 +127,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Backtrack::run(cmd);
     Misc::quickReload(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_USE | UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, sendPacket);
         Misc::fakeDuck(cmd);
@@ -201,7 +201,6 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::spectatorList();
         Misc::drawFov();
         Esp::render();
-        AntiAim::drawYaw();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }

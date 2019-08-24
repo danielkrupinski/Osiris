@@ -298,13 +298,12 @@ void GUI::renderAntiAimWindow() noexcept
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
         ImGui::Checkbox("LBY Breaker", &config.antiAim.lbyBreaker);
-        ImGui::Combo("Real Yaw", &config.antiAim.yawType, "None\0Left\0Right\0Flipper\0Desync\0");
-        if (config.antiAim.yawType == 4) {
-            ImGui::TextUnformatted("Desync Flip Key");
-            ImGui::SameLine();
-            hotkey(config.antiAim.key);
-        }
-        ImGui::Combo("Real Pitch", &config.antiAim.pitchType, "None\0Up\0Down\0Dance\0Front\0");
+        ImGui::PushItemWidth(220.0f);
+        ImGui::SliderFloat("LBY Offset", &config.antiAim.lbyBreakerOffset, 0.0f, 255.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::Combo("Fake Yaw", &config.antiAim.fakeYawType, "None\0Max Delta Left\0Max Delta Right\0Flipper\0");
+        ImGui::Combo("Real Yaw", &config.antiAim.realYawType, "None\0Max Delta Left\0Max Delta Right\0Flipper\0");
+        ImGui::Combo("Real Pitch", &config.antiAim.realPitchType, "None\0Up\0Down\0Dance\0Front\0");
         if (!config.style.menuStyle)
             ImGui::End();
     }
