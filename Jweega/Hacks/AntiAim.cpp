@@ -15,18 +15,11 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
         static auto pitchDance{ 0.0f };
         static auto yawFlick{ 1.0f };
 
-        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
-        if (!localPlayer || !localPlayer->isAlive() || localPlayer->moveType() == MoveType::NOCLIP || localPlayer->moveType() == MoveType::LADDER)
-            return;
-
-        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; !activeWeapon || (activeWeapon->isGrenade() && activeWeapon->isInThrow()) )
-            return;
-
         if (config.antiAim.lbyBreaker) {
             static auto lbyBreak{ false };
             static auto lastCheck{ 0.0f };
 
-            if (localPlayer->vecVelocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
+            if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer->vecVelocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
                 lbyBreak = false;
                 lastCheck = memory.globalVars->currenttime;
             }
