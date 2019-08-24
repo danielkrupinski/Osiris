@@ -104,7 +104,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     if (!cmd->commandNumber)
         return result;
 
-    const float oldYaw = cmd->viewangles.y;
+    static auto previousViewAngles{ cmd->viewangles };
+    const auto currentViewAngles{ cmd->viewangles };
+
     memory.globalVars->serverTime(cmd);
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -129,16 +131,25 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     if (!(cmd->buttons & (UserCmd::IN_USE | UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, oldYaw, sendPacket);
         Misc::fakeDuck(cmd);
+        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
 
+    auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
+    viewAnglesDelta.normalize();
+    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+
+    cmd->viewangles = previousViewAngles + viewAnglesDelta;
+
     cmd->viewangles.normalize();
-    Misc::fixMovement(cmd, oldYaw);
+    Misc::fixMovement(cmd, currentViewAngles.y);
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+
+    previousViewAngles = cmd->viewangles;
 
     return false;
 }

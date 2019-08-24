@@ -6,16 +6,20 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-void AntiAim::run(UserCmd* cmd, const float oldYaw, bool& sendPacket) noexcept
+void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
     if (config.antiAim.enabled) {
-        static auto lastYaw{ 0.0f };
+        if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)
+            cmd->viewangles.x = config.antiAim.pitchAngle;
 
-        if (!sendPacket) {
-            cmd->viewangles.normalize();
-            lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-        } else {
-            cmd->viewangles.y = lastYaw + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+        if (config.antiAim.yaw && sendPacket && interfaces.engine->getNetworkChannel()->chokedPackets && cmd->viewangles.y == currentViewAngles.y) {
+            cmd->viewangles.y = previousViewAngles.y + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+            if (fabsf(cmd->sidemove) < 5.0f) {
+                if (cmd->buttons & UserCmd::IN_DUCK)
+                    cmd->sidemove = cmd->tick_count & 1 ? 3.25f : -3.25f;
+                else
+                    cmd->sidemove = cmd->tick_count & 1 ? 1.1f : -1.1f;
+            }
         }
     }
 }
