@@ -26,7 +26,7 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
             static auto lbyBreak{ false };
             static auto lastCheck{ 0.0f };
 
-            if (localPlayer->velocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
+            if (localPlayer->vecVelocity().length2D() >= 0.1f || !(localPlayer->flags() & 1) || localPlayer->flags() & 32) {
                 lbyBreak = false;
                 lastCheck = memory.globalVars->currenttime;
             }
