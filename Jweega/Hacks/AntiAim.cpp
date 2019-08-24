@@ -23,15 +23,13 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
                 lastCheck = memory.globalVars->currenttime;
             }
             else {
-                if (!lbyBreak && (memory.globalVars->currenttime - lastCheck) > 0.22f) {
-                    sendPacket = false;
+                if (!lbyBreak && (memory.globalVars->serverTime() - lastCheck) > 0.22f) {
                     cmd->viewangles.y -= config.antiAim.lbyBreakerOffset;
                     lbyBreak = true;
                     lastCheck = memory.globalVars->currenttime;
                     lbyFlick = true;
                 }
-                else if (lbyBreak && (memory.globalVars->currenttime - lastCheck) > 1.1f) {
-                    sendPacket = false;
+                else if (lbyBreak && (memory.globalVars->serverTime() - lastCheck) > 1.1f) {
                     cmd->viewangles.y -= config.antiAim.lbyBreakerOffset;
                     lbyBreak = true;
                     lastCheck = memory.globalVars->currenttime;
@@ -41,26 +39,28 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
         }
 
         if (!lbyFlick) {
-            yawFlick = !yawFlick;
+
             const auto maxDesyncAngle{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() };
+
             if (!sendPacket) {
+                cmd->viewangles.normalize();
+                lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
 
                 switch (config.antiAim.realYawType) {
                 case 1:
-                    cmd->viewangles.y -= maxDesyncAngle;
+                    cmd->viewangles.y = lastYaw - maxDesyncAngle;
                     break;
                 case 2:
-                    cmd->viewangles.y += maxDesyncAngle;
+                    cmd->viewangles.y = lastYaw + maxDesyncAngle;
                     break;
                 case 3:
-                    cmd->viewangles.y -= yawFlick ? maxDesyncAngle : -maxDesyncAngle;
+                    yawFlick = !yawFlick;
+                    cmd->viewangles.y = lastYaw - yawFlick ? maxDesyncAngle : -maxDesyncAngle;
                     break;
                 default:
                     break;
                 }
 
-                cmd->viewangles.normalize();
-                lastYaw = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
             }
             else {
                 switch (config.antiAim.fakeYawType) {
@@ -71,6 +71,7 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
                     cmd->viewangles.y = lastYaw + maxDesyncAngle;
                     break;
                 case 3:
+                    yawFlick = !yawFlick;
                     cmd->viewangles.y = lastYaw - yawFlick ? maxDesyncAngle : -maxDesyncAngle;
                     break;
                 default:
@@ -97,6 +98,5 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
         default:
             break;
         }
-
     }
 }
