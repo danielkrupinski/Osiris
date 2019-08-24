@@ -813,9 +813,11 @@ void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
+        ImGui::Columns(2, nullptr, false);
+        ImGui::SetColumnOffset(1, 230.0f);
         ImGui::TextUnformatted("Menu key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
@@ -823,14 +825,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
-        ImGui::SameLine();
-        ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(0);
-        if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
-            Misc::updateClanTag(true);
-        ImGui::PopID();
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
@@ -845,6 +839,15 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
+        ImGui::NextColumn();
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
+        ImGui::SameLine();
+        ImGui::PushItemWidth(120.0f);
+        ImGui::PushID(0);
+        if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
+            Misc::updateClanTag(true);
+        ImGui::PopID();
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
@@ -864,12 +867,14 @@ void GUI::renderMiscWindow() noexcept
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
         hotkey(config.misc.chokedPacketsKey);
+        ImGui::PushItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
         ImGui::PushItemWidth(290.0f);
 
         if (ImGui::Button("Unhook"))
             hooks.restore();
 
+        ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
     }
