@@ -69,6 +69,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
+        if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -411,6 +412,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
         aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
+        aimbotJson["Between shots"] = aimbotConfig.betweenShots;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
