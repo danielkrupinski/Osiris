@@ -254,7 +254,6 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::NextColumn();
         ImGui::PushItemWidth(240.0f);
         ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f");
-        ImGui::SliderFloat("Max angle delta", &config.aimbot[currentWeapon].maxAngleDelta, 0.0f, 255.0f, "%.2f");
         ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");

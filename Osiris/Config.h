@@ -37,7 +37,6 @@ public:
         bool autoScope{ false };
         bool recoilbasedFov{ false };
         float fov{ 0.0f };
-        float maxAngleDelta{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
         float recoilControlX{ 0.0f };

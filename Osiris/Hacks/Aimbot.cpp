@@ -192,10 +192,10 @@ void Aimbot::run(UserCmd* cmd) noexcept
             bool clamped{ false };
 
             if (config.aimbot[weaponIndex].autoShot
-                && (fabs(angle.x) > config.aimbot[weaponIndex].maxAngleDelta
-                || fabs(angle.y) > config.aimbot[weaponIndex].maxAngleDelta)) {
-                    angle.x = std::clamp(angle.x, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
+                && (fabs(angle.x) > config.misc.maxAngleDelta
+                || fabs(angle.y) > config.misc.maxAngleDelta)) {
+                    angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+                    angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
                     clamped = true;
             }
             

@@ -61,7 +61,6 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
         if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
-        if (aimbotJson.isMember("Max angle delta")) aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
         if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
         if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
@@ -404,7 +403,6 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Auto scope"] = aimbotConfig.autoScope;
         aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["Fov"] = aimbotConfig.fov;
-        aimbotJson["Max angle delta"] = aimbotConfig.maxAngleDelta;
         aimbotJson["Smooth"] = aimbotConfig.smooth;
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
