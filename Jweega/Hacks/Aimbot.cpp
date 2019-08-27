@@ -123,6 +123,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
+    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
+        return;
+
     if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
         return;
 
@@ -191,11 +194,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (config.aimbot[weaponIndex].autoShot
-                && (fabs(angle.x) > config.aimbot[weaponIndex].maxAngleDelta
-                || fabs(angle.y) > config.aimbot[weaponIndex].maxAngleDelta)) {
-                    angle.x = std::clamp(angle.x, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config.aimbot[weaponIndex].maxAngleDelta, config.aimbot[weaponIndex].maxAngleDelta);
+            if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
+                    angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+                    angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
                     clamped = true;
             }
             
@@ -209,6 +210,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
+
+            if (clamped)
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
 
             if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
             else lastAngles = Vector{ };

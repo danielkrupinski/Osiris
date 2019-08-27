@@ -61,7 +61,6 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
         if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
-        if (aimbotJson.isMember("Max angle delta")) aimbotConfig.maxAngleDelta = aimbotJson["Max angle delta"].asFloat();
         if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
         if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
@@ -69,6 +68,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
+        if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -355,6 +355,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
         if (miscJson.isMember("Fake Duck key")) misc.fakeDuckKey = miscJson["fakeDuckKey"].asInt();
+        if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
     }
 
     {
@@ -405,7 +406,6 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Auto scope"] = aimbotConfig.autoScope;
         aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["Fov"] = aimbotConfig.fov;
-        aimbotJson["Max angle delta"] = aimbotConfig.maxAngleDelta;
         aimbotJson["Smooth"] = aimbotConfig.smooth;
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
@@ -413,6 +413,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
         aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
+        aimbotJson["Between shots"] = aimbotConfig.betweenShots;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -664,6 +665,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Choked packets"] = misc.chokedPackets;
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
         miscJson["Fake Duck key"] = misc.fakeDuckKey;
+        miscJson["Max angle delta"] = misc.maxAngleDelta;
     }
 
     {

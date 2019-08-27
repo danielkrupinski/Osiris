@@ -37,7 +37,6 @@ public:
         bool autoScope{ false };
         bool recoilbasedFov{ false };
         float fov{ 0.0f };
-        float maxAngleDelta{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
         float recoilControlX{ 0.0f };
@@ -45,6 +44,7 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         bool killshot{ false };
+        bool betweenShots{ true };
     };
     std::array<Aimbot, 39> aimbot;
 

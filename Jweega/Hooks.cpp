@@ -48,7 +48,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (GetAsyncKeyState(config.misc.menuKey) & 1) {
+    if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey) {
         gui.isOpen = !gui.isOpen;
         if (!gui.isOpen) {
             ImGui::GetIO().MouseDown[0] = false;
