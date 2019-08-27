@@ -176,21 +176,21 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             static auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
             interfaces.surface->printText(bombText.c_str());
-            static auto progressBarX{ interfaces.surface->getScreenSize().first / 3 };
-            static auto progressBarY{ drawPositionY + 5 };
-            static auto progress{ (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f };
-            static auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
-            static auto progressBarHeight{ 5 };
+
+            const auto progressBarX{ interfaces.surface->getScreenSize().first / 3 };
+            const auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
+            constexpr auto progressBarHeight{ 5 };
+
             interfaces.surface->setDrawColor(50, 50, 50, 255);
-            interfaces.surface->drawFilledRect(progressBarX - 3, progressBarY - 3, static_cast<int>(progressBarX + progressBarLength) + 3, progressBarY + progressBarHeight + 3);
+            interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
             interfaces.surface->setDrawColor(255, 140, 0, 255);
-            interfaces.surface->drawFilledRect(progressBarX, progressBarY, static_cast<int>(progressBarX + progressBarLength * progress), progressBarY + progressBarHeight);
-            progress = (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f;
+            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f), drawPositionY + progressBarHeight + 5);
+
             if (entity->c4Defuser() != -1) {
                 interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
                 static PlayerInfo playerInfo;
@@ -198,21 +198,18 @@ void Misc::drawBombTimer() noexcept
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        static auto defuseTimeX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, (std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str())).first / 2) };
-                        interfaces.surface->setTextPosition(defuseTimeX, drawPositionY);
-                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::showpoint << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+
+                        interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
+                        interfaces.surface->printText(defusingText.c_str());
                         interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        static auto progressBarX2{ interfaces.surface->getScreenSize().first / 3 };
-                        static auto progressBarY2{ drawPositionY + 5 };
-                        static auto progress2{ (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f) };
-                        static auto progressBarLength2{ interfaces.surface->getScreenSize().first / 3 };
-                        static auto progressBarHeight2{ 5 };
+
                         interfaces.surface->setDrawColor(50, 50, 50, 255);
-                        interfaces.surface->drawFilledRect(progressBarX2 - 3, progressBarY2 - 3, static_cast<int>(progressBarX2 + progressBarLength2) + 3, progressBarY2 + progressBarHeight2 + 3);
+                        interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
                         interfaces.surface->setDrawColor(0, 255, 0, 255);
-                        interfaces.surface->drawFilledRect(progressBarX2, progressBarY2, progressBarX2 + static_cast<int>(progressBarLength2 * progress2), progressBarY2 + progressBarHeight2);
-                        progress2 = (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f);
+                        interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
+                      
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
                         if ((std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) > (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f)) {
                             interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: TRUE").str().c_str()).first / 2), drawPositionY);
