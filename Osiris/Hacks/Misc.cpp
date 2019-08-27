@@ -166,71 +166,70 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-	if (config.misc.bombTimer) {
-		for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-			Entity* entity = interfaces.entityList->getEntity(i);
-			if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
-				continue;
+    if (config.misc.bombTimer) {
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
 
-			static constexpr unsigned font{ 0xc1 };
-			interfaces.surface->setTextFont(font);
-			interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
-			auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-			auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
-			static auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
-			interfaces.surface->setTextPosition(bombTextX, drawPositionY);
-			drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
-			interfaces.surface->printText(bombText.c_str());
-			static auto progressBarX{ interfaces.surface->getScreenSize().first / 3 };
-			static auto progressBarY{ drawPositionY + 5 };
-			static auto progress{ (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f };
-			static auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
-			static auto progressBarHeight{ 5 };
-			interfaces.surface->setDrawColor(50, 50, 50, 255);
-			interfaces.surface->drawFilledRect(progressBarX - 3, progressBarY - 3, static_cast<int>(progressBarX + progressBarLength) + 3, progressBarY + progressBarHeight + 3);
-			interfaces.surface->setDrawColor(255, 140, 0, 255);
-			interfaces.surface->drawFilledRect(progressBarX, progressBarY, static_cast<int>(progressBarX + progressBarLength * progress), progressBarY + progressBarHeight);
-			progress = (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f;
-			if (entity->c4Defuser() != -1) {
-				interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
-				static PlayerInfo playerInfo;
-				if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
-					static wchar_t name[128];
-					if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-						drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-						static auto defuseTimeX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, (std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str())).first / 2) };
-						interfaces.surface->setTextPosition(defuseTimeX, drawPositionY);
-						interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
-						interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
-						drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-						static auto progressBarX2{ interfaces.surface->getScreenSize().first / 3 };
-						static auto progressBarY2{ drawPositionY + 5 };
-						static auto progress2{ (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f) };
-						static auto progressBarLength2{ interfaces.surface->getScreenSize().first / 3 };
-						static auto progressBarHeight2{ 5 };
-						interfaces.surface->setDrawColor(50, 50, 50, 255);
-						interfaces.surface->drawFilledRect(progressBarX2 - 3, progressBarY2 - 3, static_cast<int>(progressBarX2 + progressBarLength2) + 3, progressBarY2 + progressBarHeight2 + 3);
-						interfaces.surface->setDrawColor(0, 255, 0, 255);
-						interfaces.surface->drawFilledRect(progressBarX2, progressBarY2, progressBarX2 + static_cast<int>(progressBarLength2 * progress2), progressBarY2 + progressBarHeight2);
-						progress2 = (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f);
-						drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-						if ((std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) > (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f)) {
-							interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: TRUE").str().c_str()).first / 2), drawPositionY);
-							interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
-							interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
-							interfaces.surface->printText((std::wstringstream{ } << L"TRUE").str().c_str());
-						}
-						else {
-							interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: FALSE").str().c_str()).first / 2), drawPositionY);
-							interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
-							interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
-							interfaces.surface->printText((std::wstringstream{ } << L"FALSE").str().c_str());
-						}
-					}
-				}
-			}
-		}
-	}
+            static constexpr unsigned font{ 0xc1 };
+            interfaces.surface->setTextFont(font);
+            interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+            auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            static auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
+            interfaces.surface->setTextPosition(bombTextX, drawPositionY);
+            drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
+            interfaces.surface->printText(bombText.c_str());
+            static auto progressBarX{ interfaces.surface->getScreenSize().first / 3 };
+            static auto progressBarY{ drawPositionY + 5 };
+            static auto progress{ (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f };
+            static auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
+            static auto progressBarHeight{ 5 };
+            interfaces.surface->setDrawColor(50, 50, 50, 255);
+            interfaces.surface->drawFilledRect(progressBarX - 3, progressBarY - 3, static_cast<int>(progressBarX + progressBarLength) + 3, progressBarY + progressBarHeight + 3);
+            interfaces.surface->setDrawColor(255, 140, 0, 255);
+            interfaces.surface->drawFilledRect(progressBarX, progressBarY, static_cast<int>(progressBarX + progressBarLength * progress), progressBarY + progressBarHeight);
+            progress = (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f;
+            if (entity->c4Defuser() != -1) {
+                interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+                static PlayerInfo playerInfo;
+                if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
+                    static wchar_t name[128];
+                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                        drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
+                        static auto defuseTimeX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, (std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str())).first / 2) };
+                        interfaces.surface->setTextPosition(defuseTimeX, drawPositionY);
+                        interfaces.surface->printText((std::wstringstream{ } << name << L" is defusing: " << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str().c_str());
+                        interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+                        drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
+                        static auto progressBarX2{ interfaces.surface->getScreenSize().first / 3 };
+                        static auto progressBarY2{ drawPositionY + 5 };
+                        static auto progress2{ (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f) };
+                        static auto progressBarLength2{ interfaces.surface->getScreenSize().first / 3 };
+                        static auto progressBarHeight2{ 5 };
+                        interfaces.surface->setDrawColor(50, 50, 50, 255);
+                        interfaces.surface->drawFilledRect(progressBarX2 - 3, progressBarY2 - 3, static_cast<int>(progressBarX2 + progressBarLength2) + 3, progressBarY2 + progressBarHeight2 + 3);
+                        interfaces.surface->setDrawColor(0, 255, 0, 255);
+                        interfaces.surface->drawFilledRect(progressBarX2, progressBarY2, progressBarX2 + static_cast<int>(progressBarLength2 * progress2), progressBarY2 + progressBarHeight2);
+                        progress2 = (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f);
+                        drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
+                        if ((std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) > (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f)) {
+                            interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: TRUE").str().c_str()).first / 2), drawPositionY);
+                            interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
+                            interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
+                            interfaces.surface->printText((std::wstringstream{ } << L"TRUE").str().c_str());
+                        } else {
+                            interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: FALSE").str().c_str()).first / 2), drawPositionY);
+                            interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
+                            interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
+                            interfaces.surface->printText((std::wstringstream{ } << L"FALSE").str().c_str());
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Misc::stealNames() noexcept
