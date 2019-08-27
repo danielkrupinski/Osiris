@@ -91,9 +91,9 @@ void Misc::watermark() noexcept
     if (config.misc.watermark) {
         interfaces.surface->setTextFont(Surface::font);
         interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
-                                         sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
-                                         sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
-                                         255.0f);
+            sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
+            sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
+            255.0f);
 
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
@@ -201,7 +201,7 @@ void Misc::stealNames() noexcept
         static NetworkChannel* lastNetworkChannel{ nullptr };
         static float lastServerTime{ memory.globalVars->currenttime };
 
-        auto name = interfaces.cvar->findVar("name");
+        static auto name{ interfaces.cvar->findVar("name") };
 
         if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || memory.globalVars->currenttime < lastServerTime) {
             name->onChangeCallbacks.size = 0;
@@ -222,7 +222,7 @@ void Misc::stealNames() noexcept
                     static PlayerInfo playerInfo;
                     if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                         allNamesStolen = false;
-                        name->setValue((std::string(playerInfo.name) + '\n').c_str());
+                        name->setValue(std::string{ playerInfo.name }.append("\n").c_str());
                         stolenIds.push_back(playerInfo.userId);
                         break;
                     }
