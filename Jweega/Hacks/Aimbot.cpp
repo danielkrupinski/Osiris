@@ -102,6 +102,11 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
     return false;
 }
 
+static Vector velocityExtrapolate(Entity* entity, Vector aimPos)
+{
+    return aimPos + (entity->velocity() * memory.globalVars->intervalPerTick);
+}
+
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
@@ -176,7 +181,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
-                    bestTarget = bonePosition;
+                    bestTarget = velocityExtrapolate(entity, bonePosition);
                 }
                 if (config.aimbot[weaponIndex].bone)
                     break;
@@ -191,7 +196,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (lastCommand == cmd->commandNumber - 1 && lastAngles && config.aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            auto angle = calculateRelativeAngle(velocityExtrapolate(localPlayer, localPlayer->getEyePosition()), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
             if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
