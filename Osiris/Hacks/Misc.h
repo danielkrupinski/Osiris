@@ -121,6 +121,16 @@ namespace Misc {
             cmd->buttons |= UserCmd::IN_BULLRUSH;
     }
 
+    constexpr void moonwalk(UserCmd* cmd) noexcept
+    {
+        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER) {
+            if (cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK))
+                cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK;
+            if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
+                cmd->buttons ^= UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
+        }
+    }
+
     constexpr void playHitSound(GameEvent* event) noexcept
     {
         constexpr const char* hitSounds[]{
