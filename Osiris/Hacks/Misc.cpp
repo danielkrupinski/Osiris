@@ -177,7 +177,7 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
             auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
-            static auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
+            const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
             interfaces.surface->printText(bombText.c_str());
@@ -192,7 +192,6 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f), drawPositionY + progressBarHeight + 5);
 
             if (entity->c4Defuser() != -1) {
-                interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
                 static PlayerInfo playerInfo;
                 if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
                     static wchar_t name[128];
@@ -202,7 +201,6 @@ void Misc::drawBombTimer() noexcept
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces.surface->printText(defusingText.c_str());
-                        interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
 
                         interfaces.surface->setDrawColor(50, 50, 50, 255);
@@ -211,17 +209,18 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
                       
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        if ((std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) > (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f)) {
-                            interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: TRUE").str().c_str()).first / 2), drawPositionY);
-                            interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
+                        const wchar_t* canDefuseText;
+
+                        if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
+                            canDefuseText = L"Can Defuse";
                             interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
-                            interfaces.surface->printText((std::wstringstream{ } << L"TRUE").str().c_str());
                         } else {
-                            interfaces.surface->setTextPosition(interfaces.surface->getScreenSize().first / 2 - static_cast<int>(interfaces.surface->getTextSize(font, (std::wstringstream{ } << L"Can Defuse: FALSE").str().c_str()).first / 2), drawPositionY);
-                            interfaces.surface->printText((std::wstringstream{ } << L"Can Defuse: ").str().c_str());
+                            canDefuseText = L"Cannot Defuse";
                             interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
-                            interfaces.surface->printText((std::wstringstream{ } << L"FALSE").str().c_str());
                         }
+
+                        interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
+                        interfaces.surface->printText(canDefuseText);
                     }
                 }
             }
