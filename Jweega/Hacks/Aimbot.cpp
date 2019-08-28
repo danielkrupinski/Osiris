@@ -157,7 +157,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         auto bestFov = config.aimbot[weaponIndex].fov;
         Vector bestTarget{ };
-        auto localPlayerEyePosition = localPlayer->getEyePosition();
+        auto localPlayerEyePosition = velocityExtrapolate(localPlayer, localPlayer->getEyePosition());
 
         static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
         auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
@@ -189,14 +189,14 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
-            || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+            || !memory.lineGoesThroughSmoke(localPlayerEyePosition, bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles && config.aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(velocityExtrapolate(localPlayer, localPlayer->getEyePosition()), bestTarget, cmd->viewangles + aimPunch);
+            auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
             if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
