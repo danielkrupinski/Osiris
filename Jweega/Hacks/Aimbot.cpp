@@ -173,7 +173,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             auto boneList = config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
 
             for (auto bone : boneList) {
-                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
+                auto bonePosition = velocityExtrapolate(entity, entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone));
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData())))
                     continue;
 
@@ -181,7 +181,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
-                    bestTarget = velocityExtrapolate(entity, bonePosition);
+                    bestTarget = bonePosition;
                 }
                 if (config.aimbot[weaponIndex].bone)
                     break;
