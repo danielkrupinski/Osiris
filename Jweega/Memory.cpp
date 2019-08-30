@@ -42,4 +42,5 @@ Memory::Memory() noexcept
     test2 = findPattern<uintptr_t>(L"client_panorama", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     moveHelper = **findPattern<MoveHelper***>(L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
     predictionRandomSeed = *findPattern<int**>(L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
+    predictionPlayer = findPattern<Entity***>(L"client_panorama", "\x89\x35????\xF3\x0F\x10\x48\x20", 2);
 }

@@ -55,6 +55,7 @@ public:
     uintptr_t test;
     uintptr_t test2;
     int* predictionRandomSeed;
+    Entity*** predictionPlayer;
 
 private:
     template <typename T = uintptr_t>
