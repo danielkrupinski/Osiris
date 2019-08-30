@@ -358,7 +358,7 @@
     <ClInclude Include="SDK\MoveHelper.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Checksum_MD5.h">
+    <ClInclude Include="SDK\ChecksumMD5.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

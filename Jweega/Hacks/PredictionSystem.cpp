@@ -15,7 +15,7 @@ MoveData m_MoveData;
 
 void PredictionSystem::StartPrediction(UserCmd* cmd)
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
 
     *memory.predictionRandomSeed = MD5_PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
 
@@ -36,7 +36,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd)
 
 void PredictionSystem::EndPrediction()
 {
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
 
     interfaces.gameMovement->FinishTrackPredictionErrors(localPlayer);
     memory.moveHelper->SetHost(nullptr);
