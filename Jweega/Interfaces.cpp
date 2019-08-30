@@ -17,6 +17,7 @@ Interfaces::Interfaces() noexcept
     modelRender = find<ModelRender>(L"engine", "VEngineModel016");
     panel = find<Panel>(L"vgui2", "VGUI_Panel009");
     physicsSurfaceProps = find<PhysicsSurfaceProps>(L"vphysics", "VPhysicsSurfaceProps001");
+    prediction = find<Prediction>(L"client_panorama", "VClientPrediction001");
     renderView = find<RenderView>(L"engine", "VEngineRenderView014");
     resourceAccessControl = find<ResourceAccessControl>(L"datacache", "VResourceAccessControl001");
     surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");

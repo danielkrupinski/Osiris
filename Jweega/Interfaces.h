@@ -20,6 +20,7 @@ class ModelInfo;
 class ModelRender;
 class Panel;
 class PhysicsSurfaceProps;
+class Prediction;
 class RenderView;
 class ResourceAccessControl;
 class Surface;
@@ -45,6 +46,7 @@ public:
     ModelRender* modelRender;
     Panel* panel;
     PhysicsSurfaceProps* physicsSurfaceProps;
+    Prediction* prediction;
     RenderView* renderView;
     ResourceAccessControl* resourceAccessControl;
     Surface* surface;

@@ -14,6 +14,7 @@ struct Vector;
 struct Trace;
 class Entity;
 class ViewRender;
+class MoveHelper;
 
 class Memory {
 public:
@@ -26,6 +27,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    MoveHelper* moveHelper;
 
     bool* disablePostProcessing;
 
@@ -52,6 +54,7 @@ public:
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
     uintptr_t test;
     uintptr_t test2;
+    int* predictionRandomSeed;
 
 private:
     template <typename T = uintptr_t>

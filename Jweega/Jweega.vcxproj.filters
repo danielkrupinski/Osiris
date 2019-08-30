@@ -113,6 +113,9 @@
     <ClCompile Include="Hacks\Reportbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\PredictionSystem.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -341,6 +344,21 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\WeaponType.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\PredictionSystem.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MoveData.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Prediction.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MoveHelper.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Checksum_MD5.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

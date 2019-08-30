@@ -25,6 +25,7 @@
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/PredictionSystem.h"
 
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -119,16 +120,18 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Backtrack::run(cmd);
     Misc::quickReload(cmd);
     Misc::moonwalk(cmd);
+
+    PredictionSystem::StartPrediction(cmd);
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Backtrack::run(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_USE | UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -145,6 +148,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     cmd->viewangles.normalize();
     Misc::fixMovement(cmd, currentViewAngles.y);
+    PredictionSystem::EndPrediction();
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
