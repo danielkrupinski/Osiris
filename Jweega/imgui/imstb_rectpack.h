@@ -1,10 +1,10 @@
-// [DEAR IMGUI] 
-// This is a slightly modified version of stb_rect_pack.h 0.99. 
+// [DEAR IMGUI]
+// This is a slightly modified version of stb_rect_pack.h 1.00.
 // Those changes would need to be pushed into nothings/stb:
 // - Added STBRP__CDECL
 // Grep for [DEAR IMGUI] to find the changes.
 
-// stb_rect_pack.h - v0.99 - public domain - rectangle packing
+// stb_rect_pack.h - v1.00 - public domain - rectangle packing
 // Sean Barrett 2014
 //
 // Useful for e.g. packing rectangular textures into an atlas.
@@ -37,9 +37,11 @@
 //    
 //  Bugfixes / warning fixes
 //    Jeremy Jaussaud
+//    Fabian Giesen
 //
 // Version history:
 //
+//     1.00  (2019-02-25)  avoid small space waste; gracefully fail too-wide rectangles
 //     0.99  (2019-02-07)  warning fixes
 //     0.11  (2017-03-03)  return packing success/fail result
 //     0.10  (2016-10-25)  remove cast-away-const to avoid warnings
@@ -237,7 +239,7 @@ STBRP_DEF void stbrp_setup_heuristic(stbrp_context* context, int heuristic)
     }
 }
 
-STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context * context, int allow_out_of_mem)
+STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context* context, int allow_out_of_mem)
 {
     if (allow_out_of_mem)
         // if it's ok to run out of memory, then don't bother aligning them;
@@ -257,7 +259,7 @@ STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context * context, int allow_o
     }
 }
 
-STBRP_DEF void stbrp_init_target(stbrp_context * context, int width, int height, stbrp_node * nodes, int num_nodes)
+STBRP_DEF void stbrp_init_target(stbrp_context* context, int width, int height, stbrp_node* nodes, int num_nodes)
 {
     int i;
 #ifndef STBRP_LARGE_RECTS
@@ -290,7 +292,7 @@ STBRP_DEF void stbrp_init_target(stbrp_context * context, int width, int height,
 }
 
 // find minimum y position if it starts at x1
-static int stbrp__skyline_find_min_y(stbrp_context * c, stbrp_node * first, int x0, int width, int* pwaste)
+static int stbrp__skyline_find_min_y(stbrp_context* c, stbrp_node* first, int x0, int width, int* pwaste)
 {
     stbrp_node* node = first;
     int x1 = x0 + width;
@@ -325,8 +327,7 @@ static int stbrp__skyline_find_min_y(stbrp_context * c, stbrp_node * first, int 
                 visited_width += node->next->x - x0;
             else
                 visited_width += node->next->x - node->x;
-        }
-        else {
+        } else {
             // add waste area
             int under_width = node->next->x - node->x;
             if (under_width + visited_width > width)
@@ -347,16 +348,23 @@ typedef struct
     stbrp_node** prev_link;
 } stbrp__findresult;
 
-static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int width, int height)
+static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context* c, int width, int height)
 {
     int best_waste = (1 << 30), best_x, best_y = (1 << 30);
     stbrp__findresult fr;
-    stbrp_node * *prev, *node, *tail, **best = NULL;
+    stbrp_node** prev, * node, * tail, ** best = NULL;
 
     // align to multiple of c->align
     width = (width + c->align - 1);
     width -= width % c->align;
     STBRP_ASSERT(width % c->align == 0);
+
+    // if it can't possibly fit, bail immediately
+    if (width > c->width || height > c->height) {
+        fr.prev_link = NULL;
+        fr.x = fr.y = 0;
+        return fr;
+    }
 
     node = c->active_head;
     prev = &c->active_head;
@@ -369,8 +377,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
                 best_y = y;
                 best = prev;
             }
-        }
-        else {
+        } else {
             // best-fit
             if (y + height <= c->height) {
                 // can only use it if it first vertically
@@ -422,7 +429,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
             }
             STBRP_ASSERT(node->next->x > xpos && node->x <= xpos);
             y = stbrp__skyline_find_min_y(c, node, xpos, width, &waste);
-            if (y + height < c->height) {
+            if (y + height <= c->height) {
                 if (y <= best_y) {
                     if (y < best_y || waste < best_waste || (waste == best_waste && xpos < best_x)) {
                         best_x = xpos;
@@ -443,7 +450,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
     return fr;
 }
 
-static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context * context, int width, int height)
+static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context* context, int width, int height)
 {
     // find best position according to heuristic
     stbrp__findresult res = stbrp__skyline_find_best_pos(context, width, height);
@@ -475,8 +482,7 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context * context, 
         stbrp_node* next = cur->next;
         cur->next = node;
         cur = next;
-    }
-    else {
+    } else {
         *res.prev_link = node;
     }
 
@@ -564,14 +570,12 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context * context, stbrp_rect * rects, int 
     for (i = 0; i < num_rects; ++i) {
         if (rects[i].w == 0 || rects[i].h == 0) {
             rects[i].x = rects[i].y = 0;  // empty rect needs no space
-        }
-        else {
+        } else {
             stbrp__findresult fr = stbrp__skyline_pack_rectangle(context, rects[i].w, rects[i].h);
             if (fr.prev_link) {
                 rects[i].x = (stbrp_coord)fr.x;
                 rects[i].y = (stbrp_coord)fr.y;
-            }
-            else {
+            } else {
                 rects[i].x = rects[i].y = STBRP__MAXVAL;
             }
         }
