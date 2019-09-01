@@ -200,7 +200,7 @@ namespace Misc {
 
     constexpr void fakeDuck(UserCmd* cmd) noexcept {
         if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
-            const auto animState = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAnimstate();
+            const auto animState{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAnimstate() };
             if (interfaces.engine->getNetworkChannel()->chokedPackets >= (config.misc.chokedPackets / 2)) {
                 if (animState->duckAmount < 1.0f)
                     cmd->buttons |= UserCmd::IN_DUCK;
