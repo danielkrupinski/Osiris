@@ -102,11 +102,6 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
     return false;
 }
 
-static Vector velocityExtrapolate(Entity* entity, Vector aimPos)
-{
-    return aimPos + (entity->velocity() * memory.globalVars->intervalPerTick);
-}
-
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
@@ -154,6 +149,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 cmd->buttons |= UserCmd::IN_ATTACK2;
             return;
         }
+
+        constexpr auto velocityExtrapolate = [](Entity* entity, Vector aimPos) noexcept { return aimPos + (entity->velocity() * memory.globalVars->intervalPerTick); };
 
         auto bestFov = config.aimbot[weaponIndex].fov;
         Vector bestTarget{ };
