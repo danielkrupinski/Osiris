@@ -16,9 +16,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             cmd->viewangles.y = previousViewAngles.y + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
             if (fabsf(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
-                    cmd->sidemove = cmd->tick_count & 1 ? 3.25f : -3.25f;
+                    cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
                 else
-                    cmd->sidemove = cmd->tick_count & 1 ? 1.1f : -1.1f;
+                    cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
             }
         }
     }
