@@ -4,6 +4,6 @@
 
 namespace PredictionSystem
 {
-    void StartPrediction(UserCmd* cmd);
-    void EndPrediction();
+    void StartPrediction(UserCmd* cmd) noexcept;
+    void EndPrediction() noexcept;
 };

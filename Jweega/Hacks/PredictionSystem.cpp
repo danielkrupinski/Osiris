@@ -13,7 +13,7 @@ float previousCurrenttime;
 float previousFrametime;
 static MoveData* moveData = nullptr;
 
-void PredictionSystem::StartPrediction(UserCmd* cmd)
+void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
     if (!localPlayer || !cmd)
@@ -38,7 +38,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd)
     interfaces.prediction->FinishMove(localPlayer, cmd, moveData);
 }
 
-void PredictionSystem::EndPrediction()
+void PredictionSystem::EndPrediction() noexcept
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
 
