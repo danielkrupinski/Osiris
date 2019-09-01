@@ -228,21 +228,21 @@ void Misc::drawBombTimer() noexcept
     }
 }
 
-void Misc::stealNames() noexcept
+void Misc::stealNames(int tickCount) noexcept
 {
     if (config.misc.nameStealer) {
         static auto lastChangeTime{ 0.0f };
         static NetworkChannel* lastNetworkChannel{ nullptr };
-        static float lastServerTime{ memory.globalVars->currenttime };
+        static auto lastTickCount{ 0 };
 
         static auto name{ interfaces.cvar->findVar("name") };
 
-        if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || memory.globalVars->currenttime < lastServerTime) {
+        if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || tickCount < lastTickCount) {
             name->onChangeCallbacks.size = 0;
             name->setValue("\n\xAD\xAD\xAD");
             lastChangeTime = memory.globalVars->realtime + 5.0f;
             lastNetworkChannel = currentNetworkChannel;
-            lastServerTime = memory.globalVars->currenttime;
+            lastTickCount = tickCount;
             return;
         }
 

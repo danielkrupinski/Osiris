@@ -123,7 +123,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
-    Misc::stealNames();
+    Misc::stealNames(cmd->tickCount);
     Misc::revealRanks(cmd);
     Backtrack::run(cmd);
     Misc::quickReload(cmd);
