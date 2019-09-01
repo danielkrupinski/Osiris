@@ -18,7 +18,7 @@ struct UserCmd {
     };
     int pad;
     int commandNumber;
-    int tick_count;
+    int tickCount;
     Vector viewangles;
     Vector aimdirection;
     float forwardmove;
@@ -28,7 +28,7 @@ struct UserCmd {
     char impulse;
     int weaponselect;
     int weaponsubtype;
-    int random_seed;
+    int randomSeed;
     short mousedx;
     short mousedy;
     bool hasbeenpredicted;
