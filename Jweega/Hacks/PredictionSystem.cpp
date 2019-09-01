@@ -7,7 +7,7 @@
 #include "../SDK/MoveData.h"
 #include "../SDK/MoveHelper.h"
 #include "../SDK/Prediction.h"
-#include "../SDK/ChecksumMD5.h"
+#include "../SDK/MD5.h"
 
 float previousCurrenttime;
 float previousFrametime;
@@ -19,7 +19,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     if (!localPlayer || !cmd)
         return;
 
-    *memory.predictionRandomSeed = MD5_PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
+    *memory.predictionRandomSeed = MD5::PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
     **memory.predictionPlayer = localPlayer;
 
     previousCurrenttime = memory.globalVars->currenttime;
