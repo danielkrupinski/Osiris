@@ -6,6 +6,7 @@
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/WeaponData.h"
 #include "../SDK/WeaponId.h"
 #include "Triggerbot.h"
 
@@ -40,7 +41,11 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
             auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
 
-            constexpr auto maxRange{ 8192.0f };
+            auto maxRange{ 8192.0f };
+
+           if (auto weaponData{ activeWeapon->getWeaponData() })
+               maxRange = weaponData->range;
+
             Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                                cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
                               -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * maxRange };
