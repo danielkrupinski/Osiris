@@ -4,14 +4,13 @@
 
 // The four core functions - F1 is optimized somewhat
 // #define F1(x, y, z) (x & y | ~x & z)
-static constexpr auto F1(unsigned int x, unsigned int  y, unsigned int  z) noexcept { return (z ^ (x & (y ^ z))); };
-static constexpr auto F2(unsigned int x, unsigned int  y, unsigned int  z) noexcept { return F1(z, x, y); };
-static constexpr auto F3(unsigned int x, unsigned int  y, unsigned int  z) noexcept { return (x ^ y ^ z); };
-static constexpr auto F4(unsigned int x, unsigned int  y, unsigned int  z) noexcept { return (y ^ (x | ~z)); };
+#define F1(x, y, z) (z ^ (x & (y ^ z)))
+#define F2(x, y, z) F1(z, x, y)
+#define F3(x, y, z) (x ^ y ^ z)
+#define F4(x, y, z) (y ^ (x | ~z))
 
-// This is the central step in the MD5 algorithm.
-template<typename Func>
-static constexpr auto step(Func f, unsigned int w, unsigned int x, unsigned int y, unsigned int z, unsigned int data, unsigned int s) noexcept { return (w += f(x, y, z) + data, w = w << s | w >> (32 - s), w += x); }
+#define step(f, w, x, y, z, data, s) \
+	    (w += f(x, y, z) + data, w = w << s | w >> (32 - s), w += x)
 
 //-----------------------------------------------------------------------------
 // Purpose: The core of the MD5 algorithm, this alters an existing MD5 hash to
