@@ -23,18 +23,36 @@ struct TraceFilter {
     const void* skip;
 };
 
-enum class HitGroup {
-    Invalid = -1,
-    Generic,
-    Head,
-    Chest,
-    Stomach,
-    LeftArm,
-    RightArm,
-    LeftLeg,
-    RightLeg,
-    Gear = 10
-};
+namespace HitGroup {
+    enum {
+        Invalid = -1,
+        Generic,
+        Head,
+        Chest,
+        Stomach,
+        LeftArm,
+        RightArm,
+        LeftLeg,
+        RightLeg,
+        Gear = 10
+    };
+
+    constexpr float getDamageMultiplier(int hitGroup)
+    {
+        switch (hitGroup) {
+        case Head:
+            return 4.0f;
+        case Stomach:
+            return 1.25f;
+        case LeftLeg:
+        case RightLeg:
+            return 0.75f;
+        default:
+            return 1.0f;
+        }
+    }
+
+}
 
 struct Trace {
     Vector startpos;
@@ -51,7 +69,7 @@ struct Trace {
         short surfaceProps;
         unsigned short flags;
     } surface;
-    HitGroup hitgroup;
+    int hitgroup;
     std::byte pad2[4];
     Entity* entity;
     int hitbox;

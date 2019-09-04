@@ -56,7 +56,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     || trace.entity->isEnemy())
                 && !trace.entity->gunGameImmunity()
                 && (!config.triggerbot[weaponIndex].hitgroup
-                    || trace.hitgroup == HitGroup{ config.triggerbot[weaponIndex].hitgroup })
+                    || trace.hitgroup == config.triggerbot[weaponIndex].hitgroup)
                 && (config.triggerbot[weaponIndex].ignoreSmoke
                     || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
                 && (config.triggerbot[weaponIndex].ignoreFlash
