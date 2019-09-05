@@ -41,16 +41,13 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
             auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
 
-            auto maxRange{ 8192.0f };
+            const auto weaponData{ activeWeapon->getWeaponData() };
 
-            if (auto weaponData{ activeWeapon->getWeaponData() })
-                maxRange = weaponData->range;
-
-            Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
-                               cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * maxRange,
-                              -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * maxRange };
+            Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
+                               cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
+                              -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
             static Trace trace;
-            interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, { localPlayer }, trace);
+            interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer, trace);
             if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
                 && (config.triggerbot[weaponIndex].friendlyFire
                     || trace.entity->isEnemy())
@@ -64,8 +61,16 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                 && (!config.triggerbot[weaponIndex].scopedOnly
                     || !activeWeapon->isSniperRifle()
                     || localPlayer->isScoped())) {
-                cmd->buttons |= UserCmd::IN_ATTACK;
-                lastTime = 0.0f;
+
+                float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * activeWeapon->getWeaponData()->damage * powf(activeWeapon->getWeaponData()->rangeModifier, (trace.entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() / 500.0f);
+
+                if (float armorRatio{ activeWeapon->getWeaponData()->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex2() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
+                    damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
+                
+                if (damage >= config.triggerbot[weaponIndex].minDamage) {
+                    cmd->buttons |= UserCmd::IN_ATTACK;
+                    lastTime = 0.0f;
+                }
             } else {
                 lastTime = now;
             }

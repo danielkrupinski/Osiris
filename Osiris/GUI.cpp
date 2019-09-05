@@ -391,6 +391,8 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
+        ImGui::InputInt("Min damage", &config.triggerbot[currentWeapon].minDamage);
+        config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
         if (!config.style.menuStyle)
             ImGui::End();
     }
