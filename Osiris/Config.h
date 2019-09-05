@@ -59,6 +59,7 @@ public:
         int hitgroup{ 0 };
         int shotDelay{ 0 };
         int minDamage{ 1 };
+        bool killshot{ false };
     };
     std::array<Triggerbot, 40> triggerbot;
 
