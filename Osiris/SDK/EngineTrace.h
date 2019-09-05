@@ -37,7 +37,7 @@ namespace HitGroup {
         Gear = 10
     };
 
-    constexpr float getDamageMultiplier(int hitGroup)
+    constexpr float getDamageMultiplier(int hitGroup) noexcept
     {
         switch (hitGroup) {
         case Head:
@@ -52,6 +52,21 @@ namespace HitGroup {
         }
     }
 
+    constexpr bool isArmored(int hitGroup, bool helmet) noexcept
+    {
+        switch (hitGroup) {
+        case Head:
+            return helmet;
+
+        case Chest:
+        case Stomach:
+        case LeftArm:
+        case RightArm:
+            return true;
+        default:
+            return false;
+        }
+    }
 }
 
 struct Trace {
