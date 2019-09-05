@@ -293,7 +293,7 @@ void GUI::renderTriggerbotWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -303,6 +303,11 @@ void GUI::renderTriggerbotWindow() noexcept
             currentWeapon = 0;
             ImGui::NewLine();
             break;
+        case 5:
+            currentWeapon = 39;
+            ImGui::NewLine();
+            break;
+
         case 1: {
             static int currentPistol{ 0 };
             static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };

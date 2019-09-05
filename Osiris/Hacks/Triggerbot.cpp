@@ -62,7 +62,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                     || !activeWeapon->isSniperRifle()
                     || localPlayer->isScoped())) {
 
-                float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * activeWeapon->getWeaponData()->damage * powf(activeWeapon->getWeaponData()->rangeModifier, (trace.entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() / 500.0f);
+                float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * activeWeapon->getWeaponData()->damage * powf(activeWeapon->getWeaponData()->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
                 if (float armorRatio{ activeWeapon->getWeaponData()->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex2() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
                     damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
