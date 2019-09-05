@@ -58,6 +58,7 @@ public:
         bool ignoreSmoke{ false };
         int hitgroup{ 0 };
         int shotDelay{ 0 };
+        int minDamage{ 1 };
     };
     std::array<Triggerbot, 39> triggerbot;
 
