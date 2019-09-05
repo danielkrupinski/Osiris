@@ -46,7 +46,7 @@ public:
         bool killshot{ false };
         bool betweenShots{ true };
     };
-    std::array<Aimbot, 39> aimbot;
+    std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
         bool enabled{ false };
@@ -58,8 +58,10 @@ public:
         bool ignoreSmoke{ false };
         int hitgroup{ 0 };
         int shotDelay{ 0 };
+        int minDamage{ 1 };
+        bool killshot{ false };
     };
-    std::array<Triggerbot, 39> triggerbot;
+    std::array<Triggerbot, 40> triggerbot;
 
     struct {
         bool enabled{ false };

@@ -316,7 +316,7 @@ void GUI::renderTriggerbotWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -326,6 +326,11 @@ void GUI::renderTriggerbotWindow() noexcept
             currentWeapon = 0;
             ImGui::NewLine();
             break;
+        case 5:
+            currentWeapon = 39;
+            ImGui::NewLine();
+            break;
+
         case 1: {
             static int currentPistol{ 0 };
             static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
@@ -410,10 +415,14 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Checkbox("Scoped only", &config.triggerbot[currentWeapon].scopedOnly);
         ImGui::Checkbox("Ignore flash", &config.triggerbot[currentWeapon].ignoreFlash);
         ImGui::Checkbox("Ignore smoke", &config.triggerbot[currentWeapon].ignoreSmoke);
-        ImGui::PushItemWidth(85.0f);
+        ImGui::SetNextItemWidth(85.0f);
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
+        ImGui::InputInt("Min damage", &config.triggerbot[currentWeapon].minDamage);
+        config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
+        ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
+        
         if (!config.style.menuStyle)
             ImGui::End();
     }

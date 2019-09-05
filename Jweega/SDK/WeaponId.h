@@ -105,6 +105,8 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Awp: return 32;
     case WeaponId::G3SG1: return 33;
     case WeaponId::Scar20: return 34;
+
+    case WeaponId::Taser: return 39;
     }
 }
 

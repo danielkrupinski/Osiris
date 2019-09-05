@@ -84,6 +84,8 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
         if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
         if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
+        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
+        if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
     }
 
     {
@@ -430,6 +432,8 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Ignore smoke"] = triggerbotConfig.ignoreSmoke;
         triggerbotJson["Hitgroup"] = triggerbotConfig.hitgroup;
         triggerbotJson["Shot delay"] = triggerbotConfig.shotDelay;
+        triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
+        triggerbotJson["Killshot"] = triggerbotConfig.killshot;
     }
 
     {
