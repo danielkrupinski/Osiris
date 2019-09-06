@@ -11,7 +11,6 @@
 
 float previousCurrenttime;
 float previousFrametime;
-static MoveData* moveData = nullptr;
 
 void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
 {
@@ -28,14 +27,13 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     memory.globalVars->currenttime = memory.globalVars->serverTime(cmd);
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
-    if (!moveData)
-        moveData = (MoveData*)(calloc(1, sizeof(MoveData)));
+    static MoveData moveData;
 
     memory.moveHelper->SetHost(localPlayer);
     interfaces.gameMovement->StartTrackPredictionErrors(localPlayer);
-    interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, moveData);
-    interfaces.gameMovement->ProcessMovement(localPlayer, moveData);
-    interfaces.prediction->FinishMove(localPlayer, cmd, moveData);
+    interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, &moveData);
+    interfaces.gameMovement->ProcessMovement(localPlayer, &moveData);
+    interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
 }
 
 void PredictionSystem::EndPrediction() noexcept
