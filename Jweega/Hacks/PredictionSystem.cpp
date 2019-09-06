@@ -19,6 +19,8 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     if (!localPlayer || !cmd)
         return;
 
+    static MoveData moveData{ };
+
     *memory.predictionRandomSeed = MD5::PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
     **memory.predictionPlayer = localPlayer;
 
@@ -28,14 +30,11 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     memory.globalVars->currenttime = memory.globalVars->serverTime(cmd);
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
-    if (!moveData)
-        moveData = (MoveData*)(calloc(1, sizeof(MoveData)));
-
     memory.moveHelper->SetHost(localPlayer);
     interfaces.gameMovement->StartTrackPredictionErrors(localPlayer);
-    interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, moveData);
-    interfaces.gameMovement->ProcessMovement(localPlayer, moveData);
-    interfaces.prediction->FinishMove(localPlayer, cmd, moveData);
+    interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, &moveData);
+    interfaces.gameMovement->ProcessMovement(localPlayer, &moveData);
+    interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
 }
 
 void PredictionSystem::EndPrediction() noexcept

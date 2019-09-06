@@ -195,12 +195,12 @@ static inline void final(unsigned char digest[MD5_DIGEST_LENGTH], MD5Context_t* 
     if (count < 8)
     {
         /* Two lots of padding:  Pad the first block to 64 bytes */
-        memset(p, 0, count);
+        //memset(p, 0, count);
         //byteReverse(ctx->in, 16);
         transform(ctx->buf, (unsigned int*)ctx->in);
 
         /* Now fill the next block with 56 bytes */
-        memset(ctx->in, 0, 56);
+    //    memset(ctx->in, 0, 56);
     }
     else
     {
@@ -216,7 +216,7 @@ static inline void final(unsigned char digest[MD5_DIGEST_LENGTH], MD5Context_t* 
     transform(ctx->buf, (unsigned int*)ctx->in);
     //byteReverse((unsigned char *) ctx->buf, 4);
     memcpy(digest, ctx->buf, MD5_DIGEST_LENGTH);
-    memset(ctx, 0, sizeof(*ctx));        /* In case it's sensitive */
+    //memset(ctx, 0, sizeof(*ctx));        /* In case it's sensitive */
 }
 
 //-----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ static inline void final(unsigned char digest[MD5_DIGEST_LENGTH], MD5Context_t* 
 //-----------------------------------------------------------------------------
 unsigned int MD5::PseudoRandom(unsigned int nSeed) noexcept
 {
-    MD5Context_t ctx{ };
+    static MD5Context_t ctx{ };
     unsigned char digest[MD5_DIGEST_LENGTH]; // The MD5 Hash
 
     init(&ctx);
