@@ -42,7 +42,7 @@ void Config::load(size_t id) noexcept
     in >> json;
     in.close();
 
-    for (size_t i = 0; i < aimbot.size(); i++) {
+    for (size_t i = 0; i < aimbot.size(); ++i) {
         const auto& aimbotJson = json["Aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
@@ -72,7 +72,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
     }
 
-    for (size_t i = 0; i < triggerbot.size(); i++) {
+    for (size_t i = 0; i < triggerbot.size(); ++i) {
         const auto& triggerbotJson = json["Triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
 
@@ -105,7 +105,7 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
     }
 
-    for (size_t i = 0; i < glow.size(); i++) {
+    for (size_t i = 0; i < glow.size(); ++i) {
         const auto& glowJson = json["glow"][i];
         auto& glowConfig = glow[i];
 
@@ -122,7 +122,7 @@ void Config::load(size_t id) noexcept
         }
     }
 
-    for (size_t i = 0; i < chams.size(); i++) {
+    for (size_t i = 0; i < chams.size(); ++i) {
         const auto& chamsJson = json["chams"][i];
         auto& chamsConfig = chams[i];
 
@@ -140,7 +140,7 @@ void Config::load(size_t id) noexcept
         if (chamsJson.isMember("alpha")) chamsConfig.alpha = chamsJson["alpha"].asFloat();
     }
 
-    for (size_t i = 0; i < esp.size(); i++) {
+    for (size_t i = 0; i < esp.size(); ++i) {
         const auto& espJson = json["esp"][i];
         auto& espConfig = esp[i];
         
@@ -247,7 +247,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
     }
 
-    for (size_t i = 0; i < skinChanger.size(); i++) {
+    for (size_t i = 0; i < skinChanger.size(); ++i) {
         const auto& skinChangerJson = json["skinChanger"][i];
         auto& skinChangerConfig = skinChanger[i];
 
@@ -285,7 +285,7 @@ void Config::load(size_t id) noexcept
         if (soundJson.isMember("Chicken volume")) sound.chickenVolume = soundJson["Chicken volume"].asInt();
 
         if (soundJson.isMember("Players")) {
-            for (size_t i = 0; i < sound.players.size(); i++) {
+            for (size_t i = 0; i < sound.players.size(); ++i) {
                 const auto& playerJson = soundJson["Players"][i];
                 auto& playerConfig = sound.players[i];
 
@@ -309,7 +309,7 @@ void Config::load(size_t id) noexcept
 
             ImGuiStyle& style = ImGui::GetStyle();
 
-            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+            for (int i = 0; i < ImGuiCol_COUNT; ++i) {
                 if (const char* name = ImGui::GetStyleColorName(i); colorsJson.isMember(name)) {
                     const auto& colorJson = styleJson["Colors"][name];
                     style.Colors[i].x = colorJson[0].asFloat();
@@ -391,7 +391,7 @@ void Config::save(size_t id) const noexcept
 
     Json::Value json;
 
-    for (size_t i = 0; i < aimbot.size(); i++) {
+    for (size_t i = 0; i < aimbot.size(); ++i) {
         auto& aimbotJson = json["Aimbot"][i];
         const auto& aimbotConfig = aimbot[i];
 
@@ -421,7 +421,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
     }
 
-    for (size_t i = 0; i < triggerbot.size(); i++) {
+    for (size_t i = 0; i < triggerbot.size(); ++i) {
         auto& triggerbotJson = json["Triggerbot"][i];
         const auto& triggerbotConfig = triggerbot[i];
 
@@ -454,7 +454,7 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Yaw"] = antiAim.yaw;
     }
 
-    for (size_t i = 0; i < glow.size(); i++) {
+    for (size_t i = 0; i < glow.size(); ++i) {
         auto& glowJson = json["glow"][i];
         const auto& glowConfig = glow[i];
 
@@ -469,7 +469,7 @@ void Config::save(size_t id) const noexcept
         glowJson["color"][2] = glowConfig.color[2];
     }
 
-    for (size_t i = 0; i < chams.size(); i++) {
+    for (size_t i = 0; i < chams.size(); ++i) {
         auto& chamsJson = json["chams"][i];
         const auto& chamsConfig = chams[i];
 
@@ -485,7 +485,7 @@ void Config::save(size_t id) const noexcept
         chamsJson["alpha"] = chamsConfig.alpha;
     }
 
-    for (size_t i = 0; i < esp.size(); i++) {
+    for (size_t i = 0; i < esp.size(); ++i) {
         auto& espJson = json["esp"][i];
         const auto& espConfig = esp[i];
 
@@ -570,7 +570,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
     }
 
-    for (size_t i = 0; i < skinChanger.size(); i++) {
+    for (size_t i = 0; i < skinChanger.size(); ++i) {
         auto& skinChangerJson = json["skinChanger"][i];
         const auto& skinChangerConfig = skinChanger[i];
 
@@ -605,7 +605,7 @@ void Config::save(size_t id) const noexcept
 
         soundJson["Chicken volume"] = sound.chickenVolume;
 
-        for (size_t i = 0; i < sound.players.size(); i++) {
+        for (size_t i = 0; i < sound.players.size(); ++i) {
             auto& playerJson = soundJson["Players"][i];
             const auto& playerConfig = sound.players[i];
 
@@ -626,7 +626,7 @@ void Config::save(size_t id) const noexcept
 
         const ImGuiStyle& style = ImGui::GetStyle();
 
-        for (int i = 0; i < ImGuiCol_COUNT; i++) {
+        for (int i = 0; i < ImGuiCol_COUNT; ++i) {
             auto& colorJson = styleJson["Colors"][ImGui::GetStyleColorName(i)];
             colorJson[0] = style.Colors[i].x;
             colorJson[1] = style.Colors[i].y;

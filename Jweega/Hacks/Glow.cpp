@@ -13,7 +13,7 @@ void Glow::render() noexcept
 
     Glow::clearCustomObjects();
 
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
         if (auto entity = interfaces.entityList->getEntity(i); entity && !entity->isDormant()) {
             switch (entity->getClientClass()->classId) {
             case ClassId::EconEntity:
@@ -35,7 +35,7 @@ void Glow::render() noexcept
         }
     }
 
-    for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
+    for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; ++i) {
         GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
 
         auto entity = glowobject.entity;

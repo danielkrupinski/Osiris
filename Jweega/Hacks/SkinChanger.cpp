@@ -30,7 +30,7 @@ void SkinChanger::initializeKits() noexcept
     const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
-    for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
+    for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; ++i) {
         const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001)
@@ -60,7 +60,7 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
+    for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; ++i) {
         const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
         const auto itemName{ interfaces.localize->find(stickerKit->itemName.buffer + 1) };
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
@@ -293,7 +293,7 @@ static void post_data_update_start(Entity* local) noexcept
                 auto entry = interfaces.entityList->getHighestEntityIndex() + 1;
 #define HIJACK_ENTITY 1
 #if HIJACK_ENTITY == 1
-                for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+                for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
                     auto entity = interfaces.entityList->getEntity(i);
 
                     if (entity && entity->getClientClass()->classId == ClassId{ 70 }) {
@@ -373,7 +373,7 @@ static bool hudUpdateRequired{ false };
 static constexpr void updateHud() noexcept
 {
     if (auto hud_weapons = memory.findHudElement(memory.hud, "CCSGO_HudWeaponSelection") - 0x28) {
-        for (int i = 0; i < *(hud_weapons + 0x20); i++)
+        for (int i = 0; i < *(hud_weapons + 0x20); ++i)
             i = memory.clearHudWeapon(hud_weapons, i);
     }
     hudUpdateRequired = false;

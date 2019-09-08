@@ -33,7 +33,7 @@ struct GlowObjectManager {
 
     constexpr bool hasGlowEffect(Entity* entity) noexcept
     {
-        for (int i = 0; i < glowObjectDefinitions.size; i++)
+        for (int i = 0; i < glowObjectDefinitions.size; ++i)
             if (!glowObjectDefinitions[i].isUnused() && glowObjectDefinitions[i].entity == entity)
                 return true;
 

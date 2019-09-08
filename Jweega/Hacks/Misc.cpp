@@ -57,7 +57,7 @@ void Misc::spectatorList() noexcept
 
         int textPositionY{ static_cast<int>(0.5f * height) };
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
@@ -170,7 +170,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 void Misc::drawBombTimer() noexcept
 {
     if (config.misc.bombTimer) {
-        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
@@ -254,7 +254,7 @@ void Misc::stealNames(int tickCount) noexcept
 
             bool allNamesStolen = true;
             static std::vector<int> stolenIds;
-            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
                 if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
                     static PlayerInfo playerInfo;
                     if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {

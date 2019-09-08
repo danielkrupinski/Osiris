@@ -123,11 +123,11 @@ void GUI::hotkey(int& key) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
-        for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+        for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); ++i)
             if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
                 key = i != VK_ESCAPE ? i : 0;
 
-        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); ++i)
             if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config.misc.menuKey)
                 key = i + (i > 1 ? 2 : 1);
     }
@@ -820,7 +820,7 @@ void GUI::renderStyleWindow() noexcept
 
         if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
-            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+            for (int i = 0; i < ImGuiCol_COUNT; ++i) {
                 if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
 
                 const char* name = ImGui::GetStyleColorName(i);
@@ -987,7 +987,7 @@ void GUI::renderConfigWindow() noexcept
 
         if (ImGui::BeginPopup("Config to reset")) {
             static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
-            for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+            for (int i = 0; i < IM_ARRAYSIZE(names); ++i) {
                 if (i == 1) ImGui::Separator();
 
                 if (ImGui::Selectable(names[i])) {

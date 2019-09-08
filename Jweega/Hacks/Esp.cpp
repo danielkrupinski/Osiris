@@ -131,7 +131,7 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 3; ++i)
                 interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
         }
     }
@@ -163,7 +163,7 @@ void Esp::render() noexcept
     if (interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant()
                 || !entity->isAlive())

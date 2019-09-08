@@ -67,7 +67,7 @@ private:
             char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
             char* end = begin + moduleInfo.SizeOfImage - pattern.length() + 1;
 
-            for (char* c = begin; c != end; c++) {
+            for (char* c = begin; c != end; ++c) {
                 bool matched = true;
                 auto it = c;
 
@@ -79,7 +79,7 @@ private:
                         matched = false;
                         break;
                     }
-                    it++;
+                    ++it;
                 }
                 if (matched)
                     return reinterpret_cast<T>(c + offset);
