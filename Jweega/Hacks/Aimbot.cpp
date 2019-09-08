@@ -140,7 +140,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             return;
         }
 
-        constexpr auto velocityExtrapolate = [](Entity* entity, Vector aimPos) noexcept { return aimPos + (entity->velocity() * memory.globalVars->intervalPerTick); };
+        constexpr auto velocityExtrapolate = [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); };
 
         auto bestFov = config.aimbot[weaponIndex].fov;
         Vector bestTarget{ };
