@@ -189,6 +189,7 @@ public:
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };
+        bool clocktag{ false };
         char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
