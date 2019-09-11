@@ -641,6 +641,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Custom clan tag"] = misc.customClanTag;
+        miscJson["Watermark"] = misc.watermark;
         miscJson["Clan tag"] = misc.clanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;
         miscJson["Fast duck"] = misc.fastDuck;
