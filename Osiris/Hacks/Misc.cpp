@@ -231,42 +231,23 @@ void Misc::drawBombTimer() noexcept
 void Misc::stealNames(int tickCount) noexcept
 {
     if (config.misc.nameStealer) {
-        static auto lastChangeTime{ 0.0f };
-        static NetworkChannel* lastNetworkChannel{ nullptr };
-        static auto lastTickCount{ 0 };
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        static auto name{ interfaces.cvar->findVar("name") };
-
-        if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || tickCount < lastTickCount) {
-            name->onChangeCallbacks.size = 0;
-            name->setValue("\n\xAD\xAD\xAD");
-            lastChangeTime = memory.globalVars->realtime + 5.0f;
-            lastNetworkChannel = currentNetworkChannel;
-            lastTickCount = tickCount;
-            return;
-        }
-
-        if (lastChangeTime + 1.0f <= memory.globalVars->realtime) {
-            const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-            bool allNamesStolen = true;
-            static std::vector<int> stolenIds;
-            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-                if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
-                    static PlayerInfo playerInfo;
-                    if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
-                        allNamesStolen = false;
-                        name->setValue(std::string{ playerInfo.name }.append("\n").c_str());
+        bool allNamesStolen = true;
+        static std::vector<int> stolenIds;
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
+                static PlayerInfo playerInfo;
+                if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
+                    allNamesStolen = false;
+                    if (changeName(tickCount, std::string{ playerInfo.name }.append("\n").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
-                        break;
-                    }
+                    break;
                 }
             }
-            if (allNamesStolen)
-                stolenIds.clear();
-
-            lastChangeTime = memory.globalVars->realtime;
         }
+        if (allNamesStolen)
+            stolenIds.clear();
     }
 }
 
@@ -298,4 +279,29 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
         }
     }
+}
+
+bool Misc::changeName(int tickCount, const char* newName, float delay) noexcept
+{
+    static auto lastChangeTime{ 0.0f };
+    static NetworkChannel* lastNetworkChannel{ nullptr };
+    static auto lastTickCount{ 0 };
+
+    static auto name{ interfaces.cvar->findVar("name") };
+
+    if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || tickCount < lastTickCount) {
+        name->onChangeCallbacks.size = 0;
+        name->setValue("\n\xAD\xAD\xAD");
+        lastChangeTime = memory.globalVars->realtime + 5.0f;
+        lastNetworkChannel = currentNetworkChannel;
+        lastTickCount = tickCount;
+        return false;
+    }
+
+    if (lastChangeTime + delay <= memory.globalVars->realtime) {
+        name->setValue(newName);
+        lastChangeTime = memory.globalVars->realtime;
+        return true;
+    }
+    return false;
 }

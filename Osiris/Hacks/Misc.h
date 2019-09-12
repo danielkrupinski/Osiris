@@ -23,6 +23,7 @@ namespace Misc {
     void drawBombTimer() noexcept;
     void stealNames(int) noexcept;
     void quickReload(UserCmd*) noexcept;
+    bool changeName(int, const char*, float) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
