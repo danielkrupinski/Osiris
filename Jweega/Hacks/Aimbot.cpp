@@ -161,7 +161,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             for (auto bone : boneList) {
                 auto bonePosition = velocityExtrapolate(entity, entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone));
-                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
                     continue;
 
