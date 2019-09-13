@@ -24,6 +24,7 @@ namespace Misc {
     void stealNames(int) noexcept;
     void quickReload(UserCmd*) noexcept;
     bool changeName(int, const char*, float) noexcept;
+    void fakeVote(int, bool = false) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
