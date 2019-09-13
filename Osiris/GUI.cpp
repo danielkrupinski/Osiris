@@ -868,6 +868,12 @@ void GUI::renderMiscWindow() noexcept
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
         ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
+        ImGui::PushID(2);
+        ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
+        ImGui::PopID();
+        ImGui::SameLine();
+        if (ImGui::Button("Setup fake vote"))
+            Misc::fakeVote(0, true);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
