@@ -873,7 +873,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::PopID();
         ImGui::SameLine();
         if (ImGui::Button("Setup fake vote"))
-            Misc::fakeVote(0, true);
+            Misc::fakeVote(true);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
