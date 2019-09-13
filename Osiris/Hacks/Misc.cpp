@@ -240,7 +240,7 @@ void Misc::stealNames(int tickCount) noexcept
                 static PlayerInfo playerInfo;
                 if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
-                    if (changeName(tickCount, std::string{ playerInfo.name }.append("\n").c_str(), 1.0f))
+                    if (changeName(false, std::string{ playerInfo.name }.append("\n").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
                     break;
                 }
@@ -281,20 +281,23 @@ void Misc::quickReload(UserCmd* cmd) noexcept
     }
 }
 
-bool Misc::changeName(int tickCount, const char* newName, float delay) noexcept
+bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 {
     static auto nextChangeTime{ 0.0f };
-    static NetworkChannel* lastNetworkChannel{ nullptr };
-    static auto lastTickCount{ 0 };
+    static auto exploitInitialized{ false };
 
     static auto name{ interfaces.cvar->findVar("name") };
 
-    if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || tickCount < lastTickCount) {
+    if (reconnect) {
+        exploitInitialized = false;
+        return false;
+    }
+
+    if (!exploitInitialized && interfaces.engine->isInGame()) {
         name->onChangeCallbacks.size = 0;
         name->setValue("\n\xAD\xAD\xAD");
         nextChangeTime = memory.globalVars->realtime + 5.0f;
-        lastNetworkChannel = currentNetworkChannel;
-        lastTickCount = tickCount;
+        exploitInitialized = true;
         return false;
     }
 
@@ -313,6 +316,6 @@ void Misc::fakeVote(int tickCount, bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && tickCount && changeName(tickCount, std::string(25, '\n').append(config.misc.voteText).append(50, '\n').c_str(), 10.0f))
+    if (shouldSet && tickCount && changeName(false, std::string(25, '\n').append(config.misc.voteText).append(50, '\n').c_str(), 10.0f))
         shouldSet = false;
 }

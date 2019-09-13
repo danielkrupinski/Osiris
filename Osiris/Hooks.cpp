@@ -219,6 +219,9 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
     static auto backtrackInit = (Backtrack::init(), false);
 
+    if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
+        Misc::changeName(true, nullptr, 0.0f);
+
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
