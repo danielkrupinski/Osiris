@@ -228,7 +228,7 @@ void Misc::drawBombTimer() noexcept
     }
 }
 
-void Misc::stealNames(int tickCount) noexcept
+void Misc::stealNames() noexcept
 {
     if (config.misc.nameStealer) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());

@@ -21,7 +21,7 @@ namespace Misc {
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
-    void stealNames(int) noexcept;
+    void stealNames() noexcept;
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
     void fakeVote(bool = false) noexcept;
