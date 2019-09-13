@@ -283,7 +283,7 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
 bool Misc::changeName(int tickCount, const char* newName, float delay) noexcept
 {
-    static auto lastChangeTime{ 0.0f };
+    static auto nextChangeTime{ 0.0f };
     static NetworkChannel* lastNetworkChannel{ nullptr };
     static auto lastTickCount{ 0 };
 
@@ -292,15 +292,15 @@ bool Misc::changeName(int tickCount, const char* newName, float delay) noexcept
     if (auto currentNetworkChannel{ interfaces.engine->getNetworkChannel() }; currentNetworkChannel != lastNetworkChannel || tickCount < lastTickCount) {
         name->onChangeCallbacks.size = 0;
         name->setValue("\n\xAD\xAD\xAD");
-        lastChangeTime = memory.globalVars->realtime + 5.0f;
+        nextChangeTime = memory.globalVars->realtime + 5.0f;
         lastNetworkChannel = currentNetworkChannel;
         lastTickCount = tickCount;
         return false;
     }
 
-    if (lastChangeTime + delay <= memory.globalVars->realtime) {
+    if (nextChangeTime <= memory.globalVars->realtime) {
         name->setValue(newName);
-        lastChangeTime = memory.globalVars->realtime;
+        nextChangeTime = memory.globalVars->realtime + delay;
         return true;
     }
     return false;
