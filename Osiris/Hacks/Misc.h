@@ -25,6 +25,7 @@ namespace Misc {
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
     void fakeVote(bool = false) noexcept;
+    void bunnyHop(UserCmd*) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -104,16 +105,6 @@ namespace Misc {
                 cmd->sidemove = -450.0f;
             else if (cmd->mousedx > 20)
                 cmd->sidemove = 450.0f;
-        }
-    }
-
-    constexpr void bunnyHop(UserCmd* cmd) noexcept
-    {
-        if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            config.misc.bunnyHop
-            && !(localPlayer->flags() & 1)
-            && localPlayer->moveType() != MoveType::LADDER) {
-            cmd->buttons &= ~UserCmd::IN_JUMP;
         }
     }
 
