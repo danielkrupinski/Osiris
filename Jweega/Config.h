@@ -209,6 +209,7 @@ public:
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };
+        char voteText[50]{ "" };
         bool fastPlant{ false };
         bool bombTimer{ false };
         bool quickReload{ false };

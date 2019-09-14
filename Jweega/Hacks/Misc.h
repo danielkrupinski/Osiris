@@ -25,8 +25,10 @@ namespace Misc {
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
-    void stealNames(int) noexcept;
+    void stealNames() noexcept;
     void quickReload(UserCmd*) noexcept;
+    bool changeName(bool, const char*, float) noexcept;
+    void fakeVote(bool = false) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -127,12 +129,8 @@ namespace Misc {
 
     constexpr void moonwalk(UserCmd* cmd) noexcept
     {
-        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER) {
-            if (cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK))
-                cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK;
-            if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
-                cmd->buttons ^= UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
-        }
+        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER)
+            cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
     }
 
     constexpr void playHitSound(GameEvent* event) noexcept

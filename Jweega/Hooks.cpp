@@ -123,7 +123,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
-    Misc::stealNames(cmd->tickCount);
+    Misc::fakeVote();
+    Misc::stealNames();
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);
     Misc::moonwalk(cmd);
@@ -226,6 +227,9 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
     static auto backtrackInit = (Backtrack::init(), false);
+
+    if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
+        Misc::changeName(true, nullptr, 0.0f);
 
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
