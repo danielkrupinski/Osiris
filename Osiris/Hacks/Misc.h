@@ -23,8 +23,11 @@ namespace Misc {
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
-    void stealNames(int) noexcept;
+    void stealNames() noexcept;
     void quickReload(UserCmd*) noexcept;
+    bool changeName(bool, const char*, float) noexcept;
+    void fakeVote(bool = false) noexcept;
+    void bunnyHop(UserCmd*) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -107,35 +110,6 @@ namespace Misc {
         }
     }
 
-	constexpr void bunnyHop(UserCmd* cmd) noexcept
-	{
-		auto bLastJumped = false;
-		auto bShouldFake = false;
-		if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); 
-			config.misc.bunnyHop 
-			&& localPlayer->moveType() != MoveType::LADDER)
-			if (!bLastJumped && bShouldFake)
-			{
-				bShouldFake = false;
-				cmd->buttons |= UserCmd::IN_JUMP;
-			}
-			else if (cmd->buttons & UserCmd::IN_JUMP)
-			{
-				if (localPlayer->flags() & FL_ONGROUND)
-				{
-					bLastJumped = true;
-					bShouldFake = true;
-				}
-				else {
-					cmd->buttons &= ~UserCmd::IN_JUMP;
-					bLastJumped = false;
-				}
-			}
-			else {
-				bLastJumped = false;
-				bShouldFake = false;
-			}
-	}
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
@@ -145,12 +119,8 @@ namespace Misc {
 
     constexpr void moonwalk(UserCmd* cmd) noexcept
     {
-        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER) {
-            if (cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK))
-                cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK;
-            if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
-                cmd->buttons ^= UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
-        }
+        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER)
+            cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
     }
 
     constexpr void playHitSound(GameEvent* event) noexcept

@@ -61,6 +61,11 @@ public:
 		return callVirtualMethod<bool>(this, 26);
 	}
 
+    constexpr auto isConnected() noexcept
+    {
+        return callVirtualMethod<bool>(this, 27);
+    }
+
     using Matrix = float[4][4];
 
     constexpr auto worldToScreenMatrix() noexcept
