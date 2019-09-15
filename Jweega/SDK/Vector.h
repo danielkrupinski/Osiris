@@ -77,5 +77,10 @@ struct Vector {
         return x * x + y * y + z * z;
     }
 
+    auto distance(const Vector& v) noexcept
+    {
+        return (*this - v).length();
+    }
+
     float x, y, z;
 };
