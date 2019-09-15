@@ -322,3 +322,15 @@ void Misc::fakeVote(bool set) noexcept
     if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string(25, '\n').append(config.misc.voteText).append(50, '\n').c_str(), 10.0f))
         shouldSet = false;
 }
+
+void Misc::bunnyHop(UserCmd* cmd) noexcept
+{
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+    static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
+
+    if (config.misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+        cmd->buttons &= ~UserCmd::IN_JUMP;
+
+    wasLastTimeOnGround = localPlayer->flags() & 1;
+}
