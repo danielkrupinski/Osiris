@@ -225,9 +225,9 @@ public:
         bool enabled{ false };
         int target{ 0 };
         int delay{ 10 };
-        bool aimbot{ false };
-        bool wallhack{ false };
-        bool other{ false };
+        bool aimbot{ true };
+        bool wallhack{ true };
+        bool other{ true };
         bool griefing{ false };
         bool voiceAbuse{ false };
         bool textAbuse{ false };
