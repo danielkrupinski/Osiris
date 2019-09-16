@@ -207,7 +207,7 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
                         interfaces.surface->setDrawColor(0, 255, 0, 255);
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
-                      
+
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
                         const wchar_t* canDefuseText;
 
@@ -332,4 +332,15 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
         cmd->buttons &= ~UserCmd::IN_JUMP;
 
     wasLastTimeOnGround = localPlayer->flags() & 1;
+}
+
+void Misc::fakeBan(bool set) noexcept
+{
+    static bool shouldSet = false;
+
+    if (set)
+        shouldSet = set;
+
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ static_cast<char>(config.misc.banColor + 1) }.append(config.misc.banText).append("\x1").c_str(), 5.0f))
+        shouldSet = false;
 }
