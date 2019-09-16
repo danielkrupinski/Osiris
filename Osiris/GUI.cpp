@@ -825,7 +825,7 @@ void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 580.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
@@ -874,6 +874,18 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         if (ImGui::Button("Setup fake vote"))
             Misc::fakeVote(true);
+
+        ImGui::PushID(3);
+        ImGui::SetNextItemWidth(100.0f);
+        ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
+        ImGui::PopID();
+        ImGui::SameLine();
+        ImGui::PushID(4);
+        ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
+        ImGui::PopID();
+        ImGui::SameLine();
+        if (ImGui::Button("Setup fake ban"))
+            Misc::fakeBan(true);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
