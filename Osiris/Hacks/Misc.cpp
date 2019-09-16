@@ -283,7 +283,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
 bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 {
-    static auto nextChangeTime{ 0.0f };
     static auto exploitInitialized{ false };
 
     static auto name{ interfaces.cvar->findVar("name") };
@@ -294,13 +293,16 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     }
 
     if (!exploitInitialized && interfaces.engine->isInGame()) {
-        name->onChangeCallbacks.size = 0;
-        name->setValue("\n\xAD\xAD\xAD");
-        nextChangeTime = memory.globalVars->realtime + 5.0f;
-        exploitInitialized = true;
-        return false;
+        if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
+            exploitInitialized = true;
+        } else {
+            name->onChangeCallbacks.size = 0;
+            name->setValue("\n\xAD\xAD\xAD");
+            return false;
+        }
     }
 
+    static auto nextChangeTime{ 0.0f };
     if (nextChangeTime <= memory.globalVars->realtime) {
         name->setValue(newName);
         nextChangeTime = memory.globalVars->realtime + delay;
