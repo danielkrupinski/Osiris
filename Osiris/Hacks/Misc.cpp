@@ -240,7 +240,7 @@ void Misc::stealNames() noexcept
                 static PlayerInfo playerInfo;
                 if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
-                    if (changeName(false, std::string{ playerInfo.name }.append("\n").c_str(), 1.0f))
+                    if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
                     break;
                 }
