@@ -68,6 +68,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
     head.z += 10.0f;
     if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
         const float boxWidth = abs(top.y - bottom.y) * 0.3f;
+        const float boxHeight = bottom.y - top.y;
 
         if (config.box) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
@@ -75,6 +76,17 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->setDrawColor(0, 0, 0, 255);
             interfaces.surface->drawOutlinedRect(bottom.x - boxWidth + 1, top.y + 1, bottom.x + boxWidth - 1, bottom.y - 1);
             interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 1, top.y - 1, bottom.x + boxWidth + 1, bottom.y + 1);
+        }
+
+        if (config.corner) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth / 2, top.y);
+            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth / 2, bottom.y);
+            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth, bottom.y - boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth, top.y + boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth / 2, top.y);
+            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth / 2, bottom.y);
+            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth, bottom.y - boxHeight / 4);
         }
 
         float drawPositionX = bottom.x - boxWidth - 5;
