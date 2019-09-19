@@ -27,7 +27,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     memory.globalVars->currenttime = memory.globalVars->serverTime(cmd);
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
-    static MoveData moveData{ };
+    MoveData moveData{ };
 
     memory.moveHelper->SetHost(localPlayer);
     interfaces.gameMovement->StartTrackPredictionErrors(localPlayer);
