@@ -172,7 +172,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         const auto boneList{ config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 } };
         for (const auto& target : enemies) {
             const auto entity{ interfaces.entityList->getEntity(target.id) };
-            for (const auto& bone : boneList) {
+            for (auto bone : boneList) {
                 const auto bonePosition{ entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone) };
                 const auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
                 const auto fov{ std::hypotf(angle.x, angle.y) };
