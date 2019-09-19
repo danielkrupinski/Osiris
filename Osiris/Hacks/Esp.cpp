@@ -87,6 +87,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth / 2, top.y);
             interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth / 2, bottom.y);
             interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth, bottom.y - boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth, top.y + boxHeight / 4);
         }
 
         float drawPositionX = bottom.x - boxWidth - 5;
