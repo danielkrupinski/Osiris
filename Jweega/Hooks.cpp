@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -124,6 +123,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoReload(cmd);
     Misc::updateClanTag();
     Misc::fakeVote();
+    Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);

@@ -210,7 +210,7 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
                         interfaces.surface->setDrawColor(0, 255, 0, 255);
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
-                      
+
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
                         const wchar_t* canDefuseText;
 
@@ -243,7 +243,7 @@ void Misc::stealNames() noexcept
                 static PlayerInfo playerInfo;
                 if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
-                    if (changeName(false, std::string{ playerInfo.name }.append("\n").c_str(), 1.0f))
+                    if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
                     break;
                 }
@@ -286,7 +286,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
 bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 {
-    static auto nextChangeTime{ 0.0f };
     static auto exploitInitialized{ false };
 
     static auto name{ interfaces.cvar->findVar("name") };
@@ -297,13 +296,16 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     }
 
     if (!exploitInitialized && interfaces.engine->isInGame()) {
-        name->onChangeCallbacks.size = 0;
-        name->setValue("\n\xAD\xAD\xAD");
-        nextChangeTime = memory.globalVars->realtime + 5.0f;
-        exploitInitialized = true;
-        return false;
+        if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
+            exploitInitialized = true;
+        } else {
+            name->onChangeCallbacks.size = 0;
+            name->setValue("\n\xAD\xAD\xAD");
+            return false;
+        }
     }
 
+    static auto nextChangeTime{ 0.0f };
     if (nextChangeTime <= memory.globalVars->realtime) {
         name->setValue(newName);
         nextChangeTime = memory.globalVars->realtime + delay;
@@ -333,4 +335,15 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
         cmd->buttons &= ~UserCmd::IN_JUMP;
 
     wasLastTimeOnGround = localPlayer->flags() & 1;
+}
+
+void Misc::fakeBan(bool set) noexcept
+{
+    static bool shouldSet = false;
+
+    if (set)
+        shouldSet = set;
+
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ static_cast<char>(config.misc.banColor + 1) }.append(config.misc.banText).append("\x1").c_str(), 5.0f))
+        shouldSet = false;
 }
