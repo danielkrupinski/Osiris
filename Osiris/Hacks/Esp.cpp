@@ -79,6 +79,16 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         }
 
         if (config.corner) {
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth / 2, top.y - 1);
+            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth / 2, bottom.y + 1);
+            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth - 1, bottom.y - boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth - 1, top.y + boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth / 2, top.y - 1);
+            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth / 2, bottom.y + 1);
+            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth + 1, bottom.y - boxHeight / 4);
+            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth + 1, top.y + boxHeight / 4);
+            
             interfaces.surface->setDrawColor(config.boxColor, 255);
             interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth / 2, top.y);
             interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth / 2, bottom.y);
