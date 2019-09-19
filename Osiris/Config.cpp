@@ -158,7 +158,7 @@ void Config::load(size_t id) noexcept
             espConfig.eyeTracesColor[1] = espJson["Eye traces color"][1].asFloat();
             espConfig.eyeTracesColor[2] = espJson["Eye traces color"][2].asFloat();
         }
-        if (espJson.isMember("corner")) espConfig.corner = espJson["corner"].asBool();
+        if (espJson.isMember("Corner")) espConfig.corner = espJson["Corner"].asBool();
         if (espJson.isMember("box")) espConfig.box = espJson["box"].asBool();
         if (espJson.isMember("boxColor")) {
             espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
