@@ -77,7 +77,7 @@ struct Vector {
         return x * x + y * y + z * z;
     }
 
-    auto distance(const Vector& v) noexcept
+    auto distance(const Vector& v) const noexcept
     {
         return (*this - v).length();
     }
