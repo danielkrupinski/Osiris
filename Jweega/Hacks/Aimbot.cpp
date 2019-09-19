@@ -140,8 +140,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
             return;
         }
 
-        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
-
         auto bestFov{ config.aimbot[weaponIndex].fov };
         Vector bestTarget{ };
         const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
@@ -170,6 +168,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         std::sort(enemies.begin(), enemies.end());
 
+        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
         const auto boneList{ config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 } };
         for (const auto& target : enemies) {
             const auto entity{ interfaces.entityList->getEntity(target.id) };
@@ -182,7 +181,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
                 if (fov < bestFov) {
                     bestFov = fov;
-                    bestTarget = bonePosition;
+                    bestTarget = velocityExtrapolate(entity, bonePosition);
                 }
 
                 if (config.aimbot[weaponIndex].bone)
