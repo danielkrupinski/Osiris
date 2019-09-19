@@ -13,7 +13,7 @@
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
-    Vector delta = destination - source;
+    Vector delta{ destination - source };
     Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
                    radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
     angles.normalize();
@@ -31,10 +31,10 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     if (!memory.traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
         return -1.0f;
 
-    SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
+    SurfaceData* exitSurfaceData{ interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps) };
 
-    float damageModifier = 0.16f;
-    float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
+    float damageModifier{ 0.16f };
+    float penetrationModifier{ (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f };
 
     if (enterSurfaceData->material == 71 || enterSurfaceData->material == 89) {
         damageModifier = 0.05f;
@@ -64,7 +64,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
     Vector direction{ destination - start };
     direction /= direction.length();
 
-    int hitsLeft = 4;
+    int hitsLeft{ 4 };
 
     while (damage >= 1.0f && hitsLeft) {
         static Trace trace;
@@ -81,7 +81,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
             return damage >= minDamage;
         }
-        const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+        const auto surfaceData{ interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps) };
 
         if (surfaceData->penetrationmodifier < 0.1f)
             break;
@@ -94,19 +94,19 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
     if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
+    const auto activeWeapon{ localPlayer->getActiveWeapon() };
     if (!activeWeapon || !activeWeapon->clip())
         return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+    auto weaponIndex{ getWeaponIndex(activeWeapon->itemDefinitionIndex2()) };
     if (!weaponIndex)
         return;
 
-    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+    const auto weaponClass{ getWeaponClass(activeWeapon->itemDefinitionIndex2()) };
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = weaponClass;
 
@@ -124,7 +124,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
                 return;
         } else {
-            static bool toggle = true;
+            static bool toggle{ true };
             if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1)
                 toggle = !toggle;
             if (!toggle)
@@ -140,53 +140,49 @@ void Aimbot::run(UserCmd* cmd) noexcept
             return;
         }
 
-        constexpr auto velocityExtrapolate = [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); };
+        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
 
-        auto bestFov = config.aimbot[weaponIndex].fov;
+        auto bestFov{ config.aimbot[weaponIndex].fov };
         Vector bestTarget{ };
-        auto localPlayerEyePosition = localPlayer->getEyePosition();
+        const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
 
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
+        const static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
+        auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
         aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
-        const auto boneList = config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
         std::vector<Enemies> enemies;
         for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
-            auto entity = interfaces.entityList->getEntity(i);
+            const auto entity{ interfaces.entityList->getEntity(i) };
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
                 || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
-            std::vector<Targets> targets;
-            for (auto bone : boneList) {
-                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
-                auto fov = std::hypotf(angle.x, angle.y);
-                if (fov > bestFov)
-                    continue;
-                auto distance = localPlayerEyePosition.distance(bonePosition);
-                targets.push_back({ distance, fov, bonePosition });
-                if (config.aimbot[weaponIndex].bone > 1)
-                    break;
-            }
-            if (!targets.empty())
-                enemies.push_back({ i, targets });
+            const auto origin{ entity->getAbsOrigin() };
+            const auto angle{ calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
+            const auto fov{ std::hypotf(angle.x, angle.y) };
+            if (fov > 255.f)
+                continue;
+            
+            const auto distance{ localPlayerEyePosition.distance(origin) };
+            enemies.push_back({ distance, i });
         }
 
         std::sort(enemies.begin(), enemies.end());
 
-        for (const auto& enemy : enemies) {
-            const auto entity{ interfaces.entityList->getEntity(enemy.id) };
-            for (const auto& target : enemy.targets) {
-                const auto bonePosition{ target.bonePosition };
+        const auto boneList{ config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 } };
+        for (const auto& target : enemies) {
+            const auto entity{ interfaces.entityList->getEntity(target.id) };
+            for (const auto& bone : boneList) {
+                const auto bonePosition{ entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone) };
+                const auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
+                const auto fov{ std::hypotf(angle.x, angle.y) };
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
                     continue;
 
-                if (target.fov < bestFov) {
-                    bestFov = target.fov;
-                    bestTarget = target.bonePosition;
+                if (fov < bestFov) {
+                    bestFov = fov;
+                    bestTarget = bonePosition;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
@@ -204,7 +200,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (lastCommand == cmd->commandNumber - 1 && lastAngles && config.aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
+            auto angle{ calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch) };
             bool clamped{ false };
 
             if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {

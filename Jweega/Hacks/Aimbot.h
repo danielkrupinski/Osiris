@@ -7,22 +7,12 @@ namespace Aimbot {
     Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept;
     void run(UserCmd*) noexcept;
 
-    struct Targets {
-        float distance;
-        float fov;
-        Vector bonePosition;
-
-        bool operator<(const Targets& targets) const noexcept {
-            return distance < targets.distance;
-        }
-    };
-
     struct Enemies {
+        float distance;
         int id;
-        std::vector<Targets> targets;
 
-        bool operator<(const Enemies& enemies) const noexcept {
-            return targets < enemies.targets;
+        bool operator<(const Enemies& enemy) const noexcept {
+            return distance < enemy.distance;
         }
     };
 }
