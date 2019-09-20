@@ -501,7 +501,7 @@ void Config::save(size_t id) const noexcept
         espJson["Eye traces color"][0] = espConfig.eyeTracesColor[0];
         espJson["Eye traces color"][1] = espConfig.eyeTracesColor[1];
         espJson["Eye traces color"][2] = espConfig.eyeTracesColor[2];
-        espJson["corner"] = espConfig.corner;
+        espJson["Corner"] = espConfig.corner;
         espJson["box"] = espConfig.box;
         espJson["boxColor"][0] = espConfig.boxColor[0];
         espJson["boxColor"][1] = espConfig.boxColor[1];
