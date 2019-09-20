@@ -924,6 +924,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::TextUnformatted("Fake Duck Key");
         ImGui::SameLine();
         hotkey(config.misc.fakeDuckKey);
+        ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
         ImGui::PushItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
         ImGui::PushItemWidth(290.0f);

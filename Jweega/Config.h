@@ -222,6 +222,7 @@ public:
         bool drawFOV{ false };
         int chokedPacketsKey{ 0 };
         int fakeDuckKey{ 0 };
+        bool nadePredict {false};
         float maxAngleDelta{ 255.0f };
     } misc;
 
