@@ -344,3 +344,10 @@ void Misc::fakeBan(bool set) noexcept
     if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ static_cast<char>(config.misc.banColor + 1) }.append(config.misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
+void Misc::nadePredict() noexcept { 
+    static auto nadeVar = interfaces.cvar->findVar("cl_grenadepreview"); 
+    
+    nadeVar->onChangeCallbacks.size = 0; 
+    
+    nadeVar->setValue(config.misc.nadePredict ? 1 : 0); 
+}
