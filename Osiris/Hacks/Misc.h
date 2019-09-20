@@ -27,6 +27,7 @@ namespace Misc {
     void fakeVote(bool = false) noexcept;
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
+    void nadePredict() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
