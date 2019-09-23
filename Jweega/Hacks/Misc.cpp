@@ -350,7 +350,7 @@ void Misc::fakeBan(bool set) noexcept
 
 void Misc::nadePredict() noexcept
 { 
-    static auto nadeVar = interfaces.cvar->findVar("cl_grenadepreview"); 
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
     
     nadeVar->onChangeCallbacks.size = 0; 
     nadeVar->setValue(config.misc.nadePredict); 

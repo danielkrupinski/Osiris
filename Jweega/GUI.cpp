@@ -592,6 +592,8 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Snaplines", &config.esp[currentItem].snaplines, config.esp[currentItem].snaplinesColor);
         ImGui::SameLine(spacing);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
+        ImGui::SameLine(spacing * 1.4f);
+        ImGui::Checkbox("Corner", &config.esp[currentItem].corner);
         checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
         ImGui::SameLine(spacing);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);
