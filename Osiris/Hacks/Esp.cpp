@@ -104,7 +104,9 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
         if (config.healthBar) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
-            const auto maxHealth{ gameType->getInt() == 6 ? 120.0f : 100.0f };
+            static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
+
+            const auto maxHealth{ gameType->getInt() == 6 ? survivalMaxHealth->getFloat() : 100.0f };
 
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / maxHealth, drawPositionX, bottom.y);
