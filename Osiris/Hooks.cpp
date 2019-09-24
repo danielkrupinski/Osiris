@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -107,6 +106,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     const auto currentViewAngles{ cmd->viewangles };
 
     memory.globalVars->serverTime(cmd);
+    Misc::nadePredict();
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
     Misc::prepareRevolver(cmd);

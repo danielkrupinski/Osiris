@@ -361,6 +361,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
         if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
+        if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
     }
 
@@ -677,6 +678,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Hit sound"] = misc.hitSound;
         miscJson["Choked packets"] = misc.chokedPackets;
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
+        miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
     }
 

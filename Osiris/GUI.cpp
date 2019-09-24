@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <functional>
 #include <string>
 #include <Windows.h>
@@ -900,6 +899,7 @@ void GUI::renderMiscWindow() noexcept
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
         hotkey(config.misc.chokedPacketsKey);
+        ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
         ImGui::PushItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
         ImGui::PushItemWidth(290.0f);
