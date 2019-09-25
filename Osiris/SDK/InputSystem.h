@@ -13,4 +13,9 @@ public:
     {
         callVirtualMethod<void>(this, 39);
     }
+
+    constexpr auto buttonCodeToString(int buttonCode) noexcept
+    {
+        return callVirtualMethod<const char*, int>(this, 40, buttonCode);
+    }
 };
