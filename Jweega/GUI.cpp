@@ -11,6 +11,7 @@
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
+#include "SDK/InputSystem.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -118,7 +119,13 @@ void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* co
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
+    constexpr bool stringDisplayTest = true;
+
+    if constexpr (stringDisplayTest)
+        key ? ImGui::Text("[ %s ]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
+    else
+        key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
+
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Press any key to change keybind");
         ImGuiIO& io = ImGui::GetIO();
@@ -878,6 +885,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox("Clock tag", &config.misc.clocktag);
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);

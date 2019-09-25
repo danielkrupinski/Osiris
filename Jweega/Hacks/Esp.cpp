@@ -104,10 +104,12 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
         if (config.healthBar) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
-            const auto maxHealth{ gameType->getInt() == 6 ? 120.0f : 100.0f };
+            static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
+
+            const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / maxHealth, drawPositionX, bottom.y);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bottom.y);
             interfaces.surface->setDrawColor(0, 0, 0, 255);
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
             drawPositionX -= 7;
