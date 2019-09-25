@@ -23,4 +23,12 @@ public:
     {
         return callVirtualMethod<int, int>(this, 45, virtualKey);
     }
+
+    constexpr auto virtualKeyToString(int virtualKey) noexcept
+    {
+        if (virtualKey <= VK_XBUTTON2)
+            return buttonCodeToString(virtualKey + 106);
+        else
+            return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
+    }
 };
