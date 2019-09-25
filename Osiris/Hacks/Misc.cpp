@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <sstream>
 
 #include "../Config.h"
@@ -11,7 +10,6 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
-#include "atltime.h"
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -38,15 +36,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
         memory.setClanTag(clanTag.c_str(), clanTag.c_str());
-        if (config.misc.clocktag && !clanTag.empty())
-		{
-			time_t t;
-			struct tm* t_m;
-			t = time(NULL);
-			t_m = localtime(&t);
-			std::string time = "[" + std::to_string(t_m->tm_hour) + ":" + std::to_string(t_m->tm_min) + ":" + std::to_string(t_m->tm_sec) + "]";
-			memory.setClanTag(time.c_str(), "");
-		}
+
+        if (config.misc.clocktag) {
+            const auto time{ std::time(nullptr) };
+            const auto localTime{ std::localtime(&time) };
+
+            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
+            memory.setClanTag(timeString.c_str(), timeString.c_str());
+	}
     }
 }
 
