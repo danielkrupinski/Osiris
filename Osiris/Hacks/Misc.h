@@ -11,8 +11,6 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 
-#define	FL_ONGROUND	(1 << 0) // On the floor
-
 namespace Misc {
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
@@ -109,7 +107,6 @@ namespace Misc {
                 cmd->sidemove = 450.0f;
         }
     }
-
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
