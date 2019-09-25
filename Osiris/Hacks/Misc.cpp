@@ -36,6 +36,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
         memory.setClanTag(clanTag.c_str(), clanTag.c_str());
+
+        if (config.misc.clocktag) {
+            const auto time{ std::time(nullptr) };
+            const auto localTime{ std::localtime(&time) };
+
+            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
+            memory.setClanTag(timeString.c_str(), timeString.c_str());
+	}
     }
 }
 

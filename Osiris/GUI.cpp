@@ -855,6 +855,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        ImGui::Checkbox("Clock tag", &config.misc.clocktag);
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
