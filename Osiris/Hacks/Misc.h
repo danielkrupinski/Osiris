@@ -28,6 +28,7 @@ namespace Misc {
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
+    void customViewmodel() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {

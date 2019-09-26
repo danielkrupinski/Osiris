@@ -224,6 +224,9 @@ public:
         int chokedPacketsKey{ 0 };
         bool nadePredict{ false };
         float maxAngleDelta{ 255.0f };
+		float viewmodel_x;
+		float viewmodel_y;
+		float viewmodel_z;
     } misc;
 
     struct {

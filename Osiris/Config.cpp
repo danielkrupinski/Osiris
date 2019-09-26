@@ -364,6 +364,9 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
+        if (miscJson.isMember("Custom Viewmodel X")) misc.viewmodel_x = miscJson["Custom Viewmodel X"].asFloat();
+        if (miscJson.isMember("Custom Viewmodel Y")) misc.viewmodel_y = miscJson["Custom Viewmodel Y"].asFloat();
+        if (miscJson.isMember("Custom Viewmodel Z")) misc.viewmodel_z = miscJson["Custom Viewmodel Z"].asFloat();
     }
 
     {
@@ -682,6 +685,9 @@ void Config::save(size_t id) const noexcept
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
+        miscJson["Custom Viewmodel X"] = misc.viewmodel_x;
+        miscJson["Custom Viewmodel Y"] = misc.viewmodel_y;
+        miscJson["Custom Viewmodel Z"] = misc.viewmodel_z;
     }
 
     {
