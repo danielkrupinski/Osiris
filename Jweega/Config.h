@@ -46,6 +46,7 @@ public:
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
+        bool velocityExtrapolation{ false };
     };
     std::array<Aimbot, 40> aimbot;
 

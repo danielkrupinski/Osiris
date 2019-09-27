@@ -181,7 +181,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
                 if (fov < bestFov) {
                     bestFov = fov;
-                    bestTarget = velocityExtrapolate(entity, bonePosition);
+                    bestTarget = config.aimbot[weaponIndex].velocityExtrapolation ? velocityExtrapolate(entity, bonePosition) : bonePosition;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
