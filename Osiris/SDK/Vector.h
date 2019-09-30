@@ -72,5 +72,10 @@ struct Vector {
         return x * x + y * y + z * z;
     }
 
+    constexpr auto dotProduct(const Vector& v) noexcept
+    {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
     float x, y, z;
 };
