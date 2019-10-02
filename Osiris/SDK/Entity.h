@@ -14,6 +14,7 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
+#include "ModelRender.h"
 
 struct AnimState;
 struct WeaponData;
@@ -204,6 +205,11 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
+    matrix3x4& coordinateFrame() noexcept
+    {
+        return *reinterpret_cast<matrix3x4*>(this + 0x444);
+    }
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
@@ -241,7 +247,6 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
-    //NETVAR(state, "CBaseCombatWeapon", "m_iState", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
