@@ -24,6 +24,13 @@ enum class MoveType {
     LADDER = 9
 };
 
+class Collideable {
+public:
+    virtual void* pad() = 0;
+    virtual const Vector& obbMins() = 0;
+    virtual const Vector& obbMaxs() = 0;
+};
+
 class Entity {
 public:
     constexpr bool isPistol() noexcept
