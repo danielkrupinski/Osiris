@@ -33,6 +33,11 @@ public:
 
 class Entity {
 public:
+    constexpr auto getCollideable() noexcept
+    {
+        return callVirtualMethod<Collideable*>(this, 3);
+    }
+
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
