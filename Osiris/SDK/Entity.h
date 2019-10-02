@@ -15,6 +15,7 @@
 #include "VarMapping.h"
 #include "../Memory.h"
 #include "ModelRender.h"
+#include "../SDK/matrix3x4.h"
 
 struct AnimState;
 struct WeaponData;
@@ -66,8 +67,6 @@ public:
             return false;
         }
     }
-
-    using matrix3x4 = float[3][4];
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
