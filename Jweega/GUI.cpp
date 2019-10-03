@@ -291,6 +291,8 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Max shot inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
         ImGui::InputInt("Min damage", &config.aimbot[currentWeapon].minDamage);
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
+        ImGui::InputInt("Hit chance", &config.aimbot[currentWeapon].hitChance);
+        config.aimbot[currentWeapon].hitChance = std::clamp(config.aimbot[currentWeapon].hitChance, 0, 100);
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
         ImGui::Checkbox("Between shots", &config.aimbot[currentWeapon].betweenShots);
         ImGui::Checkbox("Velocity extrapolation", &config.aimbot[currentWeapon].velocityExtrapolation);

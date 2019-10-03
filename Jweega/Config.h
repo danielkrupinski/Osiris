@@ -44,6 +44,7 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+        int hitChance{ 0 };
         bool killshot{ false };
         bool betweenShots{ true };
         bool velocityExtrapolation{ false };
