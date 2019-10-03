@@ -12,6 +12,7 @@
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
+#include "imgui/imgui_internal.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -885,8 +886,19 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        if (config.misc.customClanTag) {
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+        }
         ImGui::Checkbox("Clock tag", &config.misc.clocktag);
+        if (config.misc.customClanTag) {
+            ImGui::PopItemFlag();
+            ImGui::PopStyleVar();
+        }
+        if (config.misc.clocktag) {
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+        }
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
@@ -894,6 +906,11 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
             Misc::updateClanTag(true);
         ImGui::PopID();
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        if (config.misc.clocktag) {
+            ImGui::PopItemFlag();
+            ImGui::PopStyleVar();
+        }
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
