@@ -226,6 +226,7 @@ public:
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float);
+    NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
