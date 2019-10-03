@@ -33,6 +33,9 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, &moveData);
     interfaces.gameMovement->ProcessMovement(localPlayer, &moveData);
     interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
+
+    const auto activeWeapon{ localPlayer->getActiveWeapon() };
+    activeWeapon->updateAccuracyPenalty();
 }
 
 void PredictionSystem::EndPrediction() noexcept
