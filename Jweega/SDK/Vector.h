@@ -62,14 +62,14 @@ struct Vector {
         z = 0.0f;
     }
 
-    auto length() noexcept
+    auto length() const noexcept
     {
-        return sqrtf(x * x + y * y + z * z);
+        return std::hypot(x, y, z);
     }
 
-    auto length2D() noexcept
+    auto length2D() const noexcept
     {
-        return sqrtf(x * x + y * y);
+        return std::hypotf(x, y);
     }
 
     constexpr auto squareLength() noexcept
@@ -79,7 +79,7 @@ struct Vector {
 
     auto distance(const Vector& v) const noexcept
     {
-        return (*this - v).length();
+        return std::hypot(x - v.x, y - v.y, z - v.z);
     }
 
     float x, y, z;
