@@ -135,28 +135,26 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::moonwalk(cmd);
 
     PredictionSystem::StartPrediction(cmd);
-    {
-        Aimbot::run(cmd);
-        Triggerbot::run(cmd);
-        Backtrack::run(cmd);
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Backtrack::run(cmd);
 
-        if (!(cmd->buttons & (UserCmd::IN_USE | UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-            Misc::chokePackets(sendPacket);
-            Misc::fakeDuck(cmd);
-            AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-        }
-
-        auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
-        viewAnglesDelta.normalize();
-        viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-        viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-
-        cmd->viewangles = previousViewAngles + viewAnglesDelta;
-
-        cmd->viewangles.normalize();
-        Misc::fixMovement(cmd, currentViewAngles.y);
+    if (!(cmd->buttons & (UserCmd::IN_USE | UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+        Misc::chokePackets(sendPacket);
+        Misc::fakeDuck(cmd);
+        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
     PredictionSystem::EndPrediction();
+
+    auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
+    viewAnglesDelta.normalize();
+    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+
+    cmd->viewangles = previousViewAngles + viewAnglesDelta;
+
+    cmd->viewangles.normalize();
+    Misc::fixMovement(cmd, currentViewAngles.y);
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
