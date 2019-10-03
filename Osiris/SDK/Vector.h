@@ -79,11 +79,11 @@ struct Vector {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    constexpr void transform(matrix3x4& mat, Vector& out) noexcept
+    constexpr auto transform(matrix3x4& mat) noexcept
     {
-        out.x = dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3];
-        out.y = dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3];
-        out.z = dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3];
+        return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
+                       dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],
+                       dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
     }
 
     float x, y, z;
