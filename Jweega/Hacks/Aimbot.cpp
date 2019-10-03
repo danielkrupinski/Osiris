@@ -143,6 +143,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         auto bestFov{ config.aimbot[weaponIndex].fov };
         Vector bestTarget{ };
         const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
+        const auto localPlayerOrigin{ localPlayer->getAbsOrigin() };
 
         const static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
         auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
@@ -157,26 +158,23 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 continue;
 
             const auto origin{ entity->getAbsOrigin() };
-            const auto angle{ calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
-            const auto fov{ std::hypotf(angle.x, angle.y) };
-            if (fov > 255.f)
-                continue;
-            
-            const auto distance{ localPlayerEyePosition.distance(origin) };
-            enemies.push_back({ distance, i });
+            const auto health{ entity->health() };
+            const auto angle{ calculateRelativeAngle(localPlayerOrigin, origin, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
+            const auto distance{ localPlayerOrigin.distance(origin) };
+            enemies.push_back({ health, distance, i });
         }
 
         std::sort(enemies.begin(), enemies.end());
 
-        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
         const auto boneList{ config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 } };
+        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
         for (const auto& target : enemies) {
             const auto entity{ interfaces.entityList->getEntity(target.id) };
             for (auto bone : boneList) {
                 const auto bonePosition{ entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone) };
-                const auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
-                const auto fov{ std::hypotf(angle.x, angle.y) };
-                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
+                auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
+                const auto fov{ angle.length2D() };
+                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? target.health : (std::min)(config.aimbot[weaponIndex].minDamage, target.health))))
                     continue;
 
                 if (fov < bestFov) {
@@ -203,11 +201,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
             bool clamped{ false };
 
             if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
-                    angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-                    clamped = true;
+                angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+                angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+                clamped = true;
             }
-            
+
             angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot[weaponIndex].silent)
