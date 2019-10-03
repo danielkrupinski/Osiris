@@ -19,11 +19,18 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
-    if (config.misc.customClanTag) {
-        static std::string clanTag;
+    if (config.misc.clocktag) {
+        const auto time{ std::time(nullptr) };
+        const auto localTime{ std::localtime(&time) };
+
+        const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
+        memory.setClanTag(timeString.c_str(), timeString.c_str());
+    } else if (config.misc.customClanTag) {
+        static std::wstring clanTag;
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> codecvt;
 
         if (tagChanged) {
-            clanTag = config.misc.clanTag;
+            clanTag = codecvt.from_bytes(config.misc.clanTag);
             if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
                 clanTag.push_back(' ');
         }
@@ -35,15 +42,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (config.misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
-        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
-
-        if (config.misc.clocktag) {
-            const auto time{ std::time(nullptr) };
-            const auto localTime{ std::localtime(&time) };
-
-            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
-            memory.setClanTag(timeString.c_str(), timeString.c_str());
-	}
+        const auto convertedString{ codecvt.to_bytes(clanTag) };
+        memory.setClanTag(convertedString.c_str(), convertedString.c_str());
     }
 }
 
