@@ -179,6 +179,16 @@ public:
     {
         return callVirtualMethod<float>(this, 478);
     }
+
+    constexpr void updateAccuracyPenalty() noexcept
+    {
+        return callVirtualMethod<void>(this, 479);
+    }
+
+    constexpr float getSpread() noexcept
+    {
+        return callVirtualMethod<float>(this, 447);
+    }
     
     VarMap* getVarMap() noexcept
     {
@@ -262,6 +272,7 @@ public:
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
     //NETVAR(state, "CBaseCombatWeapon", "m_iState", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
+    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float);
 
     NETVAR(bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
     NETVAR(fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float);
