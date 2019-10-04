@@ -69,6 +69,49 @@ struct BoundingBox {
     float bottom;
 };
 
+static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
+{
+    const auto min{ entity->getCollideable()->obbMins() };
+    const auto max{ entity->getCollideable()->obbMaxs() };
+
+    const Vector points[]{
+        Vector{ min.x, min.y, min.z },
+        Vector{ min.x, max.y, min.z },
+        Vector{ max.x, max.y, min.z },
+        Vector{ max.x, min.y, min.z },
+        Vector{ min.x, min.y, max.z },
+        Vector{ min.x, max.y, max.z },
+        Vector{ max.x, max.y, max.z },
+        Vector{ max.x, min.y, max.z },
+    };
+
+    const auto [width, height] { interfaces.surface->getScreenSize() };
+    out.left = static_cast<float>(width);
+    out.right = 0.0f;
+    out.top = 0.0f;
+    out.bottom = static_cast<float>(height);
+
+    for (const auto& point : points) {
+        Vector screenPoint;
+
+        if (!worldToScreen(point.transform(entity->coordinateFrame()), screenPoint))
+            return false;
+
+        if (out.left > screenPoint.x)
+            out.left = screenPoint.x;
+
+        if (out.right < screenPoint.x)
+            out.right = screenPoint.x;
+
+        if (out.top < screenPoint.y)
+            out.top = screenPoint.y;
+
+        if (out.bottom > screenPoint.y)
+            out.bottom = screenPoint.y;
+    }
+    return true;
+}
+
 static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
