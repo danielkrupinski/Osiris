@@ -1,3 +1,4 @@
+#include <random>
 #include "Aimbot.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -10,11 +11,12 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/Angle.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta{ destination - source };
-    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
+    Vector angles{ radiansToDegrees(atan2f(-delta.z, delta.length2D())) - viewAngles.x,
                    radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
     angles.normalize();
     return angles;
@@ -39,7 +41,8 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     if (enterSurfaceData->material == 71 || enterSurfaceData->material == 89) {
         damageModifier = 0.05f;
         penetrationModifier = 3.0f;
-    } else if (enterTrace.contents >> 3 & 1 || enterTrace.surface.flags >> 7 & 1) {
+    }
+    else if (enterTrace.contents >> 3 & 1 || enterTrace.surface.flags >> 7 & 1) {
         penetrationModifier = 1.0f;
     }
 
@@ -88,6 +91,89 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
         damage = handleBulletPenetration(surfaceData, trace, direction, start, weaponData->penetration, damage);
         hitsLeft--;
+    }
+    return false;
+}
+
+static float random(float min, float max) noexcept
+{
+    static std::mt19937 gen{ std::random_device{ }() };
+    return std::uniform_real_distribution{ min, max }(gen);
+}
+
+static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, Vector& destinantion, int buttons, int hitChance) noexcept
+{
+    if (!hitChance)
+        return true;
+
+    constexpr int seed{ 256 };
+
+    const Angle angles(destinantion);
+
+    int hits{ 0 };
+    const int hitsNeed{ static_cast<int>(static_cast<float>(seed) * (static_cast<float>(hitChance) / 100.f)) };
+
+    const auto weapSpread{ weaponData->getSpread() };
+    const auto weapInaccuracy{ weaponData->getInaccuracy() };
+    const auto localEyePosition{ localPlayer->getEyePosition() };
+    const auto range{ weaponData->getWeaponData()->range };
+
+    for (int i = 0; i != seed; ++i) {
+        float inaccuracy{ random(0.f, 1.f) };
+        float spread{ random(0.f, 1.f) };
+        const float spreadX{ random(0.f, 2.f * static_cast<float>(M_PI)) };
+        const float spreadY{ random(0.f, 2.f * static_cast<float>(M_PI)) };
+
+        const auto weaponIndex{ getWeaponIndex(weaponData->itemDefinitionIndex2()) };
+        const auto recoilIndex{ weaponData->recoilIndex() };
+
+        if (weaponIndex == WEAPON_REVOLVER)
+        {
+            if (buttons & UserCmd::IN_ATTACK2)
+            {
+                inaccuracy = 1.f - inaccuracy * inaccuracy;
+                spread = 1.f - spread * spread;
+            }
+        }
+        else if (weaponIndex == WEAPON_NEGEV && recoilIndex < 3.f)
+        {
+            for (int i = 3; i > recoilIndex; --i)
+            {
+                inaccuracy *= inaccuracy;
+                spread *= spread;
+            }
+
+            inaccuracy = 1.f - inaccuracy;
+            spread = 1.f - spread;
+        }
+
+        inaccuracy *= weapInaccuracy;
+        spread *= weapSpread;
+
+        Vector spreadView{ cosf(spreadX) * inaccuracy + cosf(spreadY) * spread,
+                           sinf(spreadX) * inaccuracy + sinf(spreadY) * spread };
+
+        Vector direction{ angles.forward.x + (spreadView.x * angles.right.x) + (spreadView.y * angles.up.x),
+                          angles.forward.y + (spreadView.x * angles.right.y) + (spreadView.y * angles.up.y),
+                          angles.forward.z + (spreadView.x * angles.right.z) + (spreadView.y * angles.up.z) };
+        direction /= direction.length();
+
+        direction.normalize();
+        direction.clamp();
+        direction.normalizeInPlace();
+
+        Vector viewForward{ localEyePosition + (direction * range) };
+
+        static Trace trace;
+        interfaces.engineTrace->traceRay({ localEyePosition, viewForward }, 0x4600400B, localPlayer, trace);
+        if (trace.entity == entity)
+            ++hits;
+
+        if (static_cast<int>(static_cast<float>(hits) / static_cast<float>(seed)) * 100 >= hitChance)
+            return true;
+
+        if ((seed - i + hits) < hitsNeed)
+            return false;
     }
     return false;
 }
@@ -142,6 +228,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         auto bestFov{ config.aimbot[weaponIndex].fov };
         Vector bestTarget{ };
+        Vector bestAngle{ };
         const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
         const auto localPlayerOrigin{ localPlayer->getAbsOrigin() };
 
@@ -180,13 +267,16 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = config.aimbot[weaponIndex].velocityExtrapolation ? velocityExtrapolate(entity, bonePosition) : bonePosition;
+                    bestAngle = angle;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
                     break;
             }
+
             if (bestTarget)
-                break;
+                if (hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd->buttons, config.aimbot[weaponIndex].hitChance))
+                    break;
         }
 
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
