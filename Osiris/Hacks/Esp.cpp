@@ -122,6 +122,29 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
             interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
         }
+
+        float drawPositionX = bbox.left - 5;
+
+        if (config.healthBar) {
+            static auto gameType{ interfaces.cvar->findVar("game_type") };
+            static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
+
+            const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
+
+            interfaces.surface->setDrawColor(config.healthBarColor, 255);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.top);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            drawPositionX -= 7;
+        }
+
+        if (config.armorBar) {
+            interfaces.surface->setDrawColor(config.armorBarColor, 255);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.top);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            drawPositionX -= 7;
+        }
     }
 
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
@@ -154,27 +177,6 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         }
 
         float drawPositionX = bottom.x - boxWidth - 5;
-
-        if (config.healthBar) {
-            static auto gameType{ interfaces.cvar->findVar("game_type") };
-            static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
-
-            const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
-
-            interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
-            drawPositionX -= 7;
-        }
-
-        if (config.armorBar) {
-            interfaces.surface->setDrawColor(config.armorBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
-            drawPositionX -= 7;
-        }
 
         if (config.name) {
             static PlayerInfo playerInfo;
