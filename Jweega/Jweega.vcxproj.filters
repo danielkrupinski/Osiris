@@ -329,7 +329,7 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\RenderContext.h">
-      <Filter>Header Files</Filter>
+      <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
