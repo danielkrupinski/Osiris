@@ -128,7 +128,7 @@ void Misc::watermark() noexcept
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
-    constexpr float revolverPrepareTime{ 0.234375f };
+    constexpr float revolverPrepareTime{ 0.242f };
 
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
