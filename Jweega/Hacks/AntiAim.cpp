@@ -12,8 +12,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)
             cmd->viewangles.x = config.antiAim.pitchAngle;
 
-        if (config.antiAim.yaw && sendPacket && interfaces.engine->getNetworkChannel()->chokedPackets && cmd->viewangles.y == currentViewAngles.y) {
-            cmd->viewangles.y = previousViewAngles.y + interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+        if (config.antiAim.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
+            cmd->viewangles.y += interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
             if (fabsf(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
                     cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;

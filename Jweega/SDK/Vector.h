@@ -4,6 +4,8 @@
 #include <cfloat>
 #include <algorithm>
 
+#include "matrix3x4.h"
+
 struct Vector {
     constexpr operator bool() const noexcept
     {
@@ -109,6 +111,18 @@ struct Vector {
         x *= iradius;
         y *= iradius;
         z *= iradius;
+    }
+
+    constexpr auto dotProduct(const Vector& v) noexcept
+    {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    constexpr auto transform(matrix3x4& mat) noexcept
+    {
+        return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
+                       dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],
+                       dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
     }
 
     float x, y, z;

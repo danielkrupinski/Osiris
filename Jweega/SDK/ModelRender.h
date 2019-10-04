@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "Vector.h"
 
-using matrix3x4 = float[3][4];
+class matrix3x4;
 
 struct Model {
     void* handle;

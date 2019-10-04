@@ -16,6 +16,8 @@
 #include "../Memory.h"
 #include "WeaponData.h"
 #include "WeaponType.h"
+#include "ModelRender.h"
+#include "../SDK/matrix3x4.h"
 
 struct AnimState;
 struct WeaponData;
@@ -25,8 +27,20 @@ enum class MoveType {
     LADDER = 9
 };
 
+class Collideable {
+public:
+    virtual void* pad() = 0;
+    virtual const Vector& obbMins() = 0;
+    virtual const Vector& obbMaxs() = 0;
+};
+
 class Entity {
 public:
+    constexpr auto getCollideable() noexcept
+    {
+        return callVirtualMethod<Collideable*>(this, 3);
+    }
+
     constexpr bool isPistol() noexcept
     {
         switch (getClientClass()->classId) {
@@ -72,8 +86,6 @@ public:
 
         return false;
     }
-
-    using matrix3x4 = float[3][4];
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
@@ -233,11 +245,17 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
+    matrix3x4& coordinateFrame() noexcept
+    {
+        return *reinterpret_cast<matrix3x4*>(this + 0x444);
+    }
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float);
+    NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int);
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
@@ -270,7 +288,6 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
-    //NETVAR(state, "CBaseCombatWeapon", "m_iState", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
     NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float);
 
