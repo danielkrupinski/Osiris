@@ -150,14 +150,30 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
     }
 }
 
+float distance(Vector src, Vector des)
+{
+	const float distance = sqrt((src.x - des.x) * (src.x - des.x) + (src.y - des.y) * (src.y - des.y) + (src.z - des.z) * (src.z - des.z));
+	return distance * 0.0254f;
+}
+
 static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     if (config.headDot) {
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
-            for (int i = 1; i <= 3; i++)
-                interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
+            const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+            Vector localPos{ localPlayer->origin() };
+            Vector entityPos{ entity->origin() };
+
+            float distanceToEntity{ distance(localPos, entityPos) };
+
+            int rad{ (int) ceil(39.0f / distanceToEntity) };
+
+            //int seg{ (int) ceil(rad * 35.0f) };
+
+            interfaces.surface->drawOutlinedCircle(head.x + 0.5f, head.y - 0.5f, rad, 20);
         }
     }
 }
