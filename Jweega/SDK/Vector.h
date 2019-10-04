@@ -94,25 +94,6 @@ struct Vector {
         return std::hypot(x - v.x, y - v.y, z - v.z);
     }
 
-    constexpr auto clamp() noexcept
-    {
-        x = std::clamp(x, -89.0f, 89.0f);
-        y = std::clamp(y, -180.0f, 180.0f);
-        z = 0.0f;
-    }
-
-    void normalizeInPlace() noexcept
-    {
-        const float radius{ std::hypot(x, y, z) };
-
-        // FLT_EPSILON is added to the radius to eliminate the possibility of divide by zero.
-        const float iradius{ 1.f / (radius + FLT_EPSILON) };
-
-        x *= iradius;
-        y *= iradius;
-        z *= iradius;
-    }
-
     constexpr auto dotProduct(const Vector& v) noexcept
     {
         return x * v.x + y * v.y + z * v.z;
