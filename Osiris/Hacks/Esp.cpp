@@ -181,27 +181,17 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
                 }
             }
         }
-    }
 
-    Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
-    head.z += 10.0f;
-
-    if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
-        const float boxWidth = abs(top.y - bottom.y) * 0.3f;
-        const float boxHeight = bottom.y - top.y;
-
-        float drawPositionX = bottom.x - boxWidth - 5;
-
-        float drawPositionY = top.y;
+        float drawPositionY = bbox.bottom;
 
         if (config.health)
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.right + 5, drawPositionY });
 
         if (config.armor)
-            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.right + 5, drawPositionY });
 
         if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.right + 5, drawPositionY });
     }
 }
 
