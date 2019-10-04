@@ -34,6 +34,11 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 19, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
+    constexpr void drawPolyLine(int* xs, int* ys, int pointCount) noexcept
+    {
+        callVirtualMethod<void, int*, int*, int>(this, 20, xs, ys, pointCount);
+    }
+
     constexpr void setTextFont(unsigned font) noexcept
     {
         callVirtualMethod<void, unsigned>(this, 23, font);
