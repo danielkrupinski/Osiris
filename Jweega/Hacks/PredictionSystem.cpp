@@ -35,7 +35,8 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
 
     const auto activeWeapon{ localPlayer->getActiveWeapon() };
-    activeWeapon->updateAccuracyPenalty();
+    if (activeWeapon)
+        activeWeapon->updateAccuracyPenalty();
 }
 
 void PredictionSystem::EndPrediction() noexcept
