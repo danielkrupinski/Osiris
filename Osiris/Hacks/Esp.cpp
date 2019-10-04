@@ -118,9 +118,12 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         if (config.box) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
             interfaces.surface->drawOutlinedRect(bbox.left, bbox.bottom, bbox.right, bbox.top);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
-            interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
+
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
+                interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
+            }
         }
 
         if (config.corner) {
@@ -134,15 +137,17 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top);
             interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
 
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left - 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
-            interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
-            interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right + 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left - 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
-            interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
-            interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left - 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right + 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left - 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            }
         }
 
         float drawPositionX = bbox.left - 5;
@@ -155,16 +160,22 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.top);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            }
             drawPositionX -= 7;
         }
 
         if (config.armorBar) {
             interfaces.surface->setDrawColor(config.armorBarColor, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.top);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            }
             drawPositionX -= 7;
         }
 
