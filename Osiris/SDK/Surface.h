@@ -102,12 +102,12 @@ public:
     }
 
     template <typename T>
-    void drawCircle(T x, T y, int radius) noexcept
+    void drawCircle(T x, T y, int startRadius, int radius) noexcept
     {
         int xs[360];
         int ys[360];
 
-        for (int i = 1; i <= radius; i++) {
+        for (int i = startRadius; i <= radius; i++) {
             for (int j = 0; j < 360; j++) {
                 xs[j] = static_cast<int>(cosf(degreesToRadians(static_cast<float>(j))) * i + x);
                 ys[j] = static_cast<int>(sinf(degreesToRadians(static_cast<float>(j))) * i + y);
