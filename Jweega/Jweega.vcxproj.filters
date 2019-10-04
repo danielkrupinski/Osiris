@@ -364,5 +364,8 @@
     <ClInclude Include="SDK\MD5.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Angle.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

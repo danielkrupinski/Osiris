@@ -65,6 +65,7 @@
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
+    <ClInclude Include="SDK\Angle.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\MD5.h" />
     <ClInclude Include="SDK\Client.h" />
@@ -175,7 +176,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;_DEBUG;JWEEGA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;_DEBUG;JWEEGA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -208,7 +209,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;NDEBUG;JWEEGA_EXPORTS;_WINDOWS;_USRDLL;JSON_USE_EXCEPTION=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;NDEBUG;JWEEGA_EXPORTS;_WINDOWS;_USRDLL;JSON_USE_EXCEPTION=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <DebugInformationFormat>None</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
