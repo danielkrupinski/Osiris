@@ -114,19 +114,22 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 
 static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
+        if (config.box) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+            interfaces.surface->drawOutlinedRect(bbox.left, bbox.bottom, bbox.right, bbox.top);
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
+            interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
+        }
+    }
+
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
     head.z += 10.0f;
+
     if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
         const float boxWidth = abs(top.y - bottom.y) * 0.3f;
         const float boxHeight = bottom.y - top.y;
-
-        if (config.box) {
-            interfaces.surface->setDrawColor(config.boxColor, 255);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth, top.y, bottom.x + boxWidth, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth + 1, top.y + 1, bottom.x + boxWidth - 1, bottom.y - 1);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 1, top.y - 1, bottom.x + boxWidth + 1, bottom.y + 1);
-        }
 
         if (config.corner) {
             interfaces.surface->setDrawColor(0, 0, 0, 255);
