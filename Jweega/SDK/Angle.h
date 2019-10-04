@@ -2,9 +2,9 @@
 #include "Vector.h"
 
 class Angle {
-    float sp, cp;
-    float sy, cy;
-    float sr, cr;
+    float sp{ 0.f }, cp{ 0.f };
+    float sy{ 0.f }, cy{ 0.f };
+    float sr{ 0.f }, cr{ 0.f };
 
     Vector get(unsigned int i) noexcept {
         switch (i) {
@@ -24,9 +24,9 @@ class Angle {
     }
 
 public:
-    Vector forward;
-    Vector right;
-    Vector up;
+    Vector forward{ };
+    Vector right{ };
+    Vector up{ };
 
     Angle(const Vector& v) noexcept :sp{ sinf(v.x) }, cp{ cosf(v.x) }, sy{ sinf(v.y) }, cy{ cosf(v.y) }, sr{ sinf(v.z) }, cr{ cosf(v.z) },
                                     forward{ get(0) }, right{ get(1) }, up{ get(2) } { }
