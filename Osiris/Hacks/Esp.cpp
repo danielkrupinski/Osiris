@@ -62,6 +62,13 @@ static constexpr void renderPositionedText(unsigned font, const wchar_t* text, f
     interfaces.surface->printText(text);
 }
 
+struct BoundingBox {
+    float left;
+    float right;
+    float top;
+    float bottom;
+};
+
 static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
