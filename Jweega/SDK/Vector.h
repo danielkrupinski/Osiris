@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <cfloat>
+#include <algorithm>
 
 struct Vector {
     constexpr operator bool() const noexcept
@@ -55,6 +57,14 @@ struct Vector {
         return Vector{ x * mul, y * mul, z * mul };
     }
 
+    constexpr Vector& operator*=(float mul) noexcept
+    {
+        x *= mul;
+        y *= mul;
+        z *= mul;
+        return *this;
+    }
+
     constexpr void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
@@ -80,6 +90,25 @@ struct Vector {
     auto distance(const Vector& v) const noexcept
     {
         return std::hypot(x - v.x, y - v.y, z - v.z);
+    }
+
+    constexpr auto clamp() noexcept
+    {
+        x = std::clamp(x, -89.0f, 89.0f);
+        y = std::clamp(y, -180.0f, 180.0f);
+        z = 0.0f;
+    }
+
+    void normalizeInPlace() noexcept
+    {
+        const float radius{ std::hypot(x, y, z) };
+
+        // FLT_EPSILON is added to the radius to eliminate the possibility of divide by zero.
+        const float iradius{ 1.f / (radius + FLT_EPSILON) };
+
+        x *= iradius;
+        y *= iradius;
+        z *= iradius;
     }
 
     float x, y, z;
