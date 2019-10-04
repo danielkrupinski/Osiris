@@ -34,6 +34,11 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 19, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
+    constexpr void drawPolyLine(int* xs, int* ys, int pointCount) noexcept
+    {
+        callVirtualMethod<void, int*, int*, int>(this, 20, xs, ys, pointCount);
+    }
+
     constexpr void setTextFont(unsigned font) noexcept
     {
         callVirtualMethod<void, unsigned>(this, 23, font);
@@ -94,5 +99,20 @@ public:
     constexpr void drawOutlinedCircle(T x, T y, int r, int seg) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
+    }
+
+    template <typename T>
+    void drawCircle(T x, T y, int startRadius, int radius) noexcept
+    {
+        int xs[360];
+        int ys[360];
+
+        for (int i = startRadius; i <= radius; i++) {
+            for (int j = 0; j < 360; j++) {
+                xs[j] = static_cast<int>(cosf(degreesToRadians(static_cast<float>(j))) * i + x);
+                ys[j] = static_cast<int>(sinf(degreesToRadians(static_cast<float>(j))) * i + y);
+            }
+            interfaces.surface->drawPolyLine(xs, ys, 360);
+        }
     }
 };

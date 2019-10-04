@@ -62,45 +62,95 @@ static constexpr void renderPositionedText(unsigned font, const wchar_t* text, f
     interfaces.surface->printText(text);
 }
 
+struct BoundingBox {
+    float left;
+    float right;
+    float top;
+    float bottom;
+};
+
+static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
+{
+    const auto min{ entity->getCollideable()->obbMins() };
+    const auto max{ entity->getCollideable()->obbMaxs() };
+
+    const Vector points[]{
+        Vector{ min.x, min.y, min.z },
+        Vector{ min.x, max.y, min.z },
+        Vector{ max.x, max.y, min.z },
+        Vector{ max.x, min.y, min.z },
+        Vector{ min.x, min.y, max.z },
+        Vector{ min.x, max.y, max.z },
+        Vector{ max.x, max.y, max.z },
+        Vector{ max.x, min.y, max.z },
+    };
+
+    const auto [width, height] { interfaces.surface->getScreenSize() };
+    out.left = static_cast<float>(width * 2);
+    out.right = -static_cast<float>(width * 2);
+    out.top = -static_cast<float>(height * 2);
+    out.bottom = static_cast<float>(height * 2);
+
+    for (const auto& point : points) {
+        Vector screenPoint;
+
+        if (!worldToScreen(point.transform(entity->coordinateFrame()), screenPoint))
+            return false;
+
+        if (out.left > screenPoint.x)
+            out.left = screenPoint.x;
+
+        if (out.right < screenPoint.x)
+            out.right = screenPoint.x;
+
+        if (out.top < screenPoint.y)
+            out.top = screenPoint.y;
+
+        if (out.bottom > screenPoint.y)
+            out.bottom = screenPoint.y;
+    }
+    return true;
+}
+
 static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
 {
-    Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
-    head.z += 10.0f;
-    if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
-        const float boxWidth = abs(top.y - bottom.y) * 0.3f;
-        const float boxHeight = bottom.y - top.y;
-
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
         if (config.box) {
             interfaces.surface->setDrawColor(config.boxColor, 255);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth, top.y, bottom.x + boxWidth, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth + 1, top.y + 1, bottom.x + boxWidth - 1, bottom.y - 1);
-            interfaces.surface->drawOutlinedRect(bottom.x - boxWidth - 1, top.y - 1, bottom.x + boxWidth + 1, bottom.y + 1);
+            interfaces.surface->drawOutlinedRect(bbox.left, bbox.bottom, bbox.right, bbox.top);
+
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
+                interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
+            }
         }
 
         if (config.corner) {
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth / 2, top.y - 1);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth / 2, bottom.y + 1);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth - 1, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth - 1, top.y + boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth / 2, top.y - 1);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth / 2, bottom.y + 1);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth + 1, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth + 1, top.y + boxHeight / 4);
-            
             interfaces.surface->setDrawColor(config.boxColor, 255);
-            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth / 2, top.y);
-            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth / 2, bottom.y);
-            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth, top.y + boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth / 2, top.y);
-            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth / 2, bottom.y);
-            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth, top.y + boxHeight / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
+            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
+            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top);
+            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top);
+            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left - 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right + 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left - 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            }
         }
 
-        float drawPositionX = bottom.x - boxWidth - 5;
+        float drawPositionX = bbox.left - 5;
 
         if (config.healthBar) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
@@ -109,17 +159,23 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.top);
+            
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            }
             drawPositionX -= 7;
         }
 
         if (config.armorBar) {
             interfaces.surface->setDrawColor(config.armorBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, top.y + abs(top.y - bottom.y) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bottom.y);
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawOutlinedRect(drawPositionX - 4, top.y - 1, drawPositionX + 1, bottom.y + 1);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.top);
+            
+            if (config.outline) {
+                interfaces.surface->setDrawColor(config.outlineColor, 255);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+            }
             drawPositionX -= 7;
         }
 
@@ -128,25 +184,25 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                    const auto [width, height] = interfaces.surface->getTextSize(config.font, name);
+                    const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
                     interfaces.surface->setTextFont(config.font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
-                    interfaces.surface->setTextPosition(bottom.x - width / 2, top.y - 5 - height);
+                    interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 5 - height);
                     interfaces.surface->printText(name);
                 }
             }
         }
 
-        float drawPositionY = top.y;
+        float drawPositionY = bbox.bottom;
 
         if (config.health)
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.right + 5, drawPositionY });
 
         if (config.armor)
-            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.right + 5, drawPositionY });
 
         if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bottom.x + boxWidth + 5, drawPositionY });
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.right + 5, drawPositionY });
     }
 }
 

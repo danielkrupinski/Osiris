@@ -128,6 +128,8 @@ public:
         float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
         bool headDot{ false };
         float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
+        bool outline{ false };
+        float outlineColor[3]{ 0.0f, 0.0f, 0.0f };
     };
 
     std::array<Esp, 6> esp;

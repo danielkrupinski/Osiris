@@ -617,6 +617,7 @@ void GUI::renderEspWindow() noexcept
         checkboxedColorPicker("Money", &config.esp[currentItem].money, config.esp[currentItem].moneyColor);
         ImGui::SameLine(spacing);
         checkboxedColorPicker("Armor bar", &config.esp[currentItem].armorBar, config.esp[currentItem].armorBarColor);
+        checkboxedColorPicker("Outline", &config.esp[currentItem].outline, config.esp[currentItem].outlineColor);
 
         if (!config.style.menuStyle)
             ImGui::End();

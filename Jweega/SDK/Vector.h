@@ -84,7 +84,7 @@ struct Vector {
         return std::hypotf(x, y);
     }
 
-    constexpr auto squareLength() noexcept
+    constexpr auto squareLength() const noexcept
     {
         return x * x + y * y + z * z;
     }
@@ -94,12 +94,12 @@ struct Vector {
         return std::hypot(x - v.x, y - v.y, z - v.z);
     }
 
-    constexpr auto dotProduct(const Vector& v) noexcept
+    constexpr auto dotProduct(const Vector& v) const noexcept
     {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    constexpr auto transform(matrix3x4& mat) noexcept
+    constexpr auto transform(matrix3x4& mat) const noexcept
     {
         return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
                        dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],

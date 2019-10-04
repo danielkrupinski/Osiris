@@ -209,6 +209,12 @@ void Config::load(size_t id) noexcept
             espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
             espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
         }
+        if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
+        if (espJson.isMember("Outline color")) {
+            espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
+            espConfig.outlineColor[1] = espJson["Outline color"][1].asFloat();
+            espConfig.outlineColor[2] = espJson["Outline color"][2].asFloat();
+        }
     }
 
     {
@@ -542,6 +548,10 @@ void Config::save(size_t id) const noexcept
         espJson["headDotColor"][0] = espConfig.headDotColor[0];
         espJson["headDotColor"][1] = espConfig.headDotColor[1];
         espJson["headDotColor"][2] = espConfig.headDotColor[2];
+        espJson["Outline"] = espConfig.outline;
+        espJson["Outline color"][0] = espConfig.outlineColor[0];
+        espJson["Outline color"][1] = espConfig.outlineColor[1];
+        espJson["Outline color"][2] = espConfig.outlineColor[2];
     }
 
     {
