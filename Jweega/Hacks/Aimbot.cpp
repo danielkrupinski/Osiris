@@ -150,26 +150,16 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
         inaccuracy *= weapInaccuracy;
         spread *= weapSpread;
 
-        Vector spreadView{ cosf(spreadX) * inaccuracy + cosf(spreadY) * spread,
-                           sinf(spreadX) * inaccuracy + sinf(spreadY) * spread };
-
-        Vector direction{ angles.forward.x + (spreadView.x * angles.right.x) + (spreadView.y * angles.up.x),
-                          angles.forward.y + (spreadView.x * angles.right.y) + (spreadView.y * angles.up.y),
-                          angles.forward.z + (spreadView.x * angles.right.z) + (spreadView.y * angles.up.z) };
-        direction /= direction.length();
-
-        direction.normalize();
-        direction.clamp();
-        direction.normalizeInPlace();
-
-        Vector viewForward{ localEyePosition + (direction * range) };
+        Vector spreadView{ (cosf(spreadX) * inaccuracy) + (cosf(spreadY) * spread),
+                           (sinf(spreadX) * inaccuracy) + (sinf(spreadY) * spread) };
+        Vector direction{ (angles.forward + (angles.right * spreadView.x) + (angles.up * spreadView.y)) * range };
 
         static Trace trace;
-        interfaces.engineTrace->traceRay({ localEyePosition, viewForward }, 0x4600400B, localPlayer, trace);
+        interfaces.engineTrace->clipRayToEntity({ localEyePosition, localEyePosition + direction }, 0x4600400B, entity, trace);
         if (trace.entity == entity)
             ++hits;
 
-        if (static_cast<int>(static_cast<float>(hits) / static_cast<float>(seed)) * 100 >= hitChance)
+        if (hits >= hitsNeed)
             return true;
 
         if ((seed - i + hits) < hitsNeed)
@@ -259,7 +249,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             const auto entity{ interfaces.entityList->getEntity(target.id) };
             for (auto bone : boneList) {
                 const auto bonePosition{ entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone) };
-                auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
+                const auto angle{ calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
                 const auto fov{ angle.length2D() };
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? target.health : (std::min)(config.aimbot[weaponIndex].minDamage, target.health))))
                     continue;
@@ -267,16 +257,18 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = config.aimbot[weaponIndex].velocityExtrapolation ? velocityExtrapolate(entity, bonePosition) : bonePosition;
-                    bestAngle = angle;
+                    bestAngle = cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }) + angle;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
                     break;
             }
 
-            if (bestTarget)
-                if (hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd->buttons, config.aimbot[weaponIndex].hitChance))
-                    break;
+            if (bestTarget) {
+                if (!hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd->buttons, config.aimbot[weaponIndex].hitChance))
+                    return;
+                break;
+            }
         }
 
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
