@@ -86,10 +86,10 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     };
 
     const auto [width, height] { interfaces.surface->getScreenSize() };
-    out.left = static_cast<float>(width);
-    out.right = 0.0f;
-    out.top = 0.0f;
-    out.bottom = static_cast<float>(height);
+    out.left = static_cast<float>(width * 2);
+    out.right = -static_cast<float>(width * 2);
+    out.top = -static_cast<float>(height * 2);
+    out.bottom = static_cast<float>(height * 2);
 
     for (const auto& point : points) {
         Vector screenPoint;
