@@ -123,6 +123,28 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
         }
 
+        if (config.corner) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
+            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
+            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top);
+            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top);
+            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+
+            interfaces.surface->setDrawColor(0, 0, 0, 255);
+            interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left - 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+            interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
+            interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right + 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left - 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+            interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
+            interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+        }
+
         float drawPositionX = bbox.left - 5;
 
         if (config.healthBar) {
@@ -153,28 +175,6 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
     if (worldToScreen(entity->getAbsOrigin(), bottom) && worldToScreen(head, top)) {
         const float boxWidth = abs(top.y - bottom.y) * 0.3f;
         const float boxHeight = bottom.y - top.y;
-
-        if (config.corner) {
-            interfaces.surface->setDrawColor(0, 0, 0, 255);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth / 2, top.y - 1);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth / 2, bottom.y + 1);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, bottom.y + 1, bottom.x - boxWidth - 1, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x - boxWidth - 1, top.y - 1, bottom.x - boxWidth - 1, top.y + boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth / 2, top.y - 1);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth / 2, bottom.y + 1);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, bottom.y + 1, bottom.x + boxWidth + 1, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth + 1, top.y - 1, bottom.x + boxWidth + 1, top.y + boxHeight / 4);
-            
-            interfaces.surface->setDrawColor(config.boxColor, 255);
-            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth / 2, top.y);
-            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth / 2, bottom.y);
-            interfaces.surface->drawLine(bottom.x - boxWidth, bottom.y, bottom.x - boxWidth, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x - boxWidth, top.y, bottom.x - boxWidth, top.y + boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth / 2, top.y);
-            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth / 2, bottom.y);
-            interfaces.surface->drawLine(bottom.x + boxWidth, bottom.y, bottom.x + boxWidth, bottom.y - boxHeight / 4);
-            interfaces.surface->drawLine(bottom.x + boxWidth, top.y, bottom.x + boxWidth, top.y + boxHeight / 4);
-        }
 
         float drawPositionX = bottom.x - boxWidth - 5;
 
