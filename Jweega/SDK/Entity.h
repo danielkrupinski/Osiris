@@ -199,7 +199,7 @@ public:
 
     constexpr float getSpread() noexcept
     {
-        return callVirtualMethod<float>(this, 447);
+        return callVirtualMethod<float>(this, 448);
     }
     
     VarMap* getVarMap() noexcept
