@@ -100,4 +100,19 @@ public:
     {
         callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
     }
+
+    template <typename T>
+    void drawCircle(T x, T y, int radius) noexcept
+    {
+        int xs[360];
+        int ys[360];
+
+        for (int i = 1; i <= radius; i++) {
+            for (int j = 0; j < 360; j++) {
+                xs[j] = static_cast<int>(cosf(degreesToRadians(static_cast<float>(j))) * i + x);
+                ys[j] = static_cast<int>(sinf(degreesToRadians(static_cast<float>(j))) * i + y);
+            }
+            interfaces.surface->drawPolyLine(xs, ys, 360);
+        }
+    }
 };
