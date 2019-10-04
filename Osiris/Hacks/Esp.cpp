@@ -167,6 +167,20 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
             drawPositionX -= 7;
         }
+
+        if (config.name) {
+            static PlayerInfo playerInfo;
+            if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
+                static wchar_t name[128];
+                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                    const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+                    interfaces.surface->setTextFont(config.font);
+                    interfaces.surface->setTextColor(config.nameColor, 255);
+                    interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 5 - height);
+                    interfaces.surface->printText(name);
+                }
+            }
+        }
     }
 
     Vector bottom{ }, top{ }, head{ entity->getBonePosition(8) };
@@ -177,20 +191,6 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
         const float boxHeight = bottom.y - top.y;
 
         float drawPositionX = bottom.x - boxWidth - 5;
-
-        if (config.name) {
-            static PlayerInfo playerInfo;
-            if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
-                static wchar_t name[128];
-                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                    const auto [width, height] = interfaces.surface->getTextSize(config.font, name);
-                    interfaces.surface->setTextFont(config.font);
-                    interfaces.surface->setTextColor(config.nameColor, 255);
-                    interfaces.surface->setTextPosition(bottom.x - width / 2, top.y - 5 - height);
-                    interfaces.surface->printText(name);
-                }
-            }
-        }
 
         float drawPositionY = top.y;
 
