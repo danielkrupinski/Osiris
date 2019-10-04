@@ -182,7 +182,7 @@ namespace Misc {
                 else
                     interfaces.surface->setDrawColor(10, 255, 10, 255);
 
-                const auto radius = std::tanf(degreesToRadians(config.aimbot[weaponIndex].fov < 120.f ? config.aimbot[weaponIndex].fov : 120.f) / 2.f) / std::tanf(actualFov) * width;
+                const auto radius = std::tanf(degreesToRadians(config.aimbot[weaponIndex].fov) / 2.f) / std::tanf(actualFov) * width;
                 
                 interfaces.surface->drawOutlinedCircle(width / 2, height / 2, static_cast<int>(radius), std::max<int>(12, static_cast<int>(radius) * 2));
             }
