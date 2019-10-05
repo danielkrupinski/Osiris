@@ -154,10 +154,12 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 
         auto applied{ false };
         for (size_t i = 0; i < config.chams[WEAPONS].materials.size(); i++) {
-            if (applied)
-                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-            applyChams_2(config.chams[WEAPONS].materials[i], false, localPlayer->health());
-            applied = true;
+            if (config.chams[WEAPONS].materials[i].enabled) {
+                if (applied)
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams_2(config.chams[WEAPONS].materials[i], false, localPlayer->health());
+                applied = true;
+            }
         }
     }    
 }
