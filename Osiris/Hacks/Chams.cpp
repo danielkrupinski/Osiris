@@ -142,3 +142,11 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     }
     return needRedraw;
 }
+
+void Chams::renderWeapons() const noexcept
+{
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (config.chams[WEAPONS].enabled &&
+        !localPlayer->isScoped())
+        applyChams(config.chams[WEAPONS], false, localPlayer->health());
+}

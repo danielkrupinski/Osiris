@@ -15,19 +15,12 @@ public:
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    void renderWeapons() const noexcept;
 
     constexpr void renderHands() const noexcept
     {
         if (config.chams[HANDS].enabled)
             applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
-    }
-
-    constexpr void renderWeapons() const noexcept
-    {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (config.chams[WEAPONS].enabled &&
-            !localPlayer->isScoped())
-            applyChams(config.chams[WEAPONS], false, localPlayer->health());
     }
 
     enum ChamsId {
