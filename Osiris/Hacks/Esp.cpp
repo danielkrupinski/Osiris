@@ -75,14 +75,14 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     const auto max{ entity->getCollideable()->obbMaxs() };
 
     const Vector points[]{
-        Vector{ min.x, min.y, min.z },
-        Vector{ min.x, max.y, min.z },
-        Vector{ max.x, max.y, min.z },
-        Vector{ max.x, min.y, min.z },
-        Vector{ min.x, min.y, max.z },
-        Vector{ min.x, max.y, max.z },
-        Vector{ max.x, max.y, max.z },
-        Vector{ max.x, min.y, max.z },
+        { min.x, min.y, min.z },
+        { min.x, max.y, min.z },
+        { max.x, max.y, min.z },
+        { max.x, min.y, min.z },
+        { min.x, min.y, max.z },
+        { min.x, max.y, max.z },
+        { max.x, max.y, max.z },
+        { max.x, min.y, max.z },
     };
 
     const auto [width, height] { interfaces.surface->getScreenSize() };
