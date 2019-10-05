@@ -16,7 +16,7 @@ public:
 private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderHands() const noexcept;
+    void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,

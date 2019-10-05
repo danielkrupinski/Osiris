@@ -47,7 +47,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     if (strstr(info.model->name, "models/player"))
         return renderPlayers(ctx, state, info, customBoneToWorld);
     else if (isLocalPlayerAlive && strstr(info.model->name, "arms"))
-        renderHands();
+        renderHands(ctx, state, info, customBoneToWorld);
     else if (isLocalPlayerAlive && strstr(info.model->name, "models/weapons/v_")
         && !strstr(info.model->name, "tablet")
         && !strstr(info.model->name, "parachute")
@@ -164,7 +164,7 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
     }    
 }
 
-void Chams::renderHands() const noexcept
+void Chams::renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept
 {
     if (config.chams[HANDS].enabled)
         applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
