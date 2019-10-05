@@ -98,11 +98,7 @@ public:
         bool wireframe{ false };
         float color[3]{ 1.0f, 1.0f, 1.0f };
         float alpha{ 1.0f };
-    };
 
-    std::array<Chams, 17> chams;
-
-    struct Chams_2 {
         struct Material {
             bool enabled{ false };
             bool healthBased{ false };
@@ -116,7 +112,7 @@ public:
         std::array<Material, 2> materials;
     };
 
-    std::array<Chams_2, 17> chams_2;
+    std::array<Chams, 17> chams;
 
     struct Esp {
         bool enabled{ false };
