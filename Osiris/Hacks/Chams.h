@@ -15,7 +15,7 @@ public:
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderWeapons() const noexcept;
+    void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 
     constexpr void renderHands() const noexcept
     {

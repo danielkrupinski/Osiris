@@ -52,7 +52,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         && !strstr(info.model->name, "tablet")
         && !strstr(info.model->name, "parachute")
         && !strstr(info.model->name, "fists"))
-        renderWeapons();
+        renderWeapons(ctx, state, info, customBoneToWorld);
     return true;
 }
 
@@ -143,7 +143,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     return needRedraw;
 }
 
-void Chams::renderWeapons() const noexcept
+void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (config.chams[WEAPONS].enabled &&
