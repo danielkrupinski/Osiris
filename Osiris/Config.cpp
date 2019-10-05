@@ -123,21 +123,26 @@ void Config::load(size_t id) noexcept
     }
 
     for (size_t i = 0; i < chams.size(); i++) {
-        const auto& chamsJson = json["chams"][i];
+        const auto& chamsJson = json["Chams"][i];
         auto& chamsConfig = chams[i];
 
-        if (chamsJson.isMember("Enabled")) chamsConfig.enabled = chamsJson["Enabled"].asBool();
-        if (chamsJson.isMember("healthBased")) chamsConfig.healthBased = chamsJson["healthBased"].asBool();
-        if (chamsJson.isMember("rainbow")) chamsConfig.rainbow = chamsJson["rainbow"].asBool();
-        if (chamsJson.isMember("blinking")) chamsConfig.blinking = chamsJson["blinking"].asBool();
-        if (chamsJson.isMember("material")) chamsConfig.material = chamsJson["material"].asInt();
-        if (chamsJson.isMember("wireframe")) chamsConfig.wireframe = chamsJson["wireframe"].asBool();
-        if (chamsJson.isMember("color")) {
-            chamsConfig.color[0] = chamsJson["color"][0].asFloat();
-            chamsConfig.color[1] = chamsJson["color"][1].asFloat();
-            chamsConfig.color[2] = chamsJson["color"][2].asFloat();
+        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+            const auto& materialsJson = chamsJson[j];
+            auto& materialsConfig = chams[i].materials[j];
+
+            if (materialsJson.isMember("Enabled")) materialsConfig.enabled = materialsJson["Enabled"].asBool();
+            if (materialsJson.isMember("Health based")) materialsConfig.healthBased = materialsJson["Health based"].asBool();
+            if (materialsJson.isMember("Rainbow")) materialsConfig.rainbow = materialsJson["Rainbow"].asBool();
+            if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
+            if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
+            if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
+            if (materialsJson.isMember("Color")) {
+                materialsConfig.color[0] = materialsJson["Color"][0].asFloat();
+                materialsConfig.color[1] = materialsJson["Color"][1].asFloat();
+                materialsConfig.color[2] = materialsJson["Color"][2].asFloat();
+            }
+            if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
         }
-        if (chamsJson.isMember("alpha")) chamsConfig.alpha = chamsJson["alpha"].asFloat();
     }
 
     for (size_t i = 0; i < esp.size(); i++) {
@@ -480,19 +485,24 @@ void Config::save(size_t id) const noexcept
     }
 
     for (size_t i = 0; i < chams.size(); i++) {
-        auto& chamsJson = json["chams"][i];
+        auto& chamsJson = json["Chams"][i];
         const auto& chamsConfig = chams[i];
 
-        chamsJson["Enabled"] = chamsConfig.enabled;
-        chamsJson["healthBased"] = chamsConfig.healthBased;
-        chamsJson["rainbow"] = chamsConfig.rainbow;
-        chamsJson["blinking"] = chamsConfig.blinking;
-        chamsJson["material"] = chamsConfig.material;
-        chamsJson["wireframe"] = chamsConfig.wireframe;
-        chamsJson["color"][0] = chamsConfig.color[0];
-        chamsJson["color"][1] = chamsConfig.color[1];
-        chamsJson["color"][2] = chamsConfig.color[2];
-        chamsJson["alpha"] = chamsConfig.alpha;
+        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+            auto& materialsJson = chamsJson[j];
+            const auto& materialsConfig = chams[i].materials[j];
+
+            materialsJson["Enabled"] = materialsConfig.enabled;
+            materialsJson["Health based"] = materialsConfig.healthBased;
+            materialsJson["Rainbow"] = materialsConfig.rainbow;
+            materialsJson["Blinking"] = materialsConfig.blinking;
+            materialsJson["Material"] = materialsConfig.material;
+            materialsJson["Wireframe"] = materialsConfig.wireframe;
+            materialsJson["Color"][0] = materialsConfig.color[0];
+            materialsJson["Color"][1] = materialsConfig.color[1];
+            materialsJson["Color"][2] = materialsConfig.color[2];
+            materialsJson["Alpha"] = materialsConfig.alpha;
+        }
     }
 
     for (size_t i = 0; i < esp.size(); i++) {
