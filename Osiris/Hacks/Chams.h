@@ -92,4 +92,23 @@ private:
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
         interfaces.modelRender->forceMaterialOverride(material);
     }
+
+    constexpr void applyChams_2(decltype(config.chams[0].materials[0])& chams, bool ignorez, int health = 0) const noexcept
+    {
+        auto material = dispatchMaterial(chams.material);
+
+        if (chams.healthBased && health)
+            material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+        else if (chams.rainbow)
+            material->colorModulate(sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
+                sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
+                sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f);
+        else
+            material->colorModulate(chams.color);
+        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
+
+        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
+        interfaces.modelRender->forceMaterialOverride(material);
+    }
 };
