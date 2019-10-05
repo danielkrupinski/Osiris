@@ -196,11 +196,6 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
     if (!localPlayer->isScoped()) {
-        if (config.chams[WEAPONS].enabled) {
-            applyChams(config.chams[WEAPONS], false, localPlayer->health());
-            return;
-        }
-
         auto applied{ false };
         for (size_t i = 0; i < config.chams[WEAPONS].materials.size(); i++) {
             if (config.chams[WEAPONS].materials[i].enabled) {
@@ -216,12 +211,6 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
-
-    if (config.chams[HANDS].enabled) {
-        applyChams(config.chams[HANDS], false, localPlayer->health());
-        return;
-    }
-
     auto applied{ false };
     for (size_t i = 0; i < config.chams[HANDS].materials.size(); i++) {
         if (config.chams[HANDS].materials[i].enabled) {
