@@ -212,8 +212,8 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
-            for (int i = 1; i <= 3; i++)
-                interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
+            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
+                interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
         }
     }
 }
