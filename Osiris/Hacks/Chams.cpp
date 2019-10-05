@@ -164,8 +164,22 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
     }    
 }
 
-void Chams::renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept
+void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    if (config.chams[HANDS].enabled)
-        applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+    if (config.chams[HANDS].enabled) {
+        applyChams(config.chams[HANDS], false, localPlayer->health());
+        return;
+    }
+
+    auto applied{ false };
+    for (size_t i = 0; i < config.chams[HANDS].materials.size(); i++) {
+        if (config.chams[HANDS].materials[i].enabled) {
+            if (applied)
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+            applyChams_2(config.chams[HANDS].materials[i], false, localPlayer->health());
+            applied = true;
+        }
+    }
 }
