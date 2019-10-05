@@ -16,12 +16,7 @@ public:
 private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-
-    constexpr void renderHands() const noexcept
-    {
-        if (config.chams[HANDS].enabled)
-            applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
-    }
+    void renderHands() const noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,

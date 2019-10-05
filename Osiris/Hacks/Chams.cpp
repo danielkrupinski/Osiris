@@ -163,3 +163,9 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
         }
     }    
 }
+
+void Chams::renderHands() const noexcept
+{
+    if (config.chams[HANDS].enabled)
+        applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
+}
