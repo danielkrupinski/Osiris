@@ -71,27 +71,20 @@ struct BoundingBox {
 
 static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 {
-    const auto min{ entity->getCollideable()->obbMins() };
-    const auto max{ entity->getCollideable()->obbMaxs() };
-
-    const Vector points[]{
-        { min.x, min.y, min.z },
-        { min.x, max.y, min.z },
-        { max.x, max.y, min.z },
-        { max.x, min.y, min.z },
-        { min.x, min.y, max.z },
-        { min.x, max.y, max.z },
-        { max.x, max.y, max.z },
-        { max.x, min.y, max.z },
-    };
-
     const auto [width, height] { interfaces.surface->getScreenSize() };
     out.left = static_cast<float>(width * 2);
     out.right = -static_cast<float>(width * 2);
     out.top = -static_cast<float>(height * 2);
     out.bottom = static_cast<float>(height * 2);
 
-    for (const auto& point : points) {
+    const auto min{ entity->getCollideable()->obbMins() };
+    const auto max{ entity->getCollideable()->obbMaxs() };
+
+    for (int i = 0; i < 8; i++) {
+        const Vector point{ i & 1 ? max.x : min.x,
+                            i & 2 ? max.y : min.y,
+                            i & 4 ? max.z : min.z };
+
         Vector screenPoint;
 
         if (!worldToScreen(point.transform(entity->coordinateFrame()), screenPoint))
