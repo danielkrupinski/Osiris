@@ -67,6 +67,7 @@ struct BoundingBox {
     float right;
     float top;
     float bottom;
+    Vector vertices[6];
 };
 
 static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
@@ -85,22 +86,20 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
                             i & 2 ? max.y : min.y,
                             i & 4 ? max.z : min.z };
 
-        Vector screenPoint;
-
-        if (!worldToScreen(point.transform(entity->coordinateFrame()), screenPoint))
+        if (!worldToScreen(point.transform(entity->coordinateFrame()), out.vertices[i]))
             return false;
 
-        if (out.left > screenPoint.x)
-            out.left = screenPoint.x;
+        if (out.left > out.vertices[i].x)
+            out.left = out.vertices[i].x;
 
-        if (out.right < screenPoint.x)
-            out.right = screenPoint.x;
+        if (out.right < out.vertices[i].x)
+            out.right = out.vertices[i].x;
 
-        if (out.top < screenPoint.y)
-            out.top = screenPoint.y;
+        if (out.top < out.vertices[i].y)
+            out.top = out.vertices[i].y;
 
-        if (out.bottom > screenPoint.y)
-            out.bottom = screenPoint.y;
+        if (out.bottom > out.vertices[i].y)
+            out.bottom = out.vertices[i].y;
     }
     return true;
 }
