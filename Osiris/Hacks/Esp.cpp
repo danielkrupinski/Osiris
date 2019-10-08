@@ -108,11 +108,11 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         if (config.box) {
+            interfaces.surface->setDrawColor(config.boxColor, 255);
+
             switch (config.boxType) {
             case 0:
-                interfaces.surface->setDrawColor(config.boxColor, 255);
                 interfaces.surface->drawOutlinedRect(bbox.left, bbox.bottom, bbox.right, bbox.top);
-
 
                 if (config.outline) {
                     interfaces.surface->setDrawColor(config.outlineColor, 255);
@@ -121,7 +121,6 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
                 }
                 break;
             case 1:
-                interfaces.surface->setDrawColor(config.boxColor, 255);
                 interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
                 interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
                 interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
@@ -141,6 +140,16 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
                     interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
                     interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
                     interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 8; i++) {
+                    if (!(i & 1))
+                        interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 1].x, bbox.vertices[i + 1].y);
+                    if (!(i & 2))
+                        interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 2].x, bbox.vertices[i + 2].y);
+                    if (!(i & 4))
+                        interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 4].x, bbox.vertices[i + 4].y);
                 }
                 break;
             }
