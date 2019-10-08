@@ -67,7 +67,7 @@ struct BoundingBox {
     float right;
     float top;
     float bottom;
-    Vector vertices[6];
+    Vector vertices[8];
 };
 
 static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
