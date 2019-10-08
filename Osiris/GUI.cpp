@@ -581,7 +581,7 @@ void GUI::renderEspWindow() noexcept
         ImGui::SameLine(spacing);
         checkboxedColorPicker("Box", &config.esp[currentItem].box, config.esp[currentItem].boxColor);
         ImGui::SameLine();
-        ImGui::Combo("", &config.esp[currentItem].boxType, "2D\0""2D corners\0""3D\0");
+        ImGui::Combo("", &config.esp[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
         checkboxedColorPicker("Eye traces", &config.esp[currentItem].eyeTraces, config.esp[currentItem].eyeTracesColor);
         ImGui::SameLine(spacing);
         checkboxedColorPicker("Health", &config.esp[currentItem].health, config.esp[currentItem].healthColor);
