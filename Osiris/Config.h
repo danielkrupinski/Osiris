@@ -112,9 +112,9 @@ public:
         float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
         bool eyeTraces{ false };
         float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool corner{ false };
         bool box{ false };
         float boxColor[3]{ 1.0f, 1.0f, 1.0f };
+        int boxType{ 0 };
         bool name{ false };
         float nameColor[3]{ 1.0f, 1.0f, 1.0f };
         bool health{ false };
