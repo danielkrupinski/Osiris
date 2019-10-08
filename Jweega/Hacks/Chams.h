@@ -15,20 +15,8 @@ public:
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-
-    constexpr void renderHands() const noexcept
-    {
-        if (config.chams[HANDS].enabled)
-            applyChams(config.chams[HANDS], false, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->health());
-    }
-
-    constexpr void renderWeapons() const noexcept
-    {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (config.chams[WEAPONS].enabled &&
-            !localPlayer->isScoped())
-            applyChams(config.chams[WEAPONS], false, localPlayer->health());
-    }
+    void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,
@@ -81,7 +69,7 @@ private:
         }
     }
 
-    constexpr void applyChams(decltype(config.chams[0])& chams, bool ignorez, int health = 0) const noexcept
+    constexpr void applyChams_2(decltype(config.chams[0].materials[0])& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
 

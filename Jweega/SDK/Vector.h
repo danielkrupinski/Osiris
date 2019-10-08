@@ -99,7 +99,7 @@ struct Vector {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    constexpr auto transform(matrix3x4& mat) const noexcept
+    constexpr auto transform(const matrix3x4& mat) const noexcept
     {
         return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
                        dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],

@@ -71,27 +71,20 @@ struct BoundingBox {
 
 static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 {
-    const auto min{ entity->getCollideable()->obbMins() };
-    const auto max{ entity->getCollideable()->obbMaxs() };
-
-    const Vector points[]{
-        Vector{ min.x, min.y, min.z },
-        Vector{ min.x, max.y, min.z },
-        Vector{ max.x, max.y, min.z },
-        Vector{ max.x, min.y, min.z },
-        Vector{ min.x, min.y, max.z },
-        Vector{ min.x, max.y, max.z },
-        Vector{ max.x, max.y, max.z },
-        Vector{ max.x, min.y, max.z },
-    };
-
     const auto [width, height] { interfaces.surface->getScreenSize() };
     out.left = static_cast<float>(width * 2);
     out.right = -static_cast<float>(width * 2);
     out.top = -static_cast<float>(height * 2);
     out.bottom = static_cast<float>(height * 2);
 
-    for (const auto& point : points) {
+    const auto min{ entity->getCollideable()->obbMins() };
+    const auto max{ entity->getCollideable()->obbMaxs() };
+
+    for (int i = 0; i < 8; i++) {
+        const Vector point{ i & 1 ? max.x : min.x,
+                            i & 2 ? max.y : min.y,
+                            i & 4 ? max.z : min.z };
+
         Vector screenPoint;
 
         if (!worldToScreen(point.transform(entity->coordinateFrame()), screenPoint))
@@ -212,8 +205,8 @@ static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0]
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
             interfaces.surface->setDrawColor(config.headDotColor, 255);
-            for (int i = 1; i <= 3; ++i)
-                interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
+            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
+                interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
         }
     }
 }
