@@ -266,7 +266,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (bestTarget) {
                 if (!hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd->buttons, config.aimbot[weaponIndex].hitChance))
-                    return;
+                    continue;
                 break;
             }
         }
