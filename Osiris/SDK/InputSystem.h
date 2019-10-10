@@ -9,6 +9,11 @@ public:
         callVirtualMethod<void, bool>(this, 11, enable);
     }
 
+    constexpr bool isButtonDown(int buttonCode) noexcept
+    {
+        return callVirtualMethod<bool, int>(this, 15, buttonCode);
+    }
+
     constexpr void resetInputState() noexcept
     {
         callVirtualMethod<void>(this, 39);
