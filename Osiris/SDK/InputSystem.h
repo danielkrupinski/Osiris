@@ -26,9 +26,10 @@ public:
 
     constexpr auto virtualKeyToString(int virtualKey) noexcept
     {
-        if (virtualKey <= VK_XBUTTON2)
+        if (virtualKey <= VK_XBUTTON2) {
+            if (virtualKey > VK_CANCEL) virtualKey--;
             return buttonCodeToString(virtualKey + 106);
-        else
-            return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
+        }
+        return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
     }
 };
