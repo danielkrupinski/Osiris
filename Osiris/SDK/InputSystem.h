@@ -21,15 +21,15 @@ public:
 
     constexpr auto virtualKeyToButtonCode(int virtualKey) noexcept
     {
+        if (virtualKey <= VK_XBUTTON2) {
+            if (virtualKey > VK_CANCEL) virtualKey--;
+            return virtualKey + 106;
+        }
         return callVirtualMethod<int, int>(this, 45, virtualKey);
     }
 
     constexpr auto virtualKeyToString(int virtualKey) noexcept
     {
-        if (virtualKey <= VK_XBUTTON2) {
-            if (virtualKey > VK_CANCEL) virtualKey--;
-            return buttonCodeToString(virtualKey + 106);
-        }
         return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
     }
 };
