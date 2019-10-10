@@ -906,14 +906,16 @@ void GUI::renderMiscWindow() noexcept
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
             ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
         }
-        ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
+        if (ImGui::Checkbox("Custom clantag", &config.misc.customClanTag))
+            Misc::updateClanTag(true);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
         ImGui::PushID(0);
         if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
             Misc::updateClanTag(true);
         ImGui::PopID();
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
+        if (ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag))
+            Misc::updateClanTag(true);
         if (config.misc.clocktag) {
             ImGui::PopItemFlag();
             ImGui::PopStyleVar();
