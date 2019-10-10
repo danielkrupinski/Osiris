@@ -10,6 +10,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/Utils.h"
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -27,10 +28,11 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         memory.setClanTag(timeString.c_str(), timeString.c_str());
     } else if (config.misc.customClanTag) {
         static std::wstring clanTag;
-        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> codecvt;
 
         if (tagChanged) {
-            clanTag = codecvt.from_bytes(config.misc.clanTag);
+            if (static wchar_t currentTag[16]; MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, -1, currentTag, 16)) 
+                clanTag = currentTag;
+
             if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
                 clanTag.push_back(' ');
         }
@@ -42,8 +44,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (config.misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
-        const auto convertedString{ codecvt.to_bytes(clanTag) };
-        memory.setClanTag(convertedString.c_str(), convertedString.c_str());
+        if (static char cvtClanTag[17]; WideCharToMultiByte(CP_UTF8, 0, clanTag.c_str(), -1, cvtClanTag, 17, nullptr, nullptr))
+            memory.setClanTag(cvtClanTag, cvtClanTag);
     }
 }
 
