@@ -106,34 +106,39 @@ public:
     std::array<Chams, 17> chams;
 
     struct Esp {
-        bool enabled{ false };
-        int font{ 0x1d };
-        bool snaplines{ false };
-        float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool eyeTraces{ false };
-        float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool box{ false };
-        float boxColor[3]{ 1.0f, 1.0f, 1.0f };
-        int boxType{ 0 };
-        bool name{ false };
-        float nameColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool health{ false };
-        float healthColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool healthBar{ false };
-        float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool armor{ false };
-        float armorColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool armorBar{ false };
-        float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool money{ false };
-        float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool headDot{ false };
-        float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool outline{ false };
-        float outlineColor[3]{ 0.0f, 0.0f, 0.0f };
-    };
+        struct Shared {
+            bool enabled{ false };
+            int font{ 0x1d };
+            bool snaplines{ false };
+            float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool box{ false };
+            float boxColor[3]{ 1.0f, 1.0f, 1.0f };
+            int boxType{ 0 };
+            bool name{ false };
+            float nameColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool outline{ false };
+            float outlineColor[3]{ 0.0f, 0.0f, 0.0f };
+        };
+       
+        struct Player : public Shared {
+            bool eyeTraces{ false };
+            float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool health{ false };
+            float healthColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool healthBar{ false };
+            float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool armor{ false };
+            float armorColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool armorBar{ false };
+            float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool money{ false };
+            float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
+            bool headDot{ false };
+            float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
+        };
 
-    std::array<Esp, 6> esp;
+        std::array<Player, 6> players;
+    } esp;
 
     struct {
         bool disablePostProcessing{ false };

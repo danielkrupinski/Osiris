@@ -145,9 +145,9 @@ void Config::load(size_t id) noexcept
         }
     }
 
-    for (size_t i = 0; i < esp.size(); i++) {
-        const auto& espJson = json["esp"][i];
-        auto& espConfig = esp[i];
+    for (size_t i = 0; i < esp.players.size(); i++) {
+        const auto& espJson = json["Esp"]["Players"][i];
+        auto& espConfig = esp.players[i];
         
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
         if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
@@ -507,9 +507,9 @@ void Config::save(size_t id) const noexcept
         }
     }
 
-    for (size_t i = 0; i < esp.size(); i++) {
-        auto& espJson = json["esp"][i];
-        const auto& espConfig = esp[i];
+    for (size_t i = 0; i < esp.players.size(); i++) {
+        auto& espJson = json["Esp"]["Players"][i];
+        const auto& espConfig = esp.players[i];
 
         espJson["Enabled"] = espConfig.enabled;
         espJson["Font"] = espConfig.font;
