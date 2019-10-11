@@ -21,7 +21,7 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
     return false;
 }
 
-static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[0])& config) noexcept
+static constexpr void renderSnaplines(Entity* entity, Config::Esp::Shared& config) noexcept
 {
     if (config.snaplines) {
         Vector position{ };
@@ -33,7 +33,7 @@ static constexpr void renderSnaplines(Entity* entity, const decltype(config.esp[
     }
 }
 
-static void renderEyeTraces(Entity* entity, const decltype(config.esp[0])& config) noexcept
+static void renderEyeTraces(Entity* entity, Config::Esp::Player& config) noexcept
 {
     if (config.eyeTraces) {
         constexpr float maxRange{ 8192.0f };
@@ -104,7 +104,7 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     return true;
 }
 
-static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noexcept
+static void renderBox(Entity* entity, Config::Esp::Player& config) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         if (config.box) {
@@ -227,7 +227,7 @@ static void renderBox(Entity* entity, const decltype(config.esp[0])& config) noe
     }
 }
 
-static constexpr void renderHeadDot(Entity* entity, const decltype(config.esp[0])& config) noexcept
+static constexpr void renderHeadDot(Entity* entity, Config::Esp::Player& config) noexcept
 {
     if (config.headDot) {
         Vector head{ };
@@ -251,13 +251,13 @@ enum EspId {
 
 static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
 {
-    if (config.esp[id].enabled) {
-        renderSnaplines(entity, config.esp[id]);
-        renderEyeTraces(entity, config.esp[id]);
-        renderBox(entity, config.esp[id]);
-        renderHeadDot(entity, config.esp[id]);
+    if (config.esp.players[id].enabled) {
+        renderSnaplines(entity, config.esp.players[id]);
+        renderEyeTraces(entity, config.esp.players[id]);
+        renderBox(entity, config.esp.players[id]);
+        renderHeadDot(entity, config.esp.players[id]);
     }
-    return config.esp[id].enabled;
+    return config.esp.players[id].enabled;
 }
 
 void Esp::render() noexcept
