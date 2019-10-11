@@ -275,6 +275,7 @@ static constexpr void renderWeaponEsp(Entity* entity) noexcept
 {
     if (config.esp.weapon.enabled) {
         renderWeaponBox(entity, config.esp.weapon);
+        renderSnaplines(entity, config.esp.weapon);
     }
 }
 
