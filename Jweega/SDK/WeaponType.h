@@ -1,6 +1,6 @@
 #pragma once
 
-enum class WeaponType : int
+enum class WeaponType
 {
     Knife = 0,
     Pistol,
