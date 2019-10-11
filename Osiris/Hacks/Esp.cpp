@@ -104,7 +104,7 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     return true;
 }
 
-static void renderBox(Entity* entity, Config::Esp::Player& config) noexcept
+static void renderPlayerBox(Entity* entity, Config::Esp::Player& config) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         if (config.box) {
@@ -254,7 +254,7 @@ static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
     if (config.esp.players[id].enabled) {
         renderSnaplines(entity, config.esp.players[id]);
         renderEyeTraces(entity, config.esp.players[id]);
-        renderBox(entity, config.esp.players[id]);
+        renderPlayerBox(entity, config.esp.players[id]);
         renderHeadDot(entity, config.esp.players[id]);
     }
     return config.esp.players[id].enabled;
