@@ -232,6 +232,12 @@ static void renderPlayerBox(Entity* entity, Config::Esp::Player& config) noexcep
     }
 }
 
+static void renderWeaponBox(Entity* entity, Config::Esp::Weapon& config) noexcept
+{
+    if (BoundingBox bbox; boundingBox(entity, bbox))
+        renderBox(entity, bbox, config);
+}
+
 static constexpr void renderHeadDot(Entity* entity, Config::Esp::Player& config) noexcept
 {
     if (config.headDot) {
