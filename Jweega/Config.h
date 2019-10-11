@@ -139,6 +139,8 @@ public:
             float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
         };
 
+        struct Weapon : public Shared { } weapon;
+
         std::array<Player, 6> players;
     } esp;
 
