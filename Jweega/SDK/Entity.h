@@ -289,7 +289,7 @@ public:
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
-    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float);
+    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_iRecoilIndex", int);
 
     NETVAR(bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
     NETVAR(fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float);
