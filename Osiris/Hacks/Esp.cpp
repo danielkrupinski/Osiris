@@ -21,7 +21,7 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
     return false;
 }
 
-static constexpr void renderSnaplines(Entity* entity, Config::Esp::Shared& config) noexcept
+static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
 {
     if (config.snaplines) {
         Vector position{ };
