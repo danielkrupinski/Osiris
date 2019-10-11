@@ -296,5 +296,14 @@ void Esp::render() noexcept
                     renderEspForEntity(entity, ENEMIES_OCCLUDED);
             }
         }
+
+        for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || !entity->isWeapon() || entity->ownerEntity() != -1)
+                continue;
+
+            if (config.esp.weapon.enabled)
+                renderWeaponBox(entity, config.esp.weapon);
+        }
     }
 }
