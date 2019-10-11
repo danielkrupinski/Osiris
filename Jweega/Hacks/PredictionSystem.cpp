@@ -1,16 +1,16 @@
 #include "PredictionSystem.h"
-
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/UserCmd.h"
 #include "../SDK/GameMovement.h"
 #include "../SDK/MoveData.h"
 #include "../SDK/MoveHelper.h"
 #include "../SDK/Prediction.h"
 #include "../SDK/MD5.h"
 
-float previousCurrenttime;
-float previousFrametime;
+static float previousCurrenttime{ 0.0f };
+static float previousFrametime{ 0.0f };
 
 void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
 {
