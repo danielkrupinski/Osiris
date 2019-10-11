@@ -223,6 +223,28 @@ void Config::load(size_t id) noexcept
     }
 
     {
+        const auto& espJson = json["Esp"]["Weapons"];
+        auto& espConfig = esp.weapon;
+
+        if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
+        if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
+        if (espJson.isMember("Snaplines")) espConfig.snaplines = espJson["Snaplines"].asBool();
+        if (espJson.isMember("Snaplines color")) {
+            espConfig.snaplinesColor[0] = espJson["Snaplines color"][0].asFloat();
+            espConfig.snaplinesColor[1] = espJson["Snaplines color"][1].asFloat();
+            espConfig.snaplinesColor[2] = espJson["Snaplines color"][2].asFloat();
+        }
+        if (espJson.isMember("Box")) espConfig.box = espJson["Box"].asBool();
+        if (espJson.isMember("Box color")) {
+            espConfig.boxColor[0] = espJson["Box color"][0].asFloat();
+            espConfig.boxColor[1] = espJson["Box color"][1].asFloat();
+            espConfig.boxColor[2] = espJson["Box color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
+    }
+
+    {
         const auto& visualsJson = json["visuals"];
         if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
@@ -558,6 +580,23 @@ void Config::save(size_t id) const noexcept
         espJson["Outline color"][0] = espConfig.outlineColor[0];
         espJson["Outline color"][1] = espConfig.outlineColor[1];
         espJson["Outline color"][2] = espConfig.outlineColor[2];
+    }
+
+    {
+        auto& espJson = json["Esp"]["Weapons"];
+        const auto& espConfig = esp.weapon;
+
+        espJson["Enabled"] = espConfig.enabled;
+        espJson["Font"] = espConfig.font;
+        espJson["Snaplines"] = espConfig.snaplines;
+        espJson["Snaplines color"][0] = espConfig.snaplinesColor[0];
+        espJson["Snaplines color"][1] = espConfig.snaplinesColor[1];
+        espJson["Snaplines color"][2] = espConfig.snaplinesColor[2];
+        espJson["Box"] = espConfig.box;
+        espJson["Box color"][0] = espConfig.boxColor[0];
+        espJson["Box color"][1] = espConfig.boxColor[1];
+        espJson["Box color"][2] = espConfig.boxColor[2];
+        espJson["Box type"] = espConfig.boxType;
     }
 
     {
