@@ -271,6 +271,13 @@ static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
     return config.esp.players[id].enabled;
 }
 
+static constexpr void renderWeaponEsp(Entity* entity) noexcept
+{
+    if (config.esp.weapon.enabled) {
+        renderWeaponBox(entity, config.esp.weapon);
+    }
+}
+
 void Esp::render() noexcept
 {
     if (interfaces.engine->isInGame()) {
@@ -302,8 +309,7 @@ void Esp::render() noexcept
             if (!entity || entity->isDormant() || !entity->isWeapon() || entity->ownerEntity() != -1)
                 continue;
 
-            if (config.esp.weapon.enabled)
-                renderWeaponBox(entity, config.esp.weapon);
+            renderWeaponEsp(entity);
         }
     }
 }
