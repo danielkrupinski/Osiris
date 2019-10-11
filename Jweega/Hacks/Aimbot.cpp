@@ -124,10 +124,10 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
         const float spreadX{ random(0.f, 2.f * static_cast<float>(M_PI)) };
         const float spreadY{ random(0.f, 2.f * static_cast<float>(M_PI)) };
 
-        const auto weaponIndex{ getWeaponIndex(weaponData->itemDefinitionIndex2()) };
+        const auto weaponIndex{ weaponData->itemDefinitionIndex2() };
         const auto recoilIndex{ weaponData->recoilIndex() };
 
-        if (weaponIndex == WEAPON_REVOLVER)
+        if (weaponIndex == WeaponId::Revolver)
         {
             if (buttons & UserCmd::IN_ATTACK2)
             {
@@ -135,7 +135,7 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
                 spread = 1.f - spread * spread;
             }
         }
-        else if (weaponIndex == WEAPON_NEGEV && recoilIndex < 3.f)
+        else if (weaponIndex == WeaponId::Negev && recoilIndex < 3)
         {
             for (int i = 3; i > recoilIndex; --i)
             {
