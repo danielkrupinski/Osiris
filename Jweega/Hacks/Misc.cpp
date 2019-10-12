@@ -120,12 +120,12 @@ void Misc::watermark() noexcept
         interfaces.surface->printText(fps.c_str());
 
         float latency{ 0.0f };
-        if (auto networkChannel{ interfaces.engine->getNetworkChannel() }; networkChannel && networkChannel->getLatency(0) > 0.0f)
+        if (auto networkChannel{ interfaces.engine->getNetworkChannel() }; networkChannel)
             latency = networkChannel->getLatency(0);
 
         const static auto updateRate{ interfaces.cvar->findVar("cl_updaterate") };
         latency -= 0.5f / updateRate->getFloat();
-        const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency) * 1000)) + L" ms" };
+        const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency)) * 1000) + L" ms" };
         const auto pingWidth{ interfaces.surface->getTextSize(Surface::font, ping.c_str()).first };
         interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
         interfaces.surface->printText(ping.c_str());
