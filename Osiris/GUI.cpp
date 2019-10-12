@@ -611,6 +611,8 @@ void GUI::renderEspWindow() noexcept
             ImGui::SameLine();
             ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
             checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
+            ImGui::SameLine(spacing);
+            checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
         }
         if (!config.style.menuStyle)
             ImGui::End();
