@@ -3,8 +3,10 @@
 #include "../Interfaces.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
-#include "../SDK/Vector.h"
+#include "../SDK/Localize.h"
 #include "../SDK/Surface.h"
+#include "../SDK/Vector.h"
+#include "../SDK/WeaponData.h"
 
 static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 {
@@ -33,7 +35,7 @@ static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared&
     }
 }
 
-static void renderEyeTraces(Entity* entity, Config::Esp::Player& config) noexcept
+static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) noexcept
 {
     if (config.eyeTraces) {
         constexpr float maxRange{ 8192.0f };
@@ -53,7 +55,7 @@ static void renderEyeTraces(Entity* entity, Config::Esp::Player& config) noexcep
     }
 }
 
-static constexpr void renderPositionedText(unsigned font, const wchar_t* text, float color[3], std::pair<float, float&> position) noexcept
+static constexpr void renderPositionedText(unsigned font, const wchar_t* text, const float color[3], std::pair<float, float&> position) noexcept
 {
     interfaces.surface->setTextFont(font);
     interfaces.surface->setTextColor(color, 255);
@@ -104,7 +106,7 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     return true;
 }
 
-static void renderBox(Entity* entity, const BoundingBox& bbox, Config::Esp::Shared& config) noexcept
+static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
     if (config.box) {
         interfaces.surface->setDrawColor(config.boxColor, 255);
@@ -171,7 +173,7 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, Config::Esp::Shar
     }
 }
 
-static void renderPlayerBox(Entity* entity, Config::Esp::Player& config) noexcept
+static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
@@ -232,13 +234,14 @@ static void renderPlayerBox(Entity* entity, Config::Esp::Player& config) noexcep
     }
 }
 
-static void renderWeaponBox(Entity* entity, Config::Esp::Weapon& config) noexcept
+static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) noexcept
 {
-    if (BoundingBox bbox; boundingBox(entity, bbox))
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
+    }
 }
 
-static constexpr void renderHeadDot(Entity* entity, Config::Esp::Player& config) noexcept
+static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
 {
     if (config.headDot) {
         Vector head{ };
