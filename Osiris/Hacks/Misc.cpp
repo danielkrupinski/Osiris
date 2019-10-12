@@ -360,3 +360,31 @@ void Misc::nadePredict() noexcept
     nadeVar->onChangeCallbacks.size = 0; 
     nadeVar->setValue(config.misc.nadePredict); 
 }
+
+void Misc::quickHealthshot(UserCmd* cmd) noexcept
+{
+    static bool inProgress{ false };
+
+    if (GetAsyncKeyState(config.misc.quickHealthshotKey))
+        inProgress = true;
+
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+    if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
+        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory.globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime())
+            cmd->buttons |= UserCmd::IN_ATTACK;
+        else {
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (const auto weapon{ interfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon->getClientClass()->classId == ClassId::Healthshot) {
+                    cmd->weaponselect = weapon->index();
+                    cmd->weaponsubtype = weapon->getWeaponSubType();
+                    return;
+                }
+            }
+        }
+        inProgress = false;
+    }
+}
