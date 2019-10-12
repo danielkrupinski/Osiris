@@ -610,6 +610,7 @@ void GUI::renderEspWindow() noexcept
             checkboxedColorPicker("Box", &config.esp.weapon.box, config.esp.weapon.boxColor);
             ImGui::SameLine();
             ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+            checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
         }
         if (!config.style.menuStyle)
             ImGui::End();

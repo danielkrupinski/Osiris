@@ -238,6 +238,15 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
+
+        if (config.name) {
+            const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
+            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+            interfaces.surface->setTextFont(config.font);
+            interfaces.surface->setTextColor(config.nameColor, 255);
+            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->printText(name);
+        }
     }
 }
 
