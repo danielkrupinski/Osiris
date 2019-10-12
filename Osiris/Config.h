@@ -234,6 +234,7 @@ public:
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
+        int quickHealthshotKey{ 0 };
         bool nadePredict{ false };
         float maxAngleDelta{ 255.0f };
     } misc;
