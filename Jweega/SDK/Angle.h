@@ -1,24 +1,25 @@
 #pragma once
-#include "Vector.h"
+
+struct Vector;
 
 class Angle {
-    float sp{ 0.f }, cp{ 0.f };
-    float sy{ 0.f }, cy{ 0.f };
-    float sr{ 0.f }, cr{ 0.f };
+    float sp{ 0.0f }, cp{ 0.0f };
+    float sy{ 0.0f }, cy{ 0.0f };
+    float sr{ 0.0f }, cr{ 0.0f };
 
-    Vector get(unsigned int i) noexcept {
+    constexpr Vector get(unsigned int i) noexcept {
         switch (i) {
         case 0:
-            return Vector{ (cp * cy), (cp * sy), (-sp) };
+            return { (cp * cy), (cp * sy), (-sp) };
             break;
         case 1:
-            return Vector{ -1 * sr * sp * cy + -1 * cr * -sy, -1 * sr * sp * sy + -1 * cr * cy, -1 * sr * cp };
+            return { -1 * sr * sp * cy + -1 * cr * -sy, -1 * sr * sp * sy + -1 * cr * cy, -1 * sr * cp };
             break;
         case 2:
-            return Vector{ cr * sp * cy + -sr * -sy, cr * sp * sy + -sr * cy, cr * cp };
+            return { cr * sp * cy + -sr * -sy, cr * sp * sy + -sr * cy, cr * cp };
             break;
         default:
-            return Vector{ };
+            return { };
             break;
         }
     }
