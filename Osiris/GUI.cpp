@@ -629,6 +629,8 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Armor bar", &config.esp.players[selected].armorBar, config.esp.players[selected].armorBarColor);
                 checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
             } else {
                 ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
                 ImGui::SameLine(0.0f, 50.0f);
@@ -648,6 +650,7 @@ void GUI::renderEspWindow() noexcept
                 checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
+                checkboxedColorPicker("Distance", &config.esp.weapon.distance, config.esp.weapon.distanceColor);
             }
             ImGui::EndChild();
         }
