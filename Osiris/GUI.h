@@ -2,6 +2,8 @@
 
 #include <string>
 
+struct ImFont;
+
 class GUI {
 public:
     GUI() noexcept;
@@ -44,6 +46,10 @@ private:
         bool reportbot{ false };
         bool config{ false };
     } window;
+
+    struct {
+        ImFont* tahoma;
+    } fonts;
 };
 
 extern GUI gui;

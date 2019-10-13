@@ -37,9 +37,10 @@ GUI::GUI() noexcept
     io.LogFilename = nullptr;
 
     static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
-    char buffer[MAX_PATH];
-    if (GetWindowsDirectoryA(buffer, MAX_PATH))
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
+
+    if (char buffer[MAX_PATH]; GetWindowsDirectoryA(buffer, MAX_PATH)) {
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
+    }
 }
 
 void GUI::render() noexcept
