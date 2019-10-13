@@ -319,6 +319,14 @@ static constexpr void renderWeaponEsp(Entity* entity) noexcept
     }
 }
 
+static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
+{
+    if (config.enabled) {
+        renderEntityBox(entity, config, name);
+        renderSnaplines(entity, config);
+    }
+}
+
 void Esp::render() noexcept
 {
     if (interfaces.engine->isInGame()) {
