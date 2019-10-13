@@ -220,6 +220,12 @@ void Config::load(size_t id) noexcept
             espConfig.outlineColor[1] = espJson["Outline color"][1].asFloat();
             espConfig.outlineColor[2] = espJson["Outline color"][2].asFloat();
         }
+        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
+        if (espJson.isMember("Distance color")) {
+            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
+            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
+            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        }
     }
 
     {
@@ -255,6 +261,13 @@ void Config::load(size_t id) noexcept
             espConfig.nameColor[0] = espJson["Name color"][0].asFloat();
             espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
             espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
+        if (espJson.isMember("Distance color")) {
+            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
+            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
+            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
     }
 
@@ -595,6 +608,10 @@ void Config::save(size_t id) const noexcept
         espJson["Outline color"][0] = espConfig.outlineColor[0];
         espJson["Outline color"][1] = espConfig.outlineColor[1];
         espJson["Outline color"][2] = espConfig.outlineColor[2];
+        espJson["Distance"] = espConfig.distance;
+        espJson["Distance color"][0] = espConfig.distanceColor[0];
+        espJson["Distance color"][1] = espConfig.distanceColor[1];
+        espJson["Distance color"][2] = espConfig.distanceColor[2];
     }
 
     {
@@ -620,6 +637,10 @@ void Config::save(size_t id) const noexcept
         espJson["Name color"][0] = espConfig.nameColor[0];
         espJson["Name color"][1] = espConfig.nameColor[1];
         espJson["Name color"][2] = espConfig.nameColor[2];
+        espJson["Distance"] = espConfig.distance;
+        espJson["Distance color"][0] = espConfig.distanceColor[0];
+        espJson["Distance color"][1] = espConfig.distanceColor[1];
+        espJson["Distance color"][2] = espConfig.distanceColor[2];
     }
 
     {

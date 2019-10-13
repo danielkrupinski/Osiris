@@ -118,6 +118,8 @@ public:
             float nameColor[3]{ 1.0f, 1.0f, 1.0f };
             bool outline{ false };
             float outlineColor[3]{ 0.0f, 0.0f, 0.0f };
+            bool distance{ false };
+            float distanceColor[3]{ 1.0f, 1.0f, 1.0f };
         };
        
         struct Player : public Shared {
