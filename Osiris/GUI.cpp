@@ -30,6 +30,7 @@ GUI::GUI() noexcept
     style.GrabRounding = 5.0f;
     style.FrameRounding = 5.0f;
     style.PopupRounding = 5.0f;
+    style.ScrollbarSize = 9.0f;
 
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
@@ -554,66 +555,103 @@ void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 500.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
-        static int currentCategory{ 0 };
-        ImGui::PushItemWidth(110.0f);
-        ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Weapons");
-        ImGui::PopID();
-        ImGui::SameLine();
-        if (currentCategory < 2) {
-            static int currentType{ 0 };
-            ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        
+        static int currentCategory = 0;
+        static int currentItem = 0;
+
+        if (ImGui::ListBoxHeader("##", { 100.0f, 200.0f })) {
+            static constexpr const char* players[]{ "All", "Visible", "Occluded" };
+            
+            ImGui::Text("Allies");
+            ImGui::Indent();
+            ImGui::PushID("Allies");
+
+            for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                bool isSelected = currentCategory == 0 && currentItem == i;
+
+                if (ImGui::Selectable(players[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 0;
+                }
+            }
+
+            ImGui::Unindent();
+            ImGui::Text("Enemies");
+            ImGui::Indent();
+            ImGui::PushID("Enemies");
+            for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                bool isSelected = currentCategory == 1 && currentItem == i;
+
+                if (ImGui::Selectable(players[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 1;
+                }
+            }
             ImGui::PopID();
-            int currentItem = currentCategory * 3 + currentType;
-            ImGui::SameLine();
-            ImGui::Checkbox("Enabled", &config.esp.players[currentItem].enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::InputInt("Font", &config.esp.players[currentItem].font, 1, 294);
-            config.esp.players[currentItem].font = std::clamp(config.esp.players[currentItem].font, 1, 294);
+            ImGui::Unindent();
+            if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
+                currentCategory = 2;
 
-            ImGui::Separator();
-
-            constexpr auto spacing{ 200.0f };
-            checkboxedColorPicker("Snaplines", &config.esp.players[currentItem].snaplines, config.esp.players[currentItem].snaplinesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Box", &config.esp.players[currentItem].box, config.esp.players[currentItem].boxColor);
-            ImGui::SameLine();
-            ImGui::Combo("", &config.esp.players[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            checkboxedColorPicker("Eye traces", &config.esp.players[currentItem].eyeTraces, config.esp.players[currentItem].eyeTracesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Health", &config.esp.players[currentItem].health, config.esp.players[currentItem].healthColor);
-            checkboxedColorPicker("Head dot", &config.esp.players[currentItem].headDot, config.esp.players[currentItem].headDotColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Health bar", &config.esp.players[currentItem].healthBar, config.esp.players[currentItem].healthBarColor);
-            checkboxedColorPicker("Name", &config.esp.players[currentItem].name, config.esp.players[currentItem].nameColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Armor", &config.esp.players[currentItem].armor, config.esp.players[currentItem].armorColor);
-            checkboxedColorPicker("Money", &config.esp.players[currentItem].money, config.esp.players[currentItem].moneyColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Armor bar", &config.esp.players[currentItem].armorBar, config.esp.players[currentItem].armorBarColor);
-            checkboxedColorPicker("Outline", &config.esp.players[currentItem].outline, config.esp.players[currentItem].outlineColor);
-        } else {
-            ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::InputInt("Font", &config.esp.weapon.font, 1, 294);
-            config.esp.weapon.font = std::clamp(config.esp.weapon.font, 1, 294);
-
-            ImGui::Separator();
-
-            constexpr auto spacing{ 200.0f };
-            checkboxedColorPicker("Snaplines", &config.esp.weapon.snaplines, config.esp.weapon.snaplinesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Box", &config.esp.weapon.box, config.esp.weapon.boxColor);
-            ImGui::SameLine();
-            ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
+            ImGui::ListBoxFooter();
         }
+        ImGui::SameLine();
+        if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
+            if (currentCategory < 2) {
+                int selected = currentCategory * 3 + currentItem;
+                ImGui::Checkbox("Enabled", &config.esp.players[selected].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.players[selected].font, 1, 294);
+                config.esp.players[selected].font = std::clamp(config.esp.players[selected].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                checkboxedColorPicker("Snaplines", &config.esp.players[selected].snaplines, config.esp.players[selected].snaplinesColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Box", &config.esp.players[selected].box, config.esp.players[selected].boxColor);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                checkboxedColorPicker("Eye traces", &config.esp.players[selected].eyeTraces, config.esp.players[selected].eyeTracesColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Health", &config.esp.players[selected].health, config.esp.players[selected].healthColor);
+                checkboxedColorPicker("Head dot", &config.esp.players[selected].headDot, config.esp.players[selected].headDotColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Health bar", &config.esp.players[selected].healthBar, config.esp.players[selected].healthBarColor);
+                checkboxedColorPicker("Name", &config.esp.players[selected].name, config.esp.players[selected].nameColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Armor", &config.esp.players[selected].armor, config.esp.players[selected].armorColor);
+                checkboxedColorPicker("Money", &config.esp.players[selected].money, config.esp.players[selected].moneyColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Armor bar", &config.esp.players[selected].armorBar, config.esp.players[selected].armorBarColor);
+                checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
+            } else {
+                ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.weapon.font, 1, 294);
+                config.esp.weapon.font = std::clamp(config.esp.weapon.font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                checkboxedColorPicker("Snaplines", &config.esp.weapon.snaplines, config.esp.weapon.snaplinesColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Box", &config.esp.weapon.box, config.esp.weapon.boxColor);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
+            }
+            ImGui::EndChild();
+        }
+
         if (!config.style.menuStyle)
             ImGui::End();
     }
