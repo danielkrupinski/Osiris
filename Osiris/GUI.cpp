@@ -562,7 +562,7 @@ void GUI::renderEspWindow() noexcept
         static int currentCategory = 0;
         static int currentItem = 0;
 
-        if (ImGui::ListBoxHeader("##", { 100.0f, 200.0f })) {
+        if (ImGui::ListBoxHeader("##", { 100.0f, 250.0f })) {
             static constexpr const char* players[]{ "All", "Visible", "Occluded" };
             
             ImGui::Text("Allies");
@@ -600,7 +600,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Text("Danger zone");
             ImGui::Indent();
             ImGui::PushID("Danger zone");
-            static constexpr const char* dangerZone[]{ "Sentries" };
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
                 bool isSelected = currentCategory == 3 && currentItem == i;

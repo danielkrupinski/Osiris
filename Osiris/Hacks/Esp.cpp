@@ -360,8 +360,16 @@ void Esp::render() noexcept
 
             if (entity->isWeapon() && entity->ownerEntity() == -1)
                 renderWeaponEsp(entity);
-            else if (entity->getClientClass()->classId == ClassId::Dronegun)
-                renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
+            else {
+                switch (entity->getClientClass()->classId) {
+                case ClassId::Dronegun:
+                    renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
+                    break;
+                case ClassId::Drone:
+                    renderEntityEsp(entity, config.esp.dangerZone[1], L"Drone");
+                    break;
+                }
+            }   
         }
     }
 }

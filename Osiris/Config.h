@@ -142,7 +142,7 @@ public:
         struct Weapon : public Shared { } weapon;
 
         struct DangerZone : public Shared { };
-        std::array<DangerZone, 1> dangerZone;
+        std::array<DangerZone, 2> dangerZone;
 
         std::array<Player, 6> players;
     } esp;
