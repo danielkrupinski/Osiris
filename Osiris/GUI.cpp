@@ -596,11 +596,27 @@ void GUI::renderEspWindow() noexcept
             if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
                 currentCategory = 2;
 
+            ImGui::Text("Danger zone");
+            ImGui::Indent();
+            ImGui::PushID("Danger zone");
+            static constexpr const char* dangerZone[]{ "Sentries" };
+
+            for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
+                bool isSelected = currentCategory == 3 && currentItem == i;
+
+                if (ImGui::Selectable(dangerZone[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 3;
+                }
+            }
+
             ImGui::ListBoxFooter();
         }
         ImGui::SameLine();
         if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
-            if (currentCategory < 2) {
+            switch (currentCategory) {
+            case 0:
+            case 1: {
                 int selected = currentCategory * 3 + currentItem;
                 ImGui::Checkbox("Enabled", &config.esp.players[selected].enabled);
                 ImGui::SameLine(0.0f, 50.0f);
@@ -632,7 +648,9 @@ void GUI::renderEspWindow() noexcept
                 checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
-            } else {
+                break;
+            }
+            case 2: {
                 ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
                 ImGui::SameLine(0.0f, 50.0f);
                 ImGui::SetNextItemWidth(85.0f);
@@ -652,7 +670,32 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.weapon.distance, config.esp.weapon.distanceColor);
+                break;
             }
+            case 3: {
+                int selected = currentItem;
+                ImGui::Checkbox("Enabled", &config.esp.dangerZone[selected].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.dangerZone[selected].font, 1, 294);
+                config.esp.dangerZone[selected].font = std::clamp(config.esp.dangerZone[selected].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                checkboxedColorPicker("Snaplines", &config.esp.dangerZone[selected].snaplines, config.esp.dangerZone[selected].snaplinesColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Box", &config.esp.dangerZone[selected].box, config.esp.dangerZone[selected].boxColor);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                checkboxedColorPicker("Name", &config.esp.dangerZone[selected].name, config.esp.dangerZone[selected].nameColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Outline", &config.esp.dangerZone[selected].outline, config.esp.dangerZone[selected].outlineColor);
+                checkboxedColorPicker("Distance", &config.esp.dangerZone[selected].distance, config.esp.dangerZone[selected].distanceColor);
+                break;
+            } }
+
             ImGui::EndChild();
         }
 
