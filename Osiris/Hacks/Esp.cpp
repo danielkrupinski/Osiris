@@ -355,10 +355,13 @@ void Esp::render() noexcept
 
         for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity->isDormant() || !entity->isWeapon() || entity->ownerEntity() != -1)
+            if (!entity || entity->isDormant())
                 continue;
 
-            renderWeaponEsp(entity);
+            if (entity->isWeapon() && entity->ownerEntity() == -1)
+                renderWeaponEsp(entity);
+            else if (entity->getClientClass()->classId == ClassId::Dronegun)
+                renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
         }
     }
 }
