@@ -231,6 +231,9 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         if (config.money)
             renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.right + 5, drawPositionY });
+
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
     }
 }
 
@@ -247,6 +250,11 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
             interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
             interfaces.surface->printText(name);
         }
+
+        float drawPositionY = bbox.bottom;
+
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
     }
 }
 
