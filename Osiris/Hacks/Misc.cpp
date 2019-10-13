@@ -184,7 +184,7 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
@@ -205,7 +205,7 @@ void Misc::drawBombTimer() noexcept
                     static wchar_t name[128];
                     if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::showpoint << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces.surface->printText(defusingText.c_str());
