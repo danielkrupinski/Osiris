@@ -578,6 +578,7 @@ void GUI::renderEspWindow() noexcept
                 }
             }
 
+            ImGui::PopID();
             ImGui::Unindent();
             ImGui::Text("Enemies");
             ImGui::Indent();
@@ -610,6 +611,7 @@ void GUI::renderEspWindow() noexcept
                 }
             }
 
+            ImGui::PopID();
             ImGui::ListBoxFooter();
         }
         ImGui::SameLine();
