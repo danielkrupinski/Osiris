@@ -572,7 +572,7 @@ void GUI::renderEspWindow() noexcept
             for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
                 bool isSelected = currentCategory == 0 && currentItem == i;
 
-                if (ImGui::Selectable(players[i], isSelected)) {
+                if ((i == 0 || !config.esp.players[0].enabled) && ImGui::Selectable(players[i], isSelected)) {
                     currentItem = i;
                     currentCategory = 0;
                 }
@@ -582,10 +582,11 @@ void GUI::renderEspWindow() noexcept
             ImGui::Text("Enemies");
             ImGui::Indent();
             ImGui::PushID("Enemies");
+
             for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
                 bool isSelected = currentCategory == 1 && currentItem == i;
 
-                if (ImGui::Selectable(players[i], isSelected)) {
+                if ((i == 0 || !config.esp.players[3].enabled) && ImGui::Selectable(players[i], isSelected)) {
                     currentItem = i;
                     currentCategory = 1;
                 }
