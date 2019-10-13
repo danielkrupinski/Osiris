@@ -280,7 +280,7 @@ enum EspId {
     ENEMIES_OCCLUDED
 };
 
-static constexpr bool renderEspForEntity(Entity* entity, EspId id) noexcept
+static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
     if (config.esp.players[id].enabled) {
         renderSnaplines(entity, config.esp.players[id]);
@@ -311,17 +311,17 @@ void Esp::render() noexcept
                 continue;
 
             if (!entity->isEnemy()) {
-                if (!renderEspForEntity(entity, ALLIES_ALL)) {
+                if (!renderPlayerEsp(entity, ALLIES_ALL)) {
                     if (entity->isVisible())
-                        renderEspForEntity(entity, ALLIES_VISIBLE);
+                        renderPlayerEsp(entity, ALLIES_VISIBLE);
                     else
-                        renderEspForEntity(entity, ALLIES_OCCLUDED);
+                        renderPlayerEsp(entity, ALLIES_OCCLUDED);
                 }
-            } else if (!renderEspForEntity(entity, ENEMIES_ALL)) {
+            } else if (!renderPlayerEsp(entity, ENEMIES_ALL)) {
                 if (entity->isVisible())
-                    renderEspForEntity(entity, ENEMIES_VISIBLE);
+                    renderPlayerEsp(entity, ENEMIES_VISIBLE);
                 else
-                    renderEspForEntity(entity, ENEMIES_OCCLUDED);
+                    renderPlayerEsp(entity, ENEMIES_OCCLUDED);
             }
         }
 
