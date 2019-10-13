@@ -258,6 +258,26 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
     }
 }
 
+static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
+{
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
+        renderBox(entity, bbox, config);
+
+        if (config.name) {
+            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+            interfaces.surface->setTextFont(config.font);
+            interfaces.surface->setTextColor(config.nameColor, 255);
+            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->printText(name);
+        }
+
+        float drawPositionY = bbox.bottom;
+
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
+    }
+}
+
 static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
 {
     if (config.headDot) {
