@@ -242,6 +242,20 @@ void Config::load(size_t id) noexcept
         }
 
         if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
+
+        if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
+        if (espJson.isMember("Outline color")) {
+            espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
+            espConfig.outlineColor[1] = espJson["Outline color"][1].asFloat();
+            espConfig.outlineColor[2] = espJson["Outline color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Name")) espConfig.name = espJson["Name"].asBool();
+        if (espJson.isMember("Name color")) {
+            espConfig.nameColor[0] = espJson["Name color"][0].asFloat();
+            espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
+            espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
+        }
     }
 
     {
@@ -598,6 +612,14 @@ void Config::save(size_t id) const noexcept
         espJson["Box color"][1] = espConfig.boxColor[1];
         espJson["Box color"][2] = espConfig.boxColor[2];
         espJson["Box type"] = espConfig.boxType;
+        espJson["Outline"] = espConfig.outline;
+        espJson["Outline color"][0] = espConfig.outlineColor[0];
+        espJson["Outline color"][1] = espConfig.outlineColor[1];
+        espJson["Outline color"][2] = espConfig.outlineColor[2];
+        espJson["Name"] = espConfig.name;
+        espJson["Name color"][0] = espConfig.nameColor[0];
+        espJson["Name color"][1] = espConfig.nameColor[1];
+        espJson["Name color"][2] = espConfig.nameColor[2];
     }
 
     {
