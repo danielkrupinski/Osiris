@@ -140,6 +140,7 @@ public:
         };
 
         struct Weapon : public Shared { } weapon;
+        struct Projectile : public Shared { } projectile;
 
         struct DangerZone : public Shared { };
         std::array<DangerZone, 2> dangerZone;

@@ -368,6 +368,33 @@ void Esp::render() noexcept
                 case ClassId::Drone:
                     renderEntityEsp(entity, config.esp.dangerZone[1], L"Drone");
                     break;
+                case ClassId::BaseCSGrenadeProjectile:
+                    if (strstr(entity->getModel()->name, "flashbang"))
+                        renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
+                    else
+                        renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_HE_Grenade"));
+                    break;
+                case ClassId::BreachChargeProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_BreachCharge"));
+                    break;
+                case ClassId::BumpMineProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_BumpMine"));
+                    break;
+                case ClassId::DecoyProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_Decoy"));
+                    break;
+                case ClassId::MolotovProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_Molotov"));
+                    break;
+                case ClassId::SensorGrenadeProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_TAGrenade"));
+                    break;
+                case ClassId::SmokeGrenadeProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_SmokeGrenade"));
+                    break;
+                case ClassId::SnowballProjectile:
+                    renderEntityEsp(entity, config.esp.projectile, interfaces.localize->find("#SFUI_WPNHUD_Snowball"));
+                    break;
                 }
             }   
         }
