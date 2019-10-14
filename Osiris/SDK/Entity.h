@@ -84,6 +84,11 @@ public:
         return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
     }
 
+    constexpr auto getModel() noexcept
+    {
+        return callVirtualMethod<const Model*>(this + 4, 8);
+    }
+
     Vector getBonePosition(int bone) noexcept
     {
         static matrix3x4 boneMatrices[128];
