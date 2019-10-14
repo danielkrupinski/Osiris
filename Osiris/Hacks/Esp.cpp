@@ -221,6 +221,32 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
+		if (config.activeWeapon)
+		{
+			static PlayerInfo playerInfo;
+			if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo))
+			{
+				static wchar_t name[128];
+				if (MultiByteToWideChar(CP_UTF8, 0, entity->getActiveWeapon()->getWeaponData()->name, -1, name, 128))
+				{
+					int n = 0;
+					//L"#SFUI_WPNHUD_";
+					static wchar_t name_tmp[128];
+					for (int i = 13; i < sizeof(name); i++)
+					{
+						name_tmp[n] = name[i];
+						n++;
+					}
+					
+					const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+					interfaces.surface->setTextFont(config.font);
+					interfaces.surface->setTextColor(config.nameColor, 255);
+					interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 6 - height);
+					interfaces.surface->printText(name_tmp);
+				}
+			}
+		}        
+        
         float drawPositionY = bbox.bottom;
 
         if (config.health)
