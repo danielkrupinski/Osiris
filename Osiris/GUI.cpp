@@ -1,5 +1,7 @@
+#include <fstream>
 #include <functional>
 #include <string>
+#include <ShlObj.h>
 #include <Windows.h>
 
 #include "imgui/imgui.h"
@@ -36,11 +38,13 @@ GUI::GUI() noexcept
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
 
-    static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
+    if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
+        const std::filesystem::path path{ pathToFonts };
+        CoTaskMemFree(pathToFonts);
 
-    if (char buffer[MAX_PATH]; GetWindowsDirectoryA(buffer, MAX_PATH)) {
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF(std::string{ buffer }.append("/Fonts/Tahoma.ttf").c_str(), 16.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF(std::string{ buffer }.append("/Fonts/segoeui.ttf").c_str(), 16.0f, nullptr, ranges);
+        static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, nullptr, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, nullptr, ranges);
     }
 }
 
