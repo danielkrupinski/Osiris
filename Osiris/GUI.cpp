@@ -561,14 +561,14 @@ void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 500.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
         
         static int currentCategory = 0;
         static int currentItem = 0;
 
-        if (ImGui::ListBoxHeader("##", { 125.0f, 250.0f })) {
+        if (ImGui::ListBoxHeader("##", { 125.0f, 300.0f })) {
             static constexpr const char* players[]{ "All", "Visible", "Occluded" };
             
             ImGui::Text("Allies");
