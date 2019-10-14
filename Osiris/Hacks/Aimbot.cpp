@@ -94,38 +94,46 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
-        return;
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	if (localPlayer->nextAttack() > memory.globalVars->serverTime())
+		return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->clip())
-        return;
+	const auto activeWeapon = localPlayer->getActiveWeapon();
+	if (!activeWeapon || !activeWeapon->clip())
+		return;
 
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
-    if (!weaponIndex)
-        return;
+	auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+	if (!weaponIndex)
+		return;
 
-    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
-    if (!config.aimbot[weaponIndex].enabled)
-        weaponIndex = weaponClass;
+	auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+	if (!config.aimbot[weaponIndex].enabled)
+		weaponIndex = weaponClass;
 
-    if (!config.aimbot[weaponIndex].enabled)
-        weaponIndex = 0;
+	if (!config.aimbot[weaponIndex].enabled)
+		weaponIndex = 0;
 
-    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
-        return;
+	if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
+		return;
 
-    if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
-        return;
+	if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
+		return;
+
+	if (config.triggerbot[weaponIndex].triggerAim) {
+		config.aimbot[weaponIndex].keyTriggerAim = config.triggerbot[weaponIndex].key;
+	}
+	else
+	{
+		config.aimbot[weaponIndex].keyTriggerAim = config.aimbot[weaponIndex].key;
+	}
 
     if (config.aimbot[weaponIndex].onKey) {
         if (!config.aimbot[weaponIndex].keyMode) {
-            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
+            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key) && !GetAsyncKeyState(config.aimbot[weaponIndex].keyTriggerAim))
                 return;
         } else {
             static bool toggle = true;
-            if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1)
+            if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1 && GetAsyncKeyState(config.aimbot[weaponIndex].keyTriggerAim) & 1)
                 toggle = !toggle;
             if (!toggle)
                 return;

@@ -25,6 +25,7 @@ public:
         bool enabled{ false };
         bool onKey{ false };
         int key{ 0 };
+		int keyTriggerAim{ 0 };
         int keyMode{ 0 };
         bool aimlock{ false };
         bool silent{ false };
@@ -53,6 +54,7 @@ public:
         bool enabled{ false };
         bool onKey{ false };
         int key{ 0 };
+		bool triggerAim{ false };
         bool friendlyFire{ false };
         bool scopedOnly{ true };
         bool ignoreFlash{ false };
