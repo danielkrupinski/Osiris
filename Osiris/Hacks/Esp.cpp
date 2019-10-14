@@ -365,9 +365,21 @@ void Esp::render() noexcept
                 case ClassId::Dronegun:
                     renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
                     break;
-                case ClassId::Drone:
-                    renderEntityEsp(entity, config.esp.dangerZone[1], L"Drone");
+                case ClassId::Drone: {
+                    std::wstring text{ L"Drone" };
+                    if (const auto tablet{ interfaces.entityList->getEntityFromHandle(entity->droneTarget()) }) {
+                        if (const auto player{ interfaces.entityList->getEntityFromHandle(tablet->ownerEntity()) }) {
+                            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(player->index(), playerInfo)) {
+                                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                                    text += L" -> ";
+                                    text += name;
+                                }
+                            }
+                        }
+                    }
+                    renderEntityEsp(entity, config.esp.dangerZone[1], text.c_str());
                     break;
+                }
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
