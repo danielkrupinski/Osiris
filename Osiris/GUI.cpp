@@ -39,7 +39,8 @@ GUI::GUI() noexcept
     static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
 
     if (char buffer[MAX_PATH]; GetWindowsDirectoryA(buffer, MAX_PATH)) {
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, nullptr, ranges);
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF(std::string{ buffer }.append("/Fonts/Tahoma.ttf").c_str(), 16.0f, nullptr, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF(std::string{ buffer }.append("/Fonts/segoeui.ttf").c_str(), 16.0f, nullptr, ranges);
     }
 }
 
@@ -569,6 +570,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Text("Allies");
             ImGui::Indent();
             ImGui::PushID("Allies");
+            ImGui::PushFont(fonts.segoeui);
 
             for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
                 bool isSelected = currentCategory == 0 && currentItem == i;
@@ -579,11 +581,13 @@ void GUI::renderEspWindow() noexcept
                 }
             }
 
+            ImGui::PopFont();
             ImGui::PopID();
             ImGui::Unindent();
             ImGui::Text("Enemies");
             ImGui::Indent();
             ImGui::PushID("Enemies");
+            ImGui::PushFont(fonts.segoeui);
 
             for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
                 bool isSelected = currentCategory == 1 && currentItem == i;
@@ -593,6 +597,8 @@ void GUI::renderEspWindow() noexcept
                     currentCategory = 1;
                 }
             }
+
+            ImGui::PopFont();
             ImGui::PopID();
             ImGui::Unindent();
             if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
@@ -601,6 +607,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Text("Danger zone");
             ImGui::Indent();
             ImGui::PushID("Danger zone");
+            ImGui::PushFont(fonts.segoeui);
             static constexpr const char* dangerZone[]{ "Sentries", "Drones" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
@@ -612,6 +619,7 @@ void GUI::renderEspWindow() noexcept
                 }
             }
 
+            ImGui::PopFont();
             ImGui::PopID();
             ImGui::ListBoxFooter();
         }
