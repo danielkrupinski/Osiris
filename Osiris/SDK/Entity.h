@@ -291,4 +291,6 @@ public:
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool);
+    
+    NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int);
 };
