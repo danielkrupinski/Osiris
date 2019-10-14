@@ -651,6 +651,7 @@ void GUI::renderEspWindow() noexcept
                 checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
+				checkboxedColorPicker("Active Weapon", &config.esp.players[selected].activeWeapon, config.esp.players[selected].activeWeaponColor);                
                 break;
             }
             case 2: {
