@@ -7,8 +7,7 @@
 
 Config::Config(const char* name) noexcept
 {
-    PWSTR pathToDocuments;
-    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
+    if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         path /= name;
         CoTaskMemFree(pathToDocuments);
