@@ -568,7 +568,7 @@ void GUI::renderEspWindow() noexcept
         static int currentCategory = 0;
         static int currentItem = 0;
 
-        if (ImGui::ListBoxHeader("##", { 100.0f, 250.0f })) {
+        if (ImGui::ListBoxHeader("##", { 125.0f, 250.0f })) {
             static constexpr const char* players[]{ "All", "Visible", "Occluded" };
             
             ImGui::Text("Allies");
@@ -608,8 +608,24 @@ void GUI::renderEspWindow() noexcept
             if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
                 currentCategory = 2;
 
-            if (bool isSelected = currentCategory == 3; ImGui::Selectable("Projectiles", isSelected))
-                currentCategory = 3;
+            ImGui::Text("Projectiles");
+            ImGui::Indent();
+            ImGui::PushID("Projectiles");
+            ImGui::PushFont(fonts.segoeui);
+            static constexpr const char* projectiles[]{ "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
+
+            for (int i = 0; i < IM_ARRAYSIZE(projectiles); i++) {
+                bool isSelected = currentCategory == 3 && currentItem == i;
+
+                if (ImGui::Selectable(projectiles[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 3;
+                }
+            }
+
+            ImGui::PopFont();
+            ImGui::PopID();
+            ImGui::Unindent();
 
             ImGui::Text("Danger zone");
             ImGui::Indent();
@@ -691,25 +707,25 @@ void GUI::renderEspWindow() noexcept
                 break;
             }
             case 3: {
-                ImGui::Checkbox("Enabled", &config.esp.projectile.enabled);
+                ImGui::Checkbox("Enabled", &config.esp.projectiles[currentItem].enabled);
                 ImGui::SameLine(0.0f, 50.0f);
                 ImGui::SetNextItemWidth(85.0f);
-                ImGui::InputInt("Font", &config.esp.projectile.font, 1, 294);
-                config.esp.projectile.font = std::clamp(config.esp.projectile.font, 1, 294);
+                ImGui::InputInt("Font", &config.esp.projectiles[currentItem].font, 1, 294);
+                config.esp.projectiles[currentItem].font = std::clamp(config.esp.projectiles[currentItem].font, 1, 294);
 
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                checkboxedColorPicker("Snaplines", &config.esp.projectile.snaplines, config.esp.projectile.snaplinesColor);
+                checkboxedColorPicker("Snaplines", &config.esp.projectiles[currentItem].snaplines, config.esp.projectiles[currentItem].snaplinesColor);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Box", &config.esp.projectile.box, config.esp.projectile.boxColor);
+                checkboxedColorPicker("Box", &config.esp.projectiles[currentItem].box, config.esp.projectiles[currentItem].boxColor);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("", &config.esp.projectile.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                checkboxedColorPicker("Name", &config.esp.projectile.name, config.esp.projectile.nameColor);
+                ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                checkboxedColorPicker("Name", &config.esp.projectiles[currentItem].name, config.esp.projectiles[currentItem].nameColor);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Outline", &config.esp.projectile.outline, config.esp.projectile.outlineColor);
-                checkboxedColorPicker("Distance", &config.esp.projectile.distance, config.esp.projectile.distanceColor);
+                checkboxedColorPicker("Outline", &config.esp.projectiles[currentItem].outline, config.esp.projectiles[currentItem].outlineColor);
+                checkboxedColorPicker("Distance", &config.esp.projectiles[currentItem].distance, config.esp.projectiles[currentItem].distanceColor);
                 break;
             }
             case 4: {
