@@ -659,6 +659,10 @@ void Config::save(size_t id) const noexcept
         espJson["headDotColor"][0] = espConfig.headDotColor[0];
         espJson["headDotColor"][1] = espConfig.headDotColor[1];
         espJson["headDotColor"][2] = espConfig.headDotColor[2];
+	espJson["ActiveWeapon"] = espConfig.activeWeapon;
+	espJson["ActiveWeapon color"][0] = espConfig.activeWeaponColor[0];
+	espJson["ActiveWeapon color"][1] = espConfig.activeWeaponColor[1];
+	espJson["ActiveWeapon color"][2] = espConfig.activeWeaponColor[2];	    
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];
         espJson["Outline color"][1] = espConfig.outlineColor[1];
@@ -667,10 +671,6 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
-	espJson["ActiveWeapon"] = espConfig.activeWeapon;
-	espJson["ActiveWeapon color"][0] = espConfig.activeWeaponColor[0];
-	espJson["ActiveWeapon color"][1] = espConfig.activeWeaponColor[1];
-	espJson["ActiveWeapon color"][2] = espConfig.activeWeaponColor[2];	    
     }
 
     {
