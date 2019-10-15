@@ -213,6 +213,12 @@ void Config::load(size_t id) noexcept
             espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
             espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
         }
+        if (espJson.isMember("Active weapon")) espConfig.activeWeapon = espJson["Active weapon"].asBool();
+        if (espJson.isMember("Active weapon color")) {
+            espConfig.activeWeaponColor[0] = espJson["Active weapon color"][0].asFloat();
+            espConfig.activeWeaponColor[1] = espJson["Active weapon color"][1].asFloat();
+            espConfig.activeWeaponColor[2] = espJson["Active weapon color"][2].asFloat();
+        }
         if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
         if (espJson.isMember("Outline color")) {
             espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
@@ -262,7 +268,6 @@ void Config::load(size_t id) noexcept
             espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
             espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
         }
-
         if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
         if (espJson.isMember("Distance color")) {
             espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
@@ -694,6 +699,10 @@ void Config::save(size_t id) const noexcept
         espJson["headDotColor"][0] = espConfig.headDotColor[0];
         espJson["headDotColor"][1] = espConfig.headDotColor[1];
         espJson["headDotColor"][2] = espConfig.headDotColor[2];
+        espJson["Active weapon"] = espConfig.activeWeapon;
+        espJson["Active weapon color"][0] = espConfig.activeWeaponColor[0];
+        espJson["Active weapon color"][1] = espConfig.activeWeaponColor[1];
+        espJson["Active weapon color"][2] = espConfig.activeWeaponColor[2];	    
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];
         espJson["Outline color"][1] = espConfig.outlineColor[1];
