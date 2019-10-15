@@ -225,6 +225,7 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     {
@@ -268,6 +269,7 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
@@ -311,6 +313,7 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     for (size_t i = 0; i < esp.projectiles.size(); i++) {
@@ -354,6 +357,8 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     {
@@ -697,6 +702,7 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     {
@@ -726,6 +732,7 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
@@ -755,6 +762,7 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     for (size_t i = 0; i < esp.projectiles.size(); i++) {
@@ -784,6 +792,7 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     {
