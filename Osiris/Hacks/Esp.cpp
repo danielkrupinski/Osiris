@@ -225,7 +225,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             const auto [width, height] { interfaces.surface->getTextSize(config.font, interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name)) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.activeWeaponColor, 255);
-            interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 6 - height);
+            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) * 0.5f, bbox.top + 5);
             interfaces.surface->printText(interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name));
         }     
 
