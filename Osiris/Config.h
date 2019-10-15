@@ -139,8 +139,7 @@ public:
             bool headDot{ false };
             float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
             bool activeWeapon{ false };
-	    	float activeWeaponColor[3]{ 1.0f, 1.0f, 1.0f };
-
+            float activeWeaponColor[3]{ 1.0f, 1.0f, 1.0f };
         };
 
         struct Weapon : public Shared { } weapon;
