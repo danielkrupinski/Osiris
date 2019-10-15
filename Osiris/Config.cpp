@@ -214,6 +214,12 @@ void Config::load(size_t id) noexcept
             espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
             espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
         }
+	if (espJson.isMember("ActiveWeapon")) espConfig.activeWeapon = espJson["ActiveWeapon"].asBool();
+	if (espJson.isMember("ActiveWeapon color")) {
+		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
+		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
+		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
+	}
         if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
         if (espJson.isMember("Outline color")) {
             espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
@@ -226,12 +232,6 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
-	if (espJson.isMember("ActiveWeapon")) espConfig.activeWeapon = espJson["ActiveWeapon"].asBool();
-	if (espJson.isMember("ActiveWeapon color")) {
-		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
-		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
-		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
-	}    
     }
 
     {
