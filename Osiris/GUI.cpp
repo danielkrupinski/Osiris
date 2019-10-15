@@ -682,6 +682,7 @@ void GUI::renderEspWindow() noexcept
                 checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 2: {
@@ -704,6 +705,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.weapon.distance, config.esp.weapon.distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 3: {
@@ -726,6 +728,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.projectiles[currentItem].outline, config.esp.projectiles[currentItem].outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.projectiles[currentItem].distance, config.esp.projectiles[currentItem].distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 4: {
@@ -749,6 +752,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.dangerZone[selected].outline, config.esp.dangerZone[selected].outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.dangerZone[selected].distance, config.esp.dangerZone[selected].distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             } }
 

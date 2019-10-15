@@ -300,9 +300,14 @@ enum EspId {
     ENEMIES_OCCLUDED
 };
 
+static constexpr bool isInRange(Entity* entity, float maxDistance) noexcept
+{
+    return maxDistance == 0.0f || (entity->getAbsOrigin() - interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAbsOrigin()).length() * 0.0254f <= maxDistance;
+}
+
 static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
-    if (config.esp.players[id].enabled) {
+    if (config.esp.players[id].enabled && isInRange(entity, config.esp.players[id].maxDistance)) {
         renderSnaplines(entity, config.esp.players[id]);
         renderEyeTraces(entity, config.esp.players[id]);
         renderPlayerBox(entity, config.esp.players[id]);
@@ -313,7 +318,7 @@ static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 
 static constexpr void renderWeaponEsp(Entity* entity) noexcept
 {
-    if (config.esp.weapon.enabled) {
+    if (config.esp.weapon.enabled && isInRange(entity, config.esp.weapon.maxDistance)) {
         renderWeaponBox(entity, config.esp.weapon);
         renderSnaplines(entity, config.esp.weapon);
     }
@@ -321,7 +326,7 @@ static constexpr void renderWeaponEsp(Entity* entity) noexcept
 
 static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
 {
-    if (config.enabled) {
+    if (config.enabled && isInRange(entity, config.maxDistance)) {
         renderEntityBox(entity, config, name);
         renderSnaplines(entity, config);
     }
