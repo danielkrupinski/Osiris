@@ -221,12 +221,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
-        if (config.activeWeapon) {
-            const auto [width, height] { interfaces.surface->getTextSize(config.font, interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name)) };
+        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon && activeWeapon) {
+            const auto name{ interfaces.localize->find(activeWeapon->getWeaponData()->name) };
+            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.activeWeaponColor, 255);
             interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) * 0.5f, bbox.top + 5);
-            interfaces.surface->printText(interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name));
+            interfaces.surface->printText(name);
         }     
 
         float drawPositionY = bbox.bottom;
@@ -255,7 +256,7 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.nameColor, 255);
-            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) * 0.5f, bbox.top + 5);
             interfaces.surface->printText(name);
         }
 
@@ -275,7 +276,7 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.nameColor, 255);
-            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) * 0.5f, bbox.top + 5);
             interfaces.surface->printText(name);
         }
 
