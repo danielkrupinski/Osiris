@@ -226,12 +226,12 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
-	if (espJson.isMember("ActiveWeapon")) espConfig.distance = espJson["ActiveWeapon"].asBool();
+	if (espJson.isMember("ActiveWeapon")) espConfig.activeWeapon = espJson["ActiveWeapon"].asBool();
 	if (espJson.isMember("ActiveWeapon color")) {
 		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
 		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
 		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
-	}        
+	}    
     }
 
     {
@@ -667,6 +667,10 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+	espJson["ActiveWeapon"] = espConfig.activeWeapon;
+	espJson["ActiveWeapon color"][0] = espConfig.activeWeaponColor[0];
+	espJson["ActiveWeapon color"][1] = espConfig.activeWeaponColor[1];
+	espJson["ActiveWeapon color"][2] = espConfig.activeWeaponColor[2];	    
     }
 
     {
