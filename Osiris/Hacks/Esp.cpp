@@ -221,15 +221,14 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
-	if (config.activeWeapon)
-	{
-			const auto [width, height] { interfaces.surface->getTextSize(config.font, interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name)) };
-			interfaces.surface->setTextFont(config.font);
-			interfaces.surface->setTextColor(config.nameColor, 255);
-			interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 6 - height);
-			interfaces.surface->printText(interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name));
-	}     
-        
+        if (config.activeWeapon) {
+            const auto [width, height] { interfaces.surface->getTextSize(config.font, interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name)) };
+            interfaces.surface->setTextFont(config.font);
+            interfaces.surface->setTextColor(config.activeWeaponColor, 255);
+            interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 6 - height);
+            interfaces.surface->printText(interfaces.localize->find(entity->getActiveWeapon()->getWeaponData()->name));
+        }     
+
         float drawPositionY = bbox.bottom;
 
         if (config.health)
