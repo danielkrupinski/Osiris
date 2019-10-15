@@ -15,6 +15,7 @@ enum class ClassId {
     EconEntity = 53,
     Hostage = 97,
     Healthshot  = 104,
+    Cash,
     Knife = 107,
     KnifeGG,
     MolotovProjectile = 113,
