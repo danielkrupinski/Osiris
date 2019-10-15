@@ -268,19 +268,12 @@ void Config::load(size_t id) noexcept
             espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
             espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
         }
-
         if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
         if (espJson.isMember("Distance color")) {
             espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
-	if (espJson.isMember("ActiveWeapon")) espConfig.distance = espJson["ActiveWeapon"].asBool();
-	if (espJson.isMember("ActiveWeapon color")) {
-		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
-		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
-		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
-	}   
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
