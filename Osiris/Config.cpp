@@ -226,12 +226,12 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
-		if (espJson.isMember("ActiveWeapon")) espConfig.distance = espJson["ActiveWeapon"].asBool();
-		if (espJson.isMember("ActiveWeapon color")) {
-			espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
-			espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
-			espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
-		}        
+	if (espJson.isMember("ActiveWeapon")) espConfig.distance = espJson["ActiveWeapon"].asBool();
+	if (espJson.isMember("ActiveWeapon color")) {
+		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
+		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
+		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
+	}        
     }
 
     {
@@ -275,6 +275,12 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+	if (espJson.isMember("ActiveWeapon")) espConfig.distance = espJson["ActiveWeapon"].asBool();
+	if (espJson.isMember("ActiveWeapon color")) {
+		espConfig.distanceColor[0] = espJson["ActiveWeapon color"][0].asFloat();
+		espConfig.distanceColor[1] = espJson["ActiveWeapon color"][1].asFloat();
+		espConfig.distanceColor[2] = espJson["ActiveWeapon color"][2].asFloat();
+	}   
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
