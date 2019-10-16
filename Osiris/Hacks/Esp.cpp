@@ -374,9 +374,10 @@ void Esp::render() noexcept
                 renderWeaponEsp(entity);
             else {
                 switch (entity->getClientClass()->classId) {
-                case ClassId::Dronegun:
-                    renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
+                case ClassId::Dronegun: {
+                    renderEntityEsp(entity, config.esp.dangerZone[0], std::wstring{ interfaces.localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->sentryHealth())).append(L" HP)").c_str());
                     break;
+                }
                 case ClassId::Drone: {
                     std::wstring text{ L"Drone" };
                     if (const auto tablet{ interfaces.entityList->getEntityFromHandle(entity->droneTarget()) }) {
