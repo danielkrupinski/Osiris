@@ -232,6 +232,7 @@ void Misc::drawBombTimer() noexcept
                     }
                 }
             }
+            break;
         }
     }
 }
