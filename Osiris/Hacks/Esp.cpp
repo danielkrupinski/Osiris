@@ -396,6 +396,13 @@ void Esp::render() noexcept
                 case ClassId::Cash:
                     renderEntityEsp(entity, config.esp.dangerZone[2], L"Cash");
                     break;
+                case ClassId::LootCrate: {
+                    const auto modelName{ entity->getModel()->name };
+                    if (strstr(modelName, "dufflebag")) {
+                        renderEntityEsp(entity, config.esp.dangerZone[3], L"Cash Dufflebag");
+                    }
+                    break;
+                }
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
