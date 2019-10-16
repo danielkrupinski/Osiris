@@ -293,4 +293,6 @@ public:
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool);
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int);
+
+    NETVAR(sentryHealth, "CDronegun", "m_iHealth", int);
 };
