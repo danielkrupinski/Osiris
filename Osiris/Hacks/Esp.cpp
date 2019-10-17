@@ -416,6 +416,8 @@ void Esp::render() noexcept
                     const auto modelName{ entity->getModel()->name };
                     if (strstr(modelName, "dz_armor_helmet"))
                         renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
+                    else if (strstr(modelName, "dz_armor"))
+                        renderEntityEsp(entity, config.esp.dangerZone[10], L"Armor");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:
