@@ -402,6 +402,8 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[3], L"Cash Dufflebag");
                     else if (strstr(modelName, "case_pistol"))
                         renderEntityEsp(entity, config.esp.dangerZone[4], L"Pistol Case");
+                    else if (strstr(modelName, "case_light"))
+                        renderEntityEsp(entity, config.esp.dangerZone[5], L"Light Case");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:

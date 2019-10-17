@@ -148,7 +148,7 @@ public:
         std::array<Projectile, 9> projectiles;
 
         struct DangerZone : public Shared { };
-        std::array<DangerZone, 5> dangerZone;
+        std::array<DangerZone, 6> dangerZone;
 
         std::array<Player, 6> players;
     } esp;
