@@ -412,6 +412,12 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[8], L"Tools Case");
                     break;
                 }
+                case ClassId::WeaponUpgrade: {
+                    const auto modelName{ entity->getModel()->name };
+                    if (strstr(modelName, "dz_armor_helmet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
+                    break;
+                }
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
