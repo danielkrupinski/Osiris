@@ -398,9 +398,10 @@ void Esp::render() noexcept
                     break;
                 case ClassId::LootCrate: {
                     const auto modelName{ entity->getModel()->name };
-                    if (strstr(modelName, "dufflebag")) {
+                    if (strstr(modelName, "dufflebag"))
                         renderEntityEsp(entity, config.esp.dangerZone[3], L"Cash Dufflebag");
-                    }
+                    else if (strstr(modelName, "case_pistol"))
+                        renderEntityEsp(entity, config.esp.dangerZone[4], L"Pistol Case");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:
