@@ -408,6 +408,8 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[6], L"Heavy Case");
                     else if (strstr(modelName, "case_explosive"))
                         renderEntityEsp(entity, config.esp.dangerZone[7], L"Explosive Case");
+                    else if (strstr(modelName, "case_tools"))
+                        renderEntityEsp(entity, config.esp.dangerZone[8], L"Tools Case");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:

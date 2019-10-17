@@ -278,7 +278,7 @@ void Config::load(size_t id) noexcept
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
-        const auto& espJson = json["Esp"]["Danger zone"][i];
+        const auto& espJson = json["Esp"]["Danger Zone"][i];
         auto& espConfig = esp.dangerZone[i];
 
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
@@ -745,7 +745,7 @@ void Config::save(size_t id) const noexcept
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
-        auto& espJson = json["Esp"]["Danger zone"][i];
+        auto& espJson = json["Esp"]["Danger Zone"][i];
         const auto& espConfig = esp.dangerZone[i];
 
         espJson["Enabled"] = espConfig.enabled;
