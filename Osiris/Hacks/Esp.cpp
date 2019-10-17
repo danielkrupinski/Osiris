@@ -404,6 +404,8 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[4], L"Pistol Case");
                     else if (strstr(modelName, "case_light"))
                         renderEntityEsp(entity, config.esp.dangerZone[5], L"Light Case");
+                    else if (strstr(modelName, "case_heavy"))
+                        renderEntityEsp(entity, config.esp.dangerZone[6], L"Heavy Case");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:
