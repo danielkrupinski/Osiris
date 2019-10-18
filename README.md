@@ -8,10 +8,11 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Backtrack** - abuse lag compensation to move players back in time
 * **Glow** - render glow effect on entities
 * **Chams** - color player models to improve visibility
-* **Esp** - show information about players
+* **Esp** - show information about players, dropped weapons and projectiles
 * **Visuals** - miscellaneous visual options
 * **Skin changer** - change weapon skins, knives and stickers
 * **Sound** - modify volume of certain sound effects
+* **Style** - select menu window layout and colors
 * **Misc** - miscellaneous features
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
 * **Config** - JSON-based configuration system
@@ -33,7 +34,6 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
-    * **Max angle delta** - maximum viewangles change per tick
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Recoil control x** - horizontal recoil control factor
     * **Recoil control y** - vertical recoil control factor
@@ -161,6 +161,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
+    * **Max angle delta** - maximum viewangles change per tick
     * **Unhook** - unload cheat
 
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
