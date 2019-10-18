@@ -418,6 +418,8 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
                     else if (strstr(modelName, "dz_armor"))
                         renderEntityEsp(entity, config.esp.dangerZone[10], L"Armor");
+                    else if (strstr(modelName, "dz_helmet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[11], L"Helmet");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:
