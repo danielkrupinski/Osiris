@@ -29,6 +29,7 @@ namespace Misc {
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
+    void fixTabletSignal() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
