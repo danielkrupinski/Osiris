@@ -424,6 +424,8 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[12], L"Parachute");
                     else if (strstr(modelName, "briefcase"))
                         renderEntityEsp(entity, config.esp.dangerZone[13], L"Briefcase");
+                    else if (strstr(modelName, "upgrade_tablet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[14], L"Tablet Upgrade");
                     break;
                 }
                 case ClassId::BaseCSGrenadeProjectile:
