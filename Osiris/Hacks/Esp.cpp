@@ -433,6 +433,9 @@ void Esp::render() noexcept
                 case ClassId::AmmoBox:
                     renderEntityEsp(entity, config.esp.dangerZone[16], L"Ammobox");
                     break;
+                case ClassId::RadarJammer:
+                    renderEntityEsp(entity, config.esp.dangerZone[17], interfaces.localize->find("#TabletJammer"));
+                    break;
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
