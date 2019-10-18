@@ -322,9 +322,6 @@
     <ClInclude Include="SDK\AnimState.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\RenderContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -335,6 +332,9 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\RenderContext.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

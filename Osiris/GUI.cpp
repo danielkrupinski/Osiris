@@ -562,14 +562,14 @@ void GUI::renderEspWindow() noexcept
 {
     if (window.esp) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 500.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
         
         static int currentCategory = 0;
         static int currentItem = 0;
 
-        if (ImGui::ListBoxHeader("##", { 100.0f, 250.0f })) {
+        if (ImGui::ListBoxHeader("##", { 125.0f, 300.0f })) {
             static constexpr const char* players[]{ "All", "Visible", "Occluded" };
             
             ImGui::Text("Allies");
@@ -609,18 +609,37 @@ void GUI::renderEspWindow() noexcept
             if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
                 currentCategory = 2;
 
-            ImGui::Text("Danger zone");
+            ImGui::Text("Projectiles");
             ImGui::Indent();
-            ImGui::PushID("Danger zone");
+            ImGui::PushID("Projectiles");
             ImGui::PushFont(fonts.segoeui);
-            static constexpr const char* dangerZone[]{ "Sentries", "Drones" };
+            static constexpr const char* projectiles[]{ "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
+
+            for (int i = 0; i < IM_ARRAYSIZE(projectiles); i++) {
+                bool isSelected = currentCategory == 3 && currentItem == i;
+
+                if (ImGui::Selectable(projectiles[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 3;
+                }
+            }
+
+            ImGui::PopFont();
+            ImGui::PopID();
+            ImGui::Unindent();
+
+            ImGui::Text("Danger Zone");
+            ImGui::Indent();
+            ImGui::PushID("Danger Zone");
+            ImGui::PushFont(fonts.segoeui);
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
-                bool isSelected = currentCategory == 3 && currentItem == i;
+                bool isSelected = currentCategory == 4 && currentItem == i;
 
                 if (ImGui::Selectable(dangerZone[i], isSelected)) {
                     currentItem = i;
-                    currentCategory = 3;
+                    currentCategory = 4;
                 }
             }
 
@@ -664,6 +683,8 @@ void GUI::renderEspWindow() noexcept
                 checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
+                checkboxedColorPicker("Active Weapon", &config.esp.players[selected].activeWeapon, config.esp.players[selected].activeWeaponColor);                
+                ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 2: {
@@ -686,9 +707,33 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.weapon.distance, config.esp.weapon.distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 3: {
+                ImGui::Checkbox("Enabled", &config.esp.projectiles[currentItem].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.projectiles[currentItem].font, 1, 294);
+                config.esp.projectiles[currentItem].font = std::clamp(config.esp.projectiles[currentItem].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                checkboxedColorPicker("Snaplines", &config.esp.projectiles[currentItem].snaplines, config.esp.projectiles[currentItem].snaplinesColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Box", &config.esp.projectiles[currentItem].box, config.esp.projectiles[currentItem].boxColor);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                checkboxedColorPicker("Name", &config.esp.projectiles[currentItem].name, config.esp.projectiles[currentItem].nameColor);
+                ImGui::SameLine(spacing);
+                checkboxedColorPicker("Outline", &config.esp.projectiles[currentItem].outline, config.esp.projectiles[currentItem].outlineColor);
+                checkboxedColorPicker("Distance", &config.esp.projectiles[currentItem].distance, config.esp.projectiles[currentItem].distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
+                break;
+            }
+            case 4: {
                 int selected = currentItem;
                 ImGui::Checkbox("Enabled", &config.esp.dangerZone[selected].enabled);
                 ImGui::SameLine(0.0f, 50.0f);
@@ -709,6 +754,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 checkboxedColorPicker("Outline", &config.esp.dangerZone[selected].outline, config.esp.dangerZone[selected].outlineColor);
                 checkboxedColorPicker("Distance", &config.esp.dangerZone[selected].distance, config.esp.dangerZone[selected].distanceColor);
+                ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             } }
 

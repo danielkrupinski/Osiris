@@ -65,20 +65,18 @@ static constexpr void renderPositionedText(unsigned font, const wchar_t* text, c
 }
 
 struct BoundingBox {
-    float left;
-    float right;
-    float top;
-    float bottom;
+    float x0, y0;
+    float x1, y1;
     Vector vertices[8];
 };
 
 static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 {
     const auto [width, height] { interfaces.surface->getScreenSize() };
-    out.left = static_cast<float>(width * 2);
-    out.right = -static_cast<float>(width * 2);
-    out.top = -static_cast<float>(height * 2);
-    out.bottom = static_cast<float>(height * 2);
+    out.x0 = static_cast<float>(width * 2);
+    out.y0 = static_cast<float>(height * 2);
+    out.x1 = -static_cast<float>(width * 2);
+    out.y1 = -static_cast<float>(height * 2);
 
     const auto min{ entity->getCollideable()->obbMins() };
     const auto max{ entity->getCollideable()->obbMaxs() };
@@ -91,17 +89,17 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
         if (!worldToScreen(point.transform(entity->coordinateFrame()), out.vertices[i]))
             return false;
 
-        if (out.left > out.vertices[i].x)
-            out.left = out.vertices[i].x;
+        if (out.x0 > out.vertices[i].x)
+            out.x0 = out.vertices[i].x;
 
-        if (out.right < out.vertices[i].x)
-            out.right = out.vertices[i].x;
+        if (out.y0 > out.vertices[i].y)
+            out.y0 = out.vertices[i].y;
 
-        if (out.top < out.vertices[i].y)
-            out.top = out.vertices[i].y;
+        if (out.x1 < out.vertices[i].x)
+            out.x1 = out.vertices[i].x;
 
-        if (out.bottom > out.vertices[i].y)
-            out.bottom = out.vertices[i].y;
+        if (out.y1 < out.vertices[i].y)
+            out.y1 = out.vertices[i].y;
     }
     return true;
 }
@@ -113,34 +111,34 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
 
         switch (config.boxType) {
         case 0:
-            interfaces.surface->drawOutlinedRect(bbox.left, bbox.bottom, bbox.right, bbox.top);
+            interfaces.surface->drawOutlinedRect(bbox.x0, bbox.y0, bbox.x1, bbox.y1);
 
             if (config.outline) {
                 interfaces.surface->setDrawColor(config.outlineColor, 255);
-                interfaces.surface->drawOutlinedRect(bbox.left + 1, bbox.bottom + 1, bbox.right - 1, bbox.top - 1);
-                interfaces.surface->drawOutlinedRect(bbox.left - 1, bbox.bottom - 1, bbox.right + 1, bbox.top + 1);
+                interfaces.surface->drawOutlinedRect(bbox.x0 + 1, bbox.y0 + 1, bbox.x1 - 1, bbox.y1 - 1);
+                interfaces.surface->drawOutlinedRect(bbox.x0 - 1, bbox.y0 - 1, bbox.x1 + 1, bbox.y1 + 1);
             }
             break;
         case 1:
-            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left, bbox.bottom, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
-            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom);
-            interfaces.surface->drawLine(bbox.right, bbox.bottom, bbox.right, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
-            interfaces.surface->drawLine(bbox.left, bbox.top, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top);
-            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top);
-            interfaces.surface->drawLine(bbox.right, bbox.top, bbox.right, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+            interfaces.surface->drawLine(bbox.x0, bbox.y0, bbox.x0, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
+            interfaces.surface->drawLine(bbox.x0, bbox.y0, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0);
+            interfaces.surface->drawLine(bbox.x1, bbox.y0, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0);
+            interfaces.surface->drawLine(bbox.x1, bbox.y0, bbox.x1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
+            interfaces.surface->drawLine(bbox.x0, bbox.y1, bbox.x0, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
+            interfaces.surface->drawLine(bbox.x0, bbox.y1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y1);
+            interfaces.surface->drawLine(bbox.x1, bbox.y1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y1);
+            interfaces.surface->drawLine(bbox.x1, bbox.y1, bbox.x1, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
 
             if (config.outline) {
                 interfaces.surface->setDrawColor(config.outlineColor, 255);
-                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left - 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-                interfaces.surface->drawLine(bbox.left - 1, bbox.bottom - 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
-                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.bottom - 1);
-                interfaces.surface->drawLine(bbox.right + 1, bbox.bottom - 1, bbox.right + 1, bbox.bottom + fabsf(bbox.top - bbox.bottom) / 4);
-                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left - 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
-                interfaces.surface->drawLine(bbox.left - 1, bbox.top + 1, bbox.left + fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
-                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right - fabsf(bbox.right - bbox.left) / 4, bbox.top + 1);
-                interfaces.surface->drawLine(bbox.right + 1, bbox.top + 1, bbox.right + 1, bbox.top - fabsf(bbox.top - bbox.bottom) / 4);
+                interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 - 1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
+                interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
+                interfaces.surface->drawLine(bbox.x1 + 1, bbox.y0 - 1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
+                interfaces.surface->drawLine(bbox.x1 + 1, bbox.y0 - 1, bbox.x1 + 1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
+                interfaces.surface->drawLine(bbox.x0 - 1, bbox.y1 + 1, bbox.x0 - 1, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
+                interfaces.surface->drawLine(bbox.x0 - 1, bbox.y1 + 1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y1 + 1);
+                interfaces.surface->drawLine(bbox.x1 + 1, bbox.y1 + 1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y1 + 1);
+                interfaces.surface->drawLine(bbox.x1 + 1, bbox.y1 + 1, bbox.x1 + 1, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
             }
             break;
         case 2:
@@ -178,7 +176,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
 
-        float drawPositionX = bbox.left - 5;
+        float drawPositionX = bbox.x0 - 5;
 
         if (config.healthBar) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
@@ -187,22 +185,22 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.top);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline) {
                 interfaces.surface->setDrawColor(config.outlineColor, 255);
-                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
 
         if (config.armorBar) {
             interfaces.surface->setDrawColor(config.armorBarColor, 255);
-            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.bottom + abs(bbox.top - bbox.bottom) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.top);
+            interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
             
             if (config.outline) {
                 interfaces.surface->setDrawColor(config.outlineColor, 255);
-                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.bottom - 1, drawPositionX + 1, bbox.top + 1);
+                interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
@@ -215,25 +213,34 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                     const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
                     interfaces.surface->setTextFont(config.font);
                     interfaces.surface->setTextColor(config.nameColor, 255);
-                    interfaces.surface->setTextPosition(bbox.left + (fabsf(bbox.right - bbox.left) - width) / 2, bbox.bottom - 5 - height);
+                    interfaces.surface->setTextPosition(bbox.x0 + (fabsf(bbox.x1 - bbox.x0) - width) / 2, bbox.y0 - 5 - height);
                     interfaces.surface->printText(name);
                 }
             }
         }
 
-        float drawPositionY = bbox.bottom;
+        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon && activeWeapon) {
+            const auto name{ interfaces.localize->find(activeWeapon->getWeaponData()->name) };
+            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+            interfaces.surface->setTextFont(config.font);
+            interfaces.surface->setTextColor(config.activeWeaponColor, 255);
+            interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
+            interfaces.surface->printText(name);
+        }     
+
+        float drawPositionY = bbox.y0;
 
         if (config.health)
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.x1 + 5, drawPositionY });
 
         if (config.armor)
-            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.x1 + 5, drawPositionY });
 
         if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.x1 + 5, drawPositionY });
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
     }
 }
 
@@ -247,14 +254,14 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.nameColor, 255);
-            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
 
-        float drawPositionY = bbox.bottom;
+        float drawPositionY = bbox.y0;
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
     }
 }
 
@@ -267,14 +274,14 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
             interfaces.surface->setTextColor(config.nameColor, 255);
-            interfaces.surface->setTextPosition(bbox.left + (bbox.right - bbox.left - width) / 2, bbox.top + 5);
+            interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
 
-        float drawPositionY = bbox.bottom;
+        float drawPositionY = bbox.y0;
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.right + 5, drawPositionY });
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
     }
 }
 
@@ -300,9 +307,14 @@ enum EspId {
     ENEMIES_OCCLUDED
 };
 
+static constexpr bool isInRange(Entity* entity, float maxDistance) noexcept
+{
+    return maxDistance == 0.0f || (entity->getAbsOrigin() - interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAbsOrigin()).length() * 0.0254f <= maxDistance;
+}
+
 static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
-    if (config.esp.players[id].enabled) {
+    if (config.esp.players[id].enabled && isInRange(entity, config.esp.players[id].maxDistance)) {
         renderSnaplines(entity, config.esp.players[id]);
         renderEyeTraces(entity, config.esp.players[id]);
         renderPlayerBox(entity, config.esp.players[id]);
@@ -313,7 +325,7 @@ static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 
 static constexpr void renderWeaponEsp(Entity* entity) noexcept
 {
-    if (config.esp.weapon.enabled) {
+    if (config.esp.weapon.enabled && isInRange(entity, config.esp.weapon.maxDistance)) {
         renderWeaponBox(entity, config.esp.weapon);
         renderSnaplines(entity, config.esp.weapon);
     }
@@ -321,7 +333,7 @@ static constexpr void renderWeaponEsp(Entity* entity) noexcept
 
 static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
 {
-    if (config.enabled) {
+    if (config.enabled && isInRange(entity, config.maxDistance)) {
         renderEntityBox(entity, config, name);
         renderSnaplines(entity, config);
     }
@@ -362,11 +374,78 @@ void Esp::render() noexcept
                 renderWeaponEsp(entity);
             else {
                 switch (entity->getClientClass()->classId) {
-                case ClassId::Dronegun:
-                    renderEntityEsp(entity, config.esp.dangerZone[0], interfaces.localize->find("#SFUI_WPNHUD_AutoSentry"));
+                case ClassId::Dronegun: {
+                    renderEntityEsp(entity, config.esp.dangerZone[0], std::wstring{ interfaces.localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->sentryHealth())).append(L" HP)").c_str());
                     break;
-                case ClassId::Drone:
-                    renderEntityEsp(entity, config.esp.dangerZone[1], L"Drone");
+                }
+                case ClassId::Drone: {
+                    std::wstring text{ L"Drone" };
+                    if (const auto tablet{ interfaces.entityList->getEntityFromHandle(entity->droneTarget()) }) {
+                        if (const auto player{ interfaces.entityList->getEntityFromHandle(tablet->ownerEntity()) }) {
+                            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(player->index(), playerInfo)) {
+                                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                                    text += L" -> ";
+                                    text += name;
+                                }
+                            }
+                        }
+                    }
+                    renderEntityEsp(entity, config.esp.dangerZone[1], text.c_str());
+                    break;
+                }
+                case ClassId::Cash:
+                    renderEntityEsp(entity, config.esp.dangerZone[2], L"Cash");
+                    break;
+                case ClassId::LootCrate: {
+                    const auto modelName{ entity->getModel()->name };
+                    if (strstr(modelName, "dufflebag"))
+                        renderEntityEsp(entity, config.esp.dangerZone[3], L"Cash Dufflebag");
+                    else if (strstr(modelName, "case_pistol"))
+                        renderEntityEsp(entity, config.esp.dangerZone[4], L"Pistol Case");
+                    else if (strstr(modelName, "case_light"))
+                        renderEntityEsp(entity, config.esp.dangerZone[5], L"Light Case");
+                    else if (strstr(modelName, "case_heavy"))
+                        renderEntityEsp(entity, config.esp.dangerZone[6], L"Heavy Case");
+                    else if (strstr(modelName, "case_explosive"))
+                        renderEntityEsp(entity, config.esp.dangerZone[7], L"Explosive Case");
+                    else if (strstr(modelName, "case_tools"))
+                        renderEntityEsp(entity, config.esp.dangerZone[8], L"Tools Case");
+                    break;
+                }
+                case ClassId::WeaponUpgrade: {
+                    const auto modelName{ entity->getModel()->name };
+                    if (strstr(modelName, "dz_armor_helmet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
+                    else if (strstr(modelName, "dz_armor"))
+                        renderEntityEsp(entity, config.esp.dangerZone[10], L"Armor");
+                    break;
+                }
+                case ClassId::BaseCSGrenadeProjectile:
+                    if (strstr(entity->getModel()->name, "flashbang"))
+                        renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
+                    else
+                        renderEntityEsp(entity, config.esp.projectiles[1], interfaces.localize->find("#SFUI_WPNHUD_HE_Grenade"));
+                    break;
+                case ClassId::BreachChargeProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[2], interfaces.localize->find("#SFUI_WPNHUD_BreachCharge"));
+                    break;
+                case ClassId::BumpMineProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[3], interfaces.localize->find("#SFUI_WPNHUD_BumpMine"));
+                    break;
+                case ClassId::DecoyProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[4], interfaces.localize->find("#SFUI_WPNHUD_Decoy"));
+                    break;
+                case ClassId::MolotovProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[5], interfaces.localize->find("#SFUI_WPNHUD_Molotov"));
+                    break;
+                case ClassId::SensorGrenadeProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[6], interfaces.localize->find("#SFUI_WPNHUD_TAGrenade"));
+                    break;
+                case ClassId::SmokeGrenadeProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[7], interfaces.localize->find("#SFUI_WPNHUD_SmokeGrenade"));
+                    break;
+                case ClassId::SnowballProjectile:
+                    renderEntityEsp(entity, config.esp.projectiles[8], interfaces.localize->find("#SFUI_WPNHUD_Snowball"));
                     break;
                 }
             }   
