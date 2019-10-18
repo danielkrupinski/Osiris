@@ -337,5 +337,8 @@
     <ClInclude Include="SDK\RenderContext.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="imguiCustom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
