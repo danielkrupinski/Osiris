@@ -84,6 +84,11 @@ public:
         return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
     }
 
+    constexpr auto getModel() noexcept
+    {
+        return callVirtualMethod<const Model*>(this + 4, 8);
+    }
+
     Vector getBonePosition(int bone) noexcept
     {
         static matrix3x4 boneMatrices[128];
@@ -286,4 +291,8 @@ public:
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool);
+    
+    NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int);
+
+    NETVAR(sentryHealth, "CDronegun", "m_iHealth", int);
 };

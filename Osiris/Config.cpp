@@ -213,6 +213,12 @@ void Config::load(size_t id) noexcept
             espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
             espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
         }
+        if (espJson.isMember("Active weapon")) espConfig.activeWeapon = espJson["Active weapon"].asBool();
+        if (espJson.isMember("Active weapon color")) {
+            espConfig.activeWeaponColor[0] = espJson["Active weapon color"][0].asFloat();
+            espConfig.activeWeaponColor[1] = espJson["Active weapon color"][1].asFloat();
+            espConfig.activeWeaponColor[2] = espJson["Active weapon color"][2].asFloat();
+        }
         if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
         if (espJson.isMember("Outline color")) {
             espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
@@ -225,6 +231,7 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     {
@@ -261,17 +268,17 @@ void Config::load(size_t id) noexcept
             espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
             espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
         }
-
         if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
         if (espJson.isMember("Distance color")) {
             espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
-        const auto& espJson = json["Esp"]["Danger zone"][i];
+        const auto& espJson = json["Esp"]["Danger Zone"][i];
         auto& espConfig = esp.dangerZone[i];
 
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
@@ -311,6 +318,52 @@ void Config::load(size_t id) noexcept
             espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
             espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
         }
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
+    }
+
+    for (size_t i = 0; i < esp.projectiles.size(); i++) {
+        const auto& espJson = json["Esp"]["Projectiles"][i];
+        auto& espConfig = esp.projectiles[i];
+
+        if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
+        if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
+        if (espJson.isMember("Snaplines")) espConfig.snaplines = espJson["Snaplines"].asBool();
+        if (espJson.isMember("Snaplines color")) {
+            espConfig.snaplinesColor[0] = espJson["Snaplines color"][0].asFloat();
+            espConfig.snaplinesColor[1] = espJson["Snaplines color"][1].asFloat();
+            espConfig.snaplinesColor[2] = espJson["Snaplines color"][2].asFloat();
+        }
+        if (espJson.isMember("Box")) espConfig.box = espJson["Box"].asBool();
+        if (espJson.isMember("Box color")) {
+            espConfig.boxColor[0] = espJson["Box color"][0].asFloat();
+            espConfig.boxColor[1] = espJson["Box color"][1].asFloat();
+            espConfig.boxColor[2] = espJson["Box color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
+
+        if (espJson.isMember("Outline")) espConfig.outline = espJson["Outline"].asBool();
+        if (espJson.isMember("Outline color")) {
+            espConfig.outlineColor[0] = espJson["Outline color"][0].asFloat();
+            espConfig.outlineColor[1] = espJson["Outline color"][1].asFloat();
+            espConfig.outlineColor[2] = espJson["Outline color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Name")) espConfig.name = espJson["Name"].asBool();
+        if (espJson.isMember("Name color")) {
+            espConfig.nameColor[0] = espJson["Name color"][0].asFloat();
+            espConfig.nameColor[1] = espJson["Name color"][1].asFloat();
+            espConfig.nameColor[2] = espJson["Name color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
+        if (espJson.isMember("Distance color")) {
+            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
+            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
+            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        }
+
+        if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
     {
@@ -646,6 +699,10 @@ void Config::save(size_t id) const noexcept
         espJson["headDotColor"][0] = espConfig.headDotColor[0];
         espJson["headDotColor"][1] = espConfig.headDotColor[1];
         espJson["headDotColor"][2] = espConfig.headDotColor[2];
+        espJson["Active weapon"] = espConfig.activeWeapon;
+        espJson["Active weapon color"][0] = espConfig.activeWeaponColor[0];
+        espJson["Active weapon color"][1] = espConfig.activeWeaponColor[1];
+        espJson["Active weapon color"][2] = espConfig.activeWeaponColor[2];	    
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];
         espJson["Outline color"][1] = espConfig.outlineColor[1];
@@ -654,6 +711,7 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     {
@@ -683,10 +741,11 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     for (size_t i = 0; i < esp.dangerZone.size(); i++) {
-        auto& espJson = json["Esp"]["Danger zone"][i];
+        auto& espJson = json["Esp"]["Danger Zone"][i];
         const auto& espConfig = esp.dangerZone[i];
 
         espJson["Enabled"] = espConfig.enabled;
@@ -712,6 +771,37 @@ void Config::save(size_t id) const noexcept
         espJson["Distance color"][0] = espConfig.distanceColor[0];
         espJson["Distance color"][1] = espConfig.distanceColor[1];
         espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
+    }
+
+    for (size_t i = 0; i < esp.projectiles.size(); i++) {
+        auto& espJson = json["Esp"]["Projectiles"][i];
+        const auto& espConfig = esp.projectiles[i];
+
+        espJson["Enabled"] = espConfig.enabled;
+        espJson["Font"] = espConfig.font;
+        espJson["Snaplines"] = espConfig.snaplines;
+        espJson["Snaplines color"][0] = espConfig.snaplinesColor[0];
+        espJson["Snaplines color"][1] = espConfig.snaplinesColor[1];
+        espJson["Snaplines color"][2] = espConfig.snaplinesColor[2];
+        espJson["Box"] = espConfig.box;
+        espJson["Box color"][0] = espConfig.boxColor[0];
+        espJson["Box color"][1] = espConfig.boxColor[1];
+        espJson["Box color"][2] = espConfig.boxColor[2];
+        espJson["Box type"] = espConfig.boxType;
+        espJson["Outline"] = espConfig.outline;
+        espJson["Outline color"][0] = espConfig.outlineColor[0];
+        espJson["Outline color"][1] = espConfig.outlineColor[1];
+        espJson["Outline color"][2] = espConfig.outlineColor[2];
+        espJson["Name"] = espConfig.name;
+        espJson["Name color"][0] = espConfig.nameColor[0];
+        espJson["Name color"][1] = espConfig.nameColor[1];
+        espJson["Name color"][2] = espConfig.nameColor[2];
+        espJson["Distance"] = espConfig.distance;
+        espJson["Distance color"][0] = espConfig.distanceColor[0];
+        espJson["Distance color"][1] = espConfig.distanceColor[1];
+        espJson["Distance color"][2] = espConfig.distanceColor[2];
+        espJson["Max distance"] = espConfig.maxDistance;
     }
 
     {
