@@ -1071,7 +1071,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
         ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
-        ImGui::PushItemWidth(90.0f);
+        ImGui::SetNextItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
@@ -1080,9 +1080,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.quickHealthshotKey);
         ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
-        ImGui::PushItemWidth(120.0f);
+        ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
+        ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
-        ImGui::PushItemWidth(290.0f);
 
         if (ImGui::Button("Unhook"))
             hooks.restore();
