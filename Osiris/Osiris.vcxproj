@@ -22,6 +22,7 @@
     <ClCompile Include="Hacks\SkinChanger.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
+    <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />

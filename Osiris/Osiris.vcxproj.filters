@@ -113,6 +113,9 @@
     <ClCompile Include="Hacks\Reportbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="imguiCustom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
