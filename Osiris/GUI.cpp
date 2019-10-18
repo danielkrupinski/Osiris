@@ -631,7 +631,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Indent();
             ImGui::PushID("Danger Zone");
             ImGui::PushFont(fonts.segoeui);
-            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump" };
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
                 bool isSelected = currentCategory == 4 && currentItem == i;

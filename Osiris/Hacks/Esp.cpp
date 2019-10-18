@@ -430,6 +430,9 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[15], L"ExoJump");
                     break;
                 }
+                case ClassId::AmmoBox:
+                    renderEntityEsp(entity, config.esp.dangerZone[16], L"Ammobox");
+                    break;
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));
