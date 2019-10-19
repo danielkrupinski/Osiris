@@ -132,6 +132,7 @@ void Config::load(size_t id) noexcept
             if (materialsJson.isMember("Enabled")) materialsConfig.enabled = materialsJson["Enabled"].asBool();
             if (materialsJson.isMember("Health based")) materialsConfig.healthBased = materialsJson["Health based"].asBool();
             if (materialsJson.isMember("Rainbow")) materialsConfig.rainbow = materialsJson["Rainbow"].asBool();
+            if (materialsJson.isMember("Rainbow speed")) materialsConfig.rainbowSpeed = materialsJson["Rainbow speed"].asFloat();
             if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
             if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
@@ -643,6 +644,7 @@ void Config::save(size_t id) const noexcept
             materialsJson["Enabled"] = materialsConfig.enabled;
             materialsJson["Health based"] = materialsConfig.healthBased;
             materialsJson["Rainbow"] = materialsConfig.rainbow;
+            materialsJson["Rainbow speed"] = materialsConfig.rainbowSpeed;
             materialsJson["Blinking"] = materialsConfig.blinking;
             materialsJson["Material"] = materialsConfig.material;
             materialsJson["Wireframe"] = materialsConfig.wireframe;

@@ -94,6 +94,7 @@ public:
             bool enabled{ false };
             bool healthBased{ false };
             bool rainbow{ false };
+            float rainbowSpeed{ 0.6f };
             bool blinking{ false };
             int material{ 0 };
             bool wireframe{ false };
