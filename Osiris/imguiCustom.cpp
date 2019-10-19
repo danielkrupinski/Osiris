@@ -3,7 +3,7 @@
 
 #include "imguiCustom.h"
 
-void ImGuiCustom::colorPicker(const char* name, bool* enable, float color[3]) noexcept
+void ImGuiCustom::colorPicker(const char* name, bool* enable, float color[3], bool* rainbow, float* rainbowSpeed) noexcept
 {
     ImGui::PushID(name);
     ImGui::Checkbox("##check", enable);
@@ -17,6 +17,17 @@ void ImGuiCustom::colorPicker(const char* name, bool* enable, float color[3]) no
 
     if (ImGui::BeginPopup("##popup")) {
         ImGui::ColorPicker3("##picker", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+
+        if (rainbow && rainbowSpeed) {
+            ImGui::SameLine();
+
+            if (ImGui::BeginChild("##child", { 100.0f, 0.0f })) {
+                ImGui::Checkbox("Rainbow", rainbow);
+                ImGui::SetNextItemWidth(50.0f);
+                ImGui::InputFloat("Speed", rainbowSpeed, 0.0f, 0.0f, "%.1f");
+                ImGui::EndChild();
+            }
+        }
         ImGui::EndPopup();
     }
     ImGui::PopID();
