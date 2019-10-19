@@ -7,6 +7,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "imguiCustom.h"
+
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
@@ -526,31 +528,16 @@ void GUI::renderChamsWindow() noexcept
         ImGui::InputInt("##mat", &material, 1, 2);
         material = std::clamp(material, 1, 2);
         ImGui::SameLine();
-        ImGui::Checkbox("Enabled", &config.chams[currentItem].materials[material - 1].enabled);
-        ImGui::Separator();
-        ImGui::Checkbox("Health based", &config.chams[currentItem].materials[material - 1].healthBased);
-        ImGui::Checkbox("Rainbow", &config.chams[currentItem].materials[material - 1].rainbow);
-        ImGui::Checkbox("Blinking", &config.chams[currentItem].materials[material - 1].blinking);
-        ImGui::Combo("Material", &config.chams[currentItem].materials[material - 1].material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
-        ImGui::Checkbox("Wireframe", &config.chams[currentItem].materials[material - 1].wireframe);
+        auto& chams{ config.chams[currentItem].materials[material - 1] };
 
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].materials[material - 1].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.chams[currentItem].materials[material - 1].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
-        ImGui::PushItemWidth(220.0f);
-        ImGui::PushID(4);
-        ImGui::SliderFloat("", &config.chams[currentItem].materials[material - 1].alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::PopID();
+        ImGui::Checkbox("Enabled", &chams.enabled);
+        ImGui::Separator();
+        ImGui::Checkbox("Health based", &chams.healthBased);
+        ImGui::Checkbox("Blinking", &chams.blinking);
+        ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+        ImGui::Checkbox("Wireframe", &chams.wireframe);
+        ImGuiCustom::colorPicker("Color", chams.color, nullptr, &chams.rainbow, &chams.rainbowSpeed);
+
         if (!config.style.menuStyle) {
             ImGui::End();
         }
