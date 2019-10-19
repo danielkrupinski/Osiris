@@ -70,7 +70,7 @@ private:
         }
     }
 
-    constexpr void applyChams_2(decltype(config.chams[0].materials[0])& chams, bool ignorez, int health = 0) const noexcept
+    constexpr void applyChams(decltype(config.chams[0].materials[0])& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
 
