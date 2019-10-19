@@ -110,7 +110,8 @@ void Config::load(size_t id) noexcept
 
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-        if (glowJson.isMember("rainbow")) glowConfig.rainbow = glowJson["rainbow"].asBool();
+        if (glowJson.isMember("Rainbow")) glowConfig.rainbow = glowJson["Rainbow"].asBool();
+        if (glowJson.isMember("Rainbow speed")) glowConfig.rainbowSpeed = glowJson["Rainbow speed"].asFloat();
         if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
         if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
@@ -624,7 +625,8 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["rainbow"] = glowConfig.rainbow;
+        glowJson["Rainbow"] = glowConfig.rainbow;
+        glowJson["Rainbow speed"] = glowConfig.rainbowSpeed;
         glowJson["thickness"] = glowConfig.thickness;
         glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;

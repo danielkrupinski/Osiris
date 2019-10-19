@@ -473,19 +473,9 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.glow[currentItem].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
+
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color, nullptr, &config.glow[currentItem].rainbow, &config.glow[currentItem].rainbowSpeed);
+
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
