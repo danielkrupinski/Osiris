@@ -963,20 +963,9 @@ void GUI::renderStyleWindow() noexcept
         if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
             for (int i = 0; i < ImGuiCol_COUNT; i++) {
-                if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
+                if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-                const char* name = ImGui::GetStyleColorName(i);
-                ImGui::PushID(i);
-                bool openPopup = ImGui::ColorButton("##colorbutton", style.Colors[i], ImGuiColorEditFlags_NoTooltip);
-                ImGui::SameLine(0.0f, 5.0f);
-                ImGui::TextUnformatted(name);
-                if (openPopup)
-                    ImGui::OpenPopup(name);
-                if (ImGui::BeginPopup(name)) {
-                    ImGui::ColorPicker3("##colorpicker", (float*)& style.Colors[i], ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-                    ImGui::EndPopup();
-                }
-                ImGui::PopID();
+                ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
             }
         }
 
