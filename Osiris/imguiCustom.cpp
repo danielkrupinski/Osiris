@@ -3,11 +3,13 @@
 
 #include "imguiCustom.h"
 
-void ImGuiCustom::colorPicker(const char* name, bool* enable, float color[3], bool* rainbow, float* rainbowSpeed) noexcept
+void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bool* rainbow, float* rainbowSpeed) noexcept
 {
     ImGui::PushID(name);
-    ImGui::Checkbox("##check", enable);
-    ImGui::SameLine(0.0f, 5.0f);
+    if (enable) {
+        ImGui::Checkbox("##check", enable);
+        ImGui::SameLine(0.0f, 5.0f);
+    }
     bool openPopup = ImGui::ColorButton("##btn", ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
     ImGui::SameLine(0.0f, 5.0f);
     ImGui::TextUnformatted(name);
