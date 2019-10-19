@@ -11,3 +11,10 @@ constexpr auto callVirtualMethod(void* classBase, int index, Args... args) noexc
 
 constexpr auto degreesToRadians = [](float degrees) constexpr noexcept { return degrees * static_cast<float>(M_PI) / 180.0f; };
 constexpr auto radiansToDegrees = [](float radians) constexpr noexcept { return radians * 180.0f / static_cast<float>(M_PI); };
+
+constexpr auto rainbowColor(float time, float speed) noexcept
+{
+    return std::make_tuple(std::sin(speed * time) * 0.5f + 0.5f,
+                           std::sin(speed * time + 2.0f) * 0.5f + 0.5f,
+                           std::sin(speed * time + 4.0f) * 0.5f + 0.5f);
+}
