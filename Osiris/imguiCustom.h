@@ -1,5 +1,5 @@
 #pragma once
 
 namespace ImGuiCustom {
-    void colorPicker(const char* name, float color[3], bool* enable = nullptr, bool* rainbow = nullptr, float* rainbowSpeed = nullptr) noexcept;
+    void colorPicker(const char* name, float color[3], bool* enable = nullptr, bool* rainbow = nullptr, float* rainbowSpeed = nullptr, float rainbowSpectrum[3] = nullptr) noexcept;
 }
