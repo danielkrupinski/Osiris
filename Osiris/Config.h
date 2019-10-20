@@ -25,6 +25,7 @@ public:
         float color[3]{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
+        float rainbowSpectrum[3]{ 0.0f, 2.0f, 4.0f };
     };
     
     struct ColorToggle : public Color {
@@ -104,12 +105,10 @@ public:
         struct Material {
             bool enabled{ false };
             bool healthBased{ false };
-            bool rainbow{ false };
-            float rainbowSpeed{ 0.6f };
+            Color color;
             bool blinking{ false };
             int material{ 0 };
             bool wireframe{ false };
-            float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
         };
         std::array<Material, 2> materials;

@@ -76,11 +76,11 @@ private:
 
         if (chams.healthBased && health)
             material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-        else if (chams.rainbow) {
-            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.rainbowSpeed) };
+        else if (chams.color.rainbow) {
+            const auto [r, g, b] { rainbowColor2(memory.globalVars->realtime, chams.color.rainbowSpeed, chams.color.rainbowSpectrum) };
             material->colorModulate(r, g, b);
         } else
-            material->colorModulate(chams.color);
+            material->colorModulate(chams.color.color);
         material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);

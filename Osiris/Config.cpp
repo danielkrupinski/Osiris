@@ -132,15 +132,27 @@ void Config::load(size_t id) noexcept
 
             if (materialsJson.isMember("Enabled")) materialsConfig.enabled = materialsJson["Enabled"].asBool();
             if (materialsJson.isMember("Health based")) materialsConfig.healthBased = materialsJson["Health based"].asBool();
-            if (materialsJson.isMember("Rainbow")) materialsConfig.rainbow = materialsJson["Rainbow"].asBool();
-            if (materialsJson.isMember("Rainbow speed")) materialsConfig.rainbowSpeed = materialsJson["Rainbow speed"].asFloat();
             if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
             if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
             if (materialsJson.isMember("Color")) {
-                materialsConfig.color[0] = materialsJson["Color"][0].asFloat();
-                materialsConfig.color[1] = materialsJson["Color"][1].asFloat();
-                materialsConfig.color[2] = materialsJson["Color"][2].asFloat();
+                const auto& colorJson = materialsJson["Color"];
+                auto& colorConfig = materialsConfig.color;
+
+                if (colorJson.isMember("Color")) {
+                    colorConfig.color[0] = colorJson["Color"][0].asFloat();
+                    colorConfig.color[1] = colorJson["Color"][1].asFloat();
+                    colorConfig.color[2] = colorJson["Color"][2].asFloat();
+                }
+
+                if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
+                if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
+
+                if (colorJson.isMember("Rainbow spectrum")) {
+                    colorConfig.rainbowSpectrum[0] = colorJson["Rainbow spectrum"][0].asFloat();
+                    colorConfig.rainbowSpectrum[1] = colorJson["Rainbow spectrum"][1].asFloat();
+                    colorConfig.rainbowSpectrum[2] = colorJson["Rainbow spectrum"][2].asFloat();
+                }
             }
             if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
         }
@@ -651,14 +663,26 @@ void Config::save(size_t id) const noexcept
 
             materialsJson["Enabled"] = materialsConfig.enabled;
             materialsJson["Health based"] = materialsConfig.healthBased;
-            materialsJson["Rainbow"] = materialsConfig.rainbow;
-            materialsJson["Rainbow speed"] = materialsConfig.rainbowSpeed;
             materialsJson["Blinking"] = materialsConfig.blinking;
             materialsJson["Material"] = materialsConfig.material;
             materialsJson["Wireframe"] = materialsConfig.wireframe;
-            materialsJson["Color"][0] = materialsConfig.color[0];
-            materialsJson["Color"][1] = materialsConfig.color[1];
-            materialsJson["Color"][2] = materialsConfig.color[2];
+
+            {
+                auto& colorJson = materialsJson["Color"];
+                const auto& colorConfig = materialsConfig.color;
+
+                colorJson["Color"][0] = colorConfig.color[0];
+                colorJson["Color"][1] = colorConfig.color[1];
+                colorJson["Color"][2] = colorConfig.color[2];
+
+                colorJson["Rainbow"] = colorConfig.rainbow;
+                colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
+
+                colorJson["Rainbow spectrum"][0] = colorConfig.rainbowSpectrum[0];
+                colorJson["Rainbow spectrum"][1] = colorConfig.rainbowSpectrum[1];
+                colorJson["Rainbow spectrum"][2] = colorConfig.rainbowSpectrum[2];
+            }
+
             materialsJson["Alpha"] = materialsConfig.alpha;
         }
     }
