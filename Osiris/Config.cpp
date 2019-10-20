@@ -396,10 +396,16 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
         if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
         if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
-        if (visualsJson.isMember("worldColor")) {
-            visuals.worldColor[0] = visualsJson["worldColor"][0].asFloat();
-            visuals.worldColor[1] = visualsJson["worldColor"][1].asFloat();
-            visuals.worldColor[2] = visualsJson["worldColor"][2].asFloat();
+        if (visualsJson.isMember("World")) {
+            const auto& worldJson = visualsJson["World"];
+
+            if (worldJson.isMember("Color")) {
+                visuals.world.color[0] = worldJson["Color"][0].asFloat();
+                visuals.world.color[1] = worldJson["Color"][1].asFloat();
+                visuals.world.color[2] = worldJson["Color"][2].asFloat();
+            }
+            if (worldJson.isMember("Rainbow")) visuals.world.rainbow = worldJson["Rainbow"].asBool();
+            if (worldJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
         }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
@@ -837,9 +843,16 @@ void Config::save(size_t id) const noexcept
         visualsJson["flashReduction"] = visuals.flashReduction;
         visualsJson["brightness"] = visuals.brightness;
         visualsJson["skybox"] = visuals.skybox;
-        visualsJson["worldColor"][0] = visuals.worldColor[0];
-        visualsJson["worldColor"][1] = visuals.worldColor[1];
-        visualsJson["worldColor"][2] = visuals.worldColor[2];
+
+        {
+            auto& worldJson = visualsJson["World"];
+            worldJson["Color"][0] = visuals.world.color[0];
+            worldJson["Color"][1] = visuals.world.color[1];
+            worldJson["Color"][2] = visuals.world.color[2];
+            worldJson["Rainbow"] = visuals.world.rainbow;
+            worldJson["Rainbow speed"] = visuals.world.rainbowSpeed;
+        }
+
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;

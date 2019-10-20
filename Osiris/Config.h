@@ -21,6 +21,16 @@ public:
         return configs;
     }
 
+    struct Color {
+        float color[3]{ 1.0f, 1.0f, 1.0f };
+        bool rainbow{ false };
+        float rainbowSpeed{ 0.6f };
+    };
+    
+    struct ColorToggle : public Color {
+        bool enabled{ false };
+    };
+
     struct Aimbot {
         bool enabled{ false };
         bool onKey{ false };
@@ -182,7 +192,7 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        float worldColor[3]{ 0.0f, 0.0f, 0.0f };
+        Color world{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
