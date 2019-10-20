@@ -418,8 +418,24 @@ void Esp::render() noexcept
                         renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
                     else if (strstr(modelName, "dz_armor"))
                         renderEntityEsp(entity, config.esp.dangerZone[10], L"Armor");
+                    else if (strstr(modelName, "dz_helmet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[11], L"Helmet");
+                    else if (strstr(modelName, "parachutepack"))
+                        renderEntityEsp(entity, config.esp.dangerZone[12], L"Parachute");
+                    else if (strstr(modelName, "briefcase"))
+                        renderEntityEsp(entity, config.esp.dangerZone[13], L"Briefcase");
+                    else if (strstr(modelName, "upgrade_tablet"))
+                        renderEntityEsp(entity, config.esp.dangerZone[14], L"Tablet Upgrade");
+                    else if (strstr(modelName, "exojump"))
+                        renderEntityEsp(entity, config.esp.dangerZone[15], L"ExoJump");
                     break;
                 }
+                case ClassId::AmmoBox:
+                    renderEntityEsp(entity, config.esp.dangerZone[16], L"Ammobox");
+                    break;
+                case ClassId::RadarJammer:
+                    renderEntityEsp(entity, config.esp.dangerZone[17], interfaces.localize->find("#TabletJammer"));
+                    break;
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
                         renderEntityEsp(entity, config.esp.projectiles[0], interfaces.localize->find("#SFUI_WPNHUD_Flashbang"));

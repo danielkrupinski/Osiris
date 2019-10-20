@@ -34,7 +34,7 @@ public:
         callVirtualMethod<void, float>(this, 27, alpha);
     }
 
-    constexpr void colorModulate(float color[3]) noexcept
+    constexpr void colorModulate(const float color[3]) noexcept
     {
         callVirtualMethod<void, float, float, float>(this, 28, color[0], color[1], color[2]);
     }

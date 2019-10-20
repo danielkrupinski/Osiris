@@ -84,6 +84,7 @@ public:
         bool enabled{ false };
         bool healthBased{ false };
         bool rainbow{ false };
+        float rainbowSpeed{ 0.6f };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
@@ -96,6 +97,7 @@ public:
             bool enabled{ false };
             bool healthBased{ false };
             bool rainbow{ false };
+            float rainbowSpeed{ 0.6f };
             bool blinking{ false };
             int material{ 0 };
             bool wireframe{ false };
@@ -150,7 +152,7 @@ public:
         std::array<Projectile, 9> projectiles;
 
         struct DangerZone : public Shared { };
-        std::array<DangerZone, 11> dangerZone;
+        std::array<DangerZone, 18> dangerZone;
 
         std::array<Player, 6> players;
     } esp;
@@ -249,6 +251,7 @@ public:
         int chokedPacketsKey{ 0 };
         int quickHealthshotKey{ 0 };
         bool nadePredict{ false };
+        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
     } misc;
 
