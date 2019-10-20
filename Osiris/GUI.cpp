@@ -7,6 +7,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "imguiCustom.h"
+
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
@@ -471,19 +473,9 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
         ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.glow[currentItem].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
+
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color, nullptr, &config.glow[currentItem].rainbow, &config.glow[currentItem].rainbowSpeed);
+
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
@@ -526,31 +518,16 @@ void GUI::renderChamsWindow() noexcept
         ImGui::InputInt("##mat", &material, 1, 2);
         material = std::clamp(material, 1, 2);
         ImGui::SameLine();
-        ImGui::Checkbox("Enabled", &config.chams[currentItem].materials[material - 1].enabled);
-        ImGui::Separator();
-        ImGui::Checkbox("Health based", &config.chams[currentItem].materials[material - 1].healthBased);
-        ImGui::Checkbox("Rainbow", &config.chams[currentItem].materials[material - 1].rainbow);
-        ImGui::Checkbox("Blinking", &config.chams[currentItem].materials[material - 1].blinking);
-        ImGui::Combo("Material", &config.chams[currentItem].materials[material - 1].material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
-        ImGui::Checkbox("Wireframe", &config.chams[currentItem].materials[material - 1].wireframe);
+        auto& chams{ config.chams[currentItem].materials[material - 1] };
 
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].materials[material - 1].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.chams[currentItem].materials[material - 1].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
-        ImGui::PushItemWidth(220.0f);
-        ImGui::PushID(4);
-        ImGui::SliderFloat("", &config.chams[currentItem].materials[material - 1].alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::PopID();
+        ImGui::Checkbox("Enabled", &chams.enabled);
+        ImGui::Separator();
+        ImGui::Checkbox("Health based", &chams.healthBased);
+        ImGui::Checkbox("Blinking", &chams.blinking);
+        ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+        ImGui::Checkbox("Wireframe", &chams.wireframe);
+        ImGuiCustom::colorPicker("Color", chams.color, nullptr, &chams.rainbow, &chams.rainbowSpeed);
+
         if (!config.style.menuStyle) {
             ImGui::End();
         }
@@ -631,7 +608,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Indent();
             ImGui::PushID("Danger Zone");
             ImGui::PushFont(fonts.segoeui);
-            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor" };
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox", "Radar Jammer" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
                 bool isSelected = currentCategory == 4 && currentItem == i;
@@ -817,7 +794,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        ImGuiCustom::colorPicker("World color", config.visuals.worldColor);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
@@ -976,20 +953,9 @@ void GUI::renderStyleWindow() noexcept
         if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
             for (int i = 0; i < ImGuiCol_COUNT; i++) {
-                if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
+                if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-                const char* name = ImGui::GetStyleColorName(i);
-                ImGui::PushID(i);
-                bool openPopup = ImGui::ColorButton("##colorbutton", style.Colors[i], ImGuiColorEditFlags_NoTooltip);
-                ImGui::SameLine(0.0f, 5.0f);
-                ImGui::TextUnformatted(name);
-                if (openPopup)
-                    ImGui::OpenPopup(name);
-                if (ImGui::BeginPopup(name)) {
-                    ImGui::ColorPicker3("##colorpicker", (float*)& style.Colors[i], ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-                    ImGui::EndPopup();
-                }
-                ImGui::PopID();
+                ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
             }
         }
 
@@ -1071,7 +1037,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
         ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
-        ImGui::PushItemWidth(90.0f);
+        ImGui::SetNextItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
@@ -1080,9 +1046,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.quickHealthshotKey);
         ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
-        ImGui::PushItemWidth(120.0f);
+        ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
+        ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
-        ImGui::PushItemWidth(290.0f);
 
         if (ImGui::Button("Unhook"))
             hooks.restore();

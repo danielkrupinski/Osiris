@@ -73,6 +73,7 @@ enum ItemDefinitionIndex : int
 	WEAPON_CZ75A = 63,
 	WEAPON_REVOLVER = 64,
 	WEAPON_KNIFE_BAYONET = 500,
+	WEAPON_KNIFE_CSS = 503,
 	WEAPON_KNIFE_FLIP = 505,
 	WEAPON_KNIFE_GUT = 506,
 	WEAPON_KNIFE_KARAMBIT = 507,
@@ -144,6 +145,7 @@ namespace game_data
     constexpr weapon_name knife_names[]{
         {0, "Default"},
         {WEAPON_KNIFE_BAYONET, "Bayonet"},
+	{WEAPON_KNIFE_CSS, "Classic Knife"},
         {WEAPON_KNIFE_FLIP, "Flip Knife"},
         {WEAPON_KNIFE_GUT, "Gut Knife"},
         {WEAPON_KNIFE_KARAMBIT, "Karambit"},

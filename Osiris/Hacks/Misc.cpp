@@ -389,3 +389,13 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
         inProgress = false;
     }
 }
+
+void Misc::fixTabletSignal() noexcept
+{
+    if (config.misc.fixTabletSignal) {
+        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+            activeWeapon->tabletReceptionIsBlocked() = false;
+    }
+}

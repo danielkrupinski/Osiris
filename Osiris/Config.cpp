@@ -110,7 +110,8 @@ void Config::load(size_t id) noexcept
 
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-        if (glowJson.isMember("rainbow")) glowConfig.rainbow = glowJson["rainbow"].asBool();
+        if (glowJson.isMember("Rainbow")) glowConfig.rainbow = glowJson["Rainbow"].asBool();
+        if (glowJson.isMember("Rainbow speed")) glowConfig.rainbowSpeed = glowJson["Rainbow speed"].asFloat();
         if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
         if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
@@ -132,6 +133,7 @@ void Config::load(size_t id) noexcept
             if (materialsJson.isMember("Enabled")) materialsConfig.enabled = materialsJson["Enabled"].asBool();
             if (materialsJson.isMember("Health based")) materialsConfig.healthBased = materialsJson["Health based"].asBool();
             if (materialsJson.isMember("Rainbow")) materialsConfig.rainbow = materialsJson["Rainbow"].asBool();
+            if (materialsJson.isMember("Rainbow speed")) materialsConfig.rainbowSpeed = materialsJson["Rainbow speed"].asFloat();
             if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
             if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
@@ -521,6 +523,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
         if (miscJson.isMember("Quick healthshot key")) misc.quickHealthshotKey = miscJson["Quick healthshot key"].asInt();
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
+        if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
     }
 
@@ -622,7 +625,8 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["rainbow"] = glowConfig.rainbow;
+        glowJson["Rainbow"] = glowConfig.rainbow;
+        glowJson["Rainbow speed"] = glowConfig.rainbowSpeed;
         glowJson["thickness"] = glowConfig.thickness;
         glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
@@ -642,6 +646,7 @@ void Config::save(size_t id) const noexcept
             materialsJson["Enabled"] = materialsConfig.enabled;
             materialsJson["Health based"] = materialsConfig.healthBased;
             materialsJson["Rainbow"] = materialsConfig.rainbow;
+            materialsJson["Rainbow speed"] = materialsConfig.rainbowSpeed;
             materialsJson["Blinking"] = materialsConfig.blinking;
             materialsJson["Material"] = materialsConfig.material;
             materialsJson["Wireframe"] = materialsConfig.wireframe;
@@ -948,6 +953,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Choked packets key"] = misc.chokedPacketsKey;
         miscJson["Quick healthshot key"] = misc.quickHealthshotKey;
         miscJson["Grenade predict"] = misc.nadePredict;
+        miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
     }
 
