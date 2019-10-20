@@ -451,9 +451,8 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
-        ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
 
-        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color, nullptr, &config.glow[currentItem].rainbow, &config.glow[currentItem].rainbowSpeed);
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed, config.glow[currentItem].color.rainbowSpectrum);
 
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);

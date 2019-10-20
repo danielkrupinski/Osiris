@@ -92,12 +92,10 @@ public:
     struct Glow {
         bool enabled{ false };
         bool healthBased{ false };
-        bool rainbow{ false };
-        float rainbowSpeed{ 0.6f };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        Color color;
     };
     std::array<Glow, 21> glow;
 

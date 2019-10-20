@@ -110,15 +110,27 @@ void Config::load(size_t id) noexcept
 
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-        if (glowJson.isMember("Rainbow")) glowConfig.rainbow = glowJson["Rainbow"].asBool();
-        if (glowJson.isMember("Rainbow speed")) glowConfig.rainbowSpeed = glowJson["Rainbow speed"].asFloat();
         if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
         if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
-        if (glowJson.isMember("color")) {
-            glowConfig.color[0] = glowJson["color"][0].asFloat();
-            glowConfig.color[1] = glowJson["color"][1].asFloat();
-            glowConfig.color[2] = glowJson["color"][2].asFloat();
+        if (glowJson.isMember("Color")) {
+            const auto& colorJson = glowJson["Color"];
+            auto& colorConfig = glowConfig.color;
+
+            if (colorJson.isMember("Color")) {
+                colorConfig.color[0] = colorJson["Color"][0].asFloat();
+                colorConfig.color[1] = colorJson["Color"][1].asFloat();
+                colorConfig.color[2] = colorJson["Color"][2].asFloat();
+            }
+
+            if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
+            if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
+
+            if (colorJson.isMember("Rainbow spectrum")) {
+                colorConfig.rainbowSpectrum[0] = colorJson["Rainbow spectrum"][0].asFloat();
+                colorConfig.rainbowSpectrum[1] = colorJson["Rainbow spectrum"][1].asFloat();
+                colorConfig.rainbowSpectrum[2] = colorJson["Rainbow spectrum"][2].asFloat();
+            }
         }
     }
 
@@ -643,14 +655,25 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["Rainbow"] = glowConfig.rainbow;
-        glowJson["Rainbow speed"] = glowConfig.rainbowSpeed;
         glowJson["thickness"] = glowConfig.thickness;
         glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
-        glowJson["color"][0] = glowConfig.color[0];
-        glowJson["color"][1] = glowConfig.color[1];
-        glowJson["color"][2] = glowConfig.color[2];
+
+        {
+            auto& colorJson = glowJson["Color"];
+            const auto& colorConfig = glowConfig.color;
+
+            colorJson["Color"][0] = colorConfig.color[0];
+            colorJson["Color"][1] = colorConfig.color[1];
+            colorJson["Color"][2] = colorConfig.color[2];
+
+            colorJson["Rainbow"] = colorConfig.rainbow;
+            colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
+
+            colorJson["Rainbow spectrum"][0] = colorConfig.rainbowSpectrum[0];
+            colorJson["Rainbow spectrum"][1] = colorConfig.rainbowSpectrum[1];
+            colorJson["Rainbow spectrum"][2] = colorConfig.rainbowSpectrum[2];
+        }
     }
 
     for (size_t i = 0; i < chams.size(); i++) {
