@@ -82,27 +82,6 @@ void GUI::updateColors() const noexcept
     }
 }
 
-void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* color) noexcept
-{
-    ImGui::Checkbox(("##" + name).c_str(), enable);
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::PushID(0);
-    bool openPopup = ImGui::ColorButton(("##" + name).c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
-    ImGui::PopID();
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::TextUnformatted(name.c_str());
-    ImGui::PushID(1);
-    if (openPopup)
-        ImGui::OpenPopup(("##" + name).c_str());
-    if (ImGui::BeginPopup(("##" + name).c_str())) {
-        ImGui::PushID(2);
-        ImGui::ColorPicker3(("##" + name).c_str(), color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-        ImGui::PopID();
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
-}
-
 void GUI::hotkey(int& key) noexcept
 {
     constexpr bool stringDisplayTest = true;
@@ -473,9 +452,8 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
-        ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
 
-        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color, nullptr, &config.glow[currentItem].rainbow, &config.glow[currentItem].rainbowSpeed);
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
 
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
@@ -527,7 +505,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Checkbox("Blinking", &chams.blinking);
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
-        ImGuiCustom::colorPicker("Color", chams.color, nullptr, &chams.rainbow, &chams.rainbowSpeed);
+        ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
 
         if (!config.style.menuStyle) {
             ImGui::End();
@@ -639,28 +617,28 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                checkboxedColorPicker("Snaplines", &config.esp.players[selected].snaplines, config.esp.players[selected].snaplinesColor);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.players[selected].snaplines.color, &config.esp.players[selected].snaplines.enabled, &config.esp.players[selected].snaplines.rainbow, &config.esp.players[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Box", &config.esp.players[selected].box, config.esp.players[selected].boxColor);
+                ImGuiCustom::colorPicker("Box", config.esp.players[selected].box.color, &config.esp.players[selected].box.enabled, &config.esp.players[selected].box.rainbow, &config.esp.players[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                checkboxedColorPicker("Eye traces", &config.esp.players[selected].eyeTraces, config.esp.players[selected].eyeTracesColor);
+                ImGuiCustom::colorPicker("Eye traces", config.esp.players[selected].eyeTraces.color, &config.esp.players[selected].eyeTraces.enabled, &config.esp.players[selected].eyeTraces.rainbow, &config.esp.players[selected].eyeTraces.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Health", &config.esp.players[selected].health, config.esp.players[selected].healthColor);
-                checkboxedColorPicker("Head dot", &config.esp.players[selected].headDot, config.esp.players[selected].headDotColor);
+                ImGuiCustom::colorPicker("Health", config.esp.players[selected].healthColor, &config.esp.players[selected].health);
+                ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Health bar", &config.esp.players[selected].healthBar, config.esp.players[selected].healthBarColor);
-                checkboxedColorPicker("Name", &config.esp.players[selected].name, config.esp.players[selected].nameColor);
+                ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBarColor, &config.esp.players[selected].healthBar);
+                ImGuiCustom::colorPicker("Name", config.esp.players[selected].nameColor, &config.esp.players[selected].name);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Armor", &config.esp.players[selected].armor, config.esp.players[selected].armorColor);
-                checkboxedColorPicker("Money", &config.esp.players[selected].money, config.esp.players[selected].moneyColor);
+                ImGuiCustom::colorPicker("Armor", config.esp.players[selected].armorColor, &config.esp.players[selected].armor);
+                ImGuiCustom::colorPicker("Money", config.esp.players[selected].moneyColor, &config.esp.players[selected].money);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Armor bar", &config.esp.players[selected].armorBar, config.esp.players[selected].armorBarColor);
-                checkboxedColorPicker("Outline", &config.esp.players[selected].outline, config.esp.players[selected].outlineColor);
+                ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBarColor, &config.esp.players[selected].armorBar);
+                ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Distance", &config.esp.players[selected].distance, config.esp.players[selected].distanceColor);
-                checkboxedColorPicker("Active Weapon", &config.esp.players[selected].activeWeapon, config.esp.players[selected].activeWeaponColor);                
+                ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distanceColor, &config.esp.players[selected].distance);
+                ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeaponColor, &config.esp.players[selected].activeWeapon);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -674,16 +652,16 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                checkboxedColorPicker("Snaplines", &config.esp.weapon.snaplines, config.esp.weapon.snaplinesColor);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.weapon.snaplines.color, &config.esp.weapon.snaplines.enabled, &config.esp.weapon.snaplines.rainbow, &config.esp.weapon.snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Box", &config.esp.weapon.box, config.esp.weapon.boxColor);
+                ImGuiCustom::colorPicker("Box", config.esp.weapon.box.color, &config.esp.weapon.box.enabled, &config.esp.weapon.box.rainbow, &config.esp.weapon.box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                checkboxedColorPicker("Name", &config.esp.weapon.name, config.esp.weapon.nameColor);
+                ImGuiCustom::colorPicker("Name", config.esp.weapon.nameColor, &config.esp.weapon.name);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Outline", &config.esp.weapon.outline, config.esp.weapon.outlineColor);
-                checkboxedColorPicker("Distance", &config.esp.weapon.distance, config.esp.weapon.distanceColor);
+                ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.weapon.distanceColor, &config.esp.weapon.distance);
                 ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -697,16 +675,16 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                checkboxedColorPicker("Snaplines", &config.esp.projectiles[currentItem].snaplines, config.esp.projectiles[currentItem].snaplinesColor);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.projectiles[currentItem].snaplines.color, &config.esp.projectiles[currentItem].snaplines.enabled, &config.esp.projectiles[currentItem].snaplines.rainbow, &config.esp.projectiles[currentItem].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Box", &config.esp.projectiles[currentItem].box, config.esp.projectiles[currentItem].boxColor);
+                ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].box.color, &config.esp.projectiles[currentItem].box.enabled, &config.esp.projectiles[currentItem].box.rainbow, &config.esp.projectiles[currentItem].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                checkboxedColorPicker("Name", &config.esp.projectiles[currentItem].name, config.esp.projectiles[currentItem].nameColor);
+                ImGuiCustom::colorPicker("Name", config.esp.projectiles[currentItem].nameColor, &config.esp.projectiles[currentItem].name);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Outline", &config.esp.projectiles[currentItem].outline, config.esp.projectiles[currentItem].outlineColor);
-                checkboxedColorPicker("Distance", &config.esp.projectiles[currentItem].distance, config.esp.projectiles[currentItem].distanceColor);
+                ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distanceColor, &config.esp.projectiles[currentItem].distance);
                 ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -721,16 +699,16 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                checkboxedColorPicker("Snaplines", &config.esp.dangerZone[selected].snaplines, config.esp.dangerZone[selected].snaplinesColor);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.dangerZone[selected].snaplines.color, &config.esp.dangerZone[selected].snaplines.enabled, &config.esp.dangerZone[selected].snaplines.rainbow, &config.esp.dangerZone[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Box", &config.esp.dangerZone[selected].box, config.esp.dangerZone[selected].boxColor);
+                ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].box.color, &config.esp.dangerZone[selected].box.enabled, &config.esp.dangerZone[selected].box.rainbow, &config.esp.dangerZone[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                checkboxedColorPicker("Name", &config.esp.dangerZone[selected].name, config.esp.dangerZone[selected].nameColor);
+                ImGuiCustom::colorPicker("Name", config.esp.dangerZone[selected].nameColor, &config.esp.dangerZone[selected].name);
                 ImGui::SameLine(spacing);
-                checkboxedColorPicker("Outline", &config.esp.dangerZone[selected].outline, config.esp.dangerZone[selected].outlineColor);
-                checkboxedColorPicker("Distance", &config.esp.dangerZone[selected].distance, config.esp.dangerZone[selected].distanceColor);
+                ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outline.color, &config.esp.dangerZone[selected].outline.enabled, &config.esp.dangerZone[selected].outline.rainbow, &config.esp.dangerZone[selected].outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distanceColor, &config.esp.dangerZone[selected].distance);
                 ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             } }
@@ -795,7 +773,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGuiCustom::colorPicker("World color", config.visuals.worldColor);
+        ImGuiCustom::colorPicker("World color", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
