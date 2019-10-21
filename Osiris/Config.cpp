@@ -187,11 +187,20 @@ void Config::load(size_t id) noexcept
             espConfig.eyeTracesColor[1] = espJson["Eye traces color"][1].asFloat();
             espConfig.eyeTracesColor[2] = espJson["Eye traces color"][2].asFloat();
         }
-        if (espJson.isMember("box")) espConfig.box = espJson["box"].asBool();
-        if (espJson.isMember("boxColor")) {
-            espConfig.boxColor[0] = espJson["boxColor"][0].asFloat();
-            espConfig.boxColor[1] = espJson["boxColor"][1].asFloat();
-            espConfig.boxColor[2] = espJson["boxColor"][2].asFloat();
+        if (espJson.isMember("Box")) {
+            const auto& boxJson = espJson["Box"];
+            auto& boxConfig = espConfig.box;
+
+            if (boxJson.isMember("Enabled")) boxConfig.enabled = boxJson["Enabled"].asBool();
+
+            if (boxJson.isMember("Color")) {
+                boxConfig.color[0] = boxJson["Color"][0].asFloat();
+                boxConfig.color[1] = boxJson["Color"][1].asFloat();
+                boxConfig.color[2] = boxJson["Color"][2].asFloat();
+            }
+
+            if (boxJson.isMember("Rainbow")) boxConfig.rainbow = boxJson["Rainbow"].asBool();
+            if (boxJson.isMember("Rainbow speed")) boxConfig.rainbowSpeed = boxJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
@@ -280,11 +289,21 @@ void Config::load(size_t id) noexcept
             if (snaplinesJson.isMember("Rainbow")) snaplinesConfig.rainbow = snaplinesJson["Rainbow"].asBool();
             if (snaplinesJson.isMember("Rainbow speed")) snaplinesConfig.rainbowSpeed = snaplinesJson["Rainbow speed"].asFloat();
         }
-        if (espJson.isMember("Box")) espConfig.box = espJson["Box"].asBool();
-        if (espJson.isMember("Box color")) {
-            espConfig.boxColor[0] = espJson["Box color"][0].asFloat();
-            espConfig.boxColor[1] = espJson["Box color"][1].asFloat();
-            espConfig.boxColor[2] = espJson["Box color"][2].asFloat();
+
+        if (espJson.isMember("Box")) {
+            const auto& boxJson = espJson["Box"];
+            auto& boxConfig = espConfig.box;
+
+            if (boxJson.isMember("Enabled")) boxConfig.enabled = boxJson["Enabled"].asBool();
+
+            if (boxJson.isMember("Color")) {
+                boxConfig.color[0] = boxJson["Color"][0].asFloat();
+                boxConfig.color[1] = boxJson["Color"][1].asFloat();
+                boxConfig.color[2] = boxJson["Color"][2].asFloat();
+            }
+
+            if (boxJson.isMember("Rainbow")) boxConfig.rainbow = boxJson["Rainbow"].asBool();
+            if (boxJson.isMember("Rainbow speed")) boxConfig.rainbowSpeed = boxJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
@@ -332,11 +351,21 @@ void Config::load(size_t id) noexcept
             if (snaplinesJson.isMember("Rainbow")) snaplinesConfig.rainbow = snaplinesJson["Rainbow"].asBool();
             if (snaplinesJson.isMember("Rainbow speed")) snaplinesConfig.rainbowSpeed = snaplinesJson["Rainbow speed"].asFloat();
         }
-        if (espJson.isMember("Box")) espConfig.box = espJson["Box"].asBool();
-        if (espJson.isMember("Box color")) {
-            espConfig.boxColor[0] = espJson["Box color"][0].asFloat();
-            espConfig.boxColor[1] = espJson["Box color"][1].asFloat();
-            espConfig.boxColor[2] = espJson["Box color"][2].asFloat();
+        
+        if (espJson.isMember("Box")) {
+            const auto& boxJson = espJson["Box"];
+            auto& boxConfig = espConfig.box;
+
+            if (boxJson.isMember("Enabled")) boxConfig.enabled = boxJson["Enabled"].asBool();
+
+            if (boxJson.isMember("Color")) {
+                boxConfig.color[0] = boxJson["Color"][0].asFloat();
+                boxConfig.color[1] = boxJson["Color"][1].asFloat();
+                boxConfig.color[2] = boxJson["Color"][2].asFloat();
+            }
+
+            if (boxJson.isMember("Rainbow")) boxConfig.rainbow = boxJson["Rainbow"].asBool();
+            if (boxJson.isMember("Rainbow speed")) boxConfig.rainbowSpeed = boxJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
@@ -385,11 +414,20 @@ void Config::load(size_t id) noexcept
             if (snaplinesJson.isMember("Rainbow")) snaplinesConfig.rainbow = snaplinesJson["Rainbow"].asBool();
             if (snaplinesJson.isMember("Rainbow speed")) snaplinesConfig.rainbowSpeed = snaplinesJson["Rainbow speed"].asFloat();
         }
-        if (espJson.isMember("Box")) espConfig.box = espJson["Box"].asBool();
-        if (espJson.isMember("Box color")) {
-            espConfig.boxColor[0] = espJson["Box color"][0].asFloat();
-            espConfig.boxColor[1] = espJson["Box color"][1].asFloat();
-            espConfig.boxColor[2] = espJson["Box color"][2].asFloat();
+        if (espJson.isMember("Box")) {
+            const auto& boxJson = espJson["Box"];
+            auto& boxConfig = espConfig.box;
+
+            if (boxJson.isMember("Enabled")) boxConfig.enabled = boxJson["Enabled"].asBool();
+
+            if (boxJson.isMember("Color")) {
+                boxConfig.color[0] = boxJson["Color"][0].asFloat();
+                boxConfig.color[1] = boxJson["Color"][1].asFloat();
+                boxConfig.color[2] = boxJson["Color"][2].asFloat();
+            }
+
+            if (boxJson.isMember("Rainbow")) boxConfig.rainbow = boxJson["Rainbow"].asBool();
+            if (boxJson.isMember("Rainbow speed")) boxConfig.rainbowSpeed = boxJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Box type")) espConfig.boxType = espJson["Box type"].asInt();
@@ -751,10 +789,19 @@ void Config::save(size_t id) const noexcept
         espJson["Eye traces color"][0] = espConfig.eyeTracesColor[0];
         espJson["Eye traces color"][1] = espConfig.eyeTracesColor[1];
         espJson["Eye traces color"][2] = espConfig.eyeTracesColor[2];
-        espJson["box"] = espConfig.box;
-        espJson["boxColor"][0] = espConfig.boxColor[0];
-        espJson["boxColor"][1] = espConfig.boxColor[1];
-        espJson["boxColor"][2] = espConfig.boxColor[2];
+
+        {
+            auto& boxJson = espJson["Box"];
+            const auto& boxConfig = espConfig.box;
+
+            boxJson["Enabled"] = boxConfig.enabled;
+            boxJson["Color"][0] = boxConfig.color[0];
+            boxJson["Color"][1] = boxConfig.color[1];
+            boxJson["Color"][2] = boxConfig.color[2];
+            boxJson["Rainbow"] = boxConfig.rainbow;
+            boxJson["Rainbow speed"] = boxConfig.rainbowSpeed;
+        }
+
         espJson["Box type"] = espConfig.boxType;
         espJson["name"] = espConfig.name;
         espJson["nameColor"][0] = espConfig.nameColor[0];
@@ -816,10 +863,19 @@ void Config::save(size_t id) const noexcept
             snaplinesJson["Rainbow"] = snaplinesConfig.rainbow;
             snaplinesJson["Rainbow speed"] = snaplinesConfig.rainbowSpeed;
         }
-        espJson["Box"] = espConfig.box;
-        espJson["Box color"][0] = espConfig.boxColor[0];
-        espJson["Box color"][1] = espConfig.boxColor[1];
-        espJson["Box color"][2] = espConfig.boxColor[2];
+
+        {
+            auto& boxJson = espJson["Box"];
+            const auto& boxConfig = espConfig.box;
+
+            boxJson["Enabled"] = boxConfig.enabled;
+            boxJson["Color"][0] = boxConfig.color[0];
+            boxJson["Color"][1] = boxConfig.color[1];
+            boxJson["Color"][2] = boxConfig.color[2];
+            boxJson["Rainbow"] = boxConfig.rainbow;
+            boxJson["Rainbow speed"] = boxConfig.rainbowSpeed;
+        }
+
         espJson["Box type"] = espConfig.boxType;
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];
@@ -853,10 +909,19 @@ void Config::save(size_t id) const noexcept
             snaplinesJson["Rainbow"] = snaplinesConfig.rainbow;
             snaplinesJson["Rainbow speed"] = snaplinesConfig.rainbowSpeed;
         }
-        espJson["Box"] = espConfig.box;
-        espJson["Box color"][0] = espConfig.boxColor[0];
-        espJson["Box color"][1] = espConfig.boxColor[1];
-        espJson["Box color"][2] = espConfig.boxColor[2];
+
+        {
+            auto& boxJson = espJson["Box"];
+            const auto& boxConfig = espConfig.box;
+
+            boxJson["Enabled"] = boxConfig.enabled;
+            boxJson["Color"][0] = boxConfig.color[0];
+            boxJson["Color"][1] = boxConfig.color[1];
+            boxJson["Color"][2] = boxConfig.color[2];
+            boxJson["Rainbow"] = boxConfig.rainbow;
+            boxJson["Rainbow speed"] = boxConfig.rainbowSpeed;
+        }
+
         espJson["Box type"] = espConfig.boxType;
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];
@@ -890,10 +955,19 @@ void Config::save(size_t id) const noexcept
             snaplinesJson["Rainbow"] = snaplinesConfig.rainbow;
             snaplinesJson["Rainbow speed"] = snaplinesConfig.rainbowSpeed;
         }
-        espJson["Box"] = espConfig.box;
-        espJson["Box color"][0] = espConfig.boxColor[0];
-        espJson["Box color"][1] = espConfig.boxColor[1];
-        espJson["Box color"][2] = espConfig.boxColor[2];
+
+        {
+            auto& boxJson = espJson["Box"];
+            const auto& boxConfig = espConfig.box;
+
+            boxJson["Enabled"] = boxConfig.enabled;
+            boxJson["Color"][0] = boxConfig.color[0];
+            boxJson["Color"][1] = boxConfig.color[1];
+            boxJson["Color"][2] = boxConfig.color[2];
+            boxJson["Rainbow"] = boxConfig.rainbow;
+            boxJson["Rainbow speed"] = boxConfig.rainbowSpeed;
+        }
+
         espJson["Box type"] = espConfig.boxType;
         espJson["Outline"] = espConfig.outline;
         espJson["Outline color"][0] = espConfig.outlineColor[0];

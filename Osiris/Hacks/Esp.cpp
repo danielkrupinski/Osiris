@@ -115,9 +115,14 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 
 static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
-    if (config.box) {
-        interfaces.surface->setDrawColor(config.boxColor, 255);
-
+    if (config.box.enabled) {
+        if (config.box.rainbow) {
+            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.box.rainbowSpeed) };
+            interfaces.surface->setDrawColor(r, g, b, 1.0f);
+        } else {
+            interfaces.surface->setDrawColor(config.box.color, 255);
+        }
+        
         switch (config.boxType) {
         case 0:
             interfaces.surface->drawOutlinedRect(bbox.x0, bbox.y0, bbox.x1, bbox.y1);

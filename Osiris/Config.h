@@ -118,10 +118,7 @@ public:
             bool enabled{ false };
             int font{ 0x1d };
             ColorToggle snaplines;
-          //  bool snaplines{ false };
-           // float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool box{ false };
-            float boxColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle box;
             int boxType{ 0 };
             bool name{ false };
             float nameColor[3]{ 1.0f, 1.0f, 1.0f };

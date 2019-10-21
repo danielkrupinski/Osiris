@@ -618,7 +618,7 @@ void GUI::renderEspWindow() noexcept
                 constexpr auto spacing{ 200.0f };
                 ImGuiCustom::colorPicker("Snaplines", config.esp.players[selected].snaplines.color, &config.esp.players[selected].snaplines.enabled, &config.esp.players[selected].snaplines.rainbow, &config.esp.players[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Box", config.esp.players[selected].boxColor, &config.esp.players[selected].box);
+                ImGuiCustom::colorPicker("Box", config.esp.players[selected].box.color, &config.esp.players[selected].box.enabled, &config.esp.players[selected].box.rainbow, &config.esp.players[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
@@ -653,7 +653,7 @@ void GUI::renderEspWindow() noexcept
                 constexpr auto spacing{ 200.0f };
                 ImGuiCustom::colorPicker("Snaplines", config.esp.weapon.snaplines.color, &config.esp.weapon.snaplines.enabled, &config.esp.weapon.snaplines.rainbow, &config.esp.weapon.snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Box", config.esp.weapon.boxColor, &config.esp.weapon.box);
+                ImGuiCustom::colorPicker("Box", config.esp.weapon.box.color, &config.esp.weapon.box.enabled, &config.esp.weapon.box.rainbow, &config.esp.weapon.box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
@@ -676,7 +676,7 @@ void GUI::renderEspWindow() noexcept
                 constexpr auto spacing{ 200.0f };
                 ImGuiCustom::colorPicker("Snaplines", config.esp.projectiles[currentItem].snaplines.color, &config.esp.projectiles[currentItem].snaplines.enabled, &config.esp.projectiles[currentItem].snaplines.rainbow, &config.esp.projectiles[currentItem].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].boxColor, &config.esp.projectiles[currentItem].box);
+                ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].box.color, &config.esp.projectiles[currentItem].box.enabled, &config.esp.projectiles[currentItem].box.rainbow, &config.esp.projectiles[currentItem].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
@@ -700,7 +700,7 @@ void GUI::renderEspWindow() noexcept
                 constexpr auto spacing{ 200.0f };
                 ImGuiCustom::colorPicker("Snaplines", config.esp.dangerZone[selected].snaplines.color, &config.esp.dangerZone[selected].snaplines.enabled, &config.esp.dangerZone[selected].snaplines.rainbow, &config.esp.dangerZone[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].boxColor, &config.esp.dangerZone[selected].box);
+                ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].box.color, &config.esp.dangerZone[selected].box.enabled, &config.esp.dangerZone[selected].box.rainbow, &config.esp.dangerZone[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
                 ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
