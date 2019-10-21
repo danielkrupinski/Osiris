@@ -634,7 +634,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Money", config.esp.players[selected].moneyColor, &config.esp.players[selected].money);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBarColor, &config.esp.players[selected].armorBar);
-                ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outlineColor, &config.esp.players[selected].outline);
+                ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distanceColor, &config.esp.players[selected].distance);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeaponColor, &config.esp.players[selected].activeWeapon);
@@ -659,7 +659,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
                 ImGuiCustom::colorPicker("Name", config.esp.weapon.nameColor, &config.esp.weapon.name);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Outline", config.esp.weapon.outlineColor, &config.esp.weapon.outline);
+                ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.weapon.distanceColor, &config.esp.weapon.distance);
                 ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
@@ -682,7 +682,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
                 ImGuiCustom::colorPicker("Name", config.esp.projectiles[currentItem].nameColor, &config.esp.projectiles[currentItem].name);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outlineColor, &config.esp.projectiles[currentItem].outline);
+                ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distanceColor, &config.esp.projectiles[currentItem].distance);
                 ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
@@ -706,7 +706,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
                 ImGuiCustom::colorPicker("Name", config.esp.dangerZone[selected].nameColor, &config.esp.dangerZone[selected].name);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outlineColor, &config.esp.dangerZone[selected].outline);
+                ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outline.color, &config.esp.dangerZone[selected].outline.enabled, &config.esp.dangerZone[selected].outline.rainbow, &config.esp.dangerZone[selected].outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distanceColor, &config.esp.dangerZone[selected].distance);
                 ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;

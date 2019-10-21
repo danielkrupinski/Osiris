@@ -127,8 +127,13 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
         case 0:
             interfaces.surface->drawOutlinedRect(bbox.x0, bbox.y0, bbox.x1, bbox.y1);
 
-            if (config.outline) {
-                interfaces.surface->setDrawColor(config.outlineColor, 255);
+            if (config.outline.enabled) {
+                if (config.outline.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
+                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
+                } else {
+                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                }
                 interfaces.surface->drawOutlinedRect(bbox.x0 + 1, bbox.y0 + 1, bbox.x1 - 1, bbox.y1 - 1);
                 interfaces.surface->drawOutlinedRect(bbox.x0 - 1, bbox.y0 - 1, bbox.x1 + 1, bbox.y1 + 1);
             }
@@ -143,8 +148,13 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
             interfaces.surface->drawLine(bbox.x1, bbox.y1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y1);
             interfaces.surface->drawLine(bbox.x1, bbox.y1, bbox.x1, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
 
-            if (config.outline) {
-                interfaces.surface->setDrawColor(config.outlineColor, 255);
+            if (config.outline.enabled) {
+                if (config.outline.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
+                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
+                } else {
+                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                }
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 - 1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
                 interfaces.surface->drawLine(bbox.x1 + 1, bbox.y0 - 1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
@@ -201,8 +211,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             interfaces.surface->setDrawColor(config.healthBarColor, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
-            if (config.outline) {
-                interfaces.surface->setDrawColor(config.outlineColor, 255);
+            if (config.outline.enabled) {
+                if (config.outline.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
+                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
+                } else {
+                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                }
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
@@ -212,8 +227,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             interfaces.surface->setDrawColor(config.armorBarColor, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
             
-            if (config.outline) {
-                interfaces.surface->setDrawColor(config.outlineColor, 255);
+            if (config.outline.enabled) {
+                if (config.outline.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
+                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
+                } else {
+                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                }
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
