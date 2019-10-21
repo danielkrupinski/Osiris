@@ -54,7 +54,7 @@ void Glow::render() noexcept
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
                 else if (glow.color.rainbow) {
-                    const auto [r, g, b] { rainbowColor2(memory.globalVars->realtime, glow.color.rainbowSpeed, glow.color.rainbowSpectrum) };
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, glow.color.rainbowSpeed) };
                     glowobject.glowColor = { r, b, g };
                 }
                 else

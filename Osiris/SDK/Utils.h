@@ -18,10 +18,3 @@ constexpr auto rainbowColor(float time, float speed) noexcept
                            std::sin(speed * time + 2.0f) * 0.5f + 0.5f,
                            std::sin(speed * time + 4.0f) * 0.5f + 0.5f);
 }
-
-constexpr auto rainbowColor2(float time, float speed, const float spectrum[3]) noexcept
-{
-    return std::make_tuple(std::sin(speed * time + spectrum[0]) * 0.5f + 0.5f,
-                           std::sin(speed * time + spectrum[1]) * 0.5f + 0.5f,
-                           std::sin(speed * time + spectrum[2]) * 0.5f + 0.5f);
-}

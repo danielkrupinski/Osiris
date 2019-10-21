@@ -77,7 +77,7 @@ private:
         if (chams.healthBased && health)
             material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
         else if (chams.color.rainbow) {
-            const auto [r, g, b] { rainbowColor2(memory.globalVars->realtime, chams.color.rainbowSpeed, chams.color.rainbowSpectrum) };
+            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
             material->colorModulate(r, g, b);
         } else
             material->colorModulate(chams.color.color);

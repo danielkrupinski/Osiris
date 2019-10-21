@@ -125,12 +125,6 @@ void Config::load(size_t id) noexcept
 
             if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
             if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
-
-            if (colorJson.isMember("Rainbow spectrum")) {
-                colorConfig.rainbowSpectrum[0] = colorJson["Rainbow spectrum"][0].asFloat();
-                colorConfig.rainbowSpectrum[1] = colorJson["Rainbow spectrum"][1].asFloat();
-                colorConfig.rainbowSpectrum[2] = colorJson["Rainbow spectrum"][2].asFloat();
-            }
         }
     }
 
@@ -159,12 +153,6 @@ void Config::load(size_t id) noexcept
 
                 if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
                 if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
-
-                if (colorJson.isMember("Rainbow spectrum")) {
-                    colorConfig.rainbowSpectrum[0] = colorJson["Rainbow spectrum"][0].asFloat();
-                    colorConfig.rainbowSpectrum[1] = colorJson["Rainbow spectrum"][1].asFloat();
-                    colorConfig.rainbowSpectrum[2] = colorJson["Rainbow spectrum"][2].asFloat();
-                }
             }
             if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
         }
@@ -669,10 +657,6 @@ void Config::save(size_t id) const noexcept
 
             colorJson["Rainbow"] = colorConfig.rainbow;
             colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
-
-            colorJson["Rainbow spectrum"][0] = colorConfig.rainbowSpectrum[0];
-            colorJson["Rainbow spectrum"][1] = colorConfig.rainbowSpectrum[1];
-            colorJson["Rainbow spectrum"][2] = colorConfig.rainbowSpectrum[2];
         }
     }
 
@@ -700,10 +684,6 @@ void Config::save(size_t id) const noexcept
 
                 colorJson["Rainbow"] = colorConfig.rainbow;
                 colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
-
-                colorJson["Rainbow spectrum"][0] = colorConfig.rainbowSpectrum[0];
-                colorJson["Rainbow spectrum"][1] = colorConfig.rainbowSpectrum[1];
-                colorJson["Rainbow spectrum"][2] = colorConfig.rainbowSpectrum[2];
             }
 
             materialsJson["Alpha"] = materialsConfig.alpha;

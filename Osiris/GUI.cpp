@@ -452,7 +452,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
 
-        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed, config.glow[currentItem].color.rainbowSpectrum);
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
 
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
@@ -504,7 +504,7 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Checkbox("Blinking", &chams.blinking);
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
-        ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed, chams.color.rainbowSpectrum);
+        ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
 
         if (!config.style.menuStyle) {
             ImGui::End();
