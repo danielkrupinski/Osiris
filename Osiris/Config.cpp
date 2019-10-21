@@ -241,12 +241,23 @@ void Config::load(size_t id) noexcept
             espConfig.moneyColor[1] = espJson["moneyColor"][1].asFloat();
             espConfig.moneyColor[2] = espJson["moneyColor"][2].asFloat();
         }
-        if (espJson.isMember("headDot")) espConfig.headDot = espJson["headDot"].asBool();
-        if (espJson.isMember("headDotColor")) {
-            espConfig.headDotColor[0] = espJson["headDotColor"][0].asFloat();
-            espConfig.headDotColor[1] = espJson["headDotColor"][1].asFloat();
-            espConfig.headDotColor[2] = espJson["headDotColor"][2].asFloat();
+
+        if (espJson.isMember("Head dot")) {
+            const auto& headDotJson = espJson["Head dot"];
+            auto& headDotConfig = espConfig.headDot;
+
+            if (headDotJson.isMember("Enabled")) headDotConfig.enabled = headDotJson["Enabled"].asBool();
+
+            if (headDotJson.isMember("Color")) {
+                headDotConfig.color[0] = headDotJson["Color"][0].asFloat();
+                headDotConfig.color[1] = headDotJson["Color"][1].asFloat();
+                headDotConfig.color[2] = headDotJson["Color"][2].asFloat();
+            }
+
+            if (headDotJson.isMember("Rainbow")) headDotConfig.rainbow = headDotJson["Rainbow"].asBool();
+            if (headDotJson.isMember("Rainbow speed")) headDotConfig.rainbowSpeed = headDotJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Active weapon")) espConfig.activeWeapon = espJson["Active weapon"].asBool();
         if (espJson.isMember("Active weapon color")) {
             espConfig.activeWeaponColor[0] = espJson["Active weapon color"][0].asFloat();
@@ -865,10 +876,19 @@ void Config::save(size_t id) const noexcept
         espJson["moneyColor"][0] = espConfig.moneyColor[0];
         espJson["moneyColor"][1] = espConfig.moneyColor[1];
         espJson["moneyColor"][2] = espConfig.moneyColor[2];
-        espJson["headDot"] = espConfig.headDot;
-        espJson["headDotColor"][0] = espConfig.headDotColor[0];
-        espJson["headDotColor"][1] = espConfig.headDotColor[1];
-        espJson["headDotColor"][2] = espConfig.headDotColor[2];
+
+        {
+            auto& headDotJson = espJson["Head dot"];
+            const auto& headDotConfig = espConfig.headDot;
+
+            headDotJson["Enabled"] = headDotConfig.enabled;
+            headDotJson["Color"][0] = headDotConfig.color[0];
+            headDotJson["Color"][1] = headDotConfig.color[1];
+            headDotJson["Color"][2] = headDotConfig.color[2];
+            headDotJson["Rainbow"] = headDotConfig.rainbow;
+            headDotJson["Rainbow speed"] = headDotConfig.rainbowSpeed;
+        }
+
         espJson["Active weapon"] = espConfig.activeWeapon;
         espJson["Active weapon color"][0] = espConfig.activeWeaponColor[0];
         espJson["Active weapon color"][1] = espConfig.activeWeaponColor[1];

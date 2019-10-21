@@ -625,7 +625,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Eye traces", config.esp.players[selected].eyeTracesColor , &config.esp.players[selected].eyeTraces);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Health", config.esp.players[selected].healthColor, &config.esp.players[selected].health);
-                ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDotColor, &config.esp.players[selected].headDot);
+                ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBarColor, &config.esp.players[selected].healthBar);
                 ImGuiCustom::colorPicker("Name", config.esp.players[selected].nameColor, &config.esp.players[selected].name);

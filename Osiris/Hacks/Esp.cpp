@@ -321,10 +321,15 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
 
 static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (config.headDot) {
+    if (config.headDot.enabled) {
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
-            interfaces.surface->setDrawColor(config.headDotColor, 255);
+            if (config.headDot.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.headDot.color, 255);
+            }
             if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
                 interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
         }
