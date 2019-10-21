@@ -616,7 +616,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                ImGuiCustom::colorPicker("Snaplines", config.esp.players[selected].snaplines.color, &config.esp.players[selected].snaplines.enabled);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.players[selected].snaplines.color, &config.esp.players[selected].snaplines.enabled, &config.esp.players[selected].snaplines.rainbow, &config.esp.players[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Box", config.esp.players[selected].boxColor, &config.esp.players[selected].box);
                 ImGui::SameLine();
@@ -651,7 +651,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                ImGuiCustom::colorPicker("Snaplines", config.esp.weapon.snaplines.color, &config.esp.weapon.snaplines.enabled);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.weapon.snaplines.color, &config.esp.weapon.snaplines.enabled, &config.esp.weapon.snaplines.rainbow, &config.esp.weapon.snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Box", config.esp.weapon.boxColor, &config.esp.weapon.box);
                 ImGui::SameLine();
@@ -674,7 +674,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                ImGuiCustom::colorPicker("Snaplines", config.esp.projectiles[currentItem].snaplines.color, &config.esp.projectiles[currentItem].snaplines.enabled);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.projectiles[currentItem].snaplines.color, &config.esp.projectiles[currentItem].snaplines.enabled, &config.esp.projectiles[currentItem].snaplines.rainbow, &config.esp.projectiles[currentItem].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].boxColor, &config.esp.projectiles[currentItem].box);
                 ImGui::SameLine();
@@ -698,7 +698,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Separator();
 
                 constexpr auto spacing{ 200.0f };
-                ImGuiCustom::colorPicker("Snaplines", config.esp.dangerZone[selected].snaplines.color, &config.esp.dangerZone[selected].snaplines.enabled);
+                ImGuiCustom::colorPicker("Snaplines", config.esp.dangerZone[selected].snaplines.color, &config.esp.dangerZone[selected].snaplines.enabled, &config.esp.dangerZone[selected].snaplines.rainbow, &config.esp.dangerZone[selected].snaplines.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].boxColor, &config.esp.dangerZone[selected].box);
                 ImGui::SameLine();

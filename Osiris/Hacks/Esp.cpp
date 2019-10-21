@@ -1,8 +1,11 @@
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
+
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/Localize.h"
 #include "../SDK/Surface.h"
 #include "../SDK/Vector.h"
@@ -29,7 +32,13 @@ static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared&
         Vector position{ };
         if (worldToScreen(entity->getAbsOrigin(), position)) {
             const auto [width, height] = interfaces.surface->getScreenSize();
-            interfaces.surface->setDrawColor(config.snaplines.color, 255);
+
+            if (config.snaplines.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.snaplines.color, 255);
+            }
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
         }
     }
