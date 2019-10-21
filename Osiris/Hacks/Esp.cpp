@@ -46,7 +46,7 @@ static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared&
 
 static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (config.eyeTraces) {
+    if (config.eyeTraces.enabled) {
         constexpr float maxRange{ 8192.0f };
 
         auto eyeAngles = entity->eyeAngles();
@@ -58,7 +58,12 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
         interfaces.engineTrace->traceRay({ headPosition, headPosition + viewAngles }, 0x46004009, { entity }, trace);
         Vector start, end;
         if (worldToScreen(trace.startpos, start) && worldToScreen(trace.endpos, end)) {
-            interfaces.surface->setDrawColor(config.eyeTracesColor, 255);
+            if (config.eyeTraces.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.eyeTraces.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.eyeTraces.color, 255);
+            }
             interfaces.surface->drawLine(start.x, start.y, end.x, end.y);
         }
     }

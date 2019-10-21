@@ -129,8 +129,7 @@ public:
         };
        
         struct Player : public Shared {
-            bool eyeTraces{ false };
-            float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle eyeTraces;
             bool health{ false };
             float healthColor[3]{ 1.0f, 1.0f, 1.0f };
             bool healthBar{ false };

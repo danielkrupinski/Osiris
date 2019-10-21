@@ -181,12 +181,22 @@ void Config::load(size_t id) noexcept
             if (snaplinesJson.isMember("Rainbow speed")) snaplinesConfig.rainbowSpeed = snaplinesJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Eye traces")) espConfig.eyeTraces = espJson["Eye traces"].asBool();
-        if (espJson.isMember("Eye traces color")) {
-            espConfig.eyeTracesColor[0] = espJson["Eye traces color"][0].asFloat();
-            espConfig.eyeTracesColor[1] = espJson["Eye traces color"][1].asFloat();
-            espConfig.eyeTracesColor[2] = espJson["Eye traces color"][2].asFloat();
+        if (espJson.isMember("Eye traces")) {
+            const auto& eyeTracesJson = espJson["Eye traces"];
+            auto& eyeTracesConfig = espConfig.eyeTraces;
+
+            if (eyeTracesJson.isMember("Enabled")) eyeTracesConfig.enabled = eyeTracesJson["Enabled"].asBool();
+
+            if (eyeTracesJson.isMember("Color")) {
+                eyeTracesConfig.color[0] = eyeTracesJson["Color"][0].asFloat();
+                eyeTracesConfig.color[1] = eyeTracesJson["Color"][1].asFloat();
+                eyeTracesConfig.color[2] = eyeTracesJson["Color"][2].asFloat();
+            }
+
+            if (eyeTracesJson.isMember("Rainbow")) eyeTracesConfig.rainbow = eyeTracesJson["Rainbow"].asBool();
+            if (eyeTracesJson.isMember("Rainbow speed")) eyeTracesConfig.rainbowSpeed = eyeTracesJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Box")) {
             const auto& boxJson = espJson["Box"];
             auto& boxConfig = espConfig.box;
@@ -834,10 +844,17 @@ void Config::save(size_t id) const noexcept
             snaplinesJson["Rainbow speed"] = snaplinesConfig.rainbowSpeed;
         }
 
-        espJson["Eye traces"] = espConfig.eyeTraces;
-        espJson["Eye traces color"][0] = espConfig.eyeTracesColor[0];
-        espJson["Eye traces color"][1] = espConfig.eyeTracesColor[1];
-        espJson["Eye traces color"][2] = espConfig.eyeTracesColor[2];
+        {
+            auto& eyeTracesJson = espJson["Eye traces"];
+            const auto& eyeTracesConfig = espConfig.eyeTraces;
+
+            eyeTracesJson["Enabled"] = eyeTracesConfig.enabled;
+            eyeTracesJson["Color"][0] = eyeTracesConfig.color[0];
+            eyeTracesJson["Color"][1] = eyeTracesConfig.color[1];
+            eyeTracesJson["Color"][2] = eyeTracesConfig.color[2];
+            eyeTracesJson["Rainbow"] = eyeTracesConfig.rainbow;
+            eyeTracesJson["Rainbow speed"] = eyeTracesConfig.rainbowSpeed;
+        }
 
         {
             auto& boxJson = espJson["Box"];
