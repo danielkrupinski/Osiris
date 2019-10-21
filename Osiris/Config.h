@@ -117,8 +117,9 @@ public:
         struct Shared {
             bool enabled{ false };
             int font{ 0x1d };
-            bool snaplines{ false };
-            float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle snaplines;
+          //  bool snaplines{ false };
+           // float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
             bool box{ false };
             float boxColor[3]{ 1.0f, 1.0f, 1.0f };
             int boxType{ 0 };

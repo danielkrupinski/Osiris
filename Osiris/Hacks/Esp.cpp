@@ -25,11 +25,11 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 
 static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
 {
-    if (config.snaplines) {
+    if (config.snaplines.enabled) {
         Vector position{ };
         if (worldToScreen(entity->getAbsOrigin(), position)) {
             const auto [width, height] = interfaces.surface->getScreenSize();
-            interfaces.surface->setDrawColor(config.snaplinesColor, 255);
+            interfaces.surface->setDrawColor(config.snaplines.color, 255);
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
         }
     }
