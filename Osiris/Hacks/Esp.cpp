@@ -228,10 +228,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             drawPositionX -= 7;
         }
 
-        if (config.armorBar) {
-            interfaces.surface->setDrawColor(config.armorBarColor, 255);
+        if (config.armorBar.enabled) {
+            if (config.armorBar.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.armorBar.color, 255);
+            }
+            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+
+            interfaces.surface->setDrawColor(config.armorBar.color, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
-            
+
             if (config.outline.enabled) {
                 if (config.outline.rainbow) {
                     const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
