@@ -233,11 +233,21 @@ void Config::load(size_t id) noexcept
             espConfig.healthBarColor[1] = espJson["healthBarColor"][1].asFloat();
             espConfig.healthBarColor[2] = espJson["healthBarColor"][2].asFloat();
         }
-        if (espJson.isMember("armor")) espConfig.armor = espJson["armor"].asBool();
-        if (espJson.isMember("armorColor")) {
-            espConfig.armorColor[0] = espJson["armorColor"][0].asFloat();
-            espConfig.armorColor[1] = espJson["armorColor"][1].asFloat();
-            espConfig.armorColor[2] = espJson["armorColor"][2].asFloat();
+
+        if (espJson.isMember("Armor")) {
+            const auto& armorJson = espJson["Armor"];
+            auto& armorConfig = espConfig.armor;
+
+            if (armorJson.isMember("Enabled")) armorConfig.enabled = armorJson["Enabled"].asBool();
+
+            if (armorJson.isMember("Color")) {
+                armorConfig.color[0] = armorJson["Color"][0].asFloat();
+                armorConfig.color[1] = armorJson["Color"][1].asFloat();
+                armorConfig.color[2] = armorJson["Color"][2].asFloat();
+            }
+
+            if (armorJson.isMember("Rainbow")) armorConfig.rainbow = armorJson["Rainbow"].asBool();
+            if (armorJson.isMember("Rainbow speed")) armorConfig.rainbowSpeed = armorJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Armor bar")) {
@@ -910,10 +920,18 @@ void Config::save(size_t id) const noexcept
         espJson["healthBarColor"][0] = espConfig.healthBarColor[0];
         espJson["healthBarColor"][1] = espConfig.healthBarColor[1];
         espJson["healthBarColor"][2] = espConfig.healthBarColor[2];
-        espJson["armor"] = espConfig.armor;
-        espJson["armorColor"][0] = espConfig.armorColor[0];
-        espJson["armorColor"][1] = espConfig.armorColor[1];
-        espJson["armorColor"][2] = espConfig.armorColor[2];
+
+        {
+            auto& armorJson = espJson["Armor"];
+            const auto& armorConfig = espConfig.armor;
+
+            armorJson["Enabled"] = armorConfig.enabled;
+            armorJson["Color"][0] = armorConfig.color[0];
+            armorJson["Color"][1] = armorConfig.color[1];
+            armorJson["Color"][2] = armorConfig.color[2];
+            armorJson["Rainbow"] = armorConfig.rainbow;
+            armorJson["Rainbow speed"] = armorConfig.rainbowSpeed;
+        }
 
         {
             auto& armorBarJson = espJson["Armor bar"];

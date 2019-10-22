@@ -285,8 +285,15 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         if (config.health)
             renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.x1 + 5, drawPositionY });
 
-        if (config.armor)
-            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.x1 + 5, drawPositionY });
+        if (config.armor.enabled) {
+            if (config.armor.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armor.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                interfaces.surface->setDrawColor(config.armor.color, 255);
+            }
+        }
 
         if (config.money.enabled) {
             if (config.money.rainbow) {
