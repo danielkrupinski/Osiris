@@ -207,13 +207,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
-        if (config.healthBar) {
+        if (config.healthBar.enabled) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
-            interfaces.surface->setDrawColor(config.healthBarColor, 255);
+            if (config.healthBar.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.healthBar.color, 255);
+            }
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {

@@ -627,7 +627,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Health", config.esp.players[selected].healthColor, &config.esp.players[selected].health);
                 ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBarColor, &config.esp.players[selected].healthBar);
+                ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBar.color, &config.esp.players[selected].healthBar.enabled, &config.esp.players[selected].healthBar.rainbow, &config.esp.players[selected].healthBar.rainbowSpeed);
                 ImGuiCustom::colorPicker("Name", config.esp.players[selected].nameColor, &config.esp.players[selected].name);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Armor", config.esp.players[selected].armor.color, &config.esp.players[selected].armor.enabled, &config.esp.players[selected].armor.rainbow, &config.esp.players[selected].armor.rainbowSpeed);
