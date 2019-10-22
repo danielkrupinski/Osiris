@@ -120,8 +120,7 @@ public:
             ColorToggle snaplines;
             ColorToggle box;
             int boxType{ 0 };
-            bool name{ false };
-            float nameColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             bool distance{ false };
             float distanceColor[3]{ 1.0f, 1.0f, 1.0f };

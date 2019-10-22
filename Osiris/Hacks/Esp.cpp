@@ -257,14 +257,19 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             drawPositionX -= 7;
         }
 
-        if (config.name) {
+        if (config.name.enabled) {
             static PlayerInfo playerInfo;
             if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
                     interfaces.surface->setTextFont(config.font);
-                    interfaces.surface->setTextColor(config.nameColor, 255);
+                    if (config.name.rainbow) {
+                        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                        interfaces.surface->setTextColor(r, g, b, 1.0f);
+                    } else {
+                        interfaces.surface->setTextColor(config.name.color, 255);
+                    }
                     interfaces.surface->setTextPosition(bbox.x0 + (fabsf(bbox.x1 - bbox.x0) - width) / 2, bbox.y0 - 5 - height);
                     interfaces.surface->printText(name);
                 }
@@ -327,11 +332,16 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
 
-        if (config.name) {
+        if (config.name.enabled) {
             const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.nameColor, 255);
+            if (config.name.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.name.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
@@ -348,10 +358,15 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
 
-        if (config.name) {
+        if (config.name.enabled) {
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.nameColor, 255);
+            if (config.name.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.name.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
