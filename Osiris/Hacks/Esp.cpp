@@ -258,11 +258,16 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
-        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon && activeWeapon) {
+        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon.enabled && activeWeapon) {
             const auto name{ interfaces.localize->find(activeWeapon->getWeaponData()->name) };
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.activeWeaponColor, 255);
+            if (config.activeWeapon.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.activeWeapon.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.activeWeapon.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }     

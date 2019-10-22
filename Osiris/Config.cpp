@@ -268,11 +268,20 @@ void Config::load(size_t id) noexcept
             if (headDotJson.isMember("Rainbow speed")) headDotConfig.rainbowSpeed = headDotJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Active weapon")) espConfig.activeWeapon = espJson["Active weapon"].asBool();
-        if (espJson.isMember("Active weapon color")) {
-            espConfig.activeWeaponColor[0] = espJson["Active weapon color"][0].asFloat();
-            espConfig.activeWeaponColor[1] = espJson["Active weapon color"][1].asFloat();
-            espConfig.activeWeaponColor[2] = espJson["Active weapon color"][2].asFloat();
+        if (espJson.isMember("Active weapon")) {
+            const auto& activeWeaponJson = espJson["Active weapon"];
+            auto& activeWeaponConfig = espConfig.activeWeapon;
+
+            if (activeWeaponJson.isMember("Enabled")) activeWeaponConfig.enabled = activeWeaponJson["Enabled"].asBool();
+
+            if (activeWeaponJson.isMember("Color")) {
+                activeWeaponConfig.color[0] = activeWeaponJson["Color"][0].asFloat();
+                activeWeaponConfig.color[1] = activeWeaponJson["Color"][1].asFloat();
+                activeWeaponConfig.color[2] = activeWeaponJson["Color"][2].asFloat();
+            }
+
+            if (activeWeaponJson.isMember("Rainbow")) activeWeaponConfig.rainbow = activeWeaponJson["Rainbow"].asBool();
+            if (activeWeaponJson.isMember("Rainbow speed")) activeWeaponConfig.rainbowSpeed = activeWeaponJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Outline")) {
@@ -906,10 +915,17 @@ void Config::save(size_t id) const noexcept
             headDotJson["Rainbow speed"] = headDotConfig.rainbowSpeed;
         }
 
-        espJson["Active weapon"] = espConfig.activeWeapon;
-        espJson["Active weapon color"][0] = espConfig.activeWeaponColor[0];
-        espJson["Active weapon color"][1] = espConfig.activeWeaponColor[1];
-        espJson["Active weapon color"][2] = espConfig.activeWeaponColor[2];
+        {
+            auto& activeWeaponJson = espJson["Active weapon"];
+            const auto& activeWeaponConfig = espConfig.activeWeapon;
+
+            activeWeaponJson["Enabled"] = activeWeaponConfig.enabled;
+            activeWeaponJson["Color"][0] = activeWeaponConfig.color[0];
+            activeWeaponJson["Color"][1] = activeWeaponConfig.color[1];
+            activeWeaponJson["Color"][2] = activeWeaponConfig.color[2];
+            activeWeaponJson["Rainbow"] = activeWeaponConfig.rainbow;
+            activeWeaponJson["Rainbow speed"] = activeWeaponConfig.rainbowSpeed;
+        }
 
         {
             auto& outlineJson = espJson["Outline"];

@@ -637,7 +637,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distanceColor, &config.esp.players[selected].distance);
-                ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeaponColor, &config.esp.players[selected].activeWeapon);
+                ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon.color, &config.esp.players[selected].activeWeapon.enabled, &config.esp.players[selected].activeWeapon.rainbow, &config.esp.players[selected].activeWeapon.rainbowSpeed);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
