@@ -130,8 +130,7 @@ public:
        
         struct Player : public Shared {
             ColorToggle eyeTraces;
-            bool health{ false };
-            float healthColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle health;
             ColorToggle healthBar;
             ColorToggle armor;
             ColorToggle armorBar;

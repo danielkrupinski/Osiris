@@ -624,7 +624,7 @@ void GUI::renderEspWindow() noexcept
                 ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
                 ImGuiCustom::colorPicker("Eye traces", config.esp.players[selected].eyeTraces.color, &config.esp.players[selected].eyeTraces.enabled, &config.esp.players[selected].eyeTraces.rainbow, &config.esp.players[selected].eyeTraces.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Health", config.esp.players[selected].healthColor, &config.esp.players[selected].health);
+                ImGuiCustom::colorPicker("Health", config.esp.players[selected].health.color, &config.esp.players[selected].health.enabled, &config.esp.players[selected].health.rainbow, &config.esp.players[selected].health.rainbowSpeed);
                 ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBar.color, &config.esp.players[selected].healthBar.enabled, &config.esp.players[selected].healthBar.rainbow, &config.esp.players[selected].healthBar.rainbowSpeed);

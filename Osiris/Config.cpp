@@ -221,11 +221,21 @@ void Config::load(size_t id) noexcept
             espConfig.nameColor[1] = espJson["nameColor"][1].asFloat();
             espConfig.nameColor[2] = espJson["nameColor"][2].asFloat();
         }
-        if (espJson.isMember("health")) espConfig.health = espJson["health"].asBool();
-        if (espJson.isMember("healthColor")) {
-            espConfig.healthColor[0] = espJson["healthColor"][0].asFloat();
-            espConfig.healthColor[1] = espJson["healthColor"][1].asFloat();
-            espConfig.healthColor[2] = espJson["healthColor"][2].asFloat();
+
+        if (espJson.isMember("Health")) {
+            const auto& healthJson = espJson["Health"];
+            auto& healthConfig = espConfig.health;
+
+            if (healthJson.isMember("Enabled")) healthConfig.enabled = healthJson["Enabled"].asBool();
+
+            if (healthJson.isMember("Color")) {
+                healthConfig.color[0] = healthJson["Color"][0].asFloat();
+                healthConfig.color[1] = healthJson["Color"][1].asFloat();
+                healthConfig.color[2] = healthJson["Color"][2].asFloat();
+            }
+
+            if (healthJson.isMember("Rainbow")) healthConfig.rainbow = healthJson["Rainbow"].asBool();
+            if (healthJson.isMember("Rainbow speed")) healthConfig.rainbowSpeed = healthJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Health bar")) {
@@ -922,10 +932,18 @@ void Config::save(size_t id) const noexcept
         espJson["nameColor"][0] = espConfig.nameColor[0];
         espJson["nameColor"][1] = espConfig.nameColor[1];
         espJson["nameColor"][2] = espConfig.nameColor[2];
-        espJson["health"] = espConfig.health;
-        espJson["healthColor"][0] = espConfig.healthColor[0];
-        espJson["healthColor"][1] = espConfig.healthColor[1];
-        espJson["healthColor"][2] = espConfig.healthColor[2];
+
+        {
+            auto& healthJson = espJson["Health"];
+            const auto& healthConfig = espConfig.health;
+
+            healthJson["Enabled"] = healthConfig.enabled;
+            healthJson["Color"][0] = healthConfig.color[0];
+            healthJson["Color"][1] = healthConfig.color[1];
+            healthJson["Color"][2] = healthConfig.color[2];
+            healthJson["Rainbow"] = healthConfig.rainbow;
+            healthJson["Rainbow speed"] = healthConfig.rainbowSpeed;
+        }
 
         {
             auto& healthBarJson = espJson["Health bar"];

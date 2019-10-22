@@ -287,8 +287,15 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionY = bbox.y0;
 
-        if (config.health)
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.x1 + 5, drawPositionY });
+        if (config.health.enabled) {
+            if (config.health.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.health.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.health.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
 
         if (config.armor.enabled) {
             if (config.armor.rainbow) {
@@ -296,7 +303,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 float color[3]{ r, g, b };
                 renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), color, { bbox.x1 + 5, drawPositionY });
             } else {
-                interfaces.surface->setDrawColor(config.armor.color, 255);
+                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armor.color, { bbox.x1 + 5, drawPositionY });
             }
         }
 
@@ -306,7 +313,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 float color[3]{ r, g, b };
                 renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), color, { bbox.x1 + 5, drawPositionY });
             } else {
-                interfaces.surface->setDrawColor(config.money.color, 255);
+                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.money.color, { bbox.x1 + 5, drawPositionY });
             }
         }
 
