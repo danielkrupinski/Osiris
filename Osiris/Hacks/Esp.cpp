@@ -280,8 +280,15 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         if (config.armor)
             renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.x1 + 5, drawPositionY });
 
-        if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.x1 + 5, drawPositionY });
+        if (config.money.enabled) {
+            if (config.money.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.money.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                interfaces.surface->setDrawColor(config.money.color, 255);
+            }
+        }
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
             renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });

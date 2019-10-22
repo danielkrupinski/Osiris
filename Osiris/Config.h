@@ -138,8 +138,7 @@ public:
             float armorColor[3]{ 1.0f, 1.0f, 1.0f };
             bool armorBar{ false };
             float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool money{ false };
-            float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
         };

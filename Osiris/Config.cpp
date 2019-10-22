@@ -245,11 +245,21 @@ void Config::load(size_t id) noexcept
             espConfig.armorBarColor[1] = espJson["armorBarColor"][1].asFloat();
             espConfig.armorBarColor[2] = espJson["armorBarColor"][2].asFloat();
         }
-        if (espJson.isMember("money")) espConfig.money = espJson["money"].asBool();
-        if (espJson.isMember("moneyColor")) {
-            espConfig.moneyColor[0] = espJson["moneyColor"][0].asFloat();
-            espConfig.moneyColor[1] = espJson["moneyColor"][1].asFloat();
-            espConfig.moneyColor[2] = espJson["moneyColor"][2].asFloat();
+
+        if (espJson.isMember("Money")) {
+            const auto& moneyJson = espJson["Money"];
+            auto& moneyConfig = espConfig.money;
+
+            if (moneyJson.isMember("Enabled")) moneyConfig.enabled = moneyJson["Enabled"].asBool();
+
+            if (moneyJson.isMember("Color")) {
+                moneyConfig.color[0] = moneyJson["Color"][0].asFloat();
+                moneyConfig.color[1] = moneyJson["Color"][1].asFloat();
+                moneyConfig.color[2] = moneyJson["Color"][2].asFloat();
+            }
+
+            if (moneyJson.isMember("Rainbow")) moneyConfig.rainbow = moneyJson["Rainbow"].asBool();
+            if (moneyJson.isMember("Rainbow speed")) moneyConfig.rainbowSpeed = moneyJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Head dot")) {
@@ -898,10 +908,18 @@ void Config::save(size_t id) const noexcept
         espJson["armorBarColor"][0] = espConfig.armorBarColor[0];
         espJson["armorBarColor"][1] = espConfig.armorBarColor[1];
         espJson["armorBarColor"][2] = espConfig.armorBarColor[2];
-        espJson["money"] = espConfig.money;
-        espJson["moneyColor"][0] = espConfig.moneyColor[0];
-        espJson["moneyColor"][1] = espConfig.moneyColor[1];
-        espJson["moneyColor"][2] = espConfig.moneyColor[2];
+
+        {
+            auto& moneyJson = espJson["Money"];
+            const auto& moneyConfig = espConfig.money;
+
+            moneyJson["Enabled"] = moneyConfig.enabled;
+            moneyJson["Color"][0] = moneyConfig.color[0];
+            moneyJson["Color"][1] = moneyConfig.color[1];
+            moneyJson["Color"][2] = moneyConfig.color[2];
+            moneyJson["Rainbow"] = moneyConfig.rainbow;
+            moneyJson["Rainbow speed"] = moneyConfig.rainbowSpeed;
+        }
 
         {
             auto& headDotJson = espJson["Head dot"];
