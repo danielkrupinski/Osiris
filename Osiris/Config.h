@@ -122,8 +122,7 @@ public:
             int boxType{ 0 };
             ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
-            bool distance{ false };
-            float distanceColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle distance;
             float maxDistance{ 0.0f };
         };
        

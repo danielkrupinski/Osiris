@@ -322,8 +322,17 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 
@@ -348,8 +357,17 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
 
         float drawPositionY = bbox.y0;
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 
@@ -373,8 +391,17 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
 
         float drawPositionY = bbox.y0;
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 

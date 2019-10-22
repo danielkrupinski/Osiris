@@ -359,12 +359,22 @@ void Config::load(size_t id) noexcept
             if (outlineJson.isMember("Rainbow speed")) outlineConfig.rainbowSpeed = outlineJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
-        if (espJson.isMember("Distance color")) {
-            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
-            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
-            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        if (espJson.isMember("Distance")) {
+            const auto& distanceJson = espJson["Distance"];
+            auto& distanceConfig = espConfig.distance;
+
+            if (distanceJson.isMember("Enabled")) distanceConfig.enabled = distanceJson["Enabled"].asBool();
+
+            if (distanceJson.isMember("Color")) {
+                distanceConfig.color[0] = distanceJson["Color"][0].asFloat();
+                distanceConfig.color[1] = distanceJson["Color"][1].asFloat();
+                distanceConfig.color[2] = distanceJson["Color"][2].asFloat();
+            }
+
+            if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
+            if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
@@ -440,12 +450,22 @@ void Config::load(size_t id) noexcept
             if (nameJson.isMember("Rainbow speed")) nameConfig.rainbowSpeed = nameJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
-        if (espJson.isMember("Distance color")) {
-            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
-            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
-            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        if (espJson.isMember("Distance")) {
+            const auto& distanceJson = espJson["Distance"];
+            auto& distanceConfig = espConfig.distance;
+
+            if (distanceJson.isMember("Enabled")) distanceConfig.enabled = distanceJson["Enabled"].asBool();
+
+            if (distanceJson.isMember("Color")) {
+                distanceConfig.color[0] = distanceJson["Color"][0].asFloat();
+                distanceConfig.color[1] = distanceJson["Color"][1].asFloat();
+                distanceConfig.color[2] = distanceJson["Color"][2].asFloat();
+            }
+
+            if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
+            if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
@@ -521,12 +541,22 @@ void Config::load(size_t id) noexcept
             if (nameJson.isMember("Rainbow speed")) nameConfig.rainbowSpeed = nameJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
-        if (espJson.isMember("Distance color")) {
-            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
-            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
-            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        if (espJson.isMember("Distance")) {
+            const auto& distanceJson = espJson["Distance"];
+            auto& distanceConfig = espConfig.distance;
+
+            if (distanceJson.isMember("Enabled")) distanceConfig.enabled = distanceJson["Enabled"].asBool();
+
+            if (distanceJson.isMember("Color")) {
+                distanceConfig.color[0] = distanceJson["Color"][0].asFloat();
+                distanceConfig.color[1] = distanceJson["Color"][1].asFloat();
+                distanceConfig.color[2] = distanceJson["Color"][2].asFloat();
+            }
+
+            if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
+            if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
@@ -601,11 +631,20 @@ void Config::load(size_t id) noexcept
             if (nameJson.isMember("Rainbow speed")) nameConfig.rainbowSpeed = nameJson["Rainbow speed"].asFloat();
         }
 
-        if (espJson.isMember("Distance")) espConfig.distance = espJson["Distance"].asBool();
-        if (espJson.isMember("Distance color")) {
-            espConfig.distanceColor[0] = espJson["Distance color"][0].asFloat();
-            espConfig.distanceColor[1] = espJson["Distance color"][1].asFloat();
-            espConfig.distanceColor[2] = espJson["Distance color"][2].asFloat();
+        if (espJson.isMember("Distance")) {
+            const auto& distanceJson = espJson["Distance"];
+            auto& distanceConfig = espConfig.distance;
+
+            if (distanceJson.isMember("Enabled")) distanceConfig.enabled = distanceJson["Enabled"].asBool();
+
+            if (distanceJson.isMember("Color")) {
+                distanceConfig.color[0] = distanceJson["Color"][0].asFloat();
+                distanceConfig.color[1] = distanceJson["Color"][1].asFloat();
+                distanceConfig.color[2] = distanceJson["Color"][2].asFloat();
+            }
+
+            if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
+            if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
 
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
@@ -1074,10 +1113,18 @@ void Config::save(size_t id) const noexcept
             outlineJson["Rainbow speed"] = outlineConfig.rainbowSpeed;
         }
 
-        espJson["Distance"] = espConfig.distance;
-        espJson["Distance color"][0] = espConfig.distanceColor[0];
-        espJson["Distance color"][1] = espConfig.distanceColor[1];
-        espJson["Distance color"][2] = espConfig.distanceColor[2];
+        {
+            auto& distanceJson = espJson["Distance"];
+            const auto& distanceConfig = espConfig.distance;
+
+            distanceJson["Enabled"] = distanceConfig.enabled;
+            distanceJson["Color"][0] = distanceConfig.color[0];
+            distanceJson["Color"][1] = distanceConfig.color[1];
+            distanceJson["Color"][2] = distanceConfig.color[2];
+            distanceJson["Rainbow"] = distanceConfig.rainbow;
+            distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
+        }
+
         espJson["Max distance"] = espConfig.maxDistance;
     }
 
@@ -1137,10 +1184,18 @@ void Config::save(size_t id) const noexcept
             nameJson["Rainbow speed"] = nameConfig.rainbowSpeed;
         }
 
-        espJson["Distance"] = espConfig.distance;
-        espJson["Distance color"][0] = espConfig.distanceColor[0];
-        espJson["Distance color"][1] = espConfig.distanceColor[1];
-        espJson["Distance color"][2] = espConfig.distanceColor[2];
+        {
+            auto& distanceJson = espJson["Distance"];
+            const auto& distanceConfig = espConfig.distance;
+
+            distanceJson["Enabled"] = distanceConfig.enabled;
+            distanceJson["Color"][0] = distanceConfig.color[0];
+            distanceJson["Color"][1] = distanceConfig.color[1];
+            distanceJson["Color"][2] = distanceConfig.color[2];
+            distanceJson["Rainbow"] = distanceConfig.rainbow;
+            distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
+        }
+
         espJson["Max distance"] = espConfig.maxDistance;
     }
 
@@ -1200,10 +1255,18 @@ void Config::save(size_t id) const noexcept
             nameJson["Rainbow speed"] = nameConfig.rainbowSpeed;
         }
 
-        espJson["Distance"] = espConfig.distance;
-        espJson["Distance color"][0] = espConfig.distanceColor[0];
-        espJson["Distance color"][1] = espConfig.distanceColor[1];
-        espJson["Distance color"][2] = espConfig.distanceColor[2];
+        {
+            auto& distanceJson = espJson["Distance"];
+            const auto& distanceConfig = espConfig.distance;
+
+            distanceJson["Enabled"] = distanceConfig.enabled;
+            distanceJson["Color"][0] = distanceConfig.color[0];
+            distanceJson["Color"][1] = distanceConfig.color[1];
+            distanceJson["Color"][2] = distanceConfig.color[2];
+            distanceJson["Rainbow"] = distanceConfig.rainbow;
+            distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
+        }
+
         espJson["Max distance"] = espConfig.maxDistance;
     }
 
@@ -1263,10 +1326,18 @@ void Config::save(size_t id) const noexcept
             nameJson["Rainbow speed"] = nameConfig.rainbowSpeed;
         }
 
-        espJson["Distance"] = espConfig.distance;
-        espJson["Distance color"][0] = espConfig.distanceColor[0];
-        espJson["Distance color"][1] = espConfig.distanceColor[1];
-        espJson["Distance color"][2] = espConfig.distanceColor[2];
+        {
+            auto& distanceJson = espJson["Distance"];
+            const auto& distanceConfig = espConfig.distance;
+
+            distanceJson["Enabled"] = distanceConfig.enabled;
+            distanceJson["Color"][0] = distanceConfig.color[0];
+            distanceJson["Color"][1] = distanceConfig.color[1];
+            distanceJson["Color"][2] = distanceConfig.color[2];
+            distanceJson["Rainbow"] = distanceConfig.rainbow;
+            distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
+        }
+
         espJson["Max distance"] = espConfig.maxDistance;
     }
 

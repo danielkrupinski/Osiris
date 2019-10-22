@@ -636,7 +636,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBar.color, &config.esp.players[selected].armorBar.enabled, &config.esp.players[selected].armorBar.rainbow, &config.esp.players[selected].armorBar.rainbowSpeed);
                 ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distanceColor, &config.esp.players[selected].distance);
+                ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance.color, &config.esp.players[selected].distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon.color, &config.esp.players[selected].activeWeapon.enabled, &config.esp.players[selected].activeWeapon.rainbow, &config.esp.players[selected].activeWeapon.rainbowSpeed);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
@@ -660,7 +660,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Name", config.esp.weapon.name.color, &config.esp.weapon.name.enabled, &config.esp.weapon.name.rainbow, &config.esp.weapon.name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
-                ImGuiCustom::colorPicker("Distance", config.esp.weapon.distanceColor, &config.esp.weapon.distance);
+                ImGuiCustom::colorPicker("Distance", config.esp.weapon.distance.color, &config.esp.weapon.distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
                 ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -683,7 +683,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Name", config.esp.projectiles[currentItem].name.color, &config.esp.projectiles[currentItem].name.enabled, &config.esp.projectiles[currentItem].name.rainbow, &config.esp.projectiles[currentItem].name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
-                ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distanceColor, &config.esp.projectiles[currentItem].distance);
+                ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distance.color, &config.esp.projectiles[currentItem].distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
                 ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -707,7 +707,7 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Name", config.esp.dangerZone[selected].name.color, &config.esp.dangerZone[selected].name.enabled, &config.esp.dangerZone[selected].name.rainbow, &config.esp.dangerZone[selected].name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outline.color, &config.esp.dangerZone[selected].outline.enabled, &config.esp.dangerZone[selected].outline.rainbow, &config.esp.dangerZone[selected].outline.rainbowSpeed);
-                ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distanceColor, &config.esp.dangerZone[selected].distance);
+                ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distance.color, &config.esp.dangerZone[selected].distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
                 ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             } }
