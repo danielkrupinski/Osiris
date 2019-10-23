@@ -221,7 +221,7 @@ public:
         bool radarHack{ false };
         bool revealRanks{ false };
         bool spectatorList{ false };
-        bool watermark{ false };
+        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };

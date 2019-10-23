@@ -968,7 +968,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
         ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
-        ImGui::Checkbox("Watermark", &config.misc.watermark);
+        ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
         ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);

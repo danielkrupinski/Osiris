@@ -790,7 +790,22 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
-        if (miscJson.isMember("Watermark")) misc.watermark = miscJson["Watermark"].asBool();
+        if (const auto& watermark{ miscJson["Watermark"] }; watermark.isObject()) {
+            if (const auto& enabled{ watermark["Enabled"] }; enabled.isBool())
+                misc.watermark.enabled = enabled.asBool();
+
+            if (const auto& color{ watermark["Color"] }; color.isArray()) {
+                misc.watermark.color[0] = color[0].asFloat();
+                misc.watermark.color[1] = color[1].asFloat();
+                misc.watermark.color[2] = color[2].asFloat();
+            }
+            if (const auto& rainbow{ watermark["Rainbow"] }; rainbow.isBool())
+                misc.watermark.rainbow = rainbow.asBool();
+
+            if (const auto& rainbowSpeed{ watermark["Rainbow speed"] }; rainbowSpeed.isDouble())
+                misc.watermark.rainbowSpeed = rainbowSpeed.asFloat();
+        }
+
         if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
@@ -1471,7 +1486,17 @@ void Config::save(size_t id) const noexcept
         miscJson["Radar hack"] = misc.radarHack;
         miscJson["Reveal ranks"] = misc.revealRanks;
         miscJson["Spectator list"] = misc.spectatorList;
-        miscJson["Watermark"] = misc.watermark;
+
+        {
+            auto& watermarkJson = miscJson["Watermark"];
+            watermarkJson["Enabled"] = misc.watermark.enabled;
+            watermarkJson["Color"][0] = misc.watermark.color[0];
+            watermarkJson["Color"][1] = misc.watermark.color[1];
+            watermarkJson["Color"][2] = misc.watermark.color[2];
+            watermarkJson["Rainbow"] = misc.watermark.rainbow;
+            watermarkJson["Rainbow speed"] = misc.watermark.rainbowSpeed;
+        }
+
         miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;
