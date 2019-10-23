@@ -214,6 +214,7 @@ public:
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool sniperCrosshair{ false };
+        bool sniperCrosshairInscope{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool autoReload{ false };
