@@ -85,7 +85,14 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
+	if (!config.misc.sniperCrosshairInscope)
+	{
+		showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
+	}
+	else
+	{
+		showSpread->setValue(config.misc.sniperCrosshair ? 3 : 0);
+	}
 }
 
 void Misc::recoilCrosshair() noexcept
