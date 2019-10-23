@@ -207,13 +207,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
-        if (config.healthBar) {
+        if (config.healthBar.enabled) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
-            interfaces.surface->setDrawColor(config.healthBarColor, 255);
+            if (config.healthBar.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.healthBar.color, 255);
+            }
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
@@ -228,10 +233,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             drawPositionX -= 7;
         }
 
-        if (config.armorBar) {
-            interfaces.surface->setDrawColor(config.armorBarColor, 255);
+        if (config.armorBar.enabled) {
+            if (config.armorBar.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed) };
+                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setDrawColor(config.armorBar.color, 255);
+            }
+            interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+
+            interfaces.surface->setDrawColor(config.armorBar.color, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
-            
+
             if (config.outline.enabled) {
                 if (config.outline.rainbow) {
                     const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
@@ -244,42 +257,80 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             drawPositionX -= 7;
         }
 
-        if (config.name) {
+        if (config.name.enabled) {
             static PlayerInfo playerInfo;
             if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
                 static wchar_t name[128];
                 if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
                     interfaces.surface->setTextFont(config.font);
-                    interfaces.surface->setTextColor(config.nameColor, 255);
+                    if (config.name.rainbow) {
+                        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                        interfaces.surface->setTextColor(r, g, b, 1.0f);
+                    } else {
+                        interfaces.surface->setTextColor(config.name.color, 255);
+                    }
                     interfaces.surface->setTextPosition(bbox.x0 + (fabsf(bbox.x1 - bbox.x0) - width) / 2, bbox.y0 - 5 - height);
                     interfaces.surface->printText(name);
                 }
             }
         }
 
-        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon && activeWeapon) {
+        if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon.enabled && activeWeapon) {
             const auto name{ interfaces.localize->find(activeWeapon->getWeaponData()->name) };
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.activeWeaponColor, 255);
+            if (config.activeWeapon.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.activeWeapon.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.activeWeapon.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }     
 
         float drawPositionY = bbox.y0;
 
-        if (config.health)
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.healthColor, { bbox.x1 + 5, drawPositionY });
+        if (config.health.enabled) {
+            if (config.health.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.health.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.health.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
 
-        if (config.armor)
-            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armorColor, { bbox.x1 + 5, drawPositionY });
+        if (config.armor.enabled) {
+            if (config.armor.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armor.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armor.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
 
-        if (config.money)
-            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.moneyColor, { bbox.x1 + 5, drawPositionY });
+        if (config.money.enabled) {
+            if (config.money.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.money.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.money.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 
@@ -288,19 +339,32 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
 
-        if (config.name) {
+        if (config.name.enabled) {
             const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.nameColor, 255);
+            if (config.name.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.name.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
 
         float drawPositionY = bbox.y0;
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 
@@ -309,18 +373,31 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(entity, bbox, config);
 
-        if (config.name) {
+        if (config.name.enabled) {
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            interfaces.surface->setTextColor(config.nameColor, 255);
+            if (config.name.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
+                interfaces.surface->setTextColor(r, g, b, 1.0f);
+            } else {
+                interfaces.surface->setTextColor(config.name.color, 255);
+            }
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
 
         float drawPositionY = bbox.y0;
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance)
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distanceColor, { bbox.x1 + 5, drawPositionY });
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
+            if (config.distance.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
+                float color[3]{ r, g, b };
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+
+            } else {
+                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
+            }
+        }
     }
 }
 

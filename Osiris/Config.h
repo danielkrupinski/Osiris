@@ -120,29 +120,21 @@ public:
             ColorToggle snaplines;
             ColorToggle box;
             int boxType{ 0 };
-            bool name{ false };
-            float nameColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
-            bool distance{ false };
-            float distanceColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle distance;
             float maxDistance{ 0.0f };
         };
        
         struct Player : public Shared {
             ColorToggle eyeTraces;
-            bool health{ false };
-            float healthColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool healthBar{ false };
-            float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armor{ false };
-            float armorColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armorBar{ false };
-            float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool money{ false };
-            float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle health;
+            ColorToggle healthBar;
+            ColorToggle armor;
+            ColorToggle armorBar;
+            ColorToggle money;
             ColorToggle headDot;
-            bool activeWeapon{ false };
-            float activeWeaponColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle activeWeapon;
         };
 
         struct Weapon : public Shared { } weapon;
