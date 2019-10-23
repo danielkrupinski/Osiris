@@ -789,7 +789,23 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Auto accept")) misc.autoAccept = miscJson["Auto accept"].asBool();
         if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
-        if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
+
+        if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
+            if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
+                misc.spectatorList.enabled = enabled.asBool();
+
+            if (const auto& color{ spectatorList["Color"] }; color.isArray()) {
+                misc.spectatorList.color[0] = color[0].asFloat();
+                misc.spectatorList.color[1] = color[1].asFloat();
+                misc.spectatorList.color[2] = color[2].asFloat();
+            }
+            if (const auto& rainbow{ spectatorList["Rainbow"] }; rainbow.isBool())
+                misc.spectatorList.rainbow = rainbow.asBool();
+
+            if (const auto& rainbowSpeed{ spectatorList["Rainbow speed"] }; rainbowSpeed.isDouble())
+                misc.spectatorList.rainbowSpeed = rainbowSpeed.asFloat();
+        }
+
         if (const auto& watermark{ miscJson["Watermark"] }; watermark.isObject()) {
             if (const auto& enabled{ watermark["Enabled"] }; enabled.isBool())
                 misc.watermark.enabled = enabled.asBool();
@@ -1485,7 +1501,16 @@ void Config::save(size_t id) const noexcept
         miscJson["Auto accept"] = misc.autoAccept;
         miscJson["Radar hack"] = misc.radarHack;
         miscJson["Reveal ranks"] = misc.revealRanks;
-        miscJson["Spectator list"] = misc.spectatorList;
+
+        {
+            auto& spectatorListJson = miscJson["Spectator list"];
+            spectatorListJson["Enabled"] = misc.spectatorList.enabled;
+            spectatorListJson["Color"][0] = misc.spectatorList.color[0];
+            spectatorListJson["Color"][1] = misc.spectatorList.color[1];
+            spectatorListJson["Color"][2] = misc.spectatorList.color[2];
+            spectatorListJson["Rainbow"] = misc.spectatorList.rainbow;
+            spectatorListJson["Rainbow speed"] = misc.spectatorList.rainbowSpeed;
+        }
 
         {
             auto& watermarkJson = miscJson["Watermark"];

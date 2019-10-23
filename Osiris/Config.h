@@ -220,7 +220,7 @@ public:
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
-        bool spectatorList{ false };
+        ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
