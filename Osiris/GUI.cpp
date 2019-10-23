@@ -961,6 +961,11 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
+        if (config.misc.sniperCrosshair)
+		{
+			ImGui::SameLine();
+			ImGui::Checkbox("In scope", &config.misc.sniperCrosshairInscope);
+		}
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
         ImGui::Checkbox("Auto reload", &config.misc.autoReload);
