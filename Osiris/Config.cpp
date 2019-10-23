@@ -783,6 +783,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
+        if (miscJson.isMember("Sniper crosshair in scope")) misc.sniperCrosshairInscope = miscJson["Sniper crosshair in scope"].asBool();
         if (miscJson.isMember("Recoil crosshair")) misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
         if (miscJson.isMember("Auto pistol")) misc.autoPistol = miscJson["Auto pistol"].asBool();
         if (miscJson.isMember("Auto reload")) misc.autoReload = miscJson["Auto reload"].asBool();
