@@ -36,7 +36,7 @@ static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared&
             if (config.snaplines.rainbow)
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
             else
-                interfaces.surface->setDrawColor(config.snaplines.color, 255);
+                interfaces.surface->setDrawColor(config.snaplines.color);
 
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
         }
@@ -60,7 +60,7 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
             if (config.eyeTraces.rainbow)
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.eyeTraces.rainbowSpeed));
             else
-                interfaces.surface->setDrawColor(config.eyeTraces.color, 255);
+                interfaces.surface->setDrawColor(config.eyeTraces.color);
 
             interfaces.surface->drawLine(start.x, start.y, end.x, end.y);
         }
@@ -122,7 +122,7 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
         if (config.box.rainbow)
             interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.box.rainbowSpeed));
         else
-            interfaces.surface->setDrawColor(config.box.color, 255);
+            interfaces.surface->setDrawColor(config.box.color);
         
         switch (config.boxType) {
         case 0:
@@ -132,7 +132,7 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
                 if (config.outline.rainbow)
                     interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
                 else
-                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                    interfaces.surface->setDrawColor(config.outline.color);
 
                 interfaces.surface->drawOutlinedRect(bbox.x0 + 1, bbox.y0 + 1, bbox.x1 - 1, bbox.y1 - 1);
                 interfaces.surface->drawOutlinedRect(bbox.x0 - 1, bbox.y0 - 1, bbox.x1 + 1, bbox.y1 + 1);
@@ -152,7 +152,7 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
                 if (config.outline.rainbow)
                     interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
                 else
-                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                    interfaces.surface->setDrawColor(config.outline.color);
 
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 - 1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
@@ -207,18 +207,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
-            if (config.healthBar.rainbow) {
+            if (config.healthBar.rainbow)
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
-            } else {
-                interfaces.surface->setDrawColor(config.healthBar.color, 255);
-            }
+            else
+                interfaces.surface->setDrawColor(config.healthBar.color);
+
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
                     interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
                 else
-                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                    interfaces.surface->setDrawColor(config.outline.color);
 
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
@@ -229,18 +229,18 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             if (config.armorBar.rainbow)
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
             else
-                interfaces.surface->setDrawColor(config.armorBar.color, 255);
+                interfaces.surface->setDrawColor(config.armorBar.color);
 
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
 
-            interfaces.surface->setDrawColor(config.armorBar.color, 255);
+            interfaces.surface->setDrawColor(config.armorBar.color);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
 
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
                     interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
                 else
-                    interfaces.surface->setDrawColor(config.outline.color, 255);
+                    interfaces.surface->setDrawColor(config.outline.color);
 
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
@@ -397,7 +397,7 @@ static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& c
             if (config.headDot.rainbow)
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
             else
-                interfaces.surface->setDrawColor(config.headDot.color, 255);
+                interfaces.surface->setDrawColor(config.headDot.color);
 
             if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
                 interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));

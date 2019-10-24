@@ -13,7 +13,7 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 15, r, g, b, a);
     }
 
-    constexpr void setDrawColor(const float color[3], int a) noexcept
+    constexpr void setDrawColor(const float color[3], int a = 255) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
     }
