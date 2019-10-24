@@ -203,7 +203,9 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setDrawColor(50, 50, 50, 255);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
             interfaces.surface->setDrawColor(255, 140, 0, 255);
-            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f), drawPositionY + progressBarHeight + 5);
+            static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
+
+            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
 
             if (entity->c4Defuser() != -1) {
                 static PlayerInfo playerInfo;
