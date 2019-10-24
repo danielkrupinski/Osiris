@@ -214,54 +214,48 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
 
             if (config.healthBar.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed) };
-                interfaces.surface->setDrawColor(r, g, b, 1.0f);
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
             } else {
                 interfaces.surface->setDrawColor(config.healthBar.color, 255);
             }
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
-                if (config.outline.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
-                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
-                } else {
+                if (config.outline.rainbow)
+                    interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
+                else
                     interfaces.surface->setDrawColor(config.outline.color, 255);
-                }
+
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
 
         if (config.armorBar.enabled) {
-            if (config.armorBar.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed) };
-                interfaces.surface->setDrawColor(r, g, b, 1.0f);
-            } else {
+            if (config.armorBar.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
+            else
                 interfaces.surface->setDrawColor(config.armorBar.color, 255);
-            }
+
             interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
 
             interfaces.surface->setDrawColor(config.armorBar.color, 255);
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
 
             if (config.outline.enabled) {
-                if (config.outline.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
-                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
-                } else {
+                if (config.outline.rainbow)
+                    interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
+                else
                     interfaces.surface->setDrawColor(config.outline.color, 255);
-                }
+
                 interfaces.surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
 
         if (config.name.enabled) {
-            static PlayerInfo playerInfo;
-            if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
-                static wchar_t name[128];
-                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
+                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
                     interfaces.surface->setTextFont(config.font);
                     if (config.name.rainbow) {
@@ -406,12 +400,11 @@ static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& c
     if (config.headDot.enabled) {
         Vector head{ };
         if (worldToScreen(entity->getBonePosition(8), head)) {
-            if (config.headDot.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed) };
-                interfaces.surface->setDrawColor(r, g, b, 1.0f);
-            } else {
+            if (config.headDot.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
+            else
                 interfaces.surface->setDrawColor(config.headDot.color, 255);
-            }
+
             if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
                 interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
         }
