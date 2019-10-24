@@ -8,7 +8,7 @@ class Surface {
 public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
-    constexpr void setDrawColor(int r, int g, int b, int a) noexcept
+    constexpr void setDrawColor(int r, int g, int b, int a = 255) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, r, g, b, a);
     }

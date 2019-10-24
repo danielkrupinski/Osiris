@@ -200,9 +200,9 @@ void Misc::drawBombTimer() noexcept
             const auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
             constexpr auto progressBarHeight{ 5 };
 
-            interfaces.surface->setDrawColor(50, 50, 50, 255);
+            interfaces.surface->setDrawColor(50, 50, 50);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            interfaces.surface->setDrawColor(255, 140, 0, 255);
+            interfaces.surface->setDrawColor(255, 140, 0);
             static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
 
             interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
@@ -217,9 +217,9 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->printText(defusingText.c_str());
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
 
-                        interfaces.surface->setDrawColor(50, 50, 50, 255);
+                        interfaces.surface->setDrawColor(50, 50, 50);
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-                        interfaces.surface->setDrawColor(0, 255, 0, 255);
+                        interfaces.surface->setDrawColor(0, 255, 0);
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
 
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
