@@ -67,10 +67,9 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
     }
 }
 
-static constexpr void renderPositionedText(unsigned font, const wchar_t* text, const float color[3], std::pair<float, float&> position) noexcept
+static constexpr void renderPositionedText(unsigned font, const wchar_t* text, std::pair<float, float&> position) noexcept
 {
     interfaces.surface->setTextFont(font);
-    interfaces.surface->setTextColor(color);
     interfaces.surface->setTextPosition(position.first, position.second);
     position.second += interfaces.surface->getTextSize(font, text).second;
     interfaces.surface->printText(text);
@@ -279,43 +278,39 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         float drawPositionY = bbox.y0;
 
         if (config.health.enabled) {
-            if (config.health.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.health.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), color, { bbox.x1 + 5, drawPositionY });
-            } else {
-                renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), config.health.color, { bbox.x1 + 5, drawPositionY });
-            }
-        }
+            if (config.health.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.health.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.health.color);
+
+            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 5, drawPositionY });
+         }
 
         if (config.armor.enabled) {
-            if (config.armor.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.armor.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), color, { bbox.x1 + 5, drawPositionY });
-            } else {
-                renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), config.armor.color, { bbox.x1 + 5, drawPositionY });
-            }
+            if (config.armor.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.armor.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.armor.color);
+
+            renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), { bbox.x1 + 5, drawPositionY });
         }
 
         if (config.money.enabled) {
-            if (config.money.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.money.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), color, { bbox.x1 + 5, drawPositionY });
-            } else {
-                renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), config.money.color, { bbox.x1 + 5, drawPositionY });
-            }
+            if (config.money.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.money.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.money.color);
+
+            renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 5, drawPositionY });
         }
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
-            } else {
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
-            }
+            if (config.distance.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.distance.color);
+
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
         }
     }
 }
@@ -341,14 +336,12 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
         float drawPositionY = bbox.y0;
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+            if (config.distance.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.distance.color);
 
-            } else {
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
-            }
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
         }
     }
 }
@@ -373,14 +366,12 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
         float drawPositionY = bbox.y0;
 
         if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed) };
-                float color[3]{ r, g, b };
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), color, { bbox.x1 + 5, drawPositionY });
+            if (config.distance.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.distance.color);
 
-            } else {
-                renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), config.distance.color, { bbox.x1 + 5, drawPositionY });
-            }
+            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
         }
     }
 }
