@@ -790,8 +790,39 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Auto accept")) misc.autoAccept = miscJson["Auto accept"].asBool();
         if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
-        if (miscJson.isMember("Spectator list")) misc.spectatorList = miscJson["Spectator list"].asBool();
-        if (miscJson.isMember("Watermark")) misc.watermark = miscJson["Watermark"].asBool();
+
+        if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
+            if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
+                misc.spectatorList.enabled = enabled.asBool();
+
+            if (const auto& color{ spectatorList["Color"] }; color.isArray()) {
+                misc.spectatorList.color[0] = color[0].asFloat();
+                misc.spectatorList.color[1] = color[1].asFloat();
+                misc.spectatorList.color[2] = color[2].asFloat();
+            }
+            if (const auto& rainbow{ spectatorList["Rainbow"] }; rainbow.isBool())
+                misc.spectatorList.rainbow = rainbow.asBool();
+
+            if (const auto& rainbowSpeed{ spectatorList["Rainbow speed"] }; rainbowSpeed.isDouble())
+                misc.spectatorList.rainbowSpeed = rainbowSpeed.asFloat();
+        }
+
+        if (const auto& watermark{ miscJson["Watermark"] }; watermark.isObject()) {
+            if (const auto& enabled{ watermark["Enabled"] }; enabled.isBool())
+                misc.watermark.enabled = enabled.asBool();
+
+            if (const auto& color{ watermark["Color"] }; color.isArray()) {
+                misc.watermark.color[0] = color[0].asFloat();
+                misc.watermark.color[1] = color[1].asFloat();
+                misc.watermark.color[2] = color[2].asFloat();
+            }
+            if (const auto& rainbow{ watermark["Rainbow"] }; rainbow.isBool())
+                misc.watermark.rainbow = rainbow.asBool();
+
+            if (const auto& rainbowSpeed{ watermark["Rainbow speed"] }; rainbowSpeed.isDouble())
+                misc.watermark.rainbowSpeed = rainbowSpeed.asFloat();
+        }
+
         if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
@@ -1471,8 +1502,27 @@ void Config::save(size_t id) const noexcept
         miscJson["Auto accept"] = misc.autoAccept;
         miscJson["Radar hack"] = misc.radarHack;
         miscJson["Reveal ranks"] = misc.revealRanks;
-        miscJson["Spectator list"] = misc.spectatorList;
-        miscJson["Watermark"] = misc.watermark;
+
+        {
+            auto& spectatorListJson = miscJson["Spectator list"];
+            spectatorListJson["Enabled"] = misc.spectatorList.enabled;
+            spectatorListJson["Color"][0] = misc.spectatorList.color[0];
+            spectatorListJson["Color"][1] = misc.spectatorList.color[1];
+            spectatorListJson["Color"][2] = misc.spectatorList.color[2];
+            spectatorListJson["Rainbow"] = misc.spectatorList.rainbow;
+            spectatorListJson["Rainbow speed"] = misc.spectatorList.rainbowSpeed;
+        }
+
+        {
+            auto& watermarkJson = miscJson["Watermark"];
+            watermarkJson["Enabled"] = misc.watermark.enabled;
+            watermarkJson["Color"][0] = misc.watermark.color[0];
+            watermarkJson["Color"][1] = misc.watermark.color[1];
+            watermarkJson["Color"][2] = misc.watermark.color[2];
+            watermarkJson["Rainbow"] = misc.watermark.rainbow;
+            watermarkJson["Rainbow speed"] = misc.watermark.rainbowSpeed;
+        }
+
         miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;

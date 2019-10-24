@@ -49,14 +49,20 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorList && interfaces.engine->isInGame()) {
+    if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (!localPlayer->isAlive())
             return;
 
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(51, 153, 255, 255);
+
+        if (config.misc.spectatorList.rainbow) {
+            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed) };
+            interfaces.surface->setTextColor(r, g, b, 1.0f);
+        } else {
+            interfaces.surface->setTextColor(config.misc.spectatorList.color, 255);
+        }
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
@@ -103,12 +109,15 @@ void Misc::recoilCrosshair() noexcept
 
 void Misc::watermark() noexcept
 {
-    if (config.misc.watermark) {
+    if (config.misc.watermark.enabled) {
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
-            255.0f);
+
+        if (config.misc.watermark.rainbow) {
+            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed) };
+            interfaces.surface->setTextColor(r, g, b, 1.0f);
+        } else {
+            interfaces.surface->setTextColor(config.misc.watermark.color, 255);
+        }
 
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
