@@ -73,11 +73,8 @@ void Misc::spectatorList() noexcept
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
-            static PlayerInfo playerInfo;
-
-            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
-                static wchar_t name[128];
-                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
+                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
                     interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
                     textPositionY -= textHeight;
@@ -191,7 +188,7 @@ void Misc::drawBombTimer() noexcept
 
             static constexpr unsigned font{ 0xc1 };
             interfaces.surface->setTextFont(font);
-            interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+            interfaces.surface->setTextColor(255, 255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
             auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
@@ -230,10 +227,10 @@ void Misc::drawBombTimer() noexcept
 
                         if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
                             canDefuseText = L"Can Defuse";
-                            interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(0, 255, 0, 255);
                         } else {
                             canDefuseText = L"Cannot Defuse";
-                            interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(255, 0, 0, 255);
                         }
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
