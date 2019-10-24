@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tuple>
+
 #include "Utils.h"
 
 class Surface {
@@ -19,6 +21,11 @@ public:
     constexpr void setDrawColor(const float color[3], int a) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
+    }
+
+    constexpr void setDrawColor(std::tuple<float, float, float> color) noexcept
+    {
+        callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), 255);
     }
 
     template <typename T>
