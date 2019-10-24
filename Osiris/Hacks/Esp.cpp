@@ -70,7 +70,7 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
 static constexpr void renderPositionedText(unsigned font, const wchar_t* text, const float color[3], std::pair<float, float&> position) noexcept
 {
     interfaces.surface->setTextFont(font);
-    interfaces.surface->setTextColor(color, 255);
+    interfaces.surface->setTextColor(color);
     interfaces.surface->setTextPosition(position.first, position.second);
     position.second += interfaces.surface->getTextSize(font, text).second;
     interfaces.surface->printText(text);
@@ -255,7 +255,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                     if (config.name.rainbow)
                         interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
                     else
-                        interfaces.surface->setTextColor(config.name.color, 255);
+                        interfaces.surface->setTextColor(config.name.color);
 
                     interfaces.surface->setTextPosition(bbox.x0 + (fabsf(bbox.x1 - bbox.x0) - width) / 2, bbox.y0 - 5 - height);
                     interfaces.surface->printText(name);
@@ -270,7 +270,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             if (config.activeWeapon.rainbow)
                 interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.activeWeapon.rainbowSpeed));
             else
-                interfaces.surface->setTextColor(config.activeWeapon.color, 255);
+                interfaces.surface->setTextColor(config.activeWeapon.color);
 
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
@@ -329,12 +329,11 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
             const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
             interfaces.surface->setTextFont(config.font);
-            if (config.name.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed) };
-                interfaces.surface->setTextColor(r, g, b, 1.0f);
-            } else {
-                interfaces.surface->setTextColor(config.name.color, 255);
-            }
+            if (config.name.rainbow)
+                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
+            else
+                interfaces.surface->setTextColor(config.name.color);
+
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);
         }
@@ -365,7 +364,7 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
             if (config.name.rainbow)
                 interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
             else
-                interfaces.surface->setTextColor(config.name.color, 255);
+                interfaces.surface->setTextColor(config.name.color);
 
             interfaces.surface->setTextPosition(bbox.x0 + (bbox.x1 - bbox.x0 - width) * 0.5f, bbox.y1 + 5);
             interfaces.surface->printText(name);

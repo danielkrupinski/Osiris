@@ -57,12 +57,10 @@ void Misc::spectatorList() noexcept
 
         interfaces.surface->setTextFont(Surface::font);
 
-        if (config.misc.spectatorList.rainbow) {
-            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed) };
-            interfaces.surface->setTextColor(r, g, b, 1.0f);
-        } else {
-            interfaces.surface->setTextColor(config.misc.spectatorList.color, 255);
-        }
+        if (config.misc.spectatorList.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
@@ -102,12 +100,10 @@ void Misc::watermark() noexcept
     if (config.misc.watermark.enabled) {
         interfaces.surface->setTextFont(Surface::font);
 
-        if (config.misc.watermark.rainbow) {
-            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed) };
-            interfaces.surface->setTextColor(r, g, b, 1.0f);
-        } else {
-            interfaces.surface->setTextColor(config.misc.watermark.color, 255);
-        }
+        if (config.misc.watermark.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.watermark.color);
 
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
@@ -188,7 +184,7 @@ void Misc::drawBombTimer() noexcept
 
             static constexpr unsigned font{ 0xc1 };
             interfaces.surface->setTextFont(font);
-            interfaces.surface->setTextColor(255, 255, 255, 255);
+            interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
             auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
@@ -227,10 +223,10 @@ void Misc::drawBombTimer() noexcept
 
                         if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
                             canDefuseText = L"Can Defuse";
-                            interfaces.surface->setTextColor(0, 255, 0, 255);
+                            interfaces.surface->setTextColor(0, 255, 0);
                         } else {
                             canDefuseText = L"Cannot Defuse";
-                            interfaces.surface->setTextColor(255, 0, 0, 255);
+                            interfaces.surface->setTextColor(255, 0, 0);
                         }
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
