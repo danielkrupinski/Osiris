@@ -67,6 +67,11 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
     }
 
+    constexpr void setTextColor(std::tuple<float, float, float> color, int a = 255) noexcept
+    {
+        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a);
+    }
+
     template <typename T>
     constexpr void setTextPosition(T x, T y) noexcept
     {
