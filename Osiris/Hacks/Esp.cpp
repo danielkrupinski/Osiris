@@ -33,12 +33,11 @@ static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared&
         if (worldToScreen(entity->getAbsOrigin(), position)) {
             const auto [width, height] = interfaces.surface->getScreenSize();
 
-            if (config.snaplines.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed) };
-                interfaces.surface->setDrawColor(r, g, b, 1.0f);
-            } else {
+            if (config.snaplines.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
+            else
                 interfaces.surface->setDrawColor(config.snaplines.color, 255);
-            }
+
             interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
         }
     }
@@ -58,12 +57,11 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
         interfaces.engineTrace->traceRay({ headPosition, headPosition + viewAngles }, 0x46004009, { entity }, trace);
         Vector start, end;
         if (worldToScreen(trace.startpos, start) && worldToScreen(trace.endpos, end)) {
-            if (config.eyeTraces.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.eyeTraces.rainbowSpeed) };
-                interfaces.surface->setDrawColor(r, g, b, 1.0f);
-            } else {
+            if (config.eyeTraces.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.eyeTraces.rainbowSpeed));
+            else
                 interfaces.surface->setDrawColor(config.eyeTraces.color, 255);
-            }
+
             interfaces.surface->drawLine(start.x, start.y, end.x, end.y);
         }
     }
@@ -121,24 +119,21 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
 static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
     if (config.box.enabled) {
-        if (config.box.rainbow) {
-            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.box.rainbowSpeed) };
-            interfaces.surface->setDrawColor(r, g, b, 1.0f);
-        } else {
+        if (config.box.rainbow)
+            interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.box.rainbowSpeed));
+        else
             interfaces.surface->setDrawColor(config.box.color, 255);
-        }
         
         switch (config.boxType) {
         case 0:
             interfaces.surface->drawOutlinedRect(bbox.x0, bbox.y0, bbox.x1, bbox.y1);
 
             if (config.outline.enabled) {
-                if (config.outline.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
-                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
-                } else {
+                if (config.outline.rainbow)
+                    interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
+                else
                     interfaces.surface->setDrawColor(config.outline.color, 255);
-                }
+
                 interfaces.surface->drawOutlinedRect(bbox.x0 + 1, bbox.y0 + 1, bbox.x1 - 1, bbox.y1 - 1);
                 interfaces.surface->drawOutlinedRect(bbox.x0 - 1, bbox.y0 - 1, bbox.x1 + 1, bbox.y1 + 1);
             }
@@ -154,12 +149,11 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
             interfaces.surface->drawLine(bbox.x1, bbox.y1, bbox.x1, bbox.y1 - fabsf(bbox.y1 - bbox.y0) / 4);
 
             if (config.outline.enabled) {
-                if (config.outline.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed) };
-                    interfaces.surface->setDrawColor(r, g, b, 1.0f);
-                } else {
+                if (config.outline.rainbow)
+                    interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.outline.rainbowSpeed));
+                else
                     interfaces.surface->setDrawColor(config.outline.color, 255);
-                }
+
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 - 1, bbox.y0 + fabsf(bbox.y1 - bbox.y0) / 4);
                 interfaces.surface->drawLine(bbox.x0 - 1, bbox.y0 - 1, bbox.x0 + fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
                 interfaces.surface->drawLine(bbox.x1 + 1, bbox.y0 - 1, bbox.x1 - fabsf(bbox.x1 - bbox.x0) / 4, bbox.y0 - 1);
