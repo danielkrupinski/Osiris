@@ -81,7 +81,7 @@ private:
                     return reinterpret_cast<T>(c + offset);
             }
         }
-        MessageBox(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+        MessageBoxA(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Osiris", MB_OK | MB_ICONERROR);
         exit(EXIT_FAILURE);
     }
 };
