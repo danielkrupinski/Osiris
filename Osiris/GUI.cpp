@@ -1003,7 +1003,7 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::Button("Setup fake ban"))
             Misc::fakeBan(true);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
-        ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
+        ImGuiCustom::colorPicker("Bomb timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
