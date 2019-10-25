@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sstream>
-#include <stdexcept>
 #include <type_traits>
 #include <Windows.h>
 
@@ -52,19 +51,12 @@ private:
     template <typename T>
     static auto find(const wchar_t* module, const char* name)
     {
-        const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface"));
+        if (const auto createInterface{ reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface")) })
+            if (T* foundInterface{ createInterface(name, nullptr) })
+                return foundInterface;
 
-        T* foundInterface{ nullptr };
-
-        if (createInterface)
-            foundInterface = createInterface(name, nullptr);
-
-        if (foundInterface)
-            return foundInterface;
-        else {
-            MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Error", MB_OK | MB_ICONERROR);
-            exit(EXIT_FAILURE);
-        }
+        MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Osiris", MB_OK | MB_ICONERROR);
+        std::exit(EXIT_FAILURE);
     }
 };
 

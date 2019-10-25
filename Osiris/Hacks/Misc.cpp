@@ -183,13 +183,13 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-    if (config.misc.bombTimer) {
+    if (config.misc.bombTimer.enabled) {
         for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
 
-            static constexpr unsigned font{ 0xc1 };
+            constexpr unsigned font{ 0xc1 };
             interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
@@ -205,7 +205,11 @@ void Misc::drawBombTimer() noexcept
 
             interfaces.surface->setDrawColor(50, 50, 50);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            interfaces.surface->setDrawColor(255, 140, 0);
+            if (config.misc.bombTimer.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
+            else
+                interfaces.surface->setDrawColor(config.misc.bombTimer.color);
+
             static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
 
             interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);

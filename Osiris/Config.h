@@ -234,7 +234,7 @@ public:
         int banColor{ 6 };
         char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
-        bool bombTimer{ false };
+        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };

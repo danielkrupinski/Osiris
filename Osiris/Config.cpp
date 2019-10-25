@@ -834,7 +834,23 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
         if (miscJson.isMember("Ban text")) strcpy_s(misc.banText, sizeof(misc.banText), miscJson["Ban text"].asCString());
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
-        if (miscJson.isMember("Bomb timer")) misc.bombTimer = miscJson["Bomb timer"].asBool();
+
+        if (const auto& bombTimer{ miscJson["Bomb timer"] }; bombTimer.isObject()) {
+            if (const auto& enabled{ bombTimer["Enabled"] }; enabled.isBool())
+                misc.bombTimer.enabled = enabled.asBool();
+
+            if (const auto& color{ bombTimer["Color"] }; color.isArray()) {
+                misc.bombTimer.color[0] = color[0].asFloat();
+                misc.bombTimer.color[1] = color[1].asFloat();
+                misc.bombTimer.color[2] = color[2].asFloat();
+            }
+            if (const auto& rainbow{ bombTimer["Rainbow"] }; rainbow.isBool())
+                misc.bombTimer.rainbow = rainbow.asBool();
+
+            if (const auto& rainbowSpeed{ bombTimer["Rainbow speed"] }; rainbowSpeed.isDouble())
+                misc.bombTimer.rainbowSpeed = rainbowSpeed.asFloat();
+        }
+
         if (miscJson.isMember("Quick reload")) misc.quickReload = miscJson["Quick reload"].asBool();
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
@@ -1535,7 +1551,17 @@ void Config::save(size_t id) const noexcept
         miscJson["Ban color"] = misc.banColor;
         miscJson["Ban text"] = misc.banText;
         miscJson["Fast plant"] = misc.fastPlant;
-        miscJson["Bomb timer"] = misc.bombTimer;
+
+        {
+            auto& bombTimerJson = miscJson["Bomb timer"];
+            bombTimerJson["Enabled"] = misc.bombTimer.enabled;
+            bombTimerJson["Color"][0] = misc.bombTimer.color[0];
+            bombTimerJson["Color"][1] = misc.bombTimer.color[1];
+            bombTimerJson["Color"][2] = misc.bombTimer.color[2];
+            bombTimerJson["Rainbow"] = misc.bombTimer.rainbow;
+            bombTimerJson["Rainbow speed"] = misc.bombTimer.rainbowSpeed;
+        }
+
         miscJson["Quick reload"] = misc.quickReload;
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
