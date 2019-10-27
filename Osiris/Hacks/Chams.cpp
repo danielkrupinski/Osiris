@@ -58,6 +58,9 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
+    if (interfaces.modelRender->isMaterialOverridden())
+        return true;
+
     bool needRedraw = true;
 
     if (auto entity{ interfaces.entityList->getEntity(info.entityIndex) }; entity && !entity->isDormant() && entity->isAlive()) {

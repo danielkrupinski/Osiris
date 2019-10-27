@@ -192,13 +192,15 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
+    if (interfaces.engine->isInGame()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
+        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-        interfaces.modelRender->forceMaterialOverride(nullptr);
+        if (!isOverridden)
+            interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
@@ -418,9 +420,9 @@ Hooks::Hooks() noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
+    **reinterpret_cast<decltype(present)***>(memory.present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(reset);
+    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
