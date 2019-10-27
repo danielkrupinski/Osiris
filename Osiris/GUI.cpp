@@ -910,7 +910,8 @@ void GUI::renderSoundWindow() noexcept
 void GUI::renderStyleWindow() noexcept
 {
     if (window.style) {
-        if (!config.style.menuStyle) {
+        const auto menuStyle{ config.style.menuStyle };
+        if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Style", &window.style, windowFlags);
         }
@@ -931,7 +932,7 @@ void GUI::renderStyleWindow() noexcept
             }
         }
 
-        if (!config.style.menuStyle)
+        if (menuStyle == 0)
             ImGui::End();
     }
 }
