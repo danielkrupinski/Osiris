@@ -195,7 +195,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
     if (interfaces.engine->isInGame()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverriden();
+        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
