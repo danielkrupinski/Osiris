@@ -332,6 +332,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
+    Misc::fov = setup->fov;
     Misc::fakeDuckFix(setup);
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
