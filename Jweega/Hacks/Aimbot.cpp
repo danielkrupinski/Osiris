@@ -95,10 +95,18 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
     return false;
 }
 
-static float random(float min, float max) noexcept
+static void setRandomSeed(int seed) noexcept
 {
-    static std::mt19937 gen{ std::random_device{ }() };
-    return std::uniform_real_distribution{ min, max }(gen);
+    using randomSeedFn = void(*)(int);
+    static auto randomSeed{ reinterpret_cast<randomSeedFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomSeed")) };
+    randomSeed(seed);
+}
+
+static float getRandom(float min, float max) noexcept
+{
+    using randomFloatFn = float(*)(float, float);
+    static auto randomFloat{ reinterpret_cast<randomFloatFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomFloat")) };
+    return randomFloat(min, max);
 }
 
 static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, Vector& destinantion, int buttons, int hitChance) noexcept
@@ -106,27 +114,27 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
     if (!hitChance)
         return true;
 
-    constexpr int seed{ 256 };
+    constexpr int maxSeed{ 256 };
 
     const Angle angles(destinantion);
 
     int hits{ 0 };
-    const int hitsNeed{ static_cast<int>(static_cast<float>(seed) * (static_cast<float>(hitChance) / 100.f)) };
+    const int hitsNeed{ static_cast<int>(static_cast<float>(maxSeed) * (static_cast<float>(hitChance) / 100.f)) };
 
     const auto weapSpread{ weaponData->getSpread() };
     const auto weapInaccuracy{ weaponData->getInaccuracy() };
     const auto localEyePosition{ localPlayer->getEyePosition() };
     const auto range{ weaponData->getWeaponData()->range };
 
-    for (int i = 0; i != seed; ++i) {
-        float inaccuracy{ random(0.f, 1.f) };
-        float spread{ random(0.f, 1.f) };
-        const float spreadX{ random(0.f, 2.f * static_cast<float>(M_PI)) };
-        const float spreadY{ random(0.f, 2.f * static_cast<float>(M_PI)) };
+    for (int i = 0; i != maxSeed; ++i) {
+        setRandomSeed(i + 1);
+        float inaccuracy{ getRandom(0.f, 1.f) };
+        float spread{ getRandom(0.f, 1.f) };
+        const float spreadX{ getRandom(0.f, 2.f * static_cast<float>(M_PI)) };
+        const float spreadY{ getRandom(0.f, 2.f * static_cast<float>(M_PI)) };
 
         const auto weaponIndex{ weaponData->itemDefinitionIndex2() };
         const auto recoilIndex{ weaponData->recoilIndex() };
-
         if (weaponIndex == WeaponId::Revolver)
         {
             if (buttons & UserCmd::IN_ATTACK2)
@@ -135,7 +143,7 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
                 spread = 1.f - spread * spread;
             }
         }
-        else if (weaponIndex == WeaponId::Negev && recoilIndex < 3)
+        else if (weaponIndex == WeaponId::Negev && recoilIndex < 3.f)
         {
             for (int i = 3; i > recoilIndex; --i)
             {
@@ -162,7 +170,7 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
         if (hits >= hitsNeed)
             return true;
 
-        if ((seed - i + hits) < hitsNeed)
+        if ((maxSeed - i + hits) < hitsNeed)
             return false;
     }
     return false;
