@@ -81,12 +81,12 @@ void GUI::hotkey(int& key) noexcept
     constexpr bool stringDisplayTest = true;
 
     if constexpr (stringDisplayTest)
-        key ? ImGui::Text("[ %s ]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
+        key ? ImGui::Text("[%s]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[KEY]");
     else
-        key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
+        key ? ImGui::Text("[0x%x]", key) : ImGui::TextUnformatted("[KEY]");
 
     if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Press any key to change keybind");
+        ImGui::SetTooltip("Press any key to change the keybind");
         ImGuiIO& io = ImGui::GetIO();
         for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
             if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
@@ -102,19 +102,19 @@ void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
-        ImGui::MenuItem("Anti aim", nullptr, &window.antiAim);
+        ImGui::MenuItem("Anti Aim", nullptr, &window.antiAim);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Esp", nullptr, &window.esp);
+        ImGui::MenuItem("ESP", nullptr, &window.esp);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
-        ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
+        ImGui::MenuItem("Skinchanger", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
         ImGui::MenuItem("Style", nullptr, &window.style);
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
-        ImGui::MenuItem("Config", nullptr, &window.config);
+        ImGui::MenuItem("Configs", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
 }
@@ -123,13 +123,13 @@ void GUI::renderAimbotWindow() noexcept
 {
     if (window.aimbot) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 600.0f, 0.0f });
+			ImGui::SetNextWindowSize({ 600.0f, 0.0f });
             ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
         }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMGs\0Rifles\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -219,7 +219,7 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Separator();
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 220.0f);
-        ImGui::Checkbox("On key", &config.aimbot[currentWeapon].onKey);
+        ImGui::Checkbox("On Key", &config.aimbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.aimbot[currentWeapon].key);
         ImGui::SameLine();
@@ -230,27 +230,28 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PopID();
         ImGui::Checkbox("Aimlock", &config.aimbot[currentWeapon].aimlock);
         ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
-        ImGui::Checkbox("Friendly fire", &config.aimbot[currentWeapon].friendlyFire);
-        ImGui::Checkbox("Visible only", &config.aimbot[currentWeapon].visibleOnly);
-        ImGui::Checkbox("Scoped only", &config.aimbot[currentWeapon].scopedOnly);
-        ImGui::Checkbox("Ignore flash", &config.aimbot[currentWeapon].ignoreFlash);
-        ImGui::Checkbox("Ignore smoke", &config.aimbot[currentWeapon].ignoreSmoke);
-        ImGui::Checkbox("Auto shot", &config.aimbot[currentWeapon].autoShot);
-        ImGui::Checkbox("Auto scope", &config.aimbot[currentWeapon].autoScope);
-        ImGui::Checkbox("Recoil-based fov", &config.aimbot[currentWeapon].recoilbasedFov);
-        ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+        ImGui::Checkbox("Friendly Fire", &config.aimbot[currentWeapon].friendlyFire);
+        ImGui::Checkbox("Visible Only", &config.aimbot[currentWeapon].visibleOnly);
+        ImGui::Checkbox("Scoped Only", &config.aimbot[currentWeapon].scopedOnly);
+        ImGui::Checkbox("Disable When Flash", &config.aimbot[currentWeapon].ignoreFlash);
+        ImGui::Checkbox("Disable When Smoked", &config.aimbot[currentWeapon].ignoreSmoke);
+        ImGui::Checkbox("Auto Shoot", &config.aimbot[currentWeapon].autoShot);
+        ImGui::Checkbox("Auto Scope", &config.aimbot[currentWeapon].autoScope);
+        ImGui::Checkbox("Recoil-Based FoV", &config.aimbot[currentWeapon].recoilbasedFov);
+        ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best Damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
         ImGui::NextColumn();
         ImGui::PushItemWidth(240.0f);
-        ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f");
+        ImGui::SliderFloat("FoV", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f");
         ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-        ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
-        ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
-        ImGui::SliderFloat("Max aim inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-        ImGui::SliderFloat("Max shot inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-        ImGui::InputInt("Min damage", &config.aimbot[currentWeapon].minDamage);
+        ImGui::SliderFloat("Recoil Control X", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderFloat("Recoil Control Y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderFloat("Max Aim Inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+        ImGui::SliderFloat("Max Shot Inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+        ImGui::InputInt("Min. Damage", &config.aimbot[currentWeapon].minDamage);
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
-        ImGui::Checkbox("Between shots", &config.aimbot[currentWeapon].betweenShots);
+        ImGui::Checkbox("Between Shots", &config.aimbot[currentWeapon].betweenShots);
+		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
@@ -262,7 +263,7 @@ void GUI::renderAntiAimWindow() noexcept
     if (window.antiAim) {
         if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-            ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
+            ImGui::Begin("Anti Aim", &window.antiAim, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
         ImGui::Checkbox("##pitch", &config.antiAim.pitch);
@@ -284,7 +285,7 @@ void GUI::renderTriggerbotWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
+        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMGs\0Rifles\0Zeus x27\0");
         ImGui::PopID();
         ImGui::SameLine();
         static int currentWeapon{ 0 };
@@ -376,18 +377,18 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::SameLine();
         ImGui::Checkbox("Enabled", &config.triggerbot[currentWeapon].enabled);
         ImGui::Separator();
-        ImGui::Checkbox("On key", &config.triggerbot[currentWeapon].onKey);
+        ImGui::Checkbox("On Key", &config.triggerbot[currentWeapon].onKey);
         ImGui::SameLine();
         hotkey(config.triggerbot[currentWeapon].key);
-        ImGui::Checkbox("Friendly fire", &config.triggerbot[currentWeapon].friendlyFire);
-        ImGui::Checkbox("Scoped only", &config.triggerbot[currentWeapon].scopedOnly);
-        ImGui::Checkbox("Ignore flash", &config.triggerbot[currentWeapon].ignoreFlash);
-        ImGui::Checkbox("Ignore smoke", &config.triggerbot[currentWeapon].ignoreSmoke);
+        ImGui::Checkbox("Friendly Fire", &config.triggerbot[currentWeapon].friendlyFire);
+        ImGui::Checkbox("Scoped Only", &config.triggerbot[currentWeapon].scopedOnly);
+        ImGui::Checkbox("Disable When Flashed", &config.triggerbot[currentWeapon].ignoreFlash);
+        ImGui::Checkbox("Disable When Smoked", &config.triggerbot[currentWeapon].ignoreSmoke);
         ImGui::SetNextItemWidth(85.0f);
-        ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
+        ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left Arm\0Right Arm\0Left Leg\0Right Leg\0");
         ImGui::PushItemWidth(220.0f);
-        ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot delay: %d ms");
-        ImGui::InputInt("Min damage", &config.triggerbot[currentWeapon].minDamage);
+        ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot Delay: %d ms");
+        ImGui::InputInt("Min. Damage", &config.triggerbot[currentWeapon].minDamage);
         config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
         ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
         
@@ -404,10 +405,10 @@ void GUI::renderBacktrackWindow() noexcept
             ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
-        ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
-        ImGui::Checkbox("Recoil based fov", &config.backtrack.recoilBasedFov);
+        ImGui::Checkbox("Disable When Smoked", &config.backtrack.ignoreSmoke);
+        ImGui::Checkbox("Recoil-Based FoV", &config.backtrack.recoilBasedFov);
         ImGui::PushItemWidth(220.0f);
-        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
+        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time Window: %d ms");
         ImGui::PopItemWidth();
         if (!config.style.menuStyle)
             ImGui::End();
@@ -418,13 +419,13 @@ void GUI::renderGlowWindow() noexcept
 {
     if (window.glow) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 450.0f, 0.0f });
+			ImGui::SetNextWindowSize({ 450.0f, 0.0f });
             ImGui::Begin("Glow", &window.glow, windowFlags);
         }
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0Defuse kits\0Projectiles\0Hostages\0Ragdolls\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local Player\0Weapons\0C4\0Planted C4\0Chickens\0Defuse Kits\0Projectiles\0Hostages\0Ragdolls\0");
         ImGui::PopID();
         static int currentItem{ 0 };
         if (currentCategory <= 3) {
@@ -444,9 +445,9 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Separator();
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
-        ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
+        ImGui::Checkbox("Health-Based", &config.glow[currentItem].healthBased);
 
-        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
+        ImGuiCustom::colorPicker("Colour", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
 
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
@@ -469,7 +470,7 @@ void GUI::renderChamsWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local Player\0Weapons\0Hands\0Backtrack\0");
         ImGui::PopID();
         static int currentItem{ 0 };
 
@@ -494,11 +495,11 @@ void GUI::renderChamsWindow() noexcept
 
         ImGui::Checkbox("Enabled", &chams.enabled);
         ImGui::Separator();
-        ImGui::Checkbox("Health based", &chams.healthBased);
+        ImGui::Checkbox("Health-Based", &chams.healthBased);
         ImGui::Checkbox("Blinking", &chams.blinking);
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
-        ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+        ImGuiCustom::colorPicker("Colour", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
 
         if (!config.style.menuStyle) {
             ImGui::End();
@@ -511,7 +512,7 @@ void GUI::renderEspWindow() noexcept
     if (window.esp) {
         if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-            ImGui::Begin("Esp", &window.esp, windowFlags);
+            ImGui::Begin("ESP", &window.esp, windowFlags);
         }
         
         static int currentCategory = 0;
@@ -576,9 +577,9 @@ void GUI::renderEspWindow() noexcept
             ImGui::PopID();
             ImGui::Unindent();
 
-            ImGui::Text("Danger Zone");
+            ImGui::Text("Dangerzone");
             ImGui::Indent();
-            ImGui::PushID("Danger Zone");
+            ImGui::PushID("Dangerzone");
             ImGui::PushFont(fonts.segoeui);
             static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox", "Radar Jammer" };
 
@@ -615,24 +616,24 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Box", config.esp.players[selected].box.color, &config.esp.players[selected].box.enabled, &config.esp.players[selected].box.rainbow, &config.esp.players[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-                ImGuiCustom::colorPicker("Eye traces", config.esp.players[selected].eyeTraces.color, &config.esp.players[selected].eyeTraces.enabled, &config.esp.players[selected].eyeTraces.rainbow, &config.esp.players[selected].eyeTraces.rainbowSpeed);
+                ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D Cornered\0""3D\0""3D Cornered\0");
+                ImGuiCustom::colorPicker("Eye Tracers", config.esp.players[selected].eyeTraces.color, &config.esp.players[selected].eyeTraces.enabled, &config.esp.players[selected].eyeTraces.rainbow, &config.esp.players[selected].eyeTraces.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Health", config.esp.players[selected].health.color, &config.esp.players[selected].health.enabled, &config.esp.players[selected].health.rainbow, &config.esp.players[selected].health.rainbowSpeed);
-                ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
+                ImGuiCustom::colorPicker("Head Dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBar.color, &config.esp.players[selected].healthBar.enabled, &config.esp.players[selected].healthBar.rainbow, &config.esp.players[selected].healthBar.rainbowSpeed);
+                ImGuiCustom::colorPicker("Health Bar", config.esp.players[selected].healthBar.color, &config.esp.players[selected].healthBar.enabled, &config.esp.players[selected].healthBar.rainbow, &config.esp.players[selected].healthBar.rainbowSpeed);
                 ImGuiCustom::colorPicker("Name", config.esp.players[selected].name.color, &config.esp.players[selected].name.enabled, &config.esp.players[selected].name.rainbow, &config.esp.players[selected].name.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Armor", config.esp.players[selected].armor.color, &config.esp.players[selected].armor.enabled, &config.esp.players[selected].armor.rainbow, &config.esp.players[selected].armor.rainbowSpeed);
+                ImGuiCustom::colorPicker("Armour", config.esp.players[selected].armor.color, &config.esp.players[selected].armor.enabled, &config.esp.players[selected].armor.rainbow, &config.esp.players[selected].armor.rainbowSpeed);
                 ImGuiCustom::colorPicker("Money", config.esp.players[selected].money.color, &config.esp.players[selected].money.enabled, &config.esp.players[selected].money.rainbow, &config.esp.players[selected].money.rainbowSpeed);
                 ImGui::SameLine(spacing);
-                ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBar.color, &config.esp.players[selected].armorBar.enabled, &config.esp.players[selected].armorBar.rainbow, &config.esp.players[selected].armorBar.rainbowSpeed);
+                ImGuiCustom::colorPicker("Armour Bar", config.esp.players[selected].armorBar.color, &config.esp.players[selected].armorBar.enabled, &config.esp.players[selected].armorBar.rainbow, &config.esp.players[selected].armorBar.rainbowSpeed);
                 ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance.color, &config.esp.players[selected].distance.enabled, &config.esp.players[selected].distance.rainbow, &config.esp.players[selected].distance.rainbowSpeed);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon.color, &config.esp.players[selected].activeWeapon.enabled, &config.esp.players[selected].activeWeapon.rainbow, &config.esp.players[selected].activeWeapon.rainbowSpeed);
-                ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                ImGui::SliderFloat("Max Distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 2: {
@@ -650,12 +651,12 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Box", config.esp.weapon.box.color, &config.esp.weapon.box.enabled, &config.esp.weapon.box.rainbow, &config.esp.weapon.box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D Cornered\0""3D\0""3D Cornered\0");
                 ImGuiCustom::colorPicker("Name", config.esp.weapon.name.color, &config.esp.weapon.name.enabled, &config.esp.weapon.name.rainbow, &config.esp.weapon.name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.weapon.distance.color, &config.esp.weapon.distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
-                ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
+                ImGui::SliderFloat("Max Distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 3: {
@@ -673,12 +674,12 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].box.color, &config.esp.projectiles[currentItem].box.enabled, &config.esp.projectiles[currentItem].box.rainbow, &config.esp.projectiles[currentItem].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D Cornered\0""3D\0""3D Cornered\0");
                 ImGuiCustom::colorPicker("Name", config.esp.projectiles[currentItem].name.color, &config.esp.projectiles[currentItem].name.enabled, &config.esp.projectiles[currentItem].name.rainbow, &config.esp.projectiles[currentItem].name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distance.color, &config.esp.projectiles[currentItem].distance.enabled, &config.esp.projectiles[currentItem].distance.rainbow, &config.esp.projectiles[currentItem].distance.rainbowSpeed);
-                ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
+                ImGui::SliderFloat("Max Distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
             case 4: {
@@ -697,12 +698,12 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].box.color, &config.esp.dangerZone[selected].box.enabled, &config.esp.dangerZone[selected].box.rainbow, &config.esp.dangerZone[selected].box.rainbowSpeed);
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(95.0f);
-                ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D Cornered\0""3D\0""3D Cornered\0");
                 ImGuiCustom::colorPicker("Name", config.esp.dangerZone[selected].name.color, &config.esp.dangerZone[selected].name.enabled, &config.esp.dangerZone[selected].name.rainbow, &config.esp.dangerZone[selected].name.rainbowSpeed);
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outline.color, &config.esp.dangerZone[selected].outline.enabled, &config.esp.dangerZone[selected].outline.rainbow, &config.esp.dangerZone[selected].outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distance.color, &config.esp.dangerZone[selected].distance.enabled, &config.esp.dangerZone[selected].distance.rainbow, &config.esp.dangerZone[selected].distance.rainbowSpeed);
-                ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                ImGui::SliderFloat("Max Distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             } }
 
@@ -718,26 +719,26 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
+			ImGui::SetNextWindowSize({ 520.0f, 0.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
-        ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
-        ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
-        ImGui::Checkbox("No fog", &config.visuals.noFog);
-        ImGui::Checkbox("No 3d sky", &config.visuals.no3dSky);
-        ImGui::Checkbox("No aim punch", &config.visuals.noAimPunch);
-        ImGui::Checkbox("No view punch", &config.visuals.noViewPunch);
-        ImGui::Checkbox("No hands", &config.visuals.noHands);
-        ImGui::Checkbox("No sleeves", &config.visuals.noSleeves);
-        ImGui::Checkbox("No weapons", &config.visuals.noWeapons);
-        ImGui::Checkbox("No smoke", &config.visuals.noSmoke);
-        ImGui::Checkbox("No blur", &config.visuals.noBlur);
-        ImGui::Checkbox("No scope overlay", &config.visuals.noScopeOverlay);
-        ImGui::Checkbox("No grass", &config.visuals.noGrass);
-        ImGui::Checkbox("No shadows", &config.visuals.noShadows);
-        ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
+        ImGui::Checkbox("Disable Post-Processing", &config.visuals.disablePostProcessing);
+        ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
+        ImGui::Checkbox("No Fog", &config.visuals.noFog);
+        ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);
+        ImGui::Checkbox("No Aim Punch", &config.visuals.noAimPunch);
+        ImGui::Checkbox("No View Punch", &config.visuals.noViewPunch);
+        ImGui::Checkbox("No Hands", &config.visuals.noHands);
+        ImGui::Checkbox("No Sleeves", &config.visuals.noSleeves);
+        ImGui::Checkbox("No Weapons", &config.visuals.noWeapons);
+        ImGui::Checkbox("No Smoke", &config.visuals.noSmoke);
+        ImGui::Checkbox("No Blur", &config.visuals.noBlur);
+        ImGui::Checkbox("No Scope Overlay", &config.visuals.noScopeOverlay);
+        ImGui::Checkbox("No Grass", &config.visuals.noGrass);
+        ImGui::Checkbox("No Shadows", &config.visuals.noShadows);
+        ImGui::Checkbox("Wireframe Smoke", &config.visuals.wireframeSmoke);
         ImGui::NextColumn();
         ImGui::Checkbox("Zoom", &config.visuals.zoom);
         ImGui::SameLine();
@@ -747,30 +748,42 @@ void GUI::renderVisualsWindow() noexcept
         hotkey(config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
         ImGui::PushID(0);
-        ImGui::SliderInt("", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
+        ImGui::SliderInt("", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson Distance: %d");
         ImGui::PopID();
         ImGui::PushID(1);
-        ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
+        ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FoV: %d");
         ImGui::PopID();
         ImGui::PushID(2);
-        ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FOV: %d");
+        ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FoV: %d");
         ImGui::PopID();
         ImGui::PushID(3);
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
         ImGui::PushID(4);
-        ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+        ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash Reduction: %d%%");
         ImGui::PopID();
         ImGui::PushID(5);
         ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGuiCustom::colorPicker("World color", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
-        ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
-        ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+        ImGuiCustom::colorPicker("World Colour", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
+        ImGui::Checkbox("Rare Deagle Anims", &config.visuals.deagleSpinner);
+        ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::SliderFloat("Hit Marker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
+		if (config.visuals.viewModel) {
+			ImGui::PushID(6);
+			ImGui::SliderFloat("", &config.visuals.viewModel_x, -15, 15, ("X:%f"));
+			ImGui::PopID();
+			ImGui::PushID(7);
+			ImGui::SliderFloat("", &config.visuals.viewModel_y, -15, 15, ("Y:%f"));
+			ImGui::PopID();
+			ImGui::PushID(8);
+			ImGui::SliderFloat("", &config.visuals.viewModel_z, -15, 15, ("Z:%f"));
+			ImGui::PopID();
+		}
         ImGui::Columns(1);
 
         if (!config.style.menuStyle)
@@ -782,8 +795,8 @@ void GUI::renderSkinChangerWindow() noexcept
 {
     if (window.skinChanger) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 700.0f, 0.0f });
-            ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
+			ImGui::SetNextWindowSize({ 700.0f, 0.0f });
+            ImGui::Begin("pSkinz", &window.skinChanger, windowFlags);
         } 
 
         static auto itemIndex = 0;
@@ -830,7 +843,7 @@ void GUI::renderSkinChangerWindow() noexcept
             } else {
                 static auto unused_value = 0;
                 selected_entry.definition_override_vector_index = 0;
-                ImGui::Combo("Unavailable", &unused_value, "For knives or gloves\0");
+                ImGui::Combo("Unavailable", &unused_value, "For Knives and Gloves Only\0");
             }
 
             ImGui::InputText("Name Tag", selected_entry.custom_name, 32);
@@ -874,10 +887,10 @@ void GUI::renderSkinChangerWindow() noexcept
 
         ImGui::Separator();
 
-        if (ImGui::Button("Update", { 130.0f, 30.0f }))
+        if (ImGui::Button("Apply", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
 
-        ImGui::TextUnformatted("nSkinz by namazso");
+        ImGui::TextUnformatted("Created by BaZ (formerly Keemware)");
 
         if (!config.style.menuStyle)
             ImGui::End();
@@ -891,16 +904,16 @@ void GUI::renderSoundWindow() noexcept
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Sound", &window.sound, windowFlags);
         }
-        ImGui::SliderInt("Chicken volume", &config.sound.chickenVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Chicken Volume", &config.sound.chickenVolume, 0, 200, "%d%%");
 
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
-        ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
+        ImGui::Combo("", &currentCategory, "Local Player\0Allies\0Enemies\0");
         ImGui::PopItemWidth();
-        ImGui::SliderInt("Master volume", &config.sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
-        ImGui::SliderInt("Headshot volume", &config.sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
-        ImGui::SliderInt("Weapon volume", &config.sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
-        ImGui::SliderInt("Footstep volume", &config.sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Master Volume", &config.sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Headshot Volume", &config.sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Weapon Volume", &config.sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
+        ImGui::SliderInt("Footstep Volume", &config.sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
 
         if (!config.style.menuStyle)
             ImGui::End();
@@ -917,9 +930,9 @@ void GUI::renderStyleWindow() noexcept
         }
 
         ImGui::PushItemWidth(150.0f);
-        if (ImGui::Combo("Menu style", &config.style.menuStyle, "Classic\0One window\0"))
+        if (ImGui::Combo("Menu Style", &config.style.menuStyle, "Classic\0One window\0"))
             window = { };
-        if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+        if (ImGui::Combo("Menu Colours", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
             updateColors();
         ImGui::PopItemWidth();
 
@@ -941,89 +954,103 @@ void GUI::renderMiscWindow() noexcept
 {
     if (window.misc) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 580.0f, 0.0f });
+			ImGui::SetNextWindowSize({ 580.0f, 0.0f });
             ImGui::Begin("Misc", &window.misc, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 230.0f);
-        ImGui::TextUnformatted("Menu key");
+        ImGui::TextUnformatted("Menu Key");
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
 
-        ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
-        ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
-        ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
-        ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
-        ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
-        ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
-        ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
-        ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
-        ImGui::Checkbox("Auto reload", &config.misc.autoReload);
-        ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
-        ImGui::Checkbox("Radar hack", &config.misc.radarHack);
-        ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
-        ImGuiCustom::colorPicker("Spectator list", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
+        ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
+        ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
+        ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
+		if (config.misc.bunnyHop)
+		{
+			ImGui::PushID(0);
+			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%");
+			ImGui::PopID();
+		}
+        ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
+        ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
+        ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
+		if (config.misc.sniperCrosshair)
+		{
+			ImGui::SameLine();
+			ImGui::Checkbox("In Scope", &config.misc.sniperCrosshairInscope);
+		}
+        ImGui::Checkbox("Recoil Crosshair", &config.misc.recoilCrosshair);
+        ImGui::Checkbox("Auto Pistol", &config.misc.autoPistol);
+        ImGui::Checkbox("Auto Reload", &config.misc.autoReload);
+        ImGui::Checkbox("Auto Accept", &config.misc.autoAccept);
+        ImGui::Checkbox("Radar Hack", &config.misc.radarHack);
+        ImGui::Checkbox("Rank Revealer", &config.misc.revealRanks);
+        ImGuiCustom::colorPicker("Spectator List", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
         ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
-        ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
-        ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
-        ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
-        ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
+        ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);
+        ImGui::Checkbox("Fix Bone Matrix", &config.misc.fixBoneMatrix);
+        ImGui::Checkbox("Fix Movement", &config.misc.fixMovement);
+        ImGui::Checkbox("Disable Model Occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
-        ImGui::Checkbox("Clock tag", &config.misc.clocktag);
-        ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
+        ImGui::Checkbox("Custom Clantag", &config.misc.customClanTag);
+		ImGui::SameLine();
+		ImGui::PushItemWidth(120.0f);
+		ImGui::PushID(1);
+		if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
+			Misc::updateClanTag(true);
+		ImGui::PopID();
+		if (config.misc.customClanTag)
+		{
+			ImGui::Checkbox("Animated", &config.misc.animatedClanTag);
+		}
+		ImGui::Checkbox("Clock Clantag", &config.misc.clocktag);
+        ImGui::Checkbox("Killsay", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(0);
-        if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
-            Misc::updateClanTag(true);
-        ImGui::PopID();
-        ImGui::Checkbox("Kill message", &config.misc.killMessage);
-        ImGui::SameLine();
-        ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(1);
+        ImGui::PushID(2);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
-        ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
-        ImGui::PushID(2);
+        ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
+        ImGui::PushID(3);
         ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
         ImGui::PopID();
         ImGui::SameLine();
-        if (ImGui::Button("Setup fake vote"))
+        if (ImGui::Button("Fake Vote"))
             Misc::fakeVote(true);
 
-        ImGui::PushID(3);
+        ImGui::PushID(4);
         ImGui::SetNextItemWidth(100.0f);
-        ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
+        ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light Green\0Turquoise\0Light Red\0Gray\0Yellow\0Gray 2\0Light Blue\0Gray/Purple\0Blue\0Pink\0Dark Orange\0Orange\0");
         ImGui::PopID();
         ImGui::SameLine();
-        ImGui::PushID(4);
+        ImGui::PushID(5);
         ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
         ImGui::PopID();
         ImGui::SameLine();
-        if (ImGui::Button("Setup fake ban"))
+        if (ImGui::Button("Fake Ban"))
             Misc::fakeBan(true);
-        ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
-        ImGuiCustom::colorPicker("Bomb timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
-        ImGui::Checkbox("Quick reload", &config.misc.quickReload);
-        ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
+        ImGui::Checkbox("Fast Plant", &config.misc.fastPlant);
+        ImGuiCustom::colorPicker("Bomb Timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
+        ImGui::Checkbox("Quick Reload", &config.misc.quickReload);
+        ImGui::Checkbox("R8 Preparer", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
-        ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
+        ImGui::Combo("Hitsound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
         ImGui::SetNextItemWidth(90.0f);
-        ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
+        ImGui::InputInt("Fakelag", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
         hotkey(config.misc.chokedPacketsKey);
-        ImGui::Text("Quick healthshot");
+        ImGui::Text("Quick Healthshot");
         ImGui::SameLine();
         hotkey(config.misc.quickHealthshotKey);
         ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
-        ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
+        ImGui::Checkbox("Fix Tablet Signal", &config.misc.fixTabletSignal);
         ImGui::SetNextItemWidth(120.0f);
-        ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+        ImGui::SliderFloat("Max Angle Delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
 
-        if (ImGui::Button("Unhook"))
+        if (ImGui::Button("Unload"))
             hooks.restore();
 
         ImGui::Columns(1);
@@ -1047,8 +1074,8 @@ void GUI::renderReportbotWindow() noexcept
         ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
         ImGui::Checkbox("Other", &config.reportbot.other);
         ImGui::Checkbox("Griefing", &config.reportbot.griefing);
-        ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
-        ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
+        ImGui::Checkbox("Voice Abuse", &config.reportbot.voiceAbuse);
+        ImGui::Checkbox("Text Abuse", &config.reportbot.textAbuse);
         if (!config.style.menuStyle)
             ImGui::End();
     }
@@ -1059,8 +1086,8 @@ void GUI::renderConfigWindow() noexcept
     if (window.config) {
         const auto menuStyle{ config.style.menuStyle };
         if (menuStyle == 0) {
-            ImGui::SetNextWindowSize({ 290.0f, 190.0f });
-            ImGui::Begin("Config", &window.config, windowFlags);
+			ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+            ImGui::Begin("Configs", &window.config, windowFlags);
         }
 
         ImGui::Columns(2, nullptr, false);
@@ -1093,14 +1120,14 @@ void GUI::renderConfigWindow() noexcept
 
         ImGui::PushItemWidth(100.0f);
 
-        if (ImGui::Button("Create config", { 100.0f, 25.0f }))
+        if (ImGui::Button("Create Config", { 100.0f, 25.0f }))
             config.add(buffer);
 
-        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
-            ImGui::OpenPopup("Config to reset");
+        if (ImGui::Button("Reset Config", { 100.0f, 25.0f }))
+            ImGui::OpenPopup("Config Part to Reset");
 
-        if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+        if (ImGui::BeginPopup("Config Part to Reset")) {
+            static constexpr const char* names[]{ "Everything", "Aimbot", "Triggerbot", "Backtrack", "Anti Aim", "Glow", "Chams", "ESP", "Visuals", "Skinchanger", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1126,15 +1153,15 @@ void GUI::renderConfigWindow() noexcept
             ImGui::EndPopup();
         }
         if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
+            if (ImGui::Button("Load Selected", { 100.0f, 25.0f })) {
                 config.load(currentConfig);
                 updateColors();
                 SkinChanger::scheduleHudUpdate();
                 Misc::updateClanTag(true);
             }
-            if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("Save Selected", { 100.0f, 25.0f }))
                 config.save(currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("Delete Selected", { 100.0f, 25.0f }))
                 config.remove(currentConfig);
         }
         ImGui::Columns(1);
@@ -1146,7 +1173,7 @@ void GUI::renderConfigWindow() noexcept
 void GUI::renderGuiStyle2() noexcept
 {
     ImGui::SetNextWindowSize({ 800.0f, 0.0f });
-    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Zach's Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable)) {
         if (ImGui::BeginTabItem("Aimbot")) {
@@ -1154,7 +1181,7 @@ void GUI::renderGuiStyle2() noexcept
             window.aimbot = true;
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Anti aim")) {
+        if (ImGui::BeginTabItem("Anti Aim")) {
             window = { };
             window.antiAim = true;
             ImGui::EndTabItem();
@@ -1179,7 +1206,7 @@ void GUI::renderGuiStyle2() noexcept
             window.chams = true;
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Esp")) {
+        if (ImGui::BeginTabItem("ESP")) {
             window = { };
             window.esp = true;
             ImGui::EndTabItem();
@@ -1189,7 +1216,7 @@ void GUI::renderGuiStyle2() noexcept
             window.visuals = true;
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Skin changer")) {
+        if (ImGui::BeginTabItem("Skinchanger")) {
             window = { };
             window.skinChanger = true;
             ImGui::EndTabItem();
@@ -1214,7 +1241,7 @@ void GUI::renderGuiStyle2() noexcept
             window.reportbot = true;
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Config")) {
+        if (ImGui::BeginTabItem("Configs")) {
             window = { };
             window.config = true;
             ImGui::EndTabItem();

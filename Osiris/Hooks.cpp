@@ -110,6 +110,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     const auto currentViewAngles{ cmd->viewangles };
 
     memory.globalVars->serverTime(cmd);
+	Visuals::viewModel();
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -192,15 +193,15 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+	if (interfaces.engine->isInGame()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
+		const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-        if (!isOverridden)
-            interfaces.modelRender->forceMaterialOverride(nullptr);
+		if (!isOverridden)
+			interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
@@ -420,9 +421,9 @@ Hooks::Hooks() noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<decltype(present)***>(memory.present) = present;
+	**reinterpret_cast<decltype(present)***>(memory.present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
+	**reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
@@ -448,7 +449,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
+    interfaces.gameUI->messageBox("Injection Successful", "Welcome Back Zach\nBuild: October 28");
 }
 
 void Hooks::restore() noexcept

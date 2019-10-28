@@ -113,6 +113,9 @@
     <ClCompile Include="Hacks\Reportbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+	<ClCompile Include="AntiDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="imguiCustom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -325,6 +328,9 @@
     <ClInclude Include="SDK\AnimState.h">
       <Filter>SDK</Filter>
     </ClInclude>
+	<ClInclude Include="SDK\RenderContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -337,8 +343,8 @@
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\RenderContext.h">
-      <Filter>SDK</Filter>
+	<ClInclude Include="AntiDetection.h">
+	  <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imguiCustom.h">
       <Filter>Header Files</Filter>

@@ -39,8 +39,8 @@ public:
         bool aimlock{ false };
         bool silent{ false };
         bool friendlyFire{ false };
-        bool visibleOnly{ true };
-        bool scopedOnly{ true };
+        bool visibleOnly{ false };
+        bool scopedOnly{ false };
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
         bool autoShot{ false };
@@ -55,7 +55,8 @@ public:
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
         bool killshot{ false };
-        bool betweenShots{ true };
+        bool betweenShots{ false };
+		bool aimbotCircle{ false };
     };
     std::array<Aimbot, 40> aimbot;
 
@@ -64,7 +65,7 @@ public:
         bool onKey{ false };
         int key{ 0 };
         bool friendlyFire{ false };
-        bool scopedOnly{ true };
+        bool scopedOnly{ false };
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
         int hitgroup{ 0 };
@@ -151,6 +152,7 @@ public:
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+		bool forcefulRagdolls{ false };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -180,6 +182,10 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+		bool viewModel{ false };
+		float viewModel_x{ 0 };
+		float viewModel_y{ 0 };
+		float viewModel_z{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -207,6 +213,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+		int hopsHitchance{ 100 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
@@ -214,6 +221,7 @@ public:
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool sniperCrosshair{ false };
+		bool sniperCrosshairInscope{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool autoReload{ false };
@@ -227,7 +235,7 @@ public:
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
-        char killMessageString[230]{ "Gotcha!" };
+        char killMessageString[230]{ "sample text" };
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };
@@ -250,9 +258,9 @@ public:
         bool enabled{ false };
         int target{ 0 };
         int delay{ 10 };
-        bool aimbot{ true };
-        bool wallhack{ true };
-        bool other{ true };
+        bool aimbot{ false };
+        bool wallhack{ false };
+        bool other{ false };
         bool griefing{ false };
         bool voiceAbuse{ false };
         bool textAbuse{ false };
