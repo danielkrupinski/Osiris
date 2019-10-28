@@ -1,7 +1,3 @@
-# Osiris
-
-My verion of Daniel Krupiński's Osiris, which includes a few changes and a few features added
-
 ## Acknowledgments
 
 * Fellow users of Osiris, for providing me with sources for new features to add
