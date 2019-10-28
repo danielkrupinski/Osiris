@@ -17,9 +17,17 @@ void Visuals::colorWorld() noexcept
     static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
     static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
 
-    red->setValue(config.visuals.worldColor[0]);
-    green->setValue(config.visuals.worldColor[1]);
-    blue->setValue(config.visuals.worldColor[2]);
+    if (config.visuals.world.rainbow) {
+        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
+
+        red->setValue(r);
+        green->setValue(g);
+        blue->setValue(b);
+    } else {
+        red->setValue(config.visuals.world.color[0]);
+        green->setValue(config.visuals.world.color[1]);
+        blue->setValue(config.visuals.world.color[2]);
+    }
 }
 
 void Visuals::modifySmoke() noexcept
@@ -92,10 +100,14 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
+    constexpr auto blacksite{ fnv::hash("dz_blacksite") };
+    constexpr auto sirocco{ fnv::hash("dz_sirocco") };
+
     auto mapName = fnv::hashRuntime(interfaces.engine->getLevelName());
-    if (mapName == fnv::hash("dz_blacksite"))
+
+    if (mapName == blacksite)
         interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
-    else if (mapName == fnv::hash("dz_sirocco"))
+    else if (mapName == sirocco)
         interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
 }
 

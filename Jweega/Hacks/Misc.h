@@ -33,6 +33,8 @@ namespace Misc {
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
+    void quickHealthshot(UserCmd*) noexcept;
+    void fixTabletSignal() noexcept;
 
     static float fov{ 0.0f };
 

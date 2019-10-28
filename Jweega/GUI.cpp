@@ -1,9 +1,13 @@
+#include <fstream>
 #include <functional>
 #include <string>
+#include <ShlObj.h>
 #include <Windows.h>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+
+#include "imguiCustom.h"
 
 #include "GUI.h"
 #include "Config.h"
@@ -24,20 +28,18 @@ GUI::GUI() noexcept
 
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 5.0f;
-    style.WindowBorderSize = 0.0f;
-    style.ChildBorderSize = 0.0f;
-    style.GrabMinSize = 7.0f;
-    style.GrabRounding = 5.0f;
-    style.FrameRounding = 5.0f;
-    style.PopupRounding = 5.0f;
+
+    style.ScrollbarSize = 9.0f;
 
     ImGuiIO& io = ImGui::GetIO();
     ImFontConfig fontConfig;
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
 
-    char buffer[MAX_PATH];
+    if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
+        const std::filesystem::path path{ pathToFonts };
+        CoTaskMemFree(pathToFonts);
+
     static ImWchar ranges[] = {
         0x0020, 0x007E, // Basic Latin
         0x00A0, 0x00FF, // Latin-1 Supplement
@@ -48,20 +50,8 @@ GUI::GUI() noexcept
         0x0500, 0x052F, // Cyrillic Supplementary
         0
     };
-
-    static ImWchar KaiGenGothicCNRegular_ranges[] = {
-        0x3000, 0x30FF, // Punctuations, Hiragana, Katakana
-        0x31F0, 0x31FF, // Katakana Phonetic Extensions
-        0xFF00, 0xFFEF, // Half-width characters
-        0x4E00, 0x9FAF, // CJK Ideograms
-        0
-    };
-
-    if (GetWindowsDirectoryA(buffer, MAX_PATH)) {
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/Tahoma.ttf"), 16.0f, &fontConfig, ranges);
-        fontConfig.MergeMode = true;
-        io.Fonts->AddFontFromFileTTF(strcat(buffer, "/Fonts/KaiGenGothicCN-Regular.ttf"), 14.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
-        io.Fonts->Build();
+	fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, nullptr, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, nullptr, ranges);
     }
 }
 
@@ -95,27 +85,6 @@ void GUI::updateColors() const noexcept
     case 1: ImGui::StyleColorsLight(); break;
     case 2: ImGui::StyleColorsClassic(); break;
     }
-}
-
-void GUI::checkboxedColorPicker(const std::string& name, bool* enable, float* color) noexcept
-{
-    ImGui::Checkbox(("##" + name).c_str(), enable);
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::PushID(0);
-    bool openPopup = ImGui::ColorButton(("##" + name).c_str(), ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
-    ImGui::PopID();
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::TextUnformatted(name.c_str());
-    ImGui::PushID(1);
-    if (openPopup)
-        ImGui::OpenPopup(("##" + name).c_str());
-    if (ImGui::BeginPopup(("##" + name).c_str())) {
-        ImGui::PushID(2);
-        ImGui::ColorPicker3(("##" + name).c_str(), color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-        ImGui::PopID();
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
 }
 
 void GUI::hotkey(int& key) noexcept
@@ -490,20 +459,9 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
-        ImGui::Checkbox("Rainbow", &config.glow[currentItem].rainbow);
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.glow[currentItem].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.glow[currentItem].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
+
+        ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
+
         ImGui::NextColumn();
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderFloat("Thickness", &config.glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
@@ -546,31 +504,16 @@ void GUI::renderChamsWindow() noexcept
         ImGui::InputInt("##mat", &material, 1, 2);
         material = std::clamp(material, 1, 2);
         ImGui::SameLine();
-        ImGui::Checkbox("Enabled", &config.chams[currentItem].materials[material - 1].enabled);
-        ImGui::Separator();
-        ImGui::Checkbox("Health based", &config.chams[currentItem].materials[material - 1].healthBased);
-        ImGui::Checkbox("Rainbow", &config.chams[currentItem].materials[material - 1].rainbow);
-        ImGui::Checkbox("Blinking", &config.chams[currentItem].materials[material - 1].blinking);
-        ImGui::Combo("Material", &config.chams[currentItem].materials[material - 1].material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
-        ImGui::Checkbox("Wireframe", &config.chams[currentItem].materials[material - 1].wireframe);
+        auto& chams{ config.chams[currentItem].materials[material - 1] };
 
-        bool openPopup = ImGui::ColorButton("Color", ImVec4{ config.chams[currentItem].materials[material - 1].color }, ImGuiColorEditFlags_NoTooltip);
-        ImGui::SameLine(0.0f, 5.0f);
-        ImGui::TextUnformatted("Color");
-        ImGui::PushID(2);
-        if (openPopup)
-            ImGui::OpenPopup("");
-        if (ImGui::BeginPopup("")) {
-            ImGui::PushID(3);
-            ImGui::ColorPicker3("", config.chams[currentItem].materials[material - 1].color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-            ImGui::PopID();
-            ImGui::EndPopup();
-        }
-        ImGui::PopID();
-        ImGui::PushItemWidth(220.0f);
-        ImGui::PushID(4);
-        ImGui::SliderFloat("", &config.chams[currentItem].materials[material - 1].alpha, 0.0f, 1.0f, "Alpha: %.2f");
-        ImGui::PopID();
+        ImGui::Checkbox("Enabled", &chams.enabled);
+        ImGui::Separator();
+        ImGui::Checkbox("Health based", &chams.healthBased);
+        ImGui::Checkbox("Blinking", &chams.blinking);
+        ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+        ImGui::Checkbox("Wireframe", &chams.wireframe);
+        ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+
         if (!config.style.menuStyle) {
             ImGui::End();
         }
@@ -584,60 +527,202 @@ void GUI::renderEspWindow() noexcept
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Esp", &window.esp, windowFlags);
         }
-        static int currentCategory{ 0 };
-        ImGui::PushItemWidth(110.0f);
-        ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Weapons");
-        ImGui::PopID();
-        ImGui::SameLine();
-        if (currentCategory < 2) {
-            static int currentType{ 0 };
-            ImGui::PushID(1);
-            ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        
+        static int currentCategory = 0;
+        static int currentItem = 0;
+
+        if (ImGui::ListBoxHeader("##", { 125.0f, 300.0f })) {
+            static constexpr const char* players[]{ "All", "Visible", "Occluded" };
+            
+            ImGui::Text("Allies");
+            ImGui::Indent();
+            ImGui::PushID("Allies");
+            ImGui::PushFont(fonts.segoeui);
+
+            for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                bool isSelected = currentCategory == 0 && currentItem == i;
+
+                if ((i == 0 || !config.esp.players[0].enabled) && ImGui::Selectable(players[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 0;
+                }
+            }
+
+            ImGui::PopFont();
             ImGui::PopID();
-            int currentItem = currentCategory * 3 + currentType;
-            ImGui::SameLine();
-            ImGui::Checkbox("Enabled", &config.esp.players[currentItem].enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::InputInt("Font", &config.esp.players[currentItem].font, 1, 294);
-            config.esp.players[currentItem].font = std::clamp(config.esp.players[currentItem].font, 1, 294);
+            ImGui::Unindent();
+            ImGui::Text("Enemies");
+            ImGui::Indent();
+            ImGui::PushID("Enemies");
+            ImGui::PushFont(fonts.segoeui);
 
-            ImGui::Separator();
+            for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                bool isSelected = currentCategory == 1 && currentItem == i;
 
-            constexpr auto spacing{ 200.0f };
-            checkboxedColorPicker("Snaplines", &config.esp.players[currentItem].snaplines, config.esp.players[currentItem].snaplinesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Box", &config.esp.players[currentItem].box, config.esp.players[currentItem].boxColor);
-            ImGui::SameLine();
-            ImGui::Combo("", &config.esp.players[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            checkboxedColorPicker("Eye traces", &config.esp.players[currentItem].eyeTraces, config.esp.players[currentItem].eyeTracesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Health", &config.esp.players[currentItem].health, config.esp.players[currentItem].healthColor);
-            checkboxedColorPicker("Head dot", &config.esp.players[currentItem].headDot, config.esp.players[currentItem].headDotColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Health bar", &config.esp.players[currentItem].healthBar, config.esp.players[currentItem].healthBarColor);
-            checkboxedColorPicker("Name", &config.esp.players[currentItem].name, config.esp.players[currentItem].nameColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Armor", &config.esp.players[currentItem].armor, config.esp.players[currentItem].armorColor);
-            checkboxedColorPicker("Money", &config.esp.players[currentItem].money, config.esp.players[currentItem].moneyColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Armor bar", &config.esp.players[currentItem].armorBar, config.esp.players[currentItem].armorBarColor);
-            checkboxedColorPicker("Outline", &config.esp.players[currentItem].outline, config.esp.players[currentItem].outlineColor);
-        } else {
-            ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::InputInt("Font", &config.esp.weapon.font, 1, 294);
-            config.esp.weapon.font = std::clamp(config.esp.weapon.font, 1, 294);
+                if ((i == 0 || !config.esp.players[3].enabled) && ImGui::Selectable(players[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 1;
+                }
+            }
 
-            ImGui::Separator();
+            ImGui::PopFont();
+            ImGui::PopID();
+            ImGui::Unindent();
+            if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
+                currentCategory = 2;
 
-            constexpr auto spacing{ 200.0f };
-            checkboxedColorPicker("Snaplines", &config.esp.weapon.snaplines, config.esp.weapon.snaplinesColor);
-            ImGui::SameLine(spacing);
-            checkboxedColorPicker("Box", &config.esp.weapon.box, config.esp.weapon.boxColor);
-            ImGui::SameLine();
-            ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+            ImGui::Text("Projectiles");
+            ImGui::Indent();
+            ImGui::PushID("Projectiles");
+            ImGui::PushFont(fonts.segoeui);
+            static constexpr const char* projectiles[]{ "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
+
+            for (int i = 0; i < IM_ARRAYSIZE(projectiles); i++) {
+                bool isSelected = currentCategory == 3 && currentItem == i;
+
+                if (ImGui::Selectable(projectiles[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 3;
+                }
+            }
+
+            ImGui::PopFont();
+            ImGui::PopID();
+            ImGui::Unindent();
+
+            ImGui::Text("Danger Zone");
+            ImGui::Indent();
+            ImGui::PushID("Danger Zone");
+            ImGui::PushFont(fonts.segoeui);
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox", "Radar Jammer" };
+
+            for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
+                bool isSelected = currentCategory == 4 && currentItem == i;
+
+                if (ImGui::Selectable(dangerZone[i], isSelected)) {
+                    currentItem = i;
+                    currentCategory = 4;
+                }
+            }
+
+            ImGui::PopFont();
+            ImGui::PopID();
+            ImGui::ListBoxFooter();
         }
+        ImGui::SameLine();
+        if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
+            switch (currentCategory) {
+            case 0:
+            case 1: {
+                int selected = currentCategory * 3 + currentItem;
+                ImGui::Checkbox("Enabled", &config.esp.players[selected].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.players[selected].font, 1, 294);
+                config.esp.players[selected].font = std::clamp(config.esp.players[selected].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                ImGuiCustom::colorPicker("Snaplines", config.esp.players[selected].snaplines.color, &config.esp.players[selected].snaplines.enabled, &config.esp.players[selected].snaplines.rainbow, &config.esp.players[selected].snaplines.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Box", config.esp.players[selected].box.color, &config.esp.players[selected].box.enabled, &config.esp.players[selected].box.rainbow, &config.esp.players[selected].box.rainbowSpeed);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGuiCustom::colorPicker("Eye traces", config.esp.players[selected].eyeTraces.color, &config.esp.players[selected].eyeTraces.enabled, &config.esp.players[selected].eyeTraces.rainbow, &config.esp.players[selected].eyeTraces.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Health", config.esp.players[selected].health.color, &config.esp.players[selected].health.enabled, &config.esp.players[selected].health.rainbow, &config.esp.players[selected].health.rainbowSpeed);
+                ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot.color, &config.esp.players[selected].headDot.enabled, &config.esp.players[selected].headDot.rainbow, &config.esp.players[selected].headDot.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBar.color, &config.esp.players[selected].healthBar.enabled, &config.esp.players[selected].healthBar.rainbow, &config.esp.players[selected].healthBar.rainbowSpeed);
+                ImGuiCustom::colorPicker("Name", config.esp.players[selected].name.color, &config.esp.players[selected].name.enabled, &config.esp.players[selected].name.rainbow, &config.esp.players[selected].name.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Armor", config.esp.players[selected].armor.color, &config.esp.players[selected].armor.enabled, &config.esp.players[selected].armor.rainbow, &config.esp.players[selected].armor.rainbowSpeed);
+                ImGuiCustom::colorPicker("Money", config.esp.players[selected].money.color, &config.esp.players[selected].money.enabled, &config.esp.players[selected].money.rainbow, &config.esp.players[selected].money.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBar.color, &config.esp.players[selected].armorBar.enabled, &config.esp.players[selected].armorBar.rainbow, &config.esp.players[selected].armorBar.rainbowSpeed);
+                ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline.color, &config.esp.players[selected].outline.enabled, &config.esp.players[selected].outline.rainbow, &config.esp.players[selected].outline.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance.color, &config.esp.players[selected].distance.enabled, &config.esp.players[selected].distance.rainbow, &config.esp.players[selected].distance.rainbowSpeed);
+                ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon.color, &config.esp.players[selected].activeWeapon.enabled, &config.esp.players[selected].activeWeapon.rainbow, &config.esp.players[selected].activeWeapon.rainbowSpeed);
+                ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                break;
+            }
+            case 2: {
+                ImGui::Checkbox("Enabled", &config.esp.weapon.enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.weapon.font, 1, 294);
+                config.esp.weapon.font = std::clamp(config.esp.weapon.font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                ImGuiCustom::colorPicker("Snaplines", config.esp.weapon.snaplines.color, &config.esp.weapon.snaplines.enabled, &config.esp.weapon.snaplines.rainbow, &config.esp.weapon.snaplines.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Box", config.esp.weapon.box.color, &config.esp.weapon.box.enabled, &config.esp.weapon.box.rainbow, &config.esp.weapon.box.rainbowSpeed);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGuiCustom::colorPicker("Name", config.esp.weapon.name.color, &config.esp.weapon.name.enabled, &config.esp.weapon.name.rainbow, &config.esp.weapon.name.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.weapon.distance.color, &config.esp.weapon.distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
+                ImGui::SliderFloat("Max distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
+                break;
+            }
+            case 3: {
+                ImGui::Checkbox("Enabled", &config.esp.projectiles[currentItem].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.projectiles[currentItem].font, 1, 294);
+                config.esp.projectiles[currentItem].font = std::clamp(config.esp.projectiles[currentItem].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                ImGuiCustom::colorPicker("Snaplines", config.esp.projectiles[currentItem].snaplines.color, &config.esp.projectiles[currentItem].snaplines.enabled, &config.esp.projectiles[currentItem].snaplines.rainbow, &config.esp.projectiles[currentItem].snaplines.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Box", config.esp.projectiles[currentItem].box.color, &config.esp.projectiles[currentItem].box.enabled, &config.esp.projectiles[currentItem].box.rainbow, &config.esp.projectiles[currentItem].box.rainbowSpeed);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGuiCustom::colorPicker("Name", config.esp.projectiles[currentItem].name.color, &config.esp.projectiles[currentItem].name.enabled, &config.esp.projectiles[currentItem].name.rainbow, &config.esp.projectiles[currentItem].name.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distance.color, &config.esp.projectiles[currentItem].distance.enabled, &config.esp.projectiles[currentItem].distance.rainbow, &config.esp.projectiles[currentItem].distance.rainbowSpeed);
+                ImGui::SliderFloat("Max distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
+                break;
+            }
+            case 4: {
+                int selected = currentItem;
+                ImGui::Checkbox("Enabled", &config.esp.dangerZone[selected].enabled);
+                ImGui::SameLine(0.0f, 50.0f);
+                ImGui::SetNextItemWidth(85.0f);
+                ImGui::InputInt("Font", &config.esp.dangerZone[selected].font, 1, 294);
+                config.esp.dangerZone[selected].font = std::clamp(config.esp.dangerZone[selected].font, 1, 294);
+
+                ImGui::Separator();
+
+                constexpr auto spacing{ 200.0f };
+                ImGuiCustom::colorPicker("Snaplines", config.esp.dangerZone[selected].snaplines.color, &config.esp.dangerZone[selected].snaplines.enabled, &config.esp.dangerZone[selected].snaplines.rainbow, &config.esp.dangerZone[selected].snaplines.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Box", config.esp.dangerZone[selected].box.color, &config.esp.dangerZone[selected].box.enabled, &config.esp.dangerZone[selected].box.rainbow, &config.esp.dangerZone[selected].box.rainbowSpeed);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("", &config.esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                ImGuiCustom::colorPicker("Name", config.esp.dangerZone[selected].name.color, &config.esp.dangerZone[selected].name.enabled, &config.esp.dangerZone[selected].name.rainbow, &config.esp.dangerZone[selected].name.rainbowSpeed);
+                ImGui::SameLine(spacing);
+                ImGuiCustom::colorPicker("Outline", config.esp.dangerZone[selected].outline.color, &config.esp.dangerZone[selected].outline.enabled, &config.esp.dangerZone[selected].outline.rainbow, &config.esp.dangerZone[selected].outline.rainbowSpeed);
+                ImGuiCustom::colorPicker("Distance", config.esp.dangerZone[selected].distance.color, &config.esp.dangerZone[selected].distance.enabled, &config.esp.dangerZone[selected].distance.rainbow, &config.esp.dangerZone[selected].distance.rainbowSpeed);
+                ImGui::SliderFloat("Max distance", &config.esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                break;
+            } }
+
+            ImGui::EndChild();
+        }
+
         if (!config.style.menuStyle)
             ImGui::End();
     }
@@ -695,7 +780,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGui::ColorEdit3("World color", config.visuals.worldColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
+        ImGuiCustom::colorPicker("World color", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
@@ -839,7 +924,8 @@ void GUI::renderSoundWindow() noexcept
 void GUI::renderStyleWindow() noexcept
 {
     if (window.style) {
-        if (!config.style.menuStyle) {
+        const auto menuStyle{ config.style.menuStyle };
+        if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Style", &window.style, windowFlags);
         }
@@ -853,25 +939,14 @@ void GUI::renderStyleWindow() noexcept
 
         if (config.style.menuColors == 3) {
             ImGuiStyle& style = ImGui::GetStyle();
-            for (int i = 0; i < ImGuiCol_COUNT; ++i) {
-                if (i && i % 4) ImGui::SameLine(220.0f * (i % 4));
+            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+                if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-                const char* name = ImGui::GetStyleColorName(i);
-                ImGui::PushID(i);
-                bool openPopup = ImGui::ColorButton("##colorbutton", style.Colors[i], ImGuiColorEditFlags_NoTooltip);
-                ImGui::SameLine(0.0f, 5.0f);
-                ImGui::TextUnformatted(name);
-                if (openPopup)
-                    ImGui::OpenPopup(name);
-                if (ImGui::BeginPopup(name)) {
-                    ImGui::ColorPicker3("##colorpicker", (float*)& style.Colors[i], ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-                    ImGui::EndPopup();
-                }
-                ImGui::PopID();
+                ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
             }
         }
 
-        if (!config.style.menuStyle)
+        if (menuStyle == 0)
             ImGui::End();
     }
 }
@@ -901,8 +976,8 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
-        ImGui::Checkbox("Spectator list", &config.misc.spectatorList);
-        ImGui::Checkbox("Watermark", &config.misc.watermark);
+        ImGuiCustom::colorPicker("Spectator list", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
+        ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
         ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
@@ -962,13 +1037,13 @@ void GUI::renderMiscWindow() noexcept
             Misc::fakeBan(true);
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGui::Checkbox("Draw FOV", &config.misc.drawFOV);
-        ImGui::Checkbox("Bomb timer", &config.misc.bombTimer);
+        ImGuiCustom::colorPicker("Bomb timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
         ImGui::Combo("Hit Sound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
-        ImGui::PushItemWidth(90.0f);
+        ImGui::SetNextItemWidth(90.0f);
         ImGui::InputInt("Choked packets", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
@@ -976,10 +1051,13 @@ void GUI::renderMiscWindow() noexcept
         ImGui::TextUnformatted("Fake Duck Key");
         ImGui::SameLine();
         hotkey(config.misc.fakeDuckKey);
+        ImGui::Text("Quick healthshot");
+        ImGui::SameLine();
+        hotkey(config.misc.quickHealthshotKey);
         ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
-        ImGui::PushItemWidth(120.0f);
+        ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
+        ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
-        ImGui::PushItemWidth(290.0f);
 
         if (ImGui::Button("Unhook"))
             hooks.restore();
@@ -1015,7 +1093,8 @@ void GUI::renderReportbotWindow() noexcept
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        if (!config.style.menuStyle) {
+        const auto menuStyle{ config.style.menuStyle };
+        if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 290.0f, 190.0f });
             ImGui::Begin("Config", &window.config, windowFlags);
         }
@@ -1095,7 +1174,7 @@ void GUI::renderConfigWindow() noexcept
                 config.remove(currentConfig);
         }
         ImGui::Columns(1);
-        if (!config.style.menuStyle)
+        if (menuStyle == 0)
             ImGui::End();
     }
 }

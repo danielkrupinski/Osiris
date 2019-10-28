@@ -21,6 +21,16 @@ public:
         return configs;
     }
 
+    struct Color {
+        float color[3]{ 1.0f, 1.0f, 1.0f };
+        bool rainbow{ false };
+        float rainbowSpeed{ 0.6f };
+    };
+    
+    struct ColorToggle : public Color {
+        bool enabled{ false };
+    };
+
     struct Aimbot {
         bool enabled{ false };
         bool onKey{ false };
@@ -83,11 +93,10 @@ public:
     struct Glow {
         bool enabled{ false };
         bool healthBased{ false };
-        bool rainbow{ false };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        Color color;
     };
     std::array<Glow, 21> glow;
 
@@ -95,11 +104,10 @@ public:
         struct Material {
             bool enabled{ false };
             bool healthBased{ false };
-            bool rainbow{ false };
+            Color color;
             bool blinking{ false };
             int material{ 0 };
             bool wireframe{ false };
-            float color[3]{ 1.0f, 1.0f, 1.0f };
             float alpha{ 1.0f };
         };
         std::array<Material, 2> materials;
@@ -111,35 +119,33 @@ public:
         struct Shared {
             bool enabled{ false };
             int font{ 0x1d };
-            bool snaplines{ false };
-            float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool box{ false };
-            float boxColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle snaplines;
+            ColorToggle box;
             int boxType{ 0 };
-            bool name{ false };
-            float nameColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool outline{ false };
-            float outlineColor[3]{ 0.0f, 0.0f, 0.0f };
+            ColorToggle name;
+            ColorToggle outline{ 0.0f, 0.0f, 0.0f };
+            ColorToggle distance;
+            float maxDistance{ 0.0f };
         };
        
         struct Player : public Shared {
-            bool eyeTraces{ false };
-            float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool health{ false };
-            float healthColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool healthBar{ false };
-            float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armor{ false };
-            float armorColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool armorBar{ false };
-            float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool money{ false };
-            float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
-            bool headDot{ false };
-            float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
+            ColorToggle eyeTraces;
+            ColorToggle health;
+            ColorToggle healthBar;
+            ColorToggle armor;
+            ColorToggle armorBar;
+            ColorToggle money;
+            ColorToggle headDot;
+            ColorToggle activeWeapon;
         };
 
         struct Weapon : public Shared { } weapon;
+
+        struct Projectile : public Shared { };
+        std::array<Projectile, 9> projectiles;
+
+        struct DangerZone : public Shared { };
+        std::array<DangerZone, 18> dangerZone;
 
         std::array<Player, 6> players;
     } esp;
@@ -171,7 +177,7 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        float worldColor[3]{ 0.0f, 0.0f, 0.0f };
+        Color world{ 0.0f, 0.0f, 0.0f };
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
@@ -216,8 +222,8 @@ public:
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
-        bool spectatorList{ false };
-        bool watermark{ false };
+        ColorToggle spectatorList;
+        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
@@ -229,7 +235,7 @@ public:
         int banColor{ 6 };
         char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
-        bool bombTimer{ false };
+        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
@@ -238,7 +244,9 @@ public:
         bool drawFOV{ false };
         int chokedPacketsKey{ 0 };
         int fakeDuckKey{ 0 };
+        int quickHealthshotKey{ 0 };
         bool nadePredict{ false };
+        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
     } misc;
 
