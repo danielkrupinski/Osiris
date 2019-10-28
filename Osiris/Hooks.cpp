@@ -180,17 +180,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
     return hooks.clientMode.callOriginal<int, int>(44, param);
 }
 
-static float __stdcall getViewModelFov() noexcept
-{
-    float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
-    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
-            additionalFov = 0.0f;
-    }
-
-    return hooks.clientMode.callOriginal<float>(35) + additionalFov;
-}
-
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
 	if (interfaces.engine->isInGame()) {
@@ -431,7 +420,6 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
     clientMode.hookAt(27, shouldDrawViewModel);
-    clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
