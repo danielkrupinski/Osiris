@@ -114,18 +114,18 @@ void Misc::watermark() noexcept
         static auto frameRate{ 1.0f };
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight]{ interfaces.surface->getScreenSize() };
-        const std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1 / frameRate)) };
+        const std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1.0f / frameRate)) };
         const auto [fpsWidth, fpsHeight]{ interfaces.surface->getTextSize(Surface::font, fps.c_str()) };
         interfaces.surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces.surface->printText(fps.c_str());
 
         float latency{ 0.0f };
         if (auto networkChannel{ interfaces.engine->getNetworkChannel() }; networkChannel)
-            latency = networkChannel->getLatency(0);
+            latency = networkChannel->getAvgLatency(0);
 
         const static auto updateRate{ interfaces.cvar->findVar("cl_updaterate") };
         latency -= 0.5f / updateRate->getFloat();
-        const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency)) * 1000) + L" ms" };
+        const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency) * 1000.f)) + L" ms" };
         const auto pingWidth{ interfaces.surface->getTextSize(Surface::font, ping.c_str()).first };
         interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
         interfaces.surface->printText(ping.c_str());
