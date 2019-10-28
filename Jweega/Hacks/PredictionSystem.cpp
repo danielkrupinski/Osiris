@@ -18,8 +18,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     if (!localPlayer || !cmd)
         return;
 
-    *memory.predictionRandomSeed = MD5::PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
-    **memory.predictionPlayer = localPlayer;
+    *memory.predictionRandomSeed = memory.md5PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF;
 
     previousCurrenttime = memory.globalVars->currenttime;
     previousFrametime = memory.globalVars->frametime;
@@ -34,8 +33,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     interfaces.gameMovement->ProcessMovement(localPlayer, &moveData);
     interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
 
-    const auto activeWeapon{ localPlayer->getActiveWeapon() };
-    if (activeWeapon)
+    if (const auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon)
         activeWeapon->updateAccuracyPenalty();
 }
 
@@ -47,7 +45,6 @@ void PredictionSystem::EndPrediction() noexcept
     memory.moveHelper->SetHost(nullptr);
 
     *memory.predictionRandomSeed = -1;
-    **memory.predictionPlayer = nullptr;
 
     memory.globalVars->currenttime = previousCurrenttime;
     memory.globalVars->frametime = previousFrametime;
