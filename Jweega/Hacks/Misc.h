@@ -14,6 +14,7 @@
 #include "../SDK/Surface.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/ViewSetup.h"
+#include "../SDK/Input.h"
 
 namespace Misc {
     void inverseRagdollGravity() noexcept;
@@ -32,6 +33,8 @@ namespace Misc {
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
+
+    static float fov{ 0.0f };
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -175,7 +178,7 @@ namespace Misc {
 
                 const auto [width, height]{ interfaces.surface->getScreenSize() };
 
-                const auto actualFov{ std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(localPlayer->isScoped() ? static_cast<float>(localPlayer->fovStart()) : (static_cast<float>(localPlayer->fovStart()) + config.visuals.fov)) / 2.f)) };
+                const auto actualFov{ std::atanf((static_cast<float>(width) / static_cast<float>(height)) * 0.75f * std::tanf(degreesToRadians(fov / 2.f))) };
 
                 if (config.aimbot[weaponIndex].silent)
                     interfaces.surface->setDrawColor(255, 10, 10, 255);
@@ -189,23 +192,28 @@ namespace Misc {
         }
     }
 
-    constexpr void fakeDuck(UserCmd* cmd) noexcept {
-        if (config.misc.fakeDuckKey && GetAsyncKeyState(config.misc.fakeDuckKey)) {
-            const auto animState{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getAnimstate() };
-            if (interfaces.engine->getNetworkChannel()->chokedPackets >= (config.misc.chokedPackets / 2)) {
-                if (animState->duckAmount < 1.0f)
+    constexpr void fakeDuck(UserCmd* cmd) noexcept
+    {
+        
+        if (config.misc.fakeDuckKey
+            && GetAsyncKeyState(config.misc.fakeDuckKey))
+            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+                localPlayer
+                && localPlayer->isAlive())
+                if (interfaces.engine->getNetworkChannel()->chokedPackets > (config.misc.chokedPackets / 2))
                     cmd->buttons |= UserCmd::IN_DUCK;
-            }  else {
-                if (animState->duckAmount > 0.0f)
+                else
                     cmd->buttons &= ~UserCmd::IN_DUCK;
-            }
-        }
     }
 
-    constexpr void fakeDuckFix(ViewSetup* setup) noexcept {
-        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
-        if (localPlayer && localPlayer->isAlive() && config.misc.fakeDuckKey && config.misc.chokedPackets > 1 && GetAsyncKeyState(config.misc.fakeDuckKey) && localPlayer->flags() & 1) 
+    constexpr void fakeDuckFix(ViewSetup* setup) noexcept 
+    {
+        if (config.misc.fakeDuckKey
+            && GetAsyncKeyState(config.misc.fakeDuckKey))
+            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+                localPlayer
+                && localPlayer->isAlive()
+                && localPlayer->flags() & 1)
             setup->origin.z = localPlayer->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
     }
-
 }
