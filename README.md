@@ -15,22 +15,22 @@ Free open-source internal cheat for **CSGO** compiled as a DLL, loadable into th
 * **Style** - Select and modify menu window layout and colours
 * **Misc** - Miscellaneous features
 * **Reportbot** - Automatically report players on server for cheating or other abusive actions
-* **Config** - JSON-based configuration system
+* **Configs** - JSON-based configuration system
 
 <details>
 <summary>Features in depth</summary>
 
-* **Aimbot** - aim assistance
-    * **Enabled** - on / off master switch
-    * **On key [ key ]** - aimbot works only when chosen key is being held
-    * **Silent** - aimbot is not visible on your screen (client-sided only)
-    * **Friendly fire** - treat allies as enemies
-    * **Visible only** - aim only on visible players
-    * **Scoped only** - aimbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
-    * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
-    * **Auto shot** - shoot automatically when target found
-    * **Auto scope** - automatically scopes sniper rifle before shooting
+* **Aimbot** - Aim assistance
+    * **Enabled** - ON/OFF master switch
+    * **On Key [KEY]** - The aimbot will only function when the specified key is pressed
+    * **Silent** - The aimbot will not snap to enemies (client-sided only)
+    * **Friendly Fire** - Treat allies as enemies
+    * **Visible Only** - Aim only on visible players
+    * **Scoped Only** - the Aimbot will only work when in scope (applies only to sniper rifles)
+    * **Disable When Flashed** - Disables the aimbot when you are flashed
+    * **Disable When Smoked** - Disables the aimbot when enemies are in smoke
+    * **Auto Ahoot** - Shoot automatically when possible
+    * **Auto Acope** - Automatically scopes in with the sniper rifle before shooting
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
