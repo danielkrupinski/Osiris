@@ -1,6 +1,6 @@
 # Osiris
 
-My verion of Daniel Krupiński's [Osiris[(https://github.com/danielkrupinski/Osiris), which includes a few changes and a few features added
+My verion of Daniel Krupiński's [Osiris[(https://github.com/danielkrupinski/Osiris) , which includes a few changes and a few features added
 
 ## Acknowledgments
 
