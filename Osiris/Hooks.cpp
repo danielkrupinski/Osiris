@@ -437,7 +437,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Injection Successful", "Welcome Back Zach\nBuild: October 28");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: October 28 2019");
 }
 
 void Hooks::restore() noexcept
