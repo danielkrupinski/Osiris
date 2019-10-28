@@ -3,18 +3,18 @@
 Free open-source internal cheat for **CSGO** compiled as a DLL, loadable into the game process. Compatible with the latest version of the game on Steam.
 
 ## Features
-* **Aimbot** - aim assistance
-* **Triggerbot** - automatically fires when crosshair is on enemy
-* **Backtrack** - abuse lag compensation to move players back in time
-* **Glow** - render glow effect on entities
-* **Chams** - color player models to improve visibility
-* **Esp** - show information about players, dropped weapons and projectiles
-* **Visuals** - miscellaneous visual options
-* **Skin changer** - change weapon skins, knives and stickers
-* **Sound** - modify volume of certain sound effects
-* **Style** - select menu window layout and colors
-* **Misc** - miscellaneous features
-* **Reportbot** - automatically report players on server for cheating or other abusive actions
+* **Aimbot** - Aim assistance
+* **Triggerbot** - Automatically fires when your crosshair is on an enemy
+* **Backtrack** - Abuse lag compensation to move players back in time
+* **Glow** - Render glow effect on entities
+* **Chams** - Colour player models to improve visibility
+* **Esp** - Show information about players, dropped weapons and projectiles
+* **Visuals** - Miscellaneous visual options
+* **Skinchanger** - change weapon skins, knives, gloves and stickers
+* **Sound** - Modify volume of certain sound effects
+* **Style** - Select and modify menu window layout and colours
+* **Misc** - Miscellaneous features
+* **Reportbot** - Automatically report players on server for cheating or other abusive actions
 * **Config** - JSON-based configuration system
 
 <details>
