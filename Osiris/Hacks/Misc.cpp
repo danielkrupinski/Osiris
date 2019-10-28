@@ -86,6 +86,14 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
+	if (!config.misc.sniperCrosshairInscope)
+	{
+		showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
+	}
+	else
+	{
+		showSpread->setValue(config.misc.sniperCrosshair ? 3 : 0);
+	}
     showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
 }
 
@@ -120,7 +128,7 @@ void Misc::watermark() noexcept
         if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
             latency = networkChannel->getLatency(0);
 
-        std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
+        std::wstring ping{ L"Ping: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
         const auto pingWidth = interfaces.surface->getTextSize(Surface::font, ping.c_str()).first;
         interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
         interfaces.surface->printText(ping.c_str());
@@ -130,7 +138,7 @@ void Misc::watermark() noexcept
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
-    constexpr float revolverPrepareTime{ 0.234375f };
+	constexpr float revolverPrepareTime{ 0.242f };
 
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
@@ -186,7 +194,7 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb Planted " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
@@ -211,7 +219,7 @@ void Misc::drawBombTimer() noexcept
                 if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
                     if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+                        const auto defusingText{ (std::wstringstream{ } << name << L" Is Defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces.surface->printText(defusingText.c_str());
@@ -338,14 +346,23 @@ void Misc::fakeVote(bool set) noexcept
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
-    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+	int hopsRestricted = 0;
+	int hopsHit = 0;
 
-    static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
-
-    if (config.misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
-        cmd->buttons &= ~UserCmd::IN_JUMP;
-
-    wasLastTimeOnGround = localPlayer->flags() & 1;
+	if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.misc.bunnyHop
+		&& localPlayer->moveType() != MoveType::LADDER) {
+		if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & 1)) {
+			cmd->buttons &= ~UserCmd::IN_JUMP;	
+			hopsRestricted = 0;
+		}
+		else if ((rand() % 100 > config.misc.hopsHitchance&& hopsRestricted < 12)) {
+			cmd->buttons &= ~UserCmd::IN_JUMP;
+			hopsRestricted++;
+			hopsHit = 0;
+		}
+		else
+			hopsHit++;
+	}
 }
 
 void Misc::fakeBan(bool set) noexcept

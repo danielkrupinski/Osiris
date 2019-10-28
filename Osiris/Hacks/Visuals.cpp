@@ -11,6 +11,24 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 
+void Visuals::viewModel() noexcept
+{
+	static auto view_x{ interfaces.cvar->findVar("viewmodel_offset_x") };
+	static auto view_y{ interfaces.cvar->findVar("viewmodel_offset_y") };
+	static auto view_z{ interfaces.cvar->findVar("viewmodel_offset_z") };
+
+	view_x->onChangeCallbacks.size = 0;
+	view_y->onChangeCallbacks.size = 0;
+	view_z->onChangeCallbacks.size = 0;
+
+
+	if (config.visuals.viewModel) {
+		view_x->setValue(config.visuals.viewModel_x);
+		view_y->setValue(config.visuals.viewModel_y);
+		view_z->setValue(config.visuals.viewModel_z);
+	}
+}
+
 void Visuals::colorWorld() noexcept
 {
     static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
