@@ -26,18 +26,18 @@ Free open-source internal cheat for **CSGO** compiled as a DLL, loadable into th
     * **Silent** - The aimbot will not snap to enemies (client-sided only)
     * **Friendly Fire** - Treat allies as enemies
     * **Visible Only** - Aim only on visible players
-    * **Scoped Only** - the Aimbot will only work when in scope (applies only to sniper rifles)
+    * **Scoped Only** - The aimbot will only work when in scope (applies only to sniper rifles)
     * **Disable When Flashed** - Disables the aimbot when you are flashed
     * **Disable When Smoked** - Disables the aimbot when enemies are in smoke
-    * **Auto Ahoot** - Shoot automatically when possible
-    * **Auto Acope** - Automatically scopes in with the sniper rifle before shooting
-    * **Recoil-based fov** - aimbot uses recoil as fov origin
-    * **Bone** - bone which aimbot aims at
-    * **Fov** - field-of-view which aimbot operates [*0*-*255*]
-    * **Smooth** - smooth aimbot movement in order to seem more human-like
-    * **Recoil control x** - horizontal recoil control factor
-    * **Recoil control y** - vertical recoil control factor
-    * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
+    * **Auto Shoot** - Shoot automatically when possible
+    * **Auto Scope** - Automatically scopes in with the sniper rifle before shooting
+    * **Recoil-Based FoV** - The aimbot will use recoil as an FoV origin
+    * **Bone** - The bone which the aimbot aims at
+    * **FoV** - Field-of-View in which the aimbot operates [*0*-*255*]
+    * **Smooth** - Smooths out aimbot movement in order to seem more human-like
+    * **Recoil Control X** - Horizontal recoil control factor
+    * **Recoil Control Y** - Vertical recoil control factor
+    * **Max Aim Inaccuracy** - Maximum weapon inaccuracy allowing for the aimbot to run, lowering this value will, for example, disable the aimbot while jumping or running
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
     * **Enabled** - on / off master switch
