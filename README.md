@@ -2,7 +2,7 @@
 
 A free open-source internal cheat for **CSGO** compiled as a DLL, loadable into the game process. Compatible with the latest version of the game on Steam.
 
-I simply added some features as well as change a few things, such as capitalization in the menu
+This is my version which includes a few changes and a few features added
 
 
 ## Acknowledgments
