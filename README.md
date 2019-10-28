@@ -1,6 +1,6 @@
 # Osiris [![C++](https://img.shields.io/badge/language-C%2B%2B-%23f34b7d.svg)](https://en.wikipedia.org/wiki/C%2B%2B) [![CS:GO](https://img.shields.io/badge/game-CS%3AGO-yellow.svg)](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/) [![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg)](https://en.wikipedia.org/wiki/Microsoft_Windows) [![x86](https://img.shields.io/badge/arch-x86-red.svg)](https://en.wikipedia.org/wiki/X86) [![License](https://img.shields.io/github/license/danielkrupinski/Osiris.svg)](LICENSE) ![](https://img.shields.io/github/issues/danielkrupinski/Osiris.svg)
 
-Free open-source internal cheat for **CSGO** - [Dynamic-link library] (https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the latest version of the game on Steam.
+Free open-source internal cheat for **CSGO** compiled as a DLL, loadable into the game process. Compatible with the latest version of the game on Steam.
 
 ## Features
 * **Aimbot** - aim assistance
@@ -76,7 +76,7 @@ Free open-source internal cheat for **CSGO** - [Dynamic-link library] (https://e
     * **Wireframe** - render triangle mesh instead of solid material
     * **Alpha** - maximum material transparency
 
-* **Esp** - show information about players
+* **ESP** - show information about players
 
     *Allies, Enemies* **/** *All, Visible, Occluded*
 
@@ -121,7 +121,7 @@ Free open-source internal cheat for **CSGO** - [Dynamic-link library] (https://e
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
     * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
 
-* **Skin changer** - change weapon skins, knives and stickers
+* **Skinchanger** - change weapon skins, knives and stickers
 
 * **Sound** - modify volume of certain sound effects
     * **Chicken volume** - volume of chicken sounds
@@ -175,7 +175,7 @@ Free open-source internal cheat for **CSGO** - [Dynamic-link library] (https://e
     * **Voice abuse** - report for voice abuse
     * **Text abuse** - report for text abuse
 
-* **Config** - JSON-based configuration system
+* **Configs** - JSON-based configuration system
     * **Create config** - create new configuration file
     * **Reset config** - restore default configuration settings (does not touch saved configuration)
     * **Load selected** - load selected configuration file
