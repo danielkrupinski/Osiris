@@ -1,4 +1,4 @@
-# Osiris
+# Zach's Osiris
 
 My verion of Daniel Krupiński's Osiris, which includes a few changes and a few features added
 
