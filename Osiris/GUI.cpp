@@ -772,13 +772,13 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
 			ImGui::PushID(5);
-			ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, ("X:%f"));
+			ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, ("X: %f"));
 			ImGui::PopID();
 			ImGui::PushID(6);
-			ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, ("Y:%f"));
+			ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, ("Y: %f"));
 			ImGui::PopID();
 			ImGui::PushID(7);
-			ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, ("Z:%f"));
+			ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, ("Z: %f"));
 			ImGui::PopID();
 		}
         ImGui::Columns(1);
