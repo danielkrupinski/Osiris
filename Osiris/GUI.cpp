@@ -966,7 +966,7 @@ void GUI::renderMiscWindow() noexcept
 		if (config.misc.bunnyHop)
 		{
 			ImGui::PushID(0);
-			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%");
+			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%%");
 			ImGui::PopID();
 		}
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
