@@ -32,7 +32,7 @@ public:
         callVirtualMethod<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
     }
 
-    constexpr bool isMaterialOverridden() noexcept
+	constexpr bool isMaterialOverridden() noexcept
     {
         return callVirtualMethod<bool>(this, 2);
     }
