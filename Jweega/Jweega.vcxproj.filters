@@ -116,9 +116,6 @@
     <ClCompile Include="Hacks\PredictionSystem.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\MD5.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -359,9 +356,6 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\MoveHelper.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\MD5.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Angle.h">
