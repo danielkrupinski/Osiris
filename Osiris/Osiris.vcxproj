@@ -39,12 +39,11 @@
     <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Interfaces.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
   </ItemGroup>
   <ItemGroup>
-  	<ClInclude Include="AntiDetection.h" />
+    <ClInclude Include="AntiDetection.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="fnv.h" />
     <ClInclude Include="Hacks\Aimbot.h" />

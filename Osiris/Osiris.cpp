@@ -8,7 +8,7 @@
 
 Config config{ "Osiris" };
 GUI gui;
-Interfaces interfaces;
+const Interfaces interfaces;
 Memory memory;
 Netvars netvars;
 Hooks hooks;

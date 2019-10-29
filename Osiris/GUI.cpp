@@ -962,7 +962,7 @@ void GUI::renderMiscWindow() noexcept
 
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
         ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
-        ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
+        ImGui::Checkbox("Legit Bunnyhop", &config.misc.bunnyHop);
 		if (config.misc.bunnyHop)
 		{
 			ImGui::PushID(0);
