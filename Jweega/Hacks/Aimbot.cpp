@@ -246,7 +246,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             const auto health{ entity->health() };
             const auto angle{ calculateRelativeAngle(localPlayerOrigin, origin, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
             const auto distance{ localPlayerOrigin.distance(origin) };
-            enemies.push_back({ health, distance, i });
+            enemies.emplace_back(i, health, distance);
         }
 
         std::sort(enemies.begin(), enemies.end());
