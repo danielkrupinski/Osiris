@@ -451,7 +451,8 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("This was a triumph!", "Jweega has been successfully loaded.");
+    interfaces.gameUI->messageBox("Jweega", "Jweega has been successfully loaded!\n\n"
+        "Build time: " __DATE__ ", " __TIME__ "");
 }
 
 void Hooks::restore() noexcept
