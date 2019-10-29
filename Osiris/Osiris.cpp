@@ -11,3 +11,4 @@ const Interfaces interfaces;
 Memory memory;
 Netvars netvars;
 Hooks hooks;
+AntiDetection antiDetection;
