@@ -7,7 +7,7 @@
 
 Config config{ "Jweega" };
 GUI gui;
-Interfaces interfaces;
+const Interfaces interfaces;
 Memory memory;
 Netvars netvars;
 Hooks hooks;
