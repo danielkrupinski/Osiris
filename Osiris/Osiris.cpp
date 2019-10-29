@@ -4,6 +4,7 @@
 #include "Interfaces.h"
 #include "Memory.h"
 #include "Netvars.h"
+#include "AntiDetection.h"
 
 Config config{ "Osiris" };
 GUI gui;
