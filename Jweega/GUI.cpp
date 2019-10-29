@@ -6,6 +6,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_internal.h"
 
 #include "imguiCustom.h"
 
@@ -16,7 +17,6 @@
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
-#include "imgui/imgui_internal.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -50,8 +50,20 @@ GUI::GUI() noexcept
         0x0500, 0x052F, // Cyrillic Supplementary
         0
     };
-	fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, nullptr, ranges);
+
+    static ImWchar KaiGenGothicCNRegular_ranges[] = {
+        0x3000, 0x30FF, // Punctuations, Hiragana, Katakana
+        0x31F0, 0x31FF, // Katakana Phonetic Extensions
+        0xFF00, 0xFFEF, // Half-width characters
+        0x4E00, 0x9FAF, // CJK Ideograms
+        0
+    };
+
+	fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, &fontConfig, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, &fontConfig, ranges);
+        fonts.kaigengothic = io.Fonts->AddFontFromFileTTF((path / "KaiGenGothicCN-Regular.ttf").string().c_str(), 16.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
+        fontConfig.MergeMode = true;
+        io.Fonts->Build();
     }
 }
 
