@@ -7,14 +7,15 @@ namespace Aimbot {
     void run(UserCmd*) noexcept;
 
     struct Enemies {
+        int id;
         int health;
         float distance;
-        int id;
 
         bool operator<(const Enemies& enemy) const noexcept {
             if (health != enemy.health)
                 return health < enemy.health;
             return distance < enemy.distance;
         }
+        Enemies(int id, int health, float distance) noexcept : id(id), health(health), distance(distance) { }
     };
 }
