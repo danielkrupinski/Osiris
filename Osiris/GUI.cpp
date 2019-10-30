@@ -962,6 +962,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
+        ImGui::Checkbox("Reveal money", &config.misc.revealMoney);
         ImGuiCustom::colorPicker("Spectator list", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
         ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
