@@ -415,9 +415,7 @@ Hooks::Hooks() noexcept
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
-    originalWndProc = reinterpret_cast<WNDPROC>(
-        SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(wndProc))
-        );
+    originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
     **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
@@ -442,11 +440,11 @@ Hooks::Hooks() noexcept
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
 
-    DWORD oldProtection;
-    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
-    originalDispatchSound = reinterpret_cast<decltype(originalDispatchSound)>(reinterpret_cast<uintptr_t>(memory.dispatchSound + 1) + *memory.dispatchSound);
-    *memory.dispatchSound = reinterpret_cast<uintptr_t>(&dispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
-    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
+        *memory.dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory.dispatchSound + 1);
+        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    }
 
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
@@ -469,14 +467,14 @@ void Hooks::restore() noexcept
 
     Glow::clearCustomObjects();
 
-    SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
 
-    DWORD oldProtection;
-    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
-    *memory.dispatchSound = reinterpret_cast<uintptr_t>(originalDispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
-    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        *memory.dispatchSound = uintptr_t(originalDispatchSound) - uintptr_t(memory.dispatchSound + 1);
+        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    }
 
     interfaces.resourceAccessControl->accessingThreadCount--;
 }
@@ -488,7 +486,7 @@ uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexce
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
 
-    uintptr_t* moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
+    auto moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
     for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
         if (!*currentAddress)
@@ -504,7 +502,7 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
 {
     size_t length{ 0 };
     MEMORY_BASIC_INFORMATION memoryInfo;
-    while (VirtualQuery(reinterpret_cast<LPCVOID>(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
+    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
         length++;
     return length;
 }

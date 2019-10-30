@@ -49,14 +49,18 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorList && interfaces.engine->isInGame()) {
+    if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (!localPlayer->isAlive())
             return;
 
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(51, 153, 255, 255);
+
+        if (config.misc.spectatorList.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
@@ -67,11 +71,8 @@ void Misc::spectatorList() noexcept
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
-            static PlayerInfo playerInfo;
-
-            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
-                static wchar_t name[128];
-                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
+                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
                     interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
                     textPositionY -= textHeight;
@@ -96,12 +97,13 @@ void Misc::recoilCrosshair() noexcept
 
 void Misc::watermark() noexcept
 {
-    if (config.misc.watermark) {
+    if (config.misc.watermark.enabled) {
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
-            255.0f);
+
+        if (config.misc.watermark.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.watermark.color);
 
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
@@ -174,15 +176,15 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-    if (config.misc.bombTimer) {
+    if (config.misc.bombTimer.enabled) {
         for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
 
-            static constexpr unsigned font{ 0xc1 };
+            constexpr unsigned font{ 0xc1 };
             interfaces.surface->setTextFont(font);
-            interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+            interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
             auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
@@ -194,16 +196,20 @@ void Misc::drawBombTimer() noexcept
             const auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
             constexpr auto progressBarHeight{ 5 };
 
-            interfaces.surface->setDrawColor(50, 50, 50, 255);
+            interfaces.surface->setDrawColor(50, 50, 50);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            interfaces.surface->setDrawColor(255, 140, 0, 255);
-            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f), drawPositionY + progressBarHeight + 5);
+            if (config.misc.bombTimer.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
+            else
+                interfaces.surface->setDrawColor(config.misc.bombTimer.color);
+
+            static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
+
+            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
 
             if (entity->c4Defuser() != -1) {
-                static PlayerInfo playerInfo;
-                if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
-                    static wchar_t name[128];
-                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
+                    if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
                         const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
 
@@ -211,9 +217,9 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->printText(defusingText.c_str());
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
 
-                        interfaces.surface->setDrawColor(50, 50, 50, 255);
+                        interfaces.surface->setDrawColor(50, 50, 50);
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-                        interfaces.surface->setDrawColor(0, 255, 0, 255);
+                        interfaces.surface->setDrawColor(0, 255, 0);
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
 
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
@@ -221,10 +227,10 @@ void Misc::drawBombTimer() noexcept
 
                         if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
                             canDefuseText = L"Can Defuse";
-                            interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(0, 255, 0);
                         } else {
                             canDefuseText = L"Cannot Defuse";
-                            interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(255, 0, 0);
                         }
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
@@ -246,8 +252,7 @@ void Misc::stealNames() noexcept
         static std::vector<int> stolenIds;
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
-                static PlayerInfo playerInfo;
-                if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
+                if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
                     if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
