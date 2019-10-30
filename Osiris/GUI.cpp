@@ -407,8 +407,9 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Disable When Smoked", &config.backtrack.ignoreSmoke);
         ImGui::Checkbox("Recoil-Based FoV", &config.backtrack.recoilBasedFov);
+		ImGui::Checkbox("Draw All Ticks", &config.backtrack.drawAllTicks);
         ImGui::PushItemWidth(220.0f);
-        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time Window: %d ms");
+        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Amount: %d ms");
         ImGui::PopItemWidth();
         if (!config.style.menuStyle)
             ImGui::End();

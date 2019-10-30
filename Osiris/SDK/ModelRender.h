@@ -30,7 +30,7 @@ public:
     constexpr void forceMaterialOverride(Material* newMaterial) noexcept
     {
         callVirtualMethod<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
-    }
+	}
 
 	constexpr bool isMaterialOverridden() noexcept
     {
