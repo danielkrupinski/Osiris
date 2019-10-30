@@ -220,6 +220,7 @@ public:
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
+        bool revealMoney{ false };
         ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };
