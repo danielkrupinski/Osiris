@@ -25,7 +25,6 @@ namespace Misc {
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
     void fakeVote(bool = false) noexcept;
-    void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
@@ -97,19 +96,6 @@ namespace Misc {
     {
         if (config.misc.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
             interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
-    }
-
-    constexpr void autoStrafe(UserCmd* cmd) noexcept
-    {
-        if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            config.misc.autoStrafe
-            && !(localPlayer->flags() & 1)
-            && localPlayer->moveType() != MoveType::NOCLIP) {
-            if (cmd->mousedx < -20)
-                cmd->sidemove = -450.0f;
-            else if (cmd->mousedx > 20)
-                cmd->sidemove = 450.0f;
-        }
     }
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept

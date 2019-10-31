@@ -962,14 +962,6 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
 
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
-        ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
-        ImGui::Checkbox("Legit Bunnyhop", &config.misc.bunnyHop);
-		if (config.misc.bunnyHop)
-		{
-			ImGui::PushID(0);
-			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%%");
-			ImGui::PopID();
-		}
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
@@ -984,6 +976,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Auto Accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar Hack", &config.misc.radarHack);
         ImGui::Checkbox("Rank Revealer", &config.misc.revealRanks);
+		ImGui::Checkbox("Money Revealer", &config.misc.revealMoney);
         ImGuiCustom::colorPicker("Spectator List", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
         ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
         ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);

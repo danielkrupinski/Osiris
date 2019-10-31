@@ -212,9 +212,6 @@ public:
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
-        bool autoStrafe{ false };
-		bool bunnyHop{ false };
-		int hopsHitchance{ 100 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
@@ -229,6 +226,7 @@ public:
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
+		bool revealMoney{ false };
         ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };

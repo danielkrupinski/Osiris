@@ -779,9 +779,6 @@ void Config::load(size_t id) noexcept
 
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
-        if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
-        if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
-		if (miscJson.isMember("Bunny hop hitchance")) misc.hopsHitchance = miscJson["Bunny hop hitchance"].asInt();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
@@ -796,6 +793,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Auto accept")) misc.autoAccept = miscJson["Auto accept"].asBool();
         if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
+		if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
 
         if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
             if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
@@ -1514,9 +1512,6 @@ void Config::save(size_t id) const noexcept
         
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
-        miscJson["Auto strafe"] = misc.autoStrafe;
-        miscJson["Bunny hop"] = misc.bunnyHop;
-		miscJson["Bunny hop hitchance"] = misc.hopsHitchance;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;
@@ -1531,6 +1526,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Auto accept"] = misc.autoAccept;
         miscJson["Radar hack"] = misc.radarHack;
         miscJson["Reveal ranks"] = misc.revealRanks;
+		miscJson["Reveal money"] = misc.revealMoney;
 
         {
             auto& spectatorListJson = miscJson["Spectator list"];

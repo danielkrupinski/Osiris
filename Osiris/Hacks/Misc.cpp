@@ -344,26 +344,6 @@ void Misc::fakeVote(bool set) noexcept
         shouldSet = false;
 }
 
-void Misc::bunnyHop(UserCmd* cmd) noexcept
-{
-	int hopsRestricted = 0;
-	int hopsHit = 0;
-
-	if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.misc.bunnyHop
-		&& localPlayer->moveType() != MoveType::LADDER) {
-		if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & 1)) {
-			cmd->buttons &= ~UserCmd::IN_JUMP;	
-			hopsRestricted = 0;
-		}
-		else if ((rand() % 100 > config.misc.hopsHitchance&& hopsRestricted < 12)) {
-			cmd->buttons &= ~UserCmd::IN_JUMP;
-			hopsRestricted++;
-			hopsHit = 0;
-		}
-		else
-			hopsHit++;
-	}
-}
 
 void Misc::fakeBan(bool set) noexcept
 {
