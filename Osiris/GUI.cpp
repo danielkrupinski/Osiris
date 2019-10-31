@@ -911,7 +911,8 @@ void GUI::renderSoundWindow() noexcept
 void GUI::renderStyleWindow() noexcept
 {
     if (window.style) {
-        if (!config.style.menuStyle) {
+        const auto menuStyle{ config.style.menuStyle };
+        if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Style", &window.style, windowFlags);
         }
@@ -932,7 +933,7 @@ void GUI::renderStyleWindow() noexcept
             }
         }
 
-        if (!config.style.menuStyle)
+        if (menuStyle == 0)
             ImGui::End();
     }
 }
@@ -962,6 +963,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Auto accept", &config.misc.autoAccept);
         ImGui::Checkbox("Radar hack", &config.misc.radarHack);
         ImGui::Checkbox("Reveal ranks", &config.misc.revealRanks);
+        ImGui::Checkbox("Reveal money", &config.misc.revealMoney);
         ImGuiCustom::colorPicker("Spectator list", config.misc.spectatorList.color, &config.misc.spectatorList.enabled, &config.misc.spectatorList.rainbow, &config.misc.spectatorList.rainbowSpeed);
         ImGuiCustom::colorPicker("Watermark", config.misc.watermark.color, &config.misc.watermark.enabled, &config.misc.watermark.rainbow, &config.misc.watermark.rainbowSpeed);
         ImGui::Checkbox("Fix animation LOD", &config.misc.fixAnimationLOD);
@@ -1057,7 +1059,8 @@ void GUI::renderReportbotWindow() noexcept
 void GUI::renderConfigWindow() noexcept
 {
     if (window.config) {
-        if (!config.style.menuStyle) {
+        const auto menuStyle{ config.style.menuStyle };
+        if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 290.0f, 190.0f });
             ImGui::Begin("Config", &window.config, windowFlags);
         }
@@ -1137,7 +1140,7 @@ void GUI::renderConfigWindow() noexcept
                 config.remove(currentConfig);
         }
         ImGui::Columns(1);
-        if (!config.style.menuStyle)
+        if (menuStyle == 0)
             ImGui::End();
     }
 }

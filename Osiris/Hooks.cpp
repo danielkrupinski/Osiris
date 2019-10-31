@@ -192,13 +192,15 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
+    if (interfaces.engine->isInGame()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
+        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-        interfaces.modelRender->forceMaterialOverride(nullptr);
+        if (!isOverridden)
+            interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
@@ -409,6 +411,16 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
     return result;
 }
 
+static bool __stdcall isPlayingDemo() noexcept
+{
+    if (config.misc.revealMoney
+        && *reinterpret_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
+        return true;
+    }
+    return hooks.engine.callOriginal<bool>(82);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -418,9 +430,9 @@ Hooks::Hooks() noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
+    **reinterpret_cast<decltype(present)***>(memory.present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(reset);
+    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
@@ -430,6 +442,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
