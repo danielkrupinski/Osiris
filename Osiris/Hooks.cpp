@@ -411,6 +411,16 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
     return result;
 }
 
+static bool __stdcall isPlayingDemo() noexcept
+{
+    if (config.misc.revealMoney
+        && *reinterpret_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
+        return true;
+    }
+    return hooks.engine.callOriginal<bool>(82);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -432,6 +442,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
