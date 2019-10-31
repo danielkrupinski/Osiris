@@ -10,7 +10,7 @@ void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bo
         ImGui::Checkbox("##check", enable);
         ImGui::SameLine(0.0f, 5.0f);
     }
-    bool openPopup = ImGui::ColorButton("##btn", ImColor{ color[0], color[1], color[2] }, ImGuiColorEditFlags_NoTooltip);
+    bool openPopup = ImGui::ColorButton("##btn", color, ImGuiColorEditFlags_NoTooltip);
     ImGui::SameLine(0.0f, 5.0f);
     ImGui::TextUnformatted(name);
 
