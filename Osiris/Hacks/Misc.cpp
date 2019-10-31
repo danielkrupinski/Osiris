@@ -279,8 +279,16 @@ void Misc::quickReload(UserCmd* cmd) noexcept
         static Entity* reloadedWeapon{ nullptr };
 
         if (reloadedWeapon) {
-            cmd->weaponselect = reloadedWeapon->index();
-            cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (interfaces.entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
+                    cmd->weaponselect = reloadedWeapon->index();
+                    cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+                    break;
+                }
+            }
             reloadedWeapon = nullptr;
         }
 
@@ -297,7 +305,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
                     break;
                 }
             }
-
         }
     }
 }
