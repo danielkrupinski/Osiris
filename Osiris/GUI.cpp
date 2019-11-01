@@ -1007,7 +1007,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGuiCustom::colorPicker("Bomb timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
-        ImGui::Text(std::to_string(interfaces.entityList->getEntity(0)->cold() = 2).c_str());
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
