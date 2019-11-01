@@ -120,6 +120,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Visuals::removeShadows();
     Visuals::skybox();
     Reportbot::run();
+	Misc::bunnyHop(cmd);
+	Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
@@ -402,7 +404,7 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
 static bool __stdcall isPlayingDemo() noexcept
 {
 	if (config.misc.revealMoney
-		&& *reinterpret_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
+		&& *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
 		&& **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
 		return true;
 	}

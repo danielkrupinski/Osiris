@@ -962,6 +962,11 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
 
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
+		ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
+		ImGui::PushID(0);
+		ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%%");
+		ImGui::PopID();
+		ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
