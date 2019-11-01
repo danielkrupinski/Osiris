@@ -422,11 +422,34 @@ static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared&
 		renderSnaplines(entity, config);
 	}
 }
+float white[3] = { 1.0,1.0,1.0 };
+static constexpr void renderAimbotCircle() noexcept {
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	const auto activeWeapon = localPlayer->getActiveWeapon();
+	if (!activeWeapon || !activeWeapon->clip())
+		return;
+
+	auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+	if (!weaponIndex)
+		return;
+	if (!config.aimbot[weaponIndex].enabled)
+		weaponIndex = 0;
+	if (!config.aimbot[weaponIndex].aimbotCircle) {
+		return;
+	}
+	const auto [width, height] = interfaces.surface->getScreenSize();
+	if (config.aimbot[weaponIndex].fov > 90.0f) return;
+	float r = config.aimbot[weaponIndex].fov / 90.0f * width / 2;
+	interfaces.surface->setDrawColor(white, 255);
+	interfaces.surface->drawCircle(width / 2, height / 2, r - 1, r);
+	//interfaces.surface->drawOutlinedCircle(500,500,200,1);
+}
 
 void Esp::render() noexcept
 {
 	if (interfaces.engine->isInGame()) {
 		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		renderAimbotCircle();
 
 		for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
 			auto entity = interfaces.entityList->getEntity(i);
