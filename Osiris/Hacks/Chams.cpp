@@ -46,6 +46,8 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     const auto isLocalPlayerAlive = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive();
     if (strstr(info.model->name, "models/player"))
         return renderPlayers(ctx, state, info, customBoneToWorld);
+    else if (isLocalPlayerAlive && strstr(info.model->name, "sleeve"))
+        renderSleeves(ctx, state, info, customBoneToWorld);
     else if (isLocalPlayerAlive && strstr(info.model->name, "arms"))
         renderHands(ctx, state, info, customBoneToWorld);
     else if (isLocalPlayerAlive && strstr(info.model->name, "models/weapons/v_")
@@ -220,6 +222,20 @@ void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, mat
             if (applied)
                 hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
             applyChams(config.chams[HANDS].materials[i], false, localPlayer->health());
+            applied = true;
+        }
+    }
+}
+
+void Chams::renderSleeves(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
+{
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+    auto applied{ false };
+    for (size_t i = 0; i < config.chams[SLEEVES].materials.size(); i++) {
+        if (config.chams[SLEEVES].materials[i].enabled) {
+            if (applied)
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+            applyChams(config.chams[SLEEVES].materials[i], false, localPlayer->health());
             applied = true;
         }
     }

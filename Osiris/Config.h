@@ -111,7 +111,7 @@ public:
         std::array<Material, 2> materials;
     };
 
-    std::array<Chams, 17> chams;
+    std::array<Chams, 18> chams;
 
     struct Esp {
         struct Shared {

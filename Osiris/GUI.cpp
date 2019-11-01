@@ -469,7 +469,7 @@ void GUI::renderChamsWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0");
         ImGui::PopID();
         static int currentItem{ 0 };
 
@@ -1007,6 +1007,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fast plant", &config.misc.fastPlant);
         ImGuiCustom::colorPicker("Bomb timer", config.misc.bombTimer.color, &config.misc.bombTimer.enabled, &config.misc.bombTimer.rainbow, &config.misc.bombTimer.rainbowSpeed);
         ImGui::Checkbox("Quick reload", &config.misc.quickReload);
+        ImGui::Text(std::to_string(interfaces.entityList->getEntity(0)->cold() = 2).c_str());
         ImGui::Checkbox("Prepare revolver", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
