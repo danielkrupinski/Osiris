@@ -635,6 +635,9 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance.color, &config.esp.players[selected].distance.enabled, &config.esp.players[selected].distance.rainbow, &config.esp.players[selected].distance.rainbowSpeed);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon.color, &config.esp.players[selected].activeWeapon.enabled, &config.esp.players[selected].activeWeapon.rainbow, &config.esp.players[selected].activeWeapon.rainbowSpeed);
                 ImGui::SliderFloat("Max Distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+				ImGui::PushID(0);
+				ImGui::SliderInt("", &config.esp.players[selected].maxsnaplineDistance, 0, 500, "Max Snaplines Distance: %.2fm");
+				ImGui::PopID();
                 break;
             }
             case 2: {
@@ -658,6 +661,9 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Outline", config.esp.weapon.outline.color, &config.esp.weapon.outline.enabled, &config.esp.weapon.outline.rainbow, &config.esp.weapon.outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.weapon.distance.color, &config.esp.weapon.distance.enabled, &config.esp.weapon.distance.rainbow, &config.esp.weapon.distance.rainbowSpeed);
                 ImGui::SliderFloat("Max Distance", &config.esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
+				ImGui::PushID(0);
+				ImGui::SliderInt("", &config.esp.weapon.maxsnaplineDistance, 0, 500, "Max Snaplines Distance: %.2fm");
+				ImGui::PopID();
                 break;
             }
             case 3: {
@@ -681,6 +687,9 @@ void GUI::renderEspWindow() noexcept
                 ImGuiCustom::colorPicker("Outline", config.esp.projectiles[currentItem].outline.color, &config.esp.projectiles[currentItem].outline.enabled, &config.esp.projectiles[currentItem].outline.rainbow, &config.esp.projectiles[currentItem].outline.rainbowSpeed);
                 ImGuiCustom::colorPicker("Distance", config.esp.projectiles[currentItem].distance.color, &config.esp.projectiles[currentItem].distance.enabled, &config.esp.projectiles[currentItem].distance.rainbow, &config.esp.projectiles[currentItem].distance.rainbowSpeed);
                 ImGui::SliderFloat("Max Distance", &config.esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
+				ImGui::PushID(0);
+				ImGui::SliderInt("", &config.esp.projectiles[currentItem].maxsnaplineDistance, 0, 500, "Max Snaplines Distance: %.2fm");
+				ImGui::PopID();
                 break;
             }
             case 4: {
@@ -961,6 +970,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
 
+		ImGui::Checkbox("Show Round People (?)", &config.misc.showRoundPeople);
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
 		ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
 		if (config.misc.bunnyHop)
