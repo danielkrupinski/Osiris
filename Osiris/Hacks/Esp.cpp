@@ -29,9 +29,6 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
 {
 	if (config.snaplines.enabled) {
-		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-		float distance = (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length();
-		if (distance > config.maxsnaplineDistance) return;
 		Vector position{ };
 		if (worldToScreen(entity->getAbsOrigin(), position)) {
 			const auto [width, height] = interfaces.surface->getScreenSize();

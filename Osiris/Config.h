@@ -126,7 +126,6 @@ public:
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
             float maxDistance{ 0.0f };
-			int maxsnaplineDistance{ 500 };
         };
        
         struct Player : public Shared {
