@@ -39,9 +39,9 @@ private:
 
         LOCALPLAYER,
         WEAPONS,
-        HANDS,
-        BACKTRACK,
-		SLEEVES
+		SLEEVES,
+		HANDS,
+		BACKTRACK
     };
 
     Material* normal;

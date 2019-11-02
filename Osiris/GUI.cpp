@@ -471,7 +471,7 @@ void GUI::renderChamsWindow() noexcept
         static int currentCategory{ 0 };
         ImGui::PushItemWidth(110.0f);
         ImGui::PushID(0);
-        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local Player\0Weapons\0Sleeves\0Gloves\0Backtrack\0");
+        ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local Player\0Weapons\0Sleeves\0Hands\0Backtrack\0");
         ImGui::PopID();
         static int currentItem{ 0 };
 
@@ -963,10 +963,6 @@ void GUI::renderMiscWindow() noexcept
 
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
 		ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
-		{
-			if (config.misc.bunnyHop)
-			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%%");
-		}
 		ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);

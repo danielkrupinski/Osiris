@@ -145,5 +145,6 @@ namespace Misc {
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
             interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(config.misc.killMessageString).c_str());
-    }
+	}
 }
+
