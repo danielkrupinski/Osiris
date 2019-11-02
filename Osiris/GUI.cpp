@@ -263,7 +263,7 @@ void GUI::renderAntiAimWindow() noexcept
     if (window.antiAim) {
         if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-            ImGui::Begin("Anti Aim", &window.antiAim, windowFlags);
+            ImGui::Begin("Anti-Aim", &window.antiAim, windowFlags);
         }
         ImGui::Checkbox("Enabled", &config.antiAim.enabled);
         ImGui::Checkbox("##pitch", &config.antiAim.pitch);
