@@ -426,6 +426,7 @@ static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared&
 	}
 }
 float white[3] = { 1.0,1.0,1.0 };
+
 static constexpr void renderAimbotCircle() noexcept {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	const auto activeWeapon = localPlayer->getActiveWeapon();
@@ -445,7 +446,6 @@ static constexpr void renderAimbotCircle() noexcept {
 	float r = config.aimbot[weaponIndex].fov / 90.0f * width / 2;
 	interfaces.surface->setDrawColor(white, 255);
 	interfaces.surface->drawCircle(width / 2, height / 2, r - 1, r);
-	//interfaces.surface->drawOutlinedCircle(500,500,200,1);
 }
 
 void Esp::render() noexcept
