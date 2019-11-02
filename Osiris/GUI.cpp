@@ -582,7 +582,7 @@ void GUI::renderEspWindow() noexcept
             ImGui::Indent();
             ImGui::PushID("Dangerzone");
             ImGui::PushFont(fonts.segoeui);
-            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox", "Radar Jammer" };
+            static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armour", "Armour", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "Exo Jump", "Ammobox", "Radar Jammer" };
 
             for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
                 bool isSelected = currentCategory == 4 && currentItem == i;
@@ -737,7 +737,6 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No Smoke", &config.visuals.noSmoke);
         ImGui::Checkbox("No Blur", &config.visuals.noBlur);
         ImGui::Checkbox("No Scope Overlay", &config.visuals.noScopeOverlay);
-		ImGui::Checkbox("No grass", &config.visuals.noGrass);
         ImGui::Checkbox("No Grass", &config.visuals.noGrass);
         ImGui::Checkbox("No Shadows", &config.visuals.noShadows);
         ImGui::Checkbox("Wireframe Smoke", &config.visuals.wireframeSmoke);
