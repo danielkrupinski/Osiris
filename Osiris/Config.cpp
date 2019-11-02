@@ -780,6 +780,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
 		if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
+		if (miscJson.isMember("Bunny hop hitchance")) misc.hopsHitchance = miscJson["Bunny hop hitchance"].asInt();
 		if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
@@ -1515,6 +1516,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
 		miscJson["Bunny hop"] = misc.bunnyHop;
+		miscJson["Bunny hop hitchance"] = misc.hopsHitchance;
 		miscJson["Auto strafe"] = misc.autoStrafe;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
