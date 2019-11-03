@@ -99,17 +99,70 @@ namespace Misc {
             interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
     }
 
-	constexpr void autoStrafe(UserCmd* cmd) noexcept
+	static void usespam(UserCmd* cmd) noexcept
 	{
-		if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-			config.misc.autoStrafe
-			&& !(localPlayer->flags() & 1)
-			&& localPlayer->moveType() != MoveType::NOCLIP) {
-			if (cmd->mousedx < -20)
-				cmd->sidemove = -450.0f;
-			else if (cmd->mousedx > 20)
-				cmd->sidemove = 450.0f;
+		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		static bool usespam = true;
+		if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
+			if (usespam)
+			{
+				cmd->buttons |= UserCmd::IN_USE;
+				usespam = false;
+			}
+			else
+			{
+				cmd->buttons &= ~UserCmd::IN_USE;
+				usespam = true;
+			}
 		}
+	}
+
+	static void autoStrafe(UserCmd* cmd) noexcept
+	{
+		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		static bool bDirection = true;
+		static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
+		float flYawBhop = 0.f;
+		if (localPlayer->velocity().length() > 50.f)
+		{
+			float x = 30.f;
+			float y = localPlayer->velocity().length();
+			float z = 0.f;
+			float a = 0.f;
+
+			z = x / y;
+			z = fabsf(z);
+
+			a = x * z;
+
+			flYawBhop = a;
+		}
+		if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 0) {
+			if (cmd->mousedx > 1)
+			{
+				cmd->sidemove = 450.f;
+			}
+			else
+			{
+				cmd->sidemove = -450.f;
+			}
+		}
+		if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 1) {
+			if (bDirection || cmd->mousedx > 1)
+			{
+				cmd->viewangles.y -= flYawBhop;
+				cmd->sidemove = -450.f;
+				bDirection = false;
+			}
+			else
+			{
+				cmd->viewangles.y += flYawBhop;
+				cmd->sidemove = 450.f;
+				bDirection = true;
+			}
+		}
+		wasLastTimeOnGround = localPlayer->flags() & 1;
+		//CorrectMovement(cmd->viewangles, cmd, cmd->forwardmove, cmd->sidemove);
 	}
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept

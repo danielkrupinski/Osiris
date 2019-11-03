@@ -984,6 +984,11 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::PopID();
 		}
 		ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
+		if (config.misc.autoStrafe)
+		{
+			ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");
+		}
+		ImGui::Checkbox("Door Spam", &config.misc.usespam);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
