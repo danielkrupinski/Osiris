@@ -121,6 +121,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
+    Misc::slowwalk(cmd);
+    Misc::usespam(cmd);
     Misc::removeCrouchCooldown(cmd);
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
