@@ -273,15 +273,15 @@ void GUI::renderAntiAimWindow() noexcept
 		ImGui::Checkbox("Legit Desync", &config.antiAim.legit);
 		if (config.antiAim.legit)
 		{
-			ImGui::Text("Right"), &config.antiAim.desyncright;
-			ImGui::SameLine();
-			hotkey(config.antiAim.desyncright);
-		}
-		if (config.antiAim.legit)
-		{
 			ImGui::Text("Left"), & config.antiAim.desyncleft;
 			ImGui::SameLine();
 			hotkey(config.antiAim.desyncleft);
+		}
+		if (config.antiAim.legit)
+		{
+			ImGui::Text("Right"), & config.antiAim.desyncright;
+			ImGui::SameLine();
+			hotkey(config.antiAim.desyncright);
 		}
         if (!config.style.menuStyle)
             ImGui::End();
