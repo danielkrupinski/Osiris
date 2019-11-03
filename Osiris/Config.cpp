@@ -104,6 +104,9 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+		if (antiAimJson.isMember("Legit")) antiAim.legit = antiAimJson["Yaw"].asBool();
+		if (antiAimJson.isMember("Right")) antiAim.desyncright = antiAimJson["Right"].asInt();
+		if (antiAimJson.isMember("Left")) antiAim.desyncleft = antiAimJson["Left"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -962,6 +965,9 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+		antiAimJson["Legit desync"] = antiAim.legit;
+		antiAimJson["Right"] = antiAim.desyncright;
+		antiAimJson["Left"] = antiAim.desyncleft;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
