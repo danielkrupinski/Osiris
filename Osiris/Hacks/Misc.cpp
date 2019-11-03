@@ -1,5 +1,4 @@
 #include <sstream>
-
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -10,6 +9,8 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+#include "AntiAim.h"
+
 void Misc::slowawalk(UserCmd* cmd)noexcept 
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
