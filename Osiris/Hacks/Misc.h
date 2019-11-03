@@ -12,6 +12,7 @@
 #include "../SDK/GlobalVars.h"
 
 namespace Misc {
+    void slowawalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
