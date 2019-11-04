@@ -686,8 +686,7 @@ void Config::load(size_t id) noexcept
                 visuals.world.color[1] = worldJson["Color"][1].asFloat();
                 visuals.world.color[2] = worldJson["Color"][2].asFloat();
             }
-            if (worldJson.isMember("Rainbow")) visuals.world.rainbow = worldJson["Rainbow"].asBool();
-            if (worldJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
+            if (visualsJson.isMember("World alpha")) visuals.worldAlpha = visualsJson["World alpha"].asFloat();
         }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
@@ -1423,10 +1422,8 @@ void Config::save(size_t id) const noexcept
             worldJson["Color"][0] = visuals.world.color[0];
             worldJson["Color"][1] = visuals.world.color[1];
             worldJson["Color"][2] = visuals.world.color[2];
-            worldJson["Rainbow"] = visuals.world.rainbow;
-            worldJson["Rainbow speed"] = visuals.world.rainbowSpeed;
+            visualsJson["World alpha"] = visuals.worldAlpha;
         }
-
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
