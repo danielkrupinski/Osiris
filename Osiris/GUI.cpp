@@ -1,5 +1,4 @@
 #include <fstream>
-#include <functional>
 #include <string>
 #include <ShlObj.h>
 #include <Windows.h>
@@ -766,11 +765,10 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGuiCustom::colorPicker("World color", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
+        ImGuiCustom::colorPicker("World color", config.visuals.world.color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip);
         ImGui::SliderFloat("World alpha", &config.visuals.worldAlpha, 0.0f, 1.0f, "Alpha: %.3f");
 		if (ImGui::Button("Update world", { 130.0f, 30.0f }))
 			Visuals::scheduleUpdate();
-        ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
