@@ -11,7 +11,7 @@
 #include "../SDK/WeaponData.h"
 #include "AntiAim.h"
 
-void Misc::slowawalk(UserCmd* cmd)noexcept 
+void Misc::slowwalk(UserCmd* cmd)noexcept 
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	float speed = localPlayer->velocity().length();
