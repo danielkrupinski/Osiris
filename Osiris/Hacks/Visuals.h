@@ -12,6 +12,9 @@ enum class FrameStage;
 class GameEvent;
 
 namespace Visuals {
+    static bool update = true;
+
+	void scheduleUpdate() noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
     void thirdperson() noexcept;
