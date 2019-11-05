@@ -18,6 +18,7 @@ private:
     bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
     void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    void renderSleeves(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,
@@ -39,7 +40,8 @@ private:
         LOCALPLAYER,
         WEAPONS,
         HANDS,
-        BACKTRACK
+        BACKTRACK,
+        SLEEVES
     };
 
     Material* normal;

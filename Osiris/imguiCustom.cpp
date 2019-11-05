@@ -34,3 +34,9 @@ void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bo
     }
     ImGui::PopID();
 }
+
+void ImGuiCustom::colorPicker(const char* name, Config::ColorToggle& colorConfig) noexcept
+{
+    colorPicker(name, colorConfig.color, &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
+}
+
