@@ -9,6 +9,64 @@
 #include "Misc.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
+
+void VectorAngles(const Vector& forward, QAngle& angles)
+{
+	float	tmp, yaw, pitch;
+
+	if (forward[1] == 0 && forward[0] == 0) {
+		yaw = 0;
+		if (forward[2] > 0)
+			pitch = 270;
+		else
+			pitch = 90;
+	}
+	else {
+		yaw = (atan2(forward[1], forward[0]) * 180 / M_PI);
+		if (yaw < 0)
+			yaw += 360;
+
+		tmp = sqrt(forward[0] * forward[0] + forward[1] * forward[1]);
+		pitch = (atan2(-forward[2], tmp) * 180 / M_PI);
+		if (pitch < 0)
+			pitch += 360;
+	}
+
+	angles[0] = pitch;
+	angles[1] = yaw;
+	angles[2] = 0;
+}
+void SinCos(float radians, float* sine, float* cosine)
+{
+	register double __cosr, __sinr;
+	_asm
+	{
+		fld		DWORD PTR[radians]
+		fsincos
+
+		mov edx, DWORD PTR[cosine]
+		mov eax, DWORD PTR[sine]
+
+		fstp DWORD PTR[edx]
+		fstp DWORD PTR[eax]
+	}
+	*sine = __sinr;
+	*cosine = __cosr;
+}
+
+void AngleVectors(const QAngle& angles, Vector& forward)
+{
+
+	float sp, sy, cp, cy;
+
+	SinCos(degreesToRadians(angles[0]), &sy, &cy);
+	SinCos(degreesToRadians(angles[1]), &sp, &cp);
+
+	forward.x = cp * cy;
+	forward.y = cp * sy;
+	forward.z = -sp;
+}
+
 void CorrectMovement(Vector vOldAngles, UserCmd* pCmd, float fOldForward, float fOldSidemove)
 {
 	// side/forward move correction

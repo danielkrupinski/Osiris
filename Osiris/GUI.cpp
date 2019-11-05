@@ -989,6 +989,9 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");
 		}
 		ImGui::Checkbox("Door Spam", &config.misc.usespam);
+		ImGui::Checkbox("Slow Walk", &config.misc.slowwalk);
+		ImGui::SameLine();
+		hotkey(config.misc.slowwalkkey);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);

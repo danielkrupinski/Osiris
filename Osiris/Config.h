@@ -220,6 +220,9 @@ public:
 		bool autoStrafe{ false };
 		int autostrafestyle{ 0 };
 		bool usespam{ false };
+		bool slowwalk{ false };
+		int slowwalkkey{ 0 };
+		float slowwalkammount{ 0.f };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
