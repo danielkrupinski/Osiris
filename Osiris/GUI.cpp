@@ -1,5 +1,4 @@
 #include <fstream>
-#include <functional>
 #include <string>
 #include <ShlObj.h>
 #include <Windows.h>
@@ -778,7 +777,10 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopID();
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-        ImGuiCustom::colorPicker("World Colour", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
+		ImGuiCustom::colorPicker("World Colour", config.visuals.worldColor);
+		ImGui::SliderFloat("World Alpha", &config.visuals.worldAlpha, 0.0f, 1.0f, "Alpha: %.3f");
+		if (ImGui::Button("Update", { 130.0f, 30.0f }))
+			Visuals::scheduleUpdate();
         ImGui::Checkbox("Rare Deagle Anims", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
@@ -901,7 +903,7 @@ void GUI::renderSkinChangerWindow() noexcept
         if (ImGui::Button("Apply", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
 
-        ImGui::TextUnformatted("Created by BaZ (formerly Keemware)");
+        ImGui::TextUnformatted("Created by BaZ (Formerly Keemware)");
 
         if (!config.style.menuStyle)
             ImGui::End();
@@ -1178,6 +1180,7 @@ void GUI::renderConfigWindow() noexcept
                 config.load(currentConfig);
                 updateColors();
                 SkinChanger::scheduleHudUpdate();
+				Visuals::scheduleUpdate();
                 Misc::updateClanTag(true);
             }
             if (ImGui::Button("Save Selected", { 100.0f, 25.0f }))

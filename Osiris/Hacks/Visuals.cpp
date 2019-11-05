@@ -11,6 +11,11 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 
+void Visuals::scheduleUpdate() noexcept
+{
+	update = true;
+}
+
 void Visuals::viewModel() noexcept
 {
 	static auto view_x{ interfaces.cvar->findVar("viewmodel_offset_x") };
@@ -31,21 +36,21 @@ void Visuals::viewModel() noexcept
 
 void Visuals::colorWorld() noexcept
 {
-    static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
-    static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
-    static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
+	static MaterialSystem* matSys = interfaces.materialSystem;
+	if (!update)
+		return;
+	for (MaterialHandle_t i = matSys->firstMaterial(); i != matSys->invalidMaterial(); i = matSys->nextMaterial(i)) {
 
-    if (config.visuals.world.rainbow) {
-        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
+		Material* mat = matSys->getMaterial(i);
 
-        red->setValue(r);
-        green->setValue(g);
-        blue->setValue(b);
-    } else {
-        red->setValue(config.visuals.world.color[0]);
-        green->setValue(config.visuals.world.color[1]);
-        blue->setValue(config.visuals.world.color[2]);
-    }
+		if (!mat)
+			continue;
+		if (strstr(mat->getTextureGroupName(), "World")) {
+			mat->alphaModulate(config.visuals.worldAlpha);
+			mat->colorModulate(config.visuals.worldColor[0], config.visuals.worldColor[1], config.visuals.worldColor[2]);
+		}
+	}
+	update = false;
 }
 
 void Visuals::modifySmoke() noexcept
