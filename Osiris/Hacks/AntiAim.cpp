@@ -100,7 +100,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 	Vector vOldAngles = cmd->viewangles;
 	float fOldForward = cmd->forwardmove;
 	float fOldSidemove = cmd->sidemove;
-
+	auto desync = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
 	if (config.antiAim.enabled) {
 		if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x) {
 			cmd->viewangles.x = config.antiAim.pitchAngle;
@@ -115,33 +115,20 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 		if (config.antiAim.yaw) {
 
 			if (!sendPacket) {
-				cmd->viewangles.y += 180.f;
+				cmd->viewangles.y = 180.f;
 			}
-			if (sendPacket) {
-				leftdesync ? cmd->viewangles.y += interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() : cmd->viewangles.y -= interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+			else {
+				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
 			}
-				if (fabsf(cmd->sidemove) < 5.0f) {
-					if (cmd->buttons & UserCmd::IN_DUCK)
-						cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-					else
-						cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
-				}
+		}
+		if (config.antiAim.legit) {
+			if (!sendPacket) {
+				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
 			}
-			if (config.antiAim.legit) {
-
-				if (!sendPacket) {
-					cmd->viewangles.y += 0;
-				}
-				if (sendPacket) {
-					leftdesync ? cmd->viewangles.y += interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() : cmd->viewangles.y -= interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
-				}
-					if (fabsf(cmd->sidemove) < 5.0f) {
-						if (cmd->buttons & UserCmd::IN_DUCK)
-							cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-						else
-							cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
-					}
-				}
+			else {
+				cmd->viewangles.y += 0.f;
 			}
-	CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
+		}
+	}
+			CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
 }
