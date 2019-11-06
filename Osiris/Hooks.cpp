@@ -108,6 +108,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
+    static bool switch_ = false;
 
     memory.globalVars->serverTime(cmd);
     Misc::nadePredict();
@@ -139,9 +140,28 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
+        Misc::chokePackets(sendPacket,cmd);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+		if (config.antiAim.enabled) {
+			if ((localPlayer->flags() & 1) && cmd->sidemove < 3 && cmd->sidemove > -3 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
+				if (switch_) {
+					cmd->sidemove = 2;
+				}
+				else {
+					cmd->sidemove = -2;
+				}
+			}
+			if (cmd->buttons & (UserCmd::IN_DUCK) && (localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4) {
+				if (switch_) {
+					cmd->sidemove = 3;
+				}
+				else {
+					cmd->sidemove = -3;
+				}
+			}
+			switch_ = !switch_;
+		}
     }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
