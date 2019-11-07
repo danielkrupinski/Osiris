@@ -108,6 +108,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
+	static bool switch_ = false;
 
     memory.globalVars->serverTime(cmd);
 	Visuals::viewModel();
@@ -140,27 +141,30 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
+	if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
+		Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+		if (config.antiAim.enabled) {
+			auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+			if ((localPlayer->flags() & 1) && cmd->sidemove < 3 && cmd->sidemove > -3 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
+				if (switch_) {
+					cmd->sidemove = 2;
+				}
+				else {
+					cmd->sidemove = -2;
+				}
+			}
+			if (cmd->buttons & (UserCmd::IN_DUCK) && (localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4) {
+				if (switch_) {
+					cmd->sidemove = 3;
+				}
+				else {
+					cmd->sidemove = -3;
+				}
+			}
+			switch_ = !switch_;
+		}
     }
-
-    auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
-    viewAnglesDelta.normalize();
-    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-
-    cmd->viewangles = previousViewAngles + viewAnglesDelta;
-
-    cmd->viewangles.normalize();
-
-    cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-    cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-    cmd->viewangles.z = 0.0f;
-
-    previousViewAngles = cmd->viewangles;
-
-    return false;
 }
 
 static int __stdcall doPostScreenEffects(int param) noexcept
@@ -449,7 +453,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 5 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 9 2019");
 }
 
 void Hooks::restore() noexcept
