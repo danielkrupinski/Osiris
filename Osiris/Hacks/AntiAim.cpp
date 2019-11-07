@@ -9,6 +9,7 @@
 #include "Misc.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
+#include "../SDK/Vector.h"
 void VectorAngles(const Vector& forward, QAngle& angles)
 {
 	float	tmp, yaw, pitch;
