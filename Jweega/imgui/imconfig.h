@@ -59,7 +59,7 @@
         ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
         operator MyVec2() const { return MyVec2(x,y); }
 */
-#define IM_VEC4_CLASS_EXTRA  explicit ImVec4(float f[3]) noexcept { x = f[0]; y = f[1]; z = f[2]; w = 0.0f; }
+#define IM_VEC4_CLASS_EXTRA ImVec4(float f[3]) noexcept { x = f[0]; y = f[1]; z = f[2]; w = 1.0f; }
 
 //---- Using 32-bits vertex indices (default is 16-bits) is one way to allow large meshes with more than 64K vertices. 
 // Your renderer back-end will need to support it (most example renderer back-ends support both 16/32-bits indices).

@@ -18,7 +18,6 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Config** - JSON-based configuration system
 
 <details>
-<summary>Features in depth</summary>
 
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
@@ -67,7 +66,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Chams** - color player models to improve visibility
 
-    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled)* **/** *All, Visible, Occluded*
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
     * **Rainbow** - change color frequently
@@ -76,10 +75,16 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Wireframe** - render triangle mesh instead of solid material
     * **Alpha** - maximum material transparency
 
-* **Esp** - show information about players
-
-    *Allies, Enemies* **/** *All, Visible, Occluded*
-
+* **Esp** - show additional information about players and game world
+    
+    1. *Allies, Enemies*
+        * *All, Visible, Occluded*
+    1. *Weapons*
+    1. *Projectiles*
+        * *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
+    1. *Danger Zone*
+        * *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
+    <br><br>
     * **Enabled** - on / off master switch
     * **Font** - esp text font number (from `vgui_spew_fonts` command)
     * **Snaplines** - draw snapline to player
@@ -133,7 +138,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Footstep volume** - volume of player footsteps
 
 * **Misc** - miscellaneous features
-    * **Menu key [ key ]** - 
+    * **Menu key [ key ]** - menu toggle key 
     * **Menu style** - menu style toggle (*Classic* **/** *One window*)
     * **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
     * **Anti AFK kick** - avoid auto-kick by server for inactivity
@@ -149,6 +154,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Auto accept** - automatically accept competitive match
     * **Radar hack** - show enemies positions on radar
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
+    * **Reveal money** - show enemies' money in scoreboard
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
     * **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
@@ -219,7 +225,7 @@ If your CPU supports AVX / AVX2 instruction set, you can enable it in project se
 Press `INSERT` key while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is binary serialized so it is not meant to be edited by humans. Sometimes after updates configuration file needs to be deleted and recreated.
+Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
 
 ### What is cheat execution entry point and where is it located?
 Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.

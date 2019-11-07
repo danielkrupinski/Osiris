@@ -165,27 +165,19 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
             break;
         case 2:
             for (int i = 0; i < 8; i++) {
-                if (!(i & 1))
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 1].x, bbox.vertices[i + 1].y);
-                if (!(i & 2))
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 2].x, bbox.vertices[i + 2].y);
-                if (!(i & 4))
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + 4].x, bbox.vertices[i + 4].y);
+                for (int j = 1; j <= 4; j <<= 1) {
+                    if (!(i & j))
+                        interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i + j].x, bbox.vertices[i + j].y);
+                }
             }
             break;
         case 3:
             for (int i = 0; i < 8; i++) {
-                if (!(i & 1)) {
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i].x + (bbox.vertices[i + 1].x - bbox.vertices[i].x) * 0.25f, bbox.vertices[i].y + (bbox.vertices[i + 1].y - bbox.vertices[i].y) * 0.25f);
-                    interfaces.surface->drawLine(bbox.vertices[i].x + (bbox.vertices[i + 1].x - bbox.vertices[i].x) * 0.75f, bbox.vertices[i].y + (bbox.vertices[i + 1].y - bbox.vertices[i].y) * 0.75f, bbox.vertices[i + 1].x, bbox.vertices[i + 1].y);
-                }
-                if (!(i & 2)) {
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i].x + (bbox.vertices[i + 2].x - bbox.vertices[i].x) * 0.25f, bbox.vertices[i].y + (bbox.vertices[i + 2].y - bbox.vertices[i].y) * 0.25f);
-                    interfaces.surface->drawLine(bbox.vertices[i].x + (bbox.vertices[i + 2].x - bbox.vertices[i].x) * 0.75f, bbox.vertices[i].y + (bbox.vertices[i + 2].y - bbox.vertices[i].y) * 0.75f, bbox.vertices[i + 2].x, bbox.vertices[i + 2].y);
-                }
-                if (!(i & 4)) {
-                    interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i].x + (bbox.vertices[i + 4].x - bbox.vertices[i].x) * 0.25f, bbox.vertices[i].y + (bbox.vertices[i + 4].y - bbox.vertices[i].y) * 0.25f);
-                    interfaces.surface->drawLine(bbox.vertices[i].x + (bbox.vertices[i + 4].x - bbox.vertices[i].x) * 0.75f, bbox.vertices[i].y + (bbox.vertices[i + 4].y - bbox.vertices[i].y) * 0.75f, bbox.vertices[i + 4].x, bbox.vertices[i + 4].y);
+                for (int j = 1; j <= 4; j <<= 1) {
+                    if (!(i & j)) {
+                        interfaces.surface->drawLine(bbox.vertices[i].x, bbox.vertices[i].y, bbox.vertices[i].x + (bbox.vertices[i + j].x - bbox.vertices[i].x) * 0.25f, bbox.vertices[i].y + (bbox.vertices[i + j].y - bbox.vertices[i].y) * 0.25f);
+                        interfaces.surface->drawLine(bbox.vertices[i].x + (bbox.vertices[i + j].x - bbox.vertices[i].x) * 0.75f, bbox.vertices[i].y + (bbox.vertices[i + j].y - bbox.vertices[i].y) * 0.75f, bbox.vertices[i + j].x, bbox.vertices[i + j].y);
+                    }
                 }
             }
             break;
