@@ -130,5 +130,8 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			}
 		}
 	}
+		cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+	cmd->viewangles.z = 0.0f;
 			CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
 }
