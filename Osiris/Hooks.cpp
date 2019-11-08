@@ -106,6 +106,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     if (!cmd->commandNumber)
         return result;
 
+	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 	static bool switch_ = false;
@@ -145,7 +146,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 		Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 		if (config.antiAim.enabled) {
-			auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 			if ((localPlayer->flags() & 1) && cmd->sidemove < 3 && cmd->sidemove > -3 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
 				if (switch_) {
 					cmd->sidemove = 2;
