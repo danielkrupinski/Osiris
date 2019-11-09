@@ -78,7 +78,7 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Enabled")) triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
         if (triggerbotJson.isMember("On key")) triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
         if (triggerbotJson.isMember("Key")) triggerbotConfig.key = triggerbotJson["Key"].asInt();
-        if (triggerbotJson.isMember("Magnet")) triggerbotConfig.triggerAim = triggerbotJson["Trigger Aim"].asBool();
+        if (triggerbotJson.isMember("Magnet")) triggerbotConfig.magnet = triggerbotJson["Magnet"].asBool();
         if (triggerbotJson.isMember("Friendly fire")) triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
         if (triggerbotJson.isMember("Scoped only")) triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
         if (triggerbotJson.isMember("Ignore flash")) triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
@@ -930,7 +930,7 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Enabled"] = triggerbotConfig.enabled;
         triggerbotJson["On key"] = triggerbotConfig.onKey;
         triggerbotJson["Key"] = triggerbotConfig.key;
-        triggerbotJson["Magnet"] = triggerbotConfig.triggerAim;
+        triggerbotJson["Magnet"] = triggerbotConfig.magnet;
         triggerbotJson["Friendly fire"] = triggerbotConfig.friendlyFire;
         triggerbotJson["Scoped only"] = triggerbotConfig.scopedOnly;
         triggerbotJson["Ignore flash"] = triggerbotConfig.ignoreFlash;
