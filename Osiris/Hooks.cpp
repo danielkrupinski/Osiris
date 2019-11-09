@@ -167,6 +167,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
+        Misc::disablePanoramablur();
         Visuals::disablePostProcessing();
         Visuals::colorWorld();
         Visuals::reduceFlashEffect();
