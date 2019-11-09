@@ -230,6 +230,7 @@ public:
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };
+        bool disablePanoramablur{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };
         char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
