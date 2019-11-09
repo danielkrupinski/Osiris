@@ -36,6 +36,7 @@ public:
         bool onKey{ false };
         int key{ 0 };
         int keyMode{ 0 };
+        int magnetkey{ 0 };
         bool aimlock{ false };
         bool silent{ false };
         bool friendlyFire{ false };
@@ -63,6 +64,7 @@ public:
         bool enabled{ false };
         bool onKey{ false };
         int key{ 0 };
+        bool magnet{ false };
         bool friendlyFire{ false };
         bool scopedOnly{ true };
         bool ignoreFlash{ false };
