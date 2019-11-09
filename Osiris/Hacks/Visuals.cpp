@@ -11,6 +11,12 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 
+void Visuals::disablePanoramablur() noexcept
+{
+	ConVar* blur = { interfaces.cvar->findVar("@panorama_disable_blur") };
+	blur->setValue(config.visuals.disablePanoramablur);
+}
+
 void Visuals::scheduleUpdate() noexcept
 {
 	update = true;

@@ -155,6 +155,7 @@ public:
 
     struct {
         bool disablePostProcessing{ false };
+		bool disablePanoramablur{ false };
         bool inverseRagdollGravity{ false };
 		bool forcefulRagdolls{ false };
         bool noFog{ false };

@@ -738,6 +738,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::SetColumnOffset(1, 210.0f);
         ImGui::Checkbox("Disable Post-Processing", &config.visuals.disablePostProcessing);
+		ImGui::Checkbox("Disable HUD Blur", &config.visuals.disablePanoramablur);
         ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No Fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);

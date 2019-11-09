@@ -658,6 +658,7 @@ void Config::load(size_t id) noexcept
     {
         const auto& visualsJson = json["visuals"];
         if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
+		if (visualsJson.isMember("Disable HUD blur"))  visuals.disablePanoramablur = visualsJson["Disable HUD blur"].asBool();
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
         if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
@@ -1407,6 +1408,7 @@ void Config::save(size_t id) const noexcept
     {
         auto& visualsJson = json["visuals"];
         visualsJson["disablePostProcessing"] = visuals.disablePostProcessing;
+		visualsJson["Disable HUD blur"] = visuals.disablePanoramablur;
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
