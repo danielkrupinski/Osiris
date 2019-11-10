@@ -96,6 +96,41 @@ void CorrectMovement(Vector vOldAngles, UserCmd* pCmd, float fOldForward, float 
 	pCmd->sidemove = sin(degreesToRadians(deltaView)) * fOldForward + sin(degreesToRadians(deltaView + 90.f)) * fOldSidemove;
 }
 
+Vector CalcAngle(Vector src, Vector dst)
+{
+	Vector angles;
+	Vector delta = src - dst;
+
+	if (delta[1] == 0.0f && delta[0] == 0.0f)
+	{
+		angles[0] = (delta[2] > 0.0f) ? 270.0f : 90.0f; // Pitch (up/down)
+		angles[1] = 0.0f;  //yaw left/right
+	}
+	else
+	{
+		angles[0] = atan2(-delta[2], delta.length()) * -180 / M_PI;
+		angles[1] = atan2(delta[1], delta[0]) * 180 / M_PI;
+
+		if (angles[1] > 90) angles[1] -= 180;
+		else if (angles[1] < 90) angles[1] += 180;
+		else if (angles[1] == 90) angles[1] = 0;
+	}
+
+	angles[2] = 0.0f;
+	angles.normalize();
+
+	return angles;
+}
+int distance(Vector a, Vector b) {
+	double distance;
+
+	distance = sqrt(((int)a.x - (int)b.x) * ((int)a.x - (int)b.x) +
+		((int)a.y - (int)b.y) * ((int)a.y - (int)b.y) +
+		((int)a.z - (int)b.z) * ((int)a.z - (int)b.z));
+
+	return (int)abs(round(distance));
+}
+
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());

@@ -786,6 +786,7 @@ void Config::load(size_t id) noexcept
 		if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
 		if (miscJson.isMember("Slowwalk key")) misc.slowwalkkey = miscJson["Slowwalk key"].asBool();
 		if (miscJson.isMember("Slowwalk ammount")) misc.slowwalkammount = miscJson["Slowwalk ammount"].asFloat();
+		if (miscJson.isMember("Block bot")) misc.blockbot = miscJson["Block bot"].asBool();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
@@ -1525,6 +1526,7 @@ void Config::save(size_t id) const noexcept
 		miscJson["Slowwalk"] = misc.slowwalk;
 		miscJson["Slowwalk key"] = misc.slowwalkkey;
 		miscJson["Slowwalk ammount"] = misc.slowwalkammount;
+		miscJson["Block bot"] = misc.blockbot;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;

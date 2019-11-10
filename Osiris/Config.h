@@ -225,6 +225,7 @@ public:
 		bool slowwalk{ false };
 		int slowwalkkey{ 0 };
 		float slowwalkammount{ 0.f };
+		bool blockbot{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };

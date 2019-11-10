@@ -12,6 +12,52 @@
 #include "../SDK/WeaponData.h"
 #include "AntiAim.h"
 
+void Misc::AutoBlocker(UserCmd* cmd) noexcept
+{
+	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	float bestdist = 250.f;
+	int index = -1;
+	if (config.misc.blockbot) {
+		for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+			auto entity = interfaces.entityList->getEntity(i);
+
+			if (!entity)
+				continue;
+
+			if (!entity->isAlive() || entity->isDormant() || entity == localPlayer)
+				continue;
+
+			float dist = distance(localPlayer->origin(), entity->origin());
+			if (dist < bestdist)
+			{
+				bestdist = dist;
+				index = i;
+			}
+		}
+
+		if (index == -1)
+			return;
+
+		auto target = interfaces.entityList->getEntity(index);
+
+
+		if (!target)
+			return;
+
+		Vector angles = CalcAngle(localPlayer->origin(), target->origin());
+
+		angles.y -= localPlayer->eyeAngles().y;
+		angles.normalize();
+		angles.y = std::clamp(angles.y, -180.f, 180.f);
+
+		if (angles.y < 0.0f)
+			cmd->sidemove = 450.f;
+		else if (angles.y > 0.0f)
+			cmd->sidemove = -450.f;
+
+	}
+}
+
 void Misc::slowwalk(UserCmd* cmd)noexcept
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
