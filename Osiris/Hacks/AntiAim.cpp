@@ -126,12 +126,11 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			}
 		}
 		if (config.antiAim.legit) {
-			if (!sendPacket) {
-
-				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
+			if (sendPacket) {
+				cmd->viewangles.y += 0.f;
 			}
 			else {
-				cmd->viewangles.y += 0.f;
+				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
 			}
 		}
 	}
