@@ -958,6 +958,7 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
 
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
+	ImGui::Checkbox("Block bot", &config.misc.blockbot);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
 	ImGui::Combo("Auto strafe style", &config.misc.autostrafestyle, "Legit\0Normal\0");
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
