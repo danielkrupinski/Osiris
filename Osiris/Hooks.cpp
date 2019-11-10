@@ -173,7 +173,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
-		Visuals::disablePanoramablur();
         Visuals::disablePostProcessing();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
@@ -226,6 +225,9 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 
     if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
+
+	if (stage == FrameStage::RENDER_START)
+		Visuals::disablePanoramablur();
 
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
@@ -454,7 +456,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 10 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 11 2019");
 }
 
 void Hooks::restore() noexcept
