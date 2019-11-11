@@ -995,6 +995,9 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::Checkbox("Slow Walk", &config.misc.slowwalk);
 		ImGui::SameLine();
 		hotkey(config.misc.slowwalkkey);
+		ImGui::PushID(0);
+		ImGui::SliderFloat("Slowwalk Amount: ", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
+		ImGui::PopID();
 		ImGui::Checkbox("Block Bot", &config.misc.blockbot);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
