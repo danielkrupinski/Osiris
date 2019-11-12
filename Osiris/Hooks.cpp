@@ -449,6 +449,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
     clientMode.hookAt(27, shouldDrawViewModel);
+	clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
 	engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
