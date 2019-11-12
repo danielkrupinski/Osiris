@@ -764,16 +764,19 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PushID(0);
         ImGui::SliderInt("", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson Distance: %d");
         ImGui::PopID();
-        ImGui::PushID(1);
+		ImGui::PushID(1);
+		ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FoV: %d");
+		ImGui::PopID();
+        ImGui::PushID(2);
         ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FoV: %d");
         ImGui::PopID();
-        ImGui::PushID(2);
+        ImGui::PushID(3);
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
-        ImGui::PushID(3);
+        ImGui::PushID(4);
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash Reduction: %d%%");
         ImGui::PopID();
-        ImGui::PushID(4);
+        ImGui::PushID(5);
         ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
         ImGui::PopID();
         ImGui::PopItemWidth();
@@ -788,13 +791,13 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderFloat("Hit Marker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
-			ImGui::PushID(5);
+			ImGui::PushID(6);
 			ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, ("X: %f"));
 			ImGui::PopID();
-			ImGui::PushID(6);
+			ImGui::PushID(7);
 			ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, ("Y: %f"));
 			ImGui::PopID();
-			ImGui::PushID(7);
+			ImGui::PushID(8);
 			ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, ("Z: %f"));
 			ImGui::PopID();
 		}

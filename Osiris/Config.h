@@ -46,6 +46,7 @@ public:
         bool autoShot{ false };
         bool autoScope{ false };
         bool recoilbasedFov{ false };
+		int viewmodelFov{ 0 };
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };

@@ -678,6 +678,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("thirdperson")) visuals.thirdperson = visualsJson["thirdperson"].asBool();
         if (visualsJson.isMember("thirdpersonKey")) visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
         if (visualsJson.isMember("thirdpersonDistance")) visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
+		if (visualsJson.isMember("viewmodelFov")) visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
         if (visualsJson.isMember("Fov")) visuals.fov = visualsJson["Fov"].asInt();
         if (visualsJson.isMember("farZ")) visuals.farZ = visualsJson["farZ"].asInt();
         if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
@@ -1429,6 +1430,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["thirdperson"] = visuals.thirdperson;
         visualsJson["thirdpersonKey"] = visuals.thirdpersonKey;
         visualsJson["thirdpersonDistance"] = visuals.thirdpersonDistance;
+		visualsJson["viewmodelFov"] = visuals.viewmodelFov;
         visualsJson["Fov"] = visuals.fov;
         visualsJson["farZ"] = visuals.farZ;
         visualsJson["flashReduction"] = visuals.flashReduction;
