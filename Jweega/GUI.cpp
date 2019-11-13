@@ -1023,6 +1023,8 @@ void GUI::renderMiscWindow() noexcept
             ImGui::PopItemFlag();
             ImGui::PopStyleVar();
         }
+        ImGui::Checkbox("Disable HUD blur", &config.misc.disablePanoramablur);
+        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
