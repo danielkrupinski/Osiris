@@ -87,6 +87,7 @@ public:
         float pitchAngle{ 0.0f };
         bool yaw{ false };
         bool legit{ false };
+	    		int type{ 0 };
 		int desyncright{ 0 };
 		int desyncleft{ 0 };
     } antiAim;
