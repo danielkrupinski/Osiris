@@ -213,7 +213,7 @@ public:
 	int autostrafestyle{ 0 };
         bool bunnyHop{ false };
 	bool usespam{ false };
-	bool blockbot{ false };
+	int blockbotkey{ 0 };
 	bool slowwalk{ false };
 	int slowwalkkey{ 0 };
 	float slowwalkammount{ 0.f };
