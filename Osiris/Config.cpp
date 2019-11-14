@@ -102,6 +102,7 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+	    if (antiAimJson.isMember("Desync style")) antiAim.type = antiAimJson["Desync style"].asInt();
         if (antiAimJson.isMember("Legit")) antiAim.legit = antiAimJson["Yaw"].asBool();
 		if (antiAimJson.isMember("Right")) antiAim.desyncright = antiAimJson["Right"].asInt();
 		if (antiAimJson.isMember("Left")) antiAim.desyncleft = antiAimJson["Left"].asInt();
