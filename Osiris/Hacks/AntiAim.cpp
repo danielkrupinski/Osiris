@@ -9,7 +9,17 @@
 #include "Misc.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Surface.h"
-#include "../SDK/Vector.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Entity.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/Input.h"
+#include "../SDK/Material.h"
+#include "../SDK/MaterialSystem.h"
+#include "../SDK/RenderContext.h"
+#include "../Interfaces.h"
+#include <memory.h>
 void VectorAngles(const Vector& forward, QAngle& angles)
 {
 	float	tmp, yaw, pitch;
@@ -127,10 +137,32 @@ int distance(Vector a, Vector b) {
 
 	return (int)abs(round(distance));
 }
+bool LbyBreaker()
+{
+	const auto local_player = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	static float NextUpdate = 0;
+	auto velocity = local_player->velocity().length();
+	auto currenttime = memory.globalVars->serverTime();
+	if (!(local_player->flags() & 1) || (!(local_player->isAlive()))) {
+		return false;
+	}
+	if (local_player->flags() & 1) {
+		if (velocity > 0.1f) {
+			NextUpdate = currenttime + 0.22f;
+		}
+
+		if (NextUpdate <= currenttime)
+		{
+			NextUpdate = currenttime + 1.1f;
+			return true;
+		}
+	}
+
+	return false;
+}
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	const auto activeWeapon = localPlayer->getActiveWeapon();
 	static bool leftdesync = true;
 	Vector vOldAngles = cmd->viewangles;
 	float fOldForward = cmd->forwardmove;
@@ -148,25 +180,67 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			leftdesync = true;
 		}
 		if (config.antiAim.yaw) {
-
-			if (!sendPacket) {
-				cmd->viewangles.y = 180.f;
-			}
-			else {
-				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
-			}
+				if (sendPacket) {
+					leftdesync ? cmd->viewangles.y += desync + 180.f : cmd->viewangles.y -= desync + 180.f;
+				}else{
+					cmd->viewangles.y += 180.f;
+				}
 		}
 		if (config.antiAim.legit) {
-			if (sendPacket) {
-				cmd->viewangles.y += 0.f;
-			}
-			else {
-				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
-			}
+				if (sendPacket) {
+					cmd->viewangles.y += 0.f;
+				}else{
+					leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync ;
+				}
 		}
 	}
-		cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
 	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
 	cmd->viewangles.z = 0.0f;
-			CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
+	CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
+}
+void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
+{
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	static bool switch_ = true;
+	static bool left = true;
+	bool breaklby = LbyBreaker();
+	if (config.antiAim.enabled) {
+		if (GetAsyncKeyState(config.antiAim.desyncleft) & 1)
+		{
+			left = false;
+		}
+		if (GetAsyncKeyState(config.antiAim.desyncright) & 1) {
+			left = true;
+		}
+		if (config.antiAim.type == 1) {
+
+			if ((localPlayer->flags() & 1) && cmd->sidemove < 2 && cmd->sidemove > -2 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
+				if (switch_) {
+					cmd->sidemove = 1.01;
+				}
+				else {
+					cmd->sidemove = -1.01;
+				}
+			}
+			if ((localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4 && (cmd->buttons & (UserCmd::IN_DUCK))) {
+				if (switch_) {
+					cmd->sidemove = 3;
+				}
+				else {
+					cmd->sidemove = -3;
+				}
+			}
+			switch_ = !switch_;
+		}
+		if (config.antiAim.type == 2) {
+			if (breaklby) {
+				sendPacket = false;
+				leftdesync ? cmd->viewangles.y += 120.f : cmd->viewangles.y -= 120.f;
+			}
+		}
+		cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+		cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+		cmd->viewangles.z = 0.0f;
+	}
 }
