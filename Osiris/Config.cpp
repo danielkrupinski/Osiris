@@ -964,6 +964,7 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
 	antiAimJson["Legit desync"] = antiAim.legit;
+	    antiAimJson["Desync style"] = antiAim.type;
 	antiAimJson["Right"] = antiAim.desyncright;
 	antiAimJson["Left"] = antiAim.desyncleft;
     }
