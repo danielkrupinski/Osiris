@@ -140,7 +140,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 Misc::AutoBlocker(cmd);
-	
+	AntiAim::type(cmd, sendPacket);
     if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
