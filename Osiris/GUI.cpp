@@ -270,6 +270,7 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
 		ImGui::Checkbox("Legit desync", &config.antiAim.legit);
+	    	ImGui::Combo("Desync style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
 		ImGui::Text("Right");
 		ImGui::SameLine();
 		hotkey(config.antiAim.desyncright);
