@@ -785,7 +785,7 @@ void Config::load(size_t id) noexcept
 	if (miscJson.isMember("Slowwalk key")) misc.slowwalkkey = miscJson["Slowwalk key"].asBool();
 	if (miscJson.isMember("Slowwalk ammount")) misc.slowwalkammount = miscJson["Slowwalk ammount"].asFloat();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
-	if (miscJson.isMember("Block bot")) misc.blockbot = miscJson["Block bot"].asBool();
+	 if (miscJson.isMember("Blockbot key")) misc.blockbotkey = miscJson["Blockbot key"].asInt();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
         if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
