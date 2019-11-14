@@ -128,6 +128,10 @@ Vector CalcAngle(Vector src, Vector dst)
 
 	return angles;
 }
+float VectorDistance(Vector v1, Vector v2) {
+	return sqrtf(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2) + pow(v1.z - v2.z, 2));
+}
+
 int distance(Vector a, Vector b) {
 	double distance;
 
