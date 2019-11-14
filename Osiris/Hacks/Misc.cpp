@@ -12,10 +12,10 @@
 #include "AntiAim.h"
 void Misc::AutoBlocker(UserCmd* cmd) noexcept
 {
+	if (GetAsyncKeyState(config.misc.blockbotkey)){
 	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 		float bestdist = 250.f;
 		int index = -1;
-		if (config.misc.blockbot) {
 			for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
 				auto entity = interfaces.entityList->getEntity(i);
 
