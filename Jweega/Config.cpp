@@ -64,6 +64,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
         if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
         if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
+        if (aimbotJson.isMember("Standalone recoil control")) aimbotConfig.standaloneRecoilControl = aimbotJson["Standalone recoil control"].asBool();
         if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
         if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asInt();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
@@ -918,6 +919,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
         aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
+        aimbotJson["Standalone recoil control"] = aimbotConfig.standaloneRecoilControl;
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
         aimbotJson["Hit chance"] = aimbotConfig.hitChance;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
