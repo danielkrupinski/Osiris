@@ -265,6 +265,12 @@ void Misc::stealNames() noexcept
     }
 }
 
+void Misc::disablePanoramablur() noexcept
+{
+    static auto blur = interfaces.cvar->findVar("@panorama_disable_blur");
+    blur->setValue(config.misc.disablePanoramablur);
+}
+
 void Misc::quickReload(UserCmd* cmd) noexcept
 {
     if (config.misc.quickReload) {
