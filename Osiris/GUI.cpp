@@ -270,6 +270,7 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
 		ImGui::Checkbox("Legit Desync", &config.antiAim.legit);
+		ImGui::Combo("Desync style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
 		if (config.antiAim.legit)
 		{
 			ImGui::Text("Left"), & config.antiAim.desyncleft;
@@ -1001,7 +1002,9 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::PushID(0);
 		ImGui::SliderFloat("Slowwalk Amount: ", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
 		ImGui::PopID();
-		ImGui::Checkbox("Block Bot", &config.misc.blockbot);
+		ImGui::Text("Block Bot");
+		ImGui::SameLine();
+		hotkey(config.misc.blockbotkey);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);

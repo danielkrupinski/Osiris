@@ -125,6 +125,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::bunnyHop(cmd);
 	Misc::autoStrafe(cmd);
 	Misc::slowwalk(cmd);
+	Misc::AutoBlocker(cmd);
 	Misc::usespam(cmd);
     Misc::removeCrouchCooldown(cmd);
     Aimbot::run(cmd);
@@ -141,30 +142,13 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
+	Misc::AutoBlocker(cmd);
+	AntiAim::type(cmd, sendPacket);
 
 	if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
 		Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-		if (config.antiAim.enabled) {
-			if ((localPlayer->flags() & 1) && cmd->sidemove < 3 && cmd->sidemove > -3 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
-				if (switch_) {
-					cmd->sidemove = 2;
-				}
-				else {
-					cmd->sidemove = -2;
-				}
-			}
-			if (cmd->buttons & (UserCmd::IN_DUCK) && (localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4) {
-				if (switch_) {
-					cmd->sidemove = 3;
-				}
-				else {
-					cmd->sidemove = -3;
-				}
-			}
-			switch_ = !switch_;
-		}
-    }
+	}
 }
 
 static int __stdcall doPostScreenEffects(int param) noexcept
@@ -187,7 +171,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 static float __stdcall getViewModelFov() noexcept
 {
 	float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
-	if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+	if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer && localPlayer->isScoped()) {
 		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
 			additionalFov = 0.0f;
 	}
@@ -468,7 +452,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 12 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 15 2019");
 }
 
 void Hooks::restore() noexcept

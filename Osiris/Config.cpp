@@ -104,6 +104,7 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+		if (antiAimJson.isMember("Desync style")) antiAim.type = antiAimJson["Desync style"].asInt();
 		if (antiAimJson.isMember("Legit")) antiAim.legit = antiAimJson["Yaw"].asBool();
 		if (antiAimJson.isMember("Right")) antiAim.desyncright = antiAimJson["Right"].asInt();
 		if (antiAimJson.isMember("Left")) antiAim.desyncleft = antiAimJson["Left"].asInt();
@@ -787,7 +788,7 @@ void Config::load(size_t id) noexcept
 		if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
 		if (miscJson.isMember("Slowwalk key")) misc.slowwalkkey = miscJson["Slowwalk key"].asBool();
 		if (miscJson.isMember("Slowwalk ammount")) misc.slowwalkammount = miscJson["Slowwalk ammount"].asFloat();
-		if (miscJson.isMember("Block bot")) misc.blockbot = miscJson["Block bot"].asBool();
+		if (miscJson.isMember("Block bot key")) misc.blockbotkey = miscJson["Block bot key"].asInt();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
@@ -968,6 +969,7 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+		antiAimJson["Desync style"] = antiAim.type;
 		antiAimJson["Legit desync"] = antiAim.legit;
 		antiAimJson["Right"] = antiAim.desyncright;
 		antiAimJson["Left"] = antiAim.desyncleft;
@@ -1528,7 +1530,7 @@ void Config::save(size_t id) const noexcept
 		miscJson["Slowwalk"] = misc.slowwalk;
 		miscJson["Slowwalk key"] = misc.slowwalkkey;
 		miscJson["Slowwalk ammount"] = misc.slowwalkammount;
-		miscJson["Block bot"] = misc.blockbot;
+		miscJson["Block bot"] = misc.blockbotkey;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;

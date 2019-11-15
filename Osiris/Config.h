@@ -90,6 +90,7 @@ public:
         float pitchAngle{ 0.0f };
         bool yaw{ false };
 		bool legit{ false };
+		int type{ 0 };
 		int desyncright{ 0 };
 		int desyncleft{ 0 };
     } antiAim;
@@ -226,7 +227,7 @@ public:
 		bool slowwalk{ false };
 		int slowwalkkey{ 0 };
 		float slowwalkammount{ 0.f };
-		bool blockbot{ false };
+		int blockbotkey{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
@@ -253,7 +254,7 @@ public:
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };
-        char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
+        char banText[150]{ "<user> has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
