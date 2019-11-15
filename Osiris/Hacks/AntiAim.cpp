@@ -240,7 +240,7 @@ void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 		if (config.antiAim.type == 2) {
 			if (breaklby) {
 				sendPacket = false;
-				leftdesync ? cmd->viewangles.y += 120.f : cmd->viewangles.y -= 120.f;
+				left ? cmd->viewangles.y += 120.f : cmd->viewangles.y -= 120.f;
 			}
 		}
 		cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
