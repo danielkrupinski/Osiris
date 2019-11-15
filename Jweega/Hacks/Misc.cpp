@@ -33,7 +33,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             if (static wchar_t currentTag[16]; MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, -1, currentTag, 16)) 
                 clanTag = currentTag;
 
-            if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
+            if (!isblank(clanTag.at(0)) && !isblank(clanTag.back()))
                 clanTag.push_back(' ');
         }
 
