@@ -144,10 +144,7 @@ Misc::AutoBlocker(cmd);
     if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-	    
-	}
     }
-
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
     viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
