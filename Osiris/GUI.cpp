@@ -970,6 +970,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
+        ImGui::Checkbox("Disable HUD blur", &config.misc.disablePanoramablur);
         ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Clock tag", &config.misc.clocktag);
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);

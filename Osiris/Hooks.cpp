@@ -166,7 +166,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
     if (interfaces.engine->isInGame()) {
         Visuals::modifySmoke();
         Visuals::thirdperson();
-        Misc::inverseRagdollGravity();
+        Misc::inverseRagdollGravity(); 
         Visuals::disablePostProcessing();
         Visuals::colorWorld();
         Visuals::reduceFlashEffect();
@@ -230,6 +230,9 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 
     if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
+
+    if (stage == FrameStage::RENDER_START)
+        Misc::disablePanoramablur();
 
     if (interfaces.engine->isInGame()) {
         Visuals::removeVisualRecoil(stage);
