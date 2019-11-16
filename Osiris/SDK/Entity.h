@@ -257,6 +257,7 @@ public:
     NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool);
     NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool);
+	NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int);
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);

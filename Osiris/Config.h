@@ -54,8 +54,10 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+		int shotsFired{ 0 };
         bool killshot{ false };
         bool betweenShots{ true };
+		bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 

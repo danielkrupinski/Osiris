@@ -113,6 +113,32 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
+	if (config.aimbot[weaponIndex].enabled && config.aimbot[weaponIndex].standaloneRCS) {
+
+		static Vector StaticAimPunchAngle;
+
+		if (cmd->buttons & UserCmd::IN_ATTACK && localPlayer->getShotsFired() > config.aimbot[weaponIndex].shotsFired)
+		{
+			static auto SRCSweaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+			auto CurrentAimPunchAngle = localPlayer->aimPunchAngle() * SRCSweaponRecoilScale->getFloat();
+			CurrentAimPunchAngle.x *= config.aimbot[weaponIndex].recoilControlY;
+			CurrentAimPunchAngle.y *= config.aimbot[weaponIndex].recoilControlX;
+			cmd->viewangles += (StaticAimPunchAngle - CurrentAimPunchAngle);
+			StaticAimPunchAngle = CurrentAimPunchAngle;
+		}
+		else
+		{
+			static auto SRCSweaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
+			auto AfterCurrentAimPunchAngle = localPlayer->aimPunchAngle() * SRCSweaponRecoilScale->getFloat();
+			AfterCurrentAimPunchAngle.x *= config.aimbot[weaponIndex].recoilControlY;
+			AfterCurrentAimPunchAngle.y *= config.aimbot[weaponIndex].recoilControlX;
+			StaticAimPunchAngle = AfterCurrentAimPunchAngle;
+		}
+
+		interfaces.engine->setViewAngles(cmd->viewangles);
+
+	}
+
     if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
         return;
 
