@@ -155,8 +155,7 @@ bool LbyBreaker()
 	if (!(local_player->flags() & 1) || (!(local_player->isAlive()))) {
 		return false;
 	}
-	if (local_player->flags() & 1) {
-		if (velocity > 0.1f) {
+	if ((local_player->flags() & 1) || (fabsf(local_player->getAnimstate()->flUpVelocity) > 99.9f)) {
 			NextUpdate = currenttime + 0.22f;
 		}
 
@@ -165,7 +164,6 @@ bool LbyBreaker()
 			NextUpdate = currenttime + 1.1f;
 			return true;
 		}
-	}
 
 	return false;
 }
@@ -173,40 +171,33 @@ bool LbyBreaker()
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	const auto activeWeapon = localPlayer->getActiveWeapon();
+	auto activeWeapon = localPlayer->getActiveWeapon();
 	static bool leftdesync = true;
+	static float lastTime{ 0.0f };
 	Vector vOldAngles = cmd->viewangles;
 	float fOldForward = cmd->forwardmove;
 	float fOldSidemove = cmd->sidemove;
 	auto desync = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+	int yaw = config.antiAim.yawAngle;
 	if (config.antiAim.enabled) {
 		if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x) {
 			cmd->viewangles.x = config.antiAim.pitchAngle;
 		}
-		if (GetAsyncKeyState(config.antiAim.desyncleft) & 1)
+		if (GetAsyncKeyState(config.antiAim.desyncinvert) && memory.globalVars->realtime - lastTime > 0.5f)
 		{
-			leftdesync = false;
-		}
-		if (GetAsyncKeyState(config.antiAim.desyncright) & 1) {
-			leftdesync = true;
+			leftdesync = !leftdesync;
+			lastTime = memory.globalVars->realtime;
 		}
 		if (config.antiAim.yaw) {
 			if (sendPacket) {
-				leftdesync ? cmd->viewangles.y += desync + 180.f : cmd->viewangles.y -= desync + 180.f;
+				cmd->viewangles.y += yaw;
 			}
 			else {
-				cmd->viewangles.y += 180.f;
-			}
-		}
-		if (config.antiAim.legit) {
-			if (sendPacket) {
-				cmd->viewangles.y += 0.f;
-			}
-			else {
-				leftdesync ? cmd->viewangles.y += desync : cmd->viewangles.y -= desync;
+				leftdesync ? cmd->viewangles.y += desync + yaw : cmd->viewangles.y -= desync + yaw;
 			}
 		}
 	}
+	cmd->viewangles.normalize();
 	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
 	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
 	cmd->viewangles.z = 0.0f;
@@ -217,14 +208,13 @@ void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static bool switch_ = true;
 	static bool left = true;
+	static float lastTime{ 0.0f };
 	bool breaklby = LbyBreaker();
 	if (config.antiAim.enabled) {
-		if (GetAsyncKeyState(config.antiAim.desyncleft) & 1)
+		if (GetAsyncKeyState(config.antiAim.desyncinvert) && memory.globalVars->realtime - lastTime > 0.5f)
 		{
-			left = false;
-		}
-		if (GetAsyncKeyState(config.antiAim.desyncright) & 1) {
-			left = true;
+			left = !left;
+			lastTime = memory.globalVars->realtime;
 		}
 		if (config.antiAim.type == 1) {
 
@@ -249,11 +239,12 @@ void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 		if (config.antiAim.type == 2) {
 			if (breaklby) {
 				sendPacket = false;
-				left ? cmd->viewangles.y += 120.f : cmd->viewangles.y -= 120.f;
+				cmd->viewangles.y -= 180.f;
 			}
 		}
-		cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-		cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-		cmd->viewangles.z = 0.0f;
 	}
+	cmd->viewangles.normalize();
+	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+	cmd->viewangles.z = 0.0f;
 }

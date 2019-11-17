@@ -55,9 +55,11 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+		int shotsFired{ 0 };
         bool killshot{ false };
         bool betweenShots{ false };
 		bool aimbotCircle{ false };
+		bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 
@@ -89,10 +91,9 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
-		bool legit{ false };
+		int yawAngle{ 0 };
 		int type{ 0 };
-		int desyncright{ 0 };
-		int desyncleft{ 0 };
+		int desyncinvert{ 0 };
     } antiAim;
 
     struct Glow {

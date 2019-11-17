@@ -70,6 +70,8 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
 		if (aimbotJson.isMember("Draw FOV")) aimbotConfig.aimbotCircle = aimbotJson["Draw FOV"].asBool();
+		if (aimbotJson.isMember("Standalone RCS")) aimbotConfig.standaloneRCS = aimbotJson["Standalone RCS"].asBool();
+		if (aimbotJson.isMember("Standalone RCS Igrnore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Igrnore Shots"].asInt();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -104,10 +106,9 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+		if (antiAimJson.isMember("Yaw angle")) antiAim.yawAngle = antiAimJson["Yaw angle"].asInt();
 		if (antiAimJson.isMember("Desync style")) antiAim.type = antiAimJson["Desync style"].asInt();
-		if (antiAimJson.isMember("Legit")) antiAim.legit = antiAimJson["Yaw"].asBool();
-		if (antiAimJson.isMember("Right")) antiAim.desyncright = antiAimJson["Right"].asInt();
-		if (antiAimJson.isMember("Left")) antiAim.desyncleft = antiAimJson["Left"].asInt();
+		if (antiAimJson.isMember("Invert")) antiAim.desyncinvert = antiAimJson["Invert"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -935,6 +936,8 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Killshot"] = aimbotConfig.killshot;
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
 		aimbotJson["Draw FOV"] = aimbotConfig.aimbotCircle;
+		aimbotJson["Standalone RCS"] = aimbotConfig.standaloneRCS;
+		aimbotJson["Standalone RCS Ignore Shots"] = aimbotConfig.shotsFired;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -970,9 +973,9 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
 		antiAimJson["Desync style"] = antiAim.type;
-		antiAimJson["Legit desync"] = antiAim.legit;
-		antiAimJson["Right"] = antiAim.desyncright;
-		antiAimJson["Left"] = antiAim.desyncleft;
+		antiAimJson["Yaw angle"] = antiAim.yawAngle;
+		antiAimJson["Desync style"] = antiAim.type;
+		antiAimJson["Invert"] = antiAim.desyncinvert;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {

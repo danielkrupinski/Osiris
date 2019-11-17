@@ -143,10 +143,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 	Misc::AutoBlocker(cmd);
-	AntiAim::type(cmd, sendPacket);
 
 	if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
 		Misc::chokePackets(sendPacket);
+		AntiAim::type(cmd, sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 	}
 }
@@ -452,7 +452,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 15 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 17 2019");
 }
 
 void Hooks::restore() noexcept

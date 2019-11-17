@@ -251,6 +251,9 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
         ImGui::Checkbox("Between Shots", &config.aimbot[currentWeapon].betweenShots);
 		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
+		ImGui::Checkbox("Standalone RCS", &config.aimbot[currentWeapon].standaloneRCS);
+		ImGui::InputInt("Ignore Shots", &config.aimbot[currentWeapon].shotsFired);
+		config.aimbot[currentWeapon].shotsFired = std::clamp(config.aimbot[currentWeapon].shotsFired, 0, 10);
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
@@ -269,20 +272,11 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::SameLine();
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
-		ImGui::Checkbox("Legit Desync", &config.antiAim.legit);
-		ImGui::Combo("Desync style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
-		if (config.antiAim.legit)
-		{
-			ImGui::Text("Left"), & config.antiAim.desyncleft;
-			ImGui::SameLine();
-			hotkey(config.antiAim.desyncleft);
-		}
-		if (config.antiAim.legit)
-		{
-			ImGui::Text("Right"), & config.antiAim.desyncright;
-			ImGui::SameLine();
-			hotkey(config.antiAim.desyncright);
-		}
+		ImGui::SliderInt("Yaw Angle", &config.antiAim.yawAngle, -180, 180, "%d");
+		ImGui::Combo("Desync Style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
+		ImGui::Text("Invert Key");
+		ImGui::SameLine();
+		hotkey(config.antiAim.desyncinvert);
         if (!config.style.menuStyle)
             ImGui::End();
     }
