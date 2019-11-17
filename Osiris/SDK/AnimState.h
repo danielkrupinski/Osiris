@@ -12,4 +12,5 @@ struct AnimState {
     float stopToFullRunningFraction;
     std::byte pad3[532];
     float velocitySubtractY;
+    float flUpVelocity;
 };
