@@ -86,10 +86,9 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
-        bool legit{ false };
-	    		int type{ 0 };
-		int desyncright{ 0 };
-		int desyncleft{ 0 };
+	int yawAngle{ 0 };
+	int type{ 0 };
+	int desyncinvert{ 0 };
     } antiAim;
 
     struct Glow {
