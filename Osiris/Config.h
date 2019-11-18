@@ -88,6 +88,7 @@ public:
         bool yaw{ false };
 	int yawAngle{ 0 };
 	int type{ 0 };
+	    int third{ 0 };
 	int desyncinvert{ 0 };
     } antiAim;
 
