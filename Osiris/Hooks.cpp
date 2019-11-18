@@ -94,7 +94,9 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     ImGui_ImplDX9_CreateDeviceObjects();
     return result;
 }
-
+static Vector angle;
+static Vector fake;
+static Vector real;
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     uintptr_t* framePointer;
@@ -159,7 +161,13 @@ Misc::AutoBlocker(cmd);
     cmd->viewangles.z = 0.0f;
 
     previousViewAngles = cmd->viewangles;
-
+	if (sendPacket) {
+		fake = cmd->viewangles;
+	}
+	if (!sendPacket) {
+		real = cmd->viewangles;
+	}
+	angle = cmd->viewangles;
     return false;
 }
 
@@ -167,7 +175,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 {
     if (interfaces.engine->isInGame()) {
         Visuals::modifySmoke();
-        Visuals::thirdperson();
         Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
         Visuals::colorWorld();
@@ -234,6 +241,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::changeName(true, nullptr, 0.0f);
 
     if (interfaces.engine->isInGame()) {
+	    Visuals::thirdperson(stage, angle, real,fake);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
