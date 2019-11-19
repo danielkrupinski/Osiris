@@ -101,7 +101,7 @@ public:
     constexpr Vector getEyePosition() noexcept
     {
         Vector vec{ };
-        callVirtualMethod<void, Vector&>(this, 283, vec);
+        callVirtualMethod<void, Vector&>(this, 284, vec);
         return vec;
     }
 
@@ -170,12 +170,12 @@ public:
 
     constexpr WeaponData* getWeaponData() noexcept
     {
-        return callVirtualMethod<WeaponData*>(this, 456);
+        return callVirtualMethod<WeaponData*>(this, 457);
     }
-
+	
     constexpr float getInaccuracy() noexcept
     {
-        return callVirtualMethod<float>(this, 478);
+        return callVirtualMethod<float>(this, 479);
     }
     
     VarMap* getVarMap() noexcept
