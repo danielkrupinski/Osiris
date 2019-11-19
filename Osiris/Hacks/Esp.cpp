@@ -376,7 +376,11 @@ static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& c
                 interfaces.surface->setDrawColor(config.headDot.color);
 
             if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
-                interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(75 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
+            {
+                for(int i = 1; i <= 3; i++)
+                    interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
+                //interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(75 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
+            }
         }
     }
 }
