@@ -108,6 +108,7 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
 		if (antiAimJson.isMember("Yaw angle")) antiAim.yawAngle = antiAimJson["Yaw angle"].asInt();
 		if (antiAimJson.isMember("Desync style")) antiAim.type = antiAimJson["Desync style"].asInt();
+		if (antiAimJson.isMember("Thirdperson")) antiAim.third = antiAimJson["Thirdperson"].asInt();
 		if (antiAimJson.isMember("Invert")) antiAim.desyncinvert = antiAimJson["Invert"].asInt();
     }
 
@@ -975,6 +976,7 @@ void Config::save(size_t id) const noexcept
 		antiAimJson["Desync style"] = antiAim.type;
 		antiAimJson["Yaw angle"] = antiAim.yawAngle;
 		antiAimJson["Desync style"] = antiAim.type;
+		antiAimJson["Thirdperson"] = antiAim.third;
 		antiAimJson["Invert"] = antiAim.desyncinvert;
     }
 

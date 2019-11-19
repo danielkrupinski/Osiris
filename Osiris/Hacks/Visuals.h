@@ -18,7 +18,7 @@ namespace Visuals {
 	void viewModel() noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
-    void thirdperson() noexcept;
+	void thirdperson(FrameStage stage, Vector& angle, Vector& real, Vector& fake) noexcept;
     void removeVisualRecoil(FrameStage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;

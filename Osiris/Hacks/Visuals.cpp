@@ -78,10 +78,11 @@ void Visuals::modifySmoke() noexcept
         *memory.smokeCount = 0;
 }
 
-void Visuals::thirdperson() noexcept
+void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& real, Vector& fake) noexcept
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
+	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
@@ -89,9 +90,22 @@ void Visuals::thirdperson() noexcept
     }
 
     if (config.visuals.thirdperson)
-        if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
-            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
-            memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+		if (stage == FrameStage::RENDER_START) {
+
+			if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+				&& interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()) {
+				if (config.antiAim.third == 0) {
+					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = real;
+				}
+				if (config.antiAim.third == 1) {
+					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = fake;
+				}
+				if (config.antiAim.third == 2) {
+					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = angle;
+				}
+			}
+			memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+		}
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept

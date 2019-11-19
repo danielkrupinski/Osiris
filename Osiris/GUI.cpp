@@ -274,6 +274,7 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
 		ImGui::SliderInt("Yaw Angle", &config.antiAim.yawAngle, -180, 180, "%d");
 		ImGui::Combo("Desync Style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
+		ImGui::Combo("Thirdperson", &config.antiAim.third, "Real\0Fake\0Normal\0");
 		ImGui::Text("Invert Key");
 		ImGui::SameLine();
 		hotkey(config.antiAim.desyncinvert);

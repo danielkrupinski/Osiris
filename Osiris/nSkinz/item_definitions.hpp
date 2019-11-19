@@ -83,10 +83,14 @@ enum ItemDefinitionIndex : int
 	WEAPON_KNIFE_SURVIVAL_BOWIE = 514,
 	WEAPON_KNIFE_BUTTERFLY = 515,
 	WEAPON_KNIFE_PUSH = 516,
+	WEAPON_KNIFE_CORD,
+	WEAPON_KNIFE_CANIS,
 	WEAPON_KNIFE_URSUS = 519,
 	WEAPON_KNIFE_GYPSY_JACKKNIFE = 520,
+	WEAPON_KNIFE_OUTDOOR,
 	WEAPON_KNIFE_STILETTO = 522,
 	WEAPON_KNIFE_WIDOWMAKER = 523,
+	WEAPON_KNIFE_SKELETON = 525,
 	GLOVE_STUDDED_BLOODHOUND = 5027,
 	GLOVE_T_SIDE = 5028,
 	GLOVE_CT_SIDE = 5029,
@@ -142,23 +146,27 @@ namespace game_data
 
 	const weapon_info* get_weapon_info(int defindex);
 
-    constexpr weapon_name knife_names[]{
-        {0, "Default"},
-        {WEAPON_KNIFE_BAYONET, "Bayonet"},
-	{WEAPON_KNIFE_CSS, "Classic Knife"},
-        {WEAPON_KNIFE_FLIP, "Flip Knife"},
-        {WEAPON_KNIFE_GUT, "Gut Knife"},
-        {WEAPON_KNIFE_KARAMBIT, "Karambit"},
-        {WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet"},
-        {WEAPON_KNIFE_TACTICAL, "Huntsman Knife"},
-        {WEAPON_KNIFE_FALCHION, "Falchion Knife"},
-        {WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife"},
-        {WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife"},
-        {WEAPON_KNIFE_PUSH, "Shadow Daggers"},
+	constexpr weapon_name knife_names[]{
+		{0, "Default"},
+		{WEAPON_KNIFE_BAYONET, "Bayonet"},
+	    {WEAPON_KNIFE_CSS, "Classic Knife"},
+		{WEAPON_KNIFE_FLIP, "Flip Knife"},
+		{WEAPON_KNIFE_GUT, "Gut Knife"},
+		{WEAPON_KNIFE_KARAMBIT, "Karambit"},
+		{WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet"},
+		{WEAPON_KNIFE_TACTICAL, "Huntsman Knife"},
+		{WEAPON_KNIFE_FALCHION, "Falchion Knife"},
+		{WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife"},
+		{WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife"},
+		{WEAPON_KNIFE_PUSH, "Shadow Daggers"},
+	    {WEAPON_KNIFE_CORD, "Paracord Knife"},
+		{WEAPON_KNIFE_CANIS, "Survival Knife"},
         {WEAPON_KNIFE_URSUS, "Ursus Knife"},
         {WEAPON_KNIFE_GYPSY_JACKKNIFE, "Navaja Knife"},
+	    {WEAPON_KNIFE_OUTDOOR, "Nomad Knife"},
         {WEAPON_KNIFE_STILETTO, "Stiletto Knife"},
-        {WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"}
+        {WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"},
+	    {WEAPON_KNIFE_SKELETON, "Skeleton Knife"}
     };
 
 
