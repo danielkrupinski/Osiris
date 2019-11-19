@@ -37,6 +37,7 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
         {WEAPON_KNIFE_SKELETON,{"models/weapons/v_knife_skeleton.mdl", "knife_skeleton"}},
         {WEAPON_KNIFE_OUTDOOR,{"models/weapons/v_knife_outdoor.mdl", "knife_outdoor"}},
         {WEAPON_KNIFE_CORD,{"models/weapons/v_knife_cord.mdl", "knife_cord"}},
+        {WEAPON_KNIFE_CANIS,{"models/weapons/v_knife_canis.mdl", "knife_canis"}},
 		{WEAPON_KNIFE_FLIP,{"models/weapons/v_knife_flip.mdl", "knife_flip"}},
 		{WEAPON_KNIFE_GUT,{"models/weapons/v_knife_gut.mdl", "knife_gut"}},
 		{WEAPON_KNIFE_KARAMBIT, {"models/weapons/v_knife_karam.mdl", "knife_karambit"}},

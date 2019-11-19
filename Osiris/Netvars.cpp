@@ -131,6 +131,7 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     case fnv::hash("models/weapons/v_knife_skeleton.mdl"):
     case fnv::hash("models/weapons/v_knife_outdoor.mdl"):
     case fnv::hash("models/weapons/v_knife_cord.mdl"):
+    case fnv::hash("models/weapons/v_knife_canis.mdl"):
     {
         switch (sequence)
         {
