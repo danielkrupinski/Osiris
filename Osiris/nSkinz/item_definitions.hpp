@@ -87,6 +87,7 @@ enum ItemDefinitionIndex : int
 	WEAPON_KNIFE_GYPSY_JACKKNIFE = 520,
 	WEAPON_KNIFE_STILETTO = 522,
 	WEAPON_KNIFE_WIDOWMAKER = 523,
+    WEAPON_KNIFE_SKELETON = 525,
 	GLOVE_STUDDED_BLOODHOUND = 5027,
 	GLOVE_T_SIDE = 5028,
 	GLOVE_CT_SIDE = 5029,
@@ -145,7 +146,8 @@ namespace game_data
     constexpr weapon_name knife_names[]{
         {0, "Default"},
         {WEAPON_KNIFE_BAYONET, "Bayonet"},
-	{WEAPON_KNIFE_CSS, "Classic Knife"},
+        {WEAPON_KNIFE_CSS, "Classic Knife"},
+        {WEAPON_KNIFE_SKELETON, "Skeleton Knife"},
         {WEAPON_KNIFE_FLIP, "Flip Knife"},
         {WEAPON_KNIFE_GUT, "Gut Knife"},
         {WEAPON_KNIFE_KARAMBIT, "Karambit"},
