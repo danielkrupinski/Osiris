@@ -995,7 +995,7 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::SameLine();
 		hotkey(config.misc.slowwalkkey);
 		ImGui::PushID(0);
-		ImGui::SliderFloat("Slowwalk Amount: ", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
+		ImGui::SliderFloat("Amount", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
 		ImGui::PopID();
 		ImGui::Text("Block Bot");
 		ImGui::SameLine();
@@ -1153,9 +1153,9 @@ void GUI::renderConfigWindow() noexcept
             config.add(buffer);
 
         if (ImGui::Button("Reset Config", { 100.0f, 25.0f }))
-            ImGui::OpenPopup("Config Part to Reset");
+            ImGui::OpenPopup("Part to Reset");
 
-        if (ImGui::BeginPopup("Config Part to Reset")) {
+        if (ImGui::BeginPopup("Part to Reset")) {
             static constexpr const char* names[]{ "Everything", "Aimbot", "Triggerbot", "Backtrack", "Anti Aim", "Glow", "Chams", "ESP", "Visuals", "Skinchanger", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
