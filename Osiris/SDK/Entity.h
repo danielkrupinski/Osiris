@@ -213,7 +213,7 @@ public:
 
     constexpr Entity* getObserverTarget() noexcept
     {
-        return callVirtualMethod<Entity*>(this, 293);
+        return callVirtualMethod<Entity*>(this, 294);
     }
 
     bool isInReload() noexcept
