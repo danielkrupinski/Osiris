@@ -100,17 +100,17 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
-    switch (fnv::hashRuntime(interfaces.engine->getLevelName())) {
-    case fnv::hash("dz_blacksite"):
-        interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
-        break;
-    case fnv::hash("dz_sirocco"):
-        interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
-        break;
-    case fnv::hash("dz_junglety"):
-        interfaces.materialSystem->findMaterial("detail/tropical_grass")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
-        break;
-    }
+    constexpr auto getGrassMaterialName = []() constexpr noexcept -> const char* {
+        switch (fnv::hashRuntime(interfaces.engine->getLevelName())) {
+        case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
+        case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
+        case fnv::hash("dz_junglety"): return "detail/tropical_grass";
+        default: return nullptr;
+        }
+    };
+
+    if (const auto grassMaterialName = getGrassMaterialName())
+        interfaces.materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
@@ -143,7 +143,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
-static  __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
+static __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
 {
     __asm {
         push ebp
