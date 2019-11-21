@@ -100,15 +100,17 @@ void Visuals::updateBrightness() noexcept
 
 void Visuals::removeGrass() noexcept
 {
-    constexpr auto blacksite{ fnv::hash("dz_blacksite") };
-    constexpr auto sirocco{ fnv::hash("dz_sirocco") };
-
-    auto mapName = fnv::hashRuntime(interfaces.engine->getLevelName());
-
-    if (mapName == blacksite)
+    switch (fnv::hashRuntime(interfaces.engine->getLevelName())) {
+    case fnv::hash("dz_blacksite"):
         interfaces.materialSystem->findMaterial("detail/detailsprites_survival")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
-    else if (mapName == sirocco)
+        break;
+    case fnv::hash("dz_sirocco"):
         interfaces.materialSystem->findMaterial("detail/dust_massive_detail_sprites")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
+        break;
+    case fnv::hash("dz_junglety"):
+        interfaces.materialSystem->findMaterial("detail/tropical_grass")->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
+        break;
+    }
 }
 
 void Visuals::remove3dSky() noexcept
