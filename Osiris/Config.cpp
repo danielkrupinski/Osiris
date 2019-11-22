@@ -70,7 +70,7 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
 		if (aimbotJson.isMember("Standalone RCS")) aimbotConfig.standaloneRCS = aimbotJson["Standalone RCS"].asBool();
-		if (aimbotJson.isMember("Standalone RCS Igrnore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Igrnore Shots"].asInt();
+		if (aimbotJson.isMember("Standalone RCS Ignore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Ignore Shots"].asInt();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
