@@ -17,7 +17,7 @@ struct UserCmd {
         IN_BULLRUSH = 1 << 22,
 	};
 	enum entity_flags {
-		FL_ONGROUND = 1 << 0,
+		FL_ONGROUND = (1 << 0),
 	};
     int pad;
     int commandNumber;
