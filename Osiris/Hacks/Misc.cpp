@@ -437,6 +437,37 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
 	wasLastTimeOnGround = localPlayer->flags() & 1;
 }
 
+void Misc::shitHop(UserCmd* cmd) noexcept
+{
+	auto bLastJumped = false;
+
+	auto bShouldFake = false;
+	if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		config.misc.bunnyHop
+		&& localPlayer->moveType() != MoveType::LADDER)
+		if (!bLastJumped && bShouldFake)
+		{
+			bShouldFake = false;
+			cmd->buttons |= UserCmd::IN_JUMP;
+		}
+		else if (cmd->buttons & UserCmd::IN_JUMP)
+		{
+			if (localPlayer->flags() & UserCmd::FL_ONGROUND)
+			{
+				bLastJumped = true;
+				bShouldFake = true;
+			}
+			else {
+				cmd->buttons &= ~UserCmd::IN_JUMP;
+				bLastJumped = false;
+			}
+		}
+		else {
+			bLastJumped = false;
+			bShouldFake = false;
+		}
+}
+
 void Misc::fakeBan(bool set) noexcept
 {
     static bool shouldSet = false;

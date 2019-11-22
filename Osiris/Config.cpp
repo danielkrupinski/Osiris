@@ -783,7 +783,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
 		if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
-		if (miscJson.isMember("Bunny hop hitchance")) misc.hopsHitchance = miscJson["Bunny hop hitchance"].asInt();
+		if (miscJson.isMember("Shit bunny hop")) misc.shitHop = miscJson["Shit bunny hop"].asBool();
 		if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
 		if (miscJson.isMember("Auto strafe style")) misc.autostrafestyle = miscJson["Auto strafe style"].asInt();
 		if (miscJson.isMember("Use spam")) misc.usespam = miscJson["Use spam"].asBool();
@@ -1528,7 +1528,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
 		miscJson["Bunny hop"] = misc.bunnyHop;
-		miscJson["Bunny hop hitchance"] = misc.hopsHitchance;
+		miscJson["Shit bunny hop"] = misc.shitHop;
 		miscJson["Auto strafe"] = misc.autoStrafe;
 		miscJson["Auto strafe style"] = misc.autostrafestyle;
 		miscJson["Use spam"] = misc.usespam;

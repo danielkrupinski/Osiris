@@ -979,12 +979,7 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::Checkbox("Show Round People (?)", &config.misc.showRoundPeople);
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
 		ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
-		if (config.misc.bunnyHop)
-		{
-			ImGui::PushID(0);
-			ImGui::SliderInt("", &config.misc.hopsHitchance, 0, 100, "Hitchance: %d%%");
-			ImGui::PopID();
-		}
+		ImGui::Checkbox("Test Bunnyhop", &config.misc.shitHop);
 		ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
 		if (config.misc.autoStrafe)
 		{
