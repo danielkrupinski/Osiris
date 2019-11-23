@@ -207,7 +207,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __stdcall svCheatsGetBool() noexcept
 {
-    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
+	if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
         return hooks.svCheats.callOriginal<bool>(13);
@@ -216,10 +216,10 @@ static bool __stdcall svCheatsGetBool() noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
+		Esp::render();
         Misc::drawBombTimer();
-        Misc::watermark();
         Misc::spectatorList();
-        Esp::render();
+		Misc::watermark();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -463,7 +463,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 22 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 23 2019");
 }
 
 void Hooks::restore() noexcept
