@@ -199,8 +199,8 @@ public:
     } sound;
 
     struct {
-        int menuStyle{ 0 };
-        int menuColors{ 0 };
+        int menuStyle{ 1 };
+        int menuColors{ 2 };
     } style;
 
     struct {
