@@ -95,8 +95,8 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return result;
 }
 static Vector angle;
-static Vector fake;
-static Vector real;
+static Vector unchocked;
+static Vector chocked;
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     uintptr_t* framePointer;
@@ -142,7 +142,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 Misc::AutoBlocker(cmd);
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
+   if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE) || localPlayer->moveType() == MoveType::LADDER)) {
         Misc::chokePackets(sendPacket);
 	    AntiAim::type(cmd, sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
@@ -162,10 +162,10 @@ Misc::AutoBlocker(cmd);
 
     previousViewAngles = cmd->viewangles;
 	if (sendPacket) {
-		fake = cmd->viewangles;
+		unchocked = cmd->viewangles;
 	}
 	if (!sendPacket) {
-		real = cmd->viewangles;
+		chocked = cmd->viewangles;
 	}
 	angle = cmd->viewangles;
     return false;
@@ -244,7 +244,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
 
     if (interfaces.engine->isInGame()) {
-	    Visuals::thirdperson(stage, angle, real,fake);
+	    Visuals::thirdperson(stage, angle, chocked,unchocked);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
