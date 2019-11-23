@@ -110,8 +110,7 @@ public:
 
     Vector getBonePosition(int bone) noexcept
     {
-        static matrix3x4 boneMatrices[128];
-        if (setupBones(boneMatrices, 128, 256, 0.0f))
+        if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
             return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
@@ -120,7 +119,7 @@ public:
     constexpr Vector getEyePosition() noexcept
     {
         Vector vec{ };
-        callVirtualMethod<void, Vector&>(this, 283, vec);
+        callVirtualMethod<void, Vector&>(this, 284, vec);
         return vec;
     }
 
@@ -189,12 +188,12 @@ public:
 
     constexpr WeaponData* getWeaponData() noexcept
     {
-        return callVirtualMethod<WeaponData*>(this, 456);
+        return callVirtualMethod<WeaponData*>(this, 457);
     }
 
     constexpr float getInaccuracy() noexcept
     {
-        return callVirtualMethod<float>(this, 478);
+        return callVirtualMethod<float>(this, 479);
     }
 
     constexpr void updateAccuracyPenalty() noexcept
@@ -242,7 +241,7 @@ public:
 
     constexpr Entity* getObserverTarget() noexcept
     {
-        return callVirtualMethod<Entity*>(this, 293);
+        return callVirtualMethod<Entity*>(this, 294);
     }
 
     bool isInReload() noexcept
