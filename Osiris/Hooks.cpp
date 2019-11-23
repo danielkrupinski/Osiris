@@ -96,8 +96,8 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 }
 
 static Vector angle;
-static Vector fake;
-static Vector real;
+static Vector unchoked;
+static Vector choked;
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
@@ -148,15 +148,15 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
-	if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
+	if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE) || localPlayer->moveType() == MoveType::LADDER)) {
 		Misc::chokePackets(sendPacket);
 		AntiAim::type(cmd, sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 		if (sendPacket) {
-			fake = cmd->viewangles;
+			unchoked = cmd->viewangles;
 		}
 		if (!sendPacket) {
-			real = cmd->viewangles;
+			choked = cmd->viewangles;
 		}
 		angle = cmd->viewangles;
 	}
@@ -235,7 +235,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 		Visuals::disablePanoramablur();
 
     if (interfaces.engine->isInGame()) {
-		Visuals::thirdperson(stage, angle, real, fake);
+		Visuals::thirdperson(stage, angle, choked, unchoked);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
@@ -463,7 +463,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 23 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 24 2019");
 }
 
 void Hooks::restore() noexcept

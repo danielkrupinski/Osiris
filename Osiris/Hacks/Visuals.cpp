@@ -78,7 +78,7 @@ void Visuals::modifySmoke() noexcept
         *memory.smokeCount = 0;
 }
 
-void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& real, Vector& fake) noexcept
+void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vector& unchoked) noexcept
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
@@ -95,10 +95,10 @@ void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& real, Vector&
 			if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
 				&& interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()) {
 				if (config.antiAim.third == 0) {
-					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = real;
+					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = choked;
 				}
 				if (config.antiAim.third == 1) {
-					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = fake;
+					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = unchoked;
 				}
 				if (config.antiAim.third == 2) {
 					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = angle;
