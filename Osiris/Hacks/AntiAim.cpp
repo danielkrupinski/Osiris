@@ -211,24 +211,12 @@ void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 			lastTime = memory.globalVars->realtime;
 		}
 		if (config.antiAim.type == 1) {
-
-			if ((localPlayer->flags() & 1) && cmd->sidemove < 2 && cmd->sidemove > -2 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
-				if (switch_) {
-					cmd->sidemove = 1.01;
-				}
-				else {
-					cmd->sidemove = -1.01;
-				}
+			if (fabsf(cmd->sidemove) < 5.0f) {
+				if (cmd->buttons & UserCmd::IN_DUCK)
+					cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+				else
+					cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
 			}
-			if ((localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4 && (cmd->buttons & (UserCmd::IN_DUCK))) {
-				if (switch_) {
-					cmd->sidemove = 3;
-				}
-				else {
-					cmd->sidemove = -3;
-				}
-			}
-			switch_ = !switch_;
 		}
 		if (config.antiAim.type == 2) {
 			if (breaklby) {
