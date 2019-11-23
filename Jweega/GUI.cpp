@@ -994,6 +994,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix bone matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Fix movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable model occlusion", &config.misc.disableModelOcclusion);
+        ImGui::TextUnformatted("Fake Duck Key");
+        ImGui::SameLine();
+        hotkey(config.misc.fakeDuckKey);
         ImGui::NextColumn();
         if (config.misc.customClanTag) {
             ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -1023,7 +1026,6 @@ void GUI::renderMiscWindow() noexcept
             ImGui::PopStyleVar();
         }
         ImGui::Checkbox("Disable HUD blur", &config.misc.disablePanoramablur);
-        ImGui::Checkbox("Animated clan tag", &config.misc.animatedClanTag);
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
@@ -1062,9 +1064,6 @@ void GUI::renderMiscWindow() noexcept
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
         ImGui::SameLine();
         hotkey(config.misc.chokedPacketsKey);
-        ImGui::TextUnformatted("Fake Duck Key");
-        ImGui::SameLine();
-        hotkey(config.misc.fakeDuckKey);
         ImGui::Text("Quick healthshot");
         ImGui::SameLine();
         hotkey(config.misc.quickHealthshotKey);
