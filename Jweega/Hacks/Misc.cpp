@@ -30,14 +30,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         static std::wstring clanTag{ L"" };
 
         if (tagChanged) {
-            if (static wchar_t currentTag[18]; MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, -1, currentTag, 18)) 
-                clanTag = currentTag;
+            const auto clanTagLength{ MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), nullptr, 0) };
+            if (clanTag.resize(clanTagLength); MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), clanTag.data(), clanTagLength)) {
+                if (clanTag.empty())
+                    return;
 
-            if (clanTag.empty())
-                return;
-
-            if (!isblank(clanTag.at(0)) && !isblank(clanTag.back()))
-                clanTag.push_back(' ');
+                if (!iswblank(clanTag.at(0)) && !iswblank(clanTag.back()))
+                    clanTag.push_back(L' ');
+            }
         }
 
         static auto lastTime{ 0.0f };
@@ -47,8 +47,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (config.misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
-        if (static char cvtClanTag[18]; WideCharToMultiByte(CP_UTF8, 0, clanTag.c_str(), -1, cvtClanTag, 18, nullptr, nullptr))
-            memory.setClanTag(cvtClanTag, cvtClanTag);
+        const auto cvtClanTagLength{ WideCharToMultiByte(CP_UTF8, 0, clanTag.data(), clanTag.length(), nullptr, 0, nullptr, nullptr) };
+        if (std::string cvtClanTag(cvtClanTagLength, 0); WideCharToMultiByte(CP_UTF8, 0, clanTag.data(), clanTag.length(), cvtClanTag.data(), cvtClanTagLength, nullptr, nullptr))
+            memory.setClanTag(cvtClanTag.c_str(), cvtClanTag.c_str());
     }
 }
 
