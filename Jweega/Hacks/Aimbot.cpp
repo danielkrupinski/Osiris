@@ -225,15 +225,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         auto bestFov{ config.aimbot[weaponIndex].fov };
-        Vector bestTarget{ };
-        Vector bestAngle{ };
-        const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
-        const auto localPlayerOrigin{ localPlayer->getAbsOrigin() };
-
-        const static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
-        auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
-        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
         std::vector<Enemies> enemies;
         for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
@@ -243,16 +234,37 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 continue;
 
             const auto origin{ entity->getAbsOrigin() };
+            const auto localPlayerOrigin{ localPlayer->getAbsOrigin() };
             const auto health{ entity->health() };
-            const auto angle{ calculateRelativeAngle(localPlayerOrigin, origin, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ })) };
             const auto distance{ localPlayerOrigin.distance(origin) };
             enemies.emplace_back(i, health, distance);
         }
 
         std::sort(enemies.begin(), enemies.end());
 
+        const auto localPlayerEyePosition{ localPlayer->getEyePosition() };
+
+        constexpr auto velocityExtrapolate {
+            [](Entity* entity, const Vector& destination) constexpr noexcept {
+                return destination + (entity->velocity() * memory.globalVars->intervalPerTick);
+            }
+        };
+
+        const static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
+        auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
+        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
+        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
+
+        if (config.aimbot[weaponIndex].standaloneRecoilControl) {
+            static Vector lastAimPunch{ };
+            if (localPlayer->shotsFired() > 1) cmd->viewangles += (lastAimPunch - aimPunch);
+            if (!config.aimbot[weaponIndex].silent) interfaces.engine->setViewAngles(cmd->viewangles);
+            lastAimPunch = aimPunch;
+        }
+
+        Vector bestTarget{ };
+        Vector bestAngle{ };
         const auto boneList{ config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 } };
-        constexpr auto velocityExtrapolate{ [](Entity* entity, const Vector& destination) noexcept { return destination + (entity->velocity() * memory.globalVars->intervalPerTick); } };
         for (const auto& target : enemies) {
             const auto entity{ interfaces.entityList->getEntity(target.id) };
             for (auto bone : boneList) {
@@ -265,7 +277,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = config.aimbot[weaponIndex].velocityExtrapolation ? velocityExtrapolate(entity, bonePosition) : bonePosition;
-                    bestAngle = cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }) + angle;
+                    bestAngle = cmd->viewangles + angle;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
