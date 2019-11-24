@@ -26,11 +26,6 @@ Config::Config(const char* name) noexcept
 
 void Config::load(size_t id) noexcept
 {
-    if (!std::filesystem::is_directory(path)) {
-        std::filesystem::remove(path);
-        std::filesystem::create_directory(path);
-    }
-
     Json::Value json;
 
     if (std::ifstream in{ path / configs[id] }; in.good())
