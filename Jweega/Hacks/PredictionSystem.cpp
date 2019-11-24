@@ -22,7 +22,7 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
     previousCurrenttime = memory.globalVars->currenttime;
     previousFrametime = memory.globalVars->frametime;
 
-    memory.globalVars->currenttime = memory.globalVars->serverTime(cmd);
+    memory.globalVars->currenttime = memory.globalVars->serverTime();
     memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
     static MoveData moveData;
