@@ -52,6 +52,7 @@ public:
         float recoilControlX{ 0.0f };
         float recoilControlY{ 0.0f };
         bool standaloneRecoilControl{ false };
+        bool randomizeRecoilControl{ false };
         int minDamage{ 1 };
         int hitChance{ 0 };
         bool killshot{ false };
