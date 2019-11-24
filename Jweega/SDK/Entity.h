@@ -198,12 +198,12 @@ public:
 
     constexpr void updateAccuracyPenalty() noexcept
     {
-        return callVirtualMethod<void>(this, 479);
+        return callVirtualMethod<void>(this, 480);
     }
 
     constexpr float getSpread() noexcept
     {
-        return callVirtualMethod<float>(this, 448);
+        return callVirtualMethod<float>(this, 449);
     }
     
     VarMap* getVarMap() noexcept
