@@ -91,8 +91,7 @@ public:
 
     Vector getBonePosition(int bone) noexcept
     {
-        static matrix3x4 boneMatrices[128];
-        if (setupBones(boneMatrices, 128, 256, 0.0f))
+		if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
             return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
