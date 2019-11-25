@@ -26,20 +26,12 @@ Config::Config(const char* name) noexcept
 
 void Config::load(size_t id) noexcept
 {
-    if (!std::filesystem::is_directory(path)) {
-        std::filesystem::remove(path);
-        std::filesystem::create_directory(path);
-    }
-
-    std::ifstream in{ path / configs[id] };
-
-    if (!in.good())
-        return;
-
     Json::Value json;
 
-    in >> json;
-    in.close();
+    if (std::ifstream in{ path / configs[id] }; in.good())
+        in >> json;
+    else
+        return;
 
     for (size_t i = 0; i < aimbot.size(); i++) {
         const auto& aimbotJson = json["Aimbot"][i];

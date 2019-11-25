@@ -42,8 +42,6 @@
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
@@ -57,8 +55,11 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
             interfaces.inputSystem->resetInputState();
         }
     }
+
+    LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
+
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
@@ -207,7 +208,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __stdcall svCheatsGetBool() noexcept
 {
-    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
+    if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
         return hooks.svCheats.callOriginal<bool>(13);
@@ -216,10 +217,10 @@ static bool __stdcall svCheatsGetBool() noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
-        Misc::drawBombTimer();
-        Misc::watermark();
-        Misc::spectatorList();
         Esp::render();
+        Misc::drawBombTimer();
+        Misc::spectatorList();
+        Misc::watermark();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
