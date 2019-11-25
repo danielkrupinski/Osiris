@@ -269,8 +269,6 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
         ImGui::Checkbox("Standalone recoil control", &config.aimbot[currentWeapon].standaloneRecoilControl);
-        ImGui::SameLine();
-        ImGui::Checkbox("Randomize recoil control", &config.aimbot[currentWeapon].randomizeRecoilControl);
         ImGui::InputInt("Min damage", &config.aimbot[currentWeapon].minDamage);
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
         ImGui::InputInt("Hit chance", &config.aimbot[currentWeapon].hitChance);

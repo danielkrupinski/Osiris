@@ -252,23 +252,12 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         const static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
         auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
-
-        if (!config.aimbot[weaponIndex].randomizeRecoilControl) {
-            aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
-            aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
-        }
+        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
+        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
         if (config.aimbot[weaponIndex].standaloneRecoilControl) {
             static Vector lastAimPunch{ };
-            if (localPlayer->shotsFired() > 1) {
-                Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
-                if (config.aimbot[weaponIndex].randomizeRecoilControl) {
-                    setRandomSeed(memory.md5PseudoRandom(cmd->commandNumber) & 0x7FFFFFFF);
-                    currentPunch.x *= getRandom(config.aimbot[weaponIndex].recoilControlY, 1.f);
-                    currentPunch.y *= getRandom(config.aimbot[weaponIndex].recoilControlX, 1.f);
-                }
-                cmd->viewangles += currentPunch;
-            }
+            if (localPlayer->shotsFired() > 1) cmd->viewangles += (lastAimPunch - aimPunch);
             if (!config.aimbot[weaponIndex].silent) interfaces.engine->setViewAngles(cmd->viewangles);
             lastAimPunch = aimPunch;
         }
