@@ -42,8 +42,6 @@
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
@@ -57,8 +55,12 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
             interfaces.inputSystem->resetInputState();
         }
     }
+
+
+	LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
+
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
@@ -463,7 +465,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 24 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: November 25 2019");
 }
 
 void Hooks::restore() noexcept

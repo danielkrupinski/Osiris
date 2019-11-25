@@ -13,11 +13,6 @@ Config::Config(const char* name) noexcept
         CoTaskMemFree(pathToDocuments);
     }
 
-    if (!std::filesystem::is_directory(path)) {
-        std::filesystem::remove(path);
-        std::filesystem::create_directory(path);
-    }
-
     std::transform(std::filesystem::directory_iterator{ path },
                    std::filesystem::directory_iterator{ },
                    std::back_inserter(configs),
