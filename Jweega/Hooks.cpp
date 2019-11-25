@@ -44,8 +44,6 @@
 #include "SDK/UserCmd.h"
 #include "SDK/ViewSetup.h"
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
@@ -59,8 +57,11 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
             interfaces.inputSystem->resetInputState();
         }
     }
+
+    LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
+
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 

@@ -59,9 +59,9 @@ GUI::GUI() noexcept
         0
     };
 
-	fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, &fontConfig, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, &fontConfig, ranges);
-        fonts.kaigengothic = io.Fonts->AddFontFromFileTTF((path / "KaiGenGothicCN-Regular.ttf").string().c_str(), 16.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
+	fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &fontConfig, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &fontConfig, ranges);
+        fonts.kaigengothic = io.Fonts->AddFontFromFileTTF((path / "KaiGenGothicCN-Regular.ttf").string().c_str(), 15.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
         fontConfig.MergeMode = true;
         io.Fonts->Build();
     }
