@@ -119,7 +119,7 @@ public:
     }
     void drawFilledCircle(int x, int y, float radius, int r, int g, int b, int a)
     {
-        for(int i=0;i<radius;i++)
+        for(int i=1;i<=radius;i++)
         {
             drawColoredCircle(x,y,i,r,g,b,a);
         }
