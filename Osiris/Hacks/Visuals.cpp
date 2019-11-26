@@ -90,6 +90,9 @@ void Visuals::removeBlur() noexcept
 {
     static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
     blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
+    
+    //static auto blurdot = interfaces.materialSystem->findMaterial("dev/clearalpha");
+    //blurdot->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
