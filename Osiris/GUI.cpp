@@ -1024,6 +1024,10 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
         ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+		 ImGui::Checkbox("Spam message", &config.misc.spamMessage);
+		 ImGui::SameLine();
+		 ImGui::InputText("", config.misc.spamMessageString, IM_ARRAYSIZE(config.misc.spamMessageString));
+
 
         if (ImGui::Button("Unhook"))
             hooks.restore();

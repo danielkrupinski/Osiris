@@ -229,6 +229,8 @@ public:
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
+		 bool spamMessage{ false };
+		 char spamMessageString[230]{ "EZPZ" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
         char voteText[50]{ "" };

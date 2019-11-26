@@ -147,4 +147,12 @@ namespace Misc {
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
             interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(config.misc.killMessageString).c_str());
     }
+
+	constexpr void spamMessage(GameEvent* event) noexcept
+	{
+		auto localPlayer = interfaces.engine->getLocalPlayer();
+		if (config.misc.spamMessage
+			&& interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
+			interfaces.engine->clientCmdUnrestricted(std::string { "say " }.append(config.misc.spamMessageString).c_str());
+	}
 }
