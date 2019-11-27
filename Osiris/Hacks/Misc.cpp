@@ -67,7 +67,7 @@ void Misc::slowwalk(UserCmd* cmd)noexcept
 	float speed = localPlayer->velocity().length();
 	Vector velocity = localPlayer->velocity();
 	if (config.misc.slowwalk && (localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && GetAsyncKeyState(config.misc.slowwalkkey)) {
-		if (speed > config.misc.slowwalkammount && (cmd->buttons && (UserCmd::IN_MOVELEFT || UserCmd::IN_MOVERIGHT || UserCmd::IN_FORWARD || UserCmd::IN_BACK))) {
+		if (speed > config.misc.slowwalkamount && (cmd->buttons && (UserCmd::IN_MOVELEFT || UserCmd::IN_MOVERIGHT || UserCmd::IN_FORWARD || UserCmd::IN_BACK))) {
 			velocity.z = 0;
 			QAngle direction;
 			VectorAngles(velocity, direction);

@@ -990,7 +990,7 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::SameLine();
 		hotkey(config.misc.slowwalkkey);
 		ImGui::PushID(0);
-		ImGui::SliderFloat("Amount", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
+		ImGui::SliderFloat("Amount: ", &config.misc.slowwalkamount, 0, 100, "%d");
 		ImGui::PopID();
 		ImGui::Text("Block Bot");
 		ImGui::SameLine();

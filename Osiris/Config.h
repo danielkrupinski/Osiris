@@ -228,7 +228,7 @@ public:
 		bool usespam{ false };
 		bool slowwalk{ false };
 		int slowwalkkey{ 0 };
-		float slowwalkammount{ 0.f };
+		float slowwalkamount{ 0.f };
 		int blockbotkey{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
