@@ -253,6 +253,8 @@ public:
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "sample text" };
+		bool spamMessage{ false };
+		char spamMessageString[230]{ "YOUR TEXT HERE" };
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };

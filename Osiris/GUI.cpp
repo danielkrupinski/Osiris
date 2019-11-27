@@ -1035,6 +1035,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::PushID(2);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
+		ImGui::Checkbox("On-Hit Spam", &config.misc.spamMessage);
+		ImGui::SameLine();
+		ImGui::InputText("", config.misc.spamMessageString, IM_ARRAYSIZE(config.misc.spamMessageString));
         ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
         ImGui::PushID(3);
         ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
