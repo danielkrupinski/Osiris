@@ -113,19 +113,6 @@ public:
     }
     
     template <typename T>
-    constexpr auto drawColoredCircle(int centerx, int centery, float radiud, int r, int g, int b, int a)
-    {
-        callVirtualMethod<int, int, float, int, int, int, int>(this, 162, centerx, centery, radius, r, g, b, a);
-    }
-    void drawFilledCircle(int x, int y, float radius, int r, int g, int b, int a)
-    {
-        for(int i=1;i<=radius;i++)
-        {
-            drawColoredCircle(x,y,i,r,g,b,a);
-        }
-    }
-
-    template <typename T>
     void drawCircle(T x, T y, int startRadius, int radius) noexcept
     {
         int xs[360];
@@ -139,12 +126,6 @@ public:
             interfaces.surface->drawPolyLine(xs, ys, 360);
         }
     }
-    
-    template <typename T>
-    constexpr void drawOutlinedCircle(T x, T y, int r, int seg) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
-    }
-    
+   
   
 };
