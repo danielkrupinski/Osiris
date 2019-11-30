@@ -115,15 +115,15 @@ public:
     template <typename T>
     void drawCircle(T x, T y, int startRadius, int radius) noexcept
     {
-        int xs[360];
-        int ys[360];
+        int xs[12];
+        int ys[12];
 
-        for (int i = startRadius; i <= radius; i++) {
-            for (int j = 0; j < 360; j++) {
-                xs[j] = static_cast<int>(cosf(degreesToRadians(static_cast<float>(j))) * i + x);
-                ys[j] = static_cast<int>(sinf(degreesToRadians(static_cast<float>(j))) * i + y);
+        for (int i = startRadius; i <= radius; ++i) {
+            for (int j = 0; j < 12; ++j) {
+                xs[j] = static_cast<int>(std::cos(degreesToRadians(static_cast<float>(j * 30))) * i + x);
+                ys[j] = static_cast<int>(std::sin(degreesToRadians(static_cast<float>(j * 30))) * i + y);
             }
-            interfaces.surface->drawPolyLine(xs, ys, 360);
+            interfaces.surface->drawPolyLine(xs, ys, 12);
         }
     }
 };
