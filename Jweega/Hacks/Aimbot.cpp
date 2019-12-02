@@ -109,14 +109,14 @@ static float getRandom(float min, float max) noexcept
     return randomFloat(min, max);
 }
 
-static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, Vector& destinantion, int buttons, int hitChance) noexcept
+static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, const Vector& destinantion, const UserCmd* cmd, const int hitChance) noexcept
 {
     if (!hitChance)
         return true;
 
     constexpr int maxSeed{ 256 };
 
-    const Angle angles(destinantion);
+    const Angle angles(destinantion + cmd->viewangles);
 
     int hits{ 0 };
     const int hitsNeed{ static_cast<int>(static_cast<float>(maxSeed) * (static_cast<float>(hitChance) / 100.f)) };
@@ -126,7 +126,7 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
     const auto localEyePosition{ localPlayer->getEyePosition() };
     const auto range{ weaponData->getWeaponData()->range };
 
-    for (int i = 0; i != maxSeed; ++i) {
+    for (int i = 0; i < maxSeed; ++i) {
         setRandomSeed(i + 1);
         float inaccuracy{ getRandom(0.f, 1.f) };
         float spread{ getRandom(0.f, 1.f) };
@@ -137,7 +137,7 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, V
         const auto recoilIndex{ weaponData->recoilIndex() };
         if (weaponIndex == WeaponId::Revolver)
         {
-            if (buttons & UserCmd::IN_ATTACK2)
+            if (cmd->buttons & UserCmd::IN_ATTACK2)
             {
                 inaccuracy = 1.f - inaccuracy * inaccuracy;
                 spread = 1.f - spread * spread;
@@ -284,7 +284,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = config.aimbot[weaponIndex].velocityExtrapolation ? velocityExtrapolate(entity, bonePosition) : bonePosition;
-                    bestAngle = cmd->viewangles + angle;
+                    bestAngle = angle;
                 }
 
                 if (config.aimbot[weaponIndex].bone)
@@ -292,8 +292,10 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
 
             if (bestTarget) {
-                if (!hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd->buttons, config.aimbot[weaponIndex].hitChance))
+                if (!hitChance(localPlayer, entity, activeWeapon, bestAngle, cmd, config.aimbot[weaponIndex].hitChance)) {
+                    bestTarget = Vector{ };
                     continue;
+                }
                 break;
             }
         }
