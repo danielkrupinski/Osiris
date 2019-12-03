@@ -769,7 +769,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGuiCustom::colorPicker("World color", config.visuals.world.color, nullptr, &config.visuals.world.rainbow, &config.visuals.world.rainbowSpeed);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0Classic Hitmarker\0");
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Columns(1);
 
