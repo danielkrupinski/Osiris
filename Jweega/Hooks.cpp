@@ -112,11 +112,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 
-    memory.globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
-    Misc::prepareRevolver(cmd);
     Misc::sniperCrosshair();
     Misc::recoilCrosshair();
     Visuals::removeShadows();
@@ -125,7 +123,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
     Misc::fakeVote();
@@ -134,10 +131,13 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);
     Misc::moonwalk(cmd);
-    Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
     PredictionSystem::StartPrediction(cmd);
+    Misc::prepareRevolver(cmd);
+    Misc::autoPistol(cmd);
+    Misc::quickHealthshot(cmd);
+
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
