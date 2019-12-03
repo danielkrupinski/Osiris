@@ -204,33 +204,45 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         }
 
         if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
-            constexpr auto getEffectMaterial = [] {
-                static constexpr const char* effects[]{
-                "effects/dronecam",
-                "effects/underwater_overlay",
-                "effects/healthboost",
-                "effects/dangerzone_screen"
-                };
+			if (config.visuals.hitMarker > 0 && config.visuals.hitMarker < 6) {
+				constexpr auto getEffectMaterial = [] {
+					static constexpr const char* effects[]{
+					"effects/dronecam",
+					"effects/underwater_overlay",
+					"effects/healthboost",
+					"effects/dangerzone_screen"
+					};
 
-                if (config.visuals.hitMarker <= 2)
-                    return effects[0];
-                return effects[config.visuals.hitMarker - 2];
-            };
+					if (config.visuals.hitMarker <= 2)
+						return effects[0];
+					return effects[config.visuals.hitMarker - 2];
+				};
 
-            auto renderContext = interfaces.materialSystem->getRenderContext();
-            renderContext->beginRender();
-            int x, y, width, height;
-            renderContext->getViewport(x, y, width, height);
-            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
-            if (config.visuals.hitMarker == 1)
-                material->findVar("$c0_x")->setValue(0.0f);
-            else if (config.visuals.hitMarker == 2)
-                material->findVar("$c0_x")->setValue(0.1f);
-            else if (config.visuals.hitMarker >= 4)
-                material->findVar("$c0_x")->setValue(1.0f);
-            drawScreenEffectMaterial(material, 0, 0, width, height);
-            renderContext->endRender();
-            renderContext->release();
+				auto renderContext = interfaces.materialSystem->getRenderContext();
+				renderContext->beginRender();
+				int x, y, width, height;
+				renderContext->getViewport(x, y, width, height);
+				auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+				if (config.visuals.hitMarker == 1)
+					material->findVar("$c0_x")->setValue(0.0f);
+				else if (config.visuals.hitMarker == 2)
+					material->findVar("$c0_x")->setValue(0.1f);
+				else if (config.visuals.hitMarker >= 4)
+					material->findVar("$c0_x")->setValue(1.0f);
+				drawScreenEffectMaterial(material, 0, 0, width, height);
+				renderContext->endRender();
+				renderContext->release();
+			}
+			else if (config.visuals.hitMarker == 6)	{
+				const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
+				const auto alpha = 1.f;
+
+
+				const auto lineSize = 12;
+				interfaces.surface->setDrawColor(255, 255, 255, static_cast<int>(alpha * 255.f));
+				interfaces.surface->drawLine(screenWidth / 2 - lineSize / 2, screenHeight / 2 - lineSize / 2, screenWidth / 2 + lineSize / 2, screenHeight / 2 + lineSize / 2);
+				interfaces.surface->drawLine(screenWidth / 2 + lineSize / 2, screenHeight / 2 - lineSize / 2, screenWidth / 2 - lineSize / 2, screenHeight / 2 + lineSize / 2);
+			}
         }
     }
 }
