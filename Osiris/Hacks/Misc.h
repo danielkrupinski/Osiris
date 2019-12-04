@@ -9,7 +9,12 @@
 #include "../SDK/Entity.h"
 #include "../SDK/Client.h"
 #include "../SDK/GameEvent.h"
+#include "../SDK/GameMovement.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/Surface.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/ViewSetup.h"
+#include "../SDK/Input.h"
 
 namespace Misc {
 	void AutoBlocker(UserCmd*) noexcept;
@@ -33,6 +38,8 @@ namespace Misc {
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
+
+	static float fov{ 0.0f };
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -58,7 +65,7 @@ namespace Misc {
     constexpr void fixAnimationLOD(FrameStage stage) noexcept
     {
         if (config.misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
-            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+			for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
                 if (i == interfaces.engine->getLocalPlayer()) continue;
                 Entity* entity = interfaces.entityList->getEntity(i);
                 if (!entity || entity->isDormant() || !entity->isAlive()) continue;
@@ -209,6 +216,31 @@ namespace Misc {
 		if (config.misc.spamMessage
 			&& interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
 			interfaces.engine->clientCmdUnrestricted(std::string { "say " }.append(config.misc.spamMessageString).c_str());
+	}
+
+	constexpr void fakeDuck(UserCmd* cmd) noexcept
+	{
+
+		if (config.misc.fakeDuckKey
+			&& GetAsyncKeyState(config.misc.fakeDuckKey))
+			if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+				localPlayer
+				&& localPlayer->isAlive())
+				if (interfaces.engine->getNetworkChannel()->chokedPackets > (config.misc.chokedPackets / 2))
+					cmd->buttons |= UserCmd::IN_DUCK;
+				else
+					cmd->buttons &= ~UserCmd::IN_DUCK;
+	}
+
+	constexpr void fakeDuckFix(ViewSetup* setup) noexcept
+	{
+		if (config.misc.fakeDuckKey
+			&& GetAsyncKeyState(config.misc.fakeDuckKey))
+			if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+				localPlayer
+				&& localPlayer->isAlive()
+				&& localPlayer->flags() & 1)
+				setup->origin.z = localPlayer->getAbsOrigin().z + interfaces.gameMovement->getPlayerViewOffset(false).z;
 	}
 }
 

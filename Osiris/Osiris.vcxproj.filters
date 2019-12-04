@@ -110,6 +110,9 @@
     <ClCompile Include="Hacks\Reportbot.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+	<ClCompile Include="Hacks\PredictionSystem.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
     <ClCompile Include="AntiDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -336,6 +339,30 @@
     </ClInclude>
     <ClInclude Include="Hacks\Reportbot.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+	<ClInclude Include="SDK\GameMovement.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ViewSetup.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\WeaponType.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\PredictionSystem.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MoveData.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Prediction.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MoveHelper.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Angle.h">
+      <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>

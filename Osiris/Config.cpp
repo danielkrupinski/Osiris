@@ -33,7 +33,7 @@ void Config::load(size_t id) noexcept
 	else
 		return;
 
-    for (size_t i = 0; i < aimbot.size(); i++) {
+    for (size_t i = 0; i < aimbot.size(); ++i) {
         const auto& aimbotJson = json["Aimbot"][i];
         auto& aimbotConfig = aimbot[i];
 
@@ -58,15 +58,18 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
         if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
+		if (aimbotJson.isMember("Standalone recoil control")) aimbotConfig.standaloneRecoilControl = aimbotJson["Standalone recoil control"].asBool();
         if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
+		if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asInt();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
+		if (aimbotJson.isMember("Velocity extrapolation")) aimbotConfig.velocityExtrapolation = aimbotJson["Velocity extrapolation"].asBool();
 		if (aimbotJson.isMember("Draw FOV")) aimbotConfig.aimbotCircle = aimbotJson["Draw FOV"].asBool();
 		if (aimbotJson.isMember("Standalone RCS")) aimbotConfig.standaloneRCS = aimbotJson["Standalone RCS"].asBool();
 		if (aimbotJson.isMember("Standalone RCS Ignore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Ignore Shots"].asInt();
     }
 
-    for (size_t i = 0; i < triggerbot.size(); i++) {
+	for (size_t i = 0; i < triggerbot.size(); ++i) {
         const auto& triggerbotJson = json["Triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
 
@@ -104,7 +107,7 @@ void Config::load(size_t id) noexcept
 		if (antiAimJson.isMember("Invert")) antiAim.desyncinvert = antiAimJson["Invert"].asInt();
     }
 
-    for (size_t i = 0; i < glow.size(); i++) {
+	for (size_t i = 0; i < glow.size(); ++i) {
         const auto& glowJson = json["glow"][i];
         auto& glowConfig = glow[i];
 
@@ -128,7 +131,7 @@ void Config::load(size_t id) noexcept
         }
     }
 
-    for (size_t i = 0; i < chams.size(); i++) {
+	for (size_t i = 0; i < chams.size(); ++i) {
         const auto& chamsJson = json["Chams"][i];
         auto& chamsConfig = chams[i];
 
@@ -158,7 +161,7 @@ void Config::load(size_t id) noexcept
         }
     }
 
-    for (size_t i = 0; i < esp.players.size(); i++) {
+	for (size_t i = 0; i < esp.players.size(); ++i) {
         const auto& espJson = json["Esp"]["Players"][i];
         auto& espConfig = esp.players[i];
         
@@ -695,7 +698,7 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("ViewModel Z")) visuals.viewModel_z = visualsJson["ViewModel Z"].asFloat();
     }
 
-    for (size_t i = 0; i < skinChanger.size(); i++) {
+	for (size_t i = 0; i < skinChanger.size(); ++i) {
         const auto& skinChangerJson = json["skinChanger"][i];
         auto& skinChangerConfig = skinChanger[i];
 
@@ -733,7 +736,7 @@ void Config::load(size_t id) noexcept
         if (soundJson.isMember("Chicken volume")) sound.chickenVolume = soundJson["Chicken volume"].asInt();
 
         if (soundJson.isMember("Players")) {
-            for (size_t i = 0; i < sound.players.size(); i++) {
+			for (size_t i = 0; i < sound.players.size(); ++i) {
                 const auto& playerJson = soundJson["Players"][i];
                 auto& playerConfig = sound.players[i];
 
@@ -757,7 +760,7 @@ void Config::load(size_t id) noexcept
 
             ImGuiStyle& style = ImGui::GetStyle();
 
-            for (int i = 0; i < ImGuiCol_COUNT; i++) {
+			for (int i = 0; i < ImGuiCol_COUNT; ++i) {
                 if (const char* name = ImGui::GetStyleColorName(i); colorsJson.isMember(name)) {
                     const auto& colorJson = styleJson["Colors"][name];
                     style.Colors[i].x = colorJson[0].asFloat();
@@ -788,6 +791,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
 		if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
+		if (miscJson.isMember("Fake Duck key")) misc.fakeDuckKey = miscJson["fakeDuckKey"].asInt();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
 		if (miscJson.isMember("Sniper crosshair in scope")) misc.sniperCrosshairInscope = miscJson["Sniper crosshair in scope"].asBool();
@@ -900,7 +904,7 @@ void Config::save(size_t id) const noexcept
 
     Json::Value json;
 
-    for (size_t i = 0; i < aimbot.size(); i++) {
+	for (size_t i = 0; i < aimbot.size(); ++i) {
         auto& aimbotJson = json["Aimbot"][i];
         const auto& aimbotConfig = aimbot[i];
 
@@ -925,15 +929,18 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
         aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
         aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
+		aimbotJson["Standalone recoil control"] = aimbotConfig.standaloneRecoilControl;
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
+		aimbotJson["Hit chance"] = aimbotConfig.hitChance;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
+		aimbotJson["Velocity extrapolation"] = aimbotConfig.velocityExtrapolation;
 		aimbotJson["Draw FOV"] = aimbotConfig.aimbotCircle;
 		aimbotJson["Standalone RCS"] = aimbotConfig.standaloneRCS;
 		aimbotJson["Standalone RCS Ignore Shots"] = aimbotConfig.shotsFired;
     }
 
-    for (size_t i = 0; i < triggerbot.size(); i++) {
+	for (size_t i = 0; i < triggerbot.size(); ++i) {
         auto& triggerbotJson = json["Triggerbot"][i];
         const auto& triggerbotConfig = triggerbot[i];
 
@@ -972,7 +979,7 @@ void Config::save(size_t id) const noexcept
 		antiAimJson["Invert"] = antiAim.desyncinvert;
     }
 
-    for (size_t i = 0; i < glow.size(); i++) {
+	for (size_t i = 0; i < glow.size(); ++i) {
         auto& glowJson = json["glow"][i];
         const auto& glowConfig = glow[i];
 
@@ -995,7 +1002,7 @@ void Config::save(size_t id) const noexcept
         }
     }
 
-    for (size_t i = 0; i < chams.size(); i++) {
+	for (size_t i = 0; i < chams.size(); ++i) {
         auto& chamsJson = json["Chams"][i];
         const auto& chamsConfig = chams[i];
 
@@ -1025,7 +1032,7 @@ void Config::save(size_t id) const noexcept
         }
     }
 
-    for (size_t i = 0; i < esp.players.size(); i++) {
+	for (size_t i = 0; i < esp.players.size(); ++i) {
         auto& espJson = json["Esp"]["Players"][i];
         const auto& espConfig = esp.players[i];
 
@@ -1449,7 +1456,7 @@ void Config::save(size_t id) const noexcept
 		visualsJson["ViewModel Z"] = visuals.viewModel_z;
     }
 
-    for (size_t i = 0; i < skinChanger.size(); i++) {
+	for (size_t i = 0; i < skinChanger.size(); ++i) {
         auto& skinChangerJson = json["skinChanger"][i];
         const auto& skinChangerConfig = skinChanger[i];
 
@@ -1484,7 +1491,7 @@ void Config::save(size_t id) const noexcept
 
         soundJson["Chicken volume"] = sound.chickenVolume;
 
-        for (size_t i = 0; i < sound.players.size(); i++) {
+		for (size_t i = 0; i < sound.players.size(); ++i) {
             auto& playerJson = soundJson["Players"][i];
             const auto& playerConfig = sound.players[i];
 
@@ -1505,7 +1512,7 @@ void Config::save(size_t id) const noexcept
 
         const ImGuiStyle& style = ImGui::GetStyle();
 
-        for (int i = 0; i < ImGuiCol_COUNT; i++) {
+		for (int i = 0; i < ImGuiCol_COUNT; ++i) {
             auto& colorJson = styleJson["Colors"][ImGui::GetStyleColorName(i)];
             colorJson[0] = style.Colors[i].x;
             colorJson[1] = style.Colors[i].y;
@@ -1533,6 +1540,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Animated clan tag"] = misc.animatedClanTag;
 		miscJson["Clock tag"] = misc.clocktag;
         miscJson["Fast duck"] = misc.fastDuck;
+		miscJson["Fake Duck key"] = misc.fakeDuckKey;
         miscJson["Moonwalk"] = misc.moonwalk;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
 		miscJson["Sniper crosshair in scope"] = misc.sniperCrosshairInscope;

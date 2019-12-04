@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "WeaponType.h"
 
 struct WeaponData {
     std::byte pad[20];
@@ -8,7 +9,7 @@ struct WeaponData {
     std::byte pad1[112];
     char* name;
     std::byte pad1_[60];
-    int type;
+	WeaponType type;
     std::byte pad2[32];
     bool fullAuto;
     std::byte pad3[3];

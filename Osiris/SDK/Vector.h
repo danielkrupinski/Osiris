@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <cfloat>
+#include <algorithm>
 
 #include "matrix3x4.h"
 
@@ -239,6 +241,14 @@ struct Vector {
 		return (src.x != x) || (src.y != y) || (src.z != z);
 	}
 
+	constexpr Vector& operator*=(float mul) noexcept
+	{
+		x *= mul;
+		y *= mul;
+		z *= mul;
+		return *this;
+	}
+
     constexpr void normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
@@ -248,13 +258,23 @@ struct Vector {
 
     auto length() const noexcept
     {
-        return sqrtf(x * x + y * y + z * z);
+		return std::hypot(x, y, z);
+	}
+
+	auto length2D() const noexcept
+	{
+		return std::hypotf(x, y);
     }
 
     constexpr auto squareLength() const noexcept
     {
         return x * x + y * y + z * z;
     }
+
+	auto distance(const Vector& v) const noexcept
+	{
+		return std::hypot(x - v.x, y - v.y, z - v.z);
+	}
 
     constexpr auto dotProduct(const Vector& v) const noexcept
     {

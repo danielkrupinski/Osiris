@@ -24,6 +24,7 @@
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/PredictionSystem.h"
 
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -41,6 +42,7 @@
 #include "SDK/SoundEmitter.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/ViewSetup.h"
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -135,8 +137,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::AutoBlocker(cmd);
 	Misc::usespam(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
@@ -144,14 +144,19 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Backtrack::run(cmd);
     Misc::quickReload(cmd);
     Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
+	PredictionSystem::StartPrediction(cmd);
+	Aimbot::run(cmd);
+	Triggerbot::run(cmd);
+	Backtrack::run(cmd);
+
 	if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE) || localPlayer->moveType() == MoveType::LADDER)) {
 		Misc::chokePackets(sendPacket);
+		Misc::fakeDuck(cmd);
 		AntiAim::type(cmd, sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 		if (sendPacket) {
@@ -161,6 +166,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 			choked = cmd->viewangles;
 		}
 		angle = cmd->viewangles;
+		PredictionSystem::EndPrediction();
 	}
 }
 
@@ -329,19 +335,14 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
 
-struct ViewSetup {
-    std::byte pad[176];
-    float fov;
-    std::byte pad1[32];
-    float farZ;
-};
-
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
     if (interfaces.engine->isInGame()
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
+	Misc::fov = setup->fov;
+	Misc::fakeDuckFix(setup);
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }
 
@@ -432,6 +433,7 @@ Hooks::Hooks() noexcept
     SkinChanger::initializeKits();
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+	_controlfp(_MCW_PC, _PC_24);
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
@@ -465,7 +467,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: December 1 2019");
+    interfaces.gameUI->messageBox("Osiris: Injection Successful", "Welcome Back Zach\nBuild: " __DATE__ ", " __TIME__ "");
 }
 
 void Hooks::restore() noexcept

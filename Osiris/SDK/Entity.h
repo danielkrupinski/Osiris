@@ -14,6 +14,8 @@
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
+#include "WeaponData.h"
+#include "WeaponType.h"
 #include "ModelRender.h"
 #include "../SDK/matrix3x4.h"
 
@@ -67,6 +69,23 @@ public:
             return false;
         }
     }
+
+	constexpr bool isGrenade() noexcept
+	{
+		if (getWeaponData()->type == WeaponType::Grenade)
+			return true;
+		else
+			return false;
+	}
+
+	bool isInThrow() noexcept
+	{
+		if (!bPinPulled())
+			if (fThrowTime() > 0)
+				return true;
+
+		return false;
+	}
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
@@ -176,6 +195,16 @@ public:
     {
         return callVirtualMethod<float>(this, 479);
     }
+
+	constexpr void updateAccuracyPenalty() noexcept
+	{
+		return callVirtualMethod<void>(this, 480);
+	}
+
+	constexpr float getSpread() noexcept
+	{
+		return callVirtualMethod<float>(this, 449);
+	}
     
     VarMap* getVarMap() noexcept
     {
@@ -258,6 +287,7 @@ public:
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool);
 	NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int);
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float);
+	NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int);
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
@@ -265,6 +295,10 @@ public:
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
+	NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float);
+
+	NETVAR(bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+	NETVAR(fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float);
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
 

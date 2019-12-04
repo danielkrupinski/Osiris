@@ -226,7 +226,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         if (!unload) {
             offsets[hash] = uint16_t(offset + prop.offset);
 
-            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
+			constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) constexpr noexcept {
                 if (originalProxy != proxy) {
                     proxies[hash] = originalProxy;
                     originalProxy = proxy;
@@ -236,7 +236,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
             if (auto hook{ getHook(hash) })
                 hookProperty(hash, prop.proxy, hook);
         } else {
-            constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) noexcept {
+			constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) constexpr noexcept {
                 proxy = proxies[hash];
             } };
 

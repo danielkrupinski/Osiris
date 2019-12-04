@@ -5,6 +5,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_internal.h"
 
 #include "imguiCustom.h"
 
@@ -30,6 +31,7 @@ GUI::GUI() noexcept
     style.ScrollbarSize = 9.0f;
 
     ImGuiIO& io = ImGui::GetIO();
+	ImFontConfig fontConfig;
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
 
@@ -37,9 +39,32 @@ GUI::GUI() noexcept
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
 
-        static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
+		static ImWchar ranges[] = {
+		0x0020, 0x007E, // Basic Latin
+
+		0x00A0, 0x00FF, // Latin-1 Supplement
+
+				0x0100, 0x017F, // Latin Extended-A
+		0x0180, 0x024F, // Latin Extended-B
+		0x0370, 0x03FF, // Greek and Coptic
+		0x0400, 0x04FF, // Cyrillic
+		0x0500, 0x052F, // Cyrillic Supplementary
+		0
+		};
+
+		static ImWchar KaiGenGothicCNRegular_ranges[] = {
+			0x3000, 0x30FF, // Punctuations, Hiragana, Katakana
+			0x31F0, 0x31FF, // Katakana Phonetic Extensions
+			0xFF00, 0xFFEF, // Half-width characters
+			0x4E00, 0x9FAF, // CJK Ideograms
+			0
+		};
+
+		fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &fontConfig, ranges);
+		fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &fontConfig, ranges);
+		fonts.kaigengothic = io.Fonts->AddFontFromFileTTF((path / "KaiGenGothicCN-Regular.ttf").string().c_str(), 15.0f, &fontConfig, KaiGenGothicCNRegular_ranges);
+		fontConfig.MergeMode = true;
+		io.Fonts->Build();
     }
 }
 
@@ -87,11 +112,11 @@ void GUI::hotkey(int& key) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Press any key to change the keybind");
         ImGuiIO& io = ImGui::GetIO();
-        for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+		for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); ++i)
             if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
                 key = i != VK_ESCAPE ? i : 0;
 
-        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+		for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); ++i)
             if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config.misc.menuKey)
                 key = i + (i > 1 ? 2 : 1);
     }
@@ -246,10 +271,14 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Recoil Control Y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Max Aim Inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
         ImGui::SliderFloat("Max Shot Inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+		ImGui::Checkbox("Standalone Recoil Control", &config.aimbot[currentWeapon].standaloneRecoilControl);
         ImGui::InputInt("Min. Damage", &config.aimbot[currentWeapon].minDamage);
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
+		ImGui::InputInt("Hitchance", &config.aimbot[currentWeapon].hitChance);
+		config.aimbot[currentWeapon].hitChance = std::clamp(config.aimbot[currentWeapon].hitChance, 0, 100);
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
         ImGui::Checkbox("Between Shots", &config.aimbot[currentWeapon].betweenShots);
+		ImGui::Checkbox("Velocity Extrapolation", &config.aimbot[currentWeapon].velocityExtrapolation);
 		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
 		ImGui::Checkbox("Standalone RCS", &config.aimbot[currentWeapon].standaloneRCS);
 		ImGui::InputInt("Ignore Shots", &config.aimbot[currentWeapon].shotsFired);
@@ -783,7 +812,7 @@ void GUI::renderVisualsWindow() noexcept
 			Visuals::scheduleUpdate();
         ImGui::Checkbox("Rare Deagle Anims", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Classic\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::SliderFloat("Hit Marker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
@@ -996,6 +1025,9 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::SameLine();
 		hotkey(config.misc.blockbotkey);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
+		ImGui::TextUnformatted("Fake Duck Key");
+		ImGui::SameLine();
+		hotkey(config.misc.fakeDuckKey);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
 		if (config.misc.sniperCrosshair)
@@ -1017,7 +1049,20 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix Movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable Model Occlusion", &config.misc.disableModelOcclusion);
         ImGui::NextColumn();
-        ImGui::Checkbox("Custom Clantag", &config.misc.customClanTag);
+		if (config.misc.customClanTag) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+		if (config.misc.customClanTag) {
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+		if (config.misc.clocktag) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+		if (ImGui::Checkbox("Custom Clantag", &config.misc.customClanTag))
+			Misc::updateClanTag(true);
 		ImGui::SameLine();
 		ImGui::PushItemWidth(120.0f);
 		ImGui::PushID(1);
@@ -1026,9 +1071,14 @@ void GUI::renderMiscWindow() noexcept
 		ImGui::PopID();
 		if (config.misc.customClanTag)
 		{
-			ImGui::Checkbox("Animated", &config.misc.animatedClanTag);
+			if (ImGui::Checkbox("Animated", &config.misc.animatedClanTag))
+				Misc::updateClanTag(true);
 		}
 		ImGui::Checkbox("Clock Clantag", &config.misc.clocktag);
+		if (config.misc.clocktag) {
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
         ImGui::Checkbox("Killsay", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
@@ -1155,7 +1205,7 @@ void GUI::renderConfigWindow() noexcept
 
         if (ImGui::BeginPopup("Part to Reset")) {
             static constexpr const char* names[]{ "Everything", "Aimbot", "Triggerbot", "Backtrack", "Anti Aim", "Glow", "Chams", "ESP", "Visuals", "Skinchanger", "Sound", "Style", "Misc", "Reportbot" };
-            for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+			for (int i = 0; i < IM_ARRAYSIZE(names); ++i) {
                 if (i == 1) ImGui::Separator();
 
                 if (ImGui::Selectable(names[i])) {
@@ -1201,7 +1251,7 @@ void GUI::renderConfigWindow() noexcept
 void GUI::renderGuiStyle2() noexcept
 {
     ImGui::SetNextWindowSize({ 800.0f, 0.0f });
-    ImGui::Begin("Zach's Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable)) {
         if (ImGui::BeginTabItem("Aimbot")) {

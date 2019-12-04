@@ -18,7 +18,7 @@ void Backtrack::update(FrameStage stage) noexcept
     }
 
     if (stage == FrameStage::RENDER_START) {
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+		for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
                 records[i].clear();
@@ -68,7 +68,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
     const auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
 
-    for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+	for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
         auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
             || !entity->isEnemy())
@@ -77,7 +77,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
         auto origin = entity->getAbsOrigin();
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config.backtrack.recoilBasedFov ? aimPunch : Vector{ }));
-        auto fov = std::hypotf(angle.x, angle.y);
+		const auto fov{ angle.length2D() };
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = entity;
@@ -92,13 +92,13 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
         bestFov = 255.f;
 
-        for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
+		for (size_t i = 0; i < records[bestTargetIndex].size(); ++i) {
             auto& record = records[bestTargetIndex][i];
             if (!valid(record.simulationTime))
                 continue;
 
             auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config.backtrack.recoilBasedFov ? aimPunch : Vector{ }));
-            auto fov = std::hypotf(angle.x, angle.y);
+			const auto fov{ angle.length2D() };
             if (fov < bestFov) {
                 bestFov = fov;
                 bestRecord = i;

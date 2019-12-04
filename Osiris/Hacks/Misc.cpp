@@ -11,6 +11,7 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 #include "AntiAim.h"
+#include "../SDK/Utils.h"
 
 void Misc::AutoBlocker(UserCmd* cmd) noexcept
 {
@@ -92,13 +93,24 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
-    if (config.misc.customClanTag) {
-        static std::string clanTag;
+	if (config.misc.clocktag) {
+		const auto time{ std::time(nullptr) };
+		const auto localTime{ std::localtime(&time) };
+
+		const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
+		memory.setClanTag(timeString.c_str(), timeString.c_str());
+	}
+	else if (config.misc.customClanTag) {
+		static std::wstring clanTag{ L"" };
 
         if (tagChanged) {
-            clanTag = config.misc.clanTag;
-            if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
-                clanTag.push_back(' ');
+			const auto clanTagLength{ MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), nullptr, 0) };
+			if (clanTag.resize(clanTagLength); MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), clanTag.data(), clanTagLength)) {
+				if (clanTag.empty())
+					return;
+
+				if (!iswblank(clanTag.at(0)) && !iswblank(clanTag.back()))
+					clanTag.push_back(L' ');
         }
 
         static auto lastTime{ 0.0f };
@@ -108,25 +120,23 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (config.misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
-        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
-
-        if (config.misc.clocktag) {
-            const auto time{ std::time(nullptr) };
-            const auto localTime{ std::localtime(&time) };
-
-            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
-            memory.setClanTag(timeString.c_str(), timeString.c_str());
-	}
+		const auto cvtClanTagLength{ WideCharToMultiByte(CP_UTF8, 0, clanTag.data(), clanTag.length(), nullptr, 0, nullptr, nullptr) };
+		if (std::string cvtClanTag(cvtClanTagLength, 0); WideCharToMultiByte(CP_UTF8, 0, clanTag.data(), clanTag.length(), cvtClanTag.data(), cvtClanTagLength, nullptr, nullptr))
+			memory.setClanTag(cvtClanTag.c_str(), cvtClanTag.c_str());
+	    }
     }
 }
 
 void Misc::spectatorList() noexcept
 {
     if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        if (!localPlayer->isAlive())
-            return;
+		if (!localPlayer->isAlive()) {
+			if (!localPlayer->getObserverTarget())
+				return;
+			localPlayer = localPlayer->getObserverTarget();
+		}
 
         interfaces.surface->setTextFont(Surface::font);
 
@@ -139,12 +149,12 @@ void Misc::spectatorList() noexcept
 
         int textPositionY{ static_cast<int>(0.5f * height) };
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+		for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
-            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
+			if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer && !playerInfo.fakeplayer) {
                 if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
                     interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
@@ -189,22 +199,24 @@ void Misc::watermark() noexcept
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
 
-        static auto frameRate = 1.0f;
+		static auto frameRate{ 1.0f };
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
-        const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
-        std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1 / frameRate)) };
-        const auto [fpsWidth, fpsHeight] = interfaces.surface->getTextSize(Surface::font, fps.c_str());
+		const auto [screenWidth, screenHeight] { interfaces.surface->getScreenSize() };
+		const std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1.0f / frameRate)) };
+		const auto [fpsWidth, fpsHeight] { interfaces.surface->getTextSize(Surface::font, fps.c_str()) };
         interfaces.surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces.surface->printText(fps.c_str());
 
-        float latency = 0.0f;
-        if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-            latency = networkChannel->getLatency(0);
+		float latency{ 0.0f };
+		if (auto networkChannel{ interfaces.engine->getNetworkChannel() }; networkChannel)
+			latency = networkChannel->getAvgLatency(0);
 
-        std::wstring ping{ L"Ping: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
-        const auto pingWidth = interfaces.surface->getTextSize(Surface::font, ping.c_str()).first;
-        interfaces.surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
-        interfaces.surface->printText(ping.c_str());
+		const static auto updateRate{ interfaces.cvar->findVar("cl_updaterate") };
+
+		latency -= 0.5f / updateRate->getFloat();
+
+		const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency) * 1000.f)) + L" ms" };
+		const auto pingWidth{ interfaces.surface->getTextSize(Surface::font, ping.c_str()).first };
     }
 }
 
@@ -331,7 +343,7 @@ void Misc::stealNames() noexcept
 
         bool allNamesStolen = true;
         static std::vector<int> stolenIds;
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+		for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
                 if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;

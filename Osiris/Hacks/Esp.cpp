@@ -451,7 +451,7 @@ void Esp::render() noexcept
 		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 		renderAimbotCircle();
 
-		for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+		for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
 			auto entity = interfaces.entityList->getEntity(i);
 			if (!entity || entity == localPlayer || entity->isDormant()
 				|| !entity->isAlive())

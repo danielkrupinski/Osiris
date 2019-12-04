@@ -3,12 +3,12 @@
 #include "UtlVector.h"
 
 struct VarEntry {
-    unsigned short type;
-    unsigned short needsToInterpolate;
-    std::byte pad[8];
+	unsigned short type;
+	unsigned short needsToInterpolate;
+	std::byte pad[8];
 };
 
 struct VarMap {
-    UtlVector<VarEntry> entries;
-    int interpolatedEntries;
+	UtlVector<VarEntry> entries;
+	int interpolatedEntries;
 };

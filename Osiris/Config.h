@@ -54,10 +54,13 @@ public:
         float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
+		bool standaloneRecoilControl{ false };
         int minDamage{ 1 };
+		int hitChance{ 0 };
 		int shotsFired{ 0 };
         bool killshot{ false };
         bool betweenShots{ false };
+		bool velocityExtrapolation{ false };
 		bool aimbotCircle{ false };
 		bool standaloneRCS{ false };
     };
@@ -235,6 +238,7 @@ public:
         char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
+		int fakeDuckKey{ 0 };
         bool moonwalk{ false };
         bool sniperCrosshair{ false };
 		bool sniperCrosshairInscope{ false };
