@@ -812,7 +812,7 @@ void GUI::renderVisualsWindow() noexcept
 			Visuals::scheduleUpdate();
         ImGui::Checkbox("Rare Deagle Anims", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Classic\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
         ImGui::SliderFloat("Hit Marker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
