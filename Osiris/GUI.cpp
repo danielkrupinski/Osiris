@@ -932,7 +932,7 @@ void GUI::renderSkinChangerWindow() noexcept
         if (ImGui::Button("Apply", { 130.0f, 30.0f }))
             SkinChanger::scheduleHudUpdate();
 
-        ImGui::TextUnformatted("Created by BaZ (Formerly Keemware)");
+        ImGui::TextUnformatted("Created by namaszo");
 
         if (!config.style.menuStyle)
             ImGui::End();
