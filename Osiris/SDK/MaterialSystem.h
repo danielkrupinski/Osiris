@@ -12,6 +12,11 @@ public:
         return callVirtualMethod<Material*, const char*, const char*, bool, const char*>(this, 84, materialName, nullptr, true, nullptr);
     }
 
+    constexpr auto firstMaterial() noexcept
+    {
+        return callVirtualMethod<short>(this, 86);
+    }
+
     constexpr auto getRenderContext() noexcept
     {
         return callVirtualMethod<RenderContext*>(this, 115);
