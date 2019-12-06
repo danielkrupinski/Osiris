@@ -27,6 +27,11 @@ public:
         return callVirtualMethod<short>(this, 88);
     }
 
+    constexpr auto getMaterial(short handle) noexcept
+    {
+        return callVirtualMethod<Material*, short>(this, 89, handle);
+    }
+
     constexpr auto getRenderContext() noexcept
     {
         return callVirtualMethod<RenderContext*>(this, 115);
