@@ -14,20 +14,17 @@
 
 void Visuals::colorWorld() noexcept
 {
-    static auto red = interfaces.cvar->findVar("mat_ambient_light_r");
-    static auto green = interfaces.cvar->findVar("mat_ambient_light_g");
-    static auto blue = interfaces.cvar->findVar("mat_ambient_light_b");
-
-    if (config.visuals.world.rainbow) {
-        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
-
-        red->setValue(r);
-        green->setValue(g);
-        blue->setValue(b);
-    } else {
-        red->setValue(config.visuals.world.color[0]);
-        green->setValue(config.visuals.world.color[1]);
-        blue->setValue(config.visuals.world.color[2]);
+    if (config.visuals.world.enabled) {
+        for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
+            if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached() && std::strstr(mat->getTextureGroupName(), "World")) {
+                if (config.visuals.world.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
+                    mat->colorModulate(r, g, b);
+                } else {
+                    mat->colorModulate(config.visuals.world.color[0], config.visuals.world.color[1], config.visuals.world.color[2]);
+                }
+            }
+        }
     }
 }
 
