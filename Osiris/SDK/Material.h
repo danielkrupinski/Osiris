@@ -53,4 +53,9 @@ public:
     {
         callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
     }
+
+    constexpr auto isPrecached() noexcept
+    {
+        return callVirtualMethod<bool>(this, 70);
+    }
 };
