@@ -398,10 +398,7 @@ static constexpr bool isInRange(Entity* entity, float maxDistance) noexcept
 
 static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if ((config.esp.players[id].enabled || 
-        config.esp.players[id].deadesp && !localPlayer->isAlive()) &&
-        isInRange(entity, config.esp.players[id].maxDistance)) {
+    if (config.esp.players[id].enabled && isInRange(entity, config.esp.players[id].maxDistance)) {
         renderSnaplines(entity, config.esp.players[id]);
         renderEyeTraces(entity, config.esp.players[id]);
         renderPlayerBox(entity, config.esp.players[id]);
