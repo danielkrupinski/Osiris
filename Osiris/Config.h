@@ -123,6 +123,7 @@ public:
             ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
+            bool deadesp { false };
             float maxDistance{ 0.0f };
         };
        
