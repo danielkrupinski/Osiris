@@ -10,7 +10,6 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
-#include "../SDK/Surface.h"
 
 void Visuals::colorWorld() noexcept
 {
