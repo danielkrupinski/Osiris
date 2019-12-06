@@ -632,6 +632,8 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon);
+                ImGui::SameLine(spacing);
+                ImGui::Checkbox("Dead ESP", &config.esp.players[selected].deadesp);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
