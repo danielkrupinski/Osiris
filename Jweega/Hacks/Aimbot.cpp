@@ -178,6 +178,8 @@ static bool hitChance(Entity* localPlayer, Entity* entity, Entity* weaponData, c
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
+    static float lastServerTime{ memory.globalVars->serverTime() };
+
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
     if (localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
@@ -309,15 +311,21 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 cmd->viewangles = lastAngles;
 
             auto angle{ calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch) };
-            bool clamped{ false };
 
+            if (!config.aimbot[weaponIndex].silent) {
+                auto deltaTime{ memory.globalVars->serverTime() - lastServerTime };
+                const auto finalTime{ angle.length() / config.aimbot[weaponIndex].smooth };
+                if (deltaTime > finalTime) deltaTime = finalTime;
+                angle *= deltaTime / finalTime;
+            }
+
+            bool clamped{ false };
             if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
                 angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
                 angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
                 clamped = true;
             }
 
-            angle /= config.aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config.aimbot[weaponIndex].silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
@@ -334,4 +342,5 @@ void Aimbot::run(UserCmd* cmd) noexcept
             lastCommand = cmd->commandNumber;
         }
     }
+    lastServerTime = memory.globalVars->serverTime();
 }
