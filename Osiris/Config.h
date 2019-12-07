@@ -123,7 +123,6 @@ public:
             ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
-            bool deadesp { false };
             float maxDistance{ 0.0f };
         };
        
@@ -136,6 +135,7 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            bool deadesp { false };
         };
 
         struct Weapon : public Shared { } weapon;
