@@ -176,7 +176,7 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        Color world{ 0.0f, 0.0f, 0.0f };
+        ColorToggle world;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
