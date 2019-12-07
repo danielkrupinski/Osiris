@@ -196,7 +196,7 @@ Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v
 
 ### Dowloading
 
-There two options of downloading the source code:
+There are two options of downloading the source code:
 
 #### Without [git](https://git-scm.com)
 
