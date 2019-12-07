@@ -251,6 +251,7 @@ void GUI::renderAimbotWindow() noexcept
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
         ImGui::Checkbox("Between shots", &config.aimbot[currentWeapon].betweenShots);
+        ImGui::Checkbox("Draw aimbot FOV", &config.aimbot[currentWeapon].AimbotFov);
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
