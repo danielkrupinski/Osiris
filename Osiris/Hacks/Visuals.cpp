@@ -18,11 +18,6 @@ void Visuals::disablePanoramablur() noexcept
 	blur->setValue(config.visuals.disablePanoramablur);
 }
 
-void Visuals::scheduleUpdate() noexcept
-{
-	update = true;
-}
-
 void Visuals::viewModel() noexcept
 {
 	static auto view_x{ interfaces.cvar->findVar("viewmodel_offset_x") };
@@ -43,21 +38,19 @@ void Visuals::viewModel() noexcept
 
 void Visuals::colorWorld() noexcept
 {
-	static MaterialSystem* matSys = interfaces.materialSystem;
-	if (!update)
-		return;
-	for (MaterialHandle_t i = matSys->firstMaterial(); i != matSys->invalidMaterial(); i = matSys->nextMaterial(i)) {
-
-		Material* mat = matSys->getMaterial(i);
-
-		if (!mat)
-			continue;
-		if (strstr(mat->getTextureGroupName(), "World")) {
-			mat->alphaModulate(config.visuals.worldAlpha);
-			mat->colorModulate(config.visuals.worldColor[0], config.visuals.worldColor[1], config.visuals.worldColor[2]);
+	if (config.visuals.world.enabled) {
+		for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
+			if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached() && std::strstr(mat->getTextureGroupName(), "World")) {
+				if (config.visuals.world.rainbow) {
+					const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
+					mat->colorModulate(r, g, b);
+				}
+				else {
+					mat->colorModulate(config.visuals.world.color[0], config.visuals.world.color[1], config.visuals.world.color[2]);
+				}
+			}
 		}
 	}
-	update = false;
 }
 
 void Visuals::modifySmoke() noexcept

@@ -135,6 +135,7 @@ public:
             ColorToggle name;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
+			bool deadesp{ false };
             float maxDistance{ 0.0f };
         };
        
@@ -189,8 +190,7 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-		float worldColor[3]{ 1.0f, 1.0f, 1.0f };
-		float worldAlpha{ 1.0f };
+		ColorToggle world;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };

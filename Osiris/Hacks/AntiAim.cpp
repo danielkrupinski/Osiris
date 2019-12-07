@@ -156,14 +156,14 @@ bool LbyBreaker()
 		return false;
 	}
 	if ((local_player->flags() & 1) || (fabsf(local_player->getAnimstate()->flUpVelocity) > 99.9f)) {
-			NextUpdate = currenttime + 0.22f;
-		}
+		NextUpdate = currenttime + 0.22f;
+	}
 
-		if (NextUpdate <= currenttime)
-		{
-			NextUpdate = currenttime + 1.1f;
-			return true;
-		}
+	if (NextUpdate <= currenttime)
+	{
+		NextUpdate = currenttime + 1.1f;
+		return true;
+	}
 
 	return false;
 }

@@ -199,7 +199,6 @@ static float __stdcall getViewModelFov() noexcept
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
 	if (interfaces.engine->isInGame()) {
-		Visuals::colorWorld();
 		if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
 			return;
 		const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
@@ -239,8 +238,10 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 	if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
 		Misc::changeName(true, nullptr, 0.0f);
 
-	if (stage == FrameStage::RENDER_START)
+	if (stage == FrameStage::RENDER_START) {
 		Visuals::disablePanoramablur();
+		Visuals::colorWorld();
+}
 
 	if (interfaces.engine->isInGame()) {
 		Visuals::thirdperson(stage, angle, choked, unchoked);
