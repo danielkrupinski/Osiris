@@ -673,6 +673,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("World")) {
             const auto& worldJson = visualsJson["World"];
 
+            if (worldJson.isMember("Enabled")) visuals.world.enabled = worldJson["Enabled"].asBool();
+
             if (worldJson.isMember("Color")) {
                 visuals.world.color[0] = worldJson["Color"][0].asFloat();
                 visuals.world.color[1] = worldJson["Color"][1].asFloat();
@@ -1414,6 +1416,7 @@ void Config::save(size_t id) const noexcept
 
         {
             auto& worldJson = visualsJson["World"];
+            worldJson["Enabled"] = visuals.world.enabled;
             worldJson["Color"][0] = visuals.world.color[0];
             worldJson["Color"][1] = visuals.world.color[1];
             worldJson["Color"][2] = visuals.world.color[2];

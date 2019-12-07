@@ -18,6 +18,11 @@ enum class MaterialVarFlag {
 
 class Material {
 public:
+    constexpr auto getTextureGroupName() noexcept
+    {
+        return callVirtualMethod<const char*>(this, 1);
+    }
+
     constexpr auto findVar(const char* name) noexcept
     {
         return callVirtualMethod<MaterialVar*, const char*, bool*, bool>(this, 11, name, nullptr, false);
@@ -47,5 +52,10 @@ public:
     constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
     {
         callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
+    }
+
+    constexpr auto isPrecached() noexcept
+    {
+        return callVirtualMethod<bool>(this, 70);
     }
 };
