@@ -126,7 +126,7 @@ void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
-        ImGui::MenuItem("Anti Aim", nullptr, &window.antiAim);
+        ImGui::MenuItem("Anti-Aim", nullptr, &window.antiAim);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
@@ -1040,6 +1040,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Radar Hack", &config.misc.radarHack);
         ImGui::Checkbox("Rank Revealer", &config.misc.revealRanks);
 		ImGui::Checkbox("Money Revealer", &config.misc.revealMoney);
+		ImGui::Checkbox("Suspect Revealer", &config.misc.revealSuspect);
 		ImGuiCustom::colorPicker("Spectator List", config.misc.spectatorList);
 		ImGuiCustom::colorPicker("Watermark", config.misc.watermark);
         ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);
@@ -1256,7 +1257,7 @@ void GUI::renderGuiStyle2() noexcept
             window.aimbot = true;
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Anti Aim")) {
+        if (ImGui::BeginTabItem("Anti-Aim")) {
             window = { };
             window.antiAim = true;
             ImGui::EndTabItem();
