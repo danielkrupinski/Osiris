@@ -433,6 +433,7 @@ static constexpr void DrawAimbotFov() noexcept {
 	auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
 	if (!weaponIndex)
 		return;
+	auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
 	if (!config.aimbot[weaponIndex].enabled)
 		weaponIndex = 0;
 	if (!config.aimbot[weaponIndex].AimbotFov) {
