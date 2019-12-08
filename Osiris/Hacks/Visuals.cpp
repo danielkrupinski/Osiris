@@ -233,13 +233,15 @@ void Visuals::hitMarker(GameEvent* event) noexcept
             }
             else if (config.visuals.hitMarker == 6)    {
                 const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
-                const auto alpha = 1.f;
 
+                const auto width_mid = width / 2;
+                const auto height_mid = height / 2;
 
-                const auto lineSize = 12;
-                interfaces.surface->setDrawColor(255, 255, 255, static_cast<int>(alpha * 255.f));
-                interfaces.surface->drawLine(screenWidth / 2 - lineSize / 2, screenHeight / 2 - lineSize / 2, screenWidth / 2 + lineSize / 2, screenHeight / 2 + lineSize / 2);
-                interfaces.surface->drawLine(screenWidth / 2 + lineSize / 2, screenHeight / 2 - lineSize / 2, screenWidth / 2 - lineSize / 2, screenHeight / 2 + lineSize / 2);
+                interfaces.surface->setDrawColor(255, 255, 255, 225);
+                interfaces.surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+                interfaces.surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+                interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+                interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
             }
         }
     }
