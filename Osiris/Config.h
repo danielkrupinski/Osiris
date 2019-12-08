@@ -222,6 +222,7 @@ public:
         bool radarHack{ false };
         bool revealRanks{ false };
         bool revealMoney{ false };
+        bool revealSuspect{ false };
         ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };
