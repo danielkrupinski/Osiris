@@ -180,6 +180,7 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+        bool hitMarkerDamageIndicator{ true };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
