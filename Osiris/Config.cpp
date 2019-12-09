@@ -700,6 +700,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
+        if (visualsJson.isMember("Hit marker Damage Indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker Damage Indicator"].asBool();
 		if (visualsJson.isMember("View Model")) visuals.viewModel = visualsJson["View Model"].asBool();
 		if (visualsJson.isMember("ViewModel X")) visuals.viewModel_x = visualsJson["ViewModel X"].asFloat();
 		if (visualsJson.isMember("ViewModel Y")) visuals.viewModel_y = visualsJson["ViewModel Y"].asFloat();
@@ -1467,6 +1468,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
 		visualsJson["View Model"] = visuals.viewModel;
+        visualsJson["Hit marker Damage Indicator"] = visuals.hitMarkerDamageIndicator;
 		visualsJson["ViewModel X"] = visuals.viewModel_x;
 		visualsJson["ViewModel Y"] = visuals.viewModel_y;
 		visualsJson["ViewModel Z"] = visuals.viewModel_z;

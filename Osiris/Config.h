@@ -195,6 +195,7 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+        bool hitMarkerDamageIndicator{ false };
 		bool viewModel{ false };
 		float viewModel_x{ 0 };
 		float viewModel_y{ 0 };

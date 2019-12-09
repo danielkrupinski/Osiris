@@ -227,6 +227,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 		Misc::drawBombTimer();
 		Misc::spectatorList();
 		Misc::watermark();
+		Visuals::hitMarkerDamageIndicator();
 	}
 	hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -332,6 +333,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 	case fnv::hash("player_hurt"):
 		Misc::playHitSound(event);
 		Visuals::hitMarker(event);
+		Visuals::hitMarkerSetDamageIndicator(event);
 		break;
 	}
 	return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
@@ -413,7 +415,7 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
 	if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
 		return nullptr;
 
-	return hooks.engine.callOriginal<void*>(218);
+    return hooks.engine.callOriginal<void*>(218);
 }
 
 static bool __stdcall isPlayingDemo() noexcept
