@@ -816,7 +816,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
-        ImGui::Checkbox("Damage Indicators", &config.visuals.hitMarkerDamageIndicator);
+        ImGui::Checkbox("Damage Indicator", &config.visuals.hitMarkerDamageIndicator);
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
 			ImGui::PushID(6);
