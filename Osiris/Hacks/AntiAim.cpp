@@ -77,7 +77,6 @@ void AngleVectors(const QAngle& angles, Vector& forward)
 	forward.y = cp * sy;
 	forward.z = -sp;
 }
-
 void CorrectMovement(Vector vOldAngles, UserCmd* pCmd, float fOldForward, float fOldSidemove)
 {
 	// side/forward move correction
@@ -105,7 +104,6 @@ void CorrectMovement(Vector vOldAngles, UserCmd* pCmd, float fOldForward, float 
 	pCmd->forwardmove = cos(degreesToRadians(deltaView)) * fOldForward + cos(degreesToRadians(deltaView + 90.f)) * fOldSidemove;
 	pCmd->sidemove = sin(degreesToRadians(deltaView)) * fOldForward + sin(degreesToRadians(deltaView + 90.f)) * fOldSidemove;
 }
-
 Vector CalcAngle(Vector src, Vector dst)
 {
 	Vector angles;
@@ -131,7 +129,6 @@ Vector CalcAngle(Vector src, Vector dst)
 
 	return angles;
 }
-
 float VectorDistance(Vector v1, Vector v2) {
 	return sqrtf(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2) + pow(v1.z - v2.z, 2));
 }
@@ -145,7 +142,6 @@ int distance(Vector a, Vector b) {
 
 	return (int)abs(round(distance));
 }
-
 bool LbyBreaker()
 {
 	const auto local_player = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
@@ -202,6 +198,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
 	cmd->viewangles.z = 0.0f;
 	CorrectMovement(vOldAngles, cmd, fOldForward, fOldSidemove);
+
 }
 void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 {
@@ -218,11 +215,10 @@ void AntiAim::type(UserCmd* cmd, bool& sendPacket)  noexcept
 		}
 		if (config.antiAim.type == 1) {
 			if (fabsf(cmd->sidemove) < 5.0f) {
-
-				cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-			}
-			else {
-				cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+				if (cmd->buttons & UserCmd::IN_DUCK)
+					cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+				else
+					cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
 			}
 		}
 		if (config.antiAim.type == 2) {

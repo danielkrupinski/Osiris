@@ -158,15 +158,29 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 		Misc::fakeDuck(cmd);
 		AntiAim::type(cmd, sendPacket);
 		AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-		if (sendPacket) {
-			unchoked = cmd->viewangles;
-		}
-		if (!sendPacket) {
-			choked = cmd->viewangles;
-		}
-		angle = cmd->viewangles;
-		PredictionSystem::EndPrediction();
 	}
+	auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
+	viewAnglesDelta.normalize();
+	viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+	viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+
+	cmd->viewangles = previousViewAngles + viewAnglesDelta;
+
+	cmd->viewangles.normalize();
+
+	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
+	cmd->viewangles.z = 0.0f;
+
+	previousViewAngles = cmd->viewangles;
+	if (sendPacket) {
+		unchoked = cmd->viewangles;
+	}
+	if (!sendPacket) {
+		choked = cmd->viewangles;
+	}
+	angle = cmd->viewangles;
+	return false;
 }
 
 static int __stdcall doPostScreenEffects(int param) noexcept
@@ -227,7 +241,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 		Misc::drawBombTimer();
 		Misc::spectatorList();
 		Misc::watermark();
-		Visuals::hitMarkerDamageIndicator();
+        Visuals::hitMarkerDamageIndicator();
 	}
 	hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -345,7 +359,6 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
 		&& !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
 		setup->fov += config.visuals.fov;
 	setup->farZ += config.visuals.farZ * 10;
-	Misc::fov = setup->fov;
 	Misc::fakeDuckFix(setup);
 	hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
 }

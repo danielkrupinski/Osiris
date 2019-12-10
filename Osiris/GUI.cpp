@@ -271,7 +271,11 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::SliderFloat("Recoil Control Y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
         ImGui::SliderFloat("Max Aim Inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
         ImGui::SliderFloat("Max Shot Inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-		ImGui::Checkbox("Standalone Recoil Control", &config.aimbot[currentWeapon].standaloneRecoilControl);
+        ImGui::Checkbox("Standalone RCS", &config.aimbot[currentWeapon].standaloneRCS);
+        if (config.aimbot[currentWeapon].standaloneRCS)
+        {
+            ImGui::Combo("Mode", &config.aimbot[currentWeapon].rcsStyle, "Normal\0With Ignore Shots\0");
+        }
         ImGui::InputInt("Min. Damage", &config.aimbot[currentWeapon].minDamage);
         config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
 		ImGui::InputInt("Hitchance", &config.aimbot[currentWeapon].hitChance);
@@ -280,7 +284,6 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::Checkbox("Between Shots", &config.aimbot[currentWeapon].betweenShots);
 		ImGui::Checkbox("Velocity Extrapolation", &config.aimbot[currentWeapon].velocityExtrapolation);
 		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
-		ImGui::Checkbox("Standalone RCS", &config.aimbot[currentWeapon].standaloneRCS);
 		ImGui::InputInt("Ignore Shots", &config.aimbot[currentWeapon].shotsFired);
 		config.aimbot[currentWeapon].shotsFired = std::clamp(config.aimbot[currentWeapon].shotsFired, 0, 10);
         ImGui::Columns(1);
@@ -301,12 +304,12 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::SameLine();
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
-		ImGui::SliderInt("Yaw Angle", &config.antiAim.yawAngle, -180, 180, "%d");
-		ImGui::Combo("Desync Style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
-		ImGui::Combo("Thirdperson", &config.antiAim.third, "Choked\0Unchoked\0Normal\0");
-		ImGui::Text("Invert Key");
-		ImGui::SameLine();
-		hotkey(config.antiAim.desyncinvert);
+        ImGui::SliderInt("Yaw Angle", &config.antiAim.yawAngle, -180, 180, "%d");
+        ImGui::Combo("Desync Style", &config.antiAim.type, "None\0Sidemove\0LBY\0");
+        ImGui::Combo("Thirdperson Mode", &config.antiAim.third, "Choked\0Unchoked\0Both\0");
+        ImGui::Text("Invert Key");
+        ImGui::SameLine();
+        hotkey(config.antiAim.desyncinvert);
         if (!config.style.menuStyle)
             ImGui::End();
     }
@@ -813,6 +816,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+        ImGui::Checkbox("Damage Indicators", &config.visuals.hitMarkerDamageIndicator);
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
 		if (config.visuals.viewModel) {
 			ImGui::PushID(6);
@@ -1004,7 +1008,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.menuKey);
 
-		ImGui::Checkbox("Show Round People (?)", &config.misc.showRoundPeople);
+		ImGui::Checkbox("Show Round People", &config.misc.showRoundPeople);
         ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
 		ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
 		ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
@@ -1013,15 +1017,15 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");
 		}
 		ImGui::Checkbox("Door Spam", &config.misc.usespam);
-		ImGui::Checkbox("Slow Walk", &config.misc.slowwalk);
-		ImGui::SameLine();
-		hotkey(config.misc.slowwalkkey);
-		ImGui::PushID(0);
-		ImGui::SliderFloat("Amount: ", &config.misc.slowwalkamount, 0, 100, "%d");
-		ImGui::PopID();
-		ImGui::Text("Block Bot");
-		ImGui::SameLine();
-		hotkey(config.misc.blockbotkey);
+        ImGui::Checkbox("Slow Walk", &config.misc.slowwalk);
+        ImGui::SameLine();
+        hotkey(config.misc.slowwalkkey);
+        ImGui::PushID(0);
+        ImGui::SliderFloat("Amount", &config.misc.slowwalkamount, 0.0f, 100.0f, "%.2f");
+        ImGui::PopID();
+        ImGui::Text("Blockbot");
+        ImGui::SameLine();
+        hotkey(config.misc.blockbotkey);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
 		ImGui::TextUnformatted("Fake Duck Key");
 		ImGui::SameLine();
@@ -1056,10 +1060,6 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
-		if (config.misc.clocktag) {
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-		}
 		if (ImGui::Checkbox("Custom Clantag", &config.misc.customClanTag))
 			Misc::updateClanTag(true);
 		ImGui::SameLine();
@@ -1074,19 +1074,12 @@ void GUI::renderMiscWindow() noexcept
 				Misc::updateClanTag(true);
 		}
 		ImGui::Checkbox("Clock Clantag", &config.misc.clocktag);
-		if (config.misc.clocktag) {
-			ImGui::PopItemFlag();
-			ImGui::PopStyleVar();
-		}
         ImGui::Checkbox("Killsay", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
         ImGui::PushID(2);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
-		ImGui::Checkbox("On-Hit Spam", &config.misc.spamMessage);
-		ImGui::SameLine();
-		ImGui::InputText("", config.misc.spamMessageString, IM_ARRAYSIZE(config.misc.spamMessageString));
         ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
         ImGui::PushID(3);
         ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
@@ -1203,7 +1196,7 @@ void GUI::renderConfigWindow() noexcept
             ImGui::OpenPopup("Part to Reset");
 
         if (ImGui::BeginPopup("Part to Reset")) {
-            static constexpr const char* names[]{ "Everything", "Aimbot", "Triggerbot", "Backtrack", "Anti Aim", "Glow", "Chams", "ESP", "Visuals", "Skinchanger", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Everything", "Aimbot", "Anti-Aim", "Triggerbot", "Backtrack", "Glow", "Chams", "ESP", "Visuals", "Skinchanger", "Sound", "Style", "Misc", "Reportbot" };
 			for (int i = 0; i < IM_ARRAYSIZE(names); ++i) {
                 if (i == 1) ImGui::Separator();
 

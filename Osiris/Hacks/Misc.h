@@ -17,8 +17,8 @@
 #include "../SDK/Input.h"
 
 namespace Misc {
-	void AutoBlocker(UserCmd*) noexcept;
-	void slowwalk(UserCmd* cmd) noexcept;
+    void AutoBlocker(UserCmd*) noexcept;
+    void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
@@ -37,8 +37,6 @@ namespace Misc {
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
-
-	static float fov{ 0.0f };
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -108,71 +106,70 @@ namespace Misc {
             interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
     }
 
-	static void usespam(UserCmd* cmd) noexcept
-	{
-		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-		static bool usespam = true;
-		if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
-			if (usespam)
-			{
-				cmd->buttons |= UserCmd::IN_USE;
-				usespam = false;
-			}
-			else
-			{
-				cmd->buttons &= ~UserCmd::IN_USE;
-				usespam = true;
-			}
-		}
-	}
+    static void usespam(UserCmd* cmd) noexcept
+    {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        static bool usespam = true;
+        if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
+            if (usespam)
+            {
+                cmd->buttons |= UserCmd::IN_USE;
+                usespam = false;
+            }
+            else
+            {
+                cmd->buttons &= ~UserCmd::IN_USE;
+                usespam = true;
+            }
+        }
+    }
+    static void autoStrafe(UserCmd* cmd) noexcept
+    {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        static bool bDirection = true;
+        static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
+        float flYawBhop = 0.f;
+        if (localPlayer->velocity().length() > 50.f)
+        {
+            float x = 30.f;
+            float y = localPlayer->velocity().length();
+            float z = 0.f;
+            float a = 0.f;
 
-	static void autoStrafe(UserCmd* cmd) noexcept
-	{
-		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-		static bool bDirection = true;
-		static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
-		float flYawBhop = 0.f;
-		if (localPlayer->velocity().length() > 50.f)
-		{
-			float x = 30.f;
-			float y = localPlayer->velocity().length();
-			float z = 0.f;
-			float a = 0.f;
+            z = x / y;
+            z = fabsf(z);
 
-			z = x / y;
-			z = fabsf(z);
+            a = x * z;
 
-			a = x * z;
-
-			flYawBhop = a;
-		}
-		if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 0) {
-			if (cmd->mousedx > 1)
-			{
-				cmd->sidemove = 450.f;
-			}
-			else
-			{
-				cmd->sidemove = -450.f;
-			}
-		}
-		if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 1) {
-			if (bDirection || cmd->mousedx > 1)
-			{
-				cmd->viewangles.y -= flYawBhop;
-				cmd->sidemove = -450.f;
-				bDirection = false;
-			}
-			else
-			{
-				cmd->viewangles.y += flYawBhop;
-				cmd->sidemove = 450.f;
-				bDirection = true;
-			}
-		}
-		wasLastTimeOnGround = localPlayer->flags() & 1;
-		//CorrectMovement(cmd->viewangles, cmd, cmd->forwardmove, cmd->sidemove);
-	}
+            flYawBhop = a;
+        }
+        if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 0) {
+            if (cmd->mousedx > 1)
+            {
+                cmd->sidemove = 450.f;
+            }
+            else
+            {
+                cmd->sidemove = -450.f;
+            }
+        }
+        if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 1) {
+            if (bDirection || cmd->mousedx > 1)
+            {
+                cmd->viewangles.y -= flYawBhop;
+                cmd->sidemove = -450.f;
+                bDirection = false;
+            }
+            else
+            {
+                cmd->viewangles.y += flYawBhop;
+                cmd->sidemove = 450.f;
+                bDirection = true;
+            }
+        }
+        wasLastTimeOnGround = localPlayer->flags() & 1;
+        //CorrectMovement(cmd->viewangles, cmd, cmd->forwardmove, cmd->sidemove);
+    }
 
     constexpr void removeCrouchCooldown(UserCmd* cmd) noexcept
     {
@@ -192,7 +189,7 @@ namespace Misc {
             "play physics/metal/metal_solid_impact_bullet2",
             "play buttons/arena_switch_press_02",
             "play training/timer_bell",
-            "play physics/glass/glass_impact_bullet1"
+            "play physics/glass/glass_impact_bullet1",
         };
 
         if (config.misc.hitSound
@@ -207,14 +204,6 @@ namespace Misc {
             && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
             && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
             interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(config.misc.killMessageString).c_str());
-	}
-
-	constexpr void spamMessage(GameEvent* event) noexcept
-	{
-		auto localPlayer = interfaces.engine->getLocalPlayer();
-		if (config.misc.spamMessage
-			&& interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
-			interfaces.engine->clientCmdUnrestricted(std::string { "say " }.append(config.misc.spamMessageString).c_str());
 	}
 
 	constexpr void fakeDuck(UserCmd* cmd) noexcept

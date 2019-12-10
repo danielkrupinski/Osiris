@@ -15,74 +15,70 @@
 
 void Misc::AutoBlocker(UserCmd* cmd) noexcept
 {
-	if (GetAsyncKeyState(config.misc.blockbotkey)) {
-	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	float bestdist = 250.f;
-	int index = -1;
-		for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-			auto entity = interfaces.entityList->getEntity(i);
+    if (GetAsyncKeyState(config.misc.blockbotkey)) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        float bestdist = 250.f;
+        int index = -1;
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
 
-			if (!entity)
-				continue;
+            if (!entity)
+                continue;
 
-			if (!entity->isAlive() || entity->isDormant() || entity == localPlayer)
-				continue;
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer)
+                continue;
 
-			float dist = distance(localPlayer->origin(), entity->origin());
-			if (dist < bestdist)
-			{
-				bestdist = dist;
-				index = i;
-			}
-		}
+            float dist = distance(localPlayer->origin(), entity->origin());
+            if (dist < bestdist)
+            {
+                bestdist = dist;
+                index = i;
+            }
+        }
 
-		if (index == -1)
-			return;
+        if (index == -1)
+            return;
 
-		auto target = interfaces.entityList->getEntity(index);
+        auto target = interfaces.entityList->getEntity(index);
 
+        if (!target)
+            return;
 
-		if (!target)
-			return;
+        Vector angles = CalcAngle(localPlayer->origin(), target->origin());
 
-		Vector angles = CalcAngle(localPlayer->origin(), target->origin());
+        angles.y -= localPlayer->eyeAngles().y;
+        angles.normalize();
+        angles.y = std::clamp(angles.y, -180.f, 180.f);
 
-		angles.y -= localPlayer->eyeAngles().y;
-		angles.normalize();
-		angles.y = std::clamp(angles.y, -180.f, 180.f);
+        if (angles.y < 0.0f)
+            cmd->sidemove = 450.f;
+        else if (angles.y > 0.0f)
+            cmd->sidemove = -450.f;
 
-		if (angles.y < 0.0f)
-			cmd->sidemove = 450.f;
-		else if (angles.y > 0.0f)
-			cmd->sidemove = -450.f;
-
-	} else {
-		if (!GetAsyncKeyState(config.misc.blockbotkey))
-			return;
-	}
+    }
 }
 
 void Misc::slowwalk(UserCmd* cmd)noexcept
 {
-	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	float speed = localPlayer->velocity().length();
-	Vector velocity = localPlayer->velocity();
-	if (config.misc.slowwalk && (localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && GetAsyncKeyState(config.misc.slowwalkkey)) {
-		if (speed > config.misc.slowwalkamount && (cmd->buttons && (UserCmd::IN_MOVELEFT || UserCmd::IN_MOVERIGHT || UserCmd::IN_FORWARD || UserCmd::IN_BACK))) {
-			velocity.z = 0;
-			QAngle direction;
-			VectorAngles(velocity, direction);
-			direction.yaw = cmd->viewangles.y - direction.yaw;
-			Vector forward;
-			AngleVectors(direction, forward);
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    float speed = localPlayer->velocity().length();
+    Vector velocity = localPlayer->velocity();
+    if (config.misc.slowwalk && (localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && GetAsyncKeyState(config.misc.slowwalkkey)) {
+        if (speed > config.misc.slowwalkamount && (cmd->buttons && (UserCmd::IN_MOVELEFT || UserCmd::IN_MOVERIGHT || UserCmd::IN_FORWARD || UserCmd::IN_BACK))) {
+            velocity.z = 0;
+            QAngle direction;
+            VectorAngles(velocity, direction);
+            direction.yaw = cmd->viewangles.y - direction.yaw;
+            Vector forward;
+            AngleVectors(direction, forward);
 
-			Vector negated_direction = forward * speed;
-			AngleVectors(direction, negated_direction);
+            Vector negated_direction = forward * speed;
+            AngleVectors(direction, negated_direction);
 
-			cmd->forwardmove = negated_direction.x;
-			cmd->sidemove = negated_direction.y;
-		}
-	}
+            cmd->forwardmove = negated_direction.x;
+            cmd->sidemove = negated_direction.y;
+        }
+    }
 }
 
 void Misc::inverseRagdollGravity() noexcept
@@ -202,20 +198,20 @@ void Misc::watermark() noexcept
 		static auto frameRate{ 1.0f };
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
 		const auto [screenWidth, screenHeight] { interfaces.surface->getScreenSize() };
-		const std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1.0f / frameRate)) };
+        const std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1.0f / frameRate)) };
 		const auto [fpsWidth, fpsHeight] { interfaces.surface->getTextSize(Surface::font, fps.c_str()) };
         interfaces.surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces.surface->printText(fps.c_str());
 
 		float latency{ 0.0f };
 		if (auto networkChannel{ interfaces.engine->getNetworkChannel() }; networkChannel)
-			latency = networkChannel->getAvgLatency(0);
+            latency = networkChannel->getAvgLatency(0);
 
 		const static auto updateRate{ interfaces.cvar->findVar("cl_updaterate") };
 
 		latency -= 0.5f / updateRate->getFloat();
 
-		const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency) * 1000.f)) + L" ms" };
+        const std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>((std::max)(0.0f, latency) * 1000.f)) + L" ms" };
 		const auto pingWidth{ interfaces.surface->getTextSize(Surface::font, ping.c_str()).first };
     }
 }

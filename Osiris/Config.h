@@ -54,7 +54,8 @@ public:
         float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
-		bool standaloneRecoilControl{ false };
+        bool standaloneRCS{ false };
+        int rcsStyle{ 0 };
         int minDamage{ 1 };
 		int hitChance{ 0 };
 		int shotsFired{ 0 };
@@ -62,7 +63,6 @@ public:
         bool betweenShots{ false };
 		bool velocityExtrapolation{ false };
 		bool aimbotCircle{ false };
-		bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 
@@ -94,10 +94,10 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
-		int yawAngle{ 0 };
-		int type{ 0 };
-		int third{ 0 };
-		int desyncinvert{ 0 };
+        int yawAngle{ 0 };
+        int type{ 0 };
+        int third{ 0 };
+        int desyncinvert{ 0 };
     } antiAim;
 
     struct Glow {
@@ -227,12 +227,12 @@ public:
         bool antiAfkKick{ false };
 		bool bunnyHop{ false };
 		bool autoStrafe{ false };
-		int autostrafestyle{ 0 };
-		bool usespam{ false };
-		bool slowwalk{ false };
-		int slowwalkkey{ 0 };
-		float slowwalkamount{ 0.f };
-		int blockbotkey{ 0 };
+        int autostrafestyle{ 0 };
+        bool usespam{ false };
+        bool slowwalk{ false };
+        int slowwalkkey{ 0 };
+        float slowwalkamount{ 0.f };
+        int blockbotkey{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
@@ -258,8 +258,6 @@ public:
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "sample text" };
-		bool spamMessage{ false };
-		char spamMessageString[230]{ "YOUR TEXT HERE" };
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };

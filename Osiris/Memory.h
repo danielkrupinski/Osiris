@@ -55,8 +55,8 @@ public:
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
     uintptr_t test;
     uintptr_t test2;
-	uintptr_t* predictionRandomSeed;
-	uintptr_t(__thiscall* md5PseudoRandom)(uintptr_t);
+    uintptr_t* predictionRandomSeed;
+    uintptr_t(__thiscall* md5PseudoRandom)(uintptr_t);
 
 private:
     template <typename T = uintptr_t>

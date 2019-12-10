@@ -76,7 +76,7 @@ void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vecto
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
-	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
@@ -84,22 +84,21 @@ void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vecto
     }
 
     if (config.visuals.thirdperson)
-		if (stage == FrameStage::RENDER_START) {
-
-			if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
-				&& interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()) {
-				if (config.antiAim.third == 0) {
-					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = choked;
-				}
-				if (config.antiAim.third == 1) {
-					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = unchoked;
-				}
-				if (config.antiAim.third == 2) {
-					*reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = angle;
-				}
-			}
-			memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
-		}
+        if (stage == FrameStage::RENDER_START) {
+            if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+                && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()) {
+                if (config.antiAim.third == 0) {
+                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = choked;
+                }
+                if (config.antiAim.third == 1) {
+                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = unchoked;
+                }
+                if (config.antiAim.third == 2) {
+                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = angle;
+                }
+            }
+            memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+        }
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
