@@ -1549,7 +1549,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Use spam"] = misc.usespam;
         miscJson["Slowwalk"] = misc.slowwalk;
         miscJson["Slowwalk key"] = misc.slowwalkkey;
-        miscJson["Slowwalk ammount"] = misc.slowwalkamount;
+        miscJson["Slowwalk amount"] = misc.slowwalkamount;
         miscJson["Block bot"] = misc.blockbotkey;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
