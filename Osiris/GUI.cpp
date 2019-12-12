@@ -541,6 +541,8 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
         ImGuiCustom::colorPicker("Colour", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+        ImGui::SetNextItemWidth(220.0f);
+        ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
 
         if (!config.style.menuStyle) {
             ImGui::End();
