@@ -135,6 +135,7 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            bool deadesp { false };
         };
 
         struct Weapon : public Shared { } weapon;
