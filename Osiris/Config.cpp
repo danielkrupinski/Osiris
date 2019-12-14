@@ -366,7 +366,8 @@ void Config::load(size_t id) noexcept
             if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
             if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
-
+        
+        if (espJson.isMember("Dead ESP")) espConfig.deadesp = espJson["Dead ESP"].asBool();
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
@@ -876,16 +877,6 @@ void Config::load(size_t id) noexcept
 
 void Config::save(size_t id) const noexcept
 {
-    if (!std::filesystem::is_directory(path)) {
-        std::filesystem::remove(path);
-        std::filesystem::create_directory(path);
-    }
-
-    std::ofstream out{ path / configs[id] };
-
-    if (!out.good())
-        return;
-
     Json::Value json;
 
     for (size_t i = 0; i < aimbot.size(); i++) {
@@ -1169,6 +1160,7 @@ void Config::save(size_t id) const noexcept
             distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
         }
 
+        espJson["Dead ESP"] = espConfig.deadesp;
         espJson["Max distance"] = espConfig.maxDistance;
     }
 
@@ -1587,8 +1579,13 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Text abuse"] = reportbot.textAbuse;
     }
 
-    out << json;
-    out.close();
+    if (std::filesystem::is_directory(path)) {
+        std::filesystem::remove(path);
+        std::filesystem::create_directory(path);
+    }
+
+    if (std::ofstream out{ path / configs[id] }; out.good())
+        out << json;
 }
 
 void Config::add(const char* name) noexcept
