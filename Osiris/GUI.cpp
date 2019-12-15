@@ -745,6 +745,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::NextColumn();
         ImGui::Checkbox("Zoom", &config.visuals.zoom);
         ImGui::SameLine();
+        ImGui::Checkbox("No zoom", &config.visuals.noZoom)
         hotkey(config.visuals.zoomKey);
         ImGui::Checkbox("Thirdperson", &config.visuals.thirdperson);
         ImGui::SameLine();
