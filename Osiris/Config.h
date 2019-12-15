@@ -167,6 +167,7 @@ public:
         bool wireframeSmoke{ false };
         bool zoom{ false };
         int zoomKey{ 0 };
+        bool noZoom{ false };
         bool thirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
