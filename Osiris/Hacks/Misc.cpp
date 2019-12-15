@@ -425,17 +425,17 @@ void Misc::fakePrime() noexcept
     if (config.misc.fakePrime && !fakePrimeSet) {
         fakePrimeSet = true;
         DWORD old_protect;
-        VirtualProtect(memory.fakePrime, 5, PAGE_EXECUTE_READWRITE, &old_protect);
-        char patch[] = { 0x31, 0xC0, 0xFE, 0xC0, 0xC3 };
-        memcpy(memory.fakePrime, patch, 5);
-        VirtualProtect(memory.fakePrime, 5, old_protect, nullptr);
+        VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &old_protect);
+        char patch[] = { 0xEB };
+        memcpy(memory.fakePrime, patch, 1);
+        VirtualProtect(memory.fakePrime, 1, old_protect, nullptr);
     }
     else if (!config.misc.fakePrime && fakePrimeSet) {
         fakePrimeSet = false;
         DWORD old_protect;
-        VirtualProtect(memory.fakePrime, 5, PAGE_EXECUTE_READWRITE, &old_protect);
-        char unPatch[] = { 0x31, 0xC0, 0xC3 };
-        memcpy(memory.fakePrime, unPatch, 3);
-        VirtualProtect(memory.fakePrime, 5, old_protect, nullptr);
+        VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &old_protect);
+        char unPatch[] = { 0x74 };
+        memcpy(memory.fakePrime, unPatch, 1);
+        VirtualProtect(memory.fakePrime, 1, old_protect, nullptr);
     }
 }
