@@ -1579,7 +1579,7 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Text abuse"] = reportbot.textAbuse;
     }
 
-    if (std::filesystem::is_directory(path)) {
+    if (!std::filesystem::is_directory(path)) {
         std::filesystem::remove(path);
         std::filesystem::create_directory(path);
     }
