@@ -314,6 +314,7 @@ static void post_data_update_start(Entity* local) noexcept
 
             // Thanks, Beakers
             glove->index() = -1;
+            glove->initialized() = true;
 
             apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
         }
