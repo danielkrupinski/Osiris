@@ -417,3 +417,25 @@ void Misc::fixTabletSignal() noexcept
             activeWeapon->tabletReceptionIsBlocked() = false;
     }
 }
+
+void Misc::fakePrime() noexcept
+{
+    static bool fakePrimeSet;
+
+    if (config.misc.fakePrime && !fakePrimeSet) {
+        fakePrimeSet = true;
+        DWORD old_protect;
+        VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &old_protect);
+        char patch[] = { 0xEB };
+        memcpy(memory.fakePrime, patch, 1);
+        VirtualProtect(memory.fakePrime, 1, old_protect, nullptr);
+    }
+    else if (!config.misc.fakePrime && fakePrimeSet) {
+        fakePrimeSet = false;
+        DWORD old_protect;
+        VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &old_protect);
+        char unPatch[] = { 0x74 };
+        memcpy(memory.fakePrime, unPatch, 1);
+        VirtualProtect(memory.fakePrime, 1, old_protect, nullptr);
+    }
+}
