@@ -878,16 +878,6 @@ void Config::load(size_t id) noexcept
 
 void Config::save(size_t id) const noexcept
 {
-    if (!std::filesystem::is_directory(path)) {
-        std::filesystem::remove(path);
-        std::filesystem::create_directory(path);
-    }
-
-    std::ofstream out{ path / configs[id] };
-
-    if (!out.good())
-        return;
-
     Json::Value json;
 
     for (size_t i = 0; i < aimbot.size(); i++) {
@@ -1591,8 +1581,13 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Text abuse"] = reportbot.textAbuse;
     }
 
-    out << json;
-    out.close();
+    if (!std::filesystem::is_directory(path)) {
+        std::filesystem::remove(path);
+        std::filesystem::create_directory(path);
+    }
+
+    if (std::ofstream out{ path / configs[id] }; out.good())
+        out << json;
 }
 
 void Config::add(const char* name) noexcept

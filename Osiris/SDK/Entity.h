@@ -277,6 +277,7 @@ public:
     NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned);
     NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float);
     NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned);
+    NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool);
 
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int);
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
