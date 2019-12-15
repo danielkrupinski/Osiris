@@ -36,6 +36,7 @@ namespace Misc {
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
+    void fakePrime() noexcept;
 
     static float fov{ 0.0f };
 

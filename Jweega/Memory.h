@@ -57,6 +57,7 @@ public:
     uintptr_t test2;
     uintptr_t* predictionRandomSeed;
     uintptr_t(__thiscall* md5PseudoRandom)(uintptr_t);
+    uint8_t* fakePrime;
 
 private:
     template <typename T = uintptr_t>

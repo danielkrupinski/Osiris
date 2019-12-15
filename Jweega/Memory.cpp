@@ -43,4 +43,5 @@ Memory::Memory() noexcept
     moveHelper = **findPattern<MoveHelper***>(L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
     predictionRandomSeed = *findPattern<uintptr_t**>(L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
     md5PseudoRandom = findPattern<decltype(md5PseudoRandom)>(L"client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x70\x6A\x58");
+    fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
 }
