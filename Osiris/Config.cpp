@@ -1564,7 +1564,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
-        miscJson["Fake Prime"] = misc.fakePrime;
+        miscJson["Fake prime"] = misc.fakePrime;
     }
 
     {
