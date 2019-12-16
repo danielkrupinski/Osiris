@@ -78,6 +78,7 @@ public:
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
+		bool drawAllTicks{ false };
         int timeLimit{ 200 };
     } backtrack;
 
@@ -135,7 +136,6 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
-            bool deadesp { false };
         };
 
         struct Weapon : public Shared { } weapon;
@@ -181,6 +181,7 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+		bool hitMarkerDamageIndicator{ false };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;

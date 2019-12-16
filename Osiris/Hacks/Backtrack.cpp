@@ -20,7 +20,7 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
+            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()  ) {
                 records[i].clear();
                 continue;
             }
@@ -87,7 +87,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 12 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;

@@ -10,7 +10,7 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
-
+#include "../SDK/Surface.h"
 void Visuals::colorWorld() noexcept
 {
     if (config.visuals.world.enabled) {
@@ -201,33 +201,118 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         }
 
         if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
-            constexpr auto getEffectMaterial = [] {
-                static constexpr const char* effects[]{
-                "effects/dronecam",
-                "effects/underwater_overlay",
-                "effects/healthboost",
-                "effects/dangerzone_screen"
-                };
+			if (config.visuals.hitMarker > 0 && config.visuals.hitMarker < 6) {
+				constexpr auto getEffectMaterial = [] {
+					static constexpr const char* effects[]{
+					"effects/dronecam",
+					"effects/underwater_overlay",
+					"effects/healthboost",
+					"effects/dangerzone_screen"
+					};
 
-                if (config.visuals.hitMarker <= 2)
-                    return effects[0];
-                return effects[config.visuals.hitMarker - 2];
-            };
+					if (config.visuals.hitMarker <= 2)
+						return effects[0];
+					return effects[config.visuals.hitMarker - 2];
 
-            auto renderContext = interfaces.materialSystem->getRenderContext();
-            renderContext->beginRender();
-            int x, y, width, height;
-            renderContext->getViewport(x, y, width, height);
-            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
-            if (config.visuals.hitMarker == 1)
-                material->findVar("$c0_x")->setValue(0.0f);
-            else if (config.visuals.hitMarker == 2)
-                material->findVar("$c0_x")->setValue(0.1f);
-            else if (config.visuals.hitMarker >= 4)
-                material->findVar("$c0_x")->setValue(1.0f);
-            drawScreenEffectMaterial(material, 0, 0, width, height);
-            renderContext->endRender();
-            renderContext->release();
+
+
+
+				};
+
+				auto renderContext = interfaces.materialSystem->getRenderContext();
+				renderContext->beginRender();
+				int x, y, width, height;
+				renderContext->getViewport(x, y, width, height);
+				auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+				if (config.visuals.hitMarker == 1)
+					material->findVar("$c0_x")->setValue(0.0f);
+				else if (config.visuals.hitMarker == 2)
+					material->findVar("$c0_x")->setValue(0.1f);
+				else if (config.visuals.hitMarker >= 4)
+					material->findVar("$c0_x")->setValue(1.0f);
+				drawScreenEffectMaterial(material, 0, 0, width, height);
+				renderContext->endRender();
+				renderContext->release();
+			}
+
+			else if (config.visuals.hitMarker == 6) {
+				const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
+
+
+				const auto width_mid = screenWidth		/ 2;
+				const auto height_mid = screenHeight	/ 2;
+
+
+				interfaces.surface->setDrawColor(255, 0, 255, 225);
+
+
+
+				interfaces.surface->drawLine(width_mid - 1, height_mid - -64, width_mid - 1, height_mid + 0);
+				interfaces.surface->drawLine(width_mid - 0, height_mid - -64, width_mid - 0, height_mid + 0);
+				interfaces.surface->drawLine(width_mid + 1, height_mid - -64, width_mid + 1, height_mid + 0);
+				interfaces.surface->drawLine(width_mid + 2, height_mid - -64, width_mid + 2, height_mid + 0);
+				
+				// Right part
+				//interfaces.surface->drawLine(width_mid + 9, height_mid + 10, width_mid + -1, height_mid + 0);
+				///
+				//interfaces.surface->drawLine(width_mid + 9, height_mid + 9, width_mid + 0, height_mid + 0);
+				//interfaces.surface->drawLine(width_mid + 8, height_mid + 10, width_mid + -1, height_mid + 0);
+
+				/// Left Part
+				//interfaces.surface->drawLine(width_mid - 11, height_mid + 10, width_mid - -1, height_mid + 0);
+				///
+				//interfaces.surface->drawLine(width_mid - 11, height_mid + 11, width_mid - -2, height_mid + 0);
+				//interfaces.surface->drawLine(width_mid - 10, height_mid + 11, width_mid - -1, height_mid + 0);
+
+				///
+				/////
+				//interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 5, height_mid - 5);
+				//interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 5, height_mid - 5);
+			}
+
+
+
         }
     }
+}
+
+void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+			hitMarkerInfo.push_back({ memory.globalVars->realtime + config.visuals.hitMarkerTime, event->getInt("dmg_health") });
+		}
+	}
+}
+
+void Visuals::hitMarkerDamageIndicator() noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (hitMarkerInfo.empty()) return;
+
+		const auto [width, height] = interfaces.surface->getScreenSize();
+
+		for (size_t i = 0; i < hitMarkerInfo.size(); i++)
+		{
+			const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory.globalVars->realtime;
+
+			if (diff < 0.f)
+			{
+				hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
+				continue;
+			}
+
+			const auto dist = 42;
+			const auto ratio = 1.f - diff / .5f;
+			const auto alpha = 255;
+
+			const auto font_id = 91;
+			interfaces.surface->setTextFont(font_id);
+			interfaces.surface->setTextPosition(width / 2 + ratio * dist / 8, height / 2 - 54 + ratio * dist);
+			interfaces.surface->setTextColor(255, 0, 125, alpha);
+			interfaces.surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
+		}
+	}
 }

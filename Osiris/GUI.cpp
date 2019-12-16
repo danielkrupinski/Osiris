@@ -406,7 +406,8 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
         ImGui::Checkbox("Recoil based fov", &config.backtrack.recoilBasedFov);
-        ImGui::PushItemWidth(220.0f);
+		ImGui::Checkbox("Draw all ticks", &config.backtrack.drawAllTicks);
+        ImGui::PushItemWidth(200.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
         ImGui::PopItemWidth();
         if (!config.style.menuStyle)
@@ -499,8 +500,6 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
         ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
-        ImGui::SetNextItemWidth(220.0f);
-        ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
 
         if (!config.style.menuStyle) {
             ImGui::End();
@@ -634,8 +633,6 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon);
-                ImGui::SameLine(spacing);
-                ImGui::Checkbox("Dead ESP", &config.esp.players[selected].deadesp);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -773,7 +770,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGuiCustom::colorPicker("World color", config.visuals.world);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0Classic Hitmarker\0");
+		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Columns(1);
 

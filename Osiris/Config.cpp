@@ -85,6 +85,7 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Enabled")) backtrack.enabled = backtrackJson["Enabled"].asBool();
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
+		if (backtrackJson.isMember("Draw all ticks")) backtrack.drawAllTicks = backtrackJson["Draw all ticks"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -366,8 +367,7 @@ void Config::load(size_t id) noexcept
             if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
             if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
-        
-        if (espJson.isMember("Dead ESP")) espConfig.deadesp = espJson["Dead ESP"].asBool();
+
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
 
@@ -688,7 +688,9 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
-    }
+		if (visualsJson.isMember("Hit marker Damage Indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker Damage Indicator"].asBool();
+	
+ }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
         const auto& skinChangerJson = json["skinChanger"][i];
@@ -941,6 +943,7 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Enabled"] = backtrack.enabled;
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
+		backtrackJson["Draw all ticks"] = backtrack.drawAllTicks;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
@@ -1170,7 +1173,6 @@ void Config::save(size_t id) const noexcept
             distanceJson["Rainbow speed"] = distanceConfig.rainbowSpeed;
         }
 
-        espJson["Dead ESP"] = espConfig.deadesp;
         espJson["Max distance"] = espConfig.maxDistance;
     }
 
@@ -1430,6 +1432,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
+		visualsJson["Hit marker Damage Indicator"] = visuals.hitMarkerDamageIndicator;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {

@@ -8,6 +8,12 @@
 #include "../SDK/Engine.h"
 #include "../SDK/EntityList.h"
 
+struct HitMarkerInfo {
+	float hitMarkerExpTime;
+	int hitMarkerDmg;
+};
+
+
 enum class FrameStage;
 class GameEvent;
 
@@ -24,6 +30,8 @@ namespace Visuals {
     void applyZoom(FrameStage) noexcept;
     void applyScreenEffects() noexcept;
     void hitMarker(GameEvent* = nullptr) noexcept;
+	void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
+	void hitMarkerDamageIndicator() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
@@ -62,4 +70,8 @@ namespace Visuals {
         else
             memory.loadSky(interfaces.cvar->findVar("sv_skyname")->string);
     }
+
+
+	inline std::vector<HitMarkerInfo> hitMarkerInfo;
+
 };
