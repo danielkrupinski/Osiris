@@ -194,7 +194,7 @@ namespace Misc {
             "play bubble",
             "play cod",
             "play fatality",
-            "play custom"
+            "play custom",
 
         };
 
