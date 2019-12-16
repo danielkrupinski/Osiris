@@ -249,6 +249,7 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
     } misc;
 
     struct {
