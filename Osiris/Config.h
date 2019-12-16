@@ -176,6 +176,7 @@ public:
         bool noSmoke{ false };
         bool noBlur{ false };
         bool noScopeOverlay{ false };
+        bool noZoom{ false };
         bool noGrass{ false };
         bool noShadows{ false };
         bool wireframeSmoke{ false };
@@ -224,6 +225,7 @@ public:
 
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
+        bool showRoundPeople{ false };
         bool antiAfkKick{ false };
 		bool bunnyHop{ false };
 		bool autoStrafe{ false };
@@ -274,7 +276,7 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
-		bool showRoundPeople{ false };
+        bool fakePrime{ false };
     } misc;
 
     struct {

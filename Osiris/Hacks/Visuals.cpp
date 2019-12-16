@@ -178,6 +178,17 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
+void Visuals::noZoom() noexcept
+{
+    if (config.visuals.noZoom) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (localPlayer && localPlayer->isScoped()) {
+            localPlayer->fov() = 90 + config.visuals.fov;
+            localPlayer->fovStart() = 90 + config.visuals.fov;
+        }
+    }
+}
+
 static __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
 {
     __asm {

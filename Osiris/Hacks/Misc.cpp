@@ -456,6 +456,22 @@ void Misc::fakeBan(bool set) noexcept
         shouldSet = false;
 }
 
+
+void Misc::fakePrime() noexcept
+{
+    static bool lastState = false;
+
+    if (config.misc.fakePrime != lastState) {
+        lastState = config.misc.fakePrime;
+
+        if (DWORD oldProtect; VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            constexpr uint8_t patch[]{ 0x74, 0xEB };
+            *memory.fakePrime = patch[config.misc.fakePrime];
+            VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+        }
+    }
+}
+
 void Misc::nadePredict() noexcept
 { 
     static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 

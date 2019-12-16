@@ -669,6 +669,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("noSmoke")) visuals.noSmoke = visualsJson["noSmoke"].asBool();
         if (visualsJson.isMember("noBlur")) visuals.noBlur = visualsJson["noBlur"].asBool();
         if (visualsJson.isMember("noScopeOverlay")) visuals.noScopeOverlay = visualsJson["noScopeOverlay"].asBool();
+        if (visualsJson.isMember("No zoom")) visuals.noZoom = visualsJson["No zoom"].asBool();
         if (visualsJson.isMember("noGrass")) visuals.noGrass = visualsJson["noGrass"].asBool();
         if (visualsJson.isMember("noShadows")) visuals.noShadows = visualsJson["noShadows"].asBool();
         if (visualsJson.isMember("wireframeSmoke")) visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
@@ -882,6 +883,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
+        if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
     }
 
     {
@@ -1427,6 +1429,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["noSmoke"] = visuals.noSmoke;
         visualsJson["noBlur"] = visuals.noBlur;
         visualsJson["noScopeOverlay"] = visuals.noScopeOverlay;
+        visualsJson["No zoom"] = visuals.noZoom;
         visualsJson["noGrass"] = visuals.noGrass;
         visualsJson["noShadows"] = visuals.noShadows;
         visualsJson["wireframeSmoke"] = visuals.wireframeSmoke;
@@ -1611,6 +1614,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
+        miscJson["Fake prime"] = misc.fakePrime;
     }
 
     {

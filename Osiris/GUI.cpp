@@ -782,6 +782,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No Smoke", &config.visuals.noSmoke);
         ImGui::Checkbox("No Blur", &config.visuals.noBlur);
         ImGui::Checkbox("No Scope Overlay", &config.visuals.noScopeOverlay);
+        ImGui::Checkbox("No Scope Zoom", &config.visuals.noZoom);
         ImGui::Checkbox("No Grass", &config.visuals.noGrass);
         ImGui::Checkbox("No Shadows", &config.visuals.noShadows);
         ImGui::Checkbox("Wireframe Smoke", &config.visuals.wireframeSmoke);
@@ -1101,13 +1102,14 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         if (ImGui::Button("Fake Ban"))
             Misc::fakeBan(true);
+        ImGui::Checkbox("Fake Prime", &config.misc.fakePrime);
         ImGui::Checkbox("Fast Plant", &config.misc.fastPlant);
 		ImGuiCustom::colorPicker("Bomb Timer", config.misc.bombTimer);
         ImGui::Checkbox("Quick Reload", &config.misc.quickReload);
         ImGui::Checkbox("R8 Preparer", &config.misc.prepareRevolver);
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
-        ImGui::Combo("Hitsound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
+        ImGui::Combo("Hitsound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Bubble\0CoD\0Fatality\0Custom\0");
         ImGui::SetNextItemWidth(90.0f);
         ImGui::InputInt("Fakelag", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);

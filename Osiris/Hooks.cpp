@@ -256,12 +256,14 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 	if (stage == FrameStage::RENDER_START) {
 		Visuals::disablePanoramablur();
 		Visuals::colorWorld();
+		Misc::fakePrime();
 }
 
 	if (interfaces.engine->isInGame()) {
 		Visuals::thirdperson(stage, angle, choked, unchoked);
 		Visuals::removeVisualRecoil(stage);
 		Visuals::applyZoom(stage);
+		Visuals::noZoom();
 		Misc::fixAnimationLOD(stage);
 		Backtrack::update(stage);
 		SkinChanger::run(stage);

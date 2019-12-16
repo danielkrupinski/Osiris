@@ -37,6 +37,7 @@ namespace Misc {
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
+    void fakePrime() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -190,6 +191,11 @@ namespace Misc {
             "play buttons/arena_switch_press_02",
             "play training/timer_bell",
             "play physics/glass/glass_impact_bullet1",
+            "play bubble",
+            "play cod",
+            "play fatality",
+            "play custom"
+
         };
 
         if (config.misc.hitSound
