@@ -2,6 +2,8 @@
 
 #include "Utils.h"
 
+#include <tuple>
+
 class MaterialVar {
 public:
 	constexpr auto setValue(float value) noexcept
@@ -47,6 +49,11 @@ public:
 	constexpr void colorModulate(float r, float g, float b) noexcept
 	{
 		callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
+	}
+
+	constexpr void colorModulate(const std::tuple<float, float, float>& color) noexcept
+	{
+		callVirtualMethod<void, float, float, float>(this, 28, std::get<0>(color), std::get<1>(color), std::get<2>(color));
 	}
 
 	constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
