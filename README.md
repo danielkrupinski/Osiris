@@ -206,7 +206,7 @@ To download source code this way [click here](https://github.com/danielkrupinski
 
 #### With [git](https://git-scm.com)
 
-Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step futher, if not installed download it [here](https://git-scm.com).
+Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step further, if not installed download it [here](https://git-scm.com).
 
 Open git command prompt and enter following command:
 ```
