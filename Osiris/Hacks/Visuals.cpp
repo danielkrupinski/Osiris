@@ -13,15 +13,18 @@
 
 void Visuals::colorWorld() noexcept
 {
-    if (config.visuals.world.enabled) {
-        for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-            if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached() && std::strstr(mat->getTextureGroupName(), "World")) {
-                if (config.visuals.world.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
-                    mat->colorModulate(r, g, b);
-                } else {
-                    mat->colorModulate(config.visuals.world.color[0], config.visuals.world.color[1], config.visuals.world.color[2]);
-                }
+    for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
+        if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached()) {
+            if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+                if (config.visuals.world.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.world.color);
+            } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+                if (config.visuals.sky.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.sky.color);
             }
         }
     }
