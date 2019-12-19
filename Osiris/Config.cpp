@@ -687,15 +687,15 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Sky")) {
             const auto& skyJson = visualsJson["Sky"];
 
-            if (skyJson.isMember("Enabled")) visuals.world.enabled = skyJson["Enabled"].asBool();
+            if (skyJson.isMember("Enabled")) visuals.sky.enabled = skyJson["Enabled"].asBool();
 
             if (skyJson.isMember("Color")) {
-                visuals.world.color[0] = skyJson["Color"][0].asFloat();
-                visuals.world.color[1] = skyJson["Color"][1].asFloat();
-                visuals.world.color[2] = skyJson["Color"][2].asFloat();
+                visuals.sky.color[0] = skyJson["Color"][0].asFloat();
+                visuals.sky.color[1] = skyJson["Color"][1].asFloat();
+                visuals.sky.color[2] = skyJson["Color"][2].asFloat();
             }
-            if (skyJson.isMember("Rainbow")) visuals.world.rainbow = skyJson["Rainbow"].asBool();
-            if (skyJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = skyJson["Rainbow speed"].asFloat();
+            if (skyJson.isMember("Rainbow")) visuals.sky.rainbow = skyJson["Rainbow"].asBool();
+            if (skyJson.isMember("Rainbow speed")) visuals.sky.rainbowSpeed = skyJson["Rainbow speed"].asFloat();
         }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
