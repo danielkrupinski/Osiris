@@ -685,6 +685,19 @@ void Config::load(size_t id) noexcept
             if (worldJson.isMember("Rainbow")) visuals.world.rainbow = worldJson["Rainbow"].asBool();
             if (worldJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
         }
+        if (visualsJson.isMember("Sky")) {
+            const auto& skyJson = visualsJson["Sky"];
+
+            if (skyJson.isMember("Enabled")) visuals.sky.enabled = skyJson["Enabled"].asBool();
+
+            if (skyJson.isMember("Color")) {
+                visuals.sky.color[0] = skyJson["Color"][0].asFloat();
+                visuals.sky.color[1] = skyJson["Color"][1].asFloat();
+                visuals.sky.color[2] = skyJson["Color"][2].asFloat();
+            }
+            if (skyJson.isMember("Rainbow")) visuals.sky.rainbow = skyJson["Rainbow"].asBool();
+            if (skyJson.isMember("Rainbow speed")) visuals.sky.rainbowSpeed = skyJson["Rainbow speed"].asFloat();
+        }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
@@ -1419,6 +1432,16 @@ void Config::save(size_t id) const noexcept
             worldJson["Color"][2] = visuals.world.color[2];
             worldJson["Rainbow"] = visuals.world.rainbow;
             worldJson["Rainbow speed"] = visuals.world.rainbowSpeed;
+        }
+
+        {
+            auto& skyJson = visualsJson["Sky"];
+            skyJson["Enabled"] = visuals.sky.enabled;
+            skyJson["Color"][0] = visuals.sky.color[0];
+            skyJson["Color"][1] = visuals.sky.color[1];
+            skyJson["Color"][2] = visuals.sky.color[2];
+            skyJson["Rainbow"] = visuals.sky.rainbow;
+            skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
         }
 
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;

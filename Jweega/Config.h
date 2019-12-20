@@ -178,6 +178,7 @@ public:
         float brightness{ 0.0f };
         int skybox{ 0 };
         ColorToggle world;
+        ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };

@@ -431,10 +431,15 @@ void Esp::render() noexcept
     if (interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
+        if (!localPlayer)
+            return;
+
+        const auto observerTarget = localPlayer->getObserverTarget();
+
         for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant()
-                || !entity->isAlive())
+            if (!entity || entity == localPlayer || entity == observerTarget
+                || entity->isDormant() || !entity->isAlive())
                 continue;
 
             if (!entity->isEnemy()) {
