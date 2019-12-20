@@ -430,6 +430,7 @@ Hooks::Hooks() noexcept
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
     _controlfp(_MCW_PC, _PC_24);
+    _control87(_MCW_PC, _PC_24);
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
