@@ -856,7 +856,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
         if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
         if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
-        if (miscJson.isMember("Fake Duck key")) misc.fakeDuckKey = miscJson["fakeDuckKey"].asInt();
+        if (miscJson.isMember("Fake Duck key")) misc.fakeDuckKey = miscJson["Fake Duck key"].asInt();
         if (miscJson.isMember("Quick healthshot key")) misc.quickHealthshotKey = miscJson["Quick healthshot key"].asInt();
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
