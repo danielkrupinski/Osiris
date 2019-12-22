@@ -97,9 +97,9 @@ public:
             return Vector{ };
     }
 
-    constexpr Vector getEyePosition() noexcept
+    auto getEyePosition() noexcept
     {
-        Vector vec{ };
+        Vector vec;
         callVirtualMethod<void, Vector&>(this, 284, vec);
         return vec;
     }
