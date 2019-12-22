@@ -50,10 +50,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 void Misc::spectatorList() noexcept
 {
     if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        if (!localPlayer->isAlive())
-            return;
+       if (!localPlayer->isAlive()) 
+	{
+		if (!localPlayer->getObserverTarget())
+		return;
+		localPlayer = localPlayer->getObserverTarget();
+	}
 
         interfaces.surface->setTextFont(Surface::font);
 
