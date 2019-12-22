@@ -260,6 +260,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 }
 
 	if (interfaces.engine->isInGame()) {
+		Visuals::playerModel(stage);
 		Visuals::thirdperson(stage, angle, choked, unchoked);
 		Visuals::removeVisualRecoil(stage);
 		Visuals::applyZoom(stage);

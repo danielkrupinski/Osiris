@@ -165,7 +165,6 @@ public:
         bool disablePostProcessing{ false };
 		bool disablePanoramablur{ false };
         bool inverseRagdollGravity{ false };
-		bool forcefulRagdolls{ false };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -202,6 +201,7 @@ public:
 		float viewModel_x{ 0 };
 		float viewModel_y{ 0 };
 		float viewModel_z{ 0 };
+        int playerModel{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;

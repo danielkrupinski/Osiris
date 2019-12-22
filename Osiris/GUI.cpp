@@ -822,17 +822,18 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Checkbox("Damage Indicator", &config.visuals.hitMarkerDamageIndicator);
 		ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
-		if (config.visuals.viewModel) {
-			ImGui::PushID(6);
-			ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, ("X: %f"));
-			ImGui::PopID();
-			ImGui::PushID(7);
-			ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, ("Y: %f"));
-			ImGui::PopID();
-			ImGui::PushID(8);
-			ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, ("Z: %f"));
-			ImGui::PopID();
-		}
+        if (config.visuals.viewModel) {
+            ImGui::PushID(6);
+            ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, ("X: %f"));
+            ImGui::PopID();
+            ImGui::PushID(7);
+            ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, ("Y: %f"));
+            ImGui::PopID();
+            ImGui::PushID(8);
+            ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, ("Z: %f"));
+            ImGui::PopID();
+        }
+        ImGui::Combo("Player Model", &config.visuals.playerModel, "Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
         ImGui::Columns(1);
 
         if (!config.style.menuStyle)
