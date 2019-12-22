@@ -230,6 +230,9 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        bool chatSpam{ false };
+        int chatSpamDelay{ 0 };
+        char chatSpamPhrases[8192]{ };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };

@@ -986,6 +986,9 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
             Misc::updateClanTag(true);
         ImGui::PopID();
+        ImGui::Checkbox("Chat spam", &config.misc.chatSpam);
+        ImGui::SliderInt("Chat spam delay", &config.misc.chatSpamDelay, 0, 120);
+        ImGui::InputTextMultiline("Chat spam phrases", config.misc.chatSpamPhrases, IM_ARRAYSIZE(config.misc.chatSpamPhrases));
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);

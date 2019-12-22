@@ -32,6 +32,7 @@ namespace Misc {
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
+    void chatSpam() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
