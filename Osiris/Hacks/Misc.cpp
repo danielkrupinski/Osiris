@@ -1,4 +1,5 @@
 #include <sstream>
+#include <random>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -12,6 +13,12 @@
 #include "../SDK/WeaponData.h"
 #include "AntiAim.h"
 #include "../SDK/Utils.h"
+
+static int random(int min, int max) noexcept
+{
+    static std::mt19937 gen{ std::random_device{ }() };
+    return std::uniform_int_distribution{ min, max }(gen);
+}
 
 void Misc::AutoBlocker(UserCmd* cmd) noexcept
 {
@@ -468,6 +475,57 @@ void Misc::fakePrime() noexcept
             constexpr uint8_t patch[]{ 0x74, 0xEB };
             *memory.fakePrime = patch[config.misc.fakePrime];
             VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+        }
+    }
+}
+
+
+void Misc::chatSpam() noexcept
+{
+    if (config.misc.chatSpam && interfaces.engine->isInGame() && interfaces.engine->isConnected())
+    {
+        static time_t lastSpam{ 0 };
+        time_t theTime = time(nullptr);
+
+        if (theTime - lastSpam >= config.misc.chatSpamDelay)
+        {
+            std::vector <std::string> Phrases{ };
+            int globalIndex{ 0 }, phrasesCount{ 0 };
+            std::string Phrase{ };
+
+            while (true)
+            {
+                if (config.misc.chatSpamText[globalIndex] == '\0')
+                {
+                    if (Phrase.length() > 0)
+                    {
+                        Phrases.push_back(Phrase);
+                        phrasesCount++;
+                    }
+
+                    break;
+                }
+
+                else if (config.misc.chatSpamText[globalIndex] == '\n')
+                {
+                    if (Phrase.length() > 0)
+                    {
+                        Phrases.push_back(Phrase);
+                        Phrase.clear();
+                        phrasesCount++;
+                    }
+
+                    globalIndex++;
+                }
+
+                else
+                    Phrase += config.misc.chatSpamText[globalIndex++];
+            }
+
+            if (phrasesCount > 0)
+                interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
+
+            lastSpam = theTime;
         }
     }
 }
