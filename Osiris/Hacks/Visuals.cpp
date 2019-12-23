@@ -15,34 +15,34 @@
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     static constexpr const char* models[]{
-"models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
-"models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
-"models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
-"models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
-"models/player/custom_player/legacy/ctm_sas_variantf.mdl",
-"models/player/custom_player/legacy/ctm_st6_variante.mdl",
-"models/player/custom_player/legacy/ctm_st6_variantg.mdl",
-"models/player/custom_player/legacy/ctm_st6_varianti.mdl",
-"models/player/custom_player/legacy/ctm_st6_variantk.mdl",
-"models/player/custom_player/legacy/ctm_st6_variantm.mdl",
-"models/player/custom_player/legacy/tm_balkan_variantf.mdl",
-"models/player/custom_player/legacy/tm_balkan_variantg.mdl",
-"models/player/custom_player/legacy/tm_balkan_varianth.mdl",
-"models/player/custom_player/legacy/tm_balkan_varianti.mdl",
-"models/player/custom_player/legacy/tm_balkan_variantj.mdl",
-"models/player/custom_player/legacy/tm_leet_variantf.mdl",
-"models/player/custom_player/legacy/tm_leet_variantg.mdl",
-"models/player/custom_player/legacy/tm_leet_varianth.mdl",
-"models/player/custom_player/legacy/tm_leet_varianti.mdl",
-"models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
-"models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
-"models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+        "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
+        "models/player/custom_player/legacy/ctm_sas_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variante.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_st6_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantk.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantm.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantf.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantg.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianth.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianti.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantj.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantf.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantg.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianth.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianti.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
     };
 
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-    if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModel]));
+    if (config.visuals.playerModel > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModel - 1]));
+    }
 }
 
 void Visuals::colorWorld() noexcept
