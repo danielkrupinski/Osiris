@@ -764,11 +764,11 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-			ImGui::SetNextWindowSize({ 520.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 680.0f, 0.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
-        ImGui::SetColumnOffset(1, 210.0f);
+        ImGui::SetColumnOffset(1, 280.0f);
         ImGui::Checkbox("Disable Post-Processing", &config.visuals.disablePostProcessing);
 		ImGui::Checkbox("Disable HUD Blur", &config.visuals.disablePanoramablur);
         ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
