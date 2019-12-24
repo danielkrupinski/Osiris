@@ -1526,6 +1526,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Animated clan tag"] = misc.animatedClanTag;
         miscJson["Fast duck"] = misc.fastDuck;
         miscJson["Moonwalk"] = misc.moonwalk;
+        miscJson["Use spam"] = misc.usespam;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
         miscJson["Recoil crosshair"] = misc.recoilCrosshair;
         miscJson["Auto pistol"] = misc.autoPistol;
