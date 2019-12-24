@@ -781,9 +781,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
 	if (miscJson.isMember("Auto strafe style")) misc.autostrafestyle = miscJson["Auto strafe style"].asInt();
 	if (miscJson.isMember("Use spam")) misc.usespam = miscJson["Use spam"].asBool();
-	if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
-	if (miscJson.isMember("Slowwalk key")) misc.slowwalkkey = miscJson["Slowwalk key"].asInt();
-	if (miscJson.isMember("Slowwalk ammount")) misc.slowwalkammount = miscJson["Slowwalk ammount"].asInt();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
 	 if (miscJson.isMember("Blockbot key")) misc.blockbotkey = miscJson["Blockbot key"].asInt();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
