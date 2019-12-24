@@ -13,7 +13,6 @@
 
 namespace Misc {
 void AutoBlocker(UserCmd*) noexcept;
-    void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
