@@ -961,6 +961,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
+        ImGui::Checkbox("Use spam", &config.misc.usespam);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
