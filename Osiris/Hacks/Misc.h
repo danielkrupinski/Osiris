@@ -32,7 +32,7 @@ namespace Misc {
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
-
+    static void usespam(UserCmd*) noexcept;
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
