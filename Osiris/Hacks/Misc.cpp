@@ -11,6 +11,22 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
+ static void Misc::usespam(UserCmd* cmd) noexcept
+ {
+     static bool usespam = true;
+     if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
+         if (usespam)
+         {
+             cmd->buttons |= UserCmd::IN_USE;
+             usespam = false;
+         }
+         else
+         {
+             cmd->buttons &= ~UserCmd::IN_USE;
+             usespam = true;
+         }
+     }
+ }
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
