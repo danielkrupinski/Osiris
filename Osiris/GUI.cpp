@@ -964,12 +964,6 @@ void GUI::renderMiscWindow() noexcept
 	ImGui::Combo("Auto strafe style", &config.misc.autostrafestyle, "Legit\0Normal\0");
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
 	ImGui::Checkbox("Use spam", &config.misc.usespam);
-	ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
-	ImGui::SameLine();
-	hotkey(config.misc.slowwalkkey);
-         ImGui::PushID(0);
-         ImGui::SliderFloat("Slowwalk Amount: ", &config.misc.slowwalkammount, 0.0f, 100.0f, "%.2f");
-         ImGui::PopID();
          ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
