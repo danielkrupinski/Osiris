@@ -14,6 +14,11 @@
  static void Misc::usespam(UserCmd* cmd) noexcept
  {
      static bool usespam = true;
+    for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
+}
      if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
          if (usespam)
          {
