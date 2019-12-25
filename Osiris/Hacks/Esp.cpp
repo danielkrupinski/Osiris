@@ -115,7 +115,7 @@ static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
     return true;
 }
 
-static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
+static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
     if (config.box.enabled) {
         if (config.box.rainbow)
@@ -188,7 +188,7 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
 static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+        renderBox(bbox, config);
 
         float drawPositionX = bbox.x0 - 5;
 
@@ -307,7 +307,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+        renderBox(bbox, config);
 
         if (config.name.enabled) {
             const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
@@ -338,7 +338,7 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
 static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
 {
     if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+        renderBox(bbox, config);
 
         if (config.name.enabled) {
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
@@ -431,10 +431,15 @@ void Esp::render() noexcept
     if (interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
+        if (!localPlayer)
+            return;
+
+        const auto observerTarget = localPlayer->getObserverTarget();
+
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant()
-                || !entity->isAlive())
+            if (!entity || entity == localPlayer || entity == observerTarget
+                || entity->isDormant() || !entity->isAlive())
                 continue;
 
             if (!entity->isEnemy()) {

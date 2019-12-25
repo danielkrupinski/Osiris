@@ -10,18 +10,55 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
+#include "../SDK/ModelInfo.h"
+
+void Visuals::playerModel(FrameStage stage) noexcept
+{
+    static constexpr const char* models[]{
+        "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
+        "models/player/custom_player/legacy/ctm_sas_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variante.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_st6_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantk.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantm.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantf.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantg.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianth.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianti.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantj.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantf.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantg.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianth.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianti.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+    };
+
+    if (config.visuals.playerModel > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModel - 1]));
+    }
+}
 
 void Visuals::colorWorld() noexcept
 {
-    if (config.visuals.world.enabled) {
-        for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-            if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached() && std::strstr(mat->getTextureGroupName(), "World")) {
-                if (config.visuals.world.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
-                    mat->colorModulate(r, g, b);
-                } else {
-                    mat->colorModulate(config.visuals.world.color[0], config.visuals.world.color[1], config.visuals.world.color[2]);
-                }
+    for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
+        if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached()) {
+            if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+                if (config.visuals.world.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.world.color);
+            } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+                if (config.visuals.sky.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.sky.color);
             }
         }
     }

@@ -234,8 +234,10 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         Misc::disablePanoramablur();
         Visuals::colorWorld();
+        Misc::fakePrime();
     }
     if (interfaces.engine->isInGame()) {
+        Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);

@@ -368,7 +368,7 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\n" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
@@ -415,5 +415,20 @@ void Misc::fixTabletSignal() noexcept
 
         if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             activeWeapon->tabletReceptionIsBlocked() = false;
+    }
+}
+
+void Misc::fakePrime() noexcept
+{
+    static bool lastState = false;
+
+    if (config.misc.fakePrime != lastState) {
+        lastState = config.misc.fakePrime;
+
+        if (DWORD oldProtect; VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            constexpr uint8_t patch[]{ 0x74, 0xEB };
+            *memory.fakePrime = patch[config.misc.fakePrime];
+            VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+        }
     }
 }

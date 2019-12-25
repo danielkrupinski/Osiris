@@ -684,10 +684,24 @@ void Config::load(size_t id) noexcept
             if (worldJson.isMember("Rainbow")) visuals.world.rainbow = worldJson["Rainbow"].asBool();
             if (worldJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
         }
+        if (visualsJson.isMember("Sky")) {
+            const auto& skyJson = visualsJson["Sky"];
+
+            if (skyJson.isMember("Enabled")) visuals.sky.enabled = skyJson["Enabled"].asBool();
+
+            if (skyJson.isMember("Color")) {
+                visuals.sky.color[0] = skyJson["Color"][0].asFloat();
+                visuals.sky.color[1] = skyJson["Color"][1].asFloat();
+                visuals.sky.color[2] = skyJson["Color"][2].asFloat();
+            }
+            if (skyJson.isMember("Rainbow")) visuals.sky.rainbow = skyJson["Rainbow"].asBool();
+            if (skyJson.isMember("Rainbow speed")) visuals.sky.rainbowSpeed = skyJson["Rainbow speed"].asFloat();
+        }
         if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
+        if (visualsJson.isMember("Playermodel")) visuals.playerModel = visualsJson["Playermodel"].asInt();
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -858,6 +872,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
+        if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
     }
 
     {
@@ -1416,10 +1431,21 @@ void Config::save(size_t id) const noexcept
             worldJson["Rainbow speed"] = visuals.world.rainbowSpeed;
         }
 
+        {
+            auto& skyJson = visualsJson["Sky"];
+            skyJson["Enabled"] = visuals.sky.enabled;
+            skyJson["Color"][0] = visuals.sky.color[0];
+            skyJson["Color"][1] = visuals.sky.color[1];
+            skyJson["Color"][2] = visuals.sky.color[2];
+            skyJson["Rainbow"] = visuals.sky.rainbow;
+            skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
+        }
+
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
+        visualsJson["Playermodel"] = visuals.playerModel;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -1563,6 +1589,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
+        miscJson["Fake prime"] = misc.fakePrime;
     }
 
     {

@@ -177,10 +177,12 @@ public:
         float brightness{ 0.0f };
         int skybox{ 0 };
         ColorToggle world;
+        ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+        int playerModel{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -248,6 +250,7 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
     } misc;
 
     struct {
