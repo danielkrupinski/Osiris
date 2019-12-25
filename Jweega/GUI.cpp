@@ -747,11 +747,12 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 680.0f, 0.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
-        ImGui::SetColumnOffset(1, 210.0f);
+        ImGui::SetColumnOffset(1, 280.0f);
+        ImGui::Combo("Player Model", &config.visuals.playerModel, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No fog", &config.visuals.noFog);

@@ -379,7 +379,7 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\n" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
