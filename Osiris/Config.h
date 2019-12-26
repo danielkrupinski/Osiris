@@ -231,7 +231,7 @@ public:
 		bool bunnyHop{ false };
 		bool autoStrafe{ false };
         int autostrafestyle{ 0 };
-        bool usespam{ false };
+        bool useSpam{ false };
         bool slowwalk{ false };
         int slowwalkkey{ 0 };
         float slowwalkamount{ 0.f };

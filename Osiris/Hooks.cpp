@@ -134,7 +134,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::autoStrafe(cmd);
 	Misc::slowwalk(cmd);
 	Misc::AutoBlocker(cmd);
-	Misc::usespam(cmd);
+	Misc::useSpam(cmd);
 	Misc::removeCrouchCooldown(cmd);
 	Misc::autoPistol(cmd);
 	Misc::autoReload(cmd);

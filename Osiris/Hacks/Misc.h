@@ -39,6 +39,7 @@ namespace Misc {
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void chatSpam() noexcept;
+    void useSpam(UserCmd*) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -108,23 +109,6 @@ namespace Misc {
             interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
     }
 
-    static void usespam(UserCmd* cmd) noexcept
-    {
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        static bool usespam = true;
-        if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
-            if (usespam)
-            {
-                cmd->buttons |= UserCmd::IN_USE;
-                usespam = false;
-            }
-            else
-            {
-                cmd->buttons &= ~UserCmd::IN_USE;
-                usespam = true;
-            }
-        }
-    }
     static void autoStrafe(UserCmd* cmd) noexcept
     {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());

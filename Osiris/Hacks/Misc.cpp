@@ -14,6 +14,28 @@
 #include "AntiAim.h"
 #include "../SDK/Utils.h"
 
+void Misc::useSpam(UserCmd* cmd) noexcept
+{
+    static bool useSpam = true;
+    for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        Entity* entity = interfaces.entityList->getEntity(i);
+        if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+            continue;
+    }
+    if (config.misc.usespam && cmd->buttons & UserCmd::IN_USE) {
+        if (useSpam)
+        {
+            cmd->buttons |= UserCmd::IN_USE;
+            useSpam = false;
+        }
+        else
+        {
+            cmd->buttons &= ~UserCmd::IN_USE;
+            useSpam = true;
+        }
+    }
+}
+
 static int random(int min, int max) noexcept
 {
     static std::mt19937 gen{ std::random_device{ }() };
