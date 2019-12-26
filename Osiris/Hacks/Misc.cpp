@@ -513,18 +513,18 @@ void Misc::chatSpam() noexcept
         {
             if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer->team() > 0)
             {
-                std::vector <std::string> Phrases;
-                std::string Phrase;
-                int Index{ 0 }, phrasesCount{ 0 };
+                std::vector <std::string> Texts;
+                std::string Text;
+                int Index{ 0 }, textsCount{ 0 };
 
                 while (true)
                 {
                     if (config.misc.chatSpamText[Index] == '\0')
                     {
-                        if (Phrase.length() > 0)
+                        if (Text.length() > 0)
                         {
-                            Phrases.push_back(Phrase);
-                            phrasesCount++;
+                            Texts.push_back(Text);
+                            textsCount++;
                         }
 
                         break;
@@ -532,22 +532,22 @@ void Misc::chatSpam() noexcept
 
                     else if (config.misc.chatSpamText[Index] == '\n')
                     {
-                        if (Phrase.length() > 0)
+                        if (Text.length() > 0)
                         {
-                            Phrases.push_back(Phrase);
-                            Phrase.clear();
-                            phrasesCount++;
+                            Texts.push_back(Text);
+                            Text.clear();
+                            textsCount++;
                         }
 
                         Index++;
                     }
 
                     else
-                        Phrase += config.misc.chatSpamText[Index++];
+                        Text += config.misc.chatSpamText[Index++];
                 }
 
-                if (phrasesCount > 0)
-                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
+                if (textsCount > 0)
+                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Texts[random(0, textsCount - 1)]).c_str());
 
                 lastSpam = theTime;
             }
