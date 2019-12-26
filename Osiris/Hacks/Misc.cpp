@@ -12,7 +12,7 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
-static int random (int min, int max) noexcept
+static int random(int min, int max) noexcept
 {
     static std::mt19937 gen{ std::random_device{ }() };
     return std::uniform_int_distribution{ min, max }(gen);
@@ -442,50 +442,53 @@ void Misc::fakePrime() noexcept
 
 void Misc::chatSpam() noexcept
 {
-    if (config.misc.chatSpam && interfaces.engine->isInGame() && interfaces.engine->isConnected())
+    if (config.misc.chatSpam)
     {
         static time_t lastSpam{ 0 };
-        time_t theTime = time(nullptr);
+        const auto theTime{ time(nullptr) };
 
         if (theTime - lastSpam >= config.misc.chatSpamDelay)
         {
-            std::vector <std::string> Phrases{ };
-            int globalIndex{ 0 }, phrasesCount{ 0 };
-            std::string Phrase{ };
-
-            while (true)
+            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer->team() > 0)
             {
-                if (config.misc.chatSpamPhrases[globalIndex] == '\0')
+                std::vector <std::string> Phrases;
+                std::string Phrase;
+                int Index{ 0 }, phrasesCount{ 0 };
+
+                while (true)
                 {
-                    if (Phrase.length() > 0)
+                    if (config.misc.chatSpamPhrases[Index] == '\0')
                     {
-                        Phrases.push_back(Phrase);
-                        phrasesCount++;
+                        if (Phrase.length() > 0)
+                        {
+                            Phrases.push_back(Phrase);
+                            phrasesCount++;
+                        }
+
+                        break;
                     }
 
-                    break;
-                }
-
-                else if (config.misc.chatSpamPhrases[globalIndex] == '\n')
-                {
-                    if (Phrase.length() > 0)
+                    else if (config.misc.chatSpamPhrases[Index] == '\n')
                     {
-                        Phrases.push_back(Phrase);
-                        Phrase.clear();
-                        phrasesCount++;
+                        if (Phrase.length() > 0)
+                        {
+                            Phrases.push_back(Phrase);
+                            Phrase.clear();
+                            phrasesCount++;
+                        }
+
+                        Index++;
                     }
 
-                    globalIndex++;
+                    else
+                        Phrase += config.misc.chatSpamPhrases[Index++];
                 }
 
-                else
-                    Phrase += config.misc.chatSpamPhrases[globalIndex++];
+                if (phrasesCount > 0)
+                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
+
+                lastSpam = theTime;
             }
-
-            if (phrasesCount > 0)
-                interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
-
-            lastSpam = theTime;
         }
     }
 }
