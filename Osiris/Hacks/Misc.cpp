@@ -11,7 +11,7 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
- static void Misc::usespam(UserCmd* cmd) noexcept
+ void Misc::usespam(UserCmd* cmd) noexcept
  {
      static bool usespam = true;
     for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
