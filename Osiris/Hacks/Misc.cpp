@@ -20,7 +20,6 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
-
 void Misc::useSpam(UserCmd* cmd) noexcept
 {
     static bool useSpam = true;
