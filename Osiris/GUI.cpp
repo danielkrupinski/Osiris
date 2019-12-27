@@ -964,6 +964,8 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
         ImGui::SameLine();
         hotkey(config.misc.slowwalkkey);
+        ImGui::PopID();
+        ImGui::PushID(0);
         ImGui::SliderFloat("Slowwalk ammount", &config.misc.slowwalkammount, 0 , 250 ,"%.2f");
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
@@ -987,18 +989,18 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Custom clantag", &config.misc.customClanTag);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(0);
+        ImGui::PushID(1);
         if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
             Misc::updateClanTag(true);
         ImGui::PopID();
         ImGui::Checkbox("Kill message", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(1);
+        ImGui::PushID(2);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
         ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
-        ImGui::PushID(2);
+        ImGui::PushID(3);
         ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
         ImGui::PopID();
         ImGui::SameLine();
