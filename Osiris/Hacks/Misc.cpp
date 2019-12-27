@@ -87,25 +87,25 @@ void Misc::AutoBlocker(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::slowwalk(UserCmd* cmd)noexcept
+void Misc::slowWalk(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    float speed = localPlayer->velocity().length();
-    Vector velocity = localPlayer->velocity();
-    if (config.misc.slowwalk && (localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && GetAsyncKeyState(config.misc.slowwalkkey)) {
-        if (speed > config.misc.slowwalkamount && (cmd->buttons && (UserCmd::IN_MOVELEFT || UserCmd::IN_MOVERIGHT || UserCmd::IN_FORWARD || UserCmd::IN_BACK))) {
-            velocity.z = 0;
-            QAngle direction;
-            VectorAngles(velocity, direction);
-            direction.yaw = cmd->viewangles.y - direction.yaw;
-            Vector forward;
-            AngleVectors(direction, forward);
+    float amount = config.misc.slowWalkAmount;
+    if (amount <= 0) {
+        return;
+    }
+    if (GetAsyncKeyState(config.misc.slowWalkKey) && config.misc.slowWalk) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        Vector velocity = localPlayer->velocity();
+        static Vector direction = { 0,0,0 };
+        float speed = velocity.length();
+        direction.y = cmd->viewangles.y - direction.y;
+        Vector forward;
+        Vector source = forward * -speed;
+        if (speed >= amount)
+        {
+            cmd->forwardmove = source.x;
+            cmd->sidemove = source.y;
 
-            Vector negated_direction = forward * speed;
-            AngleVectors(direction, negated_direction);
-
-            cmd->forwardmove = negated_direction.x;
-            cmd->sidemove = negated_direction.y;
         }
     }
 }

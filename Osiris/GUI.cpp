@@ -1022,12 +1022,10 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");
 		}
 		ImGui::Checkbox("Door Spam", &config.misc.useSpam);
-        ImGui::Checkbox("Slow Walk", &config.misc.slowwalk);
+        ImGui::Checkbox("Slow Walk", &config.misc.slowWalk);
         ImGui::SameLine();
-        hotkey(config.misc.slowwalkkey);
-        ImGui::PushID(0);
-        ImGui::SliderFloat("Amount", &config.misc.slowwalkamount, 0.0f, 100.0f, "%.2f");
-        ImGui::PopID();
+        hotkey(config.misc.slowWalkKey);
+        ImGui::SliderFloat("Amount", &config.misc.slowWalkAmount, 0 , 250 , "%.2f");
         ImGui::Text("Blockbot");
         ImGui::SameLine();
         hotkey(config.misc.blockbotkey);
@@ -1069,7 +1067,7 @@ void GUI::renderMiscWindow() noexcept
 			Misc::updateClanTag(true);
 		ImGui::SameLine();
 		ImGui::PushItemWidth(120.0f);
-		ImGui::PushID(1);
+		ImGui::PushID(0);
 		if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
 			Misc::updateClanTag(true);
 		ImGui::PopID();
@@ -1085,23 +1083,23 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Killsay", &config.misc.killMessage);
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::PushID(2);
+        ImGui::PushID(1);
         ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
         ImGui::PopID();
         ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
-        ImGui::PushID(3);
+        ImGui::PushID(2);
         ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
         ImGui::PopID();
         ImGui::SameLine();
         if (ImGui::Button("Fake Vote"))
             Misc::fakeVote(true);
 
-        ImGui::PushID(4);
+        ImGui::PushID(3);
         ImGui::SetNextItemWidth(100.0f);
         ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light Green\0Turquoise\0Light Red\0Gray\0Yellow\0Gray 2\0Light Blue\0Gray/Purple\0Blue\0Pink\0Dark Orange\0Orange\0");
         ImGui::PopID();
         ImGui::SameLine();
-        ImGui::PushID(5);
+        ImGui::PushID(4);
         ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
         ImGui::PopID();
         ImGui::SameLine();

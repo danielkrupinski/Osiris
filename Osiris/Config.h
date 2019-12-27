@@ -232,9 +232,9 @@ public:
 		bool autoStrafe{ false };
         int autostrafestyle{ 0 };
         bool useSpam{ false };
-        bool slowwalk{ false };
-        int slowwalkkey{ 0 };
-        float slowwalkamount{ 0.f };
+        bool slowWalk{ false };
+        int slowWalkKey{ 0 };
+        float slowWalkAmount{ 0.0f };
         int blockbotkey{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
