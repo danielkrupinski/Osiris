@@ -216,6 +216,9 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        float slowwalkammount{ 0.0f };
+        int slowwalkkey{ 0 };
+        bool slowwalk{ false };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
