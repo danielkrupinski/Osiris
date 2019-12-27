@@ -486,9 +486,9 @@ void Misc::chatSpam() noexcept
 
                 if (phrasesCount > 0)
                     interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
-
-                lastSpam = theTime;
             }
+
+            lastSpam = theTime;
         }
     }
 }
