@@ -10,7 +10,28 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+ void Misc::slowwalk(UserCmd* cmd) noexcept
+{
+    float amount = config.misc.slowwalkammount;
+    if (amount <= 0) {
+        return;
+    }
+    if (GetAsyncKeyState(config.misc.slowwalkkey) && config.misc.slowwalk) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        Vector velocity = localPlayer->velocity();
+        static Vector direction = { 0,0,0 };
+        float speed = velocity.length();
+        direction.y = cmd->viewangles.y - direction.y;
+        Vector forward;
+        Vector source = forward * -speed;
+        if (speed >= amount)
+        {
+            cmd->forwardmove = source.x;
+            cmd->sidemove = source.y;
 
+        }
+    }
+}
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
