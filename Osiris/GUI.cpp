@@ -966,7 +966,7 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.slowwalkkey);
         ImGui::PopID();
         ImGui::PushID(0);
-        ImGui::SliderFloat("Slowwalk ammount", &config.misc.slowwalkammount, 0 , 250 ,"%.2f");
+        ImGui::SliderInt("Slowwalk ammount", &config.misc.slowwalkammount, 0 , 250 ,"%d");
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
