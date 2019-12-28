@@ -958,7 +958,7 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
         antiAimJson["Yaw Angle"] = antiAim.yawangle;
-        antiAimJson["Yaw"] = antiAim.invertkey;
+        antiAimJson["Invert"] = antiAim.invertkey;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
