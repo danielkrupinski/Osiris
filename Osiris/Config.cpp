@@ -94,6 +94,8 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+        if (antiAimJson.isMember("Yaw angle")) antiAim.yawangle = antiAimJson["Yaw angle"].asInt();
+        if (antiAimJson.isMember("Invert key")) antiAim.invertkey = antiAimJson["Invert key"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -955,6 +957,8 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+        antiAimJson["Yaw Angle"] = antiAim.yawangle;
+        antiAimJson["Yaw"] = antiAim.invertkey;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
