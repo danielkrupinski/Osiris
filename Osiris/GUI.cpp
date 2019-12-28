@@ -268,7 +268,12 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::Checkbox("##pitch", &config.antiAim.pitch);
         ImGui::SameLine();
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-        ImGui::Checkbox("Yaw", &config.antiAim.yaw);
+        ImGui::Checkbox("##Yaw", &config.antiAim.yaw);
+        ImGui::SameLine();
+        ImGui::SliderInt("Yaw", &config.antiAim.yawangle, -180, 180, "%d");
+        ImGui::Text("Invert");
+        ImGui::SameLine();
+        hotkey(config.antiAim.invertkey);
         if (!config.style.menuStyle)
             ImGui::End();
     }
