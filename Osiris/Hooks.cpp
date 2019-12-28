@@ -103,7 +103,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
-
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (!cmd->commandNumber)
         return result;
 
