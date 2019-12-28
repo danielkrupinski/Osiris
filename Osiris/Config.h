@@ -86,6 +86,8 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
+        int yawangle{ 0 };
+        int invertkey { 0 };
     } antiAim;
 
     struct Glow {
