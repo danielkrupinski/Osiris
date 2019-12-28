@@ -12,7 +12,7 @@
 #include "../SDK/WeaponData.h"
  void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-    float amount = config.misc.slowwalkammount;
+    int amount = config.misc.slowwalkammount;
     if (amount <= 0) {
         return;
     }
