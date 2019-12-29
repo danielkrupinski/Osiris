@@ -139,7 +139,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE))) {
-        if (!(localPlayer->moveType() != MoveType::LADDER)){
+        if (localPlayer->moveType() != MoveType::LADDER){
             Misc::chokePackets(sendPacket);
             AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
         }
