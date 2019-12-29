@@ -12,7 +12,7 @@ bool LbyBreaker()
 {
 	auto local_player = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static float NextUpdate = 0;
-	float velocity = local_player->velocity().length();
+	float velocity = local_player->velocity();
 	float time = memory.globalVars->serverTime();
 	if (!(local_player->flags() & 1) || (!(local_player->isAlive()))) {
 		return false;
