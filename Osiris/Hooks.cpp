@@ -138,9 +138,11 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
-     if ((!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE))) || (!(localPlayer->moveType() != MoveType::LADDER))){
-        Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE))) {
+        if (!(localPlayer->moveType() != MoveType::LADDER)){
+            Misc::chokePackets(sendPacket);
+            AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+        }
     }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
