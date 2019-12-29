@@ -37,6 +37,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 	bool lby = LbyBreaker();
 	int yaw = config.antiAim.yawangle;
 	Vector oldangle = cmd->viewangles;
+	float velocity = localPlayer->velocity().length();
 	if (config.antiAim.enabled) {
 		if (GetAsyncKeyState(config.antiAim.invertkey) && memory.globalVars->realtime - lastTime > 0.5f) {
 			invert = !invert;
@@ -50,7 +51,12 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 				sendPacket = false;
 				invert ? cmd->viewangles.y += yaw : cmd->viewangles.y -= yaw;
 		}else if (sendPacket) {
-			invert ? cmd->viewangles.y += yaw + (desync * 2) : cmd->viewangles.y += yaw - (desync * 2);
+			if (velocity > 0.1f) {
+				invert ? cmd->viewangles.y += yaw + desync : cmd->viewangles.y += yaw - desync;
+			}
+			else if(velocity < 0.1f) {
+				invert ? cmd->viewangles.y += yaw + (desync * 2) : cmd->viewangles.y += yaw - (desync * 2);
+			}
 		}
 		else {
 				cmd->viewangles.y += yaw;
