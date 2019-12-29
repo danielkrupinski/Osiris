@@ -25,12 +25,15 @@ void PredictionSystem::StartPrediction(UserCmd* cmd) noexcept
 	memory.globalVars->currenttime = memory.globalVars->serverTime();
 	memory.globalVars->frametime = memory.globalVars->intervalPerTick;
 
-	static MoveData moveData;
+	interfaces.prediction->CheckMovingGround(localPlayer, memory.globalVars->frametime);
 	memory.moveHelper->SetHost(localPlayer);
 	interfaces.gameMovement->StartTrackPredictionErrors(localPlayer);
+
+	static MoveData moveData;
 	interfaces.prediction->SetupMove(localPlayer, cmd, memory.moveHelper, &moveData);
 	interfaces.gameMovement->ProcessMovement(localPlayer, &moveData);
 	interfaces.prediction->FinishMove(localPlayer, cmd, &moveData);
+	memory.moveHelper->ProcessImpacts();
 
 	if (const auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon)
 		activeWeapon->updateAccuracyPenalty();
@@ -42,6 +45,7 @@ void PredictionSystem::EndPrediction() noexcept
 
 	interfaces.gameMovement->FinishTrackPredictionErrors(localPlayer);
 	memory.moveHelper->SetHost(nullptr);
+	interfaces.gameMovement->Reset();
 
 	*memory.predictionRandomSeed = -1;
 

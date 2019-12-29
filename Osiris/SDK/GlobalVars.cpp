@@ -3,7 +3,7 @@
 
 float GlobalVars::serverTime(UserCmd* cmd) noexcept
 {
-    static int tick;
+    /*static int tick;
     static UserCmd* lastCmd;
 
     if (cmd) {
@@ -13,5 +13,7 @@ float GlobalVars::serverTime(UserCmd* cmd) noexcept
 			++tick;
         lastCmd = cmd;
     }
-    return tick * intervalPerTick;
+    return tick * intervalPerTick;*/
+
+    return interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->tickBase() * memory.globalVars->intervalPerTick;
 }

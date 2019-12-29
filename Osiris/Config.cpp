@@ -814,7 +814,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
 		if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
-		if (miscJson.isMember("Fake Duck key")) misc.fakeDuckKey = miscJson["fakeDuckKey"].asInt();
+        if (miscJson.isMember("Fake duck key")) misc.fakeDuckKey = miscJson["Fake duck key"].asInt();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
 		if (miscJson.isMember("Sniper crosshair in scope")) misc.sniperCrosshairInscope = miscJson["Sniper crosshair in scope"].asBool();

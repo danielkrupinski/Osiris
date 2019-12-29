@@ -119,12 +119,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	const auto currentViewAngles{ cmd->viewangles };
 	static bool switch_ = false;
 
-	memory.globalVars->serverTime(cmd);
 	Visuals::viewModel();
 	Misc::nadePredict();
 	Misc::antiAfkKick(cmd);
 	Misc::fastPlant(cmd);
-	Misc::prepareRevolver(cmd);
 	Misc::sniperCrosshair();
 	Misc::recoilCrosshair();
 	Visuals::removeShadows();
@@ -136,7 +134,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::AutoBlocker(cmd);
 	Misc::useSpam(cmd);
 	Misc::removeCrouchCooldown(cmd);
-	Misc::autoPistol(cmd);
 	Misc::autoReload(cmd);
 	Misc::updateClanTag();
 	Misc::fakeVote();
@@ -145,11 +142,14 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::revealRanks(cmd);
 	Misc::quickReload(cmd);
 	Misc::moonwalk(cmd);
-	Misc::quickHealthshot(cmd);
 	Misc::fixTabletSignal();
 	Misc::chatSpam();
 
 	PredictionSystem::StartPrediction(cmd);
+	Misc::prepareRevolver(cmd);
+	Misc::autoPistol(cmd);
+	Misc::quickHealthshot(cmd);
+
 	Aimbot::run(cmd);
 	Triggerbot::run(cmd);
 	Backtrack::run(cmd);
@@ -451,6 +451,7 @@ Hooks::Hooks() noexcept
 	_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 	_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 	_controlfp(_MCW_PC, _PC_24);
+	_control87(_MCW_PC, _PC_24);
 
 	originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
