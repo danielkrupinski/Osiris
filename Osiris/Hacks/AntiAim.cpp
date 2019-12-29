@@ -49,7 +49,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (config.antiAim.yaw) {
 			if (lby) {
 				sendPacket = false;
-				invert ? cmd->viewangles.y += yaw : cmd->viewangles.y -= yaw;
+				invert ? cmd->viewangles.y -= 118.f : cmd->viewangles.y += 118.f;
 		}else if (sendPacket) {
 			if (velocity > 0.1f) {
 				invert ? cmd->viewangles.y += yaw + desync : cmd->viewangles.y += yaw - desync;
