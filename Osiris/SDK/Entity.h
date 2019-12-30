@@ -224,7 +224,9 @@ public:
     {
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
-
+    NETVAR(m_bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(m_fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float_t);
+    
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
