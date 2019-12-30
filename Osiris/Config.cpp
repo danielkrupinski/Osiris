@@ -1445,7 +1445,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
-        visualsJson["Playermodel"] = visuals.playerModel;
+        visualsJson["Playermodel T"] = visuals.playerModelT;
+        visualsJson["Playermodel CT"] = visuals.playerModelCT;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
