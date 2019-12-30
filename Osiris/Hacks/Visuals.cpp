@@ -43,7 +43,6 @@ void Visuals::playerModel(FrameStage stage) noexcept
         localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
     if (config.visuals.playerModelCT > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START && localPlayer->team() == 3) 
         localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
-    }
 }
 
 void Visuals::colorWorld() noexcept
