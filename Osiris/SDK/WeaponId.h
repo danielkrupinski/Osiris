@@ -60,7 +60,13 @@ enum class WeaponId : short {
     GloveLeatherWrap,
     GloveMotorcycle,
     GloveSpecialist,
-    GloveHydra
+    GloveHydra,
+    WEAPON_FLASHBANG = 43,
+    WEAPON_HEGRENADE = 44,
+    WEAPON_SMOKEGRENADE = 45,
+    WEAPON_MOLOTOV = 46,
+    WEAPON_DECOY = 47,
+    WEAPON_INCGRENADE = 48,
 };
 
 constexpr int getWeaponIndex(WeaponId weaponId) noexcept
@@ -107,9 +113,14 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
 
     case WeaponId::Taser: return 39;
+    case WeaponId::WEAPON_FLASHBANG:return 41;
+    case WeaponId::WEAPON_DECOY:return 42;
+    case WeaponId::WEAPON_HEGRENADE:return 43;
+    case WeaponId::WEAPON_INCGRENADE:return 44;
+    case WeaponId::WEAPON_MOLOTOV:return 45;
+    case WeaponId::WEAPON_SMOKEGRENADE: return 38;
     }
 }
-
 constexpr int getWeaponClass(WeaponId weaponId) noexcept
 {
     switch (weaponId) {
@@ -152,5 +163,12 @@ constexpr int getWeaponClass(WeaponId weaponId) noexcept
     case WeaponId::Awp:
     case WeaponId::G3SG1:
     case WeaponId::Scar20: return 38;
+
+    case WeaponId::WEAPON_FLASHBANG:
+    case WeaponId::WEAPON_DECOY:
+    case WeaponId::WEAPON_HEGRENADE:
+    case WeaponId::WEAPON_INCGRENADE:
+    case WeaponId::WEAPON_MOLOTOV:
+    case WeaponId::WEAPON_SMOKEGRENADE: return 40;
     }
 }
