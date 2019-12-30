@@ -201,7 +201,8 @@ public:
 		float viewModel_x{ 0 };
 		float viewModel_y{ 0 };
 		float viewModel_z{ 0 };
-        int playerModel{ 0 };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;

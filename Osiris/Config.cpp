@@ -719,7 +719,8 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("ViewModel X")) visuals.viewModel_x = visualsJson["ViewModel X"].asFloat();
 		if (visualsJson.isMember("ViewModel Y")) visuals.viewModel_y = visualsJson["ViewModel Y"].asFloat();
 		if (visualsJson.isMember("ViewModel Z")) visuals.viewModel_z = visualsJson["ViewModel Z"].asFloat();
-        if (visualsJson.isMember("Playermodel")) visuals.playerModel = visualsJson["Playermodel"].asInt();
+        if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
+        if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
     }
 
 	for (size_t i = 0; i < skinChanger.size(); ++i) {
@@ -1491,7 +1492,8 @@ void Config::save(size_t id) const noexcept
 		visualsJson["ViewModel X"] = visuals.viewModel_x;
 		visualsJson["ViewModel Y"] = visuals.viewModel_y;
 		visualsJson["ViewModel Z"] = visuals.viewModel_z;
-        visualsJson["Playermodel"] = visuals.playerModel;
+        visualsJson["Playermodel T"] = visuals.playerModelT;
+        visualsJson["Playermodel CT"] = visuals.playerModelCT;
     }
 
 	for (size_t i = 0; i < skinChanger.size(); ++i) {
