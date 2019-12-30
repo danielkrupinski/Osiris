@@ -182,7 +182,8 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
-        int playerModel{ 0 };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
