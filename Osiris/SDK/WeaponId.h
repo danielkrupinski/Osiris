@@ -32,6 +32,12 @@ enum class WeaponId : short {
     Scar20 = 38,
     Sg553,
     Ssg08,
+    WEAPON_FLASHBANG = 43,
+    WEAPON_HEGRENADE = 44,
+    WEAPON_SMOKEGRENADE = 45,
+    WEAPON_MOLOTOV = 46,
+    WEAPON_DECOY = 47,
+    WEAPON_INCGRENADE = 48,
     GoldenKnife,
     M4a1_s = 60,
     Usp_s,
@@ -60,13 +66,7 @@ enum class WeaponId : short {
     GloveLeatherWrap,
     GloveMotorcycle,
     GloveSpecialist,
-    GloveHydra,
-    WEAPON_FLASHBANG = 43,
-    WEAPON_HEGRENADE = 44,
-    WEAPON_SMOKEGRENADE = 45,
-    WEAPON_MOLOTOV = 46,
-    WEAPON_DECOY = 47,
-    WEAPON_INCGRENADE = 48,
+    GloveHydra
 };
 
 constexpr int getWeaponIndex(WeaponId weaponId) noexcept
@@ -118,7 +118,7 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::WEAPON_HEGRENADE:return 43;
     case WeaponId::WEAPON_INCGRENADE:return 44;
     case WeaponId::WEAPON_MOLOTOV:return 45;
-    case WeaponId::WEAPON_SMOKEGRENADE: return 38;
+    case WeaponId::WEAPON_SMOKEGRENADE: return 46;
     }
 }
 constexpr int getWeaponClass(WeaponId weaponId) noexcept
