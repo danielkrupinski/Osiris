@@ -44,6 +44,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			lastTime = memory.globalVars->realtime;
 		}
 			auto weapon = localPlayer->getActiveWeapon();
+				if (!weapon) {
+			return;
+		}
 			if (!weapon->m_bPinPulled()) {
 				float throwTime = weapon->m_fThrowTime();
 				if (throwTime > 0.f)
