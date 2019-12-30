@@ -38,10 +38,11 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
         "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
     };
-
-    if (config.visuals.playerModel > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModel - 1]));
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (config.visuals.playerModelT > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START && localPlayer->team() == 2)
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
+    if (config.visuals.playerModelCT > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START && localPlayer->team() == 3) 
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
     }
 }
 
