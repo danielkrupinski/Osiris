@@ -20,5 +20,8 @@ struct WeaponData {
     float range;
     float rangeModifier;
     std::byte pad5[16];
-    bool hasSilencer;
+    bool silencer;
+    std::byte pad6[15];
+    float maxSpeed;
+    float maxSpeedAlt;
 };
