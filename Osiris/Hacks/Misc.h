@@ -11,7 +11,9 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 
-namespace Misc {
+namespace Misc
+{
+    void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
