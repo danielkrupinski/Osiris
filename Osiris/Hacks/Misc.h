@@ -16,7 +16,8 @@
 #include "../SDK/ViewSetup.h"
 #include "../SDK/Input.h"
 
-namespace Misc {
+namespace Misc
+{
     void AutoBlocker(UserCmd*) noexcept;
     void slowWalk(UserCmd*) noexcept;
     void inverseRagdollGravity() noexcept;

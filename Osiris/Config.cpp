@@ -808,7 +808,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Use spam")) misc.useSpam = miscJson["Use spam"].asBool();
         if (miscJson.isMember("Slow walk")) misc.slowWalk = miscJson["Slow walk"].asBool();
         if (miscJson.isMember("Slow walk key")) misc.slowWalkKey = miscJson["Slow walk key"].asInt();
-        if (miscJson.isMember("Slow walk amount")) misc.slowWalkAmount = miscJson["Slow walk amount"].asInt();
         if (miscJson.isMember("Blockbot key")) misc.blockbotkey = miscJson["Blockbot key"].asInt();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
@@ -1572,7 +1571,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Use spam"] = misc.useSpam;
         miscJson["Slow walk"] = misc.slowWalk;
         miscJson["Slow walk key"] = misc.slowWalkKey;
-        miscJson["Slow walk amount"] = misc.slowWalkAmount;
         miscJson["Block bot"] = misc.blockbotkey;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;

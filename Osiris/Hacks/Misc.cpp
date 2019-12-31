@@ -89,23 +89,32 @@ void Misc::AutoBlocker(UserCmd* cmd) noexcept
 
 void Misc::slowWalk(UserCmd* cmd) noexcept
 {
-    float amount = config.misc.slowWalkAmount;
-    if (amount <= 0) {
-        return;
-    }
-    if (GetAsyncKeyState(config.misc.slowWalkKey) && config.misc.slowWalk) {
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        Vector velocity = localPlayer->velocity();
-        static Vector direction = { 0,0,0 };
-        float speed = velocity.length();
-        direction.y = cmd->viewangles.y - direction.y;
-        Vector forward;
-        Vector source = forward * -speed;
-        if (speed >= amount)
-        {
-            cmd->forwardmove = source.x;
-            cmd->sidemove = source.y;
+    if (config.misc.slowWalk && GetAsyncKeyState(config.misc.slowWalkKey)) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
+
+        const auto activeWeapon = localPlayer->getActiveWeapon();
+        if (!activeWeapon)
+            return;
+
+        const auto weaponData = activeWeapon->getWeaponData();
+        if (!weaponData)
+            return;
+
+        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+        if (cmd->forwardmove && cmd->sidemove) {
+            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        }
+        else if (cmd->forwardmove) {
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+        }
+        else if (cmd->sidemove) {
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
         }
     }
 }
