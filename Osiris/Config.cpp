@@ -701,7 +701,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
-        if (visualsJson.isMember("Playermodel")) visuals.playerModel = visualsJson["Playermodel"].asInt();
+        if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
+        if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -1447,7 +1448,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
-        visualsJson["Playermodel"] = visuals.playerModel;
+        visualsJson["Playermodel T"] = visuals.playerModelT;
+        visualsJson["Playermodel CT"] = visuals.playerModelCT;
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
