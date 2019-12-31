@@ -15,6 +15,13 @@
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
+    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
+
         static constexpr const char* models[]{
         "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
         "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
@@ -40,10 +47,9 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
         };
 
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (config.visuals.playerModelT > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START && localPlayer->team() == 2)
+        if (config.visuals.playerModelT > 0 && localPlayer->team() == 2)
             localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
-        if (config.visuals.playerModelCT > 0 && stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START && localPlayer->team() == 3)
+        if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3)
             localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
 }
 

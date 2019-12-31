@@ -172,6 +172,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
 	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
 	cmd->viewangles.z = 0.0f;
+	cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
+	cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
 	previousViewAngles = cmd->viewangles;
 	if (sendPacket) {
