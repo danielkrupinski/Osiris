@@ -46,10 +46,19 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
     };
 
-    if (config.visuals.playerModelT > 0 && localPlayer->team() == 2)
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
-    if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3) 
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
+    if (config.visuals.playerModelT > 0 && localPlayer->team() == 2) {
+        const auto idx = interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]);
+        localPlayer->setModelIndex(idx);
+
+        if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+            ragdoll->setModelIndex(idx);
+    } else if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3) {
+        const auto idx = interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]);
+        localPlayer->setModelIndex(idx);
+
+        if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+            ragdoll->setModelIndex(idx);
+    }
 }
 
 void Visuals::colorWorld() noexcept
