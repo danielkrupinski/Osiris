@@ -289,6 +289,7 @@ public:
 	NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
 	NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
+    NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)

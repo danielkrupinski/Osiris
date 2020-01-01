@@ -13,6 +13,8 @@
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
 
+#include <array>
+
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
@@ -22,7 +24,8 @@ void Visuals::playerModel(FrameStage stage) noexcept
     if (!localPlayer)
         return;
 
-        static constexpr const char* models[]{
+    constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
+        constexpr std::array models{
         "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
         "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
         "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
@@ -47,10 +50,20 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
         };
 
-        if (config.visuals.playerModelT > 0 && localPlayer->team() == 2)
-            localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
-        if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3)
-            localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
+        switch (team) {
+        case 2: return config.visuals.playerModelT > 0 && config.visuals.playerModelT <= models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
+        case 3: return config.visuals.playerModelCT > 0 && config.visuals.playerModelCT <= models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
+        default: return nullptr;
+        }
+    };
+
+    if (const auto model = getModel(localPlayer->team())) {
+        const auto idx = interfaces.modelInfo->getModelIndex(model);
+            localPlayer->setModelIndex(idx);
+
+            if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+                ragdoll->setModelIndex(idx);
+    }
 }
 
 void Visuals::disablePanoramablur() noexcept
