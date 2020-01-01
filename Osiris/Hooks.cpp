@@ -105,14 +105,14 @@ static Vector choked;
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-	uintptr_t* framePointer;
-	__asm mov framePointer, ebp;
-	bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
-
 	auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
 	if (!cmd->commandNumber)
 		return result;
+
+	uintptr_t* framePointer;
+	__asm mov framePointer, ebp;
+	bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 
 	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static auto previousViewAngles{ cmd->viewangles };
