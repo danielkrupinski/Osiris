@@ -11,7 +11,9 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 
-namespace Misc {
+namespace Misc
+{
+    void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
@@ -43,8 +45,8 @@ namespace Misc {
 
             const float forwardmove = cmd->forwardmove;
             const float sidemove = cmd->sidemove;
-            cmd->forwardmove = std::clamp(cos(degreesToRadians(yawDelta)) * forwardmove + cos(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
-            cmd->sidemove = std::clamp(sin(degreesToRadians(yawDelta)) * forwardmove + sin(degreesToRadians(yawDelta + 90.0f)) * sidemove, -450.0f, 450.0f);
+            cmd->forwardmove = std::cos(degreesToRadians(yawDelta)) * forwardmove + std::cos(degreesToRadians(yawDelta + 90.0f)) * sidemove;
+            cmd->sidemove = std::sin(degreesToRadians(yawDelta)) * forwardmove + std::sin(degreesToRadians(yawDelta + 90.0f)) * sidemove;
         }
     }
 
