@@ -10,6 +10,60 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
+#include "../SDK/ModelInfo.h"
+
+#include <array>
+
+void Visuals::playerModel(FrameStage stage) noexcept
+{
+    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
+
+    constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
+        constexpr std::array models{
+        "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
+        "models/player/custom_player/legacy/ctm_sas_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variante.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_st6_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantk.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantm.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantf.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantg.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianth.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianti.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantj.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantf.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantg.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianth.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianti.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+        };
+
+        switch (team) {
+        case 2: return config.visuals.playerModelT > 0 && config.visuals.playerModelT <= models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
+        case 3: return config.visuals.playerModelCT > 0 && config.visuals.playerModelCT <= models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
+        default: return nullptr;
+        }
+    };
+
+    if (const auto model = getModel(localPlayer->team())) {
+        const auto idx = interfaces.modelInfo->getModelIndex(model);
+        localPlayer->setModelIndex(idx);
+
+        if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+            ragdoll->setModelIndex(idx);
+    }
+}
 
 void Visuals::colorWorld() noexcept
 {

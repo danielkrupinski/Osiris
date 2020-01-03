@@ -41,4 +41,5 @@ Memory::Memory() noexcept
     test = relativeToAbsolute<uintptr_t>(findPattern<int*>(L"client_panorama", "\xE8????\x3B\x44\x24\x0C", 1)) + 0x71;
     test2 = findPattern<uintptr_t>(L"client_panorama", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
+    debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
 }
