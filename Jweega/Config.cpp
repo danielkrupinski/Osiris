@@ -702,7 +702,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
-        if (visualsJson.isMember("Playermodel")) visuals.playerModel = visualsJson["Playermodel"].asInt();
+        if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
+        if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
     }
 
     for (size_t i = 0; i < skinChanger.size(); ++i) {
@@ -792,6 +793,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
+        if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
+        if (miscJson.isMember("Slowwalk key")) misc.slowwalkKey = miscJson["Slowwalk key"].asInt();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
         if (miscJson.isMember("Recoil crosshair")) misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
         if (miscJson.isMember("Auto pistol")) misc.autoPistol = miscJson["Auto pistol"].asBool();
@@ -1449,7 +1452,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
-        visualsJson["Playermodel"] = visuals.playerModel;
+        visualsJson["Playermodel T"] = visuals.playerModelT;
+        visualsJson["Playermodel CT"] = visuals.playerModelCT;
     }
 
     for (size_t i = 0; i < skinChanger.size(); ++i) {
@@ -1530,6 +1534,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Animated clan tag"] = misc.animatedClanTag;
         miscJson["Fast duck"] = misc.fastDuck;
         miscJson["Moonwalk"] = misc.moonwalk;
+        miscJson["Slowwalk"] = misc.slowwalk;
+        miscJson["Slowwalk key"] = misc.slowwalkKey;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
         miscJson["Recoil crosshair"] = misc.recoilCrosshair;
         miscJson["Auto pistol"] = misc.autoPistol;

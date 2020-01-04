@@ -12,6 +12,36 @@
 #include "../SDK/WeaponData.h"
 #include "../SDK/Utils.h"
 
+void Misc::slowwalk(UserCmd* cmd) noexcept
+{
+    if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
+
+        const auto activeWeapon = localPlayer->getActiveWeapon();
+        if (!activeWeapon)
+            return;
+
+        const auto weaponData = activeWeapon->getWeaponData();
+        if (!weaponData)
+            return;
+
+        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+        if (cmd->forwardmove && cmd->sidemove) {
+            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        } else if (cmd->forwardmove) {
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+        } else if (cmd->sidemove) {
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+        }
+    }
+}
+
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
@@ -384,11 +414,11 @@ void Misc::fakeBan(bool set) noexcept
 }
 
 void Misc::nadePredict() noexcept
-{ 
-    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
-    
-    nadeVar->onChangeCallbacks.size = 0; 
-    nadeVar->setValue(config.misc.nadePredict); 
+{
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
+
+    nadeVar->onChangeCallbacks.size = 0;
+    nadeVar->setValue(config.misc.nadePredict);
 }
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept

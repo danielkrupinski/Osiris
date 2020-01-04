@@ -260,6 +260,7 @@ public:
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
+    NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
@@ -287,6 +288,7 @@ public:
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
     NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
+    NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)

@@ -183,7 +183,8 @@ public:
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
-        int playerModel{ 0 };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -217,6 +218,8 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool slowwalk{ false };
+        int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
