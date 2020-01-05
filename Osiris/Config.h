@@ -227,6 +227,7 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        float aspectratio{ 0 };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };
