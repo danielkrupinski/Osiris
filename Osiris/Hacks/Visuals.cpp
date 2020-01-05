@@ -50,8 +50,8 @@ void Visuals::playerModel(FrameStage stage) noexcept
         };
 
         switch (team) {
-        case 2: return config.visuals.playerModelT > 0 && config.visuals.playerModelT <= models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
-        case 3: return config.visuals.playerModelCT > 0 && config.visuals.playerModelCT <= models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
+        case 2: return static_cast<std::size_t>(config.visuals.playerModelT - 1) < models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
+        case 3: return static_cast<std::size_t>(config.visuals.playerModelCT - 1) < models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
         default: return nullptr;
         }
     };
