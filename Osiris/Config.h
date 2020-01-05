@@ -258,6 +258,7 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        float aspectRatio{ 0 };
         bool chatSpam{ false };
         int chatSpamDelay{ 0 };
         char chatSpamText[8192]{ };

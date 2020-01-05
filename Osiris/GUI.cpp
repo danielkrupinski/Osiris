@@ -1053,6 +1053,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix Bone Matrix", &config.misc.fixBoneMatrix);
         ImGui::Checkbox("Fix Movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable Model Occlusion", &config.misc.disableModelOcclusion);
+        ImGui::SliderFloat("Aspect Ratio", &config.misc.aspectRatio, 0.0f, 5.0f, "%.2f");
         ImGui::NextColumn();
 		if (config.misc.customClanTag) {
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);

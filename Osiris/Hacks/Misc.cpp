@@ -273,6 +273,15 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     }
 }
 
+void Misc::aspectRatio() noexcept
+{
+    static auto aspectratio = interfaces.cvar->findVar("r_aspectratio");
+    if (aspectratio)
+    {
+        aspectratio->setValue(config.misc.aspectratio);
+    }
+}
+
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
     if (config.misc.fastPlant) {

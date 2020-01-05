@@ -41,6 +41,7 @@ namespace Misc
     void fakePrime() noexcept;
     void chatSpam() noexcept;
     void useSpam(UserCmd*) noexcept;
+    void aspectRatio() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {

@@ -863,6 +863,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
         if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
+        if (miscJson.isMember("Aspect ratio")) misc.aspectRatio = miscJson["Aspect ratio"].asFloat();
         if (miscJson.isMember("Chat spam")) misc.chatSpam = miscJson["Chat spam"].asBool();
         if (miscJson.isMember("Chat spam delay")) misc.chatSpamDelay = miscJson["Chat spam delay"].asInt();
         if (miscJson.isMember("Chat spam text")) strcpy_s(misc.chatSpamText, sizeof(misc.chatSpamText), miscJson["Chat spam text"].asCString());
@@ -1614,6 +1615,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;
         miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
+        miscJson["Aspect ratio"] = misc.aspectRatio;
         miscJson["Chat spam"] = misc.chatSpam;
         miscJson["Chat spam delay"] = misc.chatSpamDelay;
         miscJson["Chat spam text"] = misc.chatSpamText;
