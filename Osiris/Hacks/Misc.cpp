@@ -11,6 +11,36 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
+void Misc::slowwalk(UserCmd* cmd) noexcept
+{
+    if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
+
+        const auto activeWeapon = localPlayer->getActiveWeapon();
+        if (!activeWeapon)
+            return;
+
+        const auto weaponData = activeWeapon->getWeaponData();
+        if (!weaponData)
+            return;
+
+        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+        if (cmd->forwardmove && cmd->sidemove) {
+            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        } else if (cmd->forwardmove) {
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+        } else if (cmd->sidemove) {
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+        }
+    }
+}
+
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
@@ -43,7 +73,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
             const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
             memory.setClanTag(timeString.c_str(), timeString.c_str());
-	}
+        }
     }
 }
 
@@ -377,16 +407,16 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\n" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
 void Misc::nadePredict() noexcept
-{ 
-    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
-    
-    nadeVar->onChangeCallbacks.size = 0; 
-    nadeVar->setValue(config.misc.nadePredict); 
+{
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
+
+    nadeVar->onChangeCallbacks.size = 0;
+    nadeVar->setValue(config.misc.nadePredict);
 }
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept
@@ -424,5 +454,20 @@ void Misc::fixTabletSignal() noexcept
 
         if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             activeWeapon->tabletReceptionIsBlocked() = false;
+    }
+}
+
+void Misc::fakePrime() noexcept
+{
+    static bool lastState = false;
+
+    if (config.misc.fakePrime != lastState) {
+        lastState = config.misc.fakePrime;
+
+        if (DWORD oldProtect; VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            constexpr uint8_t patch[]{ 0x74, 0xEB };
+            *memory.fakePrime = patch[config.misc.fakePrime];
+            VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+        }
     }
 }

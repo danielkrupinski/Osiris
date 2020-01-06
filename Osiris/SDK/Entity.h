@@ -97,9 +97,9 @@ public:
             return Vector{ };
     }
 
-    constexpr Vector getEyePosition() noexcept
+    auto getEyePosition() noexcept
     {
-        Vector vec{ };
+        Vector vec;
         callVirtualMethod<void, Vector&>(this, 284, vec);
         return vec;
     }
@@ -225,73 +225,76 @@ public:
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
 
-    NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int);
-    NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned);
-    NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector);
-    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType);
-    NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float);
-    NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int);
+    NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)
+    NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
+    NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
+    NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
+    NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
+    NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
+    NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48]);
-    PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int);
+    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
+    PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
-    NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int);
-    NETVAR(health, "CBasePlayer", "m_iHealth", int);
-    NETVAR(fov, "CBasePlayer", "m_iFOV", int);
-    NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int);
-    NETVAR(flags, "CBasePlayer", "m_fFlags", int);
-    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int);
-    NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector);
-    NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector);
-    NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector);
+    NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
+    NETVAR(health, "CBasePlayer", "m_iHealth", int)
+    NETVAR(fov, "CBasePlayer", "m_iFOV", int)
+    NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
+    NETVAR(flags, "CBasePlayer", "m_fFlags", int)
+    NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
+    NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
+    NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
+    NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
     
-    NETVAR(armor, "CCSPlayer", "m_ArmorValue", int);
-    NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector);
-    NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool);
-    NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool);
-    NETVAR(flashDuration, "CCSPlayer", "m_flFlashDuration", float);
-    NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float);
-    NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool);
-    NETVAR(account, "CCSPlayer", "m_iAccount", int);
-    NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool);
+    NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
+    NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
+    NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
+    NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
+    NETVAR(flashDuration, "CCSPlayer", "m_flFlashDuration", float)
+    NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
+    NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
+    NETVAR(account, "CCSPlayer", "m_iAccount", int)
+    NETVAR(inBombZone, "CCSPlayer", "m_bInBombZone", bool)
     NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
-    NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool);
-    NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float);
+    NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
+    NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
+    NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
 
-    NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int);
-    NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int);
-    NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int);
-    NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int);
-    NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int);
-    NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float);
+    NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
+    NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
+    NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
+    NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
+    NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
-    NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float);
+    NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
-    NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int);
-    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short);
-    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId);
-    NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int);
-    NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int);
-    NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32]);
-    NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned);
-    NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned);
-    NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float);
-    NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned);
+    NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
+    NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
+    NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
+    NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int)
+    NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
+    NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
+    NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
+    NETVAR(fallbackSeed, "CBaseAttributableItem", "m_nFallbackSeed", unsigned)
+    NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
+    NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
+    NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
 
-    NETVAR(owner, "CBaseViewModel", "m_hOwner", int);
-    NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int);
+    NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
+    NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
 
-    NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool);
+    NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
-    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float);
-    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int);
-    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool);
-    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float);
-    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int);
+    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
+    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
+    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
+    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
+    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 
-    NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool);
+    NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
-    NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int);
+    NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
-    NETVAR(sentryHealth, "CDronegun", "m_iHealth", int);
+    NETVAR(sentryHealth, "CDronegun", "m_iHealth", int)
 };

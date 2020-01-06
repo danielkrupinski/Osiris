@@ -192,10 +192,23 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2019 (preferably latest version i.e. 16.1.6), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
-### Cloning
-The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
+### Downloading
+
+There are two options of downloading the source code:
+
+#### Without [git](https://git-scm.com)
+
+Choose this option if you want pure source and you're not going to contribute to the repo. Download size ~600 kB.
+
+To download source code this way [click here](https://github.com/danielkrupinski/Osiris/archive/master.zip).
+
+#### With [git](https://git-scm.com)
+
+Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step further, if not installed download it [here](https://git-scm.com).
+
+Open git command prompt and enter following command:
 ```
 git clone https://github.com/danielkrupinski/Osiris.git
 ```
@@ -214,7 +227,6 @@ If everything went right you should receive `Osiris.dll`  binary file.
 Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
 
 When injected, menu is openable under `INSERT` key.
-
 
 ### Further optimizations
 If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
@@ -243,3 +255,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ## See also
 - [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
+- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source stream-proof ESP hack for Counter-Strike: Global Offensive, written in modern C++

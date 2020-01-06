@@ -2,6 +2,8 @@
 
 #include "Utils.h"
 
+#include <tuple>
+
 class MaterialVar {
 public:
     constexpr auto setValue(float value) noexcept
@@ -18,6 +20,11 @@ enum class MaterialVarFlag {
 
 class Material {
 public:
+    constexpr auto getTextureGroupName() noexcept
+    {
+        return callVirtualMethod<const char*>(this, 1);
+    }
+
     constexpr auto findVar(const char* name) noexcept
     {
         return callVirtualMethod<MaterialVar*, const char*, bool*, bool>(this, 11, name, nullptr, false);
@@ -44,8 +51,18 @@ public:
         callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
     }
 
+    constexpr void colorModulate(const std::tuple<float, float, float>& color) noexcept
+    {
+        callVirtualMethod<void, float, float, float>(this, 28, std::get<0>(color), std::get<1>(color), std::get<2>(color));
+    }
+
     constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
     {
         callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
+    }
+
+    constexpr auto isPrecached() noexcept
+    {
+        return callVirtualMethod<bool>(this, 70);
     }
 };
