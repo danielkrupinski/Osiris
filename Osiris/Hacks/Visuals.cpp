@@ -10,18 +10,62 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
-#include "../SDK/Surface.h"
+#include "../SDK/ModelInfo.h"
+
+void Visuals::playerModel(FrameStage stage) noexcept
+{
+    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
+
+    static constexpr const char* models[]{
+        "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
+        "models/player/custom_player/legacy/ctm_sas_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variante.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_st6_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantk.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantm.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantf.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantg.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianth.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianti.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantj.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantf.mdl",
+        "models/player/custom_player/legacy/tm_leet_variantg.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianth.mdl",
+        "models/player/custom_player/legacy/tm_leet_varianti.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
+        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+    };
+
+    if (config.visuals.playerModelT > 0 && localPlayer->team() == 2)
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
+    if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3) 
+        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
+}
+
 void Visuals::colorWorld() noexcept
 {
-    if (config.visuals.world.enabled) {
-        for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-            if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached() && std::strstr(mat->getTextureGroupName(), "World")) {
-                if (config.visuals.world.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed) };
-                    mat->colorModulate(r, g, b);
-                } else {
-                    mat->colorModulate(config.visuals.world.color[0], config.visuals.world.color[1], config.visuals.world.color[2]);
-                }
+    for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
+        if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached()) {
+            if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+                if (config.visuals.world.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.world.color);
+            } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+                if (config.visuals.sky.rainbow)
+                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+                else
+                    mat->colorModulate(config.visuals.sky.color);
             }
         }
     }
@@ -201,118 +245,33 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         }
 
         if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
-			if (config.visuals.hitMarker > 0 && config.visuals.hitMarker < 6) {
-				constexpr auto getEffectMaterial = [] {
-					static constexpr const char* effects[]{
-					"effects/dronecam",
-					"effects/underwater_overlay",
-					"effects/healthboost",
-					"effects/dangerzone_screen"
-					};
+            constexpr auto getEffectMaterial = [] {
+                static constexpr const char* effects[]{
+                "effects/dronecam",
+                "effects/underwater_overlay",
+                "effects/healthboost",
+                "effects/dangerzone_screen"
+                };
 
-					if (config.visuals.hitMarker <= 2)
-						return effects[0];
-					return effects[config.visuals.hitMarker - 2];
+                if (config.visuals.hitMarker <= 2)
+                    return effects[0];
+                return effects[config.visuals.hitMarker - 2];
+            };
 
-
-
-
-				};
-
-				auto renderContext = interfaces.materialSystem->getRenderContext();
-				renderContext->beginRender();
-				int x, y, width, height;
-				renderContext->getViewport(x, y, width, height);
-				auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
-				if (config.visuals.hitMarker == 1)
-					material->findVar("$c0_x")->setValue(0.0f);
-				else if (config.visuals.hitMarker == 2)
-					material->findVar("$c0_x")->setValue(0.1f);
-				else if (config.visuals.hitMarker >= 4)
-					material->findVar("$c0_x")->setValue(1.0f);
-				drawScreenEffectMaterial(material, 0, 0, width, height);
-				renderContext->endRender();
-				renderContext->release();
-			}
-
-			else if (config.visuals.hitMarker == 6) {
-				const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
-
-
-				const auto width_mid = screenWidth		/ 2;
-				const auto height_mid = screenHeight	/ 2;
-
-
-				interfaces.surface->setDrawColor(255, 0, 255, 225);
-
-
-
-				interfaces.surface->drawLine(width_mid - 1, height_mid - -64, width_mid - 1, height_mid + 0);
-				interfaces.surface->drawLine(width_mid - 0, height_mid - -64, width_mid - 0, height_mid + 0);
-				interfaces.surface->drawLine(width_mid + 1, height_mid - -64, width_mid + 1, height_mid + 0);
-				interfaces.surface->drawLine(width_mid + 2, height_mid - -64, width_mid + 2, height_mid + 0);
-				
-				// Right part
-				//interfaces.surface->drawLine(width_mid + 9, height_mid + 10, width_mid + -1, height_mid + 0);
-				///
-				//interfaces.surface->drawLine(width_mid + 9, height_mid + 9, width_mid + 0, height_mid + 0);
-				//interfaces.surface->drawLine(width_mid + 8, height_mid + 10, width_mid + -1, height_mid + 0);
-
-				/// Left Part
-				//interfaces.surface->drawLine(width_mid - 11, height_mid + 10, width_mid - -1, height_mid + 0);
-				///
-				//interfaces.surface->drawLine(width_mid - 11, height_mid + 11, width_mid - -2, height_mid + 0);
-				//interfaces.surface->drawLine(width_mid - 10, height_mid + 11, width_mid - -1, height_mid + 0);
-
-				///
-				/////
-				//interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 5, height_mid - 5);
-				//interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 5, height_mid - 5);
-			}
-
-
-
+            auto renderContext = interfaces.materialSystem->getRenderContext();
+            renderContext->beginRender();
+            int x, y, width, height;
+            renderContext->getViewport(x, y, width, height);
+            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+            if (config.visuals.hitMarker == 1)
+                material->findVar("$c0_x")->setValue(0.0f);
+            else if (config.visuals.hitMarker == 2)
+                material->findVar("$c0_x")->setValue(0.1f);
+            else if (config.visuals.hitMarker >= 4)
+                material->findVar("$c0_x")->setValue(1.0f);
+            drawScreenEffectMaterial(material, 0, 0, width, height);
+            renderContext->endRender();
+            renderContext->release();
         }
     }
-}
-
-void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept
-{
-	if (config.visuals.hitMarkerDamageIndicator)
-	{
-		if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-			hitMarkerInfo.push_back({ memory.globalVars->realtime + config.visuals.hitMarkerTime, event->getInt("dmg_health") });
-		}
-	}
-}
-
-void Visuals::hitMarkerDamageIndicator() noexcept
-{
-	if (config.visuals.hitMarkerDamageIndicator)
-	{
-		if (hitMarkerInfo.empty()) return;
-
-		const auto [width, height] = interfaces.surface->getScreenSize();
-
-		for (size_t i = 0; i < hitMarkerInfo.size(); i++)
-		{
-			const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory.globalVars->realtime;
-
-			if (diff < 0.f)
-			{
-				hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
-				continue;
-			}
-
-			const auto dist = 42;
-			const auto ratio = 1.f - diff / .5f;
-			const auto alpha = 255;
-
-			const auto font_id = 91;
-			interfaces.surface->setTextFont(font_id);
-			interfaces.surface->setTextPosition(width / 2 + ratio * dist / 8, height / 2 - 54 + ratio * dist);
-			interfaces.surface->setTextColor(255, 0, 125, alpha);
-			interfaces.surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
-		}
-	}
 }

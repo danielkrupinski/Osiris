@@ -161,15 +161,8 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                         if (applied)
                             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                         applyChams(config.chams[BACKTRACK].materials[i], false, entity->health());
-                        //hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
-						if (config.backtrack.drawAllTicks) {
-							for (int x = 0; x < record->size(); x++) {
-								hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->at(x).matrix);
-							}
-						}
-						else
-							hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
-						interfaces.modelRender->forceMaterialOverride(nullptr);
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
                         applied = true;
                     }
                 }

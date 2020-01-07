@@ -20,7 +20,7 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()  ) {
+            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
                 records[i].clear();
                 continue;
             }
@@ -36,7 +36,14 @@ void Backtrack::update(FrameStage stage) noexcept
 
             records[i].push_front(record);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config.backtrack.timeLimit) / 1000.f)))
+			float latency = config.backtrack.pingBasedPing;
+			if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+				latency = networkChannel->getLatency(0);
+			if (config.backtrack.pingBased)
+				config.backtrack.timeLimit = static_cast<int>(latency*1000);
+			
+
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>((config.backtrack.timeLimit) / 1000.f) )))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
@@ -68,6 +75,8 @@ void Backtrack::run(UserCmd* cmd) noexcept
     static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
     const auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
 
+
+
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
@@ -87,7 +96,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 12 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;

@@ -406,9 +406,12 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
         ImGui::Checkbox("Ignore smoke", &config.backtrack.ignoreSmoke);
         ImGui::Checkbox("Recoil based fov", &config.backtrack.recoilBasedFov);
-		ImGui::Checkbox("Draw all ticks", &config.backtrack.drawAllTicks);
-        ImGui::PushItemWidth(200.0f);
-        ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
+		ImGui::Checkbox("pingBased", &config.backtrack.pingBased);
+        ImGui::PushItemWidth(220.0f);
+		if (!config.backtrack.pingBased)
+			ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Time limit: %d ms");
+			;
+        
         ImGui::PopItemWidth();
         if (!config.style.menuStyle)
             ImGui::End();
@@ -500,6 +503,8 @@ void GUI::renderChamsWindow() noexcept
         ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
         ImGui::Checkbox("Wireframe", &chams.wireframe);
         ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+        ImGui::SetNextItemWidth(220.0f);
+        ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
 
         if (!config.style.menuStyle) {
             ImGui::End();
@@ -633,6 +638,8 @@ void GUI::renderEspWindow() noexcept
                 ImGui::SameLine(spacing);
                 ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance);
                 ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon);
+                ImGui::SameLine(spacing);
+                ImGui::Checkbox("Dead ESP", &config.esp.players[selected].deadesp);
                 ImGui::SliderFloat("Max distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
                 break;
             }
@@ -719,11 +726,13 @@ void GUI::renderVisualsWindow() noexcept
 {
     if (window.visuals) {
         if (!config.style.menuStyle) {
-            ImGui::SetNextWindowSize({ 520.0f, 0.0f });
+            ImGui::SetNextWindowSize({ 680.0f, 0.0f });
             ImGui::Begin("Visuals", &window.visuals, windowFlags);
         }
         ImGui::Columns(2, nullptr, false);
-        ImGui::SetColumnOffset(1, 210.0f);
+        ImGui::SetColumnOffset(1, 280.0f);
+        ImGui::Combo("T Player Model", &config.visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
+        ImGui::Combo("CT Player Model", &config.visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
         ImGui::Checkbox("Disable post-processing", &config.visuals.disablePostProcessing);
         ImGui::Checkbox("Inverse ragdoll gravity", &config.visuals.inverseRagdollGravity);
         ImGui::Checkbox("No fog", &config.visuals.noFog);
@@ -768,10 +777,10 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
         ImGuiCustom::colorPicker("World color", config.visuals.world);
+        ImGuiCustom::colorPicker("Sky color", config.visuals.sky);
         ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
         ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0Classic Hitmarker\0");
-		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
+        ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Columns(1);
 
@@ -957,6 +966,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
+        ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
+        ImGui::SameLine();
+        hotkey(config.misc.slowwalkKey);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
         ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
         ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
@@ -1027,6 +1039,7 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Fix tablet signal", &config.misc.fixTabletSignal);
         ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+        ImGui::Checkbox("Fake prime", &config.misc.fakePrime);
 
         if (ImGui::Button("Unhook"))
             hooks.restore();

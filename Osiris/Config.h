@@ -78,8 +78,9 @@ public:
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
-		bool drawAllTicks{ false };
         int timeLimit{ 200 };
+		bool pingBased{ 0 };
+		float pingBasedPing{ 0.0f };
     } backtrack;
 
     struct {
@@ -136,6 +137,7 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            bool deadesp { false };
         };
 
         struct Weapon : public Shared { } weapon;
@@ -177,11 +179,13 @@ public:
         float brightness{ 0.0f };
         int skybox{ 0 };
         ColorToggle world;
+        ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
-		bool hitMarkerDamageIndicator{ false };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -215,6 +219,8 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool slowwalk{ false };
+        int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
@@ -249,6 +255,7 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
     } misc;
 
     struct {
