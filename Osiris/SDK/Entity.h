@@ -17,6 +17,8 @@
 #include "ModelRender.h"
 #include "../SDK/matrix3x4.h"
 
+#include "../SDK/UserCmd.h"
+
 struct AnimState;
 struct WeaponData;
 
@@ -224,6 +226,28 @@ public:
     {
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
+    
+    bool throwing(UserCmd* cmd) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        auto weapon = localPlayer->getActiveWeapon();
+        if (!weapon) {
+            return true;
+        }
+        auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
+        if (weaponClass == 40) {
+            if (!weapon->m_bPinPulled()) {
+                float throwTime = weapon->m_fThrowTime();
+                if (throwTime > 0.f)
+                    return true;
+            }
+
+            if ((cmd->buttons & UserCmd::IN_ATTACK) || (cmd->buttons & UserCmd::IN_ATTACK2)) {
+                if (weapon->m_fThrowTime() > 0.f)
+                    return true;
+            }
+        }
+    }
+    
     NETVAR(m_bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
     NETVAR(m_fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float_t);
     
