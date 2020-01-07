@@ -30,35 +30,17 @@ bool LbyBreaker()
 }
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
-	float desync = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle();
+	float desync = (interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() * -1);
 	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static float lastTime{ 0.0f };
 	static bool invert;
 	bool lby = LbyBreaker();
 	int yaw = config.antiAim.yawangle;
 	Vector oldangle = cmd->viewangles;
-	float velocity = localPlayer->velocity().length();
 	if (config.antiAim.enabled) {
 		if (GetAsyncKeyState(config.antiAim.invertkey) && memory.globalVars->realtime - lastTime > 0.5f) {
 			invert = !invert;
 			lastTime = memory.globalVars->realtime;
-		}
-					auto weapon = localPlayer->getActiveWeapon();
-		if (!weapon) {
-			return;
-		}
-		auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
-		if (weaponClass == 40) {
-			if (!weapon->m_bPinPulled()) {
-				float throwTime = weapon->m_fThrowTime();
-				if (throwTime > 0.f)
-					return;
-			}
-
-			if ((cmd->buttons & UserCmd::IN_ATTACK) || (cmd->buttons & UserCmd::IN_ATTACK2)) {
-				if (weapon->m_fThrowTime() > 0.f)
-					return;
-			}
 		}
 		if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x) {
 		cmd->viewangles.x = config.antiAim.pitchAngle;
@@ -66,16 +48,13 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (config.antiAim.yaw) {
 			if (lby) {
 				sendPacket = false;
-				invert ? cmd->viewangles.y -= 118.f : cmd->viewangles.y += 118.f;
-		}else if (sendPacket) {
+				invert ? cmd->viewangles.y -= (desync * 2) :  cmd->viewangles.y += (desync * 2);
+		} 
+		if (sendPacket) {
 			if (velocity > 0.1f) {
 				invert ? cmd->viewangles.y += yaw + desync : cmd->viewangles.y += yaw - desync;
 			}
-			else if(velocity < 0.1f) {
-				invert ? cmd->viewangles.y += yaw + (desync * 2) : cmd->viewangles.y += yaw - (desync * 2);
-			}
-		}
-		else {
+		if(!sendPacket) {
 				cmd->viewangles.y += yaw;
 				}
 			}
