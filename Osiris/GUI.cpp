@@ -757,7 +757,7 @@ void GUI::renderVisualsWindow() noexcept
 		if (config.visuals.inverseRagdollGravityCustomize&&config.visuals.inverseRagdollGravity) {
 			ImGui::InputInt("Gravity Value", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
 		};
-		ImGui::Checkbox("Custom Viewmodel Position", &config.visuals.customViewmodelToggle);
+		ImGui::Checkbox("Custom Viewmodel", &config.visuals.customViewmodelToggle);
 		if (!config.visuals.customViewmodelToggle) {
 			config.visuals.customViewmodelKnifeEnabled = 0;
 		};
