@@ -11,6 +11,11 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
+
+
+
+
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
@@ -44,7 +49,7 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
+    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? config.visuals.inverseRagdollGravityValue : 600);
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
@@ -59,7 +64,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         }
 
         static auto lastTime{ 0.0f };
-        if (memory.globalVars->realtime - lastTime < 0.6f) return;
+        if (memory.globalVars->realtime - lastTime < 0.5f) return;
         lastTime = memory.globalVars->realtime;
 
         if (config.misc.animatedClanTag && !clanTag.empty())
@@ -80,10 +85,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 void Misc::spectatorList() noexcept
 {
     if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        if (!localPlayer->isAlive())
-            return;
+		if (!localPlayer->isAlive())
+		{
+			if (!localPlayer->getObserverTarget())
+				return;
+			localPlayer = localPlayer->getObserverTarget();
+		}
 
         interfaces.surface->setTextFont(Surface::font);
 

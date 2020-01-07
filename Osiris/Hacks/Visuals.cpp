@@ -11,45 +11,162 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/ModelInfo.h"
+#include <array>
+#include "../SDK/Surface.h"
+
+void Visuals::customViewmodel() noexcept {
+
+	static ConVar* view_x = interfaces.cvar->findVar("viewmodel_offset_x");
+	static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
+	static ConVar* view_z = interfaces.cvar->findVar("viewmodel_offset_z");
+	static ConVar* sv_minspec = interfaces.cvar->findVar("sv_competitive_minspec");
+	*(int*)((DWORD)& sv_minspec->onChangeCallbacks + 0xC) = 0;
+
+	if (!config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(1);
+		view_x->setValue(0);
+		view_y->setValue(0);
+		view_z->setValue(0);
+	};
+	if (!config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(1);
+		view_x->setValue(0);
+		view_y->setValue(0);
+		view_z->setValue(0);
+	};
+	if (config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(0);
+			if (config.visuals.customViewmodelKnifeEnabled&&config.visuals.customViewmodelKnifeOut) {
+				view_x->setValue(config.visuals.viewmodel_x_knife);
+				view_y->setValue(config.visuals.viewmodel_y_knife);
+				view_z->setValue(config.visuals.viewmodel_z_knife);
+			}
+			else{
+				view_x->setValue(config.visuals.viewmodel_x);
+				view_y->setValue(config.visuals.viewmodel_y);
+				view_z->setValue(config.visuals.viewmodel_z);
+			};
+	}
+};
+
+void Visuals::viewBob() noexcept {
+
+	static ConVar* view_bob = interfaces.cvar->findVar("cl_use_new_headbob");
+
+	if (!config.visuals.view_bob) {
+		view_bob->setValue(config.visuals.view_bob ? 1 : 1);
+	};
+	if (config.visuals.view_bob) {
+		view_bob->setValue(config.visuals.view_bob ? 0 : 1);
+	};
+};
+
+void Visuals::fullBright() noexcept {
+
+	static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
+
+	if (!config.visuals.full_bright) {
+		full_bright->setValue(config.visuals.full_bright ? 0 : 0);
+	};
+	if (config.visuals.full_bright) {
+		full_bright->setValue(config.visuals.full_bright ? 1 : 0);
+	};
+};
+
+void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+			hitMarkerInfo.push_back({ memory.globalVars->realtime + config.visuals.hitMarkerTime, event->getInt("dmg_health") });
+		}
+	}
+}
+
+void Visuals::hitMarkerDamageIndicator() noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (hitMarkerInfo.empty()) return;
+
+		const auto [width, height] = interfaces.surface->getScreenSize();
+
+		for (size_t i = 0; i < hitMarkerInfo.size(); i++)
+		{
+			const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory.globalVars->realtime;
+
+			if (diff < 0.f)
+			{
+				hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
+				continue;
+			}
+
+			const auto dist = config.visuals.hitMarkerDamageIndicatorDist;
+			const auto ratio = config.visuals.hitMarkerDamageIndicatorRatio - diff;
+			const auto alpha = diff * config.visuals.hitMarkerDamageIndicatorAlpha;
+
+			const auto font_id = config.visuals.hitMarkerDamageIndicatorFont;
+			interfaces.surface->setTextFont(font_id);
+			interfaces.surface->setTextPosition(width / 2 + config.visuals.hitMarkerDamageIndicatorTextX + ratio * dist / 2, height / 2 + config.visuals.hitMarkerDamageIndicatorTextY + ratio * dist);
+			interfaces.surface->setTextColor(255, 255, 255, alpha);
+			interfaces.surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
+		}
+	}
+}
+
+
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
-    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
-        return;
+	if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+		return;
 
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (!localPlayer)
-        return;
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	if (!localPlayer)
+		return;
 
-    static constexpr const char* models[]{
-        "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
-        "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
-        "models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
-        "models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
-        "models/player/custom_player/legacy/ctm_sas_variantf.mdl",
-        "models/player/custom_player/legacy/ctm_st6_variante.mdl",
-        "models/player/custom_player/legacy/ctm_st6_variantg.mdl",
-        "models/player/custom_player/legacy/ctm_st6_varianti.mdl",
-        "models/player/custom_player/legacy/ctm_st6_variantk.mdl",
-        "models/player/custom_player/legacy/ctm_st6_variantm.mdl",
-        "models/player/custom_player/legacy/tm_balkan_variantf.mdl",
-        "models/player/custom_player/legacy/tm_balkan_variantg.mdl",
-        "models/player/custom_player/legacy/tm_balkan_varianth.mdl",
-        "models/player/custom_player/legacy/tm_balkan_varianti.mdl",
-        "models/player/custom_player/legacy/tm_balkan_variantj.mdl",
-        "models/player/custom_player/legacy/tm_leet_variantf.mdl",
-        "models/player/custom_player/legacy/tm_leet_variantg.mdl",
-        "models/player/custom_player/legacy/tm_leet_varianth.mdl",
-        "models/player/custom_player/legacy/tm_leet_varianti.mdl",
-        "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
-        "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
-        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
-    };
+	constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
+		constexpr std::array models{
+		"models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
+		"models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
+		"models/player/custom_player/legacy/ctm_fbi_variantg.mdl",
+		"models/player/custom_player/legacy/ctm_fbi_varianth.mdl",
+		"models/player/custom_player/legacy/ctm_sas_variantf.mdl",
+		"models/player/custom_player/legacy/ctm_st6_variante.mdl",
+		"models/player/custom_player/legacy/ctm_st6_variantg.mdl",
+		"models/player/custom_player/legacy/ctm_st6_varianti.mdl",
+		"models/player/custom_player/legacy/ctm_st6_variantk.mdl",
+		"models/player/custom_player/legacy/ctm_st6_variantm.mdl",
+		"models/player/custom_player/legacy/tm_balkan_variantf.mdl",
+		"models/player/custom_player/legacy/tm_balkan_variantg.mdl",
+		"models/player/custom_player/legacy/tm_balkan_varianth.mdl",
+		"models/player/custom_player/legacy/tm_balkan_varianti.mdl",
+		"models/player/custom_player/legacy/tm_balkan_variantj.mdl",
+		"models/player/custom_player/legacy/tm_leet_variantf.mdl",
+		"models/player/custom_player/legacy/tm_leet_variantg.mdl",
+		"models/player/custom_player/legacy/tm_leet_varianth.mdl",
+		"models/player/custom_player/legacy/tm_leet_varianti.mdl",
+		"models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
+		"models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
+		"models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+		};
 
-    if (config.visuals.playerModelT > 0 && localPlayer->team() == 2)
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelT - 1]));
-    if (config.visuals.playerModelCT > 0 && localPlayer->team() == 3) 
-        localPlayer->setModelIndex(interfaces.modelInfo->getModelIndex(models[config.visuals.playerModelCT - 1]));
+
+		switch (team) {
+		case 2: return static_cast<std::size_t>(config.visuals.playerModelT - 1) < models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
+		case 3: return static_cast<std::size_t>(config.visuals.playerModelCT - 1) < models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
+		default: return nullptr;
+		}
+	};
+
+	if (const auto model = getModel(localPlayer->team())) {
+	const auto idx = interfaces.modelInfo->getModelIndex(model);
+		localPlayer->setModelIndex(idx);
+
+		if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+			ragdoll->setModelIndex(idx);
+	}
+
 }
 
 void Visuals::colorWorld() noexcept

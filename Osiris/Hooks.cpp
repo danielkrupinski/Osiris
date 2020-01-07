@@ -57,7 +57,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+	if (gui.isOpen && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -138,6 +138,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+	Visuals::fullBright();
+	Visuals::viewBob();
+	Visuals::customViewmodel();
+
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -178,6 +182,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::removeGrass();
         Visuals::remove3dSky();
         Glow::render();
+		
     }
     return hooks.clientMode.callOriginal<int, int>(44, param);
 }
@@ -188,6 +193,10 @@ static float __stdcall getViewModelFov() noexcept
     if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
+			config.visuals.customViewmodelKnifeOut = 1;
+		else 
+			config.visuals.customViewmodelKnifeOut = 0;
     }
 
     return hooks.clientMode.callOriginal<float>(35) + additionalFov;
@@ -223,6 +232,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::drawBombTimer();
         Misc::spectatorList();
         Misc::watermark();
+		Visuals::hitMarkerDamageIndicator();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -327,6 +337,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     case fnv::hash("player_hurt"):
         Misc::playHitSound(event);
         Visuals::hitMarker(event);
+		Visuals::hitMarkerSetDamageIndicator(event);
         break;
     }
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);

@@ -24,7 +24,7 @@ public:
     struct Color {
         float color[3]{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
-        float rainbowSpeed{ 0.6f };
+        float rainbowSpeed{ 1.0f };
     };
     
     struct ColorToggle : public Color {
@@ -81,6 +81,7 @@ public:
         int timeLimit{ 200 };
 		bool pingBased{ 0 };
 		float pingBasedPing{ 0.0f };
+		bool drawAllTicks{ true };
     } backtrack;
 
     struct {
@@ -154,6 +155,8 @@ public:
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+		int inverseRagdollGravityValue{ -600 };
+		bool inverseRagdollGravityCustomize{ false };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -183,7 +186,27 @@ public:
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
+        float hitMarkerTime{ 1.0f };
+		bool hitMarkerDamageIndicator{ false };
+		int hitMarkerDamageIndicatorDist{ 150 };
+		float hitMarkerDamageIndicatorRatio{ 1.0f };
+		int hitMarkerDamageIndicatorAlpha{ 800 };
+		int hitMarkerDamageIndicatorFont{ 31 };
+		int hitMarkerDamageIndicatorTextX{ 60 };
+		int hitMarkerDamageIndicatorTextY{ 150 };
+		bool customViewmodelToggle{ false };
+		float viewmodel_x{ 0 };
+		float viewmodel_y{ 0 };
+		float viewmodel_z{ 0 };
+		bool customViewmodelKnifeToggle{ false };
+		bool customViewmodelKnifeOut{ false };
+		bool customViewmodelKnifeEnabled{ false };
+		bool customViewmodelMenuSwitch{ false };
+		float viewmodel_x_knife{ 0 };
+		float viewmodel_y_knife{ 0 };
+		float viewmodel_z_knife{ 0 };
+		bool view_bob{ false };
+		bool full_bright{ false };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
     } visuals;
@@ -237,12 +260,12 @@ public:
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
         bool killMessage{ false };
-        char killMessageString[230]{ "Gotcha!" };
+        char killMessageString[230]{ "1" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
-        char voteText[50]{ "" };
+        char voteText[50]{ "vote text" };
         int banColor{ 6 };
-        char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
+        char banText[150]{ "ban text" };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
@@ -256,15 +279,17 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+
+
     } misc;
 
     struct {
         bool enabled{ false };
         int target{ 0 };
-        int delay{ 10 };
+        int delay{ 1 };
         bool aimbot{ true };
         bool wallhack{ true };
-        bool other{ true };
+        bool other{ false };
         bool griefing{ false };
         bool voiceAbuse{ false };
         bool textAbuse{ false };
