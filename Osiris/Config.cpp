@@ -652,7 +652,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
 		if (visualsJson.isMember("inverseRagdollGravityValue")) visuals.inverseRagdollGravityValue = visualsJson["inverseRagdollGravityValue"].asInt();
-        if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
+		if (visualsJson.isMember("inverseRagdollGravityCustomize")) visuals.inverseRagdollGravityCustomize = visualsJson["inverseRagdollGravityCustomize"].asBool();
+		if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
         if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
         if (visualsJson.isMember("No view punch")) visuals.noViewPunch = visualsJson["No view punch"].asBool();
@@ -723,6 +724,7 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Custom Viewmodel Knife Toggle")) visuals.customViewmodelKnifeToggle = visualsJson["Custom Viewmodel Knife Toggle"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Out")) visuals.customViewmodelKnifeOut = visualsJson["Custom Viewmodel Knife Out"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Enabled")) visuals.customViewmodelKnifeEnabled = visualsJson["Custom Viewmodel Knife Enabled"].asBool();
+		if (visualsJson.isMember("Custom Viewmodel Knife Menu Switch")) visuals.customViewmodelMenuSwitch = visualsJson["Custom Viewmodel Menu Switch"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Bob")) visuals.view_bob = visualsJson["Custom Viewmodel Bob"].asBool();
 		if (visualsJson.isMember("Full Brightness Light")) visuals.full_bright = visualsJson["Full Brightness Light"].asBool();
 		if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
@@ -1428,6 +1430,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["disablePostProcessing"] = visuals.disablePostProcessing;
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
 		visualsJson["inverseRagdollGravityValue"] = visuals.inverseRagdollGravityValue;
+		visualsJson["inverseRagdollGravityCustomize"] = visuals.inverseRagdollGravityCustomize;
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["No aim punch"] = visuals.noAimPunch;
@@ -1489,6 +1492,8 @@ void Config::save(size_t id) const noexcept
 		visualsJson["Custom Viewmodel Y"] = visuals.viewmodel_y;
 		visualsJson["Custom Viewmodel Z"] = visuals.viewmodel_z;
 		visualsJson["Custom Viewmodel Knife Toggle"] = visuals.customViewmodelKnifeToggle;
+		visualsJson["Custom Viewmodel Knife Enabled"] = visuals.customViewmodelKnifeEnabled;
+		visualsJson["Custom Viewmodel Knife Switch"] = visuals.customViewmodelMenuSwitch;
 		visualsJson["Custom Viewmodel X Knife"] = visuals.viewmodel_x_knife;
 		visualsJson["Custom Viewmodel Y Knife"] = visuals.viewmodel_y_knife;
 		visualsJson["Custom Viewmodel Z Knife"] = visuals.viewmodel_z_knife;
