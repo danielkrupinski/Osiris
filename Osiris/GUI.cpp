@@ -39,8 +39,8 @@ GUI::GUI() noexcept
         CoTaskMemFree(pathToFonts);
 
         static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 14.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 14.0f, nullptr, ranges);
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
     }
 }
 
@@ -1112,8 +1112,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SliderFloat("", &config.misc.maxAngleDelta, 0.0f, 255.0f, "Max angle delta: %.2f");
         ImGui::Checkbox("Fake prime", &config.misc.fakePrime);
         if (ImGui::Button("Unhook"))
-			ImGui::SameLine();
-			if (ImGui::Button("Close Cheat?"))
 				hooks.restore();
 
         ImGui::Columns(1);

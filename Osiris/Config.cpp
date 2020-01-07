@@ -91,7 +91,6 @@ void Config::load(size_t id) noexcept
 		if (backtrackJson.isMember("Draw all ticks")) backtrack.drawAllTicks = backtrackJson["Draw all ticks"].asBool();
     }
 
-
     {
         const auto& antiAimJson = json["Anti aim"];
         if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
