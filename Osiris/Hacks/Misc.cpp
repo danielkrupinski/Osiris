@@ -20,6 +20,28 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
+void Misc::edgeJump(UserCmd* cmd) noexcept
+{
+    if (config.misc.edgeJump && GetAsyncKeyState(config.misc.edgeJumpKey))
+    {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (localPlayer->moveType() == MoveType::LADDER)
+            return;
+
+        Vector start, end;
+        start = localPlayer->origin();
+        end = start;
+        end.z -= 32;
+        Trace trace;
+        Ray ray(start, end);
+        TraceFilter filter(localPlayer);
+        interfaces.engineTrace->traceRay(ray, 0x1 | 0x4000 | 0x2 | 0x10000 | 0x8, filter, trace);
+
+        if (trace.fraction == 1.0f) cmd->buttons |= UserCmd::IN_JUMP;
+    }
+}
+
 void Misc::useSpam(UserCmd* cmd) noexcept
 {
     static bool useSpam = true;
@@ -278,7 +300,7 @@ void Misc::aspectRatio() noexcept
     static auto aspectratio = interfaces.cvar->findVar("r_aspectratio");
     if (aspectratio)
     {
-        aspectratio->setValue(config.misc.aspectratio);
+        aspectratio->setValue(config.misc.aspectRatio);
     }
 }
 

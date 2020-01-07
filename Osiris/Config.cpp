@@ -805,6 +805,8 @@ void Config::load(size_t id) noexcept
 		if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
 		if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Auto strafe style")) misc.autostrafestyle = miscJson["Auto strafe style"].asInt();
+        if (miscJson.isMember("Edge jump")) misc.edgeJump = miscJson["Edge jump"].asBool();
+        if (miscJson.isMember("Edge jump key")) misc.edgeJumpKey = miscJson["Edge jump key"].asInt();
         if (miscJson.isMember("Use spam")) misc.useSpam = miscJson["Use spam"].asBool();
         if (miscJson.isMember("Slow walk")) misc.slowWalk = miscJson["Slow walk"].asBool();
         if (miscJson.isMember("Slow walk key")) misc.slowWalkKey = miscJson["Slow walk key"].asInt();
@@ -1569,6 +1571,8 @@ void Config::save(size_t id) const noexcept
 		miscJson["Bunny hop"] = misc.bunnyHop;
 		miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Auto strafe style"] = misc.autostrafestyle;
+        miscJson["Edge jump"] = misc.edgeJump;
+        miscJson["Edge jump key"] = misc.edgeJumpKey;
         miscJson["Use spam"] = misc.useSpam;
         miscJson["Slow walk"] = misc.slowWalk;
         miscJson["Slow walk key"] = misc.slowWalkKey;

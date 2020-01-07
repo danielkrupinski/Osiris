@@ -231,6 +231,8 @@ public:
 		bool bunnyHop{ false };
 		bool autoStrafe{ false };
         int autostrafestyle{ 0 };
+        bool edgeJump{ false };
+        int edgeJumpKey{ 0 };
         bool useSpam{ false };
         bool slowWalk{ false };
         int slowWalkKey{ 0 };
