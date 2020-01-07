@@ -42,6 +42,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			invert = !invert;
 			lastTime = memory.globalVars->realtime;
 		}
+				if (localPlayer->throwing(cmd)) {
+			return;
+		}
 		if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x) {
 		cmd->viewangles.x = config.antiAim.pitchAngle;
 	}
