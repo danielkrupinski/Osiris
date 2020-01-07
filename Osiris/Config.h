@@ -189,7 +189,7 @@ public:
         float hitMarkerTime{ 1.0f };
 		bool hitMarkerDamageIndicator{ false };
 		int hitMarkerDamageIndicatorDist{ 150 };
-		float hitMarkerDamageIndicatorRatio{ 1.0f };
+		float hitMarkerDamageIndicatorRatio{ 0.0f };
 		int hitMarkerDamageIndicatorAlpha{ 800 };
 		int hitMarkerDamageIndicatorFont{ 31 };
 		int hitMarkerDamageIndicatorTextX{ 60 };
