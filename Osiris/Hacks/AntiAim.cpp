@@ -13,7 +13,7 @@ bool LbyBreaker()
 	auto local_player = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static float NextUpdate = 0;
 	float velocity = local_player->velocity().length();
-	float time = memory.globalVars->currenttime;
+	float time = memory.globalVars->serverTime();
 	if (!(local_player->flags() & 1) || (!(local_player->isAlive()))) {
 		return false;
 	}
@@ -51,7 +51,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (config.antiAim.yaw) {
 			if (lby) {
 				sendPacket = false;
-				invert ? cmd->viewangles.y -= (desync * 2) :  cmd->viewangles.y += (desync * 2);
+				invert ? cmd->viewangles.y -= 120: cmd->viewangles.y += 120;
 		} 
 		if (sendPacket) {
 				invert ? cmd->viewangles.y += yaw + desync : cmd->viewangles.y += yaw - desync;
