@@ -17,7 +17,7 @@ void Misc::edgejump(UserCmd* cmd) noexcept
     {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        if (localPlayer->moveType() == MoveType::LADDER) 
+        if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
             return;
 
         Vector start, end;
