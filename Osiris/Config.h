@@ -79,6 +79,9 @@ public:
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
+		bool pingBased{ 0 };
+		float pingBasedPing{ 0.0f };
+		bool drawAllTicks{ false };
     } backtrack;
 
     struct {
@@ -152,6 +155,8 @@ public:
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+		int inverseRagdollGravityValue{ -600 };
+		bool inverseRagdollGravityCustomize{ false };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -184,6 +189,29 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+		bool hitMarkerDamageIndicator{ false };
+		int hitMarkerDamageIndicatorDist{ 150 };
+		float hitMarkerDamageIndicatorRatio{ 0.0f };
+		int hitMarkerDamageIndicatorAlpha{ 800 };
+		int hitMarkerDamageIndicatorFont{ 31 };
+		int hitMarkerDamageIndicatorTextX{ 60 };
+		int hitMarkerDamageIndicatorTextY{ 150 };
+		bool customViewmodelToggle{ false };
+		float viewmodel_x{ 0 };
+		float viewmodel_y{ 0 };
+		float viewmodel_z{ 0 };
+		bool customViewmodelKnifeToggle{ false };
+		bool customViewmodelKnifeOut{ false };
+		bool customViewmodelKnifeEnabled{ false };
+		bool customViewmodelMenuSwitch{ false };
+		bool customViewmodelBombEquiped{ false };
+		bool customViewmodelSwitchHand{ false };
+		bool customViewmodelSwitchHandKnife{ false };
+		float viewmodel_x_knife{ 0 };
+		float viewmodel_y_knife{ 0 };
+		float viewmodel_z_knife{ 0 };
+		bool view_bob{ false };
+		bool full_bright{ false };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;

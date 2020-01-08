@@ -138,6 +138,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+	Visuals::fullBright();
+	Visuals::viewBob();
+	Visuals::customViewmodel();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -188,6 +191,14 @@ static float __stdcall getViewModelFov() noexcept
     if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
+			config.visuals.customViewmodelKnifeOut = 1;
+		else
+			config.visuals.customViewmodelKnifeOut = 0;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
+			config.visuals.customViewmodelBombEquiped = 1;
+		else
+			config.visuals.customViewmodelBombEquiped = 0;
     }
 
     return hooks.clientMode.callOriginal<float>(35) + additionalFov;

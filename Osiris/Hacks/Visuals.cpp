@@ -11,8 +11,125 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/ModelInfo.h"
-
+#include "../SDK/Surface.h"
 #include <array>
+
+void Visuals::customViewmodel() noexcept {
+
+	static ConVar* view_x = interfaces.cvar->findVar("viewmodel_offset_x");
+	static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
+	static ConVar* view_z = interfaces.cvar->findVar("viewmodel_offset_z");
+	static ConVar* sv_minspec = interfaces.cvar->findVar("sv_competitive_minspec");
+	static ConVar* cl_righthand = interfaces.cvar->findVar("cl_righthand");
+
+	*(int*)((DWORD)& sv_minspec->onChangeCallbacks + 0xC) = 0;
+
+	if (!config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(1);
+		view_x->setValue(0);
+		view_y->setValue(0);
+		view_z->setValue(0);
+		cl_righthand->setValue(1);
+	};
+
+	if (config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(0);
+
+		if (config.visuals.customViewmodelKnifeEnabled && config.visuals.customViewmodelKnifeOut) {
+			view_x->setValue(config.visuals.viewmodel_x_knife);
+			view_y->setValue(config.visuals.viewmodel_y_knife);
+			view_z->setValue(config.visuals.viewmodel_z_knife);
+
+			if (!config.visuals.customViewmodelSwitchHandKnife) {
+				cl_righthand->setValue(1);
+			};
+			if (config.visuals.customViewmodelSwitchHandKnife) {
+				cl_righthand->setValue(0);
+			}
+		}
+		else if (config.visuals.customViewmodelBombEquiped) {
+			view_x->setValue(0);
+			view_y->setValue(0);
+			view_z->setValue(0);
+		}
+		else if (!config.visuals.customViewmodelBombEquiped) {
+			view_x->setValue(config.visuals.viewmodel_x);
+			view_y->setValue(config.visuals.viewmodel_y);
+			view_z->setValue(config.visuals.viewmodel_z);
+			if (!config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(1);
+			};
+			if (config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(0);
+			}
+		};
+	};
+};
+
+void Visuals::viewBob() noexcept {
+
+	static ConVar* view_bob = interfaces.cvar->findVar("cl_use_new_headbob");
+
+	if (!config.visuals.view_bob) {
+		view_bob->setValue(config.visuals.view_bob ? 1 : 1);
+	};
+	if (config.visuals.view_bob) {
+		view_bob->setValue(config.visuals.view_bob ? 0 : 1);
+	};
+};
+
+void Visuals::fullBright() noexcept {
+
+	static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
+
+	if (!config.visuals.full_bright) {
+		full_bright->setValue(config.visuals.full_bright ? 0 : 0);
+	};
+	if (config.visuals.full_bright) {
+		full_bright->setValue(config.visuals.full_bright ? 1 : 0);
+	};
+};
+
+void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+			hitMarkerInfo.push_back({ memory.globalVars->realtime + config.visuals.hitMarkerTime, event->getInt("dmg_health") });
+		}
+	}
+}
+
+void Visuals::hitMarkerDamageIndicator() noexcept
+{
+	if (config.visuals.hitMarkerDamageIndicator)
+	{
+		if (hitMarkerInfo.empty()) return;
+
+		const auto [width, height] = interfaces.surface->getScreenSize();
+
+		for (size_t i = 0; i < hitMarkerInfo.size(); i++)
+		{
+			const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory.globalVars->realtime;
+
+			if (diff < 0.f)
+			{
+				hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
+				continue;
+			}
+
+			const auto dist = config.visuals.hitMarkerDamageIndicatorDist;
+			const auto ratio = config.visuals.hitMarkerDamageIndicatorRatio - diff;
+			const auto alpha = diff * config.visuals.hitMarkerDamageIndicatorAlpha;
+
+			const auto font_id = config.visuals.hitMarkerDamageIndicatorFont;
+			interfaces.surface->setTextFont(font_id);
+			interfaces.surface->setTextPosition(width / 2 + config.visuals.hitMarkerDamageIndicatorTextX + ratio * dist / 2, height / 2 + config.visuals.hitMarkerDamageIndicatorTextY + ratio * dist);
+			interfaces.surface->setTextColor(255, 255, 255, alpha);
+			interfaces.surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
+		}
+	}
+}
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
