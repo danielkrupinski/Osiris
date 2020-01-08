@@ -652,6 +652,8 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
 		if (visualsJson.isMember("inverseRagdollGravityValue")) visuals.inverseRagdollGravityValue = visualsJson["inverseRagdollGravityValue"].asInt();
 		if (visualsJson.isMember("inverseRagdollGravityCustomize")) visuals.inverseRagdollGravityCustomize = visualsJson["inverseRagdollGravityCustomize"].asBool();
+		if (visualsJson.isMember("ragdollTimescale")) visuals.ragdollTimescale = visualsJson["ragdollTimescale"].asFloat();
+		if (visualsJson.isMember("ragdollTimescaleEnable")) visuals.ragdollTimescaleEnable = visualsJson["ragdollTimescaleEnable"].asBool();
 		if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
         if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
@@ -1432,7 +1434,9 @@ void Config::save(size_t id) const noexcept
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
 		visualsJson["inverseRagdollGravityValue"] = visuals.inverseRagdollGravityValue;
 		visualsJson["inverseRagdollGravityCustomize"] = visuals.inverseRagdollGravityCustomize;
-        visualsJson["noFog"] = visuals.noFog;
+		visualsJson["ragdollTimescale"] = visuals.ragdollTimescale;
+		visualsJson["ragdollTimescaleEnable"] = visuals.ragdollTimescaleEnable;
+		visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["No aim punch"] = visuals.noAimPunch;
         visualsJson["No view punch"] = visuals.noViewPunch;

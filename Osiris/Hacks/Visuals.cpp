@@ -66,6 +66,18 @@ void Visuals::customViewmodel() noexcept {
 	};
 };
 
+void Visuals::physicsTimescale() noexcept {
+
+	static ConVar* cl_phys_timescale = interfaces.cvar->findVar("cl_phys_timescale");
+
+	if (!config.visuals.ragdollTimescaleEnable) {
+		cl_phys_timescale->setValue(1);
+	};
+	if (config.visuals.ragdollTimescaleEnable) {
+		cl_phys_timescale->setValue(config.visuals.ragdollTimescale);
+	};
+};
+
 void Visuals::viewBob() noexcept {
 
 	static ConVar* view_bob = interfaces.cvar->findVar("cl_use_new_headbob");

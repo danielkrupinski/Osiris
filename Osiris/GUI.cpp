@@ -749,6 +749,10 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Checkbox("No shadows", &config.visuals.noShadows);
 		ImGui::Checkbox("Wireframe smoke", &config.visuals.wireframeSmoke);
 		ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
+		ImGui::Checkbox("Physics Timescale", &config.visuals.ragdollTimescaleEnable);
+		if (config.visuals.ragdollTimescaleEnable) {
+			ImGui::InputFloat("How fast?", &config.visuals.ragdollTimescale, 0, 10, "%.2f");
+		};
 		ImGui::Checkbox("Flip ragdoll gravity", &config.visuals.inverseRagdollGravity);
 		if (config.visuals.inverseRagdollGravity) {
 			ImGui::SameLine();
