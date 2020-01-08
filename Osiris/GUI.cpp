@@ -752,7 +752,7 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Checkbox("Flip ragdoll gravity", &config.visuals.inverseRagdollGravity);
 		if (config.visuals.inverseRagdollGravity) {
 			ImGui::SameLine();
-			ImGui::Checkbox("Custom gravity", &config.visuals.inverseRagdollGravityCustomize);
+			ImGui::Checkbox("Customize gravity", &config.visuals.inverseRagdollGravityCustomize);
 		};
 		if (config.visuals.inverseRagdollGravityCustomize&&config.visuals.inverseRagdollGravity) {
 			ImGui::InputInt("Gravity Value", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
