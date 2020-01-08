@@ -37,7 +37,7 @@ namespace Misc
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
-        if (config.misc.fixMovement) {
+        //if (config.misc.fixMovement) {
             float oldYaw = yaw + (yaw < 0.0f ? 360.0f : 0.0f);
             float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
             float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
@@ -47,7 +47,7 @@ namespace Misc
             const float sidemove = cmd->sidemove;
             cmd->forwardmove = std::cos(degreesToRadians(yawDelta)) * forwardmove + std::cos(degreesToRadians(yawDelta + 90.0f)) * sidemove;
             cmd->sidemove = std::sin(degreesToRadians(yawDelta)) * forwardmove + std::sin(degreesToRadians(yawDelta + 90.0f)) * sidemove;
-        }
+        //}
     }
 
     constexpr void antiAfkKick(UserCmd* cmd) noexcept
