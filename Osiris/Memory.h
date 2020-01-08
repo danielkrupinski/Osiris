@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sstream>
-#include <string_view>
+#include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -52,36 +52,34 @@ public:
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
     uintptr_t test;
     uintptr_t test2;
+    uint8_t* fakePrime;
+    std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
 
 private:
     template <typename T = uintptr_t>
-    static auto findPattern(const wchar_t* module, std::string_view pattern, size_t offset = 0) noexcept
+    static auto findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
-        MODULEINFO moduleInfo;
+        if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
+            auto start{ static_cast<const char*>(moduleInfo.lpBaseOfDll) };
+            auto end{ start + moduleInfo.SizeOfImage };
 
-        if (GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
-            char* begin = static_cast<char*>(moduleInfo.lpBaseOfDll);
-            char* end = begin + moduleInfo.SizeOfImage - pattern.length() + 1;
+            auto first{ start };
+            auto second{ pattern };
 
-            for (char* c = begin; c != end; c++) {
-                bool matched = true;
-                auto it = c;
-
-                if (*(c + pattern.length() - 1) != pattern.back())
-                    continue;
-
-                for (auto a : pattern) {
-                    if (a != '?' && *it != a) {
-                        matched = false;
-                        break;
-                    }
-                    it++;
+            while (first < end && *second) {
+                if (*first == *second || *second == '?') {
+                    first++;
+                    second++;
+                } else {
+                    first = ++start;
+                    second = pattern;
                 }
-                if (matched)
-                    return reinterpret_cast<T>(c + offset);
             }
+
+            if (!*second)
+                return reinterpret_cast<T>(const_cast<char*>(start) + offset);
         }
-        MessageBox(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Error", MB_OK | MB_ICONERROR);
+        MessageBoxA(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Osiris", MB_OK | MB_ICONERROR);
         exit(EXIT_FAILURE);
     }
 };

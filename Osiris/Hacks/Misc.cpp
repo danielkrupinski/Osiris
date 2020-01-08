@@ -11,6 +11,36 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
+void Misc::slowwalk(UserCmd* cmd) noexcept
+{
+    if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
+
+        const auto activeWeapon = localPlayer->getActiveWeapon();
+        if (!activeWeapon)
+            return;
+
+        const auto weaponData = activeWeapon->getWeaponData();
+        if (!weaponData)
+            return;
+
+        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+        if (cmd->forwardmove && cmd->sidemove) {
+            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        } else if (cmd->forwardmove) {
+            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+        } else if (cmd->sidemove) {
+            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+        }
+    }
+}
+
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
@@ -36,19 +66,31 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
         memory.setClanTag(clanTag.c_str(), clanTag.c_str());
+
+        if (config.misc.clocktag) {
+            const auto time{ std::time(nullptr) };
+            const auto localTime{ std::localtime(&time) };
+
+            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
+            memory.setClanTag(timeString.c_str(), timeString.c_str());
+        }
     }
 }
 
 void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorList && interfaces.engine->isInGame()) {
+    if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         if (!localPlayer->isAlive())
             return;
 
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(51, 153, 255, 255);
+
+        if (config.misc.spectatorList.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
         const auto [width, height] = interfaces.surface->getScreenSize();
 
@@ -59,11 +101,8 @@ void Misc::spectatorList() noexcept
             if (!entity || entity->isAlive() || entity->isDormant())
                 continue;
 
-            static PlayerInfo playerInfo;
-
-            if (interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
-                static wchar_t name[128];
-                if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
+                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                     const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
                     interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
                     textPositionY -= textHeight;
@@ -88,12 +127,13 @@ void Misc::recoilCrosshair() noexcept
 
 void Misc::watermark() noexcept
 {
-    if (config.misc.watermark) {
+    if (config.misc.watermark.enabled) {
         interfaces.surface->setTextFont(Surface::font);
-        interfaces.surface->setTextColor(sinf(0.6f * memory.globalVars->realtime) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 2.0f) * 127 + 128,
-            sinf(0.6f * memory.globalVars->realtime + 4.0f) * 127 + 128,
-            255.0f);
+
+        if (config.misc.watermark.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.misc.watermark.color);
 
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
@@ -166,17 +206,17 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-    if (config.misc.bombTimer) {
+    if (config.misc.bombTimer.enabled) {
         for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
 
-            static constexpr unsigned font{ 0xc1 };
+            constexpr unsigned font{ 0xc1 };
             interfaces.surface->setTextFont(font);
-            interfaces.surface->setTextColor(255.0f, 255.0f, 255.0f, 255.0f);
+            interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
@@ -186,26 +226,30 @@ void Misc::drawBombTimer() noexcept
             const auto progressBarLength{ interfaces.surface->getScreenSize().first / 3 };
             constexpr auto progressBarHeight{ 5 };
 
-            interfaces.surface->setDrawColor(50, 50, 50, 255);
+            interfaces.surface->setDrawColor(50, 50, 50);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            interfaces.surface->setDrawColor(255, 140, 0, 255);
-            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) / 40.0f), drawPositionY + progressBarHeight + 5);
+            if (config.misc.bombTimer.rainbow)
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
+            else
+                interfaces.surface->setDrawColor(config.misc.bombTimer.color);
+
+            static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
+
+            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
 
             if (entity->c4Defuser() != -1) {
-                static PlayerInfo playerInfo;
-                if (interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
-                    static wchar_t name[128];
-                    if (MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+                if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
+                    if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::showpoint << std::setprecision(4) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces.surface->printText(defusingText.c_str());
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
 
-                        interfaces.surface->setDrawColor(50, 50, 50, 255);
+                        interfaces.surface->setDrawColor(50, 50, 50);
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-                        interfaces.surface->setDrawColor(0, 255, 0, 255);
+                        interfaces.surface->setDrawColor(0, 255, 0);
                         interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
 
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
@@ -213,10 +257,10 @@ void Misc::drawBombTimer() noexcept
 
                         if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
                             canDefuseText = L"Can Defuse";
-                            interfaces.surface->setTextColor(0.0f, 255.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(0, 255, 0);
                         } else {
                             canDefuseText = L"Cannot Defuse";
-                            interfaces.surface->setTextColor(255.0f, 0.0f, 0.0f, 255.0f);
+                            interfaces.surface->setTextColor(255, 0, 0);
                         }
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
@@ -224,6 +268,7 @@ void Misc::drawBombTimer() noexcept
                     }
                 }
             }
+            break;
         }
     }
 }
@@ -237,8 +282,7 @@ void Misc::stealNames() noexcept
         static std::vector<int> stolenIds;
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             if (auto entity = interfaces.entityList->getEntity(i); entity && entity != localPlayer) {
-                static PlayerInfo playerInfo;
-                if (interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
+                if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
                     if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
                         stolenIds.push_back(playerInfo.userId);
@@ -251,6 +295,12 @@ void Misc::stealNames() noexcept
     }
 }
 
+void Misc::disablePanoramablur() noexcept
+{
+    static auto blur = interfaces.cvar->findVar("@panorama_disable_blur");
+    blur->setValue(config.misc.disablePanoramablur);
+}
+
 void Misc::quickReload(UserCmd* cmd) noexcept
 {
     if (config.misc.quickReload) {
@@ -258,8 +308,16 @@ void Misc::quickReload(UserCmd* cmd) noexcept
         static Entity* reloadedWeapon{ nullptr };
 
         if (reloadedWeapon) {
-            cmd->weaponselect = reloadedWeapon->index();
-            cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (interfaces.entityList->getEntityFromHandle(weaponHandle) == reloadedWeapon) {
+                    cmd->weaponselect = reloadedWeapon->index();
+                    cmd->weaponsubtype = reloadedWeapon->getWeaponSubType();
+                    break;
+                }
+            }
             reloadedWeapon = nullptr;
         }
 
@@ -276,7 +334,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
                     break;
                 }
             }
-
         }
     }
 }
@@ -341,14 +398,67 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ static_cast<char>(config.misc.banColor + 1) }.append(config.misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
 void Misc::nadePredict() noexcept
-{ 
-    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
-    
-    nadeVar->onChangeCallbacks.size = 0; 
-    nadeVar->setValue(config.misc.nadePredict); 
+{
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
+
+    nadeVar->onChangeCallbacks.size = 0;
+    nadeVar->setValue(config.misc.nadePredict);
+}
+
+void Misc::quickHealthshot(UserCmd* cmd) noexcept
+{
+    static bool inProgress{ false };
+
+    if (GetAsyncKeyState(config.misc.quickHealthshotKey))
+        inProgress = true;
+
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+    if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
+        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory.globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime())
+            cmd->buttons |= UserCmd::IN_ATTACK;
+        else {
+            for (auto weaponHandle : localPlayer->weapons()) {
+                if (weaponHandle == -1)
+                    break;
+
+                if (const auto weapon{ interfaces.entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon->getClientClass()->classId == ClassId::Healthshot) {
+                    cmd->weaponselect = weapon->index();
+                    cmd->weaponsubtype = weapon->getWeaponSubType();
+                    return;
+                }
+            }
+        }
+        inProgress = false;
+    }
+}
+
+void Misc::fixTabletSignal() noexcept
+{
+    if (config.misc.fixTabletSignal) {
+        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+        if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
+            activeWeapon->tabletReceptionIsBlocked() = false;
+    }
+}
+
+void Misc::fakePrime() noexcept
+{
+    static bool lastState = false;
+
+    if (config.misc.fakePrime != lastState) {
+        lastState = config.misc.fakePrime;
+
+        if (DWORD oldProtect; VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            constexpr uint8_t patch[]{ 0x74, 0xEB };
+            *memory.fakePrime = patch[config.misc.fakePrime];
+            VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+        }
+    }
 }

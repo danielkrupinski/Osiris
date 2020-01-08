@@ -42,19 +42,24 @@
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey) {
+    if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
+        || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config.misc.menuKey == VK_LBUTTON)
+        || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config.misc.menuKey == VK_RBUTTON)
+        || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config.misc.menuKey == VK_MBUTTON)
+        || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
         gui.isOpen = !gui.isOpen;
         if (!gui.isOpen) {
             ImGui::GetIO().MouseDown[0] = false;
             interfaces.inputSystem->resetInputState();
         }
     }
-    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+
+    LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    if (gui.isOpen && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
+
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
 
@@ -93,14 +98,14 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    uintptr_t* framePointer;
-    __asm mov framePointer, ebp;
-    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
-
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
+
+    uintptr_t* framePointer;
+    __asm mov framePointer, ebp;
+    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
@@ -130,6 +135,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Backtrack::run(cmd);
     Misc::quickReload(cmd);
     Misc::moonwalk(cmd);
+    Misc::quickHealthshot(cmd);
+    Misc::fixTabletSignal();
+    Misc::slowwalk(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -149,6 +157,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+    cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
+    cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
 
@@ -162,7 +172,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
-        Visuals::colorWorld();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
         Visuals::updateBrightness();
@@ -186,20 +195,22 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame() && !interfaces.modelRender->isMaterialOverriden()) {
+    if (interfaces.engine->isInGame()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
+        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-        interfaces.modelRender->forceMaterialOverride(nullptr);
+        if (!isOverridden)
+            interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
 }
 
 static bool __stdcall svCheatsGetBool() noexcept
 {
-    if (reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
+    if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
         return hooks.svCheats.callOriginal<bool>(13);
@@ -208,10 +219,10 @@ static bool __stdcall svCheatsGetBool() noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
-        Misc::drawBombTimer();
-        Misc::watermark();
-        Misc::spectatorList();
         Esp::render();
+        Misc::drawBombTimer();
+        Misc::spectatorList();
+        Misc::watermark();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -223,7 +234,13 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
+    if (stage == FrameStage::RENDER_START) {
+        Misc::disablePanoramablur();
+        Visuals::colorWorld();
+        Misc::fakePrime();
+    }
     if (interfaces.engine->isInGame()) {
+        Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
@@ -341,8 +358,8 @@ struct RenderableInfo {
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     if (config.misc.disableModelOcclusion && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
-        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
-            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
+        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info&& info->renderable) {
+            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent&& ent->isPlayer()) {
                 info->flags &= ~0x100;
                 info->flags2 |= 0xC0;
 
@@ -393,14 +410,20 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
 {
-    auto result = hooks.engine.callOriginal<void*>(218);
+    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
+        return nullptr;
 
-    constexpr bool overwatchRevealTest = true;
-    if constexpr (overwatchRevealTest) {
-        if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); returnAddress == memory.test || returnAddress == memory.test2)
-            return nullptr;
+    return hooks.engine.callOriginal<void*>(218);
+}
+
+static bool __stdcall isPlayingDemo() noexcept
+{
+    if (config.misc.revealMoney
+        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
+        return true;
     }
-    return result;
+    return hooks.engine.callOriginal<bool>(82);
 }
 
 Hooks::Hooks() noexcept
@@ -409,14 +432,12 @@ Hooks::Hooks() noexcept
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
-    originalWndProc = reinterpret_cast<WNDPROC>(
-        SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(wndProc))
-        );
+    originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<void***>(memory.present) = reinterpret_cast<void*>(present);
+    **reinterpret_cast<decltype(present)***>(memory.present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<void***>(memory.reset) = reinterpret_cast<void*>(reset);
+    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
@@ -426,6 +447,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
@@ -436,11 +458,11 @@ Hooks::Hooks() noexcept
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
 
-    DWORD oldProtection;
-    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
-    originalDispatchSound = reinterpret_cast<decltype(originalDispatchSound)>(reinterpret_cast<uintptr_t>(memory.dispatchSound + 1) + *memory.dispatchSound);
-    *memory.dispatchSound = reinterpret_cast<uintptr_t>(&dispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
-    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
+        *memory.dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory.dispatchSound + 1);
+        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    }
 
     interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
@@ -463,14 +485,14 @@ void Hooks::restore() noexcept
 
     Glow::clearCustomObjects();
 
-    SetWindowLongPtr(FindWindowW(L"Valve001", NULL), GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory.present) = originalPresent;
     **reinterpret_cast<void***>(memory.reset) = originalReset;
 
-    DWORD oldProtection;
-    VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
-    *memory.dispatchSound = reinterpret_cast<uintptr_t>(originalDispatchSound) - reinterpret_cast<uintptr_t>(memory.dispatchSound + 1);
-    VirtualProtect(memory.dispatchSound, 4, oldProtection, NULL);
+    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        *memory.dispatchSound = uintptr_t(originalDispatchSound) - uintptr_t(memory.dispatchSound + 1);
+        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    }
 
     interfaces.resourceAccessControl->accessingThreadCount--;
 }
@@ -482,7 +504,7 @@ uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexce
     MODULEINFO moduleInfo;
     GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
 
-    uintptr_t* moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
+    auto moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
 
     for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
         if (!*currentAddress)
@@ -498,7 +520,7 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
 {
     size_t length{ 0 };
     MEMORY_BASIC_INFORMATION memoryInfo;
-    while (VirtualQuery(reinterpret_cast<LPCVOID>(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
+    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
         length++;
     return length;
 }

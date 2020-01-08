@@ -130,8 +130,8 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 
 void apply_sticker_changer(Entity* item) noexcept
 {
-    if (!s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars[fnv::hash("CBaseAttributableItem->m_Item")] + 0xC;
+    if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
+        s_econ_item_interface_wrapper_offset = netvars[hash] + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -314,6 +314,7 @@ static void post_data_update_start(Entity* local) noexcept
 
             // Thanks, Beakers
             glove->index() = -1;
+            glove->initialized() = true;
 
             apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
         }

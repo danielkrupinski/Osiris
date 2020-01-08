@@ -5,7 +5,9 @@
 struct WeaponData {
     std::byte pad[20];
     int maxClip;
-    std::byte pad1[176];
+    std::byte pad1[112];
+    char* name;
+    std::byte pad1_[60];
     int type;
     std::byte pad2[32];
     bool fullAuto;
@@ -18,5 +20,8 @@ struct WeaponData {
     float range;
     float rangeModifier;
     std::byte pad5[16];
-    bool hasSilencer;
+    bool silencer;
+    std::byte pad6[15];
+    float maxSpeed;
+    float maxSpeedAlt;
 };

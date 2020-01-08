@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "Vector.h"
 
-using matrix3x4 = float[3][4];
+class matrix3x4;
 
 struct Model {
     void* handle;
@@ -32,7 +32,7 @@ public:
         callVirtualMethod<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
     }
 
-    constexpr bool isMaterialOverriden() noexcept
+    constexpr bool isMaterialOverridden() noexcept
     {
         return callVirtualMethod<bool>(this, 2);
     }

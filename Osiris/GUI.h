@@ -2,13 +2,14 @@
 
 #include <string>
 
+struct ImFont;
+
 class GUI {
 public:
     GUI() noexcept;
     void render() noexcept;
     bool isOpen{ false };
 private:
-    static void checkboxedColorPicker(const std::string&, bool*, float*) noexcept;
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
@@ -44,6 +45,11 @@ private:
         bool reportbot{ false };
         bool config{ false };
     } window;
+
+    struct {
+        ImFont* tahoma;
+        ImFont* segoeui;
+    } fonts;
 };
 
 extern GUI gui;

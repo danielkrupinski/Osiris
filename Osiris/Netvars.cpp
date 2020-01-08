@@ -20,7 +20,9 @@ static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config.misc.radarHack)
         data.value._int = 1;
-    proxies[fnv::hash("CBaseEntity->m_bSpotted")](data, arg2, arg3);
+
+    constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
+    proxies[hash](data, arg2, arg3);
 }
 
 #include "nSkinz/config_.hpp"
@@ -126,6 +128,10 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
         }
     }
     case fnv::hash("models/weapons/v_knife_ursus.mdl"):
+    case fnv::hash("models/weapons/v_knife_skeleton.mdl"):
+    case fnv::hash("models/weapons/v_knife_outdoor.mdl"):
+    case fnv::hash("models/weapons/v_knife_cord.mdl"):
+    case fnv::hash("models/weapons/v_knife_canis.mdl"):
     {
         switch (sequence)
         {
@@ -169,7 +175,8 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
                 data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
         }
     }
-    proxies[fnv::hash("CBaseViewModel->m_nSequence")](data, arg2, arg3);
+    constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
+    proxies[hash](data, arg2, arg3);
 }
 
 Netvars::Netvars() noexcept
@@ -205,6 +212,17 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
 
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
+        constexpr auto getHook{ [](uint32_t hash) noexcept -> recvProxy {
+             switch (hash) {
+             case fnv::hash("CBaseEntity->m_bSpotted"):
+                 return spottedHook;
+             case fnv::hash("CBaseViewModel->m_nSequence"):
+                 return viewModelSequence;
+             default:
+                 return nullptr;
+             }
+        } };
+
         if (!unload) {
             offsets[hash] = uint16_t(offset + prop.offset);
 
@@ -215,18 +233,14 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
                 }
             } };
 
-            if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                hookProperty(hash, prop.proxy, spottedHook);
-            else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
-                hookProperty(hash, prop.proxy, viewModelSequence);
+            if (auto hook{ getHook(hash) })
+                hookProperty(hash, prop.proxy, hook);
         } else {
             constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) noexcept {
                 proxy = proxies[hash];
             } };
 
-            if (hash == fnv::hash("CBaseEntity->m_bSpotted"))
-                unhookProperty(prop.proxy, hash);
-            else if (hash == fnv::hash("CBaseViewModel->m_nSequence"))
+            if (auto hook{ getHook(hash) })
                 unhookProperty(prop.proxy, hash);
         }
     }

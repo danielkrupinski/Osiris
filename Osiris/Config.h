@@ -21,6 +21,16 @@ public:
         return configs;
     }
 
+    struct Color {
+        float color[3]{ 1.0f, 1.0f, 1.0f };
+        bool rainbow{ false };
+        float rainbowSpeed{ 0.6f };
+    };
+    
+    struct ColorToggle : public Color {
+        bool enabled{ false };
+    };
+
     struct Aimbot {
         bool enabled{ false };
         bool onKey{ false };
@@ -81,54 +91,63 @@ public:
     struct Glow {
         bool enabled{ false };
         bool healthBased{ false };
-        bool rainbow{ false };
         float thickness{ 1.0f };
         float alpha{ 1.0f };
         int style{ 0 };
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        Color color;
     };
     std::array<Glow, 21> glow;
 
     struct Chams {
-        bool enabled{ false };
-        bool healthBased{ false };
-        bool rainbow{ false };
-        bool blinking{ false };
-        int material{ 0 };
-        bool wireframe{ false };
-        float color[3]{ 1.0f, 1.0f, 1.0f };
-        float alpha{ 1.0f };
+        struct Material {
+            bool enabled{ false };
+            bool healthBased{ false };
+            Color color;
+            bool blinking{ false };
+            int material{ 0 };
+            bool wireframe{ false };
+            float alpha{ 1.0f };
+        };
+        std::array<Material, 2> materials;
     };
 
-    std::array<Chams, 17> chams;
+    std::array<Chams, 18> chams;
 
     struct Esp {
-        bool enabled{ false };
-        int font{ 0x1d };
-        bool snaplines{ false };
-        float snaplinesColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool eyeTraces{ false };
-        float eyeTracesColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool corner{ false };
-        bool box{ false };
-        float boxColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool name{ false };
-        float nameColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool health{ false };
-        float healthColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool healthBar{ false };
-        float healthBarColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool armor{ false };
-        float armorColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool armorBar{ false };
-        float armorBarColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool money{ false };
-        float moneyColor[3]{ 1.0f, 1.0f, 1.0f };
-        bool headDot{ false };
-        float headDotColor[3]{ 1.0f, 1.0f, 1.0f };
-    };
+        struct Shared {
+            bool enabled{ false };
+            int font{ 0x1d };
+            ColorToggle snaplines;
+            ColorToggle box;
+            int boxType{ 0 };
+            ColorToggle name;
+            ColorToggle outline{ 0.0f, 0.0f, 0.0f };
+            ColorToggle distance;
+            float maxDistance{ 0.0f };
+        };
+       
+        struct Player : public Shared {
+            ColorToggle eyeTraces;
+            ColorToggle health;
+            ColorToggle healthBar;
+            ColorToggle armor;
+            ColorToggle armorBar;
+            ColorToggle money;
+            ColorToggle headDot;
+            ColorToggle activeWeapon;
+            bool deadesp { false };
+        };
 
-    std::array<Esp, 6> esp;
+        struct Weapon : public Shared { } weapon;
+
+        struct Projectile : public Shared { };
+        std::array<Projectile, 9> projectiles;
+
+        struct DangerZone : public Shared { };
+        std::array<DangerZone, 18> dangerZone;
+
+        std::array<Player, 6> players;
+    } esp;
 
     struct {
         bool disablePostProcessing{ false };
@@ -157,11 +176,14 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        float worldColor[3]{ 0.0f, 0.0f, 0.0f };
+        ColorToggle world;
+        ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -190,10 +212,13 @@ public:
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };
+        bool clocktag{ false };
         char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool slowwalk{ false };
+        int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
@@ -201,8 +226,10 @@ public:
         bool autoAccept{ false };
         bool radarHack{ false };
         bool revealRanks{ false };
-        bool spectatorList{ false };
-        bool watermark{ false };
+        bool revealMoney{ false };
+        bool revealSuspect{ false };
+        ColorToggle spectatorList;
+        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
@@ -210,19 +237,23 @@ public:
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };
+        bool disablePanoramablur{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };
         char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
-        bool bombTimer{ false };
+        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
+        int quickHealthshotKey{ 0 };
         bool nadePredict{ false };
+        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
     } misc;
 
     struct {

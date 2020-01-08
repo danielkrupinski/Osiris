@@ -1,19 +1,26 @@
 #pragma once
 
+#include <tuple>
+
 #include "Utils.h"
 
 class Surface {
 public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
-    constexpr void setDrawColor(int r, int g, int b, int a) noexcept
+    constexpr void setDrawColor(int r, int g, int b, int a = 255) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, r, g, b, a);
     }
 
-    constexpr void setDrawColor(float color[3], int a) noexcept
+    constexpr void setDrawColor(const float color[3], int a = 255) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
+    }
+
+    constexpr void setDrawColor(std::tuple<float, float, float> color, int a = 255) noexcept
+    {
+        callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a);
     }
 
     template <typename T>
@@ -34,20 +41,29 @@ public:
         callVirtualMethod<void, int, int, int, int>(this, 19, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
     }
 
+    constexpr void drawPolyLine(int* xs, int* ys, int pointCount) noexcept
+    {
+        callVirtualMethod<void, int*, int*, int>(this, 20, xs, ys, pointCount);
+    }
+
     constexpr void setTextFont(unsigned font) noexcept
     {
         callVirtualMethod<void, unsigned>(this, 23, font);
     }
 
-    template <typename T>
-    constexpr void setTextColor(T r, T g, T b, T a) noexcept
+    constexpr void setTextColor(int r, int g, int b, int a = 255) noexcept
     {
-        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(r), static_cast<int>(g), static_cast<int>(b), static_cast<int>(a));
+        callVirtualMethod<void, int, int, int, int>(this, 25, r, g, b, a);
     }
 
-    constexpr void setTextColor(float color[3], int a) noexcept
+    constexpr void setTextColor(const float color[3], int a = 255) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
+    }
+
+    constexpr void setTextColor(std::tuple<float, float, float> color, int a = 255) noexcept
+    {
+        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a);
     }
 
     template <typename T>
@@ -94,5 +110,20 @@ public:
     constexpr void drawOutlinedCircle(T x, T y, int r, int seg) noexcept
     {
         callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
+    }
+
+    template <typename T>
+    void drawCircle(T x, T y, int startRadius, int radius) noexcept
+    {
+        int xs[12];
+        int ys[12];
+
+        for (int i = startRadius; i <= radius; ++i) {
+            for (int j = 0; j < 12; ++j) {
+                xs[j] = static_cast<int>(std::cos(degreesToRadians(static_cast<float>(j * 30))) * i + x);
+                ys[j] = static_cast<int>(std::sin(degreesToRadians(static_cast<float>(j * 30))) * i + y);
+            }
+            interfaces.surface->drawPolyLine(xs, ys, 12);
+        }
     }
 };

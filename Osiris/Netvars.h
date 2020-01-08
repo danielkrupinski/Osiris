@@ -29,17 +29,19 @@ extern Netvars netvars;
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 auto funcname() noexcept \
 { \
-	return reinterpret_cast<std::add_pointer_t<type>>(this + netvars[fnv::hash(class_name "->" var_name)] + offset); \
+    constexpr auto hash{ fnv::hash(class_name "->" var_name) }; \
+    return reinterpret_cast<std::add_pointer_t<type>>(this + netvars[hash] + offset); \
 }
 
 #define PNETVAR(funcname, class_name, var_name, type) \
-	PNETVAR_OFFSET(funcname, class_name, var_name, 0, type)
+    PNETVAR_OFFSET(funcname, class_name, var_name, 0, type)
 
 #define NETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
 std::add_lvalue_reference_t<type> funcname() noexcept \
 { \
-	return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars[fnv::hash(class_name "->" var_name)] + offset); \
+    constexpr auto hash{ fnv::hash(class_name "->" var_name) }; \
+    return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars[hash] + offset); \
 }
 
 #define NETVAR(funcname, class_name, var_name, type) \
-	NETVAR_OFFSET(funcname, class_name, var_name, 0, type)
+    NETVAR_OFFSET(funcname, class_name, var_name, 0, type)

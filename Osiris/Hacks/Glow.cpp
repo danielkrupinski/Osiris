@@ -4,6 +4,7 @@
 #include "../SDK/ClientClass.h"
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/Utils.h"
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
@@ -52,12 +53,12 @@ void Glow::render() noexcept
                 glowobject.bloomAmount = glow.thickness;
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
-                else if (glow.rainbow)
-                    glowobject.glowColor = { sinf(0.6f * memory.globalVars->currenttime) * 0.5f + 0.5f,
-                                             sinf(0.6f * memory.globalVars->currenttime + 2.0f) * 0.5f + 0.5f,
-                                             sinf(0.6f * memory.globalVars->currenttime + 4.0f) * 0.5f + 0.5f };
+                else if (glow.color.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, glow.color.rainbowSpeed) };
+                    glowobject.glowColor = { r, b, g };
+                }
                 else
-                    glowobject.glowColor = glow.color;
+                    glowobject.glowColor = glow.color.color;
             }
         };
 

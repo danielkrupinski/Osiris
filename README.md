@@ -8,16 +8,16 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Backtrack** - abuse lag compensation to move players back in time
 * **Glow** - render glow effect on entities
 * **Chams** - color player models to improve visibility
-* **Esp** - show information about players
+* **Esp** - show information about players, dropped weapons and projectiles
 * **Visuals** - miscellaneous visual options
 * **Skin changer** - change weapon skins, knives and stickers
 * **Sound** - modify volume of certain sound effects
+* **Style** - select menu window layout and colors
 * **Misc** - miscellaneous features
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
 * **Config** - JSON-based configuration system
 
 <details>
-<summary>Features in depth</summary>
 
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
@@ -33,7 +33,6 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
-    * **Max angle delta** - maximum viewangles change per tick
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Recoil control x** - horizontal recoil control factor
     * **Recoil control y** - vertical recoil control factor
@@ -67,7 +66,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 
 * **Chams** - color player models to improve visibility
 
-    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled)* **/** *All, Visible, Occluded*
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
     * **Rainbow** - change color frequently
@@ -76,10 +75,16 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Wireframe** - render triangle mesh instead of solid material
     * **Alpha** - maximum material transparency
 
-* **Esp** - show information about players
-
-    *Allies, Enemies* **/** *All, Visible, Occluded*
-
+* **Esp** - show additional information about players and game world
+    
+    1. *Allies, Enemies*
+        * *All, Visible, Occluded*
+    1. *Weapons*
+    1. *Projectiles*
+        * *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
+    1. *Danger Zone*
+        * *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
+    <br><br>
     * **Enabled** - on / off master switch
     * **Font** - esp text font number (from `vgui_spew_fonts` command)
     * **Snaplines** - draw snapline to player
@@ -133,7 +138,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Footstep volume** - volume of player footsteps
 
 * **Misc** - miscellaneous features
-    * **Menu key [ key ]** - 
+    * **Menu key [ key ]** - menu toggle key 
     * **Menu style** - menu style toggle (*Classic* **/** *One window*)
     * **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
     * **Anti AFK kick** - avoid auto-kick by server for inactivity
@@ -149,6 +154,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Auto accept** - automatically accept competitive match
     * **Radar hack** - show enemies positions on radar
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
+    * **Reveal money** - show enemies' money in scoreboard
     * **Spectator list** - show nicknames of players spectating you
     * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
     * **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
@@ -161,6 +167,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
+    * **Max angle delta** - maximum viewangles change per tick
     * **Unhook** - unload cheat
 
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
@@ -185,10 +192,23 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2019 (preferably latest version i.e. 16.1.6), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
-### Cloning
-The very first step in order to compile Osiris is to clone this repo from GitHub to your local computer. Git is required to step futher, if not installed download it [here](https://git-scm.com). Open git bash / git cmd / cmd and enter following command:
+### Downloading
+
+There are two options of downloading the source code:
+
+#### Without [git](https://git-scm.com)
+
+Choose this option if you want pure source and you're not going to contribute to the repo. Download size ~600 kB.
+
+To download source code this way [click here](https://github.com/danielkrupinski/Osiris/archive/master.zip).
+
+#### With [git](https://git-scm.com)
+
+Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step further, if not installed download it [here](https://git-scm.com).
+
+Open git command prompt and enter following command:
 ```
 git clone https://github.com/danielkrupinski/Osiris.git
 ```
@@ -208,7 +228,6 @@ Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) a
 
 When injected, menu is openable under `INSERT` key.
 
-
 ### Further optimizations
 If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
 
@@ -218,7 +237,7 @@ If your CPU supports AVX / AVX2 instruction set, you can enable it in project se
 Press `INSERT` key while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is binary serialized so it is not meant to be edited by humans. Sometimes after updates configuration file needs to be deleted and recreated.
+Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
 
 ### What is cheat execution entry point and where is it located?
 Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
@@ -230,9 +249,10 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 
 ## License
 
-> Copyright (c) 2018-2019 Daniel Krupiński
+> Copyright (c) 2018-2020 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
 
 ## See also
 - [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
+- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source stream-proof ESP hack for Counter-Strike: Global Offensive, written in modern C++
