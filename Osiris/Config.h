@@ -202,6 +202,9 @@ public:
 		bool customViewmodelKnifeOut{ false };
 		bool customViewmodelKnifeEnabled{ false };
 		bool customViewmodelMenuSwitch{ false };
+		bool customViewmodelBombEquiped{ false };
+		bool customViewmodelSwitchHand{ false };
+		bool customViewmodelSwitchHandKnife{ false };
 		float viewmodel_x_knife{ 0 };
 		float viewmodel_y_knife{ 0 };
 		float viewmodel_z_knife{ 0 };

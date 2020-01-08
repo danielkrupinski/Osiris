@@ -781,6 +781,7 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::PushID(7);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_z, -20, 20, "Down/Up: %.2f");
 			ImGui::PopID();
+			ImGui::Checkbox("Right/Left hand Weapon", &config.visuals.customViewmodelSwitchHand);
 			//if (ImGui::Button("Update Viewmodel"))
 			//	Visuals::customViewmodel();
 		};
@@ -798,6 +799,7 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::PushID(12);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_z_knife, -20, 20, "Down/Up: %.2f");
 			ImGui::PopID();
+			ImGui::Checkbox("Right/Left hand Knife", &config.visuals.customViewmodelSwitchHandKnife);
 		};
 
         ImGui::NextColumn();

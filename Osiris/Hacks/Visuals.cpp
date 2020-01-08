@@ -20,6 +20,8 @@ void Visuals::customViewmodel() noexcept {
 	static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
 	static ConVar* view_z = interfaces.cvar->findVar("viewmodel_offset_z");
 	static ConVar* sv_minspec = interfaces.cvar->findVar("sv_competitive_minspec");
+	static ConVar* cl_righthand = interfaces.cvar->findVar("cl_righthand");
+
 	*(int*)((DWORD)& sv_minspec->onChangeCallbacks + 0xC) = 0;
 
 	if (!config.visuals.customViewmodelToggle) {
@@ -28,25 +30,39 @@ void Visuals::customViewmodel() noexcept {
 		view_y->setValue(0);
 		view_z->setValue(0);
 	};
-	if (!config.visuals.customViewmodelToggle) {
-		sv_minspec->setValue(1);
-		view_x->setValue(0);
-		view_y->setValue(0);
-		view_z->setValue(0);
-	};
+
 	if (config.visuals.customViewmodelToggle) {
 		sv_minspec->setValue(0);
-			if (config.visuals.customViewmodelKnifeEnabled&&config.visuals.customViewmodelKnifeOut) {
-				view_x->setValue(config.visuals.viewmodel_x_knife);
-				view_y->setValue(config.visuals.viewmodel_y_knife);
-				view_z->setValue(config.visuals.viewmodel_z_knife);
-			}
-			else{
-				view_x->setValue(config.visuals.viewmodel_x);
-				view_y->setValue(config.visuals.viewmodel_y);
-				view_z->setValue(config.visuals.viewmodel_z);
+
+		if (config.visuals.customViewmodelKnifeEnabled && config.visuals.customViewmodelKnifeOut) {
+			view_x->setValue(config.visuals.viewmodel_x_knife);
+			view_y->setValue(config.visuals.viewmodel_y_knife);
+			view_z->setValue(config.visuals.viewmodel_z_knife);
+
+			if (!config.visuals.customViewmodelSwitchHandKnife) {
+				cl_righthand->setValue(0);
 			};
-	}
+			if (config.visuals.customViewmodelSwitchHandKnife) {
+				cl_righthand->setValue(1);
+			}
+		}
+		else if (config.visuals.customViewmodelBombEquiped) {
+			view_x->setValue(0);
+			view_y->setValue(0);
+			view_z->setValue(0);
+		}
+		else if (!config.visuals.customViewmodelBombEquiped) {
+			view_x->setValue(config.visuals.viewmodel_x);
+			view_y->setValue(config.visuals.viewmodel_y);
+			view_z->setValue(config.visuals.viewmodel_z);
+			if (!config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(0);
+			};
+			if (config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(1);
+			}
+		};
+	};
 };
 
 void Visuals::viewBob() noexcept {

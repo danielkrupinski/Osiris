@@ -724,11 +724,15 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Custom Viewmodel Knife Out")) visuals.customViewmodelKnifeOut = visualsJson["Custom Viewmodel Knife Out"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Enabled")) visuals.customViewmodelKnifeEnabled = visualsJson["Custom Viewmodel Knife Enabled"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Menu Switch")) visuals.customViewmodelMenuSwitch = visualsJson["Custom Viewmodel Menu Switch"].asBool();
+		if (visualsJson.isMember("Custom Viewmodel Knife Switch Hand")) visuals.customViewmodelSwitchHand = visualsJson["Custom Viewmodel Menu Switch Hand"].asBool();
+		if (visualsJson.isMember("Custom Viewmodel Knife Switch Hand Knife")) visuals.customViewmodelSwitchHandKnife = visualsJson["Custom Viewmodel Switch Hand Knife"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Bob")) visuals.view_bob = visualsJson["Custom Viewmodel Bob"].asBool();
 		if (visualsJson.isMember("Full Brightness Light")) visuals.full_bright = visualsJson["Full Brightness Light"].asBool();
 		if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
     }
+
+
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
         const auto& skinChangerJson = json["skinChanger"][i];
@@ -1493,6 +1497,8 @@ void Config::save(size_t id) const noexcept
 		visualsJson["Custom Viewmodel Knife Toggle"] = visuals.customViewmodelKnifeToggle;
 		visualsJson["Custom Viewmodel Knife Enabled"] = visuals.customViewmodelKnifeEnabled;
 		visualsJson["Custom Viewmodel Knife Switch"] = visuals.customViewmodelMenuSwitch;
+		visualsJson["Custom Viewmodel Switch Hand"] = visuals.customViewmodelSwitchHand;
+		visualsJson["Custom Viewmodel Switch Hand Knife"] = visuals.customViewmodelSwitchHandKnife;
 		visualsJson["Custom Viewmodel X Knife"] = visuals.viewmodel_x_knife;
 		visualsJson["Custom Viewmodel Y Knife"] = visuals.viewmodel_y_knife;
 		visualsJson["Custom Viewmodel Z Knife"] = visuals.viewmodel_z_knife;

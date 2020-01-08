@@ -197,6 +197,10 @@ static float __stdcall getViewModelFov() noexcept
 			config.visuals.customViewmodelKnifeOut = 1;
 		else 
 			config.visuals.customViewmodelKnifeOut = 0;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
+			config.visuals.customViewmodelBombEquiped = 1;
+		else
+			config.visuals.customViewmodelBombEquiped = 0;
     }
 
     return hooks.clientMode.callOriginal<float>(35) + additionalFov;
