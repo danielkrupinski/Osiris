@@ -772,13 +772,13 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::SameLine();
 			ImGui::Checkbox("Knife Position", &config.visuals.customViewmodelKnifeToggle);
 			ImGui::PushItemWidth(280.0f);
-			ImGui::PushID(9);
+			ImGui::PushID(1);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_x, -20, 20, "Left/Right: %.2f");
 			ImGui::PopID();
-			ImGui::PushID(8);
+			ImGui::PushID(2);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_y, -20, 20, "Close/Far: %.2f");
 			ImGui::PopID();
-			ImGui::PushID(7);
+			ImGui::PushID(3);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_z, -20, 20, "Down/Up: %.2f");
 			ImGui::PopID();
 			ImGui::Checkbox("Right/Left hand Weapon", &config.visuals.customViewmodelSwitchHand);
@@ -790,13 +790,13 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::SameLine();
 			ImGui::Checkbox("Knife Position", &config.visuals.customViewmodelKnifeToggle);
 			ImGui::PushItemWidth(280.0f);
-			ImGui::PushID(10);
+			ImGui::PushID(4);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_x_knife, -20, 20, "Left/Right: %.2f");
 			ImGui::PopID();
-			ImGui::PushID(11);
+			ImGui::PushID(5);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_y_knife, -20, 20, "Close/Far: %.2f");
 			ImGui::PopID();
-			ImGui::PushID(12);
+			ImGui::PushID(6);
 			ImGui::SliderFloat("", &config.visuals.viewmodel_z_knife, -20, 20, "Down/Up: %.2f");
 			ImGui::PopID();
 			ImGui::Checkbox("Right/Left hand Knife", &config.visuals.customViewmodelSwitchHandKnife);
@@ -811,28 +811,28 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SameLine();
         hotkey(config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(280.0f);
-        ImGui::PushID(0);
+        ImGui::PushID(7);
         ImGui::SliderInt("", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
         ImGui::PopID();
-        ImGui::PushID(1);
+        ImGui::PushID(8);
         ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
         ImGui::PopID();
-        ImGui::PushID(2);
+        ImGui::PushID(9);
         ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FOV: %d");
         ImGui::PopID();
-        ImGui::PushID(3);
+        ImGui::PushID(10);
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
-        ImGui::PushID(4);
+        ImGui::PushID(11);
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::PopID();
 		if (!config.visuals.full_bright) {
-			ImGui::PushID(5);
+			ImGui::PushID(12);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
 			ImGui::PopID();
 		};
 		if (config.visuals.full_bright) {
-			ImGui::PushID(6);
+			ImGui::PushID(13);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
 			ImGui::PopID();
 		};
@@ -844,7 +844,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGuiCustom::colorPicker("Sky color", config.visuals.sky);
         ImGui::Combo("VFX", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("HitMark", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+		ImGui::PushID(14);
         ImGui::SliderFloat(" ", &config.visuals.hitMarkerTime, 0.01f, 1.0f, "Hit marker time: %.2fs");
+		ImGui::PopID();
 		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
 		if (config.visuals.hitMarkerDamageIndicator) {
 			ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
@@ -852,7 +854,9 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::InputInt("Dist", &config.visuals.hitMarkerDamageIndicatorDist, -100, 100);
 			ImGui::InputInt("Text X", &config.visuals.hitMarkerDamageIndicatorTextX, -100, 100);
 			ImGui::InputInt("Text Y", &config.visuals.hitMarkerDamageIndicatorTextY, -100, 100);
+			ImGui::PushID(15);
 			ImGui::SliderFloat("  ", &config.visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Ratio: %.2f");
+			ImGui::PopID();
 		};
 		
         ImGui::Columns(1);
