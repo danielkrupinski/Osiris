@@ -22,7 +22,7 @@ namespace Visuals {
 	void viewModel() noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
-    void thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vector& unchoked) noexcept;
+    void thirdPerson() noexcept;
     void removeVisualRecoil(FrameStage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;
@@ -35,6 +35,8 @@ namespace Visuals {
     void hitMarker(GameEvent* = nullptr) noexcept;
     void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
     void hitMarkerDamageIndicator() noexcept;
+    void fullBright() noexcept;
+    void viewBob() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {

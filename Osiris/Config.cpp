@@ -92,6 +92,8 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
 		if (backtrackJson.isMember("Draw all ticks")) backtrack.drawAllTicks = backtrackJson["Draw all ticks"].asBool();
+        if (backtrackJson.isMember("pingBasedPing")) backtrack.timeLimit = backtrackJson["pingBasedPing"].asFloat();
+        if (backtrackJson.isMember("pingBased")) backtrack.timeLimit = backtrackJson["pingBased"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -101,10 +103,6 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
-        if (antiAimJson.isMember("Yaw angle")) antiAim.yawAngle = antiAimJson["Yaw angle"].asInt();
-        if (antiAimJson.isMember("Desync style")) antiAim.type = antiAimJson["Desync style"].asInt();
-        if (antiAimJson.isMember("Thirdperson")) antiAim.third = antiAimJson["Thirdperson"].asInt();
-        if (antiAimJson.isMember("Invert")) antiAim.desyncinvert = antiAimJson["Invert"].asInt();
     }
 
 	for (size_t i = 0; i < glow.size(); ++i) {
@@ -659,6 +657,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
 		if (visualsJson.isMember("Disable HUD blur"))  visuals.disablePanoramablur = visualsJson["Disable HUD blur"].asBool();
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
+        if (visualsJson.isMember("inverseRagdollGravityValue")) visuals.inverseRagdollGravityValue = visualsJson["inverseRagdollGravityValue"].asInt();
         if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
         if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
@@ -683,6 +682,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("farZ")) visuals.farZ = visualsJson["farZ"].asInt();
         if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
         if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
+        if (visualsJson.isMember("Full bright")) visuals.fullBright = visualsJson["Full bright"].asBool();
         if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
 		if (visualsJson.isMember("World")) {
 			const auto& worldJson = visualsJson["World"];
@@ -714,11 +714,26 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
-        if (visualsJson.isMember("Hit marker Damage Indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker Damage Indicator"].asBool();
-		if (visualsJson.isMember("View Model")) visuals.viewModel = visualsJson["View Model"].asBool();
-		if (visualsJson.isMember("ViewModel X")) visuals.viewModel_x = visualsJson["ViewModel X"].asFloat();
-		if (visualsJson.isMember("ViewModel Y")) visuals.viewModel_y = visualsJson["ViewModel Y"].asFloat();
-		if (visualsJson.isMember("ViewModel Z")) visuals.viewModel_z = visualsJson["ViewModel Z"].asFloat();
+        if (visualsJson.isMember("Hit marker damage indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker damage indicator"].asBool();
+        if (visualsJson.isMember("Hit marker damage indicator dist")) visuals.hitMarkerDamageIndicatorDist = visualsJson["Hit marker damage indicator dist"].asInt();
+        if (visualsJson.isMember("Hit marker damage indicator ratio")) visuals.hitMarkerDamageIndicatorRatio = visualsJson["Hit marker damage indicator ratio"].asFloat();
+        if (visualsJson.isMember("Hit marker damage indicator alpha")) visuals.hitMarkerDamageIndicatorAlpha = visualsJson["Hit marker damage indicator alpha"].asInt();
+        if (visualsJson.isMember("Hit marker damage indicator font")) visuals.hitMarkerDamageIndicatorFont = visualsJson["Hit marker damage indicator font"].asInt();
+        if (visualsJson.isMember("Hit marker damage indicator text X")) visuals.hitMarkerDamageIndicatorTextX = visualsJson["Hit marker damage indicator text X"].asInt();
+        if (visualsJson.isMember("Hit marker damage indicator text Y")) visuals.hitMarkerDamageIndicatorTextY = visualsJson["Hit marker damage indicator text Y"].asInt();
+		if (visualsJson.isMember("Viewmodel")) visuals.viewModel = visualsJson["Viewmodel"].asBool();
+		if (visualsJson.isMember("Viewmodel X")) visuals.viewModel_x = visualsJson["Viewmodel X"].asFloat();
+		if (visualsJson.isMember("Viewmodel Y")) visuals.viewModel_y = visualsJson["Viewmodel Y"].asFloat();
+		if (visualsJson.isMember("Viewmodel Z")) visuals.viewModel_z = visualsJson["Viewmodel Z"].asFloat();
+        if (visualsJson.isMember("Viewmodel knife toggle")) visuals.viewModelKnifeToggle = visualsJson["Viewmodel knife toggle"].asBool();
+        if (visualsJson.isMember("Viewmodel knife out")) visuals.viewModelKnifeOut = visualsJson["Viewmodel knife out"].asBool();
+        if (visualsJson.isMember("Viewmodel knife enabled")) visuals.viewModelKnifeEnabled = visualsJson["Viewmodel knife enabled"].asBool();
+        if (visualsJson.isMember("Viewmodel knife switch")) visuals.viewModelKnifeSwitch = visualsJson["Viewmodel knife switch"].asBool();
+        if (visualsJson.isMember("Viewmodel flip knife hand")) visuals.viewModelFlipKnifeHand = visualsJson["Viewmodel flip knife hand"].asBool();
+        if (visualsJson.isMember("Viewmodel X knife")) visuals.viewModel_x_Knife = visualsJson["Viewmodel X knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel Y knife")) visuals.viewModel_y_Knife = visualsJson["Viewmodel Y knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel Z knife")) visuals.viewModel_z_Knife = visualsJson["Viewmodel Z knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel bob")) visuals.viewBob = visualsJson["Viewmodel bob"].asBool();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
     }
@@ -984,6 +999,7 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
 		backtrackJson["Draw all ticks"] = backtrack.drawAllTicks;
+        backtrackJson["pingBased"] = backtrack.pingBased;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
@@ -993,10 +1009,6 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
-        antiAimJson["Yaw angle"] = antiAim.yawAngle;
-        antiAimJson["Desync style"] = antiAim.type;
-        antiAimJson["Thirdperson"] = antiAim.third;
-        antiAimJson["Invert"] = antiAim.desyncinvert;
     }
 
 	for (size_t i = 0; i < glow.size(); ++i) {
@@ -1439,6 +1451,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["disablePostProcessing"] = visuals.disablePostProcessing;
 		visualsJson["Disable HUD blur"] = visuals.disablePanoramablur;
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
+        visualsJson["inverseRagdollGravityValue"] = visuals.inverseRagdollGravityValue;
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["No aim punch"] = visuals.noAimPunch;
@@ -1463,6 +1476,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["farZ"] = visuals.farZ;
         visualsJson["flashReduction"] = visuals.flashReduction;
         visualsJson["brightness"] = visuals.brightness;
+        visualsJson["Full bright"] = visuals.fullBright;
         visualsJson["skybox"] = visuals.skybox;
 
 		{
@@ -1489,11 +1503,25 @@ void Config::save(size_t id) const noexcept
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
-		visualsJson["View Model"] = visuals.viewModel;
-        visualsJson["Hit marker Damage Indicator"] = visuals.hitMarkerDamageIndicator;
-		visualsJson["ViewModel X"] = visuals.viewModel_x;
-		visualsJson["ViewModel Y"] = visuals.viewModel_y;
-		visualsJson["ViewModel Z"] = visuals.viewModel_z;
+        visualsJson["Hit marker damage indicator"] = visuals.hitMarkerDamageIndicator;
+        visualsJson["Hit marker damage indicator Ddst"] = visuals.hitMarkerDamageIndicatorDist;
+        visualsJson["Hit marker damage indicator ratio"] = visuals.hitMarkerDamageIndicatorRatio;
+        visualsJson["Hit marker damage indicator alpha"] = visuals.hitMarkerDamageIndicatorAlpha;
+        visualsJson["Hit marker damage indicator font"] = visuals.hitMarkerDamageIndicatorFont;
+        visualsJson["Hit marker damage indicator text X"] = visuals.hitMarkerDamageIndicatorTextX;
+        visualsJson["Hit marker damage indicator text Y"] = visuals.hitMarkerDamageIndicatorTextY;
+		visualsJson["Viewmodel"] = visuals.viewModel;
+		visualsJson["Viewmodel X"] = visuals.viewModel_x;
+		visualsJson["Viewmodel Y"] = visuals.viewModel_y;
+		visualsJson["Viewmodel Z"] = visuals.viewModel_z;
+        visualsJson["Viewmodel knife toggle"] = visuals.viewModelKnifeToggle;
+        visualsJson["Viewmodel knife enabled"] = visuals.viewModelKnifeEnabled;
+        visualsJson["Viewmodel knife switch"] = visuals.viewModelKnifeSwitch;
+        visualsJson["Viewmodel flip knife hand"] = visuals.viewModelFlipKnifeHand;
+        visualsJson["Viewmodel X knife"] = visuals.viewModel_x_Knife;
+        visualsJson["Viewmodel Y knife"] = visuals.viewModel_y_Knife;
+        visualsJson["Viewmodel Z knife"] = visuals.viewModel_z_Knife;
+        visualsJson["Viewmodel bob"] = visuals.viewBob;
         visualsJson["Playermodel T"] = visuals.playerModelT;
         visualsJson["Playermodel CT"] = visuals.playerModelCT;
     }

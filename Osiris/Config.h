@@ -86,6 +86,8 @@ public:
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
 		bool drawAllTicks{ false };
+        bool pingBased{ 0 };
+        float pingBasedPing{ 0.0f };
         int timeLimit{ 200 };
     } backtrack;
 
@@ -94,10 +96,6 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
-        int yawAngle{ 0 };
-        int type{ 0 };
-        int third{ 0 };
-        int desyncinvert{ 0 };
     } antiAim;
 
     struct Glow {
@@ -165,6 +163,7 @@ public:
         bool disablePostProcessing{ false };
 		bool disablePanoramablur{ false };
         bool inverseRagdollGravity{ false };
+        int inverseRagdollGravityValue{ -600 };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -189,6 +188,7 @@ public:
         int farZ{ 0 };
         int flashReduction{ 0 };
         float brightness{ 0.0f };
+        bool fullBright{ false };
         int skybox{ 0 };
 		ColorToggle world;
         ColorToggle sky;
@@ -197,10 +197,26 @@ public:
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
         bool hitMarkerDamageIndicator{ false };
+        int hitMarkerDamageIndicatorDist{ 150 };
+        float hitMarkerDamageIndicatorRatio{ 0.0f };
+        int hitMarkerDamageIndicatorAlpha{ 800 };
+        int hitMarkerDamageIndicatorFont{ 31 };
+        int hitMarkerDamageIndicatorTextX{ 60 };
+        int hitMarkerDamageIndicatorTextY{ 150 };
 		bool viewModel{ false };
 		float viewModel_x{ 0 };
 		float viewModel_y{ 0 };
 		float viewModel_z{ 0 };
+        bool viewModelKnifeToggle{ false };
+        bool viewModelKnifeOut{ false };
+        bool viewModelKnifeEnabled{ false };
+        bool viewModelKnifeSwitch{ false };
+        bool viewModelBombEquipped{ false };
+        bool viewModelFlipKnifeHand{ false };
+        float viewModel_x_Knife{ 0 };
+        float viewModel_y_Knife{ 0 };
+        float viewModel_z_Knife{ 0 };
+        bool viewBob{ false };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
     } visuals;

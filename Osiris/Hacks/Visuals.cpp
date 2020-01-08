@@ -72,23 +72,77 @@ void Visuals::disablePanoramablur() noexcept
 	blur->setValue(config.visuals.disablePanoramablur);
 }
 
-void Visuals::viewModel() noexcept
+void Visuals::viewModel() noexcept {
+
+    static ConVar* view_x = interfaces.cvar->findVar("viewmodel_offset_x");
+    static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
+    static ConVar* view_z = interfaces.cvar->findVar("viewmodel_offset_z");
+    static ConVar* sv_minspec = interfaces.cvar->findVar("sv_competitive_minspec");
+    static ConVar* cl_righthand = interfaces.cvar->findVar("cl_righthand");
+
+    *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 0;
+
+    if (!config.visuals.viewModel) {
+        sv_minspec->setValue(1);
+        view_x->setValue(0);
+        view_y->setValue(0);
+        view_z->setValue(0);
+        cl_righthand->setValue(1);
+    };
+
+    if (config.visuals.viewModel) {
+        sv_minspec->setValue(0);
+
+        if (config.visuals.viewModelKnifeEnabled && config.visuals.viewModelKnifeOut) {
+            view_x->setValue(config.visuals.viewModel_x_Knife);
+            view_y->setValue(config.visuals.viewModel_y_Knife);
+            view_z->setValue(config.visuals.viewModel_z_Knife);
+
+            if (!config.visuals.viewModelFlipKnifeHand) {
+                cl_righthand->setValue(1);
+            };
+            if (config.visuals.viewModelFlipKnifeHand) {
+                cl_righthand->setValue(0);
+            }
+        }
+        else if (config.visuals.viewModelBombEquipped) {
+            view_x->setValue(0);
+            view_y->setValue(0);
+            view_z->setValue(0);
+        }
+        else if (!config.visuals.viewModelBombEquipped) {
+            view_x->setValue(config.visuals.viewModel_x);
+            view_y->setValue(config.visuals.viewModel_y);
+            view_z->setValue(config.visuals.viewModel_z);
+        };
+    };
+};
+
+void Visuals::viewBob() noexcept 
 {
-	static auto view_x{ interfaces.cvar->findVar("viewmodel_offset_x") };
-	static auto view_y{ interfaces.cvar->findVar("viewmodel_offset_y") };
-	static auto view_z{ interfaces.cvar->findVar("viewmodel_offset_z") };
 
-	view_x->onChangeCallbacks.size = 0;
-	view_y->onChangeCallbacks.size = 0;
-	view_z->onChangeCallbacks.size = 0;
+    static ConVar* view_bob = interfaces.cvar->findVar("cl_use_new_headbob");
 
+    if (!config.visuals.viewBob) {
+        view_bob->setValue(config.visuals.viewBob ? 1 : 1);
+    };
+    if (config.visuals.viewBob) {
+        view_bob->setValue(config.visuals.viewBob ? 0 : 1);
+    };
+};
 
-	if (config.visuals.viewModel) {
-		view_x->setValue(config.visuals.viewModel_x);
-		view_y->setValue(config.visuals.viewModel_y);
-		view_z->setValue(config.visuals.viewModel_z);
-	}
-}
+void Visuals::fullBright() noexcept
+{
+
+    static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
+
+    if (!config.visuals.fullBright) {
+        full_bright->setValue(config.visuals.fullBright ? 0 : 0);
+    };
+    if (config.visuals.fullBright) {
+        full_bright->setValue(config.visuals.fullBright ? 1 : 0);
+    };
+};
 
 void Visuals::colorWorld() noexcept
 {
@@ -129,11 +183,10 @@ void Visuals::modifySmoke() noexcept
         *memory.smokeCount = 0;
 }
 
-void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vector& unchoked) noexcept
+void Visuals::thirdPerson() noexcept
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
@@ -141,21 +194,9 @@ void Visuals::thirdperson(FrameStage stage, Vector& angle, Vector& choked, Vecto
     }
 
     if (config.visuals.thirdperson)
-        if (stage == FrameStage::RENDER_START) {
-            if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
-                && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive()) {
-                if (config.antiAim.third == 0) {
-                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = choked;
-                }
-                if (config.antiAim.third == 1) {
-                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = unchoked;
-                }
-                if (config.antiAim.third == 2) {
-                    *reinterpret_cast<Vector*>(reinterpret_cast<uintptr_t>(localPlayer) + 0x31D8) = angle;
-                }
-            }
+        if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
             memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
-        }
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -376,13 +417,13 @@ void Visuals::hitMarker(GameEvent* event) noexcept
                     continue;
                 }
 
-                const auto dist = 24;
-                const auto ratio = 1.f - diff / 0.8f;
-                const auto alpha = diff * 255;
+                const auto dist = config.visuals.hitMarkerDamageIndicatorDist;
+                const auto ratio = config.visuals.hitMarkerDamageIndicatorRatio - diff;
+                const auto alpha = diff * config.visuals.hitMarkerDamageIndicatorAlpha;
 
-                const auto font_id = 17;
+                const auto font_id = config.visuals.hitMarkerDamageIndicatorFont;
                 interfaces.surface->setTextFont(font_id);
-                interfaces.surface->setTextPosition(width / 2 + 6 + ratio * dist / 2, height / 2 + 6 + ratio * dist);
+                interfaces.surface->setTextPosition(width / 2 + config.visuals.hitMarkerDamageIndicatorTextX + ratio * dist / 2, height / 2 + config.visuals.hitMarkerDamageIndicatorTextY + ratio * dist);
                 interfaces.surface->setTextColor(255, 255, 255, alpha);
                 interfaces.surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
             }

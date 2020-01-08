@@ -99,10 +99,6 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 	return result;
 }
 
-static Vector angle;
-static Vector unchoked;
-static Vector choked;
-
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
 	auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
@@ -131,7 +127,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::bunnyHop(cmd);
 	Misc::autoStrafe(cmd);
 	Misc::slowWalk(cmd);
-	Misc::AutoBlocker(cmd);
 	Misc::useSpam(cmd);
 	Misc::removeCrouchCooldown(cmd);
 	Misc::autoReload(cmd);
@@ -146,6 +141,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::chatSpam();
 	Misc::aspectRatio();
 	Misc::edgeJump(cmd);
+	Visuals::fullBright();
+	Visuals::viewBob();
 
 	PredictionSystem::StartPrediction(cmd);
 	Misc::prepareRevolver(cmd);
@@ -156,10 +153,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Triggerbot::run(cmd);
 	Backtrack::run(cmd);
 
-	if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_USE) || localPlayer->moveType() == MoveType::LADDER)) {
+	if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
 		Misc::chokePackets(sendPacket);
 		Misc::fakeDuck(cmd);
-		AntiAim::type(cmd, sendPacket);
 		AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 	}
 	auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
@@ -170,6 +166,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	cmd->viewangles = previousViewAngles + viewAnglesDelta;
 
 	cmd->viewangles.normalize();
+	Misc::fixMovement(cmd, currentViewAngles.y);
 
 	cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
 	cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
@@ -178,13 +175,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
 	previousViewAngles = cmd->viewangles;
-	if (sendPacket) {
-		unchoked = cmd->viewangles;
-	}
-	if (!sendPacket) {
-		choked = cmd->viewangles;
-	}
-	angle = cmd->viewangles;
 	return false;
 }
 
@@ -192,6 +182,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 {
 	if (interfaces.engine->isInGame()) {
 		Visuals::modifySmoke();
+		Visuals::thirdPerson();
 		Misc::inverseRagdollGravity();
 		Visuals::disablePostProcessing();
 		Visuals::reduceFlashEffect();
@@ -210,6 +201,14 @@ static float __stdcall getViewModelFov() noexcept
 	if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer && localPlayer->isScoped()) {
 		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
 			additionalFov = 0.0f;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
+			config.visuals.viewModelKnifeOut = 1;
+		else
+			config.visuals.viewModelKnifeOut = 0;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
+			config.visuals.viewModelBombEquipped = 1;
+		else
+			config.visuals.viewModelBombEquipped = 0;
 	}
 
 	return hooks.clientMode.callOriginal<float>(35) + additionalFov;
@@ -266,7 +265,6 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 
 	if (interfaces.engine->isInGame()) {
 		Visuals::playerModel(stage);
-		Visuals::thirdperson(stage, angle, choked, unchoked);
 		Visuals::removeVisualRecoil(stage);
 		Visuals::applyZoom(stage);
 		Visuals::noZoom();
