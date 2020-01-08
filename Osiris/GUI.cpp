@@ -752,12 +752,12 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Checkbox("Flip ragdoll gravity", &config.visuals.inverseRagdollGravity);
 		if (config.visuals.inverseRagdollGravity) {
 			ImGui::SameLine();
-			ImGui::Checkbox("Custom ragdoll gravity", &config.visuals.inverseRagdollGravityCustomize);
+			ImGui::Checkbox("Custom gravity", &config.visuals.inverseRagdollGravityCustomize);
 		};
 		if (config.visuals.inverseRagdollGravityCustomize&&config.visuals.inverseRagdollGravity) {
 			ImGui::InputInt("Gravity Value", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
 		};
-		ImGui::Checkbox("Custom Viewmodel", &config.visuals.customViewmodelToggle);
+		ImGui::Checkbox("Viewmodel Position", &config.visuals.customViewmodelToggle);
 		if (!config.visuals.customViewmodelToggle) {
 			config.visuals.customViewmodelKnifeEnabled = 0;
 		};
@@ -844,10 +844,11 @@ void GUI::renderVisualsWindow() noexcept
         ImGuiCustom::colorPicker("Sky color", config.visuals.sky);
         ImGui::Combo("VFX", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("HitMark", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
 		ImGui::PushID(14);
+		ImGui::PushItemWidth(280.0f);
         ImGui::SliderFloat(" ", &config.visuals.hitMarkerTime, 0.01f, 1.0f, "Hit marker time: %.2fs");
 		ImGui::PopID();
-		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
 		if (config.visuals.hitMarkerDamageIndicator) {
 			ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
 			ImGui::InputInt("Alpha", &config.visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
