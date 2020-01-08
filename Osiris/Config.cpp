@@ -92,8 +92,8 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
 		if (backtrackJson.isMember("Draw all ticks")) backtrack.drawAllTicks = backtrackJson["Draw all ticks"].asBool();
-        if (backtrackJson.isMember("pingBasedPing")) backtrack.timeLimit = backtrackJson["pingBasedPing"].asFloat();
-        if (backtrackJson.isMember("pingBased")) backtrack.timeLimit = backtrackJson["pingBased"].asBool();
+        if (backtrackJson.isMember("ping based")) backtrack.timeLimit = backtrackJson["ping based"].asBool();
+        if (backtrackJson.isMember("ping based value")) backtrack.timeLimit = backtrackJson["ping based value"].asFloat();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -725,14 +725,14 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Viewmodel X")) visuals.viewModel_x = visualsJson["Viewmodel X"].asFloat();
 		if (visualsJson.isMember("Viewmodel Y")) visuals.viewModel_y = visualsJson["Viewmodel Y"].asFloat();
 		if (visualsJson.isMember("Viewmodel Z")) visuals.viewModel_z = visualsJson["Viewmodel Z"].asFloat();
-        if (visualsJson.isMember("Viewmodel knife toggle")) visuals.viewModelKnifeToggle = visualsJson["Viewmodel knife toggle"].asBool();
+        if (visualsJson.isMember("Viewmodel X knife")) visuals.viewModel_x_Knife = visualsJson["Viewmodel X knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel Y knife")) visuals.viewModel_y_Knife = visualsJson["Viewmodel Y knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel Z knife")) visuals.viewModel_z_Knife = visualsJson["Viewmodel Z knife"].asFloat();
+        if (visualsJson.isMember("Viewmodel knife")) visuals.viewModelKnife = visualsJson["Viewmodel knife"].asBool();
         if (visualsJson.isMember("Viewmodel knife out")) visuals.viewModelKnifeOut = visualsJson["Viewmodel knife out"].asBool();
         if (visualsJson.isMember("Viewmodel knife enabled")) visuals.viewModelKnifeEnabled = visualsJson["Viewmodel knife enabled"].asBool();
         if (visualsJson.isMember("Viewmodel knife switch")) visuals.viewModelKnifeSwitch = visualsJson["Viewmodel knife switch"].asBool();
         if (visualsJson.isMember("Viewmodel flip knife hand")) visuals.viewModelFlipKnifeHand = visualsJson["Viewmodel flip knife hand"].asBool();
-        if (visualsJson.isMember("Viewmodel X knife")) visuals.viewModel_x_Knife = visualsJson["Viewmodel X knife"].asFloat();
-        if (visualsJson.isMember("Viewmodel Y knife")) visuals.viewModel_y_Knife = visualsJson["Viewmodel Y knife"].asFloat();
-        if (visualsJson.isMember("Viewmodel Z knife")) visuals.viewModel_z_Knife = visualsJson["Viewmodel Z knife"].asFloat();
         if (visualsJson.isMember("Viewmodel bob")) visuals.viewBob = visualsJson["Viewmodel bob"].asBool();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
@@ -999,7 +999,7 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
 		backtrackJson["Draw all ticks"] = backtrack.drawAllTicks;
-        backtrackJson["pingBased"] = backtrack.pingBased;
+        backtrackJson["ping based"] = backtrack.pingBased;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
@@ -1514,7 +1514,7 @@ void Config::save(size_t id) const noexcept
 		visualsJson["Viewmodel X"] = visuals.viewModel_x;
 		visualsJson["Viewmodel Y"] = visuals.viewModel_y;
 		visualsJson["Viewmodel Z"] = visuals.viewModel_z;
-        visualsJson["Viewmodel knife toggle"] = visuals.viewModelKnifeToggle;
+        visualsJson["Viewmodel knife"] = visuals.viewModelKnife;
         visualsJson["Viewmodel knife enabled"] = visuals.viewModelKnifeEnabled;
         visualsJson["Viewmodel knife switch"] = visuals.viewModelKnifeSwitch;
         visualsJson["Viewmodel flip knife hand"] = visuals.viewModelFlipKnifeHand;

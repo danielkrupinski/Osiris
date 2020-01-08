@@ -443,9 +443,9 @@ void GUI::renderBacktrackWindow() noexcept
         ImGui::Checkbox("Recoil-Based FoV", &config.backtrack.recoilBasedFov);
 		ImGui::Checkbox("Draw All Ticks", &config.backtrack.drawAllTicks);
         ImGui::Checkbox("Ping Based", &config.backtrack.pingBased);
-        ImGui::PushItemWidth(220.0f);
-        if (config.backtrack.pingBased)
+        if (!config.backtrack.pingBased)
         {
+            ImGui::PushItemWidth(220.0f);
             ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Amount: %d ms");
         }
         ImGui::PopItemWidth();
@@ -772,8 +772,8 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
         if (config.visuals.inverseRagdollGravity)
         {
-            ImGui::InputInt("Amount", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
-        };
+            ImGui::SliderInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400, "Gravity Value: %d");
+        }
         ImGui::Checkbox("No Fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);
         ImGui::Checkbox("No Aim Punch", &config.visuals.noAimPunch);
@@ -810,59 +810,59 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
         if (!config.visuals.viewModel) {
             config.visuals.viewModelKnifeEnabled = 0;
-        };
-        if (!config.visuals.viewModelKnifeToggle) {
+        }
+        if (!config.visuals.viewModelKnife) {
             config.visuals.viewModelKnifeSwitch = 0;
-        };
-        if (config.visuals.viewModelKnifeToggle) {
+        }
+        if (config.visuals.viewModelKnife) {
             config.visuals.viewModelKnifeSwitch = 1;
-        };
-        if (config.visuals.viewModel && !config.visuals.viewModelKnifeToggle && !config.visuals.viewModelKnifeSwitch) {
+        }
+        if (config.visuals.viewModel && !config.visuals.viewModelKnife && !config.visuals.viewModelKnifeSwitch) {
             config.visuals.viewModelKnifeEnabled = 1;
             ImGui::SameLine();
-            ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnifeToggle);
+            ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnife);
             ImGui::PushItemWidth(280.0f);
-            ImGui::PushID(1);
+            ImGui::PushID(5);
             ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, "X: %.2f");
             ImGui::PopID();
-            ImGui::PushID(2);
+            ImGui::PushID(6);
             ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, "Y: %.2f");
             ImGui::PopID();
-            ImGui::PushID(3);
+            ImGui::PushID(7);
             ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, "Z: %.2f");
             ImGui::PopID();
-        };
-        if (config.visuals.viewModelKnifeToggle && config.visuals.viewModelKnifeSwitch && config.visuals.viewModel) {
+        }
+        if (config.visuals.viewModelKnife && config.visuals.viewModelKnifeSwitch && config.visuals.viewModel) {
             config.visuals.viewModelKnifeEnabled = 1;
             ImGui::SameLine();
-            ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnifeToggle);
+            ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnife);
             ImGui::PushItemWidth(280.0f);
-            ImGui::PushID(4);
+            ImGui::PushID(8);
             ImGui::SliderFloat("", &config.visuals.viewModel_x_Knife, -20, 20, "X: %.2f");
             ImGui::PopID();
-            ImGui::PushID(5);
+            ImGui::PushID(9);
             ImGui::SliderFloat("", &config.visuals.viewModel_y_Knife, -20, 20, "Y: %.2f");
             ImGui::PopID();
-            ImGui::PushID(6);
+            ImGui::PushID(10);
             ImGui::SliderFloat("", &config.visuals.viewModel_z_Knife, -20, 20, "Z: %.2f");
             ImGui::PopID();
             ImGui::Checkbox("Flip Knife Hand", &config.visuals.viewModelFlipKnifeHand);
-        };
+        }
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
-        ImGui::PushID(10);
+        ImGui::PushID(11);
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash Reduction: %d%%");
         ImGui::PopID();
         if (!config.visuals.fullBright) {
             ImGui::PushID(12);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
             ImGui::PopID();
-        };
+        }
         if (config.visuals.fullBright) {
             ImGui::PushID(13);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
             ImGui::PopID();
-        };
+        }
         ImGui::Checkbox("Full Bright", &config.visuals.fullBright);
         ImGui::PopItemWidth();
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");

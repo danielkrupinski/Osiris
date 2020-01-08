@@ -87,7 +87,7 @@ public:
         bool recoilBasedFov{ false };
 		bool drawAllTicks{ false };
         bool pingBased{ 0 };
-        float pingBasedPing{ 0.0f };
+        float pingBasedValue{ 0.0f };
         int timeLimit{ 200 };
     } backtrack;
 
@@ -207,7 +207,7 @@ public:
 		float viewModel_x{ 0 };
 		float viewModel_y{ 0 };
 		float viewModel_z{ 0 };
-        bool viewModelKnifeToggle{ false };
+        bool viewModelKnife{ false };
         bool viewModelKnifeOut{ false };
         bool viewModelKnifeEnabled{ false };
         bool viewModelKnifeSwitch{ false };

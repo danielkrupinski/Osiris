@@ -36,7 +36,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
             records[i].push_front(record);
 
-            float latency = config.backtrack.pingBasedPing;
+            float latency = config.backtrack.pingBasedValue;
             if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
                 latency = networkChannel->getLatency(0);
             if (config.backtrack.pingBased)
