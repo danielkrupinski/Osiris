@@ -29,6 +29,7 @@ void Visuals::customViewmodel() noexcept {
 		view_x->setValue(0);
 		view_y->setValue(0);
 		view_z->setValue(0);
+		cl_righthand->setValue(1);
 	};
 
 	if (config.visuals.customViewmodelToggle) {
@@ -40,10 +41,10 @@ void Visuals::customViewmodel() noexcept {
 			view_z->setValue(config.visuals.viewmodel_z_knife);
 
 			if (!config.visuals.customViewmodelSwitchHandKnife) {
-				cl_righthand->setValue(0);
+				cl_righthand->setValue(1);
 			};
 			if (config.visuals.customViewmodelSwitchHandKnife) {
-				cl_righthand->setValue(1);
+				cl_righthand->setValue(0);
 			}
 		}
 		else if (config.visuals.customViewmodelBombEquiped) {
@@ -56,10 +57,10 @@ void Visuals::customViewmodel() noexcept {
 			view_y->setValue(config.visuals.viewmodel_y);
 			view_z->setValue(config.visuals.viewmodel_z);
 			if (!config.visuals.customViewmodelSwitchHand) {
-				cl_righthand->setValue(0);
+				cl_righthand->setValue(1);
 			};
 			if (config.visuals.customViewmodelSwitchHand) {
-				cl_righthand->setValue(1);
+				cl_righthand->setValue(0);
 			}
 		};
 	};
