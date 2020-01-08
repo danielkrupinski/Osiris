@@ -846,8 +846,7 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("HitMark", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
 		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
 		ImGui::PushID(14);
-		ImGui::PushItemWidth(280.0f);
-        ImGui::SliderFloat(" ", &config.visuals.hitMarkerTime, 0.01f, 1.0f, "Hit marker time: %.2fs");
+        ImGui::SliderFloat("", &config.visuals.hitMarkerTime, 0.01f, 1.0f, "Hit marker time: %.2fs");
 		ImGui::PopID();
 		if (config.visuals.hitMarkerDamageIndicator) {
 			ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
