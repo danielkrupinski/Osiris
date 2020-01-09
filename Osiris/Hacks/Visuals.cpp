@@ -74,6 +74,20 @@ void Visuals::disablePanoramablur() noexcept
 
 void Visuals::viewModel() noexcept {
 
+    bool knifeOut = 0;
+    bool bombOut = 0;
+
+    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
+            knifeOut = 1;
+        else
+            knifeOut = 0;
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
+            bombOut = 1;
+        else
+            bombOut = 0;
+    }
+
     static ConVar* view_x = interfaces.cvar->findVar("viewmodel_offset_x");
     static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
     static ConVar* view_z = interfaces.cvar->findVar("viewmodel_offset_z");
@@ -82,54 +96,78 @@ void Visuals::viewModel() noexcept {
 
     *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 0;
 
-    if (!config.visuals.viewModel) {
-        sv_minspec->setValue(1);
-        view_x->setValue(0);
-        view_y->setValue(0);
-        view_z->setValue(0);
-        cl_righthand->setValue(1);
-    };
-
     if (config.visuals.viewModel) {
+
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer)
+            return;
+
         sv_minspec->setValue(0);
 
-        if (config.visuals.viewModelKnifeEnabled && config.visuals.viewModelKnifeOut) {
+        if (!bombOut && !knifeOut) {
+            view_x->setValue(config.visuals.viewModel_x);
+            view_y->setValue(config.visuals.viewModel_y);
+            view_z->setValue(config.visuals.viewModel_z);
+            if (!config.visuals.viewModelFlipKnifeHand) {
+                cl_righthand->setValue(1);
+            }
+        }
+
+        if (knifeOut) {
             view_x->setValue(config.visuals.viewModel_x_Knife);
             view_y->setValue(config.visuals.viewModel_y_Knife);
             view_z->setValue(config.visuals.viewModel_z_Knife);
 
             if (!config.visuals.viewModelFlipKnifeHand) {
                 cl_righthand->setValue(1);
-            };
-            if (config.visuals.viewModelFlipKnifeHand) {
+            }
+            else {
                 cl_righthand->setValue(0);
             }
         }
-        else if (config.visuals.viewModelBombEquipped) {
+
+        if (bombOut) {
             view_x->setValue(0);
             view_y->setValue(0);
             view_z->setValue(0);
         }
-        else if (!config.visuals.viewModelBombEquipped) {
-            view_x->setValue(config.visuals.viewModel_x);
-            view_y->setValue(config.visuals.viewModel_y);
-            view_z->setValue(config.visuals.viewModel_z);
-        };
-    };
-};
+    }
+    else if (!config.visuals.viewModel) {
+
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer)
+            return;
+        sv_minspec->setValue(1);
+        view_x->setValue(0);
+        view_y->setValue(0);
+        view_z->setValue(0);
+    }
+}
+
+void Visuals::physicsTimescale() noexcept {
+
+    static ConVar* cl_phys_timescale = interfaces.cvar->findVar("cl_phys_timescale");
+
+    if (!config.visuals.ragdollTimescale) {
+        cl_phys_timescale->setValue(1);
+    }
+    if (config.visuals.ragdollTimescale) {
+        cl_phys_timescale->setValue(config.visuals.ragdollTimescaleValue);
+    }
+}
 
 void Visuals::viewBob() noexcept 
 {
 
-    static ConVar* view_bob = interfaces.cvar->findVar("cl_use_new_headbob");
+    static ConVar* viewBob = interfaces.cvar->findVar("cl_use_new_headbob");
 
     if (!config.visuals.viewBob) {
-        view_bob->setValue(config.visuals.viewBob ? 1 : 1);
+        viewBob->setValue(config.visuals.viewBob ? 1 : 1);
     };
     if (config.visuals.viewBob) {
-        view_bob->setValue(config.visuals.viewBob ? 0 : 1);
-    };
-};
+        viewBob->setValue(config.visuals.viewBob ? 0 : 1);
+    }
+}
 
 void Visuals::fullBright() noexcept
 {
@@ -141,8 +179,8 @@ void Visuals::fullBright() noexcept
     };
     if (config.visuals.fullBright) {
         full_bright->setValue(config.visuals.fullBright ? 1 : 0);
-    };
-};
+    }
+}
 
 void Visuals::colorWorld() noexcept
 {
@@ -391,6 +429,10 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
     void Visuals::hitMarkerSetDamageIndicator(GameEvent * event) noexcept
     {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer)
+            return;
+
         if (config.visuals.hitMarkerDamageIndicator)
         {
             if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {

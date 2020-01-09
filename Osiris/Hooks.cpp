@@ -115,7 +115,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	const auto currentViewAngles{ cmd->viewangles };
 	static bool switch_ = false;
 
-	Visuals::viewModel();
 	Misc::nadePredict();
 	Misc::antiAfkKick(cmd);
 	Misc::fastPlant(cmd);
@@ -143,6 +142,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	Misc::edgeJump(cmd);
 	Visuals::fullBright();
 	Visuals::viewBob();
+	Visuals::physicsTimescale();
 
 	PredictionSystem::StartPrediction(cmd);
 	Misc::prepareRevolver(cmd);
@@ -191,6 +191,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 		Visuals::removeGrass();
 		Visuals::remove3dSky();
 		Glow::render();
+		Visuals::viewModel();
 	}
 	return hooks.clientMode.callOriginal<int, int>(44, param);
 }
@@ -201,14 +202,6 @@ static float __stdcall getViewModelFov() noexcept
 	if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer && localPlayer->isScoped()) {
 		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
 			additionalFov = 0.0f;
-		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
-			config.visuals.viewModelKnifeOut = 1;
-		else
-			config.visuals.viewModelKnifeOut = 0;
-		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
-			config.visuals.viewModelBombEquipped = 1;
-		else
-			config.visuals.viewModelBombEquipped = 0;
 	}
 
 	return hooks.clientMode.callOriginal<float>(35) + additionalFov;

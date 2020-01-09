@@ -92,8 +92,7 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
 		if (backtrackJson.isMember("Draw all ticks")) backtrack.drawAllTicks = backtrackJson["Draw all ticks"].asBool();
-        if (backtrackJson.isMember("ping based")) backtrack.timeLimit = backtrackJson["ping based"].asBool();
-        if (backtrackJson.isMember("ping based value")) backtrack.timeLimit = backtrackJson["ping based value"].asFloat();
+        if (backtrackJson.isMember("Ping based")) backtrack.pingBased = backtrackJson["Ping based"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
     }
 
@@ -658,6 +657,8 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Disable HUD blur"))  visuals.disablePanoramablur = visualsJson["Disable HUD blur"].asBool();
         if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
         if (visualsJson.isMember("inverseRagdollGravityValue")) visuals.inverseRagdollGravityValue = visualsJson["inverseRagdollGravityValue"].asInt();
+        if (visualsJson.isMember("ragdollTimescale")) visuals.ragdollTimescale = visualsJson["ragdollTimescale"].asFloat();
+        if (visualsJson.isMember("ragdollTimescaleValue")) visuals.ragdollTimescaleValue = visualsJson["ragdollTimescaleValue"].asInt();
         if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
         if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
@@ -715,6 +716,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Hit marker damage indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker damage indicator"].asBool();
+        if (visualsJson.isMember("Hit marker damage indicator customize")) visuals.hitMarkerDamageIndicatorCustomize = visualsJson["Hit marker damage indicator customize"].asBool();
         if (visualsJson.isMember("Hit marker damage indicator dist")) visuals.hitMarkerDamageIndicatorDist = visualsJson["Hit marker damage indicator dist"].asInt();
         if (visualsJson.isMember("Hit marker damage indicator ratio")) visuals.hitMarkerDamageIndicatorRatio = visualsJson["Hit marker damage indicator ratio"].asFloat();
         if (visualsJson.isMember("Hit marker damage indicator alpha")) visuals.hitMarkerDamageIndicatorAlpha = visualsJson["Hit marker damage indicator alpha"].asInt();
@@ -729,9 +731,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Viewmodel Y knife")) visuals.viewModel_y_Knife = visualsJson["Viewmodel Y knife"].asFloat();
         if (visualsJson.isMember("Viewmodel Z knife")) visuals.viewModel_z_Knife = visualsJson["Viewmodel Z knife"].asFloat();
         if (visualsJson.isMember("Viewmodel knife")) visuals.viewModelKnife = visualsJson["Viewmodel knife"].asBool();
-        if (visualsJson.isMember("Viewmodel knife out")) visuals.viewModelKnifeOut = visualsJson["Viewmodel knife out"].asBool();
         if (visualsJson.isMember("Viewmodel knife enabled")) visuals.viewModelKnifeEnabled = visualsJson["Viewmodel knife enabled"].asBool();
-        if (visualsJson.isMember("Viewmodel knife switch")) visuals.viewModelKnifeSwitch = visualsJson["Viewmodel knife switch"].asBool();
         if (visualsJson.isMember("Viewmodel flip knife hand")) visuals.viewModelFlipKnifeHand = visualsJson["Viewmodel flip knife hand"].asBool();
         if (visualsJson.isMember("Viewmodel bob")) visuals.viewBob = visualsJson["Viewmodel bob"].asBool();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
@@ -999,7 +999,7 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
 		backtrackJson["Draw all ticks"] = backtrack.drawAllTicks;
-        backtrackJson["ping based"] = backtrack.pingBased;
+        backtrackJson["Ping based"] = backtrack.pingBased;
         backtrackJson["Time limit"] = backtrack.timeLimit;
     }
 
@@ -1452,6 +1452,8 @@ void Config::save(size_t id) const noexcept
 		visualsJson["Disable HUD blur"] = visuals.disablePanoramablur;
         visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
         visualsJson["inverseRagdollGravityValue"] = visuals.inverseRagdollGravityValue;
+        visualsJson["ragdollTimescale"] = visuals.ragdollTimescale;
+        visualsJson["ragdollTimescaleValue"] = visuals.ragdollTimescaleValue;
         visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["No aim punch"] = visuals.noAimPunch;
@@ -1504,7 +1506,8 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker"] = visuals.hitMarker;
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
         visualsJson["Hit marker damage indicator"] = visuals.hitMarkerDamageIndicator;
-        visualsJson["Hit marker damage indicator Ddst"] = visuals.hitMarkerDamageIndicatorDist;
+        visualsJson["Hit marker damage indicator customize"] = visuals.hitMarkerDamageIndicatorCustomize;
+        visualsJson["Hit marker damage indicator Dist"] = visuals.hitMarkerDamageIndicatorDist;
         visualsJson["Hit marker damage indicator ratio"] = visuals.hitMarkerDamageIndicatorRatio;
         visualsJson["Hit marker damage indicator alpha"] = visuals.hitMarkerDamageIndicatorAlpha;
         visualsJson["Hit marker damage indicator font"] = visuals.hitMarkerDamageIndicatorFont;

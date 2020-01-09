@@ -772,7 +772,15 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
         if (config.visuals.inverseRagdollGravity)
         {
+            ImGui::PushID(0);
             ImGui::SliderInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400, "Gravity Value: %d");
+            ImGui::PopID();
+        }
+        ImGui::Checkbox("Physics Timescale", &config.visuals.ragdollTimescale);
+        if (config.visuals.ragdollTimescale) {
+            ImGui::PushID(1);
+            ImGui::SliderInt("", &config.visuals.ragdollTimescaleValue, 0, 10, "Value: %d");
+            ImGui::PopID();
         }
         ImGui::Checkbox("No Fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);
@@ -797,69 +805,70 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SameLine();
         hotkey(config.visuals.thirdpersonKey);
         ImGui::PushItemWidth(290.0f);
-        ImGui::PushID(0);
+        ImGui::PushID(2);
         ImGui::SliderInt("", &config.visuals.thirdpersonDistance, 0, 1000, "Thirdperson Distance: %d");
         ImGui::PopID();
-		ImGui::PushID(1);
+		ImGui::PushID(3);
         ImGui::SliderInt("", &config.visuals.fov, -60, 60, "FoV: %d");
         ImGui::PopID();
-        ImGui::PushID(2);
+        ImGui::PushID(4);
 		ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FoV: %d");
 		ImGui::PopID();
-        ImGui::PushID(3);
+        ImGui::PushID(5);
+        bool viewModelSwitch = 0;
         ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
         if (!config.visuals.viewModel) {
             config.visuals.viewModelKnifeEnabled = 0;
         }
         if (!config.visuals.viewModelKnife) {
-            config.visuals.viewModelKnifeSwitch = 0;
+            viewModelSwitch = 0;
         }
         if (config.visuals.viewModelKnife) {
-            config.visuals.viewModelKnifeSwitch = 1;
+            viewModelSwitch = 1;
         }
-        if (config.visuals.viewModel && !config.visuals.viewModelKnife && !config.visuals.viewModelKnifeSwitch) {
+        if (config.visuals.viewModel && !config.visuals.viewModelKnife && !viewModelSwitch) {
             config.visuals.viewModelKnifeEnabled = 1;
             ImGui::SameLine();
             ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnife);
             ImGui::PushItemWidth(280.0f);
-            ImGui::PushID(5);
+            ImGui::PushID(6);
             ImGui::SliderFloat("", &config.visuals.viewModel_x, -20, 20, "X: %.2f");
             ImGui::PopID();
-            ImGui::PushID(6);
+            ImGui::PushID(7);
             ImGui::SliderFloat("", &config.visuals.viewModel_y, -20, 20, "Y: %.2f");
             ImGui::PopID();
-            ImGui::PushID(7);
+            ImGui::PushID(8);
             ImGui::SliderFloat("", &config.visuals.viewModel_z, -20, 20, "Z: %.2f");
             ImGui::PopID();
         }
-        if (config.visuals.viewModelKnife && config.visuals.viewModelKnifeSwitch && config.visuals.viewModel) {
+        if (config.visuals.viewModelKnife && viewModelSwitch && config.visuals.viewModel) {
             config.visuals.viewModelKnifeEnabled = 1;
             ImGui::SameLine();
             ImGui::Checkbox("Knife Offsets", &config.visuals.viewModelKnife);
             ImGui::PushItemWidth(280.0f);
-            ImGui::PushID(8);
+            ImGui::PushID(9);
             ImGui::SliderFloat("", &config.visuals.viewModel_x_Knife, -20, 20, "X: %.2f");
             ImGui::PopID();
-            ImGui::PushID(9);
+            ImGui::PushID(10);
             ImGui::SliderFloat("", &config.visuals.viewModel_y_Knife, -20, 20, "Y: %.2f");
             ImGui::PopID();
-            ImGui::PushID(10);
+            ImGui::PushID(11);
             ImGui::SliderFloat("", &config.visuals.viewModel_z_Knife, -20, 20, "Z: %.2f");
             ImGui::PopID();
             ImGui::Checkbox("Flip Knife Hand", &config.visuals.viewModelFlipKnifeHand);
         }
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         ImGui::PopID();
-        ImGui::PushID(11);
+        ImGui::PushID(12);
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash Reduction: %d%%");
         ImGui::PopID();
         if (!config.visuals.fullBright) {
-            ImGui::PushID(12);
+            ImGui::PushID(13);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
             ImGui::PopID();
         }
         if (config.visuals.fullBright) {
-            ImGui::PushID(13);
+            ImGui::PushID(14);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
             ImGui::PopID();
         }
@@ -873,15 +882,18 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Checkbox("Damage Indicator", &config.visuals.hitMarkerDamageIndicator);
-        if (config.visuals.hitMarkerDamageIndicator)
-        {
+        if (config.visuals.hitMarkerDamageIndicator) {
+            ImGui::SameLine();
+            ImGui::Checkbox("Customize", &config.visuals.hitMarkerDamageIndicatorCustomize);
+        }
+        if (config.visuals.hitMarkerDamageIndicator && config.visuals.hitMarkerDamageIndicatorCustomize) {
             ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
             ImGui::InputInt("Alpha", &config.visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
             ImGui::InputInt("Distance", &config.visuals.hitMarkerDamageIndicatorDist, -100, 100);
             ImGui::InputInt("X", &config.visuals.hitMarkerDamageIndicatorTextX, -100, 100);
             ImGui::InputInt("Y", &config.visuals.hitMarkerDamageIndicatorTextY, -100, 100);
-            ImGui::PushID(14);
-            ImGui::SliderFloat("  ", &config.visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Z: %.2f");
+            ImGui::PushID(15);
+            ImGui::SliderFloat(" ", &config.visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Z: %.2f");
             ImGui::PopID();
         }
         ImGui::Combo("Player Model (T)", &config.visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");

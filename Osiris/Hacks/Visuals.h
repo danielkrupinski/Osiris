@@ -37,6 +37,7 @@ namespace Visuals {
     void hitMarkerDamageIndicator() noexcept;
     void fullBright() noexcept;
     void viewBob() noexcept;
+    void physicsTimescale() noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {

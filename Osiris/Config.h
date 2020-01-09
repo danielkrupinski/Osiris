@@ -87,7 +87,6 @@ public:
         bool recoilBasedFov{ false };
 		bool drawAllTicks{ false };
         bool pingBased{ 0 };
-        float pingBasedValue{ 0.0f };
         int timeLimit{ 200 };
     } backtrack;
 
@@ -164,6 +163,8 @@ public:
 		bool disablePanoramablur{ false };
         bool inverseRagdollGravity{ false };
         int inverseRagdollGravityValue{ -600 };
+        bool ragdollTimescale{ false };
+        int ragdollTimescaleValue{ 1 };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
@@ -197,6 +198,7 @@ public:
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
         bool hitMarkerDamageIndicator{ false };
+        bool hitMarkerDamageIndicatorCustomize{ false };
         int hitMarkerDamageIndicatorDist{ 150 };
         float hitMarkerDamageIndicatorRatio{ 0.0f };
         int hitMarkerDamageIndicatorAlpha{ 800 };
