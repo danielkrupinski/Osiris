@@ -35,8 +35,9 @@ void Backtrack::update(FrameStage stage) noexcept
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 
             records[i].push_front(record);
+
 			int timelimit = config.backtrack.timeLimit;
-			float latency = config.backtrack.pingBasedPing;
+			float latency = 0.0f;
 			if (config.backtrack.pingBased)
 				if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
 					latency = networkChannel->getLatency(0);
