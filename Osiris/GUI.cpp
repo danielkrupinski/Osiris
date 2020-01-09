@@ -751,7 +751,11 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
 		ImGui::Checkbox("Physics Timescale", &config.visuals.ragdollTimescaleEnable);
 		if (config.visuals.ragdollTimescaleEnable) {
-			ImGui::InputFloat("How fast?", &config.visuals.ragdollTimescale, 0, 10, "%.2f");
+			ImGui::SameLine();
+			ImGui::Checkbox("Customize Timescale", &config.visuals.ragdollTimescaleCustomize);
+		};
+		if (config.visuals.ragdollTimescaleCustomize) {
+			ImGui::InputFloat("    ", &config.visuals.ragdollTimescale, 0, 10, "%.2f");
 		};
 		ImGui::Checkbox("Flip ragdoll gravity", &config.visuals.inverseRagdollGravity);
 		if (config.visuals.inverseRagdollGravity) {
@@ -759,19 +763,20 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::Checkbox("Customize gravity", &config.visuals.inverseRagdollGravityCustomize);
 		};
 		if (config.visuals.inverseRagdollGravityCustomize && config.visuals.inverseRagdollGravity) {
-			ImGui::InputInt("Gravity Value", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
+			ImGui::InputInt("   ", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
 		};
+		bool customViewmodelMenuSwitch = 0;
 		ImGui::Checkbox("Viewmodel Position", &config.visuals.customViewmodelToggle);
 		if (!config.visuals.customViewmodelToggle) {
 			config.visuals.customViewmodelKnifeEnabled = 0;
 		};
 		if (!config.visuals.customViewmodelKnifeToggle) {
-			config.visuals.customViewmodelMenuSwitch = 0;
+			customViewmodelMenuSwitch = 0;
 		};
 		if (config.visuals.customViewmodelKnifeToggle) {
-			config.visuals.customViewmodelMenuSwitch = 1;
+			customViewmodelMenuSwitch = 1;
 		};
-		if (config.visuals.customViewmodelToggle && !config.visuals.customViewmodelKnifeToggle && !config.visuals.customViewmodelMenuSwitch) {
+		if (config.visuals.customViewmodelToggle && !config.visuals.customViewmodelKnifeToggle && !customViewmodelMenuSwitch) {
 			config.visuals.customViewmodelKnifeEnabled = 1;
 			ImGui::SameLine();
 			ImGui::Checkbox("Knife Position", &config.visuals.customViewmodelKnifeToggle);
@@ -787,7 +792,7 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::PopID();
 			ImGui::Checkbox("Right/Left hand Weapon", &config.visuals.customViewmodelSwitchHand);
 		};
-		if (config.visuals.customViewmodelKnifeToggle && config.visuals.customViewmodelMenuSwitch && config.visuals.customViewmodelToggle) {
+		if (config.visuals.customViewmodelKnifeToggle && customViewmodelMenuSwitch && config.visuals.customViewmodelToggle) {
 			config.visuals.customViewmodelKnifeEnabled = 1;
 			ImGui::SameLine();
 			ImGui::Checkbox("Knife Position", &config.visuals.customViewmodelKnifeToggle);
@@ -846,17 +851,21 @@ void GUI::renderVisualsWindow() noexcept
 		ImGui::Combo("VFX", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
 		ImGui::Combo("HitMark", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
 		ImGui::Checkbox("Hit Damage", &config.visuals.hitMarkerDamageIndicator);
+		if (config.visuals.hitMarkerDamageIndicator) {
+			ImGui::SameLine();
+			ImGui::Checkbox("Customize Hitmarker", &config.visuals.hitMarkerDamageIndicatorCustomize);
+		};
 		ImGui::PushID(14);
 		ImGui::SliderFloat("", &config.visuals.hitMarkerTime, 0.01f, 1.0f, "Hit marker time: %.2fs");
 		ImGui::PopID();
-		if (config.visuals.hitMarkerDamageIndicator) {
+		if (config.visuals.hitMarkerDamageIndicator && config.visuals.hitMarkerDamageIndicatorCustomize) {
 			ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
 			ImGui::InputInt("Alpha", &config.visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
 			ImGui::InputInt("Dist", &config.visuals.hitMarkerDamageIndicatorDist, -100, 100);
 			ImGui::InputInt("Text X", &config.visuals.hitMarkerDamageIndicatorTextX, -100, 100);
 			ImGui::InputInt("Text Y", &config.visuals.hitMarkerDamageIndicatorTextY, -100, 100);
 			ImGui::PushID(15);
-			ImGui::SliderFloat("  ", &config.visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Ratio: %.2f");
+			ImGui::SliderFloat(" ", &config.visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Ratio: %.2f");
 			ImGui::PopID();
 		};
         ImGui::Columns(1);

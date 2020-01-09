@@ -653,6 +653,7 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("inverseRagdollGravityCustomize")) visuals.inverseRagdollGravityCustomize = visualsJson["inverseRagdollGravityCustomize"].asBool();
 		if (visualsJson.isMember("ragdollTimescale")) visuals.ragdollTimescale = visualsJson["ragdollTimescale"].asFloat();
 		if (visualsJson.isMember("ragdollTimescaleEnable")) visuals.ragdollTimescaleEnable = visualsJson["ragdollTimescaleEnable"].asBool();
+		if (visualsJson.isMember("ragdollTimescaleCustomize")) visuals.ragdollTimescaleCustomize = visualsJson["ragdollTimescaleCustomize"].asBool();
 		if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
         if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
         if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
@@ -712,6 +713,7 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
 		if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
 		if (visualsJson.isMember("Hit marker Damage Indicator")) visuals.hitMarkerDamageIndicator = visualsJson["Hit marker Damage Indicator"].asBool();
+		if (visualsJson.isMember("Hit marker Damage Indicator Customize")) visuals.hitMarkerDamageIndicatorCustomize = visualsJson["Hit marker Damage Indicator Customize"].asBool();
 		if (visualsJson.isMember("Hit marker Damage Indicator Dist")) visuals.hitMarkerDamageIndicatorDist = visualsJson["Hit marker Damage Indicator Dist"].asInt();
 		if (visualsJson.isMember("Hit marker Damage Indicator Ratio")) visuals.hitMarkerDamageIndicatorRatio = visualsJson["Hit marker Damage Indicator Ratio"].asFloat();
 		if (visualsJson.isMember("Hit marker Damage Indicator Alpha")) visuals.hitMarkerDamageIndicatorAlpha = visualsJson["Hit marker Damage Indicator Alpha"].asInt();
@@ -727,7 +729,6 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Custom Viewmodel Z Knife")) visuals.viewmodel_z_knife = visualsJson["Custom Viewmodel Z Knife"].asFloat();
 		if (visualsJson.isMember("Custom Viewmodel Knife Toggle")) visuals.customViewmodelKnifeToggle = visualsJson["Custom Viewmodel Knife Toggle"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Enabled")) visuals.customViewmodelKnifeEnabled = visualsJson["Custom Viewmodel Knife Enabled"].asBool();
-		if (visualsJson.isMember("Custom Viewmodel Knife Menu Switch")) visuals.customViewmodelMenuSwitch = visualsJson["Custom Viewmodel Menu Switch"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Switch Hand")) visuals.customViewmodelSwitchHand = visualsJson["Custom Viewmodel Menu Switch Hand"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Switch Hand Knife")) visuals.customViewmodelSwitchHandKnife = visualsJson["Custom Viewmodel Switch Hand Knife"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Bob")) visuals.view_bob = visualsJson["Custom Viewmodel Bob"].asBool();
@@ -1434,6 +1435,7 @@ void Config::save(size_t id) const noexcept
 		visualsJson["inverseRagdollGravityCustomize"] = visuals.inverseRagdollGravityCustomize;
 		visualsJson["ragdollTimescale"] = visuals.ragdollTimescale;
 		visualsJson["ragdollTimescaleEnable"] = visuals.ragdollTimescaleEnable;
+		visualsJson["ragdollTimescaleCustomize"] = visuals.ragdollTimescaleCustomize;
 		visualsJson["noFog"] = visuals.noFog;
         visualsJson["no3dSky"] = visuals.no3dSky;
         visualsJson["No aim punch"] = visuals.noAimPunch;
@@ -1486,6 +1488,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["Playermodel T"] = visuals.playerModelT;
         visualsJson["Playermodel CT"] = visuals.playerModelCT;
 		visualsJson["Hit marker Damage Indicator"] = visuals.hitMarkerDamageIndicator;
+		visualsJson["Hit marker Damage Indicator Customize"] = visuals.hitMarkerDamageIndicatorCustomize;
 		visualsJson["Hit marker Damage Indicator Dist"] = visuals.hitMarkerDamageIndicatorDist;
 		visualsJson["Hit marker Damage Indicator Ratio"] = visuals.hitMarkerDamageIndicatorRatio;
 		visualsJson["Hit marker Damage Indicator Aplha"] = visuals.hitMarkerDamageIndicatorAlpha;

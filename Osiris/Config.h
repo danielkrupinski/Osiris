@@ -158,6 +158,7 @@ public:
 		int inverseRagdollGravityValue{ -600 };
 		bool inverseRagdollGravityCustomize{ false };
 		bool ragdollTimescaleEnable{ false };
+		bool ragdollTimescaleCustomize{ false };
 		float ragdollTimescale{ 1.0f };
         bool noFog{ false };
         bool no3dSky{ false };
@@ -192,6 +193,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 		bool hitMarkerDamageIndicator{ false };
+		bool hitMarkerDamageIndicatorCustomize{ false };
 		int hitMarkerDamageIndicatorDist{ 150 };
 		float hitMarkerDamageIndicatorRatio{ 0.0f };
 		int hitMarkerDamageIndicatorAlpha{ 800 };
