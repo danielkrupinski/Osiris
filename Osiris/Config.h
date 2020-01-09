@@ -80,7 +80,6 @@ public:
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
 		bool pingBased{ 0 };
-		float pingBasedPing{ 0.0f };
 		bool drawAllTicks{ false };
     } backtrack;
 
