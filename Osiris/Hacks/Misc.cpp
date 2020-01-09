@@ -472,53 +472,71 @@ void Misc::fakePrime() noexcept
 
 void Misc::chatSpam() noexcept
 {
-    if (config.misc.chatSpam)
+    static auto lastSpam{ 0 };
+
+    if (config.misc.chatSpam && lastSpam != (int)memory.globalVars->currenttime && (config.misc.chatSpamDelay == 0 || (int)memory.globalVars->currenttime % config.misc.chatSpamDelay == 0))
     {
-        static time_t lastSpam{ 0 };
-        const auto theTime{ time(nullptr) };
-
-        if (theTime - lastSpam >= config.misc.chatSpamDelay)
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer->team() > 0)
         {
-            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer->team() > 0)
+            auto charId{ 0 }, phrasesNum{ 0 };
+
+            std::vector <std::string> Phrases;
+            std::string Phrase;
+
+            while (true)
             {
-                std::vector <std::string> Phrases;
-                std::string Phrase;
-                int Index{ 0 }, phrasesCount{ 0 };
-
-                while (true)
+                if (config.misc.chatSpamPhrases[charId] == '\0')
                 {
-                    if (config.misc.chatSpamPhrases[Index] == '\0')
+                    if (Phrase.length() > 0)
                     {
-                        if (Phrase.length() > 0)
-                        {
-                            Phrases.push_back(Phrase);
-                            phrasesCount++;
-                        }
+                        Phrases.push_back(Phrase);
 
-                        break;
+                        phrasesNum++;
                     }
 
-                    else if (config.misc.chatSpamPhrases[Index] == '\n')
-                    {
-                        if (Phrase.length() > 0)
-                        {
-                            Phrases.push_back(Phrase);
-                            Phrase.clear();
-                            phrasesCount++;
-                        }
-
-                        Index++;
-                    }
-
-                    else
-                        Phrase += config.misc.chatSpamPhrases[Index++];
+                    break;
                 }
 
-                if (phrasesCount > 0)
-                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[random(0, phrasesCount - 1)]).c_str());
+                else if (config.misc.chatSpamPhrases[charId] == '\n')
+                {
+                    if (Phrase.length() > 0)
+                    {
+                        Phrases.push_back(Phrase);
+                        Phrase.clear();
+
+                        phrasesNum++;
+                    }
+
+                    charId++;
+                }
+
+                else
+                    Phrase += config.misc.chatSpamPhrases[charId++];
             }
 
-            lastSpam = theTime;
+            if (phrasesNum > 0)
+            {
+                static auto phraseId{ 0 };
+
+                if (config.misc.chatSpamRandom)
+                {
+                    const auto randNum = random(0, phrasesNum - 1);
+
+                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[randNum]).c_str());
+
+                    phraseId = randNum + 1;
+                }
+
+                else
+                {
+                    if (phraseId >= phrasesNum)
+                        phraseId = 0;
+
+                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Phrases[phraseId++]).c_str());
+                }
+            }
         }
+
+        lastSpam = (int)memory.globalVars->currenttime;
     }
 }

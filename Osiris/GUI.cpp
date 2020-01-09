@@ -992,6 +992,7 @@ void GUI::renderMiscWindow() noexcept
             Misc::updateClanTag(true);
         ImGui::PopID();
         ImGui::Checkbox("Chat spam", &config.misc.chatSpam);
+        ImGui::Checkbox("Chat spam random", &config.misc.chatSpamRandom);
         ImGui::SliderInt("Chat spam delay", &config.misc.chatSpamDelay, 0, 60);
         ImGui::InputTextMultiline("Chat spam phrases", config.misc.chatSpamPhrases, IM_ARRAYSIZE(config.misc.chatSpamPhrases));
         ImGui::Checkbox("Kill message", &config.misc.killMessage);

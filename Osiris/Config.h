@@ -235,6 +235,7 @@ public:
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
         bool chatSpam{ false };
+        bool chatSpamRandom{ false };
         int chatSpamDelay{ 0 };
         char chatSpamPhrases[8192]{ };
         bool killMessage{ false };
