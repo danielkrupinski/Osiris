@@ -32,7 +32,7 @@ namespace Visuals {
     void hitMarker(GameEvent* = nullptr) noexcept;
 	void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
 	void hitMarkerDamageIndicator() noexcept;
-	void customViewmodel() noexcept;
+	void customViewmodelPosition() noexcept;
 	void fullBright() noexcept;
 	void viewBob() noexcept;
 	void physicsTimescale() noexcept;

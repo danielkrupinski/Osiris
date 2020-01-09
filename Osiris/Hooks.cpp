@@ -140,7 +140,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::slowwalk(cmd);
 	Visuals::fullBright();
 	Visuals::viewBob();
-	Visuals::customViewmodel();
 	Visuals::physicsTimescale();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
@@ -182,6 +181,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::removeGrass();
         Visuals::remove3dSky();
         Glow::render();
+		Visuals::customViewmodelPosition();
     }
     return hooks.clientMode.callOriginal<int, int>(44, param);
 }
@@ -192,14 +192,6 @@ static float __stdcall getViewModelFov() noexcept
     if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
-		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
-			config.visuals.customViewmodelKnifeOut = 1;
-		else
-			config.visuals.customViewmodelKnifeOut = 0;
-		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
-			config.visuals.customViewmodelBombEquiped = 1;
-		else
-			config.visuals.customViewmodelBombEquiped = 0;
     }
 
     return hooks.clientMode.callOriginal<float>(35) + additionalFov;

@@ -14,7 +14,21 @@
 #include "../SDK/Surface.h"
 #include <array>
 
-void Visuals::customViewmodel() noexcept {
+void Visuals::customViewmodelPosition() noexcept {
+
+	bool KnifeOut = 0;
+	bool BombOut = 0;
+
+	if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Knife)
+			KnifeOut = 1;
+		else
+			KnifeOut = 0;
+		if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4)
+			BombOut = 1;
+		else
+			BombOut = 0;
+	}
 
 	static ConVar* view_x = interfaces.cvar->findVar("viewmodel_offset_x");
 	static ConVar* view_y = interfaces.cvar->findVar("viewmodel_offset_y");
@@ -24,18 +38,22 @@ void Visuals::customViewmodel() noexcept {
 
 	*(int*)((DWORD)& sv_minspec->onChangeCallbacks + 0xC) = 0;
 
-	if (!config.visuals.customViewmodelToggle) {
-		sv_minspec->setValue(1);
-		view_x->setValue(0);
-		view_y->setValue(0);
-		view_z->setValue(0);
-		cl_righthand->setValue(1);
-	};
-
 	if (config.visuals.customViewmodelToggle) {
 		sv_minspec->setValue(0);
 
-		if (config.visuals.customViewmodelKnifeEnabled && config.visuals.customViewmodelKnifeOut) {
+		if (!BombOut && !KnifeOut) {
+			view_x->setValue(config.visuals.viewmodel_x);
+			view_y->setValue(config.visuals.viewmodel_y);
+			view_z->setValue(config.visuals.viewmodel_z);
+			if (!config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(1);
+			};
+			if (config.visuals.customViewmodelSwitchHand) {
+				cl_righthand->setValue(0);
+			};
+		};
+
+		if (KnifeOut) {
 			view_x->setValue(config.visuals.viewmodel_x_knife);
 			view_y->setValue(config.visuals.viewmodel_y_knife);
 			view_z->setValue(config.visuals.viewmodel_z_knife);
@@ -45,24 +63,22 @@ void Visuals::customViewmodel() noexcept {
 			};
 			if (config.visuals.customViewmodelSwitchHandKnife) {
 				cl_righthand->setValue(0);
-			}
-		}
-		else if (config.visuals.customViewmodelBombEquiped) {
+			};
+		};
+
+		if (BombOut) {
 			view_x->setValue(0);
 			view_y->setValue(0);
 			view_z->setValue(0);
-		}
-		else if (!config.visuals.customViewmodelBombEquiped) {
-			view_x->setValue(config.visuals.viewmodel_x);
-			view_y->setValue(config.visuals.viewmodel_y);
-			view_z->setValue(config.visuals.viewmodel_z);
-			if (!config.visuals.customViewmodelSwitchHand) {
-				cl_righthand->setValue(1);
-			};
-			if (config.visuals.customViewmodelSwitchHand) {
-				cl_righthand->setValue(0);
-			}
+			cl_righthand->setValue(1);
 		};
+	};
+	if (!config.visuals.customViewmodelToggle) {
+		sv_minspec->setValue(1);
+		view_x->setValue(0);
+		view_y->setValue(0);
+		view_z->setValue(0);
+		cl_righthand->setValue(1);
 	};
 };
 

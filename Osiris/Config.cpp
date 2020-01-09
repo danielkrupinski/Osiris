@@ -727,7 +727,6 @@ void Config::load(size_t id) noexcept
 		if (visualsJson.isMember("Custom Viewmodel Y Knife")) visuals.viewmodel_y_knife = visualsJson["Custom Viewmodel Y Knife"].asFloat();
 		if (visualsJson.isMember("Custom Viewmodel Z Knife")) visuals.viewmodel_z_knife = visualsJson["Custom Viewmodel Z Knife"].asFloat();
 		if (visualsJson.isMember("Custom Viewmodel Knife Toggle")) visuals.customViewmodelKnifeToggle = visualsJson["Custom Viewmodel Knife Toggle"].asBool();
-		if (visualsJson.isMember("Custom Viewmodel Knife Out")) visuals.customViewmodelKnifeOut = visualsJson["Custom Viewmodel Knife Out"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Enabled")) visuals.customViewmodelKnifeEnabled = visualsJson["Custom Viewmodel Knife Enabled"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Menu Switch")) visuals.customViewmodelMenuSwitch = visualsJson["Custom Viewmodel Menu Switch"].asBool();
 		if (visualsJson.isMember("Custom Viewmodel Knife Switch Hand")) visuals.customViewmodelSwitchHand = visualsJson["Custom Viewmodel Menu Switch Hand"].asBool();
