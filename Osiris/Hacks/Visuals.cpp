@@ -39,6 +39,11 @@ void Visuals::customViewmodelPosition() noexcept {
 	*(int*)((DWORD)& sv_minspec->onChangeCallbacks + 0xC) = 0;
 
 	if (config.visuals.customViewmodelToggle) {
+		
+		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		if (!localPlayer)
+			return;
+
 		sv_minspec->setValue(0);
 
 		if (!BombOut && !KnifeOut) {
@@ -47,8 +52,7 @@ void Visuals::customViewmodelPosition() noexcept {
 			view_z->setValue(config.visuals.viewmodel_z);
 			if (!config.visuals.customViewmodelSwitchHand) {
 				cl_righthand->setValue(1);
-			};
-			if (config.visuals.customViewmodelSwitchHand) {
+			}else {
 				cl_righthand->setValue(0);
 			};
 		};
@@ -60,8 +64,7 @@ void Visuals::customViewmodelPosition() noexcept {
 
 			if (!config.visuals.customViewmodelSwitchHandKnife) {
 				cl_righthand->setValue(1);
-			};
-			if (config.visuals.customViewmodelSwitchHandKnife) {
+			}else{
 				cl_righthand->setValue(0);
 			};
 		};
@@ -70,15 +73,18 @@ void Visuals::customViewmodelPosition() noexcept {
 			view_x->setValue(0);
 			view_y->setValue(0);
 			view_z->setValue(0);
-			cl_righthand->setValue(1);
 		};
-	};
-	if (!config.visuals.customViewmodelToggle) {
+	}
+	else if (!config.visuals.customViewmodelToggle) {
+
+		const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+		if (!localPlayer)
+			return;
+
 		sv_minspec->setValue(1);
 		view_x->setValue(0);
 		view_y->setValue(0);
 		view_z->setValue(0);
-		cl_righthand->setValue(1);
 	};
 };
 
@@ -118,8 +124,12 @@ void Visuals::fullBright() noexcept {
 	};
 };
 
-void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept
-{
+void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept{	
+
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+	if (!localPlayer)
+		return;
+
 	if (config.visuals.hitMarkerDamageIndicator)
 	{
 		if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
