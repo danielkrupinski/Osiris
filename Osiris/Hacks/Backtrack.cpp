@@ -35,14 +35,14 @@ void Backtrack::update(FrameStage stage) noexcept
             entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
 
             records[i].push_front(record);
-
+			int timelimit = config.backtrack.timeLimit;
 			float latency = config.backtrack.pingBasedPing;
-			if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-				latency = networkChannel->getLatency(0);
 			if (config.backtrack.pingBased)
-				config.backtrack.timeLimit = static_cast<int>(latency * 1000);
+				if (auto networkChannel = interfaces.engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+					latency = networkChannel->getLatency(0);
+				timelimit = static_cast<int>(latency * 1000);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config.backtrack.timeLimit) / 1000.f)))
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(timelimit) / 1000.f)))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
