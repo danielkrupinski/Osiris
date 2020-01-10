@@ -962,6 +962,9 @@ void GUI::renderMiscWindow() noexcept
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
+        ImGui::Checkbox("Edge Jump", &config.misc.edgejump);
+        ImGui::SameLine();
+        hotkey(config.misc.edgejumpkey);
         ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
         ImGui::SameLine();
         hotkey(config.misc.slowwalkKey);
