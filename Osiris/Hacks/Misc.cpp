@@ -18,6 +18,28 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
+void Misc::edgejump(UserCmd* cmd) noexcept
+{
+    if (config.misc.edgejump && GetAsyncKeyState(config.misc.edgejumpkey)) 
+    {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
+            return;
+
+        Vector start, end;
+        start = localPlayer->origin();
+        end = start;
+        end.z -= 32;
+        Trace trace;
+        Ray ray(start, end);
+        TraceFilter filter(localPlayer);
+        interfaces.engineTrace->traceRay(ray, 0x1 | 0x4000 | 0x2 | 0x10000 | 0x8, filter, trace);
+
+        if (trace.fraction == 1.0f) cmd->buttons |= UserCmd::IN_JUMP;
+    }
+}
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
