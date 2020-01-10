@@ -1,4 +1,4 @@
-#include <sstream>
+﻿#include <sstream>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -13,24 +13,23 @@
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
-    if (config.misc.edgejump && GetAsyncKeyState(config.misc.edgejumpkey)) 
-    {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.misc.edgejump || !GetAsyncKeyState(config.misc.edgejumpkey))
+        return;
 
-        if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
-            return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        Vector start, end;
-        start = localPlayer->origin();
-        end = start;
-        end.z -= 32;
-        Trace trace;
-        Ray ray(start, end);
-        TraceFilter filter(localPlayer);
-        interfaces.engineTrace->traceRay(ray, 0x1 | 0x4000 | 0x2 | 0x10000 | 0x8, filter, trace);
+    if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
+        return;
 
-        if (trace.fraction == 1.0f) cmd->buttons |= UserCmd::IN_JUMP;
-    }
+    const auto start = localPlayer->origin();
+    auto end = start;
+    end.z -= 32;
+
+    Trace trace;
+    interfaces.engineTrace->traceRay({ localPlayer->origin(), end }, 0x1400B, localPlayer, trace);
+
+    if (trace.fraction == 1.0f)
+        cmd->buttons |= UserCmd::IN_JUMP;
 }
 
 void Misc::slowwalk(UserCmd* cmd) noexcept
