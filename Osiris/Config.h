@@ -282,6 +282,7 @@ public:
         bool chatSpam{ false };
         int chatSpamDelay{ 0 };
         char chatSpamText[8192]{ };
+        bool randomChatSpam{ false };
         bool killMessage{ false };
         char killMessageString[230]{ "sample text" };
         bool nameStealer{ false };

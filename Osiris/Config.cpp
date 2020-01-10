@@ -884,6 +884,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Chat spam")) misc.chatSpam = miscJson["Chat spam"].asBool();
         if (miscJson.isMember("Chat spam delay")) misc.chatSpamDelay = miscJson["Chat spam delay"].asInt();
         if (miscJson.isMember("Chat spam text")) strcpy_s(misc.chatSpamText, sizeof(misc.chatSpamText), miscJson["Chat spam text"].asCString());
+        if (miscJson.isMember("Random chat spam")) misc.randomChatSpam = miscJson["Random chat spam"].asBool();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) strcpy_s(misc.killMessageString, sizeof(misc.killMessageString), miscJson["Kill message string"].asCString());
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
@@ -1654,6 +1655,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Chat spam"] = misc.chatSpam;
         miscJson["Chat spam delay"] = misc.chatSpamDelay;
         miscJson["Chat spam text"] = misc.chatSpamText;
+        miscJson["Random chat spam"] = misc.randomChatSpam;
         miscJson["Kill message"] = misc.killMessage;
         miscJson["Kill message string"] = misc.killMessageString;
         miscJson["Name stealer"] = misc.nameStealer;
