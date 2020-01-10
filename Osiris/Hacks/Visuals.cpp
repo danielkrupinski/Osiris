@@ -14,6 +14,12 @@
 
 #include <array>
 
+void Visuals::inverseRagdollGravity() noexcept
+{
+	static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
+	ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? config.visuals.inverseRagdollGravityValue : 600);
+}
+
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
