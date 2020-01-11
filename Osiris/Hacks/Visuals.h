@@ -12,7 +12,7 @@ enum class FrameStage;
 class GameEvent;
 
 namespace Visuals {
-	void inverseRagdollGravity() noexcept;
+    void inverseRagdollGravity() noexcept;
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
