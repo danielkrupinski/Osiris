@@ -1,4 +1,4 @@
-#include <sstream>
+﻿#include <sstream>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -11,33 +11,58 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 
+void Misc::edgejump(UserCmd* cmd) noexcept
+{
+    if (!config.misc.edgejump || !GetAsyncKeyState(config.misc.edgejumpkey))
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+        return;
+
+    const auto start = localPlayer->origin();
+    auto end = start;
+    end.z -= 32;
+
+    Trace trace;
+    interfaces.engineTrace->traceRay({ localPlayer->origin(), end }, 0x1400B, localPlayer, trace);
+
+    if (trace.fraction == 1.0f)
+        cmd->buttons |= UserCmd::IN_JUMP;
+}
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-    if (config.misc.slowwalk && GetAsyncKeyState(config.misc.slowwalkKey)) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.misc.slowwalk || !GetAsyncKeyState(config.misc.slowwalkKey))
+        return;
 
-        if (!localPlayer || !localPlayer->isAlive())
-            return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon)
-            return;
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
 
-        const auto weaponData = activeWeapon->getWeaponData();
-        if (!weaponData)
-            return;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
 
-        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+    const auto weaponData = activeWeapon->getWeaponData();
+    if (!weaponData)
+        return;
 
-        if (cmd->forwardmove && cmd->sidemove) {
-            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
-            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-        } else if (cmd->forwardmove) {
-            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
-        } else if (cmd->sidemove) {
-            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
-        }
+    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+    if (cmd->forwardmove && cmd->sidemove) {
+        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+    } else if (cmd->forwardmove) {
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+    } else if (cmd->sidemove) {
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
     }
 }
 
