@@ -19,10 +19,7 @@ void Visuals::fullBright() noexcept {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (!localPlayer)
         return;
-
-    static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
-
-    if (!config.visuals.fullBright) {full_bright->setValue(0);}else{full_bright->setValue(1);};
+    interfaces.cvar->findVar("mat_fullbright")->setValue(config.visuals.fullBright ? 1 : 0);
 };
 
 void Visuals::playerModel(FrameStage stage) noexcept
