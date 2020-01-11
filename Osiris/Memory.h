@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sstream>
-#include <string_view>
+#include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -52,6 +52,8 @@ public:
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
     uintptr_t test;
     uintptr_t test2;
+    uint8_t* fakePrime;
+    std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
 
 private:
     template <typename T = uintptr_t>

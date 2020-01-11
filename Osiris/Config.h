@@ -135,6 +135,7 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            bool deadesp { false };
         };
 
         struct Weapon : public Shared { } weapon;
@@ -175,11 +176,14 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        Color world{ 0.0f, 0.0f, 0.0f };
+        ColorToggle world;
+        ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -213,6 +217,10 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool edgejump{ false };
+        int edgejumpkey{ 0 };
+        bool slowwalk{ false };
+        int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
@@ -221,6 +229,7 @@ public:
         bool radarHack{ false };
         bool revealRanks{ false };
         bool revealMoney{ false };
+        bool revealSuspect{ false };
         ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };
@@ -246,6 +255,7 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
     } misc;
 
     struct {

@@ -57,7 +57,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+    if (gui.isOpen && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -98,14 +98,14 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    uintptr_t* framePointer;
-    __asm mov framePointer, ebp;
-    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
-
     auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
+
+    uintptr_t* framePointer;
+    __asm mov framePointer, ebp;
+    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
@@ -137,6 +137,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
+    Misc::slowwalk(cmd);
+    Misc::edgejump(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -156,6 +158,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+    cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
+    cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
 
@@ -167,9 +171,8 @@ static int __stdcall doPostScreenEffects(int param) noexcept
     if (interfaces.engine->isInGame()) {
         Visuals::modifySmoke();
         Visuals::thirdperson();
-        Misc::inverseRagdollGravity(); 
+        Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
-        Visuals::colorWorld();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
         Visuals::updateBrightness();
@@ -232,10 +235,13 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
-    if (stage == FrameStage::RENDER_START)
+    if (stage == FrameStage::RENDER_START) {
         Misc::disablePanoramablur();
-
+        Visuals::colorWorld();
+        Misc::fakePrime();
+    }
     if (interfaces.engine->isInGame()) {
+        Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
@@ -353,8 +359,8 @@ struct RenderableInfo {
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
     if (config.misc.disableModelOcclusion && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
-        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
-            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
+        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info&& info->renderable) {
+            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent&& ent->isPlayer()) {
                 info->flags &= ~0x100;
                 info->flags2 |= 0xC0;
 
@@ -405,14 +411,10 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
 {
-    auto result = hooks.engine.callOriginal<void*>(218);
+    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
+        return nullptr;
 
-    constexpr bool overwatchRevealTest = true;
-    if constexpr (overwatchRevealTest) {
-        if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); returnAddress == memory.test || returnAddress == memory.test2)
-            return nullptr;
-    }
-    return result;
+    return hooks.engine.callOriginal<void*>(218);
 }
 
 static bool __stdcall isPlayingDemo() noexcept
