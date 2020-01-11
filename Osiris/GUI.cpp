@@ -734,11 +734,11 @@ void GUI::renderVisualsWindow() noexcept
         if (config.visuals.inverseRagdollGravity) {
             ImGui::SameLine();
             ImGui::Checkbox("Custom Value", &config.visuals.inverseRagdollGravityCustomize);
-        };
-        if (config.visuals.inverseRagdollGravityCustomize && config.visuals.inverseRagdollGravity) {
-            ImGui::PushItemWidth(290.0f);
-            ImGui::InputInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
-            ImGui::PopItemWidth();
+            if (config.visuals.inverseRagdollGravityCustomize) {
+                ImGui::PushItemWidth(290.0f);
+                ImGui::InputInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400);
+                ImGui::PopItemWidth();
+            };
         };
         ImGui::Checkbox("No fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3d sky", &config.visuals.no3dSky);
