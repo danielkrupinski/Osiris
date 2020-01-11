@@ -793,7 +793,7 @@ void GUI::renderVisualsWindow() noexcept
             ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &config.visuals.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &config.visuals.colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &config.visuals.colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
-            ImGui::EndPopup();ImGui::SameLine();
+            ImGui::EndPopup();
         }
         ImGui::Columns(1);
 
