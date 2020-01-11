@@ -22,12 +22,7 @@ void Visuals::fullBright() noexcept {
 
 	static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
 
-	if (!config.visuals.fullBright) {
-		full_bright->setValue(config.visuals.fullBright ? 0 : 0);
-	};
-	if (config.visuals.fullBright) {
-		full_bright->setValue(config.visuals.fullBright ? 1 : 0);
-	};
+	if (!config.visuals.fullBright) {full_bright->setValue(0);}else{full_bright->setValue(1);};
 };
 
 void Visuals::playerModel(FrameStage stage) noexcept

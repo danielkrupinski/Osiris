@@ -771,8 +771,7 @@ void GUI::renderVisualsWindow() noexcept
 			ImGui::PushID(5);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
 			ImGui::PopID();
-		};
-		if (config.visuals.fullBright) {
+		}else{
 			ImGui::PushID(6);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
 			ImGui::PopID();
