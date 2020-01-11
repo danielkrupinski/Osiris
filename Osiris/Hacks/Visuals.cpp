@@ -16,13 +16,13 @@
 
 void Visuals::fullBright() noexcept {
 
-	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-	if (!localPlayer)
-		return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
 
-	static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
+    static ConVar* full_bright = interfaces.cvar->findVar("mat_fullbright");
 
-	if (!config.visuals.fullBright) {full_bright->setValue(0);}else{full_bright->setValue(1);};
+    if (!config.visuals.fullBright) {full_bright->setValue(0);}else{full_bright->setValue(1);};
 };
 
 void Visuals::playerModel(FrameStage stage) noexcept
