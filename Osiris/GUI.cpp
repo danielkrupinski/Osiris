@@ -866,14 +866,13 @@ void GUI::renderVisualsWindow() noexcept
             ImGui::PushID(13);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
             ImGui::PopID();
-        }
-        if (config.visuals.fullBright) {
+        } else {
             ImGui::PushID(14);
             ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
             ImGui::PopID();
         }
-        ImGui::Checkbox("Full Bright", &config.visuals.fullBright);
         ImGui::PopItemWidth();
+        ImGui::Checkbox("Full Bright", &config.visuals.fullBright);
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
 		ImGuiCustom::colorPicker("World Colour", config.visuals.world);
         ImGuiCustom::colorPicker("Sky Colour", config.visuals.sky);
