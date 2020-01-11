@@ -57,7 +57,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+    if (gui.isOpen && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -138,6 +138,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Misc::edgejump(cmd);
     Misc::chatSpam();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
@@ -427,6 +428,21 @@ static bool __stdcall isPlayingDemo() noexcept
     return hooks.engine.callOriginal<bool>(82);
 }
 
+void __stdcall updateColorCorrectionWeights() noexcept
+{
+    hooks.clientMode.callOriginal<void>(58);
+
+    if (const auto& cfg = config.visuals.colorCorrection; cfg.enabled) {
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x498) = cfg.blue;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A0) = cfg.red;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A8) = cfg.mono;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4B0) = cfg.saturation;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C0) = cfg.ghost;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
+    }
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -448,6 +464,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
