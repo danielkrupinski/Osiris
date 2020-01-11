@@ -19,7 +19,6 @@
 namespace Misc
 {
     void slowWalk(UserCmd*) noexcept;
-    void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
     void sniperCrosshair() noexcept;

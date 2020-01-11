@@ -183,7 +183,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 	if (interfaces.engine->isInGame()) {
 		Visuals::modifySmoke();
 		Visuals::thirdPerson();
-		Misc::inverseRagdollGravity();
+		Visuals::inverseRagdollGravity();
 		Visuals::disablePostProcessing();
 		Visuals::reduceFlashEffect();
 		Visuals::removeBlur();

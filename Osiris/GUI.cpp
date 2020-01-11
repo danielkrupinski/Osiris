@@ -1144,11 +1144,9 @@ void GUI::renderMiscWindow() noexcept
 		}
 		ImGui::Checkbox("Clock Clantag", &config.misc.clocktag);
         ImGui::Checkbox("Chat Spam", &config.misc.chatSpam);
-        if (config.misc.chatSpam)
         {
             ImGui::SameLine();
             ImGui::Checkbox("Random", &config.misc.randomChatSpam);
-
         }
         ImGui::SliderInt("Delay (s)", &config.misc.chatSpamDelay, 0, 120);
         ImGui::InputTextMultiline("Text", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText));

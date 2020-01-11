@@ -17,6 +17,7 @@ enum class FrameStage;
 class GameEvent;
 
 namespace Visuals {
+    void inverseRagdollGravity() noexcept;
     void playerModel(FrameStage stage) noexcept;
 	void disablePanoramablur() noexcept;
 	void viewModel() noexcept;

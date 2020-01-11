@@ -21,24 +21,26 @@ static int random(int min, int max) noexcept
 
 void Misc::edgeJump(UserCmd* cmd) noexcept
 {
-    if (config.misc.edgeJump && GetAsyncKeyState(config.misc.edgeJumpKey))
-    {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.misc.edgeJump || !GetAsyncKeyState(config.misc.edgeJumpKey))
+        return;
 
-        if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
-            return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        Vector start, end;
-        start = localPlayer->origin();
-        end = start;
-        end.z -= 32;
-        Trace trace;
-        Ray ray(start, end);
-        TraceFilter filter(localPlayer);
-        interfaces.engineTrace->traceRay(ray, 0x1 | 0x4000 | 0x2 | 0x10000 | 0x8, filter, trace);
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
 
-        if (trace.fraction == 1.0f) cmd->buttons |= UserCmd::IN_JUMP;
-    }
+    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+        return;
+
+    const auto start = localPlayer->origin();
+    auto end = start;
+    end.z -= 32;
+
+    Trace trace;
+    interfaces.engineTrace->traceRay({ localPlayer->origin(), end }, 0x1400B, localPlayer, trace);
+
+    if (trace.fraction == 1.0f)
+        cmd->buttons |= UserCmd::IN_JUMP;
 }
 
 void Misc::useSpam(UserCmd* cmd) noexcept
@@ -65,40 +67,35 @@ void Misc::useSpam(UserCmd* cmd) noexcept
 
 void Misc::slowWalk(UserCmd* cmd) noexcept
 {
-    if (config.misc.slowWalk && GetAsyncKeyState(config.misc.slowWalkKey)) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (config.misc.slowWalk || !GetAsyncKeyState(config.misc.slowWalkKey))
+        return;
 
-        if (!localPlayer || !localPlayer->isAlive())
-            return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon)
-            return;
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
 
-        const auto weaponData = activeWeapon->getWeaponData();
-        if (!weaponData)
-            return;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
 
-        const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+    const auto weaponData = activeWeapon->getWeaponData();
+    if (!weaponData)
+        return;
 
-        if (cmd->forwardmove && cmd->sidemove) {
-            const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
-            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-        }
-        else if (cmd->forwardmove) {
-            cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
-        }
-        else if (cmd->sidemove) {
-            cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
-        }
+    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+    if (cmd->forwardmove && cmd->sidemove) {
+        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
     }
-}
-
-void Misc::inverseRagdollGravity() noexcept
-{
-    static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? config.visuals.inverseRagdollGravityValue : 600);
+    else if (cmd->forwardmove) {
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+    }
+    else if (cmd->sidemove) {
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+    }
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept

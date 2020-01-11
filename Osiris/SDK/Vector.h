@@ -258,13 +258,13 @@ struct Vector {
 
     auto length() const noexcept
     {
-		return std::hypot(x, y, z);
+		return std::sqrt(x * x + y * y + z * z);
 	}
 
 	auto length2D() const noexcept
 	{
-		return std::hypotf(x, y);
-    }
+		return std::sqrt(x * x + y * y);
+	}
 
     constexpr auto squareLength() const noexcept
     {
