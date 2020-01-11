@@ -427,6 +427,11 @@ static bool __stdcall isPlayingDemo() noexcept
     return hooks.engine.callOriginal<bool>(82);
 }
 
+void __stdcall updateColorCorrectionWeights() noexcept
+{
+    hooks.clientMode.callOriginal<void>(58);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -448,6 +453,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
