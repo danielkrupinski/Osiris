@@ -249,7 +249,7 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 
 ## License
 
-> Copyright (c) 2018-2019 Daniel Krupiński
+> Copyright (c) 2018-2020 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
 
