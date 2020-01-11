@@ -768,12 +768,12 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
         ImGui::PopID();
 		if (!config.visuals.fullBright) {
-			ImGui::PushID(6);
+			ImGui::PushID(5);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
 			ImGui::PopID();
 		};
 		if (config.visuals.fullBright) {
-			ImGui::PushID(7);
+			ImGui::PushID(6);
 			ImGui::SliderFloat("", &config.visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
 			ImGui::PopID();
 		};
