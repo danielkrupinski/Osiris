@@ -184,6 +184,17 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+
+        struct {
+            bool enabled = false;
+            float blue = 0.0f;
+            float red = 0.0f;
+            float mono = 0.0f;
+            float saturation = 0.0f;
+            float ghost = 0.0f;
+            float green = 0.0f;
+            float yellow = 0.0f;
+        } colorCorrection;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
