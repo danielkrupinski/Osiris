@@ -40,10 +40,10 @@ public:
     private:
         static uintptr_t* findFreeDataPage(void* const, size_t) noexcept;
         static auto calculateLength(uintptr_t*) noexcept;
-        void* base;
-        uintptr_t* oldVmt;
-        uintptr_t* newVmt;
-        size_t length;
+        void* base = nullptr;
+        uintptr_t* oldVmt = nullptr;
+        uintptr_t* newVmt = nullptr;
+        size_t length = 0;
     };
 
     Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
