@@ -326,6 +326,15 @@ void Misc::disablePanoramablur() noexcept
     blur->setValue(config.misc.disablePanoramablur);
 }
 
+void Misc::aspectratio() noexcept
+{
+    static auto aspectratio = interfaces.cvar->findVar("r_aspectratio");
+    if (aspectratio)
+    {
+        aspectratio->setValue(config.misc.aspectratio);
+    }
+}
+
 void Misc::quickReload(UserCmd* cmd) noexcept
 {
     if (config.misc.quickReload) {
