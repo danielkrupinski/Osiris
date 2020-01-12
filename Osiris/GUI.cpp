@@ -129,6 +129,9 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Anti-Aim", nullptr, &window.antiAim);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Abuses lag compensation to move players back in time");
+        }
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
         ImGui::MenuItem("ESP", nullptr, &window.esp);
@@ -136,8 +139,14 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Skinchanger", nullptr, &window.skinChanger);
         ImGui::MenuItem("Sound", nullptr, &window.sound);
         ImGui::MenuItem("Style", nullptr, &window.style);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("The style of the cheat menu");
+        }
         ImGui::MenuItem("Misc", nullptr, &window.misc);
         ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Automatically report players on the current server for selected actions");
+        }
         ImGui::MenuItem("Configs", nullptr, &window.config);
         ImGui::EndMainMenuBar();
     }
@@ -318,14 +327,16 @@ void GUI::renderAimbotWindow() noexcept
         {
             ImGui::Combo("Mode", &config.aimbot[currentWeapon].rcsStyle, "Normal\0With Ignore Shots\0");
         }
-        ImGui::SliderFloat("Min. Damage", &config.aimbot[currentWeapon].minDamage, 0.0f, 250.0f, "1f");
+        ImGui::InputInt("Min. Damage", &config.aimbot[currentWeapon].minDamage);
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("The amount of damage the aimbot has to do before shooting");
+            ImGui::SetTooltip("The amount of damage the aimbot must be able to do before shooting");
         }
-        ImGui::SliderFloat("Hitchance", &config.aimbot[currentWeapon].hitChance, 0.0f, 100.0f, "%1f");
+        config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
+        ImGui::InputInt("Hit Chance", &config.aimbot[currentWeapon].hitChance);
         if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("Aimbot only shoots if it can hit the target");
         }
+        config.aimbot[currentWeapon].hitChance = std::clamp(config.aimbot[currentWeapon].hitChance, 0, 100);
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
         if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("Aimbot will only shoot if it can 1-hit kill enemies through walls");
@@ -336,7 +347,7 @@ void GUI::renderAimbotWindow() noexcept
         }
 		ImGui::Checkbox("Velocity Extrapolation", &config.aimbot[currentWeapon].velocityExtrapolation);
 		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
-        ImGui::SliderFloat("Ignore Shots", &config.aimbot[currentWeapon].shotsFired, 0.0f, 10.0f, "1f");
+        ImGui::SliderFloat("Ignore Shots", &config.aimbot[currentWeapon].shotsFired, 0.0f, 10.0f, "%1.0f");
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
@@ -485,9 +496,9 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left Arm\0Right Arm\0Left Leg\0Right Leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot Delay: %d ms");
-        ImGui::SliderFloat("Min. Damage", &config.triggerbot[currentWeapon].minDamage, 0.0f, 250.0f, "1f");
+        ImGui::InputInt("Min. Damage", &config.triggerbot[currentWeapon].minDamage, 0, 250);
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("The amount of damage the triggerbot has to do before shooting");
+            ImGui::SetTooltip("The amount of damage the triggerbot must be able to do before shooting");
         }
         ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
         if (ImGui::IsItemHovered()) {
@@ -506,7 +517,7 @@ void GUI::renderBacktrackWindow() noexcept
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
             if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Abuse lag compensation to move players back in time");
+                ImGui::SetTooltip("Abuses lag compensation to move players back in time");
             }
         }
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
@@ -856,11 +867,17 @@ void GUI::renderVisualsWindow() noexcept
             ImGui::SliderInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400, "Gravity Value: %d");
             ImGui::PopID();
         }
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Reverses the gravity of ragdolls");
+        }
         ImGui::Checkbox("Physics Timescale", &config.visuals.ragdollTimescale);
         if (config.visuals.ragdollTimescale) {
             ImGui::PushID(1);
             ImGui::SliderInt("", &config.visuals.ragdollTimescaleValue, 0, 10, "Value: %d");
             ImGui::PopID();
+        }
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Controls the speed of ragdolls and other physic based objects");
         }
         ImGui::Checkbox("No Fog", &config.visuals.noFog);
         ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);
@@ -900,6 +917,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::PushID(5);
         bool viewModelSwitch = 0;
         ImGui::Checkbox("Viewmodel Offsets", &config.visuals.viewModel);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("The positions of viewmodels");
+        }
         if (!config.visuals.viewModel) {
             config.visuals.viewModelKnifeEnabled = 0;
         }
@@ -942,7 +962,7 @@ void GUI::renderVisualsWindow() noexcept
         }
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("");
+            ImGui::SetTooltip("Useful for drawing distant objects such as buildings when fog is disabled");
         }
         ImGui::PopID();
         ImGui::PushID(12);
@@ -981,12 +1001,18 @@ void GUI::renderVisualsWindow() noexcept
         ImGuiCustom::colorPicker("Sky Colour", config.visuals.sky);
         ImGui::Checkbox("Rare Deagle Inspect", &config.visuals.deagleSpinner);
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("Always plays the rare Deagle inspect animation whenever equipped");
+            ImGui::SetTooltip("Plays the spinning Deagle inspect animation whenever equipped");
         }
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows an effect whenever a target is hit");
+        }
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
         ImGui::Checkbox("Damage Indicator", &config.visuals.hitMarkerDamageIndicator);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("How much damage is dealt whenever targets are hit");
+        }
         if (config.visuals.hitMarkerDamageIndicator) {
             ImGui::SameLine();
             ImGui::Checkbox("Customize", &config.visuals.hitMarkerDamageIndicatorCustomize);
@@ -1146,6 +1172,9 @@ void GUI::renderStyleWindow() noexcept
         if (menuStyle == 0) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Style", &window.style, windowFlags);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("The style of the cheat menu");
+            }
         }
 
         ImGui::PushItemWidth(150.0f);
@@ -1190,40 +1219,88 @@ void GUI::renderMiscWindow() noexcept
 			ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");
 		}
         ImGui::Checkbox("Edge Jump", &config.misc.edgeJump);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Automatically jumps whenever near an edge");
+        }
         ImGui::SameLine();
         hotkey(config.misc.edgeJumpKey);
 		ImGui::Checkbox("Door Spam", &config.misc.useSpam);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Removes the cooldown between opening doors");
+        }
         ImGui::Checkbox("Slow Walk", &config.misc.slowWalk);
         ImGui::SameLine();
         hotkey(config.misc.slowWalkKey);
-        ImGui::Text("Blockbot");
-        ImGui::SameLine();
-        hotkey(config.misc.blockbotkey);
         ImGui::Checkbox("Fast Duck", &config.misc.fastDuck);
 		ImGui::TextUnformatted("Fake Duck Key");
 		ImGui::SameLine();
 		hotkey(config.misc.fakeDuckKey);
         ImGui::Checkbox("Slidewalk", &config.misc.moonwalk);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Freezes the player model's lower body animations");
+        }
         ImGui::Checkbox("Sniper Crosshair", &config.misc.sniperCrosshair);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Draws the crosshair while holding sniper rifles");
+        }
 		if (config.misc.sniperCrosshair)
 		{
 			ImGui::SameLine();
 			ImGui::Checkbox("In Scope", &config.misc.sniperCrosshairInscope);
 		}
         ImGui::Checkbox("Recoil Crosshair", &config.misc.recoilCrosshair);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Crosshair follows weapon recoil patterns");
+        }
         ImGui::Checkbox("Auto Pistol", &config.misc.autoPistol);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Makes pistols automatically fire");
+        }
         ImGui::Checkbox("Auto Reload", &config.misc.autoReload);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Whenever weapons are empty");
+        }
         ImGui::Checkbox("Auto Accept", &config.misc.autoAccept);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Automatically accept comp matches");
+        }
         ImGui::Checkbox("Radar Hack", &config.misc.radarHack);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows enemy positions on the radar");
+        }
         ImGui::Checkbox("Rank Revealer", &config.misc.revealRanks);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows player ranks on the scoreboard in comp modes");
+        }
 		ImGui::Checkbox("Money Revealer", &config.misc.revealMoney);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows enemies' money on the scoreboard");
+        }
 		ImGui::Checkbox("Suspect Revealer", &config.misc.revealSuspect);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows The Suspect's info in Overwatch cases");
+        }
 		ImGuiCustom::colorPicker("Spectator List", config.misc.spectatorList);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows who is spectating you and other players");
+        }
 		ImGuiCustom::colorPicker("Watermark", config.misc.watermark);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows your ping and FPS at the top of your screen");
+        }
         ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Fixes aimbot inaccuracy for players behind you");
+        }
         ImGui::Checkbox("Fix Bone Matrix", &config.misc.fixBoneMatrix);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Corrects the client's bone matrix to be closer to the server's");
+        }
         ImGui::Checkbox("Fix Movement", &config.misc.fixMovement);
         ImGui::Checkbox("Disable Model Occlusion", &config.misc.disableModelOcclusion);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Draws player models behind thick objects");
+        }
         ImGui::SliderFloat("Aspect Ratio", &config.misc.aspectRatio, 0.0f, 5.0f, "%.2f");
         ImGui::NextColumn();
 		if (config.misc.customClanTag) {
@@ -1268,7 +1345,6 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         if (ImGui::Button("Fake Vote"))
             Misc::fakeVote(true);
-
         ImGui::PushID(3);
         ImGui::SetNextItemWidth(100.0f);
         ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light Green\0Turquoise\0Light Red\0Gray\0Yellow\0Gray 2\0Light Blue\0Gray/Purple\0Blue\0Pink\0Dark Orange\0Orange\0");
@@ -1281,13 +1357,25 @@ void GUI::renderMiscWindow() noexcept
         if (ImGui::Button("Fake Ban"))
             Misc::fakeBan(true);
         ImGui::Checkbox("Fake Prime", &config.misc.fakePrime);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows the Prime status in the menu");
+        }
         ImGui::Checkbox("Fast Plant", &config.misc.fastPlant);
 		ImGuiCustom::colorPicker("Bomb Timer", config.misc.bombTimer);
         ImGui::Checkbox("Quick Reload", &config.misc.quickReload);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Performs a quick switch during reloading for faster reloads");
+        }
         ImGui::Checkbox("R8 Preparer", &config.misc.prepareRevolver);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Readies the R8 to shoot as soon as you click");
+        }
         ImGui::SameLine();
         hotkey(config.misc.prepareRevolverKey);
         ImGui::Combo("Hitsound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Bubble\0CoD\0Fatality\0Custom\0");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Play's a sound whenever an enemy is hit (custom hitsounds go in the csgo/sound folder)");
+        }
         ImGui::SetNextItemWidth(90.0f);
         ImGui::InputInt("Fakelag", &config.misc.chokedPackets, 1, 5);
         config.misc.chokedPackets = std::clamp(config.misc.chokedPackets, 0, 64);
@@ -1297,12 +1385,21 @@ void GUI::renderMiscWindow() noexcept
         ImGui::SameLine();
         hotkey(config.misc.quickHealthshotKey);
         ImGui::Checkbox("Grenade Prediction", &config.misc.nadePredict);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows prediction lines for grenades whenever they are readied");
+        }
         ImGui::Checkbox("Fix Tablet Signal", &config.misc.fixTabletSignal);
         ImGui::SetNextItemWidth(120.0f);
         ImGui::SliderFloat("Max Angle Delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Maximum viewangle changes per tick (set to 30 to avoid VAC authentication errors)");
+        }
 
         if (ImGui::Button("Unload"))
             hooks.restore();
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Unloads the cheat from the game");
+        }
 
         ImGui::Columns(1);
         if (!config.style.menuStyle)
@@ -1316,6 +1413,9 @@ void GUI::renderReportbotWindow() noexcept
         if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Automatically report players on the current server for selected actions");
+            }
         }
         ImGui::Checkbox("Enabled", &config.reportbot.enabled);
         ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
@@ -1445,6 +1545,9 @@ void GUI::renderGuiStyle2() noexcept
         if (ImGui::BeginTabItem("Backtrack")) {
             window = { };
             window.backtrack = true;
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Abuses lag compensation to move players back in time");
+            }
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Glow")) {
@@ -1480,6 +1583,9 @@ void GUI::renderGuiStyle2() noexcept
         if (ImGui::BeginTabItem("Style")) {
             window = { };
             window.style = true;
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("The style of the cheat menu");
+            }
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Misc")) {
@@ -1490,6 +1596,9 @@ void GUI::renderGuiStyle2() noexcept
         if (ImGui::BeginTabItem("Reportbot")) {
             window = { };
             window.reportbot = true;
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Automatically report players on the current server for selected actions");
+            }
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Configs")) {

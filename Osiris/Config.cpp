@@ -61,8 +61,8 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Standalone RCS")) aimbotConfig.standaloneRCS = aimbotJson["Standalone RCS"].asBool();
         if (aimbotJson.isMember("Standalone RCS Ignore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Ignore Shots"].asFloat();
         if (aimbotJson.isMember("RCS style")) aimbotConfig.rcsStyle = aimbotJson["RCS style"].asInt();
-        if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asFloat();
-		if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asFloat();
+        if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
+		if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asInt();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
 		if (aimbotJson.isMember("Velocity extrapolation")) aimbotConfig.velocityExtrapolation = aimbotJson["Velocity extrapolation"].asBool();
@@ -82,7 +82,7 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
         if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
         if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
-        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asFloat();
+        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
     }
 
@@ -838,7 +838,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Use spam")) misc.useSpam = miscJson["Use spam"].asBool();
         if (miscJson.isMember("Slow walk")) misc.slowWalk = miscJson["Slow walk"].asBool();
         if (miscJson.isMember("Slow walk key")) misc.slowWalkKey = miscJson["Slow walk key"].asInt();
-        if (miscJson.isMember("Blockbot key")) misc.blockbotkey = miscJson["Blockbot key"].asInt();
 		if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
@@ -1633,7 +1632,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Use spam"] = misc.useSpam;
         miscJson["Slow walk"] = misc.slowWalk;
         miscJson["Slow walk key"] = misc.slowWalkKey;
-        miscJson["Block bot"] = misc.blockbotkey;
 		miscJson["Clan tag"] = misc.clanTag;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Animated clan tag"] = misc.animatedClanTag;
