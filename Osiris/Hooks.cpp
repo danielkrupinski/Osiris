@@ -49,15 +49,15 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config.misc.menuKey == VK_RBUTTON)
         || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config.misc.menuKey == VK_MBUTTON)
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
-        gui.isOpen = !gui.isOpen;
-        if (!gui.isOpen) {
+        gui.open = !gui.open;
+        if (!gui.open) {
             ImGui::GetIO().MouseDown[0] = false;
             interfaces.inputSystem->resetInputState();
         }
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.isOpen && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
+    if (gui.open && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
         return true;
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
@@ -67,7 +67,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    if (gui.isOpen) {
+    if (gui.open) {
         device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
         IDirect3DVertexDeclaration9* vertexDeclaration;
         device->GetVertexDeclaration(&vertexDeclaration);
@@ -303,7 +303,7 @@ static bool __stdcall shouldDrawViewModel() noexcept
 
 static void __stdcall lockCursor() noexcept
 {
-    if (gui.isOpen)
+    if (gui.open)
         return interfaces.surface->unlockCursor();
     return hooks.surface.callOriginal<void>(67);
 }
