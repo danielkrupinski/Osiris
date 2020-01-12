@@ -139,7 +139,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
     Misc::edgejump(cmd);
-    Misc::aspectratio();
+    //Misc::aspectratio();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -428,7 +428,7 @@ static bool __stdcall isPlayingDemo() noexcept
     return hooks.engine.callOriginal<bool>(82);
 }
 
-void __stdcall updateColorCorrectionWeights() noexcept
+static void __stdcall updateColorCorrectionWeights() noexcept
 {
     hooks.clientMode.callOriginal<void>(58);
 
@@ -441,6 +441,13 @@ void __stdcall updateColorCorrectionWeights() noexcept
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
     }
+}
+
+static float __stdcall getScreenAspectRatio(int width, int height) noexcept
+{
+    if (config.misc.aspectratio)
+        return config.misc.aspectratio;
+    return hooks.engine.callOriginal<float, int, int>(101, width, height);
 }
 
 Hooks::Hooks() noexcept
@@ -466,6 +473,7 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(44, doPostScreenEffects);
     clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(82, isPlayingDemo);
+    engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
