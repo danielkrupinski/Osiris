@@ -34,7 +34,6 @@ namespace Misc
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
-    void aspectratio() noexcept;
     void fakePrime() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
