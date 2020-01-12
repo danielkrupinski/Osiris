@@ -13,20 +13,20 @@ private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
-    void renderAimbotWindow() noexcept;
-    void renderAntiAimWindow() noexcept;
-    void renderTriggerbotWindow() noexcept;
-    void renderBacktrackWindow() noexcept;
-    void renderGlowWindow() noexcept;
-    void renderChamsWindow() noexcept;
-    void renderEspWindow() noexcept;
-    void renderVisualsWindow() noexcept;
-    void renderSkinChangerWindow() noexcept;
-    void renderSoundWindow() noexcept;
-    void renderStyleWindow() noexcept;
-    void renderMiscWindow() noexcept;
-    void renderReportbotWindow() noexcept;
-    void renderConfigWindow() noexcept;
+    void renderAimbotWindow(bool contentOnly = false) noexcept;
+    void renderAntiAimWindow(bool contentOnly = false) noexcept;
+    void renderTriggerbotWindow(bool contentOnly = false) noexcept;
+    void renderBacktrackWindow(bool contentOnly = false) noexcept;
+    void renderGlowWindow(bool contentOnly = false) noexcept;
+    void renderChamsWindow(bool contentOnly = false) noexcept;
+    void renderEspWindow(bool contentOnly = false) noexcept;
+    void renderVisualsWindow(bool contentOnly = false) noexcept;
+    void renderSkinChangerWindow(bool contentOnly = false) noexcept;
+    void renderSoundWindow(bool contentOnly = false) noexcept;
+    void renderStyleWindow(bool contentOnly = false) noexcept;
+    void renderMiscWindow(bool contentOnly = false) noexcept;
+    void renderReportbotWindow(bool contentOnly = false) noexcept;
+    void renderConfigWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
     struct {
