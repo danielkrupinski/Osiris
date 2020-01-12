@@ -59,10 +59,10 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Standalone RCS")) aimbotConfig.standaloneRCS = aimbotJson["Standalone RCS"].asBool();
-        if (aimbotJson.isMember("Standalone RCS Ignore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Ignore Shots"].asInt();
+        if (aimbotJson.isMember("Standalone RCS Ignore Shots")) aimbotConfig.shotsFired = aimbotJson["Standalone RCS Ignore Shots"].asFloat();
         if (aimbotJson.isMember("RCS style")) aimbotConfig.rcsStyle = aimbotJson["RCS style"].asInt();
-        if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
-		if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asInt();
+        if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asFloat();
+		if (aimbotJson.isMember("Hit chance")) aimbotConfig.hitChance = aimbotJson["Hit chance"].asFloat();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
 		if (aimbotJson.isMember("Velocity extrapolation")) aimbotConfig.velocityExtrapolation = aimbotJson["Velocity extrapolation"].asBool();
@@ -82,7 +82,7 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
         if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
         if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
-        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
+        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asFloat();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
     }
 

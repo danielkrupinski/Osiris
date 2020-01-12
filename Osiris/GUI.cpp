@@ -253,39 +253,90 @@ void GUI::renderAimbotWindow() noexcept
         ImGui::PopItemWidth();
         ImGui::PopID();
         ImGui::Checkbox("Aimlock", &config.aimbot[currentWeapon].aimlock);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot locks on to targets");
+        }
         ImGui::Checkbox("Silent", &config.aimbot[currentWeapon].silent);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("No snapping to targets (clientside only)");
+        }
         ImGui::Checkbox("Friendly Fire", &config.aimbot[currentWeapon].friendlyFire);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot treats allies as enemies");
+        }
         ImGui::Checkbox("Visible Only", &config.aimbot[currentWeapon].visibleOnly);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot only aims at visible targets");
+        }
         ImGui::Checkbox("Scoped Only", &config.aimbot[currentWeapon].scopedOnly);
-        ImGui::Checkbox("Disable When Flashed", &config.aimbot[currentWeapon].ignoreFlash);
-        ImGui::Checkbox("Disable When Smoked", &config.aimbot[currentWeapon].ignoreSmoke);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot only aims when you are scoped in");
+        }
+        ImGui::Checkbox("Ignore Flash", &config.aimbot[currentWeapon].ignoreFlash);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot aims when you are flashed");
+        }
+        ImGui::Checkbox("Ignore Smoke", &config.aimbot[currentWeapon].ignoreSmoke);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot aims when you are smoked");
+        }
         ImGui::Checkbox("Auto Shoot", &config.aimbot[currentWeapon].autoShot);
         ImGui::Checkbox("Auto Scope", &config.aimbot[currentWeapon].autoScope);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Automatically scope in before shooting");
+        }
         ImGui::Checkbox("Recoil-Based FoV", &config.aimbot[currentWeapon].recoilbasedFov);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot uses recoil as an FoV origin");
+        }
         ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best Damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
         ImGui::NextColumn();
         ImGui::PushItemWidth(240.0f);
-		ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
-        ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+		ImGui::SliderFloat("FoV", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
+        ImGui::SliderFloat("Smoothing", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Smooths out aimbot movement to appear more human-like");
+        }
         ImGui::SliderFloat("Recoil Control X", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Horizontal Recoil Control factor");
+        }
         ImGui::SliderFloat("Recoil Control Y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Vertical Recoil Control factor");
+        }
         ImGui::SliderFloat("Max Aim Inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("How accurately the aimbot can shoot before being disabled");
+        }
         ImGui::SliderFloat("Max Shot Inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("How accurate aimbot shots must be before the aimbot is disabled");
+        }
         ImGui::Checkbox("Standalone RCS", &config.aimbot[currentWeapon].standaloneRCS);
         if (config.aimbot[currentWeapon].standaloneRCS)
         {
             ImGui::Combo("Mode", &config.aimbot[currentWeapon].rcsStyle, "Normal\0With Ignore Shots\0");
         }
-        ImGui::InputInt("Min. Damage", &config.aimbot[currentWeapon].minDamage);
-        config.aimbot[currentWeapon].minDamage = std::clamp(config.aimbot[currentWeapon].minDamage, 0, 250);
-		ImGui::InputInt("Hitchance", &config.aimbot[currentWeapon].hitChance);
-		config.aimbot[currentWeapon].hitChance = std::clamp(config.aimbot[currentWeapon].hitChance, 0, 100);
+        ImGui::SliderFloat("Min. Damage", &config.aimbot[currentWeapon].minDamage, 0.0f, 250.0f, "1f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("The amount of damage the aimbot has to do before shooting");
+        }
+        ImGui::SliderFloat("Hitchance", &config.aimbot[currentWeapon].hitChance, 0.0f, 100.0f, "%1f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot only shoots if it can hit the target");
+        }
         ImGui::Checkbox("Killshot", &config.aimbot[currentWeapon].killshot);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot will only shoot if it can 1-hit kill enemies through walls");
+        }
         ImGui::Checkbox("Between Shots", &config.aimbot[currentWeapon].betweenShots);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Aimbot will continue to lock on to other targets after kills");
+        }
 		ImGui::Checkbox("Velocity Extrapolation", &config.aimbot[currentWeapon].velocityExtrapolation);
 		ImGui::Checkbox("FoV Circle", &config.aimbot[currentWeapon].aimbotCircle);
-		ImGui::InputInt("Ignore Shots", &config.aimbot[currentWeapon].shotsFired);
-		config.aimbot[currentWeapon].shotsFired = std::clamp(config.aimbot[currentWeapon].shotsFired, 0, 10);
+        ImGui::SliderFloat("Ignore Shots", &config.aimbot[currentWeapon].shotsFired, 0.0f, 10.0f, "1f");
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
@@ -415,16 +466,33 @@ void GUI::renderTriggerbotWindow() noexcept
         ImGui::SameLine();
         hotkey(config.triggerbot[currentWeapon].key);
         ImGui::Checkbox("Friendly Fire", &config.triggerbot[currentWeapon].friendlyFire);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Triggerbot treats allies as enemies");
+        }
         ImGui::Checkbox("Scoped Only", &config.triggerbot[currentWeapon].scopedOnly);
-        ImGui::Checkbox("Disable When Flashed", &config.triggerbot[currentWeapon].ignoreFlash);
-        ImGui::Checkbox("Disable When Smoked", &config.triggerbot[currentWeapon].ignoreSmoke);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Triggerbot only shoots when you are scoped in");
+        }
+        ImGui::Checkbox("Ignore Flash", &config.triggerbot[currentWeapon].ignoreFlash);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shoots when you are flashed");
+        }
+        ImGui::Checkbox("Ignore Smoke", &config.triggerbot[currentWeapon].ignoreSmoke);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shoots when you are smoked");
+        }
         ImGui::SetNextItemWidth(85.0f);
         ImGui::Combo("Hitgroup", &config.triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left Arm\0Right Arm\0Left Leg\0Right Leg\0");
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.triggerbot[currentWeapon].shotDelay, 0, 250, "Shot Delay: %d ms");
-        ImGui::InputInt("Min. Damage", &config.triggerbot[currentWeapon].minDamage);
-        config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
+        ImGui::SliderFloat("Min. Damage", &config.triggerbot[currentWeapon].minDamage, 0.0f, 250.0f, "1f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("The amount of damage the triggerbot has to do before shooting");
+        }
         ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Triggerbot will only shoot if it can do damage equal to or more than the target's health");
+        }
         
         if (!config.style.menuStyle)
             ImGui::End();
@@ -437,12 +505,24 @@ void GUI::renderBacktrackWindow() noexcept
         if (!config.style.menuStyle) {
             ImGui::SetNextWindowSize({ 0.0f, 0.0f });
             ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Abuse lag compensation to move players back in time");
+            }
         }
         ImGui::Checkbox("Enabled", &config.backtrack.enabled);
-        ImGui::Checkbox("Disable When Smoked", &config.backtrack.ignoreSmoke);
+        ImGui::Checkbox("Ignore Smoke", &config.backtrack.ignoreSmoke);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Backtrack targets when they are smoked");
+        }
         ImGui::Checkbox("Recoil-Based FoV", &config.backtrack.recoilBasedFov);
 		ImGui::Checkbox("Draw All Ticks", &config.backtrack.drawAllTicks);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Shows all backtrack records");
+        }
         ImGui::Checkbox("Ping Based", &config.backtrack.pingBased);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Uses your ping to determine how far to backtrack");
+        }
         if (!config.backtrack.pingBased)
         {
             ImGui::PushItemWidth(220.0f);
@@ -787,6 +867,9 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Checkbox("No Aim Punch", &config.visuals.noAimPunch);
         ImGui::Checkbox("No View Punch", &config.visuals.noViewPunch);
         ImGui::Checkbox("No Viewmodel Sway", &config.visuals.viewBob);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Only on movement");
+        }
         ImGui::Checkbox("No Hands", &config.visuals.noHands);
         ImGui::Checkbox("No Sleeves", &config.visuals.noSleeves);
         ImGui::Checkbox("No Weapons", &config.visuals.noWeapons);
@@ -858,6 +941,9 @@ void GUI::renderVisualsWindow() noexcept
             ImGui::Checkbox("Flip Knife Hand", &config.visuals.viewModelFlipKnifeHand);
         }
         ImGui::SliderInt("", &config.visuals.farZ, 0, 2000, "Far Z: %d");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("");
+        }
         ImGui::PopID();
         ImGui::PushID(12);
         ImGui::SliderInt("", &config.visuals.flashReduction, 0, 100, "Flash Reduction: %d%%");
@@ -884,7 +970,7 @@ void GUI::renderVisualsWindow() noexcept
             ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &config.visuals.colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &config.visuals.colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &config.visuals.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
-            ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &config.visuals.colorCorrection.saturation, 0.0f, 1.0f, "Saturation\n%.3f"); ImGui::SameLine();
+            ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &config.visuals.colorCorrection.saturation, 0.0f, 1.0f, "Sat.\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &config.visuals.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &config.visuals.colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
             ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &config.visuals.colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
@@ -893,7 +979,10 @@ void GUI::renderVisualsWindow() noexcept
         ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
 		ImGuiCustom::colorPicker("World Colour", config.visuals.world);
         ImGuiCustom::colorPicker("Sky Colour", config.visuals.sky);
-        ImGui::Checkbox("Rare Deagle Anims", &config.visuals.deagleSpinner);
+        ImGui::Checkbox("Rare Deagle Inspect", &config.visuals.deagleSpinner);
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Always plays the rare Deagle inspect animation whenever equipped");
+        }
         ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
         ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
         ImGui::SliderFloat("Hitmarker Time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");

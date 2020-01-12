@@ -56,9 +56,9 @@ public:
         float maxShotInaccuracy{ 1.0f };
         bool standaloneRCS{ false };
         int rcsStyle{ 0 };
-        int minDamage{ 1 };
-		int hitChance{ 0 };
-		int shotsFired{ 0 };
+        float minDamage{ 0.0f };
+		float hitChance{ 0.0f };
+		float shotsFired{ 0.0f };
         bool killshot{ false };
         bool betweenShots{ false };
 		bool velocityExtrapolation{ false };
@@ -76,7 +76,7 @@ public:
         bool ignoreSmoke{ false };
         int hitgroup{ 0 };
         int shotDelay{ 0 };
-        int minDamage{ 1 };
+        float minDamage{ 0.0f };
         bool killshot{ false };
     };
     std::array<Triggerbot, 40> triggerbot;
