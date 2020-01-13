@@ -1340,7 +1340,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SameLine();
         ImGui::Checkbox("Random", &config.misc.randomChatSpam);
     }
-    ImGui::SliderInt("Delay (s)", &config.misc.chatSpamDelay, 0, 120);
+    ImGui::SliderInt("Delay", &config.misc.chatSpamDelay, 0, 60, "%d s");
     ImGui::InputTextMultiline("Text", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText));
     ImGui::Checkbox("Killsay", &config.misc.killMessage);
     ImGui::SameLine();
