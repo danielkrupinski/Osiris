@@ -311,10 +311,8 @@ static void __stdcall lockCursor() noexcept
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens)) {
+    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens))
         a = 0;
-        *memory.disablePostProcessing = true;
-    }
     hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
 }
 
@@ -440,6 +438,9 @@ static void __stdcall updateColorCorrectionWeights() noexcept
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
     }
+
+    if (config.visuals.noScopeOverlay)
+        *memory.vignette = 0.0f;
 }
 
 static float __stdcall getScreenAspectRatio(int width, int height) noexcept
