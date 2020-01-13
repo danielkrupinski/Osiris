@@ -294,7 +294,7 @@ public:
         char chatSpamText[8192]{ };
         bool randomChatSpam{ false };
         bool killMessage{ false };
-        char killMessageString[230]{ "sample text" };
+        char killMessageString[230]{ "" };
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };

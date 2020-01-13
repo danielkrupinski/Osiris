@@ -467,7 +467,6 @@ void Misc::fakeBan(bool set) noexcept
         shouldSet = false;
 }
 
-
 void Misc::fakePrime() noexcept
 {
     static bool lastState = false;
@@ -482,7 +481,6 @@ void Misc::fakePrime() noexcept
         }
     }
 }
-
 
 void Misc::chatSpam() noexcept
 {

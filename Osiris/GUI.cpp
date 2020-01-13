@@ -1295,7 +1295,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGuiCustom::colorPicker("Watermark", config.misc.watermark);
     if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Shows your ping and FPS at the top of your screen");
+        ImGui::SetTooltip("Shows the cheat name and your ping and FPS at the top of your screen");
     }
     ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);
     if (ImGui::IsItemHovered()) {
@@ -1344,7 +1344,10 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::SliderInt("Delay", &config.misc.chatSpamDelay, 0, 60, "%d s");
     ImGui::InputTextMultiline("Text", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText));
-    ImGui::Checkbox("Killsay", &config.misc.killMessage);
+    ImGui::Checkbox("Kill Message", &config.misc.killMessage);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Messages chat whenever an enemy is killed");
+    }
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(1);
@@ -1386,7 +1389,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     hotkey(config.misc.prepareRevolverKey);
     ImGui::Combo("Hitsound", &config.misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Bubble\0CoD\0Fatality\0Custom\0");
     if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Play's a sound whenever an enemy is hit (custom hitsounds go in the csgo/sound folder)");
+        ImGui::SetTooltip("Plays a sound whenever an enemy is hit (custom hitsounds go in the csgo/sound folder)");
     }
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Fakelag", &config.misc.chokedPackets, 1, 5);
