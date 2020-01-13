@@ -550,20 +550,30 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
     return length;
 }
 
-Hooks::Vmt::Vmt(void* const base) noexcept
+bool Hooks::Vmt::init(void* const base) noexcept
 {
+    assert(base);
     this->base = base;
-    oldVmt = *reinterpret_cast<uintptr_t**>(base);
-    length = calculateLength(oldVmt) + 1;
+    bool init = false;
 
-    if (newVmt = findFreeDataPage(base, length)) {
-        std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    if (!oldVmt) {
+        oldVmt = *reinterpret_cast<uintptr_t**>(base);
+        length = calculateLength(oldVmt) + 1;
+
+        if (newVmt = findFreeDataPage(base, length))
+            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+        assert(newVmt);
+        init = true;
     }
+    if (newVmt)
+        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    return init;
 }
 
 void Hooks::Vmt::restore() noexcept
 {
-    *reinterpret_cast<uintptr_t**>(base) = oldVmt;
-    ZeroMemory(newVmt, length * sizeof(uintptr_t));
+    if (base && oldVmt)
+        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+    if (newVmt)
+        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
