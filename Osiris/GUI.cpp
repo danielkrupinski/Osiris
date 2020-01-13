@@ -1220,7 +1220,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::TextUnformatted("Menu Key");
     ImGui::SameLine();
     hotkey(config.misc.menuKey);
-
     ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
     ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
     ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
@@ -1307,6 +1306,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SetTooltip("Corrects the client's bone matrix to be closer to the server's");
     }
     ImGui::Checkbox("Fix Movement", &config.misc.fixMovement);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Fixes the movement issue while using silent aim and walking/bhopping");
+    }
     ImGui::Checkbox("Disable Model Occlusion", &config.misc.disableModelOcclusion);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Draws player models behind thick objects");

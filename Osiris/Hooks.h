@@ -22,7 +22,13 @@ public:
 
     class Vmt {
     public:
-        explicit Vmt(void* const) noexcept;
+        Vmt(void* const base) noexcept
+        {
+            init(base);
+        }
+
+        Vmt() = default;
+        bool init(void* const) noexcept;
         void restore() noexcept;
 
         template<typename T>

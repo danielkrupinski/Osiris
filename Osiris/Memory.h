@@ -57,6 +57,7 @@ public:
     uintptr_t test2;
     uint8_t* fakePrime;
     std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
+    float* vignette;
     uintptr_t* predictionRandomSeed;
     uintptr_t(__thiscall* md5PseudoRandom)(uintptr_t);
 
