@@ -63,133 +63,135 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     if (interfaces.modelRender->isMaterialOverridden())
         return true;
 
+    const auto entity = interfaces.entityList->getEntity(info.entityIndex);
+    if (!entity || entity->isDormant() || !entity->isPlayer())
+        return true;
+
     bool needRedraw = true;
 
-    if (auto entity{ interfaces.entityList->getEntity(info.entityIndex) }; entity && !entity->isDormant() && entity->isAlive()) {
-        auto applied{ false };
-        for (size_t i = 0; i < config.chams[ALLIES_ALL].materials.size(); i++) {
-            if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
-                if (config.chams[PLANTING_ALL].materials[i].enabled) {
-                    if (applied)
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[PLANTING_ALL].materials[i], true, entity->health());
+    auto applied{ false };
+    for (size_t i = 0; i < config.chams[ALLIES_ALL].materials.size(); ++i) {
+        if (const auto activeWeapon = entity->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
+            if (config.chams[PLANTING_ALL].materials[i].enabled) {
+                if (applied)
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[PLANTING_ALL].materials[i], false, entity->health());
-                    applied = true;
-                } else {
-                    if (config.chams[PLANTING_OCCLUDED].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[PLANTING_OCCLUDED].materials[i], true, entity->health());
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        if (!config.chams[PLANTING_VISIBLE].materials[i].enabled)
-                            interfaces.modelRender->forceMaterialOverride(nullptr);
-                        applied = true;
-                    }
-                    if (config.chams[PLANTING_VISIBLE].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[PLANTING_VISIBLE].materials[i], false, entity->health());
-                        applied = true;
-                    }
-                }
-            } else if (entity->isDefusing()) {
-                if (config.chams[DEFUSING_ALL].materials[i].enabled) {
+                applyChams(config.chams[PLANTING_ALL].materials[i], true, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[PLANTING_ALL].materials[i], false, entity->health());
+                applied = true;
+            } else {
+                if (config.chams[PLANTING_OCCLUDED].materials[i].enabled) {
                     if (applied)
                         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[DEFUSING_ALL].materials[i], true, entity->health());
+                    applyChams(config.chams[PLANTING_OCCLUDED].materials[i], true, entity->health());
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[DEFUSING_ALL].materials[i], false, entity->health());
-                    applied = true;
-                } else {
-                    if (config.chams[DEFUSING_OCCLUDED].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[DEFUSING_OCCLUDED].materials[i], true, entity->health());
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        if (!config.chams[DEFUSING_VISIBLE].materials[i].enabled)
-                            interfaces.modelRender->forceMaterialOverride(nullptr);
-                        applied = true;
-                    }
-                    if (config.chams[DEFUSING_VISIBLE].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[DEFUSING_VISIBLE].materials[i], false, entity->health());
-                        applied = true;
-                    }
-                }
-            } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
-                if (config.chams[LOCALPLAYER].materials[i].enabled) {
-                    if (applied)
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[LOCALPLAYER].materials[i], false, entity->health());
+                    if (!config.chams[PLANTING_VISIBLE].materials[i].enabled)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
                     applied = true;
                 }
-            } else if (entity->isEnemy()) {
-                if (config.chams[ENEMIES_ALL].materials[i].enabled) {
+                if (config.chams[PLANTING_VISIBLE].materials[i].enabled) {
                     if (applied)
                         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[ENEMIES_ALL].materials[i], true, entity->health());
+                    applyChams(config.chams[PLANTING_VISIBLE].materials[i], false, entity->health());
+                    applied = true;
+                }
+            }
+        } else if (entity->isDefusing()) {
+            if (config.chams[DEFUSING_ALL].materials[i].enabled) {
+                if (applied)
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[ENEMIES_ALL].materials[i], false, entity->health());
+                applyChams(config.chams[DEFUSING_ALL].materials[i], true, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[DEFUSING_ALL].materials[i], false, entity->health());
+                applied = true;
+            } else {
+                if (config.chams[DEFUSING_OCCLUDED].materials[i].enabled) {
+                    if (applied)
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    applyChams(config.chams[DEFUSING_OCCLUDED].materials[i], true, entity->health());
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    if (!config.chams[DEFUSING_VISIBLE].materials[i].enabled)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
+                    applied = true;
+                }
+                if (config.chams[DEFUSING_VISIBLE].materials[i].enabled) {
+                    if (applied)
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    applyChams(config.chams[DEFUSING_VISIBLE].materials[i], false, entity->health());
+                    applied = true;
+                }
+            }
+        } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
+            if (config.chams[LOCALPLAYER].materials[i].enabled) {
+                if (applied)
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[LOCALPLAYER].materials[i], false, entity->health());
+                applied = true;
+            }
+        } else if (entity->isEnemy()) {
+            if (config.chams[ENEMIES_ALL].materials[i].enabled) {
+                if (applied)
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[ENEMIES_ALL].materials[i], true, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[ENEMIES_ALL].materials[i], false, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                needRedraw = false;
+                applied = true;
+            } else {
+                if (config.chams[ENEMIES_OCCLUDED].materials[i].enabled) {
+                    if (applied)
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    applyChams(config.chams[ENEMIES_OCCLUDED].materials[i], true, entity->health());
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    if (!config.chams[ENEMIES_VISIBLE].materials[i].enabled)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
+                    applied = true;
+                }
+                if (config.chams[ENEMIES_VISIBLE].materials[i].enabled) {
+                    if (applied)
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    applyChams(config.chams[ENEMIES_VISIBLE].materials[i], false, entity->health());
                     hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
                     needRedraw = false;
                     applied = true;
-                } else {
-                    if (config.chams[ENEMIES_OCCLUDED].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[ENEMIES_OCCLUDED].materials[i], true, entity->health());
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        if (!config.chams[ENEMIES_VISIBLE].materials[i].enabled)
-                            interfaces.modelRender->forceMaterialOverride(nullptr);
-                        applied = true;
-                    }
-                    if (config.chams[ENEMIES_VISIBLE].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[ENEMIES_VISIBLE].materials[i], false, entity->health());
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        needRedraw = false;
-                        applied = true;
-                    }
                 }
+            }
 
-                if (config.chams[BACKTRACK].materials[i].enabled && config.backtrack.enabled) {
-                    auto record = &Backtrack::records[info.entityIndex];
-                    if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[BACKTRACK].materials[i], false, entity->health());
-                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
-                        interfaces.modelRender->forceMaterialOverride(nullptr);
-                        applied = true;
-                    }
-                }
-            } else {
-                if (config.chams[ALLIES_ALL].materials[i].enabled) {
+            if (config.chams[BACKTRACK].materials[i].enabled && config.backtrack.enabled) {
+                auto record = &Backtrack::records[info.entityIndex];
+                if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     if (applied)
                         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[ALLIES_ALL].materials[i], true, entity->health());
-                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                    applyChams(config.chams[ALLIES_ALL].materials[i], false, entity->health());
+                    applyChams(config.chams[BACKTRACK].materials[i], false, entity->health());
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, record->back().matrix);
+                    interfaces.modelRender->forceMaterialOverride(nullptr);
                     applied = true;
-                } else {
-                    if (config.chams[ALLIES_OCCLUDED].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[ALLIES_OCCLUDED].materials[i], true, entity->health());
+                }
+            }
+        } else {
+            if (config.chams[ALLIES_ALL].materials[i].enabled) {
+                if (applied)
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[ALLIES_ALL].materials[i], true, entity->health());
+                hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                applyChams(config.chams[ALLIES_ALL].materials[i], false, entity->health());
+                applied = true;
+            } else {
+                if (config.chams[ALLIES_OCCLUDED].materials[i].enabled) {
+                    if (applied)
                         hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        if (!config.chams[ALLIES_VISIBLE].materials[i].enabled)
-                            interfaces.modelRender->forceMaterialOverride(nullptr);
-                        applied = true;
-                    }
-                    if (config.chams[ALLIES_VISIBLE].materials[i].enabled) {
-                        if (applied)
-                            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-                        applyChams(config.chams[ALLIES_VISIBLE].materials[i], false, entity->health());
-                        applied = true;
-                    }
+                    applyChams(config.chams[ALLIES_OCCLUDED].materials[i], true, entity->health());
+                    hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    if (!config.chams[ALLIES_VISIBLE].materials[i].enabled)
+                        interfaces.modelRender->forceMaterialOverride(nullptr);
+                    applied = true;
+                }
+                if (config.chams[ALLIES_VISIBLE].materials[i].enabled) {
+                    if (applied)
+                        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+                    applyChams(config.chams[ALLIES_VISIBLE].materials[i], false, entity->health());
+                    applied = true;
                 }
             }
         }
