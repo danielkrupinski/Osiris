@@ -35,6 +35,7 @@ namespace Misc
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
+    void killMessage(GameEvent* event) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -143,14 +144,5 @@ namespace Misc
 
         if (static_cast<std::size_t>(config.misc.hitSound - 1) < hitSounds.size())
             interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
-    }
-
-    constexpr void killMessage(GameEvent* event) noexcept
-    {
-        auto localPlayer = interfaces.engine->getLocalPlayer();
-        if (config.misc.killMessage
-            && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer
-            && interfaces.engine->getPlayerForUserID(event->getInt("userid")) != localPlayer)
-            interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(config.misc.killMessageString).c_str());
     }
 }
