@@ -132,7 +132,10 @@ namespace Misc
 
     constexpr void playHitSound(GameEvent& event) noexcept
     {
-        if (!config.misc.hitSound || interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer())
+        if (!config.misc.hitSound)
+            return;
+
+        if (const auto localIdx = interfaces.engine->getLocalPlayer(); interfaces.engine->getPlayerForUserID(event.getInt("attacker")) != localIdx || interfaces.engine->getPlayerForUserID(event.getInt("userid")) == localIdx)
             return;
 
         constexpr std::array hitSounds{
