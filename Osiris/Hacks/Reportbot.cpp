@@ -33,7 +33,7 @@ void Reportbot::run() noexcept
         if (config.reportbot.target != 2 && (entity->isEnemy() ? config.reportbot.target != 0 : config.reportbot.target != 1))
             continue;
 
-        if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
+        if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo)) {
             static std::vector<__int64> reportedPlayers;
             if (playerInfo.steamID64 == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.steamID64) != reportedPlayers.cend())
                 continue;
