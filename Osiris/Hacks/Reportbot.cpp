@@ -35,7 +35,7 @@ void Reportbot::run() noexcept
 
         if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(entity->index(), playerInfo)) {
             static std::vector<__int64> reportedPlayers;
-            if (std::find(std::begin(reportedPlayers), std::end(reportedPlayers), playerInfo.steamID64) != std::end(reportedPlayers))
+            if (playerInfo.steamID64 == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.steamID64) != reportedPlayers.cend())
                 continue;
 
             std::string report;
