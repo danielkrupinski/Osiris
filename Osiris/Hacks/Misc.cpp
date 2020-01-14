@@ -488,7 +488,7 @@ void Misc::fakePrime() noexcept
     }
 }
 
-void Misc::killMessage(GameEvent* event) noexcept
+void Misc::killMessage(GameEvent& event) noexcept
 {
     if (!config.misc.killMessage)
         return;
@@ -498,7 +498,7 @@ void Misc::killMessage(GameEvent* event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) != localPlayer->index() || interfaces.engine->getPlayerForUserID(event->getInt("userid")) == localPlayer->index())
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces.engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
         return;
 
     std::string cmd = "say \"";

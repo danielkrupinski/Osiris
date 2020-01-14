@@ -35,7 +35,7 @@ namespace Misc
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
-    void killMessage(GameEvent* event) noexcept;
+    void killMessage(GameEvent& event) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
@@ -130,9 +130,9 @@ namespace Misc
             cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
     }
 
-    constexpr void playHitSound(GameEvent* event) noexcept
+    constexpr void playHitSound(GameEvent& event) noexcept
     {
-        if (!config.misc.hitSound || interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer())
+        if (!config.misc.hitSound || interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer())
             return;
 
         constexpr std::array hitSounds{
