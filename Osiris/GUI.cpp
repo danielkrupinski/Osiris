@@ -266,6 +266,7 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
     }
     ImGui::Checkbox("Enabled", &config.antiAim.enabled);
+	ImGui::Combo("Mode", &config.antiAim.mode, "Legit\0Static\0Jitter\0Spin\0");
     ImGui::Checkbox("##pitch", &config.antiAim.pitch);
     ImGui::SameLine();
     ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");

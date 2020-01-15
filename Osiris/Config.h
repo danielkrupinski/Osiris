@@ -26,7 +26,7 @@ public:
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -83,6 +83,7 @@ public:
 
     struct {
         bool enabled{ false };
+		int mode{ 0 };
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
@@ -125,7 +126,7 @@ public:
             ColorToggle distance;
             float maxDistance{ 0.0f };
         };
-       
+
         struct Player : public Shared {
             ColorToggle eyeTraces;
             ColorToggle health;
