@@ -54,7 +54,7 @@ public:
     uintptr_t test2;
     uint8_t* fakePrime;
     std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
-
+    float* vignette;
 private:
     template <typename T = uintptr_t>
     static auto findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept

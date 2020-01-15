@@ -312,24 +312,24 @@ static void __stdcall lockCursor() noexcept
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens)) {
+    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens))
         a = 0;
-        *memory.disablePostProcessing = true;
-    }
     hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
 }
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
-    switch (fnv::hashRuntime(event->getName())) {
-    case fnv::hash("player_death"):
-        Misc::killMessage(event);
-        SkinChanger::overrideHudIcon(event);
-        break;
-    case fnv::hash("player_hurt"):
-        Misc::playHitSound(event);
-        Visuals::hitMarker(event);
-        break;
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("player_death"):
+            Misc::killMessage(*event);
+            SkinChanger::overrideHudIcon(*event);
+            break;
+        case fnv::hash("player_hurt"):
+            Misc::playHitSound(*event);
+            Visuals::hitMarker(event);
+            break;
+        }
     }
     return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }
@@ -441,6 +441,9 @@ static void __stdcall updateColorCorrectionWeights() noexcept
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
     }
+
+    if (config.visuals.noScopeOverlay)
+        *memory.vignette = 0.0f;
 }
 
 static float __stdcall getScreenAspectRatio(int width, int height) noexcept
@@ -551,20 +554,30 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
     return length;
 }
 
-Hooks::Vmt::Vmt(void* const base) noexcept
+bool Hooks::Vmt::init(void* const base) noexcept
 {
+    assert(base);
     this->base = base;
-    oldVmt = *reinterpret_cast<uintptr_t**>(base);
-    length = calculateLength(oldVmt) + 1;
+    bool init = false;
 
-    if (newVmt = findFreeDataPage(base, length)) {
-        std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    if (!oldVmt) {
+        oldVmt = *reinterpret_cast<uintptr_t**>(base);
+        length = calculateLength(oldVmt) + 1;
+
+        if (newVmt = findFreeDataPage(base, length))
+            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+        assert(newVmt);
+        init = true;
     }
+    if (newVmt)
+        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    return init;
 }
 
 void Hooks::Vmt::restore() noexcept
 {
-    *reinterpret_cast<uintptr_t**>(base) = oldVmt;
-    ZeroMemory(newVmt, length * sizeof(uintptr_t));
+    if (base && oldVmt)
+        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+    if (newVmt)
+        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
