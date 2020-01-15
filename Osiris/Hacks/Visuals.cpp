@@ -241,9 +241,14 @@ void Visuals::thirdPerson() noexcept
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
     static Vector aimPunch;
     static Vector viewPunch;
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
     if (stage == FrameStage::RENDER_START) {
         aimPunch = localPlayer->aimPunchAngle();
         viewPunch = localPlayer->viewPunchAngle();

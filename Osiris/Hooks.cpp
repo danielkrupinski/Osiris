@@ -336,16 +336,17 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
-	switch (fnv::hashRuntime(event->getName())) {
-	case fnv::hash("player_death"):
-		Misc::killMessage(event);
-		SkinChanger::overrideHudIcon(event);
-		break;
-	case fnv::hash("player_hurt"):
-		Misc::playHitSound(event);
-		Visuals::hitMarker(event);
-		Visuals::hitMarkerSetDamageIndicator(event);
-		break;
+	if (event) {
+		switch (fnv::hashRuntime(event->getName())) {
+		case fnv::hash("player_death"):
+			Misc::killMessage(*event);
+			SkinChanger::overrideHudIcon(*event);
+			break;
+		case fnv::hash("player_hurt"):
+			Misc::playHitSound(*event);
+			Visuals::hitMarker(event);
+			break;
+		}
 	}
 	return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
 }

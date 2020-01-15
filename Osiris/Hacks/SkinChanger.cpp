@@ -397,10 +397,10 @@ void SkinChanger::scheduleHudUpdate() noexcept
     hudUpdateRequired = true;
 }
 
-void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
+void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
-    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        if (const auto iconOverride = iconOverrides[event->getString("weapon")])
-            event->setString("weapon", iconOverride);
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (const auto iconOverride = iconOverrides[event.getString("weapon")])
+            event.setString("weapon", iconOverride);
     }
 }
