@@ -365,24 +365,25 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
     }
 }
 
-static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
+static void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (config.headDot.enabled) {
-        Vector head{ };
-        if (worldToScreen(entity->getBonePosition(8), head)) {
-            if (config.headDot.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
-            else
-                interfaces.surface->setDrawColor(config.headDot.color);
+    if (!config.headDot.enabled)
+        return;
 
-            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
-            {
-                for(int i = 1; i <= 3; i++)
-                    interfaces.surface->drawOutlinedCircle(head.x, head.y, i, 100);
-                //interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(75 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
-            }
-        }
-    }
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
+
+    Vector head;
+    if (!worldToScreen(entity->getBonePosition(8), head))
+        return;
+
+    if (config.headDot.rainbow)
+        interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
+    else
+        interfaces.surface->setDrawColor(config.headDot.color);
+
+    interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / std::sqrt((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
 }
 
 enum EspId {
