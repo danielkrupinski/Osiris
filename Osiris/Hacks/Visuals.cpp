@@ -67,19 +67,25 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
 void Visuals::colorWorld() noexcept
 {
+    if (!config.visuals.world.enabled && !config.visuals.sky.enabled)
+        return;
+
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-        if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached()) {
-            if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
-                if (config.visuals.world.rainbow)
-                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
-                else
-                    mat->colorModulate(config.visuals.world.color);
-            } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
-                if (config.visuals.sky.rainbow)
-                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
-                else
-                    mat->colorModulate(config.visuals.sky.color);
-            }
+        const auto mat = interfaces.materialSystem->getMaterial(h);
+
+        if (!mat || !mat->isPrecached())
+            continue;
+
+        if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+            if (config.visuals.world.rainbow)
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+            else
+                mat->colorModulate(config.visuals.world.color);
+        } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+            if (config.visuals.sky.rainbow)
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+            else
+                mat->colorModulate(config.visuals.sky.color);
         }
     }
 }
