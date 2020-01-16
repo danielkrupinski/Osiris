@@ -42,4 +42,5 @@ Memory::Memory() noexcept
     test2 = findPattern<uintptr_t>(L"client_panorama", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
+    vignette = *findPattern<float**>(L"client_panorama", "\x0F\x11\x05????\xF3\x0F\x7E\x87", 3) + 1;
 }
