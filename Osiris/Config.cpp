@@ -703,6 +703,19 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
+
+        if (visualsJson.isMember("Color correction")) {
+            const auto& cc = visualsJson["Color correction"];
+
+            if (cc.isMember("Enabled")) visuals.colorCorrection.enabled = cc["Enabled"].asBool();
+            if (cc.isMember("Blue")) visuals.colorCorrection.blue = cc["Blue"].asFloat();
+            if (cc.isMember("Red")) visuals.colorCorrection.red = cc["Red"].asFloat();
+            if (cc.isMember("Mono")) visuals.colorCorrection.mono = cc["Mono"].asFloat();
+            if (cc.isMember("Saturation")) visuals.colorCorrection.saturation = cc["Saturation"].asFloat();
+            if (cc.isMember("Ghost")) visuals.colorCorrection.ghost = cc["Ghost"].asFloat();
+            if (cc.isMember("Green")) visuals.colorCorrection.green = cc["Green"].asFloat();
+            if (cc.isMember("Yellow")) visuals.colorCorrection.yellow = cc["Yellow"].asFloat();
+        }
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -792,6 +805,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
+        if (miscJson.isMember("Edge Jump")) misc.edgejump = miscJson["Edge Jump"].asBool();
+        if (miscJson.isMember("Edge Jump Key")) misc.edgejumpkey = miscJson["Edge Jump Key"].asInt();
         if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
         if (miscJson.isMember("Slowwalk key")) misc.slowwalkKey = miscJson["Slowwalk key"].asInt();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
@@ -841,6 +856,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
         if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
         if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
+        if (miscJson.isMember("Aspect Ratio")) misc.aspectratio = miscJson["Aspect Ratio"].asFloat();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) strcpy_s(misc.killMessageString, sizeof(misc.killMessageString), miscJson["Kill message string"].asCString());
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
@@ -1451,6 +1467,18 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
         visualsJson["Playermodel T"] = visuals.playerModelT;
         visualsJson["Playermodel CT"] = visuals.playerModelCT;
+
+        {
+            auto& cc = visualsJson["Color correction"];
+            cc["Enabled"] = visuals.colorCorrection.enabled;
+            cc["Blue"] = visuals.colorCorrection.blue;
+            cc["Red"] = visuals.colorCorrection.red;
+            cc["Mono"] = visuals.colorCorrection.mono;
+            cc["Saturation"] = visuals.colorCorrection.saturation;
+            cc["Ghost"] = visuals.colorCorrection.ghost;
+            cc["Green"] = visuals.colorCorrection.green;
+            cc["Yellow"] = visuals.colorCorrection.yellow;
+        }
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
@@ -1531,6 +1559,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Animated clan tag"] = misc.animatedClanTag;
         miscJson["Fast duck"] = misc.fastDuck;
         miscJson["Moonwalk"] = misc.moonwalk;
+        miscJson["Edge Jump"] = misc.edgejump;
+        miscJson["Edge Jump Key"] = misc.edgejumpkey;
         miscJson["Slowwalk"] = misc.slowwalk;
         miscJson["Slowwalk key"] = misc.slowwalkKey;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
@@ -1568,6 +1598,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
         miscJson["Fix movement"] = misc.fixMovement;
         miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
+        miscJson["Aspect Ratio"] = misc.aspectratio;
         miscJson["Kill message"] = misc.killMessage;
         miscJson["Kill message string"] = misc.killMessageString;
         miscJson["Name stealer"] = misc.nameStealer;
