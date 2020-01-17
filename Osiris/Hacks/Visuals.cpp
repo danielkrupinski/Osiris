@@ -16,12 +16,16 @@
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
-    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
+    static int originalIdx = 0;
+
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (!localPlayer)
+    if (!localPlayer) {
+        originalIdx = 0;
         return;
+    }
 
     constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
         constexpr std::array models{
@@ -57,7 +61,11 @@ void Visuals::playerModel(FrameStage stage) noexcept
     };
 
     if (const auto model = getModel(localPlayer->team())) {
-        const auto idx = interfaces.modelInfo->getModelIndex(model);
+        if (stage == FrameStage::RENDER_START)
+            originalIdx = localPlayer->modelIndex();
+
+        const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces.modelInfo->getModelIndex(model);
+
         localPlayer->setModelIndex(idx);
 
         if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
