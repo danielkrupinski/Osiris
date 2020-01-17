@@ -43,6 +43,7 @@ Memory::Memory() noexcept
     fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
     vignette = *findPattern<float**>(L"client_panorama", "\x0F\x11\x05????\xF3\x0F\x7E\x87", 3) + 1;
+    equipWearable = findPattern<decltype(equipWearable)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9");
 	moveHelper = **findPattern<MoveHelper***>(L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
     predictionRandomSeed = *findPattern<uintptr_t**>(L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
     md5PseudoRandom = findPattern<decltype(md5PseudoRandom)>(L"client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x70\x6A\x58");
