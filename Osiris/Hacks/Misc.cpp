@@ -507,7 +507,7 @@ void Misc::chatSpam() noexcept
 
     if (config.misc.chatSpam && lastSpam != (int)memory.globalVars->currenttime && (config.misc.chatSpamDelay == 0 || (int)memory.globalVars->currenttime % config.misc.chatSpamDelay == 0))
     {
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer->team() > 0)
+        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer && localPlayer->team() > 0)
         {
             auto charId{ 0 }, textsNum{ 0 };
 
@@ -552,8 +552,9 @@ void Misc::chatSpam() noexcept
                 if (config.misc.randomChatSpam)
                 {
                     const auto randNum = random(0, textsNum - 1);
+                    const auto Cmd = "say \"" + Texts[randNum] + "\"";
 
-                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Texts[randNum]).c_str());
+                    interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
 
                     phraseId = randNum + 1;
                 }
@@ -563,7 +564,9 @@ void Misc::chatSpam() noexcept
                     if (phraseId >= textsNum)
                         phraseId = 0;
 
-                    interfaces.engine->clientCmdUnrestricted(std::string{ "say " }.append(Texts[phraseId++]).c_str());
+                    const auto Cmd = "say \"" + Texts[phraseId++] + "\"";
+
+                    interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
                 }
             }
         }
