@@ -111,9 +111,9 @@ namespace Misc
             config.misc.autoStrafe
             && !(localPlayer->flags() & 1)
             && localPlayer->moveType() != MoveType::NOCLIP) {
-            if (cmd->mousedx < -20)
+            if (cmd->mousedx < 0)
                 cmd->sidemove = -450.0f;
-            else if (cmd->mousedx > 20)
+            else if (cmd->mousedx > 0)
                 cmd->sidemove = 450.0f;
         }
     }
