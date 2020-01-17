@@ -130,7 +130,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("Abuses lag compensation to move players back in time");
+            ImGui::SetTooltip("Abuse lag compensation to move players back in time");
         }
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
@@ -871,23 +871,23 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Disable Post-Processing", &config.visuals.disablePostProcessing);
     ImGui::Checkbox("Disable HUD Blur", &config.visuals.disablePanoramablur);
     ImGui::Checkbox("Inverse Ragdoll Gravity", &config.visuals.inverseRagdollGravity);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Reverses the gravity of ragdolls");
+    }
     if (config.visuals.inverseRagdollGravity)
     {
         ImGui::PushID(0);
         ImGui::SliderInt("", &config.visuals.inverseRagdollGravityValue, -2400, 2400, "Gravity Value: %d");
         ImGui::PopID();
     }
-    if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Reverses the gravity of ragdolls");
-    }
     ImGui::Checkbox("Physics Timescale", &config.visuals.ragdollTimescale);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Controls the speed of ragdolls and other physic based objects");
+    }
     if (config.visuals.ragdollTimescale) {
         ImGui::PushID(1);
         ImGui::SliderInt("", &config.visuals.ragdollTimescaleValue, 0, 10, "Value: %d");
         ImGui::PopID();
-    }
-    if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Controls the speed of ragdolls and other physic based objects");
     }
     ImGui::Checkbox("No Fog", &config.visuals.noFog);
     ImGui::Checkbox("No 3D Sky", &config.visuals.no3dSky);
@@ -1295,7 +1295,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGuiCustom::colorPicker("Watermark", config.misc.watermark);
     if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Shows the cheat name and your ping and FPS at the top of your screen");
+        ImGui::SetTooltip("Shows the cheat name, your ping, and your FPS at the top of your screen");
     }
     ImGui::Checkbox("Fix Animation LOD", &config.misc.fixAnimationLOD);
     if (ImGui::IsItemHovered()) {
@@ -1551,7 +1551,7 @@ void GUI::renderGuiStyle2() noexcept
         }
         if (ImGui::BeginTabItem("Backtrack")) {
             if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Abuses lag compensation to move players back in time");
+                ImGui::SetTooltip("Abuse lag compensation to move players back in time");
             }
             renderBacktrackWindow(true);
             ImGui::EndTabItem();
@@ -1581,9 +1581,6 @@ void GUI::renderGuiStyle2() noexcept
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Style")) {
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("The style of the cheat menu");
-            }
             renderStyleWindow(true);
             ImGui::EndTabItem();
         }
