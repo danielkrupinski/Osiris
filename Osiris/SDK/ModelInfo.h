@@ -3,6 +3,12 @@
 #include "Utils.h"
 #include "Vector.h"
 
+struct StudioHitboxSet {
+    int nameIndex;
+    int numHitboxes;
+    int hitboxIndex;
+};
+
 struct StudioHdr {
     int id;
     int version;
