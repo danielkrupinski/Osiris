@@ -1,6 +1,7 @@
 #pragma once
 
-namespace Glow {
+namespace Glow
+{
     void render() noexcept;
     void clearCustomObjects() noexcept;
 }
