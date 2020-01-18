@@ -95,7 +95,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
+    if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
