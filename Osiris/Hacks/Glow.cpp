@@ -10,6 +10,11 @@ static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer)
+        return;
+
     constexpr auto& glow = config.glow;
 
     Glow::clearCustomObjects();
@@ -61,8 +66,6 @@ void Glow::render() noexcept
                     glowobject.glowColor = glow.color.color;
             }
         };
-
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         auto applyPlayerGlow = [applyGlow, localPlayer](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
             if (glowAll.enabled) applyGlow(glowAll, entity->health());
