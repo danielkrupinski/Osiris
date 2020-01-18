@@ -146,6 +146,11 @@ void Misc::sniperCrosshair() noexcept
 
 void Misc::recoilCrosshair() noexcept
 {
+	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        if (!localPlayer->isAlive())
+            return;
+	
 	if (config.misc.recoilCrosshair)
 	{
 		static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
