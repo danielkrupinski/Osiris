@@ -28,6 +28,11 @@ struct StudioHdr {
     int boneControllerIndex;
     int numHitboxSets;
     int hitboxSetIndex;
+
+    StudioHitboxSet* getHitboxSet(int i) noexcept
+    {
+        return i >= 0 && i < numHitboxSets ? reinterpret_cast<StudioHitboxSet*>(std::uintptr_t(this) + hitboxSetIndex) + i : nullptr;
+    }
 };
 
 struct Model;
