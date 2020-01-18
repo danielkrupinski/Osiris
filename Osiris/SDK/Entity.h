@@ -57,6 +57,22 @@ public:
         }
     }
 
+    constexpr bool isNoRcs() noexcept
+    {
+        switch (getClientClass()->classId) {
+        case ClassId::Deagle:
+        case ClassId::Glock:
+        case ClassId::P2000:
+        case ClassId::P250:
+        case ClassId::Tec9:
+        case ClassId::Ssg08:
+        case ClassId::Awp:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     constexpr bool isSniperRifle() noexcept
     {
         switch (getClientClass()->classId) {

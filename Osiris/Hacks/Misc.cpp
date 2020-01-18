@@ -189,8 +189,19 @@ void Misc::sniperCrosshair() noexcept
 
 void Misc::recoilCrosshair() noexcept
 {
-    static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
+    if (config.misc.recoilCrosshair)
+    {
+        static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
+        const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
+        if (activeWeapon->isNoRcs())
+        {
+            recoilCrosshair->setValue(0);
+        }
+        else
+        {
+            recoilCrosshair->setValue(1);
+        }
+    }
 }
 
 void Misc::watermark() noexcept
