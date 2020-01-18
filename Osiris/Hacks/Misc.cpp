@@ -147,7 +147,8 @@ void Misc::sniperCrosshair() noexcept
 void Misc::recoilCrosshair() noexcept
 {
 	const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
+	if(!localPlayer)
+	    return;
         if (!localPlayer->isAlive())
             return;
 	
