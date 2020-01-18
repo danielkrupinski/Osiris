@@ -22,7 +22,7 @@ void Glow::render() noexcept
     for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
         const auto entity = interfaces.entityList->getEntity(i);
         if (!entity || entity->isDormant())
-            return;
+            continue;
 
         switch (entity->getClientClass()->classId) {
         case ClassId::EconEntity:
