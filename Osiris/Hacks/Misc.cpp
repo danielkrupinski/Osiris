@@ -141,13 +141,24 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces.cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config.misc.sniperCrosshair && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped() ? 3 : 0);
+    showSpread->setValue(config.misc.sniperCrosshair ? 3 : 0);  //should we check for flags in_zoom 1 << 19 ?
 }
 
 void Misc::recoilCrosshair() noexcept
 {
-    static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
+	if (config.misc.recoilCrosshair)
+	{
+		static auto recoilCrosshair = interfaces.cvar->findVar("cl_crosshair_recoil");
+		const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
+		if (activeWeapon->isNoRcs())
+		{
+			recoilCrosshair->setValue(0);
+		}
+		else
+		{
+			recoilCrosshair->setValue(1);
+		}
+	}
 }
 
 void Misc::watermark() noexcept
