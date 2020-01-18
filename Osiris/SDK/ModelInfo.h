@@ -24,10 +24,17 @@ struct StudioHdr {
     int hitboxSetIndex;
 };
 
+struct Model;
+
 class ModelInfo {
 public:
     constexpr auto getModelIndex(const char* name) noexcept
     {
         return callVirtualMethod<int, const char*>(this, 2, name);
+    }
+
+    constexpr auto getStudioModel(const Model* model) noexcept
+    {
+        return callVirtualMethod<StudioHdr*, const Model*>(this, 32, model);
     }
 };
