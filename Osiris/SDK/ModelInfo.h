@@ -3,6 +3,15 @@
 #include "Utils.h"
 #include "Vector.h"
 
+struct StudioBbox {
+    int bone;
+    int group;
+    Vector bbMin;
+    Vector bbMax;
+    int hitboxNameIndex;
+    int	unused[8];
+};
+
 struct StudioHitboxSet {
     int nameIndex;
     int numHitboxes;
