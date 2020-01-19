@@ -326,7 +326,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             break;
         case fnv::hash("player_hurt"):
             Misc::playHitSound(*event);
-            Visuals::hitMarker(event);
+            Visuals::hitEffect(event);
             break;
         }
     }
@@ -405,7 +405,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     Visuals::applyScreenEffects();
-    Visuals::hitMarker();
+    Visuals::hitEffect();
     return hooks.viewRender.callOriginal<int, int>(39, param);
 }
 

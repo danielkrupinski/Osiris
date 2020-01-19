@@ -266,9 +266,9 @@ void Visuals::applyScreenEffects() noexcept
     }
 }
 
-void Visuals::hitMarker(GameEvent* event) noexcept
+void Visuals::hitEffect(GameEvent* event) noexcept
 {
-    if (config.visuals.hitMarker) {
+    if (config.visuals.hitEffect) {
         static float lastHitTime = 0.0f;
 
         if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
@@ -276,7 +276,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
             return;
         }
 
-        if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
+        if (lastHitTime + config.visuals.hitEffectTime >= memory.globalVars->realtime) {
             constexpr auto getEffectMaterial = [] {
                 static constexpr const char* effects[]{
                 "effects/dronecam",
@@ -285,9 +285,9 @@ void Visuals::hitMarker(GameEvent* event) noexcept
                 "effects/dangerzone_screen"
                 };
 
-                if (config.visuals.hitMarker <= 2)
+                if (config.visuals.hitEffect <= 2)
                     return effects[0];
-                return effects[config.visuals.hitMarker - 2];
+                return effects[config.visuals.hitEffect - 2];
             };
 
             auto renderContext = interfaces.materialSystem->getRenderContext();
@@ -295,11 +295,11 @@ void Visuals::hitMarker(GameEvent* event) noexcept
             int x, y, width, height;
             renderContext->getViewport(x, y, width, height);
             auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
-            if (config.visuals.hitMarker == 1)
+            if (config.visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
-            else if (config.visuals.hitMarker == 2)
+            else if (config.visuals.hitEffect == 2)
                 material->findVar("$c0_x")->setValue(0.1f);
-            else if (config.visuals.hitMarker >= 4)
+            else if (config.visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
             drawScreenEffectMaterial(material, 0, 0, width, height);
             renderContext->endRender();
