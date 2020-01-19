@@ -3,6 +3,15 @@
 #include "Utils.h"
 #include "Vector.h"
 
+struct StudioBbox {
+    int bone;
+    int group;
+    Vector bbMin;
+    Vector bbMax;
+    int hitboxNameIndex;
+    int	unused[8];
+};
+
 struct StudioHitboxSet {
     int nameIndex;
     int numHitboxes;
@@ -28,6 +37,11 @@ struct StudioHdr {
     int boneControllerIndex;
     int numHitboxSets;
     int hitboxSetIndex;
+
+    StudioHitboxSet* getHitboxSet(int i) noexcept
+    {
+        return i >= 0 && i < numHitboxSets ? reinterpret_cast<StudioHitboxSet*>(std::uintptr_t(this) + hitboxSetIndex) + i : nullptr;
+    }
 };
 
 struct Model;

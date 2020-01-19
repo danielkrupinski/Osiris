@@ -181,7 +181,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     static float lastServerTime{ memory.globalVars->serverTime() };
 
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
-    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
+    if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon{ localPlayer->getActiveWeapon() };
