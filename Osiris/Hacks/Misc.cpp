@@ -522,9 +522,16 @@ void Misc::chatSpam() noexcept
 {
     static auto lastSpam{ 0 };
 
-    if (config.misc.chatSpam && lastSpam != (int)memory.globalVars->currenttime && (config.misc.chatSpamDelay == 0 || (int)memory.globalVars->currenttime % config.misc.chatSpamDelay == 0))
+    const auto curTime{ (int)memory.globalVars->currenttime };
+
+    if (!config.misc.chatSpam || lastSpam == curTime)
+        return;
+
+    if (config.misc.chatSpamDelay == 0 || curTime % config.misc.chatSpamDelay == 0)
     {
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; localPlayer && localPlayer->team() > 0)
+        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+        if (localPlayer && localPlayer->team() > 0)
         {
             auto charId{ 0 }, textsNum{ 0 };
 
@@ -564,31 +571,31 @@ void Misc::chatSpam() noexcept
 
             if (textsNum > 0)
             {
-                static auto phraseId{ 0 };
+                static auto textId{ 0 };
 
                 if (config.misc.randomChatSpam)
                 {
-                    const auto randNum = random(0, textsNum - 1);
-                    const auto Cmd = "say \"" + Texts[randNum] + "\"";
+                    const auto randNum{ random(0, textsNum - 1) };
+                    const auto Cmd{ "say \"" + Texts[randNum] + "\"" };
 
                     interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
 
-                    phraseId = randNum + 1;
+                    textId = randNum + 1;
                 }
 
                 else
                 {
-                    if (phraseId >= textsNum)
-                        phraseId = 0;
+                    if (textId >= textsNum)
+                        textId = 0;
 
-                    const auto Cmd = "say \"" + Texts[phraseId++] + "\"";
+                    const auto Cmd{ "say \"" + Texts[textId++] + "\"" };
 
                     interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
                 }
             }
         }
 
-        lastSpam = (int)memory.globalVars->currenttime;
+        lastSpam = curTime;
     }
 }
 
