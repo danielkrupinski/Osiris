@@ -180,8 +180,8 @@ public:
         ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
-        int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
+        int hitEffect{ 0 };
+        float hitEffectTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
