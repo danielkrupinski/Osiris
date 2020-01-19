@@ -19,24 +19,26 @@ void Glow::render() noexcept
 
     Glow::clearCustomObjects();
 
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (auto entity = interfaces.entityList->getEntity(i); entity && !entity->isDormant()) {
-            switch (entity->getClientClass()->classId) {
-            case ClassId::EconEntity:
-            case ClassId::BaseCSGrenadeProjectile:
-            case ClassId::BreachChargeProjectile:
-            case ClassId::BumpMineProjectile:
-            case ClassId::DecoyProjectile:
-            case ClassId::MolotovProjectile:
-            case ClassId::SensorGrenadeProjectile:
-            case ClassId::SmokeGrenadeProjectile:
-            case ClassId::SnowballProjectile:
-            case ClassId::Hostage:
-            case ClassId::CSRagdoll:
-                if (!memory.glowObjectManager->hasGlowEffect(entity)) {
-                    if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
-                        customGlowEntities.emplace_back(i, index);
-                }
+    for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
+        const auto entity = interfaces.entityList->getEntity(i);
+        if (!entity || entity->isDormant())
+            continue;
+
+        switch (entity->getClientClass()->classId) {
+        case ClassId::EconEntity:
+        case ClassId::BaseCSGrenadeProjectile:
+        case ClassId::BreachChargeProjectile:
+        case ClassId::BumpMineProjectile:
+        case ClassId::DecoyProjectile:
+        case ClassId::MolotovProjectile:
+        case ClassId::SensorGrenadeProjectile:
+        case ClassId::SmokeGrenadeProjectile:
+        case ClassId::SnowballProjectile:
+        case ClassId::Hostage:
+        case ClassId::CSRagdoll:
+            if (!memory.glowObjectManager->hasGlowEffect(entity)) {
+                if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
+                    customGlowEntities.emplace_back(i, index);
             }
         }
     }

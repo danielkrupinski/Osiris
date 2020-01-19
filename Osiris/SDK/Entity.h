@@ -226,7 +226,8 @@ public:
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
-      
+    NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
