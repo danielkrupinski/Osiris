@@ -250,7 +250,7 @@ public:
         float aspectratio{ 0 };
         bool chatSpam{ false };
         bool chatSpamRandom{ false };
-        int chatSpamDelay{ 0 };
+        int chatSpamDelay{ 1 };
         char chatSpamPhrases[8192]{ };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
