@@ -1010,9 +1010,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Combo("Skybox", &config.visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
     ImGuiCustom::colorPicker("World Colour", config.visuals.world);
     ImGuiCustom::colorPicker("Sky Colour", config.visuals.sky);
-    ImGui::Checkbox("Rare Deagle Inspect", &config.visuals.deagleSpinner);
+    ImGui::Checkbox("Spinning Deagle Inspect", &config.visuals.deagleSpinner);
     if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Plays the spinning Deagle inspect animation whenever equipped");
+        ImGui::SetTooltip("Always plays the rare spinning Deagle inspect whenever inspected");
     }
     ImGui::Combo("Screen Effect", &config.visuals.screenEffect, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0");
     ImGui::Combo("Hitmarker", &config.visuals.hitMarker, "None\0Drone Cam\0Drone Cam With Noise\0Underwater\0Healthboost\0Dangerzone\0Classic\0");
@@ -1376,6 +1376,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SetTooltip("Shows the Prime status in the menu");
     }
     ImGui::Checkbox("Fast Plant", &config.misc.fastPlant);
+    ImGui::Checkbox("Bomb Damage", &config.misc.bombDamage);
     ImGuiCustom::colorPicker("Bomb Timer", config.misc.bombTimer);
     ImGui::Checkbox("Quick Reload", &config.misc.quickReload);
     if (ImGui::IsItemHovered()) {

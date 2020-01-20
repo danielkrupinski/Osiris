@@ -19,6 +19,60 @@ static int random(int min, int max) noexcept
     return std::uniform_int_distribution{ min, max }(gen);
 }
 
+void Misc::drawBombDamage() noexcept
+{
+    if (config.misc.bombDamage) {
+
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+            Entity* entity = interfaces.entityList->getEntity(i);
+            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+                continue;
+
+            Vector vecBombDistance = entity->origin() - localPlayer->origin();
+
+            float a = 450.7f;
+            float b = 75.68f;
+            float c = 789.2f;
+            float d = ((vecBombDistance.length() - b) / c);
+            float flDamage = a * exp(-d * d);
+
+            int ArmorValue = localPlayer->armor();
+            float flArmorRatio = 0.5f;
+            float flArmorBonus = 0.5f;
+            if (ArmorValue > 0) {
+                float flNew = flDamage * flArmorRatio;
+                float flArmor = (flDamage - flNew) * flArmorBonus;
+
+                if (flArmor > static_cast<float>(ArmorValue)) {
+                    flArmor = static_cast<float>(ArmorValue)* (1.f / flArmorBonus);
+                    flNew = flDamage - flArmor;
+                }
+
+                flDamage = flNew;
+            }
+            int bombDamage = max((int)ceilf(flDamage), 0);
+
+            constexpr unsigned font{ 0xc1 };
+            interfaces.surface->setTextFont(font);
+            if (bombDamage >= localPlayer->health())
+                interfaces.surface->setTextColor(255, 0, 0);
+            else
+                interfaces.surface->setTextColor(0, 255, 0);
+
+            auto bombText{ (std::wstringstream{ } << L"Bomb Damage: " << std::noshowpoint << (std::max)(bombDamage, 0)).str() };
+
+            auto drawPositionX{ interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, bombText.c_str()).first };
+            auto drawPositionY{ interfaces.surface->getScreenSize().second - interfaces.surface->getTextSize(font, bombText.c_str()).second };
+
+            interfaces.surface->setTextPosition(drawPositionX, drawPositionY);
+            interfaces.surface->printText(bombText.c_str());
+            break;
+        }
+    }
+}
+
 void Misc::edgeJump(UserCmd* cmd) noexcept
 {
     if (!config.misc.edgeJump || !GetAsyncKeyState(config.misc.edgeJumpKey))

@@ -300,6 +300,7 @@ public:
         int banColor{ 6 };
         char banText[150]{ "<user> has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
+        bool bombDamage{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
         bool prepareRevolver{ false };
