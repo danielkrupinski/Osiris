@@ -180,10 +180,21 @@ public:
         ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
-        int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
+        int hitEffect{ 0 };
+        float hitEffectTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+
+        struct {
+            bool enabled = false;
+            float blue = 0.0f;
+            float red = 0.0f;
+            float mono = 0.0f;
+            float saturation = 0.0f;
+            float ghost = 0.0f;
+            float green = 0.0f;
+            float yellow = 0.0f;
+        } colorCorrection;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -217,6 +228,8 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool edgejump{ false };
+        int edgejumpkey{ 0 };
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
@@ -234,6 +247,7 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        float aspectratio{ 0 };
         bool killMessage{ false };
         char killMessageString[230]{ "Gotcha!" };
         bool nameStealer{ false };

@@ -232,23 +232,15 @@ static auto make_glove(int entry, int serial) noexcept
 
     const auto glove = interfaces.entityList->getEntity(entry);
 
-    // He he
-    {
-      //  static auto set_abs_origin_addr = platform::find_pattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1", "xxxxxxxxxxxx");
-
-        //const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const Vector&)>(set_abs_origin_addr);
-
-        static constexpr Vector new_pos = { 10000.f, 10000.f, 10000.f };
-
-        memory.setAbsOrigin(glove, new_pos);
-    }
-
     return glove;
 }
 
 static void post_data_update_start(Entity* local) noexcept
 {
     const auto local_index = local->index();
+
+    if (!local->isAlive())
+        return;
 
     PlayerInfo player_info;
     if (!interfaces.engine->getPlayerInfo(local_index, player_info))
@@ -276,15 +268,6 @@ static void post_data_update_start(Entity* local) noexcept
             }
         }
 
-        if (!local->isAlive()) {
-            // We are dead but we have a glove, destroy it
-            if (glove) {
-                glove->setDestroyedOnRecreateEntities();
-                glove->release();
-            }
-            return;
-        }
-
         if (glove_config && glove_config->definition_override_index)
         {
             // We don't have a glove, but we should
@@ -305,6 +288,7 @@ static void post_data_update_start(Entity* local) noexcept
                 const auto serial = rand() % 0x1000;
 
                 glove = make_glove(entry, serial);
+                glove->initialized() = true;
 
                 wearables[0] = entry | serial << 16;
 
@@ -312,9 +296,8 @@ static void post_data_update_start(Entity* local) noexcept
                 glove_handle = wearables[0];
             }
 
-            // Thanks, Beakers
-            glove->index() = -1;
-            glove->initialized() = true;
+            memory.equipWearable(glove, local);
+            local->body() = 1;
 
             apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
         }
@@ -397,10 +380,10 @@ void SkinChanger::scheduleHudUpdate() noexcept
     hudUpdateRequired = true;
 }
 
-void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
+void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
-    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        if (const auto iconOverride = iconOverrides[event->getString("weapon")])
-            event->setString("weapon", iconOverride);
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (const auto iconOverride = iconOverrides[event.getString("weapon")])
+            event.setString("weapon", iconOverride);
     }
 }
