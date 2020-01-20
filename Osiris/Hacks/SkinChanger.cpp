@@ -211,28 +211,24 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     apply_sticker_changer(item);
 }
 
-static auto get_wearable_create_fn() noexcept
+static Entity* make_glove(int entry, int serial) noexcept
 {
-    auto clazz = interfaces.client->getAllClasses();
+    static std::add_pointer_t<Entity* __cdecl(int, int)> createWearable = nullptr;
 
-    // Please, if you gonna paste it into a cheat use classids here. I use names because they
-    // won't change in the foreseeable future and i dont need high speed, but chances are
-    // you already have classids, so use them instead, they are faster.
-    while (fnv::hash(clazz->networkName) != fnv::hash("CEconWearable"))
-        clazz = clazz->next;
+    if (!createWearable) {
+        createWearable = []() -> decltype(createWearable) {
+            for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+                if (clientClass->classId == ClassId::EconWearable)
+                    return clientClass->createFunction;
+            return nullptr;
+        }();
+    }
 
-    return clazz->createFunction;
-}
+    if (!createWearable)
+        return nullptr;
 
-static auto make_glove(int entry, int serial) noexcept
-{
-    static auto create_wearable_fn = get_wearable_create_fn();
-
-    create_wearable_fn(entry, serial);
-
-    const auto glove = interfaces.entityList->getEntity(entry);
-
-    return glove;
+    createWearable(entry, serial);
+    return interfaces.entityList->getEntity(entry);
 }
 
 static void post_data_update_start(Entity* local) noexcept
@@ -288,18 +284,22 @@ static void post_data_update_start(Entity* local) noexcept
                 const auto serial = rand() % 0x1000;
 
                 glove = make_glove(entry, serial);
-                glove->initialized() = true;
+                if (glove) {
+                    glove->initialized() = true;
 
-                wearables[0] = entry | serial << 16;
+                    wearables[0] = entry | serial << 16;
 
-                // Let's store it in case we somehow lose it.
-                glove_handle = wearables[0];
+                    // Let's store it in case we somehow lose it.
+                    glove_handle = wearables[0];
+                }
             }
 
-            memory.equipWearable(glove, local);
-            local->body() = 1;
+            if (glove) {
+                memory.equipWearable(glove, local);
+                local->body() = 1;
 
-            apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
+                apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
+            }
         }
     }
 
