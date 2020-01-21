@@ -578,78 +578,73 @@ void Misc::chatSpam() noexcept
 
     const auto curTime{ (int)memory.globalVars->currenttime };
 
-    if (!config.misc.chatSpam || lastSpam == curTime)
+    if (!config.misc.chatSpam || lastSpam == curTime || curTime % config.misc.chatSpamDelay != 0)
         return;
 
-    if (config.misc.chatSpamDelay == 0 || curTime % config.misc.chatSpamDelay == 0)
+    lastSpam = curTime;
+
+    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+
+    if (!localPlayer || localPlayer->team() == 0)
+        return;
+
+    auto charId{ 0 }, textsNum{ 0 };
+
+    std::vector <std::string> Texts;
+    std::string Text;
+
+    while (true)
     {
-        const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
-
-        if (localPlayer && localPlayer->team() > 0)
+        if (config.misc.chatSpamText[charId] == '\0')
         {
-            auto charId{ 0 }, textsNum{ 0 };
-
-            std::vector <std::string> Texts;
-            std::string Text;
-
-            while (true)
+            if (Text.length() > 0)
             {
-                if (config.misc.chatSpamText[charId] == '\0')
-                {
-                    if (Text.length() > 0)
-                    {
-                        Texts.push_back(Text);
+                Texts.push_back(Text);
 
-                        textsNum++;
-                    }
-
-                    break;
-                }
-
-                else if (config.misc.chatSpamText[charId] == '\n')
-                {
-                    if (Text.length() > 0)
-                    {
-                        Texts.push_back(Text);
-                        Text.clear();
-
-                        textsNum++;
-                    }
-
-                    charId++;
-                }
-
-                else
-                    Text += config.misc.chatSpamText[charId++];
+                textsNum++;
             }
 
-            if (textsNum > 0)
-            {
-                static auto textId{ 0 };
-
-                if (config.misc.randomChatSpam)
-                {
-                    const auto randNum{ random(0, textsNum - 1) };
-                    const auto Cmd{ "say \"" + Texts[randNum] + "\"" };
-
-                    interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
-
-                    textId = randNum + 1;
-                }
-
-                else
-                {
-                    if (textId >= textsNum)
-                        textId = 0;
-
-                    const auto Cmd{ "say \"" + Texts[textId++] + "\"" };
-
-                    interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
-                }
-            }
+            break;
         }
 
-        lastSpam = curTime;
+        else if (config.misc.chatSpamText[charId] == '\n')
+        {
+            if (Text.length() > 0)
+            {
+                Texts.push_back(Text);
+                Text.clear();
+
+                textsNum++;
+            }
+
+            charId++;
+        }
+
+        else
+            Text += config.misc.chatSpamText[charId++];
+    }
+
+    if (textsNum > 0)
+    {
+        static auto textId{ 0 };
+
+        if (config.misc.randomChatSpam)
+        {
+            const auto randNum{ random(0, textsNum - 1) };
+            const auto Cmd{ "say \"" + Texts[randNum] + "\"" };
+
+            textId = randNum + 1;
+        }
+
+        else
+        {
+            if (textId >= textsNum)
+                textId = 0;
+
+            const auto Cmd{ "say \"" + Texts[textId++] + "\"" };
+
+            interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
+        }
     }
 }
 

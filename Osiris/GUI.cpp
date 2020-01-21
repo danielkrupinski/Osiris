@@ -1024,10 +1024,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("How much damage is dealt whenever targets are hit");
     }
-    if (config.visuals.hitMarkerDamageIndicator) {
-        ImGui::SameLine();
-        ImGui::Checkbox("Customize", &config.visuals.hitMarkerDamageIndicatorCustomize);
-    }
+    ImGui::SameLine();
+    ImGui::Checkbox("Customize", &config.visuals.hitMarkerDamageIndicatorCustomize);
     if (config.visuals.hitMarkerDamageIndicator && config.visuals.hitMarkerDamageIndicatorCustomize) {
         ImGui::InputInt("Font", &config.visuals.hitMarkerDamageIndicatorFont, 1, 294);
         ImGui::InputInt("Alpha", &config.visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
@@ -1252,11 +1250,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Draws the crosshair while holding sniper rifles");
     }
-    if (config.misc.sniperCrosshair)
-    {
-        ImGui::SameLine();
-        ImGui::Checkbox("In Scope", &config.misc.sniperCrosshairInscope);
-    }
+    ImGui::SameLine();
+    ImGui::Checkbox("In Scope", &config.misc.sniperCrosshairInscope);
     ImGui::Checkbox("Recoil Crosshair", &config.misc.recoilCrosshair);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Crosshair follows weapon recoil patterns");
@@ -1338,34 +1333,35 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::Checkbox("Clock Clantag", &config.misc.clocktag);
     ImGui::Checkbox("Chat Spam", &config.misc.chatSpam);
-    {
-        ImGui::SameLine();
-        ImGui::Checkbox("Random", &config.misc.randomChatSpam);
-    }
+    ImGui::SameLine();
+    ImGui::Checkbox("Random", &config.misc.randomChatSpam);
     ImGui::SliderInt("Delay", &config.misc.chatSpamDelay, 0, 60, "%d s");
-    ImGui::InputTextMultiline("Text", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText));
+    ImGui::Text("Text");
+    ImGui::PushID(1);
+    ImGui::InputTextMultiline("", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText), { 280.f, 120.f });
+    ImGui::PopID();
     ImGui::Checkbox("Kill Message", &config.misc.killMessage);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Messages chat whenever an enemy is killed");
     }
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
-    ImGui::PushID(1);
+    ImGui::PushID(2);
     ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
     ImGui::PopID();
     ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
-    ImGui::PushID(2);
+    ImGui::PushID(3);
     ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Fake Vote"))
         Misc::fakeVote(true);
-    ImGui::PushID(3);
+    ImGui::PushID(4);
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light Green\0Turquoise\0Light Red\0Gray\0Yellow\0Gray 2\0Light Blue\0Gray/Purple\0Blue\0Pink\0Dark Orange\0Orange\0");
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::PushID(4);
+    ImGui::PushID(5);
     ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
     ImGui::PopID();
     ImGui::SameLine();
