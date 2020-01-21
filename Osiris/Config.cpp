@@ -21,7 +21,7 @@ Config::Config(const char* name) noexcept
     std::transform(std::filesystem::directory_iterator{ path },
                    std::filesystem::directory_iterator{ },
                    std::back_inserter(configs),
-                   [](const auto& entry) { return entry.path().filename().string(); });
+                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
 }
 
 void Config::load(size_t id) noexcept
