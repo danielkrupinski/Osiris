@@ -1345,7 +1345,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PushID(1);
     ImGui::InputTextMultiline("", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText), { 280.f, 120.f });
     ImGui::PopID();
-    ImGui::Checkbox("Kill Message", &config.misc.killMessage);
+    ImGui::Checkbox("Killsay", &config.misc.killMessage);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Messages chat whenever an enemy is killed");
     }
