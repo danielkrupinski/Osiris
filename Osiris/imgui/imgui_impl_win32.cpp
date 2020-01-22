@@ -307,7 +307,8 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
 		static wchar_t wch;
 		MultiByteToWideChar(CP_ACP, 0, (char*)&wParam, 1, &wch, 1);
-		io.AddInputCharacter((unsigned int)wch);
+        if (wchar_t w; MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (char*)&wParam, 1, &w, 1) == 1)
+            io.AddInputCharacter((unsigned int)w);
         return 0;
     case WM_SETCURSOR:
         if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
