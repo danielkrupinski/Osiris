@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <string>
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
@@ -180,8 +181,8 @@ public:
         ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
-        int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
+        int hitEffect{ 0 };
+        float hitEffectTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
@@ -253,7 +254,7 @@ public:
         int chatSpamDelay{ 1 };
         char chatSpamPhrases[8192]{ };
         bool killMessage{ false };
-        char killMessageString[230]{ "Gotcha!" };
+        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
         char voteText[50]{ "" };

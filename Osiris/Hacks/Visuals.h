@@ -24,7 +24,7 @@ namespace Visuals {
     void removeShadows() noexcept;
     void applyZoom(FrameStage) noexcept;
     void applyScreenEffects() noexcept;
-    void hitMarker(GameEvent* = nullptr) noexcept;
+    void hitEffect(GameEvent* = nullptr) noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {

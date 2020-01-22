@@ -6,6 +6,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_stdlib.h"
 
 #include "imguiCustom.h"
 
@@ -776,8 +777,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGuiCustom::colorPicker("Sky color", config.visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config.visuals.deagleSpinner);
     ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-    ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-    ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+    ImGui::Combo("Hit effect", &config.visuals.hitEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+    ImGui::SliderFloat("Hit effect time", &config.visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Checkbox("Color correction", &config.visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
@@ -1024,7 +1025,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(2);
-    ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
+    ImGui::InputText("", &config.misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
     ImGui::PushID(3);
@@ -1116,19 +1117,19 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     if (static_cast<size_t>(currentConfig) >= configItems.size())
         currentConfig = -1;
 
-    static char buffer[16];
+    static std::string buffer;
 
     if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
         auto& vector = *static_cast<std::vector<std::string>*>(data);
         *out_text = vector[idx].c_str();
         return true;
         }, &configItems, configItems.size(), 5) && currentConfig != -1)
-        strcpy(buffer, configItems[currentConfig].c_str());
+            buffer = configItems[currentConfig];
 
         ImGui::PushID(0);
-        if (ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+        if (ImGui::InputText("", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
             if (currentConfig != -1)
-                config.rename(currentConfig, buffer);
+                config.rename(currentConfig, buffer.c_str());
         }
         ImGui::PopID();
         ImGui::NextColumn();
@@ -1136,7 +1137,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         ImGui::PushItemWidth(100.0f);
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
-            config.add(buffer);
+            config.add(buffer.c_str());
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Config to reset");
