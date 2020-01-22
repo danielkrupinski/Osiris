@@ -30,10 +30,9 @@ bool LbyBreaker()
 }
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
-	float desync = (interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getMaxDesyncAngle() * -1);
 	auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 	static float lastTime{ 0.0f };
-	static bool invert;
+	static bool invert = false;
 	bool lby = LbyBreaker();
 	int yaw = config.antiAim.yawangle;
 	Vector oldangle = cmd->viewangles;
@@ -42,22 +41,22 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 			invert = !invert;
 			lastTime = memory.globalVars->realtime;
 		}
-				if (localPlayer->throwing(cmd)) {
+		if (localPlayer->throwing(cmd)) {
 			return;
 		}
 		if (config.antiAim.pitch && cmd->viewangles.x == currentViewAngles.x) {
 		cmd->viewangles.x = config.antiAim.pitchAngle;
 	}
-        if (config.antiAim.yaw) {
-			if (lby) {
-				sendPacket = false;
-				invert ? cmd->viewangles.y -= 120: cmd->viewangles.y += 120;
+if (config.antiAim.yaw) {
+	if (lby) {
+		sendPacket = false;
+	invert ? cmd->viewangles.y -= 120: cmd->viewangles.y += 120;
 		} 
 		if (sendPacket) {
-				invert ? cmd->viewangles.y += yaw + desync : cmd->viewangles.y += yaw - desync;
+			cmd->viewangles.y += yaw;
 			}
 		if(!sendPacket) {
-				cmd->viewangles.y += yaw;
+			invert ? cmd->viewangles.y += yaw + 60.f : cmd->viewangles.y += yaw - 60.f;
 				}
 			}
         }
