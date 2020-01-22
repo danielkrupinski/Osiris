@@ -1021,7 +1021,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
     ImGui::PushID(2);
-    ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
+    ImGui::InputText("", &config.misc.voteText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake vote"))
