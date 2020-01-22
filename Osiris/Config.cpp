@@ -801,7 +801,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
-        if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
+        if (miscJson.isMember("Clan tag")) misc.clanTag = miscJson["Clan tag"].asString();
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
@@ -864,9 +864,9 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Kill message string")) misc.killMessageString = miscJson["Kill message string"].asString();
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
         if (miscJson.isMember("Disable HUD blur"))  misc.disablePanoramablur = miscJson["Disable HUD blur"].asBool();
-        if (miscJson.isMember("Vote text")) strcpy_s(misc.voteText, sizeof(misc.voteText), miscJson["Vote text"].asCString());
+        if (miscJson.isMember("Vote text")) misc.voteText = miscJson["Vote text"].asString();
         if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
-        if (miscJson.isMember("Ban text")) strcpy_s(misc.banText, sizeof(misc.banText), miscJson["Ban text"].asCString());
+        if (miscJson.isMember("Ban text")) misc.banText = miscJson["Ban text"].asString();
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
 
         if (const auto& bombTimer{ miscJson["Bomb timer"] }; bombTimer.isObject()) {

@@ -1009,7 +1009,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
-    if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
+    if (ImGui::InputText("", &config.misc.clanTag))
         Misc::updateClanTag(true);
     ImGui::PopID();
     ImGui::Checkbox("Chat spam", &config.misc.chatSpam);
@@ -1029,7 +1029,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
     ImGui::PushID(3);
-    ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
+    ImGui::InputText("", &config.misc.voteText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake vote"))
@@ -1041,7 +1041,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(5);
-    ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
+    ImGui::InputText("", &config.misc.banText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
