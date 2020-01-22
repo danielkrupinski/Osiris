@@ -225,7 +225,7 @@ public:
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
-        char clanTag[16]{ "" };
+        std::string clanTag;
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
