@@ -1392,7 +1392,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SetTooltip("Shows the Prime status in the menu");
     }
     ImGui::Checkbox("Fast Plant", &config.misc.fastPlant);
-    ImGui::Checkbox("Bomb Damage", &config.misc.bombDamage);
     ImGuiCustom::colorPicker("Bomb Timer", config.misc.bombTimer);
     ImGui::Checkbox("Quick Reload", &config.misc.quickReload);
     if (ImGui::IsItemHovered()) {

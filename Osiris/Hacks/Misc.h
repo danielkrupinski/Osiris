@@ -41,7 +41,6 @@ namespace Misc
     void chatSpam() noexcept;
     void useSpam(UserCmd*) noexcept;
     void edgeJump(UserCmd* cmd) noexcept;
-    void drawBombDamage() noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {

@@ -905,7 +905,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
         if (miscJson.isMember("Ban text")) strcpy_s(misc.banText, sizeof(misc.banText), miscJson["Ban text"].asCString());
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
-        if (miscJson.isMember("Bomb damage")) misc.bombDamage = miscJson["Bomb damage"].asBool();
 
         if (const auto& bombTimer{ miscJson["Bomb timer"] }; bombTimer.isObject()) {
             if (const auto& enabled{ bombTimer["Enabled"] }; enabled.isBool())
@@ -1689,7 +1688,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Ban color"] = misc.banColor;
         miscJson["Ban text"] = misc.banText;
         miscJson["Fast plant"] = misc.fastPlant;
-        miscJson["Bomb damage"] = misc.bombDamage;
 
         {
             auto& bombTimerJson = miscJson["Bomb timer"];

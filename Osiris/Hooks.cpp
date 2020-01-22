@@ -234,7 +234,6 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 {
 	if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
 		Esp::render();
-		Misc::drawBombDamage();
 		Misc::drawBombTimer();
 		Misc::spectatorList();
 		Misc::watermark();
