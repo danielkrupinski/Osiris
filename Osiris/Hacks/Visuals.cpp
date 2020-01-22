@@ -395,9 +395,9 @@ void Visuals::applyScreenEffects() noexcept
     }
 }
 
-void Visuals::hitEffect(GameEvent* event) noexcept
+void Visuals::hitMarker(GameEvent* event) noexcept
 {
-    if (config.visuals.hitEffect) {
+    if (config.visuals.hitMarker) {
         static float lastHitTime = 0.0f;
 
         if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
