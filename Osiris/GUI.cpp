@@ -535,6 +535,9 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         ImGui::SetTooltip("Backtrack targets when they are smoked");
     }
     ImGui::Checkbox("Recoil-Based FoV", &config.backtrack.recoilBasedFov);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Backtrack uses recoil as an FoV origin");
+    }
     ImGui::Checkbox("Draw All Ticks", &config.backtrack.drawAllTicks);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Shows all backtrack records");
@@ -543,8 +546,7 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Uses your ping to determine how far to backtrack");
     }
-    if (!config.backtrack.pingBased)
-    {
+    if (!config.backtrack.pingBased) {
         ImGui::PushItemWidth(220.0f);
         ImGui::SliderInt("", &config.backtrack.timeLimit, 1, 200, "Amount: %d ms");
         ImGui::PopItemWidth();
