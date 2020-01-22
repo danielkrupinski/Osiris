@@ -229,16 +229,18 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::drawBombDamage() noexcept
+void Misc::drawBombTimer() noexcept
 {
-    if (config.misc.bombDamage) {
-
+    if (config.misc.bombTimer.enabled) {
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
         for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
+
+            constexpr unsigned font{ 0xc1 };
+            interfaces.surface->setTextFont(font);
+
 
             Vector vecBombDistance = entity->origin() - localPlayer->origin();
 
@@ -264,37 +266,23 @@ void Misc::drawBombDamage() noexcept
             }
             int bombDamage = max((int)ceilf(flDamage), 0);
 
-            constexpr unsigned font{ 0xc1 };
-            interfaces.surface->setTextFont(font);
-
             if (bombDamage >= localPlayer->health())
                 interfaces.surface->setTextColor(255, 0, 0);
             else
                 interfaces.surface->setTextColor(0, 255, 0);
 
-            auto bombText{ (std::wstringstream{ } << L"Bomb Damage: " << bombDamage).str() };
+            auto bombDmgText{ (std::wstringstream{ } << L"Bomb Damage: " << bombDamage).str() };
 
-            auto drawPositionX{ interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, bombText.c_str()).first };
+            auto bombDmgX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombDmgText.c_str())).first / 2) };
+            auto drawPositionY{ interfaces.surface->getScreenSize().second / 10 };
+            interfaces.surface->setTextPosition(bombDmgX, drawPositionY);
+            interfaces.surface->printText(bombDmgText.c_str());
 
-            interfaces.surface->setTextPosition(drawPositionX, 0);
-            interfaces.surface->printText(bombText.c_str());
-            break;
-        }
-    }
-}
+            drawPositionY += interfaces.surface->getTextSize(font, bombDmgText.c_str()).second;
 
-void Misc::drawBombTimer() noexcept
-{
-    if (config.misc.bombTimer.enabled) {
-        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-            Entity* entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
-                continue;
 
-            constexpr unsigned font{ 0xc1 };
-            interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255, 255, 255);
-            auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
+
             auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
