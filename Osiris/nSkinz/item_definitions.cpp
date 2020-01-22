@@ -62,6 +62,6 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 		{GLOVE_HYDRA,{"models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl"}}
 	};
 
-	const auto entry = info.find(defindex);
-	return entry == end(info) ? nullptr : &entry->second;
+    const auto entry = info.find(defindex);
+    return entry == end(info) ? nullptr : &entry->second;
 }

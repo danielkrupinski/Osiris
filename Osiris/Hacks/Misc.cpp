@@ -1,4 +1,4 @@
-#include <sstream>
+﻿#include <sstream>
 #include <random>
 
 #include "../Config.h"
@@ -469,7 +469,6 @@ void Misc::quickReload(UserCmd* cmd) noexcept
                     break;
                 }
             }
-
         }
     }
 }
@@ -649,11 +648,11 @@ void Misc::chatSpam() noexcept
 }
 
 void Misc::nadePredict() noexcept
-{ 
-    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
-    
-    nadeVar->onChangeCallbacks.size = 0; 
-    nadeVar->setValue(config.misc.nadePredict); 
+{
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
+
+    nadeVar->onChangeCallbacks.size = 0;
+    nadeVar->setValue(config.misc.nadePredict);
 }
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept
