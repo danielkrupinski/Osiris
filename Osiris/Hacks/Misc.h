@@ -109,6 +109,7 @@ namespace Misc
     {
         if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
             config.misc.autoStrafe
+            && (!config.misc.autoStrafeKey || GetAsyncKeyState(config.misc.autoStrafeKey))
             && !(localPlayer->flags() & 1)
             && localPlayer->moveType() != MoveType::NOCLIP) {
             if (cmd->mousedx < 0)

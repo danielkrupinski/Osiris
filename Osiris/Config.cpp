@@ -798,6 +798,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
+        if (miscJson.isMember("Auto strafe Key")) misc.autoStrafeKey = miscJson["Auto strafe Key"].asInt();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
@@ -1551,6 +1552,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
+        miscJson["Auto strafe Key"] = misc.autoStrafeKey;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Clock tag"] = misc.clocktag;
