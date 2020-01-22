@@ -859,7 +859,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Chat spam")) misc.chatSpam = miscJson["Chat spam"].asBool();
         if (miscJson.isMember("Chat spam random")) misc.chatSpamRandom = miscJson["Chat spam random"].asBool();
         if (miscJson.isMember("Chat spam delay")) misc.chatSpamDelay = miscJson["Chat spam delay"].asInt();
-        if (miscJson.isMember("Chat spam phrases")) strcpy_s(misc.chatSpamPhrases, sizeof(misc.chatSpamPhrases), miscJson["Chat spam phrases"].asCString());
+        if (miscJson.isMember("Chat spam phrases")) misc.chatSpamPhrases = miscJson["Chat spam phrases"].asString();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) misc.killMessageString = miscJson["Kill message string"].asString();
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();

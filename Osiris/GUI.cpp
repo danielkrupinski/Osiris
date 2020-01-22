@@ -1019,7 +1019,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderInt("Delay", &config.misc.chatSpamDelay, 1, 60, "%d s");
     ImGui::Text("Phrases");
     ImGui::PushID(1);
-    ImGui::InputTextMultiline("", config.misc.chatSpamPhrases, IM_ARRAYSIZE(config.misc.chatSpamPhrases), { 280.f, 120.f });
+    ImGui::InputTextMultiline("", &config.misc.chatSpamPhrases, { 280.f, 120.f });
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &config.misc.killMessage);
     ImGui::SameLine();

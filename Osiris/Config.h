@@ -252,7 +252,7 @@ public:
         bool chatSpam{ false };
         bool chatSpamRandom{ false };
         int chatSpamDelay{ 1 };
-        char chatSpamPhrases[8192]{ };
+        std::string chatSpamPhrases{ };
         bool killMessage{ false };
         std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };

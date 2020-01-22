@@ -530,49 +530,23 @@ void Misc::chatSpam() noexcept
     if (!localPlayer || localPlayer->team() == 0)
         return;
 
-    auto charId{ 0 }, phrasesNum{ 0 };
-
+    std::istringstream Stream(config.misc.chatSpamPhrases);
     std::vector <std::string> Phrases;
     std::string Phrase;
 
-    while (true)
+    while (std::getline(Stream, Phrase, '\n'))
     {
-        if (config.misc.chatSpamPhrases[charId] == '\0')
-        {
-            if (Phrase.length() > 0)
-            {
-                Phrases.push_back(Phrase);
-
-                phrasesNum++;
-            }
-
-            break;
-        }
-
-        else if (config.misc.chatSpamPhrases[charId] == '\n')
-        {
-            if (Phrase.length() > 0)
-            {
-                Phrases.push_back(Phrase);
-                Phrase.clear();
-
-                phrasesNum++;
-            }
-
-            charId++;
-        }
-
-        else
-            Phrase += config.misc.chatSpamPhrases[charId++];
+        if (Phrase.length() > 0)
+            Phrases.push_back(Phrase);
     }
 
-    if (phrasesNum > 0)
+    if (Phrases.size() > 0)
     {
         static auto phraseId{ 0 };
 
         if (config.misc.chatSpamRandom)
         {
-            const auto randNum{ random(0, phrasesNum - 1) };
+            const auto randNum{ random(0, Phrases.size() - 1) };
             const auto Cmd{ "say \"" + Phrases[randNum] + "\"" };
 
             interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
@@ -582,7 +556,7 @@ void Misc::chatSpam() noexcept
 
         else
         {
-            if (phraseId >= phrasesNum)
+            if (phraseId >= Phrases.size())
                 phraseId = 0;
 
             const auto Cmd{ "say \"" + Phrases[phraseId++] + "\"" };
