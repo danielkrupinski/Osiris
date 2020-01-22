@@ -1033,7 +1033,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(4);
-    ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
+    ImGui::InputText("", &config.misc.banText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))

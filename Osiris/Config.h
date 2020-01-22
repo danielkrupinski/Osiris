@@ -256,7 +256,7 @@ public:
         bool disablePanoramablur{ false };
         std::string voteText;
         int banColor{ 6 };
-        char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
+        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
