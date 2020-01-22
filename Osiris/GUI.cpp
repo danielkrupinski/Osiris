@@ -1016,7 +1016,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(1);
-    ImGui::InputText("", config.misc.killMessageString, IM_ARRAYSIZE(config.misc.killMessageString));
+    ImGui::InputText("", &config.misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
     ImGui::PushID(2);
