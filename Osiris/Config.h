@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <string>
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
@@ -250,7 +251,7 @@ public:
         bool disableModelOcclusion{ false };
         float aspectratio{ 0 };
         bool killMessage{ false };
-        char killMessageString[230]{ "Gotcha!" };
+        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
         char voteText[50]{ "" };
