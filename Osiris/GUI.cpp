@@ -13,6 +13,7 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
+#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
@@ -1075,6 +1076,10 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
     }
     ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+    ImGui::SameLine(0.0f, 50.0f);
+    if (ImGui::Button("Reset"))
+        Reportbot::reset();
+    ImGui::Separator();
     ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
     ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
     config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
