@@ -164,7 +164,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMGs\0Rifles\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -177,7 +177,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         break;
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-SeveN", "CZ75 Auto", "Desert Eagle", "R8 Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config.aimbot[idx ? idx : 35].enabled) {
@@ -196,7 +196,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-Off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config.aimbot[idx ? idx + 10 : 36].enabled) {
@@ -215,7 +215,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "All", "MAC-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config.aimbot[idx ? idx + 16 : 37].enabled) {
@@ -234,7 +234,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "All", "Galil AR", "FAMAS", "AK-47", "M4A4", "M4A1-S", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config.aimbot[idx ? idx + 23 : 38].enabled) {
@@ -390,7 +390,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
+    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMGs\0Rifles\0Zeus x27\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -407,7 +407,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
 
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-SeveN", "CZ75 Auto", "Desert Eagle", "R8 Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config.triggerbot[idx ? idx : 35].enabled) {
@@ -426,7 +426,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-Off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config.triggerbot[idx ? idx + 10 : 36].enabled) {
@@ -445,7 +445,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "All", "MAC-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config.triggerbot[idx ? idx + 16 : 37].enabled) {
@@ -464,7 +464,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "All", "Galil AR", "FAMAS", "AK-47", "M4A4", "M4A1-S", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config.triggerbot[idx ? idx + 23 : 38].enabled) {
@@ -779,6 +779,9 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Active Weapon", config.esp.players[selected].activeWeapon);
             ImGui::SameLine(spacing);
             ImGui::Checkbox("Dead ESP", &config.esp.players[selected].deadesp);
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("Shows ESP whenever you're dead");
+            }
             ImGui::SliderFloat("Max Distance", &config.esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
             break;
         }
@@ -926,6 +929,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::PushID(4);
     ImGui::SliderInt("", &config.visuals.viewmodelFov, -60, 60, "Viewmodel FoV: %d");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("How close your viewmodels are to your screen");
+    }
     ImGui::PopID();
     ImGui::PushID(5);
     bool viewModelSwitch = 0;
@@ -964,12 +970,21 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::PushItemWidth(280.0f);
         ImGui::PushID(9);
         ImGui::SliderFloat("", &config.visuals.viewModel_x_Knife, -20, 20, "X: %.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Up/Down");
+        }
         ImGui::PopID();
         ImGui::PushID(10);
         ImGui::SliderFloat("", &config.visuals.viewModel_y_Knife, -20, 20, "Y: %.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Left/Right");
+        }
         ImGui::PopID();
         ImGui::PushID(11);
         ImGui::SliderFloat("", &config.visuals.viewModel_z_Knife, -20, 20, "Z: %.2f");
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("To/From");
+        }
         ImGui::PopID();
         ImGui::Checkbox("Flip Knife Hand", &config.visuals.viewModelFlipKnifeHand);
     }
@@ -1552,9 +1567,6 @@ void GUI::renderGuiStyle2() noexcept
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Backtrack")) {
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Abuse lag compensation to move players back in time");
-            }
             renderBacktrackWindow(true);
             ImGui::EndTabItem();
         }
@@ -1591,9 +1603,6 @@ void GUI::renderGuiStyle2() noexcept
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Reportbot")) {
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("Automatically report players on the current server for selected actions");
-            }
             renderReportbotWindow(true);
             ImGui::EndTabItem();
         }
