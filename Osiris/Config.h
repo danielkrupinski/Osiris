@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <string>
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
@@ -295,7 +296,7 @@ public:
         char chatSpamText[8192]{ };
         bool randomChatSpam{ false };
         bool killMessage{ false };
-        char killMessageString[230]{ "" };
+        std::string killMessageString{ "" };
         bool nameStealer{ false };
         char voteText[50]{ "" };
         int banColor{ 6 };
