@@ -832,6 +832,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
 		if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
 		if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
+        if (miscJson.isMember("Auto strafe Key")) misc.autoStrafeKey = miscJson["Auto strafe key"].asInt();
         if (miscJson.isMember("Auto strafe style")) misc.autostrafestyle = miscJson["Auto strafe style"].asInt();
         if (miscJson.isMember("Edge jump")) misc.edgeJump = miscJson["Edge jump"].asBool();
         if (miscJson.isMember("Edge jump key")) misc.edgeJumpKey = miscJson["Edge jump key"].asInt();
@@ -1627,6 +1628,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
 		miscJson["Bunny hop"] = misc.bunnyHop;
 		miscJson["Auto strafe"] = misc.autoStrafe;
+        miscJson["Auto strafe key"] = misc.autoStrafeKey;
         miscJson["Auto strafe style"] = misc.autostrafestyle;
         miscJson["Edge jump"] = misc.edgeJump;
         miscJson["Edge jump key"] = misc.edgeJumpKey;

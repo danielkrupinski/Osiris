@@ -131,7 +131,7 @@ namespace Misc
 
             flYawBhop = a;
         }
-        if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 0) {
+        if (config.misc.autoStrafe && GetAsyncKeyState(config.misc.autoStrafeKey) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 0) {
             if (cmd->mousedx > 1)
             {
                 cmd->sidemove = 450.f;
@@ -141,7 +141,7 @@ namespace Misc
                 cmd->sidemove = -450.f;
             }
         }
-        if (config.misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 1) {
+        if (config.misc.autoStrafe && GetAsyncKeyState(config.misc.autoStrafeKey) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config.misc.autostrafestyle == 1) {
             if (bDirection || cmd->mousedx > 1)
             {
                 cmd->viewangles.y -= flYawBhop;

@@ -1221,6 +1221,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Anti-AFK Kick", &config.misc.antiAfkKick);
     ImGui::Checkbox("Bunnyhop", &config.misc.bunnyHop);
     ImGui::Checkbox("Autostrafe", &config.misc.autoStrafe);
+    ImGui::SameLine();
+    hotkey(config.misc.autoStrafeKey);
     if (config.misc.autoStrafe)
     {
         ImGui::Combo("Style", &config.misc.autostrafestyle, "Legit\0Normal\0");

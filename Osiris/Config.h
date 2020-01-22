@@ -259,6 +259,7 @@ public:
         bool antiAfkKick{ false };
 		bool bunnyHop{ false };
 		bool autoStrafe{ false };
+        int autoStrafeKey{ 0 };
         int autostrafestyle{ 0 };
         bool edgeJump{ false };
         int edgeJumpKey{ 0 };
