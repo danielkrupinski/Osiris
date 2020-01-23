@@ -267,9 +267,9 @@ public:
         bool useSpam{ false };
         bool slowWalk{ false };
         int slowWalkKey{ 0 };
-        bool customClanTag{ false };
+        bool customClanTag{ false   };
         bool clocktag{ false };
-        std::string clanTag;
+        char clanTag[16]{ "" };
         bool animatedClanTag{ false };
         bool fastDuck{ false };
 		int fakeDuckKey{ 0 };

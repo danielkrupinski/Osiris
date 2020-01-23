@@ -1344,7 +1344,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
-    if (ImGui::InputText("", &config.misc.clanTag))
+    if (ImGui::InputText("", config.misc.clanTag, IM_ARRAYSIZE(config.misc.clanTag)))
         Misc::updateClanTag(true);
     ImGui::PopID();
     if (config.misc.customClanTag)
