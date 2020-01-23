@@ -293,14 +293,14 @@ public:
         float aspectRatio{ 0 };
         bool chatSpam{ false };
         int chatSpamDelay{ 0 };
-        char chatSpamText[8192]{ };
+        std::string chatSpamText{ };
         bool randomChatSpam{ false };
         bool killMessage{ false };
         std::string killMessageString{ "" };
         bool nameStealer{ false };
-        char voteText[50]{ "" };
+        std::string voteText;
         int banColor{ 6 };
-        char banText[150]{ "<user> has been permanently banned from official CS:GO servers." };
+        std::string banText{ "<user> has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };

@@ -13,6 +13,7 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
+#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
@@ -1358,7 +1359,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderInt("Delay", &config.misc.chatSpamDelay, 0, 60, "%d s");
     ImGui::Text("Text");
     ImGui::PushID(1);
-    ImGui::InputTextMultiline("", config.misc.chatSpamText, IM_ARRAYSIZE(config.misc.chatSpamText), { 280.f, 120.f });
+    ImGui::InputTextMultiline("", &config.misc.chatSpamText, { 280.f, 120.f });
     ImGui::PopID();
     ImGui::Checkbox("Killsay", &config.misc.killMessage);
     if (ImGui::IsItemHovered()) {
@@ -1371,7 +1372,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Namestealer", &config.misc.nameStealer);
     ImGui::PushID(3);
-    ImGui::InputText("", config.misc.voteText, IM_ARRAYSIZE(config.misc.voteText));
+    ImGui::InputText("", &config.misc.voteText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Fake Vote"))
@@ -1382,7 +1383,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(5);
-    ImGui::InputText("", config.misc.banText, IM_ARRAYSIZE(config.misc.banText));
+    ImGui::InputText("", &config.misc.banText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Fake Ban"))
@@ -1446,6 +1447,10 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
     }
     ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+    ImGui::SameLine(0.0f, 50.0f);
+    if (ImGui::Button("Reset"))
+        Reportbot::reset();
+    ImGui::Separator();
     ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
     ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
     config.reportbot.delay = (std::max)(config.reportbot.delay, 0);

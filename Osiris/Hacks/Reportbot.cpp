@@ -10,6 +10,8 @@
 
 #include "Reportbot.h"
 
+static std::vector<__int64> reportedPlayers;
+
 void Reportbot::run() noexcept
 {
     if (!config.reportbot.enabled)
@@ -34,7 +36,6 @@ void Reportbot::run() noexcept
             continue;
 
         if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo)) {
-            static std::vector<__int64> reportedPlayers;
             if (playerInfo.steamID64 == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.steamID64) != reportedPlayers.cend())
                 continue;
 
@@ -60,4 +61,9 @@ void Reportbot::run() noexcept
         }
     }
     lastReportTime = memory.globalVars->realtime;
+}
+
+void Reportbot::reset() noexcept
+{
+    reportedPlayers.clear();
 }

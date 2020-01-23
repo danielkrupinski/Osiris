@@ -896,14 +896,14 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Aspect ratio")) misc.aspectRatio = miscJson["Aspect ratio"].asFloat();
         if (miscJson.isMember("Chat spam")) misc.chatSpam = miscJson["Chat spam"].asBool();
         if (miscJson.isMember("Chat spam delay")) misc.chatSpamDelay = miscJson["Chat spam delay"].asInt();
-        if (miscJson.isMember("Chat spam text")) strcpy_s(misc.chatSpamText, sizeof(misc.chatSpamText), miscJson["Chat spam text"].asCString());
+        if (miscJson.isMember("Chat spam text")) misc.chatSpamText = miscJson["Chat spam text"].asString();
         if (miscJson.isMember("Random chat spam")) misc.randomChatSpam = miscJson["Random chat spam"].asBool();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
         if (miscJson.isMember("Kill message string")) misc.killMessageString = miscJson["Kill message string"].asString();
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
-        if (miscJson.isMember("Vote text")) strcpy_s(misc.voteText, sizeof(misc.voteText), miscJson["Vote text"].asCString());
+        if (miscJson.isMember("Vote text")) misc.voteText = miscJson["Vote text"].asString();
         if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
-        if (miscJson.isMember("Ban text")) strcpy_s(misc.banText, sizeof(misc.banText), miscJson["Ban text"].asCString());
+        if (miscJson.isMember("Ban text")) misc.banText = miscJson["Ban text"].asString();
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
 
         if (const auto& bombTimer{ miscJson["Bomb timer"] }; bombTimer.isObject()) {

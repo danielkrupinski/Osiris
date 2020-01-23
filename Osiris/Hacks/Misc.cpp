@@ -576,57 +576,33 @@ void Misc::chatSpam() noexcept
     if (!localPlayer || localPlayer->team() == 0)
         return;
 
-    auto charId{ 0 }, textsNum{ 0 };
-
+    std::istringstream Stream(config.misc.chatSpamText);
     std::vector <std::string> Texts;
     std::string Text;
 
-    while (true)
+    while (std::getline(Stream, Text, '\n'))
     {
-        if (config.misc.chatSpamText[charId] == '\0')
-        {
-            if (Text.length() > 0)
-            {
-                Texts.push_back(Text);
-
-                textsNum++;
-            }
-
-            break;
-        }
-
-        else if (config.misc.chatSpamText[charId] == '\n')
-        {
-            if (Text.length() > 0)
-            {
-                Texts.push_back(Text);
-                Text.clear();
-
-                textsNum++;
-            }
-
-            charId++;
-        }
-
-        else
-            Text += config.misc.chatSpamText[charId++];
+        if (Text.length() > 0)
+            Texts.push_back(Text);
     }
 
-    if (textsNum > 0)
+    if (Texts.size() > 0)
     {
         static auto textId{ 0 };
 
         if (config.misc.randomChatSpam)
         {
-            const auto randNum{ random(0, textsNum - 1) };
+            const auto randNum{ random(0, Texts.size() - 1) };
             const auto Cmd{ "say \"" + Texts[randNum] + "\"" };
+
+            interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
 
             textId = randNum + 1;
         }
 
         else
         {
-            if (textId >= textsNum)
+            if (textId >= Texts.size())
                 textId = 0;
 
             const auto Cmd{ "say \"" + Texts[textId++] + "\"" };
