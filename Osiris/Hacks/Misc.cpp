@@ -542,7 +542,7 @@ void Misc::drawBombDamage() noexcept
             flDamage = flNew;
         }
 
-        const auto bombDamage = max((int)ceilf(flDamage), 0);
+        const int bombDamage = max(ceilf(flDamage), 0);
 
         //Could get the specator target here as well and set the color based on the spaceted player
         //I'm too lazy for that tho, green while you are dead just looks nicer
