@@ -487,3 +487,22 @@ void Misc::fakePrime() noexcept
         }
     }
 }
+
+void Misc::killMessage(GameEvent& event) noexcept
+{
+    if (!config.misc.killMessage)
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces.engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+        return;
+
+    std::string cmd = "say \"";
+    cmd += config.misc.killMessageString;
+    cmd += "\"";
+    interfaces.engine->clientCmdUnrestricted(cmd.c_str());
+}
