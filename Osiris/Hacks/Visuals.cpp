@@ -318,8 +318,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
     static float hitMarkerLastHitTime = 0.0f;
 
-    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces
-        .engine->getLocalPlayer())
+    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index())
     {
         hitMarkerLastHitTime = memory.globalVars->realtime;
         return;
