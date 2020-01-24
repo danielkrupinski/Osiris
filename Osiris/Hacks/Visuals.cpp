@@ -313,7 +313,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-    if (!localPlayer || !localPlayer->isAlive() || !config.visuals.hitMarker || config.visuals.hitMarker == 0)
+    if (!localPlayer || !localPlayer->isAlive() || config.visuals.hitMarker == 0)
         return;
 
     static float hitMarkerLastHitTime = 0.0f;
