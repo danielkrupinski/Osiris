@@ -518,31 +518,30 @@ void Misc::drawBombDamage() noexcept
     for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++)
     {
         auto entity = interfaces.entityList->getEntity(i);
-        if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
+        if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->
+            c4Ticking())
             continue;
 
         auto vecBombDistance = entity->origin() - localPlayer->origin();
 
-        const auto a = 450.7f;
-        const auto b = 75.68f;
-        const auto c = 789.2f;
-        const auto d = (vecBombDistance.length() - b) / c;
-        auto flDamage = a * exp(-d * d);
+        const auto d = (vecBombDistance.length() - 75.68f) / 789.2f;
+        auto flDamage = 450.7f * exp(-d * d);
 
         const auto ArmorValue = localPlayer->armor();
-        const auto flArmorRatio = 0.5f;
-        const auto flArmorBonus = 0.5f;
-        if (ArmorValue > 0) {
-            auto flNew = flDamage * flArmorRatio;
-            auto flArmor = (flDamage - flNew) * flArmorBonus;
+        if (ArmorValue > 0)
+        {
+            auto flNew = flDamage * 0.5f;
+            auto flArmor = (flDamage - flNew) * 0.5f;
 
-            if (flArmor > static_cast<float>(ArmorValue)) {
-                flArmor = static_cast<float>(ArmorValue)* (1.f / flArmorBonus);
+            if (flArmor > static_cast<float>(ArmorValue))
+            {
+                flArmor = static_cast<float>(ArmorValue) * (1.f / 0.5f);
                 flNew = flDamage - flArmor;
             }
 
             flDamage = flNew;
         }
+
         const auto bombDamage = max((int)ceilf(flDamage), 0);
 
         //Could get the specator target here as well and set the color based on the spaceted player
@@ -552,12 +551,12 @@ void Misc::drawBombDamage() noexcept
         else
             interfaces.surface->setTextColor(0, 255, 0);
 
-        auto bombDmgText{ (std::wstringstream{ } << L"Bomb Damage: " << bombDamage).str() };
+        auto bombDmgText{(std::wstringstream{} << L"Bomb Damage: " << bombDamage).str()};
 
-        constexpr unsigned font{ 0xc1 };
+        constexpr unsigned font{0xc1};
         interfaces.surface->setTextFont(font);
 
-        auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
+        auto drawPositionY{interfaces.surface->getScreenSize().second / 8};
         const auto bombDmgX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombDmgText.c_str())).first / 2) };
 
         drawPositionY -= interfaces.surface->getTextSize(font, bombDmgText.c_str()).second;
@@ -566,4 +565,3 @@ void Misc::drawBombDamage() noexcept
         interfaces.surface->printText(bombDmgText.c_str());
     }
 }
-
