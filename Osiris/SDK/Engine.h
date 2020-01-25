@@ -51,15 +51,15 @@ public:
         callVirtualMethod<void, const Vector&>(this, 19, angles);
     }
 
-	constexpr auto getMaxClients() noexcept
-	{
-		return callVirtualMethod<int>(this, 20);
-	}
+    constexpr auto getMaxClients() noexcept
+    {
+        return callVirtualMethod<int>(this, 20);
+    }
 
-	constexpr auto isInGame() noexcept
-	{
-		return callVirtualMethod<bool>(this, 26);
-	}
+    constexpr auto isInGame() noexcept
+    {
+        return callVirtualMethod<bool>(this, 26);
+    }
 
     constexpr auto isConnected() noexcept
     {
