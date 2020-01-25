@@ -85,7 +85,7 @@ void Visuals::colorWorld() noexcept
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+        if (config.visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
             if (config.visuals.world.rainbow)
                 mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
             else
