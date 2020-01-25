@@ -85,8 +85,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         static std::wstring clanTag{ L"" };
 
         if (tagChanged) {
-            const auto clanTagLength{ MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), nullptr, 0) };
-            if (clanTag.resize(clanTagLength); MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag, strlen(config.misc.clanTag), clanTag.data(), clanTagLength)) {
+            const auto clanTagLength{ MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag.data(), config.misc.clanTag.length(), nullptr, 0) };
+            if (clanTag.resize(clanTagLength); MultiByteToWideChar(CP_UTF8, 0, config.misc.clanTag.data(), config.misc.clanTag.length(), clanTag.data(), clanTagLength)) {
                 if (clanTag.empty())
                     return;
 
