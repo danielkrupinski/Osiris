@@ -223,7 +223,8 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
-        Misc::watermark();       
+        Misc::watermark();
+        Visuals::hitMarker();
         Misc::drawBombDamage();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
@@ -327,7 +328,8 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             break;
         case fnv::hash("player_hurt"):
             Misc::playHitSound(*event);
-            Visuals::hitEffect(event);
+            Visuals::hitEffect(event);                
+            Visuals::hitMarker(event);
             break;
         }
     }
