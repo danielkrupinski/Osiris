@@ -10,6 +10,7 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
+#include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
 
 #include <array>
@@ -305,5 +306,39 @@ void Visuals::hitEffect(GameEvent* event) noexcept
             renderContext->endRender();
             renderContext->release();
         }
+    }
+}
+
+void Visuals::hitMarker(GameEvent* event) noexcept
+{
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive() || config.visuals.hitMarker == 0)
+        return;
+
+    static float hitMarkerLastHitTime = 0.0f;
+
+    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index())
+    {
+        hitMarkerLastHitTime = memory.globalVars->realtime;
+        return;
+    }
+
+    if (hitMarkerLastHitTime + config.visuals.hitMarkerTime <= memory.globalVars->realtime)
+        return;
+
+    switch (config.visuals.hitMarker) {
+    case 1:
+        const auto [width, height] = interfaces.surface->getScreenSize();
+
+        const auto width_mid = width / 2;
+        const auto height_mid = height / 2;
+
+        interfaces.surface->setDrawColor(255, 255, 255, 255);
+        interfaces.surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        break;
     }
 }
