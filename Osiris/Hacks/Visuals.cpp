@@ -311,20 +311,17 @@ void Visuals::hitEffect(GameEvent* event) noexcept
 
 void Visuals::hitMarker(GameEvent* event) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-    if (!localPlayer || !localPlayer->isAlive() || config.visuals.hitMarker == 0)
+    if (config.visuals.hitMarker == 0)
         return;
 
-    static float hitMarkerLastHitTime = 0.0f;
+    static float lastHitTime = 0.0f;
 
-    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index())
-    {
-        hitMarkerLastHitTime = memory.globalVars->realtime;
+    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        lastHitTime = memory.globalVars->realtime;
         return;
     }
 
-    if (hitMarkerLastHitTime + config.visuals.hitMarkerTime <= memory.globalVars->realtime)
+    if (lastHitTime + config.visuals.hitMarkerTime < memory.globalVars->realtime)
         return;
 
     switch (config.visuals.hitMarker) {
