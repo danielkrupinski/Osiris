@@ -79,6 +79,9 @@ void Visuals::colorWorld() noexcept
     if (!config.visuals.world.enabled && !config.visuals.sky.enabled)
         return;
 
+    if (config.visuals.world.enabled)
+        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), true);
+
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
         const auto mat = interfaces.materialSystem->getMaterial(h);
 
