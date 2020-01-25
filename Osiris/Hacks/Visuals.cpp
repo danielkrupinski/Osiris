@@ -327,11 +327,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     if (hitMarkerLastHitTime + config.visuals.hitMarkerTime <= memory.globalVars->realtime)
         return;
 
-    switch (config.visuals.hitMarker)
-    {
-    case 0:
-        //No idea how we even got here
-        return;
+    switch (config.visuals.hitMarker) {
     case 1:
         const auto [width, height] = interfaces.surface->getScreenSize();
 
