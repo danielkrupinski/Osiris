@@ -236,6 +236,7 @@ public:
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
+        bool sniperCrosshairInscope{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool autoReload{ false };

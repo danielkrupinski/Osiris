@@ -111,7 +111,7 @@ public:
     {
         callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
     }
-
+    
     template <typename T>
     void drawCircle(T x, T y, int startRadius, int radius) noexcept
     {
@@ -126,4 +126,6 @@ public:
             interfaces.surface->drawPolyLine(xs, ys, 12);
         }
     }
+   
+  
 };

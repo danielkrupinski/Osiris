@@ -171,7 +171,7 @@ public:
     {
         return callVirtualMethod<WeaponData*>(this, 457);
     }
-
+	
     constexpr float getInaccuracy() noexcept
     {
         return callVirtualMethod<float>(this, 479);
