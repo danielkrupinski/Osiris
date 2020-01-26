@@ -10,18 +10,23 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
+#include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
 
 #include <array>
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
-    if (stage != FrameStage::NET_UPDATE_POSTDATAUPDATE_START)
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
+    static int originalIdx = 0;
+
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (!localPlayer)
+    if (!localPlayer) {
+        originalIdx = 0;
         return;
+    }
 
     constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
         constexpr std::array models{
@@ -57,7 +62,11 @@ void Visuals::playerModel(FrameStage stage) noexcept
     };
 
     if (const auto model = getModel(localPlayer->team())) {
-        const auto idx = interfaces.modelInfo->getModelIndex(model);
+        if (stage == FrameStage::RENDER_START)
+            originalIdx = localPlayer->modelIndex();
+
+        const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces.modelInfo->getModelIndex(model);
+
         localPlayer->setModelIndex(idx);
 
         if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
@@ -67,19 +76,28 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
 void Visuals::colorWorld() noexcept
 {
+    if (!config.visuals.world.enabled && !config.visuals.sky.enabled)
+        return;
+
+    if (config.visuals.world.enabled)
+        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), true);
+
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-        if (Material* mat = interfaces.materialSystem->getMaterial(h); mat && mat->isPrecached()) {
-            if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
-                if (config.visuals.world.rainbow)
-                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
-                else
-                    mat->colorModulate(config.visuals.world.color);
-            } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
-                if (config.visuals.sky.rainbow)
-                    mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
-                else
-                    mat->colorModulate(config.visuals.sky.color);
-            }
+        const auto mat = interfaces.materialSystem->getMaterial(h);
+
+        if (!mat || !mat->isPrecached())
+            continue;
+
+        if (config.visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
+            if (config.visuals.world.rainbow)
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+            else
+                mat->colorModulate(config.visuals.world.color);
+        } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+            if (config.visuals.sky.rainbow)
+                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+            else
+                mat->colorModulate(config.visuals.sky.color);
         }
     }
 }
@@ -121,9 +139,14 @@ void Visuals::thirdperson() noexcept
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
     static Vector aimPunch;
     static Vector viewPunch;
-    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
     if (stage == FrameStage::RENDER_START) {
         aimPunch = localPlayer->aimPunchAngle();
         viewPunch = localPlayer->viewPunchAngle();
@@ -247,9 +270,9 @@ void Visuals::applyScreenEffects() noexcept
     }
 }
 
-void Visuals::hitMarker(GameEvent* event) noexcept
+void Visuals::hitEffect(GameEvent* event) noexcept
 {
-    if (config.visuals.hitMarker) {
+    if (config.visuals.hitEffect) {
         static float lastHitTime = 0.0f;
 
         if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
@@ -257,7 +280,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
             return;
         }
 
-        if (lastHitTime + config.visuals.hitMarkerTime >= memory.globalVars->realtime) {
+        if (lastHitTime + config.visuals.hitEffectTime >= memory.globalVars->realtime) {
             constexpr auto getEffectMaterial = [] {
                 static constexpr const char* effects[]{
                 "effects/dronecam",
@@ -266,9 +289,9 @@ void Visuals::hitMarker(GameEvent* event) noexcept
                 "effects/dangerzone_screen"
                 };
 
-                if (config.visuals.hitMarker <= 2)
+                if (config.visuals.hitEffect <= 2)
                     return effects[0];
-                return effects[config.visuals.hitMarker - 2];
+                return effects[config.visuals.hitEffect - 2];
             };
 
             auto renderContext = interfaces.materialSystem->getRenderContext();
@@ -276,15 +299,46 @@ void Visuals::hitMarker(GameEvent* event) noexcept
             int x, y, width, height;
             renderContext->getViewport(x, y, width, height);
             auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
-            if (config.visuals.hitMarker == 1)
+            if (config.visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
-            else if (config.visuals.hitMarker == 2)
+            else if (config.visuals.hitEffect == 2)
                 material->findVar("$c0_x")->setValue(0.1f);
-            else if (config.visuals.hitMarker >= 4)
+            else if (config.visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
             drawScreenEffectMaterial(material, 0, 0, width, height);
             renderContext->endRender();
             renderContext->release();
         }
+    }
+}
+
+void Visuals::hitMarker(GameEvent* event) noexcept
+{
+    if (config.visuals.hitMarker == 0)
+        return;
+
+    static float lastHitTime = 0.0f;
+
+    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        lastHitTime = memory.globalVars->realtime;
+        return;
+    }
+
+    if (lastHitTime + config.visuals.hitMarkerTime < memory.globalVars->realtime)
+        return;
+
+    switch (config.visuals.hitMarker) {
+    case 1:
+        const auto [width, height] = interfaces.surface->getScreenSize();
+
+        const auto width_mid = width / 2;
+        const auto height_mid = height / 2;
+
+        interfaces.surface->setDrawColor(255, 255, 255, 255);
+        interfaces.surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        break;
     }
 }

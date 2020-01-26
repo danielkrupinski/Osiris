@@ -42,4 +42,6 @@ Memory::Memory() noexcept
     test2 = findPattern<uintptr_t>(L"client_panorama", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
+    vignette = *findPattern<float**>(L"client_panorama", "\x0F\x11\x05????\xF3\x0F\x7E\x87", 3) + 1;
+    equipWearable = findPattern<decltype(equipWearable)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9");
 }
