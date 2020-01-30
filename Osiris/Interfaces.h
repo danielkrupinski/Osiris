@@ -23,6 +23,8 @@ class ResourceAccessControl;
 class Surface;
 class Sound;
 class SoundEmitter;
+class Predict;
+class GameMovement;
 
 class Interfaces {
 public:
@@ -45,6 +47,8 @@ public:
     Surface* surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
     Sound* sound = find<Sound>(L"engine", "IEngineSoundClient003");
     SoundEmitter* soundEmitter = find<SoundEmitter>(L"soundemittersystem", "VSoundEmitter003");
+    Predict* prediction = find<Predict>(L"client_panorama", "VClientPrediction001");
+    GameMovement* gameMovement = find<GameMovement>(L"client_panorama", "GameMovement001");
 private:
     template <typename T>
     static auto find(const wchar_t* module, const char* name) noexcept
