@@ -1,6 +1,6 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/UserCmd.h"
-#include "../SDK/EnginePrediction.h"
+#include "EnginePrediction.h"
 #include "../SDK/Prediction.h"
 #include "../Interfaces.h"
 #include "../SDK/PseudoMd5.h"
