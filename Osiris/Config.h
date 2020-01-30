@@ -169,6 +169,7 @@ public:
         bool zoom{ false };
         int zoomKey{ 0 };
         bool thirdperson{ false };
+        bool deadThirdperson{ false };
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
