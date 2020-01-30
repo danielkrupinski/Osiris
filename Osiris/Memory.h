@@ -27,6 +27,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    MoveHelper* moveHelper;
 
     bool* disablePostProcessing;
 
