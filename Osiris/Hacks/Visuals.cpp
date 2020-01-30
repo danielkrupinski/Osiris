@@ -125,6 +125,8 @@ void Visuals::thirdperson() noexcept
 {
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
+    
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
@@ -133,8 +135,10 @@ void Visuals::thirdperson() noexcept
 
     if (config.visuals.thirdperson)
         if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
-            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
+            && localPlayer->isAlive())
             memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+        else if(!localPlayer->isAlive() && config.visuals.deadThirdperson)
+            localPlayer->observerMode() = (!config.visuals.thirdpersonKey || isInThirdperson) ? ObserverMode::OBS_MODE_CHASE : ObserverMode::OBS_MODE_IN_EYE;
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
