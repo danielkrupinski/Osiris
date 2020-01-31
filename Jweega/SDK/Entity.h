@@ -198,12 +198,12 @@ public:
 
     constexpr void updateAccuracyPenalty() noexcept
     {
-        return callVirtualMethod<void>(this, 480);
+        return callVirtualMethod<void>(this, 482);
     }
 
     constexpr float getSpread() noexcept
     {
-        return callVirtualMethod<float>(this, 449);
+        return callVirtualMethod<float>(this, 451);
     }
     
     VarMap* getVarMap() noexcept
@@ -241,7 +241,7 @@ public:
 
     constexpr Entity* getObserverTarget() noexcept
     {
-        return callVirtualMethod<Entity*>(this, 294);
+        return callVirtualMethod<Entity*>(this, 296);
     }
 
     bool isInReload() noexcept
