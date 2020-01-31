@@ -53,14 +53,15 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
         gui.open = !gui.open;
         if (!gui.open) {
-            ImGui::GetIO().MouseDown[0] = false;
+           // ImGui::GetIO().MouseDown[0] = false;
             interfaces.inputSystem->resetInputState();
         }
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.open && msg >= WM_INPUT && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
-        return true;
+    ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+
+    interfaces.inputSystem->enableInput(!gui.open);
 
     return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
 }
@@ -231,6 +232,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::spectatorList();
         Misc::drawFov();
         Misc::watermark();
+        Visuals::hitMarker();
     }
     hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
 }
@@ -333,7 +335,8 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             break;
         case fnv::hash("player_hurt"):
             Misc::playHitSound(*event);
-            Visuals::hitEffect(event);
+            Visuals::hitEffect(event);                
+            Visuals::hitMarker(event);
             break;
         }
     }
@@ -528,6 +531,7 @@ void Hooks::restore() noexcept
     }
 
     interfaces.resourceAccessControl->accessingThreadCount--;
+    interfaces.inputSystem->enableInput(true);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
