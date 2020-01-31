@@ -66,6 +66,51 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     }
 }
 
+void Misc::playerBlocker(UserCmd* cmd) noexcept
+{
+    if (GetAsyncKeyState(config.misc.playerBlockerKey)) {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        float bestdist = 250.f;
+        int index = -1;
+        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
+            auto entity = interfaces.entityList->getEntity(i);
+
+            if (!entity)
+                continue;
+
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer)
+                continue;
+
+            float dist = distance(localPlayer->origin(), entity->origin());
+            if (dist < bestdist)
+            {
+                bestdist = dist;
+                index = i;
+            }
+        }
+
+        if (index == -1)
+            return;
+
+        auto target = interfaces.entityList->getEntity(index);
+
+        if (!target)
+            return;
+
+        Vector angles = Misc::calculateRelativeAngle(localPlayer->origin(), target->origin());
+
+        angles.y -= localPlayer->eyeAngles().y;
+        angles.normalize();
+        angles.y = std::clamp(angles.y, -180.f, 180.f);
+
+        if (angles.y < 0.0f)
+            cmd->sidemove = 450.f;
+        else if (angles.y > 0.0f)
+            cmd->sidemove = -450.f;
+
+    }
+}
+
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
@@ -506,3 +551,24 @@ void Misc::killMessage(GameEvent& event) noexcept
     cmd += "\"";
     interfaces.engine->clientCmdUnrestricted(cmd.c_str());
 }
+
+//Modified aimbot function
+Vector Misc::calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept
+{
+    Vector delta = destination - source;
+    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))), radiansToDegrees(atan2f(delta.y, delta.x)) };
+    angles.normalize();
+    return angles;
+}
+
+//Some distance check function i found in this source i think
+int Misc::distance(Vector a, Vector b) noexcept
+{
+    double distance;
+    distance = sqrt(((int)a.x - (int)b.x) * ((int)a.x - (int)b.x) +
+        ((int)a.y - (int)b.y) * ((int)a.y - (int)b.y) +
+        ((int)a.z - (int)b.z) * ((int)a.z - (int)b.z));
+
+    return (int)abs(round(distance));
+}
+

@@ -820,6 +820,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
         if (miscJson.isMember("Reveal suspect")) misc.revealSuspect = miscJson["Reveal suspect"].asBool();
+        if (miscJson.isMember("Player Blocker")) misc.playerBlocker = miscJson["Player Blocker"].asBool();
+        if (miscJson.isMember("Player Blocker Key")) misc.playerBlockerKey = miscJson["Player Blocker Key"].asInt();
 
         if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
             if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
@@ -1575,6 +1577,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Reveal ranks"] = misc.revealRanks;
         miscJson["Reveal money"] = misc.revealMoney;
         miscJson["Reveal suspect"] = misc.revealSuspect;
+        miscJson["Player Blocker"] = misc.playerBlocker;
+        miscJson["Player Blocker Key"] = misc.playerBlockerKey;
 
         {
             auto& spectatorListJson = miscJson["Spectator list"];

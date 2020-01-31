@@ -15,6 +15,7 @@ namespace Misc
 {
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
+    void playerBlocker(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
@@ -36,6 +37,9 @@ namespace Misc
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
+
+    Vector calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept;
+    int distance(Vector a, Vector b) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
