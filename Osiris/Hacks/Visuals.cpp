@@ -80,7 +80,7 @@ void Visuals::colorWorld() noexcept
         return;
 
     if (config.visuals.world.enabled)
-        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), true);
+        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces.cvar->findVar("cl_brushfastpath")->setValue(0), true);
 
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
         const auto mat = interfaces.materialSystem->getMaterial(h);
