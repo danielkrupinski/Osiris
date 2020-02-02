@@ -509,11 +509,12 @@ void Misc::killMessage(GameEvent& event) noexcept
 
 void Misc::drawBombDamage() noexcept
 {
+    if (!config.misc.bombDamage) return;
+
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     //No Alive return since it is useful if you want to call it out to a mate that he will die
-    if (!localPlayer || !config.misc.bombDamage)
-        return;
+    if (!localPlayer) return;
 
     for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++)
     {
@@ -527,15 +528,15 @@ void Misc::drawBombDamage() noexcept
         const auto d = (vecBombDistance.length() - 75.68f) / 789.2f;
         auto flDamage = 450.7f * exp(-d * d);
 
-        const auto ArmorValue = localPlayer->armor();
+        const float ArmorValue = localPlayer->armor();
         if (ArmorValue > 0)
         {
             auto flNew = flDamage * 0.5f;
             auto flArmor = (flDamage - flNew) * 0.5f;
 
-            if (flArmor > static_cast<float>(ArmorValue))
+            if (flArmor > ArmorValue)
             {
-                flArmor = static_cast<float>(ArmorValue) * (1.f / 0.5f);
+                flArmor = ArmorValue * 2.f;
                 flNew = flDamage - flArmor;
             }
 
@@ -557,7 +558,11 @@ void Misc::drawBombDamage() noexcept
         interfaces.surface->setTextFont(font);
 
         auto drawPositionY{interfaces.surface->getScreenSize().second / 8};
-        const auto bombDmgX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombDmgText.c_str())).first / 2) };
+        const auto bombDmgX{
+            interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces
+                                                                              .surface->getTextSize(
+                                                                                  font, bombDmgText.c_str())).first / 2)
+        };
 
         drawPositionY -= interfaces.surface->getTextSize(font, bombDmgText.c_str()).second;
 
