@@ -68,7 +68,7 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 
 void Misc::playerBlocker(UserCmd* cmd) noexcept
 {
-    if ( config.misc.playerBlocker || GetAsyncKeyState(config.misc.playerBlockerKey)) {
+    if ( config.misc.playerBlocker && GetAsyncKeyState(config.misc.playerBlockerKey)) {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
         float bestdist = 250.f;
         int index = -1;
