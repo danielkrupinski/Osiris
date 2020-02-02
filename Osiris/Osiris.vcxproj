@@ -23,6 +23,7 @@
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
+    <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
     <ClInclude Include="imguiCustom.h" />
+    <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Netvars.h" />

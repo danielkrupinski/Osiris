@@ -194,7 +194,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ### Prerequisites
 Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
-### Dowloading
+### Downloading
 
 There are two options of downloading the source code:
 
@@ -206,7 +206,7 @@ To download source code this way [click here](https://github.com/danielkrupinski
 
 #### With [git](https://git-scm.com)
 
-Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step futher, if not installed download it [here](https://git-scm.com).
+Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step further, if not installed download it [here](https://git-scm.com).
 
 Open git command prompt and enter following command:
 ```
@@ -249,9 +249,10 @@ Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https:
 
 ## License
 
-> Copyright (c) 2018-2019 Daniel Krupiński
+> Copyright (c) 2018-2020 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
 
 ## See also
 - [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
+- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source stream-proof ESP hack for Counter-Strike: Global Offensive, written in modern C++

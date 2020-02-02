@@ -10,28 +10,35 @@ static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer)
+        return;
+
     constexpr auto& glow = config.glow;
 
     Glow::clearCustomObjects();
 
-    for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-        if (auto entity = interfaces.entityList->getEntity(i); entity && !entity->isDormant()) {
-            switch (entity->getClientClass()->classId) {
-            case ClassId::EconEntity:
-            case ClassId::BaseCSGrenadeProjectile:
-            case ClassId::BreachChargeProjectile:
-            case ClassId::BumpMineProjectile:
-            case ClassId::DecoyProjectile:
-            case ClassId::MolotovProjectile:
-            case ClassId::SensorGrenadeProjectile:
-            case ClassId::SmokeGrenadeProjectile:
-            case ClassId::SnowballProjectile:
-            case ClassId::Hostage:
-            case ClassId::CSRagdoll:
-                if (!memory.glowObjectManager->hasGlowEffect(entity)) {
-                    if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
-                        customGlowEntities.emplace_back(i, index);
-                }
+    for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
+        const auto entity = interfaces.entityList->getEntity(i);
+        if (!entity || entity->isDormant())
+            continue;
+
+        switch (entity->getClientClass()->classId) {
+        case ClassId::EconEntity:
+        case ClassId::BaseCSGrenadeProjectile:
+        case ClassId::BreachChargeProjectile:
+        case ClassId::BumpMineProjectile:
+        case ClassId::DecoyProjectile:
+        case ClassId::MolotovProjectile:
+        case ClassId::SensorGrenadeProjectile:
+        case ClassId::SmokeGrenadeProjectile:
+        case ClassId::SnowballProjectile:
+        case ClassId::Hostage:
+        case ClassId::CSRagdoll:
+            if (!memory.glowObjectManager->hasGlowEffect(entity)) {
+                if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
+                    customGlowEntities.emplace_back(i, index);
             }
         }
     }
@@ -61,8 +68,6 @@ void Glow::render() noexcept
                     glowobject.glowColor = glow.color.color;
             }
         };
-
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
         auto applyPlayerGlow = [applyGlow, localPlayer](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
             if (glowAll.enabled) applyGlow(glowAll, entity->health());

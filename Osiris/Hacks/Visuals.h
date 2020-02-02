@@ -16,6 +16,7 @@ enum class FrameStage;
 class GameEvent;
 
 namespace Visuals {
+    void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
     void thirdperson() noexcept;
@@ -27,6 +28,7 @@ namespace Visuals {
     void removeShadows() noexcept;
     void applyZoom(FrameStage) noexcept;
     void applyScreenEffects() noexcept;
+    void hitEffect(GameEvent* = nullptr) noexcept;
     void hitMarker(GameEvent* = nullptr) noexcept;
     void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
     void hitMarkerDamageIndicator() noexcept;
@@ -44,19 +46,19 @@ namespace Visuals {
 
     constexpr bool removeHands(const char* modelName) noexcept
     {
-        return config.visuals.noHands && strstr(modelName, "arms") && !strstr(modelName, "sleeve");
+        return config.visuals.noHands && std::strstr(modelName, "arms") && !std::strstr(modelName, "sleeve");
     }
 
     constexpr bool removeSleeves(const char* modelName) noexcept
     {
-        return config.visuals.noSleeves && strstr(modelName, "sleeve");
+        return config.visuals.noSleeves && std::strstr(modelName, "sleeve");
     }
 
     constexpr bool removeWeapons(const char* modelName) noexcept
     {
-        return config.visuals.noWeapons && strstr(modelName, "models/weapons/v_")
-            && !strstr(modelName, "arms") && !strstr(modelName, "tablet")
-            && !strstr(modelName, "parachute") && !strstr(modelName, "fists");
+        return config.visuals.noWeapons && std::strstr(modelName, "models/weapons/v_")
+            && !std::strstr(modelName, "arms") && !std::strstr(modelName, "tablet")
+            && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
     }
 
     constexpr void skybox() noexcept

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sstream>
-#include <string_view>
+#include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -52,7 +52,10 @@ public:
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
     uintptr_t test;
     uintptr_t test2;
-
+    uint8_t* fakePrime;
+    std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
+    float* vignette;
+    int(__thiscall* equipWearable)(void* wearable, void* player);
 private:
     template <typename T = uintptr_t>
     static auto findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
