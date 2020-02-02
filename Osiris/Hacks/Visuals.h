@@ -30,8 +30,7 @@ namespace Visuals {
     void applyScreenEffects() noexcept;
     void hitEffect(GameEvent* = nullptr) noexcept;
     void hitMarker(GameEvent* = nullptr) noexcept;
-    void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
-    void hitMarkerDamageIndicator() noexcept;
+    void hitMarkerDamageIndicator(GameEvent* = nullptr) noexcept;
 
     constexpr void disablePostProcessing() noexcept
     {
