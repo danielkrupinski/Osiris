@@ -70,6 +70,4 @@ namespace Visuals {
         else
             memory.loadSky(interfaces.cvar->findVar("sv_skyname")->string);
     }
-    
-    inline std::vector<HitMarkerInfo> hitMarkerInfo;
 };
