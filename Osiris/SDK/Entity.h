@@ -199,15 +199,17 @@ public:
 
     float getMaxDesyncAngle() noexcept
     {
-        if (auto animState = getAnimstate()) {
-            float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+        const auto animState = getAnimstate();
 
-            if (animState->duckAmount > 0.0f)
-                yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+        if (!animState)
+            return 0.0f;
 
-            return animState->velocitySubtractY * yawModifier;
-        }
-        return 0.0f;
+        float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+
+        if (animState->duckAmount > 0.0f)
+            yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+
+        return animState->velocitySubtractY * yawModifier;
     }
 
     constexpr Entity* getObserverTarget() noexcept
