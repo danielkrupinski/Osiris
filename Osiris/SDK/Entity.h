@@ -17,6 +17,8 @@
 #include "ModelRender.h"
 #include "../SDK/matrix3x4.h"
 
+#include <functional>
+
 struct AnimState;
 struct WeaponData;
 
@@ -225,6 +227,13 @@ public:
     matrix3x4& coordinateFrame() noexcept
     {
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
+    }
+
+    auto getAimPunch() noexcept
+    {
+        Vector vec;
+        callVirtualMethod<void>(this, 345, std::ref(vec));
+        return vec;
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
