@@ -157,7 +157,7 @@ namespace Json {
     };
 
     // Defines a char buffer for use with uintToString().
-    typedef char UIntToStringBuffer[uintToStringBufferSize];
+    using UIntToStringBuffer = char[uintToStringBufferSize];
 
     /** Converts an unsigned integer to string.
      * @param value Unsigned integer to convert to string
@@ -288,7 +288,7 @@ namespace Json {
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
     using CharReaderPtr = std::unique_ptr<CharReader>;
 #else
-    typedef std::auto_ptr<CharReader> CharReaderPtr;
+    using CharReaderPtr = std::auto_ptr<CharReader>;
 #endif
 
     // Implementation of class Features
@@ -301,6 +301,7 @@ namespace Json {
     Features Features::strictMode() {
         Features features;
         features.allowComments_ = false;
+        features.allowTrailingCommas_ = false;
         features.strictRoot_ = true;
         features.allowDroppedNullPlaceholders_ = false;
         features.allowNumericKeys_ = false;
@@ -688,7 +689,9 @@ namespace Json {
                 initialTokenOk = readToken(tokenName);
             if (!initialTokenOk)
                 break;
-            if (tokenName.type_ == tokenObjectEnd && name.empty()) // empty object
+            if (tokenName.type_ == tokenObjectEnd &&
+                (name.empty() ||
+                    features_.allowTrailingCommas_)) // empty object or trailing comma
                 return true;
             name.clear();
             if (tokenName.type_ == tokenString) {
@@ -698,7 +701,7 @@ namespace Json {
                 Value numberName;
                 if (!decodeNumber(tokenName, numberName))
                     return recoverFromError(tokenObjectEnd);
-                name = String(numberName.asCString());
+                name = numberName.asString();
             } else {
                 break;
             }
@@ -736,15 +739,20 @@ namespace Json {
         Value init(arrayValue);
         currentValue().swapPayload(init);
         currentValue().setOffsetStart(token.start_ - begin_);
-        skipSpaces();
-        if (current_ != end_ && *current_ == ']') // empty array
-        {
-            Token endArray;
-            readToken(endArray);
-            return true;
-        }
         int index = 0;
         for (;;) {
+            skipSpaces();
+            if (current_ != end_ && *current_ == ']' &&
+                (index == 0 ||
+                (features_.allowTrailingCommas_ &&
+                    !features_.allowDroppedNullPlaceholders_))) // empty array or trailing
+                                                                // comma
+            {
+                Token endArray;
+                readToken(endArray);
+                return true;
+            }
+
             Value& value = currentValue()[index++];
             nodes_.push(&value);
             bool ok = readValue();
@@ -863,7 +871,7 @@ namespace Json {
             Char c = *current++;
             if (c == '"')
                 break;
-            else if (c == '\\') {
+            if (c == '\\') {
                 if (current == end)
                     return addError("Empty escape sequence in string", token, current);
                 Char escape = *current++;
@@ -1097,6 +1105,7 @@ namespace Json {
     public:
         static OurFeatures all();
         bool allowComments_;
+        bool allowTrailingCommas_;
         bool strictRoot_;
         bool allowDroppedNullPlaceholders_;
         bool allowNumericKeys_;
@@ -1129,9 +1138,6 @@ namespace Json {
             bool collectComments = true);
         String getFormattedErrorMessages() const;
         std::vector<StructuredError> getStructuredErrors() const;
-        bool pushError(const Value& value, const String& message);
-        bool pushError(const Value& value, const String& message, const Value& extra);
-        bool good() const;
 
     private:
         OurReader(OurReader const&);      // no impl
@@ -1586,11 +1592,10 @@ namespace Json {
 
         while ((current_ + 1) < end_) {
             Char c = getNextChar();
-            if (c == '*' && *current_ == '/') {
+            if (c == '*' && *current_ == '/')
                 break;
-            } else if (c == '\n') {
+            if (c == '\n')
                 *containsNewLineResult = true;
-            }
         }
 
         return getNextChar() == '/';
@@ -1674,7 +1679,9 @@ namespace Json {
                 initialTokenOk = readToken(tokenName);
             if (!initialTokenOk)
                 break;
-            if (tokenName.type_ == tokenObjectEnd && name.empty()) // empty object
+            if (tokenName.type_ == tokenObjectEnd &&
+                (name.empty() ||
+                    features_.allowTrailingCommas_)) // empty object or trailing comma
                 return true;
             name.clear();
             if (tokenName.type_ == tokenString) {
@@ -1728,15 +1735,19 @@ namespace Json {
         Value init(arrayValue);
         currentValue().swapPayload(init);
         currentValue().setOffsetStart(token.start_ - begin_);
-        skipSpaces();
-        if (current_ != end_ && *current_ == ']') // empty array
-        {
-            Token endArray;
-            readToken(endArray);
-            return true;
-        }
         int index = 0;
         for (;;) {
+            skipSpaces();
+            if (current_ != end_ && *current_ == ']' &&
+                (index == 0 ||
+                (features_.allowTrailingCommas_ &&
+                    !features_.allowDroppedNullPlaceholders_))) // empty array or trailing
+                                                                // comma
+            {
+                Token endArray;
+                readToken(endArray);
+                return true;
+            }
             Value& value = currentValue()[index++];
             nodes_.push(&value);
             bool ok = readValue();
@@ -1777,19 +1788,45 @@ namespace Json {
         // larger than the maximum supported value of an integer then
         // we decode the number as a double.
         Location current = token.start_;
-        bool isNegative = *current == '-';
-        if (isNegative)
+        const bool isNegative = *current == '-';
+        if (isNegative) {
             ++current;
+        }
 
-        static constexpr auto positive_threshold = Value::maxLargestUInt / 10;
-        static constexpr auto positive_last_digit = Value::maxLargestUInt % 10;
+        // We assume we can represent the largest and smallest integer types as
+        // unsigned integers with separate sign. This is only true if they can fit
+        // into an unsigned integer.
+        static_assert(Value::maxLargestInt <= Value::maxLargestUInt,
+            "Int must be smaller than UInt");
+
+        // We need to convert minLargestInt into a positive number. The easiest way
+        // to do this conversion is to assume our "threshold" value of minLargestInt
+        // divided by 10 can fit in maxLargestInt when absolute valued. This should
+        // be a safe assumption.
+        static_assert(Value::minLargestInt <= -Value::maxLargestInt,
+            "The absolute value of minLargestInt must be greater than or "
+            "equal to maxLargestInt");
+        static_assert(Value::minLargestInt / 10 >= -Value::maxLargestInt,
+            "The absolute value of minLargestInt must be only 1 magnitude "
+            "larger than maxLargest Int");
+
+        static constexpr Value::LargestUInt positive_threshold =
+            Value::maxLargestUInt / 10;
+        static constexpr Value::UInt positive_last_digit = Value::maxLargestUInt % 10;
+
+        // For the negative values, we have to be more careful. Since typically
+        // -Value::minLargestInt will cause an overflow, we first divide by 10 and
+        // then take the inverse. This assumes that minLargestInt is only a single
+        // power of 10 different in magnitude, which we check above. For the last
+        // digit, we take the modulus before negating for the same reason.
         static constexpr auto negative_threshold =
-            Value::LargestUInt(Value::minLargestInt) / 10;
+            Value::LargestUInt(-(Value::minLargestInt / 10));
         static constexpr auto negative_last_digit =
-            Value::LargestUInt(Value::minLargestInt) % 10;
+            Value::UInt(-(Value::minLargestInt % 10));
 
-        const auto threshold = isNegative ? negative_threshold : positive_threshold;
-        const auto last_digit =
+        const Value::LargestUInt threshold =
+            isNegative ? negative_threshold : positive_threshold;
+        const Value::UInt max_last_digit =
             isNegative ? negative_last_digit : positive_last_digit;
 
         Value::LargestUInt value = 0;
@@ -1805,19 +1842,23 @@ namespace Json {
                 // b) this is the last digit, or
                 // c) it's small enough to fit in that rounding delta, we're okay.
                 // Otherwise treat this number as a double to avoid overflow.
-                if (value > threshold || current != token.end_ || digit > last_digit) {
+                if (value > threshold || current != token.end_ ||
+                    digit > max_last_digit) {
                     return decodeDouble(token, decoded);
                 }
             }
             value = value * 10 + digit;
         }
 
-        if (isNegative)
-            decoded = -Value::LargestInt(value);
-        else if (value <= Value::LargestUInt(Value::maxLargestInt))
+        if (isNegative) {
+            // We use the same magnitude assumption here, just in case.
+            const auto last_digit = static_cast<Value::UInt>(value % 10);
+            decoded = -Value::LargestInt(value / 10) * 10 - last_digit;
+        } else if (value <= Value::LargestUInt(Value::maxLargestInt)) {
             decoded = Value::LargestInt(value);
-        else
+        } else {
             decoded = value;
+        }
 
         return true;
     }
@@ -1834,37 +1875,12 @@ namespace Json {
 
     bool OurReader::decodeDouble(Token& token, Value& decoded) {
         double value = 0;
-        const int bufferSize = 32;
-        int count;
-        ptrdiff_t const length = token.end_ - token.start_;
-
-        // Sanity check to avoid buffer overflow exploits.
-        if (length < 0) {
-            return addError("Unable to parse token length", token);
-        }
-        auto const ulength = static_cast<size_t>(length);
-
-        // Avoid using a string constant for the format control string given to
-        // sscanf, as this can cause hard to debug crashes on OS X. See here for more
-        // info:
-        //
-        //     http://developer.apple.com/library/mac/#DOCUMENTATION/DeveloperTools/gcc-4.0.1/gcc/Incompatibilities.html
-        char format[] = "%lf";
-
-        if (length <= bufferSize) {
-            Char buffer[bufferSize + 1];
-            memcpy(buffer, token.start_, ulength);
-            buffer[length] = 0;
-            fixNumericLocaleInput(buffer, buffer + length);
-            count = sscanf(buffer, format, &value);
-        } else {
-            String buffer(token.start_, token.end_);
-            count = sscanf(buffer.c_str(), format, &value);
-        }
-
-        if (count != 1)
+        const String buffer(token.start_, token.end_);
+        IStringStream is(buffer);
+        if (!(is >> value)) {
             return addError(
                 "'" + String(token.start_, token.end_) + "' is not a number.", token);
+        }
         decoded = value;
         return true;
     }
@@ -1888,7 +1904,7 @@ namespace Json {
             Char c = *current++;
             if (c == '"')
                 break;
-            else if (c == '\\') {
+            if (c == '\\') {
                 if (current == end)
                     return addError("Empty escape sequence in string", token, current);
                 Char escape = *current++;
@@ -2075,42 +2091,6 @@ namespace Json {
         return allErrors;
     }
 
-    bool OurReader::pushError(const Value& value, const String& message) {
-        ptrdiff_t length = end_ - begin_;
-        if (value.getOffsetStart() > length || value.getOffsetLimit() > length)
-            return false;
-        Token token;
-        token.type_ = tokenError;
-        token.start_ = begin_ + value.getOffsetStart();
-        token.end_ = begin_ + value.getOffsetLimit();
-        ErrorInfo info;
-        info.token_ = token;
-        info.message_ = message;
-        info.extra_ = nullptr;
-        errors_.push_back(info);
-        return true;
-    }
-
-    bool OurReader::pushError(const Value& value, const String& message,
-        const Value& extra) {
-        ptrdiff_t length = end_ - begin_;
-        if (value.getOffsetStart() > length || value.getOffsetLimit() > length ||
-            extra.getOffsetLimit() > length)
-            return false;
-        Token token;
-        token.type_ = tokenError;
-        token.start_ = begin_ + value.getOffsetStart();
-        token.end_ = begin_ + value.getOffsetLimit();
-        ErrorInfo info;
-        info.token_ = token;
-        info.message_ = message;
-        info.extra_ = begin_ + extra.getOffsetStart();
-        errors_.push_back(info);
-        return true;
-    }
-
-    bool OurReader::good() const { return errors_.empty(); }
-
     class OurCharReader : public CharReader {
         bool const collectComments_;
         OurReader reader_;
@@ -2134,6 +2114,7 @@ namespace Json {
         bool collectComments = settings_["collectComments"].asBool();
         OurFeatures features = OurFeatures::all();
         features.allowComments_ = settings_["allowComments"].asBool();
+        features.allowTrailingCommas_ = settings_["allowTrailingCommas"].asBool();
         features.strictRoot_ = settings_["strictRoot"].asBool();
         features.allowDroppedNullPlaceholders_ =
             settings_["allowDroppedNullPlaceholders"].asBool();
@@ -2152,6 +2133,7 @@ namespace Json {
         valid_keys->clear();
         valid_keys->insert("collectComments");
         valid_keys->insert("allowComments");
+        valid_keys->insert("allowTrailingCommas");
         valid_keys->insert("strictRoot");
         valid_keys->insert("allowDroppedNullPlaceholders");
         valid_keys->insert("allowNumericKeys");
@@ -2185,6 +2167,7 @@ namespace Json {
     void CharReaderBuilder::strictMode(Json::Value* settings) {
         //! [CharReaderBuilderStrictMode]
         (*settings)["allowComments"] = false;
+        (*settings)["allowTrailingCommas"] = false;
         (*settings)["strictRoot"] = true;
         (*settings)["allowDroppedNullPlaceholders"] = false;
         (*settings)["allowNumericKeys"] = false;
@@ -2200,6 +2183,7 @@ namespace Json {
         //! [CharReaderBuilderDefaults]
         (*settings)["collectComments"] = true;
         (*settings)["allowComments"] = true;
+        (*settings)["allowTrailingCommas"] = true;
         (*settings)["strictRoot"] = false;
         (*settings)["allowDroppedNullPlaceholders"] = false;
         (*settings)["allowNumericKeys"] = false;
@@ -2283,9 +2267,6 @@ namespace Json {
 
     ValueIteratorBase::difference_type
         ValueIteratorBase::computeDistance(const SelfType& other) const {
-#ifdef JSON_USE_CPPTL_SMALLMAP
-        return other.current_ - current_;
-#else
         // Iterator for null value are initialized using the default
         // constructor, which initialize current_ to the default
         // std::map::iterator. As begin() and end() are two instance
@@ -2306,7 +2287,6 @@ namespace Json {
             ++myDistance;
         }
         return myDistance;
-#endif
     }
 
     bool ValueIteratorBase::isEqual(const SelfType& other) const {
@@ -2435,16 +2415,13 @@ namespace Json {
 #include <json/value.h>
 #include <json/writer.h>
 #endif // if !defined(JSON_IS_AMALGAMATION)
+#include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstring>
 #include <sstream>
 #include <utility>
-#ifdef JSON_USE_CPPTL
-#include <cpptl/conststring.h>
-#endif
-#include <algorithm> // min()
-#include <cstddef>   // size_t
 
 // Provide implementation equivalent of std::snprintf for older _MSC compilers
 #if defined(_MSC_VER) && _MSC_VER < 1900
@@ -2547,7 +2524,7 @@ namespace Json {
         if (length >= static_cast<size_t>(Value::maxInt))
             length = Value::maxInt - 1;
 
-        char* newString = static_cast<char*>(malloc(length + 1));
+        auto newString = static_cast<char*>(malloc(length + 1));
         if (newString == nullptr) {
             throwRuntimeError("in Json::Value::duplicateStringValue(): "
                 "Failed to allocate string value buffer");
@@ -2567,8 +2544,8 @@ namespace Json {
             sizeof(unsigned) - 1U,
             "in Json::Value::duplicateAndPrefixStringValue(): "
             "length too big for prefixing");
-        unsigned actualLength = length + static_cast<unsigned>(sizeof(unsigned)) + 1U;
-        char* newString = static_cast<char*>(malloc(actualLength));
+        size_t actualLength = sizeof(length) + length + 1;
+        auto newString = static_cast<char*>(malloc(actualLength));
         if (newString == nullptr) {
             throwRuntimeError("in Json::Value::duplicateAndPrefixStringValue(): "
                 "Failed to allocate string value buffer");
@@ -2846,14 +2823,6 @@ namespace Json {
         value_.string_ = const_cast<char*>(value.c_str());
     }
 
-#ifdef JSON_USE_CPPTL
-    Value::Value(const CppTL::ConstString& value) {
-        initBasic(stringValue, true);
-        value_.string_ = duplicateAndPrefixStringValue(
-            value, static_cast<unsigned>(value.length()));
-    }
-#endif
-
     Value::Value(bool value) {
         initBasic(booleanValue);
         value_.bool_ = value;
@@ -2956,9 +2925,10 @@ namespace Json {
         }
         case arrayValue:
         case objectValue: {
-            int delta = int(value_.map_->size() - other.value_.map_->size());
-            if (delta)
-                return delta < 0;
+            auto thisSize = value_.map_->size();
+            auto otherSize = other.value_.map_->size();
+            if (thisSize != otherSize)
+                return thisSize < otherSize;
             return (*value_.map_) < (*other.value_.map_);
         }
         default:
@@ -3080,15 +3050,6 @@ namespace Json {
             JSON_FAIL_MESSAGE("Type is not convertible to string");
         }
     }
-
-#ifdef JSON_USE_CPPTL
-    CppTL::ConstString Value::asConstString() const {
-        unsigned len;
-        char const* str;
-        decodePrefixedString(isAllocated(), value_.string_, &len, &str);
-        return CppTL::ConstString(str, len);
-    }
-#endif
 
     Value::Int Value::asInt() const {
         switch (type()) {
@@ -3321,8 +3282,7 @@ namespace Json {
     bool Value::empty() const {
         if (isNull() || isArray() || isObject())
             return size() == 0U;
-        else
-            return false;
+        return false;
     }
 
     Value::operator bool() const { return !isNull(); }
@@ -3562,18 +3522,6 @@ namespace Json {
         return resolveReference(key.c_str());
     }
 
-#ifdef JSON_USE_CPPTL
-    Value& Value::operator[](const CppTL::ConstString& key) {
-        return resolveReference(key.c_str(), key.end_c_str());
-    }
-    Value const& Value::operator[](CppTL::ConstString const& key) const {
-        Value const* found = find(key.c_str(), key.end_c_str());
-        if (!found)
-            return nullSingleton();
-        return *found;
-    }
-#endif
-
     Value& Value::append(const Value& value) { return append(Value(value)); }
 
     Value& Value::append(Value&& value) {
@@ -3585,19 +3533,22 @@ namespace Json {
         return this->value_.map_->emplace(size(), std::move(value)).first->second;
     }
 
-    bool Value::insert(ArrayIndex index, Value newValue) {
+    bool Value::insert(ArrayIndex index, const Value& newValue) {
+        return insert(index, Value(newValue));
+    }
+
+    bool Value::insert(ArrayIndex index, Value&& newValue) {
         JSON_ASSERT_MESSAGE(type() == nullValue || type() == arrayValue,
             "in Json::Value::insert: requires arrayValue");
         ArrayIndex length = size();
         if (index > length) {
             return false;
-        } else {
-            for (ArrayIndex i = length; i > index; i--) {
-                (*this)[i] = std::move((*this)[i - 1]);
-            }
-            (*this)[index] = std::move(newValue);
-            return true;
         }
+        for (ArrayIndex i = length; i > index; i--) {
+            (*this)[i] = std::move((*this)[i - 1]);
+        }
+        (*this)[index] = std::move(newValue);
+        return true;
     }
 
     Value Value::get(char const* begin, char const* end,
@@ -3667,13 +3618,6 @@ namespace Json {
         return true;
     }
 
-#ifdef JSON_USE_CPPTL
-    Value Value::get(const CppTL::ConstString& key,
-        const Value& defaultValue) const {
-        return get(key.c_str(), key.end_c_str(), defaultValue);
-    }
-#endif
-
     bool Value::isMember(char const* begin, char const* end) const {
         Value const* value = find(begin, end);
         return nullptr != value;
@@ -3684,12 +3628,6 @@ namespace Json {
     bool Value::isMember(String const& key) const {
         return isMember(key.data(), key.data() + key.length());
     }
-
-#ifdef JSON_USE_CPPTL
-    bool Value::isMember(const CppTL::ConstString& key) const {
-        return isMember(key.c_str(), key.end_c_str());
-    }
-#endif
 
     Value::Members Value::getMemberNames() const {
         JSON_ASSERT_MESSAGE(
@@ -3706,31 +3644,6 @@ namespace Json {
         }
         return members;
     }
-    //
-    //# ifdef JSON_USE_CPPTL
-    // EnumMemberNames
-    // Value::enumMemberNames() const
-    //{
-    //   if ( type() == objectValue )
-    //   {
-    //      return CppTL::Enum::any(  CppTL::Enum::transform(
-    //         CppTL::Enum::keys( *(value_.map_), CppTL::Type<const CZString &>() ),
-    //         MemberNamesTransform() ) );
-    //   }
-    //   return EnumMemberNames();
-    //}
-    //
-    //
-    // EnumValues
-    // Value::enumValues() const
-    //{
-    //   if ( type() == objectValue  ||  type() == arrayValue )
-    //      return CppTL::Enum::anyValues( *(value_.map_),
-    //                                     CppTL::Type<const Value &>() );
-    //   return EnumValues();
-    //}
-    //
-    //# endif
 
     static bool IsIntegral(double d) {
         double integral_part;
@@ -4221,7 +4134,7 @@ namespace Json {
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
     using StreamWriterPtr = std::unique_ptr<StreamWriter>;
 #else
-    typedef std::auto_ptr<StreamWriter> StreamWriterPtr;
+    using StreamWriterPtr = std::auto_ptr<StreamWriter>;
 #endif
 
     String valueToString(LargestInt value) {
@@ -4313,8 +4226,9 @@ namespace Json {
 
         char const* const end = s + n;
         for (char const* cur = s; cur < end; ++cur) {
-            if (*cur == '\\' || *cur == '\"' || *cur < ' ' ||
-                static_cast<unsigned char>(*cur) < 0x80)
+            if (*cur == '\\' || *cur == '\"' ||
+                static_cast<unsigned char>(*cur) < ' ' ||
+                static_cast<unsigned char>(*cur) >= 0x80)
                 return true;
         }
         return false;
