@@ -39,14 +39,12 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         (GetAsyncKeyState(config.triggerbot[weaponIndex].key) || !config.triggerbot[weaponIndex].onKey)
         && now - lastTime >= config.triggerbot[weaponIndex].shotDelay / 1000.0f) {
 
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-
-        const auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
+        const auto aimPunch = localPlayer->getAimPunch();
         const auto weaponData = activeWeapon->getWeaponData();
 
-        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                           cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                          -sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
+        const Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
+                                 std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
+                                -std::sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
         Trace trace;
         interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer, trace);
         if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
