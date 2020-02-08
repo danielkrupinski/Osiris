@@ -6,8 +6,8 @@ class Entity;
 
 class MoveHelper {
 public:
-    constexpr void setHost(Entity* host) noexcept
+    constexpr auto setHost(Entity* host) noexcept
     {
-        return callVirtualMethod<void>(this, 1, host);
+        callVirtualMethod<void>(this, 1, host);
     }
 };
