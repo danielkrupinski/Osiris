@@ -355,5 +355,8 @@
     <ClInclude Include="SDK\Prediction.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\EnginePrediction.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
