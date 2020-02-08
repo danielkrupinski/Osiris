@@ -18,6 +18,7 @@ class ModelInfo;
 class ModelRender;
 class Panel;
 class PhysicsSurfaceProps;
+class Prediction;
 class RenderView;
 class ResourceAccessControl;
 class Surface;
@@ -40,6 +41,7 @@ public:
     ModelRender* modelRender = find<ModelRender>(L"engine", "VEngineModel016");
     Panel* panel = find<Panel>(L"vgui2", "VGUI_Panel009");
     PhysicsSurfaceProps* physicsSurfaceProps = find<PhysicsSurfaceProps>(L"vphysics", "VPhysicsSurfaceProps001");
+    Prediction* prediction = find<Prediction>(L"client_panorama", "VClientPrediction001");
     RenderView* renderView = find<RenderView>(L"engine", "VEngineRenderView014");
     ResourceAccessControl* resourceAccessControl = find<ResourceAccessControl>(L"datacache", "VResourceAccessControl001");
     Surface* surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
