@@ -9,6 +9,7 @@ class ClientMode;
 class Entity;
 class Input;
 class ItemSchema;
+class MoveHelper;
 class MoveData;
 class ViewRender;
 
@@ -60,6 +61,7 @@ public:
     int(__thiscall* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
     MoveData* moveData;
+    MoveHelper* moveHelper;
 private:
     template <typename T = uintptr_t>
     static auto findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
