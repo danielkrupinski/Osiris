@@ -349,5 +349,8 @@
     <ClInclude Include="SDK\GameMovement.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\MoveHelper.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
