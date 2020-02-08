@@ -1,3 +1,4 @@
+#include <functional>
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -99,7 +100,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
+    auto result = hooks.clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
@@ -181,7 +182,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::remove3dSky();
         Glow::render();
     }
-    return hooks.clientMode.callOriginal<int, int>(44, param);
+    return hooks.clientMode.callOriginal<int, 44>(param);
 }
 
 static float __stdcall getViewModelFov() noexcept
@@ -192,7 +193,7 @@ static float __stdcall getViewModelFov() noexcept
             additionalFov = 0.0f;
     }
 
-    return hooks.clientMode.callOriginal<float>(35) + additionalFov;
+    return hooks.clientMode.callOriginal<float, 35>() + additionalFov;
 }
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
@@ -203,11 +204,11 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
         const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
-            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+            hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
         if (!isOverridden)
             interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
-        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+        hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
 
 static bool __stdcall svCheatsGetBool() noexcept
@@ -215,7 +216,7 @@ static bool __stdcall svCheatsGetBool() noexcept
     if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
-        return hooks.svCheats.callOriginal<bool>(13);
+        return hooks.svCheats.callOriginal<bool, 13>();
 }
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -227,7 +228,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::watermark();        
         Visuals::hitMarker();
     }
-    hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
+    hooks.panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
 static void __stdcall frameStageNotify(FrameStage stage) noexcept
@@ -250,7 +251,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Backtrack::update(stage);
         SkinChanger::run(stage);
     }
-    hooks.client.callOriginal<void, FrameStage>(37, stage);
+    hooks.client.callOriginal<void, 37>(stage);
 }
 
 struct SoundData {
@@ -288,7 +289,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         ShowWindow(window, SW_RESTORE);
     }
     data.volume = std::clamp(data.volume, 0.0f, 1.0f);
-    hooks.sound.callOriginal<void, SoundData>(5, data);
+    hooks.sound.callOriginal<void, 5>(data);
 }
 
 static bool __stdcall shouldDrawFog() noexcept
@@ -300,14 +301,14 @@ static bool __stdcall shouldDrawViewModel() noexcept
 {
     if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
-    return hooks.clientMode.callOriginal<bool>(27);
+    return hooks.clientMode.callOriginal<bool, 27>();
 }
 
 static void __stdcall lockCursor() noexcept
 {
     if (gui.open)
         return interfaces.surface->unlockCursor();
-    return hooks.surface.callOriginal<void>(67);
+    return hooks.surface.callOriginal<void, 67>();
 }
 
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
@@ -315,7 +316,7 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
     if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens))
         a = 0;
-    hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
+    hooks.surface.callOriginal<void, 15>(r, g, b, a);
 }
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
@@ -333,7 +334,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             break;
         }
     }
-    return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
+    return hooks.gameEventManager.callOriginal<bool, 9>(event);
 }
 
 struct ViewSetup {
@@ -349,7 +350,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
-    hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
+    hooks.clientMode.callOriginal<void, 18>(setup);
 }
 
 struct RenderableInfo {
@@ -371,11 +372,11 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
                 constexpr float minCoord{ -maxCoord };
                 constexpr Vector min{ minCoord, minCoord, minCoord };
                 constexpr Vector max{ maxCoord, maxCoord, maxCoord };
-                return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, min, max, list, listMax);
+                return hooks.bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
             }
         }
     }
-    return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, mins, maxs, list, listMax);
+    return hooks.bspQuery.callOriginal<int, 6>(std::cref(mins), std::cref(maxs), list, listMax);
 }
 
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
@@ -409,7 +410,7 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     Visuals::applyScreenEffects();
     Visuals::hitEffect();
-    return hooks.viewRender.callOriginal<int, int>(39, param);
+    return hooks.viewRender.callOriginal<int, 39>(param);
 }
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
@@ -417,7 +418,7 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
     if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
         return nullptr;
 
-    return hooks.engine.callOriginal<void*>(218);
+    return hooks.engine.callOriginal<void*, 218>();
 }
 
 static bool __stdcall isPlayingDemo() noexcept
@@ -427,12 +428,12 @@ static bool __stdcall isPlayingDemo() noexcept
         && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
         return true;
     }
-    return hooks.engine.callOriginal<bool>(82);
+    return hooks.engine.callOriginal<bool, 82>();
 }
 
 static void __stdcall updateColorCorrectionWeights() noexcept
 {
-    hooks.clientMode.callOriginal<void>(58);
+    hooks.clientMode.callOriginal<void, 58>();
 
     if (const auto& cfg = config.visuals.colorCorrection; cfg.enabled) {
         *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x498) = cfg.blue;
@@ -452,7 +453,7 @@ static float __stdcall getScreenAspectRatio(int width, int height) noexcept
 {
     if (config.misc.aspectratio)
         return config.misc.aspectratio;
-    return hooks.engine.callOriginal<float, int, int>(101, width, height);
+    return hooks.engine.callOriginal<float, 101>(width, height);
 }
 
 Hooks::Hooks() noexcept

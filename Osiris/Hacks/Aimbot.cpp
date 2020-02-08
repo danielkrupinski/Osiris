@@ -141,8 +141,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
+        auto aimPunch = localPlayer->getAimPunch();
         aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
         aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
 
