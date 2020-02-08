@@ -6,14 +6,16 @@
 #include <Psapi.h>
 
 class ClientMode;
+class Entity;
 class Input;
 class ItemSchema;
+class MoveData;
+class ViewRender;
+
 struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
 struct Trace;
-class Entity;
-class ViewRender;
 
 class Memory {
 public:
@@ -57,6 +59,7 @@ public:
     float* vignette;
     int(__thiscall* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
+    MoveData* moveData;
 private:
     template <typename T = uintptr_t>
     static auto findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
