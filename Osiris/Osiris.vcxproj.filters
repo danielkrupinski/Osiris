@@ -346,5 +346,8 @@
     <ClInclude Include="imgui\imgui_stdlib.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\GameMovement.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
