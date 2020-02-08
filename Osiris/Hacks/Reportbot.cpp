@@ -40,18 +40,17 @@ void Reportbot::run() noexcept
                 continue;
 
             std::string report;
-            if (config.reportbot.aimbot)
-                report += "aimbot,";
-            if (config.reportbot.wallhack)
-                report += "wallhack,";
-            if (config.reportbot.other)
-                report += "speedhack,";
-            if (config.reportbot.griefing)
-                report += "grief,";
-            if (config.reportbot.voiceAbuse)
-                report += "voiceabuse,";
+
             if (config.reportbot.textAbuse)
                 report += "textabuse,";
+            if (config.reportbot.griefing)
+                report += "grief,";
+            if (config.reportbot.wallhack)
+                report += "wallhack,";
+            if (config.reportbot.aimbot)
+                report += "aimbot,";
+            if (config.reportbot.other)
+                report += "speedhack,";
 
             if (!report.empty()) {
                 memory.submitReport(std::to_string(playerInfo.steamID64).c_str(), report.c_str());
