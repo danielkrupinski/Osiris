@@ -10,6 +10,7 @@ class Engine;
 class EngineTrace;
 class EntityList;
 class GameEventManager;
+class GameMovement;
 class GameUI;
 class InputSystem;
 class Localize;
@@ -33,6 +34,7 @@ public:
     EngineTrace* engineTrace = find<EngineTrace>(L"engine", "EngineTraceClient004");
     EntityList* entityList = find<EntityList>(L"client_panorama", "VClientEntityList003");;
     GameEventManager* gameEventManager = find<GameEventManager>(L"engine", "GAMEEVENTSMANAGER002");
+    GameMovement* gameMovement = find<GameMovement>(L"client_panorama", "GameMovement001");
     GameUI* gameUI = find<GameUI>(L"client_panorama", "GameUI011");
     InputSystem* inputSystem = find<InputSystem>(L"inputsystem", "InputSystemVersion001");
     Localize* localize = find<Localize>(L"localize", "Localize_001");
