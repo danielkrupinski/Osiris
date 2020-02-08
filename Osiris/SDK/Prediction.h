@@ -5,7 +5,7 @@
 class Entity;
 class MoveData;
 class MoveHelper;
-class UserCmd;
+struct UserCmd;
 
 class Prediction {
 public:
