@@ -18,6 +18,7 @@
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
+#include "Hacks/EnginePrediction.h"
 #include "Hacks/Esp.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
@@ -125,8 +126,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
@@ -134,13 +133,18 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Backtrack::run(cmd);
     Misc::quickReload(cmd);
-    Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+
+    EnginePrediction::run(cmd);
+
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Backtrack::run(cmd);
     Misc::edgejump(cmd);
+    Misc::moonwalk(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
