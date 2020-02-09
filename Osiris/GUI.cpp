@@ -1080,8 +1080,8 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         Reportbot::reset();
     ImGui::Separator();
     ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
-    config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
+    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1);
+    config.reportbot.delay = (std::max)(config.reportbot.delay, 1);
     ImGui::Checkbox("Abusive Communications", &config.reportbot.textAbuse);
     ImGui::Checkbox("Griefing", &config.reportbot.griefing);
     ImGui::Checkbox("Wall Hacking", &config.reportbot.wallhack);
