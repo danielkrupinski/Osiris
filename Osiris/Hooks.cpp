@@ -134,7 +134,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::stealNames();
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);
-    Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
@@ -145,6 +144,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
+    Misc::moonwalk(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
