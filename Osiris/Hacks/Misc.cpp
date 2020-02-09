@@ -10,6 +10,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+#include "EnginePrediction.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -24,14 +25,7 @@ void Misc::edgejump(UserCmd* cmd) noexcept
     if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
         return;
 
-    const auto start = localPlayer->origin();
-    auto end = start;
-    end.z -= 32;
-
-    Trace trace;
-    interfaces.engineTrace->traceRay({ localPlayer->origin(), end }, 0x1400B, localPlayer, trace);
-
-    if (trace.fraction == 1.0f)
+    if ((EnginePrediction::getFlags() & 1) && !(localPlayer->flags() & 1))
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 

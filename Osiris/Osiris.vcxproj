@@ -17,6 +17,7 @@
     <ClCompile Include="Hacks\AntiAim.cpp" />
     <ClCompile Include="Hacks\Backtrack.cpp" />
     <ClCompile Include="Hacks\Chams.cpp" />
+    <ClCompile Include="Hacks\EnginePrediction.cpp" />
     <ClCompile Include="Hacks\Esp.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
     <ClCompile Include="Hacks\Reportbot.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Hacks\AntiAim.h" />
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
+    <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Esp.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
@@ -92,6 +94,7 @@
     <ClInclude Include="SDK\FrameStage.h" />
     <ClInclude Include="SDK\GameEvent.h" />
     <ClInclude Include="SDK\GameEventManager.h" />
+    <ClInclude Include="SDK\GameMovement.h" />
     <ClInclude Include="SDK\GameUI.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\GlowObjectManager.h" />
@@ -104,9 +107,11 @@
     <ClInclude Include="SDK\matrix3x4.h" />
     <ClInclude Include="SDK\ModelInfo.h" />
     <ClInclude Include="SDK\ModelRender.h" />
+    <ClInclude Include="SDK\MoveHelper.h" />
     <ClInclude Include="SDK\NetworkChannel.h" />
     <ClInclude Include="SDK\Panel.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
+    <ClInclude Include="SDK\Prediction.h" />
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\RenderContext.h" />
     <ClInclude Include="SDK\RenderView.h" />
