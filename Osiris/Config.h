@@ -183,6 +183,8 @@ public:
         int screenEffect{ 0 };
         int hitEffect{ 0 };
         float hitEffectTime{ 0.6f };
+        int hitMarker{ 0 };
+        float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
@@ -278,13 +280,12 @@ public:
     struct {
         bool enabled{ false };
         int target{ 0 };
-        int delay{ 10 };
-        bool aimbot{ true };
-        bool wallhack{ true };
-        bool other{ true };
-        bool griefing{ false };
-        bool voiceAbuse{ false };
+        int delay{ 1 };
         bool textAbuse{ false };
+        bool griefing{ false };
+        bool wallhack{ true };
+        bool aimbot{ true };
+        bool other{ true };
     } reportbot;
 private:
     std::filesystem::path path;

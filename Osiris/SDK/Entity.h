@@ -17,6 +17,8 @@
 #include "ModelRender.h"
 #include "../SDK/matrix3x4.h"
 
+#include <functional>
+
 struct AnimState;
 struct WeaponData;
 
@@ -164,19 +166,19 @@ public:
 
     constexpr int getWeaponSubType() noexcept
     {
-        return callVirtualMethod<int>(this, 279);
+        return callVirtualMethod<int>(this, 281);
     }
 
     constexpr WeaponData* getWeaponData() noexcept
     {
-        return callVirtualMethod<WeaponData*>(this, 457);
+        return callVirtualMethod<WeaponData*>(this, 459);
     }
 
     constexpr float getInaccuracy() noexcept
     {
-        return callVirtualMethod<float>(this, 479);
+        return callVirtualMethod<float>(this, 481);
     }
-    
+
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
@@ -199,15 +201,17 @@ public:
 
     float getMaxDesyncAngle() noexcept
     {
-        if (auto animState = getAnimstate()) {
-            float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+        const auto animState = getAnimstate();
 
-            if (animState->duckAmount > 0.0f)
-                yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+        if (!animState)
+            return 0.0f;
 
-            return animState->velocitySubtractY * yawModifier;
-        }
-        return 0.0f;
+        float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+
+        if (animState->duckAmount > 0.0f)
+            yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+
+        return animState->velocitySubtractY * yawModifier;
     }
 
     constexpr Entity* getObserverTarget() noexcept
@@ -223,6 +227,13 @@ public:
     matrix3x4& coordinateFrame() noexcept
     {
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
+    }
+
+    auto getAimPunch() noexcept
+    {
+        Vector vec;
+        callVirtualMethod<void>(this, 345, std::ref(vec));
+        return vec;
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)

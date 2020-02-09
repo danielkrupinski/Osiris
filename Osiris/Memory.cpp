@@ -44,4 +44,7 @@ Memory::Memory() noexcept
     debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
     vignette = *findPattern<float**>(L"client_panorama", "\x0F\x11\x05????\xF3\x0F\x7E\x87", 3) + 1;
     equipWearable = findPattern<decltype(equipWearable)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9");
+    predictionRandomSeed = *findPattern<int**>(L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
+    moveData = **findPattern<MoveData***>(L"client_panorama", "\xA1????\xF3\x0F\x59\xCD", 1);
+    moveHelper = **findPattern<MoveHelper***>(L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
 }

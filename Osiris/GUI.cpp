@@ -13,6 +13,7 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
+#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
 #include "Hooks.h"
@@ -34,6 +35,7 @@ GUI::GUI() noexcept
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
+    io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
     if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
         const std::filesystem::path path{ pathToFonts };
@@ -79,24 +81,20 @@ void GUI::updateColors() const noexcept
 
 void GUI::hotkey(int& key) noexcept
 {
-    constexpr bool stringDisplayTest = true;
+    key ? ImGui::Text("[ %s ]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
 
-    if constexpr (stringDisplayTest)
-        key ? ImGui::Text("[ %s ]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
-    else
-        key ? ImGui::Text("[ 0x%x ]", key) : ImGui::TextUnformatted("[ key ]");
+    if (!ImGui::IsItemHovered())
+        return;
 
-    if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Press any key to change keybind");
-        ImGuiIO& io = ImGui::GetIO();
-        for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
-            if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
-                key = i != VK_ESCAPE ? i : 0;
+    ImGui::SetTooltip("Press any key to change keybind");
+    ImGuiIO& io = ImGui::GetIO();
+    for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+        if (ImGui::IsKeyPressed(i) && i != config.misc.menuKey)
+            key = i != VK_ESCAPE ? i : 0;
 
-        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config.misc.menuKey)
-                key = i + (i > 1 ? 2 : 1);
-    }
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+        if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config.misc.menuKey)
+            key = i + (i > 1 ? 2 : 1);
 }
 
 void GUI::renderMenuBar() noexcept
@@ -486,9 +484,16 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    static auto material{ 1 };
-    ImGui::InputInt("##mat", &material, 1, 2);
-    material = std::clamp(material, 1, 2);
+    static int material = 1;
+
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+        --material;
+    ImGui::SameLine();
+    ImGui::Text("%d", material);
+    ImGui::SameLine();
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config.chams[0].materials.size()))
+        ++material;
+
     ImGui::SameLine();
     auto& chams{ config.chams[currentItem].materials[material - 1] };
 
@@ -779,6 +784,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Combo("Screen effect", &config.visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
     ImGui::Combo("Hit effect", &config.visuals.hitEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
     ImGui::SliderFloat("Hit effect time", &config.visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
+    ImGui::Combo("Hit marker", &config.visuals.hitMarker, "None\0Default (Cross)\0");
+    ImGui::SliderFloat("Hit marker time", &config.visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Checkbox("Color correction", &config.visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
@@ -1084,15 +1091,19 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
     }
     ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+    ImGui::SameLine(0.0f, 50.0f);
+    if (ImGui::Button("Reset"))
+        Reportbot::reset();
+    ImGui::Separator();
     ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
-    config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
-    ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
-    ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
-    ImGui::Checkbox("Other", &config.reportbot.other);
+    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1);
+    config.reportbot.delay = (std::max)(config.reportbot.delay, 1);
+    ImGui::Checkbox("Abusive Communications", &config.reportbot.textAbuse);
     ImGui::Checkbox("Griefing", &config.reportbot.griefing);
-    ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
-    ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
+    ImGui::Checkbox("Wall Hacking", &config.reportbot.wallhack);
+    ImGui::Checkbox("Aim Hacking", &config.reportbot.aimbot);
+    ImGui::Checkbox("Other Hacking", &config.reportbot.other);
+
     if (!contentOnly)
         ImGui::End();
 }
@@ -1187,10 +1198,10 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 800.0f, 0.0f });
+    ImGui::SetNextWindowSize({ 600.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
 
-    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable)) {
+    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
         if (ImGui::BeginTabItem("Aimbot")) {
             renderAimbotWindow(true);
             ImGui::EndTabItem();

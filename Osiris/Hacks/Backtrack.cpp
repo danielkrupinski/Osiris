@@ -65,8 +65,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     Vector bestTargetOrigin{ };
     int bestRecord{ };
 
-    static auto weaponRecoilScale{ interfaces.cvar->findVar("weapon_recoil_scale") };
-    const auto aimPunch{ localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat() };
+    const auto aimPunch = localPlayer->getAimPunch();
 
     for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
         auto entity = interfaces.entityList->getEntity(i);

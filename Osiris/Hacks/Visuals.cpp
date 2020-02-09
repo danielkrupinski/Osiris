@@ -10,6 +10,7 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/RenderContext.h"
+#include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
 
 #include <array>
@@ -78,13 +79,16 @@ void Visuals::colorWorld() noexcept
     if (!config.visuals.world.enabled && !config.visuals.sky.enabled)
         return;
 
+    if (config.visuals.world.enabled)
+        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces.cvar->findVar("cl_brushfastpath")->setValue(0), true);
+
     for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
         const auto mat = interfaces.materialSystem->getMaterial(h);
 
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config.visuals.world.enabled && std::strstr(mat->getTextureGroupName(), "World")) {
+        if (config.visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
             if (config.visuals.world.rainbow)
                 mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
             else
@@ -305,5 +309,36 @@ void Visuals::hitEffect(GameEvent* event) noexcept
             renderContext->endRender();
             renderContext->release();
         }
+    }
+}
+
+void Visuals::hitMarker(GameEvent* event) noexcept
+{
+    if (config.visuals.hitMarker == 0)
+        return;
+
+    static float lastHitTime = 0.0f;
+
+    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        lastHitTime = memory.globalVars->realtime;
+        return;
+    }
+
+    if (lastHitTime + config.visuals.hitMarkerTime < memory.globalVars->realtime)
+        return;
+
+    switch (config.visuals.hitMarker) {
+    case 1:
+        const auto [width, height] = interfaces.surface->getScreenSize();
+
+        const auto width_mid = width / 2;
+        const auto height_mid = height / 2;
+
+        interfaces.surface->setDrawColor(255, 255, 255, 255);
+        interfaces.surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+        interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+        interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        break;
     }
 }

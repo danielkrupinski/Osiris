@@ -316,6 +316,12 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         if ((UINT)wParam == DBT_DEVNODES_CHANGED)
             g_WantUpdateHasGamepad = true;
         return 0;
+    case WM_ACTIVATEAPP:
+        if (hwnd == g_hWnd && wParam == FALSE) {
+            memset(io.MouseDown, 0, sizeof(io.MouseDown));
+            memset(io.KeysDown, 0, sizeof(io.KeysDown));
+        }
+        return 0;
     }
     return 0;
 }
