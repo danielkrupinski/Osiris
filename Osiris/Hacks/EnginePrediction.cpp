@@ -2,6 +2,7 @@
 #include "../Memory.h"
 
 #include "../SDK/Engine.h"
+#include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/GameMovement.h"
 #include "../SDK/GlobalVars.h"
