@@ -276,7 +276,7 @@ public:
     struct {
         bool enabled{ false };
         int target{ 0 };
-        int delay{ 10 };
+        int delay{ 1 };
         bool textAbuse{ false };
         bool griefing{ false };
         bool wallhack{ true };
