@@ -484,9 +484,16 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    static auto material{ 1 };
-    ImGui::InputInt("##mat", &material, 1, 2);
-    material = std::clamp(material, 1, 2);
+    static int material = 1;
+
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+        --material;
+    ImGui::SameLine();
+    ImGui::Text("%d", material);
+    ImGui::SameLine();
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config.chams[0].materials.size()))
+        ++material;
+
     ImGui::SameLine();
     auto& chams{ config.chams[currentItem].materials[material - 1] };
 
