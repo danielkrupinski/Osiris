@@ -63,9 +63,11 @@ public:
     MoveData* moveData;
     MoveHelper* moveHelper;
 private:
-   // template <typename T = uintptr_t>
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
+        static auto id = 0;
+        ++id;
+
         if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
             auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
             const auto end = start + moduleInfo.SizeOfImage;
@@ -75,8 +77,8 @@ private:
 
             while (first < end && *second) {
                 if (*first == *second || *second == '?') {
-                    first++;
-                    second++;
+                    ++first;
+                    ++second;
                 } else {
                     first = ++start;
                     second = pattern;
@@ -86,9 +88,8 @@ private:
             if (!*second)
                 return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
         }
-        MessageBoxA(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id).append("!")).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;
-        //exit(EXIT_FAILURE);
     }
 };
 
