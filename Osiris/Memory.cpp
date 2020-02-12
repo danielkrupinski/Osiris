@@ -37,7 +37,7 @@ Memory::Memory() noexcept
     traceToExit = findPattern<decltype(traceToExit)>(L"client_panorama", "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
     viewRender = **findPattern<ViewRender***>(L"client_panorama", "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08", 2);
     drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(findPattern<int*>(L"client_panorama", "\xE8????\x83\xC4\x0C\x8D\x4D\xF8", 1));
-    submitReport = findPattern<decltype(submitReport)>(L"client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x20\x8B\x4D\x08\x56\x57\xE8????\x8B\xF8\x8D\x4C\x24\x0C");
+    submitReport = findPattern<decltype(submitReport)>(L"client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x20\x8B\x4D\x08\x56\x57\xE8????\x8B\xF8\x8D\x4C\x24\x08");
     test = relativeToAbsolute<uintptr_t>(findPattern<int*>(L"client_panorama", "\xE8????\x3B\x44\x24\x0C", 1)) + 0x71;
     test2 = findPattern<uintptr_t>(L"client_panorama", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     fakePrime = findPattern<uint8_t*>(L"client_panorama", "\x17\xF6\x40\x14\x10") - 1;
