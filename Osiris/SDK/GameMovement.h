@@ -11,14 +11,4 @@ public:
     {
         callVirtualMethod<void>(this, 1, localPlayer, moveData);
     }
-
-    constexpr auto startTrackPredictionErrors(Entity* localPlayer) noexcept
-    {
-        callVirtualMethod<void>(this, 3, localPlayer);
-    }
-
-    constexpr auto finishTrackPredictionErrors(Entity* localPlayer) noexcept
-    {
-        callVirtualMethod<void>(this, 4, localPlayer);
-    }
 };
