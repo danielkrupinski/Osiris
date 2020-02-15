@@ -91,7 +91,6 @@
     <ClInclude Include="Memory.h" />
     <ClInclude Include="SDK\FrameStage.h" />
     <ClInclude Include="SDK\GameEvent.h" />
-    <ClInclude Include="SDK\GameEventManager.h" />
     <ClInclude Include="SDK\GameMovement.h" />
     <ClInclude Include="SDK\GameUI.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
