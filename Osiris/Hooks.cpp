@@ -31,7 +31,6 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
-#include "SDK/GameEventManager.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
