@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sstream>
+#include <string>
 #include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
@@ -88,7 +88,7 @@ private:
             if (!*second)
                 return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
         }
-        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id).append("!")).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;
     }
 };
