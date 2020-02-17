@@ -368,8 +368,6 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
             return true;
             }, nullptr, IM_ARRAYSIZE(rifles));
 
-        currentWeapon = currentRifle ? currentRifle + 23 : 38;
-        break;
     }
     }
     ImGui::PopID();
