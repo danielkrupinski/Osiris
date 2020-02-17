@@ -38,9 +38,15 @@ GUI::GUI() noexcept
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
 
+<<<<<<< HEAD
         static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
         fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 16.0f, nullptr, ranges);
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 16.0f, nullptr, ranges);
+=======
+        static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
+>>>>>>> pr/2
     }
 }
 
@@ -368,6 +374,7 @@ void GUI::renderTriggerbotWindow() noexcept
                 return true;
             }, nullptr, IM_ARRAYSIZE(rifles));
 
+<<<<<<< HEAD
             currentWeapon = currentRifle ? currentRifle + 23 : 38;
             break;
         }
@@ -394,6 +401,10 @@ void GUI::renderTriggerbotWindow() noexcept
         
         if (!config.style.menuStyle)
             ImGui::End();
+=======
+        currentWeapon = currentRifle ? currentRifle + 23 : 38;
+        break;
+>>>>>>> pr/2
     }
 }
 
@@ -447,6 +458,7 @@ void GUI::renderGlowWindow() noexcept
         ImGui::SetColumnOffset(1, 150.0f);
         ImGui::Checkbox("Health based", &config.glow[currentItem].healthBased);
 
+<<<<<<< HEAD
         ImGuiCustom::colorPicker("Color", config.glow[currentItem].color.color, nullptr, &config.glow[currentItem].color.rainbow, &config.glow[currentItem].color.rainbowSpeed);
 
         ImGui::NextColumn();
@@ -457,6 +469,34 @@ void GUI::renderGlowWindow() noexcept
         ImGui::Columns(1);
         if (!config.style.menuStyle)
             ImGui::End();
+=======
+    ImGui::SameLine();
+    static int material = 1;
+
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+        --material;
+    ImGui::SameLine();
+    ImGui::Text("%d", material);
+    ImGui::SameLine();
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config.chams[0].materials.size()))
+        ++material;
+
+    ImGui::SameLine();
+    auto& chams{ config.chams[currentItem].materials[material - 1] };
+
+    ImGui::Checkbox("Enabled", &chams.enabled);
+    ImGui::Separator();
+    ImGui::Checkbox("Health based", &chams.healthBased);
+    ImGui::Checkbox("Blinking", &chams.blinking);
+    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+    ImGui::Checkbox("Wireframe", &chams.wireframe);
+    ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+    ImGui::SetNextItemWidth(220.0f);
+    ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
+
+    if (!contentOnly) {
+        ImGui::End();
+>>>>>>> pr/2
     }
 }
 
@@ -1054,6 +1094,25 @@ void GUI::renderReportbotWindow() noexcept
         if (!config.style.menuStyle)
             ImGui::End();
     }
+<<<<<<< HEAD
+=======
+    ImGui::Checkbox("Enabled", &config.reportbot.enabled);
+    ImGui::SameLine(0.0f, 50.0f);
+    if (ImGui::Button("Reset"))
+        Reportbot::reset();
+    ImGui::Separator();
+    ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
+    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1);
+    config.reportbot.delay = (std::max)(config.reportbot.delay, 1);
+    ImGui::Checkbox("Abusive Communications", &config.reportbot.textAbuse);
+    ImGui::Checkbox("Griefing", &config.reportbot.griefing);
+    ImGui::Checkbox("Wall Hacking", &config.reportbot.wallhack);
+    ImGui::Checkbox("Aim Hacking", &config.reportbot.aimbot);
+    ImGui::Checkbox("Other Hacking", &config.reportbot.other);
+
+    if (!contentOnly)
+        ImGui::End();
+>>>>>>> pr/2
 }
 
 void GUI::renderConfigWindow() noexcept

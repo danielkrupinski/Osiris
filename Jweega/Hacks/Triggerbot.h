@@ -2,7 +2,8 @@
 
 #include "../SDK/UserCmd.h"
 
-namespace Triggerbot {
+namespace Triggerbot
+{
     void run(UserCmd*) noexcept;
 }
 

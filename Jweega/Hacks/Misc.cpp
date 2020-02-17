@@ -10,7 +10,11 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
 #include "../SDK/Utils.h"
+=======
+#include "EnginePrediction.h"
+>>>>>>> pr/2:Osiris/Hacks/Misc.cpp
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -25,14 +29,7 @@ void Misc::edgejump(UserCmd* cmd) noexcept
     if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
         return;
 
-    const auto start = localPlayer->origin();
-    auto end = start;
-    end.z -= 32;
-
-    Trace trace;
-    interfaces.engineTrace->traceRay({ localPlayer->origin(), end }, 0x1400B, localPlayer, trace);
-
-    if (trace.fraction == 1.0f)
+    if ((EnginePrediction::getFlags() & 1) && !(localPlayer->flags() & 1))
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
@@ -110,6 +107,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
+<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
     if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
@@ -118,18 +116,26 @@ void Misc::spectatorList() noexcept
                 return;
             localPlayer = localPlayer->getObserverTarget();
         }
+=======
+    if (!config.misc.spectatorList.enabled)
+        return;
 
-        interfaces.surface->setTextFont(Surface::font);
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+>>>>>>> pr/2:Osiris/Hacks/Misc.cpp
 
-        if (config.misc.spectatorList.rainbow)
-            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
-        else
-            interfaces.surface->setTextColor(config.misc.spectatorList.color);
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
 
-        const auto [width, height] = interfaces.surface->getScreenSize();
+    interfaces.surface->setTextFont(Surface::font);
 
-        int textPositionY{ static_cast<int>(0.5f * height) };
+    if (config.misc.spectatorList.rainbow)
+        interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+    else
+        interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
+    const auto [width, height] = interfaces.surface->getScreenSize();
+
+<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
         for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isAlive() || entity->isDormant())
@@ -143,6 +149,25 @@ void Misc::spectatorList() noexcept
                     interfaces.surface->printText(name);
                 }
             }
+=======
+    auto textPositionY = static_cast<int>(0.5f * height);
+
+    for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
+        const auto entity = interfaces.entityList->getEntity(i);
+        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer)
+            continue;
+
+        PlayerInfo playerInfo;
+
+        if (!interfaces.engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
+            interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
+            textPositionY -= textHeight;
+            interfaces.surface->printText(name);
+>>>>>>> pr/2:Osiris/Hacks/Misc.cpp
         }
     }
 }

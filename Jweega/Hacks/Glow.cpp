@@ -1,6 +1,8 @@
 #include "../Config.h"
 #include "Glow.h"
+#include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/Entity.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/GlowObjectManager.h"
 #include "../SDK/GlobalVars.h"

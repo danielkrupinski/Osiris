@@ -52,6 +52,10 @@
 //#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
 //#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
 
+//---- Unless IMGUI_DISABLE_DEFAULT_FORMAT_FUNCTIONS is defined, use the much faster STB sprintf library implementation of vsnprintf instead of the one from the default C library.
+// Note that stb_sprintf.h is meant to be provided by the user and available in the include path at compile time. Also, the compatibility checks of the arguments and formats done by clang and GCC will be disabled in order to support the extra formats provided by STB sprintf.
+// #define IMGUI_USE_STB_SPRINTF
+
 //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
 /*
@@ -61,9 +65,9 @@
 */
 #define IM_VEC4_CLASS_EXTRA ImVec4(float f[3]) noexcept { x = f[0]; y = f[1]; z = f[2]; w = 1.0f; }
 
-//---- Using 32-bits vertex indices (default is 16-bits) is one way to allow large meshes with more than 64K vertices. 
-// Your renderer back-end will need to support it (most example renderer back-ends support both 16/32-bits indices).
-// Another way to allow large meshes while keeping 16-bits indices is to handle ImDrawCmd::VtxOffset in your renderer. 
+//---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
+// Your renderer back-end will need to support it (most example renderer back-ends support both 16/32-bit indices).
+// Another way to allow large meshes while keeping 16-bit indices is to handle ImDrawCmd::VtxOffset in your renderer.
 // Read about ImGuiBackendFlags_RendererHasVtxOffset for details.
 //#define ImDrawIdx unsigned int
 
@@ -72,6 +76,19 @@
 //struct ImDrawCmd;
 //typedef void (*MyImDrawCallback)(const ImDrawList* draw_list, const ImDrawCmd* cmd, void* my_renderer_user_data);
 //#define ImDrawCallback MyImDrawCallback
+
+//---- Debug Tools: Macro to break in Debugger
+// (use 'Metrics->Tools->Item Picker' to pick widgets with the mouse and break into them for easy debugging.)
+//#define IM_DEBUG_BREAK  IM_ASSERT(0)
+//#define IM_DEBUG_BREAK  __debugbreak()
+
+//---- Debug Tools: Have the Item Picker break in the ItemAdd() function instead of ItemHoverable(),
+// (which comes earlier in the code, will catch a few extra items, allow picking items other than Hovered one.)
+// This adds a small runtime cost which is why it is not enabled by default.
+//#define IMGUI_DEBUG_TOOL_ITEM_PICKER_EX
+
+//---- Debug Tools: Enable slower asserts
+//#define IMGUI_DEBUG_PARANOID
 
 //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
 /*

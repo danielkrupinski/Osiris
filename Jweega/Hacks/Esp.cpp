@@ -306,33 +306,38 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
 static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) noexcept
 {
-    if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(bbox, config);
+    BoundingBox bbox;
 
-        if (config.name.enabled) {
-            const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
-            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
-            interfaces.surface->setTextFont(config.font);
-            if (config.name.rainbow)
-                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
-            else
-                interfaces.surface->setTextColor(config.name.color);
+    if (!boundingBox(entity, bbox))
+        return;
 
-            interfaces.surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
-            interfaces.surface->printText(name);
-        }
+    renderBox(bbox, config);
 
-        float drawPositionY = bbox.y0;
+    if (config.name.enabled) {
+        const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
+        const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+        interfaces.surface->setTextFont(config.font);
+        if (config.name.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.name.color);
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow)
-                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
-            else
-                interfaces.surface->setTextColor(config.distance.color);
-
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
-        }
+        interfaces.surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
+        interfaces.surface->printText(name);
     }
+
+    float drawPositionY = bbox.y0;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer || !config.distance.enabled)
+        return;
+
+    if (config.distance.rainbow)
+        interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
+    else
+        interfaces.surface->setTextColor(config.distance.color);
+
+    renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
 }
 
 static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept

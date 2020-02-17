@@ -71,7 +71,6 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Enabled")) triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
         if (triggerbotJson.isMember("On key")) triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
         if (triggerbotJson.isMember("Key")) triggerbotConfig.key = triggerbotJson["Key"].asInt();
-        if (triggerbotJson.isMember("Magnet")) triggerbotConfig.magnet = triggerbotJson["Magnet"].asBool();
         if (triggerbotJson.isMember("Friendly fire")) triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
         if (triggerbotJson.isMember("Scoped only")) triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
         if (triggerbotJson.isMember("Ignore flash")) triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
@@ -906,12 +905,11 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Enabled")) reportbot.enabled = reportbotJson["Enabled"].asBool();
         if (reportbotJson.isMember("Target")) reportbot.target = reportbotJson["Target"].asInt();
         if (reportbotJson.isMember("Delay")) reportbot.delay = reportbotJson["Delay"].asInt();
-        if (reportbotJson.isMember("Aimbot")) reportbot.aimbot = reportbotJson["Aimbot"].asBool();
-        if (reportbotJson.isMember("Wallhack")) reportbot.wallhack = reportbotJson["Wallhack"].asBool();
-        if (reportbotJson.isMember("Other")) reportbot.other = reportbotJson["Other"].asBool();
+        if (reportbotJson.isMember("Abusive Communications")) reportbot.textAbuse = reportbotJson["Abusive Communications"].asBool();
         if (reportbotJson.isMember("Griefing")) reportbot.griefing = reportbotJson["Griefing"].asBool();
-        if (reportbotJson.isMember("Voice abuse")) reportbot.voiceAbuse = reportbotJson["Voice abuse"].asBool();
-        if (reportbotJson.isMember("Text abuse")) reportbot.textAbuse = reportbotJson["Text abuse"].asBool();
+        if (reportbotJson.isMember("Wall Hacking")) reportbot.wallhack = reportbotJson["Wall Hacking"].asBool();
+        if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
+        if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
     }
 }
 
@@ -957,7 +955,6 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Enabled"] = triggerbotConfig.enabled;
         triggerbotJson["On key"] = triggerbotConfig.onKey;
         triggerbotJson["Key"] = triggerbotConfig.key;
-        triggerbotJson["Magnet"] = triggerbotConfig.magnet;
         triggerbotJson["Friendly fire"] = triggerbotConfig.friendlyFire;
         triggerbotJson["Scoped only"] = triggerbotConfig.scopedOnly;
         triggerbotJson["Ignore flash"] = triggerbotConfig.ignoreFlash;
@@ -1647,12 +1644,11 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Enabled"] = reportbot.enabled;
         reportbotJson["Target"] = reportbot.target;
         reportbotJson["Delay"] = reportbot.delay;
-        reportbotJson["Aimbot"] = reportbot.aimbot;
-        reportbotJson["Wallhack"] = reportbot.wallhack;
-        reportbotJson["Other"] = reportbot.other;
+        reportbotJson["Abusive Communications"] = reportbot.textAbuse;
         reportbotJson["Griefing"] = reportbot.griefing;
-        reportbotJson["Voice abuse"] = reportbot.voiceAbuse;
-        reportbotJson["Text abuse"] = reportbot.textAbuse;
+        reportbotJson["Wall Hacking"] = reportbot.wallhack;
+        reportbotJson["Aim Hacking"] = reportbot.aimbot;
+        reportbotJson["Other Hacking"] = reportbot.other;
     }
 
     if (!std::filesystem::is_directory(path)) {
