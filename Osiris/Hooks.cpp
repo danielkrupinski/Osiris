@@ -191,8 +191,8 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 static float __stdcall getViewModelFov() noexcept
 {
     float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
-    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); localPlayer && localPlayer->isScoped()) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet);
+    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+        if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
 

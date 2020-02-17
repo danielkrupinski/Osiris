@@ -119,14 +119,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
         return;
 
-	if (config.triggerbot[weaponIndex].magnet) {
-            if (GetAsyncKeyState(config.triggerbot[weaponIndex].key)) {config.aimbot[weaponIndex].magnetkey = config.triggerbot[weaponIndex].key;}
-        else {
-            if (!GetAsyncKeyState(config.triggerbot[weaponIndex].key)) 
-                return;
-        }			
-    }
-    
     if (config.aimbot[weaponIndex].onKey) {
         if (!config.aimbot[weaponIndex].keyMode) {
             if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
@@ -140,7 +132,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
     }
 
-    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock || config.aimbot[weaponIndex].magnetkey) && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
+    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
 
         if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
             return;
