@@ -3,6 +3,8 @@
 #include "Utils.h"
 #include "Vector.h"
 #include "MoveData.h"
+class Entity;
+class MoveData;
 
 class GameMovement {
 public:
@@ -28,7 +30,9 @@ public:
     }
 
     constexpr Vector getPlayerViewOffset(bool ducked) noexcept
+    constexpr auto processMovement(Entity* localPlayer, MoveData* moveData) noexcept
     {
         return callVirtualMethod<Vector&, bool>(this, 8, ducked);
+        callVirtualMethod<void>(this, 1, localPlayer, moveData);
     }
 };

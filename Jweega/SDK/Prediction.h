@@ -1,24 +1,21 @@
 #pragma once
 
-#include "Entity.h"
-#include "UserCmd.h"
-#include "MoveData.h"
-#include "MoveHelper.h"
+#include "Utils.h"
+
+class Entity;
+class MoveData;
+class MoveHelper;
+struct UserCmd;
 
 class Prediction {
 public:
-    constexpr void CheckMovingGround(Entity* localPlayer, double frametime) noexcept
+    constexpr void setupMove(Entity* localPlayer, UserCmd* cmd, MoveHelper* moveHelper, MoveData* moveData) noexcept
     {
-        return callVirtualMethod<void, Entity*, double>(this, 18, localPlayer, frametime);
+        callVirtualMethod<void>(this, 20, localPlayer, cmd, moveHelper, moveData);
     }
 
-    constexpr void SetupMove(Entity* localPlayer, UserCmd* cmd, MoveHelper* helper, MoveData* move) noexcept
+    constexpr void finishMove(Entity* localPlayer, UserCmd* cmd, MoveData* moveData) noexcept
     {
-        return callVirtualMethod<void, Entity*, UserCmd*, MoveHelper*, MoveData*>(this, 20, localPlayer, cmd, helper, move);
-    }
-
-    constexpr void FinishMove(Entity* localPlayer, UserCmd* cmd, MoveData* move) noexcept
-    {
-        return callVirtualMethod<void, Entity*, UserCmd*, MoveData*>(this, 21, localPlayer, cmd, move);
+        callVirtualMethod<void>(this, 21, localPlayer, cmd, moveData);
     }
 };
