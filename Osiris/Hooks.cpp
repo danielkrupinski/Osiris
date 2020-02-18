@@ -230,6 +230,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::spectatorList();
         Misc::watermark();        
         Visuals::hitMarker();
+        Misc::drawAimbotFov();
     }
     hooks.panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
@@ -353,6 +354,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
+    Misc::actualFov = setup->fov;
     hooks.clientMode.callOriginal<void, 18>(setup);
 }
 
