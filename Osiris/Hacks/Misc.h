@@ -10,6 +10,7 @@
 #include "../SDK/Client.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/Surface.h"
 
 namespace Misc
 {
@@ -156,8 +157,8 @@ namespace Misc
         if(config.misc.drawAimbotFov && interfaces.engine->isInGame())
         {
             auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-            if (!local || !local->isAlive() || !local->getActiveWeapon()) return;
-            int weaponId = getWeaponIndex(local->getActiveWeapon()->itemDefinitionIndex2());
+            if (!localPlayer || !localPlayer->isAlive() || !localPlayer->getActiveWeapon()) return;
+            int weaponId = getWeaponIndex(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
             if (!config.aimbot[weaponId].enabled) weaponId = 0;
             if (!config.aimbot[weaponId].enabled) return;
             auto screenSize = interfaces.surface->getScreenSize();
