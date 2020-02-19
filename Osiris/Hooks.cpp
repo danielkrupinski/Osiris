@@ -371,7 +371,7 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
                 if (config.misc.disableModelOcclusion) {
                     // FIXME: sometimes players are rendered above smoke, maybe sort render list?
                     info->flags &= ~0x100;
-                    info->flags2 |= 0xC0;
+                    info->flags2 |= 0x40;
 
                     constexpr float maxCoord = 16384.0f;
                     constexpr float minCoord = -maxCoord;
