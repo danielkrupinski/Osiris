@@ -8,6 +8,7 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_stdlib.h"
 #include "imgui/spectrum.h"
+#include "imgui/style.h"
 
 #include "imguiCustom.h"
 
@@ -89,6 +90,9 @@ void GUI::updateColors() const noexcept
 		break;
 	case 4:
 		ImGui::Spectrum::StyleColorsSpectrum();
+		break;
+	case 5:
+		ImGui::CustomStyle::StyleAtropurpureus();
 		break;
 	}
 }
@@ -1093,7 +1097,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
 	ImGui::PushItemWidth(150.0f);
 	if (ImGui::Combo("Menu style", &config.style.menuStyle, "Classic\0One window\0"))
 		window = {};
-	if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0Adobe\0"))
+	if (ImGui::Combo("Menu colors", &config.style.menuColors, "Dark\0Light\0Classic\0Custom\0Adobe\0Atropurpureus\0"))
 		updateColors();
 	ImGui::PopItemWidth();
 

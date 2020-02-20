@@ -122,6 +122,9 @@
     <ClCompile Include="imgui\spectrum.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\style.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -362,6 +365,9 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="imgui\spectrum.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\style.h">
       <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>

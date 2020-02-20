@@ -26,6 +26,7 @@
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\spectrum.cpp" />
+    <ClCompile Include="imgui\style.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="imguiCustom.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="imgui\spectrum.h" />
+    <ClInclude Include="imgui\style.h" />
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Netvars.h" />
