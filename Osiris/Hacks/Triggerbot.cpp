@@ -67,8 +67,10 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                 damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
 
             if (damage >= (config.triggerbot[weaponIndex].killshot ? trace.entity->health() : config.triggerbot[weaponIndex].minDamage)) {
-                cmd->buttons |= UserCmd::IN_ATTACK;
-                lastTime = 0.0f;
+                if ((!config.triggerbot[weaponIndex].hitChance || (1.0f - (activeWeapon->getInaccuracy())) * 100.f >= hitchance)) {
+                    cmd->buttons |= UserCmd::IN_ATTACK;
+                    lastTime = 0.0f;
+                }
             }
         } else {
             lastTime = now;
