@@ -72,6 +72,8 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Key")) triggerbotConfig.key = triggerbotJson["Key"].asInt();
         if (triggerbotJson.isMember("Friendly fire")) triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
         if (triggerbotJson.isMember("Scoped only")) triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
+		if (triggerbotJson.isMember("Hitchance enable")) triggerbotConfig.hitChance = triggerbotJson["Hitchance enable"].asBool();
+		if (triggerbotJson.isMember("Hitchance ammount")) triggerbotConfig.hitChanceAmmount = triggerbotJson["Hitchance ammount"].asInt();
         if (triggerbotJson.isMember("Ignore flash")) triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
         if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
         if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
@@ -952,6 +954,8 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["On key"] = triggerbotConfig.onKey;
         triggerbotJson["Key"] = triggerbotConfig.key;
         triggerbotJson["Friendly fire"] = triggerbotConfig.friendlyFire;
+		triggerbotJson["Hitchance enable"] = triggerbotConfig.hitChance;
+		triggerbotJson["Hitchance ammount"] = triggerbotConfig.hitChanceAmmount;
         triggerbotJson["Scoped only"] = triggerbotConfig.scopedOnly;
         triggerbotJson["Ignore flash"] = triggerbotConfig.ignoreFlash;
         triggerbotJson["Ignore smoke"] = triggerbotConfig.ignoreSmoke;
