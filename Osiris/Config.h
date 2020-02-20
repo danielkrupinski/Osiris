@@ -66,6 +66,8 @@ public:
         int key{ 0 };
         bool friendlyFire{ false };
         bool scopedOnly{ true };
+		bool hitChance{ true };
+		int hitChanceAmmount{ 0 };
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
         int hitgroup{ 0 };
