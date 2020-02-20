@@ -43,6 +43,8 @@
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
+#define U8(S) reinterpret_cast<const char *>(u8##S)
+
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
@@ -501,7 +503,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
+    interfaces.gameUI->messageBox(U8("注入成功"), U8("Osiris已成功加载"));
 }
 
 void Hooks::restore() noexcept

@@ -119,6 +119,9 @@
     <ClCompile Include="Hacks\EnginePrediction.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\spectrum.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -357,6 +360,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\EnginePrediction.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\spectrum.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

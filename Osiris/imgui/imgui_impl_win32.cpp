@@ -13,11 +13,23 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#include <XInput.h>
 #include <tchar.h>
+
+// Using XInput library for gamepad (with recent Windows SDK this may leads to executables which won't run on Windows 7)
+#ifndef IMGUI_IMPL_WIN32_DISABLE_GAMEPAD
+#include <XInput.h>
+#else
+#define IMGUI_IMPL_WIN32_DISABLE_LINKING_XINPUT
+#endif
+#if defined(_MSC_VER) && !defined(IMGUI_IMPL_WIN32_DISABLE_LINKING_XINPUT)
+#pragma comment(lib, "xinput")
+//#pragma comment(lib, "Xinput9_1_0")
+#endif
 
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
+//  2020-01-14: Inputs: Added support for #define IMGUI_IMPL_WIN32_DISABLE_GAMEPAD/IMGUI_IMPL_WIN32_DISABLE_LINKING_XINPUT.
+//  2019-12-05: Inputs: Added support for ImGuiMouseCursor_NotAllowed mouse cursor.
 //  2019-05-11: Inputs: Don't filter value from WM_CHAR before calling AddInputCharacter().
 //  2019-01-17: Misc: Using GetForegroundWindow()+IsChild() instead of GetActiveWindow() to be compatible with windows created in a different thread or parent.
 //  2019-01-17: Inputs: Added support for mouse buttons 4 and 5 via WM_XBUTTON* messages.
@@ -39,7 +51,7 @@
 //  2016-11-12: Inputs: Only call Win32 ::SetCursor(NULL) when io.MouseDrawCursor is set.
 
 // Win32 Data
-static HWND                 g_hWnd = 0;
+static HWND                 g_hWnd = NULL;
 static INT64                g_Time = 0;
 static INT64                g_TicksPerSecond = 0;
 static ImGuiMouseCursor     g_LastMouseCursor = ImGuiMouseCursor_COUNT;
@@ -49,9 +61,9 @@ static bool                 g_WantUpdateHasGamepad = true;
 // Functions
 bool    ImGui_ImplWin32_Init(void* hwnd)
 {
-    if (!::QueryPerformanceFrequency((LARGE_INTEGER*)& g_TicksPerSecond))
+    if (!::QueryPerformanceFrequency((LARGE_INTEGER *)&g_TicksPerSecond))
         return false;
-    if (!::QueryPerformanceCounter((LARGE_INTEGER*)& g_Time))
+    if (!::QueryPerformanceCounter((LARGE_INTEGER *)&g_Time))
         return false;
 
     // Setup back-end capabilities flags
@@ -78,6 +90,7 @@ bool    ImGui_ImplWin32_Init(void* hwnd)
     io.KeyMap[ImGuiKey_Space] = VK_SPACE;
     io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
     io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_KeyPadEnter] = VK_RETURN;
     io.KeyMap[ImGuiKey_A] = 'A';
     io.KeyMap[ImGuiKey_C] = 'C';
     io.KeyMap[ImGuiKey_V] = 'V';
@@ -104,7 +117,8 @@ static bool ImGui_ImplWin32_UpdateMouseCursor()
     {
         // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
         ::SetCursor(NULL);
-    } else
+    }
+    else
     {
         // Show OS mouse cursor
         LPTSTR win32_cursor = IDC_ARROW;
@@ -118,6 +132,7 @@ static bool ImGui_ImplWin32_UpdateMouseCursor()
         case ImGuiMouseCursor_ResizeNESW:   win32_cursor = IDC_SIZENESW; break;
         case ImGuiMouseCursor_ResizeNWSE:   win32_cursor = IDC_SIZENWSE; break;
         case ImGuiMouseCursor_Hand:         win32_cursor = IDC_HAND; break;
+        case ImGuiMouseCursor_NotAllowed:   win32_cursor = IDC_NO; break;
         }
         ::SetCursor(::LoadCursor(NULL, win32_cursor));
     }
@@ -145,13 +160,10 @@ static void ImGui_ImplWin32_UpdateMousePos()
                 io.MousePos = ImVec2((float)pos.x, (float)pos.y);
 }
 
-#ifdef _MSC_VER
-// #pragma comment(lib, "xinput")
-#endif
-
 // Gamepad navigation mapping
 static void ImGui_ImplWin32_UpdateGamepads()
 {
+#ifndef IMGUI_IMPL_WIN32_DISABLE_GAMEPAD
     ImGuiIO& io = ImGui::GetIO();
     memset(io.NavInputs, 0, sizeof(io.NavInputs));
     if ((io.ConfigFlags & ImGuiConfigFlags_NavEnableGamepad) == 0)
@@ -173,27 +185,28 @@ static void ImGui_ImplWin32_UpdateGamepads()
         const XINPUT_GAMEPAD& gamepad = xinput_state.Gamepad;
         io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
 
-#define MAP_BUTTON(NAV_NO, BUTTON_ENUM)     { io.NavInputs[NAV_NO] = (gamepad.wButtons & BUTTON_ENUM) ? 1.0f : 0.0f; }
-#define MAP_ANALOG(NAV_NO, VALUE, V0, V1)   { float vn = (float)(VALUE - V0) / (float)(V1 - V0); if (vn > 1.0f) vn = 1.0f; if (vn > 0.0f && io.NavInputs[NAV_NO] < vn) io.NavInputs[NAV_NO] = vn; }
-        MAP_BUTTON(ImGuiNavInput_Activate, XINPUT_GAMEPAD_A);              // Cross / A
-        MAP_BUTTON(ImGuiNavInput_Cancel, XINPUT_GAMEPAD_B);              // Circle / B
-        MAP_BUTTON(ImGuiNavInput_Menu, XINPUT_GAMEPAD_X);              // Square / X
-        MAP_BUTTON(ImGuiNavInput_Input, XINPUT_GAMEPAD_Y);              // Triangle / Y
-        MAP_BUTTON(ImGuiNavInput_DpadLeft, XINPUT_GAMEPAD_DPAD_LEFT);      // D-Pad Left
-        MAP_BUTTON(ImGuiNavInput_DpadRight, XINPUT_GAMEPAD_DPAD_RIGHT);     // D-Pad Right
-        MAP_BUTTON(ImGuiNavInput_DpadUp, XINPUT_GAMEPAD_DPAD_UP);        // D-Pad Up
-        MAP_BUTTON(ImGuiNavInput_DpadDown, XINPUT_GAMEPAD_DPAD_DOWN);      // D-Pad Down
-        MAP_BUTTON(ImGuiNavInput_FocusPrev, XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
-        MAP_BUTTON(ImGuiNavInput_FocusNext, XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
-        MAP_BUTTON(ImGuiNavInput_TweakSlow, XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
-        MAP_BUTTON(ImGuiNavInput_TweakFast, XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
-        MAP_ANALOG(ImGuiNavInput_LStickLeft, gamepad.sThumbLX, -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32768);
-        MAP_ANALOG(ImGuiNavInput_LStickRight, gamepad.sThumbLX, +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
-        MAP_ANALOG(ImGuiNavInput_LStickUp, gamepad.sThumbLY, +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
-        MAP_ANALOG(ImGuiNavInput_LStickDown, gamepad.sThumbLY, -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32767);
-#undef MAP_BUTTON
-#undef MAP_ANALOG
+        #define MAP_BUTTON(NAV_NO, BUTTON_ENUM)     { io.NavInputs[NAV_NO] = (gamepad.wButtons & BUTTON_ENUM) ? 1.0f : 0.0f; }
+        #define MAP_ANALOG(NAV_NO, VALUE, V0, V1)   { float vn = (float)(VALUE - V0) / (float)(V1 - V0); if (vn > 1.0f) vn = 1.0f; if (vn > 0.0f && io.NavInputs[NAV_NO] < vn) io.NavInputs[NAV_NO] = vn; }
+        MAP_BUTTON(ImGuiNavInput_Activate,      XINPUT_GAMEPAD_A);              // Cross / A
+        MAP_BUTTON(ImGuiNavInput_Cancel,        XINPUT_GAMEPAD_B);              // Circle / B
+        MAP_BUTTON(ImGuiNavInput_Menu,          XINPUT_GAMEPAD_X);              // Square / X
+        MAP_BUTTON(ImGuiNavInput_Input,         XINPUT_GAMEPAD_Y);              // Triangle / Y
+        MAP_BUTTON(ImGuiNavInput_DpadLeft,      XINPUT_GAMEPAD_DPAD_LEFT);      // D-Pad Left
+        MAP_BUTTON(ImGuiNavInput_DpadRight,     XINPUT_GAMEPAD_DPAD_RIGHT);     // D-Pad Right
+        MAP_BUTTON(ImGuiNavInput_DpadUp,        XINPUT_GAMEPAD_DPAD_UP);        // D-Pad Up
+        MAP_BUTTON(ImGuiNavInput_DpadDown,      XINPUT_GAMEPAD_DPAD_DOWN);      // D-Pad Down
+        MAP_BUTTON(ImGuiNavInput_FocusPrev,     XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
+        MAP_BUTTON(ImGuiNavInput_FocusNext,     XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
+        MAP_BUTTON(ImGuiNavInput_TweakSlow,     XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
+        MAP_BUTTON(ImGuiNavInput_TweakFast,     XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
+        MAP_ANALOG(ImGuiNavInput_LStickLeft,    gamepad.sThumbLX,  -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32768);
+        MAP_ANALOG(ImGuiNavInput_LStickRight,   gamepad.sThumbLX,  +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
+        MAP_ANALOG(ImGuiNavInput_LStickUp,      gamepad.sThumbLY,  +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
+        MAP_ANALOG(ImGuiNavInput_LStickDown,    gamepad.sThumbLY,  -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32767);
+        #undef MAP_BUTTON
+        #undef MAP_ANALOG
     }
+#endif // #ifndef IMGUI_IMPL_WIN32_DISABLE_GAMEPAD
 }
 
 void    ImGui_ImplWin32_NewFrame()
@@ -208,7 +221,7 @@ void    ImGui_ImplWin32_NewFrame()
 
     // Setup time step
     INT64 current_time;
-    ::QueryPerformanceCounter((LARGE_INTEGER*)& current_time);
+    ::QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
     io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
     g_Time = current_time;
 
@@ -231,7 +244,7 @@ void    ImGui_ImplWin32_NewFrame()
     }
 
     // Update game controllers (if enabled and available)
-    // ImGui_ImplWin32_UpdateGamepads();
+    ImGui_ImplWin32_UpdateGamepads();
 }
 
 // Allow compilation with old Windows SDK. MinGW doesn't have default _WIN32_WINNT/WINVER versions.
@@ -305,8 +318,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         return 0;
     case WM_CHAR:
         // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
-        if (wchar_t w; MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (char*)&wParam, 1, &w, 1) == 1)
-            io.AddInputCharacter((unsigned int)w);
+        io.AddInputCharacter((unsigned int)wParam);
         return 0;
     case WM_SETCURSOR:
         if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
@@ -316,12 +328,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         if ((UINT)wParam == DBT_DEVNODES_CHANGED)
             g_WantUpdateHasGamepad = true;
         return 0;
-    case WM_ACTIVATEAPP:
-        if (hwnd == g_hWnd && wParam == FALSE) {
-            memset(io.MouseDown, 0, sizeof(io.MouseDown));
-            memset(io.KeysDown, 0, sizeof(io.KeysDown));
-        }
-        return 0;
     }
     return 0;
 }
+

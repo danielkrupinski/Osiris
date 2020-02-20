@@ -45,11 +45,6 @@ private:
         bool reportbot = false;
         bool config = false;
     } window;
-
-    struct {
-        ImFont* tahoma = nullptr;
-        ImFont* segoeui = nullptr;
-    } fonts;
 };
 
 extern GUI gui;

@@ -2,8 +2,8 @@
 // This needs to be used along with a Platform Binding (e.g. Win32)
 
 // Implemented features:
-//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID!
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bit indices.
 
 // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
 // If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
@@ -90,10 +90,10 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
         D3DMATRIX mat_identity = { { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } } };
         D3DMATRIX mat_projection =
         { { {
-            2.0f / (R - L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f / (T - B),   0.0f,  0.0f,
+            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
+            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
             0.0f,         0.0f,         0.5f,  0.0f,
-            (L + R) / (L - R),  (T + B) / (B - T),  0.5f,  1.0f
+            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f
         } } };
         g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
         g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
@@ -127,7 +127,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 
     // Backup the DX9 state
     IDirect3DStateBlock9* d3d9_state_block = NULL;
-    if (g_pd3dDevice->CreateStateBlock(D3DSBT_PIXELSTATE, &d3d9_state_block) < 0)
+    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
         return;
 
     // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
@@ -142,9 +142,9 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     //  2) to avoid repacking vertices: #define IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT struct ImDrawVert { ImVec2 pos; float z; ImU32 col; ImVec2 uv; }
     CUSTOMVERTEX* vtx_dst;
     ImDrawIdx* idx_dst;
-    if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)& vtx_dst, D3DLOCK_DISCARD) < 0)
+    if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
         return;
-    if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)& idx_dst, D3DLOCK_DISCARD) < 0)
+    if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
         return;
     for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
@@ -192,13 +192,14 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
                     ImGui_ImplDX9_SetupRenderState(draw_data);
                 else
                     pcmd->UserCallback(cmd_list, pcmd);
-            } else
+            }
+            else
             {
                 const RECT r = { (LONG)(pcmd->ClipRect.x - clip_off.x), (LONG)(pcmd->ClipRect.y - clip_off.y), (LONG)(pcmd->ClipRect.z - clip_off.x), (LONG)(pcmd->ClipRect.w - clip_off.y) };
                 const LPDIRECT3DTEXTURE9 texture = (LPDIRECT3DTEXTURE9)pcmd->TextureId;
                 g_pd3dDevice->SetTexture(0, texture);
                 g_pd3dDevice->SetScissorRect(&r);
-                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, pcmd->IdxOffset + global_idx_offset, pcmd->ElemCount / 3);
+                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, pcmd->IdxOffset + global_idx_offset, pcmd->ElemCount/3);
             }
         }
         global_idx_offset += cmd_list->IdxBuffer.Size;
@@ -249,7 +250,7 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, 0) != D3D_OK)
         return false;
     for (int y = 0; y < height; y++)
-        memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + (width * bytes_per_pixel) * y, (width * bytes_per_pixel));
+        memcpy((unsigned char *)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + (width * bytes_per_pixel) * y, (width * bytes_per_pixel));
     g_FontTexture->UnlockRect(0);
 
     // Store our identifier
