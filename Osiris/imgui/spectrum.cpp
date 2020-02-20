@@ -8,7 +8,7 @@ namespace ImGui {
         extern const unsigned int SourceSansProRegular_compressed_data[]; // defined later in the file
 
         void StyleColorsSpectrum() {
-            ImGuiIO& io = ImGui::GetIO();
+            // ImGuiIO& io = ImGui::GetIO();
             // ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(SourceSansProRegular_compressed_data, SourceSansProRegular_compressed_size, 16.0f);
             // if (font) io.FontDefault = font;
 

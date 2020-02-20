@@ -217,7 +217,7 @@ public:
 
     struct {
         int menuStyle{ 0 };
-        int menuColors{ 0 };
+        int menuColors{ 3 };
     } style;
 
     struct {
