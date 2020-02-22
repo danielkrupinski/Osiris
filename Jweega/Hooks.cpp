@@ -125,7 +125,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-<<<<<<< HEAD:Jweega/Hooks.cpp
+<<<<<<< HEAD:Aotian/Hooks.cpp
 =======
     Misc::autoPistol(cmd);
 >>>>>>> pr/2:Osiris/Hooks.cpp
@@ -136,7 +136,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::stealNames();
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);
-<<<<<<< HEAD:Jweega/Hooks.cpp
+<<<<<<< HEAD:Aotian/Hooks.cpp
     Misc::moonwalk(cmd);
 =======
     Misc::quickHealthshot(cmd);
@@ -365,7 +365,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
-<<<<<<< HEAD:Jweega/Hooks.cpp
+<<<<<<< HEAD:Aotian/Hooks.cpp
     Misc::fov = setup->fov;
     Misc::fakeDuckFix(setup);
     hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
@@ -521,7 +521,7 @@ Hooks::Hooks() noexcept
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.gameUI->messageBox("Jweega", "Jweega has been successfully loaded!\n\n"
+    interfaces.gameUI->messageBox("Aotian", "Aotian has been successfully loaded!\n\n"
         "Build time: " __DATE__ ", " __TIME__ "");
 }
 

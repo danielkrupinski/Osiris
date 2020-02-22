@@ -32,7 +32,7 @@ Memory::Memory() noexcept
     auto temp = FIND_PATTERN(std::uintptr_t*, L"client_panorama", "\xB9????\xE8????\x8B\x5D\x08", 1);
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
-<<<<<<< HEAD:Jweega/Memory.cpp
+<<<<<<< HEAD:Aotian/Memory.cpp
     clearHudWeapon = findPattern<decltype(clearHudWeapon)>(L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C");
     itemSchema = relativeToAbsolute<decltype(itemSchema)>(findPattern<int*>(L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern<int*>(L"client_panorama", "\xE8????\xEB\x19\x8B\x07", 1));

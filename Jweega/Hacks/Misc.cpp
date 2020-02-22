@@ -10,7 +10,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
-<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
+<<<<<<< HEAD:Aotian/Hacks/Misc.cpp
 #include "../SDK/Utils.h"
 =======
 #include "EnginePrediction.h"
@@ -107,7 +107,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
-<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
+<<<<<<< HEAD:Aotian/Hacks/Misc.cpp
     if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
@@ -135,7 +135,7 @@ void Misc::spectatorList() noexcept
 
     const auto [width, height] = interfaces.surface->getScreenSize();
 
-<<<<<<< HEAD:Jweega/Hacks/Misc.cpp
+<<<<<<< HEAD:Aotian/Hacks/Misc.cpp
         for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isAlive() || entity->isDormant())
@@ -195,7 +195,7 @@ void Misc::watermark() noexcept
             interfaces.surface->setTextColor(config.misc.watermark.color);
 
         interfaces.surface->setTextPosition(5, 0);
-        interfaces.surface->printText(L"Jweega");
+        interfaces.surface->printText(L"Aotian");
 
         static auto frameRate{ 1.0f };
         frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;

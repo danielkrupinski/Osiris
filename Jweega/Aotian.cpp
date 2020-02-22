@@ -5,7 +5,7 @@
 #include "Memory.h"
 #include "Netvars.h"
 
-Config config{ "Jweega" };
+Config config{ "Aotian" };
 GUI gui;
 const Interfaces interfaces;
 Memory memory;

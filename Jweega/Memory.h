@@ -17,7 +17,7 @@ struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
 struct Trace;
-<<<<<<< HEAD:Jweega/Memory.h
+<<<<<<< HEAD:Aotian/Memory.h
 class Entity;
 class ViewRender;
 class MoveHelper;
@@ -98,8 +98,8 @@ private:
             if (!*second)
                 return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
         }
-<<<<<<< HEAD:Jweega/Memory.h
-        MessageBoxA(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Jweega", MB_OK | MB_ICONERROR);
+<<<<<<< HEAD:Aotian/Memory.h
+        MessageBoxA(NULL, (std::ostringstream{ } << "Failed to find pattern in " << module << '!').str().c_str(), "Aotian", MB_OK | MB_ICONERROR);
         exit(EXIT_FAILURE);
 =======
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
