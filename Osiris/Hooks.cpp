@@ -228,7 +228,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
-        Misc::watermark();        
+        Misc::watermark();
         Visuals::hitMarker();
     }
     hooks.panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
@@ -327,13 +327,19 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("player_death"):
+            Misc::teamDamageCounter(event);
             Misc::killMessage(*event);
             SkinChanger::overrideHudIcon(*event);
             break;
         case fnv::hash("player_hurt"):
+            Misc::teamDamageCounter(event);
             Misc::playHitSound(*event);
-            Visuals::hitEffect(event);                
+            Visuals::hitEffect(event);
             Visuals::hitMarker(event);
+            break;
+        case fnv::hash("round_announce_match_start"):
+            Misc::teamKills = 0;
+            Misc::teamDamage = 0;
             break;
         }
     }

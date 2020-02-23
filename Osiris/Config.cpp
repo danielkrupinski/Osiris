@@ -153,7 +153,7 @@ void Config::load(size_t id) noexcept
     for (size_t i = 0; i < esp.players.size(); i++) {
         const auto& espJson = json["Esp"]["Players"][i];
         auto& espConfig = esp.players[i];
-        
+
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
         if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
 
@@ -366,7 +366,7 @@ void Config::load(size_t id) noexcept
             if (distanceJson.isMember("Rainbow")) distanceConfig.rainbow = distanceJson["Rainbow"].asBool();
             if (distanceJson.isMember("Rainbow speed")) distanceConfig.rainbowSpeed = distanceJson["Rainbow speed"].asFloat();
         }
-        
+
         if (espJson.isMember("Dead ESP")) espConfig.deadesp = espJson["Dead ESP"].asBool();
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
     }
@@ -483,7 +483,7 @@ void Config::load(size_t id) noexcept
             if (snaplinesJson.isMember("Rainbow")) snaplinesConfig.rainbow = snaplinesJson["Rainbow"].asBool();
             if (snaplinesJson.isMember("Rainbow speed")) snaplinesConfig.rainbowSpeed = snaplinesJson["Rainbow speed"].asFloat();
         }
-        
+
         if (espJson.isMember("Box")) {
             const auto& boxJson = espJson["Box"];
             auto& boxConfig = espConfig.box;
@@ -820,6 +820,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
         if (miscJson.isMember("Reveal suspect")) misc.revealSuspect = miscJson["Reveal suspect"].asBool();
+        if (miscJson.isMember("Team Damage Counter")) misc.teamDamageCounter = miscJson["Team Damage Counter"].asBool();
 
         if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
             if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
@@ -1301,7 +1302,7 @@ void Config::save(size_t id) const noexcept
         }
 
         espJson["Box type"] = espConfig.boxType;
-        
+
         {
             auto& outlineJson = espJson["Outline"];
             const auto& outlineConfig = espConfig.outline;
@@ -1550,7 +1551,7 @@ void Config::save(size_t id) const noexcept
 
     {
         auto& miscJson = json["Misc"];
-        
+
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;

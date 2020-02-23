@@ -504,3 +504,27 @@ void Misc::killMessage(GameEvent& event) noexcept
     cmd += "\"";
     interfaces.engine->clientCmdUnrestricted(cmd.c_str());
 }
+
+void Misc::teamDamageCounter(GameEvent* event) noexcept {
+    if (!event || !interfaces.engine->isInGame()) return;
+
+    PlayerInfo pinfo;
+    interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), pinfo);
+
+    if (event->getInt("attacker") == pinfo.userId) { // we attacked.
+        if (!interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(event->getInt("userid")))->isEnemy()) {
+            // teammate got hurt
+            switch (fnv::hashRuntime(event->getName())) {
+            case fnv::hash("player_hurt"):
+                teamDamage += event->getInt("dmg_health");
+                break;
+            case fnv::hash("player_death"):
+                teamKills += 1;
+                break;
+            }
+
+            if (config.misc.teamDamageCounter)
+                memory.debugMsg("[ Friendly Fire ] Kills: <%d> Damage: <%d>)\n", teamKills, teamDamage);
+        }
+    }
+}

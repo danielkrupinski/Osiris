@@ -27,7 +27,7 @@ public:
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -126,7 +126,7 @@ public:
             ColorToggle distance;
             float maxDistance{ 0.0f };
         };
-       
+
         struct Player : public Shared {
             ColorToggle eyeTraces;
             ColorToggle health;
@@ -244,6 +244,7 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
+        bool teamDamageCounter{ false };
         ColorToggle spectatorList;
         ColorToggle watermark;
         bool fixAnimationLOD{ false };

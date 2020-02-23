@@ -13,6 +13,9 @@
 
 namespace Misc
 {
+    inline int teamDamage = 0;
+    inline int teamKills = 0;
+
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
@@ -36,6 +39,7 @@ namespace Misc
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
+    void teamDamageCounter(GameEvent* event) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {

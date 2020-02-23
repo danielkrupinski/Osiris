@@ -1064,6 +1064,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config.misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config.misc.fakePrime);
+    ImGui::Checkbox("Team Damage Counter", &config.misc.teamDamageCounter);
 
     if (ImGui::Button("Unhook"))
         hooks.restore();
