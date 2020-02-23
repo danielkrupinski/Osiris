@@ -508,12 +508,10 @@ void Misc::killMessage(GameEvent& event) noexcept
 void Misc::teamDamageCounter(GameEvent* event) noexcept {
     if (!event || !interfaces.engine->isInGame()) return;
 
-    PlayerInfo pinfo;
-    interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), pinfo);
+    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) { // we attacked.
+        Entity* ent = interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(event->getInt("userid")));
 
-    if (event->getInt("attacker") == pinfo.userId) { // we attacked.
-        if (!interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(event->getInt("userid")))->isEnemy()) {
-            // teammate got hurt
+        if (ent && !ent->isEnemy()) { // teammate got hurt
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("player_hurt"):
                 teamDamage += event->getInt("dmg_health");
