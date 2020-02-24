@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <string>
 #include <type_traits>
 #include <Windows.h>
@@ -57,6 +58,7 @@ public:
     uintptr_t test2;
     uint8_t* fakePrime;
     std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
+    std::add_pointer_t<void __cdecl(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
     int(__thiscall* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
