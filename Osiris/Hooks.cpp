@@ -462,6 +462,14 @@ static float __stdcall getScreenAspectRatio(int width, int height) noexcept
     return hooks.engine.callOriginal<float, 101>(width, height);
 }
 
+static void __stdcall renderSmokeOverlay(bool update) noexcept
+{
+    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + 0x588) = 0.0f;
+    else
+        hooks.viewRender.callOriginal<void, 41>(update);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -495,6 +503,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
+    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
