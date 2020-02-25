@@ -69,24 +69,26 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    if (gui.open) {
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
-        device->GetVertexDeclaration(&vertexDeclaration);
+    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
+    IDirect3DVertexDeclaration9* vertexDeclaration;
+    device->GetVertexDeclaration(&vertexDeclaration);
 
-        ImGui_ImplDX9_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 
+    if (gui.open)
         gui.render();
 
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+    if (config.misc.griefBox)
+        Misc::griefingBox();
 
-        device->SetVertexDeclaration(vertexDeclaration);
-        vertexDeclaration->Release();
-    }
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+    device->SetVertexDeclaration(vertexDeclaration);
+    vertexDeclaration->Release();
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
@@ -327,10 +329,12 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("player_death"):
+            Misc::griefCounter(event);
             Misc::killMessage(*event);
             SkinChanger::overrideHudIcon(*event);
             break;
         case fnv::hash("player_hurt"):
+            Misc::griefCounter(event);
             Misc::playHitSound(*event);
             Visuals::hitEffect(event);                
             Visuals::hitMarker(event);

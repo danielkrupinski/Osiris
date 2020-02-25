@@ -10,6 +10,8 @@
 #include "../SDK/Client.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
+extern int teamKills[65];
+extern int teamDamage[65];
 
 namespace Misc
 {
@@ -36,6 +38,8 @@ namespace Misc
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
+    void griefingBox() noexcept;
+    void griefCounter(GameEvent* event) noexcept;
 
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {

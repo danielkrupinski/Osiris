@@ -11,6 +11,66 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 #include "EnginePrediction.h"
+#include "../imgui/imgui.h"
+int teamKills[65];
+int teamDamage[65];
+
+void Misc::griefCounter(GameEvent* event) noexcept {
+    if (!event) return;
+    auto attacker = event->getInt("attacker");
+    auto victim = event->getInt("userid");
+    auto hurt_player = interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(victim));
+    auto attacker_entity = interfaces.entityList->getEntity(interfaces.engine->getPlayerForUserID(attacker));
+
+    if (attacker != victim) {
+        if (attacker_entity->team() == hurt_player->team()) {
+            PlayerInfo pinfo;
+            interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), pinfo);
+            switch (fnv::hashRuntime(event->getName())) {
+            case fnv::hash("player_hurt"):
+                teamDamage[attacker_entity->index()] = teamDamage[attacker_entity->index()] + event->getInt("dmg_health");
+                break;
+            case fnv::hash("player_death"):
+                teamKills[attacker_entity->index()]++;
+                break;
+            }
+        }
+    }
+}
+
+void Misc::griefingBox() noexcept
+{
+    if (interfaces.engine->isInGame()) {
+        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer) return;
+        ImGui::SetNextWindowSize({ 175, 0 });
+        ImGui::Begin("Team Damage Counter", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+        static PlayerInfo pInfo;
+        ImGui::Columns(3);
+        ImGui::Text("Name");
+        ImGui::NextColumn();
+        ImGui::Text("Kills");
+        ImGui::NextColumn();
+        ImGui::Text("Damage");
+        ImGui::NextColumn();
+
+        for (int i = 0; i < 65; i++) {
+            auto entity = interfaces.entityList->getEntity(i);
+            if (!entity) continue;
+            interfaces.engine->getPlayerInfo(i, pInfo);
+            if (entity->team() == localPlayer->team()) {
+                ImGui::Separator();
+                ImGui::Text(pInfo.name);
+                ImGui::NextColumn();
+                ImGui::Text(std::to_string(teamKills[i]).c_str());
+                ImGui::NextColumn();
+                ImGui::Text(std::to_string(teamDamage[i]).c_str());
+                ImGui::NextColumn();
+            }
+        }
+        ImGui::End();
+    }
+}
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
