@@ -24,8 +24,6 @@ void Misc::griefCounter(GameEvent* event) noexcept {
 
     if (attacker != victim) {
         if (attacker_entity->team() == hurt_player->team()) {
-            PlayerInfo pinfo;
-            interfaces.engine->getPlayerInfo(interfaces.engine->getLocalPlayer(), pinfo);
             switch (fnv::hashRuntime(event->getName())) {
             case fnv::hash("player_hurt"):
                 teamDamage[attacker_entity->index()] = teamDamage[attacker_entity->index()] + event->getInt("dmg_health");
