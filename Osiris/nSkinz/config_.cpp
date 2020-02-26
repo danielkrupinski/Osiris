@@ -24,11 +24,8 @@
 */
 #include "config_.hpp"
 #include "../Config.h"
-#include <fstream>
 
-config_ g_config;
-
-item_setting* config_::get_by_definition_index(const int definition_index)
+item_setting* get_by_definition_index(const int definition_index)
 {
 	auto it = std::find_if(std::begin(config.skinChanger), std::end(config.skinChanger), [definition_index](const item_setting& e)
 	{

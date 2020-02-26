@@ -90,9 +90,4 @@ struct item_setting
 	std::array<sticker_setting, 5> stickers;
 };
 
-class config_ {
-public:
-    item_setting* get_by_definition_index(int definition_index);
-};
-
-extern config_ g_config;
+item_setting* get_by_definition_index(int definition_index);

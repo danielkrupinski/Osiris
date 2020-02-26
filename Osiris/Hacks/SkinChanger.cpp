@@ -90,7 +90,7 @@ struct GetStickerAttributeBySlotIndexFloat {
 
         const auto defindex = item->itemDefinitionIndex();
 
-        auto config = g_config.get_by_definition_index(defindex);
+        auto config = get_by_definition_index(defindex);
 
         if (config) {
             switch (attribute) {
@@ -118,7 +118,7 @@ struct GetStickerAttributeBySlotIndexInt {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
         if (attribute == StickerAttribute::Index)
-            if (auto config = g_config.get_by_definition_index(item->itemDefinitionIndex()))
+            if (auto config = get_by_definition_index(item->itemDefinitionIndex()))
                 return config->stickers[slot].kit;
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
@@ -246,7 +246,7 @@ static void post_data_update_start(Entity* local) noexcept
     {
         const auto wearables = local->wearables();
 
-        const auto glove_config = g_config.get_by_definition_index(GLOVE_T_SIDE);
+        const auto glove_config = get_by_definition_index(GLOVE_T_SIDE);
 
         static int glove_handle;
 
@@ -319,7 +319,7 @@ static void post_data_update_start(Entity* local) noexcept
             auto& definition_index = weapon->itemDefinitionIndex();
 
             // All knives are terrorist knives.
-            if (const auto active_conf = g_config.get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
+            if (const auto active_conf = get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
                 apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
             else
                 erase_override_if_exists_by_index(definition_index);
