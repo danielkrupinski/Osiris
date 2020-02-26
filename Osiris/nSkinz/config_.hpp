@@ -50,7 +50,7 @@ struct item_setting
 {
 	void update()
 	{
-        itemId = game_data::weapon_names[definition_vector_index].definition_index;
+        itemId = game_data::weapon_names[itemIdIndex].definition_index;
         quality = game_data::quality_names[entity_quality_vector_index].index;
 
 		const std::vector<SkinChanger::PaintKit>* kit_names;
@@ -75,7 +75,7 @@ struct item_setting
 	}
 
 	bool enabled = false;
-	int definition_vector_index = 0;
+	int itemIdIndex = 0;
 	int itemId = 1;
 	int entity_quality_vector_index = 0;
 	int quality = 0;
