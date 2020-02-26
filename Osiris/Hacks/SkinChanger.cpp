@@ -165,8 +165,8 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
     item->accountID() = xuid_low;
 
-    if (config->entity_quality_index)
-        item->entityQuality() = config->entity_quality_index;
+    if (config->quality)
+        item->entityQuality() = config->quality;
 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
