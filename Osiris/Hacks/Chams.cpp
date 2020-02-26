@@ -71,7 +71,8 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
     auto applied{ false };
     for (size_t i = 0; i < config.chams[ALLIES_ALL].materials.size(); ++i) {
-        if (const auto activeWeapon = entity->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
+        if (const auto activeWeapon = entity->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()
+            && (config.chams[PLANTING_ALL].materials[i].enabled || config.chams[PLANTING_OCCLUDED].materials[i].enabled || config.chams[PLANTING_VISIBLE].materials[i].enabled)) {
             if (config.chams[PLANTING_ALL].materials[i].enabled) {
                 if (applied)
                     hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -97,7 +98,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applied = true;
                 }
             }
-        } else if (entity->isDefusing()) {
+        } else if (entity->isDefusing() && (config.chams[DEFUSING_ALL].materials[i].enabled || config.chams[DEFUSING_OCCLUDED].materials[i].enabled || config.chams[DEFUSING_VISIBLE].materials[i].enabled)) {
             if (config.chams[DEFUSING_ALL].materials[i].enabled) {
                 if (applied)
                     hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);

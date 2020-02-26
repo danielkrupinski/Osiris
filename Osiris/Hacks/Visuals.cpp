@@ -117,8 +117,8 @@ void Visuals::modifySmoke() noexcept
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
     }
 
-    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
-        *memory.smokeCount = 0;
+  //  if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+    //    *memory.smokeCount = 0;
 }
 
 void Visuals::thirdperson() noexcept
