@@ -50,13 +50,13 @@ struct item_setting
 {
 	void update()
 	{
-        definition_index = game_data::weapon_names[definition_vector_index].definition_index;
+        itemId = game_data::weapon_names[definition_vector_index].definition_index;
         entity_quality_index = game_data::quality_names[entity_quality_vector_index].index;
 
 		const std::vector<SkinChanger::PaintKit>* kit_names;
 		const game_data::weapon_name* defindex_names;
 
-		if (definition_index == GLOVE_T_SIDE)
+		if (itemId == GLOVE_T_SIDE)
 		{
 			kit_names = &SkinChanger::gloveKits;
 			defindex_names = game_data::glove_names;
@@ -76,7 +76,7 @@ struct item_setting
 
 	bool enabled = false;
 	int definition_vector_index = 0;
-	int definition_index = 1;
+	int itemId = 1;
 	int entity_quality_vector_index = 0;
 	int entity_quality_index = 0;
 	int paint_kit_vector_index = 0;

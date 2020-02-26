@@ -726,7 +726,7 @@ void Config::load(size_t id) noexcept
 
         if (skinChangerJson.isMember("Enabled")) skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
         if (skinChangerJson.isMember("definition_vector_index")) skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
-        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
+        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.itemId = skinChangerJson["definition_index"].asInt();
         if (skinChangerJson.isMember("entity_quality_vector_index")) skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
         if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.entity_quality_index = skinChangerJson["entity_quality_index"].asInt();
         if (skinChangerJson.isMember("paint_kit_vector_index")) skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
@@ -1489,7 +1489,7 @@ void Config::save(size_t id) const noexcept
 
         skinChangerJson["Enabled"] = skinChangerConfig.enabled;
         skinChangerJson["definition_vector_index"] = skinChangerConfig.definition_vector_index;
-        skinChangerJson["definition_index"] = skinChangerConfig.definition_index;
+        skinChangerJson["definition_index"] = skinChangerConfig.itemId;
         skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
         skinChangerJson["entity_quality_index"] = skinChangerConfig.entity_quality_index;
         skinChangerJson["paint_kit_vector_index"] = skinChangerConfig.paint_kit_vector_index;
