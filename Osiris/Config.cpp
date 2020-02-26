@@ -730,7 +730,7 @@ void Config::load(size_t id) noexcept
         if (skinChangerJson.isMember("entity_quality_vector_index")) skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
         if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.quality = skinChangerJson["entity_quality_index"].asInt();
         if (skinChangerJson.isMember("paint_kit_vector_index")) skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
-        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paint_kit_index = skinChangerJson["paint_kit_index"].asInt();
+        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paintKit = skinChangerJson["paint_kit_index"].asInt();
         if (skinChangerJson.isMember("definition_override_vector_index")) skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
         if (skinChangerJson.isMember("definition_override_index")) skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
         if (skinChangerJson.isMember("seed")) skinChangerConfig.seed = skinChangerJson["seed"].asInt();
@@ -1493,7 +1493,7 @@ void Config::save(size_t id) const noexcept
         skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
         skinChangerJson["entity_quality_index"] = skinChangerConfig.quality;
         skinChangerJson["paint_kit_vector_index"] = skinChangerConfig.paint_kit_vector_index;
-        skinChangerJson["paint_kit_index"] = skinChangerConfig.paint_kit_index;
+        skinChangerJson["paint_kit_index"] = skinChangerConfig.paintKit;
         skinChangerJson["definition_override_vector_index"] = skinChangerConfig.definition_override_vector_index;
         skinChangerJson["definition_override_index"] = skinChangerConfig.definition_override_index;
         skinChangerJson["seed"] = skinChangerConfig.seed;

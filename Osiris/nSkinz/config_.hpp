@@ -67,7 +67,7 @@ struct item_setting
 			defindex_names = game_data::knife_names;
 		}
 
-        paint_kit_index = (*kit_names)[paint_kit_vector_index].id;
+        paintKit = (*kit_names)[paint_kit_vector_index].id;
         definition_override_index = defindex_names[definition_override_vector_index].definition_index;
 
 		for(auto& sticker : stickers)
@@ -80,7 +80,7 @@ struct item_setting
 	int entity_quality_vector_index = 0;
 	int quality = 0;
 	int paint_kit_vector_index = 0;
-	int paint_kit_index = 0;
+	int paintKit = 0;
 	int definition_override_vector_index = 0;
 	int definition_override_index = 0;
 	int seed = 0;

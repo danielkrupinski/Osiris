@@ -171,8 +171,8 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
 
-    if (config->paint_kit_index)
-        item->fallbackPaintKit() = config->paint_kit_index;
+    if (config->paintKit)
+        item->fallbackPaintKit() = config->paintKit;
 
     if (config->seed)
         item->fallbackSeed() = config->seed;
