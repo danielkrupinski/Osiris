@@ -33,7 +33,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
         const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
 
-        if (paintKit->id == 9001)
+        if (paintKit->id == 9001) // ignore workshop_default
             continue;
 
         const auto itemName{ interfaces.localize->find(paintKit->itemName.buffer + 1) };
@@ -62,7 +62,7 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
         const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
-        const auto itemName{ interfaces.localize->find(stickerKit->itemName.buffer + 1) };
+        const auto itemName = interfaces.localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr))
