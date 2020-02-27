@@ -56,7 +56,7 @@ void Misc::griefingBox() noexcept
             auto entity = interfaces.entityList->getEntity(i);
             if (!entity) continue;
             interfaces.engine->getPlayerInfo(i, pInfo);
-            if (entity->team() == localPlayer->team()) {
+            if (!entity->isEnemy()) {
                 ImGui::Separator();
                 ImGui::Text(pInfo.name);
                 ImGui::NextColumn();
