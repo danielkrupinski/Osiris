@@ -225,6 +225,10 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        bool humanBunnyHop{ false };
+        int bhop_hit_chance{ 100 };
+        int hops_restricted_limit{ 100 };
+        int max_hops_hit{ 5 };
         bool customClanTag{ false };
         bool clocktag{ false };
         std::string clanTag;

@@ -414,6 +414,33 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer->flags() & 1;
 }
 
+void Misc::humanBunnyHop(UserCmd* cmd) noexcept
+{
+    static int hops_restricted = 0;
+    static int hops_hit = 0;
+
+    if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.misc.humanBunnyHop
+
+        && localPlayer->moveType() != MoveType::LADDER) {
+        if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & 1)) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+            hops_restricted = 0;
+        }
+        else if ((rand() % 100 > config.misc.bhop_hit_chance			//chance of hitting first hop is always the same, the 2nd part is that so it always doesn't rape your speed
+            && hops_restricted < config.misc.hops_restricted_limit)	//the same amount, it can be made a constant if you want to or can be removed, up to you
+            || (config.misc.max_hops_hit > 0							//force fuck up after certain amount of hops to look more legit, you could add variance to this and
+                && hops_hit > config.misc.max_hops_hit))				//everything but fuck off that's too much customisation in my opinion, i only added this one because prof told me to
+        {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+            hops_restricted++;
+            hops_hit = 0;
+        }
+        else
+            hops_hit++;
+    }
+
+}
+
 void Misc::fakeBan(bool set) noexcept
 {
     static bool shouldSet = false;

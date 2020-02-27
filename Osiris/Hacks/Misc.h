@@ -30,6 +30,7 @@ namespace Misc
     bool changeName(bool, const char*, float) noexcept;
     void fakeVote(bool = false) noexcept;
     void bunnyHop(UserCmd*) noexcept;
+    void humanBunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
