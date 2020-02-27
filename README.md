@@ -234,7 +234,7 @@ If your CPU supports AVX / AVX2 instruction set, you can enable it in project se
 ## FAQ
 
 ### How do I open menu?
-Press `INSERT` key while focused on CS:GO window.
+Press <kbd>INSERT</kbd> while focused on CS:GO window.
 
 ### Where is my config file saved?
 Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
