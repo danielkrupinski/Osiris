@@ -1,6 +1,7 @@
 #pragma once
 
-#include <sstream>
+#include <array>
+#include <string>
 #include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
@@ -57,6 +58,7 @@ public:
     uintptr_t test2;
     uint8_t* fakePrime;
     std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
+    std::add_pointer_t<void __cdecl(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
     int(__thiscall* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
@@ -88,7 +90,7 @@ private:
             if (!*second)
                 return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
         }
-        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id).append("!")).c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;
     }
 };

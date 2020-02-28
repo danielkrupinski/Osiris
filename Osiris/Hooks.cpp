@@ -31,7 +31,6 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
-#include "SDK/GameEventManager.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
@@ -369,10 +368,11 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
     if (std::uintptr_t(_ReturnAddress()) == memory.listLeaves) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
             if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
-                info->flags &= ~0x100;
-                info->flags2 |= 0xC0;
-
                 if (config.misc.disableModelOcclusion) {
+                    // FIXME: sometimes players are rendered above smoke, maybe sort render list?
+                    info->flags &= ~0x100;
+                    info->flags2 |= 0x40;
+
                     constexpr float maxCoord = 16384.0f;
                     constexpr float minCoord = -maxCoord;
                     constexpr Vector min{ minCoord, minCoord, minCoord };
@@ -462,6 +462,14 @@ static float __stdcall getScreenAspectRatio(int width, int height) noexcept
     return hooks.engine.callOriginal<float, 101>(width, height);
 }
 
+static void __stdcall renderSmokeOverlay(bool update) noexcept
+{
+    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + 0x588) = 0.0f;
+    else
+        hooks.viewRender.callOriginal<void, 41>(update);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -495,6 +503,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
+    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
