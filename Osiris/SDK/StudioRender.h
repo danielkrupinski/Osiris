@@ -11,7 +11,7 @@ class StudioRender {
     std::byte pad_1[0xC];
     int overrideType;
 public:
-    bool isInGlow() noexcept
+    bool isForcedMaterialOverride() noexcept
     {
         if (!materialOverride)
             return overrideType == 2 || overrideType == 4; // see CStudioRenderContext::IsForcedMaterialOverride
