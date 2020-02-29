@@ -61,9 +61,6 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    if (interfaces.studioRender->isForcedMaterialOverride())
-        return true;
-
     const auto entity = interfaces.entityList->getEntity(info.entityIndex);
     if (!entity || entity->isDormant() || !entity->isPlayer())
         return true;

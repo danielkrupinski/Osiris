@@ -40,6 +40,7 @@
 #include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
+#include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -201,15 +202,14 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && !interfaces.studioRender->isForcedMaterialOverride()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
+
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        if (!isOverridden)
-            interfaces.modelRender->forceMaterialOverride(nullptr);
+        interfaces.modelRender->forceMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
