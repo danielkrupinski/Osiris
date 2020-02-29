@@ -18,6 +18,7 @@
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
+#include "Hacks/EnginePrediction.h"
 #include "Hacks/Esp.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
@@ -30,7 +31,6 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
-#include "SDK/GameEventManager.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
@@ -40,6 +40,7 @@
 #include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
+#include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -69,24 +70,24 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    if (gui.open) {
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
-        device->GetVertexDeclaration(&vertexDeclaration);
+    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
+    IDirect3DVertexDeclaration9* vertexDeclaration;
+    device->GetVertexDeclaration(&vertexDeclaration);
 
-        ImGui_ImplDX9_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 
+    if (gui.open)
         gui.render();
 
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-        device->SetVertexDeclaration(vertexDeclaration);
-        vertexDeclaration->Release();
-    }
+    device->SetVertexDeclaration(vertexDeclaration);
+    vertexDeclaration->Release();
+
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
@@ -125,8 +126,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
@@ -134,14 +133,22 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Backtrack::run(cmd);
     Misc::quickReload(cmd);
-    Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+
+    EnginePrediction::run(cmd);
+
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Backtrack::run(cmd);
     Misc::edgejump(cmd);
+<<<<<<< HEAD
     Misc::playerBlocker(cmd);
+=======
+    Misc::moonwalk(cmd);
+>>>>>>> upstream/master
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -199,15 +206,14 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && !interfaces.studioRender->isForcedMaterialOverride()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
+
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        if (!isOverridden)
-            interfaces.modelRender->forceMaterialOverride(nullptr);
+        interfaces.studioRender->forcedMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
@@ -363,17 +369,20 @@ struct RenderableInfo {
 
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    if (config.misc.disableModelOcclusion && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
-        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info&& info->renderable) {
-            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent&& ent->isPlayer()) {
-                info->flags &= ~0x100;
-                info->flags2 |= 0xC0;
+    if (std::uintptr_t(_ReturnAddress()) == memory.listLeaves) {
+        if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
+            if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
+                if (config.misc.disableModelOcclusion) {
+                    // FIXME: sometimes players are rendered above smoke, maybe sort render list?
+                    info->flags &= ~0x100;
+                    info->flags2 |= 0x40;
 
-                constexpr float maxCoord{ 16384.0f };
-                constexpr float minCoord{ -maxCoord };
-                constexpr Vector min{ minCoord, minCoord, minCoord };
-                constexpr Vector max{ maxCoord, maxCoord, maxCoord };
-                return hooks.bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
+                    constexpr float maxCoord = 16384.0f;
+                    constexpr float minCoord = -maxCoord;
+                    constexpr Vector min{ minCoord, minCoord, minCoord };
+                    constexpr Vector max{ maxCoord, maxCoord, maxCoord };
+                    return hooks.bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
+                }
             }
         }
     }
@@ -457,6 +466,14 @@ static float __stdcall getScreenAspectRatio(int width, int height) noexcept
     return hooks.engine.callOriginal<float, 101>(width, height);
 }
 
+static void __stdcall renderSmokeOverlay(bool update) noexcept
+{
+    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + 0x588) = 0.0f;
+    else
+        hooks.viewRender.callOriginal<void, 41>(update);
+}
+
 Hooks::Hooks() noexcept
 {
     SkinChanger::initializeKits();
@@ -490,6 +507,7 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
+    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);

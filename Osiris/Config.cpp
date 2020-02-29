@@ -725,12 +725,12 @@ void Config::load(size_t id) noexcept
         auto& skinChangerConfig = skinChanger[i];
 
         if (skinChangerJson.isMember("Enabled")) skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
-        if (skinChangerJson.isMember("definition_vector_index")) skinChangerConfig.definition_vector_index = skinChangerJson["definition_vector_index"].asInt();
-        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.definition_index = skinChangerJson["definition_index"].asInt();
+        if (skinChangerJson.isMember("definition_vector_index")) skinChangerConfig.itemIdIndex = skinChangerJson["definition_vector_index"].asInt();
+        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.itemId = skinChangerJson["definition_index"].asInt();
         if (skinChangerJson.isMember("entity_quality_vector_index")) skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
-        if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.entity_quality_index = skinChangerJson["entity_quality_index"].asInt();
+        if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.quality = skinChangerJson["entity_quality_index"].asInt();
         if (skinChangerJson.isMember("paint_kit_vector_index")) skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
-        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paint_kit_index = skinChangerJson["paint_kit_index"].asInt();
+        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paintKit = skinChangerJson["paint_kit_index"].asInt();
         if (skinChangerJson.isMember("definition_override_vector_index")) skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
         if (skinChangerJson.isMember("definition_override_index")) skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
         if (skinChangerJson.isMember("seed")) skinChangerConfig.seed = skinChangerJson["seed"].asInt();
@@ -904,12 +904,11 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Enabled")) reportbot.enabled = reportbotJson["Enabled"].asBool();
         if (reportbotJson.isMember("Target")) reportbot.target = reportbotJson["Target"].asInt();
         if (reportbotJson.isMember("Delay")) reportbot.delay = reportbotJson["Delay"].asInt();
-        if (reportbotJson.isMember("Aimbot")) reportbot.aimbot = reportbotJson["Aimbot"].asBool();
-        if (reportbotJson.isMember("Wallhack")) reportbot.wallhack = reportbotJson["Wallhack"].asBool();
-        if (reportbotJson.isMember("Other")) reportbot.other = reportbotJson["Other"].asBool();
+        if (reportbotJson.isMember("Abusive Communications")) reportbot.textAbuse = reportbotJson["Abusive Communications"].asBool();
         if (reportbotJson.isMember("Griefing")) reportbot.griefing = reportbotJson["Griefing"].asBool();
-        if (reportbotJson.isMember("Voice abuse")) reportbot.voiceAbuse = reportbotJson["Voice abuse"].asBool();
-        if (reportbotJson.isMember("Text abuse")) reportbot.textAbuse = reportbotJson["Text abuse"].asBool();
+        if (reportbotJson.isMember("Wall Hacking")) reportbot.wallhack = reportbotJson["Wall Hacking"].asBool();
+        if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
+        if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
     }
 }
 
@@ -1491,12 +1490,12 @@ void Config::save(size_t id) const noexcept
         const auto& skinChangerConfig = skinChanger[i];
 
         skinChangerJson["Enabled"] = skinChangerConfig.enabled;
-        skinChangerJson["definition_vector_index"] = skinChangerConfig.definition_vector_index;
-        skinChangerJson["definition_index"] = skinChangerConfig.definition_index;
+        skinChangerJson["definition_vector_index"] = skinChangerConfig.itemIdIndex;
+        skinChangerJson["definition_index"] = skinChangerConfig.itemId;
         skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
-        skinChangerJson["entity_quality_index"] = skinChangerConfig.entity_quality_index;
+        skinChangerJson["entity_quality_index"] = skinChangerConfig.quality;
         skinChangerJson["paint_kit_vector_index"] = skinChangerConfig.paint_kit_vector_index;
-        skinChangerJson["paint_kit_index"] = skinChangerConfig.paint_kit_index;
+        skinChangerJson["paint_kit_index"] = skinChangerConfig.paintKit;
         skinChangerJson["definition_override_vector_index"] = skinChangerConfig.definition_override_vector_index;
         skinChangerJson["definition_override_index"] = skinChangerConfig.definition_override_index;
         skinChangerJson["seed"] = skinChangerConfig.seed;
@@ -1643,12 +1642,11 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Enabled"] = reportbot.enabled;
         reportbotJson["Target"] = reportbot.target;
         reportbotJson["Delay"] = reportbot.delay;
-        reportbotJson["Aimbot"] = reportbot.aimbot;
-        reportbotJson["Wallhack"] = reportbot.wallhack;
-        reportbotJson["Other"] = reportbot.other;
+        reportbotJson["Abusive Communications"] = reportbot.textAbuse;
         reportbotJson["Griefing"] = reportbot.griefing;
-        reportbotJson["Voice abuse"] = reportbot.voiceAbuse;
-        reportbotJson["Text abuse"] = reportbot.textAbuse;
+        reportbotJson["Wall Hacking"] = reportbot.wallhack;
+        reportbotJson["Aim Hacking"] = reportbot.aimbot;
+        reportbotJson["Other Hacking"] = reportbot.other;
     }
 
     if (!std::filesystem::is_directory(path)) {

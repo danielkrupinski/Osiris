@@ -116,6 +116,9 @@
     <ClCompile Include="imgui\imgui_stdlib.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\EnginePrediction.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -289,9 +292,6 @@
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\GameEventManager.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\GameEvent.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -345,6 +345,21 @@
     </ClInclude>
     <ClInclude Include="imgui\imgui_stdlib.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\GameMovement.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\MoveHelper.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Prediction.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\EnginePrediction.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\StudioRender.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

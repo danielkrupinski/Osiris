@@ -41,7 +41,7 @@ GUI::GUI() noexcept
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
 
-        static ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017f, 0 };
+        static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
         fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
     }
@@ -484,9 +484,16 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    static auto material{ 1 };
-    ImGui::InputInt("##mat", &material, 1, 2);
-    material = std::clamp(material, 1, 2);
+    static int material = 1;
+
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+        --material;
+    ImGui::SameLine();
+    ImGui::Text("%d", material);
+    ImGui::SameLine();
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config.chams[0].materials.size()))
+        ++material;
+
     ImGui::SameLine();
     auto& chams{ config.chams[currentItem].materials[material - 1] };
 
@@ -821,7 +828,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     ImGui::PopItemWidth();
 
     auto& selected_entry = config.skinChanger[itemIndex];
-    selected_entry.definition_vector_index = itemIndex;
+    selected_entry.itemIdIndex = itemIndex;
 
     {
         ImGui::SameLine();
@@ -1083,14 +1090,14 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         Reportbot::reset();
     ImGui::Separator();
     ImGui::Combo("Target", &config.reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1, 5);
-    config.reportbot.delay = (std::max)(config.reportbot.delay, 0);
-    ImGui::Checkbox("Aimbot", &config.reportbot.aimbot);
-    ImGui::Checkbox("Wallhack", &config.reportbot.wallhack);
-    ImGui::Checkbox("Other", &config.reportbot.other);
+    ImGui::InputInt("Delay (s)", &config.reportbot.delay, 1);
+    config.reportbot.delay = (std::max)(config.reportbot.delay, 1);
+    ImGui::Checkbox("Abusive Communications", &config.reportbot.textAbuse);
     ImGui::Checkbox("Griefing", &config.reportbot.griefing);
-    ImGui::Checkbox("Voice abuse", &config.reportbot.voiceAbuse);
-    ImGui::Checkbox("Text abuse", &config.reportbot.textAbuse);
+    ImGui::Checkbox("Wall Hacking", &config.reportbot.wallhack);
+    ImGui::Checkbox("Aim Hacking", &config.reportbot.aimbot);
+    ImGui::Checkbox("Other Hacking", &config.reportbot.other);
+
     if (!contentOnly)
         ImGui::End();
 }

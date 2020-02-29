@@ -10,6 +10,7 @@ class Engine;
 class EngineTrace;
 class EntityList;
 class GameEventManager;
+class GameMovement;
 class GameUI;
 class InputSystem;
 class Localize;
@@ -18,11 +19,13 @@ class ModelInfo;
 class ModelRender;
 class Panel;
 class PhysicsSurfaceProps;
+class Prediction;
 class RenderView;
 class ResourceAccessControl;
 class Surface;
 class Sound;
 class SoundEmitter;
+class StudioRender;
 
 class Interfaces {
 public:
@@ -32,6 +35,7 @@ public:
     EngineTrace* engineTrace = find<EngineTrace>(L"engine", "EngineTraceClient004");
     EntityList* entityList = find<EntityList>(L"client_panorama", "VClientEntityList003");;
     GameEventManager* gameEventManager = find<GameEventManager>(L"engine", "GAMEEVENTSMANAGER002");
+    GameMovement* gameMovement = find<GameMovement>(L"client_panorama", "GameMovement001");
     GameUI* gameUI = find<GameUI>(L"client_panorama", "GameUI011");
     InputSystem* inputSystem = find<InputSystem>(L"inputsystem", "InputSystemVersion001");
     Localize* localize = find<Localize>(L"localize", "Localize_001");
@@ -40,11 +44,13 @@ public:
     ModelRender* modelRender = find<ModelRender>(L"engine", "VEngineModel016");
     Panel* panel = find<Panel>(L"vgui2", "VGUI_Panel009");
     PhysicsSurfaceProps* physicsSurfaceProps = find<PhysicsSurfaceProps>(L"vphysics", "VPhysicsSurfaceProps001");
+    Prediction* prediction = find<Prediction>(L"client_panorama", "VClientPrediction001");
     RenderView* renderView = find<RenderView>(L"engine", "VEngineRenderView014");
     ResourceAccessControl* resourceAccessControl = find<ResourceAccessControl>(L"datacache", "VResourceAccessControl001");
     Surface* surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
     Sound* sound = find<Sound>(L"engine", "IEngineSoundClient003");
     SoundEmitter* soundEmitter = find<SoundEmitter>(L"soundemittersystem", "VSoundEmitter003");
+    StudioRender* studioRender = find<StudioRender>(L"studiorender", "VStudioRender026");
 private:
     template <typename T>
     static auto find(const wchar_t* module, const char* name) noexcept

@@ -1,5 +1,9 @@
 #include "GlobalVars.h"
 #include "UserCmd.h"
+#include "../Interfaces.h"
+#include "Engine.h"
+#include "Entity.h"
+#include "EntityList.h"
 
 float GlobalVars::serverTime(UserCmd* cmd) noexcept
 {
