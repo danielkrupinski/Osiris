@@ -1,4 +1,3 @@
-#define NOMINMAX
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -80,43 +79,41 @@ struct BoundingBox {
     float x0, y0;
     float x1, y1;
     Vector vertices[8];
-
-    BoundingBox(Entity* entity) noexcept
-    {
-        const auto [width, height] = interfaces.surface->getScreenSize();
-
-        x0 = static_cast<float>(width * 2);
-        y0 = static_cast<float>(height * 2);
-        x1 = -x0;
-        y1 = -y0;
-
-        const auto& mins = entity->getCollideable()->obbMins();
-        const auto& maxs = entity->getCollideable()->obbMaxs();
-
-        for (int i = 0; i < 8; ++i) {
-            const Vector point{ i & 1 ? maxs.x : mins.x,
-                                i & 2 ? maxs.y : mins.y,
-                                i & 4 ? maxs.z : mins.z };
-
-            if (!worldToScreen(point.transform(entity->coordinateFrame()), vertices[i])) {
-                valid = false;
-                return;
-            }
-            x0 = std::min(x0, vertices[i].x);
-            y0 = std::min(y0, vertices[i].y);
-            x1 = std::max(x1, vertices[i].x);
-            y1 = std::max(y1, vertices[i].y);
-        }
-        valid = true;
-    }
-
-    operator bool() noexcept
-    {
-        return valid;
-    }
-private:
-    bool valid;
 };
+
+static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
+{
+    const auto [width, height] { interfaces.surface->getScreenSize() };
+    out.x0 = static_cast<float>(width * 2);
+    out.y0 = static_cast<float>(height * 2);
+    out.x1 = -static_cast<float>(width * 2);
+    out.y1 = -static_cast<float>(height * 2);
+
+    const auto min{ entity->getCollideable()->obbMins() };
+    const auto max{ entity->getCollideable()->obbMaxs() };
+
+    for (int i = 0; i < 8; i++) {
+        const Vector point{ i & 1 ? max.x : min.x,
+                            i & 2 ? max.y : min.y,
+                            i & 4 ? max.z : min.z };
+
+        if (!worldToScreen(point.transform(entity->coordinateFrame()), out.vertices[i]))
+            return false;
+
+        if (out.x0 > out.vertices[i].x)
+            out.x0 = out.vertices[i].x;
+
+        if (out.y0 > out.vertices[i].y)
+            out.y0 = out.vertices[i].y;
+
+        if (out.x1 < out.vertices[i].x)
+            out.x1 = out.vertices[i].x;
+
+        if (out.y1 < out.vertices[i].y)
+            out.y1 = out.vertices[i].y;
+    }
+    return true;
+}
 
 static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
@@ -190,7 +187,7 @@ static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config
 
 static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (BoundingBox bbox{ entity }) {
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(bbox, config);
 
         float drawPositionX = bbox.x0 - 5;
@@ -309,9 +306,9 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
 static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) noexcept
 {
-    BoundingBox bbox{ entity };
+    BoundingBox bbox;
 
-    if (!bbox)
+    if (!boundingBox(entity, bbox))
         return;
 
     renderBox(bbox, config);
@@ -345,7 +342,7 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
 
 static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
 {
-    if (BoundingBox bbox{ entity }) {
+    if (BoundingBox bbox; boundingBox(entity, bbox)) {
         renderBox(bbox, config);
 
         if (config.name.enabled) {

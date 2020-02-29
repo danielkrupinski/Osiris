@@ -1,29 +1,25 @@
 #pragma once
 
-#include <cstddef>
-
 #include "Utils.h"
 #include "Vector.h"
 
 struct PlayerInfo {
-    std::uint64_t version;
+    __int64 pad;
     union {
-        std::uint64_t xuid;
-        struct {
-            std::uint32_t xuidLow;
-            std::uint32_t xuidHigh;
-        };
+        __int64 steamID64;
+        __int32 xuidLow;
+        __int32 xuidHigh;
     };
     char name[128];
     int userId;
-    char guid[33];
-    std::uint32_t friendsId;
+    char steamIdString[20];
+    char pad1[16];
+    unsigned long steamId;
     char friendsName[128];
     bool fakeplayer;
-    bool hltv;
-    int customfiles[4];
+    bool ishltv;
+    unsigned int customfiles[4];
     unsigned char filesdownloaded;
-    int entityIndex;
 };
 
 class NetworkChannel;
