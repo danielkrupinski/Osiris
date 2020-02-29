@@ -27,7 +27,7 @@ class Material;
 
 class ModelRender {
 public:
-    constexpr void forceMaterialOverride(Material* newMaterial) noexcept
+    [[deprecated]] constexpr void forceMaterialOverride(Material* newMaterial) noexcept
     {
         callVirtualMethod<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
     }
