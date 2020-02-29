@@ -14,7 +14,7 @@ public:
     bool isInGlow() noexcept
     {
         if (!materialOverride)
-            return overrideType != 0; // other than OVERRIDE_NORMAL
+            return overrideType == 2 || overrideType == 4; // see CStudioRenderContext::IsForcedMaterialOverride
         return std::strstr(materialOverride->getName(), "dev/glow") != nullptr;
     }
 };
