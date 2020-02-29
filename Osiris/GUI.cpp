@@ -990,7 +990,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(100.0f);
     ImGui::InputInt("Bhop Restricted Limit", &config.misc.hops_restricted_limit);
     ImGui::SetNextItemWidth(100.0f);
-    ImGui::InputInt("Max Hops Hit", &config.misc.hops_restricted_limit);
+    ImGui::InputInt("Max Hops Hit", &config.misc.max_hops_hit);
     ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
     ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
     ImGui::Checkbox("Edge Jump", &config.misc.edgejump);
