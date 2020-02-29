@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string_view>
 
 #include "Material.h"
 #include "../Memory.h"
@@ -15,6 +16,6 @@ public:
     {
         if (!materialOverride)
             return overrideType == 2 || overrideType == 4; // see CStudioRenderContext::IsForcedMaterialOverride
-        return std::strstr(materialOverride->getName(), "dev/glow") != nullptr;
+        return std::string_view{ materialOverride->getName() }.starts_with("dev/glow");
     }
 };
