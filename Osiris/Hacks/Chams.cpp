@@ -8,6 +8,7 @@
 #include "Backtrack.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/StudioRender.h"
 
 Chams::Chams() noexcept
 {
@@ -60,7 +61,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    if (interfaces.modelRender->isMaterialOverridden())
+    if (interfaces.studioRender->isInGlow())
         return true;
 
     const auto entity = interfaces.entityList->getEntity(info.entityIndex);
