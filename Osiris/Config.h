@@ -271,6 +271,9 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        bool jumpBug{ false };
+        int jumpBugKey{ 0 };
+        int jumpBugUnits{ 4 };
     } misc;
 
     struct {
