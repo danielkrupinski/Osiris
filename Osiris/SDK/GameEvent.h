@@ -24,3 +24,18 @@ public:
         callVirtualMethod<void, const char*, const char*>(this, 16, keyName, value);
     }
 };
+
+class GameEventListener {
+public:
+    virtual ~GameEventListener() {}
+    virtual void fireGameEvent(GameEvent* event) = 0;
+    virtual int getEventDebugId() { return 42; }
+};
+
+class GameEventManager {
+public:
+    constexpr auto addListener(GameEventListener* listener, const char* name) noexcept
+    {
+        return callVirtualMethod<bool>(this, 3, listener, name, false);
+    }
+};

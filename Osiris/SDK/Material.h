@@ -20,6 +20,11 @@ enum class MaterialVarFlag {
 
 class Material {
 public:
+    constexpr auto getName() noexcept
+    {
+        return callVirtualMethod<const char*>(this, 0);
+    }
+
     constexpr auto getTextureGroupName() noexcept
     {
         return callVirtualMethod<const char*>(this, 1);

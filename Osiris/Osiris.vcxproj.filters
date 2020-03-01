@@ -292,9 +292,6 @@
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\GameEventManager.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\GameEvent.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -360,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\EnginePrediction.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\StudioRender.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

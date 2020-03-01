@@ -10,7 +10,7 @@
 
 #include "Reportbot.h"
 
-static std::vector<__int64> reportedPlayers;
+static std::vector<std::uint64_t> reportedPlayers;
 
 void Reportbot::run() noexcept
 {
@@ -35,31 +35,33 @@ void Reportbot::run() noexcept
         if (config.reportbot.target != 2 && (entity->isEnemy() ? config.reportbot.target != 0 : config.reportbot.target != 1))
             continue;
 
-        if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo)) {
-            if (playerInfo.steamID64 == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.steamID64) != reportedPlayers.cend())
-                continue;
+        PlayerInfo playerInfo;  
+        if (!interfaces.engine->getPlayerInfo(i, playerInfo))
+            continue;
 
-            std::string report;
+        if (playerInfo.xuid == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+            continue;
 
-            if (config.reportbot.textAbuse)
-                report += "textabuse,";
-            if (config.reportbot.griefing)
-                report += "grief,";
-            if (config.reportbot.wallhack)
-                report += "wallhack,";
-            if (config.reportbot.aimbot)
-                report += "aimbot,";
-            if (config.reportbot.other)
-                report += "speedhack,";
+        std::string report;
 
-            if (!report.empty()) {
-                memory.submitReport(std::to_string(playerInfo.steamID64).c_str(), report.c_str());
-                reportedPlayers.push_back(playerInfo.steamID64);
-            }
-            break;
+        if (config.reportbot.textAbuse)
+            report += "textabuse,";
+        if (config.reportbot.griefing)
+            report += "grief,";
+        if (config.reportbot.wallhack)
+            report += "wallhack,";
+        if (config.reportbot.aimbot)
+            report += "aimbot,";
+        if (config.reportbot.other)
+            report += "speedhack,";
+
+        if (!report.empty()) {
+            memory.submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory.globalVars->realtime;
+            reportedPlayers.push_back(playerInfo.xuid);
         }
+        break;
     }
-    lastReportTime = memory.globalVars->realtime;
 }
 
 void Reportbot::reset() noexcept
