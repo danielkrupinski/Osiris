@@ -11,6 +11,7 @@
 #include "Reportbot.h"
 
 static std::vector<std::uint64_t> reportedPlayers;
+static int currentRound;
 
 void Reportbot::run() noexcept
 {
@@ -26,6 +27,10 @@ void Reportbot::run() noexcept
     if (lastReportTime + config.reportbot.delay > memory.globalVars->realtime)
         return;
 
+    if (currentRound >= config.reportbot.rounds)
+        return;
+
+    bool allPlayersReported = true;
     for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
         const auto entity = interfaces.entityList->getEntity(i);
 
@@ -60,11 +65,18 @@ void Reportbot::run() noexcept
             lastReportTime = memory.globalVars->realtime;
             reportedPlayers.push_back(playerInfo.xuid);
         }
+        allPlayersReported = false;
         break;
+    }
+
+    if (allPlayersReported) {
+        reportedPlayers.clear();
+        ++currentRound;
     }
 }
 
 void Reportbot::reset() noexcept
 {
+    currentRound = 0;
     reportedPlayers.clear();
 }
