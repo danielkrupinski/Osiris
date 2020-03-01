@@ -358,5 +358,8 @@
     <ClInclude Include="Hacks\EnginePrediction.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\StudioRender.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

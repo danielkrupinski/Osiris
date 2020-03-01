@@ -33,7 +33,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
         const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
 
-        if (paintKit->id == 9001)
+        if (paintKit->id == 9001) // ignore workshop_default
             continue;
 
         const auto itemName{ interfaces.localize->find(paintKit->itemName.buffer + 1) };
@@ -62,7 +62,7 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
         const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
-        const auto itemName{ interfaces.localize->find(stickerKit->itemName.buffer + 1) };
+        const auto itemName = interfaces.localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr))
@@ -90,7 +90,7 @@ struct GetStickerAttributeBySlotIndexFloat {
 
         const auto defindex = item->itemDefinitionIndex();
 
-        auto config = g_config.get_by_definition_index(defindex);
+        auto config = get_by_definition_index(defindex);
 
         if (config) {
             switch (attribute) {
@@ -118,7 +118,7 @@ struct GetStickerAttributeBySlotIndexInt {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
         if (attribute == StickerAttribute::Index)
-            if (auto config = g_config.get_by_definition_index(item->itemDefinitionIndex()))
+            if (auto config = get_by_definition_index(item->itemDefinitionIndex()))
                 return config->stickers[slot].kit;
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
@@ -165,14 +165,14 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
     item->accountID() = xuid_low;
 
-    if (config->entity_quality_index)
-        item->entityQuality() = config->entity_quality_index;
+    if (config->quality)
+        item->entityQuality() = config->quality;
 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
 
-    if (config->paint_kit_index)
-        item->fallbackPaintKit() = config->paint_kit_index;
+    if (config->paintKit)
+        item->fallbackPaintKit() = config->paintKit;
 
     if (config->seed)
         item->fallbackSeed() = config->seed;
@@ -246,7 +246,7 @@ static void post_data_update_start(Entity* local) noexcept
     {
         const auto wearables = local->wearables();
 
-        const auto glove_config = g_config.get_by_definition_index(GLOVE_T_SIDE);
+        const auto glove_config = get_by_definition_index(GLOVE_T_SIDE);
 
         static int glove_handle;
 
@@ -319,7 +319,7 @@ static void post_data_update_start(Entity* local) noexcept
             auto& definition_index = weapon->itemDefinitionIndex();
 
             // All knives are terrorist knives.
-            if (const auto active_conf = g_config.get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
+            if (const auto active_conf = get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
                 apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
             else
                 erase_override_if_exists_by_index(definition_index);
