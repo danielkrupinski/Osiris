@@ -6,6 +6,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/Material.h"
 #include "../SDK/ModelRender.h"
+#include "../SDK/StudioRender.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/RenderView.h"
 #include "../SDK/Utils.h"
@@ -87,6 +88,6 @@ private:
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
-        interfaces.modelRender->forceMaterialOverride(material);
+        interfaces.studioRender->forcedMaterialOverride(material);
     }
 };
