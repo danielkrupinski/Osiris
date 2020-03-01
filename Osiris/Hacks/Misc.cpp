@@ -29,6 +29,80 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
+bool isUnitsFromFloor(size_t units) noexcept {
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return false;
+
+    Vector _velocity = localPlayer->velocity();
+    float speed = sqrt(_velocity.x * _velocity.x + _velocity.y * _velocity.y);
+    float value = ceil(17 + speed / 64);
+    if (_velocity.z < 0) {
+        units -= floor(_velocity.z / 64);
+    }
+    units = (size_t)units;
+    for (size_t x = -value; x < value; x++)
+    {
+        for (size_t y = -value; y < value; y++)
+        {
+            Vector pos = localPlayer->origin();
+
+            Vector pt;
+            pt.x = pos.x + x;
+            pt.y = pos.y + y;
+            pt.z = pos.z;
+
+            Trace trc;
+
+            TraceFilter flt = localPlayer;
+
+            Vector pt2 = pt;
+            pt2.z -= units;
+
+            interfaces.engineTrace->traceRay({ pt, pt2 }, 0x202400B, flt, trc);
+
+            if (trc.fraction != 1.f && trc.fraction != 0.f) 
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+
+}
+
+void Misc::jumpBug(UserCmd* cmd) noexcept
+{
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    
+    if (!config.misc.jumpBug || (!localPlayer || !localPlayer->isAlive()) || !(GetAsyncKeyState(config.misc.jumpBugKey) && (localPlayer->flags() & (1 << 0)))) return;
+
+    if (config.misc.bunnyHop) {
+        config.misc.bunnyHop = false;
+        Misc::bhopWasEnabled = true;
+    }
+        
+    if (unduck) {
+        bDidJump = false;
+        cmd->buttons &= ~UserCmd::IN_DUCK;
+        cmd->buttons |= UserCmd::IN_JUMP;
+        unduck = false;
+    }
+    Vector pos = localPlayer->origin();
+    if (isUnitsFromFloor(jumpBugUnits)) {
+        bDidJump = true;
+        cmd->buttons |= UserCmd::IN_DUCK;
+        cmd->buttons &= ~UserCmd::IN_JUMP;
+        unduck = true;
+    } else if (bhopWasEnabled) { 
+        config.misc.bunnyHop = true;
+    }
+
+}
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (!config.misc.slowwalk || !GetAsyncKeyState(config.misc.slowwalkKey))
