@@ -11,6 +11,7 @@
 #include "Reportbot.h"
 
 static std::vector<std::uint64_t> reportedPlayers;
+int Reports = 0;
 
 void Reportbot::run() noexcept
 {
@@ -58,7 +59,11 @@ void Reportbot::run() noexcept
         if (!report.empty()) {
             memory.submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
             lastReportTime = memory.globalVars->realtime;
-            reportedPlayers.push_back(playerInfo.xuid);
+            Reports = Reports + 1;
+            if (Reports == config.reportbot.Reports) {
+                reportedPlayers.push_back(playerInfo.xuid);
+                Reports = 0;
+            }
         }
         break;
     }

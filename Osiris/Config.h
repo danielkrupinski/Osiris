@@ -277,6 +277,7 @@ public:
         bool enabled{ false };
         int target{ 0 };
         int delay{ 1 };
+        int Reports{ 5 };
         bool textAbuse{ false };
         bool griefing{ false };
         bool wallhack{ true };
