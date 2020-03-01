@@ -36,7 +36,13 @@ namespace Misc
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
-
+    void jumpBug(UserCmd*) noexcept;
+    
+    static int jumpBugUnits;
+    static bool bDidJump;
+    static bool unduck;
+    static bool bhopWasEnabled;
+    
     constexpr void fixMovement(UserCmd* cmd, float yaw) noexcept
     {
         if (config.misc.fixMovement) {
