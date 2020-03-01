@@ -992,6 +992,10 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
     ImGui::SameLine();
     hotkey(config.misc.slowwalkKey);
+    ImGui::Checkbox("Jump Bug", &config.misc.jumpBug);
+    ImGui::SameLine();
+    hotkey(config.misc.jumpBugKey);
+    ImGui::SliderInt("JB Units", &config.misc.jumpBugUnits, 1, 24, "%d units");
     ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);
     ImGui::Checkbox("Recoil crosshair", &config.misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config.misc.autoPistol);
