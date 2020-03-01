@@ -820,6 +820,9 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
         if (miscJson.isMember("Reveal suspect")) misc.revealSuspect = miscJson["Reveal suspect"].asBool();
+        if (miscJson.isMember("Jump Bug")) misc.jumpBug = miscJson["Jump Bug"].asBool();
+        if (miscJson.isMember("JB Key")) misc.jumpBugKey = miscJson["Jump Bug Key"].asInt();
+        if (miscJson.isMember("JB Units")) misc.jumpBugUnits = miscJson["Jump Bug Units"].asInt();
 
         if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
             if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
@@ -1574,6 +1577,9 @@ void Config::save(size_t id) const noexcept
         miscJson["Reveal ranks"] = misc.revealRanks;
         miscJson["Reveal money"] = misc.revealMoney;
         miscJson["Reveal suspect"] = misc.revealSuspect;
+        miscJson["Jump Bug"] = misc.jumpBug;
+        miscJson["Jump Bug Key"] = misc.jumpBugKey;
+        miscJson["Jump Bug Units"] = misc.jumpBugUnits;
 
         {
             auto& spectatorListJson = miscJson["Spectator list"];
