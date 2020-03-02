@@ -237,7 +237,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 void Misc::drawBombTimer() noexcept
 {
     if (config.misc.bombTimer.enabled) {
-        for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) {
+        for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces.entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
                 continue;
