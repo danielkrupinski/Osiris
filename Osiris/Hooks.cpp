@@ -40,6 +40,7 @@
 #include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
+#include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -69,24 +70,24 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    if (gui.open) {
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
-        device->GetVertexDeclaration(&vertexDeclaration);
+    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
+    IDirect3DVertexDeclaration9* vertexDeclaration;
+    device->GetVertexDeclaration(&vertexDeclaration);
 
-        ImGui_ImplDX9_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 
+    if (gui.open)
         gui.render();
 
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-        device->SetVertexDeclaration(vertexDeclaration);
-        vertexDeclaration->Release();
-    }
+    device->SetVertexDeclaration(vertexDeclaration);
+    vertexDeclaration->Release();
+
     return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
@@ -201,15 +202,14 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && !interfaces.studioRender->isForcedMaterialOverride()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
+
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        if (!isOverridden)
-            interfaces.modelRender->forceMaterialOverride(nullptr);
+        interfaces.studioRender->forcedMaterialOverride(nullptr);
     } else
         hooks.modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
