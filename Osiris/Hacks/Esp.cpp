@@ -27,21 +27,22 @@ static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
     return false;
 }
 
-static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
+static void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
 {
-    if (config.snaplines.enabled) {
-        Vector position{ };
-        if (worldToScreen(entity->getAbsOrigin(), position)) {
-            const auto [width, height] = interfaces.surface->getScreenSize();
+    if (!config.snaplines.enabled)
+        return;
 
-            if (config.snaplines.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
-            else
-                interfaces.surface->setDrawColor(config.snaplines.color);
+    Vector position;
+    if (!worldToScreen(entity->getAbsOrigin(), position))
+        return;
 
-            interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
-        }
-    }
+    if (config.snaplines.rainbow)
+        interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
+    else
+        interfaces.surface->setDrawColor(config.snaplines.color);
+
+    const auto [width, height] = interfaces.surface->getScreenSize();
+    interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
 }
 
 static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) noexcept
