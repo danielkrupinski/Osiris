@@ -1175,16 +1175,46 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::EndPopup();
         }
         if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config.load(currentConfig);
-                updateColors();
-                SkinChanger::scheduleHudUpdate();
-                Misc::updateClanTag(true);
+            if (ImGui::Button("Load selected", { 100.0f, 25.0f }))
+                ImGui::OpenPopup("Config to load");
+            if (ImGui::BeginPopup("Config to load")) {
+                static constexpr const char* choices[]{"Confirm", "Cancel"};
+                
+                for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
+                    if (ImGui::Selectable(choices[i]))
+                        if (i == 0) {
+                            config.load(currentConfig);
+                            updateColors();
+                            SkinChanger::scheduleHudUpdate();
+                            Misc::updateClanTag(true);
+                        }
+                
+                ImGui::EndPopup();
             }
+            
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config.save(currentConfig);
+                ImGui::OpenPopup("Config to save");
+            if (ImGui::BeginPopup("Config to save")) {
+                static constexpr const char* choices[]{"Confirm", "Cancel"};
+                
+                for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
+                    if (ImGui::Selectable(choices[i]))
+                        if (i == 0) config.save(currentConfig);
+                
+                ImGui::EndPopup();
+            }
+            
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
-                config.remove(currentConfig);
+                ImGui::OpenPopup("Config to delete");
+            if (ImGui::BeginPopup("Config to delete")) {
+                static constexpr const char* choices[]{"Confirm", "Cancel"};
+                
+                for (auto i = 0; i < IM_ARRAYSIZE(choices); i++)
+                    if (ImGui::Selectable(choices[i]))
+                        if (i == 0) config.remove(currentConfig);
+                
+                ImGui::EndPopup();
+            }
         }
         ImGui::Columns(1);
         if (!contentOnly)
