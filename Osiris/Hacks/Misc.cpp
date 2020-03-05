@@ -211,10 +211,10 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     if (config.misc.fastPlant) {
         static auto plantAnywhere = interfaces.cvar->findVar("mp_plant_c4_anywhere");
 
-        if (!plantAnywhere || plantAnywhere->getInt()) return;
+        if (plantAnywhere->getInt()) return;
 
         const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!localPlayer || !localPlayer->isAlive() || !localPlayer->inBombZone()) return;
+        if (!localPlayer->isAlive() || localPlayer->inBombZone()) return;
 
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
