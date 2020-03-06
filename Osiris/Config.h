@@ -52,8 +52,7 @@ public:
         int bone{ 0 };
         float recoilControlX{ 0.0f };
         float recoilControlY{ 0.0f };
-        float maxAimInaccuracy{ 1.0f };
-        float maxShotInaccuracy{ 1.0f };
+        int hitchance{ 0 };
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
