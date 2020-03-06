@@ -179,6 +179,11 @@ public:
         return callVirtualMethod<float>(this, 482);
     }
 
+    constexpr float getSpread() noexcept
+    {
+        return callVirtualMethod<float>(this, 452);
+    }
+
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
@@ -273,6 +278,7 @@ public:
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
     NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
+    NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
@@ -280,6 +286,7 @@ public:
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
