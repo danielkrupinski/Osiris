@@ -101,4 +101,9 @@ public:
     {
         callVirtualMethod<void, const Ray&, unsigned int, const TraceFilter& , Trace&>(this, 5, ray, mask, filter, trace);
     }
+
+    constexpr void clipRayToEntity(const Ray& ray, unsigned int mask, Entity* pEnt, Trace& trace) noexcept
+    {
+        callVirtualMethod<void, const Ray&, unsigned int, Entity*, Trace&>(this, 3, ray, mask, pEnt, trace);
+    }
 };
