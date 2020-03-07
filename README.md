@@ -144,6 +144,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Anti AFK kick** - avoid auto-kick by server for inactivity
     * **Auto strafe** - automatically strafe in air following mouse movement
     * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
+    * **Human bunny hop** - simulate a human attempting to bhop, allowing for a percentage chance + max hops hit, thanks to @Kerncs + my gui ;)
     * **Clan tag** - set custom clan tag
     * **Animated clan tag** - animate clan tag
     * **Fast duck** - remove crouch delay
