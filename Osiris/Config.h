@@ -26,6 +26,7 @@ public:
         float color[3]{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
+        bool percentageBased{ false };
     };
     
     struct ColorToggle : public Color {

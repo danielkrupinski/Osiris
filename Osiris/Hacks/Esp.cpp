@@ -196,17 +196,37 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
+        float green_color[3]{ 0.0f, 0.5f, 0.0f };
+        float amber_color[3]{ 1.0f, 0.74609375f, 0.0f };
+        float red_color[3]{ 1.0f, 0.0f, 0.0f };
+
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
+            const auto currHealth{ ((entity->health()) / static_cast<float>(maxHealth)) * 100 };
 
-            if (config.healthBar.rainbow)
+            if (config.healthBar.rainbow) {
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
-            else
+            }
+            else if (config.healthBar.percentageBased) {
+                if (90 <= currHealth && currHealth <= 100) {
+                    interfaces.surface->setDrawColor(green_color);
+                }
+                else if (40 <= currHealth && currHealth <= 89) {
+                    interfaces.surface->setDrawColor(amber_color);
+                }
+                else if (0 <= currHealth && currHealth <= 39) {
+                    interfaces.surface->setDrawColor(red_color);
+                }
+                else {
+                    interfaces.surface->setDrawColor(red_color);
+                }
+            }
+            else {
                 interfaces.surface->setDrawColor(config.healthBar.color);
-
+            }
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
@@ -221,10 +241,27 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         }
 
         if (config.armorBar.enabled) {
-            if (config.armorBar.rainbow)
+            if (config.armorBar.rainbow) {
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
-            else
+            }
+            else if (config.armorBar.percentageBased) {
+                if (90 <= entity->armor() && entity->armor() <= 100) {
+                    interfaces.surface->setDrawColor(green_color);
+                }
+                else if (40 <= entity->armor() && entity->armor() <= 89) {
+                    interfaces.surface->setDrawColor(amber_color);
+                }
+                else if (0 <= entity->armor() && entity->armor() <= 39) {
+                    interfaces.surface->setDrawColor(red_color);
+                }
+                else {
+                    interfaces.surface->setDrawColor(red_color);
+                }
+            }
+            else {
                 interfaces.surface->setDrawColor(config.armorBar.color);
+            }
+
 
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
 
