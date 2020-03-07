@@ -1116,6 +1116,9 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 170.0f);
 
     ImGui::PushItemWidth(160.0f);
+    
+    if (ImGui::Button("Reload configs", { 160.0F, 25.0F }))
+        config = Config("Osiris");
 
     constexpr auto& configItems = config.getConfigs();
     static int currentConfig = -1;
@@ -1144,11 +1147,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config.add(buffer.c_str());
-    
-        ImGui::SameLine(0.0F, 10.0F);
-    
-        if (ImGui::Button("Reload configs", { 100.0F, 25.0F }))
-            config = Config("Osiris");
 
         if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Config to reset");
