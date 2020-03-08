@@ -205,24 +205,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
-            const auto currHealth{ ((entity->health()) / static_cast<float>(maxHealth)) * 100 };
+            const auto currHealth{ ((entity->health()) / static_cast<float>(maxHealth))};
 
             if (config.healthBar.rainbow) {
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
             }
             else if (config.healthBar.percentageBased) {
-                if (90 <= currHealth && currHealth <= 100) {
-                    interfaces.surface->setDrawColor(green_color);
-                }
-                else if (40 <= currHealth && currHealth <= 89) {
-                    interfaces.surface->setDrawColor(amber_color);
-                }
-                else if (0 <= currHealth && currHealth <= 39) {
-                    interfaces.surface->setDrawColor(red_color);
-                }
-                else {
-                    interfaces.surface->setDrawColor(red_color);
-                }
+                interfaces.surface->setDrawColor({ 1.0f - currHealth, currHealth, 0.0f });
             }
             else {
                 interfaces.surface->setDrawColor(config.healthBar.color);
@@ -245,18 +234,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
             }
             else if (config.armorBar.percentageBased) {
-                if (90 <= entity->armor() && entity->armor() <= 100) {
-                    interfaces.surface->setDrawColor(green_color);
-                }
-                else if (40 <= entity->armor() && entity->armor() <= 89) {
-                    interfaces.surface->setDrawColor(amber_color);
-                }
-                else if (0 <= entity->armor() && entity->armor() <= 39) {
-                    interfaces.surface->setDrawColor(red_color);
-                }
-                else {
-                    interfaces.surface->setDrawColor(red_color);
-                }
+                interfaces.surface->setDrawColor({ 1.0f - entity->armor() / 100.0f, entity->armor() / 100.0f, 0.0f });
             }
             else {
                 interfaces.surface->setDrawColor(config.armorBar.color);
