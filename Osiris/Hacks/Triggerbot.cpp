@@ -36,7 +36,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     static auto lastTime = 0.0f;
 
     if (const auto now{ memory.globalVars->realtime };
-        (GetAsyncKeyState(config.triggerbot[weaponIndex].key) || !config.triggerbot[weaponIndex].onKey)
+        (GetAsyncKeyState(config.triggerbot[weaponIndex].key) || GetAsyncKeyState(config.triggerbot[weaponIndex].key2) || !config.triggerbot[weaponIndex].onKey)
         && now - lastTime >= config.triggerbot[weaponIndex].shotDelay / 1000.0f) {
 
         const auto aimPunch = localPlayer->getAimPunch();
