@@ -196,10 +196,6 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
-        float green_color[3]{ 0.0f, 0.5f, 0.0f };
-        float amber_color[3]{ 1.0f, 0.74609375f, 0.0f };
-        float red_color[3]{ 1.0f, 0.0f, 0.0f };
-
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces.cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
@@ -211,7 +207,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
             }
             else if (config.healthBar.percentageBased) {
-                interfaces.surface->setDrawColor({ 1.0f - currHealth, currHealth, 0.0f });
+                interfaces.surface->setDrawColor({ std::min((2.0f * (100 - entity->health()) / maxHealth), 1.0f) , std::min((2.0f * entity->health()) / maxHealth, 1.0f) , 0.f });
             }
             else {
                 interfaces.surface->setDrawColor(config.healthBar.color);
@@ -234,7 +230,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
             }
             else if (config.armorBar.percentageBased) {
-                interfaces.surface->setDrawColor({ 1.0f - entity->armor() / 100.0f, entity->armor() / 100.0f, 0.0f });
+                interfaces.surface->setDrawColor({ std::min((2.0f * (100 - entity->armor()) / 100.0f), 1.0f) , std::min((2.0f * entity->armor()) / 100.0f, 1.0f) , 0.f });
             }
             else {
                 interfaces.surface->setDrawColor(config.armorBar.color);
