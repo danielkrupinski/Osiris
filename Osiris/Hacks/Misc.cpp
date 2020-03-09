@@ -514,16 +514,16 @@ void Misc::killMessage(GameEvent& event) noexcept
 
 void Misc::chatSpam() noexcept
 {
-    static auto lastSpam{ 0 };
+    static int lastSpam = 0;
 
-    const auto curTime{ (int)memory.globalVars->currenttime };
+    const int curTime = (int)memory.globalVars->currenttime;
 
     if (!config.misc.chatSpam || lastSpam == curTime || curTime % config.misc.chatSpamDelay != 0)
         return;
 
     lastSpam = curTime;
 
-    const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
     if (!localPlayer || localPlayer->team() == 0)
         return;
@@ -540,12 +540,12 @@ void Misc::chatSpam() noexcept
 
     if (Phrases.size() > 0)
     {
-        static auto phraseId{ 0 };
+        static int phraseId = 0;
 
         if (config.misc.chatSpamRandom)
         {
-            const auto randNum{ random(0, Phrases.size() - 1) };
-            const auto Cmd{ "say \"" + Phrases[randNum] + "\"" };
+            const int randNum = random(0, Phrases.size() - 1);
+            const std::string Cmd = "say \"" + Phrases[randNum] + "\"";
 
             interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
 
@@ -557,7 +557,7 @@ void Misc::chatSpam() noexcept
             if (phraseId >= Phrases.size())
                 phraseId = 0;
 
-            const auto Cmd{ "say \"" + Phrases[phraseId++] + "\"" };
+            const std::string Cmd = "say \"" + Phrases[phraseId++] + "\"";
 
             interfaces.engine->clientCmdUnrestricted(Cmd.c_str());
         }
