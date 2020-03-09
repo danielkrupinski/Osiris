@@ -121,12 +121,17 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (config.aimbot[weaponIndex].onKey) {
         if (!config.aimbot[weaponIndex].keyMode) {
-            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
+            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key) && !GetAsyncKeyState(config.aimbot[weaponIndex].key2)) {
                 return;
+            }
         } else {
             static bool toggle = true;
-            if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1)
+            if (GetAsyncKeyState(config.aimbot[weaponIndex].key)) {
                 toggle = !toggle;
+            }
+            else if (GetAsyncKeyState(config.aimbot[weaponIndex].key2)) {
+                toggle = !toggle;
+            }
             if (!toggle)
                 return;
         }
