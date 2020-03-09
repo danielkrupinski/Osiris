@@ -228,7 +228,9 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     hotkey(config.aimbot[currentWeapon].key2);
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("Mode :", &config.aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
+    ImGui::Text("Mode :");
+    ImGui::SameLine();
+    ImGui::Combo("", &config.aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Checkbox("Aimlock", &config.aimbot[currentWeapon].aimlock);
@@ -383,7 +385,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::Text("Key 1:");
     ImGui::SameLine();
     hotkey(config.triggerbot[currentWeapon].key);
-    ImGui::Text("Key 1:");
+    ImGui::Text("Key 2:");
     ImGui::SameLine();
     hotkey(config.triggerbot[currentWeapon].key2);
     ImGui::Checkbox("Friendly fire", &config.triggerbot[currentWeapon].friendlyFire);
