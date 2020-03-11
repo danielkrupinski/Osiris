@@ -1,0 +1,15 @@
+version: "1"
+rules:
+  - base: master            
+    upstream: danielkrupinski:master    
+    mergeMethod: merge  
+    mergeUnstable: false    
+  - base: health_based_bars
+    upstream: master        
+    assignees:              
+      - jimbob88
+    reviewers:              
+      - jimbob88
+    conflictReviewers:      
+      - jimbob88
+label: ":sweat_drops: [automatic pull]"
