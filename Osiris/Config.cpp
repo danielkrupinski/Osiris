@@ -862,7 +862,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Kill message string")) misc.killMessageString = miscJson["Kill message string"].asString();
         if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
         if (miscJson.isMember("Disable HUD blur"))  misc.disablePanoramablur = miscJson["Disable HUD blur"].asBool();
-        if (miscJson.isMember("Vote text")) misc.voteText = miscJson["Vote text"].asString();
         if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
         if (miscJson.isMember("Ban text")) misc.banText = miscJson["Ban text"].asString();
         if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
@@ -1605,7 +1604,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Kill message string"] = misc.killMessageString;
         miscJson["Name stealer"] = misc.nameStealer;
         miscJson["Disable HUD blur"] = misc.disablePanoramablur;
-        miscJson["Vote text"] = misc.voteText;
         miscJson["Ban color"] = misc.banColor;
         miscJson["Ban text"] = misc.banText;
         miscJson["Fast plant"] = misc.fastPlant;
