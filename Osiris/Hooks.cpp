@@ -129,7 +129,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
-    Misc::fakeVote();
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);

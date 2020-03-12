@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -1036,18 +1036,11 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
     ImGui::PushID(3);
-    ImGui::InputText("", &config.misc.voteText);
-    ImGui::PopID();
-    ImGui::SameLine();
-    if (ImGui::Button("Setup fake vote"))
-        Misc::fakeVote(true);
-
-    ImGui::PushID(4);
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::PushID(5);
+    ImGui::PushID(4);
     ImGui::InputText("", &config.misc.banText);
     ImGui::PopID();
     ImGui::SameLine();

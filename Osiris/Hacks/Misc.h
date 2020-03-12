@@ -28,7 +28,6 @@ namespace Misc
     void disablePanoramablur() noexcept;
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
-    void fakeVote(bool = false) noexcept;
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
