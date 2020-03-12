@@ -391,17 +391,6 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     return false;
 }
 
-void Misc::fakeVote(bool set) noexcept
-{
-    static bool shouldSet = false;
-
-    if (set)
-        shouldSet = set;
-
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string(25, '\n').append(config.misc.voteText).append(50, '\n').c_str(), 10.0f))
-        shouldSet = false;
-}
-
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
