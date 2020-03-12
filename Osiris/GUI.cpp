@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
