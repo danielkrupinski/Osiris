@@ -1026,12 +1026,15 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::InputText("", &config.misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
+    
+    /*
     ImGui::PushID(2);
     ImGui::InputText("", &config.misc.voteText);
     ImGui::PopID();
     ImGui::SameLine();
     if (ImGui::Button("Setup fake vote"))
         Misc::fakeVote(true);
+    */
 
     ImGui::PushID(3);
     ImGui::SetNextItemWidth(100.0f);
