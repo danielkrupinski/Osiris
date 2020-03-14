@@ -83,7 +83,6 @@ private:
 
         if (material == glow)
         {
-            bool bFound = false;
             auto pVar = material->findVar("$envmaptint");
             (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, col2[0], col2[1], col2[2]);
 
