@@ -32,13 +32,22 @@ enum class WeaponId : short {
     Scar20 = 38,
     Sg553,
     Ssg08,
+    Knife = 42,
+    Flashbang = 43,
+    HeGrenade = 44,
+    SmokeGrenade = 45,
+    Molotov = 46,
+    Decoy = 47,
+    IncGrenade = 48,
     GoldenKnife,
+    KnifeT = 59,
     M4a1_s = 60,
     Usp_s,
     Cz75a = 63,
     Revolver,
     GhostKnife = 80,
     Bayonet = 500,
+    KnifeCss = 503,
     Flip = 505,
     Gut,
     Karambit,
@@ -48,10 +57,14 @@ enum class WeaponId : short {
     Bowie = 514,
     Butterfly,
     Daggers,
-    Ursus = 519,
+    Cord,
+    Canis,
+    Ursus,
     Navaja,
-    Stiletto = 522,
+    KnifeOutdoor,
+    Stiletto,
     Talon,
+    Skeleton = 525,
     GloveStuddedBloodhound = 5027,
     GloveT,
     GloveCT,
@@ -107,9 +120,31 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
 
     case WeaponId::Taser: return 39;
+    case WeaponId::Flashbang:return 41;
+    case WeaponId::Decoy:return 42;
+    case WeaponId::HeGrenade:return 43;
+    case WeaponId::IncGrenade:return 44;
+    case WeaponId::Molotov:return 45;
+    case WeaponId::SmokeGrenade: return 46;
+
+    case WeaponId::GhostKnife:return 47;
+    case WeaponId::GoldenKnife:return 48;
+    case WeaponId::Talon:return 49;
+    case WeaponId::Stiletto:return 50;
+    case WeaponId::Navaja:return 51;
+    case WeaponId::Ursus: return 52;
+    case WeaponId::Daggers:return 53;
+    case WeaponId::Butterfly:return 54;
+    case WeaponId::Bowie:return 55;
+    case WeaponId::Falchion:return 56;
+    case WeaponId::Huntsman:return 57;
+    case WeaponId::M9Bayonet: return 58;
+    case WeaponId::Karambit:return 59;
+    case WeaponId::Gut:return 60;
+    case WeaponId::Flip: return 61;
+    case WeaponId::Bayonet: return 62;
     }
 }
-
 constexpr int getWeaponClass(WeaponId weaponId) noexcept
 {
     switch (weaponId) {
@@ -152,5 +187,36 @@ constexpr int getWeaponClass(WeaponId weaponId) noexcept
     case WeaponId::Awp:
     case WeaponId::G3SG1:
     case WeaponId::Scar20: return 38;
+
+    case WeaponId::Flashbang:
+    case WeaponId::Decoy:
+    case WeaponId::HeGrenade:
+    case WeaponId::IncGrenade:
+    case WeaponId::Molotov:
+    case WeaponId::SmokeGrenade: return 40;
+
+    case WeaponId::Knife: //42
+    case WeaponId::GoldenKnife: //49
+    case WeaponId::KnifeT: //59
+    case WeaponId::GhostKnife: //80
+    case WeaponId::Bayonet: //500
+    case WeaponId::KnifeCss: //503
+    case WeaponId::Flip: //505
+    case WeaponId::Gut: //506
+    case WeaponId::Karambit: //507
+    case WeaponId::M9Bayonet: //508
+    case WeaponId::Huntsman: //509
+    case WeaponId::Falchion: //512
+    case WeaponId::Bowie: //514
+    case WeaponId::Butterfly: //515
+    case WeaponId::Daggers: //516
+    case WeaponId::Cord: //517
+    case WeaponId::Canis: //518
+    case WeaponId::Ursus: //519
+    case WeaponId::Navaja: //520
+    case WeaponId::KnifeOutdoor: //521
+    case WeaponId::Stiletto: //522
+    case WeaponId::Talon: //523
+    case WeaponId::Skeleton: return 63; //525 
     }
 }
