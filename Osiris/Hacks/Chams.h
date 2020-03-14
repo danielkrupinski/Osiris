@@ -79,13 +79,31 @@ private:
     {
         auto material = dispatchMaterial(chams.material);
 
+        const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
         float col2[3] = { chams.color.color[0], chams.color.color[1], chams.color.color[2] };
-
         if (material == glow)
         {
+            
+            
             auto pVar = material->findVar("$envmaptint");
-            (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, col2[0], col2[1], col2[2]);
+            if (chams.color.rainbow)
+            { 
 
+                (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, r, g, b);
+
+            }
+            else if (chams.healthBased && health)
+            {
+
+                (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, 1.0f - health / 100.0f, health / 100.0f, 0.0f);
+
+            }
+            else
+            {
+
+                (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, col2[0], col2[1], col2[2]);
+
+            }
         }
 
         if (chams.healthBased && health)
