@@ -269,6 +269,13 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
     ImGui::Checkbox("Yaw", &config.antiAim.yaw);
+    if (config.antiAim.yaw) {
+        ImGui::Checkbox("Lby Breaker", &config.antiAim.lby);
+    }
+    ImGui::Checkbox("Indicators", &config.antiAim.indicators);
+    ImGui::Text("Invert AA");
+    ImGui::SameLine();
+    hotkey(config.antiAim.invert);
     if (!contentOnly)
         ImGui::End();
 }
