@@ -98,7 +98,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     ImGui_ImplDX9_CreateDeviceObjects();
     return result;
 }
-
+static bool warmup = true;
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks.clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
@@ -145,7 +145,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE)) && localPlayer->moveType() != MoveType::LADDER && localPlayer->moveType() != MoveType::NOCLIP && !warmup) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
@@ -324,6 +324,30 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
     if (event) {
+        if(!strcmp(event->getName(),"round_prestart") || !strcmp(event->getName(),"round_end"))
+        {
+            if (!strcmp(event->getName() ,"round_end"))
+            {
+
+                warmup = false;
+            }
+            else
+            {
+
+                warmup = true;
+            }
+
+        }
+
+        if (!strcmp(event->getName(), "round_freeze_end"))
+        {
+            warmup = false;
+        }
+
+        if (!strcmp(event->getName() ,"round_end"))
+        {
+            warmup = true;
+        }
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("player_death"):
             Misc::killMessage(*event);
