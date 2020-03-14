@@ -48,6 +48,7 @@ private:
     Material* normal;
     Material* flat;
     Material* animated;
+    Material* glow;
     Material* platinum;
     Material* glass;
     Material* crystal;
@@ -63,19 +64,30 @@ private:
         case 0: return normal;
         case 1: return flat;
         case 2: return animated;
-        case 3: return platinum;
-        case 4: return glass;
-        case 5: return chrome;
-        case 6: return crystal;
-        case 7: return silver;
-        case 8: return gold;
-        case 9: return plastic;
+        case 3: return glow;
+        case 4: return platinum;
+        case 5: return glass;
+        case 6: return chrome;
+        case 7: return crystal;
+        case 8: return silver;
+        case 9: return gold;
+        case 10: return plastic;
         }
     }
 
     constexpr void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
+
+        float col2[3] = { chams.color.color[0], chams.color.color[1], chams.color.color[2] };
+
+        if (material == glow)
+        {
+            bool bFound = false;
+            auto pVar = material->findVar("$envmaptint");
+            (*(void(__thiscall**)(int, float, float, float))(*(DWORD*)pVar + 44))((uintptr_t)pVar, col2[0], col2[1], col2[2]);
+
+        }
 
         if (chams.healthBased && health)
             material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
