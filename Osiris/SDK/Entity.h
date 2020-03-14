@@ -235,7 +235,33 @@ public:
         callVirtualMethod<void>(this, 345, std::ref(vec));
         return vec;
     }
+    
+    bool isInThrow() noexcept {
+        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (!localPlayer || localPlayer->isAlive())
+            return false;
 
+        auto activeWeapon = localPlayer->getActiveWeapon();
+        if (!activeWeapon)
+            return false;
+
+        auto weaponIndex = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+        if (!weaponIndex)
+            return false;
+        if (weaponIndex == 40) {
+            if (!m_bPinPulled()) {
+                if (!m_fThrowTime())
+                    return false;
+                float throwTime = m_fThrowTime();
+                if (throwTime > 0)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    NETVAR(m_bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(m_fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float_t);
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
