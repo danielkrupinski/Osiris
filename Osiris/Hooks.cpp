@@ -113,6 +113,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     memory.globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
