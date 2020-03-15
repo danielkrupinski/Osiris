@@ -26,6 +26,7 @@ bool LbyUpdate()
     {
         Update = memory.globalVars->serverTime() + 1.1f;
         return true;
+    }
     return false;
 }
 
