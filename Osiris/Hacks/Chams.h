@@ -55,6 +55,7 @@ private:
     Material* silver;
     Material* gold;
     Material* plastic;
+    Material* glow;
 
     constexpr auto dispatchMaterial(int id) const noexcept
     {
@@ -70,20 +71,37 @@ private:
         case 7: return silver;
         case 8: return gold;
         case 9: return plastic;
+        case 10: return glow;
         }
     }
 
     constexpr void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
-
-        if (chams.healthBased && health)
-            material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-        else if (chams.color.rainbow) {
-            const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
-            material->colorModulate(r, g, b);
-        } else
-            material->colorModulate(chams.color.color);
+        if (material == glow) {
+            if (chams.healthBased && health) {
+                material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+            }
+            else if (chams.color.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
+                material->findVar("$envmaptint")->setVectorValue(r, g, b);
+            }
+            else {
+                material->findVar("$envmaptint")->setVectorValue(chams.color.color[0], chams.color.color[1], chams.color.color[2]);
+            }
+        }
+        else {
+            if (chams.healthBased && health) {
+                material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+            }
+            else if (chams.color.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
+                material->colorModulate(r, g, b);
+            }
+            else {
+                material->colorModulate(chams.color.color);
+            }
+        }
         material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
