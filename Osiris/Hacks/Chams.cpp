@@ -21,14 +21,8 @@ Chams::Chams() noexcept
     std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
         "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
    
-    std::ofstream("csgo/materials/glowOverlay.vmt") << R"#("VertexLitGeneric" {
-	    "$additive" "1"
-	    "$envmap" "models/effects/cube_white"
-	    "$envmaptint" "[1 0 0]"
-	    "$envmapfresnel" "1"
-	    "$envmapfresnelminmaxexp" "[0 1 2]"
-	    "$alpha" "0.8"
-    })#";
+    std::ofstream("csgo/materials/glowOverlay.vmt") <<
+        "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
 
     normal = interfaces.materialSystem->findMaterial("chamsNormal");
     normal->incrementReferenceCount();
