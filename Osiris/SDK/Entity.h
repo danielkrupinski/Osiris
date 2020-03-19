@@ -311,4 +311,6 @@ public:
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(sentryHealth, "CDronegun", "m_iHealth", int)
+	
+	NETVAR(getShotsFired, "CCSPlayer", "m_iShotsFired", int);
 };
