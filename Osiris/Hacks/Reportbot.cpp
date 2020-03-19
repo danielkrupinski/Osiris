@@ -44,7 +44,7 @@ void Reportbot::run() noexcept
         if (!interfaces.engine->getPlayerInfo(i, playerInfo))
             continue;
 
-        if (playerInfo.xuid == 0 || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
             continue;
 
         std::string report;

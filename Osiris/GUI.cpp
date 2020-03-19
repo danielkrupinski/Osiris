@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -501,7 +501,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Checkbox("Health based", &chams.healthBased);
     ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0");
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
     ImGui::SetNextItemWidth(220.0f);
@@ -1026,13 +1026,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::InputText("", &config.misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
-    ImGui::PushID(2);
-    ImGui::InputText("", &config.misc.voteText);
-    ImGui::PopID();
-    ImGui::SameLine();
-    if (ImGui::Button("Setup fake vote"))
-        Misc::fakeVote(true);
-
     ImGui::PushID(3);
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
