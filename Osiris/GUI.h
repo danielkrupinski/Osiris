@@ -8,7 +8,7 @@ class GUI {
 public:
     GUI() noexcept;
     void render() noexcept;
-    bool open = false;
+    bool open = true;
 private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
