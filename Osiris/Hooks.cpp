@@ -509,8 +509,6 @@ Hooks::Hooks() noexcept
         *memory.dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory.dispatchSound + 1);
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
-
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
 void Hooks::restore() noexcept
