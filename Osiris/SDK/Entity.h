@@ -238,7 +238,7 @@ public:
     
     bool isInThrow() noexcept {
         auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-        if (!localPlayer || localPlayer->isAlive())
+        if (!localPlayer || !localPlayer->isAlive())
             return false;
 
         auto activeWeapon = localPlayer->getActiveWeapon();
