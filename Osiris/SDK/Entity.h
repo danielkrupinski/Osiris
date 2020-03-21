@@ -78,6 +78,14 @@ public:
         return WeaponType::Unknown;
     }
 
+    constexpr auto requiresRecoilControl() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->type != WeaponType::Shotgun && weaponData->recoveryTimeStand > weaponData->cycletime;
+        return false;
+    }
+
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
         if (config.misc.fixBoneMatrix) {
