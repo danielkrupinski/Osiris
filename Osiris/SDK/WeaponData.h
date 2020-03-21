@@ -23,7 +23,9 @@ struct WeaponData {
     char* name;
     std::byte pad1_[60];
     WeaponType type;
-    std::byte pad2[32];
+    std::byte pad2[16];
+    float cycletime;
+    std::byte pad2_[12];
     bool fullAuto;
     std::byte pad3[3];
     int damage;
@@ -38,4 +40,6 @@ struct WeaponData {
     std::byte pad6[15];
     float maxSpeed;
     float maxSpeedAlt;
+    std::byte pad7[120];
+    float recoveryTimeStand;
 };
