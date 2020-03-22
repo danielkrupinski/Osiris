@@ -82,7 +82,7 @@ public:
     {
         const auto weaponData = getWeaponData();
         if (weaponData)
-            return weaponData->type != WeaponType::Shotgun && weaponData->recoveryTimeStand > weaponData->cycletime;
+            return weaponData->recoilMagnitude < 35.0f && weaponData->recoveryTimeStand > weaponData->cycletime;
         return false;
     }
 
