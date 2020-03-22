@@ -1,28 +1,14 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
 class GameEvent {
 public:
-    constexpr auto getName() noexcept
-    {
-        return callVirtualMethod<const char*>(this, 1);
-    }
-
-    constexpr auto getInt(const char* keyName) noexcept
-    {
-        return callVirtualMethod<int, const char*, int>(this, 6, keyName, 0);
-    }
-
-    constexpr auto getString(const char* keyName) noexcept
-    {
-        return callVirtualMethod<const char*, const char*, const char*>(this, 9, keyName, "");
-    }
-
-    constexpr auto setString(const char* keyName, const char* value) noexcept
-    {
-        callVirtualMethod<void, const char*, const char*>(this, 16, keyName, value);
-    }
+    VIRTUAL_METHOD(const char*, getName, 1, (), (this))
+    VIRTUAL_METHOD(int, getInt, 6, (const char* keyName, int defaultValue = 0), (this, keyName, defaultValue))
+    VIRTUAL_METHOD(float, getFloat, 8, (const char* keyName, float defaultValue = 0.0f), (this, keyName, defaultValue))
+    VIRTUAL_METHOD(const char*, getString, 9, (const char* keyName, const char* defaultValue = ""), (this, keyName, defaultValue))
+    VIRTUAL_METHOD(void, setString, 16, (const char* keyName, const char* value), (this, keyName, value))
 };
 
 class GameEventListener {
@@ -34,8 +20,6 @@ public:
 
 class GameEventManager {
 public:
-    constexpr auto addListener(GameEventListener* listener, const char* name) noexcept
-    {
-        return callVirtualMethod<bool>(this, 3, listener, name, false);
-    }
+    VIRTUAL_METHOD(bool, addListener, 3, (GameEventListener* listener, const char* name), (this, listener, name, false))
+    VIRTUAL_METHOD(void, removeListener, 5, (GameEventListener* listener), (this, listener))
 };
