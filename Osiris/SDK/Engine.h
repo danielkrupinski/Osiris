@@ -3,7 +3,6 @@
 #include <cstddef>
 #include <d3d9types.h>
 
-#include "Utils.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
