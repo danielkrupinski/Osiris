@@ -11,6 +11,7 @@
 #include "EntityList.h"
 #include "Utils.h"
 #include "Vector.h"
+#include "WeaponData.h"
 #include "WeaponId.h"
 #include "VarMapping.h"
 #include "../Memory.h"
@@ -20,7 +21,6 @@
 #include <functional>
 
 struct AnimState;
-struct WeaponData;
 
 enum class MoveType {
     NOCLIP = 8,
@@ -68,6 +68,22 @@ public:
         default:
             return false;
         }
+    }
+
+    constexpr auto getWeaponType() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->type;
+        return WeaponType::Unknown;
+    }
+
+    constexpr auto requiresRecoilControl() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->type != WeaponType::Shotgun && weaponData->recoveryTimeStand > weaponData->cycletime;
+        return false;
     }
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
