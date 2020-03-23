@@ -57,19 +57,6 @@ public:
     VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 
-    constexpr bool isSniperRifle() noexcept
-    {
-        switch (getClientClass()->classId) {
-        case ClassId::Ssg08:
-        case ClassId::Awp:
-        case ClassId::Scar20:
-        case ClassId::G3sg1:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     constexpr auto getWeaponType() noexcept
     {
         const auto weaponData = getWeaponData();
@@ -81,6 +68,11 @@ public:
     constexpr auto isPistol() noexcept
     {
         return getWeaponType() == WeaponType::Pistol;
+    }
+
+    constexpr auto isSniperRifle() noexcept
+    {
+        return getWeaponType() == WeaponType::SniperRifle;
     }
 
     constexpr auto requiresRecoilControl() noexcept
