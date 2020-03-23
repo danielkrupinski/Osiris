@@ -1,14 +1,11 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
 class Entity;
 class MoveData;
 
 class GameMovement {
 public:
-    constexpr auto processMovement(Entity* localPlayer, MoveData* moveData) noexcept
-    {
-        callVirtualMethod<void>(this, 1, localPlayer, moveData);
-    }
+    VIRTUAL_METHOD(void, processMovement, 1, (Entity* localPlayer, MoveData* moveData), (this, localPlayer, moveData))
 };

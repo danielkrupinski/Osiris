@@ -1,23 +1,12 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
 class Entity;
 
 class EntityList {
 public:
-    constexpr auto getEntity(int index) noexcept
-    {
-        return callVirtualMethod<Entity*, int>(this, 3, index);
-    }
-
-    constexpr auto getEntityFromHandle(int handle) noexcept
-    {
-        return callVirtualMethod<Entity*, int>(this, 4, handle);
-    }
-
-    constexpr auto getHighestEntityIndex() noexcept
-    {
-        return callVirtualMethod<int>(this, 6);
-    }
+    VIRTUAL_METHOD(Entity*, getEntity, 3, (int index), (this, index))
+    VIRTUAL_METHOD(Entity*, getEntityFromHandle, 4, (int handle), (this, handle))
+    VIRTUAL_METHOD(int, getHighestEntityIndex, 6, (), (this))
 };
