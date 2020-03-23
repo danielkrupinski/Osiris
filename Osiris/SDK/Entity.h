@@ -2,21 +2,23 @@
 
 #include "AnimState.h"
 #include "ClientClass.h"
-#include "../Config.h"
-#include "../Interfaces.h"
-#include "../Netvars.h"
 #include "Cvar.h"
 #include "Engine.h"
 #include "EngineTrace.h"
 #include "EntityList.h"
+#include "matrix3x4.h"
+#include "ModelRender.h"
 #include "Utils.h"
+#include "VarMapping.h"
 #include "Vector.h"
+#include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
-#include "VarMapping.h"
+
+#include "../Config.h"
+#include "../Interfaces.h"
 #include "../Memory.h"
-#include "ModelRender.h"
-#include "../SDK/matrix3x4.h"
+#include "../Netvars.h"
 
 #include <functional>
 
@@ -29,17 +31,31 @@ enum class MoveType {
 
 class Collideable {
 public:
-    virtual void* pad() = 0;
-    virtual const Vector& obbMins() = 0;
-    virtual const Vector& obbMaxs() = 0;
+    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
+    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
 class Entity {
 public:
-    constexpr auto getCollideable() noexcept
-    {
-        return callVirtualMethod<Collideable*>(this, 3);
-    }
+    VIRTUAL_METHOD(void, release, 1, (), (this + 8))
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
+
+    VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
+    VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
+    VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, 157, (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
+    VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 
     constexpr bool isPistol() noexcept
     {
@@ -102,11 +118,6 @@ public:
         return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
     }
 
-    constexpr auto getModel() noexcept
-    {
-        return callVirtualMethod<const Model*>(this + 4, 8);
-    }
-
     Vector getBonePosition(int bone) noexcept
     {
         if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
@@ -134,82 +145,12 @@ public:
     {
         return memory.isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
     }
-
-    constexpr bool isDormant() noexcept
-    {
-        return callVirtualMethod<bool>(this + 8, 9);
-    }
-
-    constexpr void preDataUpdate(int updateType) noexcept
-    {
-        callVirtualMethod<void, int>(this + 8, 6, updateType);
-    }
-
-    constexpr void release() noexcept
-    {
-        return callVirtualMethod<void>(this + 8, 1);
-    }
-
-    constexpr void setDestroyedOnRecreateEntities() noexcept
-    {
-        return callVirtualMethod<void>(this + 8, 13);
-    }
-
-    constexpr bool isWeapon() noexcept
-    {
-        return callVirtualMethod<bool>(this, 165);
-    }
-
-    constexpr ClientClass* getClientClass() noexcept
-    {
-        return callVirtualMethod<ClientClass*>(this + 8, 2);
-    }
-
-    constexpr bool isAlive() noexcept
-    {
-        return callVirtualMethod<bool>(this, 155) && health() > 0;
-    }
-
-    constexpr bool isPlayer() noexcept
-    {
-        return callVirtualMethod<bool>(this, 157);
-    }
-
-    constexpr Entity* getActiveWeapon() noexcept
-    {
-        return callVirtualMethod<Entity*>(this, 267);
-    }
-
-    constexpr int getWeaponSubType() noexcept
-    {
-        return callVirtualMethod<int>(this, 281);
-    }
-
-    constexpr WeaponData* getWeaponData() noexcept
-    {
-        return callVirtualMethod<WeaponData*>(this, 460);
-    }
-
-    constexpr float getInaccuracy() noexcept
-    {
-        return callVirtualMethod<float>(this, 482);
-    }
-
+  
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
     }
-    
-    constexpr Vector getAbsOrigin() noexcept
-    {
-        return callVirtualMethod<Vector&>(this, 10);
-    }
-
-    constexpr void setModelIndex(int index) noexcept
-    {
-        callVirtualMethod<void, int>(this, 75, index);
-    }
-
+   
     AnimState* getAnimstate() noexcept
     {
         return *reinterpret_cast<AnimState**>(this + 0x3900);
@@ -228,11 +169,6 @@ public:
             yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
 
         return animState->velocitySubtractY * yawModifier;
-    }
-
-    constexpr Entity* getObserverTarget() noexcept
-    {
-        return callVirtualMethod<Entity*>(this, 294);
     }
 
     bool isInReload() noexcept
