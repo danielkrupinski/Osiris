@@ -57,22 +57,6 @@ public:
     VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 
-    constexpr bool isPistol() noexcept
-    {
-        switch (getClientClass()->classId) {
-        case ClassId::Deagle:
-        case ClassId::Elite:
-        case ClassId::FiveSeven:
-        case ClassId::Glock:
-        case ClassId::P2000:
-        case ClassId::P250:
-        case ClassId::Tec9:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     constexpr bool isSniperRifle() noexcept
     {
         switch (getClientClass()->classId) {
@@ -92,6 +76,11 @@ public:
         if (weaponData)
             return weaponData->type;
         return WeaponType::Unknown;
+    }
+
+    constexpr auto isPistol() noexcept
+    {
+        return getWeaponType() == WeaponType::Pistol;
     }
 
     constexpr auto requiresRecoilControl() noexcept
