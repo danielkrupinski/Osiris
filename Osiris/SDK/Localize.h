@@ -1,11 +1,8 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
 class Localize {
 public:
-    constexpr auto find(const char* tokenName) noexcept
-    {
-        return callVirtualMethod<wchar_t*, const char*>(this, 12, tokenName);
-    }
+    VIRTUAL_METHOD(const wchar_t*, find, 12, (const char* tokenName), (this, tokenName))
 };
