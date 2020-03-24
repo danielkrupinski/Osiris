@@ -40,6 +40,9 @@ struct WeaponData {
     std::byte pad6[15];
     float maxSpeed;
     float maxSpeedAlt;
-    std::byte pad7[120];
+    std::byte pad7[96];
+    float recoilMagnitude;
+    float recoilMagnitudeAlt;
+    std::byte pad8[20];
     float recoveryTimeStand;
 };

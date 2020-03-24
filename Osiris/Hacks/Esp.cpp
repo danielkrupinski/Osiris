@@ -14,13 +14,13 @@
 
 static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 {
-    const auto matrix = interfaces.engine->worldToScreenMatrix();
-    float w = matrix[3][0] * in.x + matrix[3][1] * in.y + matrix[3][2] * in.z + matrix[3][3];
+    const auto& matrix = interfaces.engine->worldToScreenMatrix();
+    float w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
 
     if (w > 0.001f) {
         const auto [width, height] = interfaces.surface->getScreenSize();
-        out.x = width / 2 * (1 + (matrix[0][0] * in.x + matrix[0][1] * in.y + matrix[0][2] * in.z + matrix[0][3]) / w);
-        out.y = height / 2 * (1 - (matrix[1][0] * in.x + matrix[1][1] * in.y + matrix[1][2] * in.z + matrix[1][3]) / w);
+        out.x = width / 2 * (1 + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w);
+        out.y = height / 2 * (1 - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w);
         out.z = 0.0f;
         return true;
     }

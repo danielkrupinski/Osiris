@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <d3d9types.h>
 
-#include "Utils.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
@@ -43,12 +43,5 @@ public:
     VIRTUAL_METHOD(const char*, getLevelName, 53, (), (this))
     VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
     VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd), (this, cmd, false))
-
-    // TODO: replace with D3DMATRIX
-    using Matrix = float[4][4];
-
-    constexpr auto worldToScreenMatrix() noexcept
-    {
-        return callVirtualMethod<const Matrix&>(this, 37);
-    }
+    VIRTUAL_METHOD(const D3DMATRIX&, worldToScreenMatrix, 37, (), (this))
 };
