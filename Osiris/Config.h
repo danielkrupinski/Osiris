@@ -59,17 +59,17 @@ public:
     std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
-        bool enabled{ false };
-        bool onKey{ false };
-        int key{ 0 };
-        bool friendlyFire{ false };
-        bool scopedOnly{ true };
-        bool ignoreFlash{ false };
-        bool ignoreSmoke{ false };
-        int hitgroup{ 0 };
-        int shotDelay{ 0 };
-        int minDamage{ 1 };
-        bool killshot{ false };
+        bool enabled = false;
+        bool friendlyFire = false;
+        bool scopedOnly = true;
+        bool ignoreFlash = false;
+        bool ignoreSmoke = false;
+        bool killshot = false;
+        bool onKey = false;
+        int key = 0;
+        int hitgroup = 0;
+        int shotDelay = 0;
+        int minDamage = 1;
     };
     std::array<Triggerbot, 40> triggerbot;
 
@@ -83,8 +83,8 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
-        float pitchAngle{ 0.0f };
         bool yaw{ false };
+        float pitchAngle{ 0.0f };
     } antiAim;
 
     struct Glow {
