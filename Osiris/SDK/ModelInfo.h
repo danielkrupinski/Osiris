@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils.h"
 #include "Vector.h"
+#include "VirtualMethod.h"
 
 struct StudioBbox {
     int bone;
@@ -48,13 +48,6 @@ struct Model;
 
 class ModelInfo {
 public:
-    constexpr auto getModelIndex(const char* name) noexcept
-    {
-        return callVirtualMethod<int, const char*>(this, 2, name);
-    }
-
-    constexpr auto getStudioModel(const Model* model) noexcept
-    {
-        return callVirtualMethod<StudioHdr*, const Model*>(this, 32, model);
-    }
+    VIRTUAL_METHOD(int, getModelIndex, 2, (const char* name), (this, name))
+    VIRTUAL_METHOD(StudioHdr*, getStudioModel, 32, (const Model* model), (this, model))
 };
