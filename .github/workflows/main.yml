@@ -27,7 +27,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Build for AVX
-      run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_AVX;EIS=AdvancedVectorExtensions'
+      run: '%MSBUILD_PATH%\MSBuild.exe -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_AVX;EIS=AdvancedVectorExtensions'
 
     - name: Build for AVX2
       run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_AVX2;EIS=AdvancedVectorExtensions2'
