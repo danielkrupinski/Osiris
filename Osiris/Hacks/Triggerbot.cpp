@@ -34,8 +34,15 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         return;
 
     static auto lastTime = 0.0f;
+    static auto lastContact = 0.0f;
 
     const auto now = memory.globalVars->realtime;
+
+    if (now - lastContact < config.triggerbot[weaponIndex].burstTime) {
+        cmd->buttons |= UserCmd::IN_ATTACK;
+        return;
+    }
+    lastContact = 0.0f;
 
     if (config.triggerbot[weaponIndex].onKey && !GetAsyncKeyState(config.triggerbot[weaponIndex].key))
         return;
@@ -76,6 +83,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         if (damage >= (config.triggerbot[weaponIndex].killshot ? trace.entity->health() : config.triggerbot[weaponIndex].minDamage)) {
             cmd->buttons |= UserCmd::IN_ATTACK;
             lastTime = 0.0f;
+            lastContact = now;
         }
     } else {
         lastTime = now;
