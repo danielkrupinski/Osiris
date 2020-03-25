@@ -73,14 +73,14 @@ void Triggerbot::run(UserCmd* cmd) noexcept
             || !localPlayer->flashDuration())
         && (!config.triggerbot[weaponIndex].scopedOnly
             || !activeWeapon->isSniperRifle()
-            || localPlayer->isScoped())) {
+            || localPlayer->isScoped()) && activeWeapon->getInaccuracy() <= config.triggerbot[weaponIndex].maxAimInaccuracy) {
 
         float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
         if (float armorRatio{ weaponData->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex2() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
             damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
 
-        if (damage >= (config.triggerbot[weaponIndex].killshot ? trace.entity->health() : config.triggerbot[weaponIndex].minDamage)) {
+        if (damage >= (config.triggerbot[weaponIndex].killshot ? trace.entity->health() : config.triggerbot[weaponIndex].minDamage) && activeWeapon->getInaccuracy() <= config.triggerbot[weaponIndex].maxShotInaccuracy) {
             cmd->buttons |= UserCmd::IN_ATTACK;
             lastTime = 0.0f;
             lastContact = now;
