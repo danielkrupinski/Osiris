@@ -75,6 +75,7 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
         if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
+        if (triggerbotJson.isMember("Burst Time")) triggerbotConfig.burstTime = triggerbotJson["Burst Time"].asFloat();
     }
 
     {
@@ -953,6 +954,7 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Shot delay"] = triggerbotConfig.shotDelay;
         triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
         triggerbotJson["Killshot"] = triggerbotConfig.killshot;
+        triggerbotJson["Burst Time"] = triggerbotConfig.burstTime;
     }
 
     {
