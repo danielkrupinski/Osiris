@@ -525,7 +525,7 @@ void Hooks::restore() noexcept
     svCheats.restore();
     viewRender.restore();
 
-    netvars.restore();
+    netvars->restore();
 
     Glow::clearCustomObjects();
 

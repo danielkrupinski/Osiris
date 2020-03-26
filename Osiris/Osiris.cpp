@@ -9,7 +9,7 @@ Config config{ "Osiris" };
 GUI gui;
 const Interfaces interfaces;
 Memory memory;
-Netvars netvars;
+// Netvars netvars;
 //Hooks hooks;
 
 static HMODULE module;
@@ -18,6 +18,7 @@ static WNDPROC originalWndproc;
 static LRESULT WINAPI init(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     SetWindowLongPtr(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndproc));
+    netvars = std::make_unique<Netvars>();
     hooks = std::make_unique<Hooks>(module);
 
     return CallWindowProc(originalWndproc, window, msg, wParam, lParam);
