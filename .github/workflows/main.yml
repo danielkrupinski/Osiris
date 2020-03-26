@@ -25,18 +25,42 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
+    
+    - name: Cache for AVX
+      uses: actions/cache@v1
+      with:
+        path: Osiris\Release
+        key: avx_cache
+
     - name: Build for AVX
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_AVX;EIS=AdvancedVectorExtensions'
+
+    - name: Cache for AVX2
+      uses: actions/cache@v1
+      with:
+        path: Osiris\Release
+        key: avx2_cache
 
     - name: Build for AVX2
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_AVX2;EIS=AdvancedVectorExtensions2'
     
+    - name: Cache for SSE
+      uses: actions/cache@v1
+      with:
+        path: Osiris\Release
+        key: sse_cache
+    
     - name: Build for SSE
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_SSE;EIS=StreamingSIMDExtensions'
+
+    - name: Cache for IA32
+      uses: actions/cache@v1
+      with:
+        path: Osiris\Release
+        key: ia32_cache
 
     - name: Build for IA32
       shell: cmd
