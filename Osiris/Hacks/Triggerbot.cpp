@@ -13,11 +13,11 @@
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory.globalVars->serverTime())
+    if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
+    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;
 
     auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
@@ -36,7 +36,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     static auto lastTime = 0.0f;
     static auto lastContact = 0.0f;
 
-    const auto now = memory.globalVars->realtime;
+    const auto now = memory->globalVars->realtime;
 
     if (now - lastContact < config.triggerbot[weaponIndex].burstTime) {
         cmd->buttons |= UserCmd::IN_ATTACK;
@@ -68,7 +68,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         && (!config.triggerbot[weaponIndex].hitgroup
             || trace.hitgroup == config.triggerbot[weaponIndex].hitgroup)
         && (config.triggerbot[weaponIndex].ignoreSmoke
-            || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
+            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
         && (config.triggerbot[weaponIndex].ignoreFlash
             || !localPlayer->flashDuration())
         && (!config.triggerbot[weaponIndex].scopedOnly

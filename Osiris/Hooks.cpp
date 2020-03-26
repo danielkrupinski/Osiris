@@ -113,7 +113,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
 
-    memory.globalVars->serverTime(cmd);
+    memory->globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
@@ -215,7 +215,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __stdcall svCheatsGetBool() noexcept
 {
-    if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
+    if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config.visuals.thirdperson)
         return true;
     else
         return hooks->svCheats.callOriginal<bool, 13>();
@@ -284,7 +284,7 @@ static void __stdcall emitSound(SoundData data) noexcept
     if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
         modulateVolume([](int index) { return config.sound.players[index].weaponVolume; });
     } else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
-        memory.acceptMatch("");
+        memory->acceptMatch("");
         auto window = FindWindowW(L"Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
         FlashWindowEx(&flash);
@@ -316,7 +316,7 @@ static void __stdcall lockCursor() noexcept
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens))
+    if (config.visuals.noScopeOverlay && (returnAddress == memory->scopeArc || returnAddress == memory->scopeLens))
         a = 0;
     hooks->surface.callOriginal<void, 15>(r, g, b, a);
 }
@@ -364,7 +364,7 @@ struct RenderableInfo {
 
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    if (std::uintptr_t(_ReturnAddress()) == memory.listLeaves) {
+    if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
             if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
                 if (config.misc.disableModelOcclusion) {
@@ -420,7 +420,7 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
 {
-    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
+    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory->test || returnAddress == memory->test2))
         return nullptr;
 
     return hooks->engine.callOriginal<void*, 218>();
@@ -441,17 +441,17 @@ static void __stdcall updateColorCorrectionWeights() noexcept
     hooks->clientMode.callOriginal<void, 58>();
 
     if (const auto& cfg = config.visuals.colorCorrection; cfg.enabled) {
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x498) = cfg.blue;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A0) = cfg.red;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A8) = cfg.mono;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4B0) = cfg.saturation;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C0) = cfg.ghost;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
-        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x498) = cfg.blue;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A0) = cfg.red;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A8) = cfg.mono;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4B0) = cfg.saturation;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4C0) = cfg.ghost;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4C8) = cfg.green;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4D0) = cfg.yellow;
     }
 
     if (config.visuals.noScopeOverlay)
-        *memory.vignette = 0.0f;
+        *memory->vignette = 0.0f;
 }
 
 static float __stdcall getScreenAspectRatio(int width, int height) noexcept
@@ -464,7 +464,7 @@ static float __stdcall getScreenAspectRatio(int width, int height) noexcept
 static void __stdcall renderSmokeOverlay(bool update) noexcept
 {
     if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
-        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + 0x588) = 0.0f;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x588) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, 41>(update);
 }
@@ -477,10 +477,10 @@ Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 
-    originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<decltype(present)***>(memory.present) = present;
-    originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
+    originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
+    **reinterpret_cast<decltype(present)***>(memory->present) = present;
+    originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
+    **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
@@ -504,10 +504,10 @@ Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
     viewRender.hookAt(39, render2dEffectsPreHud);
     viewRender.hookAt(41, renderSmokeOverlay);
 
-    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
-        originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
-        *memory.dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory.dispatchSound + 1);
-        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory->dispatchSound + 1) + *memory->dispatchSound);
+        *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
+        VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 }
 
@@ -530,12 +530,12 @@ void Hooks::restore() noexcept
     Glow::clearCustomObjects();
 
     SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndProc));
-    **reinterpret_cast<void***>(memory.present) = originalPresent;
-    **reinterpret_cast<void***>(memory.reset) = originalReset;
+    **reinterpret_cast<void***>(memory->present) = originalPresent;
+    **reinterpret_cast<void***>(memory->reset) = originalReset;
 
-    if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
-        *memory.dispatchSound = uintptr_t(originalDispatchSound) - uintptr_t(memory.dispatchSound + 1);
-        VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
+    if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
+        *memory->dispatchSound = uintptr_t(originalDispatchSound) - uintptr_t(memory->dispatchSound + 1);
+        VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
     interfaces.resourceAccessControl->accessingThreadCount--;

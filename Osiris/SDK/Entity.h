@@ -90,9 +90,9 @@ public:
             int backup = *render;
             Vector absOrigin = getAbsOrigin();
             *render = 0;
-            memory.setAbsOrigin(this, origin());
+            memory->setAbsOrigin(this, origin());
             auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
-            memory.setAbsOrigin(this, absOrigin);
+            memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
@@ -124,7 +124,7 @@ public:
 
     bool isEnemy() noexcept
     {
-        return memory.isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
+        return memory->isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
     }
   
     VarMap* getVarMap() noexcept
