@@ -1,7 +1,9 @@
 #pragma once
 
 #include <d3d9.h>
+#include <memory>
 #include <type_traits>
+#include <Windows.h>
 
 #include "Interfaces.h"
 #include "Memory.h"
@@ -12,7 +14,8 @@ struct SoundInfo;
 
 class Hooks {
 public:
-    Hooks() noexcept;
+    Hooks(HMODULE cheatModule);
+
     void restore() noexcept;
 
     WNDPROC originalWndProc;
@@ -69,6 +72,8 @@ public:
     Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
     Vmt viewRender{ memory.viewRender };
+private:
+    HMODULE module;
 };
 
-extern Hooks hooks;
+inline std::unique_ptr<Hooks> hooks;
