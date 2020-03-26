@@ -58,17 +58,18 @@ public:
     std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
-        bool enabled{ false };
-        bool onKey{ false };
-        int key{ 0 };
-        bool friendlyFire{ false };
-        bool scopedOnly{ true };
-        bool ignoreFlash{ false };
-        bool ignoreSmoke{ false };
-        int hitgroup{ 0 };
-        int shotDelay{ 0 };
-        int minDamage{ 1 };
-        bool killshot{ false };
+        bool enabled = false;
+        bool friendlyFire = false;
+        bool scopedOnly = true;
+        bool ignoreFlash = false;
+        bool ignoreSmoke = false;
+        bool killshot = false;
+        bool onKey = false;
+        int key = 0;
+        int hitgroup = 0;
+        int shotDelay = 0;
+        int minDamage = 1;
+        float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
 
@@ -82,8 +83,8 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
-        float pitchAngle{ 0.0f };
         bool yaw{ false };
+        float pitchAngle{ 0.0f };
     } antiAim;
 
     struct Glow {
@@ -98,13 +99,13 @@ public:
 
     struct Chams {
         struct Material {
-            bool enabled{ false };
-            bool healthBased{ false };
+            bool enabled = false;
+            bool healthBased = false;
+            bool blinking = false;
+            bool wireframe = false;
             Color color;
-            bool blinking{ false };
-            int material{ 0 };
-            bool wireframe{ false };
-            float alpha{ 1.0f };
+            int material = 0;
+            float alpha = 1.0f;
         };
         std::array<Material, 2> materials;
     };

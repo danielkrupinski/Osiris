@@ -1,13 +1,10 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
 class Entity;
 
 class MoveHelper {
 public:
-    constexpr auto setHost(Entity* host) noexcept
-    {
-        callVirtualMethod<void>(this, 1, host);
-    }
+    VIRTUAL_METHOD(void, setHost, 1, (Entity* host), (this, host))
 };
