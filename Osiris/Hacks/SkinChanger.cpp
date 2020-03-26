@@ -30,8 +30,8 @@ void SkinChanger::initializeKits() noexcept
     const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
-    for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
-        const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
+    for (int i = 0; i <= memory->itemSchema()->paintKits.lastElement; i++) {
+        const auto paintKit = memory->itemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001) // ignore workshop_default
             continue;
@@ -60,8 +60,8 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
-        const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
+    for (int i = 0; i <= memory->itemSchema()->stickerKits.lastElement; i++) {
+        const auto stickerKit = memory->itemSchema()->stickerKits.memory[i].value;
         const auto itemName = interfaces.localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 
@@ -131,7 +131,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 void apply_sticker_changer(Entity* item) noexcept
 {
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars[hash] + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -295,7 +295,7 @@ static void post_data_update_start(Entity* local) noexcept
             }
 
             if (glove) {
-                memory.equipWearable(glove, local);
+                memory->equipWearable(glove, local);
                 local->body() = 1;
 
                 apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
@@ -356,9 +356,9 @@ static bool hudUpdateRequired{ false };
 
 static constexpr void updateHud() noexcept
 {
-    if (auto hud_weapons = memory.findHudElement(memory.hud, "CCSGO_HudWeaponSelection") - 0x28) {
+    if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - 0x28) {
         for (int i = 0; i < *(hud_weapons + 0x20); i++)
-            i = memory.clearHudWeapon(hud_weapons, i);
+            i = memory->clearHudWeapon(hud_weapons, i);
     }
     hudUpdateRequired = false;
 }

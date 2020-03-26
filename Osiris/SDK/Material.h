@@ -1,15 +1,13 @@
 #pragma once
 
-#include "Utils.h"
-
 #include <tuple>
+
+#include "VirtualMethod.h"
 
 class MaterialVar {
 public:
-    constexpr auto setValue(float value) noexcept
-    {
-        callVirtualMethod<void, float>(this, 4, value);
-    }
+    VIRTUAL_METHOD(void, setValue, 4, (float value), (this, value))
+    VIRTUAL_METHOD(void, setVectorValue, 11, (float r, float g, float b), (this, r, g, b))
 };
 
 enum class MaterialVarFlag {
@@ -20,54 +18,14 @@ enum class MaterialVarFlag {
 
 class Material {
 public:
-    constexpr auto getName() noexcept
-    {
-        return callVirtualMethod<const char*>(this, 0);
-    }
-
-    constexpr auto getTextureGroupName() noexcept
-    {
-        return callVirtualMethod<const char*>(this, 1);
-    }
-
-    constexpr auto findVar(const char* name) noexcept
-    {
-        return callVirtualMethod<MaterialVar*, const char*, bool*, bool>(this, 11, name, nullptr, false);
-    }
-
-    constexpr int incrementReferenceCount() noexcept
-    {
-        callVirtualMethod<void>(this, 12);
-        return 0;
-    }
-
-    constexpr void alphaModulate(float alpha) noexcept
-    {
-        callVirtualMethod<void, float>(this, 27, alpha);
-    }
-
-    constexpr void colorModulate(const float color[3]) noexcept
-    {
-        callVirtualMethod<void, float, float, float>(this, 28, color[0], color[1], color[2]);
-    }
-
-    constexpr void colorModulate(float r, float g, float b) noexcept
-    {
-        callVirtualMethod<void, float, float, float>(this, 28, r, g, b);
-    }
-
-    constexpr void colorModulate(const std::tuple<float, float, float>& color) noexcept
-    {
-        callVirtualMethod<void, float, float, float>(this, 28, std::get<0>(color), std::get<1>(color), std::get<2>(color));
-    }
-
-    constexpr void setMaterialVarFlag(MaterialVarFlag flag, bool on) noexcept
-    {
-        callVirtualMethod<void, MaterialVarFlag, bool>(this, 29, flag, on);
-    }
-
-    constexpr auto isPrecached() noexcept
-    {
-        return callVirtualMethod<bool>(this, 70);
-    }
+    VIRTUAL_METHOD(const char*, getName, 0, (), (this))
+    VIRTUAL_METHOD(const char*, getTextureGroupName, 1, (), (this))
+    VIRTUAL_METHOD(MaterialVar*, findVar, 11, (const char* name), (this, name, nullptr, false))
+    VIRTUAL_METHOD(int, incrementReferenceCount, 12, (), (this))
+    VIRTUAL_METHOD(void, alphaModulate, 27, (float alpha), (this, alpha))
+    VIRTUAL_METHOD(void, colorModulate, 28, (const float color[3]), (this, color[0], color[1], color[2]))
+    VIRTUAL_METHOD(void, colorModulate, 28, (float r, float g, float b), (this, r, g, b))
+    VIRTUAL_METHOD(void, colorModulate, 28, (const std::tuple<float, float, float>& color), (this, std::get<0>(color), std::get<1>(color), std::get<2>(color)))
+    VIRTUAL_METHOD(void, setMaterialVarFlag, 29, (MaterialVarFlag flag, bool on), (this, flag, on))
+    VIRTUAL_METHOD(bool, isPrecached, 70, (), (this))
 };

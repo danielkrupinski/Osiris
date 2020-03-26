@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -242,14 +242,11 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Ignore smoke", &config.aimbot[currentWeapon].ignoreSmoke);
     ImGui::Checkbox("Auto shot", &config.aimbot[currentWeapon].autoShot);
     ImGui::Checkbox("Auto scope", &config.aimbot[currentWeapon].autoScope);
-    ImGui::Checkbox("Recoil-based fov", &config.aimbot[currentWeapon].recoilbasedFov);
     ImGui::Combo("Bone", &config.aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
     ImGui::SliderFloat("Fov", &config.aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
     ImGui::SliderFloat("Smooth", &config.aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Recoil control x", &config.aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderFloat("Recoil control y", &config.aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
     ImGui::SliderFloat("Max aim inaccuracy", &config.aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
     ImGui::SliderFloat("Max shot inaccuracy", &config.aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
     ImGui::InputInt("Min damage", &config.aimbot[currentWeapon].minDamage);
@@ -399,6 +396,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::InputInt("Min damage", &config.triggerbot[currentWeapon].minDamage);
     config.triggerbot[currentWeapon].minDamage = std::clamp(config.triggerbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config.triggerbot[currentWeapon].killshot);
+    ImGui::SliderFloat("Burst Time", &config.triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
     if (!contentOnly)
         ImGui::End();
@@ -510,7 +508,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Checkbox("Health based", &chams.healthBased);
     ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0");
+    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0");
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
     ImGui::SetNextItemWidth(220.0f);
@@ -1035,13 +1033,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::InputText("", &config.misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config.misc.nameStealer);
-    ImGui::PushID(2);
-    ImGui::InputText("", &config.misc.voteText);
-    ImGui::PopID();
-    ImGui::SameLine();
-    if (ImGui::Button("Setup fake vote"))
-        Misc::fakeVote(true);
-
     ImGui::PushID(3);
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &config.misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
@@ -1075,7 +1066,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Fake prime", &config.misc.fakePrime);
 
     if (ImGui::Button("Unhook"))
-        hooks.restore();
+        hooks->restore();
 
     ImGui::Columns(1);
     if (!contentOnly)

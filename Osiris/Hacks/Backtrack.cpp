@@ -32,7 +32,7 @@ void Backtrack::update(FrameStage stage) noexcept
             record.origin = entity->getAbsOrigin();
             record.simulationTime = entity->simulationTime();
 
-            entity->setupBones(record.matrix, 128, 0x7FF00, memory.globalVars->currenttime);
+            entity->setupBones(record.matrix, 128, 0x7FF00, memory->globalVars->currenttime);
 
             records[i].push_front(record);
 
@@ -86,7 +86,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config.backtrack.ignoreSmoke && memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config.backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;
@@ -107,7 +107,12 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
-        memory.setAbsOrigin(bestTarget, record.origin);
+        memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
+}
+
+int Backtrack::timeToTicks(float time) noexcept
+{
+    return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
 }

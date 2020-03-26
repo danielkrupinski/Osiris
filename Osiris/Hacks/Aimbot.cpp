@@ -28,7 +28,7 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
         mov ecx, end
         mov edx, enterTrace
     }
-    if (!memory.traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
+    if (!memory->traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
         return -1.0f;
 
     SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
@@ -95,7 +95,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime())
+    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
@@ -113,7 +113,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config.aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime())
+    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;
 
     if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
@@ -146,9 +146,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        auto aimPunch = localPlayer->getAimPunch();
-        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
+        const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
@@ -163,7 +161,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
+                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
@@ -175,7 +173,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
-            || !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
@@ -196,10 +194,10 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (!config.aimbot[weaponIndex].silent)
                 interfaces.engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
+            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped)

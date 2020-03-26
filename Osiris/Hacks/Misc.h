@@ -28,7 +28,6 @@ namespace Misc
     void disablePanoramablur() noexcept;
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
-    void fakeVote(bool = false) noexcept;
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
@@ -66,7 +65,7 @@ namespace Misc
                 Entity* entity = interfaces.entityList->getEntity(i);
                 if (!entity || entity->isDormant() || !entity->isAlive()) continue;
                 *reinterpret_cast<int*>(entity + 0xA28) = 0;
-                *reinterpret_cast<int*>(entity + 0xA30) = memory.globalVars->framecount;
+                *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
             }
         }
     }
@@ -75,7 +74,7 @@ namespace Misc
     {
         if (config.misc.autoPistol) {
             const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
-            if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory.globalVars->serverTime()) {
+            if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime()) {
                 if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
                 else

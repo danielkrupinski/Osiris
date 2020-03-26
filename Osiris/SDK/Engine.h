@@ -1,9 +1,10 @@
 #pragma once
 
 #include <cstddef>
+#include <d3d9types.h>
 
-#include "Utils.h"
 #include "Vector.h"
+#include "VirtualMethod.h"
 
 struct PlayerInfo {
     std::uint64_t version;
@@ -30,70 +31,17 @@ class NetworkChannel;
 
 class Engine {
 public:
-    constexpr auto getPlayerInfo(int entityIndex, const PlayerInfo& playerInfo) noexcept
-    {
-        return callVirtualMethod<bool, int, const PlayerInfo&>(this, 8, entityIndex, playerInfo);
-    }
-
-    constexpr auto getPlayerForUserID(int userId) noexcept
-    {
-        return callVirtualMethod<int, int>(this, 9, userId);
-    }
-
-    constexpr auto getLocalPlayer() noexcept
-    {
-        return callVirtualMethod<int>(this, 12);
-    }
-
-    constexpr auto getViewAngles(Vector& angles) noexcept
-    {
-        callVirtualMethod<void, Vector&>(this, 18, angles);
-    }
-
-    constexpr auto setViewAngles(const Vector& angles) noexcept
-    {
-        callVirtualMethod<void, const Vector&>(this, 19, angles);
-    }
-
-    constexpr auto getMaxClients() noexcept
-    {
-        return callVirtualMethod<int>(this, 20);
-    }
-
-    constexpr auto isInGame() noexcept
-    {
-        return callVirtualMethod<bool>(this, 26);
-    }
-
-    constexpr auto isConnected() noexcept
-    {
-        return callVirtualMethod<bool>(this, 27);
-    }
-
-    using Matrix = float[4][4];
-
-    constexpr auto worldToScreenMatrix() noexcept
-    {
-        return callVirtualMethod<const Matrix&>(this, 37);
-    }
-
-    constexpr auto getBSPTreeQuery() noexcept
-    {
-        return callVirtualMethod<void*>(this, 43);
-    }
-
-    constexpr auto getLevelName() noexcept
-    {
-        return callVirtualMethod<const char*>(this, 53);
-    }
-
-    constexpr auto getNetworkChannel() noexcept
-    {
-        return callVirtualMethod<NetworkChannel*>(this, 78);
-    }
-
-    constexpr auto clientCmdUnrestricted(const char* cmd) noexcept
-    {
-        callVirtualMethod<void, const char*, bool>(this, 114, cmd, false);
-    }
+    VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (this, entityIndex, std::ref(playerInfo)))
+    VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (this, userId))
+    VIRTUAL_METHOD(int, getLocalPlayer, 12, (), (this))
+    VIRTUAL_METHOD(void, getViewAngles, 18, (Vector& angles), (this, std::ref(angles)))
+    VIRTUAL_METHOD(void, setViewAngles, 19, (const Vector& angles), (this, std::cref(angles)))
+    VIRTUAL_METHOD(int, getMaxClients, 20, (), (this))
+    VIRTUAL_METHOD(bool, isInGame, 26, (), (this))
+    VIRTUAL_METHOD(bool, isConnected, 27, (), (this))
+    VIRTUAL_METHOD(void*, getBSPTreeQuery, 43, (), (this))
+    VIRTUAL_METHOD(const char*, getLevelName, 53, (), (this))
+    VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
+    VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd), (this, cmd, false))
+    VIRTUAL_METHOD(const D3DMATRIX&, worldToScreenMatrix, 37, (), (this))
 };

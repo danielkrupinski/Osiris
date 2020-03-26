@@ -361,5 +361,8 @@
     <ClInclude Include="SDK\StudioRender.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\VirtualMethod.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
