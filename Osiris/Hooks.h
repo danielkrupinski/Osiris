@@ -63,7 +63,7 @@ public:
 
     Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
     Vmt client{ interfaces.client };
-    Vmt clientMode{ memory.clientMode };
+    Vmt clientMode{ memory->clientMode };
     Vmt engine{ interfaces.engine };
     Vmt gameEventManager{ interfaces.gameEventManager };
     Vmt modelRender{ interfaces.modelRender };
@@ -71,7 +71,7 @@ public:
     Vmt sound{ interfaces.sound };
     Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
-    Vmt viewRender{ memory.viewRender };
+    Vmt viewRender{ memory->viewRender };
 private:
     HMODULE module;
 };

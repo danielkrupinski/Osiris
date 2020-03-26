@@ -53,14 +53,11 @@ namespace Backtrack {
         if (!network)
             return false;
 
-        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->serverTime() - simtime);
+        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
         return std::fabsf(delta) <= 0.2f;
     }
 
-    constexpr auto timeToTicks(float time) noexcept
-    {
-        return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
-    }
+    int timeToTicks(float time) noexcept;
 
     static void init() noexcept
     {
