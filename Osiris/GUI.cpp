@@ -1057,7 +1057,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Fake prime", &config.misc.fakePrime);
 
     if (ImGui::Button("Unhook"))
-        hooks.restore();
+        hooks->restore();
 
     ImGui::Columns(1);
     if (!contentOnly)
