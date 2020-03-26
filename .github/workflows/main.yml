@@ -42,3 +42,8 @@ jobs:
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" -m Osiris.sln  /t:build /p:Platform=x86;Configuration=Release;TargetName=Osiris_-_IA32;EIS=NoExtensions'
       
+    - uses: actions/upload-artifact@v1
+      with:
+        name: Osiris Build Output
+        path: Release
+
