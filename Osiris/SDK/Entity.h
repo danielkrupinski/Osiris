@@ -24,6 +24,12 @@
 
 struct AnimState;
 
+enum ObserverMode {
+	OBS_MODE_IN_EYE = 4,	
+	OBS_MODE_CHASE,
+	OBS_MODE_ROAMING = 7
+};
+
 enum class MoveType {
     NOCLIP = 8,
     LADDER = 9
@@ -192,6 +198,7 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
+    NETVAR(observerMode, "CBasePlayer", "m_iObserverMode", ObserverMode)
     
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
