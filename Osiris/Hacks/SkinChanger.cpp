@@ -131,7 +131,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 void apply_sticker_changer(Entity* item) noexcept
 {
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars[hash] + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
     static vmt_multi_hook hook;
 
