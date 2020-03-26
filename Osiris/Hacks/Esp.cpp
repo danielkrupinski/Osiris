@@ -201,12 +201,17 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             static auto survivalMaxHealth{ interfaces.cvar->findVar("sv_dz_player_max_health") };
 
             const auto maxHealth{ (std::max)((gameType->getInt() == 6 ? survivalMaxHealth->getInt() : 100), entity->health()) };
+            const auto currHealth{ ((entity->health()) / static_cast<float>(maxHealth))};
 
-            if (config.healthBar.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.healthBar.rainbowSpeed));
-            else
+            if (config.healthBar.rainbow) {
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.healthBar.rainbowSpeed));
+            }
+            else if (config.healthBar.percentageBased) {
+                interfaces.surface->setDrawColor({ std::min((2.0f * (100 - entity->health()) / maxHealth), 1.0f) , std::min((2.0f * entity->health()) / maxHealth, 1.0f) , 0.f });
+            }
+            else {
                 interfaces.surface->setDrawColor(config.healthBar.color);
-
+            }
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
@@ -221,10 +226,16 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         }
 
         if (config.armorBar.enabled) {
-            if (config.armorBar.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.armorBar.rainbowSpeed));
-            else
+            if (config.armorBar.rainbow) {
+                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.armorBar.rainbowSpeed));
+            }
+            else if (config.armorBar.percentageBased) {
+                interfaces.surface->setDrawColor({ std::min((2.0f * (100 - entity->armor()) / 100.0f), 1.0f) , std::min((2.0f * entity->armor()) / 100.0f, 1.0f) , 0.f });
+            }
+            else {
                 interfaces.surface->setDrawColor(config.armorBar.color);
+            }
+
 
             interfaces.surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
 

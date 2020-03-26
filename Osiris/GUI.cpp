@@ -626,13 +626,13 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Health", config.esp.players[selected].health);
             ImGuiCustom::colorPicker("Head dot", config.esp.players[selected].headDot);
             ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Health bar", config.esp.players[selected].healthBar);
+            ImGuiCustom::colorPicker_bars("Health bar", config.esp.players[selected].healthBar);
             ImGuiCustom::colorPicker("Name", config.esp.players[selected].name);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor", config.esp.players[selected].armor);
             ImGuiCustom::colorPicker("Money", config.esp.players[selected].money);
             ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Armor bar", config.esp.players[selected].armorBar);
+            ImGuiCustom::colorPicker_bars("Armor bar", config.esp.players[selected].armorBar);
             ImGuiCustom::colorPicker("Outline", config.esp.players[selected].outline);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Distance", config.esp.players[selected].distance);
