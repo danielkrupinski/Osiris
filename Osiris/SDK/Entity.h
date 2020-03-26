@@ -2,23 +2,27 @@
 
 #include "AnimState.h"
 #include "ClientClass.h"
-#include "../Config.h"
-#include "../Interfaces.h"
-#include "../Netvars.h"
 #include "Cvar.h"
 #include "Engine.h"
 #include "EngineTrace.h"
 #include "EntityList.h"
-#include "Utils.h"
-#include "Vector.h"
-#include "WeaponId.h"
-#include "VarMapping.h"
-#include "../Memory.h"
+#include "matrix3x4.h"
 #include "ModelRender.h"
-#include "../SDK/matrix3x4.h"
+#include "Utils.h"
+#include "VarMapping.h"
+#include "Vector.h"
+#include "VirtualMethod.h"
+#include "WeaponData.h"
+#include "WeaponId.h"
+
+#include "../Config.h"
+#include "../Interfaces.h"
+#include "../Memory.h"
+#include "../Netvars.h"
+
+#include <functional>
 
 struct AnimState;
-struct WeaponData;
 
 enum class MoveType {
     NOCLIP = 8,
@@ -27,45 +31,56 @@ enum class MoveType {
 
 class Collideable {
 public:
-    virtual void* pad() = 0;
-    virtual const Vector& obbMins() = 0;
-    virtual const Vector& obbMaxs() = 0;
+    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
+    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
 class Entity {
 public:
-    constexpr auto getCollideable() noexcept
+    VIRTUAL_METHOD(void, release, 1, (), (this + 8))
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
+
+    VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
+    VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
+    VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, 157, (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
+    VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+
+    constexpr auto getWeaponType() noexcept
     {
-        return callVirtualMethod<Collideable*>(this, 3);
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->type;
+        return WeaponType::Unknown;
     }
 
-    constexpr bool isPistol() noexcept
+    constexpr auto isPistol() noexcept
     {
-        switch (getClientClass()->classId) {
-        case ClassId::Deagle:
-        case ClassId::Elite:
-        case ClassId::FiveSeven:
-        case ClassId::Glock:
-        case ClassId::P2000:
-        case ClassId::P250:
-        case ClassId::Tec9:
-            return true;
-        default:
-            return false;
-        }
+        return getWeaponType() == WeaponType::Pistol;
     }
 
-    constexpr bool isSniperRifle() noexcept
+    constexpr auto isSniperRifle() noexcept
     {
-        switch (getClientClass()->classId) {
-        case ClassId::Ssg08:
-        case ClassId::Awp:
-        case ClassId::Scar20:
-        case ClassId::G3sg1:
-            return true;
-        default:
-            return false;
-        }
+        return getWeaponType() == WeaponType::SniperRifle;
+    }
+
+    constexpr auto requiresRecoilControl() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->recoilMagnitude < 35.0f && weaponData->recoveryTimeStand > weaponData->cycletime;
+        return false;
     }
 
     constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
@@ -82,11 +97,6 @@ public:
             return result;
         }
         return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
-    }
-
-    constexpr auto getModel() noexcept
-    {
-        return callVirtualMethod<const Model*>(this + 4, 8);
     }
 
     Vector getBonePosition(int bone) noexcept
@@ -116,82 +126,12 @@ public:
     {
         return memory.isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
     }
-
-    constexpr bool isDormant() noexcept
-    {
-        return callVirtualMethod<bool>(this + 8, 9);
-    }
-
-    constexpr void preDataUpdate(int updateType) noexcept
-    {
-        callVirtualMethod<void, int>(this + 8, 6, updateType);
-    }
-
-    constexpr void release() noexcept
-    {
-        return callVirtualMethod<void>(this + 8, 1);
-    }
-
-    constexpr void setDestroyedOnRecreateEntities() noexcept
-    {
-        return callVirtualMethod<void>(this + 8, 13);
-    }
-
-    constexpr bool isWeapon() noexcept
-    {
-        return callVirtualMethod<bool>(this, 165);
-    }
-
-    constexpr ClientClass* getClientClass() noexcept
-    {
-        return callVirtualMethod<ClientClass*>(this + 8, 2);
-    }
-
-    constexpr bool isAlive() noexcept
-    {
-        return callVirtualMethod<bool>(this, 155) && health() > 0;
-    }
-
-    constexpr bool isPlayer() noexcept
-    {
-        return callVirtualMethod<bool>(this, 157);
-    }
-
-    constexpr Entity* getActiveWeapon() noexcept
-    {
-        return callVirtualMethod<Entity*>(this, 267);
-    }
-
-    constexpr int getWeaponSubType() noexcept
-    {
-        return callVirtualMethod<int>(this, 279);
-    }
-
-    constexpr WeaponData* getWeaponData() noexcept
-    {
-        return callVirtualMethod<WeaponData*>(this, 457);
-    }
-
-    constexpr float getInaccuracy() noexcept
-    {
-        return callVirtualMethod<float>(this, 479);
-    }
-    
+  
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
     }
-    
-    constexpr Vector getAbsOrigin() noexcept
-    {
-        return callVirtualMethod<Vector&>(this, 10);
-    }
-
-    constexpr void setModelIndex(int index) noexcept
-    {
-        callVirtualMethod<void, int>(this, 75, index);
-    }
-
+   
     AnimState* getAnimstate() noexcept
     {
         return *reinterpret_cast<AnimState**>(this + 0x3900);
@@ -199,20 +139,17 @@ public:
 
     float getMaxDesyncAngle() noexcept
     {
-        if (auto animState = getAnimstate()) {
-            float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
+        const auto animState = getAnimstate();
 
-            if (animState->duckAmount > 0.0f)
-                yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+        if (!animState)
+            return 0.0f;
 
-            return animState->velocitySubtractY * yawModifier;
-        }
-        return 0.0f;
-    }
+        float yawModifier = (animState->stopToFullRunningFraction * -0.3f - 0.2f) * std::clamp(animState->footSpeed, 0.0f, 1.0f) + 1.0f;
 
-    constexpr Entity* getObserverTarget() noexcept
-    {
-        return callVirtualMethod<Entity*>(this, 294);
+        if (animState->duckAmount > 0.0f)
+            yawModifier += (animState->duckAmount * std::clamp(animState->footSpeed2, 0.0f, 1.0f) * (0.5f - yawModifier));
+
+        return animState->velocitySubtractY * yawModifier;
     }
 
     bool isInReload() noexcept
@@ -225,12 +162,23 @@ public:
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
 
+    auto getAimPunch() noexcept
+    {
+        Vector vec;
+        callVirtualMethod<void>(this, 345, std::ref(vec));
+        return vec;
+    }
+
+    NETVAR(body, "CBaseAnimating", "m_nBody", int)
+    NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
+
     NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
+    NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
@@ -257,6 +205,7 @@ public:
     NETVAR(hasDefuser, "CCSPlayer", "m_bHasDefuser", bool)
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
+    NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)

@@ -13,6 +13,7 @@ enum class ClassId {
     Drone,
     Dronegun,
     EconEntity = 53,
+    EconWearable,
     Hostage = 97,
     Healthshot  = 104,
     Cash,

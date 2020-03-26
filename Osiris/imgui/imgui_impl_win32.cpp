@@ -305,7 +305,8 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         return 0;
     case WM_CHAR:
         // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
-        io.AddInputCharacter((unsigned int)wParam);
+        if (wchar_t w; MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (char*)&wParam, 1, &w, 1) == 1)
+            io.AddInputCharacter((unsigned int)w);
         return 0;
     case WM_SETCURSOR:
         if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
@@ -314,6 +315,12 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
     case WM_DEVICECHANGE:
         if ((UINT)wParam == DBT_DEVNODES_CHANGED)
             g_WantUpdateHasGamepad = true;
+        return 0;
+    case WM_ACTIVATEAPP:
+        if (hwnd == g_hWnd && wParam == FALSE) {
+            memset(io.MouseDown, 0, sizeof(io.MouseDown));
+            memset(io.KeysDown, 0, sizeof(io.KeysDown));
+        }
         return 0;
     }
     return 0;

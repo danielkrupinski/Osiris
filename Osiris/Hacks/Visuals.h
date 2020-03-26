@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -24,6 +26,7 @@ namespace Visuals {
     void removeShadows() noexcept;
     void applyZoom(FrameStage) noexcept;
     void applyScreenEffects() noexcept;
+    void hitEffect(GameEvent* = nullptr) noexcept;
     void hitMarker(GameEvent* = nullptr) noexcept;
 
     constexpr void disablePostProcessing() noexcept
@@ -39,26 +42,26 @@ namespace Visuals {
 
     constexpr bool removeHands(const char* modelName) noexcept
     {
-        return config.visuals.noHands && strstr(modelName, "arms") && !strstr(modelName, "sleeve");
+        return config.visuals.noHands && std::strstr(modelName, "arms") && !std::strstr(modelName, "sleeve");
     }
 
     constexpr bool removeSleeves(const char* modelName) noexcept
     {
-        return config.visuals.noSleeves && strstr(modelName, "sleeve");
+        return config.visuals.noSleeves && std::strstr(modelName, "sleeve");
     }
 
     constexpr bool removeWeapons(const char* modelName) noexcept
     {
-        return config.visuals.noWeapons && strstr(modelName, "models/weapons/v_")
-            && !strstr(modelName, "arms") && !strstr(modelName, "tablet")
-            && !strstr(modelName, "parachute") && !strstr(modelName, "fists");
+        return config.visuals.noWeapons && std::strstr(modelName, "models/weapons/v_")
+            && !std::strstr(modelName, "arms") && !std::strstr(modelName, "tablet")
+            && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
     }
 
     constexpr void skybox() noexcept
     {
-        constexpr const char* skyboxes[]{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
+        constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
 
-        if (config.visuals.skybox)
+        if (static_cast<std::size_t>(config.visuals.skybox - 1) < skyboxes.size())
             memory.loadSky(skyboxes[config.visuals.skybox - 1]);
         else
             memory.loadSky(interfaces.cvar->findVar("sv_skyname")->string);

@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -13,34 +14,35 @@
 
 static constexpr bool worldToScreen(const Vector& in, Vector& out) noexcept
 {
-    const auto matrix = interfaces.engine->worldToScreenMatrix();
-    float w = matrix[3][0] * in.x + matrix[3][1] * in.y + matrix[3][2] * in.z + matrix[3][3];
+    const auto& matrix = interfaces.engine->worldToScreenMatrix();
+    float w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
 
     if (w > 0.001f) {
         const auto [width, height] = interfaces.surface->getScreenSize();
-        out.x = width / 2 * (1 + (matrix[0][0] * in.x + matrix[0][1] * in.y + matrix[0][2] * in.z + matrix[0][3]) / w);
-        out.y = height / 2 * (1 - (matrix[1][0] * in.x + matrix[1][1] * in.y + matrix[1][2] * in.z + matrix[1][3]) / w);
+        out.x = width / 2 * (1 + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w);
+        out.y = height / 2 * (1 - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w);
         out.z = 0.0f;
         return true;
     }
     return false;
 }
 
-static constexpr void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
+static void renderSnaplines(Entity* entity, const Config::Esp::Shared& config) noexcept
 {
-    if (config.snaplines.enabled) {
-        Vector position{ };
-        if (worldToScreen(entity->getAbsOrigin(), position)) {
-            const auto [width, height] = interfaces.surface->getScreenSize();
+    if (!config.snaplines.enabled)
+        return;
 
-            if (config.snaplines.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
-            else
-                interfaces.surface->setDrawColor(config.snaplines.color);
+    Vector position;
+    if (!worldToScreen(entity->getAbsOrigin(), position))
+        return;
 
-            interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
-        }
-    }
+    if (config.snaplines.rainbow)
+        interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.snaplines.rainbowSpeed));
+    else
+        interfaces.surface->setDrawColor(config.snaplines.color);
+
+    const auto [width, height] = interfaces.surface->getScreenSize();
+    interfaces.surface->drawLine(width / 2, height, static_cast<int>(position.x), static_cast<int>(position.y));
 }
 
 static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) noexcept
@@ -79,43 +81,45 @@ struct BoundingBox {
     float x0, y0;
     float x1, y1;
     Vector vertices[8];
+
+    BoundingBox(Entity* entity) noexcept
+    {
+        const auto [width, height] = interfaces.surface->getScreenSize();
+
+        x0 = static_cast<float>(width * 2);
+        y0 = static_cast<float>(height * 2);
+        x1 = -x0;
+        y1 = -y0;
+
+        const auto& mins = entity->getCollideable()->obbMins();
+        const auto& maxs = entity->getCollideable()->obbMaxs();
+
+        for (int i = 0; i < 8; ++i) {
+            const Vector point{ i & 1 ? maxs.x : mins.x,
+                                i & 2 ? maxs.y : mins.y,
+                                i & 4 ? maxs.z : mins.z };
+
+            if (!worldToScreen(point.transform(entity->coordinateFrame()), vertices[i])) {
+                valid = false;
+                return;
+            }
+            x0 = std::min(x0, vertices[i].x);
+            y0 = std::min(y0, vertices[i].y);
+            x1 = std::max(x1, vertices[i].x);
+            y1 = std::max(y1, vertices[i].y);
+        }
+        valid = true;
+    }
+
+    operator bool() noexcept
+    {
+        return valid;
+    }
+private:
+    bool valid;
 };
 
-static auto boundingBox(Entity* entity, BoundingBox& out) noexcept
-{
-    const auto [width, height] { interfaces.surface->getScreenSize() };
-    out.x0 = static_cast<float>(width * 2);
-    out.y0 = static_cast<float>(height * 2);
-    out.x1 = -static_cast<float>(width * 2);
-    out.y1 = -static_cast<float>(height * 2);
-
-    const auto min{ entity->getCollideable()->obbMins() };
-    const auto max{ entity->getCollideable()->obbMaxs() };
-
-    for (int i = 0; i < 8; i++) {
-        const Vector point{ i & 1 ? max.x : min.x,
-                            i & 2 ? max.y : min.y,
-                            i & 4 ? max.z : min.z };
-
-        if (!worldToScreen(point.transform(entity->coordinateFrame()), out.vertices[i]))
-            return false;
-
-        if (out.x0 > out.vertices[i].x)
-            out.x0 = out.vertices[i].x;
-
-        if (out.y0 > out.vertices[i].y)
-            out.y0 = out.vertices[i].y;
-
-        if (out.x1 < out.vertices[i].x)
-            out.x1 = out.vertices[i].x;
-
-        if (out.y1 < out.vertices[i].y)
-            out.y1 = out.vertices[i].y;
-    }
-    return true;
-}
-
-static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
+static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config) noexcept
 {
     if (config.box.enabled) {
         if (config.box.rainbow)
@@ -187,8 +191,8 @@ static void renderBox(Entity* entity, const BoundingBox& bbox, const Config::Esp
 
 static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+    if (BoundingBox bbox{ entity }) {
+        renderBox(bbox, config);
 
         float drawPositionX = bbox.x0 - 5;
 
@@ -306,39 +310,44 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
 static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) noexcept
 {
-    if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+    BoundingBox bbox{ entity };
 
-        if (config.name.enabled) {
-            const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
-            const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
-            interfaces.surface->setTextFont(config.font);
-            if (config.name.rainbow)
-                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
-            else
-                interfaces.surface->setTextColor(config.name.color);
+    if (!bbox)
+        return;
 
-            interfaces.surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
-            interfaces.surface->printText(name);
-        }
+    renderBox(bbox, config);
 
-        float drawPositionY = bbox.y0;
+    if (config.name.enabled) {
+        const auto name{ interfaces.localize->find(entity->getWeaponData()->name) };
+        const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
+        interfaces.surface->setTextFont(config.font);
+        if (config.name.rainbow)
+            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.name.rainbowSpeed));
+        else
+            interfaces.surface->setTextColor(config.name.color);
 
-        if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow)
-                interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
-            else
-                interfaces.surface->setTextColor(config.distance.color);
-
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
-        }
+        interfaces.surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
+        interfaces.surface->printText(name);
     }
+
+    float drawPositionY = bbox.y0;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer || !config.distance.enabled)
+        return;
+
+    if (config.distance.rainbow)
+        interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.distance.rainbowSpeed));
+    else
+        interfaces.surface->setTextColor(config.distance.color);
+
+    renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
 }
 
 static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, const wchar_t* name) noexcept
 {
-    if (BoundingBox bbox; boundingBox(entity, bbox)) {
-        renderBox(entity, bbox, config);
+    if (BoundingBox bbox{ entity }) {
+        renderBox(bbox, config);
 
         if (config.name.enabled) {
             const auto [width, height] { interfaces.surface->getTextSize(config.font, name) };
@@ -365,20 +374,25 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
     }
 }
 
-static constexpr void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
+static void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noexcept
 {
-    if (config.headDot.enabled) {
-        Vector head{ };
-        if (worldToScreen(entity->getBonePosition(8), head)) {
-            if (config.headDot.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
-            else
-                interfaces.surface->setDrawColor(config.headDot.color);
+    if (!config.headDot.enabled)
+        return;
 
-            if (const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) })
-                interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / sqrtf((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
-        }
-    }
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!localPlayer)
+        return;
+
+    Vector head;
+    if (!worldToScreen(entity->getBonePosition(8), head))
+        return;
+
+    if (config.headDot.rainbow)
+        interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.headDot.rainbowSpeed));
+    else
+        interfaces.surface->setDrawColor(config.headDot.color);
+
+    interfaces.surface->drawCircle(head.x, head.y, 0, static_cast<int>(100 / std::sqrt((localPlayer->getAbsOrigin() - entity->getAbsOrigin()).length())));
 }
 
 enum EspId {

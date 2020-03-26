@@ -33,7 +33,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
         const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
 
-        if (paintKit->id == 9001)
+        if (paintKit->id == 9001) // ignore workshop_default
             continue;
 
         const auto itemName{ interfaces.localize->find(paintKit->itemName.buffer + 1) };
@@ -62,7 +62,7 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
         const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
-        const auto itemName{ interfaces.localize->find(stickerKit->itemName.buffer + 1) };
+        const auto itemName = interfaces.localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr))
@@ -90,7 +90,7 @@ struct GetStickerAttributeBySlotIndexFloat {
 
         const auto defindex = item->itemDefinitionIndex();
 
-        auto config = g_config.get_by_definition_index(defindex);
+        auto config = get_by_definition_index(defindex);
 
         if (config) {
             switch (attribute) {
@@ -118,7 +118,7 @@ struct GetStickerAttributeBySlotIndexInt {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
 
         if (attribute == StickerAttribute::Index)
-            if (auto config = g_config.get_by_definition_index(item->itemDefinitionIndex()))
+            if (auto config = get_by_definition_index(item->itemDefinitionIndex()))
                 return config->stickers[slot].kit;
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
@@ -131,7 +131,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 void apply_sticker_changer(Entity* item) noexcept
 {
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars[hash] + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -165,14 +165,14 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
     item->accountID() = xuid_low;
 
-    if (config->entity_quality_index)
-        item->entityQuality() = config->entity_quality_index;
+    if (config->quality)
+        item->entityQuality() = config->quality;
 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
 
-    if (config->paint_kit_index)
-        item->fallbackPaintKit() = config->paint_kit_index;
+    if (config->paintKit)
+        item->fallbackPaintKit() = config->paintKit;
 
     if (config->seed)
         item->fallbackSeed() = config->seed;
@@ -211,44 +211,32 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     apply_sticker_changer(item);
 }
 
-static auto get_wearable_create_fn() noexcept
+static Entity* make_glove(int entry, int serial) noexcept
 {
-    auto clazz = interfaces.client->getAllClasses();
+    static std::add_pointer_t<Entity* __cdecl(int, int)> createWearable = nullptr;
 
-    // Please, if you gonna paste it into a cheat use classids here. I use names because they
-    // won't change in the foreseeable future and i dont need high speed, but chances are
-    // you already have classids, so use them instead, they are faster.
-    while (fnv::hash(clazz->networkName) != fnv::hash("CEconWearable"))
-        clazz = clazz->next;
-
-    return clazz->createFunction;
-}
-
-static auto make_glove(int entry, int serial) noexcept
-{
-    static auto create_wearable_fn = get_wearable_create_fn();
-
-    create_wearable_fn(entry, serial);
-
-    const auto glove = interfaces.entityList->getEntity(entry);
-
-    // He he
-    {
-      //  static auto set_abs_origin_addr = platform::find_pattern("client_panorama", "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1", "xxxxxxxxxxxx");
-
-        //const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const Vector&)>(set_abs_origin_addr);
-
-        static constexpr Vector new_pos = { 10000.f, 10000.f, 10000.f };
-
-        memory.setAbsOrigin(glove, new_pos);
+    if (!createWearable) {
+        createWearable = []() -> decltype(createWearable) {
+            for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+                if (clientClass->classId == ClassId::EconWearable)
+                    return clientClass->createFunction;
+            return nullptr;
+        }();
     }
 
-    return glove;
+    if (!createWearable)
+        return nullptr;
+
+    createWearable(entry, serial);
+    return interfaces.entityList->getEntity(entry);
 }
 
 static void post_data_update_start(Entity* local) noexcept
 {
     const auto local_index = local->index();
+
+    if (!local->isAlive())
+        return;
 
     PlayerInfo player_info;
     if (!interfaces.engine->getPlayerInfo(local_index, player_info))
@@ -258,7 +246,7 @@ static void post_data_update_start(Entity* local) noexcept
     {
         const auto wearables = local->wearables();
 
-        const auto glove_config = g_config.get_by_definition_index(GLOVE_T_SIDE);
+        const auto glove_config = get_by_definition_index(GLOVE_T_SIDE);
 
         static int glove_handle;
 
@@ -274,15 +262,6 @@ static void post_data_update_start(Entity* local) noexcept
                 wearables[0] = glove_handle;
                 glove = our_glove;
             }
-        }
-
-        if (!local->isAlive()) {
-            // We are dead but we have a glove, destroy it
-            if (glove) {
-                glove->setDestroyedOnRecreateEntities();
-                glove->release();
-            }
-            return;
         }
 
         if (glove_config && glove_config->definition_override_index)
@@ -305,18 +284,22 @@ static void post_data_update_start(Entity* local) noexcept
                 const auto serial = rand() % 0x1000;
 
                 glove = make_glove(entry, serial);
+                if (glove) {
+                    glove->initialized() = true;
 
-                wearables[0] = entry | serial << 16;
+                    wearables[0] = entry | serial << 16;
 
-                // Let's store it in case we somehow lose it.
-                glove_handle = wearables[0];
+                    // Let's store it in case we somehow lose it.
+                    glove_handle = wearables[0];
+                }
             }
 
-            // Thanks, Beakers
-            glove->index() = -1;
-            glove->initialized() = true;
+            if (glove) {
+                memory.equipWearable(glove, local);
+                local->body() = 1;
 
-            apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
+                apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
+            }
         }
     }
 
@@ -336,7 +319,7 @@ static void post_data_update_start(Entity* local) noexcept
             auto& definition_index = weapon->itemDefinitionIndex();
 
             // All knives are terrorist knives.
-            if (const auto active_conf = g_config.get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
+            if (const auto active_conf = get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
                 apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
             else
                 erase_override_if_exists_by_index(definition_index);
@@ -397,10 +380,10 @@ void SkinChanger::scheduleHudUpdate() noexcept
     hudUpdateRequired = true;
 }
 
-void SkinChanger::overrideHudIcon(GameEvent* event) noexcept
+void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
-    if (interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        if (const auto iconOverride = iconOverrides[event->getString("weapon")])
-            event->setString("weapon", iconOverride);
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (const auto iconOverride = iconOverrides[event.getString("weapon")])
+            event.setString("weapon", iconOverride);
     }
 }

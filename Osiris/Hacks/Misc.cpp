@@ -1,4 +1,4 @@
-#include <sstream>
+﻿#include <sstream>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -10,6 +10,55 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
+#include "EnginePrediction.h"
+
+void Misc::edgejump(UserCmd* cmd) noexcept
+{
+    if (!config.misc.edgejump || !GetAsyncKeyState(config.misc.edgejumpkey))
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto mt = localPlayer->moveType(); mt == MoveType::LADDER || mt == MoveType::NOCLIP)
+        return;
+
+    if ((EnginePrediction::getFlags() & 1) && !(localPlayer->flags() & 1))
+        cmd->buttons |= UserCmd::IN_JUMP;
+}
+
+void Misc::slowwalk(UserCmd* cmd) noexcept
+{
+    if (!config.misc.slowwalk || !GetAsyncKeyState(config.misc.slowwalkKey))
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    const auto weaponData = activeWeapon->getWeaponData();
+    if (!weaponData)
+        return;
+
+    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+
+    if (cmd->forwardmove && cmd->sidemove) {
+        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+    } else if (cmd->forwardmove) {
+        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+    } else if (cmd->sidemove) {
+        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+    }
+}
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -43,42 +92,46 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
             const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
             memory.setClanTag(timeString.c_str(), timeString.c_str());
-	}
+        }
     }
 }
 
 void Misc::spectatorList() noexcept
 {
-    if (config.misc.spectatorList.enabled && interfaces.engine->isInGame()) {
-        const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    if (!config.misc.spectatorList.enabled)
+        return;
 
-        if (!localPlayer->isAlive())
-            return;
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
 
-        interfaces.surface->setTextFont(Surface::font);
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
 
-        if (config.misc.spectatorList.rainbow)
-            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
-        else
-            interfaces.surface->setTextColor(config.misc.spectatorList.color);
+    interfaces.surface->setTextFont(Surface::font);
 
-        const auto [width, height] = interfaces.surface->getScreenSize();
+    if (config.misc.spectatorList.rainbow)
+        interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+    else
+        interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
-        int textPositionY{ static_cast<int>(0.5f * height) };
+    const auto [width, height] = interfaces.surface->getScreenSize();
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-            auto entity = interfaces.entityList->getEntity(i);
-            if (!entity || entity->isAlive() || entity->isDormant())
-                continue;
+    auto textPositionY = static_cast<int>(0.5f * height);
 
-            if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(i, playerInfo) && entity->getObserverTarget() == localPlayer) {
-                if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-                    const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
-                    interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
-                    textPositionY -= textHeight;
-                    interfaces.surface->printText(name);
-                }
-            }
+    for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
+        const auto entity = interfaces.entityList->getEntity(i);
+        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer)
+            continue;
+
+        PlayerInfo playerInfo;
+
+        if (!interfaces.engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+            const auto [textWidth, textHeight] = interfaces.surface->getTextSize(Surface::font, name);
+            interfaces.surface->setTextPosition(width - textWidth - 5, textPositionY);
+            textPositionY -= textHeight;
+            interfaces.surface->printText(name);
         }
     }
 }
@@ -338,17 +391,6 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     return false;
 }
 
-void Misc::fakeVote(bool set) noexcept
-{
-    static bool shouldSet = false;
-
-    if (set)
-        shouldSet = set;
-
-    if (shouldSet && interfaces.engine->isInGame() && changeName(false, std::string(25, '\n').append(config.misc.voteText).append(50, '\n').c_str(), 10.0f))
-        shouldSet = false;
-}
-
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
@@ -373,11 +415,11 @@ void Misc::fakeBan(bool set) noexcept
 }
 
 void Misc::nadePredict() noexcept
-{ 
-    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") }; 
-    
-    nadeVar->onChangeCallbacks.size = 0; 
-    nadeVar->setValue(config.misc.nadePredict); 
+{
+    static auto nadeVar{ interfaces.cvar->findVar("cl_grenadepreview") };
+
+    nadeVar->onChangeCallbacks.size = 0;
+    nadeVar->setValue(config.misc.nadePredict);
 }
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept
@@ -431,4 +473,23 @@ void Misc::fakePrime() noexcept
             VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
         }
     }
+}
+
+void Misc::killMessage(GameEvent& event) noexcept
+{
+    if (!config.misc.killMessage)
+        return;
+
+    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces.engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+        return;
+
+    std::string cmd = "say \"";
+    cmd += config.misc.killMessageString;
+    cmd += "\"";
+    interfaces.engine->clientCmdUnrestricted(cmd.c_str());
 }

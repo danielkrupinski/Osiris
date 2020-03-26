@@ -59,14 +59,19 @@ struct Vector {
 
     constexpr void normalize() noexcept
     {
-        x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
-        y = std::isfinite(y) ? std::remainderf(y, 360.0f) : 0.0f;
+        x = std::isfinite(x) ? std::remainder(x, 360.0f) : 0.0f;
+        y = std::isfinite(y) ? std::remainder(y, 360.0f) : 0.0f;
         z = 0.0f;
     }
 
     auto length() const noexcept
     {
-        return sqrtf(x * x + y * y + z * z);
+        return std::sqrt(x * x + y * y + z * z);
+    }
+
+    auto length2D() const noexcept
+    {
+        return std::sqrt(x * x + y * y);
     }
 
     constexpr auto squareLength() const noexcept

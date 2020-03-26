@@ -1,7 +1,9 @@
 #pragma once
 
 #include <d3d9.h>
+#include <memory>
 #include <type_traits>
+#include <Windows.h>
 
 #include "Interfaces.h"
 #include "Memory.h"
@@ -12,7 +14,8 @@ struct SoundInfo;
 
 class Hooks {
 public:
-    Hooks() noexcept;
+    Hooks(HMODULE cheatModule);
+
     void restore() noexcept;
 
     WNDPROC originalWndProc;
@@ -22,7 +25,13 @@ public:
 
     class Vmt {
     public:
-        explicit Vmt(void* const) noexcept;
+        Vmt(void* const base) noexcept
+        {
+            init(base);
+        }
+
+        Vmt() = default;
+        bool init(void* const) noexcept;
         void restore() noexcept;
 
         template<typename T>
@@ -32,18 +41,24 @@ public:
                 newVmt[index + 1] = reinterpret_cast<uintptr_t>(fun);
         }
 
-        template<typename T, typename ...Args>
-        constexpr auto callOriginal(size_t index, Args... args) const noexcept
+        template<typename T, std::size_t Idx, typename ...Args>
+        constexpr auto callOriginal(Args... args) const noexcept
         {
-            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(oldVmt[index])(base, args...);
+            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(oldVmt[Idx])(base, args...);
+        }
+
+        template<typename T, typename ...Args>
+        constexpr auto getOriginal(size_t index, Args... args) const noexcept
+        {
+            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(oldVmt[index]);
         }
     private:
         static uintptr_t* findFreeDataPage(void* const, size_t) noexcept;
         static auto calculateLength(uintptr_t*) noexcept;
-        void* base;
-        uintptr_t* oldVmt;
-        uintptr_t* newVmt;
-        size_t length;
+        void* base = nullptr;
+        uintptr_t* oldVmt = nullptr;
+        uintptr_t* newVmt = nullptr;
+        size_t length = 0;
     };
 
     Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
@@ -57,6 +72,8 @@ public:
     Vmt surface{ interfaces.surface };
     Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
     Vmt viewRender{ memory.viewRender };
+private:
+    HMODULE module;
 };
 
-extern Hooks hooks;
+inline std::unique_ptr<Hooks> hooks;

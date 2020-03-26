@@ -168,7 +168,7 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
 {
     if (interfaces.engine->isInGame()) {
         if (const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon()) {
-            if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && !data.value._int)
+            if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))

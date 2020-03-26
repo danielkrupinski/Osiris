@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <string>
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
@@ -45,12 +46,9 @@ public:
         bool ignoreSmoke{ false };
         bool autoShot{ false };
         bool autoScope{ false };
-        bool recoilbasedFov{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
-        float recoilControlX{ 0.0f };
-        float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
@@ -60,17 +58,18 @@ public:
     std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
-        bool enabled{ false };
-        bool onKey{ false };
-        int key{ 0 };
-        bool friendlyFire{ false };
-        bool scopedOnly{ true };
-        bool ignoreFlash{ false };
-        bool ignoreSmoke{ false };
-        int hitgroup{ 0 };
-        int shotDelay{ 0 };
-        int minDamage{ 1 };
-        bool killshot{ false };
+        bool enabled = false;
+        bool friendlyFire = false;
+        bool scopedOnly = true;
+        bool ignoreFlash = false;
+        bool ignoreSmoke = false;
+        bool killshot = false;
+        bool onKey = false;
+        int key = 0;
+        int hitgroup = 0;
+        int shotDelay = 0;
+        int minDamage = 1;
+        float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
 
@@ -84,8 +83,8 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
-        float pitchAngle{ 0.0f };
         bool yaw{ false };
+        float pitchAngle{ 0.0f };
     } antiAim;
 
     struct Glow {
@@ -100,13 +99,13 @@ public:
 
     struct Chams {
         struct Material {
-            bool enabled{ false };
-            bool healthBased{ false };
+            bool enabled = false;
+            bool healthBased = false;
+            bool blinking = false;
+            bool wireframe = false;
             Color color;
-            bool blinking{ false };
-            int material{ 0 };
-            bool wireframe{ false };
-            float alpha{ 1.0f };
+            int material = 0;
+            float alpha = 1.0f;
         };
         std::array<Material, 2> materials;
     };
@@ -180,9 +179,23 @@ public:
         ColorToggle sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
+        int hitEffect{ 0 };
+        float hitEffectTime{ 0.6f };
         int hitMarker{ 0 };
         float hitMarkerTime{ 0.6f };
-        int playerModel{ 0 };
+        int playerModelT{ 0 };
+        int playerModelCT{ 0 };
+
+        struct {
+            bool enabled = false;
+            float blue = 0.0f;
+            float red = 0.0f;
+            float mono = 0.0f;
+            float saturation = 0.0f;
+            float ghost = 0.0f;
+            float green = 0.0f;
+            float yellow = 0.0f;
+        } colorCorrection;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -212,10 +225,14 @@ public:
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
-        char clanTag[16]{ "" };
+        std::string clanTag;
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool edgejump{ false };
+        int edgejumpkey{ 0 };
+        bool slowwalk{ false };
+        int slowwalkKey{ 0 };
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
@@ -231,13 +248,13 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        float aspectratio{ 0 };
         bool killMessage{ false };
-        char killMessageString[230]{ "Gotcha!" };
+        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
-        char voteText[50]{ "" };
         int banColor{ 6 };
-        char banText[150]{ "Cheater has been permanently banned from official CS:GO servers." };
+        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
@@ -255,14 +272,14 @@ public:
 
     struct {
         bool enabled{ false };
-        int target{ 0 };
-        int delay{ 10 };
-        bool aimbot{ true };
-        bool wallhack{ true };
-        bool other{ true };
-        bool griefing{ false };
-        bool voiceAbuse{ false };
         bool textAbuse{ false };
+        bool griefing{ false };
+        bool wallhack{ true };
+        bool aimbot{ true };
+        bool other{ true };
+        int target{ 0 };
+        int delay{ 1 };
+        int rounds{ 1 };
     } reportbot;
 private:
     std::filesystem::path path;

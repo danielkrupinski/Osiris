@@ -7,7 +7,7 @@ class Entity;
 struct RecvTable;
 
 struct ClientClass {
-    std::add_pointer_t<Entity* (int, int)> createFunction;
+    std::add_pointer_t<Entity* __cdecl(int, int)> createFunction;
     void* createEventFunction;
     char* networkName;
     RecvTable* recvTable;

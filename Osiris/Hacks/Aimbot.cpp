@@ -95,7 +95,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-    if (localPlayer->nextAttack() > memory.globalVars->serverTime())
+    if (!localPlayer || localPlayer->nextAttack() > memory.globalVars->serverTime())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
@@ -141,10 +141,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        static auto weaponRecoilScale = interfaces.cvar->findVar("weapon_recoil_scale");
-        auto aimPunch = localPlayer->aimPunchAngle() * weaponRecoilScale->getFloat();
-        aimPunch.x *= config.aimbot[weaponIndex].recoilControlY;
-        aimPunch.y *= config.aimbot[weaponIndex].recoilControlX;
+        const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
         for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
             auto entity = interfaces.entityList->getEntity(i);
@@ -159,7 +156,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config.aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
+                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;

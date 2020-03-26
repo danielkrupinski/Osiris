@@ -1,3 +1,4 @@
+#include <functional>
 #include <intrin.h>
 #include <string>
 #include <Windows.h>
@@ -17,6 +18,7 @@
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
+#include "Hacks/EnginePrediction.h"
 #include "Hacks/Esp.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
@@ -29,7 +31,6 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/GameEvent.h"
-#include "SDK/GameEventManager.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
@@ -39,6 +40,7 @@
 #include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
+#include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
 
@@ -49,63 +51,64 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config.misc.menuKey == VK_RBUTTON)
         || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config.misc.menuKey == VK_MBUTTON)
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
-        gui.isOpen = !gui.isOpen;
-        if (!gui.isOpen) {
-            ImGui::GetIO().MouseDown[0] = false;
+        gui.open = !gui.open;
+        if (!gui.open) {
+           // ImGui::GetIO().MouseDown[0] = false;
             interfaces.inputSystem->resetInputState();
         }
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    if (gui.isOpen && !ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam))
-        return true;
+    ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
-    return CallWindowProc(hooks.originalWndProc, window, msg, wParam, lParam);
+    interfaces.inputSystem->enableInput(!gui.open);
+
+    return CallWindowProc(hooks->originalWndProc, window, msg, wParam, lParam);
 }
 
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    if (gui.isOpen) {
-        device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-        IDirect3DVertexDeclaration9* vertexDeclaration;
-        device->GetVertexDeclaration(&vertexDeclaration);
+    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
+    IDirect3DVertexDeclaration9* vertexDeclaration;
+    device->GetVertexDeclaration(&vertexDeclaration);
 
-        ImGui_ImplDX9_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 
+    if (gui.open)
         gui.render();
 
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-        device->SetVertexDeclaration(vertexDeclaration);
-        vertexDeclaration->Release();
-    }
-    return hooks.originalPresent(device, src, dest, windowOverride, dirtyRegion);
+    device->SetVertexDeclaration(vertexDeclaration);
+    vertexDeclaration->Release();
+
+    return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    auto result = hooks.originalReset(device, params);
+    auto result = hooks->originalReset(device, params);
     ImGui_ImplDX9_CreateDeviceObjects();
     return result;
 }
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
-    uintptr_t* framePointer;
-    __asm mov framePointer, ebp;
-    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
-
-    auto result = hooks.clientMode.callOriginal<bool, float, UserCmd*>(24, inputSampleTime, cmd);
+    auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
+
+    uintptr_t* framePointer;
+    __asm mov framePointer, ebp;
+    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
@@ -123,20 +126,24 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
-    Aimbot::run(cmd);
-    Triggerbot::run(cmd);
     Misc::autoPistol(cmd);
     Misc::autoReload(cmd);
     Misc::updateClanTag();
-    Misc::fakeVote();
     Misc::fakeBan();
     Misc::stealNames();
     Misc::revealRanks(cmd);
-    Backtrack::run(cmd);
     Misc::quickReload(cmd);
-    Misc::moonwalk(cmd);
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
+    Misc::slowwalk(cmd);
+
+    EnginePrediction::run(cmd);
+
+    Aimbot::run(cmd);
+    Triggerbot::run(cmd);
+    Backtrack::run(cmd);
+    Misc::edgejump(cmd);
+    Misc::moonwalk(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -156,6 +163,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
+    cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
+    cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
 
@@ -167,7 +176,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
     if (interfaces.engine->isInGame()) {
         Visuals::modifySmoke();
         Visuals::thirdperson();
-        Misc::inverseRagdollGravity(); 
+        Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
@@ -176,7 +185,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::remove3dSky();
         Glow::render();
     }
-    return hooks.clientMode.callOriginal<int, int>(44, param);
+    return hooks->clientMode.callOriginal<int, 44>(param);
 }
 
 static float __stdcall getViewModelFov() noexcept
@@ -187,22 +196,21 @@ static float __stdcall getViewModelFov() noexcept
             additionalFov = 0.0f;
     }
 
-    return hooks.clientMode.callOriginal<float>(35) + additionalFov;
+    return hooks->clientMode.callOriginal<float, 35>() + additionalFov;
 }
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces.engine->isInGame() && !interfaces.studioRender->isForcedMaterialOverride()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
-        const auto isOverridden = interfaces.modelRender->isMaterialOverridden();
+
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
-            hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
-        if (!isOverridden)
-            interfaces.modelRender->forceMaterialOverride(nullptr);
+            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+        interfaces.studioRender->forcedMaterialOverride(nullptr);
     } else
-        hooks.modelRender.callOriginal<void, void*, void*, const ModelRenderInfo&, matrix3x4*>(21, ctx, state, info, customBoneToWorld);
+        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
 
 static bool __stdcall svCheatsGetBool() noexcept
@@ -210,7 +218,7 @@ static bool __stdcall svCheatsGetBool() noexcept
     if (uintptr_t(_ReturnAddress()) == memory.cameraThink && config.visuals.thirdperson)
         return true;
     else
-        return hooks.svCheats.callOriginal<bool>(13);
+        return hooks->svCheats.callOriginal<bool, 13>();
 }
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -219,9 +227,10 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
-        Misc::watermark();
+        Misc::watermark();        
+        Visuals::hitMarker();
     }
-    hooks.panel.callOriginal<void, unsigned int, bool, bool>(41, panel, forceRepaint, allowForce);
+    hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
 static void __stdcall frameStageNotify(FrameStage stage) noexcept
@@ -244,7 +253,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Backtrack::update(stage);
         SkinChanger::run(stage);
     }
-    hooks.client.callOriginal<void, FrameStage>(37, stage);
+    hooks->client.callOriginal<void, 37>(stage);
 }
 
 struct SoundData {
@@ -282,7 +291,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         ShowWindow(window, SW_RESTORE);
     }
     data.volume = std::clamp(data.volume, 0.0f, 1.0f);
-    hooks.sound.callOriginal<void, SoundData>(5, data);
+    hooks->sound.callOriginal<void, 5>(data);
 }
 
 static bool __stdcall shouldDrawFog() noexcept
@@ -294,39 +303,40 @@ static bool __stdcall shouldDrawViewModel() noexcept
 {
     if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
-    return hooks.clientMode.callOriginal<bool>(27);
+    return hooks->clientMode.callOriginal<bool, 27>();
 }
 
 static void __stdcall lockCursor() noexcept
 {
-    if (gui.isOpen)
+    if (gui.open)
         return interfaces.surface->unlockCursor();
-    return hooks.surface.callOriginal<void>(67);
+    return hooks->surface.callOriginal<void, 67>();
 }
 
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens)) {
+    if (config.visuals.noScopeOverlay && (returnAddress == memory.scopeArc || returnAddress == memory.scopeLens))
         a = 0;
-        *memory.disablePostProcessing = true;
-    }
-    hooks.surface.callOriginal<void, int, int, int, int>(15, r, g, b, a);
+    hooks->surface.callOriginal<void, 15>(r, g, b, a);
 }
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
-    switch (fnv::hashRuntime(event->getName())) {
-    case fnv::hash("player_death"):
-        Misc::killMessage(event);
-        SkinChanger::overrideHudIcon(event);
-        break;
-    case fnv::hash("player_hurt"):
-        Misc::playHitSound(event);
-        Visuals::hitMarker(event);
-        break;
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("player_death"):
+            Misc::killMessage(*event);
+            SkinChanger::overrideHudIcon(*event);
+            break;
+        case fnv::hash("player_hurt"):
+            Misc::playHitSound(*event);
+            Visuals::hitEffect(event);                
+            Visuals::hitMarker(event);
+            break;
+        }
     }
-    return hooks.gameEventManager.callOriginal<bool, GameEvent*>(9, event);
+    return hooks->gameEventManager.callOriginal<bool, 9>(event);
 }
 
 struct ViewSetup {
@@ -342,7 +352,7 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
-    hooks.clientMode.callOriginal<void, ViewSetup*>(18, setup);
+    hooks->clientMode.callOriginal<void, 18>(setup);
 }
 
 struct RenderableInfo {
@@ -354,21 +364,24 @@ struct RenderableInfo {
 
 static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
-    if (config.misc.disableModelOcclusion && reinterpret_cast<uintptr_t>(_ReturnAddress()) == memory.listLeaves) {
-        if (auto info = *reinterpret_cast<RenderableInfo**>(reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
-            if (auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
-                info->flags &= ~0x100;
-                info->flags2 |= 0xC0;
+    if (std::uintptr_t(_ReturnAddress()) == memory.listLeaves) {
+        if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
+            if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
+                if (config.misc.disableModelOcclusion) {
+                    // FIXME: sometimes players are rendered above smoke, maybe sort render list?
+                    info->flags &= ~0x100;
+                    info->flags2 |= 0x40;
 
-                constexpr float maxCoord{ 16384.0f };
-                constexpr float minCoord{ -maxCoord };
-                constexpr Vector min{ minCoord, minCoord, minCoord };
-                constexpr Vector max{ maxCoord, maxCoord, maxCoord };
-                return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, min, max, list, listMax);
+                    constexpr float maxCoord = 16384.0f;
+                    constexpr float minCoord = -maxCoord;
+                    constexpr Vector min{ minCoord, minCoord, minCoord };
+                    constexpr Vector max{ maxCoord, maxCoord, maxCoord };
+                    return hooks->bspQuery.callOriginal<int, 6>(std::cref(min), std::cref(max), list, listMax);
+                }
             }
         }
     }
-    return hooks.bspQuery.callOriginal<int, const Vector&, const Vector&, unsigned short*, int>(6, mins, maxs, list, listMax);
+    return hooks->bspQuery.callOriginal<int, 6>(std::cref(mins), std::cref(maxs), list, listMax);
 }
 
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
@@ -395,14 +408,14 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
             soundInfo.volume *= config.sound.chickenVolume / 100.0f;
     }
     soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
-    return hooks.originalDispatchSound(soundInfo);
+    return hooks->originalDispatchSound(soundInfo);
 }
 
 static int __stdcall render2dEffectsPreHud(int param) noexcept
 {
     Visuals::applyScreenEffects();
-    Visuals::hitMarker();
-    return hooks.viewRender.callOriginal<int, int>(39, param);
+    Visuals::hitEffect();
+    return hooks->viewRender.callOriginal<int, 39>(param);
 }
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
@@ -410,7 +423,7 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
     if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory.test || returnAddress == memory.test2))
         return nullptr;
 
-    return hooks.engine.callOriginal<void*>(218);
+    return hooks->engine.callOriginal<void*, 218>();
 }
 
 static bool __stdcall isPlayingDemo() noexcept
@@ -420,10 +433,43 @@ static bool __stdcall isPlayingDemo() noexcept
         && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
         return true;
     }
-    return hooks.engine.callOriginal<bool>(82);
+    return hooks->engine.callOriginal<bool, 82>();
 }
 
-Hooks::Hooks() noexcept
+static void __stdcall updateColorCorrectionWeights() noexcept
+{
+    hooks->clientMode.callOriginal<void, 58>();
+
+    if (const auto& cfg = config.visuals.colorCorrection; cfg.enabled) {
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x498) = cfg.blue;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A0) = cfg.red;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4A8) = cfg.mono;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4B0) = cfg.saturation;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C0) = cfg.ghost;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4C8) = cfg.green;
+        *reinterpret_cast<float*>(std::uintptr_t(memory.clientMode) + 0x4D0) = cfg.yellow;
+    }
+
+    if (config.visuals.noScopeOverlay)
+        *memory.vignette = 0.0f;
+}
+
+static float __stdcall getScreenAspectRatio(int width, int height) noexcept
+{
+    if (config.misc.aspectratio)
+        return config.misc.aspectratio;
+    return hooks->engine.callOriginal<float, 101>(width, height);
+}
+
+static void __stdcall renderSmokeOverlay(bool update) noexcept
+{
+    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+        *reinterpret_cast<float*>(std::uintptr_t(memory.viewRender) + 0x588) = 0.0f;
+    else
+        hooks->viewRender.callOriginal<void, 41>(update);
+}
+
+Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
 {
     SkinChanger::initializeKits();
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -444,7 +490,9 @@ Hooks::Hooks() noexcept
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
+    clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(82, isPlayingDemo);
+    engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(218, getDemoPlaybackParameters);
     gameEventManager.hookAt(9, fireEventClientSide);
     modelRender.hookAt(21, drawModelExecute);
@@ -454,14 +502,13 @@ Hooks::Hooks() noexcept
     surface.hookAt(67, lockCursor);
     svCheats.hookAt(13, svCheatsGetBool);
     viewRender.hookAt(39, render2dEffectsPreHud);
+    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory.dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory.dispatchSound + 1) + *memory.dispatchSound);
         *memory.dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory.dispatchSound + 1);
         VirtualProtect(memory.dispatchSound, 4, oldProtection, nullptr);
     }
-
-    interfaces.gameUI->messageBox("This was a triumph!", "Osiris has been successfully loaded.");
 }
 
 void Hooks::restore() noexcept
@@ -478,7 +525,7 @@ void Hooks::restore() noexcept
     svCheats.restore();
     viewRender.restore();
 
-    netvars.restore();
+    netvars->restore();
 
     Glow::clearCustomObjects();
 
@@ -492,6 +539,7 @@ void Hooks::restore() noexcept
     }
 
     interfaces.resourceAccessControl->accessingThreadCount--;
+    interfaces.inputSystem->enableInput(true);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
@@ -522,20 +570,30 @@ auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
     return length;
 }
 
-Hooks::Vmt::Vmt(void* const base) noexcept
+bool Hooks::Vmt::init(void* const base) noexcept
 {
+    assert(base);
     this->base = base;
-    oldVmt = *reinterpret_cast<uintptr_t**>(base);
-    length = calculateLength(oldVmt) + 1;
+    bool init = false;
 
-    if (newVmt = findFreeDataPage(base, length)) {
-        std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    if (!oldVmt) {
+        oldVmt = *reinterpret_cast<uintptr_t**>(base);
+        length = calculateLength(oldVmt) + 1;
+
+        if (newVmt = findFreeDataPage(base, length))
+            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+        assert(newVmt);
+        init = true;
     }
+    if (newVmt)
+        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    return init;
 }
 
 void Hooks::Vmt::restore() noexcept
 {
-    *reinterpret_cast<uintptr_t**>(base) = oldVmt;
-    ZeroMemory(newVmt, length * sizeof(uintptr_t));
+    if (base && oldVmt)
+        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+    if (newVmt)
+        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
