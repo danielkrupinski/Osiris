@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <Windows.h>
@@ -95,4 +96,4 @@ private:
     }
 };
 
-extern Memory memory;
+inline std::unique_ptr<Memory> memory;

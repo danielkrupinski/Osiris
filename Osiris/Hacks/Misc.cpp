@@ -78,20 +78,20 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         }
 
         static auto lastTime{ 0.0f };
-        if (memory.globalVars->realtime - lastTime < 0.6f) return;
-        lastTime = memory.globalVars->realtime;
+        if (memory->globalVars->realtime - lastTime < 0.6f) return;
+        lastTime = memory->globalVars->realtime;
 
         if (config.misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
-        memory.setClanTag(clanTag.c_str(), clanTag.c_str());
+        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
 
         if (config.misc.clocktag) {
             const auto time{ std::time(nullptr) };
             const auto localTime{ std::localtime(&time) };
 
             const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
-            memory.setClanTag(timeString.c_str(), timeString.c_str());
+            memory->setClanTag(timeString.c_str(), timeString.c_str());
         }
     }
 }
@@ -109,7 +109,7 @@ void Misc::spectatorList() noexcept
     interfaces.surface->setTextFont(Surface::font);
 
     if (config.misc.spectatorList.rainbow)
-        interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+        interfaces.surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
     else
         interfaces.surface->setTextColor(config.misc.spectatorList.color);
 
@@ -154,7 +154,7 @@ void Misc::watermark() noexcept
         interfaces.surface->setTextFont(Surface::font);
 
         if (config.misc.watermark.rainbow)
-            interfaces.surface->setTextColor(rainbowColor(memory.globalVars->realtime, config.misc.watermark.rainbowSpeed));
+            interfaces.surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.misc.watermark.rainbowSpeed));
         else
             interfaces.surface->setTextColor(config.misc.watermark.color);
 
@@ -162,7 +162,7 @@ void Misc::watermark() noexcept
         interfaces.surface->printText(L"Osiris");
 
         static auto frameRate = 1.0f;
-        frameRate = 0.9f * frameRate + 0.1f * memory.globalVars->absoluteFrameTime;
+        frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
         std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1 / frameRate)) };
         const auto [fpsWidth, fpsHeight] = interfaces.surface->getTextSize(Surface::font, fps.c_str());
@@ -182,15 +182,15 @@ void Misc::watermark() noexcept
 
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
-    constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick); };
+    constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick); };
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
     if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
         const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
-            if (!readyTime) readyTime = memory.globalVars->serverTime() + revolverPrepareTime;
-            auto ticksToReady = timeToTicks(readyTime - memory.globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0));
+            if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
+            auto ticksToReady = timeToTicks(readyTime - memory->globalVars->serverTime() - interfaces.engine->getNetworkChannel()->getLatency(0));
             if (ticksToReady > 0 && ticksToReady <= timeToTicks(revolverPrepareTime))
                 cmd->buttons |= UserCmd::IN_ATTACK;
             else
@@ -239,7 +239,7 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setTextFont(font);
             interfaces.surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces.surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces.surface->getScreenSize().first / 2 - static_cast<int>((interfaces.surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces.surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces.surface->getTextSize(font, bombText.c_str()).second;
@@ -252,19 +252,19 @@ void Misc::drawBombTimer() noexcept
             interfaces.surface->setDrawColor(50, 50, 50);
             interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
             if (config.misc.bombTimer.rainbow)
-                interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
+                interfaces.surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
             else
                 interfaces.surface->setDrawColor(config.misc.bombTimer.color);
 
             static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
 
-            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
+            interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
 
             if (entity->c4Defuser() != -1) {
                 if (PlayerInfo playerInfo; interfaces.engine->getPlayerInfo(interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
                     if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) << L" s").str() };
+                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
 
                         interfaces.surface->setTextPosition((interfaces.surface->getScreenSize().first - interfaces.surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces.surface->printText(defusingText.c_str());
@@ -273,7 +273,7 @@ void Misc::drawBombTimer() noexcept
                         interfaces.surface->setDrawColor(50, 50, 50);
                         interfaces.surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
                         interfaces.surface->setDrawColor(0, 255, 0);
-                        interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory.globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
+                        interfaces.surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) / (interfaces.entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
 
                         drawPositionY += interfaces.surface->getTextSize(font, L" ").second;
                         const wchar_t* canDefuseText;
@@ -383,9 +383,9 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     }
 
     static auto nextChangeTime{ 0.0f };
-    if (nextChangeTime <= memory.globalVars->realtime) {
+    if (nextChangeTime <= memory->globalVars->realtime) {
         name->setValue(newName);
-        nextChangeTime = memory.globalVars->realtime + delay;
+        nextChangeTime = memory->globalVars->realtime + delay;
         return true;
     }
     return false;
@@ -432,7 +432,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
     const auto localPlayer{ interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()) };
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
-        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory.globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory.globalVars->serverTime())
+        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory->globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
             cmd->buttons |= UserCmd::IN_ATTACK;
         else {
             for (auto weaponHandle : localPlayer->weapons()) {
@@ -467,10 +467,10 @@ void Misc::fakePrime() noexcept
     if (config.misc.fakePrime != lastState) {
         lastState = config.misc.fakePrime;
 
-        if (DWORD oldProtect; VirtualProtect(memory.fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+        if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
             constexpr uint8_t patch[]{ 0x74, 0xEB };
-            *memory.fakePrime = patch[config.misc.fakePrime];
-            VirtualProtect(memory.fakePrime, 1, oldProtect, nullptr);
+            *memory->fakePrime = patch[config.misc.fakePrime];
+            VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
         }
     }
 }

@@ -90,12 +90,12 @@ void Visuals::colorWorld() noexcept
 
         if (config.visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
             if (config.visuals.world.rainbow)
-                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.world.rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config.visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config.visuals.world.color);
         } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
             if (config.visuals.sky.rainbow)
-                mat->colorModulate(rainbowColor(memory.globalVars->realtime, config.visuals.sky.rainbowSpeed));
+                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config.visuals.sky.rainbowSpeed));
             else
                 mat->colorModulate(config.visuals.sky.color);
         }
@@ -116,9 +116,6 @@ void Visuals::modifySmoke() noexcept
         material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noSmoke);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
     }
-
-  //  if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
-    //    *memory.smokeCount = 0;
 }
 
 void Visuals::thirdperson() noexcept
@@ -126,15 +123,15 @@ void Visuals::thirdperson() noexcept
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
 
-    if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory.globalVars->realtime - lastTime > 0.5f) {
+    if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
-        lastTime = memory.globalVars->realtime;
+        lastTime = memory->globalVars->realtime;
     }
 
     if (config.visuals.thirdperson)
-        if (memory.input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+        if (memory->input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
             && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
-            memory.input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+            memory->input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -220,7 +217,8 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
-static __declspec(naked) void drawScreenEffectMaterial(Material* material, int x, int y, int width, int height) noexcept
+// TODO: verify if this is needed, check if other methods don't break with postprocessing disabled
+static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFunction, Material* material, int x, int y, int width, int height) noexcept
 {
     __asm {
         push ebp
@@ -230,7 +228,7 @@ static __declspec(naked) void drawScreenEffectMaterial(Material* material, int x
         push y
         mov edx, x
         mov ecx, material
-        call memory.drawScreenEffectMaterial
+        call drawFunction
         mov esp, ebp
         pop ebp
         ret
@@ -264,7 +262,7 @@ void Visuals::applyScreenEffects() noexcept
             material->findVar("$c0_x")->setValue(0.1f);
         else if (config.visuals.screenEffect >= 4)
             material->findVar("$c0_x")->setValue(1.0f);
-        drawScreenEffectMaterial(material, 0, 0, width, height);
+        drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
         renderContext->endRender();
         renderContext->release();
     }
@@ -276,11 +274,11 @@ void Visuals::hitEffect(GameEvent* event) noexcept
         static float lastHitTime = 0.0f;
 
         if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-            lastHitTime = memory.globalVars->realtime;
+            lastHitTime = memory->globalVars->realtime;
             return;
         }
 
-        if (lastHitTime + config.visuals.hitEffectTime >= memory.globalVars->realtime) {
+        if (lastHitTime + config.visuals.hitEffectTime >= memory->globalVars->realtime) {
             constexpr auto getEffectMaterial = [] {
                 static constexpr const char* effects[]{
                 "effects/dronecam",
@@ -305,7 +303,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 material->findVar("$c0_x")->setValue(0.1f);
             else if (config.visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
-            drawScreenEffectMaterial(material, 0, 0, width, height);
+            drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
             renderContext->endRender();
             renderContext->release();
         }
@@ -320,11 +318,11 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     static float lastHitTime = 0.0f;
 
     if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
-        lastHitTime = memory.globalVars->realtime;
+        lastHitTime = memory->globalVars->realtime;
         return;
     }
 
-    if (lastHitTime + config.visuals.hitMarkerTime < memory.globalVars->realtime)
+    if (lastHitTime + config.visuals.hitMarkerTime < memory->globalVars->realtime)
         return;
 
     switch (config.visuals.hitMarker) {
@@ -341,4 +339,10 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
         break;
     }
+}
+
+void Visuals::disablePostProcessing() noexcept
+{
+    if (*memory->disablePostProcessing != config.visuals.disablePostProcessing)
+        *memory->disablePostProcessing = config.visuals.disablePostProcessing;
 }
