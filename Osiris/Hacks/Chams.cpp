@@ -24,27 +24,27 @@ Chams::Chams() noexcept
     std::ofstream("csgo/materials/glowOverlay.vmt") <<
         "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
 
-    normal = interfaces.materialSystem->findMaterial("chamsNormal");
+    normal = interfaces->materialSystem->findMaterial("chamsNormal");
     normal->incrementReferenceCount();
-    flat = interfaces.materialSystem->findMaterial("chamsFlat");
+    flat = interfaces->materialSystem->findMaterial("chamsFlat");
     flat->incrementReferenceCount();
-    animated = interfaces.materialSystem->findMaterial("chamsAnimated");
+    animated = interfaces->materialSystem->findMaterial("chamsAnimated");
     animated->incrementReferenceCount();
-    platinum = interfaces.materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
+    platinum = interfaces->materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
     platinum->incrementReferenceCount();
-    glass = interfaces.materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
+    glass = interfaces->materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
     glass->incrementReferenceCount();
-    crystal = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/crystal_clear");
+    crystal = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/crystal_clear");
     crystal->incrementReferenceCount();
-    chrome = interfaces.materialSystem->findMaterial("models/gibs/glass/glass");
+    chrome = interfaces->materialSystem->findMaterial("models/gibs/glass/glass");
     chrome->incrementReferenceCount();
-    silver = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/silver_plain");
+    silver = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/silver_plain");
     silver->incrementReferenceCount();
-    gold = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
+    gold = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
     gold->incrementReferenceCount();
-    plastic = interfaces.materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
+    plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
     plastic->incrementReferenceCount();
-    glow = interfaces.materialSystem->findMaterial("glowOverlay");
+    glow = interfaces->materialSystem->findMaterial("glowOverlay");
     glow->incrementReferenceCount();
 }
 
@@ -66,7 +66,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto entity = interfaces.entityList->getEntity(info.entityIndex);
+    const auto entity = interfaces->entityList->getEntity(info.entityIndex);
     if (!entity || entity->isDormant() || !entity->isPlayer())
         return true;
 
@@ -90,7 +90,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applyChams(config.chams[PLANTING_OCCLUDED].materials[i], true, entity->health());
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                     if (!config.chams[PLANTING_VISIBLE].materials[i].enabled)
-                        interfaces.studioRender->forcedMaterialOverride(nullptr);
+                        interfaces->studioRender->forcedMaterialOverride(nullptr);
                     applied = true;
                 }
 
@@ -116,7 +116,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applyChams(config.chams[DEFUSING_OCCLUDED].materials[i], true, entity->health());
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                     if (!config.chams[DEFUSING_VISIBLE].materials[i].enabled)
-                        interfaces.studioRender->forcedMaterialOverride(nullptr);
+                        interfaces->studioRender->forcedMaterialOverride(nullptr);
                     applied = true;
                 }
                 if (config.chams[DEFUSING_VISIBLE].materials[i].enabled) {
@@ -126,7 +126,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applied = true;
                 }
             }
-        } else if (info.entityIndex == interfaces.engine->getLocalPlayer()) {
+        } else if (info.entityIndex == interfaces->engine->getLocalPlayer()) {
             if (config.chams[LOCALPLAYER].materials[i].enabled) {
                 if (applied)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -150,7 +150,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applyChams(config.chams[ENEMIES_OCCLUDED].materials[i], true, entity->health());
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                     if (!config.chams[ENEMIES_VISIBLE].materials[i].enabled)
-                        interfaces.studioRender->forcedMaterialOverride(nullptr);
+                        interfaces->studioRender->forcedMaterialOverride(nullptr);
                     applied = true;
                 }
                 if (config.chams[ENEMIES_VISIBLE].materials[i].enabled) {
@@ -170,7 +170,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                     applyChams(config.chams[BACKTRACK].materials[i], false, entity->health());
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), record->back().matrix);
-                    interfaces.studioRender->forcedMaterialOverride(nullptr);
+                    interfaces->studioRender->forcedMaterialOverride(nullptr);
                     applied = true;
                 }
             }
@@ -189,7 +189,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applyChams(config.chams[ALLIES_OCCLUDED].materials[i], true, entity->health());
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                     if (!config.chams[ALLIES_VISIBLE].materials[i].enabled)
-                        interfaces.studioRender->forcedMaterialOverride(nullptr);
+                        interfaces->studioRender->forcedMaterialOverride(nullptr);
                     applied = true;
                 }
                 if (config.chams[ALLIES_VISIBLE].materials[i].enabled) {
@@ -206,7 +206,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
         return;
@@ -224,7 +224,7 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -242,7 +242,7 @@ void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, mat
 
 void Chams::renderSleeves(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer || !localPlayer->isAlive())
         return;

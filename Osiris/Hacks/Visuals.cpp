@@ -22,7 +22,7 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
     static int originalIdx = 0;
 
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer) {
         originalIdx = 0;
         return;
@@ -65,11 +65,11 @@ void Visuals::playerModel(FrameStage stage) noexcept
         if (stage == FrameStage::RENDER_START)
             originalIdx = localPlayer->modelIndex();
 
-        const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces.modelInfo->getModelIndex(model);
+        const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces->modelInfo->getModelIndex(model);
 
         localPlayer->setModelIndex(idx);
 
-        if (const auto ragdoll = interfaces.entityList->getEntityFromHandle(localPlayer->ragdoll()))
+        if (const auto ragdoll = interfaces->entityList->getEntityFromHandle(localPlayer->ragdoll()))
             ragdoll->setModelIndex(idx);
     }
 }
@@ -80,10 +80,10 @@ void Visuals::colorWorld() noexcept
         return;
 
     if (config.visuals.world.enabled)
-        static auto _ = (interfaces.cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces.cvar->findVar("cl_brushfastpath")->setValue(0), true);
+        static auto _ = (interfaces->cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces->cvar->findVar("cl_brushfastpath")->setValue(0), true);
 
-    for (short h = interfaces.materialSystem->firstMaterial(); h != interfaces.materialSystem->invalidMaterial(); h = interfaces.materialSystem->nextMaterial(h)) {
-        const auto mat = interfaces.materialSystem->getMaterial(h);
+    for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
+        const auto mat = interfaces->materialSystem->getMaterial(h);
 
         if (!mat || !mat->isPrecached())
             continue;
@@ -112,7 +112,7 @@ void Visuals::modifySmoke() noexcept
     };
 
     for (const auto mat : smokeMaterials) {
-        auto material = interfaces.materialSystem->findMaterial(mat);
+        auto material = interfaces->materialSystem->findMaterial(mat);
         material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noSmoke);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
     }
@@ -130,13 +130,13 @@ void Visuals::thirdperson() noexcept
 
     if (config.visuals.thirdperson)
         if (memory->input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
-            && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isAlive())
+            && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isAlive())
             memory->input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -162,20 +162,20 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 
 void Visuals::removeBlur() noexcept
 {
-    static auto blur = interfaces.materialSystem->findMaterial("dev/scope_bluroverlay");
+    static auto blur = interfaces->materialSystem->findMaterial("dev/scope_bluroverlay");
     blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
 {
-    static auto brightness = interfaces.cvar->findVar("mat_force_tonemap_scale");
+    static auto brightness = interfaces->cvar->findVar("mat_force_tonemap_scale");
     brightness->setValue(config.visuals.brightness);
 }
 
 void Visuals::removeGrass() noexcept
 {
     constexpr auto getGrassMaterialName = []() constexpr noexcept -> const char* {
-        switch (fnv::hashRuntime(interfaces.engine->getLevelName())) {
+        switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
         case fnv::hash("dz_junglety"): return "detail/tropical_grass";
@@ -184,25 +184,25 @@ void Visuals::removeGrass() noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces.materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
 {
-    static auto sky = interfaces.cvar->findVar("r_3dsky");
+    static auto sky = interfaces->cvar->findVar("r_3dsky");
     sky->setValue(!config.visuals.no3dSky);
 }
 
 void Visuals::removeShadows() noexcept
 {
-    static auto shadows = interfaces.cvar->findVar("cl_csm_enabled");
+    static auto shadows = interfaces->cvar->findVar("cl_csm_enabled");
     shadows->setValue(!config.visuals.noShadows);
 }
 
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
     if (config.visuals.zoom) {
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
         if (stage == FrameStage::RENDER_START && localPlayer && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             static bool scoped{ false };
 
@@ -251,11 +251,11 @@ void Visuals::applyScreenEffects() noexcept
             return effects[config.visuals.screenEffect - 2];
         };
 
-        auto renderContext = interfaces.materialSystem->getRenderContext();
+        auto renderContext = interfaces->materialSystem->getRenderContext();
         renderContext->beginRender();
         int x, y, width, height;
         renderContext->getViewport(x, y, width, height);
-        auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+        auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
         if (config.visuals.screenEffect == 1)
             material->findVar("$c0_x")->setValue(0.0f);
         else if (config.visuals.screenEffect == 2)
@@ -273,7 +273,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
     if (config.visuals.hitEffect) {
         static float lastHitTime = 0.0f;
 
-        if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+        if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
             lastHitTime = memory->globalVars->realtime;
             return;
         }
@@ -292,11 +292,11 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 return effects[config.visuals.hitEffect - 2];
             };
 
-            auto renderContext = interfaces.materialSystem->getRenderContext();
+            auto renderContext = interfaces->materialSystem->getRenderContext();
             renderContext->beginRender();
             int x, y, width, height;
             renderContext->getViewport(x, y, width, height);
-            auto material = interfaces.materialSystem->findMaterial(getEffectMaterial());
+            auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
             if (config.visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
             else if (config.visuals.hitEffect == 2)
@@ -317,7 +317,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
     static float lastHitTime = 0.0f;
 
-    if (event && interfaces.engine->getPlayerForUserID(event->getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+    if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
         lastHitTime = memory->globalVars->realtime;
         return;
     }
@@ -327,16 +327,16 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
     switch (config.visuals.hitMarker) {
     case 1:
-        const auto [width, height] = interfaces.surface->getScreenSize();
+        const auto [width, height] = interfaces->surface->getScreenSize();
 
         const auto width_mid = width / 2;
         const auto height_mid = height / 2;
 
-        interfaces.surface->setDrawColor(255, 255, 255, 255);
-        interfaces.surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
-        interfaces.surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
-        interfaces.surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
-        interfaces.surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        interfaces->surface->setDrawColor(255, 255, 255, 255);
+        interfaces->surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+        interfaces->surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+        interfaces->surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+        interfaces->surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
         break;
     }
 }

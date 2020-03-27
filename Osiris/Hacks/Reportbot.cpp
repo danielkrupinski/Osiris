@@ -18,7 +18,7 @@ void Reportbot::run() noexcept
     if (!config.reportbot.enabled)
         return;
 
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
 
@@ -31,8 +31,8 @@ void Reportbot::run() noexcept
         return;
 
     bool allPlayersReported = true;
-    for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
 
         if (!entity || entity == localPlayer)
             continue;
@@ -41,7 +41,7 @@ void Reportbot::run() noexcept
             continue;
 
         PlayerInfo playerInfo;  
-        if (!interfaces.engine->getPlayerInfo(i, playerInfo))
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
         if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())

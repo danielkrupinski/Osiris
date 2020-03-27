@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <sstream>
 #include <type_traits>
 #include <Windows.h>
@@ -66,4 +67,4 @@ private:
     }
 };
 
-extern const Interfaces interfaces;
+inline std::unique_ptr<const Interfaces> interfaces;

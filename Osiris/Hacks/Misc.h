@@ -60,9 +60,9 @@ namespace Misc
     constexpr void fixAnimationLOD(FrameStage stage) noexcept
     {
         if (config.misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
-            for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-                if (i == interfaces.engine->getLocalPlayer()) continue;
-                Entity* entity = interfaces.entityList->getEntity(i);
+            for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
+                if (i == interfaces->engine->getLocalPlayer()) continue;
+                Entity* entity = interfaces->entityList->getEntity(i);
                 if (!entity || entity->isDormant() || !entity->isAlive()) continue;
                 *reinterpret_cast<int*>(entity + 0xA28) = 0;
                 *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
@@ -73,7 +73,7 @@ namespace Misc
     constexpr void autoPistol(UserCmd* cmd) noexcept
     {
         if (config.misc.autoPistol) {
-            const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
+            const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
             if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime()) {
                 if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
                     cmd->buttons &= ~UserCmd::IN_ATTACK2;
@@ -86,13 +86,13 @@ namespace Misc
     constexpr void chokePackets(bool& sendPacket) noexcept
     {
         if (!config.misc.chokedPacketsKey || GetAsyncKeyState(config.misc.chokedPacketsKey))
-            sendPacket = interfaces.engine->getNetworkChannel()->chokedPackets >= config.misc.chokedPackets;
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config.misc.chokedPackets;
     }
 
     constexpr void autoReload(UserCmd* cmd) noexcept
     {
         if (config.misc.autoReload) {
-            const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon();
+            const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
             if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->clip())
                 cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
         }
@@ -101,12 +101,12 @@ namespace Misc
     constexpr void revealRanks(UserCmd* cmd) noexcept
     {
         if (config.misc.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
-            interfaces.client->dispatchUserMessage(50, 0, 0, nullptr);
+            interfaces->client->dispatchUserMessage(50, 0, 0, nullptr);
     }
 
     constexpr void autoStrafe(UserCmd* cmd) noexcept
     {
-        if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
             config.misc.autoStrafe
             && !(localPlayer->flags() & 1)
             && localPlayer->moveType() != MoveType::NOCLIP) {
@@ -125,7 +125,7 @@ namespace Misc
 
     constexpr void moonwalk(UserCmd* cmd) noexcept
     {
-        if (config.misc.moonwalk && interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->moveType() != MoveType::LADDER)
+        if (config.misc.moonwalk && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->moveType() != MoveType::LADDER)
             cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
     }
 
@@ -134,7 +134,7 @@ namespace Misc
         if (!config.misc.hitSound)
             return;
 
-        if (const auto localIdx = interfaces.engine->getLocalPlayer(); interfaces.engine->getPlayerForUserID(event.getInt("attacker")) != localIdx || interfaces.engine->getPlayerForUserID(event.getInt("userid")) == localIdx)
+        if (const auto localIdx = interfaces->engine->getLocalPlayer(); interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localIdx || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localIdx)
             return;
 
         constexpr std::array hitSounds{
@@ -145,6 +145,6 @@ namespace Misc
         };
 
         if (static_cast<std::size_t>(config.misc.hitSound - 1) < hitSounds.size())
-            interfaces.engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
+            interfaces->engine->clientCmdUnrestricted(hitSounds[config.misc.hitSound - 1]);
     }
 }

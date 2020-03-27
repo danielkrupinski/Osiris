@@ -32,7 +32,7 @@ namespace Visuals {
 
     constexpr auto reduceFlashEffect = []() noexcept
     {
-        interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->flashMaxAlpha() = 255.0f - config.visuals.flashReduction * 2.55f;
+        interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->flashMaxAlpha() = 255.0f - config.visuals.flashReduction * 2.55f;
     };
 
     constexpr bool removeHands(const char* modelName) noexcept
@@ -59,6 +59,6 @@ namespace Visuals {
         if (static_cast<std::size_t>(config.visuals.skybox - 1) < skyboxes.size())
             memory->loadSky(skyboxes[config.visuals.skybox - 1]);
         else
-            memory->loadSky(interfaces.cvar->findVar("sv_skyname")->string);
+            memory->loadSky(interfaces->cvar->findVar("sv_skyname")->string);
     }
 };

@@ -12,7 +12,7 @@ float GlobalVars::serverTime(UserCmd* cmd) noexcept
 
     if (cmd) {
         if (!lastCmd || lastCmd->hasbeenpredicted)
-            tick = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->tickBase();
+            tick = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->tickBase();
         else
             tick++;
         lastCmd = cmd;

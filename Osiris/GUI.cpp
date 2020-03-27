@@ -81,7 +81,7 @@ void GUI::updateColors() const noexcept
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ %s ]", interfaces.inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
+    key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
 
     if (!ImGui::IsItemHovered())
         return;

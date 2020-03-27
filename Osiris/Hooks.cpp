@@ -54,14 +54,14 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         gui.open = !gui.open;
         if (!gui.open) {
            // ImGui::GetIO().MouseDown[0] = false;
-            interfaces.inputSystem->resetInputState();
+            interfaces->inputSystem->resetInputState();
         }
     }
 
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
-    interfaces.inputSystem->enableInput(!gui.open);
+    interfaces->inputSystem->enableInput(!gui.open);
 
     return CallWindowProc(hooks->originalWndProc, window, msg, wParam, lParam);
 }
@@ -173,7 +173,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
 static int __stdcall doPostScreenEffects(int param) noexcept
 {
-    if (interfaces.engine->isInGame()) {
+    if (interfaces->engine->isInGame()) {
         Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
@@ -191,7 +191,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 static float __stdcall getViewModelFov() noexcept
 {
     float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
-    if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
+    if (const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
@@ -201,14 +201,14 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces.engine->isInGame() && !interfaces.studioRender->isForcedMaterialOverride()) {
+    if (interfaces->engine->isInGame() && !interfaces->studioRender->isForcedMaterialOverride()) {
         if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
             return;
 
         static Chams chams;
         if (chams.render(ctx, state, info, customBoneToWorld))
             hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        interfaces.studioRender->forcedMaterialOverride(nullptr);
+        interfaces->studioRender->forcedMaterialOverride(nullptr);
     } else
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 }
@@ -223,7 +223,7 @@ static bool __stdcall svCheatsGetBool() noexcept
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
-    if (interfaces.panel->getName(panel) == "MatSystemTopPanel") {
+    if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
         Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
@@ -237,7 +237,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
     static auto backtrackInit = (Backtrack::init(), false);
 
-    if (interfaces.engine->isConnected() && !interfaces.engine->isInGame())
+    if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
     if (stage == FrameStage::RENDER_START) {
@@ -245,7 +245,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Visuals::colorWorld();
         Misc::fakePrime();
     }
-    if (interfaces.engine->isInGame()) {
+    if (interfaces->engine->isInGame()) {
         Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
@@ -269,8 +269,8 @@ struct SoundData {
 static void __stdcall emitSound(SoundData data) noexcept
 {
     auto modulateVolume = [&data](int(*get)(int)) {
-        if (auto entity{ interfaces.entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
-            if (data.entityIndex == interfaces.engine->getLocalPlayer())
+        if (auto entity{ interfaces->entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
+            if (data.entityIndex == interfaces->engine->getLocalPlayer())
                 data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
                 data.volume *= get(1) / 100.0f;
@@ -301,7 +301,7 @@ static bool __stdcall shouldDrawFog() noexcept
 
 static bool __stdcall shouldDrawViewModel() noexcept
 {
-    if (auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, 27>();
 }
@@ -309,7 +309,7 @@ static bool __stdcall shouldDrawViewModel() noexcept
 static void __stdcall lockCursor() noexcept
 {
     if (gui.open)
-        return interfaces.surface->unlockCursor();
+        return interfaces->surface->unlockCursor();
     return hooks->surface.callOriginal<void, 67>();
 }
 
@@ -348,8 +348,8 @@ struct ViewSetup {
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
-    if (interfaces.engine->isInGame()
-        && !interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->isScoped())
+    if (interfaces->engine->isInGame()
+        && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped())
         setup->fov += config.visuals.fov;
     setup->farZ += config.visuals.farZ * 10;
     hooks->clientMode.callOriginal<void, 18>(setup);
@@ -386,10 +386,10 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 
 static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
 {
-    if (const char* soundName = interfaces.soundEmitter->getSoundName(soundInfo.soundIndex)) {
+    if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
         auto modulateVolume = [&soundInfo](int(*get)(int)) {
-            if (auto entity{ interfaces.entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
-                if (soundInfo.entityIndex == interfaces.engine->getLocalPlayer())
+            if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
+                if (soundInfo.entityIndex == interfaces->engine->getLocalPlayer())
                     soundInfo.volume *= get(0) / 100.0f;
                 else if (!entity->isEnemy())
                     soundInfo.volume *= get(1) / 100.0f;
@@ -538,8 +538,8 @@ void Hooks::restore() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces.resourceAccessControl->accessingThreadCount--;
-    interfaces.inputSystem->enableInput(true);
+    interfaces->resourceAccessControl->accessingThreadCount--;
+    interfaces->inputSystem->enableInput(true);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
