@@ -51,8 +51,8 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config.misc.menuKey == VK_RBUTTON)
         || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config.misc.menuKey == VK_MBUTTON)
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
-        gui.open = !gui.open;
-        if (!gui.open) {
+        gui->open = !gui->open;
+        if (!gui->open) {
            // ImGui::GetIO().MouseDown[0] = false;
             interfaces->inputSystem->resetInputState();
         }
@@ -61,7 +61,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
-    interfaces->inputSystem->enableInput(!gui.open);
+    interfaces->inputSystem->enableInput(!gui->open);
 
     return CallWindowProc(hooks->originalWndProc, window, msg, wParam, lParam);
 }
@@ -78,8 +78,8 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    if (gui.open)
-        gui.render();
+    if (gui->open)
+        gui->render();
 
     ImGui::EndFrame();
     ImGui::Render();
@@ -308,7 +308,7 @@ static bool __stdcall shouldDrawViewModel() noexcept
 
 static void __stdcall lockCursor() noexcept
 {
-    if (gui.open)
+    if (gui->open)
         return interfaces->surface->unlockCursor();
     return hooks->surface.callOriginal<void, 67>();
 }
