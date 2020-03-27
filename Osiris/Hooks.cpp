@@ -509,8 +509,6 @@ Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
         *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
-
-    interfaces.gameUI->messageBox("Pablo by proto", "Pablo is in da house!");
 }
 
 void Hooks::restore() noexcept
