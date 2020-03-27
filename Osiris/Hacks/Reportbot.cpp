@@ -24,7 +24,7 @@ void Reportbot::run() noexcept
 
     static auto lastReportTime = 0.0f;
 
-    if (lastReportTime + config.reportbot.delay > memory.globalVars->realtime)
+    if (lastReportTime + config.reportbot.delay > memory->globalVars->realtime)
         return;
 
     if (currentRound >= config.reportbot.rounds)
@@ -61,8 +61,8 @@ void Reportbot::run() noexcept
             report += "speedhack,";
 
         if (!report.empty()) {
-            memory.submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
-            lastReportTime = memory.globalVars->realtime;
+            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory->globalVars->realtime;
             reportedPlayers.push_back(playerInfo.xuid);
         }
         allPlayersReported = false;
