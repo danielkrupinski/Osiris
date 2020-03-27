@@ -63,7 +63,10 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces.cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
+    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -10 : 600);
+
+    static auto physTimescale = interfaces.cvar->findVar("cl_phys_timescale");
+    physTimescale->setValue(config.visuals.inverseRagdollGravity ? 0.2f : 1.0f);
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
@@ -73,8 +76,6 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
         if (tagChanged) {
             clanTag = config.misc.clanTag;
-            if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
-                clanTag.push_back(' ');
         }
 
         static auto lastTime{ 0.0f };
