@@ -161,6 +161,9 @@ void Misc::watermark() noexcept
         interfaces.surface->setTextPosition(5, 0);
         interfaces.surface->printText(L"Osiris");
 
+        interfaces.surface->setTextPosition(5, 15);
+        interfaces.surface->printText(L"dll by PlayDay");
+
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces.surface->getScreenSize();
