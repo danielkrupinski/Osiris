@@ -106,6 +106,7 @@
     <ClInclude Include="SDK\ModelRender.h" />
     <ClInclude Include="SDK\MoveHelper.h" />
     <ClInclude Include="SDK\NetworkChannel.h" />
+    <ClInclude Include="SDK\Pad.h" />
     <ClInclude Include="SDK\Panel.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\Prediction.h" />
