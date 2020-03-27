@@ -10,7 +10,7 @@ struct Vector {
         return x || y || z;
     }
 
-    constexpr Vector& operator=(float array[3]) noexcept
+    constexpr Vector& operator=(const float array[3]) noexcept
     {
         x = array[0];
         y = array[1];

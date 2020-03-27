@@ -14,7 +14,7 @@
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
-    if (!config.misc.edgejump || !GetAsyncKeyState(config.misc.edgejumpkey))
+    if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
         return;
 
     const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
@@ -31,7 +31,7 @@ void Misc::edgejump(UserCmd* cmd) noexcept
 
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-    if (!config.misc.slowwalk || !GetAsyncKeyState(config.misc.slowwalkKey))
+    if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
         return;
 
     const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
@@ -63,16 +63,16 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 void Misc::inverseRagdollGravity() noexcept
 {
     static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config.visuals.inverseRagdollGravity ? -600 : 600);
+    ragdollGravity->setValue(config->visuals.inverseRagdollGravity ? -600 : 600);
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
-    if (config.misc.customClanTag) {
+    if (config->misc.customClanTag) {
         static std::string clanTag;
 
         if (tagChanged) {
-            clanTag = config.misc.clanTag;
+            clanTag = config->misc.clanTag;
             if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
                 clanTag.push_back(' ');
         }
@@ -81,12 +81,12 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (memory->globalVars->realtime - lastTime < 0.6f) return;
         lastTime = memory->globalVars->realtime;
 
-        if (config.misc.animatedClanTag && !clanTag.empty())
+        if (config->misc.animatedClanTag && !clanTag.empty())
             std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
 
-        if (config.misc.clocktag) {
+        if (config->misc.clocktag) {
             const auto time{ std::time(nullptr) };
             const auto localTime{ std::localtime(&time) };
 
@@ -98,7 +98,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
-    if (!config.misc.spectatorList.enabled)
+    if (!config->misc.spectatorList.enabled)
         return;
 
     const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
@@ -108,10 +108,10 @@ void Misc::spectatorList() noexcept
 
     interfaces->surface->setTextFont(Surface::font);
 
-    if (config.misc.spectatorList.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.misc.spectatorList.rainbowSpeed));
+    if (config->misc.spectatorList.rainbow)
+        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.spectatorList.rainbowSpeed));
     else
-        interfaces->surface->setTextColor(config.misc.spectatorList.color);
+        interfaces->surface->setTextColor(config->misc.spectatorList.color);
 
     const auto [width, height] = interfaces->surface->getScreenSize();
 
@@ -139,24 +139,24 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config.misc.sniperCrosshair && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped() ? 3 : 0);
+    showSpread->setValue(config->misc.sniperCrosshair && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped() ? 3 : 0);
 }
 
 void Misc::recoilCrosshair() noexcept
 {
     static auto recoilCrosshair = interfaces->cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config.misc.recoilCrosshair ? 1 : 0);
+    recoilCrosshair->setValue(config->misc.recoilCrosshair ? 1 : 0);
 }
 
 void Misc::watermark() noexcept
 {
-    if (config.misc.watermark.enabled) {
+    if (config->misc.watermark.enabled) {
         interfaces->surface->setTextFont(Surface::font);
 
-        if (config.misc.watermark.rainbow)
-            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.misc.watermark.rainbowSpeed));
+        if (config->misc.watermark.rainbow)
+            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.watermark.rainbowSpeed));
         else
-            interfaces->surface->setTextColor(config.misc.watermark.color);
+            interfaces->surface->setTextColor(config->misc.watermark.color);
 
         interfaces->surface->setTextPosition(5, 0);
         interfaces->surface->printText(L"Osiris");
@@ -186,7 +186,7 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
-    if (config.misc.prepareRevolver && (!config.misc.prepareRevolverKey || GetAsyncKeyState(config.misc.prepareRevolverKey))) {
+    if (config->misc.prepareRevolver && (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
         const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
@@ -201,7 +201,7 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
-    if (config.misc.fastPlant) {
+    if (config->misc.fastPlant) {
         static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
         if (plantAnywhere->getInt()) return;
@@ -229,7 +229,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-    if (config.misc.bombTimer.enabled) {
+    if (config->misc.bombTimer.enabled) {
         for (int i = interfaces->engine->getMaxClients(); i <= interfaces->entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces->entityList->getEntity(i);
             if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
@@ -251,10 +251,10 @@ void Misc::drawBombTimer() noexcept
 
             interfaces->surface->setDrawColor(50, 50, 50);
             interfaces->surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            if (config.misc.bombTimer.rainbow)
-                interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.misc.bombTimer.rainbowSpeed));
+            if (config->misc.bombTimer.rainbow)
+                interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config->misc.bombTimer.rainbowSpeed));
             else
-                interfaces->surface->setDrawColor(config.misc.bombTimer.color);
+                interfaces->surface->setDrawColor(config->misc.bombTimer.color);
 
             static auto c4Timer = interfaces->cvar->findVar("mp_c4timer");
 
@@ -298,7 +298,7 @@ void Misc::drawBombTimer() noexcept
 
 void Misc::stealNames() noexcept
 {
-    if (config.misc.nameStealer) {
+    if (config->misc.nameStealer) {
         const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
         bool allNamesStolen = true;
@@ -321,12 +321,12 @@ void Misc::stealNames() noexcept
 void Misc::disablePanoramablur() noexcept
 {
     static auto blur = interfaces->cvar->findVar("@panorama_disable_blur");
-    blur->setValue(config.misc.disablePanoramablur);
+    blur->setValue(config->misc.disablePanoramablur);
 }
 
 void Misc::quickReload(UserCmd* cmd) noexcept
 {
-    if (config.misc.quickReload) {
+    if (config->misc.quickReload) {
         const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
         static Entity* reloadedWeapon{ nullptr };
 
@@ -397,7 +397,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
 
     static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
 
-    if (config.misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+    if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
         cmd->buttons &= ~UserCmd::IN_JUMP;
 
     wasLastTimeOnGround = localPlayer->flags() & 1;
@@ -410,7 +410,7 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config.misc.banColor + 1) }).append(config.misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config->misc.banColor + 1) }).append(config->misc.banText).append("\x1").c_str(), 5.0f))
         shouldSet = false;
 }
 
@@ -419,14 +419,14 @@ void Misc::nadePredict() noexcept
     static auto nadeVar{ interfaces->cvar->findVar("cl_grenadepreview") };
 
     nadeVar->onChangeCallbacks.size = 0;
-    nadeVar->setValue(config.misc.nadePredict);
+    nadeVar->setValue(config->misc.nadePredict);
 }
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept
 {
     static bool inProgress{ false };
 
-    if (GetAsyncKeyState(config.misc.quickHealthshotKey))
+    if (GetAsyncKeyState(config->misc.quickHealthshotKey))
         inProgress = true;
 
     const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) };
@@ -452,7 +452,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
 void Misc::fixTabletSignal() noexcept
 {
-    if (config.misc.fixTabletSignal) {
+    if (config->misc.fixTabletSignal) {
         const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) };
 
         if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
@@ -464,12 +464,12 @@ void Misc::fakePrime() noexcept
 {
     static bool lastState = false;
 
-    if (config.misc.fakePrime != lastState) {
-        lastState = config.misc.fakePrime;
+    if (config->misc.fakePrime != lastState) {
+        lastState = config->misc.fakePrime;
 
         if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
             constexpr uint8_t patch[]{ 0x74, 0xEB };
-            *memory->fakePrime = patch[config.misc.fakePrime];
+            *memory->fakePrime = patch[config->misc.fakePrime];
             VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
         }
     }
@@ -477,7 +477,7 @@ void Misc::fakePrime() noexcept
 
 void Misc::killMessage(GameEvent& event) noexcept
 {
-    if (!config.misc.killMessage)
+    if (!config->misc.killMessage)
         return;
 
     const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
@@ -489,7 +489,119 @@ void Misc::killMessage(GameEvent& event) noexcept
         return;
 
     std::string cmd = "say \"";
-    cmd += config.misc.killMessageString;
+    cmd += config->misc.killMessageString;
     cmd += "\"";
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
+}
+
+void Misc::fixMovement(UserCmd* cmd, float yaw) noexcept
+{
+    if (config->misc.fixMovement) {
+        float oldYaw = yaw + (yaw < 0.0f ? 360.0f : 0.0f);
+        float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
+        float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
+        yawDelta = 360.0f - yawDelta;
+
+        const float forwardmove = cmd->forwardmove;
+        const float sidemove = cmd->sidemove;
+        cmd->forwardmove = std::cos(degreesToRadians(yawDelta)) * forwardmove + std::cos(degreesToRadians(yawDelta + 90.0f)) * sidemove;
+        cmd->sidemove = std::sin(degreesToRadians(yawDelta)) * forwardmove + std::sin(degreesToRadians(yawDelta + 90.0f)) * sidemove;
+    }
+}
+
+void Misc::antiAfkKick(UserCmd* cmd) noexcept
+{
+    if (config->misc.antiAfkKick && cmd->commandNumber % 2)
+        cmd->buttons |= 1 << 26;
+}
+
+void Misc::fixAnimationLOD(FrameStage stage) noexcept
+{
+    if (config->misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
+        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
+            if (i == interfaces->engine->getLocalPlayer()) continue;
+            Entity* entity = interfaces->entityList->getEntity(i);
+            if (!entity || entity->isDormant() || !entity->isAlive()) continue;
+            *reinterpret_cast<int*>(entity + 0xA28) = 0;
+            *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
+        }
+    }
+}
+
+void Misc::autoPistol(UserCmd* cmd) noexcept
+{
+    if (config->misc.autoPistol) {
+        const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
+        if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime()) {
+            if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
+                cmd->buttons &= ~UserCmd::IN_ATTACK2;
+            else
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
+        }
+    }
+}
+
+void Misc::chokePackets(bool& sendPacket) noexcept
+{
+    if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
+        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
+}
+
+void Misc::autoReload(UserCmd* cmd) noexcept
+{
+    if (config->misc.autoReload) {
+        const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
+        if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->clip())
+            cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
+    }
+}
+
+void Misc::revealRanks(UserCmd* cmd) noexcept
+{
+    if (config->misc.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
+        interfaces->client->dispatchUserMessage(50, 0, 0, nullptr);
+}
+
+void Misc::autoStrafe(UserCmd* cmd) noexcept
+{
+    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
+        config->misc.autoStrafe
+        && !(localPlayer->flags() & 1)
+        && localPlayer->moveType() != MoveType::NOCLIP) {
+        if (cmd->mousedx < 0)
+            cmd->sidemove = -450.0f;
+        else if (cmd->mousedx > 0)
+            cmd->sidemove = 450.0f;
+    }
+}
+
+void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
+{
+    if (config->misc.fastDuck)
+        cmd->buttons |= UserCmd::IN_BULLRUSH;
+}
+
+void Misc::moonwalk(UserCmd* cmd) noexcept
+{
+    if (config->misc.moonwalk && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->moveType() != MoveType::LADDER)
+        cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
+}
+
+void Misc::playHitSound(GameEvent& event) noexcept
+{
+    if (!config->misc.hitSound)
+        return;
+
+    if (const auto localIdx = interfaces->engine->getLocalPlayer(); interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localIdx || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localIdx)
+        return;
+
+    constexpr std::array hitSounds{
+        "play physics/metal/metal_solid_impact_bullet2",
+        "play buttons/arena_switch_press_02",
+        "play training/timer_bell",
+        "play physics/glass/glass_impact_bullet1"
+    };
+
+    if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
+        interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
 }

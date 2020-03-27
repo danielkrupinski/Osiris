@@ -18,7 +18,7 @@ static std::unordered_map<uint32_t, recvProxy> proxies;
 
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (config.misc.radarHack)
+    if (config->misc.radarHack)
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
@@ -168,7 +168,7 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
 {
     if (interfaces->engine->isInGame()) {
         if (const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon()) {
-            if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))

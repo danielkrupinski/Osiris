@@ -46,11 +46,11 @@
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    if (msg == WM_KEYDOWN && LOWORD(wParam) == config.misc.menuKey
-        || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config.misc.menuKey == VK_LBUTTON)
-        || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config.misc.menuKey == VK_RBUTTON)
-        || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config.misc.menuKey == VK_MBUTTON)
-        || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config.misc.menuKey == HIWORD(wParam) + 4)) {
+    if (msg == WM_KEYDOWN && LOWORD(wParam) == config->misc.menuKey
+        || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config->misc.menuKey == VK_LBUTTON)
+        || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config->misc.menuKey == VK_RBUTTON)
+        || ((msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) && config->misc.menuKey == VK_MBUTTON)
+        || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config->misc.menuKey == HIWORD(wParam) + 4)) {
         gui->open = !gui->open;
         if (!gui->open) {
            // ImGui::GetIO().MouseDown[0] = false;
@@ -152,8 +152,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
-    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
 
     cmd->viewangles = previousViewAngles + viewAnglesDelta;
 
@@ -190,7 +190,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 
 static float __stdcall getViewModelFov() noexcept
 {
-    float additionalFov = static_cast<float>(config.visuals.viewmodelFov);
+    float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
     if (const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
@@ -215,7 +215,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __stdcall svCheatsGetBool() noexcept
 {
-    if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config.visuals.thirdperson)
+    if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config->visuals.thirdperson)
         return true;
     else
         return hooks->svCheats.callOriginal<bool, 13>();
@@ -279,11 +279,11 @@ static void __stdcall emitSound(SoundData data) noexcept
         }
     };
 
-    modulateVolume([](int index) { return config.sound.players[index].masterVolume; });
+    modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
 
     if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
-        modulateVolume([](int index) { return config.sound.players[index].weaponVolume; });
-    } else if (config.misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
+        modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
+    } else if (config->misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory->acceptMatch("");
         auto window = FindWindowW(L"Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
@@ -296,12 +296,12 @@ static void __stdcall emitSound(SoundData data) noexcept
 
 static bool __stdcall shouldDrawFog() noexcept
 {
-    return !config.visuals.noFog;
+    return !config->visuals.noFog;
 }
 
 static bool __stdcall shouldDrawViewModel() noexcept
 {
-    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()); config.visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()); config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, 27>();
 }
@@ -316,7 +316,7 @@ static void __stdcall lockCursor() noexcept
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
     auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-    if (config.visuals.noScopeOverlay && (returnAddress == memory->scopeArc || returnAddress == memory->scopeLens))
+    if (config->visuals.noScopeOverlay && (returnAddress == memory->scopeArc || returnAddress == memory->scopeLens))
         a = 0;
     hooks->surface.callOriginal<void, 15>(r, g, b, a);
 }
@@ -350,8 +350,8 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
     if (interfaces->engine->isInGame()
         && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped())
-        setup->fov += config.visuals.fov;
-    setup->farZ += config.visuals.farZ * 10;
+        setup->fov += config->visuals.fov;
+    setup->farZ += config->visuals.farZ * 10;
     hooks->clientMode.callOriginal<void, 18>(setup);
 }
 
@@ -367,7 +367,7 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
     if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
             if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
-                if (config.misc.disableModelOcclusion) {
+                if (config->misc.disableModelOcclusion) {
                     // FIXME: sometimes players are rendered above smoke, maybe sort render list?
                     info->flags &= ~0x100;
                     info->flags2 |= 0x40;
@@ -398,14 +398,14 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
             }
         };
 
-        modulateVolume([](int index) { return config.sound.players[index].masterVolume; });
+        modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
 
         if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
-            modulateVolume([](int index) { return config.sound.players[index].headshotVolume; });
+            modulateVolume([](int index) { return config->sound.players[index].headshotVolume; });
         else if (strstr(soundName, "Step"))
-            modulateVolume([](int index) { return config.sound.players[index].footstepVolume; });
+            modulateVolume([](int index) { return config->sound.players[index].footstepVolume; });
         else if (strstr(soundName, "Chicken"))
-            soundInfo.volume *= config.sound.chickenVolume / 100.0f;
+            soundInfo.volume *= config->sound.chickenVolume / 100.0f;
     }
     soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     return hooks->originalDispatchSound(soundInfo);
@@ -420,7 +420,7 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
 
 static void* __stdcall getDemoPlaybackParameters() noexcept
 {
-    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config.misc.revealSuspect && (returnAddress == memory->test || returnAddress == memory->test2))
+    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config->misc.revealSuspect && (returnAddress == memory->test || returnAddress == memory->test2))
         return nullptr;
 
     return hooks->engine.callOriginal<void*, 218>();
@@ -428,7 +428,7 @@ static void* __stdcall getDemoPlaybackParameters() noexcept
 
 static bool __stdcall isPlayingDemo() noexcept
 {
-    if (config.misc.revealMoney
+    if (config->misc.revealMoney
         && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
         && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
         return true;
@@ -440,7 +440,7 @@ static void __stdcall updateColorCorrectionWeights() noexcept
 {
     hooks->clientMode.callOriginal<void, 58>();
 
-    if (const auto& cfg = config.visuals.colorCorrection; cfg.enabled) {
+    if (const auto& cfg = config->visuals.colorCorrection; cfg.enabled) {
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x498) = cfg.blue;
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A0) = cfg.red;
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A8) = cfg.mono;
@@ -450,20 +450,20 @@ static void __stdcall updateColorCorrectionWeights() noexcept
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4D0) = cfg.yellow;
     }
 
-    if (config.visuals.noScopeOverlay)
+    if (config->visuals.noScopeOverlay)
         *memory->vignette = 0.0f;
 }
 
 static float __stdcall getScreenAspectRatio(int width, int height) noexcept
 {
-    if (config.misc.aspectratio)
-        return config.misc.aspectratio;
+    if (config->misc.aspectratio)
+        return config->misc.aspectratio;
     return hooks->engine.callOriginal<float, 101>(width, height);
 }
 
 static void __stdcall renderSmokeOverlay(bool update) noexcept
 {
-    if (config.visuals.noSmoke || config.visuals.wireframeSmoke)
+    if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x588) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, 41>(update);

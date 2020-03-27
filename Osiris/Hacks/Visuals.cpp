@@ -55,8 +55,8 @@ void Visuals::playerModel(FrameStage stage) noexcept
         };
 
         switch (team) {
-        case 2: return static_cast<std::size_t>(config.visuals.playerModelT - 1) < models.size() ? models[config.visuals.playerModelT - 1] : nullptr;
-        case 3: return static_cast<std::size_t>(config.visuals.playerModelCT - 1) < models.size() ? models[config.visuals.playerModelCT - 1] : nullptr;
+        case 2: return static_cast<std::size_t>(config->visuals.playerModelT - 1) < models.size() ? models[config->visuals.playerModelT - 1] : nullptr;
+        case 3: return static_cast<std::size_t>(config->visuals.playerModelCT - 1) < models.size() ? models[config->visuals.playerModelCT - 1] : nullptr;
         default: return nullptr;
         }
     };
@@ -76,10 +76,10 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
 void Visuals::colorWorld() noexcept
 {
-    if (!config.visuals.world.enabled && !config.visuals.sky.enabled)
+    if (!config->visuals.world.enabled && !config->visuals.sky.enabled)
         return;
 
-    if (config.visuals.world.enabled)
+    if (config->visuals.world.enabled)
         static auto _ = (interfaces->cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces->cvar->findVar("cl_brushfastpath")->setValue(0), true);
 
     for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
@@ -88,16 +88,16 @@ void Visuals::colorWorld() noexcept
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config.visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
-            if (config.visuals.world.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config.visuals.world.rainbowSpeed));
+        if (config->visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
+            if (config->visuals.world.rainbow)
+                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.world.rainbowSpeed));
             else
-                mat->colorModulate(config.visuals.world.color);
-        } else if (config.visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
-            if (config.visuals.sky.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config.visuals.sky.rainbowSpeed));
+                mat->colorModulate(config->visuals.world.color);
+        } else if (config->visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+            if (config->visuals.sky.rainbow)
+                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.sky.rainbowSpeed));
             else
-                mat->colorModulate(config.visuals.sky.color);
+                mat->colorModulate(config->visuals.sky.color);
         }
     }
 }
@@ -113,8 +113,8 @@ void Visuals::modifySmoke() noexcept
 
     for (const auto mat : smokeMaterials) {
         auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config.visuals.wireframeSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config->visuals.wireframeSmoke);
     }
 }
 
@@ -123,15 +123,15 @@ void Visuals::thirdperson() noexcept
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
 
-    if (GetAsyncKeyState(config.visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
+    if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
         lastTime = memory->globalVars->realtime;
     }
 
-    if (config.visuals.thirdperson)
-        if (memory->input->isCameraInThirdPerson = (!config.visuals.thirdpersonKey || isInThirdperson)
+    if (config->visuals.thirdperson)
+        if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
             && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isAlive())
-            memory->input->cameraOffset.z = static_cast<float>(config.visuals.thirdpersonDistance);
+            memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -148,10 +148,10 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
         aimPunch = localPlayer->aimPunchAngle();
         viewPunch = localPlayer->viewPunchAngle();
 
-        if (config.visuals.noAimPunch && !config.misc.recoilCrosshair)
+        if (config->visuals.noAimPunch && !config->misc.recoilCrosshair)
             localPlayer->aimPunchAngle() = Vector{ };
 
-        if (config.visuals.noViewPunch)
+        if (config->visuals.noViewPunch)
             localPlayer->viewPunchAngle() = Vector{ };
 
     } else if (stage == FrameStage::RENDER_END) {
@@ -163,13 +163,13 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 void Visuals::removeBlur() noexcept
 {
     static auto blur = interfaces->materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noBlur);
+    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces->cvar->findVar("mat_force_tonemap_scale");
-    brightness->setValue(config.visuals.brightness);
+    brightness->setValue(config->visuals.brightness);
 }
 
 void Visuals::removeGrass() noexcept
@@ -184,29 +184,29 @@ void Visuals::removeGrass() noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config.visuals.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
 {
     static auto sky = interfaces->cvar->findVar("r_3dsky");
-    sky->setValue(!config.visuals.no3dSky);
+    sky->setValue(!config->visuals.no3dSky);
 }
 
 void Visuals::removeShadows() noexcept
 {
     static auto shadows = interfaces->cvar->findVar("cl_csm_enabled");
-    shadows->setValue(!config.visuals.noShadows);
+    shadows->setValue(!config->visuals.noShadows);
 }
 
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
-    if (config.visuals.zoom) {
+    if (config->visuals.zoom) {
         auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
         if (stage == FrameStage::RENDER_START && localPlayer && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             static bool scoped{ false };
 
-            if (GetAsyncKeyState(config.visuals.zoomKey) & 1)
+            if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
                 scoped = !scoped;
 
             if (scoped) {
@@ -237,7 +237,7 @@ static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFuncti
 
 void Visuals::applyScreenEffects() noexcept
 {
-    if (config.visuals.screenEffect) {
+    if (config->visuals.screenEffect) {
         constexpr auto getEffectMaterial = [] {
             static constexpr const char* effects[]{
             "effects/dronecam",
@@ -246,9 +246,9 @@ void Visuals::applyScreenEffects() noexcept
             "effects/dangerzone_screen"
             };
 
-            if (config.visuals.screenEffect <= 2)
+            if (config->visuals.screenEffect <= 2)
                 return effects[0];
-            return effects[config.visuals.screenEffect - 2];
+            return effects[config->visuals.screenEffect - 2];
         };
 
         auto renderContext = interfaces->materialSystem->getRenderContext();
@@ -256,11 +256,11 @@ void Visuals::applyScreenEffects() noexcept
         int x, y, width, height;
         renderContext->getViewport(x, y, width, height);
         auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
-        if (config.visuals.screenEffect == 1)
+        if (config->visuals.screenEffect == 1)
             material->findVar("$c0_x")->setValue(0.0f);
-        else if (config.visuals.screenEffect == 2)
+        else if (config->visuals.screenEffect == 2)
             material->findVar("$c0_x")->setValue(0.1f);
-        else if (config.visuals.screenEffect >= 4)
+        else if (config->visuals.screenEffect >= 4)
             material->findVar("$c0_x")->setValue(1.0f);
         drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
         renderContext->endRender();
@@ -270,7 +270,7 @@ void Visuals::applyScreenEffects() noexcept
 
 void Visuals::hitEffect(GameEvent* event) noexcept
 {
-    if (config.visuals.hitEffect) {
+    if (config->visuals.hitEffect) {
         static float lastHitTime = 0.0f;
 
         if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
@@ -278,7 +278,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
             return;
         }
 
-        if (lastHitTime + config.visuals.hitEffectTime >= memory->globalVars->realtime) {
+        if (lastHitTime + config->visuals.hitEffectTime >= memory->globalVars->realtime) {
             constexpr auto getEffectMaterial = [] {
                 static constexpr const char* effects[]{
                 "effects/dronecam",
@@ -287,9 +287,9 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 "effects/dangerzone_screen"
                 };
 
-                if (config.visuals.hitEffect <= 2)
+                if (config->visuals.hitEffect <= 2)
                     return effects[0];
-                return effects[config.visuals.hitEffect - 2];
+                return effects[config->visuals.hitEffect - 2];
             };
 
             auto renderContext = interfaces->materialSystem->getRenderContext();
@@ -297,11 +297,11 @@ void Visuals::hitEffect(GameEvent* event) noexcept
             int x, y, width, height;
             renderContext->getViewport(x, y, width, height);
             auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
-            if (config.visuals.hitEffect == 1)
+            if (config->visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
-            else if (config.visuals.hitEffect == 2)
+            else if (config->visuals.hitEffect == 2)
                 material->findVar("$c0_x")->setValue(0.1f);
-            else if (config.visuals.hitEffect >= 4)
+            else if (config->visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
             drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
             renderContext->endRender();
@@ -312,7 +312,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
 
 void Visuals::hitMarker(GameEvent* event) noexcept
 {
-    if (config.visuals.hitMarker == 0)
+    if (config->visuals.hitMarker == 0)
         return;
 
     static float lastHitTime = 0.0f;
@@ -322,10 +322,10 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         return;
     }
 
-    if (lastHitTime + config.visuals.hitMarkerTime < memory->globalVars->realtime)
+    if (lastHitTime + config->visuals.hitMarkerTime < memory->globalVars->realtime)
         return;
 
-    switch (config.visuals.hitMarker) {
+    switch (config->visuals.hitMarker) {
     case 1:
         const auto [width, height] = interfaces->surface->getScreenSize();
 
@@ -343,6 +343,38 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
 void Visuals::disablePostProcessing() noexcept
 {
-    if (*memory->disablePostProcessing != config.visuals.disablePostProcessing)
-        *memory->disablePostProcessing = config.visuals.disablePostProcessing;
+    if (*memory->disablePostProcessing != config->visuals.disablePostProcessing)
+        *memory->disablePostProcessing = config->visuals.disablePostProcessing;
+}
+
+void Visuals::reduceFlashEffect() noexcept
+{
+    interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->flashMaxAlpha() = 255.0f - config->visuals.flashReduction * 2.55f;
+}
+
+bool Visuals::removeHands(const char* modelName) noexcept
+{
+    return config->visuals.noHands && std::strstr(modelName, "arms") && !std::strstr(modelName, "sleeve");
+}
+
+bool Visuals::removeSleeves(const char* modelName) noexcept
+{
+    return config->visuals.noSleeves && std::strstr(modelName, "sleeve");
+}
+
+bool Visuals::removeWeapons(const char* modelName) noexcept
+{
+    return config->visuals.noWeapons && std::strstr(modelName, "models/weapons/v_")
+        && !std::strstr(modelName, "arms") && !std::strstr(modelName, "tablet")
+        && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
+}
+
+void Visuals::skybox() noexcept
+{
+    constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
+
+    if (static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size())
+        memory->loadSky(skyboxes[config->visuals.skybox - 1]);
+    else
+        memory->loadSky(interfaces->cvar->findVar("sv_skyname")->string);
 }

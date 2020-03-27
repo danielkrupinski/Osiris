@@ -413,22 +413,22 @@ static constexpr bool isInRange(Entity* entity, float maxDistance) noexcept
 static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
     const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-    if ((config.esp.players[id].enabled || 
-        config.esp.players[id].deadesp && !localPlayer->isAlive()) &&
-        isInRange(entity, config.esp.players[id].maxDistance)) {
-        renderSnaplines(entity, config.esp.players[id]);
-        renderEyeTraces(entity, config.esp.players[id]);
-        renderPlayerBox(entity, config.esp.players[id]);
-        renderHeadDot(entity, config.esp.players[id]);
+    if ((config->esp.players[id].enabled || 
+        config->esp.players[id].deadesp && !localPlayer->isAlive()) &&
+        isInRange(entity, config->esp.players[id].maxDistance)) {
+        renderSnaplines(entity, config->esp.players[id]);
+        renderEyeTraces(entity, config->esp.players[id]);
+        renderPlayerBox(entity, config->esp.players[id]);
+        renderHeadDot(entity, config->esp.players[id]);
     }
-    return config.esp.players[id].enabled;
+    return config->esp.players[id].enabled;
 }
 
-static constexpr void renderWeaponEsp(Entity* entity) noexcept
+static void renderWeaponEsp(Entity* entity) noexcept
 {
-    if (config.esp.weapon.enabled && isInRange(entity, config.esp.weapon.maxDistance)) {
-        renderWeaponBox(entity, config.esp.weapon);
-        renderSnaplines(entity, config.esp.weapon);
+    if (config->esp.weapon.enabled && isInRange(entity, config->esp.weapon.maxDistance)) {
+        renderWeaponBox(entity, config->esp.weapon);
+        renderSnaplines(entity, config->esp.weapon);
     }
 }
 
@@ -481,7 +481,7 @@ void Esp::render() noexcept
             else {
                 switch (entity->getClientClass()->classId) {
                 case ClassId::Dronegun: {
-                    renderEntityEsp(entity, config.esp.dangerZone[0], std::wstring{ interfaces->localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->sentryHealth())).append(L" HP)").c_str());
+                    renderEntityEsp(entity, config->esp.dangerZone[0], std::wstring{ interfaces->localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->sentryHealth())).append(L" HP)").c_str());
                     break;
                 }
                 case ClassId::Drone: {
@@ -496,78 +496,78 @@ void Esp::render() noexcept
                             }
                         }
                     }
-                    renderEntityEsp(entity, config.esp.dangerZone[1], text.c_str());
+                    renderEntityEsp(entity, config->esp.dangerZone[1], text.c_str());
                     break;
                 }
                 case ClassId::Cash:
-                    renderEntityEsp(entity, config.esp.dangerZone[2], L"Cash");
+                    renderEntityEsp(entity, config->esp.dangerZone[2], L"Cash");
                     break;
                 case ClassId::LootCrate: {
                     const auto modelName{ entity->getModel()->name };
                     if (strstr(modelName, "dufflebag"))
-                        renderEntityEsp(entity, config.esp.dangerZone[3], L"Cash Dufflebag");
+                        renderEntityEsp(entity, config->esp.dangerZone[3], L"Cash Dufflebag");
                     else if (strstr(modelName, "case_pistol"))
-                        renderEntityEsp(entity, config.esp.dangerZone[4], L"Pistol Case");
+                        renderEntityEsp(entity, config->esp.dangerZone[4], L"Pistol Case");
                     else if (strstr(modelName, "case_light"))
-                        renderEntityEsp(entity, config.esp.dangerZone[5], L"Light Case");
+                        renderEntityEsp(entity, config->esp.dangerZone[5], L"Light Case");
                     else if (strstr(modelName, "case_heavy"))
-                        renderEntityEsp(entity, config.esp.dangerZone[6], L"Heavy Case");
+                        renderEntityEsp(entity, config->esp.dangerZone[6], L"Heavy Case");
                     else if (strstr(modelName, "case_explosive"))
-                        renderEntityEsp(entity, config.esp.dangerZone[7], L"Explosive Case");
+                        renderEntityEsp(entity, config->esp.dangerZone[7], L"Explosive Case");
                     else if (strstr(modelName, "case_tools"))
-                        renderEntityEsp(entity, config.esp.dangerZone[8], L"Tools Case");
+                        renderEntityEsp(entity, config->esp.dangerZone[8], L"Tools Case");
                     break;
                 }
                 case ClassId::WeaponUpgrade: {
                     const auto modelName{ entity->getModel()->name };
                     if (strstr(modelName, "dz_armor_helmet"))
-                        renderEntityEsp(entity, config.esp.dangerZone[9], L"Full Armor");
+                        renderEntityEsp(entity, config->esp.dangerZone[9], L"Full Armor");
                     else if (strstr(modelName, "dz_armor"))
-                        renderEntityEsp(entity, config.esp.dangerZone[10], L"Armor");
+                        renderEntityEsp(entity, config->esp.dangerZone[10], L"Armor");
                     else if (strstr(modelName, "dz_helmet"))
-                        renderEntityEsp(entity, config.esp.dangerZone[11], L"Helmet");
+                        renderEntityEsp(entity, config->esp.dangerZone[11], L"Helmet");
                     else if (strstr(modelName, "parachutepack"))
-                        renderEntityEsp(entity, config.esp.dangerZone[12], L"Parachute");
+                        renderEntityEsp(entity, config->esp.dangerZone[12], L"Parachute");
                     else if (strstr(modelName, "briefcase"))
-                        renderEntityEsp(entity, config.esp.dangerZone[13], L"Briefcase");
+                        renderEntityEsp(entity, config->esp.dangerZone[13], L"Briefcase");
                     else if (strstr(modelName, "upgrade_tablet"))
-                        renderEntityEsp(entity, config.esp.dangerZone[14], L"Tablet Upgrade");
+                        renderEntityEsp(entity, config->esp.dangerZone[14], L"Tablet Upgrade");
                     else if (strstr(modelName, "exojump"))
-                        renderEntityEsp(entity, config.esp.dangerZone[15], L"ExoJump");
+                        renderEntityEsp(entity, config->esp.dangerZone[15], L"ExoJump");
                     break;
                 }
                 case ClassId::AmmoBox:
-                    renderEntityEsp(entity, config.esp.dangerZone[16], L"Ammobox");
+                    renderEntityEsp(entity, config->esp.dangerZone[16], L"Ammobox");
                     break;
                 case ClassId::RadarJammer:
-                    renderEntityEsp(entity, config.esp.dangerZone[17], interfaces->localize->find("#TabletJammer"));
+                    renderEntityEsp(entity, config->esp.dangerZone[17], interfaces->localize->find("#TabletJammer"));
                     break;
                 case ClassId::BaseCSGrenadeProjectile:
                     if (strstr(entity->getModel()->name, "flashbang"))
-                        renderEntityEsp(entity, config.esp.projectiles[0], interfaces->localize->find("#SFUI_WPNHUD_Flashbang"));
+                        renderEntityEsp(entity, config->esp.projectiles[0], interfaces->localize->find("#SFUI_WPNHUD_Flashbang"));
                     else
-                        renderEntityEsp(entity, config.esp.projectiles[1], interfaces->localize->find("#SFUI_WPNHUD_HE_Grenade"));
+                        renderEntityEsp(entity, config->esp.projectiles[1], interfaces->localize->find("#SFUI_WPNHUD_HE_Grenade"));
                     break;
                 case ClassId::BreachChargeProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[2], interfaces->localize->find("#SFUI_WPNHUD_BreachCharge"));
+                    renderEntityEsp(entity, config->esp.projectiles[2], interfaces->localize->find("#SFUI_WPNHUD_BreachCharge"));
                     break;
                 case ClassId::BumpMineProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[3], interfaces->localize->find("#SFUI_WPNHUD_BumpMine"));
+                    renderEntityEsp(entity, config->esp.projectiles[3], interfaces->localize->find("#SFUI_WPNHUD_BumpMine"));
                     break;
                 case ClassId::DecoyProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[4], interfaces->localize->find("#SFUI_WPNHUD_Decoy"));
+                    renderEntityEsp(entity, config->esp.projectiles[4], interfaces->localize->find("#SFUI_WPNHUD_Decoy"));
                     break;
                 case ClassId::MolotovProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[5], interfaces->localize->find("#SFUI_WPNHUD_Molotov"));
+                    renderEntityEsp(entity, config->esp.projectiles[5], interfaces->localize->find("#SFUI_WPNHUD_Molotov"));
                     break;
                 case ClassId::SensorGrenadeProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[6], interfaces->localize->find("#SFUI_WPNHUD_TAGrenade"));
+                    renderEntityEsp(entity, config->esp.projectiles[6], interfaces->localize->find("#SFUI_WPNHUD_TAGrenade"));
                     break;
                 case ClassId::SmokeGrenadeProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[7], interfaces->localize->find("#SFUI_WPNHUD_SmokeGrenade"));
+                    renderEntityEsp(entity, config->esp.projectiles[7], interfaces->localize->find("#SFUI_WPNHUD_SmokeGrenade"));
                     break;
                 case ClassId::SnowballProjectile:
-                    renderEntityEsp(entity, config.esp.projectiles[8], interfaces->localize->find("#SFUI_WPNHUD_Snowball"));
+                    renderEntityEsp(entity, config->esp.projectiles[8], interfaces->localize->find("#SFUI_WPNHUD_Snowball"));
                     break;
                 }
             }   

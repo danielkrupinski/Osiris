@@ -83,9 +83,9 @@ public:
         return false;
     }
 
-    constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
-        if (config.misc.fixBoneMatrix) {
+        if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
             Vector absOrigin = getAbsOrigin();

@@ -17,7 +17,7 @@ void Glow::render() noexcept
     if (!localPlayer)
         return;
 
-    constexpr auto& glow = config.glow;
+    const auto& glow = config->glow;
 
     Glow::clearCustomObjects();
 
