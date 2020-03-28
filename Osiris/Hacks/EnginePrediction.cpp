@@ -15,7 +15,7 @@ static int localPlayerFlags;
 
 void EnginePrediction::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
     
@@ -30,9 +30,9 @@ void EnginePrediction::run(UserCmd* cmd) noexcept
     memory->globalVars->frametime = memory->globalVars->intervalPerTick;
 
     memory->moveHelper->setHost(localPlayer);
-    interfaces.prediction->setupMove(localPlayer, cmd, memory->moveHelper, memory->moveData);
-    interfaces.gameMovement->processMovement(localPlayer, memory->moveData);
-    interfaces.prediction->finishMove(localPlayer, cmd, memory->moveData);
+    interfaces->prediction->setupMove(localPlayer, cmd, memory->moveHelper, memory->moveData);
+    interfaces->gameMovement->processMovement(localPlayer, memory->moveData);
+    interfaces->prediction->finishMove(localPlayer, cmd, memory->moveData);
     memory->moveHelper->setHost(nullptr);
 
     *memory->predictionRandomSeed = -1;

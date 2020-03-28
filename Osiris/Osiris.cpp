@@ -5,19 +5,15 @@
 #include "Memory.h"
 #include "Netvars.h"
 
-Config config{ "Osiris" };
-GUI gui;
-const Interfaces interfaces;
-// Memory memory;
-// Netvars netvars;
-//Hooks hooks;
-
 static HMODULE module;
 static WNDPROC originalWndproc;
 
 static LRESULT WINAPI init(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     SetWindowLongPtr(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndproc));
+    config = std::make_unique<Config>("Osiris");
+    gui = std::make_unique<GUI>();
+    interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<Memory>();
     netvars = std::make_unique<Netvars>();
     hooks = std::make_unique<Hooks>(module);

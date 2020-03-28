@@ -12,17 +12,17 @@ static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer)
         return;
 
-    constexpr auto& glow = config.glow;
+    const auto& glow = config->glow;
 
     Glow::clearCustomObjects();
 
-    for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+    for (int i = interfaces->engine->getMaxClients() + 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
         if (!entity || entity->isDormant())
             continue;
 
@@ -83,7 +83,7 @@ void Glow::render() noexcept
                 applyPlayerGlow(glow[6], glow[7], glow[8], entity);
             else if (entity->isDefusing())
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
-            else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()))
+            else if (entity == interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()))
                 applyGlow(glow[12], entity->health());
             else if (entity->isEnemy())
                 applyPlayerGlow(glow[3], glow[4], glow[5], entity);

@@ -15,33 +15,33 @@ static int currentRound;
 
 void Reportbot::run() noexcept
 {
-    if (!config.reportbot.enabled)
+    if (!config->reportbot.enabled)
         return;
 
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
 
     static auto lastReportTime = 0.0f;
 
-    if (lastReportTime + config.reportbot.delay > memory->globalVars->realtime)
+    if (lastReportTime + config->reportbot.delay > memory->globalVars->realtime)
         return;
 
-    if (currentRound >= config.reportbot.rounds)
+    if (currentRound >= config->reportbot.rounds)
         return;
 
     bool allPlayersReported = true;
-    for (int i = 1; i <= interfaces.engine->getMaxClients(); ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
 
         if (!entity || entity == localPlayer)
             continue;
 
-        if (config.reportbot.target != 2 && (entity->isEnemy() ? config.reportbot.target != 0 : config.reportbot.target != 1))
+        if (config->reportbot.target != 2 && (entity->isEnemy() ? config->reportbot.target != 0 : config->reportbot.target != 1))
             continue;
 
         PlayerInfo playerInfo;  
-        if (!interfaces.engine->getPlayerInfo(i, playerInfo))
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
         if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
@@ -49,15 +49,15 @@ void Reportbot::run() noexcept
 
         std::string report;
 
-        if (config.reportbot.textAbuse)
+        if (config->reportbot.textAbuse)
             report += "textabuse,";
-        if (config.reportbot.griefing)
+        if (config->reportbot.griefing)
             report += "grief,";
-        if (config.reportbot.wallhack)
+        if (config->reportbot.wallhack)
             report += "wallhack,";
-        if (config.reportbot.aimbot)
+        if (config->reportbot.aimbot)
             report += "aimbot,";
-        if (config.reportbot.other)
+        if (config->reportbot.other)
             report += "speedhack,";
 
         if (!report.empty()) {

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <memory>
 #include <string>
 
 #include "imgui/imgui.h"
@@ -286,4 +287,4 @@ private:
     std::vector<std::string> configs;
 };
 
-extern Config config;
+inline std::unique_ptr<Config> config;

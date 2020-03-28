@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <sstream>
 #include <type_traits>
 #include <Windows.h>
@@ -49,7 +50,7 @@ public:
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, "vphysics", "VPhysicsSurfaceProps001")
     GAME_INTERFACE(Prediction, prediction, "client_panorama", "VClientPrediction001")
     GAME_INTERFACE(RenderView, renderView, "engine", "VEngineRenderView014")
-    GAME_INTERFACE(ResourceAccessControl, resourceAccessControl, "datacache", "VResourceAccessControl001")
+    // GAME_INTERFACE(ResourceAccessControl, resourceAccessControl, "datacache", "VResourceAccessControl001")
     GAME_INTERFACE(Surface, surface, "vguimatsurface", "VGUI_Surface031")
     GAME_INTERFACE(Sound, sound, "engine", "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, "soundemittersystem", "VSoundEmitter003")
@@ -66,4 +67,4 @@ private:
     }
 };
 
-extern const Interfaces interfaces;
+inline std::unique_ptr<const Interfaces> interfaces;
