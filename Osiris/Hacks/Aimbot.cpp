@@ -31,7 +31,7 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     if (!memory->traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
         return -1.0f;
 
-    SurfaceData* exitSurfaceData = interfaces.physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
+    SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
 
     float damageModifier = 0.16f;
     float penetrationModifier = (enterSurfaceData->penetrationmodifier + exitSurfaceData->penetrationmodifier) / 2.0f;
@@ -68,7 +68,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
     while (damage >= 1.0f && hitsLeft) {
         static Trace trace;
-        interfaces.engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer, trace);
+        interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer, trace);
 
         if (trace.fraction == 1.0f)
             break;
@@ -81,7 +81,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
             return damage >= minDamage;
         }
-        const auto surfaceData = interfaces.physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+        const auto surfaceData = interfaces->physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
 
         if (surfaceData->penetrationmodifier < 0.1f)
             break;
@@ -94,7 +94,7 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
@@ -107,53 +107,53 @@ void Aimbot::run(UserCmd* cmd) noexcept
         return;
 
     auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
-    if (!config.aimbot[weaponIndex].enabled)
+    if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = weaponClass;
 
-    if (!config.aimbot[weaponIndex].enabled)
+    if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config.aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
+    if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;
 
-    if (!config.aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
+    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
         return;
 
-    if (config.aimbot[weaponIndex].onKey) {
-        if (!config.aimbot[weaponIndex].keyMode) {
-            if (!GetAsyncKeyState(config.aimbot[weaponIndex].key))
+    if (config->aimbot[weaponIndex].onKey) {
+        if (!config->aimbot[weaponIndex].keyMode) {
+            if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
                 return;
         } else {
             static bool toggle = true;
-            if (GetAsyncKeyState(config.aimbot[weaponIndex].key) & 1)
+            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
                 toggle = !toggle;
             if (!toggle)
                 return;
         }
     }
 
-    if (config.aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config.aimbot[weaponIndex].autoShot || config.aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxAimInaccuracy) {
+    if (config->aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config->aimbot[weaponIndex].autoShot || config->aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxAimInaccuracy) {
 
-        if (config.aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+        if (config->aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
             return;
 
-        auto bestFov = config.aimbot[weaponIndex].fov;
+        auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
-        for (int i = 1; i <= interfaces.engine->getMaxClients(); i++) {
-            auto entity = interfaces.entityList->getEntity(i);
+        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
+            auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
-                || !entity->isEnemy() && !config.aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
+                || !entity->isEnemy() && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
-            auto boneList = config.aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
+            auto boneList = config->aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
 
             for (auto bone : boneList) {
-                auto bonePosition = entity->getBonePosition(config.aimbot[weaponIndex].bone > 1 ? 10 - config.aimbot[weaponIndex].bone : bone);
-                if (!entity->isVisible(bonePosition) && (config.aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config.aimbot[weaponIndex].killshot ? entity->health() : config.aimbot[weaponIndex].minDamage)))
+                auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)))
                     continue;
 
                 auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
@@ -162,43 +162,43 @@ void Aimbot::run(UserCmd* cmd) noexcept
                     bestFov = fov;
                     bestTarget = bonePosition;
                 }
-                if (config.aimbot[weaponIndex].bone)
+                if (config->aimbot[weaponIndex].bone)
                     break;
             }
         }
 
-        if (bestTarget && (config.aimbot[weaponIndex].ignoreSmoke
+        if (bestTarget && (config->aimbot[weaponIndex].ignoreSmoke
             || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
-            if (lastCommand == cmd->commandNumber - 1 && lastAngles && config.aimbot[weaponIndex].silent)
+            if (lastCommand == cmd->commandNumber - 1 && lastAngles && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (fabs(angle.x) > config.misc.maxAngleDelta || fabs(angle.y) > config.misc.maxAngleDelta) {
-                    angle.x = std::clamp(angle.x, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config.misc.maxAngleDelta, config.misc.maxAngleDelta);
+            if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
+                    angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+                    angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
                     clamped = true;
             }
             
-            angle /= config.aimbot[weaponIndex].smooth;
+            angle /= config->aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
-            if (!config.aimbot[weaponIndex].silent)
-                interfaces.engine->setViewAngles(cmd->viewangles);
+            if (!config->aimbot[weaponIndex].silent)
+                interfaces->engine->setViewAngles(cmd->viewangles);
 
-            if (config.aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+            if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;
 
-            if (config.aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config.aimbot[weaponIndex].maxShotInaccuracy)
+            if (config->aimbot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
             if (clamped)
                 cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-            if (clamped || config.aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
+            if (clamped || config->aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
             else lastAngles = Vector{ };
 
             lastCommand = cmd->commandNumber;

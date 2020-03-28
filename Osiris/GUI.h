@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 struct ImFont;
@@ -52,4 +53,4 @@ private:
     } fonts;
 };
 
-extern GUI gui;
+inline std::unique_ptr<GUI> gui;

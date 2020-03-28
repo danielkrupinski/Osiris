@@ -106,6 +106,6 @@ private:
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material);
+        interfaces->studioRender->forcedMaterialOverride(material);
     }
 };
