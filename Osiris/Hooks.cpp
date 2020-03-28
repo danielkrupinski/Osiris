@@ -538,7 +538,7 @@ void Hooks::restore() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces->resourceAccessControl->accessingThreadCount--;
+    // interfaces->resourceAccessControl->accessingThreadCount--;
     interfaces->inputSystem->enableInput(true);
 }
 
