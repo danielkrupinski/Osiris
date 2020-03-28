@@ -1,4 +1,7 @@
 #define NOMINMAX
+
+#include <sstream>
+
 #include "Esp.h"
 #include "../Config.h"
 #include "../Interfaces.h"
