@@ -973,6 +973,11 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
         ImGui::Begin("Misc", &window.misc, windowFlags);
     }
+    ImGui::Columns(2, nullptr, false);
+    ImGui::SetColumnOffset(1, 230.0f);
+    ImGui::TextUnformatted("Menu key");
+    ImGui::SameLine();
+    hotkey(config->misc.menuKey);
 
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
