@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <sstream>
+#include <string>
 #include <type_traits>
 #include <Windows.h>
 
@@ -22,7 +22,6 @@ class Panel;
 class PhysicsSurfaceProps;
 class Prediction;
 class RenderView;
-class ResourceAccessControl;
 class Surface;
 class Sound;
 class SoundEmitter;
@@ -50,7 +49,6 @@ public:
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, "vphysics", "VPhysicsSurfaceProps001")
     GAME_INTERFACE(Prediction, prediction, "client_panorama", "VClientPrediction001")
     GAME_INTERFACE(RenderView, renderView, "engine", "VEngineRenderView014")
-    // GAME_INTERFACE(ResourceAccessControl, resourceAccessControl, "datacache", "VResourceAccessControl001")
     GAME_INTERFACE(Surface, surface, "vguimatsurface", "VGUI_Surface031")
     GAME_INTERFACE(Sound, sound, "engine", "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, "soundemittersystem", "VSoundEmitter003")
@@ -62,7 +60,7 @@ private:
             if (void* foundInterface = createInterface(name, nullptr))
                 return foundInterface;
 
-        MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Osiris", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
         std::exit(EXIT_FAILURE);
     }
 };
