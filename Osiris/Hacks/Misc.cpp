@@ -157,9 +157,15 @@ void Misc::watermark() noexcept
             interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.watermark.rainbowSpeed));
         else
             interfaces->surface->setTextColor(config->misc.watermark.color);
-
-        interfaces->surface->setTextPosition(5, 0);
+        
+        interfaces->surface->setTextPosition(5, 5);
         interfaces->surface->printText(L"Osiris");
+        interfaces->surface->setTextPosition(0, -14);
+        interfaces->surface->printText(L"________________________________________________________________________________________________________________________________________________________"); //skeet line 1 box
+        interfaces->surface->setTextPosition(0, -13);
+        interfaces->surface->printText(L"________________________________________________________________________________________________________________________________________________________"); //skeet line 1 box
+        interfaces->surface->setTextPosition(0, -12);
+        interfaces->surface->printText(L"________________________________________________________________________________________________________________________________________________________"); //skeet line 1 box
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
