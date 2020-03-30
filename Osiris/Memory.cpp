@@ -14,9 +14,9 @@ Memory::Memory() noexcept
 {
     present = findPattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
     reset = findPattern(L"gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8", 9);
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 5);
+    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces->client))[16] + 1);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[11] + 10);
     glowObjectManager = *FIND_PATTERN(GlowObjectManager**, L"client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3);
     disablePostProcessing = *FIND_PATTERN(bool**, L"client_panorama", "\x83\xEC\x4C\x80\x3D", 5);
     loadSky = relativeToAbsolute<decltype(loadSky)>(FIND_PATTERN(int*, L"engine", "\xE8????\x84\xC0\x74\x2D\xA1", 1));

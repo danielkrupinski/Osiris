@@ -83,16 +83,16 @@ public:
         return false;
     }
 
-    constexpr bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
+    bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
-        if (config.misc.fixBoneMatrix) {
+        if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
             Vector absOrigin = getAbsOrigin();
             *render = 0;
-            memory.setAbsOrigin(this, origin());
+            memory->setAbsOrigin(this, origin());
             auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
-            memory.setAbsOrigin(this, absOrigin);
+            memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
@@ -116,15 +116,15 @@ public:
 
     bool isVisible(const Vector& position = { }) noexcept
     {
-        auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
+        auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
         static Trace trace;
-        interfaces.engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer }, trace);
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
     bool isEnemy() noexcept
     {
-        return memory.isOtherEnemy(this, interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()));
+        return memory->isOtherEnemy(this, interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()));
     }
   
     VarMap* getVarMap() noexcept

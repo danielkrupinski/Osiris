@@ -123,7 +123,7 @@ public:
                 xs[j] = static_cast<int>(std::cos(degreesToRadians(static_cast<float>(j * 30))) * i + x);
                 ys[j] = static_cast<int>(std::sin(degreesToRadians(static_cast<float>(j * 30))) * i + y);
             }
-            interfaces.surface->drawPolyLine(xs, ys, 12);
+            interfaces->surface->drawPolyLine(xs, ys, 12);
         }
     }
 };

@@ -49,29 +49,26 @@ namespace Backtrack {
 
     constexpr auto valid(float simtime) noexcept
     {
-        auto network = interfaces.engine->getNetworkChannel();
+        auto network = interfaces->engine->getNetworkChannel();
         if (!network)
             return false;
 
-        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory.globalVars->serverTime() - simtime);
+        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
         return std::fabsf(delta) <= 0.2f;
     }
 
-    constexpr auto timeToTicks(float time) noexcept
-    {
-        return static_cast<int>(0.5f + time / memory.globalVars->intervalPerTick);
-    }
+    int timeToTicks(float time) noexcept;
 
     static void init() noexcept
     {
         records->clear();
 
-        cvars.updateRate = interfaces.cvar->findVar("cl_updaterate");
-        cvars.maxUpdateRate = interfaces.cvar->findVar("sv_maxupdaterate");
-        cvars.interp = interfaces.cvar->findVar("cl_interp");
-        cvars.interpRatio = interfaces.cvar->findVar("cl_interp_ratio");
-        cvars.minInterpRatio = interfaces.cvar->findVar("sv_client_min_interp_ratio");
-        cvars.maxInterpRatio = interfaces.cvar->findVar("sv_client_max_interp_ratio");
-        cvars.maxUnlag = interfaces.cvar->findVar("sv_maxunlag");
+        cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
+        cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
+        cvars.interp = interfaces->cvar->findVar("cl_interp");
+        cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
+        cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
+        cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
+        cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
     }
 }

@@ -27,10 +27,10 @@
 
 item_setting* get_by_definition_index(const int definition_index)
 {
-	auto it = std::find_if(std::begin(config.skinChanger), std::end(config.skinChanger), [definition_index](const item_setting& e)
+	auto it = std::find_if(std::begin(config->skinChanger), std::end(config->skinChanger), [definition_index](const item_setting& e)
 	{
 		return e.enabled && e.itemId == definition_index;
 	});
 
-	return it == std::end(config.skinChanger) ? nullptr : &*it;
+	return it == std::end(config->skinChanger) ? nullptr : &*it;
 }

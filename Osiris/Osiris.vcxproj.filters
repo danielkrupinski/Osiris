@@ -364,5 +364,8 @@
     <ClInclude Include="SDK\VirtualMethod.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Pad.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -83,7 +83,7 @@ private:
                 material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
             }
             else if (chams.color.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
+                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, chams.color.rainbowSpeed) };
                 material->findVar("$envmaptint")->setVectorValue(r, g, b);
             }
             else {
@@ -95,17 +95,17 @@ private:
                 material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
             }
             else if (chams.color.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, chams.color.rainbowSpeed) };
+                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, chams.color.rainbowSpeed) };
                 material->colorModulate(r, g, b);
             }
             else {
                 material->colorModulate(chams.color.color);
             }
         }
-        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory.globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
+        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
-        interfaces.studioRender->forcedMaterialOverride(material);
+        interfaces->studioRender->forcedMaterialOverride(material);
     }
 };
