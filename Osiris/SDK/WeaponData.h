@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include "Pad.h"
 
 enum class WeaponType {
     Knife = 0,
@@ -17,32 +17,32 @@ enum class WeaponType {
 };
 
 struct WeaponData {
-    std::byte pad[20];
+    PAD(20)
     int maxClip;
-    std::byte pad1[112];
+    PAD(112)
     char* name;
-    std::byte pad1_[60];
+    PAD(60)
     WeaponType type;
-    std::byte pad2[16];
+    PAD(16)
     float cycletime;
-    std::byte pad2_[12];
+    PAD(12)
     bool fullAuto;
-    std::byte pad3[3];
+    PAD(3)
     int damage;
     float armorRatio;
     int bullets;
     float penetration;
-    std::byte pad4[8];
+    PAD(8)
     float range;
     float rangeModifier;
-    std::byte pad5[16];
+    PAD(0x10)
     bool silencer;
-    std::byte pad6[15];
+    PAD(15)
     float maxSpeed;
     float maxSpeedAlt;
-    std::byte pad7[96];
+    PAD(96)
     float recoilMagnitude;
     float recoilMagnitudeAlt;
-    std::byte pad8[20];
+    PAD(0x14)
     float recoveryTimeStand;
 };
