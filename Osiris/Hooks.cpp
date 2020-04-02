@@ -37,7 +37,6 @@
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
 #include "SDK/RenderContext.h"
-#include "SDK/ResourceAccessControl.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/StudioRender.h"
