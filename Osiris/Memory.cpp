@@ -1,5 +1,6 @@
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/LocalPlayer.h"
 
 template <typename T>
 static constexpr auto relativeToAbsolute(int* address) noexcept
@@ -51,4 +52,6 @@ Memory::Memory() noexcept
     predictionRandomSeed = *FIND_PATTERN(int**, L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
     moveData = **FIND_PATTERN(MoveData***, L"client_panorama", "\xA1????\xF3\x0F\x59\xCD", 1);
     moveHelper = **FIND_PATTERN(MoveHelper***, L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
+
+    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client_panorama", "\xA1????\x89\x45\xBC\x85\xC0", 1)));
 }
