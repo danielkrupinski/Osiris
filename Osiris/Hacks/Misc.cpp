@@ -584,7 +584,15 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!config->misc.hitSound)
         return;
 
-    if (!localPlayer || interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+    if (!localPlayer)
+        return;
+
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     constexpr std::array hitSounds{
