@@ -12,7 +12,6 @@
 
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
@@ -60,7 +59,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
                              std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
                             -std::sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
     Trace trace;
-    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer, trace);
+    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
     if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
         && (config->triggerbot[weaponIndex].friendlyFire
             || trace.entity->isEnemy())

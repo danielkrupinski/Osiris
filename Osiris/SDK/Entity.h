@@ -6,6 +6,7 @@
 #include "Engine.h"
 #include "EngineTrace.h"
 #include "EntityList.h"
+#include "LocalPlayer.h"
 #include "matrix3x4.h"
 #include "ModelRender.h"
 #include "Utils.h"
@@ -116,15 +117,21 @@ public:
 
     bool isVisible(const Vector& position = { }) noexcept
     {
-        auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-        static Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer }, trace);
+        if (!localPlayer)
+            return false;
+
+        Trace trace;
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
     bool isEnemy() noexcept
     {
-        return memory->isOtherEnemy(this, interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()));
+        // SHOULD NEVER HAPPEN
+        if (!localPlayer)
+            return false;
+
+        return memory->isOtherEnemy(this, localPlayer.get());
     }
   
     VarMap* getVarMap() noexcept

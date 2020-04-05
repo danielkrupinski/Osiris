@@ -18,7 +18,6 @@ void Reportbot::run() noexcept
     if (!config->reportbot.enabled)
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
 
@@ -34,7 +33,7 @@ void Reportbot::run() noexcept
     for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
 
-        if (!entity || entity == localPlayer)
+        if (!entity || entity == localPlayer.get())
             continue;
 
         if (config->reportbot.target != 2 && (entity->isEnemy() ? config->reportbot.target != 0 : config->reportbot.target != 1))
