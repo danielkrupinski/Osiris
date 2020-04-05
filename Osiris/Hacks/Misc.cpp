@@ -475,7 +475,12 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    if (interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     std::string cmd = "say \"";
