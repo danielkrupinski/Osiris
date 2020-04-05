@@ -268,8 +268,8 @@ struct SoundData {
 static void __stdcall emitSound(SoundData data) noexcept
 {
     auto modulateVolume = [&data](int(*get)(int)) {
-        if (auto entity{ interfaces->entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
-            if (data.entityIndex == interfaces->engine->getLocalPlayer())
+        if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
+            if (data.entityIndex == localPlayer->index())
                 data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
                 data.volume *= get(1) / 100.0f;
