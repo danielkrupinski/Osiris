@@ -366,8 +366,8 @@ static constexpr void updateHud() noexcept
 void SkinChanger::run(FrameStage stage) noexcept
 {
     if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        if (const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())) {
-            post_data_update_start(localPlayer);
+        if (localPlayer) {
+            post_data_update_start(localPlayer.get());
             if (hudUpdateRequired && !localPlayer->isDormant())
                 updateHud();
         }
@@ -382,7 +382,7 @@ void SkinChanger::scheduleHudUpdate() noexcept
 
 void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
-    if (interfaces->engine->getPlayerForUserID(event.getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
+    if (localPlayer && interfaces->engine->getPlayerForUserID(event.getInt("attacker")) == localPlayer->index()) {
         if (const auto iconOverride = iconOverrides[event.getString("weapon")])
             event.setString("weapon", iconOverride);
     }

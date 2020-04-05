@@ -12,8 +12,6 @@ static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer)
         return;
 
@@ -71,7 +69,7 @@ void Glow::render() noexcept
             }
         };
 
-        auto applyPlayerGlow = [applyGlow, localPlayer](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
+        auto applyPlayerGlow = [applyGlow](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
             if (glowAll.enabled) applyGlow(glowAll, entity->health());
             else if (entity->isVisible() && !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glowVisible, entity->health());
             else applyGlow(glowOccluded, entity->health());
@@ -83,7 +81,7 @@ void Glow::render() noexcept
                 applyPlayerGlow(glow[6], glow[7], glow[8], entity);
             else if (entity->isDefusing())
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
-            else if (entity == interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()))
+            else if (entity == localPlayer.get())
                 applyGlow(glow[12], entity->health());
             else if (entity->isEnemy())
                 applyPlayerGlow(glow[3], glow[4], glow[5], entity);

@@ -9,7 +9,6 @@ Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
         for (auto& record : records)
             record.clear();
@@ -20,7 +19,7 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
                 records[i].clear();
                 continue;
             }
@@ -53,7 +52,6 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (!(cmd->buttons & UserCmd::IN_ATTACK))
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
 
@@ -69,7 +67,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
+        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
             || !entity->isEnemy())
             continue;
 

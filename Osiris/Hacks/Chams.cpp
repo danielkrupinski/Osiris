@@ -66,6 +66,9 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
 
 bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
+    if (!localPlayer)
+        return true;
+
     const auto entity = interfaces->entityList->getEntity(info.entityIndex);
     if (!entity || entity->isDormant() || !entity->isPlayer())
         return true;
@@ -126,7 +129,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applied = true;
                 }
             }
-        } else if (info.entityIndex == interfaces->engine->getLocalPlayer()) {
+        } else if (info.entityIndex == localPlayer->index()) {
             if (config->chams[LOCALPLAYER].materials[i].enabled) {
                 if (applied)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -206,8 +209,6 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
         return;
 
@@ -224,8 +225,6 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
 
 void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
@@ -242,8 +241,6 @@ void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, mat
 
 void Chams::renderSleeves(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 

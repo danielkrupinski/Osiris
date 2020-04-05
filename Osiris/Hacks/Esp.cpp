@@ -300,7 +300,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 5, drawPositionY });
         }
 
-        if (const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) }; config.distance.enabled) {
+        if (config.distance.enabled && localPlayer) {
             if (config.distance.rainbow)
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.distance.rainbowSpeed));
             else
@@ -335,7 +335,6 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
 
     float drawPositionY = bbox.y0;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer || !config.distance.enabled)
         return;
 
@@ -366,14 +365,15 @@ static void renderEntityBox(Entity* entity, const Config::Esp::Shared& config, c
 
         float drawPositionY = bbox.y0;
 
-        if (const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) }; config.distance.enabled) {
-            if (config.distance.rainbow)
-                interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.distance.rainbowSpeed));
-            else
-                interfaces->surface->setTextColor(config.distance.color);
+        if (!localPlayer || !config.distance.enabled)
+            return;
 
-            renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
-        }
+        if (config.distance.rainbow)
+            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.distance.rainbowSpeed));
+        else
+            interfaces->surface->setTextColor(config.distance.color);
+
+        renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
     }
 }
 
@@ -382,7 +382,6 @@ static void renderHeadDot(Entity* entity, const Config::Esp::Player& config) noe
     if (!config.headDot.enabled)
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer)
         return;
 
@@ -408,15 +407,17 @@ enum EspId {
     ENEMIES_OCCLUDED
 };
 
-static constexpr bool isInRange(Entity* entity, float maxDistance) noexcept
+static bool isInRange(Entity* entity, float maxDistance) noexcept
 {
-    return maxDistance == 0.0f || (entity->getAbsOrigin() - interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getAbsOrigin()).length() * 0.0254f <= maxDistance;
+    if (!localPlayer)
+        return false;
+
+    return maxDistance == 0.0f || (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f <= maxDistance;
 }
 
 static constexpr bool renderPlayerEsp(Entity* entity, EspId id) noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-    if ((config->esp.players[id].enabled || 
+    if (localPlayer && (config->esp.players[id].enabled ||
         config->esp.players[id].deadesp && !localPlayer->isAlive()) &&
         isInRange(entity, config->esp.players[id].maxDistance)) {
         renderSnaplines(entity, config->esp.players[id]);
@@ -446,8 +447,6 @@ static constexpr void renderEntityEsp(Entity* entity, const Config::Esp::Shared&
 void Esp::render() noexcept
 {
     if (interfaces->engine->isInGame()) {
-        const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
         if (!localPlayer)
             return;
 
@@ -455,7 +454,7 @@ void Esp::render() noexcept
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity == observerTarget
+            if (!entity || entity == localPlayer.get() || entity == observerTarget
                 || entity->isDormant() || !entity->isAlive())
                 continue;
 

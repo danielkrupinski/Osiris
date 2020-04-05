@@ -190,7 +190,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 static float __stdcall getViewModelFov() noexcept
 {
     float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
-    if (const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())) {
+    if (localPlayer) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
     }
@@ -268,8 +268,8 @@ struct SoundData {
 static void __stdcall emitSound(SoundData data) noexcept
 {
     auto modulateVolume = [&data](int(*get)(int)) {
-        if (auto entity{ interfaces->entityList->getEntity(data.entityIndex) }; entity && entity->isPlayer()) {
-            if (data.entityIndex == interfaces->engine->getLocalPlayer())
+        if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
+            if (data.entityIndex == localPlayer->index())
                 data.volume *= get(0) / 100.0f;
             else if (!entity->isEnemy())
                 data.volume *= get(1) / 100.0f;
@@ -300,7 +300,7 @@ static bool __stdcall shouldDrawFog() noexcept
 
 static bool __stdcall shouldDrawViewModel() noexcept
 {
-    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()); config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, 27>();
 }
@@ -347,8 +347,7 @@ struct ViewSetup {
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
-    if (interfaces->engine->isInGame()
-        && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped())
+    if (localPlayer && !localPlayer->isScoped())
         setup->fov += config->visuals.fov;
     setup->farZ += config->visuals.farZ * 10;
     hooks->clientMode.callOriginal<void, 18>(setup);
@@ -388,7 +387,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
     if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
         auto modulateVolume = [&soundInfo](int(*get)(int)) {
             if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
-                if (soundInfo.entityIndex == interfaces->engine->getLocalPlayer())
+                if (localPlayer && soundInfo.entityIndex == localPlayer->index())
                     soundInfo.volume *= get(0) / 100.0f;
                 else if (!entity->isEnemy())
                     soundInfo.volume *= get(1) / 100.0f;
