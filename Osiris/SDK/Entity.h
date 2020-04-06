@@ -42,10 +42,12 @@ public:
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
+    VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
 
+    VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
@@ -179,7 +181,6 @@ public:
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
-    NETVAR_OFFSET(index, "CBaseEntity", "m_bIsAutoaimTarget", 4, int)
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)

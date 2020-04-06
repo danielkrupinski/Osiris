@@ -133,7 +133,7 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && localPlayer->isScoped() ? 3 : 0);
+    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped() ? 3 : 0);
 }
 
 void Misc::recoilCrosshair() noexcept
@@ -478,12 +478,17 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    if (interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     std::string cmd = "say \"";
     cmd += config->misc.killMessageString;
-    cmd += "\"";
+    cmd += '"';
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
 }
 
@@ -587,7 +592,15 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!config->misc.hitSound)
         return;
 
-    if (!localPlayer || interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+    if (!localPlayer)
+        return;
+
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     constexpr std::array hitSounds{
