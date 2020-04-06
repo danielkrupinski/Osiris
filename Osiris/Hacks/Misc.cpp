@@ -17,8 +17,6 @@ void Misc::edgejump(UserCmd* cmd) noexcept
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
@@ -33,8 +31,6 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
         return;
-
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -101,8 +97,6 @@ void Misc::spectatorList() noexcept
     if (!config->misc.spectatorList.enabled)
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
@@ -119,7 +113,7 @@ void Misc::spectatorList() noexcept
 
     for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer)
+        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer.get())
             continue;
 
         PlayerInfo playerInfo;
@@ -142,7 +136,7 @@ void Misc::sniperCrosshair() noexcept
 
 	if (!config->misc.sniperCrosshairInscope)
 	{
-		showSpread->setValue(config->misc.sniperCrosshair && !interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isScoped() ? 3 : 0);
+		showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped()  ? 3 : 0);
 	}
 	else
 	{
@@ -194,8 +188,8 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
-    if (config->misc.prepareRevolver && (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
-        const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
+    if (config->misc.prepareRevolver && localPlayer && (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
+        const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
             auto ticksToReady = timeToTicks(readyTime - memory->globalVars->serverTime() - interfaces->engine->getNetworkChannel()->getLatency(0));
@@ -212,10 +206,11 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     if (config->misc.fastPlant) {
         static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
-        if (plantAnywhere->getInt()) return;
+        if (plantAnywhere->getInt())
+            return;
 
-        const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-        if (!localPlayer->isAlive() || localPlayer->inBombZone()) return;
+        if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
+            return;
 
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
@@ -227,8 +222,8 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
                            cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
                           -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
-        static Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer, trace);
+        Trace trace;
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
 
         if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
             cmd->buttons &= ~UserCmd::IN_USE;
@@ -341,13 +336,11 @@ void Misc::drawBombTimer2() noexcept
 
 void Misc::stealNames() noexcept
 {
-    if (config->misc.nameStealer) {
-        const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
+    if (config->misc.nameStealer && localPlayer) {
         bool allNamesStolen = true;
         static std::vector<int> stolenIds;
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            if (auto entity = interfaces->entityList->getEntity(i); entity && entity != localPlayer) {
+            if (auto entity = interfaces->entityList->getEntity(i); entity && entity != localPlayer.get()) {
                 if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
                     allNamesStolen = false;
                     if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
@@ -370,7 +363,6 @@ void Misc::disablePanoramablur() noexcept
 void Misc::quickReload(UserCmd* cmd) noexcept
 {
     if (config->misc.quickReload) {
-        const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
         static Entity* reloadedWeapon{ nullptr };
 
         if (reloadedWeapon) {
@@ -416,7 +408,7 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     }
 
     if (!exploitInitialized && interfaces->engine->isInGame()) {
-        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(interfaces->engine->getLocalPlayer(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
+        if (PlayerInfo playerInfo; localPlayer && interfaces->engine->getPlayerInfo(localPlayer->index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
             exploitInitialized = true;
         } else {
             name->onChangeCallbacks.size = 0;
@@ -436,7 +428,8 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
-    const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) };
+    if (!localPlayer)
+        return;
 
     static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
 
@@ -467,12 +460,13 @@ void Misc::nadePredict() noexcept
 
 void Misc::quickHealthshot(UserCmd* cmd) noexcept
 {
+    if (!localPlayer)
+        return;
+
     static bool inProgress{ false };
 
     if (GetAsyncKeyState(config->misc.quickHealthshotKey))
         inProgress = true;
-
-    const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) };
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
         if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory->globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
@@ -495,9 +489,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
 void Misc::fixTabletSignal() noexcept
 {
-    if (config->misc.fixTabletSignal) {
-        const auto localPlayer{ interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer()) };
-
+    if (config->misc.fixTabletSignal && localPlayer) {
         if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             activeWeapon->tabletReceptionIsBlocked() = false;
     }
@@ -523,12 +515,15 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!config->misc.killMessage)
         return;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    if (interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localPlayer->index() || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localPlayer->index())
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     std::string cmd = "say \"";
@@ -561,10 +556,12 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
 void Misc::fixAnimationLOD(FrameStage stage) noexcept
 {
     if (config->misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
+        if (!localPlayer)
+            return;
+
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            if (i == interfaces->engine->getLocalPlayer()) continue;
             Entity* entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity->isDormant() || !entity->isAlive()) continue;
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) continue;
             *reinterpret_cast<int*>(entity + 0xA28) = 0;
             *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
         }
@@ -573,8 +570,8 @@ void Misc::fixAnimationLOD(FrameStage stage) noexcept
 
 void Misc::autoPistol(UserCmd* cmd) noexcept
 {
-    if (config->misc.autoPistol) {
-        const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
+    if (config->misc.autoPistol && localPlayer) {
+        const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->isPistol() && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime()) {
             if (activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver)
                 cmd->buttons &= ~UserCmd::IN_ATTACK2;
@@ -592,8 +589,8 @@ void Misc::chokePackets(bool& sendPacket) noexcept
 
 void Misc::autoReload(UserCmd* cmd) noexcept
 {
-    if (config->misc.autoReload) {
-        const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon();
+    if (config->misc.autoReload && localPlayer) {
+        const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && getWeaponIndex(activeWeapon->itemDefinitionIndex2()) && !activeWeapon->clip())
             cmd->buttons &= ~(UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2);
     }
@@ -607,8 +604,8 @@ void Misc::revealRanks(UserCmd* cmd) noexcept
 
 void Misc::autoStrafe(UserCmd* cmd) noexcept
 {
-    if (auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-        config->misc.autoStrafe
+    if (localPlayer
+        && config->misc.autoStrafe
         && !(localPlayer->flags() & 1)
         && localPlayer->moveType() != MoveType::NOCLIP) {
         if (cmd->mousedx < 0)
@@ -626,7 +623,7 @@ void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
 
 void Misc::moonwalk(UserCmd* cmd) noexcept
 {
-    if (config->misc.moonwalk && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->moveType() != MoveType::LADDER)
+    if (config->misc.moonwalk && localPlayer && localPlayer->moveType() != MoveType::LADDER)
         cmd->buttons ^= UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT;
 }
 
@@ -635,7 +632,15 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!config->misc.hitSound)
         return;
 
-    if (const auto localIdx = interfaces->engine->getLocalPlayer(); interfaces->engine->getPlayerForUserID(event.getInt("attacker")) != localIdx || interfaces->engine->getPlayerForUserID(event.getInt("userid")) == localIdx)
+    if (!localPlayer)
+        return;
+
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
         return;
 
     constexpr std::array hitSounds{

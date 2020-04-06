@@ -166,8 +166,8 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
 
 static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (interfaces->engine->isInGame()) {
-        if (const auto activeWeapon = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->getActiveWeapon()) {
+    if (localPlayer) {
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
             if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 

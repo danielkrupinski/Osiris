@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Pad.h"
+
 struct SoundInfo {
-    std::byte pad[40];
+    PAD(40)
     float volume;
-    std::byte pad1[12];
+    PAD(12)
     int	entityIndex;
-    std::byte pad2[12];
+    PAD(0xC)
     int soundIndex;
 };

@@ -22,7 +22,6 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
     static int originalIdx = 0;
 
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer) {
         originalIdx = 0;
         return;
@@ -130,14 +129,12 @@ void Visuals::thirdperson() noexcept
 
     if (config->visuals.thirdperson)
         if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
-            && interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->isAlive())
+            && localPlayer && localPlayer->isAlive())
             memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
@@ -201,9 +198,8 @@ void Visuals::removeShadows() noexcept
 
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
-    if (config->visuals.zoom) {
-        auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-        if (stage == FrameStage::RENDER_START && localPlayer && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
+    if (config->visuals.zoom && localPlayer) {
+        if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             static bool scoped{ false };
 
             if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
@@ -270,10 +266,10 @@ void Visuals::applyScreenEffects() noexcept
 
 void Visuals::hitEffect(GameEvent* event) noexcept
 {
-    if (config->visuals.hitEffect) {
+    if (config->visuals.hitEffect && localPlayer) {
         static float lastHitTime = 0.0f;
 
-        if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
+        if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
             lastHitTime = memory->globalVars->realtime;
             return;
         }
@@ -312,12 +308,12 @@ void Visuals::hitEffect(GameEvent* event) noexcept
 
 void Visuals::hitMarker(GameEvent* event) noexcept
 {
-    if (config->visuals.hitMarker == 0)
+    if (config->visuals.hitMarker == 0 || !localPlayer)
         return;
 
     static float lastHitTime = 0.0f;
 
-    if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer()) {
+    if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
         lastHitTime = memory->globalVars->realtime;
         return;
     }
@@ -349,7 +345,8 @@ void Visuals::disablePostProcessing() noexcept
 
 void Visuals::reduceFlashEffect() noexcept
 {
-    interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer())->flashMaxAlpha() = 255.0f - config->visuals.flashReduction * 2.55f;
+    if (localPlayer)
+        localPlayer->flashMaxAlpha() = 255.0f - config->visuals.flashReduction * 2.55f;
 }
 
 bool Visuals::removeHands(const char* modelName) noexcept

@@ -94,7 +94,6 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
@@ -145,7 +144,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer || entity->isDormant() || !entity->isAlive()
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
                 || !entity->isEnemy() && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
@@ -153,7 +152,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             for (auto bone : boneList) {
                 auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
-                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(localPlayer, entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)))
+                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(localPlayer.get(), entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)))
                     continue;
 
                 auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
