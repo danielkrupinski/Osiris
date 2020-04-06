@@ -485,7 +485,7 @@ void Misc::killMessage(GameEvent& event) noexcept
 
     std::string cmd = "say \"";
     cmd += config->misc.killMessageString;
-    cmd += "\"";
+    cmd += '"';
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
 }
 
