@@ -231,8 +231,12 @@ static Entity* make_glove(int entry, int serial) noexcept
     return interfaces->entityList->getEntity(entry);
 }
 
-static void post_data_update_start(Entity* local) noexcept
+static void post_data_update_start(int localHandle) noexcept
 {
+    const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
+    if (!local)
+        return;
+
     const auto local_index = local->index();
 
     if (!local->isAlive())
@@ -365,12 +369,15 @@ static constexpr void updateHud() noexcept
 
 void SkinChanger::run(FrameStage stage) noexcept
 {
+    static int localPlayerHandle = -1;
+
+    if (localPlayer)
+        localPlayerHandle = localPlayer->handle();
+
     if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        if (localPlayer) {
-            post_data_update_start(localPlayer.get());
-            if (hudUpdateRequired && !localPlayer->isDormant())
-                updateHud();
-        }
+        post_data_update_start(localPlayerHandle);
+        if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
+            updateHud();
     }
 }
 
