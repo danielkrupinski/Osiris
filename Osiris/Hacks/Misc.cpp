@@ -133,7 +133,7 @@ void Misc::spectatorList() noexcept
 void Misc::sniperCrosshair() noexcept
 {
     static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && localPlayer->isScoped() ? 3 : 0);
+    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped() ? 3 : 0);
 }
 
 void Misc::recoilCrosshair() noexcept
