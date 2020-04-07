@@ -78,7 +78,7 @@ private:
     constexpr void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept
     {
         auto material = dispatchMaterial(chams.material);
-        if (material == glow || material == chrome || material == plastic || material == glass) {
+        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
             if (chams.healthBased && health) {
                 material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
             } else if (chams.color.rainbow) {
