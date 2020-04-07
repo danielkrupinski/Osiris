@@ -29,7 +29,6 @@ void Reportbot::run() noexcept
     if (currentRound >= config->reportbot.rounds)
         return;
 
-    bool allPlayersReported = true;
     for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
 
@@ -39,7 +38,7 @@ void Reportbot::run() noexcept
         if (config->reportbot.target != 2 && (entity->isEnemy() ? config->reportbot.target != 0 : config->reportbot.target != 1))
             continue;
 
-        PlayerInfo playerInfo;  
+        PlayerInfo playerInfo;
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
@@ -64,14 +63,11 @@ void Reportbot::run() noexcept
             lastReportTime = memory->globalVars->realtime;
             reportedPlayers.push_back(playerInfo.xuid);
         }
-        allPlayersReported = false;
-        break;
+        return;
     }
 
-    if (allPlayersReported) {
-        reportedPlayers.clear();
-        ++currentRound;
-    }
+    reportedPlayers.clear();
+    ++currentRound;
 }
 
 void Reportbot::reset() noexcept
