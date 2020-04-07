@@ -293,22 +293,33 @@ void Misc::drawBombTimer() noexcept
 
 void Misc::stealNames() noexcept
 {
-    if (config->misc.nameStealer && localPlayer) {
-        bool allNamesStolen = true;
-        static std::vector<int> stolenIds;
-        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            if (auto entity = interfaces->entityList->getEntity(i); entity && entity != localPlayer.get()) {
-                if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(entity->index(), playerInfo) && !playerInfo.fakeplayer && std::find(std::begin(stolenIds), std::end(stolenIds), playerInfo.userId) == std::end(stolenIds)) {
-                    allNamesStolen = false;
-                    if (changeName(false, std::string{ playerInfo.name }.append("\x1").c_str(), 1.0f))
-                        stolenIds.push_back(playerInfo.userId);
-                    break;
-                }
-            }
-        }
-        if (allNamesStolen)
-            stolenIds.clear();
+    if (!config->misc.nameStealer)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static std::vector<int> stolenIds;
+
+    for (int i = 1; i <= memory->globalVars->maxClients; ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(entity->index(), playerInfo))
+            continue;
+
+        if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
+            continue;
+
+        if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
+            stolenIds.push_back(playerInfo.userId);
+
+        return;
     }
+    stolenIds.clear();
 }
 
 void Misc::disablePanoramablur() noexcept
