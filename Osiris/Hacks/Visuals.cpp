@@ -231,18 +231,24 @@ static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFuncti
     }
 }
 
-#define DRAW_SCREEN_EFFECT(material, x, y, width, height) \
+#define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
+    const auto renderContext = interfaces->materialSystem->getRenderContext(); \
+    renderContext->beginRender(); \
+    int x, y, w, h; \
+    renderContext->getViewport(x, y, w, h); \
     __asm { \
-        __asm push height \
-        __asm push width \
+        __asm push h \
+        __asm push w \
         __asm push y \
         __asm mov edx, x \
         __asm mov ecx, material \
         __asm call drawFunction \
         __asm add esp, 12 \
     } \
+    renderContext->endRender(); \
+    renderContext->release(); \
 } \
 
 void Visuals::applyScreenEffects() noexcept
@@ -270,8 +276,7 @@ void Visuals::applyScreenEffects() noexcept
     else if (config->visuals.screenEffect >= 4)
         material->findVar("$c0_x")->setValue(1.0f);
 
-    const auto [width, height] = interfaces->surface->getScreenSize();
-    drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
+    DRAW_SCREEN_EFFECT(material)
 }
 
 void Visuals::hitEffect(GameEvent* event) noexcept
@@ -298,10 +303,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 return effects[config->visuals.hitEffect - 2];
             };
 
-            auto renderContext = interfaces->materialSystem->getRenderContext();
-            renderContext->beginRender();
-            int x, y, width, height;
-            renderContext->getViewport(x, y, width, height);
+           
             auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
             if (config->visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
@@ -309,9 +311,8 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 material->findVar("$c0_x")->setValue(0.1f);
             else if (config->visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
-            drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
-            renderContext->endRender();
-            renderContext->release();
+
+            DRAW_SCREEN_EFFECT(material)
         }
     }
 }
