@@ -231,6 +231,20 @@ static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFuncti
     }
 }
 
+#define DRAW_SCREEN_EFFECT(material, x, y, width, height) \
+{ \
+    const auto drawFunction = memory->drawScreenEffectMaterial; \
+    __asm { \
+        __asm push height \
+        __asm push width \
+        __asm push y \
+        __asm mov edx, x \
+        __asm mov ecx, material \
+        __asm call drawFunction \
+        __asm add esp, 12 \
+    } \
+} \
+
 void Visuals::applyScreenEffects() noexcept
 {
     if (!config->visuals.screenEffect)
