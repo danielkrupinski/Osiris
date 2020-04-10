@@ -213,24 +213,6 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
-// TODO: verify if this is needed, check if other methods don't break with postprocessing disabled
-static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFunction, Material* material, int x, int y, int width, int height) noexcept
-{
-    __asm {
-        push ebp
-        mov ebp, esp
-        push height
-        push width
-        push y
-        mov edx, x
-        mov ecx, material
-        call drawFunction
-        mov esp, ebp
-        pop ebp
-        ret
-    }
-}
-
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
