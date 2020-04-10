@@ -216,22 +216,18 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
-    const auto renderContext = interfaces->materialSystem->getRenderContext(); \
-    renderContext->beginRender(); \
-    int x, y, w, h; \
-    renderContext->getViewport(x, y, w, h); \
+    int w, h; \
+    interfaces->surface->getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
-        __asm push y \
-        __asm mov edx, x \
+        __asm push 0 \
+        __asm xor edx, edx \
         __asm mov ecx, material \
         __asm call drawFunction \
         __asm add esp, 12 \
     } \
-    renderContext->endRender(); \
-    renderContext->release(); \
-} \
+}
 
 void Visuals::applyScreenEffects() noexcept
 {
