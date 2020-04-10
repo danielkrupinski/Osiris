@@ -231,37 +231,52 @@ static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFuncti
     }
 }
 
+#define DRAW_SCREEN_EFFECT(material) \
+{ \
+    const auto drawFunction = memory->drawScreenEffectMaterial; \
+    const auto renderContext = interfaces->materialSystem->getRenderContext(); \
+    renderContext->beginRender(); \
+    int x, y, w, h; \
+    renderContext->getViewport(x, y, w, h); \
+    __asm { \
+        __asm push h \
+        __asm push w \
+        __asm push y \
+        __asm mov edx, x \
+        __asm mov ecx, material \
+        __asm call drawFunction \
+        __asm add esp, 12 \
+    } \
+    renderContext->endRender(); \
+    renderContext->release(); \
+} \
+
 void Visuals::applyScreenEffects() noexcept
 {
-    if (config->visuals.screenEffect) {
-        constexpr auto getEffectMaterial = [] {
-            static constexpr const char* effects[]{
+    if (!config->visuals.screenEffect)
+        return;
+
+    const auto material = interfaces->materialSystem->findMaterial([] {
+        constexpr std::array effects{
             "effects/dronecam",
             "effects/underwater_overlay",
             "effects/healthboost",
             "effects/dangerzone_screen"
-            };
-
-            if (config->visuals.screenEffect <= 2)
-                return effects[0];
-            return effects[config->visuals.screenEffect - 2];
         };
 
-        auto renderContext = interfaces->materialSystem->getRenderContext();
-        renderContext->beginRender();
-        int x, y, width, height;
-        renderContext->getViewport(x, y, width, height);
-        auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
-        if (config->visuals.screenEffect == 1)
-            material->findVar("$c0_x")->setValue(0.0f);
-        else if (config->visuals.screenEffect == 2)
-            material->findVar("$c0_x")->setValue(0.1f);
-        else if (config->visuals.screenEffect >= 4)
-            material->findVar("$c0_x")->setValue(1.0f);
-        drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
-        renderContext->endRender();
-        renderContext->release();
-    }
+        if (config->visuals.screenEffect <= 2 || static_cast<std::size_t>(config->visuals.screenEffect - 2) >= effects.size())
+            return effects[0];
+        return effects[config->visuals.screenEffect - 2];
+    }());
+
+    if (config->visuals.screenEffect == 1)
+        material->findVar("$c0_x")->setValue(0.0f);
+    else if (config->visuals.screenEffect == 2)
+        material->findVar("$c0_x")->setValue(0.1f);
+    else if (config->visuals.screenEffect >= 4)
+        material->findVar("$c0_x")->setValue(1.0f);
+
+    DRAW_SCREEN_EFFECT(material)
 }
 
 void Visuals::hitEffect(GameEvent* event) noexcept
@@ -288,10 +303,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 return effects[config->visuals.hitEffect - 2];
             };
 
-            auto renderContext = interfaces->materialSystem->getRenderContext();
-            renderContext->beginRender();
-            int x, y, width, height;
-            renderContext->getViewport(x, y, width, height);
+           
             auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
             if (config->visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
@@ -299,9 +311,8 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 material->findVar("$c0_x")->setValue(0.1f);
             else if (config->visuals.hitEffect >= 4)
                 material->findVar("$c0_x")->setValue(1.0f);
-            drawScreenEffectMaterial(memory->drawScreenEffectMaterial, material, 0, 0, width, height);
-            renderContext->endRender();
-            renderContext->release();
+
+            DRAW_SCREEN_EFFECT(material)
         }
     }
 }
