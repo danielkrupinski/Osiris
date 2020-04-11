@@ -875,13 +875,20 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         ImGui::PushItemWidth(-1);
 
-        ImGui::ListBox("", &selectedStickerSlot, [](void* data, int idx, const char** out_text) {
-            static char elementName[64];
-            auto kit_vector_index = config->skinChanger[itemIndex].stickers[idx].kit_vector_index;
-            sprintf_s(elementName, "#%d (%s)", idx + 1, SkinChanger::stickerKits[kit_vector_index].name.c_str());
-            *out_text = elementName;
-            return true;
-            }, nullptr, 5, 5);
+        if (ImGui::ListBoxHeader("", 5)) {
+            for (int i = 0; i < 5; ++i) {
+                ImGui::PushID(i);
+
+                const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
+                const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::stickerKits[kit_vector_index].name;
+
+                if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
+                    selectedStickerSlot = i;
+
+                ImGui::PopID();
+            }
+            ImGui::ListBoxFooter();
+        }
 
         ImGui::PopItemWidth();
 
