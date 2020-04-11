@@ -984,7 +984,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
-    ImGui::SliderInt("Bhop hitchance", &config->misc.bhopHitchance, 0, 1, "%d%");
+    ImGui::SliderInt("Bhop hitchance", &config->misc.bhopHitchance, 0, 100, "%d%");
     ImGui::SliderInt("Min hits", &config->misc.bhopMinHits, 0, 20, "%");
     ImGui::SliderInt("Max hits", &config->misc.bhopMaxHits, 0, 20, "%");
     ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
