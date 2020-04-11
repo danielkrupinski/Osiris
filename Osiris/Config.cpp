@@ -801,6 +801,9 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
+        if (miscJson.isMember("Bhop hitchance")) misc.bunnyHop = miscJson["Bunny hop"].asInt();
+        if (miscJson.isMember("Min hits")) misc.bunnyHop = miscJson["Min hits"].asInt();
+        if (miscJson.isMember("Max hits")) misc.bunnyHop = miscJson["Max hits"].asInt();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
         if (miscJson.isMember("Clan tag")) misc.clanTag = miscJson["Clan tag"].asString();
