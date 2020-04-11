@@ -410,7 +410,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
         && !(localPlayer->flags() & 1) 
         && localPlayer->moveType() != MoveType::LADDER 
         && !wasLastTimeOnGround)
-        && ((config->misc.bhopMaxHits < config->misc.bhopMinHits || config->misc.bhopMaxHits > hopsHit)
+        && ((config->misc.bhopMaxHits <= config->misc.bhopMinHits || config->misc.bhopMaxHits >= hopsHit)
             || hopsHit < config->misc.bhopMinHits)) {
         
         if (config->misc.bhopHitchance == 100 || rand() % 100 > config->misc.bhopHitchance || hopsHit < config->misc.bhopMinHits) {
