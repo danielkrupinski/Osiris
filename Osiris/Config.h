@@ -227,8 +227,8 @@ public:
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         int bhopHitchance{ 100 };
-        int bhopMaxHits{ 0 };
         int bhopMinHits{ 0 };
+        int bhopMaxHits{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         std::string clanTag;
