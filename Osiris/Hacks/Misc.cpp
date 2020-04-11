@@ -406,16 +406,17 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
 
     //if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
     //    cmd->buttons &= ~UserCmd::IN_JUMP;
-    if (missedLast) {
-        cmd->buttons &= ~UserCmd::IN_JUMP;
-    } else if ((config->misc.bunnyHop 
+    if ((config->misc.bunnyHop 
         && !(localPlayer->flags() & 1) 
         && localPlayer->moveType() != MoveType::LADDER 
         && !wasLastTimeOnGround)) {
         
-        if ((((config->misc.bhopMaxHits <= config->misc.bhopMinHits || hopsHit < config->misc.bhopMaxHits)
-            && config->misc.bhopHitchance == 100 || rand() % 100 > config->misc.bhopHitchance || hopsHit < config->misc.bhopMinHits))
-            || hopsHit < config->misc.bhopMinHits) {
+        if (missedLast) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+            hopsHit++;
+            missedLast = false;
+        } else if ((((config->misc.bhopMaxHits <= config->misc.bhopMinHits || hopsHit < config->misc.bhopMaxHits)
+            && config->misc.bhopHitchance == 100 || rand() % 100 > config->misc.bhopHitchance || hopsHit < config->misc.bhopMinHits))) {
 
             hopsHit++;
             cmd->buttons &= ~UserCmd::IN_JUMP;
