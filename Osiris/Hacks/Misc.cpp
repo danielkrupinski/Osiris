@@ -397,36 +397,25 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
     static int hopsHit = 0;
-    static bool missedLast = false;
 
-    if (!localPlayer)
+    if (!config->misc.bunnyHop || !localPlayer)
         return;
-
-    static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
 
     //if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
     //    cmd->buttons &= ~UserCmd::IN_JUMP;
-    if ((config->misc.bunnyHop 
-        && !(localPlayer->flags() & 1) 
-        && localPlayer->moveType() != MoveType::LADDER 
-        && !wasLastTimeOnGround)) {
-        
-        if (missedLast) {
-            cmd->buttons &= ~UserCmd::IN_JUMP;
-            hopsHit++;
-            missedLast = false;
-        } else if ((((config->misc.bhopMaxHits <= config->misc.bhopMinHits || hopsHit < config->misc.bhopMaxHits)
-            && config->misc.bhopHitchance == 100 || rand() % 100 > config->misc.bhopHitchance || hopsHit < config->misc.bhopMinHits))) {
 
-            hopsHit++;
+    if (localPlayer->moveType() != MoveType::LADDER) {
+        if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & 1)) {
             cmd->buttons &= ~UserCmd::IN_JUMP;
-        } else {
+        }
+        else if ((hopsHit >= config->misc.bhopMinHits && rand() % 100 + 1 > config->misc.bhopHitchance) || hopsHit >= config->misc.bhopMaxHits) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
             hopsHit = 0;
-            missedLast = true;
+        }
+        else {
+            hopsHit++;
         }
     }
-
-    wasLastTimeOnGround = localPlayer->flags() & 1;
 }
 
 void Misc::fakeBan(bool set) noexcept
