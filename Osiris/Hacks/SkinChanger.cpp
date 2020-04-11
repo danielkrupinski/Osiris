@@ -71,7 +71,7 @@ void SkinChanger::initializeKits() noexcept
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
 }
 
-static std::unordered_map<std::string_view, const char*> iconOverrides;
+static std::unordered_map<std::string, const char*> iconOverrides;
 
 enum class StickerAttribute {
     Index,
