@@ -421,6 +421,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
             cmd->buttons &= ~UserCmd::IN_JUMP;
         } else {
             hopsHit = 0;
+            missedLast = true;
         }
     }
 
