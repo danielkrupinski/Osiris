@@ -1555,6 +1555,9 @@ void Config::save(size_t id) const noexcept
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
+        miscJson["Bhop hitchance"] = misc.bhopHitchance;
+        miscJson["Max hits"] = misc.bhopMaxHits;
+        miscJson["Min hits"] = misc.bhopMinHits;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Clock tag"] = misc.clocktag;
         miscJson["Clan tag"] = misc.clanTag;
