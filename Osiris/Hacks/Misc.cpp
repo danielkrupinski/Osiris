@@ -397,6 +397,7 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
     static int hopsHit = 0;
+    static bool missedLast = false;
 
     if (!localPlayer)
         return;
@@ -405,8 +406,9 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
 
     //if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
     //    cmd->buttons &= ~UserCmd::IN_JUMP;
-
-    if ((config->misc.bunnyHop 
+    if (missedLast) {
+        cmd->buttons &= ~UserCmd::IN_JUMP;
+    } else if ((config->misc.bunnyHop 
         && !(localPlayer->flags() & 1) 
         && localPlayer->moveType() != MoveType::LADDER 
         && !wasLastTimeOnGround)) {
