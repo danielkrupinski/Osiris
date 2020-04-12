@@ -660,6 +660,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGui::Combo("", &config->esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
             ImGuiCustom::colorPicker("Name", config->esp.weapon.name);
             ImGui::SameLine(spacing);
+            ImGuiCustom::colorPicker("Ammo", config->esp.weapon.ammo);
             ImGuiCustom::colorPicker("Outline", config->esp.weapon.outline);
             ImGuiCustom::colorPicker("Distance", config->esp.weapon.distance);
             ImGui::SliderFloat("Max distance", &config->esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
