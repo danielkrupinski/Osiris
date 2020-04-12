@@ -2,6 +2,7 @@
 
 #include <array>
 #include <filesystem>
+#include <memory>
 #include <string>
 
 #include "imgui/imgui.h"
@@ -46,12 +47,9 @@ public:
         bool ignoreSmoke{ false };
         bool autoShot{ false };
         bool autoScope{ false };
-        bool recoilbasedFov{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
-        float recoilControlX{ 0.0f };
-        float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
@@ -61,17 +59,18 @@ public:
     std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
-        bool enabled{ false };
-        bool onKey{ false };
-        int key{ 0 };
-        bool friendlyFire{ false };
-        bool scopedOnly{ true };
-        bool ignoreFlash{ false };
-        bool ignoreSmoke{ false };
-        int hitgroup{ 0 };
-        int shotDelay{ 0 };
-        int minDamage{ 1 };
-        bool killshot{ false };
+        bool enabled = false;
+        bool friendlyFire = false;
+        bool scopedOnly = true;
+        bool ignoreFlash = false;
+        bool ignoreSmoke = false;
+        bool killshot = false;
+        bool onKey = false;
+        int key = 0;
+        int hitgroup = 0;
+        int shotDelay = 0;
+        int minDamage = 1;
+        float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
 
@@ -85,8 +84,8 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
-        float pitchAngle{ 0.0f };
         bool yaw{ false };
+        float pitchAngle{ 0.0f };
     } antiAim;
 
     struct Glow {
@@ -101,13 +100,13 @@ public:
 
     struct Chams {
         struct Material {
-            bool enabled{ false };
-            bool healthBased{ false };
+            bool enabled = false;
+            bool healthBased = false;
+            bool blinking = false;
+            bool wireframe = false;
             Color color;
-            bool blinking{ false };
-            int material{ 0 };
-            bool wireframe{ false };
-            float alpha{ 1.0f };
+            int material = 0;
+            float alpha = 1.0f;
         };
         std::array<Material, 2> materials;
     };
@@ -288,4 +287,4 @@ private:
     std::vector<std::string> configs;
 };
 
-extern Config config;
+inline std::unique_ptr<Config> config;

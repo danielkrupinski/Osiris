@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 struct ImFont;
@@ -8,7 +9,7 @@ class GUI {
 public:
     GUI() noexcept;
     void render() noexcept;
-    bool open = false;
+    bool open = true;
 private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
@@ -52,4 +53,4 @@ private:
     } fonts;
 };
 
-extern GUI gui;
+inline std::unique_ptr<GUI> gui;

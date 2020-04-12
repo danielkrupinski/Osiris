@@ -50,12 +50,9 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Ignore smoke")) aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
         if (aimbotJson.isMember("Auto shot")) aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
         if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
-        if (aimbotJson.isMember("Recoil-based fov")) aimbotConfig.recoilbasedFov = aimbotJson["Recoil-based fov"].asBool();
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
         if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
-        if (aimbotJson.isMember("Recoil control X")) aimbotConfig.recoilControlX = aimbotJson["Recoil control X"].asFloat();
-        if (aimbotJson.isMember("Recoil control Y")) aimbotConfig.recoilControlY = aimbotJson["Recoil control Y"].asFloat();
         if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
@@ -78,6 +75,7 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
         if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
+        if (triggerbotJson.isMember("Burst Time")) triggerbotConfig.burstTime = triggerbotJson["Burst Time"].asFloat();
     }
 
     {
@@ -931,12 +929,9 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
         aimbotJson["Auto shot"] = aimbotConfig.autoShot;
         aimbotJson["Auto scope"] = aimbotConfig.autoScope;
-        aimbotJson["Recoil-based fov"] = aimbotConfig.recoilbasedFov;
         aimbotJson["Fov"] = aimbotConfig.fov;
         aimbotJson["Smooth"] = aimbotConfig.smooth;
         aimbotJson["Bone"] = aimbotConfig.bone;
-        aimbotJson["Recoil control X"] = aimbotConfig.recoilControlX;
-        aimbotJson["Recoil control Y"] = aimbotConfig.recoilControlY;
         aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
         aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
@@ -959,6 +954,7 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Shot delay"] = triggerbotConfig.shotDelay;
         triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
         triggerbotJson["Killshot"] = triggerbotConfig.killshot;
+        triggerbotJson["Burst Time"] = triggerbotConfig.burstTime;
     }
 
     {

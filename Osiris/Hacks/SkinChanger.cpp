@@ -30,13 +30,13 @@ void SkinChanger::initializeKits() noexcept
     const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
-    for (int i = 0; i <= memory.itemSchema()->paintKits.lastElement; i++) {
-        const auto paintKit = memory.itemSchema()->paintKits.memory[i].value;
+    for (int i = 0; i <= memory->itemSchema()->paintKits.lastElement; i++) {
+        const auto paintKit = memory->itemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001) // ignore workshop_default
             continue;
 
-        const auto itemName{ interfaces.localize->find(paintKit->itemName.buffer + 1) };
+        const auto itemName{ interfaces->localize->find(paintKit->itemName.buffer + 1) };
         
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr)) {
@@ -60,9 +60,9 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory.itemSchema()->stickerKits.lastElement; i++) {
-        const auto stickerKit = memory.itemSchema()->stickerKits.memory[i].value;
-        const auto itemName = interfaces.localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
+    for (int i = 0; i <= memory->itemSchema()->stickerKits.lastElement; i++) {
+        const auto stickerKit = memory->itemSchema()->stickerKits.memory[i].value;
+        const auto itemName = interfaces->localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 
         if (std::string name(itemNameLength, 0); WideCharToMultiByte(CP_UTF8, 0, itemName, -1, &name[0], itemNameLength, nullptr, nullptr))
@@ -71,7 +71,7 @@ void SkinChanger::initializeKits() noexcept
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
 }
 
-static std::unordered_map<std::string_view, const char*> iconOverrides;
+static std::unordered_map<std::string, const char*> iconOverrides;
 
 enum class StickerAttribute {
     Index,
@@ -131,7 +131,7 @@ decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlo
 void apply_sticker_changer(Entity* item) noexcept
 {
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars[hash] + 0xC;
+        s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
     static vmt_multi_hook hook;
 
@@ -195,7 +195,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
             // Set the weapon model index -- required for paint kits to work on replacement items after the 29/11/2016 update.
             //item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
-            item->setModelIndex(interfaces.modelInfo->getModelIndex(replacement_item->model));
+            item->setModelIndex(interfaces->modelInfo->getModelIndex(replacement_item->model));
             item->preDataUpdate(0);
 
             // We didn't override 0, but some actual weapon, that we have data for
@@ -217,7 +217,7 @@ static Entity* make_glove(int entry, int serial) noexcept
 
     if (!createWearable) {
         createWearable = []() -> decltype(createWearable) {
-            for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+            for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
                 if (clientClass->classId == ClassId::EconWearable)
                     return clientClass->createFunction;
             return nullptr;
@@ -228,18 +228,22 @@ static Entity* make_glove(int entry, int serial) noexcept
         return nullptr;
 
     createWearable(entry, serial);
-    return interfaces.entityList->getEntity(entry);
+    return interfaces->entityList->getEntity(entry);
 }
 
-static void post_data_update_start(Entity* local) noexcept
+static void post_data_update_start(int localHandle) noexcept
 {
+    const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
+    if (!local)
+        return;
+
     const auto local_index = local->index();
 
     if (!local->isAlive())
         return;
 
     PlayerInfo player_info;
-    if (!interfaces.engine->getPlayerInfo(local_index, player_info))
+    if (!interfaces->engine->getPlayerInfo(local_index, player_info))
         return;
 
     // Handle glove config
@@ -250,12 +254,12 @@ static void post_data_update_start(Entity* local) noexcept
 
         static int glove_handle;
 
-        auto glove = interfaces.entityList->getEntityFromHandle(wearables[0]);
+        auto glove = interfaces->entityList->getEntityFromHandle(wearables[0]);
 
         if (!glove) // There is no glove
         {
             // Try to get our last created glove
-            const auto our_glove = interfaces.entityList->getEntityFromHandle(glove_handle);
+            const auto our_glove = interfaces->entityList->getEntityFromHandle(glove_handle);
 
             if (our_glove) // Our glove still exists
             {
@@ -269,11 +273,11 @@ static void post_data_update_start(Entity* local) noexcept
             // We don't have a glove, but we should
             if (!glove)
             {
-                auto entry = interfaces.entityList->getHighestEntityIndex() + 1;
+                auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
 #define HIJACK_ENTITY 1
 #if HIJACK_ENTITY == 1
-                for (int i = 65; i <= interfaces.entityList->getHighestEntityIndex(); i++) {
-                    auto entity = interfaces.entityList->getEntity(i);
+                for (int i = 65; i <= interfaces->entityList->getHighestEntityIndex(); i++) {
+                    auto entity = interfaces->entityList->getEntity(i);
 
                     if (entity && entity->getClientClass()->classId == ClassId{ 70 }) {
                         entry = i;
@@ -295,7 +299,7 @@ static void post_data_update_start(Entity* local) noexcept
             }
 
             if (glove) {
-                memory.equipWearable(glove, local);
+                memory->equipWearable(glove, local);
                 local->body() = 1;
 
                 apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
@@ -311,7 +315,7 @@ static void post_data_update_start(Entity* local) noexcept
             if (weapon_handle == -1)
                 break;
 
-            auto weapon = interfaces.entityList->getEntityFromHandle(weapon_handle);
+            auto weapon = interfaces->entityList->getEntityFromHandle(weapon_handle);
 
             if (!weapon)
                 continue;
@@ -326,12 +330,12 @@ static void post_data_update_start(Entity* local) noexcept
         }
     }
 
-    const auto view_model = interfaces.entityList->getEntityFromHandle(local->viewModel());
+    const auto view_model = interfaces->entityList->getEntityFromHandle(local->viewModel());
 
     if (!view_model)
         return;
 
-    const auto view_model_weapon = interfaces.entityList->getEntityFromHandle(view_model->weapon());
+    const auto view_model_weapon = interfaces->entityList->getEntityFromHandle(view_model->weapon());
 
     if (!view_model_weapon)
         return;
@@ -341,10 +345,10 @@ static void post_data_update_start(Entity* local) noexcept
     if (!override_info)
         return;
 
-    const auto override_model_index = interfaces.modelInfo->getModelIndex(override_info->model);
+    const auto override_model_index = interfaces->modelInfo->getModelIndex(override_info->model);
     view_model->modelIndex() = override_model_index;
 
-    const auto world_model = interfaces.entityList->getEntityFromHandle(view_model_weapon->weaponWorldModel());
+    const auto world_model = interfaces->entityList->getEntityFromHandle(view_model_weapon->weaponWorldModel());
 
     if (!world_model)
         return;
@@ -356,33 +360,36 @@ static bool hudUpdateRequired{ false };
 
 static constexpr void updateHud() noexcept
 {
-    if (auto hud_weapons = memory.findHudElement(memory.hud, "CCSGO_HudWeaponSelection") - 0x28) {
+    if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - 0x28) {
         for (int i = 0; i < *(hud_weapons + 0x20); i++)
-            i = memory.clearHudWeapon(hud_weapons, i);
+            i = memory->clearHudWeapon(hud_weapons, i);
     }
     hudUpdateRequired = false;
 }
 
 void SkinChanger::run(FrameStage stage) noexcept
 {
+    static int localPlayerHandle = -1;
+
+    if (localPlayer)
+        localPlayerHandle = localPlayer->handle();
+
     if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        if (const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())) {
-            post_data_update_start(localPlayer);
-            if (hudUpdateRequired && !localPlayer->isDormant())
-                updateHud();
-        }
+        post_data_update_start(localPlayerHandle);
+        if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
+            updateHud();
     }
 }
 
 void SkinChanger::scheduleHudUpdate() noexcept
 {
-    interfaces.cvar->findVar("cl_fullupdate")->changeCallback();
+    interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
     hudUpdateRequired = true;
 }
 
 void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
 {
-    if (interfaces.engine->getPlayerForUserID(event.getInt("attacker")) == interfaces.engine->getLocalPlayer()) {
+    if (localPlayer && interfaces->engine->getPlayerForUserID(event.getInt("attacker")) == localPlayer->index()) {
         if (const auto iconOverride = iconOverrides[event.getString("weapon")])
             event.setString("weapon", iconOverride);
     }

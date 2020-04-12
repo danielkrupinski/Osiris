@@ -12,17 +12,15 @@ static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
     if (!localPlayer)
         return;
 
-    constexpr auto& glow = config.glow;
+    const auto& glow = config->glow;
 
     Glow::clearCustomObjects();
 
-    for (int i = interfaces.engine->getMaxClients() + 1; i <= interfaces.entityList->getHighestEntityIndex(); ++i) {
-        const auto entity = interfaces.entityList->getEntity(i);
+    for (int i = interfaces->engine->getMaxClients() + 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
         if (!entity || entity->isDormant())
             continue;
 
@@ -38,15 +36,15 @@ void Glow::render() noexcept
         case ClassId::SnowballProjectile:
         case ClassId::Hostage:
         case ClassId::CSRagdoll:
-            if (!memory.glowObjectManager->hasGlowEffect(entity)) {
-                if (auto index{ memory.glowObjectManager->registerGlowObject(entity) }; index != -1)
+            if (!memory->glowObjectManager->hasGlowEffect(entity)) {
+                if (auto index{ memory->glowObjectManager->registerGlowObject(entity) }; index != -1)
                     customGlowEntities.emplace_back(i, index);
             }
         }
     }
 
-    for (int i = 0; i < memory.glowObjectManager->glowObjectDefinitions.size; i++) {
-        GlowObjectDefinition& glowobject = memory.glowObjectManager->glowObjectDefinitions[i];
+    for (int i = 0; i < memory->glowObjectManager->glowObjectDefinitions.size; i++) {
+        GlowObjectDefinition& glowobject = memory->glowObjectManager->glowObjectDefinitions[i];
 
         auto entity = glowobject.entity;
 
@@ -63,7 +61,7 @@ void Glow::render() noexcept
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
                 else if (glow.color.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory.globalVars->realtime, glow.color.rainbowSpeed) };
+                    const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, glow.color.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
                 }
                 else
@@ -71,9 +69,9 @@ void Glow::render() noexcept
             }
         };
 
-        auto applyPlayerGlow = [applyGlow, localPlayer](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
+        auto applyPlayerGlow = [applyGlow](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
             if (glowAll.enabled) applyGlow(glowAll, entity->health());
-            else if (entity->isVisible() && !memory.lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glowVisible, entity->health());
+            else if (entity->isVisible() && !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glowVisible, entity->health());
             else applyGlow(glowOccluded, entity->health());
         };
 
@@ -83,7 +81,7 @@ void Glow::render() noexcept
                 applyPlayerGlow(glow[6], glow[7], glow[8], entity);
             else if (entity->isDefusing())
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
-            else if (entity == interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer()))
+            else if (entity == localPlayer.get())
                 applyGlow(glow[12], entity->health());
             else if (entity->isEnemy())
                 applyPlayerGlow(glow[3], glow[4], glow[5], entity);
@@ -119,7 +117,7 @@ void Glow::render() noexcept
 void Glow::clearCustomObjects() noexcept
 {
     for (const auto& [entityIndex, glowObjectIndex] : customGlowEntities)
-        memory.glowObjectManager->unregisterGlowObject(glowObjectIndex);
+        memory->glowObjectManager->unregisterGlowObject(glowObjectIndex);
 
     customGlowEntities.clear();
 }

@@ -1,5 +1,6 @@
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/LocalPlayer.h"
 
 template <typename T>
 static constexpr auto relativeToAbsolute(int* address) noexcept
@@ -14,9 +15,9 @@ Memory::Memory() noexcept
 {
     present = findPattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
     reset = findPattern(L"gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8", 9);
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 5);
+    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces->client))[16] + 1);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[11] + 10);
     glowObjectManager = *FIND_PATTERN(GlowObjectManager**, L"client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3);
     disablePostProcessing = *FIND_PATTERN(bool**, L"client_panorama", "\x83\xEC\x4C\x80\x3D", 5);
     loadSky = relativeToAbsolute<decltype(loadSky)>(FIND_PATTERN(int*, L"engine", "\xE8????\x84\xC0\x74\x2D\xA1", 1));
@@ -51,4 +52,6 @@ Memory::Memory() noexcept
     predictionRandomSeed = *FIND_PATTERN(int**, L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
     moveData = **FIND_PATTERN(MoveData***, L"client_panorama", "\xA1????\xF3\x0F\x59\xCD", 1);
     moveHelper = **FIND_PATTERN(MoveHelper***, L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
+
+    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client_panorama", "\xA1????\x89\x45\xBC\x85\xC0", 1)));
 }
