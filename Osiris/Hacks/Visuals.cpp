@@ -213,43 +213,21 @@ void Visuals::applyZoom(FrameStage stage) noexcept
     }
 }
 
-// TODO: verify if this is needed, check if other methods don't break with postprocessing disabled
-static __declspec(naked) void drawScreenEffectMaterial(std::uintptr_t drawFunction, Material* material, int x, int y, int width, int height) noexcept
-{
-    __asm {
-        push ebp
-        mov ebp, esp
-        push height
-        push width
-        push y
-        mov edx, x
-        mov ecx, material
-        call drawFunction
-        mov esp, ebp
-        pop ebp
-        ret
-    }
-}
-
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
-    const auto renderContext = interfaces->materialSystem->getRenderContext(); \
-    renderContext->beginRender(); \
-    int x, y, w, h; \
-    renderContext->getViewport(x, y, w, h); \
+    int w, h; \
+    interfaces->surface->getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
-        __asm push y \
-        __asm mov edx, x \
+        __asm push 0 \
+        __asm xor edx, edx \
         __asm mov ecx, material \
         __asm call drawFunction \
         __asm add esp, 12 \
     } \
-    renderContext->endRender(); \
-    renderContext->release(); \
-} \
+}
 
 void Visuals::applyScreenEffects() noexcept
 {
@@ -381,8 +359,10 @@ void Visuals::skybox() noexcept
 {
     constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
 
-    if (static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size())
+    if (static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
         memory->loadSky(skyboxes[config->visuals.skybox - 1]);
-    else
-        memory->loadSky(interfaces->cvar->findVar("sv_skyname")->string);
+    } else {
+        static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
+        memory->loadSky(sv_skyname->string);
+    }
 }
