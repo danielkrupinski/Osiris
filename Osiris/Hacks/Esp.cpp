@@ -224,8 +224,6 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
-        float drawPositionXXX = bbox.x0 + 60;
-
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces->cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces->cvar->findVar("sv_dz_player_max_health") };
