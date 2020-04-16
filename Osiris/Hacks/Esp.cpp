@@ -224,6 +224,8 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
         float drawPositionX = bbox.x0 - 5;
 
+        float drawPositionXXX = bbox.x0 + 60;
+
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces->cvar->findVar("game_type") };
             static auto survivalMaxHealth{ interfaces->cvar->findVar("sv_dz_player_max_health") };
@@ -236,14 +238,25 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setDrawColor(config.healthBar.color);
 
             interfaces->surface->drawFilledRect(drawPositionX - 1, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
-            
+            if (config.health.enabled) {
+                if (config.health.rainbow)
+                    interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.health.rainbowSpeed));
+                else
+                    interfaces->surface->setTextColor(config.health.color);
+                if (entity->health() < 100)
+                {
+                    interfaces->surface->setTextPosition(drawPositionX - 5, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth) - 15);
+                    interfaces->surface->setTextFont(config.font);
+                    interfaces->surface->printText(std::to_wstring(entity->health()));
+                }
+            }
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
                     interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
-                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
@@ -262,7 +275,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
-                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
@@ -274,7 +287,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 else
                     interfaces->surface->setDrawColor(config.ammoBar.color);
 
-                interfaces->surface->drawFilledRect(drawPositionX - 1, bbox.y0 + abs(bbox.y1 - bbox.y0) * (iClip - iClipMax) / iClip, drawPositionX, bbox.y1);
+                interfaces->surface->drawFilledRect(drawPositionX - 2, bbox.y0 + abs(bbox.y1 - bbox.y0) * (iClip - iClipMax) / iClip, drawPositionX, bbox.y1);
 
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
@@ -282,7 +295,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
-                    interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                    interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 + abs(bbox.y1 - bbox.y0) * (iClip - iClipMax) / iClip, drawPositionX + 1, bbox.y1 + 1);
                 }
             drawPositionX -= 7;
         }
@@ -317,15 +330,6 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         }     
 
         float drawPositionY = bbox.y0;
-
-        if (config.health.enabled) {
-            if (config.health.rainbow)
-                interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.health.rainbowSpeed));
-            else
-                interfaces->surface->setTextColor(config.health.color);
-
-            renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 5, drawPositionY });
-         }
 
         if (config.armor.enabled) {
             if (config.armor.rainbow)
