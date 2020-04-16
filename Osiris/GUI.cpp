@@ -1051,7 +1051,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (config->misc.hitSound == 5)
     {
-        ImGui::InputText("Hitsound", config->misc.customhitsound, 50);
+        ImGui::InputText("Hitsound name", &config->misc.customhitsound);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("type the name of the .wav file you placed in csgo\\sound\\ *DO NOT INCLUDE THE EXTENSION*");
     }
