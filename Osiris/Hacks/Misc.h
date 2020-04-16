@@ -13,6 +13,7 @@
 
 namespace Misc
 {
+    void BetterHitsounds(GameEvent* event) noexcept;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;

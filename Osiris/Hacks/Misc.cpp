@@ -12,6 +12,24 @@
 #include "../SDK/WeaponData.h"
 #include "EnginePrediction.h"
 
+#include <Windows.h>
+#include <playsoundapi.h>
+#pragma comment(lib, "Winmm.lib")
+
+void Misc::BetterHitsounds(GameEvent* event) noexcept
+{
+    if (!config->misc.hitSound)
+        return;
+    std::string soundFile = "csgo\\sound\\";
+    soundFile += config->misc.customhitsound;
+    soundFile += ".wav";
+    if (config->misc.hitSound == 5)
+    {
+        if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer() || interfaces->engine->getPlayerForUserID(event->getInt("userid")) == interfaces->engine->getLocalPlayer())
+            PlaySoundA(soundFile.c_str(), NULL, SND_ASYNC);
+    }
+}
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
