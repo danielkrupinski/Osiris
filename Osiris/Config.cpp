@@ -348,7 +348,21 @@ void Config::load(size_t id) noexcept
             if (outlineJson.isMember("Rainbow")) outlineConfig.rainbow = outlineJson["Rainbow"].asBool();
             if (outlineJson.isMember("Rainbow speed")) outlineConfig.rainbowSpeed = outlineJson["Rainbow speed"].asFloat();
         }
+        if (espJson.isMember("Ammo")) {
+            const auto& ammoJson = espJson["Ammo"];
+            auto& ammoConfig = espConfig.ammo;
 
+            if (ammoJson.isMember("Enabled")) ammoConfig.enabled = ammoJson["Enabled"].asBool();
+
+            if (ammoJson.isMember("Color")) {
+                ammoConfig.color[0] = ammoJson["Color"][0].asFloat();
+                ammoConfig.color[1] = ammoJson["Color"][1].asFloat();
+                ammoConfig.color[2] = ammoJson["Color"][2].asFloat();
+            }
+
+            if (ammoJson.isMember("Rainbow")) ammoConfig.rainbow = ammoJson["Rainbow"].asBool();
+            if (ammoJson.isMember("Rainbow speed")) ammoConfig.rainbowSpeed = ammoJson["Rainbow speed"].asFloat();
+        }
         if (espJson.isMember("Distance")) {
             const auto& distanceJson = espJson["Distance"];
             auto& distanceConfig = espConfig.distance;
@@ -1320,6 +1334,17 @@ void Config::save(size_t id) const noexcept
             nameJson["Color"][2] = nameConfig.color[2];
             nameJson["Rainbow"] = nameConfig.rainbow;
             nameJson["Rainbow speed"] = nameConfig.rainbowSpeed;
+        }
+        {
+            auto& ammoJson = espJson["Ammo"];
+            const auto& ammoConfig = espConfig.ammo;
+
+            ammoJson["Enabled"] = ammoConfig.enabled;
+            ammoJson["Color"][0] = ammoConfig.color[0];
+            ammoJson["Color"][1] = ammoConfig.color[1];
+            ammoJson["Color"][2] = ammoConfig.color[2];
+            ammoJson["Rainbow"] = ammoConfig.rainbow;
+            ammoJson["Rainbow speed"] = ammoConfig.rainbowSpeed;
         }
 
         {
