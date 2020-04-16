@@ -20,13 +20,13 @@ void Misc::BetterHitsounds(GameEvent* event) noexcept
 {
     if (!config->misc.hitSound)
         return;
-    std::string soundFile = "csgo\\sound\\";
+    std::string soundFile = "play ";
     soundFile += config->misc.customhitsound;
     soundFile += ".wav";
     if (config->misc.hitSound == 5)
     {
         if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer() || interfaces->engine->getPlayerForUserID(event->getInt("userid")) == interfaces->engine->getLocalPlayer())
-            PlaySoundA(soundFile.c_str(), NULL, SND_ASYNC);
+            interfaces->engine->clientCmdUnrestricted(soundFile.c_str());
     }
 }
 
