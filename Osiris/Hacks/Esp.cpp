@@ -235,7 +235,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             else
                 interfaces->surface->setDrawColor(config.healthBar.color);
 
-            interfaces->surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
+            interfaces->surface->drawFilledRect(drawPositionX - 1, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionX, bbox.y1);
             
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
@@ -243,7 +243,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
-                interfaces->surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
             drawPositionX -= 7;
         }
@@ -254,7 +254,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             else
                 interfaces->surface->setDrawColor(config.armorBar.color);
 
-            interfaces->surface->drawFilledRect(drawPositionX - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
+            interfaces->surface->drawFilledRect(drawPositionX - 1, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionX, bbox.y1);
 
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
@@ -262,8 +262,28 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
-                interfaces->surface->drawOutlinedRect(drawPositionX - 4, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
             }
+            drawPositionX -= 7;
+        }
+            if (config.ammoBar.enabled) {
+                int iClip = entity->getActiveWeapon()->getWeaponData()->maxClip;
+                int iClipMax = entity->getActiveWeapon()->clip();
+                if (config.ammoBar.rainbow)
+                    interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.ammoBar.rainbowSpeed));
+                else
+                    interfaces->surface->setDrawColor(config.ammoBar.color);
+
+                interfaces->surface->drawFilledRect(drawPositionX - 1, bbox.y0 + abs(bbox.y1 - bbox.y0) * (iClip - iClipMax) / iClip, drawPositionX, bbox.y1);
+
+                if (config.outline.enabled) {
+                    if (config.outline.rainbow)
+                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                    else
+                        interfaces->surface->setDrawColor(config.outline.color);
+
+                    interfaces->surface->drawOutlinedRect(drawPositionX - 2, bbox.y0 - 1, drawPositionX + 1, bbox.y1 + 1);
+                }
             drawPositionX -= 7;
         }
 

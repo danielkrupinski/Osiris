@@ -132,6 +132,7 @@ public:
             ColorToggle healthBar;
             ColorToggle armor;
             ColorToggle armorBar;
+            ColorToggle ammoBar;
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;

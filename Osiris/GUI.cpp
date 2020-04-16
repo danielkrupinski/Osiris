@@ -627,8 +627,9 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Head dot", config->esp.players[selected].headDot);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
-            ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
+            ImGuiCustom::colorPicker("Ammo Bar", config->esp.players[selected].ammoBar);
             ImGui::SameLine(spacing);
+            ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
             ImGuiCustom::colorPicker("Armor", config->esp.players[selected].armor);
             ImGuiCustom::colorPicker("Money", config->esp.players[selected].money);
             ImGui::SameLine(spacing);

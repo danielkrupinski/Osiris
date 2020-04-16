@@ -284,7 +284,21 @@ void Config::load(size_t id) noexcept
             if (armorBarJson.isMember("Rainbow")) armorBarConfig.rainbow = armorBarJson["Rainbow"].asBool();
             if (armorBarJson.isMember("Rainbow speed")) armorBarConfig.rainbowSpeed = armorBarJson["Rainbow speed"].asFloat();
         }
+        if (espJson.isMember("Ammo bar")) {
+            const auto& ammoBarJson = espJson["Ammo bar"];
+            auto& ammoBarConfig = espConfig.ammoBar;
 
+            if (ammoBarJson.isMember("Enabled")) ammoBarConfig.enabled = ammoBarJson["Enabled"].asBool();
+
+            if (ammoBarJson.isMember("Color")) {
+                ammoBarConfig.color[0] = ammoBarJson["Color"][0].asFloat();
+                ammoBarConfig.color[1] = ammoBarJson["Color"][1].asFloat();
+                ammoBarConfig.color[2] = ammoBarJson["Color"][2].asFloat();
+            }
+
+            if (ammoBarJson.isMember("Rainbow")) ammoBarConfig.rainbow = ammoBarJson["Rainbow"].asBool();
+            if (ammoBarJson.isMember("Rainbow speed")) ammoBarConfig.rainbowSpeed = ammoBarJson["Rainbow speed"].asFloat();
+        }
         if (espJson.isMember("Money")) {
             const auto& moneyJson = espJson["Money"];
             auto& moneyConfig = espConfig.money;
@@ -1129,6 +1143,17 @@ void Config::save(size_t id) const noexcept
             armorBarJson["Color"][2] = armorBarConfig.color[2];
             armorBarJson["Rainbow"] = armorBarConfig.rainbow;
             armorBarJson["Rainbow speed"] = armorBarConfig.rainbowSpeed;
+        }
+        {
+            auto& ammoJson = espJson["Ammo bar"];
+            const auto& ammoConfig = espConfig.ammoBar;
+
+            ammoJson["Enabled"] = ammoConfig.enabled;
+            ammoJson["Color"][0] = ammoConfig.color[0];
+            ammoJson["Color"][1] = ammoConfig.color[1];
+            ammoJson["Color"][2] = ammoConfig.color[2];
+            ammoJson["Rainbow"] = ammoConfig.rainbow;
+            ammoJson["Rainbow speed"] = ammoConfig.rainbowSpeed;
         }
 
         {
