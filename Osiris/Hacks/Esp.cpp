@@ -354,8 +354,22 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
         else
             interfaces->surface->setTextColor(config.name.color);
 
-        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
+        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 16);
         interfaces->surface->printText(name);
+    }
+    if (config.ammo.enabled)
+    {
+        int clip = entity->clip();
+        int reserveAmmo = entity->reserveAmmoCount();
+        const auto text{ std::to_wstring(clip) + L" / " + std::to_wstring(reserveAmmo) };
+        const auto [width, height] { interfaces->surface->getTextSize(config.font, text.c_str()) };
+        interfaces->surface->setTextFont(config.font);
+        if (config.ammo.rainbow)
+            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.ammo.rainbowSpeed));
+        else
+            interfaces->surface->setTextColor(config.ammo.color);
+        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 6);
+        interfaces->surface->printText(text);
     }
 
     float drawPositionY = bbox.y0;
