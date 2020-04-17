@@ -25,7 +25,7 @@ void Misc::BetterHitsounds(GameEvent* event) noexcept
     soundFile += ".wav";
     if (config->misc.hitSound == 5)
     {
-        if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == interfaces->engine->getLocalPlayer() || interfaces->engine->getPlayerForUserID(event->getInt("userid")) == interfaces->engine->getLocalPlayer())
+        if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index() || interfaces->engine->getPlayerForUserID(event->getInt("userid")) == localPlayer->index())
             interfaces->engine->clientCmdUnrestricted(soundFile.c_str());
     }
 }
