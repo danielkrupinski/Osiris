@@ -40,7 +40,7 @@ struct WeaponData {
     PAD(15)
     float maxSpeed;
     float maxSpeedAlt;
-    PAD(96)
+    PAD(100)
     float recoilMagnitude;
     float recoilMagnitudeAlt;
     PAD(0x14)
