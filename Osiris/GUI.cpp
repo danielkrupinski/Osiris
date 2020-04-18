@@ -1120,7 +1120,10 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 170.0f);
 
     ImGui::PushItemWidth(160.0f);
-
+    
+    if (ImGui::Button("Reload configs", { 160.0F, 25.0F }))// Reload Configs
+        config->Config::Config("Osiris");// Reload Configs
+    
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;
 
