@@ -893,6 +893,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
         if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
+        if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
     }
 
     {
@@ -1627,6 +1628,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
         miscJson["Fake prime"] = misc.fakePrime;
+        miscJson["Custom Hit Sound"] = misc.customHitSound;
     }
 
     {
