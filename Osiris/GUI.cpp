@@ -1048,7 +1048,13 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
     ImGui::SameLine();
     hotkey(config->misc.prepareRevolverKey);
-    ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0");
+    ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
+    if (config->misc.hitSound == 5) {
+        ImGui::InputText("Hit Sound filename", &config->misc.customHitSound);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
+    }
+
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
     config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
