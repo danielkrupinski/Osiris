@@ -354,7 +354,7 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
         else
             interfaces->surface->setTextColor(config.name.color);
 
-        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 16);
+        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y0 - 10);
         interfaces->surface->printText(name);
     }
     if (config.ammo.enabled)
@@ -369,7 +369,10 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
         else
             interfaces->surface->setTextColor(config.ammo.color);
         interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 6);
-        interfaces->surface->printText(text);
+        if (clip > -1)
+        {
+            interfaces->surface->printText(text);
+        }
     }
 
     float drawPositionY = bbox.y0;
