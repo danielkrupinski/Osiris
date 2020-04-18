@@ -620,4 +620,6 @@ void Misc::playHitSound(GameEvent& event) noexcept
 
     if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
+    else if (config->misc.hitSound == 5)
+        interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customHitSound).c_str());
 }
