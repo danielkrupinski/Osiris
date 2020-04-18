@@ -225,7 +225,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         float drawPositionLeft = bbox.x0 - 5;
         float drawPositionRight = bbox.x1 + 5;
         float drawPositionBottom = 2;
-        float drawPositionBottomEh = 3;
+        float drawPositionBottomEh = 4;
 
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces->cvar->findVar("game_type") };
