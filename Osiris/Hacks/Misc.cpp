@@ -617,7 +617,7 @@ void Misc::playHitSound(GameEvent& event) noexcept
         "play training/timer_bell",
         "play physics/glass/glass_impact_bullet1"
     };
-    if (config->misc.hitSound > 5)
+    if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
     {
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
     }
