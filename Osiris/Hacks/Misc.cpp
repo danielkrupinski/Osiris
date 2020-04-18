@@ -12,24 +12,6 @@
 #include "../SDK/WeaponData.h"
 #include "EnginePrediction.h"
 
-#include <Windows.h>
-#include <playsoundapi.h>
-#pragma comment(lib, "Winmm.lib")
-
-void Misc::BetterHitsounds(GameEvent* event) noexcept
-{
-    if (!config->misc.hitSound)
-        return;
-    std::string soundFile = "play ";
-    soundFile += config->misc.customhitsound;
-    soundFile += ".wav";
-    if (config->misc.hitSound == 5)
-    {
-        if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index() || interfaces->engine->getPlayerForUserID(event->getInt("userid")) == localPlayer->index())
-            interfaces->engine->clientCmdUnrestricted(soundFile.c_str());
-    }
-}
-
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
@@ -635,7 +617,15 @@ void Misc::playHitSound(GameEvent& event) noexcept
         "play training/timer_bell",
         "play physics/glass/glass_impact_bullet1"
     };
-
-    if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
+    if (config->misc.hitSound > 5)
+    {
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
+    }
+    else if (config->misc.hitSound == 5)
+    {
+        std::string soundFile = "play ";
+        soundFile += config->misc.customhitsound;
+        soundFile += ".wav";
+        interfaces->engine->clientCmdUnrestricted(soundFile.c_str());
+    }
 }
