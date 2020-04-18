@@ -330,7 +330,6 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             break;
         case fnv::hash("player_hurt"):
             Misc::playHitSound(*event);
-            Misc::BetterHitsounds(event);
             Visuals::hitEffect(event);                
             Visuals::hitMarker(event);
             break;
