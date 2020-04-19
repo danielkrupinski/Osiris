@@ -39,6 +39,7 @@ jobs:
       working-directory: Osiris
       run: |
             ((Get-Content Osiris_AVX.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX.vcxproj
+            ((Get-Content Osiris_AVX.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX.vcxproj
       shell: pwsh
     - name: MSBuild AVX
       working-directory: Osiris
@@ -62,6 +63,7 @@ jobs:
     - name: Prepare AVX2
       working-directory: Osiris
       run: |
+            ((Get-Content Osiris_AVX2.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX2.vcxproj
             ((Get-Content Osiris_AVX2.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX2.vcxproj
       shell: pwsh
     - name: MSBuild AVX2
