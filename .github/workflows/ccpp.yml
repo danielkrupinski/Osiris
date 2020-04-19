@@ -36,15 +36,15 @@ jobs:
             Remove-Item D:\a\Osiris\Osiris\Osiris\Release\AVX\*.i*
             Remove-Item D:\a\Osiris\Osiris\Osiris\Release\AVX2\*.i*
       shell: pwsh
+    - name: Move to one folder
+      working-directory: Osiris/Release
+      run: |
+            mkdir D:\a\Osiris\Osiris\Osiris\Release\All
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\SSE2\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
+      shell: pwsh
     - uses: actions/upload-artifact@v1
       with:
-        name: Release SSE2
-        path: Osiris/Release/SSE2
-    - uses: actions/upload-artifact@v1
-      with:
-        name: Release AVX
-        path: Osiris/Release/AVX
-    - uses: actions/upload-artifact@v1
-      with:
-        name: Release AVX2
-        path: Osiris/Release/AVX2
+        name: Release All
+        path: Osiris/Release/All
