@@ -18,10 +18,17 @@ jobs:
       working-directory: Osiris/Release/SSE2
       run: ren Osiris.dll Osiris_SSE2.dll
       shell: cmd
+    - name: Move to one folder SSE2
+      working-directory: Osiris
+      run: |
+            mkdir D:\a\Osiris\Osiris\Osiris\ready
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\SSE2\Osiris_SSE2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 SSE2
-      working-directory: Osiris/Release/SSE2
+      working-directory: Osiris/ready
       run: sha1sum Osiris_SSE2.dll > Osiris_SSE2.dll.sha1
-    - name: ren AVX
+      
+    - name: Rename AVX
       working-directory: Osiris
       run: 
           |
@@ -31,15 +38,22 @@ jobs:
     - name: Prepare AVX
       working-directory: Osiris
       run: |
-            ((Get-Content Osiris_AVX.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
+            ((Get-Content Osiris_AVX.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX.vcxproj
       shell: pwsh
     - name: MSBuild AVX
       working-directory: Osiris
-      run: msbuild Osiris_AVX.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
+      run: msbuild Osiris_AVX.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
+    - name: Move to one folder AVX
+      working-directory: Osiris
+      run: |
+            mkdir D:\a\Osiris\Osiris\Osiris\ready
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\Osiris_AVX.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX
-      working-directory: Osiris/Release/AVX
+      working-directory: Osiris/ready
       run: sha1sum Osiris_AVX.dll > Osiris_AVX.dll.sha1
-    - name: ren AVX2
+      
+    - name: Rename AVX2
       working-directory: Osiris
       run: 
           |
@@ -49,30 +63,22 @@ jobs:
     - name: Prepare AVX2
       working-directory: Osiris
       run: |
-            ((Get-Content Osiris_AVX2.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
+            ((Get-Content Osiris_AVX2.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content Osiris_AVX2.vcxproj
       shell: pwsh
     - name: MSBuild AVX2
       working-directory: Osiris
-      run: msbuild Osiris_AVX2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
+      run: msbuild Osiris_AVX2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
+    - name: Move to one folder AVX2
+      working-directory: Osiris
+      run: |
+            mkdir D:\a\Osiris\Osiris\Osiris\ready
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\Osiris_AVX2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX2
-      working-directory: Osiris/Release/AVX2
+      working-directory: Osiris/ready
       run: sha1sum Osiris_AVX2.dll > Osiris_AVX2.dll.sha1
-    - name: Delete trash files before upload
-      working-directory: Osiris/Release
-      run: |
-            Remove-Item D:\a\Osiris\Osiris\Osiris\Release\SSE2\*.i*
-            Remove-Item D:\a\Osiris\Osiris\Osiris\Release\AVX\*.i*
-            Remove-Item D:\a\Osiris\Osiris\Osiris\Release\AVX2\*.i*
-      shell: pwsh
-    - name: Move to one folder
-      working-directory: Osiris/Release
-      run: |
-            mkdir D:\a\Osiris\Osiris\Osiris\Release\All
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\SSE2\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\*.* -Destination D:\a\Osiris\Osiris\Osiris\Release\All\
-      shell: pwsh
+      
     - uses: actions/upload-artifact@v1
       with:
         name: Release All
-        path: Osiris/Release/All
+        path: Osiris/ready
