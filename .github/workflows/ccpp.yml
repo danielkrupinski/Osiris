@@ -13,7 +13,7 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: MSBuild SSE2
       working-directory: Osiris
-      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=StreamingSIMDExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\SSE2\"
+      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\SSE2\"
     - name: Rename SSE2
       working-directory: Osiris/Release/SSE2
       run: ren Osiris.dll Osiris_SSE2.dll
