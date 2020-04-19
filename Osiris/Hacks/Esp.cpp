@@ -223,9 +223,9 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         renderBox(bbox, config);
 
         float drawPositionLeft = bbox.x0 - 5;
-        float drawPositionRight = bbox.x1 + 5;
-        float drawPositionBottom = 2;
-        float drawPositionBottomEh = 4;
+        float drawPositionRight = bbox.x1 + 8;
+        float drawPositionBottom = 3.5f;
+        float drawPositionBottomEh = 6.5f;
 
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces->cvar->findVar("game_type") };
@@ -262,7 +262,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                     interfaces->surface->drawOutlinedRect(bbox.x0, bbox.y1 + drawPositionBottom - 1, bbox.x0 + abs(bbox.x1 - bbox.x0) * (entity->health()) / 100.f, bbox.y1 + drawPositionBottomEh + 1);
                 }
-                drawPositionBottom += 6;
+                drawPositionBottom += 7;
                 drawPositionBottomEh += 7;
             }
             if (config.hpside == 2)
@@ -311,8 +311,8 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                     interfaces->surface->drawOutlinedRect(bbox.x0, bbox.y1 + drawPositionBottom - 1, bbox.x0 + abs(bbox.x1 - bbox.x0) * (entity->armor()) / 100.f, bbox.y1 + drawPositionBottomEh + 1);
                 }
-                drawPositionBottom += 6;
-                drawPositionBottomEh += 5;
+                drawPositionBottom += 7;
+                drawPositionBottomEh += 7;
             }
             if (config.armorside == 2)
             {
