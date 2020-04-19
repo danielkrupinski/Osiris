@@ -23,7 +23,11 @@ jobs:
       run: sha1sum Osiris_SSE2.dll > Osiris_SSE2.dll.sha1
     - name: ren AVX
       working-directory: Osiris
-      run: ren Osiris.vcxproj Osiris_AVX.vcxproj
+      run: 
+          |
+          ren Osiris.vcxproj Osiris_AVX.vcxproj
+          ren Osiris.vcxproj.filters Osiris_AVX.vcxproj.filters
+      shell: cmd
     - name: Prepare AVX
       working-directory: Osiris
       run: |
@@ -39,9 +43,13 @@ jobs:
     - name: SHA1 AVX
       working-directory: Osiris/Release/AVX
       run: sha1sum Osiris_AVX.dll > Osiris_AVX.dll.sha1
-    - name: ren AVX
+    - name: ren AVX2
       working-directory: Osiris
-      run: ren Osiris_AVX.vcxproj Osiris_AVX2.vcxproj
+      run: 
+          |
+          ren Osiris_AVX.vcxproj Osiris_AVX2.vcxproj
+          ren Osiris_AVX.vcxproj.filters Osiris_AVX2.vcxproj.filters
+      shell: cmd
     - name: Prepare AVX2
       working-directory: Osiris
       run: |
