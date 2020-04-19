@@ -46,7 +46,6 @@ jobs:
     - name: Move to one folder AVX
       working-directory: Osiris
       run: |
-            mkdir D:\a\Osiris\Osiris\Osiris\ready
             Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\Osiris_AVX.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
             Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX
@@ -71,7 +70,6 @@ jobs:
     - name: Move to one folder AVX2
       working-directory: Osiris
       run: |
-            mkdir D:\a\Osiris\Osiris\Osiris\ready
             Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\Osiris_AVX2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
             Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX2
