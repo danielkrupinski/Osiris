@@ -21,14 +21,17 @@ jobs:
     - name: SHA1 SSE2
       working-directory: Osiris/Release/SSE2
       run: sha1sum Osiris_SSE2.dll > Osiris_SSE2.dll.sha1
+    - name: ren AVX
+      working-directory: Osiris
+      run: ren Osiris.vcxproj Osiris_AVX.vcxproj
     - name: Prepare AVX
       working-directory: Osiris
       run: |
-            ((Get-Content Osiris.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
+            ((Get-Content Osiris_AVX.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
       shell: pwsh
     - name: MSBuild AVX
       working-directory: Osiris
-      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
+      run: msbuild Osiris_AVX.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
     - name: Rename AVX
       working-directory: Osiris/Release/AVX
       run: ren Osiris.dll Osiris_AVX.dll
@@ -36,14 +39,17 @@ jobs:
     - name: SHA1 AVX
       working-directory: Osiris/Release/AVX
       run: sha1sum Osiris_AVX.dll > Osiris_AVX.dll.sha1
+    - name: ren AVX
+      working-directory: Osiris
+      run: ren Osiris_AVX.vcxproj Osiris_AVX2.vcxproj
     - name: Prepare AVX2
       working-directory: Osiris
       run: |
-            ((Get-Content Osiris.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
+            ((Get-Content Osiris_AVX2.vcxproj -Raw) -replace '<EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>','<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>') | Set-Content csgo.cs
       shell: pwsh
     - name: MSBuild AVX2
       working-directory: Osiris
-      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
+      run: msbuild Osiris_AVX2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
     - name: Rename AVX2
       working-directory: Osiris/Release/AVX2
       run: ren Osiris.dll Osiris_AVX2.dll
