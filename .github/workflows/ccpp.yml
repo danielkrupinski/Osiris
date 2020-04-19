@@ -13,19 +13,19 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: MSBuild SSE2
       working-directory: Osiris
-      run: msbuild Osiris_SSE2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\SSE2\"
+      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=StreamingSIMDExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\SSE2\"
     - name: SHA1 SSE2
       working-directory: Osiris/Release/SSE2
       run: sha1sum Osiris_SSE2.dll > Osiris_SSE2.dll.sha1
     - name: MSBuild AVX
       working-directory: Osiris
-      run: msbuild Osiris_AVX.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
+      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
     - name: SHA1 AVX
       working-directory: Osiris/Release/AVX
       run: sha1sum Osiris_AVX.dll > Osiris_AVX.dll.sha1
     - name: MSBuild AVX2
       working-directory: Osiris
-      run: msbuild Osiris_AVX2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
+      run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:EnableEnhancedInstructionSet=AdvancedVectorExtensions2 /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
     - name: SHA1 AVX2
       working-directory: Osiris/Release/AVX2
       run: sha1sum Osiris_AVX2.dll > Osiris_AVX2.dll.sha1
