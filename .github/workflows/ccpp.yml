@@ -76,6 +76,14 @@ jobs:
       working-directory: Osiris/ready
       run: sha1sum Osiris_AVX2.dll > Osiris_AVX2.dll.sha1
       
+    - name: Get checker
+      run: |
+            git clone -b osiris https://github.com/playday3008/FeatureDetector.git checker
+            cd .\checker\FeatureDetector
+            msbuild FeatureDetector.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m
+            Copy-Item -Path D:\a\Osiris\Osiris\checker\FeatureDetector\Release\FeatureDetector.exe -Destination "D:\a\Osiris\Osiris\Osiris\ready\What to inject(Чо инжектить).exe"
+      shell: pwsh
+      
     - uses: actions/upload-artifact@v1
       with:
         name: Osiris Release All
