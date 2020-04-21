@@ -11,6 +11,12 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 #include "EnginePrediction.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/Entity.h"
+#include "../SDK/UserCmd.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/Client.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
