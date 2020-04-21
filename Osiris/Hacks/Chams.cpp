@@ -50,17 +50,22 @@ Chams::Chams() noexcept
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
 {
-    if (std::strstr(info.model->name, "models/player"))
+    const std::string_view modelName = info.model->name;
+
+    if (modelName.starts_with("models/player")) {
         return renderPlayers(ctx, state, info, customBoneToWorld);
-    else if (std::strstr(info.model->name, "sleeve"))
-        renderSleeves(ctx, state, info, customBoneToWorld);
-    else if (std::strstr(info.model->name, "arms"))
-        renderHands(ctx, state, info, customBoneToWorld);
-    else if (std::strstr(info.model->name, "models/weapons/v_")
-        && !std::strstr(info.model->name, "tablet")
-        && !std::strstr(info.model->name, "parachute")
-        && !std::strstr(info.model->name, "fists"))
-        renderWeapons(ctx, state, info, customBoneToWorld);
+    } else if (modelName.starts_with("models/weapons/v_")) {
+        // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
+        if (std::strstr(info.model->name + 17, "sleeve"))
+            renderSleeves(ctx, state, info, customBoneToWorld);
+        else if (std::strstr(info.model->name + 17, "arms"))
+            renderHands(ctx, state, info, customBoneToWorld);
+        else if (!std::strstr(info.model->name + 17, "tablet")
+            && !std::strstr(info.model->name + 17, "parachute")
+            && !std::strstr(info.model->name + 17, "fists"))
+            renderWeapons(ctx, state, info, customBoneToWorld);
+    }
+
     return true;
 }
 
