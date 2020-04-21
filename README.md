@@ -78,7 +78,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Health based** - color is based on player's hp
     * **Rainbow** - change color frequently
     * **Blinking** - change transparency frequently
-    * **Material** - material applied to model (*Normal, Flat, Animated, Platinum,Glass, Chrome, Crystal, Silver, Gold, Plastic*)
+    * **Material** - material applied to model (*Normal, Flat, Animated, Platinum,Glass, Chrome, Crystal, Silver, Gold, Plastic, Glow*)
     * **Wireframe** - render triangle mesh instead of solid material
     * **Alpha** - maximum material transparency
 
