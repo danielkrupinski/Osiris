@@ -30,6 +30,7 @@
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
+#include "SDK/FrameStage.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
 #include "SDK/InputSystem.h"
