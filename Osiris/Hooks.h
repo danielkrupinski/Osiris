@@ -16,6 +16,7 @@ class Hooks {
 public:
     Hooks(HMODULE cheatModule);
 
+    void install() noexcept;
     void restore() noexcept;
 
     WNDPROC originalWndProc;
