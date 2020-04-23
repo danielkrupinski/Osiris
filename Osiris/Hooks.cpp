@@ -470,11 +470,15 @@ static void __stdcall renderSmokeOverlay(bool update) noexcept
 
 Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
 {
-    SkinChanger::initializeKits();
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
+}
+
+void Hooks::install() noexcept
+{
+    SkinChanger::initializeKits();
 
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
@@ -537,7 +541,6 @@ void Hooks::restore() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    // interfaces->resourceAccessControl->accessingThreadCount--;
     interfaces->inputSystem->enableInput(true);
 }
 

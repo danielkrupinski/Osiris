@@ -17,6 +17,7 @@ static LRESULT WINAPI init(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) 
     memory = std::make_unique<Memory>();
     netvars = std::make_unique<Netvars>();
     hooks = std::make_unique<Hooks>(module);
+    hooks->install();
 
     return CallWindowProc(originalWndproc, window, msg, wParam, lParam);
 }

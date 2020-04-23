@@ -94,12 +94,12 @@ public:
             Vector absOrigin = getAbsOrigin();
             *render = 0;
             memory->setAbsOrigin(this, origin());
-            auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
             memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
-        return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
+        return VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone) noexcept
@@ -113,7 +113,7 @@ public:
     auto getEyePosition() noexcept
     {
         Vector vec;
-        callVirtualMethod<void, Vector&>(this, 284, vec);
+        VirtualMethod::call<void, 284>(this, std::ref(vec));
         return vec;
     }
 
@@ -174,7 +174,7 @@ public:
     auto getAimPunch() noexcept
     {
         Vector vec;
-        callVirtualMethod<void>(this, 345, std::ref(vec));
+        VirtualMethod::call<void, 345>(this, std::ref(vec));
         return vec;
     }
 
