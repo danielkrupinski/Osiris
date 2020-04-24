@@ -376,6 +376,9 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 
     static auto name{ interfaces->cvar->findVar("name") };
 
+    if (!exploitInitialized && config->misc.originalName == NULL && interfaces->engine->isInGame())
+        config->misc.originalName = name->string;
+
     if (reconnect) {
         exploitInitialized = false;
         return false;
@@ -432,14 +435,16 @@ void Misc::resetName(bool set) noexcept
         shouldSet = set;
 
     if (shouldSet && changeName(false, config->misc.originalName, 5.0f))
+    {
         shouldSet = false;
+        config->misc.originalName = NULL;
+    }
 }
 
 void Misc::fakeItem(bool set) noexcept
 {
     static auto name{ interfaces->cvar->findVar("name") };
     static auto disconnect{ interfaces->cvar->findVar("disconnect") };
-    config->misc.originalName = name->string;
 
     static int shouldSet = 0;
 
