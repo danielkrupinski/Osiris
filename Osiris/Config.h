@@ -254,8 +254,23 @@ public:
         std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
+        char* originalName;
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        const char* fakeItemFlags[2] = {
+            "Auto Disconnect",
+            "Star"
+        };
+        bool selectedFakeItemFlags[2] = {
+            false,
+            false
+        };
+        int fakeItemMessageType{ 0 };
+        int fakeItemType{ 0 };
+        int fakeItemRarity{ 0 };
+        int fakeItemTeam{ 0 };
+        std::string fakeItemName{ "" };
+        std::string fakeItemPlayerName{ "" };
         bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         bool quickReload{ false };
