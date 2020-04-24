@@ -1,4 +1,4 @@
-﻿#include <fstream>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -1042,6 +1042,22 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     if (ImGui::Button("Setup fake ban"))
         Misc::fakeBan(true);
+    ImGui::SetNextItemWidth(200.0f);
+    ImGuiCustom::MultiCombo("Fake Item Flags", config->misc.fakeItemFlags, config->misc.selectedFakeItemFlags, 3);
+    ImGui::SetNextItemWidth(200.0f);
+    ImGui::Combo("Team", &config->misc.fakeItemTeam, "Counter-Terrorist\0Terrorist");
+    ImGui::SetNextItemWidth(200.0f);
+    ImGui::Combo("Message Type", &config->misc.fakeItemMessageType, "Unbox\0Trade\0");
+    ImGui::SetNextItemWidth(200.0f);
+    ImGui::Combo("Item Type", &config->misc.fakeItemType, "AK-47\0AUG\0AWP\0Bayonet\0Bowie Knife\0Butterfly Knife\0CZ75-Auto\0Classic Knife\0Desert Eagle\0Dual Berettas\0FAMAS\0Falchion Knife\0Five-SeveN\0Flip Knife\0G3SG1\0Galil AR\0Glock-18\0Gut Knife\0Huntsman Knife\0Karambit\0M249\0M4A1-S\0M4A4\0M9 Bayonet\0MAC-10\0MAG-7\0MP5-SD\0MP7\0MP9\0Navaja Knife\0Negev\0Nomad Knife\0Nova\0P2000\0P250\0P90\0PP-Bizon\0Paracord Knife\0R8 Revolver\0SCAR-20\0SG 553\0SSG 08\0Sawed-Off\0Shadow Daggers\0Skeleton Knife\0Spectral Shiv\0Stiletto Knife\0Survival Knife\0Talon Knife\0Tec-9\0UMP-45\0USP-S\0Ursus Knife\0XM1014\0Hand Wraps\0Moto Gloves\0Specialist Gloves\0Sport Gloves\0Bloodhound Gloves\0Hydra Gloves\0Driver Gloves\0");
+    ImGui::SetNextItemWidth(200.0f);
+    ImGui::Combo("Item Color/Rarity", &config->misc.fakeItemRarity, "Consumer Grade (White)\0Industrial Grade (Light blue)\0Mil-Spec (Blue)\0Restricted (Purple)\0Classified (Pink)\0Covert (Red)\0Contrabanned(Orange/Gold)\0");
+    ImGui::InputText("Player Name", &config->misc.fakeItemPlayerName);
+    ImGui::InputText("Skin Name", &config->misc.fakeItemName);
+    if (ImGui::Button("Change Name"))
+        Misc::fakeItem(true);
+    if (ImGui::Button("Reset Name"))
+        Misc::resetName(true);
     ImGui::Checkbox("Fast plant", &config->misc.fastPlant);
     ImGuiCustom::colorPicker("Bomb timer", config->misc.bombTimer);
     ImGui::Checkbox("Quick reload", &config->misc.quickReload);
@@ -1054,7 +1070,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
     }
-
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
     config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
