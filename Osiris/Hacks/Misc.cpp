@@ -1,4 +1,4 @@
-﻿#include <sstream>
+#include <sstream>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -420,8 +420,205 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config->misc.banColor + 1) }).append(config->misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ " \x1\xB" }.append(std::string{ static_cast<char>(config->misc.banColor + 1) }).append(config->misc.banText).append("\n\x1").c_str(), 5.0f))
         shouldSet = false;
+}
+
+void Misc::resetName(bool set) noexcept
+{
+    static bool shouldSet = false;
+
+    if (set)
+        shouldSet = set;
+
+    if (shouldSet && changeName(false, config->misc.originalName, 5.0f))
+        shouldSet = false;
+}
+
+void Misc::fakeItem(bool set) noexcept
+{
+    static auto name{ interfaces->cvar->findVar("name") };
+    static auto disconnect{ interfaces->cvar->findVar("disconnect") };
+    config->misc.originalName = name->string;
+
+    static int shouldSet = 0;
+
+    std::string color;
+    std::string team;
+    std::string star;
+    std::string stattrak;
+    std::string skinName;
+    std::string item;
+
+    if (set)
+        if (shouldSet == 0)
+            shouldSet = 1;
+
+    if (shouldSet == 1)
+    {
+        if (config->misc.fakeItemRarity == 0)
+            color = "\x08"; // Consumer Grade(White)
+        else if (config->misc.fakeItemRarity == 1)
+            color = "\x0D"; // Industrial Grade(Light blue)
+        else if (config->misc.fakeItemRarity == 2)
+            color = "\x0B"; // Mil-Spec(Blue)
+        else if (config->misc.fakeItemRarity == 3)
+            color = "\x03"; // Restricted(Purple)
+        else if (config->misc.fakeItemRarity == 4)
+            color = "\x0E"; // Classified(Pink)
+        else if (config->misc.fakeItemRarity == 5)
+            color = "\x02"; // Covert(Red)
+        else if (config->misc.fakeItemRarity == 6)
+            color = "\x10"; // Contrabanned(Orange / Gold
+
+        if (config->misc.fakeItemTeam == 1)
+            team = "\x09";
+        else
+            team = "\x0B";
+
+        if (config->misc.selectedFakeItemFlags[1])
+            star = "★ ";
+        else
+            star = "";
+
+        if (!config->misc.fakeItemName.empty())
+            skinName.append(" | ").append(config->misc.fakeItemName);
+        else
+            skinName = "";
+
+        if (config->misc.fakeItemType == 0)
+            item = "AK-47";
+        else if (config->misc.fakeItemType == 1)
+            item = "AUG";
+        else if (config->misc.fakeItemType == 2)
+            item = "AWP";
+        else if (config->misc.fakeItemType == 3)
+            item = "Bayonet";
+        else if (config->misc.fakeItemType == 4)
+            item = "Bowie Knife";
+        else if (config->misc.fakeItemType == 5)
+            item = "Butterfly Knife";
+        else if (config->misc.fakeItemType == 6)
+            item = "CZ75";
+        else if (config->misc.fakeItemType == 7)
+            item = "Classic Knife";
+        else if (config->misc.fakeItemType == 8)
+            item = "Desert Eagle";
+        else if (config->misc.fakeItemType == 9)
+            item = "Dual Berettas";
+        else if (config->misc.fakeItemType == 10)
+            item = "FAMAS";
+        else if (config->misc.fakeItemType == 11)
+            item = "Falchion Knife";
+        else if (config->misc.fakeItemType == 12)
+            item = "FiveSeveN";
+        else if (config->misc.fakeItemType == 13)
+            item = "Flip Knife";
+        else if (config->misc.fakeItemType == 14)
+            item = "G3SG1";
+        else if (config->misc.fakeItemType == 15)
+            item = "Galil AR";
+        else if (config->misc.fakeItemType == 16)
+            item = "Glock-18";
+        else if (config->misc.fakeItemType == 17)
+            item = "Gut Knife";
+        else if (config->misc.fakeItemType == 18)
+            item = "Huntsman Knife";
+        else if (config->misc.fakeItemType == 19)
+            item = "Karambit";
+        else if (config->misc.fakeItemType == 20)
+            item = "M249";
+        else if (config->misc.fakeItemType == 21)
+            item = "M4A1-S";
+        else if (config->misc.fakeItemType == 22)
+            item = "M4A4";
+        else if (config->misc.fakeItemType == 23)
+            item = "M9 Bayonet";
+        else if (config->misc.fakeItemType == 24)
+            item = "MAC-10";
+        else if (config->misc.fakeItemType == 25)
+            item = "MAG-7";
+        else if (config->misc.fakeItemType == 26)
+            item = "MP5-SD";
+        else if (config->misc.fakeItemType == 27)
+            item = "MP7";
+        else if (config->misc.fakeItemType == 28)
+            item = "MP9";
+        else if (config->misc.fakeItemType == 29)
+            item = "Navaja Knife";
+        else if (config->misc.fakeItemType == 30)
+            item = "Negev";
+        else if (config->misc.fakeItemType == 31)
+            item = "Nomad Knife";
+        else if (config->misc.fakeItemType == 32)
+            item = "P2000";
+        else if (config->misc.fakeItemType == 33)
+            item = "P250";
+        else if (config->misc.fakeItemType == 34)
+            item = "P90";
+        else if (config->misc.fakeItemType == 35)
+            item = "PP-Bizon";
+        else if (config->misc.fakeItemType == 36)
+            item = "Paracord Knife";
+        else if (config->misc.fakeItemType == 37)
+            item = "SCAR-20";
+        else if (config->misc.fakeItemType == 38)
+            item = "SG 553";
+        else if (config->misc.fakeItemType == 39)
+            item = "Sawed-Off";
+        else if (config->misc.fakeItemType == 40)
+            item = "Shadow Daggers";
+        else if (config->misc.fakeItemType == 41)
+            item = "Skeleton Knife";
+        else if (config->misc.fakeItemType == 42)
+            item = "Stiletto Knife";
+        else if (config->misc.fakeItemType == 43)
+            item = "Survival Knife";
+        else if (config->misc.fakeItemType == 44)
+            item = "Talon Knife";
+        else if (config->misc.fakeItemType == 45)
+            item = "Tec-9";
+        else if (config->misc.fakeItemType == 46)
+            item = "UMP-45";
+        else if (config->misc.fakeItemType == 47)
+            item = "USP-S";
+        else if (config->misc.fakeItemType == 48)
+            item = "Ursus Knife";
+        else if (config->misc.fakeItemType == 49)
+            item = "XM1014";
+        else if (config->misc.fakeItemType == 50)
+            item = "Hand Wraps";
+        else if (config->misc.fakeItemType == 51)
+            item = "Moto Gloves";
+        else if (config->misc.fakeItemType == 52)
+            item = "Specialist Gloves";
+        else if (config->misc.fakeItemType == 53)
+            item = "Sport Gloves";
+        else if (config->misc.fakeItemType == 54)
+            item = "Bloodhound Gloves";
+        else if (config->misc.fakeItemType == 55)
+            item = "Hydra Gloves";
+        else if (config->misc.fakeItemType == 56)
+            item = "Driver Gloves";
+
+        if (config->misc.fakeItemMessageType == 0)
+        { 
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(team).append(config->misc.fakeItemPlayerName).append("\x01 has opened a container and found: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+                shouldSet = 2;
+        }
+        else
+        {
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(team).append(config->misc.fakeItemPlayerName).append("\x01 has recieved in trade: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+                shouldSet = 2;
+        }
+    }
+
+    if (shouldSet == 2) 
+    {
+        if (config->misc.selectedFakeItemFlags[1])
+            disconnect->setValue(1);
+        shouldSet = 0;
+    }
 }
 
 void Misc::nadePredict() noexcept
