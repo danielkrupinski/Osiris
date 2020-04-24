@@ -376,9 +376,6 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 
     static auto name{ interfaces->cvar->findVar("name") };
 
-    if (!exploitInitialized && config->misc.originalName == NULL && interfaces->engine->isInGame())
-        config->misc.originalName = name->string;
-
     if (reconnect) {
         exploitInitialized = false;
         return false;
@@ -427,17 +424,18 @@ void Misc::fakeBan(bool set) noexcept
         shouldSet = false;
 }
 
-void Misc::resetName(bool set) noexcept
+void Misc::setName(bool set) noexcept
 {
     static bool shouldSet = false;
+    static bool shouldResetOrigName = false;
 
     if (set)
         shouldSet = set;
 
-    if (shouldSet && changeName(false, config->misc.originalName, 5.0f))
+    if (shouldSet && changeName(false, std::string{ "" }.append(config->misc.customName).c_str(), 5.0f) && !(config->misc.customName.c_str() == NULL))
     {
         shouldSet = false;
-        config->misc.originalName = NULL;
+        shouldResetOrigName = true;
     }
 }
 
@@ -448,6 +446,7 @@ void Misc::fakeItem(bool set) noexcept
 
     static int shouldSet = 0;
 
+    std::string playercolor;
     std::string color;
     std::string team;
     std::string star;
@@ -474,17 +473,22 @@ void Misc::fakeItem(bool set) noexcept
         else if (config->misc.fakeItemRarity == 5)
             color = "\x02"; // Covert(Red)
         else if (config->misc.fakeItemRarity == 6)
-            color = "\x10"; // Contrabanned(Orange / Gold
+            color = "\x10"; // Contrabanned(Orange / Gold)
 
         if (config->misc.fakeItemTeam == 1)
             team = "\x09";
         else
             team = "\x0B";
 
-        if (config->misc.selectedFakeItemFlags[1])
+        if (config->misc.selectedFakeItemFlags[3])
             star = "★ ";
         else
             star = "";
+
+        if (config->misc.selectedFakeItemFlags[2])
+            stattrak = "StatTrak™ ";
+        else
+            stattrak = "";
 
         if (!config->misc.fakeItemName.empty())
             skinName.append(" | ").append(config->misc.fakeItemName);
@@ -606,14 +610,25 @@ void Misc::fakeItem(bool set) noexcept
         else if (config->misc.fakeItemType == 56)
             item = "Driver Gloves";
 
+        if (config->misc.fakeItemPlayerColor == 0)
+            playercolor = "\x09"; // Yellow
+        else if (config->misc.fakeItemPlayerColor == 1)
+            playercolor = "\x04"; // Green
+        else if (config->misc.fakeItemPlayerColor == 2)
+            playercolor = "\x0D"; // Blue
+        else if (config->misc.fakeItemPlayerColor == 3)
+            playercolor = "\x03"; // Purple
+        else if (config->misc.fakeItemPlayerColor == 4)
+            playercolor = "\x10"; // Orange
+
         if (config->misc.fakeItemMessageType == 0)
         { 
-            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(team).append(config->misc.fakeItemPlayerName).append("\x01 has opened a container and found: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(playercolor).append("• • ").append(team).append(config->misc.fakeItemPlayerName).append("\x01 has opened a container and found: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
                 shouldSet = 2;
         }
         else
         {
-            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(team).append(config->misc.fakeItemPlayerName).append("\x01 has recieved in trade: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(playercolor).append("• • ").append(team).append(config->misc.fakeItemPlayerName).append("\x01 has recieved in trade: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
                 shouldSet = 2;
         }
     }
