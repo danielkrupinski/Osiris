@@ -39,4 +39,5 @@ namespace Misc
     void removeCrouchCooldown(UserCmd* cmd) noexcept;
     void moonwalk(UserCmd* cmd) noexcept;
     void playHitSound(GameEvent& event) noexcept;
+    void killSound(GameEvent& event) noexcept;
 }
