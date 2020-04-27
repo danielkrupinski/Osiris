@@ -10,24 +10,32 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/StudioRender.h"
 
+static auto keyValuesFromString(const char* name, const char* value) noexcept
+{
+    const auto keyValuesFromString = memory->keyValuesFromString;
+    KeyValues* keyValues;
+    __asm {
+        push 0
+        mov edx, value
+        mov ecx, name
+        call keyValuesFromString
+        add esp, 4
+        mov keyValues, eax
+    }
+    return keyValues;
+}
+
 Chams::Chams() noexcept
 {
-    std::ofstream{ "csgo/materials/chamsNormal.vmt" } <<
-        "VertexLitGeneric { }";
-
-    std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
-        "UnlitGeneric { }";
-
     std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
         "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
    
     std::ofstream("csgo/materials/glowOverlay.vmt") <<
         "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
 
-    normal = interfaces->materialSystem->findMaterial("chamsNormal");
-    normal->incrementReferenceCount();
-    flat = interfaces->materialSystem->findMaterial("chamsFlat");
-    flat->incrementReferenceCount();
+    normal = interfaces->materialSystem->createMaterial("normal", keyValuesFromString("VertexLitGeneric", nullptr));
+    flat = interfaces->materialSystem->createMaterial("flat", keyValuesFromString("UnlitGeneric", nullptr));
+
     animated = interfaces->materialSystem->findMaterial("chamsAnimated");
     animated->incrementReferenceCount();
     platinum = interfaces->materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
