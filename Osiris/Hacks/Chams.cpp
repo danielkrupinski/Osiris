@@ -27,9 +27,6 @@ static auto keyValuesFromString(const char* name, const char* value) noexcept
 
 Chams::Chams() noexcept
 {
-    std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
-        "UnlitGeneric { }";
-
     std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
         "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
    
@@ -37,9 +34,8 @@ Chams::Chams() noexcept
         "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
 
     normal = interfaces->materialSystem->createMaterial("normal", keyValuesFromString("VertexLitGeneric", nullptr));
+    flat = interfaces->materialSystem->createMaterial("flat", keyValuesFromString("UnlitGeneric", nullptr));
 
-    flat = interfaces->materialSystem->findMaterial("chamsFlat");
-    flat->incrementReferenceCount();
     animated = interfaces->materialSystem->findMaterial("chamsAnimated");
     animated->incrementReferenceCount();
     platinum = interfaces->materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
