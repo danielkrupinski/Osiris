@@ -629,3 +629,32 @@ void Misc::playHitSound(GameEvent& event) noexcept
     else if (config->misc.hitSound == 5)
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customHitSound).c_str());
 }
+
+void Misc::killSound(GameEvent& event) noexcept
+{
+    if (!config->misc.killSound)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    PlayerInfo localInfo;
+
+    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
+        return;
+
+    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+        return;
+
+    constexpr std::array killSounds{
+        "play physics/metal/metal_solid_impact_bullet2",
+        "play buttons/arena_switch_press_02",
+        "play training/timer_bell",
+        "play physics/glass/glass_impact_bullet1"
+    };
+
+    if (static_cast<std::size_t>(config->misc.killSound - 1) < killSounds.size())
+        interfaces->engine->clientCmdUnrestricted(killSounds[config->misc.killSound - 1]);
+    else if (config->misc.killSound == 5)
+        interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
+}
