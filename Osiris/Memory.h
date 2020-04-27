@@ -11,6 +11,7 @@ class ClientMode;
 class Entity;
 class Input;
 class ItemSchema;
+class KeyValues;
 class MoveHelper;
 class MoveData;
 class ViewRender;
@@ -66,6 +67,8 @@ public:
     MoveData* moveData;
     MoveHelper* moveHelper;
     std::uintptr_t keyValuesFromString;
+    KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
+
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
