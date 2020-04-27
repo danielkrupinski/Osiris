@@ -54,6 +54,7 @@ Memory::Memory() noexcept
     moveHelper = **FIND_PATTERN(MoveHelper***, L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
     keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x83\xC4\x04\x89\x45\xD8", 1));
     keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\xF7\x45", 1));
+    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x89\x77\x38", 1));
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client_panorama", "\xA1????\x89\x45\xBC\x85\xC0", 1)));
 }
