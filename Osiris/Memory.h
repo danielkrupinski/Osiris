@@ -65,6 +65,7 @@ public:
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
+    std::uintptr_t keyValuesFromString;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
