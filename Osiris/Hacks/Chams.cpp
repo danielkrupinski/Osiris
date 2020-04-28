@@ -62,10 +62,10 @@ Chams::Chams() noexcept
         crystal = interfaces->materialSystem->createMaterial("crystal", kv);
     }
 
+    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
+
     // TODO: don't use game's materials, create their clones
 
-    chrome = interfaces->materialSystem->findMaterial("models/gibs/glass/glass");
-    chrome->incrementReferenceCount();
     silver = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/silver_plain");
     silver->incrementReferenceCount();
     gold = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
