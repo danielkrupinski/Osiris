@@ -49,10 +49,14 @@ Chams::Chams() noexcept
         platinum = interfaces->materialSystem->createMaterial("platinum", kv);
     }
 
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture detail/dt_metal1 $additive 1 $envmap editor/cube_vertigo");
+        kv->setString("$color", "[.05 .05 .05]");
+        glass = interfaces->materialSystem->createMaterial("glass", kv);
+    }
+
     // TODO: don't use game's materials, create their clones
 
-    glass = interfaces->materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
-    glass->incrementReferenceCount();
     crystal = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/crystal_clear");
     crystal->incrementReferenceCount();
     chrome = interfaces->materialSystem->findMaterial("models/gibs/glass/glass");
