@@ -1,4 +1,3 @@
-#include <fstream>
 #include <functional>
 
 #include "Chams.h"
@@ -9,27 +8,42 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/StudioRender.h"
+#include "../SDK/KeyValues.h"
+
+static auto keyValuesFromString(const char* name, const char* value) noexcept
+{
+    const auto keyValuesFromString = memory->keyValuesFromString;
+    KeyValues* keyValues;
+    __asm {
+        push 0
+        mov edx, value
+        mov ecx, name
+        call keyValuesFromString
+        add esp, 4
+        mov keyValues, eax
+    }
+    return keyValues;
+}
 
 Chams::Chams() noexcept
 {
-    std::ofstream{ "csgo/materials/chamsNormal.vmt" } <<
-        "VertexLitGeneric { }";
+    normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
+    flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
 
-    std::ofstream{ "csgo/materials/chamsFlat.vmt" } <<
-        "UnlitGeneric { }";
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
+        kv->setString("$envmaptint", "[.7 .7 .7]");
+        animated = interfaces->materialSystem->createMaterial("animated", kv);
+    }
 
-    std::ofstream{ "csgo/materials/chamsAnimated.vmt" } <<
-        "VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
-   
-    std::ofstream("csgo/materials/glowOverlay.vmt") <<
-        "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8");
+        kv->setString("$envmaptint", "[1 0 0]");
+        kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
+        glow = interfaces->materialSystem->createMaterial("glow", kv);
+    }
 
-    normal = interfaces->materialSystem->findMaterial("chamsNormal");
-    normal->incrementReferenceCount();
-    flat = interfaces->materialSystem->findMaterial("chamsFlat");
-    flat->incrementReferenceCount();
-    animated = interfaces->materialSystem->findMaterial("chamsAnimated");
-    animated->incrementReferenceCount();
+    // TODO: don't use game's materials, create their clones
     platinum = interfaces->materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
     platinum->incrementReferenceCount();
     glass = interfaces->materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
@@ -44,8 +58,6 @@ Chams::Chams() noexcept
     gold->incrementReferenceCount();
     plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
     plastic->incrementReferenceCount();
-    glow = interfaces->materialSystem->findMaterial("glowOverlay");
-    glow->incrementReferenceCount();
 }
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
