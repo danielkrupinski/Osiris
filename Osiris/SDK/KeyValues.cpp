@@ -15,3 +15,8 @@ KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
     }
     return keyValues;
 }
+
+KeyValues* KeyValues::findKey(const char* keyName, bool create) noexcept
+{
+    return memory->keyValuesFindKey(this, keyName, create);
+}
