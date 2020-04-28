@@ -9,6 +9,7 @@
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/StudioRender.h"
+#include "../SDK/KeyValues.h"
 
 static auto keyValuesFromString(const char* name, const char* value) noexcept
 {
@@ -33,8 +34,8 @@ Chams::Chams() noexcept
     std::ofstream("csgo/materials/glowOverlay.vmt") <<
         "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
 
-    normal = interfaces->materialSystem->createMaterial("normal", keyValuesFromString("VertexLitGeneric", nullptr));
-    flat = interfaces->materialSystem->createMaterial("flat", keyValuesFromString("UnlitGeneric", nullptr));
+    normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
+    flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
 
     animated = interfaces->materialSystem->findMaterial("chamsAnimated");
     animated->incrementReferenceCount();
