@@ -27,5 +27,6 @@ public:
     VIRTUAL_METHOD(void, colorModulate, 28, (float r, float g, float b), (this, r, g, b))
     VIRTUAL_METHOD(void, colorModulate, 28, (const std::tuple<float, float, float>& color), (this, std::get<0>(color), std::get<1>(color), std::get<2>(color)))
     VIRTUAL_METHOD(void, setMaterialVarFlag, 29, (MaterialVarFlag flag, bool on), (this, flag, on))
+    VIRTUAL_METHOD(int, getReferenceCount, 56, (), (this))
     VIRTUAL_METHOD(bool, isPrecached, 70, (), (this))
 };
