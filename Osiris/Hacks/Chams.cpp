@@ -38,8 +38,8 @@ Chams::Chams() noexcept
 
     {
         const auto kv = KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8");
-        kv->setString("$envmaptint", "[1 0 0]");
-        kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
+        // kv->setString("$envmaptint", "[1 0 0]");
+        // kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
         glow = interfaces->materialSystem->createMaterial("glow", kv);
     }
 
