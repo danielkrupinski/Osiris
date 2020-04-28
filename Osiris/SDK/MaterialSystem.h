@@ -2,11 +2,13 @@
 
 #include "VirtualMethod.h"
 
+class KeyValues;
 class Material;
 class RenderContext;
 
 class MaterialSystem {
 public:
+    VIRTUAL_METHOD(Material*, createMaterial, 83, (const char* materialName, KeyValues* keyValues), (this, materialName, keyValues))
     VIRTUAL_METHOD(Material*, findMaterial, 84, (const char* materialName), (this, materialName, nullptr, true, nullptr))
     VIRTUAL_METHOD(short, firstMaterial, 86, (), (this))
     VIRTUAL_METHOD(short, nextMaterial, 87, (short handle), (this, handle))
