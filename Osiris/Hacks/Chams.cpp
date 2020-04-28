@@ -64,10 +64,18 @@ Chams::Chams() noexcept
 
     chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
 
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapcontrast 16 $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
+        kv->setString("$color2", "[.05 .05 .05]");
+        kv->setString("$envmaptint", "[.2 .2 .2]");
+        kv->setString("$envmapsaturation", "[.5 .5 .5]");
+        kv->setString("$phongfresnelranges", "[.7 .8 1]");
+        kv->setString("$phongtint", "[.8 .9 1]");
+        silver = interfaces->materialSystem->createMaterial("silver", kv);
+    }
+
     // TODO: don't use game's materials, create their clones
 
-    silver = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/silver_plain");
-    silver->incrementReferenceCount();
     gold = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
     gold->incrementReferenceCount();
     plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
