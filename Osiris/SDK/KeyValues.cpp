@@ -20,3 +20,9 @@ KeyValues* KeyValues::findKey(const char* keyName, bool create) noexcept
 {
     return memory->keyValuesFindKey(this, keyName, create);
 }
+
+void KeyValues::setString(const char* keyName, const char* value) noexcept
+{
+    if (const auto key = findKey(keyName, true))
+        memory->keyValuesSetString(key, value);
+}
