@@ -20,7 +20,7 @@ class Material {
 public:
     VIRTUAL_METHOD(const char*, getName, 0, (), (this))
     VIRTUAL_METHOD(const char*, getTextureGroupName, 1, (), (this))
-    VIRTUAL_METHOD(MaterialVar*, findVar, 11, (const char* name), (this, name, nullptr, false))
+    VIRTUAL_METHOD(MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (this, name, found, complain))
     VIRTUAL_METHOD(int, incrementReferenceCount, 12, (), (this))
     VIRTUAL_METHOD(void, alphaModulate, 27, (float alpha), (this, alpha))
     VIRTUAL_METHOD(void, colorModulate, 28, (const float color[3]), (this, color[0], color[1], color[2]))
