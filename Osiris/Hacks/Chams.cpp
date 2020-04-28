@@ -1,4 +1,3 @@
-#include <fstream>
 #include <functional>
 
 #include "Chams.h"
@@ -28,9 +27,6 @@ static auto keyValuesFromString(const char* name, const char* value) noexcept
 
 Chams::Chams() noexcept
 {
-    std::ofstream("csgo/materials/glowOverlay.vmt") <<
-        "VertexLitGeneric { $additive 1 $envmap models/effects/cube_white $envmaptint \"[1 0 0]\" $envmapfresnel 1 $envmapfresnelminmaxexp \"[0 1 2]\" $alpha 0.8 }";
-
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
 
@@ -40,6 +36,14 @@ Chams::Chams() noexcept
         animated = interfaces->materialSystem->createMaterial("animated", kv);
     }
 
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8");
+        kv->setString("$envmaptint", "[1 0 0]");
+        kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
+        glow = interfaces->materialSystem->createMaterial("glow", kv);
+    }
+
+    // TODO: don't use game's materials, create their clones
     platinum = interfaces->materialSystem->findMaterial("models/player/ct_fbi/ct_fbi_glass");
     platinum->incrementReferenceCount();
     glass = interfaces->materialSystem->findMaterial("models/inventory_items/cologne_prediction/cologne_prediction_glass");
@@ -54,8 +58,6 @@ Chams::Chams() noexcept
     gold->incrementReferenceCount();
     plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
     plastic->incrementReferenceCount();
-    glow = interfaces->materialSystem->findMaterial("glowOverlay");
-    glow->incrementReferenceCount();
 }
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
