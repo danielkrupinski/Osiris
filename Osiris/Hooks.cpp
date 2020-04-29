@@ -98,7 +98,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     ImGui_ImplDX9_CreateDeviceObjects();
     return result;
 }
-static bool warmup = true;
+bool warmup = true;
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks.clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
