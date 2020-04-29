@@ -7,7 +7,7 @@
 class MaterialVar {
 public:
     VIRTUAL_METHOD(void, setValue, 4, (float value), (this, value))
-    VIRTUAL_METHOD(void, setVectorValue, 11, (float r, float g, float b), (this, r, g, b))
+    VIRTUAL_METHOD(void, setVectorValue, 11, (float x, float y, float z), (this, x, y, z))
 };
 
 enum class MaterialVarFlag {
