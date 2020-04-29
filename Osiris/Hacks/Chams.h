@@ -97,7 +97,11 @@ private:
                 material->colorModulate(chams.color.color);
             }
         }
-        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
+
+        if (material == glow)
+            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - chams.alpha * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f)), 2);
+        else
+            material->alphaModulate(chams.alpha * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
