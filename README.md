@@ -38,12 +38,9 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
     * **Auto shot** - shoot automatically when target found
     * **Auto scope** - automatically scopes sniper rifle before shooting
-    * **Recoil-based fov** - aimbot uses recoil as fov origin
     * **Bone** - bone which aimbot aims at
     * **Fov** - field-of-view which aimbot operates [*0*-*255*]
     * **Smooth** - smooth aimbot movement in order to seem more human-like
-    * **Recoil control x** - horizontal recoil control factor
-    * **Recoil control y** - vertical recoil control factor
     * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
 * **Triggerbot** - automatically fires when crosshair is on enemy
