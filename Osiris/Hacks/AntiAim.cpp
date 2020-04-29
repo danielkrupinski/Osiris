@@ -62,7 +62,10 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                     return;
                 }
             }
-            else 
+            if (!sendPacket) {
+                invert ? cmd->viewangles.y += delta: cmd->viewangles.y -= delta;
+            }
+            if(!config.antiAim.lby)
             {
                 if (fabsf(cmd->sidemove) < 5.0f) {
                     if (cmd->buttons & UserCmd::IN_DUCK)
@@ -70,9 +73,6 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                     else
                         cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
                 }
-            }
-            if (!sendPacket) {
-                invert ? cmd->viewangles.y += delta: cmd->viewangles.y -= delta;
             }
         }
     }
