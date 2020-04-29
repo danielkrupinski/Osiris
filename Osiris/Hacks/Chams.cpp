@@ -68,10 +68,13 @@ Chams::Chams() noexcept
         gold = interfaces->materialSystem->createMaterial("gold", kv);
     }
 
-    // TODO: don't use game's materials, create their clones
-
-    plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
-    plastic->incrementReferenceCount();
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapcontrast 16 $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
+        kv->setString("$envmapsaturation", "[.5 .5 .5]"); // TODO: in shader definition defined as float, not vector. Maybe Valve made a mistake, test this
+        kv->setString("$phongfresnelranges", "[.1 .4 1]");
+        kv->setString("$phongtint", "[.8 .9 1]");
+        plastic = interfaces->materialSystem->createMaterial("plastic", kv);
+    }
 }
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
