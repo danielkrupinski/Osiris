@@ -10,21 +10,6 @@
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
 
-static auto keyValuesFromString(const char* name, const char* value) noexcept
-{
-    const auto keyValuesFromString = memory->keyValuesFromString;
-    KeyValues* keyValues;
-    __asm {
-        push 0
-        mov edx, value
-        mov ecx, name
-        call keyValuesFromString
-        add esp, 4
-        mov keyValues, eax
-    }
-    return keyValues;
-}
-
 Chams::Chams() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
