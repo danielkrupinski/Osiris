@@ -14,18 +14,13 @@ Chams::Chams() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
+    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
+    glow = interfaces->materialSystem->createMaterial("glow", KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8"));
 
     {
         const auto kv = KeyValues::fromString("VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
         kv->setString("$envmaptint", "[.7 .7 .7]");
         animated = interfaces->materialSystem->createMaterial("animated", kv);
-    }
-
-    {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8");
-        // kv->setString("$envmaptint", "[1 0 0]");
-        // kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
-        glow = interfaces->materialSystem->createMaterial("glow", kv);
     }
 
     {
@@ -46,8 +41,6 @@ Chams::Chams() noexcept
         kv->setString("$phongtint", "[.2 .35 .6]");
         crystal = interfaces->materialSystem->createMaterial("crystal", kv);
     }
-
-    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
 
     {
         const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapcontrast 16 $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
