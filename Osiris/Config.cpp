@@ -13,13 +13,7 @@ Config::Config(const char* name) noexcept
         CoTaskMemFree(pathToDocuments);
     }
 
-    std::error_code ec;
-    std::filesystem::create_directory(path, ec);
-
-    std::transform(std::filesystem::directory_iterator{ path, ec },
-                   std::filesystem::directory_iterator{ },
-                   std::back_inserter(configs),
-                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+    listConfigs();
 }
 
 void Config::load(size_t id) noexcept
@@ -1686,4 +1680,15 @@ void Config::reset() noexcept
     style = { };
     misc = { };
     reportbot = { };
+}
+
+void Config::listConfigs() noexcept
+{
+    configs.clear();
+
+    std::error_code ec;
+    std::transform(std::filesystem::directory_iterator{ path, ec },
+                   std::filesystem::directory_iterator{ },
+                   std::back_inserter(configs),
+                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
 }
