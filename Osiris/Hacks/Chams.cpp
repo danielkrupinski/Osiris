@@ -53,7 +53,7 @@ Chams::Chams() noexcept
     }
 
     {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapcontrast 32 $envmapfresnel .6 $phong 1 $phongboost 6 $phongexponent 128 $phongdisablehalflambert 1");
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 6 $phongexponent 128 $phongdisablehalflambert 1");
         kv->setString("$color2", "[.18 .15 .06]");
         kv->setString("$envmaptint", "[.6 .5 .2]");
         kv->setString("$phongfresnelranges", "[.7 .8 1]");
