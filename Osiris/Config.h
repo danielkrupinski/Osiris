@@ -17,6 +17,7 @@ public:
     void remove(size_t) noexcept;
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
+    void listConfigs() noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
