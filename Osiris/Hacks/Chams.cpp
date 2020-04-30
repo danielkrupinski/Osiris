@@ -36,7 +36,7 @@ Chams::Chams() noexcept
     }
 
     {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapsaturation 0.1 $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
         // kv->setString("$envmaptint", "[.7 .7 .7]");
         kv->setString("$phongtint", "[.2 .35 .6]");
         crystal = interfaces->materialSystem->createMaterial("crystal", kv);
