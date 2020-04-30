@@ -75,9 +75,13 @@ private:
         }
     }
 
+    // TODO: move to Chams.cpp
     constexpr void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept
     {
-        auto material = dispatchMaterial(chams.material);
+        const auto material = dispatchMaterial(chams.material);
+        if (!material)
+            return;
+
         if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
             if (chams.healthBased && health) {
                 material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
@@ -97,7 +101,13 @@ private:
                 material->colorModulate(chams.color.color);
             }
         }
-        material->alphaModulate(chams.alpha * (chams.blinking ? sinf(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f));
+
+        const auto pulse = chams.alpha * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
+
+        if (material == glow)
+            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
+        else
+            material->alphaModulate(pulse);
 
         material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);

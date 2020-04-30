@@ -14,18 +14,13 @@ Chams::Chams() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
+    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
+    glow = interfaces->materialSystem->createMaterial("glow", KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
 
     {
         const auto kv = KeyValues::fromString("VertexLitGeneric", "$envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
         kv->setString("$envmaptint", "[.7 .7 .7]");
         animated = interfaces->materialSystem->createMaterial("animated", kv);
-    }
-
-    {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha 0.8");
-        // kv->setString("$envmaptint", "[1 0 0]");
-        // kv->setString("$envmapfresnelminmaxexp", "[0 1 2]");
-        glow = interfaces->materialSystem->createMaterial("glow", kv);
     }
 
     {
@@ -41,30 +36,35 @@ Chams::Chams() noexcept
     }
 
     {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapsaturation 0.1 $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
-        kv->setString("$envmaptint", "[.7 .7 .7]");
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap effects/flat_normal $translucent 1 $envmap models/effects/crystal_cube_vertigo_hdr $envmapfresnel 0 $phong 1 $phongexponent 16 $phongboost 2");
         kv->setString("$phongtint", "[.2 .35 .6]");
         crystal = interfaces->materialSystem->createMaterial("crystal", kv);
     }
 
-    chrome = interfaces->materialSystem->createMaterial("chrome", KeyValues::fromString("VertexLitGeneric", "$envmap env_cubemap"));
-
     {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapcontrast 16 $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
         kv->setString("$color2", "[.05 .05 .05]");
         kv->setString("$envmaptint", "[.2 .2 .2]");
-        kv->setString("$envmapsaturation", "[.5 .5 .5]");
         kv->setString("$phongfresnelranges", "[.7 .8 1]");
         kv->setString("$phongtint", "[.8 .9 1]");
         silver = interfaces->materialSystem->createMaterial("silver", kv);
     }
 
-    // TODO: don't use game's materials, create their clones
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 6 $phongexponent 128 $phongdisablehalflambert 1");
+        kv->setString("$color2", "[.18 .15 .06]");
+        kv->setString("$envmaptint", "[.6 .5 .2]");
+        kv->setString("$phongfresnelranges", "[.7 .8 1]");
+        kv->setString("$phongtint", "[.6 .5 .2]");
+        gold = interfaces->materialSystem->createMaterial("gold", kv);
+    }
 
-    gold = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gold");
-    gold->incrementReferenceCount();
-    plastic = interfaces->materialSystem->findMaterial("models/inventory_items/trophy_majors/gloss");
-    plastic->incrementReferenceCount();
+    {
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture black $bumpmap models/inventory_items/trophy_majors/matte_metal_normal $additive 1 $envmap editor/cube_vertigo $envmapfresnel 1 $normalmapalphaenvmapmask 1 $phong 1 $phongboost 20 $phongexponent 3000 $phongdisablehalflambert 1");
+        kv->setString("$phongfresnelranges", "[.1 .4 1]");
+        kv->setString("$phongtint", "[.8 .9 1]");
+        plastic = interfaces->materialSystem->createMaterial("plastic", kv);
+    }
 }
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) const noexcept
