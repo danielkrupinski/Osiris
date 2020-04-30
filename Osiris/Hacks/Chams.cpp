@@ -43,10 +43,9 @@ Chams::Chams() noexcept
     }
 
     {
-        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapcontrast 16 $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
+        const auto kv = KeyValues::fromString("VertexLitGeneric", "$baseTexture white $bumpmap effects/flat_normal $envmap editor/cube_vertigo $envmapfresnel .6 $phong 1 $phongboost 2 $phongexponent 8");
         kv->setString("$color2", "[.05 .05 .05]");
         kv->setString("$envmaptint", "[.2 .2 .2]");
-        // kv->setString("$envmapsaturation", "[.5 .5 .5]");
         kv->setString("$phongfresnelranges", "[.7 .8 1]");
         kv->setString("$phongtint", "[.8 .9 1]");
         silver = interfaces->materialSystem->createMaterial("silver", kv);
