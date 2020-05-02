@@ -1,19 +1,10 @@
 #pragma once
 
-#include <array>
-
-#include "../Config.h"
-#include "../Interfaces.h"
-#include "../Memory.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Entity.h"
-#include "../SDK/Engine.h"
-#include "../SDK/EntityList.h"
-
 enum class FrameStage;
 class GameEvent;
 
-namespace Visuals {
+namespace Visuals
+{
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
@@ -34,4 +25,4 @@ namespace Visuals {
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
-};
+}

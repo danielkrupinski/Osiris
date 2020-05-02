@@ -15,7 +15,6 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
-#include "Hacks/Visuals.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
 
