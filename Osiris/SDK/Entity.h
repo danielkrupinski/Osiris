@@ -178,6 +178,14 @@ public:
         return vec;
     }
 
+    auto getUserId() noexcept
+    {
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerInfo.userId;
+
+        return -1;
+    }
+
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
