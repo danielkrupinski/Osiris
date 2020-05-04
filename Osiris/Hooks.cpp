@@ -145,10 +145,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
         Misc::chokePackets(sendPacket);
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-    }
+    AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
