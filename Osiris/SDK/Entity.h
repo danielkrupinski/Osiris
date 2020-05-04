@@ -186,6 +186,22 @@ public:
         return -1;
     }
 
+    bool throwing(UserCmd* cmd) 
+    {
+        auto weapon = localPlayer->getActiveWeapon();
+        auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
+        if (weaponClass == 40) {
+            if (!weapon->pinPulled())
+                if (weapon->throwTime() > 0.f)
+                    return true;
+
+            if ((cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+                if (weapon->throwTime() > 0.f)
+                    return true;
+        }
+        return false;
+    }
+
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
@@ -254,6 +270,9 @@ public:
     NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
     NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
+
+    NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
