@@ -1,48 +1,27 @@
 #pragma once
 
-#include "Pad.h"
-
-enum class WeaponType {
-    Knife = 0,
-    Pistol,
-    SubMachinegun,
-    Rifle,
-    Shotgun,
-    SniperRifle,
-    Machinegun,
-    C4,
-    Placeholder,
-    Grenade,
-    Unknown
-};
+#include <cstddef>
 
 struct WeaponData {
-    PAD(20)
+    std::byte pad[20];
     int maxClip;
-    PAD(112)
+    std::byte pad1[112];
     char* name;
-    PAD(60)
-    WeaponType type;
-    PAD(16)
-    float cycletime;
-    PAD(12)
+    std::byte pad1_[60];
+    int type;
+    std::byte pad2[32];
     bool fullAuto;
-    PAD(3)
+    std::byte pad3[3];
     int damage;
     float armorRatio;
     int bullets;
     float penetration;
-    PAD(8)
+    std::byte pad4[8];
     float range;
     float rangeModifier;
-    PAD(0x10)
+    std::byte pad5[16];
     bool silencer;
-    PAD(15)
+    std::byte pad6[15];
     float maxSpeed;
     float maxSpeedAlt;
-    PAD(100)
-    float recoilMagnitude;
-    float recoilMagnitudeAlt;
-    PAD(0x14)
-    float recoveryTimeStand;
 };

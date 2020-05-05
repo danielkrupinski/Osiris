@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Pad.h"
-#include "VirtualMethod.h"
+#include <cstddef>
+
+#include "Utils.h"
 
 struct SurfaceData {
-    PAD(80)
+    std::byte pad[80];
     float maxspeedfactor;
     float jumpfactor;
     float penetrationmodifier;
@@ -15,5 +16,8 @@ struct SurfaceData {
 
 class PhysicsSurfaceProps {
 public:
-    VIRTUAL_METHOD(SurfaceData*, getSurfaceData, 5, (int index), (this, index))
+    constexpr auto getSurfaceData(int index) noexcept
+    {
+        return callVirtualMethod<SurfaceData*, int>(this, 5, index);
+    }
 };

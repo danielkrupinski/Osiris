@@ -1,9 +1,7 @@
 #pragma once
 
 #include <d3d9.h>
-#include <memory>
 #include <type_traits>
-#include <Windows.h>
 
 #include "Interfaces.h"
 #include "Memory.h"
@@ -14,9 +12,7 @@ struct SoundInfo;
 
 class Hooks {
 public:
-    Hooks(HMODULE cheatModule);
-
-    void install() noexcept;
+    Hooks() noexcept;
     void restore() noexcept;
 
     WNDPROC originalWndProc;
@@ -62,19 +58,17 @@ public:
         size_t length = 0;
     };
 
-    Vmt bspQuery{ interfaces->engine->getBSPTreeQuery() };
-    Vmt client{ interfaces->client };
-    Vmt clientMode{ memory->clientMode };
-    Vmt engine{ interfaces->engine };
-    Vmt gameEventManager{ interfaces->gameEventManager };
-    Vmt modelRender{ interfaces->modelRender };
-    Vmt panel{ interfaces->panel };
-    Vmt sound{ interfaces->sound };
-    Vmt surface{ interfaces->surface };
-    Vmt svCheats{ interfaces->cvar->findVar("sv_cheats") };
-    Vmt viewRender{ memory->viewRender };
-private:
-    HMODULE module;
+    Vmt bspQuery{ interfaces.engine->getBSPTreeQuery() };
+    Vmt client{ interfaces.client };
+    Vmt clientMode{ memory.clientMode };
+    Vmt engine{ interfaces.engine };
+    Vmt gameEventManager{ interfaces.gameEventManager };
+    Vmt modelRender{ interfaces.modelRender };
+    Vmt panel{ interfaces.panel };
+    Vmt sound{ interfaces.sound };
+    Vmt surface{ interfaces.surface };
+    Vmt svCheats{ interfaces.cvar->findVar("sv_cheats") };
+    Vmt viewRender{ memory.viewRender };
 };
 
-inline std::unique_ptr<Hooks> hooks;
+extern Hooks hooks;

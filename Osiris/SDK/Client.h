@@ -1,11 +1,18 @@
 #pragma once
 
-#include "VirtualMethod.h"
+#include "Utils.h"
 
 struct ClientClass;
 
 class Client {
 public:
-    VIRTUAL_METHOD(ClientClass*, getAllClasses, 8, (), (this))
-    VIRTUAL_METHOD(bool, dispatchUserMessage, 38, (int messageType, int arg, int arg1, void* data), (this, messageType, arg, arg1, data))
+    constexpr auto getAllClasses() noexcept
+    {
+        return callVirtualMethod<ClientClass*>(this, 8);
+    }
+
+    constexpr bool dispatchUserMessage(int messageType, int arg, int arg1, void* data) noexcept
+    {
+        return callVirtualMethod<bool, int, int, int, void*>(this, 38, messageType, arg, arg1, data);
+    }
 };

@@ -1,10 +1,13 @@
 #pragma once
 
-#include "VirtualMethod.h"
+#include "Utils.h"
 
 class NetworkChannel {
 public:
-    VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
+    constexpr auto getLatency(int flow) noexcept
+    {
+        return callVirtualMethod<float, int>(this, 9, flow);
+    }
 
     std::byte pad[44];
     int chokedPackets;

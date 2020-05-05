@@ -1,10 +1,8 @@
 #pragma once
 
-#include <functional>
 #include <tuple>
 
 #include "Utils.h"
-#include "VirtualMethod.h"
 
 class Surface {
 public:
@@ -78,14 +76,12 @@ public:
     {
         callVirtualMethod<void, const wchar_t*, int, int>(this, 28, text.data(), text.length(), drawType);
     }
-    
-    VIRTUAL_METHOD(void, getScreenSize, 44, (int& w, int& h), (this, std::ref(w), std::ref(h)))
 
-    auto getScreenSize() noexcept
+    constexpr auto getScreenSize() noexcept
     {
-        int w, h;
-        getScreenSize(w, h);
-        return std::make_pair(w, h);
+        int width{ }, height{ };
+        callVirtualMethod<void, int&, int&>(this, 44, width, height);
+        return std::make_pair(width, height);
     }
 
     constexpr void unlockCursor() noexcept
@@ -127,7 +123,7 @@ public:
                 xs[j] = static_cast<int>(std::cos(degreesToRadians(static_cast<float>(j * 30))) * i + x);
                 ys[j] = static_cast<int>(std::sin(degreesToRadians(static_cast<float>(j * 30))) * i + y);
             }
-            interfaces->surface->drawPolyLine(xs, ys, 12);
+            interfaces.surface->drawPolyLine(xs, ys, 12);
         }
     }
 };

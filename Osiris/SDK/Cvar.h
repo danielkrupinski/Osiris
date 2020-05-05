@@ -1,10 +1,13 @@
 #pragma once
 
-#include "VirtualMethod.h"
+#include "Utils.h"
 
 struct ConVar;
 
 class Cvar {
 public:
-    VIRTUAL_METHOD(ConVar*, findVar, 15, (const char* name), (this, name))
+    constexpr auto findVar(const char* name) noexcept
+    {
+        return callVirtualMethod<ConVar*, const char*>(this, 15, name);
+    }
 };
