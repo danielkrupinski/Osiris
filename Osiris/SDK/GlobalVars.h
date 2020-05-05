@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Entity.h"
-#include "EntityList.h"
-#include "../Interfaces.h"
+#include <cstddef>
 
 struct UserCmd;
 
@@ -11,8 +9,8 @@ struct GlobalVars {
     const int framecount;
     const float absoluteFrameTime;
     const std::byte pad[4];
-    const float currenttime;
-    const float frametime;
+    float currenttime;
+    float frametime;
     const int maxClients;
     const int tickCount;
     const float intervalPerTick;

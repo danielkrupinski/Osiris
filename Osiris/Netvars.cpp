@@ -18,7 +18,7 @@ static std::unordered_map<uint32_t, recvProxy> proxies;
 
 static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (config.misc.radarHack)
+    if (config->misc.radarHack)
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
@@ -166,9 +166,9 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
 
 static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (interfaces.engine->isInGame()) {
-        if (const auto activeWeapon = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->getActiveWeapon()) {
-            if (config.visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+    if (localPlayer) {
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+            if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
             if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))
@@ -181,13 +181,13 @@ static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexc
 
 Netvars::Netvars() noexcept
 {
-    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(false, clientClass->networkName, clientClass->recvTable);
 }
 
 void Netvars::restore() noexcept
 {
-    for (auto clientClass = interfaces.client->getAllClasses(); clientClass; clientClass = clientClass->next)
+    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(true, clientClass->networkName, clientClass->recvTable);
 
     proxies.clear();

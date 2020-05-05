@@ -1,5 +1,9 @@
 #include "GlobalVars.h"
 #include "UserCmd.h"
+#include "../Interfaces.h"
+#include "Engine.h"
+#include "Entity.h"
+#include "EntityList.h"
 
 float GlobalVars::serverTime(UserCmd* cmd) noexcept
 {
@@ -7,8 +11,8 @@ float GlobalVars::serverTime(UserCmd* cmd) noexcept
     static UserCmd* lastCmd;
 
     if (cmd) {
-        if (!lastCmd || lastCmd->hasbeenpredicted)
-            tick = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->tickBase();
+        if (localPlayer && (!lastCmd || lastCmd->hasbeenpredicted))
+            tick = localPlayer->tickBase();
         else
             tick++;
         lastCmd = cmd;

@@ -1,39 +1,18 @@
 #pragma once
 
-#include "Utils.h"
+#include "VirtualMethod.h"
 
+class KeyValues;
 class Material;
 class RenderContext;
 
 class MaterialSystem {
 public:
-    constexpr auto findMaterial(const char* materialName) noexcept
-    {
-        return callVirtualMethod<Material*, const char*, const char*, bool, const char*>(this, 84, materialName, nullptr, true, nullptr);
-    }
-
-    constexpr auto firstMaterial() noexcept
-    {
-        return callVirtualMethod<short>(this, 86);
-    }
-
-    constexpr auto nextMaterial(short handle) noexcept
-    {
-        return callVirtualMethod<short, short>(this, 87, handle);
-    }
-
-    constexpr auto invalidMaterial() noexcept
-    {
-        return callVirtualMethod<short>(this, 88);
-    }
-
-    constexpr auto getMaterial(short handle) noexcept
-    {
-        return callVirtualMethod<Material*, short>(this, 89, handle);
-    }
-
-    constexpr auto getRenderContext() noexcept
-    {
-        return callVirtualMethod<RenderContext*>(this, 115);
-    }
+    VIRTUAL_METHOD(Material*, createMaterial, 83, (const char* materialName, KeyValues* keyValues), (this, materialName, keyValues))
+    VIRTUAL_METHOD(Material*, findMaterial, 84, (const char* materialName, const char* textureGroupName = nullptr, bool complain = true, const char* complainPrefix = nullptr), (this, materialName, textureGroupName, complain, complainPrefix))
+    VIRTUAL_METHOD(short, firstMaterial, 86, (), (this))
+    VIRTUAL_METHOD(short, nextMaterial, 87, (short handle), (this, handle))
+    VIRTUAL_METHOD(short, invalidMaterial, 88, (), (this))
+    VIRTUAL_METHOD(Material*, getMaterial, 89, (short handle), (this, handle))
+    VIRTUAL_METHOD(RenderContext*, getRenderContext, 115, (), (this))
 };

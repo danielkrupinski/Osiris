@@ -1,6 +1,7 @@
 #pragma once
 
-#include <sstream>
+#include <memory>
+#include <string>
 #include <type_traits>
 #include <Windows.h>
 
@@ -10,6 +11,7 @@ class Engine;
 class EngineTrace;
 class EntityList;
 class GameEventManager;
+class GameMovement;
 class GameUI;
 class InputSystem;
 class Localize;
@@ -18,45 +20,49 @@ class ModelInfo;
 class ModelRender;
 class Panel;
 class PhysicsSurfaceProps;
+class Prediction;
 class RenderView;
-class ResourceAccessControl;
 class Surface;
 class Sound;
 class SoundEmitter;
+class StudioRender;
+
+#define GAME_INTERFACE(type, name, module, version) \
+type* name = reinterpret_cast<type*>(find(L##module, version));
 
 class Interfaces {
 public:
-    Client* client = find<Client>(L"client_panorama", "VClient018");
-    Cvar* cvar = find<Cvar>(L"vstdlib", "VEngineCvar007");
-    Engine* engine = find<Engine>(L"engine", "VEngineClient014");
-    EngineTrace* engineTrace = find<EngineTrace>(L"engine", "EngineTraceClient004");
-    EntityList* entityList = find<EntityList>(L"client_panorama", "VClientEntityList003");;
-    GameEventManager* gameEventManager = find<GameEventManager>(L"engine", "GAMEEVENTSMANAGER002");
-    GameUI* gameUI = find<GameUI>(L"client_panorama", "GameUI011");
-    InputSystem* inputSystem = find<InputSystem>(L"inputsystem", "InputSystemVersion001");
-    Localize* localize = find<Localize>(L"localize", "Localize_001");
-    MaterialSystem* materialSystem = find<MaterialSystem>(L"materialsystem", "VMaterialSystem080");
-    ModelInfo* modelInfo = find<ModelInfo>(L"engine", "VModelInfoClient004");
-    ModelRender* modelRender = find<ModelRender>(L"engine", "VEngineModel016");
-    Panel* panel = find<Panel>(L"vgui2", "VGUI_Panel009");
-    PhysicsSurfaceProps* physicsSurfaceProps = find<PhysicsSurfaceProps>(L"vphysics", "VPhysicsSurfaceProps001");
-    RenderView* renderView = find<RenderView>(L"engine", "VEngineRenderView014");
-    ResourceAccessControl* resourceAccessControl = find<ResourceAccessControl>(L"datacache", "VResourceAccessControl001");
-    Surface* surface = find<Surface>(L"vguimatsurface", "VGUI_Surface031");
-    Sound* sound = find<Sound>(L"engine", "IEngineSoundClient003");
-    SoundEmitter* soundEmitter = find<SoundEmitter>(L"soundemittersystem", "VSoundEmitter003");
+    GAME_INTERFACE(Client, client, "client_panorama", "VClient018")
+    GAME_INTERFACE(Cvar, cvar, "vstdlib", "VEngineCvar007")
+    GAME_INTERFACE(Engine, engine, "engine", "VEngineClient014")
+    GAME_INTERFACE(EngineTrace, engineTrace, "engine", "EngineTraceClient004")
+    GAME_INTERFACE(EntityList, entityList, "client_panorama", "VClientEntityList003")
+    GAME_INTERFACE(GameEventManager, gameEventManager, "engine", "GAMEEVENTSMANAGER002")
+    GAME_INTERFACE(GameMovement, gameMovement, "client_panorama", "GameMovement001")
+    GAME_INTERFACE(GameUI, gameUI, "client_panorama", "GameUI011")
+    GAME_INTERFACE(InputSystem, inputSystem, "inputsystem", "InputSystemVersion001")
+    GAME_INTERFACE(Localize, localize, "localize", "Localize_001")
+    GAME_INTERFACE(MaterialSystem, materialSystem, "materialsystem", "VMaterialSystem080")
+    GAME_INTERFACE(ModelInfo, modelInfo, "engine", "VModelInfoClient004")
+    GAME_INTERFACE(ModelRender, modelRender, "engine", "VEngineModel016")
+    GAME_INTERFACE(Panel, panel, "vgui2", "VGUI_Panel009")
+    GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, "vphysics", "VPhysicsSurfaceProps001")
+    GAME_INTERFACE(Prediction, prediction, "client_panorama", "VClientPrediction001")
+    GAME_INTERFACE(RenderView, renderView, "engine", "VEngineRenderView014")
+    GAME_INTERFACE(Surface, surface, "vguimatsurface", "VGUI_Surface031")
+    GAME_INTERFACE(Sound, sound, "engine", "IEngineSoundClient003")
+    GAME_INTERFACE(SoundEmitter, soundEmitter, "soundemittersystem", "VSoundEmitter003")
+    GAME_INTERFACE(StudioRender, studioRender, "studiorender", "VStudioRender026")
 private:
-    template <typename T>
-    static auto find(const wchar_t* module, const char* name) noexcept
+    static void* find(const wchar_t* module, const char* name) noexcept
     {
-        if (HMODULE moduleHandle = GetModuleHandleW(module))
-            if (const auto createInterface = reinterpret_cast<std::add_pointer_t<T* (const char* name, int* returnCode)>>(GetProcAddress(moduleHandle, "CreateInterface")))
-                if (T* foundInterface = createInterface(name, nullptr))
-                    return foundInterface;
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface")))
+            if (void* foundInterface = createInterface(name, nullptr))
+                return foundInterface;
 
-        MessageBoxA(nullptr, (std::ostringstream{ } << "Failed to find " << name << " interface!").str().c_str(), "Osiris", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
         std::exit(EXIT_FAILURE);
     }
 };
 
-extern const Interfaces interfaces;
+inline std::unique_ptr<const Interfaces> interfaces;
