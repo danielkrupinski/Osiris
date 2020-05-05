@@ -9,7 +9,9 @@ struct StudioBbox {
     Vector bbMin;
     Vector bbMax;
     int hitboxNameIndex;
-    int	unused[8];
+    Vector offsetOrientation;
+    float capsuleRadius;
+    int	unused[4];
 };
 
 struct StudioHitboxSet {

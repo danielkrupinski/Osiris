@@ -94,17 +94,17 @@ public:
             Vector absOrigin = getAbsOrigin();
             *render = 0;
             memory->setAbsOrigin(this, origin());
-            auto result = callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
             memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
-        return callVirtualMethod<bool, matrix3x4*, int, int, float>(this + 4, 13, out, maxBones, boneMask, currentTime);
+        return VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone) noexcept
     {
-        if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
+        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
             return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
@@ -113,7 +113,7 @@ public:
     auto getEyePosition() noexcept
     {
         Vector vec;
-        callVirtualMethod<void, Vector&>(this, 284, vec);
+        VirtualMethod::call<void, 284>(this, std::ref(vec));
         return vec;
     }
 
@@ -174,8 +174,16 @@ public:
     auto getAimPunch() noexcept
     {
         Vector vec;
-        callVirtualMethod<void>(this, 345, std::ref(vec));
+        VirtualMethod::call<void, 345>(this, std::ref(vec));
         return vec;
+    }
+
+    auto getUserId() noexcept
+    {
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerInfo.userId;
+
+        return -1;
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
