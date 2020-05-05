@@ -104,7 +104,7 @@ public:
 
     Vector getBonePosition(int bone) noexcept
     {
-        if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
+        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
             return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
@@ -176,6 +176,14 @@ public:
         Vector vec;
         VirtualMethod::call<void, 345>(this, std::ref(vec));
         return vec;
+    }
+
+    auto getUserId() noexcept
+    {
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerInfo.userId;
+
+        return -1;
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)

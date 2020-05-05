@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <tuple>
 
 template<typename T, typename ...Args>
 constexpr auto callVirtualMethod(void* classBase, int index, Args... args) noexcept
