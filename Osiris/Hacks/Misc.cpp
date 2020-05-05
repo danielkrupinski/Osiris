@@ -495,12 +495,7 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     std::string cmd = "say \"";
@@ -612,12 +607,7 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!localPlayer)
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     constexpr std::array hitSounds{
@@ -641,12 +631,7 @@ void Misc::killSound(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     constexpr std::array killSounds{
