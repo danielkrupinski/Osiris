@@ -44,7 +44,6 @@ void AntiAim::setYaw(float yaw, UserCmd* cmd, bool sendPacket) noexcept
 
     if (config->antiAim.yawReal)
     {
-        static float LBY = 0;
         if (!sendPacket)
         {
             if (config->antiAim.LBYBreaker)
@@ -52,7 +51,6 @@ void AntiAim::setYaw(float yaw, UserCmd* cmd, bool sendPacket) noexcept
                 if (LbyUpdate)
                 {
                     newviewangle += 180.0f;
-                    LBY = config->globals.serverTime + 0.22f;
                 }
                 else {
                     if (!GetAsyncKeyState(config->antiAim.yawInverseAngleKey))
