@@ -270,13 +270,20 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             ImGui::SliderFloat("Pitch Angle", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f", 1);
         }
         ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+        ImGui::Checkbox("Yaw", &config->antiAim.yaw);
         if (config->antiAim.yaw) {
             ImGui::SameLine();
             ImGui::SetNextItemWidth(240.0f);
             ImGui::SliderFloat("Yaw Angle", &config->antiAim.yawAngle, -179.0f, 179.0f, "%.2f", 1);
+            ImGui::SameLine();
+            hotkey(config->antiAim.yawInverseAngleKey);
+            ImGui::Checkbox("LBY Breaker", &config->antiAim.LBYBreaker);
         }
-        ImGui::SameLine();
-        hotkey(config->antiAim.yawInverseAngleKey);
+        else
+        {
+            ImGui::SameLine();
+            hotkey(config->antiAim.yawInverseAngleKey);
+        }
         ImGui::Checkbox("Yaw Desync", &config->antiAim.yawReal);
         if (config->antiAim.yawReal == true)
         {
