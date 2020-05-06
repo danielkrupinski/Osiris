@@ -1,4 +1,5 @@
 #pragma once
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 class GameEvent;
@@ -8,7 +9,7 @@ namespace Visuals
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
-    void thirdperson() noexcept;
+	void thirdperson(FrameStage stage, Vector angle) noexcept;
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;

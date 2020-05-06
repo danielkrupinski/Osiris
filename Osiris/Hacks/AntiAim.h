@@ -4,5 +4,8 @@ struct UserCmd;
 struct Vector;
 
 namespace AntiAim {
-    void run(UserCmd*, const Vector&, const Vector&, bool&) noexcept;
+	float RandomFloat(float min, float max) noexcept;
+	void setPitch(float pitch, UserCmd* cmd, bool sendPacket) noexcept;
+	void setYaw(float yaw, UserCmd* cmd, bool sendPacket) noexcept;
+	void run(UserCmd*, const Vector&, const Vector&, bool&) noexcept;
 }

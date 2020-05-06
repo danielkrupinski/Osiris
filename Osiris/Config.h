@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include "SDK/Vector.h"
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
@@ -18,6 +19,11 @@ public:
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
+    struct Record {
+        Vector origin;
+        float simulationTime;
+        matrix3x4 matrix[128];
+    };
 
     constexpr auto& getConfigs() noexcept
     {
@@ -84,9 +90,17 @@ public:
 
     struct {
         bool enabled{ false };
+        int thirdpersonMode{ 0 };
         bool pitch{ false };
         bool yaw{ false };
         float pitchAngle{ 0.0f };
+        float yawAngle{ 0.0f };
+        int yawInverseAngleKey{ 0 };
+        bool yawReal{ false };
+        float bodyLean{ 0.0f };
+        int mode{ 0 };
+        float jitterMax{ 0.0f };
+        float jitterMin{ 0.0f };
     } antiAim;
 
     struct Glow {
@@ -112,7 +126,7 @@ public:
         std::array<Material, 2> materials;
     };
 
-    std::array<Chams, 18> chams;
+    std::array<Chams, 20> chams;
 
     struct Esp {
         struct Shared {
@@ -263,8 +277,21 @@ public:
         bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
-        int chokedPackets{ 0 };
-        int chokedPacketsKey{ 0 };
+        int fakeLagMode{ 0 };
+        int fakeLagTicks{ 0 };
+        int fakeLagKey{ 0 };
+        const char* fakeLagFlags[4] = {
+            "While Shooting",
+            "While Standing",
+            "While Moving",
+            "In Air"
+        };
+        bool fakeLagSelectedFlags[4] = {
+            false,
+            false,
+            false,
+            false
+        };
         int quickHealthshotKey{ 0 };
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
@@ -286,6 +313,14 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct {
+        bool thirdPersonAnglesSet{ false };
+        Vector fakeAngle;
+        Vector realAngle;
+        Vector cmdAngle;
+        Record serverPos;
+    } globals;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;

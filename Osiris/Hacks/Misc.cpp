@@ -550,10 +550,56 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::chokePackets(bool& sendPacket) noexcept
+float Misc::RandomFloat(float min, float max) noexcept
 {
-    if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
-        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
+    return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
+}
+
+void Misc::chokePackets(bool& sendPacket, UserCmd* cmd) noexcept
+{
+    bool doFakeLag{ false };
+    auto position = localPlayer->getAbsOrigin();
+    auto velocity = localPlayer->velocity();
+    auto extrapolatedVelocity = sqrt(sqrt(velocity.x * velocity.y * velocity.z));
+    auto& records = config->globals.serverPos;
+    float distanceDifToServerSide = sqrt(sqrt(records.origin.x * records.origin.y * records.origin.z));
+
+    if (config->misc.fakeLagMode != 0)
+    {
+        if ((config->misc.fakeLagSelectedFlags[0] && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+            || (config->misc.fakeLagSelectedFlags[1] && fabsf(cmd->sidemove) > 6.0f && fabsf(cmd->forwardmove) > 6.0f && fabsf(cmd->sidemove) < -6.0f && fabsf(cmd->forwardmove) < -6.0f)
+            || (config->misc.fakeLagSelectedFlags[2] && fabsf(cmd->sidemove) < 6.0f && fabsf(cmd->forwardmove) < 6.0f && fabsf(cmd->sidemove) > -6.0f && fabsf(cmd->forwardmove) > -6.0f)
+            || (config->misc.fakeLagSelectedFlags[3] && (localPlayer->flags() & 1)))
+            doFakeLag = true;
+        else
+            doFakeLag = false;
+    }
+
+    if (doFakeLag)
+    {
+        if (config->misc.fakeLagMode == 1)
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.fakeLagTicks;
+        if (config->misc.fakeLagMode == 2)
+        {
+            auto requiredPacketsToBreakLagComp = 65 / extrapolatedVelocity;
+            if (!(requiredPacketsToBreakLagComp > config->misc.fakeLagTicks) && requiredPacketsToBreakLagComp <= 16)
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= requiredPacketsToBreakLagComp;
+            else
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= 16;
+        }
+        if (config->misc.fakeLagMode == 3)
+        {
+            float lagTicks = RandomFloat(config->misc.fakeLagTicks, 16);
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= lagTicks;
+        }
+        if (config->misc.fakeLagMode == 4)
+        {
+            if (distanceDifToServerSide < 64.f && interfaces->engine->getNetworkChannel()->chokedPackets < 16)
+                sendPacket = false;
+            else
+                sendPacket = true;
+        }
+    }
 }
 
 void Misc::autoReload(UserCmd* cmd) noexcept

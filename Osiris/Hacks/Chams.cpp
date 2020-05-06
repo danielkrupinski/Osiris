@@ -9,6 +9,7 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
+#include "Misc.h"
 
 Chams::Chams() noexcept
 {
@@ -159,7 +160,26 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                 applyChams(config->chams[LOCALPLAYER].materials[i], false, entity->health());
                 applied = true;
+            }/*
+            if (config->misc.fakeLagMode != 0 && config->chams[SERVERPOS].materials[i].enabled) {
+                auto record = config->globals.serverPos;
+                if (record.matrix && record.origin && record.simulationTime) {
+                    if (applied)
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), record.matrix);
+                    applyChams(config->chams[SERVERPOS].materials[i], false, entity->health());
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), record.matrix);
+                    interfaces->studioRender->forcedMaterialOverride(nullptr);
+                    applied = true;
+                }
             }
+            if (config->chams[REALANGLES].materials[i].enabled) {
+                if (applied)
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                interfaces->studioRender->forcedMaterialOverride(nullptr);
+                applyChams(config->chams[REALANGLES].materials[i], false, entity->health());
+                applied = true;
+            }*/
         } else if (entity->isEnemy()) {
             if (config->chams[ENEMIES_ALL].materials[i].enabled) {
                 if (applied)

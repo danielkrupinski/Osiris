@@ -80,10 +80,17 @@ void Config::load(size_t id) noexcept
 
     {
         const auto& antiAimJson = json["Anti aim"];
-        if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
-        if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
-        if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
-        if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+        if (antiAimJson.isMember("Enabled")) config->antiAim.enabled = antiAimJson["Enabled"].asBool();
+        if (antiAimJson.isMember("Pitch")) config->antiAim.pitch = antiAimJson["Pitch"].asBool();
+        if (antiAimJson.isMember("Pitch angle")) config->antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
+        if (antiAimJson.isMember("Yaw")) config->antiAim.yaw = antiAimJson["Yaw"].asBool();
+        if (antiAimJson.isMember("Yaw angle")) config->antiAim.yawAngle = antiAimJson["Yaw angle"].asFloat();
+        if (antiAimJson.isMember("Inverse Yaw Key")) config->antiAim.yawInverseAngleKey = antiAimJson["Inverse Yaw Key"].asInt();
+        if (antiAimJson.isMember("Yaw Real")) config->antiAim.yawReal = antiAimJson["Yaw Real"].asBool();
+        if (antiAimJson.isMember("Body Lean")) config->antiAim.bodyLean = antiAimJson["Body Lean"].asFloat();
+        if (antiAimJson.isMember("AntiAim Mode")) config->antiAim.mode = antiAimJson["AntiAim Mode"].asInt();
+        if (antiAimJson.isMember("Jitter Max")) config->antiAim.jitterMax = antiAimJson["Jitter Max"].asFloat();
+        if (antiAimJson.isMember("Jitter Min")) config->antiAim.jitterMin = antiAimJson["Jitter Min"].asFloat();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -876,8 +883,13 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
-        if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
-        if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
+        if (miscJson.isMember("Fakelag Ticks")) misc.fakeLagTicks = miscJson["Fakelag Ticks"].asInt();
+        if (miscJson.isMember("Fakelag Mode")) misc.fakeLagMode = miscJson["Fakelag Mode"].asInt();
+        if (miscJson.isMember("Fakelag While Shooting")) misc.fakeLagSelectedFlags[0] = miscJson["Fakelag While Shooting"].asBool();
+        if (miscJson.isMember("Fakelag While Standing")) misc.fakeLagSelectedFlags[1] = miscJson["Fakelag While Standing"].asBool();
+        if (miscJson.isMember("Fakelag While Moving")) misc.fakeLagSelectedFlags[2] = miscJson["Fakelag While Moving"].asBool();
+        if (miscJson.isMember("Fakelag In Air")) misc.fakeLagSelectedFlags[3] = miscJson["Fakelag In Air"].asBool();
+        if (miscJson.isMember("Fakelag key")) misc.fakeLagKey = miscJson["Fakelag key"].asInt();
         if (miscJson.isMember("Quick healthshot key")) misc.quickHealthshotKey = miscJson["Quick healthshot key"].asInt();
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
@@ -966,6 +978,13 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+        antiAimJson["Yaw angle"] = antiAim.yawAngle;
+        antiAimJson["Inverse Yaw Key"] = antiAim.yawInverseAngleKey;
+        antiAimJson["Yaw Real"] = antiAim.yawReal;
+        antiAimJson["Body Lean"] = antiAim.bodyLean;
+        antiAimJson["AntiAim Mode"] = antiAim.mode;
+        antiAimJson["Jitter Max"] = antiAim.jitterMax;
+        antiAimJson["Jitter Min"] = antiAim.jitterMin;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -1613,8 +1632,13 @@ void Config::save(size_t id) const noexcept
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;
-        miscJson["Choked packets"] = misc.chokedPackets;
-        miscJson["Choked packets key"] = misc.chokedPacketsKey;
+        miscJson["Fakelag Ticks"] = misc.fakeLagTicks;
+        miscJson["Fakelag Mode"] = misc.fakeLagMode;
+        miscJson["Fakelag While Shooting"] = misc.fakeLagSelectedFlags[0];
+        miscJson["Fakelag While Standing"] = misc.fakeLagSelectedFlags[1];
+        miscJson["Fakelag While Moving"] = misc.fakeLagSelectedFlags[2];
+        miscJson["Fakelag In Air"] = misc.fakeLagSelectedFlags[3];
+        miscJson["Fakelag key"] = misc.fakeLagKey;
         miscJson["Quick healthshot key"] = misc.quickHealthshotKey;
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;

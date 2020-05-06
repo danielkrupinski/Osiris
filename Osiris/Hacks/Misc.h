@@ -32,7 +32,6 @@ namespace Misc
     void antiAfkKick(UserCmd* cmd) noexcept;
     void fixAnimationLOD(FrameStage stage) noexcept;
     void autoPistol(UserCmd* cmd) noexcept;
-    void chokePackets(bool& sendPacket) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(UserCmd* cmd) noexcept;
     void autoStrafe(UserCmd* cmd) noexcept;
@@ -40,4 +39,6 @@ namespace Misc
     void moonwalk(UserCmd* cmd) noexcept;
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
+    float RandomFloat(float min, float max) noexcept;
+    void chokePackets(bool& sendPacket, UserCmd* cmd) noexcept;
 }
