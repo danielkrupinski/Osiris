@@ -15,7 +15,6 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
-#include "Hacks/Visuals.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
 
@@ -1054,7 +1053,14 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
     }
-
+    ImGui::PushID(5);
+    ImGui::Combo("Kill Sound", &config->misc.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
+    if (config->misc.killSound == 5) {
+        ImGui::InputText("Kill Sound filename", &config->misc.customKillSound);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
+    }
+    ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
     config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
@@ -1112,7 +1118,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     if (!contentOnly) {
         if (!window.config)
             return;
-        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 290.0f, 200.0f });
         ImGui::Begin("Config", &window.config, windowFlags);
     }
 
@@ -1120,6 +1126,9 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 170.0f);
 
     ImGui::PushItemWidth(160.0f);
+
+    if (ImGui::Button("Reload configs", { 160.0f, 25.0f }))
+        config->listConfigs();
 
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;

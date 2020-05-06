@@ -119,6 +119,9 @@
     <ClCompile Include="Hacks\EnginePrediction.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="SDK\KeyValues.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -365,6 +368,9 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\LocalPlayer.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\KeyValues.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
