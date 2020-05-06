@@ -1,4 +1,4 @@
-﻿#include <fstream>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -264,12 +264,11 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
     if (config->antiAim.enabled)
     {
         ImGui::Checkbox("Pitch", &config->antiAim.pitch);
-        if (config->antiAim.yaw) {
+        if (config->antiAim.pitch) {
             ImGui::SameLine();
             ImGui::SetNextItemWidth(240.0f);
             ImGui::SliderFloat("Pitch Angle", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f", 1);
         }
-        ImGui::Checkbox("Yaw", &config->antiAim.yaw);
         ImGui::Checkbox("Yaw", &config->antiAim.yaw);
         if (config->antiAim.yaw) {
             ImGui::SameLine();
@@ -277,7 +276,6 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             ImGui::SliderFloat("Yaw Angle", &config->antiAim.yawAngle, -179.0f, 179.0f, "%.2f", 1);
             ImGui::SameLine();
             hotkey(config->antiAim.yawInverseAngleKey);
-            ImGui::Checkbox("LBY Breaker", &config->antiAim.LBYBreaker);
         }
         else
         {
@@ -289,6 +287,7 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         {
             ImGui::SetNextItemWidth(240.0f);
             ImGui::SliderFloat("Body Lean", &config->antiAim.bodyLean, 0.0f, 100.0f, "%.2f", 1);
+            ImGui::Checkbox("LBY Breaker", &config->antiAim.LBYBreaker);
         }
         ImGui::SetNextItemWidth(85.0f);
         ImGui::Combo("Anti-Aim Mode", &config->antiAim.mode, "Static\0Custom\0");
