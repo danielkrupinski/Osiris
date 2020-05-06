@@ -567,8 +567,8 @@ void Misc::chokePackets(bool& sendPacket, UserCmd* cmd) noexcept
     if (config->misc.fakeLagMode != 0)
     {
         if ((config->misc.fakeLagSelectedFlags[0] && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
-            || (config->misc.fakeLagSelectedFlags[1] && fabsf(cmd->sidemove) < 6.0f && fabsf(cmd->forwardmove) < 6.0f && fabsf(cmd->sidemove) > -6.0f && fabsf(cmd->forwardmove) > -6.0f)
-            || (config->misc.fakeLagSelectedFlags[2] && fabsf(cmd->sidemove) > 6.0f && fabsf(cmd->forwardmove) > 6.0f && fabsf(cmd->sidemove) < -6.0f && fabsf(cmd->forwardmove) < -6.0f)
+            || (config->misc.fakeLagSelectedFlags[1] && !(cmd->buttons& (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT)))
+            || (config->misc.fakeLagSelectedFlags[2] && cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
             || (config->misc.fakeLagSelectedFlags[3] && !(localPlayer->flags() & 1)))
             doFakeLag = true;
         else
