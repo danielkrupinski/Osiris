@@ -19,7 +19,7 @@ void AntiAim::setPitch(float pitch, UserCmd* cmd, bool sendPacket) noexcept
     cmd->viewangles.x = newviewangle;
 };
 
-bool AntiAim::LbyUpdate()
+bool AntiAim::LbyUpdate(Vector& previousViewAngles)
 {
     if (!(localPlayer->flags() & 1))
     {
@@ -28,7 +28,6 @@ bool AntiAim::LbyUpdate()
     if (localPlayer->velocity() > 0.f)
     {
         config->globals.nextLBY = config->globals.serverTime + 0.22f;
-        return false;
     }
     if (config->globals.nextLBY <= config->globals.serverTime)
     {
@@ -45,28 +44,17 @@ void AntiAim::setYaw(float yaw, UserCmd* cmd, bool sendPacket) noexcept
     {
         if (!sendPacket)
         {
-            if (config->antiAim.LBYBreaker)
-            {
-                if (LbyUpdate)
-                {
-                    newviewangle += 180.0f;
-                }
-                else {
-                    if (!GetAsyncKeyState(config->antiAim.yawInverseAngleKey))
-                        newviewangle += localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                    else
-                        newviewangle -= localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                }
-            }
+            if (!GetAsyncKeyState(config->antiAim.yawInverseAngleKey))
+                newviewangle += localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
             else
-            {
-                if (!GetAsyncKeyState(config->antiAim.yawInverseAngleKey))
-                    newviewangle += localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                else
-                    newviewangle -= localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-            }
+                newviewangle -= localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
         }
     }
+
+    if (config->antiAim.LBYBreaker && config->antiAim.yawReal)
+        if (!sendPacket)
+            if (LbyUpdate)
+                newviewangle += 180.0f;
 
     cmd->viewangles.y = newviewangle;
 };
