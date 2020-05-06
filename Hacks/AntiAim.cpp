@@ -21,19 +21,18 @@ void AntiAim::setPitch(float pitch, UserCmd* cmd, bool sendPacket) noexcept
 
 bool AntiAim::LbyUpdate()
 {
-    static float timeUntilLBYUpdate = 0.f;
     if (!(localPlayer->flags() & 1))
     {
         return false;
     }
     if (localPlayer->velocity() > 0.f)
     {
-        timeUntilLBYUpdate = config->globals.serverTime + 0.22f;
+        config->globals.nextLBY = config->globals.serverTime + 0.22f;
         return false;
     }
-    if (timeUntilLBYUpdate <= config->globals.serverTime)
+    if (config->globals.nextLBY <= config->globals.serverTime)
     {
-        timeUntilLBYUpdate = config->globals.serverTime + 1.1f;
+        config->globals.nextLBY = config->globals.serverTime + 1.1f;
         return true;
     }
 }
