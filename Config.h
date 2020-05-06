@@ -322,6 +322,7 @@ public:
         Vector cmdAngle;
         Record serverPos;
         float serverTime{ 0.f };
+        float nextLBY{ 0.f };
     } globals;
 private:
     std::filesystem::path path;
