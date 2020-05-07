@@ -2,6 +2,8 @@
 
 #include <cstddef>
 
+#include "VirtualMethod.h"
+
 template <typename Key, typename Value>
 struct Node {
     int previousId;
@@ -41,6 +43,11 @@ struct StickerKit {
     int id;
     std::byte pad[36];
     String itemName;
+};
+
+class EconItemDefintion {
+public:
+    VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
 };
 
 class ItemSchema {
