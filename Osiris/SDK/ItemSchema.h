@@ -4,6 +4,8 @@
 
 #include "VirtualMethod.h"
 
+enum class WeaponId : short;
+
 template <typename Key, typename Value>
 struct Node {
     int previousId;
@@ -50,6 +52,12 @@ public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
 };
 
+class _ItemSchema {
+public:
+    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
+};
+
+// TODO: rename to ItemSystem and move fields to _ItemSchema
 class ItemSchema {
     void* vmt;
     std::byte pad[0x28C];
