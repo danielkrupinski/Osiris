@@ -146,6 +146,8 @@ void Config::load(size_t id) noexcept
 
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
         if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
+        if (espJson.isMember("HP side")) espConfig.hpside = espJson["HP side"].asInt();
+        if (espJson.isMember("Armor side")) espConfig.armorside = espJson["Armor side"].asInt();
 
         if (espJson.isMember("Snaplines")) {
             const auto& snaplinesJson = espJson["Snaplines"];
@@ -1041,6 +1043,8 @@ void Config::save(size_t id) const noexcept
 
         espJson["Enabled"] = espConfig.enabled;
         espJson["Font"] = espConfig.font;
+        espJson["HP side"] = espConfig.hpside;
+        espJson["Armor side"] = espConfig.armorside;
 
         {
             auto& snaplinesJson = espJson["Snaplines"];
