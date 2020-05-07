@@ -105,7 +105,7 @@ public:
 
     Vector getBonePosition(int bone) noexcept
     {
-        if (matrix3x4 boneMatrices[128]; setupBones(boneMatrices, 128, 256, 0.0f))
+        if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
             return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
         else
             return Vector{ };
@@ -203,6 +203,30 @@ public:
         return false;
     }
 
+    [[nodiscard]] auto getPlayerName(bool normalize) noexcept
+    {
+        std::string playerName = "unknown";
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerName;
+
+        playerName = playerInfo.name;
+
+        if (normalize) {
+            if (wchar_t wide[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, 128, wide, 128)) {
+                if (wchar_t wideNormalized[128]; NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128)) {
+                    if (char nameNormalized[128]; WideCharToMultiByte(CP_UTF8, 0, wideNormalized, -1, nameNormalized, 128, nullptr, nullptr))
+                        playerName = nameNormalized;
+                }
+            }
+        }
+
+        playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
+        return playerName;
+
+    }
+
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
@@ -245,6 +269,7 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
