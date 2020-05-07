@@ -657,9 +657,8 @@ void Misc::killSound(GameEvent& event) noexcept
 
 void Misc::drawAimbotFov() noexcept {
     if (config->misc.drawAimbotFov && interfaces->engine->isInGame()) {
-        auto local = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
-        if (!local || !local->isAlive() || !local->getActiveWeapon()) return;
-        int weaponId = getWeaponIndex(local->getActiveWeapon()->itemDefinitionIndex2());
+        if (!localPlayer || !localPlayer->isAlive() || !localPlayer->getActiveWeapon()) return;
+        int weaponId = getWeaponIndex(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
         if (!config->aimbot[weaponId].enabled) weaponId = 0;
         if (!config->aimbot[weaponId].enabled) return;
         auto [width, heigth] = interfaces->surface->getScreenSize();
