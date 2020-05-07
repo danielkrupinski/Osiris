@@ -613,7 +613,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
 
             ImGui::Separator();
 
-            constexpr auto spacing{ 200.0f };
+            constexpr auto spacing{ 185.0f };
             ImGuiCustom::colorPicker("Snaplines", config->esp.players[selected].snaplines);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Box", config->esp.players[selected].box);
@@ -626,12 +626,20 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Head dot", config->esp.players[selected].headDot);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::Combo("HP side", &config->esp.players[selected].hpside, "Left\0Bottom \0Right \0");
+            ImGui::PushID("hotfix");
             ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor", config->esp.players[selected].armor);
             ImGuiCustom::colorPicker("Money", config->esp.players[selected].money);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor bar", config->esp.players[selected].armorBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::PopID();
+            ImGui::Combo("AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
             ImGuiCustom::colorPicker("Outline", config->esp.players[selected].outline);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Distance", config->esp.players[selected].distance);
