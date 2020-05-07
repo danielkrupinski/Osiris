@@ -129,7 +129,7 @@ static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config
             interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.box.rainbowSpeed));
         else
             interfaces->surface->setDrawColor(config.box.color);
-        
+
         switch (config.boxType) {
         case 0:
             interfaces->surface->drawOutlinedRect(bbox.x0, bbox.y0, bbox.x1, bbox.y1);
@@ -237,8 +237,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.healthBar.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config.healthBar.color);
-            if (config.hpside == 0)
-            {
+            if (config.hpside == 0) {
                 interfaces->surface->drawFilledRect(drawPositionLeft - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionLeft, bbox.y1);
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
@@ -250,8 +249,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
                 drawPositionLeft -= 7;
             }
-            if (config.hpside == 1)
-            {
+            if (config.hpside == 1) {
                 interfaces->surface->drawFilledRect(bbox.x0, bbox.y1 + drawPositionBottom, bbox.x0 + abs(bbox.x1 - bbox.x0) * (entity->health()) / 100.f, bbox.y1 + drawPositionBottomEh);
 
                 if (config.outline.enabled) {
@@ -265,8 +263,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 drawPositionBottom += 7;
                 drawPositionBottomEh += 7;
             }
-            if (config.hpside == 2)
-            {
+            if (config.hpside == 2) {
                 interfaces->surface->drawFilledRect(drawPositionRight - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionRight, bbox.y1);
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
@@ -285,8 +282,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.armorBar.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config.armorBar.color);
-            if (config.armorside == 0)
-            {
+            if (config.armorside == 0) {
                 interfaces->surface->drawFilledRect(drawPositionLeft - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionLeft, bbox.y1);
 
                 if (config.outline.enabled) {
@@ -299,8 +295,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
                 drawPositionLeft -= 7;
             }
-            if (config.armorside == 1)
-            {
+            if (config.armorside == 1) {
                 interfaces->surface->drawFilledRect(bbox.x0, bbox.y1 + drawPositionBottom, bbox.x0 + abs(bbox.x1 - bbox.x0) * (entity->armor()) / 100.f, bbox.y1 + drawPositionBottomEh);
 
                 if (config.outline.enabled) {
@@ -314,8 +309,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 drawPositionBottom += 7;
                 drawPositionBottomEh += 7;
             }
-            if (config.armorside == 2)
-            {
+            if (config.armorside == 2) {
                 interfaces->surface->drawFilledRect(drawPositionRight - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionRight, bbox.y1);
 
                 if (config.outline.enabled) {
@@ -328,7 +322,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
                 drawPositionRight += 7;
             }
-          }
+        }
 
         if (config.name.enabled) {
             if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(entity->index(), playerInfo)) {
@@ -354,23 +348,17 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.activeWeapon.rainbowSpeed));
             else
                 interfaces->surface->setTextColor(config.activeWeapon.color);
-            if (config.hpside == 1)
-            {
-                if (config.armorside == 1)
-                {
+            if (config.hpside == 1) {
+                if (config.armorside == 1) {
                     interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 15);
-                }
-                else
-                {
+                } else {
                     interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 10);
                 }
-            }
-            else
-            {
+            } else {
                 interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
             }
             interfaces->surface->printText(name);
-        }     
+        }
 
         float drawPositionY = bbox.y0;
 
@@ -379,22 +367,16 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.health.rainbowSpeed));
             else
                 interfaces->surface->setTextColor(config.health.color);
-            if (config.hpside == 2)
-            {
-                if (config.armorside == 2)
-                {
+            if (config.hpside == 2) {
+                if (config.armorside == 2) {
                     renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 15, drawPositionY });
-                }
-                else
-                {
+                } else {
                     renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 10, drawPositionY });
                 }
-            }
-            else
-            {
+            } else {
                 renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 5, drawPositionY });
             }
-         }
+        }
 
         if (config.armor.enabled) {
             if (config.armor.rainbow)
@@ -402,19 +384,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             else
                 interfaces->surface->setTextColor(config.armor.color);
 
-            if (config.hpside == 2)
-            {
-                if (config.armorside == 2)
-                {
+            if (config.hpside == 2) {
+                if (config.armorside == 2) {
                     renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), { bbox.x1 + 15, drawPositionY });
-                }
-                else
-                {
+                } else {
                     renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), { bbox.x1 + 10, drawPositionY });
                 }
-            }
-            else
-            {
+            } else {
                 renderPositionedText(config.font, (std::to_wstring(entity->armor()) + L" AR").c_str(), { bbox.x1 + 5, drawPositionY });
             }
         }
@@ -425,19 +401,13 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             else
                 interfaces->surface->setTextColor(config.money.color);
 
-            if (config.hpside == 2)
-            {
-                if (config.armorside == 2)
-                {
+            if (config.hpside == 2) {
+                if (config.armorside == 2) {
                     renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 15, drawPositionY });
-                }
-                else
-                {
+                } else {
                     renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 10, drawPositionY });
                 }
-            }
-            else
-            {
+            } else {
                 renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 5, drawPositionY });
             }
         }
@@ -447,19 +417,14 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.distance.rainbowSpeed));
             else
                 interfaces->surface->setTextColor(config.distance.color);
-            if (config.hpside == 2)
-            {
-                if (config.armorside == 2)
-                {
+
+            if (config.hpside == 2) {
+                if (config.armorside == 2) {
                     renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 15, drawPositionY });
-                }
-                else
-                {
+                } else {
                     renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 10, drawPositionY });
                 }
-            }
-            else
-            {
+            } else {
                 renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
             }
         }
@@ -727,7 +692,7 @@ void Esp::render() noexcept
                     renderEntityEsp(entity, config->esp.projectiles[8], interfaces->localize->find("#SFUI_WPNHUD_Snowball"));
                     break;
                 }
-            }   
+            }
         }
     }
 }
