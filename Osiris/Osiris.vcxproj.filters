@@ -379,5 +379,8 @@
     <ClInclude Include="EventListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
