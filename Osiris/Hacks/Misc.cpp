@@ -632,3 +632,19 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
 }
+
+void Misc::drawAimbotFov() noexcept {
+    if (config->misc.drawAimbotFov && interfaces->engine->isInGame()) {
+        auto local = interfaces->entityList->getEntity(interfaces->engine->getLocalPlayer());
+        if (!local || !local->isAlive() || !local->getActiveWeapon()) return;
+        int weaponId = getWeaponIndex(local->getActiveWeapon()->itemDefinitionIndex2());
+        if (!config->aimbot[weaponId].enabled) weaponId = 0;
+        if (!config->aimbot[weaponId].enabled) return;
+        auto [width, heigth] = interfaces->surface->getScreenSize();
+        if (config->aimbot[weaponId].silent)
+            interfaces->surface->setDrawColor(255, 10, 10, 255);
+        else interfaces->surface->setDrawColor(10, 255, 10, 255);
+        float radius = std::tan(degreesToRadians(config->aimbot[weaponId].fov / 2.f)) / std::tan(degreesToRadians(config->misc.actualFov / 2.f)) * width;
+        interfaces->surface->drawOutlinedCircle(width / 2, heigth / 2, radius, 100);
+    }
+}
