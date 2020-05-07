@@ -11,6 +11,7 @@ class ClientMode;
 class Entity;
 class Input;
 class ItemSchema;
+class KeyValues;
 class MoveHelper;
 class MoveData;
 class ViewRender;
@@ -65,6 +66,10 @@ public:
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
+    std::uintptr_t keyValuesFromString;
+    KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
+    void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
+
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
@@ -96,4 +101,4 @@ private:
     }
 };
 
-inline std::unique_ptr<Memory> memory;
+inline std::unique_ptr<const Memory> memory;

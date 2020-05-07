@@ -226,6 +226,8 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
         float drawPositionRight = bbox.x1 + 8;
         float drawPositionBottom = 3.5f;
         float drawPositionBottomEh = 6.5f;
+        float drawPositionX = bbox.x0 - 5;
+
 
         if (config.healthBar.enabled) {
             static auto gameType{ interfaces->cvar->findVar("game_type") };
@@ -237,6 +239,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.healthBar.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config.healthBar.color);
+
             if (config.hpside == 0) {
                 interfaces->surface->drawFilledRect(drawPositionLeft - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionLeft, bbox.y1);
                 if (config.outline.enabled) {
@@ -275,6 +278,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
                 drawPositionRight += 7;
             }
+
         }
 
         if (config.armorBar.enabled) {
@@ -282,6 +286,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.armorBar.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config.armorBar.color);
+
             if (config.armorside == 0) {
                 interfaces->surface->drawFilledRect(drawPositionLeft - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (100.0f - entity->armor()) / 100.0f, drawPositionLeft, bbox.y1);
 
@@ -322,6 +327,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
                 drawPositionRight += 7;
             }
+
         }
 
         if (config.name.enabled) {
@@ -348,6 +354,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.activeWeapon.rainbowSpeed));
             else
                 interfaces->surface->setTextColor(config.activeWeapon.color);
+
             if (config.hpside == 1) {
                 if (config.armorside == 1) {
                     interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 15);
@@ -367,6 +374,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.health.rainbowSpeed));
             else
                 interfaces->surface->setTextColor(config.health.color);
+
             if (config.hpside == 2) {
                 if (config.armorside == 2) {
                     renderPositionedText(config.font, (std::to_wstring(entity->health()) + L" HP").c_str(), { bbox.x1 + 15, drawPositionY });
@@ -410,6 +418,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             } else {
                 renderPositionedText(config.font, (L'$' + std::to_wstring(entity->account())).c_str(), { bbox.x1 + 5, drawPositionY });
             }
+
         }
 
         if (config.distance.enabled && localPlayer) {
@@ -449,8 +458,25 @@ static void renderWeaponBox(Entity* entity, const Config::Esp::Weapon& config) n
         else
             interfaces->surface->setTextColor(config.name.color);
 
-        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 5);
+        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y0 - 10);
         interfaces->surface->printText(name);
+    }
+    if (config.ammo.enabled)
+    {
+        int clip = entity->clip();
+        int reserveAmmo = entity->reserveAmmoCount();
+        const auto text{ std::to_wstring(clip) + L" / " + std::to_wstring(reserveAmmo) };
+        const auto [width, height] { interfaces->surface->getTextSize(config.font, text.c_str()) };
+        interfaces->surface->setTextFont(config.font);
+        if (config.ammo.rainbow)
+            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.ammo.rainbowSpeed));
+        else
+            interfaces->surface->setTextColor(config.ammo.color);
+        interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 6);
+        if (clip > -1)
+        {
+            interfaces->surface->printText(text);
+        }
     }
 
     float drawPositionY = bbox.y0;

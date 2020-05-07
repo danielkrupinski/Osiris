@@ -17,6 +17,7 @@ public:
     void remove(size_t) noexcept;
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
+    void listConfigs() noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
@@ -121,6 +122,7 @@ public:
             ColorToggle box;
             int boxType{ 0 };
             ColorToggle name;
+            ColorToggle ammo;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
             float maxDistance{ 0.0f };
@@ -271,6 +273,8 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        int killSound{ 0 };
+        std::string customKillSound;
         std::string customHitSound;
     } misc;
 

@@ -23,7 +23,7 @@ namespace Backtrack {
     struct Record {
         Vector origin;
         float simulationTime;
-        matrix3x4 matrix[128];
+        matrix3x4 matrix[256];
     };
 
     extern std::deque<Record> records[65];
