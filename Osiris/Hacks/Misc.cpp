@@ -11,6 +11,12 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/WeaponData.h"
 #include "EnginePrediction.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/Entity.h"
+#include "../SDK/UserCmd.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/Client.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -497,12 +503,7 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     std::string cmd = "say \"";
@@ -614,12 +615,7 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!localPlayer)
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     constexpr std::array hitSounds{
@@ -631,6 +627,32 @@ void Misc::playHitSound(GameEvent& event) noexcept
 
     if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
+    else if (config->misc.hitSound == 5)
+        interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customHitSound).c_str());
+}
+
+void Misc::killSound(GameEvent& event) noexcept
+{
+    if (!config->misc.killSound)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    constexpr std::array killSounds{
+        "play physics/metal/metal_solid_impact_bullet2",
+        "play buttons/arena_switch_press_02",
+        "play training/timer_bell",
+        "play physics/glass/glass_impact_bullet1"
+    };
+
+    if (static_cast<std::size_t>(config->misc.killSound - 1) < killSounds.size())
+        interfaces->engine->clientCmdUnrestricted(killSounds[config->misc.killSound - 1]);
+    else if (config->misc.killSound == 5)
+        interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
 }
 
 void Misc::drawAimbotFov() noexcept {
