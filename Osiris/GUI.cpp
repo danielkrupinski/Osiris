@@ -628,7 +628,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
             ImGui::SameLine();
             ImGui::SetNextItemWidth(70.f);
-            ImGui::Combo("HP side", &config->esp.players[selected].hpside, "Left\0Bottom \0Right \0");
+            ImGui::Combo("##HP side", &config->esp.players[selected].hpside, "Left\0Bottom\0Right\0");
             ImGui::PushID("hotfix");
             ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
             ImGui::SameLine(spacing);
@@ -639,7 +639,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGui::SameLine();
             ImGui::SetNextItemWidth(70.f);
             ImGui::PopID();
-            ImGui::Combo("AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
+            ImGui::Combo("##AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
             ImGuiCustom::colorPicker("Outline", config->esp.players[selected].outline);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Distance", config->esp.players[selected].distance);
