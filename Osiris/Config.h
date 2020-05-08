@@ -7,6 +7,7 @@
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
+#include "ConfigStructs.h"
 
 class Config {
 public:
@@ -276,6 +277,7 @@ public:
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
+        PurchaseList purchaseList;
     } misc;
 
     struct {
