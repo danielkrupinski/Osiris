@@ -9,6 +9,7 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include "Config.h"
+#include "EventListener.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
@@ -515,6 +516,25 @@ void Hooks::install() noexcept
     }
 }
 
+static DWORD WINAPI unload(HMODULE module) noexcept
+{
+    Sleep(100);
+
+    interfaces->inputSystem->enableInput(true);
+    ImGui_ImplDX9_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+
+    hooks.reset();
+    eventListener.reset();
+    memory.reset();
+    interfaces.reset();
+    gui.reset();
+    config.reset();
+
+    FreeLibraryAndExitThread(module, 0);
+}
+
 void Hooks::uninstall() noexcept
 {
     bspQuery.restore();
@@ -542,7 +562,8 @@ void Hooks::uninstall() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces->inputSystem->enableInput(true);
+    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
+        CloseHandle(thread);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
