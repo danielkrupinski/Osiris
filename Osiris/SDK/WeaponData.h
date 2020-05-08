@@ -23,7 +23,9 @@ struct WeaponInfo {
     char* name;
     PAD(60)
     WeaponType type;
-    PAD(16)
+    PAD(4)
+    int price;
+    PAD(0x8)
     float cycletime;
     PAD(12)
     bool fullAuto;
