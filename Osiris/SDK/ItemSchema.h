@@ -52,7 +52,7 @@ public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
 };
 
-class _ItemSchema {
+class ItemSchema {
     std::byte pad[0x28C];
 public:
     Head<int, PaintKit*> paintKits;
@@ -66,5 +66,5 @@ public:
 
 class ItemSystem {
 public:
-    VIRTUAL_METHOD(_ItemSchema*, getItemSchema, 0, (), (this))
+    VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
