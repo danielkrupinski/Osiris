@@ -30,8 +30,8 @@ void SkinChanger::initializeKits() noexcept
     const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
-    for (int i = 0; i <= memory->itemSchema()->paintKits.lastElement; i++) {
-        const auto paintKit = memory->itemSchema()->paintKits.memory[i].value;
+    for (int i = 0; i <= memory->itemSchema()->getItemSchema()->paintKits.lastElement; i++) {
+        const auto paintKit = memory->itemSchema()->getItemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001) // ignore workshop_default
             continue;
@@ -60,8 +60,8 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory->itemSchema()->stickerKits.lastElement; i++) {
-        const auto stickerKit = memory->itemSchema()->stickerKits.memory[i].value;
+    for (int i = 0; i <= memory->itemSchema()->getItemSchema()->stickerKits.lastElement; i++) {
+        const auto stickerKit = memory->itemSchema()->getItemSchema()->stickerKits.memory[i].value;
         const auto itemName = interfaces->localize->find(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         const int itemNameLength = WideCharToMultiByte(CP_UTF8, 0, itemName, -1, nullptr, 0, nullptr, nullptr);
 

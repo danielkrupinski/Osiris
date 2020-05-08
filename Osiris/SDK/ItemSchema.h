@@ -53,13 +53,6 @@ public:
 };
 
 class _ItemSchema {
-public:
-    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
-};
-
-// TODO: rename to ItemSystem and move fields to _ItemSchema
-class ItemSchema {
-    void* vmt;
     std::byte pad[0x28C];
 public:
     Head<int, PaintKit*> paintKits;
@@ -67,4 +60,11 @@ private:
     std::byte pad1[0x8];
 public:
     Head<int, StickerKit*> stickerKits;
+public:
+    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
+};
+
+class ItemSystem {
+public:
+    VIRTUAL_METHOD(_ItemSchema*, getItemSchema, 0, (), (this))
 };
