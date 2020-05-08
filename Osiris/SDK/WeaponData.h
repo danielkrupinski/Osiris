@@ -16,7 +16,7 @@ enum class WeaponType {
     Unknown
 };
 
-struct WeaponData {
+struct WeaponInfo {
     PAD(20)
     int maxClip;
     PAD(112)
