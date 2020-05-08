@@ -515,7 +515,7 @@ void Hooks::install() noexcept
     }
 }
 
-void Hooks::restore() noexcept
+void Hooks::uninstall() noexcept
 {
     bspQuery.restore();
     client.restore();
