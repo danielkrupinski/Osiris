@@ -41,8 +41,11 @@ GUI::GUI() noexcept
         CoTaskMemFree(pathToFonts);
 
         static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
+        ImFontConfig cfg;
+        cfg.OversampleV = 3;
+
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges);
     }
 }
 
