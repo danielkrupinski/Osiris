@@ -1,15 +1,22 @@
 #pragma once
 
-#include "VirtualMethod.h"
+#include "Utils.h"
 
 class RenderView {
 public:
-    VIRTUAL_METHOD(void, setBlend, 4, (float alpha), (this, alpha))
-    VIRTUAL_METHOD(void, setColorModulation, 6, (const float* colors), (this, colors))
+    constexpr void setBlend(float alpha) noexcept
+    {
+        return callVirtualMethod<void, float>(this, 4, alpha);
+    }
+
+    constexpr void setColorModulation(const float* colors) noexcept
+    {
+        return callVirtualMethod<void, const float*>(this, 6, colors);
+    }
 
     constexpr void setColorModulation(float r, float g, float b) noexcept
     {
         float color[3]{ r, g, b };
-        setColorModulation(color);
+        return callVirtualMethod<void, const float*>(this, 6, color);
     }
 };

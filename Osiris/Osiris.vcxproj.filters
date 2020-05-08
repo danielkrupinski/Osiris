@@ -119,12 +119,6 @@
     <ClCompile Include="Hacks\EnginePrediction.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\KeyValues.cpp">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="EventListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -334,6 +328,9 @@
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ResourceAccessControl.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
     <ClInclude Include="Hacks\Reportbot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -362,27 +359,6 @@
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\StudioRender.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\VirtualMethod.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Pad.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\LocalPlayer.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\KeyValues.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="EventListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfigStructs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\WeaponSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

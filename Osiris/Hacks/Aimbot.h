@@ -1,10 +1,8 @@
 #pragma once
 
-struct UserCmd;
-struct Vector;
+#include "../SDK/UserCmd.h"
 
-namespace Aimbot
-{
+namespace Aimbot {
     Vector calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept;
     void run(UserCmd*) noexcept;
 }

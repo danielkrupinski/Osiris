@@ -11,8 +11,8 @@ float GlobalVars::serverTime(UserCmd* cmd) noexcept
     static UserCmd* lastCmd;
 
     if (cmd) {
-        if (localPlayer && (!lastCmd || lastCmd->hasbeenpredicted))
-            tick = localPlayer->tickBase();
+        if (!lastCmd || lastCmd->hasbeenpredicted)
+            tick = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer())->tickBase();
         else
             tick++;
         lastCmd = cmd;

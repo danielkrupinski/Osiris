@@ -2,12 +2,10 @@
 
 #include <array>
 #include <filesystem>
-#include <memory>
 #include <string>
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
-#include "ConfigStructs.h"
 
 class Config {
 public:
@@ -18,7 +16,6 @@ public:
     void remove(size_t) noexcept;
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
-    void listConfigs() noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
@@ -49,30 +46,34 @@ public:
         bool ignoreSmoke{ false };
         bool autoShot{ false };
         bool autoScope{ false };
+        bool recoilbasedFov{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
+        float recoilControlX{ 0.0f };
+        float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+		int shotsFired{ 0 };
         bool killshot{ false };
         bool betweenShots{ true };
+		bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 
     struct Triggerbot {
-        bool enabled = false;
-        bool friendlyFire = false;
-        bool scopedOnly = true;
-        bool ignoreFlash = false;
-        bool ignoreSmoke = false;
-        bool killshot = false;
-        bool onKey = false;
-        int key = 0;
-        int hitgroup = 0;
-        int shotDelay = 0;
-        int minDamage = 1;
-        float burstTime = 0.0f;
+        bool enabled{ false };
+        bool onKey{ false };
+        int key{ 0 };
+        bool friendlyFire{ false };
+        bool scopedOnly{ true };
+        bool ignoreFlash{ false };
+        bool ignoreSmoke{ false };
+        int hitgroup{ 0 };
+        int shotDelay{ 0 };
+        int minDamage{ 1 };
+        bool killshot{ false };
     };
     std::array<Triggerbot, 40> triggerbot;
 
@@ -86,8 +87,8 @@ public:
     struct {
         bool enabled{ false };
         bool pitch{ false };
-        bool yaw{ false };
         float pitchAngle{ 0.0f };
+        bool yaw{ false };
     } antiAim;
 
     struct Glow {
@@ -102,13 +103,13 @@ public:
 
     struct Chams {
         struct Material {
-            bool enabled = false;
-            bool healthBased = false;
-            bool blinking = false;
-            bool wireframe = false;
+            bool enabled{ false };
+            bool healthBased{ false };
             Color color;
-            int material = 0;
-            float alpha = 1.0f;
+            bool blinking{ false };
+            int material{ 0 };
+            bool wireframe{ false };
+            float alpha{ 1.0f };
         };
         std::array<Material, 2> materials;
     };
@@ -123,7 +124,6 @@ public:
             ColorToggle box;
             int boxType{ 0 };
             ColorToggle name;
-            ColorToggle ammo;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
             float maxDistance{ 0.0f };
@@ -138,8 +138,6 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
-            int hpside{ 0 };
-            int armorside{ 0 };
             bool deadesp { false };
         };
 
@@ -274,10 +272,6 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
-        int killSound{ 0 };
-        std::string customKillSound;
-        std::string customHitSound;
-        PurchaseList purchaseList;
     } misc;
 
     struct {
@@ -296,4 +290,4 @@ private:
     std::vector<std::string> configs;
 };
 
-inline std::unique_ptr<Config> config;
+extern Config config;

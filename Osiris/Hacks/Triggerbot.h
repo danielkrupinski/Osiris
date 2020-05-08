@@ -1,8 +1,9 @@
 #pragma once
 
-struct UserCmd;
+#include "../SDK/UserCmd.h"
 
 namespace Triggerbot
 {
     void run(UserCmd*) noexcept;
 }
+

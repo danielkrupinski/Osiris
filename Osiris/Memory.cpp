@@ -1,6 +1,5 @@
 #include "Interfaces.h"
 #include "Memory.h"
-#include "SDK/LocalPlayer.h"
 
 template <typename T>
 static constexpr auto relativeToAbsolute(int* address) noexcept
@@ -15,9 +14,9 @@ Memory::Memory() noexcept
 {
     present = findPattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB", 2);
     reset = findPattern(L"gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8", 9);
-    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 5);
-    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces->client))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[11] + 10);
+    clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[10] + 5);
+    input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces.client))[16] + 1);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces.client))[11] + 10);
     glowObjectManager = *FIND_PATTERN(GlowObjectManager**, L"client_panorama", "\x0F\x11\x05????\x83\xC8\x01", 3);
     disablePostProcessing = *FIND_PATTERN(bool**, L"client_panorama", "\x83\xEC\x4C\x80\x3D", 5);
     loadSky = relativeToAbsolute<decltype(loadSky)>(FIND_PATTERN(int*, L"engine", "\xE8????\x84\xC0\x74\x2D\xA1", 1));
@@ -34,7 +33,7 @@ Memory::Memory() noexcept
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
     clearHudWeapon = FIND_PATTERN(decltype(clearHudWeapon), L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C");
-    itemSystem = relativeToAbsolute<decltype(itemSystem)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
+    itemSchema = relativeToAbsolute<decltype(itemSchema)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\xEB\x19\x8B\x07", 1));
     listLeaves = findPattern(L"client_panorama", "\x56\x52\xFF\x50\x18", 5);
     dispatchSound = FIND_PATTERN(int*, L"engine", "\x74\x0B\xE8????\x8B\x3D", 3);
@@ -52,10 +51,4 @@ Memory::Memory() noexcept
     predictionRandomSeed = *FIND_PATTERN(int**, L"client_panorama", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
     moveData = **FIND_PATTERN(MoveData***, L"client_panorama", "\xA1????\xF3\x0F\x59\xCD", 1);
     moveHelper = **FIND_PATTERN(MoveHelper***, L"client_panorama", "\x8B\x0D????\x8B\x45?\x51\x8B\xD4\x89\x02\x8B\x01", 2);
-    keyValuesFromString = relativeToAbsolute<decltype(keyValuesFromString)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x83\xC4\x04\x89\x45\xD8", 1));
-    keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\xF7\x45", 1));
-    keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x89\x77\x38", 1));
-    weaponSystem = *reinterpret_cast<WeaponSystem**>(findPattern(L"client_panorama", "\x8B\x35????\xFF\x10\x0F\xB7\xC0", 2));
-
-    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client_panorama", "\xA1????\x89\x45\xBC\x85\xC0", 1)));
 }

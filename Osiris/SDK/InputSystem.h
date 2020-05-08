@@ -1,13 +1,28 @@
 #pragma once
 
-#include "VirtualMethod.h"
+#include "Utils.h"
 
 class InputSystem {
 public:
-    VIRTUAL_METHOD(void, enableInput, 11, (bool enable), (this, enable))
-    VIRTUAL_METHOD(bool, isButtonDown, 15, (int buttonCode), (this, buttonCode))
-    VIRTUAL_METHOD(void, resetInputState, 39, (), (this))
-    VIRTUAL_METHOD(const char*, buttonCodeToString, 40, (int buttonCode), (this, buttonCode))
+    constexpr void enableInput(bool enable) noexcept
+    {
+        callVirtualMethod<void, bool>(this, 11, enable);
+    }
+
+    constexpr bool isButtonDown(int buttonCode) noexcept
+    {
+        return callVirtualMethod<bool, int>(this, 15, buttonCode);
+    }
+
+    constexpr void resetInputState() noexcept
+    {
+        callVirtualMethod<void>(this, 39);
+    }
+
+    constexpr auto buttonCodeToString(int buttonCode) noexcept
+    {
+        return callVirtualMethod<const char*, int>(this, 40, buttonCode);
+    }
 
     constexpr auto virtualKeyToButtonCode(int virtualKey) noexcept
     {
@@ -15,7 +30,7 @@ public:
             if (virtualKey > VK_CANCEL) virtualKey--;
             return virtualKey + 106;
         }
-        return VirtualMethod::call<int, 45>(this, virtualKey);
+        return callVirtualMethod<int, int>(this, 45, virtualKey);
     }
 
     constexpr auto virtualKeyToString(int virtualKey) noexcept

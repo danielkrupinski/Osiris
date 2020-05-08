@@ -4,7 +4,7 @@
 #include <string_view>
 
 #include "Material.h"
-#include "VirtualMethod.h"
+#include "../Memory.h"
 
 enum class OverrideType {
     Normal = 0,
@@ -20,7 +20,10 @@ class StudioRender {
     std::byte pad_1[0xC];
     OverrideType overrideType;
 public:
-    VIRTUAL_METHOD(void, forcedMaterialOverride, 33, (Material* material, OverrideType type = OverrideType::Normal, int index = -1), (this, material, type, index))
+    constexpr void forcedMaterialOverride(Material* material, OverrideType type = OverrideType::Normal, int index = -1) noexcept
+    {
+        callVirtualMethod<void>(this, 33, material, type, index);
+    }
 
     bool isForcedMaterialOverride() noexcept
     {
