@@ -615,7 +615,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
 
             ImGui::Separator();
 
-            constexpr auto spacing{ 200.0f };
+            constexpr auto spacing{ 185.0f };
             ImGuiCustom::colorPicker("Snaplines", config->esp.players[selected].snaplines);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Box", config->esp.players[selected].box);
@@ -628,12 +628,20 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Head dot", config->esp.players[selected].headDot);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::Combo("##HP side", &config->esp.players[selected].hpside, "Left\0Bottom\0Right\0");
+            ImGui::PushID("hotfix");
             ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor", config->esp.players[selected].armor);
             ImGuiCustom::colorPicker("Money", config->esp.players[selected].money);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor bar", config->esp.players[selected].armorBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::PopID();
+            ImGui::Combo("##AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
             ImGuiCustom::colorPicker("Outline", config->esp.players[selected].outline);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Distance", config->esp.players[selected].distance);
@@ -661,6 +669,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGui::Combo("", &config->esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
             ImGuiCustom::colorPicker("Name", config->esp.weapon.name);
             ImGui::SameLine(spacing);
+            ImGuiCustom::colorPicker("Ammo", config->esp.weapon.ammo);
             ImGuiCustom::colorPicker("Outline", config->esp.weapon.outline);
             ImGuiCustom::colorPicker("Distance", config->esp.weapon.distance);
             ImGui::SliderFloat("Max distance", &config->esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");

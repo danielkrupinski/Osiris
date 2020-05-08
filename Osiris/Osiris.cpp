@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "EventListener.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
@@ -15,6 +16,7 @@ static LRESULT WINAPI init(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) 
     gui = std::make_unique<GUI>();
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
+    eventListener = std::make_unique<EventListener>();
     netvars = std::make_unique<Netvars>();
     hooks = std::make_unique<Hooks>(module);
     hooks->install();
