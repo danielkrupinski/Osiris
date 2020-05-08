@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+#include "Pad.h"
 #include "VirtualMethod.h"
 
 enum class WeaponId : short;
@@ -52,19 +53,17 @@ public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
 };
 
-class _ItemSchema {
+class ItemSchema {
 public:
+    PAD(0x28C)
+    Head<int, PaintKit*> paintKits;
+    PAD(0x8)
+    Head<int, StickerKit*> stickerKits;
+
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
 
-// TODO: rename to ItemSystem and move fields to _ItemSchema
-class ItemSchema {
-    void* vmt;
-    std::byte pad[0x28C];
+class ItemSystem {
 public:
-    Head<int, PaintKit*> paintKits;
-private:
-    std::byte pad1[0x8];
-public:
-    Head<int, StickerKit*> stickerKits;
+    VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };

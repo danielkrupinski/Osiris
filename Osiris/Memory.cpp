@@ -34,7 +34,7 @@ Memory::Memory() noexcept
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
     clearHudWeapon = FIND_PATTERN(decltype(clearHudWeapon), L"client_panorama", "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C");
-    itemSchema = relativeToAbsolute<decltype(itemSchema)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
+    itemSystem = relativeToAbsolute<decltype(itemSystem)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\x0F\xB7\x0F", 1));
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(FIND_PATTERN(int*, L"client_panorama", "\xE8????\xEB\x19\x8B\x07", 1));
     listLeaves = findPattern(L"client_panorama", "\x56\x52\xFF\x50\x18", 5);
     dispatchSound = FIND_PATTERN(int*, L"engine", "\x74\x0B\xE8????\x8B\x3D", 3);

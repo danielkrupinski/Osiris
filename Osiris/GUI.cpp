@@ -1091,7 +1091,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
 
     if (ImGui::Button("Unhook"))
-        hooks->restore();
+        hooks->uninstall();
 
     ImGui::Columns(1);
     if (!contentOnly)

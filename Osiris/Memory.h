@@ -10,7 +10,7 @@
 class ClientMode;
 class Entity;
 class Input;
-class ItemSchema;
+class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
@@ -48,7 +48,7 @@ public:
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
-    std::add_pointer_t<ItemSchema* __cdecl()> itemSchema;
+    std::add_pointer_t<ItemSystem* __cdecl()> itemSystem;
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
     uintptr_t listLeaves;
     int* dispatchSound;
