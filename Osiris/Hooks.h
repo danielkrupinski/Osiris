@@ -17,7 +17,7 @@ public:
     Hooks(HMODULE cheatModule);
 
     void install() noexcept;
-    void restore() noexcept;
+    void uninstall() noexcept;
 
     WNDPROC originalWndProc;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;

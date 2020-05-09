@@ -10,11 +10,12 @@
 class ClientMode;
 class Entity;
 class Input;
-class ItemSchema;
+class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
 class ViewRender;
+class WeaponSystem;
 
 struct GlobalVars;
 struct GlowObjectManager;
@@ -48,7 +49,7 @@ public:
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
-    std::add_pointer_t<ItemSchema* __cdecl()> itemSchema;
+    std::add_pointer_t<ItemSystem* __cdecl()> itemSystem;
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
     uintptr_t listLeaves;
     int* dispatchSound;
@@ -69,6 +70,7 @@ public:
     std::uintptr_t keyValuesFromString;
     KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
+    WeaponSystem* weaponSystem;
 
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
