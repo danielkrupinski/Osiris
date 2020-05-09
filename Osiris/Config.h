@@ -7,6 +7,7 @@
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
+#include "ConfigStructs.h"
 
 class Config {
 public:
@@ -122,6 +123,7 @@ public:
             ColorToggle box;
             int boxType{ 0 };
             ColorToggle name;
+            ColorToggle ammo;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
             float maxDistance{ 0.0f };
@@ -136,6 +138,8 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            int hpside{ 0 };
+            int armorside{ 0 };
             bool deadesp { false };
         };
 
@@ -273,6 +277,7 @@ public:
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
+        PurchaseList purchaseList;
     } misc;
 
     struct {
