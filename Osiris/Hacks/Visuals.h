@@ -26,4 +26,5 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
+    void indicators() noexcept;
 }

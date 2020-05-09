@@ -96,11 +96,15 @@ public:
         float pitchAngle{ 0.0f };
         float yawAngle{ 0.0f };
         int yawInverseAngleKey{ 0 };
+        int yawInverseKeyMode{ 0 };
+        bool yawInversed{ false };
         bool yawReal{ false };
         float bodyLean{ 0.0f };
         int mode{ 0 };
         float jitterMax{ 0.0f };
         float jitterMin{ 0.0f };
+        bool LBYBreaker{ false };
+        float LBYAngle{ 0.0f };
     } antiAim;
 
     struct Glow {
@@ -212,6 +216,20 @@ public:
             float green = 0.0f;
             float yellow = 0.0f;
         } colorCorrection;
+
+        bool indicatorsEnabled{ false };
+        const char* indicators[4] = {
+            "Desync",
+            "LBY",
+            "Fakelag",
+            "Fakeduck"
+        };
+        bool selectedIndicators[4] = {
+            false,
+            false,
+            false,
+            false
+        };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -244,7 +262,7 @@ public:
         std::string clanTag;
         bool animatedClanTag{ false };
         bool fastDuck{ false };
-        bool moonwalk{ false };
+        bool moonwalk{ 0 };
         bool edgejump{ false };
         int edgejumpkey{ 0 };
         bool slowwalk{ false };
@@ -297,6 +315,11 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        bool autoZeus{ false };
+        bool fakeDuck{ false };
+        int fakeDuckKey{ 0 };
+        bool fakeDucking{ false };
+        int fakeDuckShotState{ 0 };
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
@@ -320,6 +343,11 @@ public:
         Vector realAngle;
         Vector cmdAngle;
         Record serverPos;
+        float serverTime{ 0.f };
+        int tickRate{ 0 };
+        float nextLBY{ 0.f };
+        float lastLBY{ 0.f };
+        int chokedPackets{ 0 };
     } globals;
 private:
     std::filesystem::path path;

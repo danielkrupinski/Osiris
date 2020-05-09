@@ -689,3 +689,76 @@ void Misc::killSound(GameEvent& event) noexcept
     else if (config->misc.killSound == 5)
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
 }
+
+void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
+{
+    auto state = localPlayer->getAnimstate();
+
+    if (config->misc.fakeDuck)
+    {
+        if (config->misc.fakeDuckKey != 0) {
+            if (!GetAsyncKeyState(config->misc.fakeDuckKey))
+            {
+                config->misc.fakeDucking = false;
+                return;
+            }
+            else
+                config->misc.fakeDucking = true;
+        }
+
+        if (config->misc.fakeDucking)
+        {
+            if (cmd->buttons & UserCmd::IN_ATTACK || config->misc.fakeDuckShotState != 0)
+            {
+                if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 0)
+                {
+                    sendPacket = true; // clear up sendPacket for fakeduck going up to choke
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 1;
+                }
+                else if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 1)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons &= ~UserCmd::IN_DUCK;
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 1;
+                }
+                else if (localPlayer->getAnimstate()->duckAmount <= 0.2 && config->misc.fakeDuckShotState == 1)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons &= ~UserCmd::IN_DUCK;
+                    cmd->buttons |= UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 2;
+                }
+                else if (config->misc.fakeDuckShotState == 2)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    config->misc.fakeDuckShotState = 3;
+                }
+                else if (config->misc.fakeDuckShotState == 3)
+                {
+                    sendPacket = true;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    config->misc.fakeDuckShotState = 0;
+                }
+            }
+            else
+            {
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                config->misc.fakeDuckShotState = 0;
+            }
+        }
+        else
+        {
+            config->misc.fakeDuckShotState = 0;
+        }
+    }
+}

@@ -39,6 +39,7 @@ namespace Misc
     void moonwalk(UserCmd* cmd) noexcept;
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
+    void fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept;
     float RandomFloat(float min, float max) noexcept;
     void chokePackets(bool& sendPacket, UserCmd* cmd) noexcept;
 }
