@@ -79,6 +79,8 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    Misc::purchaseList();
+
     if (gui->open)
         gui->render();
 

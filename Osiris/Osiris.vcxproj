@@ -131,6 +131,7 @@
     <ClInclude Include="SDK\VirtualMethod.h" />
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
+    <ClInclude Include="SDK\WeaponSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

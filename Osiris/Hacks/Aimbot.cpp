@@ -2,7 +2,6 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
@@ -56,7 +55,7 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     return damage;
 }
 
-static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData, int minDamage) noexcept
+static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage) noexcept
 {
     float damage{ static_cast<float>(weaponData->damage) };
 

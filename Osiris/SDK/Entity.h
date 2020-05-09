@@ -57,7 +57,7 @@ public:
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
-    VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 
     constexpr auto getWeaponType() noexcept

@@ -2,6 +2,7 @@
 
 #include "EventListener.h"
 #include "fnv.h"
+#include "Hacks/Misc.h"
 #include "Interfaces.h"
 
 EventListener::EventListener() noexcept
@@ -27,7 +28,7 @@ void EventListener::fireGameEvent(GameEvent* event)
 
     case fnv::hash("item_purchase"):
     case fnv::hash("round_freeze_end"):
-
+        Misc::purchaseList(event);
         break;
     }
 }

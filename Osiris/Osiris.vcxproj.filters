@@ -382,5 +382,8 @@
     <ClInclude Include="ConfigStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\WeaponSystem.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
