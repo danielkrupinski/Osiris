@@ -4,32 +4,17 @@
 #include <string>
 
 struct ImFont;
-
+char textCODE[1024 * 16] = "CFG:ÎÒµÄÎÄµµ//ShadowWareLuaCFG.Shadow";
 class GUI {
+
+
 public:
     GUI() noexcept;
     void render() noexcept;
-    bool open = true;
-private:
+    bool open = false;
     static void hotkey(int&) noexcept;
-    void updateColors() const noexcept;
+private:
     void renderMenuBar() noexcept;
-    void renderAimbotWindow(bool contentOnly = false) noexcept;
-    void renderAntiAimWindow(bool contentOnly = false) noexcept;
-    void renderTriggerbotWindow(bool contentOnly = false) noexcept;
-    void renderBacktrackWindow(bool contentOnly = false) noexcept;
-    void renderGlowWindow(bool contentOnly = false) noexcept;
-    void renderChamsWindow(bool contentOnly = false) noexcept;
-    void renderEspWindow(bool contentOnly = false) noexcept;
-    void renderVisualsWindow(bool contentOnly = false) noexcept;
-    void renderSkinChangerWindow(bool contentOnly = false) noexcept;
-    void renderSoundWindow(bool contentOnly = false) noexcept;
-    void renderStyleWindow(bool contentOnly = false) noexcept;
-    void renderMiscWindow(bool contentOnly = false) noexcept;
-    void renderReportbotWindow(bool contentOnly = false) noexcept;
-    void renderConfigWindow(bool contentOnly = false) noexcept;
-    void renderGuiStyle2() noexcept;
-
     struct {
         bool aimbot = false;
         bool antiAim = false;

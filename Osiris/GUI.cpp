@@ -1,4 +1,4 @@
-﻿#include <fstream>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -228,44 +228,19 @@ GUI::GUI() noexcept
 
 void GUI::render() noexcept
 {
-    if (!config->style.menuStyle) {
-        renderMenuBar();
-        renderAimbotWindow();
-        renderAntiAimWindow();
-        renderTriggerbotWindow();
-        renderBacktrackWindow();
-        renderGlowWindow();
-        renderChamsWindow();
-        renderEspWindow();
-        renderVisualsWindow();
-        renderSkinChangerWindow();
-        renderSoundWindow();
-        renderStyleWindow();
-        renderMiscWindow();
-        renderReportbotWindow();
-        renderConfigWindow();
-    } else {
-        renderGuiStyle2();
-    }
+    renderMenuBar();
 }
 
-void GUI::updateColors() const noexcept
-{
-    switch (config->style.menuColors) {
-    case 0: ImGui::StyleColorsDark(); break;
-    case 1: ImGui::StyleColorsLight(); break;
-    case 2: ImGui::StyleColorsClassic(); break;
-    }
-}
+
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
+    key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ 热键 ]");
 
     if (!ImGui::IsItemHovered())
         return;
 
-    ImGui::SetTooltip("Press any key to change keybind");
+    ImGui::SetTooltip("按下任意键修改热键");
     ImGuiIO& io = ImGui::GetIO();
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
         if (ImGui::IsKeyPressed(i) && i != config->misc.menuKey)
