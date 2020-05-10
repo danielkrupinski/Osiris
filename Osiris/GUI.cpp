@@ -268,6 +268,10 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
     ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+    ImGui::Checkbox("SlowWalk", &config->antiAim.Slowwalk);
+    ImGui::SliderInt("SlowWalkSpeed", &config->antiAim.slowwalkspeed,0,64,"%d");
+    ImGui::SameLine();
+    hotkey(config->antiAim.slowwalkkey);
     if (!contentOnly)
         ImGui::End();
 }
