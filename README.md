@@ -13,7 +13,11 @@ GUI以及其他功能除了PULL添加的全都是手写的！请尊重劳动成�
 因为我是学生所以一周更新一次
 字体下载:https://shadowware.lanzous.com/icgcg7i
 
+http://ripgod.club/attachments/vumwmgnj-fhml85gy6y-d99-jpg.303/?hash=88350d159b78b4f6c1a8362838f01488
+
+
 /***********************************/分割线
+
 我是这个项目的合作者nosexynomoney QQ381106559
 
 协助发呆发展项目
