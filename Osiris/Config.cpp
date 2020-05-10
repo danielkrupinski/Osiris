@@ -84,6 +84,9 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+        if (antiAimJson.isMember("Slow Walk")) antiAim.Slowwalk = antiAimJson["Slow Walk"].asBool();
+        if (antiAimJson.isMember("Slow Walk Speed")) antiAim.slowwalkspeed = antiAimJson["Slow Walk Speed"].asInt();
+        if (antiAimJson.isMember("Slow Walk Key")) antiAim.slowwalkkey = antiAimJson["Slow Walk Key"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -995,6 +998,9 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+        antiAimJson["Slow Walk"] = antiAim.Slowwalk;
+        antiAimJson["Slow Walk Speed"] = antiAim.slowwalkspeed;
+        antiAimJson["Slow Walk Key"] = antiAim.slowwalkkey;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
