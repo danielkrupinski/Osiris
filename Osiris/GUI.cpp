@@ -102,8 +102,8 @@ void GUI::hotkey(int& key) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
-        ImGui::MenuItem("Anti aim", nullptr, &window.antiAim);
+        ImGui::MenuItem("自瞄", nullptr, &window.aimbot);
+        ImGui::MenuItem("反自瞄", nullptr, &window.antiAim);
         ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
