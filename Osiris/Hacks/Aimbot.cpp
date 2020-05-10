@@ -10,6 +10,20 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 
+static float getRandom(float min, float max) noexcept
+{
+    using randomFloatFn = float(*)(float, float);
+    static auto randomFloat{ reinterpret_cast<randomFloatFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomFloat")) };
+    return randomFloat(min, max);
+}
+
+static void setRandomSeed(int seed) noexcept
+{
+    using randomSeedFn = void(*)(int);
+    static auto randomSeed{ reinterpret_cast<randomSeedFn>(GetProcAddress(GetModuleHandleA("vstdlib.dll"), "RandomSeed")) };
+    randomSeed(seed);
+}
+
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     Vector delta = destination - source;
@@ -105,8 +119,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
         return;
 
     auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
-    if (!config->aimbot[weaponIndex].enabled)
-        weaponIndex = weaponClass;
+    if (!weaponClass || weaponClass == 63 || weaponClass == 40)
+        return;
 
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
@@ -121,7 +135,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
         if (!config->aimbot[weaponIndex].keyMode) {
             if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
                 return;
-        } else {
+        }
+        else {
             static bool toggle = true;
             if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
                 toggle = !toggle;
@@ -139,7 +154,23 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
+        auto aimPunch = localPlayer->getAimPunch();
+        if (config->aimbot[weaponIndex].standaloneRCS && !config->aimbot[weaponIndex].silent) {
+            static Vector lastAimPunch{ };
+            if (localPlayer->getShotsFired() > config->aimbot[weaponIndex].shotsFired) {
+                setRandomSeed(*memory->predictionRandomSeed);
+                Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
+                currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
+                currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                cmd->viewangles += currentPunch;
+            }
+            interfaces->engine->setViewAngles(cmd->viewangles);
+            lastAimPunch = aimPunch;
+        }
+        else {
+            aimPunch.x *= config->aimbot[weaponIndex].recoilControlY;
+            aimPunch.y *= config->aimbot[weaponIndex].recoilControlX;
+        }
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
@@ -154,7 +185,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(localPlayer.get(), entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
+                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + (config->aimbot[weaponIndex].recoilbasedFov ? aimPunch : Vector{ }));
                 auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
@@ -165,8 +196,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
-        if (bestTarget && (config->aimbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+        if (bestTarget && (config->aimbot[weaponIndex].ignoreSmoke || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
@@ -177,11 +207,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
             bool clamped{ false };
 
             if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
-                    angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-                    clamped = true;
+                angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+                angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+                clamped = true;
             }
-            
+
             angle /= config->aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config->aimbot[weaponIndex].silent)

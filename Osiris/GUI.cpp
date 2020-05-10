@@ -397,7 +397,7 @@ void GUI::renderMenuBar() noexcept
                               ImGui::Checkbox("无视闪光", &config->aimbot[currentWeapon].ignoreFlash);
                               ImGui::Checkbox("无视烟雾", &config->aimbot[currentWeapon].ignoreSmoke);
 
-                              /* float res = 0.0;
+                               float res = 0.0;
 
                                ImGui::Checkbox("后座力控制", &config->aimbot[currentWeapon].recoilbasedFov);
 
@@ -413,7 +413,7 @@ void GUI::renderMenuBar() noexcept
                                    config->aimbot[currentWeapon].recoilControlX = res;
                                    config->aimbot[currentWeapon].recoilControlY = res;
                                }
-                               */
+                               
 
 
 

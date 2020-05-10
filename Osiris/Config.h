@@ -52,11 +52,16 @@ public:
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
+        bool recoilbasedFov{ false };
+        float recoilControlX{ 0.0f };
+        float recoilControlY{ 0.0f };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
+        int shotsFired{ 0 };
+        bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 
