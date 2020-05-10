@@ -4,7 +4,6 @@
 #include <string>
 
 struct ImFont;
-char textCODE[1024 * 16] = "CFG:нр╣днд╣╣//ShadowWareLuaCFG.Shadow";
 class GUI {
 
 

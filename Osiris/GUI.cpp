@@ -17,6 +17,8 @@
 #include "Hacks/SkinChanger.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
+int tab_int = 0;
+
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -253,1205 +255,1162 @@ void GUI::hotkey(int& key) noexcept
 
 void GUI::renderMenuBar() noexcept
 {
-    if (ImGui::BeginMainMenuBar()) {
-        ImGui::MenuItem("自瞄", nullptr, &window.aimbot);
-        ImGui::MenuItem("反自瞄", nullptr, &window.antiAim);
-        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
-        ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
-        ImGui::MenuItem("Glow", nullptr, &window.glow);
-        ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Esp", nullptr, &window.esp);
-        ImGui::MenuItem("Visuals", nullptr, &window.visuals);
-        ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
-        ImGui::MenuItem("Sound", nullptr, &window.sound);
-        ImGui::MenuItem("Style", nullptr, &window.style);
-        ImGui::MenuItem("Misc", nullptr, &window.misc);
-        ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
-        ImGui::MenuItem("Config", nullptr, &window.config);
-        ImGui::EndMainMenuBar();
-    }
-}
-
-void GUI::renderAimbotWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.aimbot)
-            return;
-        ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
-    }
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
-    ImGui::PopID();
-    ImGui::SameLine();
-    static int currentWeapon{ 0 };
-    ImGui::PushID(1);
-
-    switch (currentCategory) {
-    case 0:
-        currentWeapon = 0;
-        ImGui::NewLine();
-        break;
-    case 1: {
-        static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
-
-        ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
-            if (config->aimbot[idx ? idx : 35].enabled) {
-                static std::string name;
-                name = pistols[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = pistols[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(pistols));
-
-        currentWeapon = currentPistol ? currentPistol : 35;
-        break;
-    }
-    case 2: {
-        static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
-
-        ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
-            if (config->aimbot[idx ? idx + 10 : 36].enabled) {
-                static std::string name;
-                name = heavies[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = heavies[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(heavies));
-
-        currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
-        break;
-    }
-    case 3: {
-        static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
-
-        ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
-            if (config->aimbot[idx ? idx + 16 : 37].enabled) {
-                static std::string name;
-                name = smgs[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = smgs[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(smgs));
-
-        currentWeapon = currentSmg ? currentSmg + 16 : 37;
-        break;
-    }
-    case 4: {
-        static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
-
-        ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
-            if (config->aimbot[idx ? idx + 23 : 38].enabled) {
-                static std::string name;
-                name = rifles[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = rifles[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(rifles));
-
-        currentWeapon = currentRifle ? currentRifle + 23 : 38;
-        break;
-    }
-    }
-    ImGui::PopID();
-    ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
-    ImGui::Separator();
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("On key", &config->aimbot[currentWeapon].onKey);
-    ImGui::SameLine();
-    hotkey(config->aimbot[currentWeapon].key);
-    ImGui::SameLine();
-    ImGui::PushID(2);
-    ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config->aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
-    ImGui::PopItemWidth();
-    ImGui::PopID();
-    ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
-    ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
-    ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Visible only", &config->aimbot[currentWeapon].visibleOnly);
-    ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->aimbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
-    ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
-    ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
-    ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
-    ImGui::NextColumn();
-    ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
-    ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-    ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
-    config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
-    ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
-    ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderAntiAimWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.antiAim)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->antiAim.enabled);
-    ImGui::Checkbox("##pitch", &config->antiAim.pitch);
-    ImGui::SameLine();
-    ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-    ImGui::Checkbox("Yaw", &config->antiAim.yaw);
-    ImGui::Checkbox("SlowWalk", &config->antiAim.Slowwalk);
-    ImGui::SliderInt("SlowWalkSpeed", &config->antiAim.slowwalkspeed,0,64,"%d");
-    ImGui::SameLine();
-    hotkey(config->antiAim.slowwalkkey);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.triggerbot)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
-    }
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
-    ImGui::PopID();
-    ImGui::SameLine();
-    static int currentWeapon{ 0 };
-    ImGui::PushID(1);
-    switch (currentCategory) {
-    case 0:
-        currentWeapon = 0;
-        ImGui::NewLine();
-        break;
-    case 5:
-        currentWeapon = 39;
-        ImGui::NewLine();
-        break;
-
-    case 1: {
-        static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
-
-        ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
-            if (config->triggerbot[idx ? idx : 35].enabled) {
-                static std::string name;
-                name = pistols[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = pistols[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(pistols));
-
-        currentWeapon = currentPistol ? currentPistol : 35;
-        break;
-    }
-    case 2: {
-        static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
-
-        ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
-            if (config->triggerbot[idx ? idx + 10 : 36].enabled) {
-                static std::string name;
-                name = heavies[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = heavies[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(heavies));
-
-        currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
-        break;
-    }
-    case 3: {
-        static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
-
-        ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
-            if (config->triggerbot[idx ? idx + 16 : 37].enabled) {
-                static std::string name;
-                name = smgs[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = smgs[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(smgs));
-
-        currentWeapon = currentSmg ? currentSmg + 16 : 37;
-        break;
-    }
-    case 4: {
-        static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
-
-        ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
-            if (config->triggerbot[idx ? idx + 23 : 38].enabled) {
-                static std::string name;
-                name = rifles[idx];
-                *out_text = name.append(" *").c_str();
-            } else {
-                *out_text = rifles[idx];
-            }
-            return true;
-            }, nullptr, IM_ARRAYSIZE(rifles));
-
-        currentWeapon = currentRifle ? currentRifle + 23 : 38;
-        break;
-    }
-    }
-    ImGui::PopID();
-    ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->triggerbot[currentWeapon].enabled);
-    ImGui::Separator();
-    ImGui::Checkbox("On key", &config->triggerbot[currentWeapon].onKey);
-    ImGui::SameLine();
-    hotkey(config->triggerbot[currentWeapon].key);
-    ImGui::Checkbox("Friendly fire", &config->triggerbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Scoped only", &config->triggerbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->triggerbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->triggerbot[currentWeapon].ignoreSmoke);
-    ImGui::SetNextItemWidth(85.0f);
-    ImGui::Combo("Hitgroup", &config->triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Shot delay", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
-    ImGui::InputInt("Min damage", &config->triggerbot[currentWeapon].minDamage);
-    config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
-    ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
-
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderBacktrackWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.backtrack)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
-    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
-    ImGui::PopItemWidth();
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderGlowWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.glow)
-            return;
-        ImGui::SetNextWindowSize({ 450.0f, 0.0f });
-        ImGui::Begin("Glow", &window.glow, windowFlags);
-    }
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0Defuse kits\0Projectiles\0Hostages\0Ragdolls\0");
-    ImGui::PopID();
-    static int currentItem{ 0 };
-    if (currentCategory <= 3) {
-        ImGui::SameLine();
-        static int currentType{ 0 };
-        ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
-        ImGui::PopID();
-        currentItem = currentCategory * 3 + currentType;
-    } else {
-        currentItem = currentCategory + 8;
-    }
-
-    ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->glow[currentItem].enabled);
-    ImGui::Separator();
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
-
-    ImGuiCustom::colorPicker("Color", config->glow[currentItem].color.color, nullptr, &config->glow[currentItem].color.rainbow, &config->glow[currentItem].color.rainbowSpeed);
-
-    ImGui::NextColumn();
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderFloat("Thickness", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderInt("Style", &config->glow[currentItem].style, 0, 3);
-    ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderChamsWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.chams)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Chams", &window.chams, windowFlags);
-    }
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0");
-    ImGui::PopID();
-    static int currentItem{ 0 };
-
-    if (currentCategory <= 3) {
-        ImGui::SameLine();
-        static int currentType{ 0 };
-        ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
-        ImGui::PopID();
-        currentItem = currentCategory * 3 + currentType;
-    } else {
-        currentItem = currentCategory + 8;
-    }
-
-    ImGui::SameLine();
-    static int material = 1;
-
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
-        --material;
-    ImGui::SameLine();
-    ImGui::Text("%d", material);
-    ImGui::SameLine();
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config->chams[0].materials.size()))
-        ++material;
-
-    ImGui::SameLine();
-    auto& chams{ config->chams[currentItem].materials[material - 1] };
-
-    ImGui::Checkbox("Enabled", &chams.enabled);
-    ImGui::Separator();
-    ImGui::Checkbox("Health based", &chams.healthBased);
-    ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0");
-    ImGui::Checkbox("Wireframe", &chams.wireframe);
-    ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
-    ImGui::SetNextItemWidth(220.0f);
-    ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
-
-    if (!contentOnly) {
-        ImGui::End();
-    }
-}
-
-void GUI::renderEspWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.esp)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Esp", &window.esp, windowFlags);
-    }
-
-    static int currentCategory = 0;
-    static int currentItem = 0;
-
-    if (ImGui::ListBoxHeader("##", { 125.0f, 300.0f })) {
-        static constexpr const char* players[]{ "All", "Visible", "Occluded" };
-
-        ImGui::Text("Allies");
-        ImGui::Indent();
-        ImGui::PushID("Allies");
-        ImGui::PushFont(fonts.segoeui);
-
-        for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
-            bool isSelected = currentCategory == 0 && currentItem == i;
-
-            if ((i == 0 || !config->esp.players[0].enabled) && ImGui::Selectable(players[i], isSelected)) {
-                currentItem = i;
-                currentCategory = 0;
-            }
-        }
-
-        ImGui::PopFont();
-        ImGui::PopID();
-        ImGui::Unindent();
-        ImGui::Text("Enemies");
-        ImGui::Indent();
-        ImGui::PushID("Enemies");
-        ImGui::PushFont(fonts.segoeui);
-
-        for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
-            bool isSelected = currentCategory == 1 && currentItem == i;
-
-            if ((i == 0 || !config->esp.players[3].enabled) && ImGui::Selectable(players[i], isSelected)) {
-                currentItem = i;
-                currentCategory = 1;
-            }
-        }
-
-        ImGui::PopFont();
-        ImGui::PopID();
-        ImGui::Unindent();
-        if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
-            currentCategory = 2;
-
-        ImGui::Text("Projectiles");
-        ImGui::Indent();
-        ImGui::PushID("Projectiles");
-        ImGui::PushFont(fonts.segoeui);
-        static constexpr const char* projectiles[]{ "Flashbang", "HE Grenade", "Breach Charge", "Bump Mine", "Decoy Grenade", "Molotov", "TA Grenade", "Smoke Grenade", "Snowball" };
-
-        for (int i = 0; i < IM_ARRAYSIZE(projectiles); i++) {
-            bool isSelected = currentCategory == 3 && currentItem == i;
-
-            if (ImGui::Selectable(projectiles[i], isSelected)) {
-                currentItem = i;
-                currentCategory = 3;
-            }
-        }
-
-        ImGui::PopFont();
-        ImGui::PopID();
-        ImGui::Unindent();
-
-        ImGui::Text("Danger Zone");
-        ImGui::Indent();
-        ImGui::PushID("Danger Zone");
-        ImGui::PushFont(fonts.segoeui);
-        static constexpr const char* dangerZone[]{ "Sentries", "Drones", "Cash", "Cash Dufflebag", "Pistol Case", "Light Case", "Heavy Case", "Explosive Case", "Tools Case", "Full Armor", "Armor", "Helmet", "Parachute", "Briefcase", "Tablet Upgrade", "ExoJump", "Ammobox", "Radar Jammer" };
-
-        for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
-            bool isSelected = currentCategory == 4 && currentItem == i;
-
-            if (ImGui::Selectable(dangerZone[i], isSelected)) {
-                currentItem = i;
-                currentCategory = 4;
-            }
-        }
-
-        ImGui::PopFont();
-        ImGui::PopID();
-        ImGui::ListBoxFooter();
-    }
-    ImGui::SameLine();
-    if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
-        switch (currentCategory) {
-        case 0:
-        case 1: {
-            int selected = currentCategory * 3 + currentItem;
-            ImGui::Checkbox("Enabled", &config->esp.players[selected].enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::SetNextItemWidth(85.0f);
-            ImGui::InputInt("Font", &config->esp.players[selected].font, 1, 294);
-            config->esp.players[selected].font = std::clamp(config->esp.players[selected].font, 1, 294);
-
-            ImGui::Separator();
-
-            constexpr auto spacing{ 185.0f };
-            ImGuiCustom::colorPicker("Snaplines", config->esp.players[selected].snaplines);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Box", config->esp.players[selected].box);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(95.0f);
-            ImGui::Combo("", &config->esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            ImGuiCustom::colorPicker("Eye traces", config->esp.players[selected].eyeTraces);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Health", config->esp.players[selected].health);
-            ImGuiCustom::colorPicker("Head dot", config->esp.players[selected].headDot);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(70.f);
-            ImGui::Combo("##HP side", &config->esp.players[selected].hpside, "Left\0Bottom\0Right\0");
-            ImGui::PushID("hotfix");
-            ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Armor", config->esp.players[selected].armor);
-            ImGuiCustom::colorPicker("Money", config->esp.players[selected].money);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Armor bar", config->esp.players[selected].armorBar);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(70.f);
-            ImGui::PopID();
-            ImGui::Combo("##AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
-            ImGuiCustom::colorPicker("Outline", config->esp.players[selected].outline);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Distance", config->esp.players[selected].distance);
-            ImGuiCustom::colorPicker("Active Weapon", config->esp.players[selected].activeWeapon);
-            ImGui::SameLine(spacing);
-            ImGui::Checkbox("Dead ESP", &config->esp.players[selected].deadesp);
-            ImGui::SliderFloat("Max distance", &config->esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
-            break;
-        }
-        case 2: {
-            ImGui::Checkbox("Enabled", &config->esp.weapon.enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::SetNextItemWidth(85.0f);
-            ImGui::InputInt("Font", &config->esp.weapon.font, 1, 294);
-            config->esp.weapon.font = std::clamp(config->esp.weapon.font, 1, 294);
-
-            ImGui::Separator();
-
-            constexpr auto spacing{ 200.0f };
-            ImGuiCustom::colorPicker("Snaplines", config->esp.weapon.snaplines);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Box", config->esp.weapon.box);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(95.0f);
-            ImGui::Combo("", &config->esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            ImGuiCustom::colorPicker("Name", config->esp.weapon.name);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Ammo", config->esp.weapon.ammo);
-            ImGuiCustom::colorPicker("Outline", config->esp.weapon.outline);
-            ImGuiCustom::colorPicker("Distance", config->esp.weapon.distance);
-            ImGui::SliderFloat("Max distance", &config->esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
-            break;
-        }
-        case 3: {
-            ImGui::Checkbox("Enabled", &config->esp.projectiles[currentItem].enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::SetNextItemWidth(85.0f);
-            ImGui::InputInt("Font", &config->esp.projectiles[currentItem].font, 1, 294);
-            config->esp.projectiles[currentItem].font = std::clamp(config->esp.projectiles[currentItem].font, 1, 294);
-
-            ImGui::Separator();
-
-            constexpr auto spacing{ 200.0f };
-            ImGuiCustom::colorPicker("Snaplines", config->esp.projectiles[currentItem].snaplines);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Box", config->esp.projectiles[currentItem].box);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(95.0f);
-            ImGui::Combo("", &config->esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            ImGuiCustom::colorPicker("Name", config->esp.projectiles[currentItem].name);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Outline", config->esp.projectiles[currentItem].outline);
-            ImGuiCustom::colorPicker("Distance", config->esp.projectiles[currentItem].distance);
-            ImGui::SliderFloat("Max distance", &config->esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
-            break;
-        }
-        case 4: {
-            int selected = currentItem;
-            ImGui::Checkbox("Enabled", &config->esp.dangerZone[selected].enabled);
-            ImGui::SameLine(0.0f, 50.0f);
-            ImGui::SetNextItemWidth(85.0f);
-            ImGui::InputInt("Font", &config->esp.dangerZone[selected].font, 1, 294);
-            config->esp.dangerZone[selected].font = std::clamp(config->esp.dangerZone[selected].font, 1, 294);
-
-            ImGui::Separator();
-
-            constexpr auto spacing{ 200.0f };
-            ImGuiCustom::colorPicker("Snaplines", config->esp.dangerZone[selected].snaplines);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Box", config->esp.dangerZone[selected].box);
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(95.0f);
-            ImGui::Combo("", &config->esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
-            ImGuiCustom::colorPicker("Name", config->esp.dangerZone[selected].name);
-            ImGui::SameLine(spacing);
-            ImGuiCustom::colorPicker("Outline", config->esp.dangerZone[selected].outline);
-            ImGuiCustom::colorPicker("Distance", config->esp.dangerZone[selected].distance);
-            ImGui::SliderFloat("Max distance", &config->esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
-            break;
-        }
-        }
-
-        ImGui::EndChild();
-    }
-
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderVisualsWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.visuals)
-            return;
-        ImGui::SetNextWindowSize({ 680.0f, 0.0f });
-        ImGui::Begin("Visuals", &window.visuals, windowFlags);
-    }
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 280.0f);
-    ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
-    ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
-    ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
-    ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
-    ImGui::Checkbox("No fog", &config->visuals.noFog);
-    ImGui::Checkbox("No 3d sky", &config->visuals.no3dSky);
-    ImGui::Checkbox("No aim punch", &config->visuals.noAimPunch);
-    ImGui::Checkbox("No view punch", &config->visuals.noViewPunch);
-    ImGui::Checkbox("No hands", &config->visuals.noHands);
-    ImGui::Checkbox("No sleeves", &config->visuals.noSleeves);
-    ImGui::Checkbox("No weapons", &config->visuals.noWeapons);
-    ImGui::Checkbox("No smoke", &config->visuals.noSmoke);
-    ImGui::Checkbox("No blur", &config->visuals.noBlur);
-    ImGui::Checkbox("No scope overlay", &config->visuals.noScopeOverlay);
-    ImGui::Checkbox("No grass", &config->visuals.noGrass);
-    ImGui::Checkbox("No shadows", &config->visuals.noShadows);
-    ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
-    ImGui::NextColumn();
-    ImGui::Checkbox("Zoom", &config->visuals.zoom);
-    ImGui::SameLine();
-    hotkey(config->visuals.zoomKey);
-    ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
-    ImGui::SameLine();
-    hotkey(config->visuals.thirdpersonKey);
-    ImGui::PushItemWidth(290.0f);
-    ImGui::PushID(0);
-    ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
-    ImGui::PopID();
-    ImGui::PushID(1);
-    ImGui::SliderInt("", &config->visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
-    ImGui::PopID();
-    ImGui::PushID(2);
-    ImGui::SliderInt("", &config->visuals.fov, -60, 60, "FOV: %d");
-    ImGui::PopID();
-    ImGui::PushID(3);
-    ImGui::SliderInt("", &config->visuals.farZ, 0, 2000, "Far Z: %d");
-    ImGui::PopID();
-    ImGui::PushID(4);
-    ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
-    ImGui::PopID();
-    ImGui::PushID(5);
-    ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
-    ImGui::PopID();
-    ImGui::PopItemWidth();
-    ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-    ImGuiCustom::colorPicker("World color", config->visuals.world);
-    ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
-    ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
-    ImGui::Combo("Screen effect", &config->visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-    ImGui::Combo("Hit effect", &config->visuals.hitEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
-    ImGui::SliderFloat("Hit effect time", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
-    ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
-    ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
-    ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
-    ImGui::SameLine();
-    bool ccPopup = ImGui::Button("Edit");
-
-    if (ccPopup)
-        ImGui::OpenPopup("##popup");
-
-    if (ImGui::BeginPopup("##popup")) {
-        ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &config->visuals.colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &config->visuals.colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &config->visuals.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &config->visuals.colorCorrection.saturation, 0.0f, 1.0f, "Sat\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &config->visuals.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &config->visuals.colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
-        ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &config->visuals.colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
-        ImGui::EndPopup();
-    }
-    ImGui::Columns(1);
-
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.skinChanger)
-            return;
-        ImGui::SetNextWindowSize({ 700.0f, 0.0f });
-        ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
-    }
-
-    static auto itemIndex = 0;
-
-    ImGui::PushItemWidth(110.0f);
-    ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
-        *out_text = game_data::weapon_names[idx].name;
-        return true;
-        }, nullptr, IM_ARRAYSIZE(game_data::weapon_names), 5);
-    ImGui::PopItemWidth();
-
-    auto& selected_entry = config->skinChanger[itemIndex];
-    selected_entry.itemIdIndex = itemIndex;
-
+    ImGui::SetNextWindowSize({ 700.0f, 700.0f });
+    ImGui::Begin("Shadow Ware V0.7Beta", nullptr, windowFlags);
     {
-        ImGui::SameLine();
-        ImGui::Checkbox("Enabled", &selected_entry.enabled);
-        ImGui::Separator();
-        ImGui::Columns(2, nullptr, false);
-        ImGui::InputInt("Seed", &selected_entry.seed);
-        ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
-        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
+        {
+            ImGui::SetCursorPos(ImVec2(10, 40));
 
-        ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
-            return true;
-            }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
+            if (ImGui::Button("自瞄&扳机", ImVec2(80, 80)))
+                tab_int = 0;
 
-        ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = game_data::quality_names[idx].name;
-            return true;
-            }, nullptr, IM_ARRAYSIZE(game_data::quality_names), 5);
+            ImGui::SameLine();
 
-        if (itemIndex == 0) {
-            ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
-                *out_text = game_data::knife_names[idx].name;
-                return true;
-                }, nullptr, IM_ARRAYSIZE(game_data::knife_names), 5);
-        } else if (itemIndex == 1) {
-            ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
-                *out_text = game_data::glove_names[idx].name;
-                return true;
-                }, nullptr, IM_ARRAYSIZE(game_data::glove_names), 5);
-        } else {
-            static auto unused_value = 0;
-            selected_entry.definition_override_vector_index = 0;
-            ImGui::Combo("Unavailable", &unused_value, "For knives or gloves\0");
-        }
+            ImGui::BeginChild("Shadow Ware V0.7Beta", ImVec2(600, 680), true, 0);
+            {
+                ImGui::Separator();
+                switch (tab_int) {
 
-        ImGui::InputText("Name Tag", selected_entry.custom_name, 32);
-    }
+                case 0: {
+                    static int currentCategory{ 0 };
 
-    ImGui::NextColumn();
+                    ImGui::PushItemWidth(110.0f);
+                    ImGui::PushID(0);
+                    ImGui::Combo("", &currentCategory, "全部\0手枪\0重型武器\0冲锋枪\0步枪\0");
+                    ImGui::PopID();
+                    ImGui::SameLine();
+                    static int currentWeapon{ 0 };
+                    ImGui::PushID(1);
 
-    {
-        ImGui::PushID("sticker");
+                    switch (currentCategory) {
+                    case 0: {
+                        currentWeapon = 0;
+                        ImGui::NewLine();
+                        break;
+                    case 1: {
+                        static int currentPistol{ 0 };
+                        static constexpr const char* pistols[]{ "所有手枪", "格洛克18", "P2000", "USP-S", "双持贝瑞塔", "P250", "Tec-9", "FN57", "CZ-75", "沙漠之鹰", "R8左轮" };
 
-        static auto selectedStickerSlot = 0;
+                        ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
+                            if (config->aimbot[idx ? idx : 35].enabled) {
+                                static std::string name;
+                                name = pistols[idx];
+                                *out_text = name.append(" *").c_str();
+                            }
+                            else {
+                                *out_text = pistols[idx];
+                            }
+                            return true;
+                            }, nullptr, IM_ARRAYSIZE(pistols));
 
-        ImGui::PushItemWidth(-1);
+                        currentWeapon = currentPistol ? currentPistol : 35;
+                        break;
+                    }
+                    case 2: {
+                        static int currentHeavy{ 0 };
+                        static constexpr const char* heavies[]{ "所有重型武器", "新星", "XM1014", "截断霰弹枪", "MAG-7", "M249", "内格夫" };
 
-        if (ImGui::ListBoxHeader("", 5)) {
-            for (int i = 0; i < 5; ++i) {
-                ImGui::PushID(i);
+                        ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
+                            if (config->aimbot[idx ? idx + 10 : 36].enabled) {
+                                static std::string name;
+                                name = heavies[idx];
+                                *out_text = name.append(" *").c_str();
+                            }
+                            else {
+                                *out_text = heavies[idx];
+                            }
+                            return true;
+                            }, nullptr, IM_ARRAYSIZE(heavies));
 
-                const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
-                const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::stickerKits[kit_vector_index].name;
+                        currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
+                        break;
+                    }
+                    case 3: {
+                        static int currentSmg{ 0 };
+                        static constexpr const char* smgs[]{ "所有冲锋枪", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP野牛" };
 
-                if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
-                    selectedStickerSlot = i;
+                        ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
+                            if (config->aimbot[idx ? idx + 16 : 37].enabled) {
+                                static std::string name;
+                                name = smgs[idx];
+                                *out_text = name.append(" *").c_str();
+                            }
+                            else {
+                                *out_text = smgs[idx];
+                            }
+                            return true;
+                            }, nullptr, IM_ARRAYSIZE(smgs));
 
-                ImGui::PopID();
-            }
-            ImGui::ListBoxFooter();
-        }
+                        currentWeapon = currentSmg ? currentSmg + 16 : 37;
+                        break;
+                    }
+                    case 4: {
+                        static int currentRifle{ 0 };
+                        static constexpr const char* rifles[]{ "全部步枪", "加利尔AR", "法玛斯", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
-        ImGui::PopItemWidth();
+                        ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
+                            if (config->aimbot[idx ? idx + 23 : 38].enabled) {
+                                static std::string name;
+                                name = rifles[idx];
+                                *out_text = name.append(" *").c_str();
+                            }
+                            else {
+                                *out_text = rifles[idx];
+                            }
+                            return true;
+                            }, nullptr, IM_ARRAYSIZE(rifles));
 
-        auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
+                        currentWeapon = currentRifle ? currentRifle + 23 : 38;
+                        break;
+                    }
 
-        ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = SkinChanger::stickerKits[idx].name.c_str();
-            return true;
-            }, nullptr, SkinChanger::stickerKits.size(), 10);
+                          ImGui::PopID();
+                          ImGui::SameLine();
+                          ImGui::Combo("自瞄&扳机", &config->backtrack.amode, "自瞄\0扳机\0");
 
-        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
-        ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
-        ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.0f, 360.0f);
+                          ImGui::Separator();
+                          ImGui::PushID(2);
+                          ImGui::PushItemWidth(70.0f);
+                          ImGui::PopItemWidth();
+                          ImGui::PopID();
+                          ImGui::Columns(2, nullptr, false);
+                          ImGui::SetColumnOffset(1, 220.0f);
 
-        ImGui::PopID();
-    }
-    selected_entry.update();
+                          switch (config->backtrack.amode) {
 
-    ImGui::Columns(1);
+                          case 0: {
+                              /*if (config->aimbot[currentWeapon].enabled == true) {
+                                  config->ragebot[currentWeapon].enabled = false;
+                              }
+                              else if (config->ragebot[currentWeapon].enabled == true)
+                              {
+                                  config->aimbot[currentWeapon].enabled = false;
+                              }*/
 
-    ImGui::Separator();
+                              ImGui::Combo("自瞄位置", &config->aimbot[currentWeapon].bone, "准星附近\0最高伤害\0头部\0脖子\0胸骨\0胸部\0胃部\0屁股\0");
+                              ImGui::Checkbox("启用自瞄", &config->aimbot[currentWeapon].enabled);
+                              ImGui::Checkbox("强制锁定", &config->aimbot[currentWeapon].aimlock);
+                              ImGui::Checkbox("静默瞄准", &config->aimbot[currentWeapon].silent);
+                              ImGui::Checkbox("友军伤害", &config->aimbot[currentWeapon].friendlyFire);
+                              ImGui::Checkbox("仅瞄可见", &config->aimbot[currentWeapon].visibleOnly);
+                              ImGui::Checkbox("仅开镜时启用", &config->aimbot[currentWeapon].scopedOnly);
+                              ImGui::Checkbox("无视闪光", &config->aimbot[currentWeapon].ignoreFlash);
+                              ImGui::Checkbox("无视烟雾", &config->aimbot[currentWeapon].ignoreSmoke);
 
-    if (ImGui::Button("Update", { 130.0f, 30.0f }))
-        SkinChanger::scheduleHudUpdate();
+                              /* float res = 0.0;
 
-    ImGui::TextUnformatted("nSkinz by namazso");
+                               ImGui::Checkbox("后座力控制", &config->aimbot[currentWeapon].recoilbasedFov);
 
-    if (!contentOnly)
-        ImGui::End();
-}
+                               if (config->aimbot[currentWeapon].recoilbasedFov) {
+                                   ImGui::SliderFloat("垂直压枪力度", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
+                                   ImGui::SliderFloat("水平压枪力度", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+                                   ImGui::Checkbox("随机RCS压枪", &config->aimbot[currentWeapon].standaloneRCS);
+                                   ImGui::InputInt("空枪数", &config->aimbot[currentWeapon].shotsFired);
+                                   config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 10);
+                               }
 
-void GUI::renderSoundWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.sound)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Sound", &window.sound, windowFlags);
-    }
-    ImGui::SliderInt("Chicken volume", &config->sound.chickenVolume, 0, 200, "%d%%");
+                               if (config->aimbot[currentWeapon].recoilbasedFov == false) {
+                                   config->aimbot[currentWeapon].recoilControlX = res;
+                                   config->aimbot[currentWeapon].recoilControlY = res;
+                               }
+                               */
 
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
-    ImGui::PopItemWidth();
-    ImGui::SliderInt("Master volume", &config->sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Headshot volume", &config->sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Weapon volume", &config->sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Footstep volume", &config->sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
 
-    if (!contentOnly)
-        ImGui::End();
-}
 
-void GUI::renderStyleWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.style)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Style", &window.style, windowFlags);
-    }
+                              ImGui::NextColumn();
+                              ImGui::Checkbox("按键启用", &config->aimbot[currentWeapon].onKey);
+                              ImGui::SameLine();
+                              ImGui::Text("按键:");
+                              ImGui::SameLine();
+                              hotkey(config->aimbot[currentWeapon].key);
+                              ImGui::Checkbox("R8左轮预热", &config->misc.prepareRevolver);
 
-    ImGui::PushItemWidth(150.0f);
-    if (ImGui::Combo("Menu style", &config->style.menuStyle, "Classic\0One window\0"))
-        window = { };
-    if (ImGui::Combo("Menu colors", &config->style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
-        updateColors();
-    ImGui::PopItemWidth();
+                              ImGui::Combo("自瞄方式", &config->aimbot[currentWeapon].keyMode, "按住开启\0按下开启\0");
+                              ImGui::PushItemWidth(240.0f);
+                              ImGui::SliderFloat("范围", &config->aimbot[currentWeapon].fov, 0.0f, 8.0f, "%.2f", 2.5f);
+                              ImGui::SliderFloat("平滑", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+                              ImGui::InputInt("最小伤害", &config->aimbot[currentWeapon].minDamage, 0, 150);
+                              config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+                              ImGui::Checkbox("自适应瞄准部位", &config->aimbot[currentWeapon].killshot);
+                              ImGui::Checkbox("连续射击", &config->aimbot[currentWeapon].betweenShots);
+                              //ImGui::Checkbox("绘制自瞄范围", &config->misc.drawAimbotFov);
+                              ImGui::PopItemWidth();
+                              ImGui::Columns(1);
+                              break;
+                          }
 
-    if (config->style.menuColors == 3) {
-        ImGuiStyle& style = ImGui::GetStyle();
-        for (int i = 0; i < ImGuiCol_COUNT; i++) {
-            if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
+                          case 1: {
+                              {
+                                  static int currentCategory{ 0 };
+                                  ImGui::PushItemWidth(110.0f);
+                                  ImGui::PushID(0);
+                                  ImGui::Combo("", &currentCategory, "All\0手枪\0重型武器\0冲锋枪\0步枪\0宙斯X27\0");
+                                  ImGui::PopID();
+                                  ImGui::SameLine();
+                                  static int currentWeapon{ 0 };
+                                  ImGui::PushID(1);
+                                  switch (currentCategory) {
+                                  case 0:
+                                      currentWeapon = 0;
+                                      ImGui::NewLine();
+                                      break;
+                                  case 5:
+                                      currentWeapon = 39;
+                                      ImGui::NewLine();
+                                      break;
 
-            ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
-        }
-    }
+                                  case 1: {
+                                      static int currentPistol{ 0 };
+                                      static constexpr const char* pistols[]{ "所有手枪", "格洛克18", "P2000", "USP-S", "双持贝瑞塔", "P250", "Tec-9", "FN57", "CZ-75", "沙漠之鹰", "R8左轮" };
 
-    if (!contentOnly)
-        ImGui::End();
-}
+                                      ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
+                                          if (config->triggerbot[idx ? idx : 35].enabled) {
+                                              static std::string name;
+                                              name = pistols[idx];
+                                              *out_text = name.append(" *").c_str();
+                                          }
+                                          else {
+                                              *out_text = pistols[idx];
+                                          }
+                                          return true;
+                                          }, nullptr, IM_ARRAYSIZE(pistols));
 
-void GUI::renderMiscWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.misc)
-            return;
-        ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc", &window.misc, windowFlags);
-    }
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 230.0f);
-    ImGui::TextUnformatted("Menu key");
-    ImGui::SameLine();
-    hotkey(config->misc.menuKey);
+                                      currentWeapon = currentPistol ? currentPistol : 35;
+                                      break;
+                                  }
+                                  case 2: {
+                                      static int currentHeavy{ 0 };
+                                      static constexpr const char* heavies[]{ "所有重型武器", "新星", "XM1014", "截断霰弹枪", "MAG-7", "M249", "内格夫" };
 
-    ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
-    ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
-    ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
-    ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
-    ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);
-    ImGui::Checkbox("Edge Jump", &config->misc.edgejump);
-    ImGui::SameLine();
-    hotkey(config->misc.edgejumpkey);
-    ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
-    ImGui::SameLine();
-    hotkey(config->misc.slowwalkKey);
-    ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
-    ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
-    ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
-    ImGui::Checkbox("Auto reload", &config->misc.autoReload);
-    ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
-    ImGui::Checkbox("Radar hack", &config->misc.radarHack);
-    ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
-    ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
-    ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
-    ImGuiCustom::colorPicker("Spectator list", config->misc.spectatorList);
-    ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
-    ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
-    ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
-    ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
-    ImGui::Checkbox("Disable model occlusion", &config->misc.disableModelOcclusion);
-    ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
-    ImGui::NextColumn();
-    ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &config->misc.clocktag);
-    ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
-    ImGui::SameLine();
-    ImGui::PushItemWidth(120.0f);
-    ImGui::PushID(0);
-    if (ImGui::InputText("", &config->misc.clanTag))
-        Misc::updateClanTag(true);
-    ImGui::PopID();
-    ImGui::Checkbox("Kill message", &config->misc.killMessage);
-    ImGui::SameLine();
-    ImGui::PushItemWidth(120.0f);
-    ImGui::PushID(1);
-    ImGui::InputText("", &config->misc.killMessageString);
-    ImGui::PopID();
-    ImGui::Checkbox("Name stealer", &config->misc.nameStealer);
-    ImGui::PushID(3);
-    ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("", &config->misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
-    ImGui::PopID();
-    ImGui::SameLine();
-    ImGui::PushID(4);
-    ImGui::InputText("", &config->misc.banText);
-    ImGui::PopID();
-    ImGui::SameLine();
-    if (ImGui::Button("Setup fake ban"))
-        Misc::fakeBan(true);
-    ImGui::Checkbox("Fast plant", &config->misc.fastPlant);
-    ImGuiCustom::colorPicker("Bomb timer", config->misc.bombTimer);
-    ImGui::Checkbox("Quick reload", &config->misc.quickReload);
-    ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
-    ImGui::SameLine();
-    hotkey(config->misc.prepareRevolverKey);
-    ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
-    if (config->misc.hitSound == 5) {
-        ImGui::InputText("Hit Sound filename", &config->misc.customHitSound);
-        if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
-    }
-    ImGui::PushID(5);
-    ImGui::Combo("Kill Sound", &config->misc.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
-    if (config->misc.killSound == 5) {
-        ImGui::InputText("Kill Sound filename", &config->misc.customKillSound);
-        if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
-    }
-    ImGui::PopID();
-    ImGui::SetNextItemWidth(90.0f);
-    ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
-    config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
-    ImGui::SameLine();
-    hotkey(config->misc.chokedPacketsKey);
-    ImGui::Text("Quick healthshot");
-    ImGui::SameLine();
-    hotkey(config->misc.quickHealthshotKey);
-    ImGui::Checkbox("Grenade Prediction", &config->misc.nadePredict);
-    ImGui::Checkbox("Fix tablet signal", &config->misc.fixTabletSignal);
-    ImGui::SetNextItemWidth(120.0f);
-    ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
-    ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
-    ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
-    ImGui::SameLine();
+                                      ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
+                                          if (config->triggerbot[idx ? idx + 10 : 36].enabled) {
+                                              static std::string name;
+                                              name = heavies[idx];
+                                              *out_text = name.append(" *").c_str();
+                                          }
+                                          else {
+                                              *out_text = heavies[idx];
+                                          }
+                                          return true;
+                                          }, nullptr, IM_ARRAYSIZE(heavies));
 
-    ImGui::PushID("Purchase List");
-    if (ImGui::Button("..."))
-        ImGui::OpenPopup("");
+                                      currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
+                                      break;
+                                  }
+                                  case 3: {
+                                      static int currentSmg{ 0 };
+                                      static constexpr const char* smgs[]{ "所有冲锋枪", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP野牛" };
 
-    if (ImGui::BeginPopup("")) {
-        ImGui::SetNextItemWidth(75.0f);
-        ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
-        ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
-        ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
-        ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
+                                      ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
+                                          if (config->triggerbot[idx ? idx + 16 : 37].enabled) {
+                                              static std::string name;
+                                              name = smgs[idx];
+                                              *out_text = name.append(" *").c_str();
+                                          }
+                                          else {
+                                              *out_text = smgs[idx];
+                                          }
+                                          return true;
+                                          }, nullptr, IM_ARRAYSIZE(smgs));
 
-    if (ImGui::Button("Unhook"))
-        hooks->uninstall();
+                                      currentWeapon = currentSmg ? currentSmg + 16 : 37;
+                                      break;
+                                  }
+                                  case 4: {
+                                      static int currentRifle{ 0 };
+                                      static constexpr const char* rifles[]{ "全部步枪", "加利尔AR", "法玛斯", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
-    ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
+                                      ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
+                                          if (config->triggerbot[idx ? idx + 23 : 38].enabled) {
+                                              static std::string name;
+                                              name = rifles[idx];
+                                              *out_text = name.append(" *").c_str();
+                                          }
+                                          else {
+                                              *out_text = rifles[idx];
+                                          }
+                                          return true;
+                                          }, nullptr, IM_ARRAYSIZE(rifles));
 
-void GUI::renderReportbotWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.reportbot)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->reportbot.enabled);
-    ImGui::SameLine(0.0f, 50.0f);
-    if (ImGui::Button("Reset"))
-        Reportbot::reset();
-    ImGui::Separator();
-    ImGui::PushItemWidth(80.0f);
-    ImGui::Combo("Target", &config->reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config->reportbot.delay);
-    config->reportbot.delay = (std::max)(config->reportbot.delay, 1);
-    ImGui::InputInt("Rounds", &config->reportbot.rounds);
-    config->reportbot.rounds = (std::max)(config->reportbot.rounds, 1);
-    ImGui::PopItemWidth();
-    ImGui::Checkbox("Abusive Communications", &config->reportbot.textAbuse);
-    ImGui::Checkbox("Griefing", &config->reportbot.griefing);
-    ImGui::Checkbox("Wall Hacking", &config->reportbot.wallhack);
-    ImGui::Checkbox("Aim Hacking", &config->reportbot.aimbot);
-    ImGui::Checkbox("Other Hacking", &config->reportbot.other);
+                                      currentWeapon = currentRifle ? currentRifle + 23 : 38;
+                                      break;
+                                  }
+                                  }
+                                  ImGui::PopID();
+                                  ImGui::SameLine();
+                                  ImGui::Checkbox("启用", &config->triggerbot[currentWeapon].enabled);
+                                  ImGui::Separator();
+                                  ImGui::Checkbox("按键启用", &config->triggerbot[currentWeapon].onKey);
+                                  ImGui::Text("按键:");
+                                  ImGui::SameLine();
+                                  hotkey(config->triggerbot[currentWeapon].key);
+                                  ImGui::Checkbox("对友军启用", &config->triggerbot[currentWeapon].friendlyFire);
+                                  ImGui::Checkbox("仅开镜时启用", &config->triggerbot[currentWeapon].scopedOnly);
+                                  ImGui::Checkbox("无视闪光弹", &config->triggerbot[currentWeapon].ignoreFlash);
+                                  ImGui::Checkbox("无视烟雾弹", &config->triggerbot[currentWeapon].ignoreSmoke);
+                                  ImGui::SetNextItemWidth(85.0f);
+                                  ImGui::Combo("扳机位置", &config->triggerbot[currentWeapon].hitgroup, "所有部位\0头部\0胸部\0胃部\0左手\0右手\0左腿\0右腿\0");
+                                  ImGui::PushItemWidth(220.0f);
+                                  ImGui::SliderInt("开枪延时", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+                                  ImGui::InputInt("最小伤害", &config->triggerbot[currentWeapon].minDamage);
+                                  config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
+                                  ImGui::Checkbox("自适应瞄准部位", &config->triggerbot[currentWeapon].killshot);
+                                  ImGui::SliderFloat("爆发时间", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
-    if (!contentOnly)
-        ImGui::End();
-}
+                              }
+                              break;
+                          }
 
-void GUI::renderConfigWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.config)
-            return;
-        ImGui::SetNextWindowSize({ 290.0f, 200.0f });
-        ImGui::Begin("Config", &window.config, windowFlags);
-    }
+                          }
+                          break;
+                    }
+                    }
+                    
+                }
+                //Legit
 
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 170.0f);
+case 1: {
 
-    ImGui::PushItemWidth(160.0f);
 
-    if (ImGui::Button("Reload configs", { 160.0f, 25.0f }))
-        config->listConfigs();
+                    break;
+                }
+                        //Rage
+                    
+                        case 2: {
+                        ImGui::Checkbox("Enabled", &config->antiAim.enabled);
+                        ImGui::Checkbox("##pitch", &config->antiAim.pitch);
+                        ImGui::SameLine();
+                        ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
+                        ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+                        ImGui::Checkbox("SlowWalk", &config->antiAim.Slowwalk);
+                        ImGui::SliderInt("SlowWalkSpeed", &config->antiAim.slowwalkspeed, 0, 64, "%d");
+                        ImGui::SameLine();
+                        hotkey(config->antiAim.slowwalkkey);
+                        break;
+                    }
+                          //AntiAim
+                    case 3: {
 
-    auto& configItems = config->getConfigs();
-    static int currentConfig = -1;
+                        
 
-    if (static_cast<size_t>(currentConfig) >= configItems.size())
-        currentConfig = -1;
+                        ImGui::BeginChild("Glow", { 400.0f,150.0f });
+                        {
+                            static int currentCategory{ 0 };
+                            ImGui::PushItemWidth(110.0f);
+                            ImGui::Text("发光透视");
+                            ImGui::SameLine();
+                            ImGui::PushID(0);
+                            ImGui::Combo("", &currentCategory, "友军\0敌人\0正在安放炸弹的\0正在拆除炸弹的\0本地玩家\0武器\0C4炸弹\0已经安放的C4\0小鸡\0拆弹装备\0投掷物\0人质\0尸体\0");
+                            ImGui::PopID();
+                            static int currentItem{ 0 };
+                            if (currentCategory <= 3) {
+                                ImGui::SameLine();
+                                static int currentType{ 0 };
+                                ImGui::PushID(1);
+                                ImGui::Combo("", &currentType, "所有\0可见的\0不可见的\0");
+                                ImGui::PopID();
+                                currentItem = currentCategory * 3 + currentType;
+                            }
+                            else {
+                                currentItem = currentCategory + 8;
+                            }
+                            ImGui::SameLine();
+                            ImGui::Checkbox("启用", &config->glow[currentItem].enabled);
+                            ImGui::Separator();
+                            ImGui::Checkbox("随血量变色", &config->glow[currentItem].healthBased);
+                            ImGuiCustom::colorPicker("颜色", config->glow[currentItem].color.color, nullptr, &config->glow[currentItem].color.rainbow, &config->glow[currentItem].color.rainbowSpeed);
+                            ImGui::PushItemWidth(220.0f);
+                            ImGui::SliderFloat("边缘厚度", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
+                            ImGui::SliderFloat("发光厚度", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
+                            ImGui::SliderInt("发光风格", &config->glow[currentItem].style, 0, 3);
+                            ImGui::EndChild();
+                        }
 
-    static std::string buffer;
 
-    if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
-        auto& vector = *static_cast<std::vector<std::string>*>(data);
-        *out_text = vector[idx].c_str();
-        return true;
-        }, &configItems, configItems.size(), 5) && currentConfig != -1)
-            buffer = configItems[currentConfig];
+                        ImGui::Separator();
 
-        ImGui::PushID(0);
-        if (ImGui::InputText("", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            if (currentConfig != -1)
-                config->rename(currentConfig, buffer.c_str());
-        }
-        ImGui::PopID();
-        ImGui::NextColumn();
+                        ImGui::BeginChild("Chams", { 400.0f,150.0f });
+                        {
+                            static int currentCategorys{ 0 };
+                            ImGui::PushItemWidth(110.0f);
+                            ImGui::Text("上色透视");
+                            ImGui::SameLine();
+                            ImGui::PushID(0);
+                            ImGui::Combo("", &currentCategorys, "友军\0敌人\0安包\0拆弹\0本地\0武器\0手部\0回溯\0袖子\0");
+                            ImGui::PopID();
+                            static int currentItems{ 0 };
 
-        ImGui::PushItemWidth(100.0f);
+                            if (currentCategorys <= 3) {
+                                ImGui::SameLine();
+                                static int currentTypes{ 0 };
+                                ImGui::PushID(1);
+                                ImGui::Combo("", &currentTypes, "所有\0可见的\0不可见的\0");
+                                ImGui::PopID();
+                                currentItems = currentCategorys * 3 + currentTypes;
+                            }
+                            else {
+                                currentItems = currentCategorys + 8;
+                            }
 
-        if (ImGui::Button("Create config", { 100.0f, 25.0f }))
-            config->add(buffer.c_str());
+                            ImGui::SameLine();
+                            static int material = 1;
 
-        if (ImGui::Button("Reset config", { 100.0f, 25.0f }))
-            ImGui::OpenPopup("Config to reset");
+                            if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+                                --material;
+                            ImGui::SameLine();
+                            ImGui::Text("%d", material);
+                            ImGui::SameLine();
+                            if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config->chams[0].materials.size()))
+                                ++material;
 
-        if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
-            for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
-                if (i == 1) ImGui::Separator();
+                            ImGui::SameLine();
+                            auto& chams{ config->chams[currentItems].materials[material - 1] };
 
-                if (ImGui::Selectable(names[i])) {
-                    switch (i) {
-                    case 0: config->reset(); updateColors(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
-                    case 1: config->aimbot = { }; break;
-                    case 2: config->triggerbot = { }; break;
-                    case 3: config->backtrack = { }; break;
-                    case 4: config->antiAim = { }; break;
-                    case 5: config->glow = { }; break;
-                    case 6: config->chams = { }; break;
-                    case 7: config->esp = { }; break;
-                    case 8: config->visuals = { }; break;
-                    case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 10: config->sound = { }; break;
-                    case 11: config->style = { }; updateColors(); break;
-                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 13: config->reportbot = { }; break;
+                            ImGui::Checkbox("启用", &chams.enabled);
+                            ImGui::Separator();
+                            ImGui::Checkbox("随血量变色", &chams.healthBased);
+                            ImGui::Checkbox("闪烁 ", &chams.blinking);
+                            ImGui::Combo("材质", &chams.material, "普通\0纯色\0动态\0铂金\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0");
+                            ImGui::Checkbox("线条", &chams.wireframe);
+                            ImGuiCustom::colorPicker("颜色", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
+                            ImGui::SetNextItemWidth(220.0f);
+                            ImGui::SliderFloat("厚度", &chams.alpha, 0.0f, 1.0f, "%.2f");
+                            ImGui::EndChild();
+                        }
+
+                        ImGui::Separator();
+
+                        ImGui::BeginChild("Esp", { 500.0f,500.0f });
+                        {
+                            static int currentCategory = 0;
+                            static int currentItem = 0;
+
+                            if (ImGui::ListBoxHeader("##", { 125.0f, 475.0f })) {
+                                static constexpr const char* players[]{ "所有", "可见的", "不可见的" };
+
+                                ImGui::Text("友军");
+                                ImGui::Indent();
+                                ImGui::PushID("Allies");
+                                ImGui::PushFont(fonts.segoeui);
+
+                                for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                                    bool isSelected = currentCategory == 0 && currentItem == i;
+
+                                    if ((i == 0 || !config->esp.players[0].enabled) && ImGui::Selectable(players[i], isSelected)) {
+                                        currentItem = i;
+                                        currentCategory = 0;
+                                    }
+                                }
+
+                                ImGui::PopFont();
+                                ImGui::PopID();
+                                ImGui::Unindent();
+                                ImGui::Text("敌人");
+                                ImGui::Indent();
+                                ImGui::PushID("Enemies");
+                                ImGui::PushFont(fonts.segoeui);
+
+                                for (int i = 0; i < IM_ARRAYSIZE(players); i++) {
+                                    bool isSelected = currentCategory == 1 && currentItem == i;
+
+                                    if ((i == 0 || !config->esp.players[3].enabled) && ImGui::Selectable(players[i], isSelected)) {
+                                        currentItem = i;
+                                        currentCategory = 1;
+                                    }
+                                }
+
+                                ImGui::PopFont();
+                                ImGui::PopID();
+                                ImGui::Unindent();
+                                if (bool isSelected = currentCategory == 2; ImGui::Selectable("Weapons", isSelected))
+                                    currentCategory = 2;
+
+                                ImGui::Text("投掷物");
+                                ImGui::Indent();
+                                ImGui::PushID("Projectiles");
+                                ImGui::PushFont(fonts.segoeui);
+                                static constexpr const char* projectiles[]{ "闪光弹", "手榴弹", "遥控炸弹", "弹射炸弹", "诱饵手雷", "燃烧瓶", "战术探测手雷", "烟雾弹", "雪球" };
+
+                                for (int i = 0; i < IM_ARRAYSIZE(projectiles); i++) {
+                                    bool isSelected = currentCategory == 3 && currentItem == i;
+
+                                    if (ImGui::Selectable(projectiles[i], isSelected)) {
+                                        currentItem = i;
+                                        currentCategory = 3;
+                                    }
+                                }
+
+                                ImGui::PopFont();
+                                ImGui::PopID();
+                                ImGui::Unindent();
+
+                                ImGui::Text("头号特训");
+                                ImGui::Indent();
+                                ImGui::PushID("Danger Zone");
+                                ImGui::PushFont(fonts.segoeui);
+                                static constexpr const char* dangerZone[]{ "哨戒机枪", "无人机", "现金", "现金袋子", "手枪武器箱", "轻武器箱", "重武器箱", "易爆炸油箱", "工具箱", "全甲", "半甲", "头盔", "降落伞", "高分目标", "平板升级卡", "Exo跳跃", "弹药箱", "雷达干扰器" };
+
+                                for (int i = 0; i < IM_ARRAYSIZE(dangerZone); i++) {
+                                    bool isSelected = currentCategory == 4 && currentItem == i;
+
+                                    if (ImGui::Selectable(dangerZone[i], isSelected)) {
+                                        currentItem = i;
+                                        currentCategory = 4;
+                                    }
+                                }
+
+                                ImGui::PopFont();
+                                ImGui::PopID();
+                                ImGui::ListBoxFooter();
+
+                            }
+                            ImGui::SameLine();
+                            if (ImGui::BeginChild("##child", { 400.0f, 0.0f })) {
+                                switch (currentCategory) {
+                                case 0:
+                                case 1: {
+                                    int selected = currentCategory * 3 + currentItem;
+                                    ImGui::Checkbox("启用", &config->esp.players[selected].enabled);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(85.0f);
+                                    ImGui::InputInt("字体", &config->esp.players[selected].font, 1, 294);
+                                    config->esp.players[selected].font = std::clamp(config->esp.players[selected].font, 1, 294);
+
+                                    ImGui::Separator();
+
+                                    constexpr auto spacing{ 200.0f };
+                                    ImGuiCustom::colorPicker("线条", config->esp.players[selected].snaplines);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("方框", config->esp.players[selected].box);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(95.0f);
+                                    ImGui::Combo("", &config->esp.players[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                                    ImGuiCustom::colorPicker("视线", config->esp.players[selected].eyeTraces);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("生命", config->esp.players[selected].health);
+                                    ImGuiCustom::colorPicker("头部白点", config->esp.players[selected].headDot);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("柱状血条", config->esp.players[selected].healthBar);
+                                    // ImGui::Combo("##HP side", &config->esp.players[selected].hpside, "Left\0Bottom\0Right\0");
+                                    ImGui::PushID("hotfix");
+                                    ImGuiCustom::colorPicker("名字", config->esp.players[selected].name);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("护甲", config->esp.players[selected].armor);
+                                    ImGuiCustom::colorPicker("金钱", config->esp.players[selected].money);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("甲条", config->esp.players[selected].armorBar);
+                                    // ImGui::Combo("##AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
+                                    ImGuiCustom::colorPicker("轮廓", config->esp.players[selected].outline);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("距离", config->esp.players[selected].distance);
+                                    ImGuiCustom::colorPicker("武器", config->esp.players[selected].activeWeapon);
+                                    ImGui::SameLine();
+                                    ImGui::Checkbox("死亡方框", &config->esp.players[selected].deadesp);
+                                    ImGui::SliderFloat("最大绘制距离", &config->esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                                    break;
+                                }
+                                case 2: {
+                                    ImGui::Checkbox("启用", &config->esp.weapon.enabled);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(85.0f);
+                                    ImGui::InputInt("字体", &config->esp.weapon.font, 1, 294);
+                                    config->esp.weapon.font = std::clamp(config->esp.weapon.font, 1, 294);
+
+                                    ImGui::Separator();
+
+                                    constexpr auto spacing{ 200.0f };
+                                    ImGuiCustom::colorPicker("线条", config->esp.weapon.snaplines);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("方框", config->esp.weapon.box);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(95.0f);
+                                    ImGui::Combo("", &config->esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                                    ImGuiCustom::colorPicker("弹药", config->esp.weapon.ammo);
+                                    ImGuiCustom::colorPicker("名字", config->esp.weapon.name);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("轮廓", config->esp.weapon.outline);
+                                    ImGuiCustom::colorPicker("距离", config->esp.weapon.distance);
+                                    ImGui::SliderFloat("最大绘制距离", &config->esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
+                                    break;
+                                }
+                                case 3: {
+                                    ImGui::Checkbox("启用", &config->esp.projectiles[currentItem].enabled);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(85.0f);
+                                    ImGui::InputInt("字体", &config->esp.projectiles[currentItem].font, 1, 294);
+                                    config->esp.projectiles[currentItem].font = std::clamp(config->esp.projectiles[currentItem].font, 1, 294);
+
+                                    ImGui::Separator();
+
+                                    constexpr auto spacing{ 200.0f };
+                                    ImGuiCustom::colorPicker("线条", config->esp.projectiles[currentItem].snaplines);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("方框", config->esp.projectiles[currentItem].box);
+                                    ImGui::SameLine();
+                                    ImGui::SetNextItemWidth(95.0f);
+                                    ImGui::Combo("", &config->esp.projectiles[currentItem].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                                    ImGuiCustom::colorPicker("名字", config->esp.projectiles[currentItem].name);
+                                    ImGui::SameLine();
+                                    ImGuiCustom::colorPicker("轮廓", config->esp.projectiles[currentItem].outline);
+                                    ImGuiCustom::colorPicker("距离", config->esp.projectiles[currentItem].distance);
+                                    ImGui::SliderFloat("最大绘制距离", &config->esp.projectiles[currentItem].maxDistance, 0.0f, 200.0f, "%.2fm");
+                                    break;
+                                }
+                                case 4: {
+                                    {
+                                        int selected = currentItem;
+                                        ImGui::Checkbox("启用", &config->esp.dangerZone[selected].enabled);
+                                        ImGui::SameLine();
+                                        ImGui::SetNextItemWidth(85.0f);
+                                        ImGui::InputInt("字体", &config->esp.dangerZone[selected].font, 1, 294);
+                                        config->esp.dangerZone[selected].font = std::clamp(config->esp.dangerZone[selected].font, 1, 294);
+
+                                        ImGui::Separator();
+
+                                        constexpr auto spacing{ 200.0f };
+                                        ImGuiCustom::colorPicker("线条", config->esp.dangerZone[selected].snaplines);
+                                        ImGui::SameLine();
+                                        ImGuiCustom::colorPicker("方框", config->esp.dangerZone[selected].box);
+                                        ImGui::SameLine();
+                                        ImGui::SetNextItemWidth(95.0f);
+                                        ImGui::Combo("", &config->esp.dangerZone[selected].boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
+                                        ImGuiCustom::colorPicker("名字", config->esp.dangerZone[selected].name);
+                                        ImGui::SameLine();
+                                        ImGuiCustom::colorPicker("轮廓", config->esp.dangerZone[selected].outline);
+                                        ImGuiCustom::colorPicker("距离", config->esp.dangerZone[selected].distance);
+                                        ImGui::SliderFloat("最大绘制距离", &config->esp.dangerZone[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+                                        break;
+                                    }
+                                }
+                                      ImGui::EndChild();
+
+                                }
+                            }
+
+
+
+                            ImGui::EndChild();
+                            ImGui::EndChild();
+                        }
+
+                        break;
+
+                    }
+                          //WallHack                
+                    case 4: {
+                        {
+                            ImGui::Columns(2, nullptr, false);
+                            ImGui::SetColumnOffset(1, 280.0f);
+                            ImGui::PushItemWidth(350.0f);
+
+                            ImGui::Combo("天空模板", &config->visuals.skybox, "默认\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
+                           /* if (!config->visuals.fullBright) {
+                                ImGui::PushID(5);
+                                ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "亮度: %.2f");
+                                ImGui::PopID();
+                            }
+                            else
+
+                            {
+                                ImGui::PushID(6);
+                                ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 0.0f, "禁用");
+                                ImGui::PopID();
+                            };*/
+                            ImGuiCustom::colorPicker("世界颜色", config->visuals.world);
+                            ImGuiCustom::colorPicker("天空颜色", config->visuals.sky);
+                            ImGui::Checkbox("禁用后期处理", &config->visuals.disablePostProcessing);
+                            //ImGui::Checkbox("FullBright", &config->visuals.fullBright);
+                            ImGui::Checkbox("击杀飞天", &config->visuals.inverseRagdollGravity);
+                            ImGui::Checkbox("移除雾气", &config->visuals.noFog);
+                            ImGui::Checkbox("移除3D天空", &config->visuals.no3dSky);
+                            ImGui::Checkbox("移除烟雾弹", &config->visuals.noSmoke);
+                            ImGui::Checkbox("移除模糊", &config->visuals.noBlur);
+                            ImGui::Checkbox("移除开镜黑边", &config->visuals.noScopeOverlay);
+                            ImGui::Checkbox("移除草地", &config->visuals.noGrass);
+                            ImGui::Checkbox("移除阴影", &config->visuals.noShadows);
+                            ImGui::Checkbox("线化烟雾", &config->visuals.wireframeSmoke);
+
+
+
+                        }
+                        ImGui::NextColumn();
+
+
+
+                        ImGui::Checkbox("移除枪械后坐力", &config->visuals.noAimPunch);
+                        ImGui::Checkbox("移除视觉后坐力", &config->visuals.noViewPunch);
+                        ImGui::Checkbox("移除手臂", &config->visuals.noHands);
+                        ImGui::Checkbox("移除袖子", &config->visuals.noSleeves);
+                        ImGui::Checkbox("移除武器", &config->visuals.noWeapons);
+                        ImGui::Combo("屏幕效果", &config->visuals.screenEffect, "无\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+
+                        ImGui::Combo("击中效果", &config->visuals.hitEffect, "无\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0头号特训\0");
+                        ImGui::SliderFloat("持续时间", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
+                        ImGui::Combo("击中效果1", &config->visuals.hitMarker, "无\0默认(穿越)\0");
+                        ImGui::SliderFloat("持续时间2", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+                        ImGui::Checkbox("颜色矫正", &config->visuals.colorCorrection.enabled);
+                        ImGui::SameLine();
+                        bool ccPopup = ImGui::Button("编辑");
+
+                        if (ccPopup)
+                            ImGui::OpenPopup("##popup");
+
+                        if (ImGui::BeginPopup("##popup")) {
+                            ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &config->visuals.colorCorrection.blue, 0.0f, 1.0f, "蓝色\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &config->visuals.colorCorrection.red, 0.0f, 1.0f, "红色\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &config->visuals.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &config->visuals.colorCorrection.saturation, 0.0f, 1.0f, "Sat\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &config->visuals.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &config->visuals.colorCorrection.green, 0.0f, 1.0f, "绿色\n%.3f"); ImGui::SameLine();
+                            ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &config->visuals.colorCorrection.yellow, 0.0f, 1.0f, "黄色\n%.3f"); ImGui::SameLine();
+                            ImGui::EndPopup();
+
+                        }
+                        ImGui::Checkbox("视野", &config->visuals.zoom);
+                        ImGui::SameLine();
+                        hotkey(config->visuals.zoomKey);
+                        ImGui::Checkbox("第三人称", &config->visuals.thirdperson);
+                        ImGui::SameLine();
+                        hotkey(config->visuals.thirdpersonKey);
+                        ImGui::SetNextItemWidth(140.0f);
+                        /*ImGui::Combo("Thirdperson Angles", &config->antiAim.thirdpersonMode, "假身\0假身\0Current Tick\0");
+
+                        if (config->visuals.thirdperson)
+                        {
+                            ImGui::Checkbox("死亡后启用", &config->visuals.deadThirdperson);
+                        }*/
+
+
+                        ImGui::PushItemWidth(290.0f);
+                        ImGui::PushID(0);
+                        ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "第三人称距离: %d");
+                        ImGui::PopID();
+                        //ImGui::PushID(1);
+                        //ImGui::SliderInt("", &config->visuals.viewmodelFov, -60, 150, "手臂长度: %d");
+                        //ImGui::PopID();
+                        ImGui::PushID(2);
+                        ImGui::SliderInt("", &config->visuals.fov, -60, 60, "视野大小: %d");
+                        ImGui::PopID();
+                        ImGui::PushID(3);
+                        ImGui::SliderInt("", &config->visuals.farZ, 0, 2000, "渲染距离: %d");
+                        ImGui::PopID();
+                        ImGui::PushID(4);
+                        ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "闪光弹去除程度: %d%%");
+                        ImGui::PopID();
+
+                        break;
+                    }
+                        //Visual
+                    case 5: {
+                        static auto itemIndex = 0;
+
+                        ImGui::PushItemWidth(90.0f);
+                        ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
+                            *out_text = game_data::weapon_names[idx].name;
+                            return true;
+                            }, nullptr, IM_ARRAYSIZE(game_data::weapon_names), 5);
+                        ImGui::PopItemWidth();
+
+                        auto& selected_entry = config->skinChanger[itemIndex];
+                        selected_entry.itemIdIndex = itemIndex;
+
+                        {
+                            ImGui::SameLine();
+                            ImGui::Checkbox("开启", &selected_entry.enabled);
+                            ImGui::Separator();
+                            ImGui::Columns(2, nullptr, false);
+                            ImGui::InputInt("皮肤种子", &selected_entry.seed);
+                            ImGui::InputInt("暗金计数器", &selected_entry.stat_trak);
+                            ImGui::SliderFloat("磨损度", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
+
+                            ImGui::Combo("皮肤选择", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
+                                *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
+                                return true;
+                                }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
+
+
+                            ImGui::Combo("品质", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
+                                *out_text = game_data::quality_names[idx].name;
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(game_data::quality_names), 5);
+
+                            if (itemIndex == 0) {
+                                ImGui::Combo("匕首", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                                    *out_text = game_data::knife_names[idx].name;
+                                    return true;
+                                    }, nullptr, IM_ARRAYSIZE(game_data::knife_names), 5);
+                            }
+                            else if (itemIndex == 1) {
+                                ImGui::Combo("手套", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                                    *out_text = game_data::glove_names[idx].name;
+                                    return true;
+                                    }, nullptr, IM_ARRAYSIZE(game_data::glove_names), 5);
+                            }
+                            else {
+                                static auto unused_value = 0;
+                                selected_entry.definition_override_vector_index = 0;
+                                ImGui::Combo("不可用的", &unused_value, "仅用于刀和手套\0");
+                            }
+
+                            ImGui::InputText("名称标签", selected_entry.custom_name, 32);
+
+                            ImGui::NextColumn();
+
+                            {
+                                ImGui::PushID("sticker");
+
+                                static auto selectedStickerSlot = 0;
+
+                                ImGui::PushItemWidth(-1);
+
+                                ImGui::ListBox("", &selectedStickerSlot, [](void* data, int idx, const char** out_text) {
+                                    static char elementName[64];
+                                    auto kit_vector_index = config->skinChanger[itemIndex].stickers[idx].kit_vector_index;
+                                    sprintf_s(elementName, "#%d (%s)", idx + 1, SkinChanger::stickerKits[kit_vector_index].name.c_str());
+                                    *out_text = elementName;
+                                    return true;
+                                    }, nullptr, 5, 5);
+
+                                ImGui::PopItemWidth();
+
+                                auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
+
+                                ImGui::Combo("印花选择", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text) {
+                                    *out_text = SkinChanger::stickerKits[idx].name.c_str();
+                                    return true;
+                                    }, nullptr, SkinChanger::stickerKits.size(), 10);
+
+                                ImGui::SliderFloat("磨损度", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
+                                ImGui::SliderFloat("大小比例", &selected_sticker.scale, 0.1f, 5.0f);
+                                ImGui::SliderFloat("旋转角度", &selected_sticker.rotation, 0.0f, 360.0f);
+
+                                ImGui::PopID();
+                            }
+                            selected_entry.update();
+
+                            ImGui::Columns(1);
+
+                            ImGui::Separator();
+
+
+
+                            //皮肤搜索开始
+                           /* {
+                                已经删除 倒卖死妈
+
+                            }*/
+                            
+                            
+                            
+                            ImGui::Combo("CT 玩家模型", &config->visuals.playerModelCT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
+                            ImGui::Combo("T 玩家模型", &config->visuals.playerModelT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
+                            /*ImGui::SliderFloat("##Custom Viewmodel X", &config->visuals.viewmodel_x, -100, 100, "自定义手臂长度X轴: %.2f");
+                            ImGui::SliderFloat("##Custom Viewmodel Y", &config->visuals.viewmodel_y, -100, 100, "自定义手臂长度Y轴: %.2f");
+                            ImGui::SliderFloat("##Custom Viewmodel Z", &config->visuals.viewmodel_z, -100, 100, "自定义手臂长度Z轴: %.2f");*/
+                            ImGui::Checkbox("旋转沙鹰", &config->visuals.deagleSpinner);
+                            if (ImGui::Button("刷新修改", { 130.0f, 30.0f }))
+                                SkinChanger::scheduleHudUpdate();
+                            //Visuals::customViewmodel();
+                        }
+
+                        break;
+                    }
+
+                    case 6: {
+                        ImGui::Columns(2, nullptr, false);
+                        ImGui::SetColumnOffset(1, 230.0f);
+                        ImGui::Checkbox("防止系统挂机自动踢出", &config->misc.antiAfkKick);
+                        ImGui::Checkbox("自动连跳", &config->misc.bunnyHop);
+                        /*ImGui::SliderInt("连跳击中率", &config->misc.bhopHitchance, 0, 100, "%d%");
+                        ImGui::SliderInt("最小击中率", &config->misc.bhopMinHits, 0, 20, "%d%");
+                        ImGui::SliderInt("最大击中率", &config->misc.bhopMaxHits, 0, 20, "%d%");*/
+                        ImGui::Checkbox("自动转向", &config->misc.autoStrafe);
+                        ImGui::Checkbox("快速蹲下", &config->misc.fastDuck);
+                        ImGui::Checkbox("滑步不演", &config->misc.moonwalk);
+                        ImGui::Checkbox("地形边缘自动跳跃", &config->misc.edgejump);
+                        ImGui::SameLine();
+                        hotkey(config->misc.edgejumpkey);
+                        ImGui::Checkbox("慢走", &config->misc.slowwalk);
+                        ImGui::SameLine();
+                        hotkey(config->misc.slowwalkKey);
+                        ImGui::Checkbox("狙击准心", &config->misc.sniperCrosshair);
+                        ImGui::Checkbox("后坐力准心", &config->misc.recoilCrosshair);
+                        ImGui::Checkbox("自动手枪 ", &config->misc.autoPistol);
+                        ImGui::Checkbox("自动上弹", &config->misc.autoReload);
+                        ImGui::Checkbox("自动接受", &config->misc.autoAccept);
+                        ImGui::Checkbox("雷达透视", &config->misc.radarHack);
+                        ImGui::Checkbox("显示段位", &config->misc.revealRanks);
+                        ImGui::Checkbox("显示金钱", &config->misc.revealMoney);
+                        ImGui::Checkbox("揭发嫌疑人", &config->misc.revealSuspect);
+                        ImGuiCustom::colorPicker("观众名单 ", config->misc.spectatorList);
+                        ImGuiCustom::colorPicker("水印", config->misc.watermark);
+                        ImGui::Checkbox("修复自瞄精度", &config->misc.fixAnimationLOD);
+                        ImGui::Checkbox("修复自瞄部位", &config->misc.fixBoneMatrix);
+                        ImGui::Checkbox("修复物体运动", &config->misc.fixMovement);
+                        ImGui::Checkbox("模型绘测", &config->misc.disableModelOcclusion);
+                        ImGui::SliderFloat("纵横比", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f ");
+                        ImGui::NextColumn();
+                        ImGui::Checkbox("界面UI透明化", &config->misc.disablePanoramablur);
+                        /*ImGui::Combo("组名选择", &config->misc.clantagshadow, "ShadowWare\0自定义组名\0时钟组名\0");
+                        switch (config->misc.clantagshadow) {
+                        case 0: {
+                            ImGui::Text("组名:ShadowWare");
+                            break;
+                        }
+                        case 1: {
+                            ImGui::Checkbox("动态组名", &config->misc.animatedClanTag);
+                            ImGui::Checkbox("自定义组名", &config->misc.customClanTag);
+                            ImGui::SameLine();
+                            ImGui::PushItemWidth(120.0f);
+                            ImGui::PushID(0);
+                            if (ImGui::InputText("", &config->misc.clanTag))
+                                Misc::updateClanTag(true);
+                            ImGui::PopID();
+                            break;
+                        }
+                        case 2: {
+                            ImGui::Checkbox("时钟组名 ", &config->misc.clocktag);
+                            break;
+                        }
+                        }*/
+
+                        ImGui::PushItemWidth(120.0f);
+
+                        ImGui::Checkbox("击杀嘲讽", &config->misc.killMessage);
+                        ImGui::SameLine();
+                        ImGui::PushItemWidth(120.0f);
+                        ImGui::PushID(1);
+                        ImGui::InputText("", &config->misc.killMessageString);
+                        ImGui::PopID();
+                        /*ImGui::Combo("Fake功能选项", &config->misc.nameChangeSelection, "关闭\0假封禁\0假交易(开箱)\0窃取(自定义)名字");
+                        if (config->misc.nameChangeSelection == 1)
+                        {
+                            ImGui::PushID(3);
+                            ImGui::SetNextItemWidth(100.0f);
+                            ImGui::Combo("", &config->misc.banColor, "白色\0红色\0紫色\0绿色\0浅绿色\0青色\0浅白色\0灰色\0黄色\0灰色2\0浅蓝色\0紫灰色\0蓝色\0粉色\0暗橙色\0橙色\0");
+                            ImGui::PopID();
+                            ImGui::SameLine();
+                            ImGui::PushID(4);
+                            ImGui::InputText("", &config->misc.banText);
+                            ImGui::PopID();
+                            ImGui::SameLine();
+                            if (ImGui::Button("假封禁"))
+                                Misc::fakeBan(true);
+                        }
+                        else if (config->misc.nameChangeSelection == 2)
+                        {
+                            ImGui::SetNextItemWidth(200.0f);
+                            ImGuiCustom::MultiCombo("Fake Item Flags", config->misc.fakeItemFlags, config->misc.selectedFakeItemFlags, 4);
+                            ImGui::SetNextItemWidth(200.0f);
+                            ImGui::Combo("阵营", &config->misc.fakeItemTeam, "警家\0匪家");
+                            ImGui::SetNextItemWidth(200.0f);
+                            ImGui::Combo("Fake信息选项", &config->misc.fakeItemMessageType, "开箱获得的\0交易获得的\0");
+                            ImGui::SetNextItemWidth(200.0f);
+                            ImGui::Combo("武器选择", &config->misc.fakeItemType, "AK-47\0AUG\0AWP\0Bayonet\0Bowie Knife\0Butterfly Knife\0CZ75-Auto\0Classic Knife\0Desert Eagle\0Dual Berettas\0FAMAS\0Falchion Knife\0Five-SeveN\0Flip Knife\0G3SG1\0Galil AR\0Glock-18\0Gut Knife\0Huntsman Knife\0Karambit\0M249\0M4A1-S\0M4A4\0M9 Bayonet\0MAC-10\0MAG-7\0MP5-SD\0MP7\0MP9\0Navaja Knife\0Negev\0Nomad Knife\0Nova\0P2000\0P250\0P90\0PP-Bizon\0Paracord Knife\0R8 Revolver\0SCAR-20\0SG 553\0SSG 08\0Sawed-Off\0Shadow Daggers\0Skeleton Knife\0Spectral Shiv\0Stiletto Knife\0Survival Knife\0Talon Knife\0Tec-9\0UMP-45\0USP-S\0Ursus Knife\0XM1014\0Hand Wraps\0Moto Gloves\0Specialist Gloves\0Sport Gloves\0Bloodhound Gloves\0Hydra Gloves\0Driver Gloves\0");
+                            ImGui::SetNextItemWidth(200.0f);
+                            ImGui::Combo("皮肤颜色(质量)", &config->misc.fakeItemRarity, "白色品质\0淡蓝色品质\0蓝色品质\0紫色品质\0粉色品质\0红色品质\0橙色|金色品质\0");
+                            ImGui::Combo("玩家颜色", &config->misc.fakeItemPlayerColor, "黄色\0绿色\0蓝色\0紫色\0橙色");
+                            ImGui::InputText("玩家名字", &config->misc.fakeItemPlayerName);
+                            ImGui::InputText("皮肤名字", &config->misc.fakeItemName);
+                            if (ImGui::Button("开启假皮肤"))
+                                Misc::fakeItem(true);
+                        }
+                        else if (config->misc.nameChangeSelection == 3)
+                        {
+                            ImGui::Checkbox("名字窃取", &config->misc.nameStealer);
+                            ImGui::InputText("自定义名字", &config->misc.customName);
+                            if (ImGui::Button("改变昵称"))
+                                Misc::setName(true);
+                        }*/
+
+                        ImGui::Checkbox("快速下包", &config->misc.fastPlant);
+                        //ImGui::Checkbox("C4伤害器", &config->misc.bombDamage);
+                        ImGuiCustom::colorPicker("C4计时器", config->misc.bombTimer);
+                        ImGui::Checkbox("快速换弹", &config->misc.quickReload);
+                        if (ImGui::Button("开启自定义击中音效"))
+                            config->misc.hitSound = 5;
+
+                        ImGui::Combo("击中音效", &config->misc.hitSound, "无\0金属\0SK\0铃铛声\0玻璃声音\0自定义\0");
+                        if (config->misc.hitSound == 5) {
+                            ImGui::InputText("击中音效文件名", &config->misc.customHitSound);
+                            if (ImGui::IsItemHovered())
+                                ImGui::SetTooltip("请在CSGO根目录csgo/sound/里面放入音效文件xxx.wav");
+                        }
+                        if (ImGui::Button("开启自定义击杀音效"))
+                            config->misc.killSound = 5;
+
+                        ImGui::PushID(5);
+                        ImGui::Combo("击杀音效", &config->misc.killSound, "无\0金属\0SK\0铃铛声\0玻璃声音\0自定义\0");
+                        if (config->misc.killSound == 5) {
+                            ImGui::InputText("击杀音效文件名", &config->misc.customKillSound);
+                            if (ImGui::IsItemHovered())
+                                ImGui::SetTooltip("请在CSGO根目录csgo/sound/里面放入音效文件xxx.wav");
+                        }
+                        ImGui::PopID();
+                        ImGui::SetNextItemWidth(90.0f);
+
+                        ImGui::Text("快速打针");
+                        ImGui::SameLine();
+                        hotkey(config->misc.quickHealthshotKey);
+                        ImGui::Checkbox("投掷物预测线", &config->misc.nadePredict);
+                        ImGui::Checkbox("修复头号特训信号", &config->misc.fixTabletSignal);
+                        ImGui::SetNextItemWidth(120.0f);
+                        ImGui::SliderFloat("最大视角变化", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+                        ImGui::Checkbox("强开优先", &config->misc.fakePrime);
+                        ImGui::Text("——————游戏声音——————");
+                        static int currentCategory{ 0 };
+                        ImGui::PushItemWidth(110.0f);
+                        ImGui::Combo("", &currentCategory, "本人\0友军\0敌人\0");
+                        ImGui::PopItemWidth();
+                        ImGui::SliderInt("全局音效", &config->sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("爆头音效", &config->sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("开枪声音", &config->sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("脚步声音", &config->sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("鸡叫声", &config->sound.chickenVolume, 0, 200, "%d%%");
+                        ImGui::Columns(1);
+                        break;
+                    }
+                        //Misc
+                    case 7: {
+                        static char buffer[16];
+                        {
+                            /* static float Gavno = 0.4f;
+                             Gavno -= 0.01f;
+                             if (Gavno < 0.f)
+                                 Gavno += 1.f;
+
+                             static float Gavno2 = 0.1f;
+                             Gavno2 -= 0.01f;
+                             if (Gavno2 < 0.f)
+                                 Gavno2 += 1.f;
+                             ImGui::GetWindowDrawList()->AddText(ImVec2(ImGui::GetWindowPos().x + 14, ImGui::GetWindowPos().y + 18), ImColor(0.4f, 0.8f, 0.8f, Gavno), "Shadow Ware No.1");
+                             ImGui::GetWindowDrawList()->AddText(ImVec2(ImGui::GetWindowPos().x + 22, ImGui::GetWindowPos().y + 18), ImColor(0.8f, 0.4f, 0.8f, Gavno2), "Shadow Ware No.1");
+                             ImGui::GetWindowDrawList()->AddText(ImVec2(ImGui::GetWindowPos().x + 18, ImGui::GetWindowPos().y + 19), ImColor(0.8f, 0.8f, 0.8f, 0.8f), "Shadow Ware No.1");*/
+
+                            ImGui::Columns(2, nullptr, false);
+
+                            ImGui::PushItemWidth(160.0f);
+
+                            auto& configItems = config->getConfigs();
+                            static int currentConfig = -1;
+
+                            if (static_cast<size_t>(currentConfig) >= configItems.size())
+                                currentConfig = -1;
+
+                            static std::string buffer;
+
+                            if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
+                                auto& vector = *static_cast<std::vector<std::string>*>(data);
+                                *out_text = vector[idx].c_str();
+                                return true;
+                                }, &configItems, configItems.size(), 10) && currentConfig != -1)
+                                buffer = configItems[currentConfig];
+
+
+                                ImGui::PushID(0);
+                                if (ImGui::InputText("", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
+                                    if (currentConfig != -1)
+                                        config->rename(currentConfig, buffer.c_str());
+                                }
+                                ImGui::PopID();
+
+
+
+                                if (ImGui::Button("刷新参数", { 160.0F, 25.0F }))
+                                    //config->Config::Config("ShadowWare");// old  文件夹名字
+                                    config->listConfigs(); //New 
+
+                                if (ImGui::Button("创建参数", { 100.0f, 25.0f }))
+                                    config->add(buffer.c_str());
+
+                                if (ImGui::Button("重置参数", { 100.0f, 25.0f }))
+                                    ImGui::OpenPopup("重置参数");
+
+                                if (ImGui::BeginPopup("重置参数")) {
+                                    static constexpr const char* names[]{ "确定重置" };
+                                    for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
+                                        if (i == 1) ImGui::Separator();
+
+                                        if (ImGui::Selectable(names[i])) {
+                                            switch (i) {
+                                            case 0: config->reset(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
+                                            }
+                                        }
+                                    }
+                                    ImGui::EndPopup();
+                                }
+                                ImGui::PushItemWidth(100.0f);
+                                if (currentConfig != -1) {
+                                    if (ImGui::Button("加载参数", { 100.0f, 25.0f })) {
+                                        config->load(currentConfig);
+                                        SkinChanger::scheduleHudUpdate();
+                                        Misc::updateClanTag(true);
+                                    }
+
+                                    if (ImGui::Button("保存参数", { 100.0f, 25.0f }))
+                                        config->save(currentConfig);
+
+                                    if (ImGui::Button("删除参数", { 100.0f, 25.0f }))
+                                        config->remove(currentConfig);
+                                }
+
+
+
+                                ImGui::NextColumn();
+                                ImGui::TextUnformatted("ShadowWare菜单热键");
+                                ImGui::SameLine();
+                                hotkey(config->misc.menuKey);
+
+                                //ImGui::Checkbox("LUA编辑", &LUA_WINDOW);
+
+                                //if (ImGui::Button("加载LUA", { 100.0f, 25.0f })) 
+                                //c_lua::luaSettingLoad();
+                                //if (ImGui::Button("保存LUA", { 100.0f, 25.0f }))
+
+
+                                
+
+                                if (ImGui::Button("退出Shadow Ware"))
+                                    hooks->uninstall();
+
+
+
+                                break;
+                        }
+                        //Config  & LUA
+
+                    }
                     }
                 }
+                ImGui::EndChild();
             }
-            ImGui::EndPopup();
         }
-        if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config->load(currentConfig);
-                updateColors();
-                SkinChanger::scheduleHudUpdate();
-                Misc::updateClanTag(true);
-            }
-            if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config->save(currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
-                config->remove(currentConfig);
-        }
-        ImGui::Columns(1);
-        if (!contentOnly)
-            ImGui::End();
-}
 
-void GUI::renderGuiStyle2() noexcept
-{
-    ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
-
-    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
-        if (ImGui::BeginTabItem("Aimbot")) {
-            renderAimbotWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Anti aim")) {
-            renderAntiAimWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Triggerbot")) {
-            renderTriggerbotWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Backtrack")) {
-            renderBacktrackWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Glow")) {
-            renderGlowWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Chams")) {
-            renderChamsWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Esp")) {
-            renderEspWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Visuals")) {
-            renderVisualsWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Skin changer")) {
-            renderSkinChangerWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Sound")) {
-            renderSoundWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Style")) {
-            renderStyleWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Misc")) {
-            renderMiscWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Reportbot")) {
-            renderReportbotWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Config")) {
-            renderConfigWindow(true);
-            ImGui::EndTabItem();
-        }
-        ImGui::EndTabBar();
     }
 
-    ImGui::End();
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

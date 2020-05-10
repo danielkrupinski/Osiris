@@ -81,6 +81,7 @@ public:
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
+        int amode{ 0 };
     } backtrack;
 
     struct {
