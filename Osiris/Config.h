@@ -88,8 +88,8 @@ public:
         bool pitch{ false };
         bool yaw{ false };
         bool Slowwalk{ false };
-        int Slowwalkspeed{ 0 };
-        int Slowwalkkey{ 0 };
+        int slowwalkspeed{ 0 };
+        int slowwalkkey{ 0 };
         float pitchAngle{ 0.0f };
     } antiAim;
 
