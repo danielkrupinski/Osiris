@@ -288,6 +288,7 @@ public:
         std::string customHitSound;
         PurchaseList purchaseList;
         ColorToggle menucol = { 0.f,0.f,0.f };
+        bool thirdPersonAnglesSet{ false };
     } misc;
 
     struct {

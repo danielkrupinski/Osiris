@@ -132,7 +132,7 @@ void Visuals::thirdperson(FrameStage stage, Vector angle) noexcept
             if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson) && localPlayer && localPlayer->isAlive())
             {
             memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
-                if (config->globals.thirdPersonAnglesSet && stage == FrameStage::RENDER_START)
+                if (config->misc.thirdPersonAnglesSet && stage == FrameStage::RENDER_START)
                 {
                     *(Vector*)((uintptr_t)(localPlayer.get()) + 0x31D8) = angle;
                 }
