@@ -256,7 +256,7 @@ void GUI::hotkey(int& key) noexcept
 void GUI::renderMenuBar() noexcept
 {
     ImGui::SetNextWindowSize({ 700.0f, 700.0f });
-    ImGui::Begin("Shadow Ware V0.7Beta", nullptr, windowFlags);
+    ImGui::Begin("ZyCheat", nullptr, windowFlags);
     {
         {
             ImGui::SetCursorPos(ImVec2(10, 40));
@@ -266,7 +266,7 @@ void GUI::renderMenuBar() noexcept
 
             ImGui::SameLine();
 
-            ImGui::BeginChild("Shadow Ware V0.7Beta", ImVec2(600, 680), true, 0);
+            ImGui::BeginChild("ZyCheat", ImVec2(600, 680), true, 0);
             {
                 ImGui::Separator();
                 switch (tab_int) {
