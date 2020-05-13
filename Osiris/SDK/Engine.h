@@ -7737,4 +7737,4 @@ void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool po
 	}
 }
 }
-
+}
