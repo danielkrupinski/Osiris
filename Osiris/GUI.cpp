@@ -1095,10 +1095,80 @@ case 1: {
 
 
                             //皮肤搜索开始
-                           /* {
-                                已经删除 倒卖死妈
+                                                  {
+                            if (ImGui::Button("皮肤搜索", { 178.0f,25.0f }))
+                            {
+                                ImGui::OpenPopup("Search");
+                            }
+                            if (ImGui::BeginPopup("Search"))
+                            {
+                                static char skin_name[256];
+                                static int select_current = 0;
 
-                            }*/
+                                ImGui::Text("皮肤搜索");
+                                ImGui::Separator();
+                                ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
+                                ImGui::Text("请在上方输入皮肤拼音或枪械名字");
+                                ImGui::Separator();
+                                if (ImGui::Button("开始搜索"))
+                                {
+                                    search_result.clear();
+
+                                    for (auto skin : SkinChanger::skinKits)
+                                    {
+                                        auto skin_copy = skin;
+
+                                        char in_buffer[1024];
+                                        strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                                        char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                                        memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                                        if (is_utf8_string(in_buffer))
+                                            pinyin_utf8(in_buffer, out_buffer);
+                                        else
+                                            pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
+
+                                        if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
+                                        {
+                                            skin_copy.name = skin_copy.name + " (" + out_buffer + ")";
+                                            search_result.push_back(skin_copy);
+                                        }
+                                    }
+                                }
+                                ImGui::SameLine();
+                                if (ImGui::Button("确定"))
+                                {
+                                    for (int i = 0; i < SkinChanger::skinKits.size(); i++)
+                                    {
+                                        if (SkinChanger::skinKits[i].id == search_result[select_current].id)
+                                        {
+                                            selected_entry.paint_kit_vector_index = i;
+                                            ImGui::CloseCurrentPopup();
+                                        }
+                                    }
+                                }
+                                ImGui::ListBox("", &select_current,
+                                    [](void* data, int idx, const char** out_text)  -> bool
+                                    {
+                                        auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                                        *out_text = vector[idx].name.c_str();
+                                        return true;
+                                    },
+                                    &search_result, search_result.size(), 10);
+
+                                if (ImGui::Button("退出搜索菜单"))
+                                {
+                                    ImGui::CloseCurrentPopup();
+                                }
+
+                                ImGui::EndPopup();
+
+                            }
+
+                        }
+
                             
                             
                             
