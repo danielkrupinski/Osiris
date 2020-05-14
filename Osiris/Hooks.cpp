@@ -204,16 +204,16 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces->engine->isInGame() && !interfaces->studioRender->isForcedMaterialOverride()) {
-        if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
-            return;
+    if (interfaces->studioRender->isForcedMaterialOverride())
+        return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
-        static Chams chams;
-        if (chams.render(ctx, state, info, customBoneToWorld))
-            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        interfaces->studioRender->forcedMaterialOverride(nullptr);
-    } else
+    if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
+        return;
+
+    static Chams chams;
+    if (chams.render(ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    interfaces->studioRender->forcedMaterialOverride(nullptr);  
 }
 
 static bool __stdcall svCheatsGetBool() noexcept
