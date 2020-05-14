@@ -88,7 +88,7 @@ jobs:
       run: |
             git clone https://github.com/playday3008/Osiris-GOESP-inj.git
             cd .\Osiris-GOESP-inj\src
-            & '.\__asm_emit generator.exe' 200 1
+            & '.\__asm_emit generator.exe' (Get-Random -Minimum 150 -Maximum 500) 1
             Remove-Item -Path Osiris-inj\JunkDef.h
             Move-Item -Path junk.h -Destination Osiris-inj\JunkDef.h
             cd .\Osiris-inj
