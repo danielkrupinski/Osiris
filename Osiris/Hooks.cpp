@@ -50,7 +50,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     static const auto once = [](HWND window) noexcept {
         netvars = std::make_unique<Netvars>();
         eventListener = std::make_unique<EventListener>();
-        config = std::make_unique<Config>("GOESP");
+        config = std::make_unique<Config>("Osiris");
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
