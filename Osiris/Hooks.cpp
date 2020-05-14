@@ -518,6 +518,8 @@ void Hooks::install() noexcept
     }
 }
 
+extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
+
 static DWORD WINAPI unload(HMODULE module) noexcept
 {
     Sleep(100);
@@ -533,6 +535,8 @@ static DWORD WINAPI unload(HMODULE module) noexcept
     interfaces.reset();
     gui.reset();
     config.reset();
+
+    _CRT_INIT(module, DLL_PROCESS_DETACH, nullptr);
 
     FreeLibraryAndExitThread(module, 0);
 }
