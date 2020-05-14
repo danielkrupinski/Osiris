@@ -47,6 +47,20 @@
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+    static const auto once = [](HWND window) noexcept {
+        netvars = std::make_unique<Netvars>();
+        eventListener = std::make_unique<EventListener>();
+        config = std::make_unique<Config>("GOESP");
+
+        ImGui::CreateContext();
+        ImGui_ImplWin32_Init(window);
+        gui = std::make_unique<GUI>();
+
+        hooks->install();
+
+        return true;
+    }(window);
+
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config->misc.menuKey
         || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config->misc.menuKey == VK_LBUTTON)
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config->misc.menuKey == VK_RBUTTON)
@@ -54,7 +68,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config->misc.menuKey == HIWORD(wParam) + 4)) {
         gui->open = !gui->open;
         if (!gui->open) {
-           // ImGui::GetIO().MouseDown[0] = false;
+            // ImGui::GetIO().MouseDown[0] = false;
             interfaces->inputSystem->resetInputState();
         }
     }
@@ -472,10 +486,16 @@ static void __stdcall renderSmokeOverlay(bool update) noexcept
         hooks->viewRender.callOriginal<void, 41>(update);
 }
 
-Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
+Hooks::Hooks(HMODULE module) noexcept
 {
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+
+    this->module = module;
+
+    // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
+    interfaces = std::make_unique<const Interfaces>();
+    memory = std::make_unique<const Memory>();
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
@@ -488,6 +508,18 @@ void Hooks::install() noexcept
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
     **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
+    
+    bspQuery.init(interfaces->engine->getBSPTreeQuery());
+    client.init(interfaces->client);
+    clientMode.init(memory->clientMode);
+    engine.init(interfaces->engine);
+    gameEventManager.init(interfaces->gameEventManager);
+    modelRender.init(interfaces->modelRender);
+    panel.init(interfaces->panel);
+    sound.init(interfaces->sound);
+    surface.init(interfaces->surface);
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    viewRender.init(memory->viewRender);
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
