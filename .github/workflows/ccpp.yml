@@ -93,7 +93,7 @@ jobs:
             Move-Item -Path junk.h -Destination Osiris-inj\JunkDef.h
             cd .\Osiris-inj
             msbuild Osiris-inj.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m
-            Copy-Item -Path D:\a\GOESP\GOESP\Osiris-GOESP-inj\src\Osiris-inj\Release\Osiris-inj.exe -Destination "D:\a\GOESP\GOESP\GOESP\ready\Osiris-Injector.exe"
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris-GOESP-inj\src\Osiris-inj\Release\Osiris-inj.exe -Destination "D:\a\Osiris\Osiris\Osiris\ready\Osiris-Injector.exe"
       shell: pwsh
       
     - uses: actions/upload-artifact@v1
