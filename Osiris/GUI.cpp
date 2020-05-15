@@ -1894,9 +1894,9 @@ void GUI::renderMenuBar() noexcept
                             ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
                             ImGui::SliderInt("Style", &config->glow[currentItem].style, 0, 3);
                             ImGui::Columns(1);
-                            ImGui::EndChild();
+                            
                         }
-
+                        ImGui::EndChild();
 
                         ImGui::Separator();
 
@@ -1945,9 +1945,10 @@ void GUI::renderMenuBar() noexcept
                             ImGui::SetNextItemWidth(220.0f);
                             ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
 
-                            ImGui::EndChild();
+                           
                         }
-
+                        ImGui::EndChild();
+                        
                         ImGui::Separator();
 
                         ImGui::BeginChild("Esp", { 500.0f,500.0f });
@@ -2165,23 +2166,22 @@ void GUI::renderMenuBar() noexcept
 
 
 
-                            ImGui::EndChild();
-                            ImGui::EndChild();
+                           
 
 
                             
 
                         }
+                        ImGui::EndChild();
+                       
                         //WallHack                
                         break;
  }
-                          //WallHack
+                          
                     case 4: {
                         {
                             ImGui::Columns(2, nullptr, false);
                             ImGui::SetColumnOffset(1, 280.0f);
-                            ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
-                            ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
                             ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
                             ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
                             ImGui::Checkbox("No fog", &config->visuals.noFog);
@@ -2434,8 +2434,8 @@ void GUI::renderMenuBar() noexcept
 
 
 
-                            ImGui::Combo("PlayerModel CT", &config->visuals.playerModelCT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
-                            ImGui::Combo("PlayerModel T", &config->visuals.playerModelT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
+                            ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
+                            ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
                             /*ImGui::SliderFloat("##Custom Viewmodel X", &config->visuals.viewmodel_x, -100, 100, "自定义手臂长度X轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Y", &config->visuals.viewmodel_y, -100, 100, "自定义手臂长度Y轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Z", &config->visuals.viewmodel_z, -100, 100, "自定义手臂长度Z轴: %.2f");*/
