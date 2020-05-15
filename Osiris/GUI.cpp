@@ -18,8 +18,8 @@
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
 #include "SDK/SearchEngine.h"
-int tab_int = 0;
-int tab_intenglish = 0;
+int tab_int;
+int tab_intenglish;
 static std::vector<SkinChanger::PaintKit> search_result;
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
@@ -308,6 +308,7 @@ void GUI::renderMenuBar() noexcept
                         currentWeapon = 0;
                         ImGui::NewLine();
                         break;
+                    }
                     case 1: {
                         static int currentPistol{ 0 };
                         static constexpr const char* pistols[]{ "所有手枪", "格洛克18", "P2000", "USP-S", "双持贝瑞塔", "P250", "Tec-9", "FN57", "CZ-75", "沙漠之鹰", "R8左轮" };
@@ -384,7 +385,7 @@ void GUI::renderMenuBar() noexcept
                         currentWeapon = currentRifle ? currentRifle + 23 : 38;
                         break;
                     }
-
+                    }
                           ImGui::PopID();
                           ImGui::SameLine();
                           ImGui::Combo("自瞄&扳机", &config->backtrack.amode, "自瞄\0扳机\0");
@@ -584,9 +585,9 @@ void GUI::renderMenuBar() noexcept
 
                           }
                           
-                    }
-                    }
                     
+                    
+                    break;
                 }
                 //Legit
 
@@ -1210,6 +1211,7 @@ void GUI::renderMenuBar() noexcept
                     case 6: {
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
+                        ImGui::Combo("Language/语言选择", &config->misc.language, "中文/Chinese\0英语/English\0");
                         ImGui::Checkbox("防止系统挂机自动踢出", &config->misc.antiAfkKick);
                         ImGui::Checkbox("自动连跳", &config->misc.bunnyHop);
                         /*ImGui::SliderInt("连跳击中率", &config->misc.bhopHitchance, 0, 100, "%d%");
@@ -1351,7 +1353,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("购买清单", &config->misc.purchaseList.enabled);
                         ImGui::SameLine();
 
-                        ImGui::PushID("Purchase List");
+                        ImGui::PushID("购买清单");
                         if (ImGui::Button("..."))
                             ImGui::OpenPopup("");
 
@@ -1463,7 +1465,7 @@ void GUI::renderMenuBar() noexcept
 
 
                                 ImGui::NextColumn();
-                                ImGui::TextUnformatted("ShadowWare菜单热键");
+                                ImGui::TextUnformatted("Zy-Cheat菜单热键");
                                 ImGui::SameLine();
                                 hotkey(config->misc.menuKey);
 
@@ -1476,7 +1478,7 @@ void GUI::renderMenuBar() noexcept
 
                                 
 
-                                if (ImGui::Button("退出Shadow Ware"))
+                                if (ImGui::Button("退出Zy-Cheat"))
                                     hooks->uninstall();
 
 
@@ -1533,7 +1535,7 @@ void GUI::renderMenuBar() noexcept
                 ImGui::SetCursorPos(ImVec2(10, 40));
 
                 if (ImGui::Button("Aimbot", ImVec2(80, 80)))
-                    tab_int = 0;
+                    tab_intenglish = 0;
 
                 ImGui::SameLine();
 
@@ -2451,6 +2453,7 @@ void GUI::renderMenuBar() noexcept
                     case 6: {
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
+                        ImGui::Combo("Language/语言选择", &config->misc.language, "中文/Chinese\0英语/English\0");
                         ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
                         ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
                         ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
@@ -2682,37 +2685,37 @@ void GUI::renderMenuBar() noexcept
                 ImGui::SetCursorPos(ImVec2(10, 120));
 
                 if (ImGui::Button("Updating", ImVec2(80, 80)))
-                    tab_int = 1;
+                    tab_intenglish = 1;
 
                 ImGui::SetCursorPos(ImVec2(10, 200));
 
                 if (ImGui::Button("AA", ImVec2(80, 80)))
-                    tab_int = 2;
+                    tab_intenglish = 2;
 
                 ImGui::SetCursorPos(ImVec2(10, 280));
 
                 if (ImGui::Button("WallHack", ImVec2(80, 80)))
-                    tab_int = 3;
+                    tab_intenglish = 3;
 
                 ImGui::SetCursorPos(ImVec2(10, 360));
 
                 if (ImGui::Button("Visual", ImVec2(80, 80)))
-                    tab_int = 4;
+                    tab_intenglish = 4;
 
                 ImGui::SetCursorPos(ImVec2(10, 440));
 
                 if (ImGui::Button("Skinchanger", ImVec2(80, 80)))
-                    tab_int = 5;
+                    tab_intenglish = 5;
 
                 ImGui::SetCursorPos(ImVec2(10, 520));
 
                 if (ImGui::Button("Misc", ImVec2(80, 80)))
-                    tab_int = 6;
+                    tab_intenglish = 6;
 
                 ImGui::SetCursorPos(ImVec2(10, 600));
 
                 if (ImGui::Button("CFG", ImVec2(80, 80)))
-                    tab_int = 7;
+                    tab_intenglish = 7;
 
                 }
                 break;
