@@ -47,8 +47,8 @@ ImVec4 txt(float f) {
 
 GUI::GUI() noexcept
 {
-    ImGui::CreateContext();
-    ImGui_ImplWin32_Init(FindWindowW(L"Valve001", NULL));
+    /*ImGui::CreateContext();
+    ImGui_ImplWin32_Init(FindWindowW(L"Valve001", NULL));*/
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
@@ -223,8 +223,8 @@ GUI::GUI() noexcept
         ImFontConfig cfg;
         cfg.OversampleV = 3;
 
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/汉仪铸字美心体W.TTF", 15.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/汉仪铸字美心体W.TTF", 16.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/汉仪铸字美心体W.TTF", 13.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/汉仪铸字美心体W.TTF", 14.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
 
 
     }

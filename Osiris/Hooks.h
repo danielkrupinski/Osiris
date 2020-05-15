@@ -14,7 +14,7 @@ struct SoundInfo;
 
 class Hooks {
 public:
-    Hooks(HMODULE cheatModule);
+    Hooks(HMODULE module) noexcept;
 
     void install() noexcept;
     void uninstall() noexcept;
@@ -62,17 +62,17 @@ public:
         size_t length = 0;
     };
 
-    Vmt bspQuery{ interfaces->engine->getBSPTreeQuery() };
-    Vmt client{ interfaces->client };
-    Vmt clientMode{ memory->clientMode };
-    Vmt engine{ interfaces->engine };
-    Vmt gameEventManager{ interfaces->gameEventManager };
-    Vmt modelRender{ interfaces->modelRender };
-    Vmt panel{ interfaces->panel };
-    Vmt sound{ interfaces->sound };
-    Vmt surface{ interfaces->surface };
-    Vmt svCheats{ interfaces->cvar->findVar("sv_cheats") };
-    Vmt viewRender{ memory->viewRender };
+    Vmt bspQuery;
+    Vmt client;
+    Vmt clientMode;
+    Vmt engine;
+    Vmt gameEventManager;
+    Vmt modelRender;
+    Vmt panel;
+    Vmt sound;
+    Vmt surface;
+    Vmt svCheats;
+    Vmt viewRender;
 private:
     HMODULE module;
 };
