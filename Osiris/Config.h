@@ -213,6 +213,7 @@ public:
             float green = 0.0f;
             float yellow = 0.0f;
         } colorCorrection;
+        ColorToggle bulletTracers;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -292,7 +293,9 @@ public:
         ColorToggle menucol = { 0.f,0.f,0.f };
         bool thirdPersonAnglesSet{ true };
         int language{ 0 };
+        bool pure{ false };
         Vector Angle;
+    
     } misc;
 
     struct {

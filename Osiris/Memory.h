@@ -16,6 +16,7 @@ class MoveHelper;
 class MoveData;
 class ViewRender;
 class WeaponSystem;
+class IViewRenderBeams;
 
 struct GlobalVars;
 struct GlowObjectManager;
@@ -71,6 +72,8 @@ public:
     KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
+    IViewRenderBeams* renderBeams;
+    void *CheckFileCRCsWithServer;
 
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
@@ -101,6 +104,7 @@ private:
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;
     }
+    
 };
 
 inline std::unique_ptr<const Memory> memory;

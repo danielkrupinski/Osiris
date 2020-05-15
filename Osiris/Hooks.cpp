@@ -356,6 +356,9 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
             Visuals::hitEffect(event);                
             Visuals::hitMarker(event);
             break;
+        /*case fnv::hash("bullet_impact"):
+            Visuals::bulletBeams(event);*/
+            break;
         }
     }
     return hooks->gameEventManager.callOriginal<bool, 9>(event);
@@ -399,6 +402,8 @@ struct ViewSetup {
 
 
 };
+
+
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
 {
@@ -641,6 +646,12 @@ void Hooks::uninstall() noexcept
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
         CloseHandle(thread);
 }
+
+
+
+
+
+
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
 {

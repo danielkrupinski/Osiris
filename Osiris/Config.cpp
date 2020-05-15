@@ -85,7 +85,7 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
         if (antiAimJson.isMember("Slow Walk")) antiAim.Slowwalk = antiAimJson["Slow Walk"].asBool();
-        if (antiAimJson.isMember("Slow Walk Speed")) antiAim.slowwalkspeed = antiAimJson["Slow Walk Speed"].asInt();
+        if (antiAimJson.isMember("Slow Walk Speed")) antiAim.slowwalkspeed = antiAimJson["Slow Walk Speed"].asFloat();
         if (antiAimJson.isMember("Slow Walk Key")) antiAim.slowwalkkey = antiAimJson["Slow Walk Key"].asInt();
     }
 
@@ -902,6 +902,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
         if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
+        if (miscJson.isMember("Pure")) misc.pure = miscJson["Pure"].asBool();
+        if (miscJson.isMember("Language")) misc.language = miscJson["Language"].asInt();
         if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
         if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
         if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
@@ -1499,6 +1501,16 @@ void Config::save(size_t id) const noexcept
             skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
         }
 
+        {
+            auto& skyJson = visualsJson["Bullet Beams"];
+            skyJson["Enabled"] = visuals.bulletTracers.enabled;
+            skyJson["Color"][0] = visuals.bulletTracers.color[0];
+            skyJson["Color"][1] = visuals.bulletTracers.color[1];
+            skyJson["Color"][2] = visuals.bulletTracers.color[2];
+            skyJson["Rainbow"] = visuals.bulletTracers.rainbow;
+            skyJson["Rainbow speed"] = visuals.bulletTracers.rainbowSpeed;
+        }
+
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit effect"] = visuals.hitEffect;
@@ -1667,6 +1679,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
         miscJson["Fake prime"] = misc.fakePrime;
+        miscJson["Language"] = misc.language;
+        miscJson["Pure"] = misc.pure;
         miscJson["Custom Hit Sound"] = misc.customHitSound;
         miscJson["Kill sound"] = misc.killSound;
         miscJson["Custom Kill Sound"] = misc.customKillSound;

@@ -23,6 +23,10 @@
 #include "../SDK/WeaponSystem.h"
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
+#include "../Hooks.h"
+
+
+
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -165,7 +169,7 @@ void Misc::watermark() noexcept
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
         interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Shadow Ware");
+        interfaces->surface->printText(L"Zy-Cheat");
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
@@ -474,6 +478,23 @@ void Misc::fixTabletSignal() noexcept
             activeWeapon->tabletReceptionIsBlocked() = false;
     }
 }
+
+
+void __fastcall hkCheckFileCRCsWithServer(void* ecx, void* edx)
+{
+    // dont do anything.. to prevent CRC check from happening
+    return;
+}
+
+void Misc::pure() noexcept 
+{
+    if (config->misc.pure)
+    {
+        hkCheckFileCRCsWithServer(memory->CheckFileCRCsWithServer, hkCheckFileCRCsWithServer);
+    }
+
+}
+
 
 void Misc::fakePrime() noexcept
 {

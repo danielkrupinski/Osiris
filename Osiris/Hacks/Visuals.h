@@ -4,6 +4,7 @@
 enum class FrameStage;
 class GameEvent;
 
+
 namespace Visuals
 {
     void playerModel(FrameStage stage) noexcept;
@@ -26,4 +27,5 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
+    //void bulletBeams(GameEvent* event = nullptr) noexcept;
 }

@@ -1348,6 +1348,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SetNextItemWidth(120.0f);
                         ImGui::SliderFloat("最大视角变化", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
                         ImGui::Checkbox("强开优先", &config->misc.fakePrime);
+                        ImGui::Checkbox("Bypass_pure", &config->misc.pure);
                         ImGui::Checkbox("购买清单", &config->misc.purchaseList.enabled);
                         ImGui::SameLine();
 
@@ -2540,6 +2541,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("Fix tablet signal", &config->misc.fixTabletSignal);
                         ImGui::SetNextItemWidth(120.0f);
                         ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+                        ImGui::Checkbox("Bypass_pure", &config->misc.pure);
                         ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
                         ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
                         ImGui::SameLine();
