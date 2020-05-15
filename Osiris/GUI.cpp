@@ -2144,7 +2144,8 @@ void GUI::renderMenuBar() noexcept
                         //WallHack                
                         break;
  }
-                    case 4: {
+                    
+case 4: {
                         {
                             ImGui::Columns(2, nullptr, false);
                             ImGui::SetColumnOffset(1, 280.0f);
@@ -2220,9 +2221,10 @@ void GUI::renderMenuBar() noexcept
                             }
                             ImGui::Columns(1);
 
-                        break;
+                            break;
+                        }
                     }
-                          //Visual
+                        //Visual
                     case 5: {
                         static auto itemIndex = 0;
 
@@ -2238,32 +2240,31 @@ void GUI::renderMenuBar() noexcept
 
                         {
                             ImGui::SameLine();
-                            ImGui::Checkbox("开启", &selected_entry.enabled);
+                            ImGui::Checkbox("Enabled", &selected_entry.enabled);
                             ImGui::Separator();
                             ImGui::Columns(2, nullptr, false);
-                            ImGui::InputInt("皮肤种子", &selected_entry.seed);
-                            ImGui::InputInt("暗金计数器", &selected_entry.stat_trak);
-                            ImGui::SliderFloat("磨损度", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
+                            ImGui::InputInt("Seed", &selected_entry.seed);
+                            ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
+                            ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
-                            ImGui::Combo("皮肤选择", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
+                            ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
                                 *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
                                 return true;
                                 }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
 
-
-                            ImGui::Combo("品质", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
+                            ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
                                 *out_text = game_data::quality_names[idx].name;
                                 return true;
                                 }, nullptr, IM_ARRAYSIZE(game_data::quality_names), 5);
 
                             if (itemIndex == 0) {
-                                ImGui::Combo("匕首", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                                ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
                                     *out_text = game_data::knife_names[idx].name;
                                     return true;
                                     }, nullptr, IM_ARRAYSIZE(game_data::knife_names), 5);
                             }
                             else if (itemIndex == 1) {
-                                ImGui::Combo("手套", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                                ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
                                     *out_text = game_data::glove_names[idx].name;
                                     return true;
                                     }, nullptr, IM_ARRAYSIZE(game_data::glove_names), 5);
@@ -2271,43 +2272,51 @@ void GUI::renderMenuBar() noexcept
                             else {
                                 static auto unused_value = 0;
                                 selected_entry.definition_override_vector_index = 0;
-                                ImGui::Combo("不可用的", &unused_value, "仅用于刀和手套\0");
+                                ImGui::Combo("Unavailable", &unused_value, "For knives or gloves\0");
                             }
 
-                            ImGui::InputText("名称标签", selected_entry.custom_name, 32);
+                            ImGui::InputText("Name Tag", selected_entry.custom_name, 32);
+                        }
 
-                            ImGui::NextColumn();
+                        ImGui::NextColumn();
 
-                            {
-                                ImGui::PushID("sticker");
+                        {
+                            ImGui::PushID("sticker");
 
-                                static auto selectedStickerSlot = 0;
+                            static auto selectedStickerSlot = 0;
 
-                                ImGui::PushItemWidth(-1);
+                            ImGui::PushItemWidth(-1);
 
-                                ImGui::ListBox("", &selectedStickerSlot, [](void* data, int idx, const char** out_text) {
-                                    static char elementName[64];
-                                    auto kit_vector_index = config->skinChanger[itemIndex].stickers[idx].kit_vector_index;
-                                    sprintf_s(elementName, "#%d (%s)", idx + 1, SkinChanger::stickerKits[kit_vector_index].name.c_str());
-                                    *out_text = elementName;
-                                    return true;
-                                    }, nullptr, 5, 5);
+                            if (ImGui::ListBoxHeader("", 5)) {
+                                for (int i = 0; i < 5; ++i) {
+                                    ImGui::PushID(i);
 
-                                ImGui::PopItemWidth();
+                                    const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
+                                    const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::stickerKits[kit_vector_index].name;
 
-                                auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
+                                    if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
+                                        selectedStickerSlot = i;
 
-                                ImGui::Combo("印花选择", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text) {
-                                    *out_text = SkinChanger::stickerKits[idx].name.c_str();
-                                    return true;
-                                    }, nullptr, SkinChanger::stickerKits.size(), 10);
-
-                                ImGui::SliderFloat("磨损度", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
-                                ImGui::SliderFloat("大小比例", &selected_sticker.scale, 0.1f, 5.0f);
-                                ImGui::SliderFloat("旋转角度", &selected_sticker.rotation, 0.0f, 360.0f);
-
-                                ImGui::PopID();
+                                    ImGui::PopID();
+                                }
+                                ImGui::ListBoxFooter();
                             }
+
+                            ImGui::PopItemWidth();
+
+                            auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
+
+                            ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text) {
+                                *out_text = SkinChanger::stickerKits[idx].name.c_str();
+                                return true;
+                                }, nullptr, SkinChanger::stickerKits.size(), 10);
+
+                            ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
+                            ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
+                            ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.0f, 360.0f);
+
+                            ImGui::PopID();
+                        }
                             selected_entry.update();
 
                             ImGui::Columns(1);
@@ -2394,8 +2403,8 @@ void GUI::renderMenuBar() noexcept
 
 
 
-                            ImGui::Combo("CT 玩家模型", &config->visuals.playerModelCT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
-                            ImGui::Combo("T 玩家模型", &config->visuals.playerModelT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
+                            ImGui::Combo("PlayerModel CT", &config->visuals.playerModelCT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
+                            ImGui::Combo("PlayerModel T", &config->visuals.playerModelT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
                             /*ImGui::SliderFloat("##Custom Viewmodel X", &config->visuals.viewmodel_x, -100, 100, "自定义手臂长度X轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Y", &config->visuals.viewmodel_y, -100, 100, "自定义手臂长度Y轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Z", &config->visuals.viewmodel_z, -100, 100, "自定义手臂长度Z轴: %.2f");*/
@@ -2403,7 +2412,7 @@ void GUI::renderMenuBar() noexcept
                             if (ImGui::Button("刷新修改", { 130.0f, 30.0f }))
                                 SkinChanger::scheduleHudUpdate();
                             //Visuals::customViewmodel();
-                        }
+                        
 
                         break;
                     }
