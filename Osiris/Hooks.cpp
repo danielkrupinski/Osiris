@@ -148,10 +148,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) 
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-    }
+    
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
@@ -178,7 +178,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::modifySmoke();
-        Visuals::thirdperson();
+
         Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
         Visuals::reduceFlashEffect();
@@ -253,9 +253,13 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
+        Visuals::thirdperson(stage,config->misc.Angle);
         Backtrack::update(stage);
         SkinChanger::run(stage);
     }
+    
+    
+    
     hooks->client.callOriginal<void, 37>(stage);
 }
 
@@ -344,10 +348,42 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 }
 
 struct ViewSetup {
-    std::byte pad[176];
+    /*std::byte pad[176];
     float fov;
     std::byte pad1[32];
+    float farZ;*/
+
+    char _0x0000[16];
+    __int32 x;
+    __int32 x_old;
+    __int32 y;
+    __int32 y_old;
+    __int32 width;
+    __int32    width_old;
+    __int32 height;
+    __int32    height_old;
+    char _0x0030[128];
+    float fov;
+    float fovViewmodel;
+    Vector origin;
+    Vector angles;
+    float zNear;
     float farZ;
+    float zNearViewmodel;
+    float zFarViewmodel;
+    float m_flAspectRatio;
+    float m_flNearBlurDepth;
+    float m_flNearFocusDepth;
+    float m_flFarFocusDepth;
+    float m_flFarBlurDepth;
+    float m_flNearBlurRadius;
+    float m_flFarBlurRadius;
+    float m_nDoFQuality;
+    __int32 m_nMotionBlurMode;
+    char _0x0104[68];
+    __int32 m_EdgeBlur;
+
+
 };
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept

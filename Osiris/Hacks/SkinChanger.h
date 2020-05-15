@@ -5,7 +5,7 @@
 
 enum class FrameStage;
 class GameEvent;
-static std::vector<SkinChanger::PaintKit> search_result;
+
 
 namespace SkinChanger {
     void initializeKits() noexcept;

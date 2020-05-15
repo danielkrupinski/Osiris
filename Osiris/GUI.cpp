@@ -20,6 +20,7 @@
 #include "SDK/SearchEngine.h"
 int tab_int = 0;
 int tab_intenglish = 0;
+static std::vector<SkinChanger::PaintKit> search_result;
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -567,14 +568,14 @@ void GUI::renderMenuBar() noexcept
                           }
 
                           }
-                          break;
+                          
                     }
                     }
                     
                 }
                 //Legit
 
-case 1: {
+                case 1: {
 
 
                     break;
@@ -1456,9 +1457,45 @@ case 1: {
 
                     }
                     }
-                }
+                
                 ImGui::EndChild();
-            }
+                ImGui::SetCursorPos(ImVec2(10, 120));
+
+                if (ImGui::Button("Updating", ImVec2(80, 80)))
+                    tab_int = 1;
+
+                ImGui::SetCursorPos(ImVec2(10, 200));
+
+                if (ImGui::Button("AA", ImVec2(80, 80)))
+                    tab_int = 2;
+
+                ImGui::SetCursorPos(ImVec2(10, 280));
+
+                if (ImGui::Button("透视选项", ImVec2(80, 80)))
+                    tab_int = 3;
+
+                ImGui::SetCursorPos(ImVec2(10, 360));
+
+                if (ImGui::Button("视觉修改", ImVec2(80, 80)))
+                    tab_int = 4;
+
+                ImGui::SetCursorPos(ImVec2(10, 440));
+
+                if (ImGui::Button("皮肤修改", ImVec2(80, 80)))
+                    tab_int = 5;
+
+                ImGui::SetCursorPos(ImVec2(10, 520));
+
+                if (ImGui::Button("杂项", ImVec2(80, 80)))
+                    tab_int = 6;
+
+                ImGui::SetCursorPos(ImVec2(10, 600));
+
+                if (ImGui::Button("CFG", ImVec2(80, 80)))
+                    tab_int = 7;
+                }
+
+}
         case 1: 
         {
             
@@ -1567,10 +1604,204 @@ case 1: {
                             break;
                         }
                         }
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        ImGui::Combo("Mode", &config->backtrack.amode, "Aimbot\0TriggerBot\0");
 
+                        ImGui::Separator();
+                        ImGui::PushID(2);
+                        ImGui::PushItemWidth(70.0f);
+                        ImGui::PopItemWidth();
+                        ImGui::PopID();
+                        ImGui::Columns(2, nullptr, false);
+                        ImGui::SetColumnOffset(1, 220.0f);
+
+                        switch (config->backtrack.amode) {
+
+                        case 0: {
+                            /*if (config->aimbot[currentWeapon].enabled == true) {
+                                config->ragebot[currentWeapon].enabled = false;
+                            }
+                            else if (config->ragebot[currentWeapon].enabled == true)
+                            {
+                                config->aimbot[currentWeapon].enabled = false;
+                            }*/
+
+                            ImGui::Combo("自瞄位置", &config->aimbot[currentWeapon].bone, "准星附近\0最高伤害\0头部\0脖子\0胸骨\0胸部\0胃部\0屁股\0");
+                            ImGui::Checkbox("启用自瞄", &config->aimbot[currentWeapon].enabled);
+                            ImGui::Checkbox("强制锁定", &config->aimbot[currentWeapon].aimlock);
+                            ImGui::Checkbox("静默瞄准", &config->aimbot[currentWeapon].silent);
+                            ImGui::Checkbox("友军伤害", &config->aimbot[currentWeapon].friendlyFire);
+                            ImGui::Checkbox("仅瞄可见", &config->aimbot[currentWeapon].visibleOnly);
+                            ImGui::Checkbox("仅开镜时启用", &config->aimbot[currentWeapon].scopedOnly);
+                            ImGui::Checkbox("无视闪光", &config->aimbot[currentWeapon].ignoreFlash);
+                            ImGui::Checkbox("无视烟雾", &config->aimbot[currentWeapon].ignoreSmoke);
+
+                            float res = 0.0;
+
+                            ImGui::Checkbox("后座力控制", &config->aimbot[currentWeapon].recoilbasedFov);
+
+                            if (config->aimbot[currentWeapon].recoilbasedFov) {
+                                ImGui::SliderFloat("垂直压枪力度", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.2f");
+                                ImGui::SliderFloat("水平压枪力度", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.2f");
+                                ImGui::Checkbox("随机RCS压枪", &config->aimbot[currentWeapon].standaloneRCS);
+                                ImGui::InputInt("空枪数", &config->aimbot[currentWeapon].shotsFired);
+                                config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 10);
+                            }
+
+                            if (config->aimbot[currentWeapon].recoilbasedFov == false) {
+                                config->aimbot[currentWeapon].recoilControlX = res;
+                                config->aimbot[currentWeapon].recoilControlY = res;
+                            }
+
+
+
+
+                            ImGui::NextColumn();
+                            ImGui::Checkbox("按键启用", &config->aimbot[currentWeapon].onKey);
+                            ImGui::SameLine();
+                            ImGui::Text("按键:");
+                            ImGui::SameLine();
+                            hotkey(config->aimbot[currentWeapon].key);
+                            ImGui::Checkbox("R8左轮预热", &config->misc.prepareRevolver);
+
+                            ImGui::Combo("自瞄方式", &config->aimbot[currentWeapon].keyMode, "按住开启\0按下开启\0");
+                            ImGui::PushItemWidth(240.0f);
+                            ImGui::SliderFloat("范围", &config->aimbot[currentWeapon].fov, 0.0f, 8.0f, "%.2f", 2.5f);
+                            ImGui::SliderFloat("平滑", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+                            ImGui::InputInt("最小伤害", &config->aimbot[currentWeapon].minDamage, 0, 150);
+                            config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+                            ImGui::Checkbox("自适应瞄准部位", &config->aimbot[currentWeapon].killshot);
+                            ImGui::Checkbox("连续射击", &config->aimbot[currentWeapon].betweenShots);
+                            //ImGui::Checkbox("绘制自瞄范围", &config->misc.drawAimbotFov);
+                            ImGui::PopItemWidth();
+                            ImGui::Columns(1);
+                            break;
+                        }
+                        
+                        case 1: {
+                            {
+                                static int currentCategory{ 0 };
+                                ImGui::PushItemWidth(110.0f);
+                                ImGui::PushID(0);
+                                ImGui::Combo("", &currentCategory, "All\0手枪\0重型武器\0冲锋枪\0步枪\0宙斯X27\0");
+                                ImGui::PopID();
+                                ImGui::SameLine();
+                                static int currentWeapon{ 0 };
+                                ImGui::PushID(1);
+                                switch (currentCategory) {
+                                case 0:
+                                    currentWeapon = 0;
+                                    ImGui::NewLine();
+                                    break;
+                                case 5:
+                                    currentWeapon = 39;
+                                    ImGui::NewLine();
+                                    break;
+
+                                case 1: {
+                                    static int currentPistol{ 0 };
+                                    static constexpr const char* pistols[]{ "所有手枪", "格洛克18", "P2000", "USP-S", "双持贝瑞塔", "P250", "Tec-9", "FN57", "CZ-75", "沙漠之鹰", "R8左轮" };
+
+                                    ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
+                                        if (config->triggerbot[idx ? idx : 35].enabled) {
+                                            static std::string name;
+                                            name = pistols[idx];
+                                            *out_text = name.append(" *").c_str();
+                                        }
+                                        else {
+                                            *out_text = pistols[idx];
+                                        }
+                                        return true;
+                                        }, nullptr, IM_ARRAYSIZE(pistols));
+
+                                    currentWeapon = currentPistol ? currentPistol : 35;
+                                    break;
+                                }
+                                case 2: {
+                                    static int currentHeavy{ 0 };
+                                    static constexpr const char* heavies[]{ "所有重型武器", "新星", "XM1014", "截断霰弹枪", "MAG-7", "M249", "内格夫" };
+
+                                    ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
+                                        if (config->triggerbot[idx ? idx + 10 : 36].enabled) {
+                                            static std::string name;
+                                            name = heavies[idx];
+                                            *out_text = name.append(" *").c_str();
+                                        }
+                                        else {
+                                            *out_text = heavies[idx];
+                                        }
+                                        return true;
+                                        }, nullptr, IM_ARRAYSIZE(heavies));
+
+                                    currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
+                                    break;
+                                }
+                                case 3: {
+                                    static int currentSmg{ 0 };
+                                    static constexpr const char* smgs[]{ "所有冲锋枪", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP野牛" };
+
+                                    ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
+                                        if (config->triggerbot[idx ? idx + 16 : 37].enabled) {
+                                            static std::string name;
+                                            name = smgs[idx];
+                                            *out_text = name.append(" *").c_str();
+                                        }
+                                        else {
+                                            *out_text = smgs[idx];
+                                        }
+                                        return true;
+                                        }, nullptr, IM_ARRAYSIZE(smgs));
+
+                                    currentWeapon = currentSmg ? currentSmg + 16 : 37;
+                                    break;
+                                }
+                                case 4: {
+                                    static int currentRifle{ 0 };
+                                    static constexpr const char* rifles[]{ "全部步枪", "加利尔AR", "法玛斯", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+
+                                    ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
+                                        if (config->triggerbot[idx ? idx + 23 : 38].enabled) {
+                                            static std::string name;
+                                            name = rifles[idx];
+                                            *out_text = name.append(" *").c_str();
+                                        }
+                                        else {
+                                            *out_text = rifles[idx];
+                                        }
+                                        return true;
+                                        }, nullptr, IM_ARRAYSIZE(rifles));
+
+                                    currentWeapon = currentRifle ? currentRifle + 23 : 38;
+                                    break;
+                                }
+                                }
+                                ImGui::PopID();
+                                ImGui::SameLine();
+                                ImGui::Checkbox("启用", &config->triggerbot[currentWeapon].enabled);
+                                ImGui::Separator();
+                                ImGui::Checkbox("按键启用", &config->triggerbot[currentWeapon].onKey);
+                                ImGui::Text("按键:");
+                                ImGui::SameLine();
+                                hotkey(config->triggerbot[currentWeapon].key);
+                                ImGui::Checkbox("对友军启用", &config->triggerbot[currentWeapon].friendlyFire);
+                                ImGui::Checkbox("仅开镜时启用", &config->triggerbot[currentWeapon].scopedOnly);
+                                ImGui::Checkbox("无视闪光弹", &config->triggerbot[currentWeapon].ignoreFlash);
+                                ImGui::Checkbox("无视烟雾弹", &config->triggerbot[currentWeapon].ignoreSmoke);
+                                ImGui::SetNextItemWidth(85.0f);
+                                ImGui::Combo("扳机位置", &config->triggerbot[currentWeapon].hitgroup, "所有部位\0头部\0胸部\0胃部\0左手\0右手\0左腿\0右腿\0");
+                                ImGui::PushItemWidth(220.0f);
+                                ImGui::SliderInt("开枪延时", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+                                ImGui::InputInt("最小伤害", &config->triggerbot[currentWeapon].minDamage);
+                                config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
+                                ImGui::Checkbox("自适应瞄准部位", &config->triggerbot[currentWeapon].killshot);
+                                ImGui::SliderFloat("爆发时间", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
+
+                            }
+                            break;
+                        }
+                      }       //Legit
                     }
-                          //Legit
-
                     case 1: {
 
 
@@ -2497,8 +2728,7 @@ case 1: {
 }
 
 }
-
-    }
+}
 
 
 

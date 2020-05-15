@@ -8,6 +8,8 @@
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 #include "ConfigStructs.h"
+#include "SDK/Vector.h"
+
 
 class Config {
 public:
@@ -290,6 +292,7 @@ public:
         ColorToggle menucol = { 0.f,0.f,0.f };
         bool thirdPersonAnglesSet{ true };
         int language{ 0 };
+        Vector Angle;
     } misc;
 
     struct {

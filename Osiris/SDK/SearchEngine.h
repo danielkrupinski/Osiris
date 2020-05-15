@@ -7,27 +7,27 @@
 //////////////////////////////////////////////////////////////////////////
 /// Search Engine Github - CykFad 
 //////////////////////////////////////////////////////////////////////////
-#define HZ2PY_OUTPUT_BUF_ARRAY_SIZE 5120	//Ò»¸ö×Ö¶ÎµÄÆ´Òô×î³¤³¤¶È
-#define HZ2PY_MAX_PINYIN_SIZE 30			//Ò»¸ö×ÖµÄÆ´Òô×î³¤³¤¶È
-#define HZ2PY_UTF8_CHECK_LENGTH 20			//¼ì²éÊÇ·ñÎªutf8±àÂëÊ±Ëù¼ì²éµÄ×Ö·û³¤¶È
+#define HZ2PY_OUTPUT_BUF_ARRAY_SIZE 5120	//ä¸€ä¸ªå­—æ®µçš„æ‹¼éŸ³æœ€é•¿é•¿åº¦
+#define HZ2PY_MAX_PINYIN_SIZE 30			//ä¸€ä¸ªå­—çš„æ‹¼éŸ³æœ€é•¿é•¿åº¦
+#define HZ2PY_UTF8_CHECK_LENGTH 20			//æ£€æŸ¥æ˜¯å¦ä¸ºutf8ç¼–ç æ—¶æ‰€æ£€æŸ¥çš„å­—ç¬¦é•¿åº¦
 
 bool safeAddToOutbuf(char* outbuf, int& iOutbuf, char* pinyinValue, int iPinyinValue) {
 	int iOutbufWord = 1, iPinyinValueWord = 1, m;
-	for (m = 0; m < iOutbuf; m++) {	//Í³¼ÆÒÑ¾­×ª»¯µÄ´ÊÊı
+	for (m = 0; m < iOutbuf; m++) {	//ç»Ÿè®¡å·²ç»è½¬åŒ–çš„è¯æ•°
 		if (outbuf[m] == ' ') {
 			iOutbufWord++;
 		}
 	}
-	for (m = 0; m < iPinyinValue; m++) {	//Í³¼Æ¶àÒô×ÖÊıÄ¿
+	for (m = 0; m < iPinyinValue; m++) {	//ç»Ÿè®¡å¤šéŸ³å­—æ•°ç›®
 		if (pinyinValue[m] == '|') {
 			iPinyinValueWord++;
 		}
 	}
-	bool flag = false;	//ÊÇ·ñ³¬³ö·¶Î§
-	int iNewOutbuf = iOutbufWord * iPinyinValue + iPinyinValueWord * iOutbuf + iOutbufWord + iPinyinValueWord - 1 - iOutbufWord * iPinyinValueWord;//ÏëÏëÎªÉ¶
+	bool flag = false;	//æ˜¯å¦è¶…å‡ºèŒƒå›´
+	int iNewOutbuf = iOutbufWord * iPinyinValue + iPinyinValueWord * iOutbuf + iOutbufWord + iPinyinValueWord - 1 - iOutbufWord * iPinyinValueWord;//æƒ³æƒ³ä¸ºå•¥
 	if (iNewOutbuf < HZ2PY_OUTPUT_BUF_ARRAY_SIZE) {
 		int totalWord = iOutbufWord * iPinyinValueWord;
-		//¿Õ¼äÉêÇë
+		//ç©ºé—´ç”³è¯·
 		char** tempOutbuf = new char* [totalWord];
 		if (!tempOutbuf) {
 			fprintf(stdout, "FATAL ERROR: out of memory (failed to malloc %d bytes)\n", totalWord);
@@ -47,7 +47,7 @@ bool safeAddToOutbuf(char* outbuf, int& iOutbuf, char* pinyinValue, int iPinyinV
 		}
 		char* tmp1 = outbuf;
 		int n = 0, i, j, k;
-		while (*tmp1 != '\0' || n == 0)	//×¢Òâ£¬¿ÉÄÜÊÇ×î¿ªÊ¼£¬¹Ê¼ÓÉÏn==0
+		while (*tmp1 != '\0' || n == 0)	//æ³¨æ„ï¼Œå¯èƒ½æ˜¯æœ€å¼€å§‹ï¼Œæ•…åŠ ä¸Šn==0
 		{
 			n += iPinyinValueWord;
 			i = 0;
@@ -81,7 +81,7 @@ bool safeAddToOutbuf(char* outbuf, int& iOutbuf, char* pinyinValue, int iPinyinV
 			}
 		}
 
-		//½«ËùÓĞµÄ¶«Î÷¶¼ÕûºÏµ½outbufÖĞ
+		//å°†æ‰€æœ‰çš„ä¸œè¥¿éƒ½æ•´åˆåˆ°outbufä¸­
 		outbuf[0] = '\0';
 		for (m = 0; m < totalWord; m++)
 		{
@@ -93,7 +93,7 @@ bool safeAddToOutbuf(char* outbuf, int& iOutbuf, char* pinyinValue, int iPinyinV
 			}
 		}
 		iOutbuf = iNewOutbuf;
-		//É¾³ıËùÉêÇëµÄ¿Õ¼ä
+		//åˆ é™¤æ‰€ç”³è¯·çš„ç©ºé—´
 		for (m = 0; m < totalWord; m++)
 		{
 			delete[] tempOutbuf[m];
@@ -105,7 +105,7 @@ bool safeAddToOutbuf(char* outbuf, int& iOutbuf, char* pinyinValue, int iPinyinV
 }
 
 //////////////////////////////////////////////////////////////////////////
-//ÅĞ¶ÏÒ»¸ö×Ö·û´®ÊÇ·ñÎªutf8±àÂë
+//åˆ¤æ–­ä¸€ä¸ªå­—ç¬¦ä¸²æ˜¯å¦ä¸ºutf8ç¼–ç 
 //////////////////////////////////////////////////////////////////////////
 const char* _pinyin_table_[20902] = {
 	"yi", "ding|zheng", "yu", "qi", "shang", "xia", "myeon", "wan|mo", "zhang", "san", "shang", \
@@ -2206,7 +2206,7 @@ int is_utf8_string(char* utf)
 	int check_sub = 0;
 	int i = 0;
 
-	if (length > HZ2PY_UTF8_CHECK_LENGTH)	//Ö»È¡Ç°ÃæÌØ¶¨³¤¶ÈµÄ×Ö·ûÀ´ÑéÖ¤¼´¿É
+	if (length > HZ2PY_UTF8_CHECK_LENGTH)	//åªå–å‰é¢ç‰¹å®šé•¿åº¦çš„å­—ç¬¦æ¥éªŒè¯å³å¯
 	{
 		length = HZ2PY_UTF8_CHECK_LENGTH;
 	}
@@ -2262,24 +2262,24 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 	int inbuf_len = strlen(inbuf);
 	char* _tmp;
 	char* _tmp2;
-	char py_tmp[HZ2PY_MAX_PINYIN_SIZE] = "";	//Ô­Ê¼Æ´Òô
-	char py_tmp2[HZ2PY_MAX_PINYIN_SIZE] = "";	//´¦ÀíºóµÄÆ´Òô
+	char py_tmp[HZ2PY_MAX_PINYIN_SIZE] = "";	//åŸå§‹æ‹¼éŸ³
+	char py_tmp2[HZ2PY_MAX_PINYIN_SIZE] = "";	//å¤„ç†åçš„æ‹¼éŸ³
 	int uni;
 	int iOutbuf = 0;
-	char sep = '\'';			//·Ö¸ô·û
+	char sep = '\'';			//åˆ†éš”ç¬¦
 
 	for (int i = 0; i < inbuf_len; i++)
 	{
-		if ((unsigned char)inbuf[i] < 0x80) {  //ÈôÊÇÓ¢ÎÄ»òÊı×Ö
+		if ((unsigned char)inbuf[i] < 0x80) {  //è‹¥æ˜¯è‹±æ–‡æˆ–æ•°å­—
 			if (m_filterPunc && !(inbuf[i] >= 'a' && inbuf[i] <= 'z' || inbuf[i] >= 'A' && inbuf[i] <= 'Z')) {
 				continue;
 			}
 			if (!safeAddToOutbuf(outbuf, iOutbuf, &inbuf[i], 1)) return;
-			//if(m_LetterEnd) if(!safeAddToOutbuf(outbuf,iOutbuf,&sep,1)) return;  //Ó¢ÎÄ×ÖÄ¸Ò²´ò·Ö¸ô·û
+			//if(m_LetterEnd) if(!safeAddToOutbuf(outbuf,iOutbuf,&sep,1)) return;  //è‹±æ–‡å­—æ¯ä¹Ÿæ‰“åˆ†éš”ç¬¦
 			continue;
 		}
-		else if ((inbuf[i] & 0xE0) == 0xC0) {	//Á½¸ö×Ö·û£¬±íÊ¾ÊÇ·ºÅ·ÓïÏµ»òË¹À­·òÓï
-			if (i + 1 >= inbuf_len) {	//×îºóÒ»¸ö²»¹»ÁË
+		else if ((inbuf[i] & 0xE0) == 0xC0) {	//ä¸¤ä¸ªå­—ç¬¦ï¼Œè¡¨ç¤ºæ˜¯æ³›æ¬§è¯­ç³»æˆ–æ–¯æ‹‰å¤«è¯­
+			if (i + 1 >= inbuf_len) {	//æœ€åä¸€ä¸ªä¸å¤Ÿäº†
 				return;
 			}
 			if (!m_unknowSkip) {
@@ -2287,7 +2287,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 			}
 			i++;
 		}
-		else if ((inbuf[i] & 0xF0) == 0xE0) {	//Èı¸ö×Ö·û£¬ºº×Ö¡¢ÈÕÓïµÈÑÇÖŞ×Ö·û
+		else if ((inbuf[i] & 0xF0) == 0xE0) {	//ä¸‰ä¸ªå­—ç¬¦ï¼Œæ±‰å­—ã€æ—¥è¯­ç­‰äºšæ´²å­—ç¬¦
 			if (i + 2 >= inbuf_len) {
 				return;
 			}
@@ -2304,7 +2304,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 				_tmp = py_tmp;
 				_tmp2 = py_tmp2;
 
-				if (m_blnSimaple)	//Ö»Ö§³ÖÊ××ÖÄ¸
+				if (m_blnSimaple)	//åªæ”¯æŒé¦–å­—æ¯
 				{
 					*_tmp2 = *_tmp;
 					_tmp++;
@@ -2325,7 +2325,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 					strcpy_s(py_tmp2, HZ2PY_MAX_PINYIN_SIZE, py_tmp);
 				}
 
-				if (m_blnAllBiG)	//È«²¿´óĞ´
+				if (m_blnAllBiG)	//å…¨éƒ¨å¤§å†™
 				{
 					while (*_tmp2 != '\0')
 					{
@@ -2338,14 +2338,14 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 					_tmp2 = py_tmp2;
 				}
 
-				if (m_blnFirstBig) {	//Ê××ÖÄ¸´óĞ´
+				if (m_blnFirstBig) {	//é¦–å­—æ¯å¤§å†™
 					if (*_tmp2 >= 'a' && *_tmp2 <= 'z')
 					{
 						*_tmp2 = *_tmp2 - 32;
 					}
 				}
 
-				if (!polyphone_support)	//²»Ö§³Ö¶àÒô×Ö
+				if (!polyphone_support)	//ä¸æ”¯æŒå¤šéŸ³å­—
 				{
 					while (*_tmp2 != '\0')
 					{
@@ -2369,7 +2369,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 				i = i + 2;
 			}
 		}
-		else  if ((inbuf[i] & 0xF8) == 0xF0) {//ËÄ¸ö×Ö½Ú
+		else  if ((inbuf[i] & 0xF8) == 0xF0) {//å››ä¸ªå­—èŠ‚
 			if (i + 3 >= inbuf_len) {
 				return;
 			}
@@ -2378,7 +2378,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 			}
 			i = i + 3;
 		}
-		else if ((inbuf[i] & 0xFC) == 0xF8) {	//Îå¸ö×Ö½Ú
+		else if ((inbuf[i] & 0xFC) == 0xF8) {	//äº”ä¸ªå­—èŠ‚
 			if (i + 4 >= inbuf_len) {
 				return;
 			}
@@ -2387,7 +2387,7 @@ void pinyin_utf8(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool poly
 			}
 			i = i + 4;
 		}
-		else if ((inbuf[i] & 0xFE) == 0xFC) {	//Áù¸ö×Ö½Ú
+		else if ((inbuf[i] & 0xFE) == 0xFC) {	//å…­ä¸ªå­—èŠ‚
 			if (i + 5 >= inbuf_len) {
 				return;
 			}
@@ -7597,12 +7597,12 @@ int findLetter(int nCode, char* strValue)
 }
 void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool polyphone_support = false, bool m_blnFirstBig = false, bool m_blnAllBiG = false, bool m_LetterEnd = false, bool m_unknowSkip = true, bool m_filterPunc = true) {
 	/*
-	bool m_blnSimaple=false; //ÊÇ·ñ¼òÆ´
-	bool m_blnFirstBig=false; //Æ´ÒôµÚÒ»¸ö×ÖÄ¸ÊÇ·ñ´óĞ´
-	bool m_blnAllBiG=false; //Æ´ÒôÊÇ·ñ´óĞ´
-	bool m_LetterEnd=false; //Ã¿¸öÆ´ÒôºóÊÇ·ñÓÃ·Ö¸ô·û
-	bool m_unknowSkip=false; //Î´ÖªÆ´ÒôµÄ×ÖÊÇ·ñÂÔ¹ı
-	bool m_filterPunc=true; //ÊÇ·ñ¹ıÂË±êµã
+	bool m_blnSimaple=false; //æ˜¯å¦ç®€æ‹¼
+	bool m_blnFirstBig=false; //æ‹¼éŸ³ç¬¬ä¸€ä¸ªå­—æ¯æ˜¯å¦å¤§å†™
+	bool m_blnAllBiG=false; //æ‹¼éŸ³æ˜¯å¦å¤§å†™
+	bool m_LetterEnd=false; //æ¯ä¸ªæ‹¼éŸ³åæ˜¯å¦ç”¨åˆ†éš”ç¬¦
+	bool m_unknowSkip=false; //æœªçŸ¥æ‹¼éŸ³çš„å­—æ˜¯å¦ç•¥è¿‡
+	bool m_filterPunc=true; //æ˜¯å¦è¿‡æ»¤æ ‡ç‚¹
 	*/
 	unsigned char ucHigh, ucLow;
 	int nCode, j, k;
@@ -7621,7 +7621,7 @@ void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool po
 			if (m_LetterEnd)
 				if (!safeAddToOutbuf(outbuf, iOutbuf, &sep, 1))
 					return;
-			//Ó¢ÎÄ×ÖÄ¸Ò²´ò·Ö¸ô·û
+			//è‹±æ–‡å­—æ¯ä¹Ÿæ‰“åˆ†éš”ç¬¦
 			continue;
 		}
 		ucHigh = (unsigned char)inbuf[i];
@@ -7641,7 +7641,7 @@ void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool po
 			i++;
 			continue;
 		}
-		if (!polyphone_support) { //²»Ö§³Ö¶àÒô×Ö
+		if (!polyphone_support) { //ä¸æ”¯æŒå¤šéŸ³å­—
 			k = 0;
 			while (pinyinValue[k] != '\0') {
 				if (pinyinValue[k] == '|') {
@@ -7651,7 +7651,7 @@ void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool po
 				k++;
 			}
 		}
-		if (m_blnSimaple) //Ö»Ö§³ÖÊ××ÖÄ¸
+		if (m_blnSimaple) //åªæ”¯æŒé¦–å­—æ¯
 		{
 			k = 1;
 			j = 1;
@@ -7662,10 +7662,10 @@ void pinyin_gb2312(char* inbuf, char* outbuf, bool m_blnSimaple = false, bool po
 				}
 				k++;
 			}
-			pinyinValue[j] = '\0'; //Ö»È¡µÚÒ»¸ö×Ö·û
+			pinyinValue[j] = '\0'; //åªå–ç¬¬ä¸€ä¸ªå­—ç¬¦
 		}
 		int iPinyinValue = strlen(pinyinValue);
-		if (!m_blnFirstBig) //Ê××ÖÄ¸ÊÇ·ñ´óĞ´
+		if (!m_blnFirstBig) //é¦–å­—æ¯æ˜¯å¦å¤§å†™
 		{
 			pinyinValue[0] = pinyinValue[0] + 32;
 			for (j = 1; j < iPinyinValue; j++) {
