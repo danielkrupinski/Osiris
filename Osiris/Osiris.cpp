@@ -12,7 +12,7 @@ static WNDPROC originalWndproc;
 static LRESULT WINAPI init(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     SetWindowLongPtr(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndproc));
-    config = std::make_unique<Config>("Osiris");
+    config = std::make_unique<Config>("Zy-Cheat");
     gui = std::make_unique<GUI>();
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
