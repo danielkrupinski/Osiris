@@ -603,7 +603,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("P轴", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
                         ImGui::Checkbox("Y轴", &config->antiAim.yaw);
                         ImGui::Checkbox("假走", &config->antiAim.Slowwalk);
-                        ImGui::SliderInt("假走速度", &config->antiAim.slowwalkspeed, 0, 64, "%d");
+                        ImGui::SliderFloat("假走速度", &config->antiAim.slowwalkspeed, 0, 64, "%d");
                         ImGui::SameLine();
                         hotkey(config->antiAim.slowwalkkey);
                         break;
@@ -1849,9 +1849,10 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
                         ImGui::Checkbox("Yaw", &config->antiAim.yaw);
                         ImGui::Checkbox("SlowWalk", &config->antiAim.Slowwalk);
-                        ImGui::SliderInt("SlowWalkSpeed", &config->antiAim.slowwalkspeed, 0, 64, "%d");
                         ImGui::SameLine();
                         hotkey(config->antiAim.slowwalkkey);
+                        ImGui::SliderFloat("SlowWalkSpeed", &config->antiAim.slowwalkspeed, 0, 64, "%.2f");
+                        
                         break;
                     }
                           //AntiAim
@@ -2358,7 +2359,7 @@ void GUI::renderMenuBar() noexcept
 
                             //皮肤搜索开始
                             {
-                                if (ImGui::Button("皮肤搜索", { 178.0f,25.0f }))
+                                if (ImGui::Button("SkinSearch", { 178.0f,25.0f }))
                                 {
                                     ImGui::OpenPopup("Search");
                                 }
@@ -2367,12 +2368,11 @@ void GUI::renderMenuBar() noexcept
                                     static char skin_name[256];
                                     static int select_current = 0;
 
-                                    ImGui::Text("皮肤搜索");
+                                    ImGui::Text("SkinName");
                                     ImGui::Separator();
                                     ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
-                                    ImGui::Text("请在上方输入皮肤拼音或枪械名字");
                                     ImGui::Separator();
-                                    if (ImGui::Button("开始搜索"))
+                                    if (ImGui::Button("Search"))
                                     {
                                         search_result.clear();
 
@@ -2400,7 +2400,7 @@ void GUI::renderMenuBar() noexcept
                                         }
                                     }
                                     ImGui::SameLine();
-                                    if (ImGui::Button("确定"))
+                                    if (ImGui::Button("Apply"))
                                     {
                                         for (int i = 0; i < SkinChanger::skinKits.size(); i++)
                                         {
@@ -2420,7 +2420,7 @@ void GUI::renderMenuBar() noexcept
                                         },
                                         &search_result, search_result.size(), 10);
 
-                                    if (ImGui::Button("退出搜索菜单"))
+                                    if (ImGui::Button("Quit Search"))
                                     {
                                         ImGui::CloseCurrentPopup();
                                     }
