@@ -727,7 +727,19 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
+        if (visualsJson.isMember("Bullet Beams")) {
+            const auto& worldJson = visualsJson["Bullet Beams"];
 
+            if (worldJson.isMember("Enabled")) visuals.bulletTracers.enabled = worldJson["Enabled"].asBool();
+
+            if (worldJson.isMember("Color")) {
+                visuals.bulletTracers.color[0] = worldJson["Color"][0].asFloat();
+                visuals.bulletTracers.color[1] = worldJson["Color"][1].asFloat();
+                visuals.bulletTracers.color[2] = worldJson["Color"][2].asFloat();
+            }
+            if (worldJson.isMember("Rainbow")) visuals.bulletTracers.rainbow = worldJson["Rainbow"].asBool();
+            if (worldJson.isMember("Rainbow speed")) visuals.bulletTracers.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
+        }
         if (visualsJson.isMember("Color correction")) {
             const auto& cc = visualsJson["Color correction"];
 
@@ -921,6 +933,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
         if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
         if (miscJson.isMember("Autozeus")) misc.autoZeus = miscJson["Autozeus"].asBool();
+        if (miscJson.isMember("Autozeus BAIM Only")) misc.autoZeusBaimOnly = miscJson["Autozeus BAIM Only"].asBool();
+        if (miscJson.isMember("Autozeus Max Pen Dist")) misc.autoZeusMaxPenDist = miscJson["Autozeus Max Pen Dist"].asInt();
         if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
         if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
         if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
@@ -1533,6 +1547,16 @@ void Config::save(size_t id) const noexcept
             skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
         }
 
+        {
+            auto& skyJson = visualsJson["Bullet Beams"];
+            skyJson["Enabled"] = visuals.bulletTracers.enabled;
+            skyJson["Color"][0] = visuals.bulletTracers.color[0];
+            skyJson["Color"][1] = visuals.bulletTracers.color[1];
+            skyJson["Color"][2] = visuals.bulletTracers.color[2];
+            skyJson["Rainbow"] = visuals.bulletTracers.rainbow;
+            skyJson["Rainbow speed"] = visuals.bulletTracers.rainbowSpeed;
+        }
+
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
         visualsJson["Screen effect"] = visuals.screenEffect;
         visualsJson["Hit effect"] = visuals.hitEffect;
@@ -1707,6 +1731,8 @@ void Config::save(size_t id) const noexcept
         miscJson["Max angle delta"] = misc.maxAngleDelta;
         miscJson["Fake prime"] = misc.fakePrime;
         miscJson["Autozeus"] = misc.autoZeus;
+        miscJson["Autozeus BAIM Only"] = misc.autoZeusBaimOnly;
+        miscJson["Autozeus Max Pen Dist"] = misc.autoZeusMaxPenDist;
         miscJson["Custom Hit Sound"] = misc.customHitSound;
         miscJson["Kill sound"] = misc.killSound;
         miscJson["Custom Kill Sound"] = misc.customKillSound;
@@ -1786,7 +1812,7 @@ void Config::listConfigs() noexcept
 
     std::error_code ec;
     std::transform(std::filesystem::directory_iterator{ path, ec },
-                   std::filesystem::directory_iterator{ },
-                   std::back_inserter(configs),
-                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+        std::filesystem::directory_iterator{ },
+        std::back_inserter(configs),
+        [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
 }

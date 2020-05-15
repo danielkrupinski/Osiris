@@ -36,7 +36,7 @@ public:
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -146,7 +146,7 @@ public:
             ColorToggle distance;
             float maxDistance{ 0.0f };
         };
-       
+
         struct Player : public Shared {
             ColorToggle eyeTraces;
             ColorToggle health;
@@ -158,7 +158,7 @@ public:
             ColorToggle activeWeapon;
             int hpside{ 0 };
             int armorside{ 0 };
-            bool deadesp { false };
+            bool deadesp{ false };
         };
 
         struct Weapon : public Shared { } weapon;
@@ -234,6 +234,7 @@ public:
             false,
             false
         };
+        ColorToggle bulletTracers;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -320,6 +321,8 @@ public:
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
         bool autoZeus{ false };
+        bool autoZeusBaimOnly{ false };
+        int autoZeusMaxPenDist{ 0 };
         bool fakeDuck{ false };
         int fakeDuckKey{ 0 };
         bool fakeDucking{ false };

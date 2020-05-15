@@ -39,7 +39,8 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     if (enterSurfaceData->material == 71 || enterSurfaceData->material == 89) {
         damageModifier = 0.05f;
         penetrationModifier = 3.0f;
-    } else if (enterTrace.contents >> 3 & 1 || enterTrace.surface.flags >> 7 & 1) {
+    }
+    else if (enterTrace.contents >> 3 & 1 || enterTrace.surface.flags >> 7 & 1) {
         penetrationModifier = 1.0f;
     }
 
@@ -67,7 +68,7 @@ static bool handleTaserPenetration(UserCmd* cmd, Vector& angle, Vector& target) 
 
     interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), target }, 0x46004009, { localPlayer.get() }, enterTrace);
 
-    if (sqrt(sqrt(enterTrace.startpos.x * enterTrace.startpos.y * enterTrace.startpos.z)) - sqrt(sqrt(target.x * target.y * target.z)) <= 26)
+    if (sqrt(sqrt(enterTrace.startpos.x * enterTrace.startpos.y * enterTrace.startpos.z)) - sqrt(sqrt(target.x * target.y * target.z)) <= config->misc.autoZeusMaxPenDist)
         return true;
     else
         return false;
@@ -142,7 +143,12 @@ void Aimbot::autoZeus(UserCmd* cmd) noexcept
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->gunGameImmunity())
             continue;
 
-        auto boneList = std::initializer_list{ 3, 4, 5, 6, 7, 11, 28, 39, 53, 73, 74, 76, 82, 83 };
+        auto boneList = std::initializer_list{ 3, 4 };
+
+        if (!config->misc.autoZeusBaimOnly)
+            boneList = std::initializer_list{ 3, 4, 5, 6, 7, 11, 28, 39, 53, 73, 74, 76, 82, 83 };
+        else
+            boneList = std::initializer_list{ 3, 4, 5 };
 
         for (auto bone : boneList) {
             auto bonePosition = entity->getBonePosition(bone);
@@ -250,7 +256,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
         if (!config->aimbot[weaponIndex].keyMode) {
             if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
                 return;
-        } else {
+        }
+        else {
             static bool toggle = true;
             if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
                 toggle = !toggle;
@@ -302,16 +309,16 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
-            
+
 
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
 
             bool clamped{ false };
 
             if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
-                    angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-                    angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-                    clamped = true;
+                angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+                angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+                clamped = true;
             }
 
             angle /= config->aimbot[weaponIndex].smooth;

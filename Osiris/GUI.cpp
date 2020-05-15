@@ -304,7 +304,7 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             }
         }
         ImGui::SetNextItemWidth(85.0f);
-        ImGui::Combo("Anti-Aim Mode", &config->antiAim.mode, "Static\0Custom\0");
+        ImGui::Combo("Anti-Aim Mode", &config->antiAim.mode, "Static\0Jitter\0Dump Me Test\0");
         if (config->antiAim.mode == 1)
         {
             ImGui::SetNextItemWidth(240.0f);
@@ -847,6 +847,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::PushID(6);
     ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 4);
     ImGui::PopID();
+    ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers);
     
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
@@ -1154,6 +1155,13 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
     ImGui::Checkbox("Zeusbot", &config->misc.autoZeus);
+    if (config->misc.autoZeus)
+    {
+        ImGui::SetNextItemWidth(120.0f);
+        ImGui::SliderInt("Zeus Max Wall Penetration Distance", &config->misc.autoZeusMaxPenDist, 0, 50);
+        config->misc.autoZeusMaxPenDist = std::clamp(config->misc.autoZeusMaxPenDist, 0, 50);
+        ImGui::Checkbox("Zeusbot BAIM Only", &config->misc.autoZeusBaimOnly);
+    }
     ImGui::Checkbox("Fakeduck", &config->misc.fakeDuck);
     ImGui::SameLine();
     hotkey(config->misc.fakeDuckKey);
