@@ -18,8 +18,9 @@
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
 
-constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+#include "Fonts.cpp"
+
+constexpr auto windowFlags = NULL;
 
 GUI::GUI() noexcept
 {
@@ -41,29 +42,16 @@ GUI::GUI() noexcept
         ImFontConfig cfg;
         cfg.OversampleV = 3;
 
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges);
+        fonts.tahoma = io.Fonts->AddFontFromMemoryCompressedTTF(&CaviarDreamsNotoSansLight_compressed_data, CaviarDreamsNotoSansLight_compressed_size, 15.0f, &cfg, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromMemoryCompressedTTF(&CaviarDreamsNotoSansLight_compressed_data, CaviarDreamsNotoSansLight_compressed_size, 15.0f, &cfg, ranges);
+        fonts.astriumtabs = io.Fonts->AddFontFromMemoryCompressedTTF(&Astriumtabs2_compressed_data, Astriumtabs2_compressed_size, 30.0f, &cfg, ranges);
     }
 }
 
 void GUI::render() noexcept
 {
     if (!config->style.menuStyle) {
-        renderMenuBar();
-        renderAimbotWindow();
-        renderAntiAimWindow();
-        renderTriggerbotWindow();
-        renderBacktrackWindow();
-        renderGlowWindow();
-        renderChamsWindow();
-        renderEspWindow();
-        renderVisualsWindow();
-        renderSkinChangerWindow();
-        renderSoundWindow();
-        renderStyleWindow();
-        renderMiscWindow();
-        renderReportbotWindow();
-        renderConfigWindow();
+        renderGuiStyle2();
     } else {
         renderGuiStyle2();
     }
@@ -75,6 +63,7 @@ void GUI::updateColors() const noexcept
     case 0: ImGui::StyleColorsDark(); break;
     case 1: ImGui::StyleColorsLight(); break;
     case 2: ImGui::StyleColorsClassic(); break;
+    case 4: ImGui::StyleColorsD3DMeme(); break;
     }
 }
 
@@ -217,7 +206,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 220.0f);
+    ImGui::SetColumnOffset(125.0f, 300.0f);
     ImGui::Checkbox("On key", &config->aimbot[currentWeapon].onKey);
     ImGui::SameLine();
     hotkey(config->aimbot[currentWeapon].key);
@@ -238,7 +227,6 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
     ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
     ImGui::NextColumn();
-    ImGui::PushItemWidth(240.0f);
     ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
     ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
     ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
@@ -439,13 +427,12 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Enabled", &config->glow[currentItem].enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 150.0f);
+    ImGui::SetColumnOffset(125.0f, 300.0f);
     ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
 
     ImGuiCustom::colorPicker("Color", config->glow[currentItem].color.color, nullptr, &config->glow[currentItem].color.rainbow, &config->glow[currentItem].color.rainbowSpeed);
 
     ImGui::NextColumn();
-    ImGui::PushItemWidth(220.0f);
     ImGui::SliderFloat("Thickness", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
     ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
     ImGui::SliderInt("Style", &config->glow[currentItem].style, 0, 3);
@@ -738,7 +725,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
     }
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 280.0f);
+    ImGui::SetColumnOffset(125.0f, 300.0f);
     ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
     ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
     ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
@@ -763,7 +750,6 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
     ImGui::SameLine();
     hotkey(config->visuals.thirdpersonKey);
-    ImGui::PushItemWidth(290.0f);
     ImGui::PushID(0);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
     ImGui::PopID();
@@ -782,7 +768,6 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::PushID(5);
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
-    ImGui::PopItemWidth();
     ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
@@ -961,9 +946,9 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
     }
 
     ImGui::PushItemWidth(150.0f);
-    if (ImGui::Combo("Menu style", &config->style.menuStyle, "Classic\0One window\0"))
+    if (ImGui::Combo("Menu style", &config->style.menuStyle, "One window\0Classic\0"))
         window = { };
-    if (ImGui::Combo("Menu colors", &config->style.menuColors, "Dark\0Light\0Classic\0Custom\0"))
+    if (ImGui::Combo("Menu colors", &config->style.menuColors, "Dark\0Light\0Classic\0Custom\0what is this :thinking:\0"))
         updateColors();
     ImGui::PopItemWidth();
 
@@ -972,7 +957,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-            ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
+            ImGuiCustom::colorPicker2(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
         }
     }
 
@@ -989,7 +974,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::Begin("Misc", &window.misc, windowFlags);
     }
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 230.0f);
+    ImGui::SetColumnOffset(125.0f, 300.0f);
     ImGui::TextUnformatted("Menu key");
     ImGui::SameLine();
     hotkey(config->misc.menuKey);
@@ -1040,7 +1025,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config->misc.nameStealer);
     ImGui::PushID(3);
-    ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("", &config->misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
     ImGui::PopID();
     ImGui::SameLine();
@@ -1148,9 +1132,8 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     }
 
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 170.0f);
+    ImGui::SetColumnOffset(125.0f, 300.0f);
 
-    ImGui::PushItemWidth(160.0f);
 
     if (ImGui::Button("Reload configs", { 160.0f, 25.0f }))
         config->listConfigs();
@@ -1231,67 +1214,202 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+    
+    ImGui::SetNextWindowSize(ImVec2(1150, 525), ImGuiCond_FirstUseEver);
+    static int iPage1 = 0;
+    static int iPage2 = 0;
+    static int iPage3 = 0;
+    ImGui::Begin("Sippin' Fanta", nullptr);
+    {
+        static int tabb = 0;
+        {
+            ImGui::PushFont(fonts.astriumtabs);
+            const char* tabbname[] = {
+                "C",
+                "E",
+                "F"
+            };
+            ImGuiStyle* style = &ImGui::GetStyle();
+            ImVec4* colors = style->Colors;
+            for (int i = 0; i < ARRAYSIZE(tabbname) - 1; i++)
+            {
 
-    if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
-        if (ImGui::BeginTabItem("Aimbot")) {
-            renderAimbotWindow(true);
+                if (tabb == i) {
+                    ImGui::SameLine();
+                    ImGui::PushStyleColor(ImGuiCol_Button, colors[ImGuiCol_ButtonActive]);
+                    if (ImGui::Button(tabbname[i], ImVec2(ImGui::GetWindowSize().x / (ARRAYSIZE(tabbname)) - 19, ImGui::GetWindowSize().y / 8)))
+                        tabb = i;
+                    ImGui::PopStyleColor();
+                }
+                else {
+                    ImGui::SameLine();
+                    if (ImGui::Button(tabbname[i], ImVec2(ImGui::GetWindowSize().x / (ARRAYSIZE(tabbname)) - 19, ImGui::GetWindowSize().y / 8)))
+                        tabb = i;
+                }
+
+            }
+            if (tabb == ARRAYSIZE(tabbname) - 1) {
+                ImGui::SameLine();
+                ImGui::PushStyleColor(ImGuiCol_Button, colors[ImGuiCol_ButtonActive]);
+                if (ImGui::Button(tabbname[ARRAYSIZE(tabbname) - 1], ImVec2(ImGui::GetWindowSize().x / (ARRAYSIZE(tabbname)) - 44.5, ImGui::GetWindowSize().y / 8)))
+                    tabb = ARRAYSIZE(tabbname) - 1;
+                ImGui::PopStyleColor();
+            }
+            else {
+                ImGui::SameLine();
+                if (ImGui::Button(tabbname[ARRAYSIZE(tabbname) - 1], ImVec2(ImGui::GetWindowSize().x / (ARRAYSIZE(tabbname)) - 44.5, ImGui::GetWindowSize().y / 8)))
+                    tabb = ARRAYSIZE(tabbname) - 1;
+            }
+            ImGui::PopFont();
+        }
+        ImGui::Separator();
+        if (tabb == 0) {
+            const char* tabs[] = {
+        "Aimbot",
+        "Triggerbot",
+        "Backtrack",
+        "Anti-Aim"
+            };
+            ImGui::BeginGroup();
+            ImGuiStyle* style = &ImGui::GetStyle();
+            ImVec4* colors = style->Colors;
+            for (int i = 0; i < ARRAYSIZE(tabs); i++)
+            {
+
+                if (iPage1 == i) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, colors[ImGuiCol_ButtonActive]);
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage1 = i;
+                    ImGui::PopStyleColor();
+                }
+                else {
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage1 = i;
+                }
+
+            }
+            ImGui::EndGroup();
+            ImGui::SameLine();
+            ImGui::BeginGroup();
+
+            switch (iPage1)
+            {
+            case 0:
+                renderAimbotWindow(true);
+                break;
+            case 1:
+                renderTriggerbotWindow(true);
+                break;
+            case 2:
+                renderBacktrackWindow(true);
+                break;
+            case 3:
+                renderAntiAimWindow(true);
+                break;
+            }
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Anti aim")) {
-            renderAntiAimWindow(true);
+        if (tabb == 1) {
+            const char* tabs[] = {
+        "Chams",
+        "Esp",
+        "Glow",
+        "Visuals",
+        "Skin changer"
+            };
+            ImGui::BeginGroup();
+            ImGuiStyle* style = &ImGui::GetStyle();
+            ImVec4* colors = style->Colors;
+            for (int i = 0; i < ARRAYSIZE(tabs); i++)
+            {
+
+                if (iPage2 == i) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, colors[ImGuiCol_ButtonActive]);
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage2 = i;
+                    ImGui::PopStyleColor();
+                }
+                else {
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage2 = i;
+                }
+
+            }
+            ImGui::EndGroup();
+            ImGui::SameLine();
+            ImGui::BeginGroup();
+
+            switch (iPage2)
+            {
+            case 0:
+                renderChamsWindow(true);
+                break;
+            case 1:
+                renderEspWindow(true);
+                break;
+            case 2:
+                renderGlowWindow(true);
+                break;
+            case 3:
+                renderVisualsWindow(true);
+                break;
+            case 4:
+                renderSkinChangerWindow(true);
+                break;
+            }
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Triggerbot")) {
-            renderTriggerbotWindow(true);
+        if (tabb == 2) {
+            const char* tabs[] = {
+        "Style",
+        "Sound",
+        "Misc",
+        "Reportbot",
+        "Config"
+            };
+            ImGui::BeginGroup();
+            ImGuiStyle* style = &ImGui::GetStyle();
+            ImVec4* colors = style->Colors;
+            for (int i = 0; i < ARRAYSIZE(tabs); i++)
+            {
+
+                if (iPage3 == i) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, colors[ImGuiCol_ButtonActive]);
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage3 = i;
+                    ImGui::PopStyleColor();
+                }
+                else {
+                    if (ImGui::Button(tabs[i], ImVec2(ImGui::GetWindowSize().x / (/*ARRAYSIZE(tabs)*/ 4 * 2) - 9, ImGui::GetWindowSize().y / 8)))
+                        iPage3 = i;
+                }
+
+            }
+            ImGui::EndGroup();
+            ImGui::SameLine();
+            ImGui::BeginGroup();
+
+            switch (iPage3)
+            {
+            case 0:
+                renderStyleWindow(true);
+                break;
+            case 1:
+                renderSoundWindow(true);
+                break;
+            case 2:
+                renderMiscWindow(true);
+                break;
+            case 3:
+                renderReportbotWindow(true);
+                break;
+            case 4:
+                renderConfigWindow(true);
+                break;
+            }
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Backtrack")) {
-            renderBacktrackWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Glow")) {
-            renderGlowWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Chams")) {
-            renderChamsWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Esp")) {
-            renderEspWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Visuals")) {
-            renderVisualsWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Skin changer")) {
-            renderSkinChangerWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Sound")) {
-            renderSoundWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Style")) {
-            renderStyleWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Misc")) {
-            renderMiscWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Reportbot")) {
-            renderReportbotWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Config")) {
-            renderConfigWindow(true);
-            ImGui::EndTabItem();
-        }
-        ImGui::EndTabBar();
+
     }
 
     ImGui::End();

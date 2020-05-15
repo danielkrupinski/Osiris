@@ -165,7 +165,7 @@ void Misc::watermark() noexcept
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
         interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Osiris");
+        interfaces->surface->printText(L"Sippin' Fanta");
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
