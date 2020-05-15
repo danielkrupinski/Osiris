@@ -1242,28 +1242,15 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("纵横比", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f ");
                         ImGui::NextColumn();
                         ImGui::Checkbox("界面UI透明化", &config->misc.disablePanoramablur);
-                        /*ImGui::Combo("组名选择", &config->misc.clantagshadow, "ShadowWare\0自定义组名\0时钟组名\0");
-                        switch (config->misc.clantagshadow) {
-                        case 0: {
-                            ImGui::Text("组名:ShadowWare");
-                            break;
-                        }
-                        case 1: {
-                            ImGui::Checkbox("动态组名", &config->misc.animatedClanTag);
-                            ImGui::Checkbox("自定义组名", &config->misc.customClanTag);
-                            ImGui::SameLine();
-                            ImGui::PushItemWidth(120.0f);
-                            ImGui::PushID(0);
-                            if (ImGui::InputText("", &config->misc.clanTag))
-                                Misc::updateClanTag(true);
-                            ImGui::PopID();
-                            break;
-                        }
-                        case 2: {
-                            ImGui::Checkbox("时钟组名 ", &config->misc.clocktag);
-                            break;
-                        }
-                        }*/
+                        ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
+                        ImGui::Checkbox("Clock tag", &config->misc.clocktag);
+                        ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
+                        ImGui::SameLine();
+                        ImGui::PushItemWidth(120.0f);
+                        ImGui::PushID(0);
+                        if (ImGui::InputText("", &config->misc.clanTag))
+                            Misc::updateClanTag(true);
+                        ImGui::PopID();
 
                         ImGui::PushItemWidth(120.0f);
 
@@ -2480,6 +2467,24 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
                         ImGui::Checkbox("Disable model occlusion", &config->misc.disableModelOcclusion);
                         ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
+                        ImGui::Text("ReportBot");
+                        ImGui::Checkbox("Enabled", &config->reportbot.enabled);
+                        ImGui::SameLine(0.0f, 50.0f);
+                        if (ImGui::Button("Reset"))
+                            Reportbot::reset();
+                        ImGui::Separator();
+                        ImGui::PushItemWidth(80.0f);
+                        ImGui::Combo("Target", &config->reportbot.target, "Enemies\0Allies\0All\0");
+                        ImGui::InputInt("Delay (s)", &config->reportbot.delay);
+                        config->reportbot.delay = (std::max)(config->reportbot.delay, 1);
+                        ImGui::InputInt("Rounds", &config->reportbot.rounds);
+                        config->reportbot.rounds = (std::max)(config->reportbot.rounds, 1);
+                        ImGui::PopItemWidth();
+                        ImGui::Checkbox("Abusive Communications", &config->reportbot.textAbuse);
+                        ImGui::Checkbox("Griefing", &config->reportbot.griefing);
+                        ImGui::Checkbox("Wall Hacking", &config->reportbot.wallhack);
+                        ImGui::Checkbox("Aim Hacking", &config->reportbot.aimbot);
+                        ImGui::Checkbox("Other Hacking", &config->reportbot.other);
                         ImGui::NextColumn();
                         ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
                         ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
