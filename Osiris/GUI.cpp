@@ -239,12 +239,27 @@ void GUI::render() noexcept
 
 void GUI::hotkey(int& key) noexcept
 {
-    key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ 热键 ]");
+    switch (config->misc.language) {
+    case 0: {
+        key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ 热键 ]");
 
-    if (!ImGui::IsItemHovered())
-        return;
+        if (!ImGui::IsItemHovered())
+            return;
 
-    ImGui::SetTooltip("按下任意键修改热键");
+        ImGui::SetTooltip("按下任意键修改热键");
+        break;
+    }
+    case 1: {
+        key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ Hotkey ]");
+
+        if (!ImGui::IsItemHovered())
+            return;
+
+        ImGui::SetTooltip("Press anykey to change KeyBind");
+        break;
+    }
+
+    }
     ImGuiIO& io = ImGui::GetIO();
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
         if (ImGui::IsKeyPressed(i) && i != config->misc.menuKey)
@@ -1333,6 +1348,21 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SetNextItemWidth(120.0f);
                         ImGui::SliderFloat("最大视角变化", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
                         ImGui::Checkbox("强开优先", &config->misc.fakePrime);
+                        ImGui::Checkbox("购买清单", &config->misc.purchaseList.enabled);
+                        ImGui::SameLine();
+
+                        ImGui::PushID("Purchase List");
+                        if (ImGui::Button("..."))
+                            ImGui::OpenPopup("");
+
+                        if (ImGui::BeginPopup("")) {
+                            ImGui::SetNextItemWidth(75.0f);
+                            ImGui::Combo("模式", &config->misc.purchaseList.mode, "详细\0简略\0");
+                            ImGui::Checkbox("只在冻结时间启用", &config->misc.purchaseList.onlyDuringFreezeTime);
+                            ImGui::Checkbox("显示价格", &config->misc.purchaseList.showPrices);
+                            ImGui::Checkbox("没有窗口标题", &config->misc.purchaseList.noTitleBar);
+                            ImGui::EndPopup();
+                        }
                         ImGui::Text("——————游戏声音——————");
                         static int currentCategory{ 0 };
                         ImGui::PushItemWidth(110.0f);
@@ -1495,6 +1525,7 @@ void GUI::renderMenuBar() noexcept
                     tab_int = 7;
                 }
 
+                break;
 }
         case 1: 
         {
@@ -2144,8 +2175,8 @@ void GUI::renderMenuBar() noexcept
                         //WallHack                
                         break;
  }
-                    
-case 4: {
+                          //WallHack
+                    case 4: {
                         {
                             ImGui::Columns(2, nullptr, false);
                             ImGui::SetColumnOffset(1, 280.0f);
@@ -2408,8 +2439,8 @@ case 4: {
                             /*ImGui::SliderFloat("##Custom Viewmodel X", &config->visuals.viewmodel_x, -100, 100, "自定义手臂长度X轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Y", &config->visuals.viewmodel_y, -100, 100, "自定义手臂长度Y轴: %.2f");
                             ImGui::SliderFloat("##Custom Viewmodel Z", &config->visuals.viewmodel_z, -100, 100, "自定义手臂长度Z轴: %.2f");*/
-                            ImGui::Checkbox("旋转沙鹰", &config->visuals.deagleSpinner);
-                            if (ImGui::Button("刷新修改", { 130.0f, 30.0f }))
+                            ImGui::Checkbox("DeagleSpinner", &config->visuals.deagleSpinner);
+                            if (ImGui::Button("Update", { 130.0f, 30.0f }))
                                 SkinChanger::scheduleHudUpdate();
                             //Visuals::customViewmodel();
                         
@@ -2420,154 +2451,121 @@ case 4: {
                     case 6: {
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
-                        ImGui::Checkbox("防止系统挂机自动踢出", &config->misc.antiAfkKick);
-                        ImGui::Checkbox("自动连跳", &config->misc.bunnyHop);
-                        /*ImGui::SliderInt("连跳击中率", &config->misc.bhopHitchance, 0, 100, "%d%");
-                        ImGui::SliderInt("最小击中率", &config->misc.bhopMinHits, 0, 20, "%d%");
-                        ImGui::SliderInt("最大击中率", &config->misc.bhopMaxHits, 0, 20, "%d%");*/
-                        ImGui::Checkbox("自动转向", &config->misc.autoStrafe);
-                        ImGui::Checkbox("快速蹲下", &config->misc.fastDuck);
-                        ImGui::Checkbox("滑步不演", &config->misc.moonwalk);
-                        ImGui::Checkbox("地形边缘自动跳跃", &config->misc.edgejump);
+                        ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
+                        ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
+                        ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
+                        ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
+                        ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);
+                        ImGui::Checkbox("Edge Jump", &config->misc.edgejump);
                         ImGui::SameLine();
                         hotkey(config->misc.edgejumpkey);
-                        ImGui::Checkbox("慢走", &config->misc.slowwalk);
+                        ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
                         ImGui::SameLine();
                         hotkey(config->misc.slowwalkKey);
-                        ImGui::Checkbox("狙击准心", &config->misc.sniperCrosshair);
-                        ImGui::Checkbox("后坐力准心", &config->misc.recoilCrosshair);
-                        ImGui::Checkbox("自动手枪 ", &config->misc.autoPistol);
-                        ImGui::Checkbox("自动上弹", &config->misc.autoReload);
-                        ImGui::Checkbox("自动接受", &config->misc.autoAccept);
-                        ImGui::Checkbox("雷达透视", &config->misc.radarHack);
-                        ImGui::Checkbox("显示段位", &config->misc.revealRanks);
-                        ImGui::Checkbox("显示金钱", &config->misc.revealMoney);
-                        ImGui::Checkbox("揭发嫌疑人", &config->misc.revealSuspect);
-                        ImGuiCustom::colorPicker("观众名单 ", config->misc.spectatorList);
-                        ImGuiCustom::colorPicker("水印", config->misc.watermark);
-                        ImGui::Checkbox("修复自瞄精度", &config->misc.fixAnimationLOD);
-                        ImGui::Checkbox("修复自瞄部位", &config->misc.fixBoneMatrix);
-                        ImGui::Checkbox("修复物体运动", &config->misc.fixMovement);
-                        ImGui::Checkbox("模型绘测", &config->misc.disableModelOcclusion);
-                        ImGui::SliderFloat("纵横比", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f ");
+                        ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
+                        ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
+                        ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
+                        ImGui::Checkbox("Auto reload", &config->misc.autoReload);
+                        ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
+                        ImGui::Checkbox("Radar hack", &config->misc.radarHack);
+                        ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
+                        ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
+                        ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
+                        ImGuiCustom::colorPicker("Spectator list", config->misc.spectatorList);
+                        ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
+                        ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
+                        ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
+                        ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
+                        ImGui::Checkbox("Disable model occlusion", &config->misc.disableModelOcclusion);
+                        ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
                         ImGui::NextColumn();
-                        ImGui::Checkbox("界面UI透明化", &config->misc.disablePanoramablur);
-                        /*ImGui::Combo("组名选择", &config->misc.clantagshadow, "ShadowWare\0自定义组名\0时钟组名\0");
-                        switch (config->misc.clantagshadow) {
-                        case 0: {
-                            ImGui::Text("组名:ShadowWare");
-                            break;
-                        }
-                        case 1: {
-                            ImGui::Checkbox("动态组名", &config->misc.animatedClanTag);
-                            ImGui::Checkbox("自定义组名", &config->misc.customClanTag);
-                            ImGui::SameLine();
-                            ImGui::PushItemWidth(120.0f);
-                            ImGui::PushID(0);
-                            if (ImGui::InputText("", &config->misc.clanTag))
-                                Misc::updateClanTag(true);
-                            ImGui::PopID();
-                            break;
-                        }
-                        case 2: {
-                            ImGui::Checkbox("时钟组名 ", &config->misc.clocktag);
-                            break;
-                        }
-                        }*/
-
+                        ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
+                        ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
+                        ImGui::Checkbox("Clock tag", &config->misc.clocktag);
+                        ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
+                        ImGui::SameLine();
                         ImGui::PushItemWidth(120.0f);
-
-                        ImGui::Checkbox("击杀嘲讽", &config->misc.killMessage);
+                        ImGui::PushID(0);
+                        if (ImGui::InputText("", &config->misc.clanTag))
+                            Misc::updateClanTag(true);
+                        ImGui::PopID();
+                        ImGui::Checkbox("Kill message", &config->misc.killMessage);
                         ImGui::SameLine();
                         ImGui::PushItemWidth(120.0f);
                         ImGui::PushID(1);
                         ImGui::InputText("", &config->misc.killMessageString);
                         ImGui::PopID();
-                        /*ImGui::Combo("Fake功能选项", &config->misc.nameChangeSelection, "关闭\0假封禁\0假交易(开箱)\0窃取(自定义)名字");
-                        if (config->misc.nameChangeSelection == 1)
-                        {
-                            ImGui::PushID(3);
-                            ImGui::SetNextItemWidth(100.0f);
-                            ImGui::Combo("", &config->misc.banColor, "白色\0红色\0紫色\0绿色\0浅绿色\0青色\0浅白色\0灰色\0黄色\0灰色2\0浅蓝色\0紫灰色\0蓝色\0粉色\0暗橙色\0橙色\0");
-                            ImGui::PopID();
-                            ImGui::SameLine();
-                            ImGui::PushID(4);
-                            ImGui::InputText("", &config->misc.banText);
-                            ImGui::PopID();
-                            ImGui::SameLine();
-                            if (ImGui::Button("假封禁"))
-                                Misc::fakeBan(true);
-                        }
-                        else if (config->misc.nameChangeSelection == 2)
-                        {
-                            ImGui::SetNextItemWidth(200.0f);
-                            ImGuiCustom::MultiCombo("Fake Item Flags", config->misc.fakeItemFlags, config->misc.selectedFakeItemFlags, 4);
-                            ImGui::SetNextItemWidth(200.0f);
-                            ImGui::Combo("阵营", &config->misc.fakeItemTeam, "警家\0匪家");
-                            ImGui::SetNextItemWidth(200.0f);
-                            ImGui::Combo("Fake信息选项", &config->misc.fakeItemMessageType, "开箱获得的\0交易获得的\0");
-                            ImGui::SetNextItemWidth(200.0f);
-                            ImGui::Combo("武器选择", &config->misc.fakeItemType, "AK-47\0AUG\0AWP\0Bayonet\0Bowie Knife\0Butterfly Knife\0CZ75-Auto\0Classic Knife\0Desert Eagle\0Dual Berettas\0FAMAS\0Falchion Knife\0Five-SeveN\0Flip Knife\0G3SG1\0Galil AR\0Glock-18\0Gut Knife\0Huntsman Knife\0Karambit\0M249\0M4A1-S\0M4A4\0M9 Bayonet\0MAC-10\0MAG-7\0MP5-SD\0MP7\0MP9\0Navaja Knife\0Negev\0Nomad Knife\0Nova\0P2000\0P250\0P90\0PP-Bizon\0Paracord Knife\0R8 Revolver\0SCAR-20\0SG 553\0SSG 08\0Sawed-Off\0Shadow Daggers\0Skeleton Knife\0Spectral Shiv\0Stiletto Knife\0Survival Knife\0Talon Knife\0Tec-9\0UMP-45\0USP-S\0Ursus Knife\0XM1014\0Hand Wraps\0Moto Gloves\0Specialist Gloves\0Sport Gloves\0Bloodhound Gloves\0Hydra Gloves\0Driver Gloves\0");
-                            ImGui::SetNextItemWidth(200.0f);
-                            ImGui::Combo("皮肤颜色(质量)", &config->misc.fakeItemRarity, "白色品质\0淡蓝色品质\0蓝色品质\0紫色品质\0粉色品质\0红色品质\0橙色|金色品质\0");
-                            ImGui::Combo("玩家颜色", &config->misc.fakeItemPlayerColor, "黄色\0绿色\0蓝色\0紫色\0橙色");
-                            ImGui::InputText("玩家名字", &config->misc.fakeItemPlayerName);
-                            ImGui::InputText("皮肤名字", &config->misc.fakeItemName);
-                            if (ImGui::Button("开启假皮肤"))
-                                Misc::fakeItem(true);
-                        }
-                        else if (config->misc.nameChangeSelection == 3)
-                        {
-                            ImGui::Checkbox("名字窃取", &config->misc.nameStealer);
-                            ImGui::InputText("自定义名字", &config->misc.customName);
-                            if (ImGui::Button("改变昵称"))
-                                Misc::setName(true);
-                        }*/
-
-                        ImGui::Checkbox("快速下包", &config->misc.fastPlant);
-                        //ImGui::Checkbox("C4伤害器", &config->misc.bombDamage);
-                        ImGuiCustom::colorPicker("C4计时器", config->misc.bombTimer);
-                        ImGui::Checkbox("快速换弹", &config->misc.quickReload);
-                        if (ImGui::Button("开启自定义击中音效"))
-                            config->misc.hitSound = 5;
-
-                        ImGui::Combo("击中音效", &config->misc.hitSound, "无\0金属\0SK\0铃铛声\0玻璃声音\0自定义\0");
+                        ImGui::Checkbox("Name stealer", &config->misc.nameStealer);
+                        ImGui::PushID(3);
+                        ImGui::SetNextItemWidth(100.0f);
+                        ImGui::Combo("", &config->misc.banColor, "White\0Red\0Purple\0Green\0Light green\0Turquoise\0Light red\0Gray\0Yellow\0Gray 2\0Light blue\0Gray/Purple\0Blue\0Pink\0Dark orange\0Orange\0");
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        ImGui::PushID(4);
+                        ImGui::InputText("", &config->misc.banText);
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        if (ImGui::Button("Setup fake ban"))
+                            Misc::fakeBan(true);
+                        ImGui::Checkbox("Fast plant", &config->misc.fastPlant);
+                        ImGuiCustom::colorPicker("Bomb timer", config->misc.bombTimer);
+                        ImGui::Checkbox("Quick reload", &config->misc.quickReload);
+                        ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
+                        ImGui::SameLine();
+                        hotkey(config->misc.prepareRevolverKey);
+                        ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
                         if (config->misc.hitSound == 5) {
-                            ImGui::InputText("击中音效文件名", &config->misc.customHitSound);
+                            ImGui::InputText("Hit Sound filename", &config->misc.customHitSound);
                             if (ImGui::IsItemHovered())
-                                ImGui::SetTooltip("请在CSGO根目录csgo/sound/里面放入音效文件xxx.wav");
+                                ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
                         }
-                        if (ImGui::Button("开启自定义击杀音效"))
-                            config->misc.killSound = 5;
-
                         ImGui::PushID(5);
-                        ImGui::Combo("击杀音效", &config->misc.killSound, "无\0金属\0SK\0铃铛声\0玻璃声音\0自定义\0");
+                        ImGui::Combo("Kill Sound", &config->misc.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
                         if (config->misc.killSound == 5) {
-                            ImGui::InputText("击杀音效文件名", &config->misc.customKillSound);
+                            ImGui::InputText("Kill Sound filename", &config->misc.customKillSound);
                             if (ImGui::IsItemHovered())
-                                ImGui::SetTooltip("请在CSGO根目录csgo/sound/里面放入音效文件xxx.wav");
+                                ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
                         }
                         ImGui::PopID();
                         ImGui::SetNextItemWidth(90.0f);
-
-                        ImGui::Text("快速打针");
+                        ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
+                        config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
+                        ImGui::SameLine();
+                        hotkey(config->misc.chokedPacketsKey);
+                        ImGui::Text("Quick healthshot");
                         ImGui::SameLine();
                         hotkey(config->misc.quickHealthshotKey);
-                        ImGui::Checkbox("投掷物预测线", &config->misc.nadePredict);
-                        ImGui::Checkbox("修复头号特训信号", &config->misc.fixTabletSignal);
+                        ImGui::Checkbox("Grenade Prediction", &config->misc.nadePredict);
+                        ImGui::Checkbox("Fix tablet signal", &config->misc.fixTabletSignal);
                         ImGui::SetNextItemWidth(120.0f);
-                        ImGui::SliderFloat("最大视角变化", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
-                        ImGui::Checkbox("强开优先", &config->misc.fakePrime);
-                        ImGui::Text("——————游戏声音——————");
+                        ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
+                        ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+                        ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
+                        ImGui::SameLine();
+
+                        ImGui::PushID("Purchase List");
+                        if (ImGui::Button("..."))
+                            ImGui::OpenPopup("");
+
+                        if (ImGui::BeginPopup("")) {
+                            ImGui::SetNextItemWidth(75.0f);
+                            ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
+                            ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
+                            ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
+                            ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
+                            ImGui::EndPopup();
+                        }
+                        ImGui::PopID();
+                        ImGui::Text("——————GameSounds——————");
                         static int currentCategory{ 0 };
                         ImGui::PushItemWidth(110.0f);
-                        ImGui::Combo("", &currentCategory, "本人\0友军\0敌人\0");
+                        ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
                         ImGui::PopItemWidth();
-                        ImGui::SliderInt("全局音效", &config->sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
-                        ImGui::SliderInt("爆头音效", &config->sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
-                        ImGui::SliderInt("开枪声音", &config->sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
-                        ImGui::SliderInt("脚步声音", &config->sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
-                        ImGui::SliderInt("鸡叫声", &config->sound.chickenVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("MasterVolume", &config->sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("HeadShotVolume", &config->sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("WeaponVolume", &config->sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("FootStepVolume", &config->sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
+                        ImGui::SliderInt("ChickenVolume", &config->sound.chickenVolume, 0, 200, "%d%%");
                         ImGui::Columns(1);
                         break;
                     }
@@ -2617,18 +2615,18 @@ case 4: {
 
 
 
-                                if (ImGui::Button("刷新参数", { 160.0F, 25.0F }))
+                                if (ImGui::Button("Refresh", { 160.0F, 25.0F }))
                                     //config->Config::Config("ShadowWare");// old  文件夹名字
                                     config->listConfigs(); //New 
 
-                                if (ImGui::Button("创建参数", { 100.0f, 25.0f }))
+                                if (ImGui::Button("Creat Config", { 100.0f, 25.0f }))
                                     config->add(buffer.c_str());
 
-                                if (ImGui::Button("重置参数", { 100.0f, 25.0f }))
-                                    ImGui::OpenPopup("重置参数");
+                                if (ImGui::Button("Reset Config", { 100.0f, 25.0f }))
+                                    ImGui::OpenPopup("Reset");
 
-                                if (ImGui::BeginPopup("重置参数")) {
-                                    static constexpr const char* names[]{ "确定重置" };
+                                if (ImGui::BeginPopup("Reset")) {
+                                    static constexpr const char* names[]{ "Reset All" };
                                     for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                                         if (i == 1) ImGui::Separator();
 
@@ -2642,37 +2640,34 @@ case 4: {
                                 }
                                 ImGui::PushItemWidth(100.0f);
                                 if (currentConfig != -1) {
-                                    if (ImGui::Button("加载参数", { 100.0f, 25.0f })) {
+                                    if (ImGui::Button("Load Config", { 100.0f, 25.0f })) {
                                         config->load(currentConfig);
                                         SkinChanger::scheduleHudUpdate();
                                         Misc::updateClanTag(true);
                                     }
 
-                                    if (ImGui::Button("保存参数", { 100.0f, 25.0f }))
+                                    if (ImGui::Button("Save Config", { 100.0f, 25.0f }))
                                         config->save(currentConfig);
 
-                                    if (ImGui::Button("删除参数", { 100.0f, 25.0f }))
+                                    if (ImGui::Button("Deleted Config", { 100.0f, 25.0f }))
                                         config->remove(currentConfig);
                                 }
 
 
 
                                 ImGui::NextColumn();
-                                ImGui::TextUnformatted("ShadowWare菜单热键");
+                                ImGui::TextUnformatted("Menu HotKey");
                                 ImGui::SameLine();
                                 hotkey(config->misc.menuKey);
 
-                                //ImGui::Checkbox("LUA编辑", &LUA_WINDOW);
-
-                                //if (ImGui::Button("加载LUA", { 100.0f, 25.0f })) 
-                                //c_lua::luaSettingLoad();
-                                //if (ImGui::Button("保存LUA", { 100.0f, 25.0f }))
 
 
-
-
-                                if (ImGui::Button("退出Shadow Ware"))
+                                if (ImGui::Button("Rage Quit"))
                                     hooks->uninstall();
+
+
+
+                                
 
 
 
@@ -2720,8 +2715,9 @@ case 4: {
                     tab_int = 7;
 
                 }
-        }
-
+                break;
+}
+        
 
 }
 
