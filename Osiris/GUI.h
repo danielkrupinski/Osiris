@@ -14,6 +14,7 @@ private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
+	void drawLuaItems(int tab, int column);
     void renderAimbotWindow(bool contentOnly = false) noexcept;
     void renderAntiAimWindow(bool contentOnly = false) noexcept;
     void renderTriggerbotWindow(bool contentOnly = false) noexcept;
