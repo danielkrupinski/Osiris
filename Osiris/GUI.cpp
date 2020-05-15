@@ -1200,7 +1200,7 @@ void GUI::renderMenuBar() noexcept
                             ImGui::Checkbox("旋转沙鹰", &config->visuals.deagleSpinner);
                             if (ImGui::Button("刷新修改", { 130.0f, 30.0f }))
                                 SkinChanger::scheduleHudUpdate();
-                            //Visuals::customViewmodel();
+                            
                         }
 
                         break;
@@ -1242,9 +1242,9 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("纵横比", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f ");
                         ImGui::NextColumn();
                         ImGui::Checkbox("界面UI透明化", &config->misc.disablePanoramablur);
-                        ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
-                        ImGui::Checkbox("Clock tag", &config->misc.clocktag);
-                        ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
+                        ImGui::Checkbox("动态组名", &config->misc.animatedClanTag);
+                        ImGui::Checkbox("时钟组名", &config->misc.clocktag);
+                        ImGui::Checkbox("自定义组名", &config->misc.customClanTag);
                         ImGui::SameLine();
                         ImGui::PushItemWidth(120.0f);
                         ImGui::PushID(0);
