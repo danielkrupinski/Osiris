@@ -17,6 +17,7 @@
 #include "Hacks/SkinChanger.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
+#include "SDK/SearchEngine.h"
 int tab_int = 0;
 
 
