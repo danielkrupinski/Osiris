@@ -1,4 +1,4 @@
-﻿#include <mutex>
+#include <mutex>
 #include <numeric>
 #include <sstream>
 
@@ -39,34 +39,34 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
-void Misc::slowwalk(UserCmd* cmd) noexcept
-{
-    if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
-        return;
-
-    if (!localPlayer || !localPlayer->isAlive())
-        return;
-
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon)
-        return;
-
-    const auto weaponData = activeWeapon->getWeaponData();
-    if (!weaponData)
-        return;
-
-    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
-
-    if (cmd->forwardmove && cmd->sidemove) {
-        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
-        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
-    } else if (cmd->forwardmove) {
-        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
-    } else if (cmd->sidemove) {
-        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
-    }
-}
+//void Misc::slowwalk(UserCmd* cmd) noexcept
+//{
+//    if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
+//        return;
+//
+//    if (!localPlayer || !localPlayer->isAlive())
+//        return;
+//
+//    const auto activeWeapon = localPlayer->getActiveWeapon();
+//    if (!activeWeapon)
+//        return;
+//
+//    const auto weaponData = activeWeapon->getWeaponData();
+//    if (!weaponData)
+//        return;
+//
+//    const float maxSpeed = (localPlayer->isScoped() ? weaponData->maxSpeedAlt : weaponData->maxSpeed) / 3;
+//
+//    if (cmd->forwardmove && cmd->sidemove) {
+//        const float maxSpeedRoot = maxSpeed * static_cast<float>(M_SQRT1_2);
+//        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+//        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeedRoot : maxSpeedRoot;
+//    } else if (cmd->forwardmove) {
+//        cmd->forwardmove = cmd->forwardmove < 0.0f ? -maxSpeed : maxSpeed;
+//    } else if (cmd->sidemove) {
+//        cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
+//    }
+//}
 
 void Misc::inverseRagdollGravity() noexcept
 {
@@ -667,7 +667,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                if (const auto definition = memory->itemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
                         purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
                         totalCost += weaponInfo->price;

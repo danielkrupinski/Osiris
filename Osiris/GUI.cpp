@@ -292,7 +292,7 @@ void GUI::renderMenuBar() noexcept
                 ImGui::Separator();
                 switch (tab_int) {
 
-                case 0: {
+                    case 0: {
                     static int currentCategory{ 0 };
 
                     ImGui::PushItemWidth(110.0f);
@@ -589,23 +589,21 @@ void GUI::renderMenuBar() noexcept
                     
                     break;
                 }
-                //Legit
-
-                case 1: {
+                        //Legit
+                    case 1: {
 
 
                     break;
                 }
                         //Rage
-                    
-                        case 2: {
-                        ImGui::Checkbox("Enabled", &config->antiAim.enabled);
+                    case 2: {
+                        ImGui::Checkbox("开启", &config->antiAim.enabled);
                         ImGui::Checkbox("##pitch", &config->antiAim.pitch);
                         ImGui::SameLine();
-                        ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-                        ImGui::Checkbox("Yaw", &config->antiAim.yaw);
-                        ImGui::Checkbox("SlowWalk", &config->antiAim.Slowwalk);
-                        ImGui::SliderInt("SlowWalkSpeed", &config->antiAim.slowwalkspeed, 0, 64, "%d");
+                        ImGui::SliderFloat("P轴", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
+                        ImGui::Checkbox("Y轴", &config->antiAim.yaw);
+                        ImGui::Checkbox("假走", &config->antiAim.Slowwalk);
+                        ImGui::SliderInt("假走速度", &config->antiAim.slowwalkspeed, 0, 64, "%d");
                         ImGui::SameLine();
                         hotkey(config->antiAim.slowwalkkey);
                         break;
@@ -1207,7 +1205,7 @@ void GUI::renderMenuBar() noexcept
 
                         break;
                     }
-
+                    //Skin
                     case 6: {
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
@@ -1223,9 +1221,9 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("地形边缘自动跳跃", &config->misc.edgejump);
                         ImGui::SameLine();
                         hotkey(config->misc.edgejumpkey);
-                        ImGui::Checkbox("慢走", &config->misc.slowwalk);
+                        /*ImGui::Checkbox("慢走", &config->misc.slowwalk);
                         ImGui::SameLine();
-                        hotkey(config->misc.slowwalkKey);
+                        hotkey(config->misc.slowwalkKey);*/
                         ImGui::Checkbox("狙击准心", &config->misc.sniperCrosshair);
                         ImGui::Checkbox("后坐力准心", &config->misc.recoilCrosshair);
                         ImGui::Checkbox("自动手枪 ", &config->misc.autoPistol);
@@ -1498,7 +1496,7 @@ void GUI::renderMenuBar() noexcept
 
                 ImGui::SetCursorPos(ImVec2(10, 200));
 
-                if (ImGui::Button("AA", ImVec2(80, 80)))
+                if (ImGui::Button("AntiAim", ImVec2(80, 80)))
                     tab_int = 2;
 
                 ImGui::SetCursorPos(ImVec2(10, 280));
@@ -2462,9 +2460,9 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("Edge Jump", &config->misc.edgejump);
                         ImGui::SameLine();
                         hotkey(config->misc.edgejumpkey);
-                        ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
+                        /*ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
                         ImGui::SameLine();
-                        hotkey(config->misc.slowwalkKey);
+                        hotkey(config->misc.slowwalkKey);*/
                         ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
                         ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
                         ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);

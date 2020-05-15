@@ -61,9 +61,7 @@ public:
     Head<int, StickerKit*> stickerKits;
 
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
-};
-
-class ItemSystem {
-public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
+
+

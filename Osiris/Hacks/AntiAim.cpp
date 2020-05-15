@@ -52,14 +52,16 @@ void SlowWalk(UserCmd* get_cmd, float get_speed)
 
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
-    if (config->antiAim.Slowwalk && GetAsyncKeyState(config->antiAim.slowwalkkey))
-	{
-		SlowWalk(cmd, config->antiAim.slowwalkspeed);
-	}
+    
     
     if (config->antiAim.enabled) {
         if (!localPlayer)
             return;
+		
+		if(config->antiAim.Slowwalk && GetAsyncKeyState(config->antiAim.slowwalkkey))
+		{
+			SlowWalk(cmd, config->antiAim.slowwalkspeed);
+		}
 
         if (config->antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)
             cmd->viewangles.x = config->antiAim.pitchAngle;

@@ -248,8 +248,8 @@ public:
         bool moonwalk{ false };
         bool edgejump{ false };
         int edgejumpkey{ 0 };
-        bool slowwalk{ false };
-        int slowwalkKey{ 0 };
+        /*bool slowwalk{ false };
+        int slowwalkKey{ 0 };*/
         bool sniperCrosshair{ false };
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
