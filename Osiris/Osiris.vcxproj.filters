@@ -385,5 +385,8 @@
     <ClInclude Include="SDK\WeaponSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\SearchEngine.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
