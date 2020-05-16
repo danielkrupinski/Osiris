@@ -429,9 +429,6 @@ void Ragebot::run(UserCmd* cmd) noexcept
 }
 
 
-
-
-
 bool Ragebot::can_shoot(const float time, UserCmd* cmd)
 {
     
@@ -452,7 +449,7 @@ bool Ragebot::can_shoot(const float time, UserCmd* cmd)
 
 void Ragebot::Autostop(UserCmd* cmd) noexcept
 {
-    
+    static float Speed = 450.f;
 
     if (!localPlayer) return;
 
@@ -460,9 +457,6 @@ void Ragebot::Autostop(UserCmd* cmd) noexcept
 
     if (Velocity.Length2D() == 0)
         return;
-
-    static float Speed = 450.f;
-
 
     Vector2 Direction;
     Vector2 RealView;

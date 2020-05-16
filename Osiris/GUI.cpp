@@ -1335,6 +1335,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
                         ImGui::Combo("Language/语言选择", &config->misc.language, "中文/Chinese\0英语/English\0");
+                        ImGui::Combo("界面风格", &config->misc.guistyle, "风格1\0风格2\0风格3\0");
                         ImGui::Checkbox("防止系统挂机自动踢出", &config->misc.antiAfkKick);
                         ImGui::Checkbox("自动连跳", &config->misc.bunnyHop);
                         /*ImGui::SliderInt("连跳击中率", &config->misc.bhopHitchance, 0, 100, "%d%");
@@ -2566,6 +2567,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Columns(2, nullptr, false);
                         ImGui::SetColumnOffset(1, 230.0f);
                         ImGui::Combo("Language/语言选择", &config->misc.language, "中文/Chinese\0英语/English\0");
+                        ImGui::Combo("GuiStyle", &config->misc.guistyle, "Styel1\0Styel2\0Styel3\0");
                         ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
                         ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
                         ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
@@ -2574,9 +2576,6 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("Edge Jump", &config->misc.edgejump);
                         ImGui::SameLine();
                         hotkey(config->misc.edgejumpkey);
-                        /*ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
-                        ImGui::SameLine();
-                        hotkey(config->misc.slowwalkKey);*/
                         ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
                         ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
                         ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
@@ -2613,6 +2612,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("Other Hacking", &config->reportbot.other);
                         ImGui::NextColumn();
                         ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
+                        ImGui::Checkbox("Zy-Cheat-Clantag", &config->misc.zycheat);
                         ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
                         ImGui::Checkbox("Clock tag", &config->misc.clocktag);
                         ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
