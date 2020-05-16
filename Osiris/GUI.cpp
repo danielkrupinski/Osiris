@@ -2725,7 +2725,7 @@ void GUI::renderMenuBar() noexcept
                                     return true;
                                 }, &search_result, search_result.size(), 10);
 
-                    }
+                    
 
 
 
