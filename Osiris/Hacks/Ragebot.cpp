@@ -311,6 +311,12 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
 
 void Ragebot::run(UserCmd* cmd) noexcept
 {
+    float SimulationTime = 0.f;
+    
+    float flServerTime = localPlayer->tickBase() * memory->globalVars->intervalPerTick2;
+    
+    static int MinimumVelocity = 0;
+    
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
         return;
 
@@ -338,8 +344,9 @@ void Ragebot::run(UserCmd* cmd) noexcept
 
    // if (activeWeapon->itemDefinitionIndex2() == WeaponId::Taser && config->misc.autoZeus)
         //Ragebot::autoZeus(cmd);
+    
 
-
+    bool canShoot = (activeWeapon->nextPrimaryAttack() <= flServerTime && activeWeapon->clip() > 0);
 
     if (config->ragebot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config->ragebot[weaponIndex].autoShot) && activeWeapon->getInaccuracy() <= config->ragebot[weaponIndex].maxAimInaccuracy) {
 
@@ -400,6 +407,13 @@ void Ragebot::run(UserCmd* cmd) noexcept
                 interfaces->engine->setViewAngles(cmd->viewangles);
             
 
+            MinimumVelocity = localPlayer->getActiveWeapon() && localPlayer->get_full_info()->max_speed_alt * .34f;
+
+            if (!activeWeapon || activeWeapon->clip() == 0) return;
+
+            if (localPlayer->velocity_vector2().Length() >= MinimumVelocity && canShoot && !GetAsyncKeyState(VK_SPACE))
+                Autostop(cmd);
+
             if (config->ragebot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config->ragebot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
 
@@ -426,8 +440,6 @@ bool Ragebot::can_shoot(const float time, UserCmd* cmd)
 
     const auto weapon = localPlayer->getActiveWeapon();
     if (!weapon || weapon->clip() == 0) return false;
-
-
 
 
     if (weapon->nextPrimaryAttack() > time)

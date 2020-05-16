@@ -15,6 +15,7 @@
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
+#include "Fad.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -35,6 +36,7 @@ public:
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
+
 
 class Entity {
 public:
@@ -208,6 +210,13 @@ VIRTUAL_METHOD(void, release, 1, (), (this + 8))
 
         playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
         return playerName;
+    }
+
+    CSWeaponInfo* get_full_info()
+    {
+        if (!this) return nullptr;
+        typedef CSWeaponInfo* (__thiscall* Fn)(void*);
+        return GetFunction<Fn>(this, 460)(this);
     }
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)

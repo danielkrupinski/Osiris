@@ -14,6 +14,7 @@ struct GlobalVars {
     const int maxClients;
     const int tickCount;
     const float intervalPerTick;
+    float intervalPerTick2;
 
     float serverTime(UserCmd* = nullptr) noexcept;
 };

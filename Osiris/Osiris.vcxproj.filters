@@ -394,5 +394,8 @@
     <ClInclude Include="Hacks\Ragebot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Fad.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
