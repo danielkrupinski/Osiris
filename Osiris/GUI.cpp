@@ -23,9 +23,6 @@ constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoRe
 
 GUI::GUI() noexcept
 {
-    ImGui::CreateContext();
-    ImGui_ImplWin32_Init(FindWindowW(L"Valve001", NULL));
-
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
 
