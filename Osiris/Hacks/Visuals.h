@@ -28,4 +28,5 @@ namespace Visuals
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
     //void bulletBeams(GameEvent* event = nullptr) noexcept;
+
 }

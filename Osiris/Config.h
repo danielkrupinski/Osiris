@@ -202,6 +202,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        bool nightmode{ false };
 
         struct {
             bool enabled = false;
@@ -295,7 +296,7 @@ public:
         int language{ 0 };
         bool pure{ false };
         Vector Angle;
-    
+        int guistyle{ 0 };
     } misc;
 
     struct {
