@@ -3,8 +3,7 @@
 struct PurchaseList {
     bool enabled = false;
     bool onlyDuringFreezeTime = false;
-    bool showPrices = false;
-    bool noTitleBar = false;
+    bool showPrices = true;
 
     enum Mode {
         Details = 0,
@@ -17,7 +16,6 @@ struct PurchaseList {
         return enabled == pl.enabled
             && onlyDuringFreezeTime == pl.onlyDuringFreezeTime
             && showPrices == pl.showPrices
-            && noTitleBar == pl.noTitleBar
             && mode == pl.mode;
     }
 };

@@ -1559,20 +1559,8 @@ void GUI::renderMenuBar() noexcept
                         ImGui::Checkbox("强开优先", &config->misc.fakePrime);
                         ImGui::Checkbox("Bypass_pure", &config->misc.pure);
                         ImGui::Checkbox("购买清单", &config->misc.purchaseList.enabled);
-                        ImGui::SameLine();
-
-                        ImGui::PushID("购买清单");
-                        if (ImGui::Button("..."))
-                            ImGui::OpenPopup("");
-
-                        if (ImGui::BeginPopup("")) {
-                            ImGui::SetNextItemWidth(75.0f);
-                            ImGui::Combo("模式", &config->misc.purchaseList.mode, "详细\0简略\0");
-                            ImGui::Checkbox("只在冻结时间启用", &config->misc.purchaseList.onlyDuringFreezeTime);
-                            ImGui::Checkbox("显示价格", &config->misc.purchaseList.showPrices);
-                            ImGui::Checkbox("没有窗口标题", &config->misc.purchaseList.noTitleBar);
-                            ImGui::EndPopup();
-                        }
+                        ImGui::Checkbox("只在冻结时间启用", &config->misc.purchaseList.onlyDuringFreezeTime);
+                        
                         ImGui::Text("——————游戏声音——————");
                         static int currentCategory{ 0 };
                         ImGui::PushItemWidth(110.0f);
@@ -2852,22 +2840,8 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
                         ImGui::Checkbox("Bypass_pure", &config->misc.pure);
                         ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
-                        ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
-                        ImGui::SameLine();
-
-                        ImGui::PushID("Purchase List");
-                        if (ImGui::Button("..."))
-                            ImGui::OpenPopup("");
-
-                        if (ImGui::BeginPopup("")) {
-                            ImGui::SetNextItemWidth(75.0f);
-                            ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
-                            ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
-                            ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
-                            ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
-                            ImGui::EndPopup();
-                        }
-                        ImGui::PopID();
+                        ImGui::Checkbox("PurchaseList", &config->misc.purchaseList.enabled);
+                        ImGui::Checkbox("OnlyDuringFreezeTime", &config->misc.purchaseList.onlyDuringFreezeTime);
                         ImGui::Text("——————GameSounds——————");
                         static int currentCategory{ 0 };
                         ImGui::PushItemWidth(110.0f);

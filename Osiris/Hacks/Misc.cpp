@@ -93,11 +93,14 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
             lastTime = GetTickCount() + 650;
         }
+        
+    
+    
     }
     
     if (config->misc.customClanTag) {
         static std::string clanTag;
-
+        
         if (tagChanged) {
             clanTag = config->misc.clanTag;
             if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
@@ -747,18 +750,6 @@ void Misc::purchaseList(GameEvent* event) noexcept
         if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || purchaseDetails.empty() || purchaseTotal.empty()) && !gui->open)
             return;
 
-        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
-
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
-        if (!gui->open)
-            windowFlags |= ImGuiWindowFlags_NoInputs;
-        if (config->misc.purchaseList.noTitleBar)
-            windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
-        ImGui::Begin("Purchases", nullptr, windowFlags);
-        ImGui::PopStyleVar();
-
         if (config->misc.purchaseList.mode == PurchaseList::Details) {
             for (const auto& [playerName, purchases] : purchaseDetails) {
                 std::string s = std::accumulate(purchases.first.begin(), purchases.first.end(), std::string{ }, [](std::string s, const std::string& piece) { return s += piece + ", "; });
@@ -766,19 +757,8 @@ void Misc::purchaseList(GameEvent* event) noexcept
                     s.erase(s.length() - 2);
 
                 if (config->misc.purchaseList.showPrices)
-                    ImGui::TextWrapped("%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
-                else
-                    ImGui::TextWrapped("%s: %s", playerName.c_str(), s.c_str());
+                    memory->debugMsg("[ Zy Cheat ]%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
             }
-        } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
-            for (const auto& purchase : purchaseTotal)
-                ImGui::TextWrapped("%d x %s", purchase.second, purchase.first.c_str());
 
-            if (config->misc.purchaseList.showPrices && totalCost > 0) {
-                ImGui::Separator();
-                ImGui::TextWrapped("Total: $%d", totalCost);
-            }
-        }
-        ImGui::End();
     }
 }
