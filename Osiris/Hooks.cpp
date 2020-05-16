@@ -140,6 +140,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::recoilCrosshair();
     Visuals::removeShadows();
     Visuals::skybox();
+    Visuals::UpdateWorldTextures();
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -361,6 +362,12 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
         /*case fnv::hash("bullet_impact"):
             Visuals::bulletBeams(event);*/
             break;
+        }
+        if (!strcmp(event->getName(), "game_newmap"))
+        {
+            ConVar* sv_skyname = interfaces->cvar->findVar("sv_skyname");
+            Visuals::OldSkyname = sv_skyname->GetString();
+            Visuals::NightmodeDone = false;
         }
     }
     return hooks->gameEventManager.callOriginal<bool, 9>(event);

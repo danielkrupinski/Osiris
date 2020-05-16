@@ -47,17 +47,17 @@ ImVec4 txt(float f) {
 
 GUI::GUI() noexcept
 {
-    /*ImGui::CreateContext();
-    ImGui_ImplWin32_Init(FindWindowW(L"Valve001", NULL));*/
+
     ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-
+    
     ImGuiStyle& style = ImGui::GetStyle();
+    
     switch (config->misc.guistyle) {
-    case 0:
-    {
+    case 0:{
+        
         style.Colors[ImGuiCol_Text] = txt(0.78f);
         style.Colors[ImGuiCol_TextDisabled] = txt(0.28f);
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
@@ -217,11 +217,10 @@ GUI::GUI() noexcept
         break;
     }
 
-case 2:{
+    case 1:{
         style.Colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-        /*style.Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);*/
         style.Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
         style.Colors[ImGuiCol_Border] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
         style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
@@ -281,9 +280,10 @@ case 2:{
         style.DisplaySafeAreaPadding = ImVec2(4, 4);      // If you cannot see the edge of your screen (e.g. on a TV) increase the safe area padding. Covers popups/tooltips as well regular windows.
         style.AntiAliasedLines = true;             // Enable anti-aliasing on lines/borders. Disable if you are really short on CPU/GPU.
         style.CurveTessellationTol = 1.25f;            // Tessellation tolerance. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality.
-    }
         break;
-    case 3: {
+}
+        
+    case 2:{
         style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.59f, 0.59f, 0.59f, 1.00f);
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0.045f, 0.045f, 0.045f, 1.00f);
@@ -341,9 +341,6 @@ case 2:{
         CoTaskMemFree(pathToFonts);
 
         static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
-        //fonts.tahoma = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/msyhbd.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
-        //fonts.segoeui = io.Fonts->AddFontFromFileTTF("c:/windows/fonts/msyhbd.ttc", 20.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
-    //newfont
 
         ImFontConfig cfg;
         cfg.OversampleV = 3;
@@ -2975,16 +2972,8 @@ void GUI::renderMenuBar() noexcept
                                 ImGui::SameLine();
                                 hotkey(config->misc.menuKey);
 
-
-
                                 if (ImGui::Button("Rage Quit"))
                                     hooks->uninstall();
-
-
-
-                                
-
-
 
                                 break;
                         }

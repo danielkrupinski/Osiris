@@ -5,6 +5,7 @@ enum class FrameStage;
 class GameEvent;
 
 
+
 namespace Visuals
 {
     bool NightmodeDone = true;
@@ -30,4 +31,5 @@ namespace Visuals
     void skybox() noexcept;
     void UpdateWorldTextures()noexcept;
     void PerformNightmode()noexcept;
+    std::string OldSkyname = "";
 }
