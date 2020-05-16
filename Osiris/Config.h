@@ -297,6 +297,7 @@ public:
         bool pure{ false };
         Vector Angle;
         int guistyle{ 0 };
+        bool zycheat{ false };
     } misc;
 
     struct {

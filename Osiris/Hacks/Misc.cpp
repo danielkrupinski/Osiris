@@ -80,6 +80,21 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
+    if (config->misc.zycheat) {
+        static size_t lastTime = 0;
+        std::string ZY = "Zy-Cheat";
+        
+        if (GetTickCount() > lastTime)
+        {
+            ZY += ZY.at(0);
+            ZY.erase(0, 1);
+
+            memory->setClanTag(ZY.c_str(), ZY.c_str());
+
+            lastTime = GetTickCount() + 650;
+        }
+    }
+    
     if (config->misc.customClanTag) {
         static std::string clanTag;
 

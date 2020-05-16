@@ -1242,6 +1242,7 @@ void GUI::renderMenuBar() noexcept
                         ImGui::SliderFloat("纵横比", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f ");
                         ImGui::NextColumn();
                         ImGui::Checkbox("界面UI透明化", &config->misc.disablePanoramablur);
+                        ImGui::Checkbox("专属组名", &config->misc.zycheat);
                         ImGui::Checkbox("动态组名", &config->misc.animatedClanTag);
                         ImGui::Checkbox("时钟组名", &config->misc.clocktag);
                         ImGui::Checkbox("自定义组名", &config->misc.customClanTag);
