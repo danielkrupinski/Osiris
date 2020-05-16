@@ -716,7 +716,120 @@ void GUI::renderMenuBar() noexcept
                 }
                         //Legit
                     case 1: {
+                        static int currentCategory{ 0 };
 
+                        ImGui::PushItemWidth(110.0f);
+                        ImGui::PushID(0);
+                        ImGui::Combo("", &currentCategory, "全部\0手枪\0重型武器\0冲锋枪\0步枪\0");
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        static int currentWeapon{ 0 };
+                        ImGui::PushID(1);
+
+                        switch (currentCategory) {
+                        case 0:
+                            currentWeapon = 0;
+                            ImGui::NewLine();
+                            break;
+                        case 1: {
+                            static int currentPistol{ 0 };
+                            static constexpr const char* pistols[]{ "所有手枪", "格洛克18", "P2000", "USP-S", "双持贝瑞塔", "P250", "Tec-9", "FN57", "CZ-75", "沙漠之鹰", "R8左轮" };
+
+                            ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx : 35].enabled) {
+                                    static std::string name;
+                                    name = pistols[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = pistols[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(pistols));
+
+                            currentWeapon = currentPistol ? currentPistol : 35;
+                            break;
+                        }
+                        case 2: {
+                            static int currentHeavy{ 0 };
+                            static constexpr const char* heavies[]{ "所有重型武器", "新星", "XM1014", "截断霰弹枪", "MAG-7", "M249", "内格夫" };
+
+                            ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 10 : 36].enabled) {
+                                    static std::string name;
+                                    name = heavies[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = heavies[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(heavies));
+
+                            currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
+                            break;
+                        }
+                        case 3: {
+                            static int currentSmg{ 0 };
+                            static constexpr const char* smgs[]{ "所有冲锋枪", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP野牛" };
+
+                            ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 16 : 37].enabled) {
+                                    static std::string name;
+                                    name = smgs[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = smgs[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(smgs));
+
+                            currentWeapon = currentSmg ? currentSmg + 16 : 37;
+                            break;
+                        }
+                        case 4: {
+                            static int currentRifle{ 0 };
+                            static constexpr const char* rifles[]{ "全部步枪", "加利尔AR", "法玛斯", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+
+                            ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 23 : 38].enabled) {
+                                    static std::string name;
+                                    name = rifles[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = rifles[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(rifles));
+
+                            currentWeapon = currentRifle ? currentRifle + 23 : 38;
+                            break;
+                        }
+                        }
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        ImGui::Separator();
+                        ImGui::PushID(2);
+                        ImGui::PushItemWidth(70.0f);
+                        ImGui::PopItemWidth();
+                        ImGui::PopID();
+                        ImGui::Columns(2, nullptr, false);
+                        ImGui::SetColumnOffset(1, 350.0f);
+                        ImGui::Checkbox("启用Rage", &config->ragebot[currentWeapon].enabled);
+                        ImGui::Combo("打击部位", &config->ragebot[currentWeapon].bone, "准星附近\0最高伤害\0头部\0脖子\0胸骨\0胸部\0胃部\0屁股\0");
+                        ImGui::Checkbox("静默", &config->ragebot[currentWeapon].silent);
+                        ImGui::Checkbox("对队友启用", &config->ragebot[currentWeapon].friendlyFire);
+                        ImGui::Checkbox("不穿墙", &config->ragebot[currentWeapon].visibleOnly);
+                        ImGui::Checkbox("仅开镜时启用", &config->ragebot[currentWeapon].scopedOnly);
+                        ImGui::Checkbox("无视闪光", &config->ragebot[currentWeapon].ignoreFlash);
+                        ImGui::Checkbox("无视烟雾", &config->ragebot[currentWeapon].ignoreSmoke);
+
+                        ImGui::Checkbox("R8左轮预热", &config->misc.prepareRevolver);
+                        ImGui::SliderInt("最小伤害", &config->ragebot[currentWeapon].minDamage, 0, 150);
+                        config->ragebot[currentWeapon].minDamage = std::clamp(config->ragebot[currentWeapon].minDamage, 0, 250);
+                        ImGui::Columns(1);
 
                     break;
                 }
@@ -1951,7 +2064,118 @@ void GUI::renderMenuBar() noexcept
 }
                     
                     case 1: {
+                        static int currentCategory{ 0 };
 
+                        ImGui::PushItemWidth(110.0f);
+                        ImGui::PushID(0);
+                        ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        static int currentWeapon{ 0 };
+                        ImGui::PushID(1);
+
+                        switch (currentCategory) {
+                        case 0:
+                            currentWeapon = 0;
+                            ImGui::NewLine();
+                            break;
+                        case 1: {
+                            static int currentPistol{ 0 };
+                            static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+
+                            ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx : 35].enabled) {
+                                    static std::string name;
+                                    name = pistols[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = pistols[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(pistols));
+
+                            currentWeapon = currentPistol ? currentPistol : 35;
+                            break;
+                        }
+                        case 2: {
+                            static int currentHeavy{ 0 };
+                            static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+
+                            ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 10 : 36].enabled) {
+                                    static std::string name;
+                                    name = heavies[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = heavies[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(heavies));
+
+                            currentWeapon = currentHeavy ? currentHeavy + 10 : 36;
+                            break;
+                        }
+                        case 3: {
+                            static int currentSmg{ 0 };
+                            static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+
+                            ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 16 : 37].enabled) {
+                                    static std::string name;
+                                    name = smgs[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = smgs[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(smgs));
+
+                            currentWeapon = currentSmg ? currentSmg + 16 : 37;
+                            break;
+                        }
+                        case 4: {
+                            static int currentRifle{ 0 };
+                            static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+
+                            ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
+                                if (config->ragebot[idx ? idx + 23 : 38].enabled) {
+                                    static std::string name;
+                                    name = rifles[idx];
+                                    *out_text = name.append(" *").c_str();
+                                }
+                                else {
+                                    *out_text = rifles[idx];
+                                }
+                                return true;
+                                }, nullptr, IM_ARRAYSIZE(rifles));
+
+                            currentWeapon = currentRifle ? currentRifle + 23 : 38;
+                            break;
+                        }
+                        }
+                        ImGui::PopID();
+                        ImGui::SameLine();
+                        ImGui::Separator();
+                        ImGui::PushID(2);
+                        ImGui::PushItemWidth(70.0f);
+                        ImGui::PopItemWidth();
+                        ImGui::PopID();
+                        ImGui::Columns(2, nullptr, false);
+                        ImGui::SetColumnOffset(1, 350.0f);
+                        ImGui::Checkbox("Enabled", &config->ragebot[currentWeapon].enabled);
+                        ImGui::Combo("Bone", &config->ragebot[currentWeapon].bone, "准星附近\0最高伤害\0头部\0脖子\0胸骨\0胸部\0胃部\0屁股\0");
+                        ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].silent);
+                        ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
+                        ImGui::Checkbox("VisibleOnly", &config->ragebot[currentWeapon].visibleOnly);
+                        ImGui::Checkbox("ScopedOnly", &config->ragebot[currentWeapon].scopedOnly);
+                        ImGui::Checkbox("IgnoreFlash", &config->ragebot[currentWeapon].ignoreFlash);
+                        ImGui::Checkbox("IgnoreSmoke", &config->ragebot[currentWeapon].ignoreSmoke);
+                        ImGui::SliderInt("MinDamage", &config->ragebot[currentWeapon].minDamage, 0, 150);
+                        config->ragebot[currentWeapon].minDamage = std::clamp(config->ragebot[currentWeapon].minDamage, 0, 250);
+                        ImGui::Columns(1);
 
                         break;
                     }

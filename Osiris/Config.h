@@ -336,6 +336,12 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct {
+        int autostopmode{ 0 };
+    
+    
+    } fad;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;

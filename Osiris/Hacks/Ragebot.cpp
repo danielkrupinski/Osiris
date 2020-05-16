@@ -449,25 +449,32 @@ bool Ragebot::can_shoot(const float time, UserCmd* cmd)
 
 void Ragebot::Autostop(UserCmd* cmd) noexcept
 {
-    static float Speed = 450.f;
+    if (config->fad.autostopmode == 0) {
+        static float Speed = 450.f;
 
-    if (!localPlayer) return;
+        if (!localPlayer) return;
 
-    Vector2 Velocity = localPlayer->velocity_vector2();
+        Vector2 Velocity = localPlayer->velocity_vector2();
 
-    if (Velocity.Length2D() == 0)
-        return;
+        if (Velocity.Length2D() == 0)
+            return;
 
-    Vector2 Direction;
-    Vector2 RealView;
-    VectorAngles(Velocity, Direction);
-    interfaces->engine->getViewAngles2(RealView);
-    Direction.y = RealView.y - Direction.y;
+        Vector2 Direction;
+        Vector2 RealView;
+        VectorAngles(Velocity, Direction);
+        interfaces->engine->getViewAngles2(RealView);
+        Direction.y = RealView.y - Direction.y;
 
-    Vector2 Forward;
-    AngleVectors23(Direction, &Forward);
-    Vector2 NegativeDirection = Forward * -Speed;
+        Vector2 Forward;
+        AngleVectors23(Direction, &Forward);
+        Vector2 NegativeDirection = Forward * -Speed;
 
-    cmd->forwardmove = NegativeDirection.x;
-    cmd->sidemove = NegativeDirection.y;
+        cmd->forwardmove = NegativeDirection.x;
+        cmd->sidemove = NegativeDirection.y;
+    }
+    else if (config->fad.autostopmode == 1) {
+        cmd->forwardmove = 0;
+        cmd->sidemove = 0;
+        cmd->upmove = 0;
+    }
 }
