@@ -365,8 +365,6 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
         }
         if (!strcmp(event->getName(), "game_newmap"))
         {
-            ConVar* sv_skyname = interfaces->cvar->findVar("sv_skyname");
-            Visuals::OldSkyname = sv_skyname->GetString();
             Visuals::NightmodeDone = false;
         }
     }

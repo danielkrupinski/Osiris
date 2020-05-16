@@ -741,7 +741,8 @@ void Misc::purchaseList(GameEvent* event) noexcept
             freezeEnd = memory->globalVars->realtime;
             break;
         }
-    } else {
+    }
+    else {
         if (!config->misc.purchaseList.enabled)
             return;
 
@@ -760,5 +761,6 @@ void Misc::purchaseList(GameEvent* event) noexcept
                     memory->debugMsg("[ Zy Cheat ]%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
             }
 
+        }
     }
 }

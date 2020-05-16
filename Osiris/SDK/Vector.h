@@ -7,7 +7,6 @@
 #include <xmmintrin.h>
 #include <pmmintrin.h>
 
-
 static const float invtwopi = 0.1591549f;
 static const float twopi = 6.283185f;
 static const float threehalfpi = 4.7123889f;
@@ -210,7 +209,7 @@ class Vector2
 public:
 	float x, y, z;
 
-	float youhua180f = 180.0;
+
 
 
 	//Vector2(void);
@@ -336,8 +335,7 @@ public:
 
 		float s, c;
 
-
-		float r = f * M_PI / youhua180f;
+		float r = f * M_PI / 180.0;
 		s = sin(r);
 		c = cos(r);
 

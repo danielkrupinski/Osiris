@@ -24,6 +24,9 @@
     <Filter Include="json">
       <UniqueIdentifier>{a5ac10c7-4d96-4bca-80b2-b5e98f0d672a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\Math">
+      <UniqueIdentifier>{40e5f132-5517-4186-b27b-75926afbc93e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -173,9 +176,6 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Material.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Vector.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Input.h">
@@ -396,6 +396,9 @@
     </ClInclude>
     <ClInclude Include="SDK\Fad.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Vector.h">
+      <Filter>SDK\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -929,8 +929,6 @@ void Config::load(size_t id) noexcept
                 misc.purchaseList.onlyDuringFreezeTime = onlyDuringFreezeTime.asBool();
             if (const auto& showPrices{ purchaseList["Show Prices"] }; showPrices.isBool())
                 misc.purchaseList.showPrices = showPrices.asBool();
-            if (const auto& noTitleBar{ purchaseList["No Title Bar"] }; noTitleBar.isBool())
-                misc.purchaseList.noTitleBar = noTitleBar.asBool();
             if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
                 misc.purchaseList.mode = mode.asInt();
         }
@@ -1721,7 +1719,6 @@ void Config::save(size_t id) const noexcept
             purchaseListJson["Enabled"] = misc.purchaseList.enabled;
             purchaseListJson["Only During Freeze Time"] = misc.purchaseList.onlyDuringFreezeTime;
             purchaseListJson["Show Prices"] = misc.purchaseList.showPrices;
-            purchaseListJson["No Title Bar"] = misc.purchaseList.noTitleBar;
             purchaseListJson["Mode"] = misc.purchaseList.mode;
         }
     }
