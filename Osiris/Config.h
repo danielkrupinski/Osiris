@@ -339,7 +339,7 @@ public:
 
     struct {
         int autostopmode{ 0 };
-    
+        bool nightmode{ false };
     
     } fad;
 private:

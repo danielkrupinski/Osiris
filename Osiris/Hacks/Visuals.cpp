@@ -418,3 +418,58 @@ void Visuals::skybox() noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+
+
+void Visuals::UpdateWorldTextures()noexcept
+{
+    if (config->fad.nightmode) {
+        if (!NightmodeDone) {
+            PerformNightmode();
+            NightmodeDone = true;
+        }
+    }
+}
+
+void Visuals::PerformNightmode()noexcept
+{
+    static auto r_DrawSpecificStaticProp = interfaces->cvar->findVar("r_DrawSpecificStaticProp");
+    r_DrawSpecificStaticProp->setValue(config->fad.nightmode);
+    auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
+    sv_skyname->setValue(config->fad.nightmode ? ("sky_csgo_night02") : OldSkyname.c_str());
+
+    for (MaterialHandle_t i = interfaces->materialSystem->firstMaterial(); i != interfaces->materialSystem->invalidMaterial(); i = interfaces->materialSystem->nextMaterial(i))
+    {
+        Material* pMaterial = interfaces->materialSystem->getMaterial(i);
+
+        if (!pMaterial)
+            continue;
+
+        const char* group = pMaterial->getTextureGroupName();
+        const char* name = pMaterial->getName();
+        float world_textures = config->fad.nightmode ? 0.10f : 1.f;
+        float staticprop = config->fad.nightmode ? 0.30f : 1.f;
+        float palace_pillars = config->fad.nightmode ? 0.30f : 1.f;
+        if (strstr(group, ("World textures")))
+        {
+            pMaterial->colorModulate(world_textures, world_textures, world_textures);
+        }
+        if (strstr(group, ("StaticProp")))
+        {
+            pMaterial->colorModulate(staticprop, staticprop, staticprop);
+        }
+        if (strstr(name, ("models/props/de_dust/palace_bigdome")))
+        {
+            pMaterial->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->fad.nightmode);
+        }
+        if (strstr(name, ("models/props/de_dust/palace_pillars")))
+        {
+            pMaterial->colorModulate(palace_pillars, palace_pillars, palace_pillars);
+        }
+
+        if (strstr(group, ("Particle textures")))
+        {
+            pMaterial->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->fad.nightmode);
+        }
+    }
+}

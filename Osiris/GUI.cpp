@@ -1162,7 +1162,8 @@ void GUI::renderMenuBar() noexcept
                             ImGui::PushItemWidth(350.0f);
 
                             ImGui::Combo("天空模板", &config->visuals.skybox, "默认\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-                           /* if (!config->visuals.fullBright) {
+                            ImGui::Checkbox("夜晚模式", &config->fad.nightmode);
+                            /* if (!config->visuals.fullBright) {
                                 ImGui::PushID(5);
                                 ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "亮度: %.2f");
                                 ImGui::PopID();
@@ -2524,6 +2525,7 @@ void GUI::renderMenuBar() noexcept
                             ImGui::SetColumnOffset(1, 280.0f);
                             ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
                             ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
+                            ImGui::Checkbox("Nightmode", &config->fad.nightmode);
                             ImGui::Checkbox("No fog", &config->visuals.noFog);
                             ImGui::Checkbox("No 3d sky", &config->visuals.no3dSky);
                             ImGui::Checkbox("No aim punch", &config->visuals.noAimPunch);

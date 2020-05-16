@@ -27,6 +27,7 @@ class Sound;
 class SoundEmitter;
 class StudioRender;
 
+typedef unsigned short MaterialHandle_t;
 #define GAME_INTERFACE(type, name, module, version) \
 type* name = reinterpret_cast<type*>(find(L##module, version));
 
@@ -53,6 +54,7 @@ public:
     GAME_INTERFACE(Sound, sound, "engine", "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, "soundemittersystem", "VSoundEmitter003")
     GAME_INTERFACE(StudioRender, studioRender, "studiorender", "VStudioRender026")
+
 private:
     static void* find(const wchar_t* module, const char* name) noexcept
     {
