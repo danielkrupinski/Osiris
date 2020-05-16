@@ -52,6 +52,20 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
     }
 
+    for (size_t i = 0; i < ragebot.size(); i++) {
+        const auto& ragebotJson = json["Ragebot"][i];
+        auto& ragebotConfig = ragebot[i];
+
+        if (ragebotJson.isMember("Enabled")) ragebotConfig.enabled = ragebotJson["Enabled"].asBool();
+        if (ragebotJson.isMember("Silent")) ragebotConfig.silent = ragebotJson["Silent"].asBool();
+        if (ragebotJson.isMember("Friendly fire")) ragebotConfig.friendlyFire = ragebotJson["Friendly fire"].asBool();
+        if (ragebotJson.isMember("Scoped only")) ragebotConfig.scopedOnly = ragebotJson["Scoped only"].asBool();
+        if (ragebotJson.isMember("Ignore flash")) ragebotConfig.ignoreFlash = ragebotJson["Ignore flash"].asBool();
+        if (ragebotJson.isMember("Ignore smoke")) ragebotConfig.ignoreSmoke = ragebotJson["Ignore smoke"].asBool();
+        if (ragebotJson.isMember("Bone")) ragebotConfig.bone = ragebotJson["Bone"].asInt();
+        if (ragebotJson.isMember("Min damage")) ragebotConfig.minDamage = ragebotJson["Min damage"].asInt();
+    }
+
     for (size_t i = 0; i < triggerbot.size(); i++) {
         const auto& triggerbotJson = json["Triggerbot"][i];
         auto& triggerbotConfig = triggerbot[i];
@@ -966,6 +980,23 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
+    }
+
+    for (size_t i = 0; i < ragebot.size(); i++) {
+        auto& ragebotJson = json["Ragebot"][i];
+        const auto& ragebotConfig = ragebot[i];
+
+        ragebotJson["Enabled"] = ragebotConfig.enabled;
+        ragebotJson["Silent"] = ragebotConfig.silent;
+        ragebotJson["Friendly fire"] = ragebotConfig.friendlyFire;
+        ragebotJson["Visible only"] = ragebotConfig.visibleOnly;
+        ragebotJson["Scoped only"] = ragebotConfig.scopedOnly;
+        ragebotJson["Ignore flash"] = ragebotConfig.ignoreFlash;
+        ragebotJson["Ignore smoke"] = ragebotConfig.ignoreSmoke;
+        ragebotJson["Auto shot"] = ragebotConfig.autoShot;
+        ragebotJson["Auto scope"] = ragebotConfig.autoScope;
+        ragebotJson["Bone"] = ragebotConfig.bone;
+        ragebotJson["Min damage"] = ragebotConfig.minDamage;
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {

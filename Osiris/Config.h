@@ -67,6 +67,31 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+    struct Ragebot {
+        bool enabled{ false };
+        bool silent{ true };
+        bool friendlyFire{ false };
+        bool visibleOnly{ false };
+        bool scopedOnly{ true };
+        bool ignoreFlash{ true };
+        bool ignoreSmoke{ true };
+        bool autoShot{ true };
+        bool autoScope{ true };
+        bool recoilbasedFov{ true };
+        float fov{ 270.0f };
+        float smooth{ 1.0f };
+        int bone{ 1 };
+        float recoilControlX{ 1.0f };
+        float recoilControlY{ 1.0f };
+        float maxAimInaccuracy{ 1.0f };
+        float maxShotInaccuracy{ 1.0f };
+        int minDamage{ 0 };
+        bool killshot{ true };
+        bool betweenShots{ false };
+    
+    };
+    std::array<Ragebot, 40> ragebot;
+
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;

@@ -247,6 +247,7 @@ VIRTUAL_METHOD(void, release, 1, (), (this + 8))
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
     NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
+    NETVAR(velocity_vector2, "CBasePlayer", "m_vecVelocity[0]", Vector2)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)

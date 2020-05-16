@@ -16,6 +16,7 @@
 #include "Memory.h"
 
 #include "Hacks/Aimbot.h"
+#include "Hacks/Ragebot.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
@@ -157,6 +158,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     EnginePrediction::run(cmd);
 
     Aimbot::run(cmd);
+    Ragebot::run(cmd);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);

@@ -1,17 +1,17 @@
 
 #include "Ragebot.h"
-#include "../Osiris/Config.h"
-#include "../Osiris/interfaces.h"
-#include "../Osiris/Memory.h"
-#include "../Osiris/SDK/ConVar.h"
-#include "../Osiris/SDK/Entity.h"
-#include "../Osiris/SDK/UserCmd.h"
-#include "../Osiris/SDK/Vector.h"
-#include "../Osiris/SDK/WeaponId.h"
-#include "../Osiris/SDK/GlobalVars.h"
-#include "../Osiris/SDK/PhysicsSurfaceProps.h"
-#include "../Osiris/SDK/WeaponData.h"
-#include "../Osiris/SDK/EngineTrace.h"
+#include "../Config.h"
+#include "../interfaces.h"
+#include "../Memory.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Entity.h"
+#include "../SDK/UserCmd.h"
+#include "../SDK/Vector.h"
+#include "../SDK/WeaponId.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/PhysicsSurfaceProps.h"
+#include "../SDK/WeaponData.h"
+#include "../SDK/EngineTrace.h"
 
 #define M_PI_F2		((float)(M_PI2))	// Shouldn't collide with anything.
 
@@ -399,42 +399,6 @@ void Ragebot::run(UserCmd* cmd) noexcept
             if (!config->ragebot[weaponIndex].silent)
                 interfaces->engine->setViewAngles(cmd->viewangles);
             
-            //if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
-            /*if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime()) {
-                if (localPlayer->getActiveWeapon() && localPlayer->itemDefinitionIndex() == ItemDefinitionIndex::WEAPON_AWP || localPlayer->getActiveWeapon() && localPlayer->itemDefinitionIndex() == ItemDefinitionIndex::WEAPON_SSG08 ||
-                    localPlayer->getActiveWeapon() && localPlayer->itemDefinitionIndex() == ItemDefinitionIndex::WEAPON_SCAR20 || localPlayer->getActiveWeapon() && localPlayer->itemDefinitionIndex() == ItemDefinitionIndex::WEAPON_G3SG1)
-                {
-                    if (!localPlayer->GetIsScoped())
-                    {
-                        cmd->buttons |= UserCmd::IN_ATTACK2;
-                    }
-                }
-            }*/
-            
-           /* static int MinimumVelocity = 0;
-            
-            
-            float flServerTime = localPlayer->tickBase() * memory->globalVars->interval_per_tick;
-
-            const auto weapon = localPlayer->getActiveWeapon();
-            
-            const auto item = localPlayer->itemDefinitionIndex();
-
-            bool canShoot = (weapon->nextPrimaryAttack() <= flServerTime && weapon->clip() > 0);
-            
-            MinimumVelocity = localPlayer->getActiveWeapon()&& localPlayer->get_full_info()->max_speed_alt * .34f;
-
-            if (!weapon || weapon->clip() == 0) return;
-
-            if (localPlayer->velocity_vector2().Length() >= MinimumVelocity && canShoot && !GetAsyncKeyState(VK_SPACE))
-                Autostop(cmd);
-
-            if (config->ragebot[weaponIndex].autoScope && !localPlayer->isScoped()) {
-                if (weapon && item == ItemDefinitionIndex::WEAPON_SSG08 || WEAPON_AWP || WEAPON_SCAR20 || WEAPON_G3SG1);
-
-                    cmd->buttons |= UserCmd::IN_ATTACK2;
-                
-            }*/
 
             if (config->ragebot[weaponIndex].autoShot && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && !clamped && activeWeapon->getInaccuracy() <= config->ragebot[weaponIndex].maxShotInaccuracy)
                 cmd->buttons |= UserCmd::IN_ATTACK;
@@ -450,112 +414,7 @@ void Ragebot::run(UserCmd* cmd) noexcept
     }
 }
 
-void Ragebot::autoZeus(UserCmd* cmd) noexcept
-{
-    if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime())
-        return;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
-        return;
-
-    auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
-    if (!weaponIndex)
-        return;
-
-    static auto lastTime = 0.0f;
-    static auto lastContact = 0.0f;
-
-    const auto now = memory->globalVars->realtime;
-
-    const auto weaponData = activeWeapon->getWeaponData();
-    if (!weaponData)
-        return;
-
-    if (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser)
-        return;
-
-    Vector bestTarget{ };
-    auto localPlayerEyePosition = localPlayer->getEyePosition();
-
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-        auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->gunGameImmunity())
-            continue;
-
-        auto boneList = std::initializer_list{ 3, 4, 5, 6, 7, 11, 28, 39, 53, 73, 74, 76, 82, 83 };
-
-        for (auto bone : boneList) {
-            auto bonePosition = entity->getBonePosition(bone);
-
-            auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles);
-            auto fov = std::hypotf(angle.x, angle.y);
-
-            Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x + angle.x)) * std::cos(degreesToRadians(cmd->viewangles.y + angle.y)) * weaponData->range,
-                std::cos(degreesToRadians(cmd->viewangles.x + angle.x)) * std::sin(degreesToRadians(cmd->viewangles.y + angle.y)) * weaponData->range,
-                -std::sin(degreesToRadians(cmd->viewangles.x + angle.x)) * weaponData->range };
-
-            if (!entity->isVisible(bonePosition) && !handleTaserPenetration(cmd, viewAngles, bonePosition))
-                continue;
-            else
-            {
-                Trace trace;
-
-                interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
-                if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy() && !trace.entity->gunGameImmunity())
-                {
-                    float damage = (weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 510.0f));
-
-                    if (damage >= (true ? trace.entity->health() : 100)) {
-                        bestTarget = bonePosition;
-                    }
-                }
-            }
-        }
-    }
-
-    if (bestTarget) {
-        static Vector lastAngles{ cmd->viewangles };
-        static int lastCommand{ };
-
-        if (lastCommand == cmd->commandNumber - 1 && lastAngles)
-            cmd->viewangles = lastAngles;
-
-        auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles);
-        bool clamped{ false };
-
-        if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
-            angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-            angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-            clamped = true;
-        }
-
-        cmd->viewangles += angle;
-
-        const Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x)) * std::cos(degreesToRadians(cmd->viewangles.y)) * weaponData->range,
-                 std::cos(degreesToRadians(cmd->viewangles.x)) * std::sin(degreesToRadians(cmd->viewangles.y)) * weaponData->range,
-                -std::sin(degreesToRadians(cmd->viewangles.x)) * weaponData->range };
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
-        if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy() && !trace.entity->gunGameImmunity())
-        {
-            float damage = (weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f));
-
-            if (damage >= (true ? trace.entity->health() : 100)) {
-                cmd->buttons |= UserCmd::IN_ATTACK;
-                lastContact = now;
-            }
-        }
-
-        if (clamped)
-            cmd->buttons &= ~UserCmd::IN_ATTACK;
-
-        if (clamped) lastAngles = cmd->viewangles;
-        else lastAngles = Vector{ };
-
-        lastCommand = cmd->commandNumber;
-    }
-}
 
 
 
@@ -576,104 +435,7 @@ bool Ragebot::can_shoot(const float time, UserCmd* cmd)
 
     if (localPlayer->nextAttack() > time)
         return false;
-
-    //return (weapon->GetNextPrimaryAttack() < UTILS::GetCurtime()) && (local_player->GetNextAttack() < UTILS::GetCurtime());
 }
-
-
-
-
-
-
-/*bool Ragebot::hitchance(Vector angle, float chance, Entity* entity) {
-    //auto chance = float(c_config::get()->i["rage_hitchance_value" + weapon_type]);
-
-    auto local_player = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
-
-
-    auto wep = local_player->getActiveWeapon(local_player);
-
-    //	if (!wep)
-        //	return false;
-
-    if (wep->itemDefinitionIndex() == WEAPON_TASER)
-        chance = 85.f;
-
-    //	if ((local_player->eyeAngles2() - angle).Length() > wep->get_full_info()->m_Range)
-        //	return false;
-
-    Vector
-        forward,
-        right,
-        up,
-        src = local_player->getEyePositionVector();
-
-    Math_AngleVectors(angle, &forward, &right, &up);
-
-    int
-        hits = 0,
-        needed_hits = static_cast<int>(500.f * (chance / 100.f));
-
-    wep->UpdateAccuracyPenalty();
-
-    float
-        weap_spread = wep->GetSpread(),
-        weap_inaccuracy = wep->getInaccuracy();
-
-    for (int i = 0; i < 500; i++)
-    {
-        float
-            a = Game_RandomFloat(0.f, 1.f),
-            b = Game_RandomFloat(0.f, 2.f * M_PI),
-            c = Game_RandomFloat(0.f, 1.f),
-            d = Game_RandomFloat(0.f, 2.f * M_PI),
-            inaccuracy = a * weap_inaccuracy,
-            spread = c * weap_spread;
-
-        if (wep->itemDefinitionIndex() == WEAPON_REVOLVER) {
-            a = 1.f - a * a;
-            c = 1.f - c * c;
-        }
-
-        Vector
-            spread_view((cos(b) * inaccuracy) + (cos(d) * spread), (sin(b) * inaccuracy) + (sin(d) * spread), 0),
-            direction;
-
-        direction.x = forward.x + (spread_view.x * right.x) + (spread_view.y * up.x);
-        direction.y = forward.y + (spread_view.x * right.y) + (spread_view.y * up.y);
-        direction.z = forward.z + (spread_view.x * right.z) + (spread_view.y * up.z);
-        direction.Normalized();
-
-        Vector
-            viewangles_spread,
-            view_forward;
-
-        Math_VectorAngles(direction, up, viewangles_spread);
-        Math_Normalize(viewangles_spread);
-
-        Math_AngleVectors(viewangles_spread, view_forward);
-        view_forward.NormalizeInPlace();
-
-        view_forward = src + (view_forward * wep->get_full_info()->m_Range);
-
-        trace_t tr;
-        Ray_t ray;
-
-        ray.Init(src, view_forward);
-        memory.g_trace->ClipRayToEntity(ray, MASK_SHOT | CONTENTS_GRATE, entity, &tr);
-
-        if (tr.m_pEnt == entity)
-            hits++;
-
-        if (static_cast<int>((static_cast<float>(hits) / 500.f) * 100.f) >= chance)
-            return true;
-    }
-
-    return false;
-
-
-}
-*/
 
 
 void Ragebot::Autostop(UserCmd* cmd) noexcept
@@ -703,37 +465,3 @@ void Ragebot::Autostop(UserCmd* cmd) noexcept
     cmd->forwardmove = NegativeDirection.x;
     cmd->sidemove = NegativeDirection.y;
 }
-
-/*inline void Math_AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up)
-{
-    auto sincos = [](float radians, float* sine, float* cosine)
-    {
-        *sine = sin(radians);
-        *cosine = cos(radians);
-    };
-    float sr, sp, sy, cr, cp, cy;
-    sincos(DEG2RAD2(angles[1]), &sy, &cy);
-    sincos(DEG2RAD2(angles[0]), &sp, &cp);
-    sincos(DEG2RAD2(angles[2]), &sr, &cr);
-
-    if (forward)
-    {
-        forward->x = cp * cy;
-        forward->y = cp * sy;
-        forward->z = -sp;
-    }
-
-    if (right)
-    {
-        right->x = (-1 * sr * sp * cy + -1 * cr * -sy);
-        right->y = (-1 * sr * sp * sy + -1 * cr * cy);
-        right->z = -1 * sr * cp;
-    }
-
-    if (up)
-    {
-        up->x = (cr * sp * cy + -sr * -sy);
-        up->y = (cr * sp * sy + -sr * cy);
-        up->z = cr * cp;
-    }
-}*/
