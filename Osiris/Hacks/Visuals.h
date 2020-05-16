@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-
 #include "../SDK/Vector.h"
 
 enum class FrameStage;
@@ -9,7 +7,6 @@ class GameEvent;
 
 namespace Visuals
 {
-    std::string OldSkyname = "";
     bool NightmodeDone = true;
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
@@ -31,7 +28,6 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
-    //void bulletBeams(GameEvent* event = nullptr) noexcept;
     void UpdateWorldTextures()noexcept;
     void PerformNightmode()noexcept;
 }

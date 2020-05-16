@@ -433,6 +433,7 @@ void Visuals::UpdateWorldTextures()noexcept
 
 void Visuals::PerformNightmode()noexcept
 {
+    std::string OldSkyname = "";
     static auto r_DrawSpecificStaticProp = interfaces->cvar->findVar("r_DrawSpecificStaticProp");
     r_DrawSpecificStaticProp->setValue(config->fad.nightmode);
     auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
