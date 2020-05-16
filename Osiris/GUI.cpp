@@ -1262,7 +1262,8 @@ void GUI::renderMenuBar() noexcept
                         //Visual
                     case 5: {
                         static auto itemIndex = 0;
-
+                        static char skin_name[256];
+                        
                         ImGui::PushItemWidth(90.0f);
                         ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
                             *out_text = game_data::weapon_names[idx].name;
@@ -1282,11 +1283,13 @@ void GUI::renderMenuBar() noexcept
                             ImGui::InputInt("暗金计数器", &selected_entry.stat_trak);
                             ImGui::SliderFloat("磨损度", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
-                            ImGui::Combo("皮肤选择", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
-                                *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
-                                return true;
-                                }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
-
+                            ImGui::Combo("皮肤选择", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)
+                                
+                                
+                                    {
+                                        *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
+                                        return true;
+                                    }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
 
                             ImGui::Combo("品质", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
                                 *out_text = game_data::quality_names[idx].name;
@@ -1350,87 +1353,68 @@ void GUI::renderMenuBar() noexcept
                             ImGui::Columns(1);
 
                             ImGui::Separator();
-
-
-
                             //皮肤搜索开始
-                                                  {
-                            if (ImGui::Button("皮肤搜索", { 178.0f,25.0f }))
                             {
-                                ImGui::OpenPopup("Search");
-                            }
-                            if (ImGui::BeginPopup("Search"))
-                            {
-                                static char skin_name[256];
-                                static int select_current = 0;
+                               
+                                    static char skin_name[256];
+                                    static int select_current = 0;
 
-                                ImGui::Text("皮肤搜索");
-                                ImGui::Separator();
-                                ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
-                                ImGui::Text("请在上方输入皮肤拼音或枪械名字");
-                                ImGui::Separator();
-                                if (ImGui::Button("开始搜索"))
-                                {
-                                    search_result.clear();
-
-                                    for (auto skin : SkinChanger::skinKits)
+                                    ImGui::Text("皮肤搜索");
+                                    ImGui::Separator();
+                                    ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
+                                    ImGui::Text("请在上方输入皮肤拼音或枪械名字");
+                                    ImGui::Separator();
+                                    if (ImGui::Button("开始搜索"))
                                     {
-                                        auto skin_copy = skin;
+                                        search_result.clear();
 
-                                        char in_buffer[1024];
-                                        strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
-
-                                        char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
-
-                                        memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
-
-                                        if (is_utf8_string(in_buffer))
-                                            pinyin_utf8(in_buffer, out_buffer);
-                                        else
-                                            pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
-
-                                        if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
+                                        for (auto skin : SkinChanger::skinKits)
                                         {
-                                            skin_copy.name = skin_copy.name + " (" + out_buffer + ")";
-                                            search_result.push_back(skin_copy);
+                                            auto skin_copy = skin;
+
+                                            char in_buffer[1024];
+                                            strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                                            char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                                            memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                                            if (is_utf8_string(in_buffer))
+                                                pinyin_utf8(in_buffer, out_buffer);
+                                            else
+                                                pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
+
+                                            if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
+                                            {
+                                                skin_copy.name = skin_copy.name + " (" + out_buffer + ")";
+                                                search_result.push_back(skin_copy);
+                                            }
                                         }
                                     }
-                                }
-                                ImGui::SameLine();
-                                if (ImGui::Button("确定"))
-                                {
-                                    for (int i = 0; i < SkinChanger::skinKits.size(); i++)
+                                    ImGui::SameLine();
+                                    if (ImGui::Button("确定"))
                                     {
-                                        if (SkinChanger::skinKits[i].id == search_result[select_current].id)
+                                        for (int i = 0; i < SkinChanger::skinKits.size(); i++)
                                         {
-                                            selected_entry.paint_kit_vector_index = i;
-                                            ImGui::CloseCurrentPopup();
+                                            if (SkinChanger::skinKits[i].id == search_result[select_current].id)
+                                            {
+                                                selected_entry.paint_kit_vector_index = i;
+                                                ImGui::CloseCurrentPopup();
+                                            }
                                         }
                                     }
-                                }
-                                ImGui::ListBox("", &select_current,
-                                    [](void* data, int idx, const char** out_text)  -> bool
-                                    {
-                                        auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
-                                        *out_text = vector[idx].name.c_str();
-                                        return true;
-                                    },
-                                    &search_result, search_result.size(), 10);
+                                    
+                                    ImGui::ListBox("", &select_current,[](void* data, int idx, const char** out_text)  -> bool
+                                        {
+                                            auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                                            *out_text = vector[idx].name.c_str();
+                                            return true;
+                                        },&search_result, search_result.size(), 10);
 
-                                if (ImGui::Button("退出搜索菜单"))
-                                {
-                                    ImGui::CloseCurrentPopup();
                                 }
 
-                                ImGui::EndPopup();
-
-                            }
-
-                        }
-
                             
-                            
-                            
+
                             ImGui::Combo("CT 玩家模型", &config->visuals.playerModelCT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
                             ImGui::Combo("T 玩家模型", &config->visuals.playerModelT, "默认\0Ava特工 | 联邦调查局(FBI)\0特种兵 | 联邦调查局（FBI）特警\0Markus Delrow | 联邦调查局（FBI）人质营救队\0Michael Syfers | 联邦调查局（FBI）狙击手\0B Squadron指挥官 | 英国空军特别部队\0海豹部队第六分队士兵 | 海军水面战中心海豹部队\0铅弹 | 海军水面战中心海豹部队\0陆军少尉长官Ricksaw | 海军水面战中心海豹部队\0第三特种兵连 | 德国特种部队突击队\0'两次'McCoy | 美国空军战术空中管制部队\0Dragomir | Sabre\0准备就绪的Rezan | Sabre\0’医生‘Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0精英Muhlik先生 | 精锐分子\0地面叛军 | 精锐分子\0Osiris | 精锐分子\0Shahmat教授 | 精锐分子\0执行者 | 凤凰战士\0弹弓 | 凤凰战士\0枪手 | 凤凰战士\0");
                             /*ImGui::SliderFloat("##Custom Viewmodel X", &config->visuals.viewmodel_x, -100, 100, "自定义手臂长度X轴: %.2f");
@@ -2503,15 +2487,6 @@ void GUI::renderMenuBar() noexcept
 
 
                             }
-
-
-
-
-                           
-
-
-                            
-
                         }
                         ImGui::EndChild();
                        
@@ -2696,81 +2671,61 @@ void GUI::renderMenuBar() noexcept
 
                             ImGui::Separator();
 
+                            static char skin_name[256];
+                            static int select_current = 0;
 
-
-                            //皮肤搜索开始
+                            ImGui::Separator();
+                            ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
+                            ImGui::Text("Please input skin name");
+                            ImGui::Separator();
+                            if (ImGui::Button("Search"))
                             {
-                                if (ImGui::Button("SkinSearch", { 178.0f,25.0f }))
+                                search_result.clear();
+
+                                for (auto skin : SkinChanger::skinKits)
                                 {
-                                    ImGui::OpenPopup("Search");
+                                    auto skin_copy = skin;
+
+                                    char in_buffer[1024];
+                                    strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                                    char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                                    memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                                    if (is_utf8_string(in_buffer))
+                                        pinyin_utf8(in_buffer, out_buffer);
+                                    else
+                                        pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
+
+                                    if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
+                                    {
+                                        skin_copy.name = skin_copy.name + " (" + out_buffer + ")";
+                                        search_result.push_back(skin_copy);
+                                    }
                                 }
-                                if (ImGui::BeginPopup("Search"))
+                            }
+                            ImGui::SameLine();
+                            if (ImGui::Button("Apply"))
+                            {
+                                for (int i = 0; i < SkinChanger::skinKits.size(); i++)
                                 {
-                                    static char skin_name[256];
-                                    static int select_current = 0;
-
-                                    ImGui::Text("SkinName");
-                                    ImGui::Separator();
-                                    ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
-                                    ImGui::Separator();
-                                    if (ImGui::Button("Search"))
+                                    if (SkinChanger::skinKits[i].id == search_result[select_current].id)
                                     {
-                                        search_result.clear();
-
-                                        for (auto skin : SkinChanger::skinKits)
-                                        {
-                                            auto skin_copy = skin;
-
-                                            char in_buffer[1024];
-                                            strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
-
-                                            char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
-
-                                            memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
-
-                                            if (is_utf8_string(in_buffer))
-                                                pinyin_utf8(in_buffer, out_buffer);
-                                            else
-                                                pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
-
-                                            if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
-                                            {
-                                                skin_copy.name = skin_copy.name + " (" + out_buffer + ")";
-                                                search_result.push_back(skin_copy);
-                                            }
-                                        }
-                                    }
-                                    ImGui::SameLine();
-                                    if (ImGui::Button("Apply"))
-                                    {
-                                        for (int i = 0; i < SkinChanger::skinKits.size(); i++)
-                                        {
-                                            if (SkinChanger::skinKits[i].id == search_result[select_current].id)
-                                            {
-                                                selected_entry.paint_kit_vector_index = i;
-                                                ImGui::CloseCurrentPopup();
-                                            }
-                                        }
-                                    }
-                                    ImGui::ListBox("", &select_current,
-                                        [](void* data, int idx, const char** out_text)  -> bool
-                                        {
-                                            auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
-                                            *out_text = vector[idx].name.c_str();
-                                            return true;
-                                        },
-                                        &search_result, search_result.size(), 10);
-
-                                    if (ImGui::Button("Quit Search"))
-                                    {
+                                        selected_entry.paint_kit_vector_index = i;
                                         ImGui::CloseCurrentPopup();
                                     }
-
-                                    ImGui::EndPopup();
-
                                 }
-
                             }
+
+                            ImGui::ListBox("", &select_current, [](void* data, int idx, const char** out_text)  -> bool
+                                {
+                                    auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                                    *out_text = vector[idx].name.c_str();
+                                    return true;
+                                }, &search_result, search_result.size(), 10);
+
+                    }
 
 
 
