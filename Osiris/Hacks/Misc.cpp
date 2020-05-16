@@ -82,7 +82,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 {
     if (config->misc.zycheat) {
         static size_t lastTime = 0;
-        std::string ZY = "Zy-Cheat";
+        std::string ZY = "Zy-Cheat ";
         
         if (GetTickCount() > lastTime)
         {

@@ -589,6 +589,7 @@ void Hooks::install() noexcept
         *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
+    interfaces->gameUI->createCommandMsgBox("欢迎使用Zy-Cheat", "此版本完全免费，如果你是买来的，那么你被骗了！购买参数/赞助作者/学习技术+QQ2476159893");
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
