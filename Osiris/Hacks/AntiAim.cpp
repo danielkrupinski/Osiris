@@ -96,6 +96,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
 
         auto activeWeapon = localPlayer->getActiveWeapon();
         //auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+        
+        if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || !(localPlayer->moveType() != MoveType::LADDER) || !(localPlayer->moveType() != MoveType::NOCLIP))
+            return;
 
         if (config->antiAim.pitch)
             setPitch(config->antiAim.pitchAngle, cmd, sendPacket);
@@ -117,23 +120,6 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 setYaw(cmd->viewangles.y + config->antiAim.yawAngle, desyncYaw, cmd, sendPacket);
             else if (config->antiAim.mode == 1)
                 setYaw(cmd->viewangles.y + config->antiAim.yawAngle + RandomFloat(config->antiAim.jitterMin, config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-            else if (config->antiAim.mode == 2)
-            {
-                int aaTick{ 0 };
-                if (aaTick == 4)
-                {
-                    float yaw = cmd->viewangles.y + config->antiAim.yawAngle + 20;
-                    float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                    aaTick++;
-                }
-                else
-                {
-                    float yaw = cmd->viewangles.y + config->antiAim.yawAngle - 5;
-                    float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                    aaTick++;
-                }
-                setYaw(cmd->viewangles.y + -config->antiAim.yawAngle + RandomFloat(-config->antiAim.jitterMin, -config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-            }
         }
         else if (config->antiAim.yaw && config->antiAim.yawInversed)
         {
@@ -143,25 +129,6 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 setYaw(cmd->viewangles.y + -config->antiAim.yawAngle, desyncYaw, cmd, sendPacket);
             else if (config->antiAim.mode == 1)
                 setYaw(cmd->viewangles.y + -config->antiAim.yawAngle + RandomFloat(-config->antiAim.jitterMin, -config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-            else if (config->antiAim.mode == 2)
-            {
-                int aaTick{ 0 };
-                float yaw;
-                float desyncYaw{ 0 };
-                if (aaTick == 4)
-                {
-                    float yaw = cmd->viewangles.y + -config->antiAim.yawAngle - 20;
-                    float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100 * -1;
-                    aaTick++;
-                }
-                else
-                {
-                    float yaw = cmd->viewangles.y + -config->antiAim.yawAngle + 5;
-                    float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-                    aaTick++;
-                }
-                setYaw(cmd->viewangles.y + -config->antiAim.yawAngle + RandomFloat(-config->antiAim.jitterMin, -config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-            }
         }
         else if (!config->antiAim.yaw && config->antiAim.yawReal)
         {

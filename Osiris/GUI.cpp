@@ -301,7 +301,7 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             }
         }
         ImGui::SetNextItemWidth(85.0f);
-        ImGui::Combo("Anti-Aim Mode", &config->antiAim.mode, "Static\0Jitter\0Dump Me Test\0");
+        ImGui::Combo("Anti-Aim Mode", &config->antiAim.mode, "Static\0Jitter\0");
         if (config->antiAim.mode == 1)
         {
             ImGui::SetNextItemWidth(240.0f);

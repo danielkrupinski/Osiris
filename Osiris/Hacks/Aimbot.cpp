@@ -237,6 +237,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
 
+    if (weaponClass == 40)
+        return;
+
     if (activeWeapon->itemDefinitionIndex2() == WeaponId::Taser && config->misc.autoZeus)
         Aimbot::autoZeus(cmd);
 

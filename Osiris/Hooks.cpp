@@ -175,8 +175,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     Misc::fakeDuck(cmd, sendPacket);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE)))
-        AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+    //if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE)))
+    AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();

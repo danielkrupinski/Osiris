@@ -24,6 +24,11 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!weaponIndex)
         return;
 
+    auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+
+    if (weaponClass == 40)
+        return;
+
     if (!config->triggerbot[weaponIndex].enabled)
         weaponIndex = getWeaponClass(activeWeapon->itemDefinitionIndex2());
 
