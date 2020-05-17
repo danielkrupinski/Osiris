@@ -14,7 +14,7 @@
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Vector.h"
 //#include "../SDK/Beams.h"
-
+std::string OldSkyname = "";
 #include <array>
 
 void Visuals::playerModel(FrameStage stage) noexcept

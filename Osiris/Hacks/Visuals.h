@@ -32,5 +32,5 @@ namespace Visuals
     void skybox() noexcept;
     void UpdateWorldTextures()noexcept;
     void PerformNightmode()noexcept;
-    std::string OldSkyname = "";
+    
 }
