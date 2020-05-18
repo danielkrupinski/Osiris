@@ -155,7 +155,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
             vtx_dst->pos[0] = vtx_src->pos.x;
             vtx_dst->pos[1] = vtx_src->pos.y;
             vtx_dst->pos[2] = 0.0f;
-            vtx_dst->col = (vtx_src->col & 0xFF00FF00) | ((vtx_src->col & 0xFF0000) >> 16) | ((vtx_src->col & 0xFF) << 16);     // RGBA --> ARGB for DirectX9
+            vtx_dst->col = vtx_src->col;
             vtx_dst->uv[0] = vtx_src->uv.x;
             vtx_dst->uv[1] = vtx_src->uv.y;
             vtx_dst++;
