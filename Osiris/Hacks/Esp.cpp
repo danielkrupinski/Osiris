@@ -72,7 +72,7 @@ static void renderEyeTraces(Entity* entity, const Config::Esp::Player& config) n
     }
 }
 
-static constexpr void renderPositionedText(unsigned font, const wchar_t* text, std::pair<float, float&> position) noexcept
+static void renderPositionedText(unsigned font, const wchar_t* text, std::pair<float, float&> position) noexcept
 {
     interfaces->surface->setTextFont(font);
     interfaces->surface->setTextPosition(position.first, position.second);
