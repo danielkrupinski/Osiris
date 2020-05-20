@@ -39,6 +39,23 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
+void Misc::autoJumpBug(UserCmd* cmd) noexcept {
+    if (!localPlayer)
+        return;
+
+    static auto hasLanded = false;
+
+    if (config->misc.autoJumpBug) {
+        if ((EnginePrediction::getFlags() & 1) && !(localPlayer->flags() & 1)) {
+            cmd->buttons |= UserCmd::IN_DUCK;
+            hasLanded = false;
+        } else if (!hasLanded) {
+            cmd->buttons &= ~UserCmd::IN_DUCK;
+            hasLanded = true;
+        }
+    }
+}
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
     if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))

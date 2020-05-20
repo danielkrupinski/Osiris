@@ -815,6 +815,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
         if (miscJson.isMember("Edge Jump")) misc.edgejump = miscJson["Edge Jump"].asBool();
         if (miscJson.isMember("Edge Jump Key")) misc.edgejumpkey = miscJson["Edge Jump Key"].asInt();
+        if (miscJson.isMember("Auto Jumpbug")) misc.autoJumpBug = miscJson["Auto Jumpbug"].asBool();
         if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
         if (miscJson.isMember("Slowwalk key")) misc.slowwalkKey = miscJson["Slowwalk key"].asInt();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
@@ -1595,6 +1596,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Moonwalk"] = misc.moonwalk;
         miscJson["Edge Jump"] = misc.edgejump;
         miscJson["Edge Jump Key"] = misc.edgejumpkey;
+        miscJson["Auto Jumpbug"] = misc.autoJumpBug;
         miscJson["Slowwalk"] = misc.slowwalk;
         miscJson["Slowwalk key"] = misc.slowwalkKey;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
