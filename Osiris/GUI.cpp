@@ -763,6 +763,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
     ImGui::SameLine();
     hotkey(config->visuals.thirdpersonKey);
+    ImGui::SetNextItemWidth(140.0f);
+    ImGui::Combo("Thirdperson Angles", &config->antiAim.thirdpersonMode, "Fake\0Real\0Current Tick\0");
     ImGui::PushItemWidth(290.0f);
     ImGui::PushID(0);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
