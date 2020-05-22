@@ -1,4 +1,6 @@
-﻿#include <sstream>
+﻿#include <mutex>
+#include <numeric>
+#include <sstream>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -17,6 +19,10 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/Client.h"
+#include "../SDK/ItemSchema.h"
+#include "../SDK/WeaponSystem.h"
+#include "../SDK/WeaponData.h"
+#include "../GUI.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -642,4 +648,101 @@ void Misc::killSound(GameEvent& event) noexcept
         interfaces->engine->clientCmdUnrestricted(killSounds[config->misc.killSound - 1]);
     else if (config->misc.killSound == 5)
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
+}
+
+void Misc::purchaseList(GameEvent* event) noexcept
+{
+    static std::mutex mtx;
+    std::scoped_lock _{ mtx };
+
+    static std::unordered_map<std::string, std::pair<std::vector<std::string>, int>> purchaseDetails;
+    static std::unordered_map<std::string, int> purchaseTotal;
+    static int totalCost;
+
+    static auto freezeEnd = 0.0f;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("item_purchase"): {
+            const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
+
+            if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                    if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
+                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        totalCost += weaponInfo->price;
+                    }
+                }
+                std::string weapon = event->getString("weapon");
+
+                if (weapon.starts_with("weapon_"))
+                    weapon.erase(0, 7);
+                else if (weapon.starts_with("item_"))
+                    weapon.erase(0, 5);
+
+                if (weapon.starts_with("smoke"))
+                    weapon = "smoke";
+                else if (weapon.starts_with("m4a1_s"))
+                    weapon = "m4a1_s";
+                else if (weapon.starts_with("usp_s"))
+                    weapon = "usp_s";
+
+                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
+                ++purchaseTotal[weapon];
+            }
+            break;
+        }
+        case fnv::hash("round_start"):
+            freezeEnd = 0.0f;
+            purchaseDetails.clear();
+            purchaseTotal.clear();
+            totalCost = 0;
+            break;
+        case fnv::hash("round_freeze_end"):
+            freezeEnd = memory->globalVars->realtime;
+            break;
+        }
+    } else {
+        if (!config->misc.purchaseList.enabled)
+            return;
+
+        static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime");
+
+        if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || purchaseDetails.empty() || purchaseTotal.empty()) && !gui->open)
+            return;
+
+        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+        if (!gui->open)
+            windowFlags |= ImGuiWindowFlags_NoInputs;
+        if (config->misc.purchaseList.noTitleBar)
+            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+        ImGui::Begin("Purchases", nullptr, windowFlags);
+        ImGui::PopStyleVar();
+
+        if (config->misc.purchaseList.mode == PurchaseList::Details) {
+            for (const auto& [playerName, purchases] : purchaseDetails) {
+                std::string s = std::accumulate(purchases.first.begin(), purchases.first.end(), std::string{ }, [](std::string s, const std::string& piece) { return s += piece + ", "; });
+                if (s.length() >= 2)
+                    s.erase(s.length() - 2);
+
+                if (config->misc.purchaseList.showPrices)
+                    ImGui::TextWrapped("%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
+                else
+                    ImGui::TextWrapped("%s: %s", playerName.c_str(), s.c_str());
+            }
+        } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
+            for (const auto& purchase : purchaseTotal)
+                ImGui::TextWrapped("%d x %s", purchase.second, purchase.first.c_str());
+
+            if (config->misc.purchaseList.showPrices && totalCost > 0) {
+                ImGui::Separator();
+                ImGui::TextWrapped("Total: $%d", totalCost);
+            }
+        }
+        ImGui::End();
+    }
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
     <ClCompile Include="Hacks\AntiAim.cpp" />
     <ClCompile Include="Hacks\Backtrack.cpp" />
@@ -46,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="ConfigStructs.h" />
+    <ClInclude Include="EventListener.h" />
     <ClInclude Include="fnv.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\AntiAim.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="SDK\VirtualMethod.h" />
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
+    <ClInclude Include="SDK\WeaponSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -189,6 +193,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
+      <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -226,6 +231,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>shell32.lib;ole32.lib</AdditionalDependencies>
       <AdditionalOptions>/EMITPOGOPHASEINFO %(AdditionalOptions)</AdditionalOptions>
+      <EntryPointSymbol>DllEntryPoint</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

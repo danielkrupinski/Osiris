@@ -16,14 +16,16 @@ enum class WeaponType {
     Unknown
 };
 
-struct WeaponData {
+struct WeaponInfo {
     PAD(20)
     int maxClip;
     PAD(112)
     char* name;
     PAD(60)
     WeaponType type;
-    PAD(16)
+    PAD(4)
+    int price;
+    PAD(0x8)
     float cycletime;
     PAD(12)
     bool fullAuto;

@@ -3,6 +3,7 @@
 #include "Chams.h"
 #include "../Config.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
 Backtrack::Cvars Backtrack::cvars;

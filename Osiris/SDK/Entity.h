@@ -57,7 +57,7 @@ public:
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
-    VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 
     constexpr auto getWeaponType() noexcept
@@ -186,6 +186,29 @@ public:
         return -1;
     }
 
+    [[nodiscard]] auto getPlayerName(bool normalize) noexcept
+    {
+        std::string playerName = "unknown";
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerName;
+
+        playerName = playerInfo.name;
+
+        if (normalize) {
+            if (wchar_t wide[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, 128, wide, 128)) {
+                if (wchar_t wideNormalized[128]; NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128)) {
+                    if (char nameNormalized[128]; WideCharToMultiByte(CP_UTF8, 0, wideNormalized, -1, nameNormalized, 128, nullptr, nullptr))
+                        playerName = nameNormalized;
+                }
+            }
+        }
+
+        playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
+        return playerName;
+    }
+
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
@@ -228,6 +251,7 @@ public:
     NETVAR(worldDroppedModelIndex, "CBaseCombatWeapon", "m_iWorldDroppedModelIndex", int)
     NETVAR(weaponWorldModel, "CBaseCombatWeapon", "m_hWeaponWorldModel", int)
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
+    NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
