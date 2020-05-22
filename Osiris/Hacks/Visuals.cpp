@@ -13,7 +13,6 @@
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Vector.h"
-#include "../SDK/Beams.h"
 
 #include <array>
 
