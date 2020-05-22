@@ -1,4 +1,4 @@
-#include "../fnv.h"
+﻿#include "../fnv.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -12,6 +12,8 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/Vector.h"
+#include "../SDK/Beams.h"
 
 #include <array>
 
@@ -117,9 +119,9 @@ void Visuals::modifySmoke() noexcept
     }
 }
 
-void Visuals::thirdperson() noexcept
+void Visuals::thirdperson(FrameStage stage, Vector angle) noexcept
 {
-    static bool isInThirdperson{ true };
+    static bool isInThirdperson{ false };
     static float lastTime{ 0.0f };
 
     if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
@@ -128,9 +130,14 @@ void Visuals::thirdperson() noexcept
     }
 
     if (config->visuals.thirdperson)
-        if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
-            && localPlayer && localPlayer->isAlive())
+        if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson) && localPlayer && localPlayer->isAlive())
+        {
             memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
+            if (config->globals.thirdPersonAnglesSet && stage == FrameStage::RENDER_START)
+            {
+                *(Vector*)((uintptr_t)(localPlayer.get()) + 0x31D8) = angle;
+            }
+        }
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
