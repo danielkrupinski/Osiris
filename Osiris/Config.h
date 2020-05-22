@@ -291,6 +291,12 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+        struct {
+        bool thirdPersonAnglesSet{ false };
+        Vector fakeAngle;
+        Vector realAngle;
+        Vector cmdAngle;
+    } globals;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;
