@@ -1,4 +1,5 @@
 #pragma once
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 class GameEvent;
