@@ -191,6 +191,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        int thirdpersonMode{ 0 };
 
         struct {
             bool enabled = false;
@@ -291,7 +292,8 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
-        struct {
+    
+    struct {
         bool thirdPersonAnglesSet{ false };
         Vector fakeAngle;
         Vector realAngle;
