@@ -185,6 +185,19 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     previousViewAngles = cmd->viewangles;
 
+    if (sendPacket)
+    {
+        config->globals.fakeAngle = cmd->viewangles;
+        config->globals.cmdAngle = cmd->viewangles;
+        config->globals.thirdPersonAnglesSet = true;
+    }
+    else
+    {
+        config->globals.realAngle = cmd->viewangles;
+        config->globals.cmdAngle = cmd->viewangles;
+        config->globals.thirdPersonAnglesSet = true;
+    }
+
     return false;
 }
 
