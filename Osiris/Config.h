@@ -8,6 +8,7 @@
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 #include "ConfigStructs.h"
+#include "SDK/Vector.h"
 
 class Config {
 public:
