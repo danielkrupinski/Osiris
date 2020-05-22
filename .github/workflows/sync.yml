@@ -26,5 +26,6 @@ jobs:
       with:
         # Token for the github API
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        owner: danielkrupinski
         # Branch to keep updated
         base: autopull # optional, default is master
