@@ -111,9 +111,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    auto result = hooks->originalReset(device, params);
-    ImGui_ImplDX9_CreateDeviceObjects();
-    return result;
+    return hooks->originalReset(device, params);
 }
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
