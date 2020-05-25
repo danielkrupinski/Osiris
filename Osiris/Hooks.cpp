@@ -96,7 +96,11 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     ImGui::EndFrame();
     ImGui::Render();
-    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
