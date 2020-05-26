@@ -134,8 +134,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
         return;
 
     // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-    D3DMATRIX last_view, last_projection;
-    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
+    D3DMATRIX last_projection;
     g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
 
     // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
@@ -202,7 +201,6 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     }
 
     // Restore the DX9 transform
-    g_pd3dDevice->SetTransform(D3DTS_VIEW, &last_view);
     g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
 
     // Restore the DX9 state
