@@ -17,9 +17,12 @@
 #include "Hacks/SkinChanger.h"
 #include "Hooks.h"
 #include "SDK/InputSystem.h"
+#include "SDK/SearchEngine.h"
 
+
+static std::vector<SkinChanger::PaintKit> search_result;
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar;
 
 GUI::GUI() noexcept
 {
@@ -844,11 +847,100 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
-
-        ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
+        ImGui::Combo("", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
             *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
             return true;
             }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
+        ImGui::SameLine();
+        {
+
+            if (itemIndex != 1) {
+                if (ImGui::Button("Search"))
+                {
+                    ImGui::OpenPopup("Search");
+                }
+            }
+            ImGui::SameLine();
+            ImGui::TextUnformatted("Skin");
+            if (ImGui::BeginPopup("Search", ImGuiWindowFlags_NoResize))
+            {
+
+                static char skin_name[256];
+                static int select_current = 0;
+
+                ImGui::Text("Pesquisar Skin");
+
+                ImGui::SameLine();
+                std::string text = "1";
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() - ImGui::CalcTextSize(text.c_str()).x
+                    - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.x);
+                if (ImGui::Button("x"))
+                {
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::Separator();
+                ImGui::InputText("", skin_name, IM_ARRAYSIZE(skin_name));
+                ImGui::Text("Insert a Skin");
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("This search are CaSe-SeNsItIvE");
+                }
+                ImGui::Separator();
+                if (ImGui::Button("Search"))
+                {
+                    search_result.clear();
+
+                    for (auto skin : SkinChanger::skinKits)
+                    {
+                        auto skin_copy = skin;
+
+                        char in_buffer[1024];
+                        strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                        char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                        memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                        if (is_utf8_string(in_buffer))
+                            pinyin_utf8(in_buffer, out_buffer);
+                        else
+                            pinyin_gb2312(in_buffer, out_buffer, false, false, true, true, true);
+
+                        if (std::string p(out_buffer); p.find(skin_name) != std::string::npos)
+                        {
+                            skin_copy.name = skin_copy.name;
+                            search_result.push_back(skin_copy);
+                        }
+                    }
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Aplicar"))
+                {
+                    for (int i = 0; i < SkinChanger::skinKits.size(); i++)
+                    {
+                        if (SkinChanger::skinKits[i].id == search_result[select_current].id)
+                        {
+                            selected_entry.paint_kit_vector_index = i;
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
+                }
+                ImGui::ListBox("", &select_current,
+                    [](void* data, int idx, const char** out_text)  -> bool
+                    {
+                        auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                        *out_text = vector[idx].name.c_str();
+                        return true;
+                    },
+                    &search_result, search_result.size(), 10);
+
+
+
+                ImGui::EndPopup();
+
+
+            }
+
+        }
 
         ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
             *out_text = game_data::quality_names[idx].name;
