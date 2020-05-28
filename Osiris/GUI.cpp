@@ -868,7 +868,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 static char skin_name[256];
                 static int select_current = 0;
 
-                ImGui::Text("Pesquisar Skin");
+                ImGui::Text("Search Skin");
 
                 ImGui::SameLine();
                 std::string text = "1";
@@ -913,7 +913,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                     }
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("Aplicar"))
+                if (ImGui::Button("Apply"))
                 {
                     for (int i = 0; i < SkinChanger::skinKits.size(); i++)
                     {
