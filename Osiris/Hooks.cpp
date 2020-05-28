@@ -637,7 +637,9 @@ bool Hooks::Vmt::init(void* const base) noexcept
         oldVmt = *reinterpret_cast<uintptr_t**>(base);
         length = calculateLength(oldVmt) + 1;
 
-        if (newVmt = findFreeDataPage(base, length))
+        // Temporary fix for unstable hooks, newVmt is never freed
+        // BEFORE: if (newVmt = findFreeDataPage(base, length))
+        if (newVmt = new std::uintptr_t[length])
             std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
         assert(newVmt);
         init = true;
