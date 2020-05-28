@@ -847,7 +847,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
-        ImGui::Combo("", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
+        ImGui::Combo(" ", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
             *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
             return true;
             }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
