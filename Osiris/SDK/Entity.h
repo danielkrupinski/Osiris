@@ -41,6 +41,7 @@ public:
     VIRTUAL_METHOD(void, release, 1, (), (this + 8))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + 8, updateType))
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
