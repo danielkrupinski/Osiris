@@ -98,10 +98,9 @@ struct GetStickerAttributeBySlotIndexFloat {
         }
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
-    static decltype(&hooked) m_original;
-};
 
-decltype(GetStickerAttributeBySlotIndexFloat::m_original) GetStickerAttributeBySlotIndexFloat::m_original;
+    inline static decltype(&hooked) m_original;
+};
 
 struct GetStickerAttributeBySlotIndexInt {
     static int __fastcall hooked(void* thisptr, void*, const int slot,
@@ -115,10 +114,8 @@ struct GetStickerAttributeBySlotIndexInt {
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
 
-    static decltype(&hooked) m_original;
+    inline static decltype(&hooked) m_original;
 };
-
-decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlotIndexInt::m_original;
 
 void apply_sticker_changer(Entity* item) noexcept
 {
