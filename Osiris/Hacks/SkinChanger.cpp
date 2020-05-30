@@ -383,3 +383,21 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
             event.setString("weapon", iconOverride);
     }
 }
+
+void SkinChanger::updateStatTrak(GameEvent& event) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    const auto weapon = localPlayer->getActiveWeapon();
+    if (!weapon)
+        return;
+
+    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > 0) {
+        weapon->fallbackStatTrak() = ++conf->stat_trak;
+        weapon->postDataUpdate(0);
+    }
+}

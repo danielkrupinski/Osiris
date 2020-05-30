@@ -3,6 +3,7 @@
 #include "EventListener.h"
 #include "fnv.h"
 #include "Hacks/Misc.h"
+#include "Hacks/SkinChanger.h"
 #include "Interfaces.h"
 
 EventListener::EventListener() noexcept
@@ -12,6 +13,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "item_purchase");
     interfaces->gameEventManager->addListener(this, "round_start");
     interfaces->gameEventManager->addListener(this, "round_freeze_end");
+    interfaces->gameEventManager->addListener(this, "player_death");
 }
 
 EventListener::~EventListener()
@@ -30,5 +32,7 @@ void EventListener::fireGameEvent(GameEvent* event)
     case fnv::hash("round_freeze_end"):
         Misc::purchaseList(event);
         break;
+    case fnv::hash("player_death"):
+        SkinChanger::updateStatTrak(*event);
     }
 }

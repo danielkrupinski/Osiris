@@ -11,6 +11,7 @@ namespace SkinChanger {
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
     void overrideHudIcon(GameEvent& event) noexcept;
+    void updateStatTrak(GameEvent& event) noexcept;
 
     struct PaintKit {
         PaintKit(int id, std::string&& name) noexcept : id(id), name(name) { }
