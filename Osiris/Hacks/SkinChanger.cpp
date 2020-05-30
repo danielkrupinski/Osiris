@@ -166,7 +166,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (config->seed)
         item->fallbackSeed() = config->seed;
 
-    if (config->stat_trak)
+    if (config->stat_trak > -1)
         item->fallbackStatTrak() = config->stat_trak;
 
     item->fallbackWear() = config->wear;
@@ -396,7 +396,7 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
     if (!weapon)
         return;
 
-    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > 0) {
+    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > -1) {
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
