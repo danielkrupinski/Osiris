@@ -136,7 +136,9 @@ public:
 
         return memory->isOtherEnemy(this, localPlayer.get());
     }
-  
+    
+    bool isOtherEnemy(Entity* other) noexcept;
+
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
