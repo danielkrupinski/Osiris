@@ -97,7 +97,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         auto activeWeapon = localPlayer->getActiveWeapon();
         //auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
         
-        if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || !(localPlayer->moveType() != MoveType::LADDER) || !(localPlayer->moveType() != MoveType::NOCLIP))
+        if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == (MoveType::LADDER | MoveType::NOCLIP)))
             return;
 
         if (config->antiAim.pitch)
