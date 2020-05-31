@@ -1,6 +1,8 @@
 #include "Entity.h"
 
+#include "../Memory.h"
+
 bool Entity::isOtherEnemy(Entity* other) noexcept
 {
-    return false;
+    return memory->isOtherEnemy(this, other);
 }
