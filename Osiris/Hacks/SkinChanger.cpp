@@ -166,7 +166,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (config->seed)
         item->fallbackSeed() = config->seed;
 
-    if (config->stat_trak)
+    if (config->stat_trak > -1)
         item->fallbackStatTrak() = config->stat_trak;
 
     item->fallbackWear() = config->wear;
@@ -381,5 +381,23 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
     if (localPlayer && interfaces->engine->getPlayerForUserID(event.getInt("attacker")) == localPlayer->index()) {
         if (const auto iconOverride = iconOverrides[event.getString("weapon")])
             event.setString("weapon", iconOverride);
+    }
+}
+
+void SkinChanger::updateStatTrak(GameEvent& event) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    const auto weapon = localPlayer->getActiveWeapon();
+    if (!weapon)
+        return;
+
+    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > -1) {
+        weapon->fallbackStatTrak() = ++conf->stat_trak;
+        weapon->postDataUpdate(0);
     }
 }

@@ -843,6 +843,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
+        selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
         ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {

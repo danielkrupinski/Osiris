@@ -84,7 +84,7 @@ struct item_setting
 	int definition_override_vector_index = 0;
 	int definition_override_index = 0;
 	int seed = 0;
-	int stat_trak = 0;
+	int stat_trak = -1;
 	float wear = std::numeric_limits<float>::min();
 	char custom_name[32] = "";
 	std::array<sticker_setting, 5> stickers;
