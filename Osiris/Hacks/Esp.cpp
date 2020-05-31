@@ -604,7 +604,7 @@ void Esp::render() noexcept
                 || entity->isDormant() || !entity->isAlive())
                 continue;
 
-            if (!entity->isEnemy()) {
+            if (!entity->isOtherEnemy(localPlayer.get())) {
                 if (!renderPlayerEsp(entity, ALLIES_ALL)) {
                     if (entity->isVisible())
                         renderPlayerEsp(entity, ALLIES_VISIBLE);

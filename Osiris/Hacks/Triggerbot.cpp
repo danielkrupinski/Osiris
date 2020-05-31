@@ -63,7 +63,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
     if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
         && (config->triggerbot[weaponIndex].friendlyFire
-            || trace.entity->isEnemy())
+            || trace.entity->isOtherEnemy(localPlayer.get()))
         && !trace.entity->gunGameImmunity()
         && (!config->triggerbot[weaponIndex].hitgroup
             || trace.hitgroup == config->triggerbot[weaponIndex].hitgroup)
