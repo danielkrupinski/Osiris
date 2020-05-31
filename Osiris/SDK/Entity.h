@@ -128,7 +128,7 @@ public:
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
-    bool isEnemy() noexcept
+    [[deprecated]] bool isEnemy() noexcept
     {
         // SHOULD NEVER HAPPEN
         if (!localPlayer)
