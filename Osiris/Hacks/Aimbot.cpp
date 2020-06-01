@@ -140,7 +140,7 @@ void Aimbot::autoZeus(UserCmd* cmd) noexcept
 
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isEnemy() || entity->gunGameImmunity())
+        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get()) || entity->gunGameImmunity())
             continue;
 
         auto boneList = std::initializer_list{ 3, 4 };
@@ -167,7 +167,7 @@ void Aimbot::autoZeus(UserCmd* cmd) noexcept
                 Trace trace;
 
                 interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
-                if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy() && !trace.entity->gunGameImmunity())
+                if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isOtherEnemy(localPlayer.get()) && !trace.entity->gunGameImmunity())
                 {
                     float damage = (weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 510.0f));
 
@@ -202,7 +202,7 @@ void Aimbot::autoZeus(UserCmd* cmd) noexcept
                 -std::sin(degreesToRadians(cmd->viewangles.x)) * weaponData->range };
         Trace trace;
         interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
-        if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isEnemy() && !trace.entity->gunGameImmunity())
+        if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer && trace.entity->isOtherEnemy(localPlayer.get()) && !trace.entity->gunGameImmunity())
         {
             float damage = (weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f));
 
