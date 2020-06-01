@@ -325,7 +325,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
             if (data.entityIndex == localPlayer->index())
                 data.volume *= get(0) / 100.0f;
-            else if (!entity->isEnemy())
+            else if (!entity->isOtherEnemy(localPlayer.get()))
                 data.volume *= get(1) / 100.0f;
             else
                 data.volume *= get(2) / 100.0f;
@@ -478,7 +478,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
             if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (localPlayer && soundInfo.entityIndex == localPlayer->index())
                     soundInfo.volume *= get(0) / 100.0f;
-                else if (!entity->isEnemy())
+                else if (!entity->isOtherEnemy(localPlayer.get()))
                     soundInfo.volume *= get(1) / 100.0f;
                 else
                     soundInfo.volume *= get(2) / 100.0f;

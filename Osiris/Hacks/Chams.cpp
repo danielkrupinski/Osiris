@@ -180,7 +180,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 applyChams(config->chams[REALANGLES].materials[i], false, entity->health());
                 applied = true;
             }*/
-        } else if (entity->isEnemy()) {
+        } else if (entity->isOtherEnemy(localPlayer.get())) {
             if (config->chams[ENEMIES_ALL].materials[i].enabled) {
                 if (applied)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
