@@ -16,6 +16,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "round_freeze_end");
     interfaces->gameEventManager->addListener(this, "player_death");
     interfaces->gameEventManager->addListener(this, "bullet_impact");
+}
 
 EventListener::~EventListener()
 {
