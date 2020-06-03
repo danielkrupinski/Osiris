@@ -28,7 +28,7 @@ private:
 inline std::unique_ptr<Netvars> netvars;
 
 #define PNETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
-auto funcname() noexcept \
+[[nodiscard]] auto funcname() noexcept \
 { \
     constexpr auto hash{ fnv::hash(class_name "->" var_name) }; \
     return reinterpret_cast<std::add_pointer_t<type>>(this + netvars->operator[](hash) + offset); \
@@ -38,7 +38,7 @@ auto funcname() noexcept \
     PNETVAR_OFFSET(funcname, class_name, var_name, 0, type)
 
 #define NETVAR_OFFSET(funcname, class_name, var_name, offset, type) \
-std::add_lvalue_reference_t<type> funcname() noexcept \
+[[nodiscard]] std::add_lvalue_reference_t<type> funcname() noexcept \
 { \
     constexpr auto hash{ fnv::hash(class_name "->" var_name) }; \
     return *reinterpret_cast<std::add_pointer_t<type>>(this + netvars->operator[](hash) + offset); \
