@@ -6,11 +6,13 @@
 enum class FrameStage;
 class GameEvent;
 
-namespace SkinChanger {
+namespace SkinChanger
+{
     void initializeKits() noexcept;
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
     void overrideHudIcon(GameEvent& event) noexcept;
+    void updateStatTrak(GameEvent& event) noexcept;
 
     struct PaintKit {
         PaintKit(int id, std::string&& name) noexcept : id(id), name(name) { }
@@ -23,7 +25,7 @@ namespace SkinChanger {
         }
     };
 
-    extern std::vector<PaintKit> skinKits;
-    extern std::vector<PaintKit> gloveKits;
-    extern std::vector<PaintKit> stickerKits;
+    inline std::vector<PaintKit> skinKits;
+    inline std::vector<PaintKit> gloveKits;
+    inline std::vector<PaintKit> stickerKits{ {0, "None"} };
 }

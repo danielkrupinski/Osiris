@@ -949,14 +949,11 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 
     // Backup the DX9 state
     IDirect3DStateBlock9* d3d9_state_block = NULL;
-    if (g_pd3dDevice->CreateStateBlock(D3DSBT_PIXELSTATE, &d3d9_state_block) < 0)
+    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
         return;
 
-    // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-    D3DMATRIX last_world, last_view, last_projection;
-    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
+    if (d3d9_state_block->Capture() != D3D_OK)
+        return;
 
     // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
     // FIXME-OPT: This is a waste of resource, the ideal is to use imconfig.h and
@@ -1020,11 +1017,6 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
         global_idx_offset += cmd_list->IdxBuffer.Size;
         global_vtx_offset += cmd_list->VtxBuffer.Size;
     }
-
-    // Restore the DX9 transform
-    g_pd3dDevice->SetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->SetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
 
     // Restore the DX9 state
     d3d9_state_block->Apply();

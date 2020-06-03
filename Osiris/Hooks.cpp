@@ -748,10 +748,6 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-    IDirect3DVertexDeclaration9* vertexDeclaration;
-    device->GetVertexDeclaration(&vertexDeclaration);
-
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -763,10 +759,11 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     ImGui::EndFrame();
     ImGui::Render();
-    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-    device->SetVertexDeclaration(vertexDeclaration);
-    vertexDeclaration->Release();
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -774,9 +771,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    auto result = hooks->originalReset(device, params);
-    ImGui_ImplDX9_CreateDeviceObjects();
-    return result;
+    return hooks->originalReset(device, params);
 }
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
@@ -952,7 +947,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
             if (data.entityIndex == localPlayer->index())
                 data.volume *= get(0) / 100.0f;
-            else if (!entity->isEnemy())
+            else if (!entity->isOtherEnemy(localPlayer.get()))
                 data.volume *= get(1) / 100.0f;
             else
                 data.volume *= get(2) / 100.0f;
@@ -1071,7 +1066,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
             if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (localPlayer && soundInfo.entityIndex == localPlayer->index())
                     soundInfo.volume *= get(0) / 100.0f;
-                else if (!entity->isEnemy())
+                else if (!entity->isOtherEnemy(localPlayer.get()))
                     soundInfo.volume *= get(1) / 100.0f;
                 else
                     soundInfo.volume *= get(2) / 100.0f;
@@ -1305,7 +1300,9 @@ bool Hooks::Vmt::init(void* const base) noexcept
         oldVmt = *reinterpret_cast<uintptr_t**>(base);
         length = calculateLength(oldVmt) + 1;
 
-        if (newVmt = findFreeDataPage(base, length))
+        // Temporary fix for unstable hooks, newVmt is never freed
+        // BEFORE: if (newVmt = findFreeDataPage(base, length))
+        if (newVmt = new std::uintptr_t[length])
             std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
         assert(newVmt);
         init = true;
