@@ -20,10 +20,6 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
-std::vector<SkinChanger::PaintKit> SkinChanger::skinKits;
-std::vector<SkinChanger::PaintKit> SkinChanger::gloveKits;
-std::vector<SkinChanger::PaintKit> SkinChanger::stickerKits{ {0, "None"} };
-
 void SkinChanger::initializeKits() noexcept
 {
     std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };

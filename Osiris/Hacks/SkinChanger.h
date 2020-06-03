@@ -6,7 +6,8 @@
 enum class FrameStage;
 class GameEvent;
 
-namespace SkinChanger {
+namespace SkinChanger
+{
     void initializeKits() noexcept;
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
@@ -24,7 +25,7 @@ namespace SkinChanger {
         }
     };
 
-    extern std::vector<PaintKit> skinKits;
-    extern std::vector<PaintKit> gloveKits;
-    extern std::vector<PaintKit> stickerKits;
+    inline std::vector<PaintKit> skinKits;
+    inline std::vector<PaintKit> gloveKits;
+    inline std::vector<PaintKit> stickerKits{ {0, "None"} };
 }
