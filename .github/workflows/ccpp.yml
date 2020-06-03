@@ -96,6 +96,11 @@ jobs:
             Copy-Item -Path D:\a\Osiris\Osiris\Osiris-GOESP-inj\src\Osiris-inj\Release\Osiris-inj.exe -Destination "D:\a\Osiris\Osiris\Osiris\ready\Osiris-Injector.exe"
       shell: pwsh
       
+    - name: Open CFG folder (BAT)
+      run: |
+            Add-Content -path "D:\a\Osiris\Osiris\Osiris\ready\Open CFG folder (Открыть папку с КФГ).bat" -value "@echo off`r`necho `"Wait a second`"`r`nIF EXIST %USERPROFILE%\Documents\Osiris (`r`n%SystemRoot%\explorer.exe `"%USERPROFILE%\Documents\Osiris`"`r`n) ELSE (`r`nmkdir %USERPROFILE%\Documents\Osiris`r`n%SystemRoot%\explorer.exe `"%USERPROFILE%\Documents\Osiris`"`r`n)`r`nstart `"`" https://youtu.be/xY3oX_cpAVs"
+      shell: pwsh
+      
     - uses: actions/upload-artifact@v1
       with:
         name: Osiris Release All
