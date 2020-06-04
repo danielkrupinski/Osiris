@@ -7,7 +7,7 @@ typedef float quaternion_t[4];
 
 HookListener hookListener;
 
-
+/*
 void BuildTransformations(Entity* player, uintptr_t /*edx*/, StudioHdr* hdr, Vector* pos, quaternion_t* q, const matrix3x4& cameraTransform, int boneMask, byte* boneComputed) {
 	auto orig = hookListener.m_players[player->index()].m_vmt.getOriginal<void, StudioHdr*, Vector*, quaternion_t*, const matrix3x4&, int, byte*>(187, hdr, pos, q, cameraTransform, boneMask, boneComputed);
 	//auto backup = hdr->flags;
@@ -18,7 +18,7 @@ void BuildTransformations(Entity* player, uintptr_t /*edx*/, StudioHdr* hdr, Vec
 	orig(player, hdr, pos, q, cameraTransform, boneMask, boneComputed);
 	//hdr->flags = backup;
 }
-
+*/
 void __fastcall DoExtraBoneProcessing(Entity* player, uint32_t, StudioHdr* hdr, Vector* pos, quaternion_t* q, matrix3x4* matrix,
 	void* bone_list, void* context)
 {
@@ -57,7 +57,7 @@ void __fastcall StandardBlendingRules(Entity* player, uintptr_t edx, StudioHdr* 
 
 
 
-
+/*
 void __fastcall AccumulateLayers(Entity* player, uintptr_t /*edx*/, void** bone_setup, Vector* pos, float time, quaternion_t* q)
 {
 	std::array<size_t, 13> layers;
@@ -89,9 +89,9 @@ void __fastcall AccumulateLayers(Entity* player, uintptr_t /*edx*/, void** bone_
 		//piece of shit, no answers on uc about get_ik_context and accumulate_pose i dont fucking have ida pro, WHAT IAM SUPPOSED TO DO????????
 	}
 }
+*/
 
-
-
+/*
 void __fastcall UpdateClientSideAnimation(Entity* player_, uintptr_t /*edx*/)
 {
 	auto e = reinterpret_cast<Entity*>(player_);
@@ -140,6 +140,7 @@ void __fastcall UpdateClientSideAnimation(Entity* player_, uintptr_t /*edx*/)
 	else
 		hookListener.m_players[e->index()].m_vmt.getOriginal<void>(223, player_);
 }
+*/
 void HookListener::hook_entity(Entity* ent)
 {
 	auto i = ent->index();
@@ -172,7 +173,7 @@ bool HookListener::init()
 
 void HookListener::remove()
 {
-	for (auto i = 1; i <= interfaces->engine->getMaxClients(); i++)
+	for (auto i = 1; i <= 65; i++)
 	{
 		if (m_players[i].m_hooked)
 		{
