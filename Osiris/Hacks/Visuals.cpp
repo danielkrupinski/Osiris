@@ -25,7 +25,7 @@ void Visuals::createmove(bool& sendPacket, UserCmd* cmd) noexcept
     viewangles = cmd->viewangles;
 }
 
-void Visuals::chams(FrameStage stage) noexcept
+void Visuals::AnimationFix(FrameStage stage) noexcept
 {
     if (stage == FrameStage::RENDER_START)
     {
