@@ -78,25 +78,27 @@ private:
         static auto id = 0;
         ++id;
 
-        if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
-            auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
-            const auto end = start + moduleInfo.SizeOfImage;
+        if (HMODULE moduleHandle = GetModuleHandleW(module)) {
+            if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), moduleHandle, &moduleInfo, sizeof(moduleInfo))) {
+                auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
+                const auto end = start + moduleInfo.SizeOfImage;
 
-            auto first = start;
-            auto second = pattern;
+                auto first = start;
+                auto second = pattern;
 
-            while (first < end && *second) {
-                if (*first == *second || *second == '?') {
-                    ++first;
-                    ++second;
-                } else {
-                    first = ++start;
-                    second = pattern;
+                while (first < end && *second) {
+                    if (*first == *second || *second == '?') {
+                        ++first;
+                        ++second;
+                    } else {
+                        first = ++start;
+                        second = pattern;
+                    }
                 }
-            }
 
-            if (!*second)
-                return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
+                if (!*second)
+                    return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
+            }
         }
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;

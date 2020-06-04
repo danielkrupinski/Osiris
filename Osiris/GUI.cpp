@@ -16,6 +16,7 @@
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Hooks.h"
+#include "Interfaces.h"
 #include "SDK/InputSystem.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
