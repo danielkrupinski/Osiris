@@ -15,4 +15,4 @@ namespace VirtualMethod
 constexpr auto name##args noexcept \
 { \
     return VirtualMethod::call<returnType, idx>##argsRaw; \
-} \
+}

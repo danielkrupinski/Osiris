@@ -83,7 +83,7 @@ void Glow::render() noexcept
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
             else if (entity == localPlayer.get())
                 applyGlow(glow[12], entity->health());
-            else if (entity->isEnemy())
+            else if (entity->isOtherEnemy(localPlayer.get()))
                 applyPlayerGlow(glow[3], glow[4], glow[5], entity);
             else
                 applyPlayerGlow(glow[0], glow[1], glow[2], entity);

@@ -2,7 +2,6 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
@@ -56,7 +55,7 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     return damage;
 }
 
-static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponData* weaponData, int minDamage) noexcept
+static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage) noexcept
 {
     float damage{ static_cast<float>(weaponData->damage) };
 
@@ -145,7 +144,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-                || !entity->isEnemy() && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
+                || !entity->isOtherEnemy(localPlayer.get()) && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
             auto boneList = config->aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };

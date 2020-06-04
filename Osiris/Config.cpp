@@ -146,6 +146,8 @@ void Config::load(size_t id) noexcept
 
         if (espJson.isMember("Enabled")) espConfig.enabled = espJson["Enabled"].asBool();
         if (espJson.isMember("Font")) espConfig.font = espJson["Font"].asInt();
+        if (espJson.isMember("HP side")) espConfig.hpside = espJson["HP side"].asInt();
+        if (espJson.isMember("Armor side")) espConfig.armorside = espJson["Armor side"].asInt();
 
         if (espJson.isMember("Snaplines")) {
             const auto& snaplinesJson = espJson["Snaplines"];
@@ -340,7 +342,21 @@ void Config::load(size_t id) noexcept
             if (outlineJson.isMember("Rainbow")) outlineConfig.rainbow = outlineJson["Rainbow"].asBool();
             if (outlineJson.isMember("Rainbow speed")) outlineConfig.rainbowSpeed = outlineJson["Rainbow speed"].asFloat();
         }
+        if (espJson.isMember("Ammo")) {
+            const auto& ammoJson = espJson["Ammo"];
+            auto& ammoConfig = espConfig.ammo;
 
+            if (ammoJson.isMember("Enabled")) ammoConfig.enabled = ammoJson["Enabled"].asBool();
+
+            if (ammoJson.isMember("Color")) {
+                ammoConfig.color[0] = ammoJson["Color"][0].asFloat();
+                ammoConfig.color[1] = ammoJson["Color"][1].asFloat();
+                ammoConfig.color[2] = ammoJson["Color"][2].asFloat();
+            }
+
+            if (ammoJson.isMember("Rainbow")) ammoConfig.rainbow = ammoJson["Rainbow"].asBool();
+            if (ammoJson.isMember("Rainbow speed")) ammoConfig.rainbowSpeed = ammoJson["Rainbow speed"].asFloat();
+        }
         if (espJson.isMember("Distance")) {
             const auto& distanceJson = espJson["Distance"];
             auto& distanceConfig = espConfig.distance;
@@ -886,6 +902,19 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
         if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
         if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
+
+        if (const auto& purchaseList = miscJson["Purchase List"]; purchaseList.isObject()) {
+            if (const auto& enabled{ purchaseList["Enabled"] }; enabled.isBool())
+                misc.purchaseList.enabled = enabled.asBool();
+            if (const auto& onlyDuringFreezeTime{ purchaseList["Only During Freeze Time"] }; onlyDuringFreezeTime.isBool())
+                misc.purchaseList.onlyDuringFreezeTime = onlyDuringFreezeTime.asBool();
+            if (const auto& showPrices{ purchaseList["Show Prices"] }; showPrices.isBool())
+                misc.purchaseList.showPrices = showPrices.asBool();
+            if (const auto& noTitleBar{ purchaseList["No Title Bar"] }; noTitleBar.isBool())
+                misc.purchaseList.noTitleBar = noTitleBar.asBool();
+            if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
+                misc.purchaseList.mode = mode.asInt();
+        }
     }
 
     {
@@ -1027,6 +1056,8 @@ void Config::save(size_t id) const noexcept
 
         espJson["Enabled"] = espConfig.enabled;
         espJson["Font"] = espConfig.font;
+        espJson["HP side"] = espConfig.hpside;
+        espJson["Armor side"] = espConfig.armorside;
 
         {
             auto& snaplinesJson = espJson["Snaplines"];
@@ -1173,7 +1204,17 @@ void Config::save(size_t id) const noexcept
             outlineJson["Rainbow"] = outlineConfig.rainbow;
             outlineJson["Rainbow speed"] = outlineConfig.rainbowSpeed;
         }
+        {
+            auto& ammoJson = espJson["Ammo"];
+            const auto& ammoConfig = espConfig.ammo;
 
+            ammoJson["Enabled"] = ammoConfig.enabled;
+            ammoJson["Color"][0] = ammoConfig.color[0];
+            ammoJson["Color"][1] = ammoConfig.color[1];
+            ammoJson["Color"][2] = ammoConfig.color[2];
+            ammoJson["Rainbow"] = ammoConfig.rainbow;
+            ammoJson["Rainbow speed"] = ammoConfig.rainbowSpeed;
+        }
         {
             auto& distanceJson = espJson["Distance"];
             const auto& distanceConfig = espConfig.distance;
@@ -1623,6 +1664,15 @@ void Config::save(size_t id) const noexcept
         miscJson["Custom Hit Sound"] = misc.customHitSound;
         miscJson["Kill sound"] = misc.killSound;
         miscJson["Custom Kill Sound"] = misc.customKillSound;
+
+        {
+            auto& purchaseListJson = miscJson["Purchase List"];
+            purchaseListJson["Enabled"] = misc.purchaseList.enabled;
+            purchaseListJson["Only During Freeze Time"] = misc.purchaseList.onlyDuringFreezeTime;
+            purchaseListJson["Show Prices"] = misc.purchaseList.showPrices;
+            purchaseListJson["No Title Bar"] = misc.purchaseList.noTitleBar;
+            purchaseListJson["Mode"] = misc.purchaseList.mode;
+        }
     }
 
     {

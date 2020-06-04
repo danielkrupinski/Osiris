@@ -9,6 +9,7 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include "Config.h"
+#include "EventListener.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
@@ -46,6 +47,20 @@
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+    static const auto once = [](HWND window) noexcept {
+        netvars = std::make_unique<Netvars>();
+        eventListener = std::make_unique<EventListener>();
+        config = std::make_unique<Config>("Osiris");
+
+        ImGui::CreateContext();
+        ImGui_ImplWin32_Init(window);
+        gui = std::make_unique<GUI>();
+
+        hooks->install();
+
+        return true;
+    }(window);
+
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config->misc.menuKey
         || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config->misc.menuKey == VK_LBUTTON)
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config->misc.menuKey == VK_RBUTTON)
@@ -53,7 +68,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         || ((msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) && config->misc.menuKey == HIWORD(wParam) + 4)) {
         gui->open = !gui->open;
         if (!gui->open) {
-           // ImGui::GetIO().MouseDown[0] = false;
+            // ImGui::GetIO().MouseDown[0] = false;
             interfaces->inputSystem->resetInputState();
         }
     }
@@ -70,23 +85,22 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
-    device->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE);
-    IDirect3DVertexDeclaration9* vertexDeclaration;
-    device->GetVertexDeclaration(&vertexDeclaration);
-
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    Misc::purchaseList();
 
     if (gui->open)
         gui->render();
 
     ImGui::EndFrame();
     ImGui::Render();
-    ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-    device->SetVertexDeclaration(vertexDeclaration);
-    vertexDeclaration->Release();
+    if (device->BeginScene() == D3D_OK) {
+        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+        device->EndScene();
+    }
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -94,9 +108,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    auto result = hooks->originalReset(device, params);
-    ImGui_ImplDX9_CreateDeviceObjects();
-    return result;
+    return hooks->originalReset(device, params);
 }
 
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
@@ -201,16 +213,16 @@ static float __stdcall getViewModelFov() noexcept
 
 static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
-    if (interfaces->engine->isInGame() && !interfaces->studioRender->isForcedMaterialOverride()) {
-        if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
-            return;
+    if (interfaces->studioRender->isForcedMaterialOverride())
+        return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
 
-        static Chams chams;
-        if (chams.render(ctx, state, info, customBoneToWorld))
-            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-        interfaces->studioRender->forcedMaterialOverride(nullptr);
-    } else
+    if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
+        return;
+
+    static Chams chams;
+    if (chams.render(ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    interfaces->studioRender->forcedMaterialOverride(nullptr);  
 }
 
 static bool __stdcall svCheatsGetBool() noexcept
@@ -272,7 +284,7 @@ static void __stdcall emitSound(SoundData data) noexcept
         if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
             if (data.entityIndex == localPlayer->index())
                 data.volume *= get(0) / 100.0f;
-            else if (!entity->isEnemy())
+            else if (!entity->isOtherEnemy(localPlayer.get()))
                 data.volume *= get(1) / 100.0f;
             else
                 data.volume *= get(2) / 100.0f;
@@ -366,7 +378,7 @@ static int __stdcall listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 {
     if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
-            if (const auto ent = callVirtualMethod<Entity*>(info->renderable - 4, 7); ent && ent->isPlayer()) {
+            if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
                 if (config->misc.disableModelOcclusion) {
                     // FIXME: sometimes players are rendered above smoke, maybe sort render list?
                     info->flags &= ~0x100;
@@ -391,7 +403,7 @@ static int __fastcall dispatchSound(SoundInfo& soundInfo) noexcept
             if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
                 if (localPlayer && soundInfo.entityIndex == localPlayer->index())
                     soundInfo.volume *= get(0) / 100.0f;
-                else if (!entity->isEnemy())
+                else if (!entity->isOtherEnemy(localPlayer.get()))
                     soundInfo.volume *= get(1) / 100.0f;
                 else
                     soundInfo.volume *= get(2) / 100.0f;
@@ -469,10 +481,16 @@ static void __stdcall renderSmokeOverlay(bool update) noexcept
         hooks->viewRender.callOriginal<void, 41>(update);
 }
 
-Hooks::Hooks(HMODULE cheatModule) : module{ cheatModule }
+Hooks::Hooks(HMODULE module) noexcept
 {
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+
+    this->module = module;
+
+    // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
+    interfaces = std::make_unique<const Interfaces>();
+    memory = std::make_unique<const Memory>();
 
     originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
@@ -485,6 +503,18 @@ void Hooks::install() noexcept
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
     **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
+    
+    bspQuery.init(interfaces->engine->getBSPTreeQuery());
+    client.init(interfaces->client);
+    clientMode.init(memory->clientMode);
+    engine.init(interfaces->engine);
+    gameEventManager.init(interfaces->gameEventManager);
+    modelRender.init(interfaces->modelRender);
+    panel.init(interfaces->panel);
+    sound.init(interfaces->sound);
+    surface.init(interfaces->surface);
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    viewRender.init(memory->viewRender);
 
     bspQuery.hookAt(6, listLeavesInBox);
     client.hookAt(37, frameStageNotify);
@@ -515,7 +545,30 @@ void Hooks::install() noexcept
     }
 }
 
-void Hooks::restore() noexcept
+extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
+
+static DWORD WINAPI unload(HMODULE module) noexcept
+{
+    Sleep(100);
+
+    interfaces->inputSystem->enableInput(true);
+    ImGui_ImplDX9_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+
+    hooks.reset();
+    eventListener.reset();
+    memory.reset();
+    interfaces.reset();
+    gui.reset();
+    config.reset();
+
+    _CRT_INIT(module, DLL_PROCESS_DETACH, nullptr);
+
+    FreeLibraryAndExitThread(module, 0);
+}
+
+void Hooks::uninstall() noexcept
 {
     bspQuery.restore();
     client.restore();
@@ -542,7 +595,8 @@ void Hooks::restore() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    interfaces->inputSystem->enableInput(true);
+    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
+        CloseHandle(thread);
 }
 
 uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
@@ -583,7 +637,9 @@ bool Hooks::Vmt::init(void* const base) noexcept
         oldVmt = *reinterpret_cast<uintptr_t**>(base);
         length = calculateLength(oldVmt) + 1;
 
-        if (newVmt = findFreeDataPage(base, length))
+        // Temporary fix for unstable hooks, newVmt is never freed
+        // BEFORE: if (newVmt = findFreeDataPage(base, length))
+        if (newVmt = new std::uintptr_t[length])
             std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
         assert(newVmt);
         init = true;
