@@ -97,7 +97,7 @@ private:
                 }
 
                 if (!*second)
-                    return reinterpret_cast<std::uintptr_t>(start);
+                    return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
             }
         }
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
