@@ -20,6 +20,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
+#include "../Pattern.h"
 
 #include <functional>
 
