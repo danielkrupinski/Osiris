@@ -8,7 +8,7 @@ typedef float quaternion_t[4];
 HookListener hookListener;
 
 /*
-void BuildTransformations(Entity* player, uintptr_t /*edx*/, StudioHdr* hdr, Vector* pos, quaternion_t* q, const matrix3x4& cameraTransform, int boneMask, byte* boneComputed) {
+void BuildTransformations(Entity* player, uintptr_t , StudioHdr* hdr, Vector* pos, quaternion_t* q, const matrix3x4& cameraTransform, int boneMask, byte* boneComputed) {
 	auto orig = hookListener.m_players[player->index()].m_vmt.getOriginal<void, StudioHdr*, Vector*, quaternion_t*, const matrix3x4&, int, byte*>(187, hdr, pos, q, cameraTransform, boneMask, boneComputed);
 	//auto backup = hdr->flags;
 	//for (int i = 0; i < hdr->numBones;i++)
@@ -58,7 +58,7 @@ void __fastcall StandardBlendingRules(Entity* player, uintptr_t edx, StudioHdr* 
 
 
 /*
-void __fastcall AccumulateLayers(Entity* player, uintptr_t /*edx*/, void** bone_setup, Vector* pos, float time, quaternion_t* q)
+void __fastcall AccumulateLayers(Entity* player, uintptr_t , void** bone_setup, Vector* pos, float time, quaternion_t* q)
 {
 	std::array<size_t, 13> layers;
 	layers.fill(layers.size());
@@ -92,7 +92,7 @@ void __fastcall AccumulateLayers(Entity* player, uintptr_t /*edx*/, void** bone_
 */
 
 /*
-void __fastcall UpdateClientSideAnimation(Entity* player_, uintptr_t /*edx*/)
+void __fastcall UpdateClientSideAnimation(Entity* player_, uintptr_t )
 {
 	auto e = reinterpret_cast<Entity*>(player_);
 	
