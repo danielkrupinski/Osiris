@@ -15,6 +15,57 @@
 
 #include <array>
 
+//bad way
+static Vector viewangles{};
+static bool sendPacket_ = true;
+
+void Visuals::createmove(bool& sendPacket, UserCmd* cmd) noexcept
+{
+    sendPacket_ = sendPacket;
+    viewangles = cmd->viewangles;
+}
+
+void Visuals::chams(FrameStage stage) noexcept
+{
+    if (stage == FrameStage::RENDER_START)
+    {
+            if (!localPlayer || !localPlayer->isAlive() || !localPlayer.get()->getAnimstate2())
+        return;
+    //*reinterpret_cast<int*>(localPlayer.get() + 0xF0) |= 8; //No Interp
+    //*reinterpret_cast<int*>(localPlayer.get() + 0xA68) = 0; //shouldskipframe
+
+    static auto backup_poses = localPlayer.get()->pos_par();
+    static auto backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
+
+    static std::array<AnimationLayer, 15> networked_layers;
+
+    if (localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount == memory->globalVars->framecount)
+        localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount -= 1;
+
+    static int old_tick = 0;
+    if (old_tick != memory->globalVars->tickCount)
+    {
+        old_tick = memory->globalVars->tickCount;
+        std::memcpy(&networked_layers, localPlayer.get()->animOverlays(), sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
+        localPlayer.get()->animations() = true;
+        localPlayer.get()->UpdateState(localPlayer->getAnimstate2(), viewangles);
+        localPlayer.get()->UpdateClientSideAnimation();
+        localPlayer.get()->animations() = false;
+        if (sendPacket_)
+        {
+            backup_poses = localPlayer.get()->pos_par();
+            backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
+        }
+    }
+    localPlayer.get()->getAnimstate2()->m_fDuckAmount = std::clamp(localPlayer.get()->getAnimstate2()->m_fDuckAmount, 0.f, 1.f);
+    localPlayer.get()->getAnimstate2()->m_flFeetYawRate = 0.f;
+    localPlayer->setAbsAngle(Vector{ 0,backup_abs,0 });
+    localPlayer.get()->getAnimstate2()->m_flUnknownFraction = 0.f;
+    std::memcpy(localPlayer.get()->animOverlays(), &networked_layers, sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
+    localPlayer.get()->pos_par() = backup_poses;
+    }
+}
+
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
