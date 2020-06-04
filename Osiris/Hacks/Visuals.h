@@ -1,10 +1,13 @@
 #pragma once
 
 enum class FrameStage;
+struct UserCmd;
 class GameEvent;
 
 namespace Visuals
 {
+    void createmove(bool&,UserCmd*) noexcept;
+    void AnimationFix(FrameStage stage) noexcept;
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
