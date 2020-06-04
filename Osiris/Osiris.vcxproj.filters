@@ -125,10 +125,10 @@
     <ClCompile Include="EventListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Listener.cpp">
+    <ClCompile Include="Pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pattern.cpp">
+    <ClCompile Include="Listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
