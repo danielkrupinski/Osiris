@@ -14,6 +14,7 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "Listener.h"
 
 #include "Hacks/Aimbot.h"
 #include "Hacks/AntiAim.h"
@@ -152,6 +153,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
+    hookListener.init();
+    
     EnginePrediction::run(cmd);
 
     Aimbot::run(cmd);
@@ -267,6 +270,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);
+        Visuals::AnimationFix(stage);
     }
     hooks->client.callOriginal<void, 37>(stage);
 }
