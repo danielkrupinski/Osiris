@@ -7,7 +7,7 @@
 class EventListener : public GameEventListener {
 public:
     EventListener() noexcept;
-    ~EventListener();
+    void remove() noexcept;
     void fireGameEvent(GameEvent* event);
 };
 
