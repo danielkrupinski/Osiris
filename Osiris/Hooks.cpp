@@ -552,17 +552,11 @@ static DWORD WINAPI unload(HMODULE module) noexcept
     Sleep(100);
 
     interfaces->inputSystem->enableInput(true);
+    eventListener->remove();
+
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-
-    hooks.reset();
-    eventListener->remove();
-    eventListener.reset();
-    memory.reset();
-    interfaces.reset();
-    gui.reset();
-    config.reset();
 
     _CRT_INIT(module, DLL_PROCESS_DETACH, nullptr);
 
