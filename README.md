@@ -104,7 +104,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Armor bar** - draw rectangle indicating player armor
     * **Money** - draw player money
     * **Head dot** - draw dot on player's head
-    * **Active Weapon** draw player equipped weapon
+    * **Active Weapon** - draw player equipped weapon
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
