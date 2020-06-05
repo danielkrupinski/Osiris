@@ -632,6 +632,7 @@ static DWORD WINAPI unload(HMODULE module) noexcept
     ImGui::DestroyContext();
 
     hooks.reset();
+    eventListener->remove();
     eventListener.reset();
     memory.reset();
     interfaces.reset();

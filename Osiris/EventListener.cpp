@@ -18,7 +18,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "bullet_impact");
 }
 
-EventListener::~EventListener()
+void EventListener::remove() noexcept
 {
     assert(interfaces);
 
