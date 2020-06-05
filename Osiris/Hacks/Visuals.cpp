@@ -30,7 +30,11 @@ void Visuals::AnimationFix(FrameStage stage) noexcept
 {
     if (stage == FrameStage::RENDER_START)
     {
-            if (!localPlayer || !localPlayer->isAlive() || !localPlayer.get()->getAnimstate2())
+    //https://github.com/perilouswithadollarsign/cstrike15_src/blob/master/game/client/c_baseanimating.cpp#L81
+    //disables shaking attachments
+    static auto jigglebones = interfaces->cvar->findVar("r_jiggle_bones");
+    jigglebones->setValue(0);
+    if (!localPlayer || !localPlayer->isAlive() || !localPlayer.get()->getAnimstate2())
         return;
     //*reinterpret_cast<int*>(localPlayer.get() + 0xF0) |= 8; //No Interp
     //*reinterpret_cast<int*>(localPlayer.get() + 0xA68) = 0; //shouldskipframe
