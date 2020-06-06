@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <d3d9types.h>
 
+#include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
@@ -26,6 +27,11 @@ struct PlayerInfo {
     int customfiles[4];
     unsigned char filesdownloaded;
     int entityIndex;
+};
+
+struct DemoPlaybackParameters {
+    PAD(16)
+    bool anonymousPlayerIdentity;
 };
 
 class NetworkChannel;
