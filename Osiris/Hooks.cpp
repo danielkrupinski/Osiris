@@ -430,19 +430,21 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
     return hooks->viewRender.callOriginal<int, 39>(param);
 }
 
-static void* __stdcall getDemoPlaybackParameters() noexcept
+static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
 {
-    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config->misc.revealSuspect && (returnAddress == memory->test || returnAddress == memory->test2))
-        return nullptr;
+    const auto params = hooks->engine.callOriginal<DemoPlaybackParameters*, 218>();
 
-    return hooks->engine.callOriginal<void*, 218>();
+    if (params && config->misc.revealSuspect && *static_cast<std::uintptr_t*>(_ReturnAddress()) != 0xC985C88B)  // client.dll : 8B C8 85 C9 74 1F 80 79 10 00
+        params->anonymousPlayerIdentity = false;
+
+    return params;
 }
 
 static bool __stdcall isPlayingDemo() noexcept
 {
     if (config->misc.revealMoney
-        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
-        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
+        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
         return true;
     }
     return hooks->engine.callOriginal<bool, 82>();
