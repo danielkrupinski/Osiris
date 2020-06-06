@@ -42,11 +42,10 @@ Memory::Memory() noexcept
     viewRender = **FIND_PATTERN(ViewRender***, L"client", "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08", 2);
     drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(FIND_PATTERN(int*, L"client", "\xE8????\x83\xC4\x0C\x8D\x4D\xF8", 1));
     submitReport = FIND_PATTERN(decltype(submitReport), L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08");
-    test = relativeToAbsolute<uintptr_t>(FIND_PATTERN(int*, L"client", "\xE8????\x3B\x44\x24\x0C", 1)) + 0x71;
-    test2 = findPattern(L"client", "\x85\xC0\x0F\x84????\x80\x78\x10\x00\x0F\x84");
     fakePrime = FIND_PATTERN(std::uint8_t*, L"client", "\x17\xF6\x40\x14\x10") - 1;
-    debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "Msg"));
-    conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(GetModuleHandleW(L"tier0"), "?ConColorMsg@@YAXABVColor@@PBDZZ"));
+    const auto tier0 = GetModuleHandleW(L"tier0");
+    debugMsg = reinterpret_cast<decltype(debugMsg)>(GetProcAddress(tier0, "Msg"));
+    conColorMsg = reinterpret_cast<decltype(conColorMsg)>(GetProcAddress(tier0, "?ConColorMsg@@YAXABVColor@@PBDZZ"));
     vignette = *FIND_PATTERN(float**, L"client", "\x0F\x11\x05????\xF3\x0F\x7E\x87", 3) + 1;
     equipWearable = FIND_PATTERN(decltype(equipWearable), L"client", "\x55\x8B\xEC\x83\xEC\x10\x53\x8B\x5D\x08\x57\x8B\xF9");
     predictionRandomSeed = *FIND_PATTERN(int**, L"client", "\x8B\x0D????\xBA????\xE8????\x83\xC4\x04", 2);
