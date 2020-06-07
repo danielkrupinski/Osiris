@@ -434,7 +434,7 @@ static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
 {
     const auto params = hooks->engine.callOriginal<DemoPlaybackParameters*, 218>();
 
-    if (params && config->misc.revealSuspect && *static_cast<std::uintptr_t*>(_ReturnAddress()) != 0xC985C88B)  // client.dll : 8B C8 85 C9 74 1F 80 79 10 00
+    if (params && config->misc.revealSuspect && *static_cast<std::uint64_t*>(_ReturnAddress()) != 0x79801F74C985C88B)  // client.dll : 8B C8 85 C9 74 1F 80 79 10 00
         params->anonymousPlayerIdentity = false;
 
     return params;
