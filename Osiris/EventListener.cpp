@@ -16,7 +16,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "player_death");
 }
 
-EventListener::~EventListener()
+void EventListener::remove() noexcept
 {
     assert(interfaces);
 

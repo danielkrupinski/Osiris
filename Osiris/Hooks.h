@@ -5,11 +5,6 @@
 #include <type_traits>
 #include <Windows.h>
 
-#include "Interfaces.h"
-#include "Memory.h"
-#include "SDK/Cvar.h"
-#include "SDK/Engine.h"
-
 struct SoundInfo;
 
 class Hooks {
@@ -75,6 +70,7 @@ public:
     Vmt viewRender;
 private:
     HMODULE module;
+    HWND window;
 };
 
 inline std::unique_ptr<Hooks> hooks;
