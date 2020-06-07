@@ -430,19 +430,21 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
     return hooks->viewRender.callOriginal<int, 39>(param);
 }
 
-static void* __stdcall getDemoPlaybackParameters() noexcept
+static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
 {
-    if (uintptr_t returnAddress = uintptr_t(_ReturnAddress()); config->misc.revealSuspect && (returnAddress == memory->test || returnAddress == memory->test2))
-        return nullptr;
+    const auto params = hooks->engine.callOriginal<DemoPlaybackParameters*, 218>();
 
-    return hooks->engine.callOriginal<void*, 218>();
+    if (params && config->misc.revealSuspect && *static_cast<std::uintptr_t*>(_ReturnAddress()) != 0xC985C88B)  // client.dll : 8B C8 85 C9 74 1F 80 79 10 00
+        params->anonymousPlayerIdentity = false;
+
+    return params;
 }
 
 static bool __stdcall isPlayingDemo() noexcept
 {
     if (config->misc.revealMoney
-        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client_panorama.dll : 84 C0 75 09 38 05
-        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client_panorama.dll : 84 C0 75 0C 5B
+        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
         return true;
     }
     return hooks->engine.callOriginal<bool, 82>();
@@ -492,7 +494,8 @@ Hooks::Hooks(HMODULE module) noexcept
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
 
-    originalWndProc = WNDPROC(SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(wndProc)));
+    window = FindWindowW(L"Valve001", nullptr);
+    originalWndProc = WNDPROC(SetWindowLongPtrA(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
 
 void Hooks::install() noexcept
@@ -552,17 +555,11 @@ static DWORD WINAPI unload(HMODULE module) noexcept
     Sleep(100);
 
     interfaces->inputSystem->enableInput(true);
+    eventListener->remove();
+
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-
-    hooks.reset();
-    eventListener->remove();
-    eventListener.reset();
-    memory.reset();
-    interfaces.reset();
-    gui.reset();
-    config.reset();
 
     _CRT_INIT(module, DLL_PROCESS_DETACH, nullptr);
 
@@ -587,7 +584,7 @@ void Hooks::uninstall() noexcept
 
     Glow::clearCustomObjects();
 
-    SetWindowLongPtrA(FindWindowW(L"Valve001", nullptr), GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    SetWindowLongPtrA(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory->present) = originalPresent;
     **reinterpret_cast<void***>(memory->reset) = originalReset;
 

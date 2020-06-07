@@ -152,6 +152,8 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
     if (config->quality)
         item->entityQuality() = config->quality;
+    else if (is_knife(item->itemDefinitionIndex()))
+        item->entityQuality() = 3; // make a star appear on knife
 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
