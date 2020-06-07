@@ -450,6 +450,15 @@ static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
 
 static bool __stdcall isPlayingDemo() noexcept
 {
+#ifdef _DEBUG
+    // Check if we always get the same return address
+    if (*static_cast<std::uintptr_t*>(_ReturnAddress()) == 0x0975C084
+        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) {
+        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
+        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
+    }
+#endif
+
     if (config->misc.revealMoney
         && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084  // client.dll : 84 C0 75 09 38 05
         && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
