@@ -192,13 +192,17 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
 
             if (config->chams[BACKTRACK].materials[i].enabled && config->backtrack.enabled) {
                 auto record = &Backtrack::records[info.entityIndex];
-                if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
-                    if (applied)
-                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-                    applyChams(config->chams[BACKTRACK].materials[i], false, entity->health());
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), record->back().matrix);
-                    interfaces->studioRender->forcedMaterialOverride(nullptr);
-                    applied = true;
+                if (record && record->size()) {
+                    for (std::size_t nIter = 0u; nIter < record->size(); nIter++) {
+                        if (Backtrack::valid(record->at(nIter).simulationTime)) {
+                            if (applied)
+                                hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                            applyChams(config->chams[BACKTRACK].materials[i], false, entity->health());
+                            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), record->at(nIter).matrix);
+                            interfaces->studioRender->forcedMaterialOverride(nullptr);
+                            applied = true;
+                        }
+                    }
                 }
             }
         } else {
