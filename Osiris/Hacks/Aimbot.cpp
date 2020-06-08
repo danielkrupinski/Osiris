@@ -3,7 +3,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Entity.h"
-#include "../SDK/UserCmd.h"
+#include "../SDK/UserCmd.h"        
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
 #include "../SDK/GlobalVars.h"
@@ -117,6 +117,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
 
+    if (!(localPlayer->flags() & FL_ONGROUND) && config->aimbot[weaponIndex].jumpCheck) return;
+    
     if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;
 
