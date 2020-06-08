@@ -212,6 +212,8 @@ public:
         return playerName;
     }
 
+   #define FL_ONGROUND (1<<0)
+    
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
