@@ -69,7 +69,7 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
     int hitsLeft = 4;
 
     while (damage >= 1.0f && hitsLeft) {
-        static Trace trace;
+        Trace trace;
         interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
 
         if (!allowFriendlyFire)
