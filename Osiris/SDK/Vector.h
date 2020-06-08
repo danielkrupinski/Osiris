@@ -64,6 +64,11 @@ struct Vector {
         z = 0.0f;
     }
 
+    auto distance(const Vector& v) const noexcept
+    {
+        return std::hypot(x - v.x, y - v.y, z - v.z);
+    }
+    
     auto length() const noexcept
     {
         return std::sqrt(x * x + y * y + z * z);
