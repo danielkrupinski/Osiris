@@ -61,6 +61,7 @@ public:
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+    VIRTUAL_METHOD(float, getSpread, 452, (), (this))
 
     constexpr auto isPistol() noexcept
     {
@@ -249,6 +250,7 @@ public:
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+    NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
