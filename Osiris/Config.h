@@ -52,8 +52,7 @@ public:
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
-        float maxAimInaccuracy{ 1.0f };
-        float maxShotInaccuracy{ 1.0f };
+        int hitchance{ 0 };
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
