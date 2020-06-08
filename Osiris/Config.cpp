@@ -961,6 +961,7 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
+        aimbotJson["jump check"] = aimbotConfig.jumpCheck;
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
     }
 
