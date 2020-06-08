@@ -443,9 +443,9 @@ static int __stdcall render2dEffectsPreHud(int param) noexcept
     return hooks->viewRender.callOriginal<int, 39>(param);
 }
 
-static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
+static const DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
 {
-    const auto params = hooks->engine.callOriginal<DemoPlaybackParameters*, 218>();
+    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, 218>();
 
 #ifdef _DEBUG
     // Check if we always get the same return address
@@ -455,8 +455,12 @@ static DemoPlaybackParameters* __stdcall getDemoPlaybackParameters() noexcept
     }
 #endif
 
-    if (params && config->misc.revealSuspect && *static_cast<std::uint64_t*>(_ReturnAddress()) != 0x79801F74C985C88B) // client.dll : 8B C8 85 C9 74 1F 80 79 10 00 , there game decides whether to show overwatch panel
-        params->anonymousPlayerIdentity = false;
+    if (params && config->misc.revealSuspect && *static_cast<std::uint64_t*>(_ReturnAddress()) != 0x79801F74C985C88B) { // client.dll : 8B C8 85 C9 74 1F 80 79 10 00 , there game decides whether to show overwatch panel
+        static DemoPlaybackParameters customParams;
+        customParams = *params;
+        customParams.anonymousPlayerIdentity = false;
+        return &customParams;
+    }
 
     return params;
 }
