@@ -72,19 +72,8 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
         Trace trace;
         interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
 
-        if (!allowFriendlyFire)
-        {
-            if (trace.entity)
-            {
-                if (trace.entity->isPlayer())
-                {
-                    if (trace.entity->team() == localPlayer->team())
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
+        if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(trace.entity))
+            return false;
 
         if (trace.fraction == 1.0f)
             break;
