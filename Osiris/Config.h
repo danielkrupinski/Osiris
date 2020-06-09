@@ -227,6 +227,7 @@ public:
     struct {
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
+        int autostrafestyle{ 0 };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };

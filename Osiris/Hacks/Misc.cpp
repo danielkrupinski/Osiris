@@ -23,6 +23,14 @@
 #include "../SDK/WeaponSystem.h"
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
+#ifndef RAD2DEG
+#define RAD2DEG( x  )  ( (float)(x) * (float)(180.f / 3.14159265358979323846) )
+#endif
+
+/*struct vec3
+{
+    float x, y, z;
+}*/
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -578,18 +586,98 @@ void Misc::revealRanks(UserCmd* cmd) noexcept
     if (config->misc.revealRanks && cmd->buttons & UserCmd::IN_SCORE)
         interfaces->client->dispatchUserMessage(50, 0, 0, nullptr);
 }
+float NormalizeYaw(float value)
+{
+    while (value > 180)
+        value -= 360.f;
 
+    while (value < -180)
+        value += 360.f;
+    return value;
+}
 void Misc::autoStrafe(UserCmd* cmd) noexcept
 {
-    if (localPlayer
-        && config->misc.autoStrafe
-        && !(localPlayer->flags() & 1)
-        && localPlayer->moveType() != MoveType::NOCLIP) {
-        if (cmd->mousedx < 0)
-            cmd->sidemove = -450.0f;
-        else if (cmd->mousedx > 0)
-            cmd->sidemove = 450.0f;
+    static bool bDirection = true;
+    static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
+    float flYawBhop = 0.f;
+    if (localPlayer->velocity().length() > 50.f)
+    {
+        float x = 30.f;
+        float y = localPlayer->velocity().length();
+        float z = 0.f;
+        float a = 0.f;
+
+        z = x / y;
+        z = fabsf(z);
+
+        a = x * z;
+
+        flYawBhop = a;
     }
+    //Legit Autostrafe
+    if (config->misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config->misc.autostrafestyle == 0) {
+        if (cmd->mousedx > 1)
+        {
+            cmd->sidemove = 450.f;
+        }
+        else
+        {
+            cmd->sidemove = -450.f;
+        }
+    }
+    // Normal Autostrafe
+    if (config->misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config->misc.autostrafestyle == 1) {
+        if (bDirection || cmd->mousedx > 1)
+        {
+            cmd->viewangles.y -= flYawBhop;
+            cmd->sidemove = -450.f;
+            bDirection = false;
+        }
+        else
+        {
+            cmd->viewangles.y += flYawBhop;
+            cmd->sidemove = 450.f;
+            bDirection = true;
+        }
+    }
+    //Rage Autostrafe
+    if (config->misc.autoStrafe && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround && !(localPlayer->flags() & 1) && config->misc.autostrafestyle == 2) {
+        float speed = localPlayer->velocity().length2D();
+        Vector velocity = localPlayer->velocity();
+        float yawVelocity = RAD2DEG(atan2(velocity.y, velocity.x));
+        float velocityDelta = NormalizeYaw(cmd->viewangles.y - yawVelocity);
+        static float sideSpeed = interfaces->cvar->findVar("cl_sidespeed")->getFloat();
+
+
+        if (fabsf(cmd->mousedx > 2)) {
+
+            cmd->sidemove = (cmd->mousedx < 0.f) ? -sideSpeed : sideSpeed;
+            return;
+        }
+
+        if (cmd->buttons & UserCmd::IN_BACK)
+            cmd->viewangles.y -= 180.f;
+        else if (cmd->buttons & UserCmd::IN_MOVELEFT)
+            cmd->viewangles.y -= 90.f;
+        else if (cmd->buttons & UserCmd::IN_MOVERIGHT)
+            cmd->viewangles.y += 90.f;
+
+        if (!speed > 0.5f || speed == NAN || speed == INFINITE) {
+
+            cmd->forwardmove = 450.f;
+            return;
+        }
+
+        cmd->forwardmove = std::clamp(5850.f / speed, -450.f, 450.f);
+
+        if ((cmd->forwardmove < -450.f || cmd->forwardmove > 450.f))
+            cmd->forwardmove = 0.f;
+
+        cmd->sidemove = (velocityDelta > 0.0f) ? -sideSpeed : sideSpeed;
+        cmd->viewangles.y = NormalizeYaw(cmd->viewangles.y - velocityDelta);
+    }
+    wasLastTimeOnGround = localPlayer->flags() & 1;
+    //CorrectMovement(cmd->viewangles, cmd, cmd->forwardmove, cmd->sidemove);
 }
 
 void Misc::removeCrouchCooldown(UserCmd* cmd) noexcept
