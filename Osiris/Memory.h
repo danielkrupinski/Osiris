@@ -19,8 +19,8 @@ class WeaponSystem;
 
 struct GlobalVars;
 struct GlowObjectManager;
-struct Vector;
 struct Trace;
+struct Vector;
 
 class Memory {
 public:
@@ -69,7 +69,7 @@ public:
     KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
-
+    std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {
