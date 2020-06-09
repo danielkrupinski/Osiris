@@ -32,6 +32,7 @@ struct PlayerInfo {
 struct DemoPlaybackParameters {
     PAD(16)
     bool anonymousPlayerIdentity;
+    PAD(23)
 };
 
 class NetworkChannel;

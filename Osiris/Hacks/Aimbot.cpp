@@ -55,8 +55,11 @@ static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace&
     return damage;
 }
 
-static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage) noexcept
+static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire) noexcept
 {
+    if (!localPlayer)
+        return false;
+
     float damage{ static_cast<float>(weaponData->damage) };
 
     Vector start{ localPlayer->getEyePosition() };
@@ -66,8 +69,11 @@ static bool canScan(Entity* localPlayer, Entity* entity, const Vector& destinati
     int hitsLeft = 4;
 
     while (damage >= 1.0f && hitsLeft) {
-        static Trace trace;
-        interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer, trace);
+        Trace trace;
+        interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
+
+        if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(trace.entity))
+            return false;
 
         if (trace.fraction == 1.0f)
             break;
@@ -151,7 +157,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             for (auto bone : boneList) {
                 auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
-                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(localPlayer.get(), entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage)))
+                if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage, config->aimbot[weaponIndex].friendlyFire)))
                     continue;
 
                 auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
