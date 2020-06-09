@@ -327,8 +327,6 @@ static void __stdcall lockCursor() noexcept
 
 static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 {
-    auto returnAddress = reinterpret_cast<uintptr_t>(_ReturnAddress());
-
 #ifdef _DEBUG
     // Check if we always get the same return address
     if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B) {
