@@ -18,6 +18,7 @@ class Localize;
 class MaterialSystem;
 class ModelInfo;
 class ModelRender;
+class NetworkStringTableContainer;
 class Panel;
 class PhysicsSurfaceProps;
 class Prediction;
@@ -45,6 +46,7 @@ public:
     GAME_INTERFACE(MaterialSystem, materialSystem, "materialsystem", "VMaterialSystem080")
     GAME_INTERFACE(ModelInfo, modelInfo, "engine", "VModelInfoClient004")
     GAME_INTERFACE(ModelRender, modelRender, "engine", "VEngineModel016")
+    GAME_INTERFACE(NetworkStringTableContainer, networkStringTableContainer, "engine", "VEngineClientStringTable001")
     GAME_INTERFACE(Panel, panel, "vgui2", "VGUI_Panel009")
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, "vphysics", "VPhysicsSurfaceProps001")
     GAME_INTERFACE(Prediction, prediction, "client", "VClientPrediction001")
