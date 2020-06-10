@@ -961,12 +961,12 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     ImGui::Separator();
 
     {
-        ImGui::Text("皮肤搜索");
+        ImGui::Text("SkinSearcher");
         ImGui::Separator();
         if (ImGui::InputText("", SkinChanger::skin_name, IM_ARRAYSIZE(SkinChanger::skin_name)))
             SearchCheck(true);
 
-        ImGui::Text("请在上方输入皮肤拼音或枪械名字");
+        ImGui::Text("Please Inset A Skin Name");
         ImGui::Separator();
 
 
