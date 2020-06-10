@@ -70,6 +70,7 @@ public:
     Vmt viewRender;
 private:
     HMODULE module;
+    HWND window;
 };
 
 inline std::unique_ptr<Hooks> hooks;

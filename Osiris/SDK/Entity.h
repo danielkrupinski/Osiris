@@ -58,16 +58,9 @@ public:
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
-
-    constexpr auto getWeaponType() noexcept
-    {
-        const auto weaponData = getWeaponData();
-        if (weaponData)
-            return weaponData->type;
-        return WeaponType::Unknown;
-    }
 
     constexpr auto isPistol() noexcept
     {

@@ -16,7 +16,7 @@ static int random(int min, int max) noexcept
 
 static std::unordered_map<uint32_t, recvProxy> proxies;
 
-static void spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config->misc.radarHack)
         data.value._int = 1;
@@ -164,7 +164,7 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-static void viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void __cdecl viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (localPlayer) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
