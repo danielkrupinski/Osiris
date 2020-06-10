@@ -191,7 +191,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
-
+        
         struct {
             bool enabled = false;
             float blue = 0.0f;
@@ -291,6 +291,10 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct {
+        int Searchmode{ 0 };
+    }SkinSearch;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;

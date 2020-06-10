@@ -21,6 +21,7 @@
 #include "SDK/SearchEngine.h"
 
 void SearchCheck(bool)noexcept;
+
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
@@ -50,31 +51,64 @@ GUI::GUI() noexcept
 }
 
 void SearchCheck(bool changed)noexcept {
-    if (changed) {
-        SkinChanger::search_result.clear();
-        for (auto skin : SkinChanger::skinKits)
-        {
-            auto skin_copy = skin;
-
-            char in_buffer[1024];
-            strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
-
-            char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
-
-            memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
-
-            if (is_utf8_string(in_buffer)) {
-                pinyin_utf8(in_buffer, out_buffer);
-            }
-            else {
-                pinyin_gb2312(in_buffer, out_buffer);
-            }
-            if (std::string p(out_buffer); p.find(SkinChanger::skin_name) != std::string::npos)
+    switch (config->SkinSearch.Searchmode) {
+    case 0:
+        if (changed) {
+            SkinChanger::search_result.clear();
+            for (auto skin : SkinChanger::skinKits)
             {
-                skin_copy.name = skin_copy.name + " [ " + out_buffer + " ]";
-                SkinChanger::search_result.push_back(skin_copy);
+                auto skin_copy = skin;
+
+                char in_buffer[1024];
+                strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                if (is_utf8_string(in_buffer)) {
+                    pinyin_utf8(in_buffer, out_buffer);
+                }
+                else {
+                    pinyin_gb2312(in_buffer, out_buffer);
+                }
+                if (std::string p(out_buffer); p.find(SkinChanger::skin_name) != std::string::npos)
+                {
+                    skin_copy.name = skin_copy.name + " [ " + out_buffer + " ]";
+                    SkinChanger::search_result.push_back(skin_copy);
+                }
             }
         }
+        break;
+    
+    case 1:
+        if (changed) {
+            SkinChanger::search_result_sticker.clear();
+            for (auto skin : SkinChanger::stickerKits)
+            {
+                auto skin_copy = skin;
+
+                char in_buffer[1024];
+                strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+                char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+                memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+                if (is_utf8_string(in_buffer)) {
+                    pinyin_utf8(in_buffer, out_buffer);
+                }
+                else {
+                    pinyin_gb2312(in_buffer, out_buffer);
+                }
+                if (std::string p(out_buffer); p.find(SkinChanger::sticker_name) != std::string::npos)
+                {
+                    skin_copy.name = skin_copy.name + " [ " + out_buffer + " ]";
+                    SkinChanger::search_result_sticker.push_back(skin_copy);
+                }
+            }
+        }
+        break;
     }
 }
 
@@ -959,8 +993,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     ImGui::TextUnformatted("nSkinz by namazso - SkinSearcher By Cyk丶Fad");
 
     ImGui::Separator();
-
-    {
+    switch (config->SkinSearch.Searchmode) {
+    case 0:
         ImGui::Text("SkinSearcher");
         ImGui::Separator();
         if (ImGui::InputText("", SkinChanger::skin_name, IM_ARRAYSIZE(SkinChanger::skin_name)))
@@ -968,17 +1002,57 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         ImGui::Text("Please Inset A Skin Name");
         ImGui::Separator();
+        ImGui::SameLine();
+        if (ImGui::Button("Apply")) {
+            for (int i = 0; i < SkinChanger::skinKits.size(); i++)
+            {
+                if (SkinChanger::skinKits[i].id == SkinChanger::search_result[SkinChanger::select_current].id)
+                {
+                    selected_entry.paint_kit_vector_index = i;
 
-
+                }
+            }
+        }
         ImGui::ListBox("", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)  -> bool
             {
                 auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
                 *out_text = vector[idx].name.c_str();
                 return true;
             }, &SkinChanger::search_result, SkinChanger::search_result.size(), 10);
-    }
 
-    if (!contentOnly)
+        break;
+    case 1: 
+        auto & selected_sticker = selected_entry.stickers[SkinChanger::selectedStickerSlot];
+        ImGui::Text("StickerSearch");
+        ImGui::Separator();
+        if (ImGui::InputText("", SkinChanger::sticker_name, IM_ARRAYSIZE(SkinChanger::sticker_name)))
+            SearchCheck(true);
+
+        ImGui::Text("Please Inser A StickerName");
+        ImGui::SameLine();
+        if (ImGui::Button("Apply")) {
+            for (int i = 0; i < SkinChanger::stickerKits.size(); i++)
+            {
+                if (SkinChanger::stickerKits[i].id == SkinChanger::search_result_sticker[SkinChanger::select_current_sitcker].id)
+                {
+                    selected_sticker.kit_vector_index = i;
+
+                }
+            }
+        }
+        ImGui::Separator();
+
+
+        ImGui::ListBox("", &SkinChanger::select_current_sitcker, [](void* data, int idx, const char** out_text)  -> bool
+            {
+                auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                *out_text = vector[idx].name.c_str();
+                return true;
+
+            }, &SkinChanger::search_result_sticker, SkinChanger::search_result_sticker.size(), 10);
+        break;
+    }
+        if (!contentOnly)
         ImGui::End();
 }
 

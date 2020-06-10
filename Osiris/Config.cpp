@@ -930,6 +930,14 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
         if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
     }
+
+    {
+        const auto& skinsearchJson = json["SkinSearch"];
+
+        if (skinsearchJson.isMember("SearchMode")) SkinSearch.Searchmode = skinsearchJson["SearchMode"].asInt();
+
+    }
+
 }
 
 void Config::save(size_t id) const noexcept
@@ -1688,7 +1696,12 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Aim Hacking"] = reportbot.aimbot;
         reportbotJson["Other Hacking"] = reportbot.other;
     }
+    {
+        auto& skinsearchJson = json["SkinSearch"];
 
+        skinsearchJson["SearchMode"] = SkinSearch.Searchmode;
+    }
+    
     std::error_code ec;
     std::filesystem::create_directory(path, ec);
 
