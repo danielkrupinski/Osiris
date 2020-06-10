@@ -32,7 +32,6 @@ namespace SkinChanger
     inline std::vector<PaintKit> search_result_sticker;
     inline int select_current;
     inline int select_current_sitcker;
-    inline std::vector<PaintKit> search_result;
     inline std::vector<PaintKit> skinKits;
     inline std::vector<PaintKit> gloveKits;
     inline std::vector<PaintKit> stickerKits{ {0, "None"} };
