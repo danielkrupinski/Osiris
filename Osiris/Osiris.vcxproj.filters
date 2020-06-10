@@ -391,5 +391,8 @@
     <ClInclude Include="SDK\NetworkStringTable.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\SearchEngine.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

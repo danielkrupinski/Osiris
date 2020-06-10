@@ -18,7 +18,9 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
+#include "SDK/SearchEngine.h"
 
+void SearchCheck(bool)noexcept;
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
@@ -46,6 +48,36 @@ GUI::GUI() noexcept
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges);
     }
 }
+
+void SearchCheck(bool changed)noexcept {
+    if (changed) {
+        SkinChanger::search_result.clear();
+        for (auto skin : SkinChanger::skinKits)
+        {
+            auto skin_copy = skin;
+
+            char in_buffer[1024];
+            strcpy_s<1024U>(in_buffer, skin_copy.name.c_str());
+
+            char* out_buffer = new char[HZ2PY_OUTPUT_BUF_ARRAY_SIZE];
+
+            memset(out_buffer, '\0', sizeof(char) * HZ2PY_OUTPUT_BUF_ARRAY_SIZE);
+
+            if (is_utf8_string(in_buffer)) {
+                pinyin_utf8(in_buffer, out_buffer);
+            }
+            else {
+                pinyin_gb2312(in_buffer, out_buffer);
+            }
+            if (std::string p(out_buffer); p.find(SkinChanger::skin_name) != std::string::npos)
+            {
+                skin_copy.name = skin_copy.name + " [ " + out_buffer + " ]";
+                SkinChanger::search_result.push_back(skin_copy);
+            }
+        }
+    }
+}
+
 
 void GUI::render() noexcept
 {
@@ -924,7 +956,27 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     if (ImGui::Button("Update", { 130.0f, 30.0f }))
         SkinChanger::scheduleHudUpdate();
 
-    ImGui::TextUnformatted("nSkinz by namazso");
+    ImGui::TextUnformatted("nSkinz by namazso - SkinSearcher By Cyk丶Fad");
+
+    ImGui::Separator();
+
+    {
+        ImGui::Text("皮肤搜索");
+        ImGui::Separator();
+        if (ImGui::InputText("", SkinChanger::skin_name, IM_ARRAYSIZE(SkinChanger::skin_name)))
+            SearchCheck(true);
+
+        ImGui::Text("请在上方输入皮肤拼音或枪械名字");
+        ImGui::Separator();
+
+
+        ImGui::ListBox("", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text)  -> bool
+            {
+                auto& vector = *static_cast<std::vector<SkinChanger::PaintKit>*>(data);
+                *out_text = vector[idx].name.c_str();
+                return true;
+            }, &SkinChanger::search_result, SkinChanger::search_result.size(), 10);
+    }
 
     if (!contentOnly)
         ImGui::End();

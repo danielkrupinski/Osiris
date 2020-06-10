@@ -24,7 +24,9 @@ namespace SkinChanger
             return name < other.name;
         }
     };
-
+    inline char skin_name[256];
+    inline int itemIndex = 0;
+    inline std::vector<PaintKit> search_result;
     inline std::vector<PaintKit> skinKits;
     inline std::vector<PaintKit> gloveKits;
     inline std::vector<PaintKit> stickerKits{ {0, "None"} };
