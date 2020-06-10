@@ -10,7 +10,12 @@ void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bo
         ImGui::Checkbox("##check", enable);
         ImGui::SameLine(0.0f, 5.0f);
     }
-    bool openPopup = ImGui::ColorButton("##btn", color, ImGuiColorEditFlags_NoTooltip);
+    bool openPopup = ImGui::ColorButton("##btn", color, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoAlpha);
+    if (ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
+            std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
+        ImGui::EndDragDropTarget();
+    }
     ImGui::SameLine(0.0f, 5.0f);
     ImGui::TextUnformatted(name);
 

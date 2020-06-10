@@ -15,8 +15,8 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
-#include "Hacks/Visuals.h"
 #include "Hooks.h"
+#include "Interfaces.h"
 #include "SDK/InputSystem.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
@@ -24,9 +24,6 @@ constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoRe
 
 GUI::GUI() noexcept
 {
-    ImGui::CreateContext();
-    ImGui_ImplWin32_Init(FindWindowW(L"Valve001", NULL));
-
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
 
@@ -42,8 +39,11 @@ GUI::GUI() noexcept
         CoTaskMemFree(pathToFonts);
 
         static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, nullptr, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, nullptr, ranges);
+        ImFontConfig cfg;
+        cfg.OversampleV = 3;
+
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, ranges);
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges);
     }
 }
 
@@ -614,7 +614,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
 
             ImGui::Separator();
 
-            constexpr auto spacing{ 200.0f };
+            constexpr auto spacing{ 185.0f };
             ImGuiCustom::colorPicker("Snaplines", config->esp.players[selected].snaplines);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Box", config->esp.players[selected].box);
@@ -627,12 +627,20 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGuiCustom::colorPicker("Head dot", config->esp.players[selected].headDot);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Health bar", config->esp.players[selected].healthBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::Combo("##HP side", &config->esp.players[selected].hpside, "Left\0Bottom\0Right\0");
+            ImGui::PushID("hotfix");
             ImGuiCustom::colorPicker("Name", config->esp.players[selected].name);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor", config->esp.players[selected].armor);
             ImGuiCustom::colorPicker("Money", config->esp.players[selected].money);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Armor bar", config->esp.players[selected].armorBar);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(70.f);
+            ImGui::PopID();
+            ImGui::Combo("##AR side", &config->esp.players[selected].armorside, "Left\0Bottom\0Right\0");
             ImGuiCustom::colorPicker("Outline", config->esp.players[selected].outline);
             ImGui::SameLine(spacing);
             ImGuiCustom::colorPicker("Distance", config->esp.players[selected].distance);
@@ -660,6 +668,7 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGui::Combo("", &config->esp.weapon.boxType, "2D\0""2D corners\0""3D\0""3D corners\0");
             ImGuiCustom::colorPicker("Name", config->esp.weapon.name);
             ImGui::SameLine(spacing);
+            ImGuiCustom::colorPicker("Ammo", config->esp.weapon.ammo);
             ImGuiCustom::colorPicker("Outline", config->esp.weapon.outline);
             ImGuiCustom::colorPicker("Distance", config->esp.weapon.distance);
             ImGui::SliderFloat("Max distance", &config->esp.weapon.maxDistance, 0.0f, 200.0f, "%.2fm");
@@ -731,8 +740,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
-    ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
-    ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0");
+    ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0Pirate\0");
+    ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0Pirate\0");
     ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
     ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
     ImGui::Checkbox("No fog", &config->visuals.noFog);
@@ -835,6 +844,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Columns(2, nullptr, false);
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
+        selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
         ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
@@ -1083,6 +1093,14 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
     }
+    ImGui::PushID(5);
+    ImGui::Combo("Kill Sound", &config->misc.killSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
+    if (config->misc.killSound == 5) {
+        ImGui::InputText("Kill Sound filename", &config->misc.customKillSound);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("audio file must be put in csgo/sound/ directory");
+    }
+    ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
     ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
     config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
@@ -1096,9 +1114,25 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Purchase List");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::SetNextItemWidth(75.0f);
+        ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
+        ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
+        ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
+        ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
-        hooks->restore();
+        hooks->uninstall();
 
     ImGui::Columns(1);
     if (!contentOnly)
@@ -1140,7 +1174,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     if (!contentOnly) {
         if (!window.config)
             return;
-        ImGui::SetNextWindowSize({ 290.0f, 190.0f });
+        ImGui::SetNextWindowSize({ 290.0f, 200.0f });
         ImGui::Begin("Config", &window.config, windowFlags);
     }
 
@@ -1148,6 +1182,9 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 170.0f);
 
     ImGui::PushItemWidth(160.0f);
+
+    if (ImGui::Button("Reload configs", { 160.0f, 25.0f }))
+        config->listConfigs();
 
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;

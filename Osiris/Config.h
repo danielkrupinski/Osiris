@@ -7,6 +7,7 @@
 
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
+#include "ConfigStructs.h"
 
 class Config {
 public:
@@ -17,6 +18,7 @@ public:
     void remove(size_t) noexcept;
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
+    void listConfigs() noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
@@ -121,6 +123,7 @@ public:
             ColorToggle box;
             int boxType{ 0 };
             ColorToggle name;
+            ColorToggle ammo;
             ColorToggle outline{ 0.0f, 0.0f, 0.0f };
             ColorToggle distance;
             float maxDistance{ 0.0f };
@@ -135,6 +138,8 @@ public:
             ColorToggle money;
             ColorToggle headDot;
             ColorToggle activeWeapon;
+            int hpside{ 0 };
+            int armorside{ 0 };
             bool deadesp { false };
         };
 
@@ -290,7 +295,10 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        int killSound{ 0 };
+        std::string customKillSound;
         std::string customHitSound;
+        PurchaseList purchaseList;
     } misc;
 
     struct {

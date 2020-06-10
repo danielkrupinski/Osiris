@@ -1,3 +1,5 @@
+#include <mutex>
+#include <numeric>
 #include <sstream>
 
 #include "../Config.h"
@@ -17,6 +19,10 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/Client.h"
+#include "../SDK/ItemSchema.h"
+#include "../SDK/WeaponSystem.h"
+#include "../SDK/WeaponData.h"
+#include "../GUI.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -70,6 +76,15 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
+    if (config->misc.clocktag) {
+        const auto time = std::time(nullptr);
+        const auto localTime = std::localtime(&time);
+        char s[11];
+        s[0] = '\0';
+        sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+        memory->setClanTag(s, s);
+    }
+
     if (config->misc.customClanTag) {
         static std::string clanTag;
 
@@ -79,22 +94,15 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 clanTag.push_back(' ');
         }
 
-        static auto lastTime{ 0.0f };
-        if (memory->globalVars->realtime - lastTime < 0.6f) return;
+        static auto lastTime = 0.0f;
+        if (memory->globalVars->realtime - lastTime < 0.6f)
+            return;
         lastTime = memory->globalVars->realtime;
 
         if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
+            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
 
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
-
-        if (config->misc.clocktag) {
-            const auto time{ std::time(nullptr) };
-            const auto localTime{ std::localtime(&time) };
-
-            const auto timeString{ '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']' };
-            memory->setClanTag(timeString.c_str(), timeString.c_str());
-        }
     }
 }
 
@@ -709,12 +717,7 @@ void Misc::killMessage(GameEvent& event) noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     std::string cmd = "say \"";
@@ -826,12 +829,7 @@ void Misc::playHitSound(GameEvent& event) noexcept
     if (!localPlayer)
         return;
 
-    PlayerInfo localInfo;
-
-    if (!interfaces->engine->getPlayerInfo(localPlayer->index(), localInfo))
-        return;
-
-    if (event.getInt("attacker") != localInfo.userId || event.getInt("userid") == localInfo.userId)
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
         return;
 
     constexpr std::array hitSounds{
@@ -845,4 +843,125 @@ void Misc::playHitSound(GameEvent& event) noexcept
         interfaces->engine->clientCmdUnrestricted(hitSounds[config->misc.hitSound - 1]);
     else if (config->misc.hitSound == 5)
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customHitSound).c_str());
+}
+
+void Misc::killSound(GameEvent& event) noexcept
+{
+    if (!config->misc.killSound)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    constexpr std::array killSounds{
+        "play physics/metal/metal_solid_impact_bullet2",
+        "play buttons/arena_switch_press_02",
+        "play training/timer_bell",
+        "play physics/glass/glass_impact_bullet1"
+    };
+
+    if (static_cast<std::size_t>(config->misc.killSound - 1) < killSounds.size())
+        interfaces->engine->clientCmdUnrestricted(killSounds[config->misc.killSound - 1]);
+    else if (config->misc.killSound == 5)
+        interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
+}
+
+void Misc::purchaseList(GameEvent* event) noexcept
+{
+    static std::mutex mtx;
+    std::scoped_lock _{ mtx };
+
+    static std::unordered_map<std::string, std::pair<std::vector<std::string>, int>> purchaseDetails;
+    static std::unordered_map<std::string, int> purchaseTotal;
+    static int totalCost;
+
+    static auto freezeEnd = 0.0f;
+
+    if (event) {
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("item_purchase"): {
+            const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
+
+            if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                    if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
+                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        totalCost += weaponInfo->price;
+                    }
+                }
+                std::string weapon = event->getString("weapon");
+
+                if (weapon.starts_with("weapon_"))
+                    weapon.erase(0, 7);
+                else if (weapon.starts_with("item_"))
+                    weapon.erase(0, 5);
+
+                if (weapon.starts_with("smoke"))
+                    weapon = "smoke";
+                else if (weapon.starts_with("m4a1_s"))
+                    weapon = "m4a1_s";
+                else if (weapon.starts_with("usp_s"))
+                    weapon = "usp_s";
+
+                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
+                ++purchaseTotal[weapon];
+            }
+            break;
+        }
+        case fnv::hash("round_start"):
+            freezeEnd = 0.0f;
+            purchaseDetails.clear();
+            purchaseTotal.clear();
+            totalCost = 0;
+            break;
+        case fnv::hash("round_freeze_end"):
+            freezeEnd = memory->globalVars->realtime;
+            break;
+        }
+    } else {
+        if (!config->misc.purchaseList.enabled)
+            return;
+
+        static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime");
+
+        if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || purchaseDetails.empty() || purchaseTotal.empty()) && !gui->open)
+            return;
+
+        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+        if (!gui->open)
+            windowFlags |= ImGuiWindowFlags_NoInputs;
+        if (config->misc.purchaseList.noTitleBar)
+            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+        ImGui::Begin("Purchases", nullptr, windowFlags);
+        ImGui::PopStyleVar();
+
+        if (config->misc.purchaseList.mode == PurchaseList::Details) {
+            for (const auto& [playerName, purchases] : purchaseDetails) {
+                std::string s = std::accumulate(purchases.first.begin(), purchases.first.end(), std::string{ }, [](std::string s, const std::string& piece) { return s += piece + ", "; });
+                if (s.length() >= 2)
+                    s.erase(s.length() - 2);
+
+                if (config->misc.purchaseList.showPrices)
+                    ImGui::TextWrapped("%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
+                else
+                    ImGui::TextWrapped("%s: %s", playerName.c_str(), s.c_str());
+            }
+        } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
+            for (const auto& purchase : purchaseTotal)
+                ImGui::TextWrapped("%d x %s", purchase.second, purchase.first.c_str());
+
+            if (config->misc.purchaseList.showPrices && totalCost > 0) {
+                ImGui::Separator();
+                ImGui::TextWrapped("Total: $%d", totalCost);
+            }
+        }
+        ImGui::End();
+    }
 }

@@ -1,8 +1,10 @@
 #pragma once
 
-#include <cstddef>
+#include <cstdint>
+#include <Windows.h>
 #include <d3d9types.h>
 
+#include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
@@ -27,13 +29,18 @@ struct PlayerInfo {
     int entityIndex;
 };
 
+struct DemoPlaybackParameters {
+    PAD(16)
+    bool anonymousPlayerIdentity;
+    PAD(23)
+};
+
 class NetworkChannel;
 
 class Engine {
 public:
     VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (this, entityIndex, std::ref(playerInfo)))
     VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (this, userId))
-    [[deprecated]] VIRTUAL_METHOD(int, getLocalPlayer, 12, (), (this))
     VIRTUAL_METHOD(void, getViewAngles, 18, (Vector& angles), (this, std::ref(angles)))
     VIRTUAL_METHOD(void, setViewAngles, 19, (const Vector& angles), (this, std::cref(angles)))
     VIRTUAL_METHOD(int, getMaxClients, 20, (), (this))
