@@ -141,6 +141,7 @@ public:
             int hpside{ 0 };
             int armorside{ 0 };
             bool deadesp { false };
+            ColorToggle defuseesp;
         };
 
         struct Weapon : public Shared { } weapon;
