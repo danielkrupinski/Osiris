@@ -30,6 +30,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
     * **On key [ key ]** - aimbot works only when chosen key is being held
+    * **Aimlock** - brings your aim to the target (affected by Smooth).
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Friendly fire** - treat allies as enemies
     * **Visible only** - aim only on visible players
@@ -52,6 +53,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
     * **Hitgroup** - body parts on which triggerbot works
     * **Shot delay** - delay time in ms (milliseconds)
+    * **Min damage** - minimal damage to fire.
     
 * **Backtrack** - abuse lag compensation in order to move players back in time
     * **Enabled** - on / off master switch
@@ -102,6 +104,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Armor bar** - draw rectangle indicating player armor
     * **Money** - draw player money
     * **Head dot** - draw dot on player's head
+    * **Active Weapon** - draw player equipped weapon
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
@@ -130,6 +133,8 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **World color** - set world material ambient light color
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
     * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
+    * **Hit effect** - show screen effect on enemy hit
+    * **Hit maker** - show a cross detail on enemy hit
 
 * **Skin changer** - change weapon skins, knives and stickers
 
@@ -167,12 +172,16 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Disable model occlusion** - draw player models even if they are behind thick walls
     * **Kill message** - print message to chat after killing an enemy
     * **Name stealer** - mimic other players names
+    * **Custom clantag** - set a custom clantag
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
     * **Quick reload** - perform quick weapon switch during reload for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
+    * **Fix tablet signal** - allow use tablet on underground (dangerzone)
     * **Hit Sound** - sound emitted when hurting enemy
     * **Chocked packets** - length of sequence of chocked ticks
     * **Max angle delta** - maximum viewangles change per tick
+    * **Fake Prime** - set a fake prime (visible in lobby)
+    * **Purchase List** - show the purchased equipment by enemies.
     * **Unhook** - unload cheat
 
 * **Reportbot** - automatically report players on server for cheating or other abusive actions
@@ -183,8 +192,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Wallhack** - report for visual assistance
     * **Other** - report for other assistance
     * **Griefing** - report for griefing
-    * **Voice abuse** - report for voice abuse
-    * **Text abuse** - report for text abuse
+    * **Abusive Communications** - report for abusive communications
 
 * **Config** - JSON-based configuration system
     * **Create config** - create new configuration file
@@ -192,6 +200,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Load selected** - load selected configuration file
     * **Save selected** - save selected configuration file
     * **Delete selected** - delete selected configuration file
+    * **Reload configs** - reload configs list
 </details>
 
 ## Getting started

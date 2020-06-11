@@ -19,8 +19,8 @@ class WeaponSystem;
 
 struct GlobalVars;
 struct GlowObjectManager;
-struct Vector;
 struct Trace;
+struct Vector;
 
 class Memory {
 public:
@@ -43,8 +43,8 @@ public:
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    uintptr_t scopeArc;
-    uintptr_t scopeLens;
+    // uintptr_t scopeArc;
+    // uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
@@ -69,7 +69,7 @@ public:
     KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
-
+    std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

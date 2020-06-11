@@ -24,8 +24,8 @@ Memory::Memory() noexcept
     cameraThink = findPattern(L"client", "\x85\xC0\x75\x30\x38\x86");
     acceptMatch = reinterpret_cast<decltype(acceptMatch)>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12"));
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(L"client", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
-    scopeArc = findPattern(L"client", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7") + 5;
-    scopeLens = findPattern(L"client", "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
+    // scopeArc = findPattern(L"client", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7") + 5;
+    // scopeLens = findPattern(L"client", "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
     isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x02\xC0") + 1));
     auto temp = reinterpret_cast<std::uintptr_t*>(findPattern(L"client", "\xB9????\xE8????\x8B\x5D\x08") + 1);
     hud = *temp;
@@ -52,6 +52,7 @@ Memory::Memory() noexcept
     keyValuesFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\xF7\x45") + 1));
     keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x89\x77\x38") + 1));
     weaponSystem = *reinterpret_cast<WeaponSystem**>(findPattern(L"client", "\x8B\x35????\xFF\x10\x0F\xB7\xC0") + 2);
+    getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x89\x87????\x6A\x00") + 1));
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0" + 1)));
 }
