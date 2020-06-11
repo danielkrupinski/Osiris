@@ -346,6 +346,28 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
             }
         }
 
+        if (config.defuseesp.enabled && entity->hasDefuser()) {
+            const auto [width, height] { interfaces->surface->getTextSize(config.font, L"Defuser") };
+            interfaces->surface->setTextFont(config.font);
+            if (config.defuseesp.rainbow)
+                interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config.defuseesp.rainbowSpeed));
+            else
+                interfaces->surface->setTextColor(config.defuseesp.color);
+            interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - 7) / 2, bbox.y0);
+            if (config.hpside == 2) {
+                if (config.armorside == 2) {
+                    interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 30);
+                }
+                else {
+                    interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 25);
+                }
+            }
+            else {
+                interfaces->surface->setTextPosition((bbox.x0 + bbox.x1 - width) / 2, bbox.y1 + 20);
+            }
+            interfaces->surface->printText(L"Defuser");
+        }
+
         if (const auto activeWeapon{ entity->getActiveWeapon() };  config.activeWeapon.enabled && activeWeapon) {
             const auto name{ interfaces->localize->find(activeWeapon->getWeaponData()->name) };
             const auto [width, height] { interfaces->surface->getTextSize(config.font, name) };
