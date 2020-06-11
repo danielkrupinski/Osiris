@@ -141,6 +141,7 @@ public:
             int hpside{ 0 };
             int armorside{ 0 };
             bool deadesp { false };
+            ColorToggle defuseesp;
         };
 
         struct Weapon : public Shared { } weapon;
@@ -181,7 +182,6 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        std::string customSkybox;
         ColorToggle world;
         ColorToggle sky;
         bool deagleSpinner{ false };
