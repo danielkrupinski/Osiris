@@ -57,7 +57,12 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_pirate_varianta.mdl",
         "models/player/custom_player/legacy/tm_pirate_variantb.mdl",
         "models/player/custom_player/legacy/tm_pirate_variantc.mdl",
-        "models/player/custom_player/legacy/tm_pirate_variantd.mdl"
+        "models/player/custom_player/legacy/tm_pirate_variantd.mdl",
+        "models/player/custom_player/legacy/tm_anarchist.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_varianta.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantb.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantc.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantd.mdl"
         };
 
         switch (team) {
