@@ -139,7 +139,7 @@ public:
    
     AnimState* getAnimstate() noexcept
     {
-        return *reinterpret_cast<AnimState**>(this + 0x3900);
+        return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
 
     float getMaxDesyncAngle() noexcept
