@@ -210,12 +210,12 @@ public:
    
     AnimState* getAnimstate() noexcept
     {
-        return *reinterpret_cast<AnimState**>(this + 0x3900);
+        return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
 
     CCSGOPlayerAnimState* getAnimstate2() noexcept
     {
-        return *reinterpret_cast<CCSGOPlayerAnimState**>(this + 0x3900);
+        return *reinterpret_cast<CCSGOPlayerAnimState**>(this + 0x3914);
     }
     
     float getMaxDesyncAngle() noexcept
