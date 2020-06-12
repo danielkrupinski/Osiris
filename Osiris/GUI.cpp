@@ -484,12 +484,18 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     static int material = 1;
 
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+    if (material <= 1)
+        ImGuiCustom::arrowButtonDisabled("##left", ImGuiDir_Left);
+    else if (ImGui::ArrowButton("##left", ImGuiDir_Left))
         --material;
+
     ImGui::SameLine();
     ImGui::Text("%d", material);
     ImGui::SameLine();
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config->chams[0].materials.size()))
+
+    if (material >= int(config->chams[0].materials.size()))
+        ImGuiCustom::arrowButtonDisabled("##right", ImGuiDir_Right);
+    else if (ImGui::ArrowButton("##right", ImGuiDir_Right))
         ++material;
 
     ImGui::SameLine();
