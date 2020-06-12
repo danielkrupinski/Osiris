@@ -986,7 +986,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     
     
     auto& selected_sticker = selected_entry.stickers[SkinChanger::selectedStickerSlot];
+    
+    ImGui::Combo("SearchMode", &config->SkinSearch.Searchmode, "Skins\0Stickers\0");
+    
     if (config->SkinSearch.Searchmode == 0) {
+    
         ImGui::Text("SkinSearcher");
         ImGui::Separator();
 
