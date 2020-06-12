@@ -45,3 +45,10 @@ void ImGuiCustom::colorPicker(const char* name, Config::ColorToggle& colorConfig
     colorPicker(name, colorConfig.color, &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
 }
 
+void ImGuiCustom::arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept
+{
+    float sz = ImGui::GetFrameHeight();
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+    ImGui::ArrowButtonEx(id, dir, { sz, sz }, ImGuiButtonFlags_Disabled);
+    ImGui::PopStyleVar();
+}
