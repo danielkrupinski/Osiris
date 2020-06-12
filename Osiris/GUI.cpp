@@ -985,7 +985,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     ImGui::Separator();
     
     
-    auto& selected_sticker = selected_entry.stickers[SkinChanger::selectedStickerSlot];
+   
     
     ImGui::Combo("SearchMode", &config->SkinSearch.Searchmode, "Skins\0Stickers\0");
     
@@ -997,7 +997,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::InputText("", SkinChanger::skin_name, IM_ARRAYSIZE(SkinChanger::skin_name)))
             SearchCheck(true);
 
-        ImGui::Text("Please Inset A Skin/Sticker Name");
+        ImGui::Text("Please Inset A Skin Name");
         ImGui::Separator();
         ImGui::SameLine();
 
@@ -1021,7 +1021,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             }, &SkinChanger::search_result, SkinChanger::search_result.size(), 10);
     }
     else {
-            ImGui::Text("StickerSearch");
+        auto& selected_sticker = selected_entry.stickers[SkinChanger::selectedStickerSlot];
+        ImGui::Text("StickerSearch");
             ImGui::Separator();
             if (ImGui::InputText("", SkinChanger::sticker_name, IM_ARRAYSIZE(SkinChanger::sticker_name)))
                 SearchCheck(true);
