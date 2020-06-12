@@ -25,8 +25,8 @@ namespace SkinChanger
         }
     };
     inline auto selectedStickerSlot = 0;
-    inline char skin_name[256];
-    inline char sticker_name[256];
+    inline char skin_name;
+    inline char sticker_name;
     inline std::vector<PaintKit> search_result;
     inline int itemIndex = 0;
     inline std::vector<PaintKit> search_result_sticker;

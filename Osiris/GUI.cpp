@@ -963,7 +963,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Text("SkinSearcher");
         ImGui::Separator();
         
-        if (ImGui::InputText("", *set ? SkinChanger::skin_name : SkinChanger::sticker_name, IM_ARRAYSIZE(set ? SkinChanger::skin_name : SkinChanger::sticker_name)))
+        if (ImGui::InputText("", *set ? &SkinChanger::skin_name : &SkinChanger::sticker_name, IM_ARRAYSIZE(set ? SkinChanger::skin_name : SkinChanger::sticker_name)))
             SearchCheck(true, *set);
 
         ImGui::Text("Please Inset A Skin/Sticker Name");
