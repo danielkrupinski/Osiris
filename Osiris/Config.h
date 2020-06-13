@@ -101,12 +101,11 @@ public:
     std::array<Glow, 21> glow;
 
     struct Chams {
-        struct Material {
+        struct Material : ColorA {
             bool enabled = false;
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
-            ColorA color;
             int material = 0;
         };
         std::vector<Material> materials{ {}, {} };
