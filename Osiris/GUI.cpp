@@ -853,7 +853,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Separator();
         ImGui::Columns(2, nullptr, false);
         ImGui::InputInt("Seed", &selected_entry.seed);
-        ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
+        ImGui::InputInt("StatTrak\u2122", &selected_entry.stat_trak);
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
