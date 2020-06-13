@@ -466,7 +466,12 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0");
+
+    static int material = 1;
+
+    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+        material = 1;
+
     ImGui::PopID();
     static int currentItem{ 0 };
 
@@ -474,7 +479,8 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        if (ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0"))
+            material = 1;
         ImGui::PopID();
         currentItem = currentCategory * 3 + currentType;
     } else {
@@ -482,7 +488,6 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    static int material = 1;
 
     if (material <= 1)
         ImGuiCustom::arrowButtonDisabled("##left", ImGuiDir_Left);
