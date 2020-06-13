@@ -47,6 +47,7 @@ public:
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
@@ -151,11 +152,6 @@ public:
     bool isInReload() noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
-
-    matrix3x4& toWorldTransform() noexcept
-    {
-        return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
 
     auto getAimPunch() noexcept
