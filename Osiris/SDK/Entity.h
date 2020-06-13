@@ -120,15 +120,6 @@ public:
         interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
-
-    [[deprecated]] bool isEnemy() noexcept
-    {
-        // SHOULD NEVER HAPPEN
-        if (!localPlayer)
-            return false;
-
-        return memory->isOtherEnemy(this, localPlayer.get());
-    }
     
     bool isOtherEnemy(Entity* other) noexcept;
 
