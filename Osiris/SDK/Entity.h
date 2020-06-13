@@ -153,7 +153,7 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    matrix3x4& coordinateFrame() noexcept
+    matrix3x4& toWorldTransform() noexcept
     {
         return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }

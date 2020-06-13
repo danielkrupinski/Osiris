@@ -102,7 +102,7 @@ struct BoundingBox {
                                 i & 2 ? maxs.y : mins.y,
                                 i & 4 ? maxs.z : mins.z };
 
-            if (!worldToScreen(point.transform(entity->coordinateFrame()), vertices[i])) {
+            if (!worldToScreen(point.transform(entity->toWorldTransform()), vertices[i])) {
                 valid = false;
                 return;
             }
