@@ -110,7 +110,7 @@ public:
             int material = 0;
             float alpha = 1.0f;
         };
-        std::array<Material, 2> materials;
+        std::vector<Material> materials{ {}, {} };
     };
 
     std::array<Chams, 18> chams;
