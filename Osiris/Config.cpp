@@ -131,12 +131,15 @@ void Config::load(size_t id) noexcept
                     colorConfig.color[0] = colorJson["Color"][0].asFloat();
                     colorConfig.color[1] = colorJson["Color"][1].asFloat();
                     colorConfig.color[2] = colorJson["Color"][2].asFloat();
+
+                    if (colorJson["Color"].size() == 4)
+                        colorConfig.color[3] = colorJson["Color"][3].asFloat();
                 }
 
                 if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
                 if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
             }
-            if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
+            if (materialsJson.isMember("Alpha")) materialsConfig.color.color[3] = materialsJson["Alpha"].asFloat();
         }
     }
 
@@ -1041,12 +1044,11 @@ void Config::save(size_t id) const noexcept
                 colorJson["Color"][0] = colorConfig.color[0];
                 colorJson["Color"][1] = colorConfig.color[1];
                 colorJson["Color"][2] = colorConfig.color[2];
+                colorJson["Color"][3] = colorConfig.color[3];
 
                 colorJson["Rainbow"] = colorConfig.rainbow;
                 colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
             }
-
-            materialsJson["Alpha"] = materialsConfig.alpha;
         }
     }
 

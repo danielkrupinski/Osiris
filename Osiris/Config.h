@@ -106,9 +106,8 @@ public:
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
-            Color color;
+            ColorA color;
             int material = 0;
-            float alpha = 1.0f;
         };
         std::vector<Material> materials{ {}, {} };
     };

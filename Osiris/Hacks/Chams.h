@@ -98,11 +98,11 @@ private:
                 const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, chams.color.rainbowSpeed) };
                 material->colorModulate(r, g, b);
             } else {
-                material->colorModulate(chams.color.color);
+                material->colorModulate(chams.color.color[0], chams.color.color[1], chams.color.color[2]);
             }
         }
 
-        const auto pulse = chams.alpha * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
+        const auto pulse = chams.color.color[3] * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
         if (material == glow)
             material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
