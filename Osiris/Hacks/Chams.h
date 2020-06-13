@@ -56,6 +56,7 @@ private:
     Material* gold;
     Material* plastic;
     Material* glow;
+    Material* pearlescent;
 
     constexpr auto dispatchMaterial(int id) const noexcept
     {
@@ -72,6 +73,7 @@ private:
         case 8: return gold;
         case 9: return plastic;
         case 10: return glow;
+        case 11: return pearlescent;
         }
     }
 
