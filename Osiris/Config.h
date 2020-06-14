@@ -289,6 +289,21 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct {
+        bool chamsOnKey{ false };
+        bool espOnKey{ false };
+        bool glowOnKey{ false };
+
+        int chamsKey{ 0 };
+        int espKey{ 0 };
+        int glowKey{ 0 };
+
+        int chamsKeyMode{ 0 };
+        int espKeyMode{ 0 };
+        int glowKeyMode{ 0 };
+    } visualKeys;
+
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;

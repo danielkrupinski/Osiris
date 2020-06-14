@@ -933,6 +933,22 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
         if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
     }
+
+    {
+        const auto& visualKeysJson = json["Visual keys"];
+
+        if (visualKeysJson.isMember("Chams on key")) visualKeys.chamsOnKey = visualKeysJson["Chams on key"].asBool();
+        if (visualKeysJson.isMember("Esp on key")) visualKeys.espOnKey = visualKeysJson["Esp on key"].asBool();
+        if (visualKeysJson.isMember("Glow on key")) visualKeys.glowOnKey = visualKeysJson["Glow on key"].asBool();
+
+        if (visualKeysJson.isMember("Chams key")) visualKeys.chamsKey = visualKeysJson["Chams key"].asInt();
+        if (visualKeysJson.isMember("Esp key")) visualKeys.espKey = visualKeysJson["Esp key"].asInt();
+        if (visualKeysJson.isMember("Glow key")) visualKeys.glowKey = visualKeysJson["Glow key"].asInt();
+
+        if (visualKeysJson.isMember("Chams key mode")) visualKeys.chamsKeyMode = visualKeysJson["Chams key mode"].asInt();
+        if (visualKeysJson.isMember("Esp key mode")) visualKeys.espKeyMode = visualKeysJson["Esp key mode"].asInt();
+        if (visualKeysJson.isMember("Glow key mode")) visualKeys.glowKeyMode = visualKeysJson["Glow key mode"].asInt();
+    }
 }
 
 void Config::save(size_t id) const noexcept
@@ -1689,6 +1705,22 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Wall Hacking"] = reportbot.wallhack;
         reportbotJson["Aim Hacking"] = reportbot.aimbot;
         reportbotJson["Other Hacking"] = reportbot.other;
+    }
+
+    {
+        auto& visualKeysJson = json["Visual keys"];
+
+        visualKeysJson["Chams on key"] = visualKeys.chamsOnKey;
+        visualKeysJson["Esp on key"] = visualKeys.espOnKey;
+        visualKeysJson["Glow on key"] = visualKeys.glowOnKey;
+
+        visualKeysJson["Chams key"] = visualKeys.chamsKey;
+        visualKeysJson["Esp key"] = visualKeys.espKey;
+        visualKeysJson["Glow key"] = visualKeys.glowKey;
+
+        visualKeysJson["Chams key mode"] = visualKeys.chamsKeyMode;
+        visualKeysJson["Esp key mode"] = visualKeys.espKeyMode;
+        visualKeysJson["Glow key mode"] = visualKeys.glowKeyMode;
     }
 
     std::error_code ec;
