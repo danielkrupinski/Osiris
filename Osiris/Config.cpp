@@ -821,6 +821,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
         if (miscJson.isMember("Slowwalk key")) misc.slowwalkKey = miscJson["Slowwalk key"].asInt();
         if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
+        if (miscJson.isMember("In scope")) misc.sniperCrosshairInscope = miscJson["In scope"].asBool();
         if (miscJson.isMember("Recoil crosshair")) misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
         if (miscJson.isMember("Auto pistol")) misc.autoPistol = miscJson["Auto pistol"].asBool();
         if (miscJson.isMember("Auto reload")) misc.autoReload = miscJson["Auto reload"].asBool();
@@ -1600,6 +1601,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Slowwalk"] = misc.slowwalk;
         miscJson["Slowwalk key"] = misc.slowwalkKey;
         miscJson["Sniper crosshair"] = misc.sniperCrosshair;
+        miscJson["In scope"] = misc.sniperCrosshairInscope;
         miscJson["Recoil crosshair"] = misc.recoilCrosshair;
         miscJson["Auto pistol"] = misc.autoPistol;
         miscJson["Auto reload"] = misc.autoReload;
