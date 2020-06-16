@@ -94,7 +94,7 @@ public:
         bool enabled{ false };
         bool healthBased{ false };
         float thickness{ 1.0f };
-        float alpha{ 1.0f };
+        [[deprecated]] float alpha{ 1.0f };
         int style{ 0 };
     };
     std::array<Glow, 21> glow;
