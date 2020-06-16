@@ -93,7 +93,7 @@ public:
     struct Glow : ColorA {
         bool enabled{ false };
         bool healthBased{ false };
-        float thickness{ 1.0f };
+        [[deprecated]] float thickness{ 1.0f };
         [[deprecated]] float alpha{ 1.0f };
         int style{ 0 };
     };
