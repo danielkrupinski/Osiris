@@ -14,6 +14,7 @@ Config::Config(const char* name) noexcept
     }
 
     listConfigs();
+    misc.clanTag[0] = '\0';
 }
 
 void Config::load(size_t id) noexcept
