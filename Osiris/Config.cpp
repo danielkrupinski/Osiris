@@ -98,7 +98,7 @@ void Config::load(size_t id) noexcept
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
         if (glowJson.isMember("Color")) {
             const auto& colorJson = glowJson["Color"];
-            auto& colorConfig = glowConfig.color;
+            auto& colorConfig = glowConfig;
 
             if (colorJson.isMember("Color")) {
                 colorConfig.color[0] = colorJson["Color"][0].asFloat();
@@ -1013,7 +1013,7 @@ void Config::save(size_t id) const noexcept
 
         {
             auto& colorJson = glowJson["Color"];
-            const auto& colorConfig = glowConfig.color;
+            const auto& colorConfig = glowConfig;
 
             colorJson["Color"][0] = colorConfig.color[0];
             colorJson["Color"][1] = colorConfig.color[1];

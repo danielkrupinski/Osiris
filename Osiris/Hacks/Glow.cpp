@@ -60,12 +60,12 @@ void Glow::render() noexcept
                 glowobject.glowAlphaMax = glow.thickness;
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
-                else if (glow.color.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, glow.color.rainbowSpeed) };
+                else if (glow.rainbow) {
+                    const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, glow.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
                 }
                 else
-                    glowobject.glowColor = glow.color.color;
+                    glowobject.glowColor = { glow.color[0], glow.color[1], glow.color[2] };
             }
         };
 
