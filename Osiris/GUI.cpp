@@ -448,7 +448,7 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::PushItemWidth(220.0f);
     ImGui::SliderFloat("Thickness", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
+    // ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
     ImGui::SliderInt("Style", &config->glow[currentItem].style, 0, 3);
     ImGui::Columns(1);
     if (!contentOnly)
