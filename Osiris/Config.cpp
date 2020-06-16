@@ -14,6 +14,7 @@ Config::Config(const char* name) noexcept
     }
 
     listConfigs();
+    misc.clanTag[0] = '\0';
 }
 
 void Config::load(size_t id) noexcept
@@ -93,16 +94,22 @@ void Config::load(size_t id) noexcept
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
         if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
-        if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
+
+        // TODO: remove soon
+        if (glowJson.isMember("alpha")) glowConfig.color[3] = glowJson["alpha"].asFloat();
+
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
         if (glowJson.isMember("Color")) {
             const auto& colorJson = glowJson["Color"];
-            auto& colorConfig = glowConfig.color;
+            auto& colorConfig = glowConfig;
 
             if (colorJson.isMember("Color")) {
                 colorConfig.color[0] = colorJson["Color"][0].asFloat();
                 colorConfig.color[1] = colorJson["Color"][1].asFloat();
                 colorConfig.color[2] = colorJson["Color"][2].asFloat();
+
+                if (colorJson["Color"].size() == 4)
+                    colorConfig.color[3] = colorJson["Color"][3].asFloat();
             }
 
             if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
@@ -812,7 +819,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
-        if (miscJson.isMember("Clan tag")) misc.clanTag = miscJson["Clan tag"].asString();
+        if (miscJson.isMember("Clan tag")) strncpy_s(misc.clanTag, miscJson["Clan tag"].asCString(), _TRUNCATE);
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
@@ -1008,16 +1015,17 @@ void Config::save(size_t id) const noexcept
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
         glowJson["thickness"] = glowConfig.thickness;
-        glowJson["alpha"] = glowConfig.alpha;
+        // glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
 
         {
             auto& colorJson = glowJson["Color"];
-            const auto& colorConfig = glowConfig.color;
+            const auto& colorConfig = glowConfig;
 
             colorJson["Color"][0] = colorConfig.color[0];
             colorJson["Color"][1] = colorConfig.color[1];
             colorJson["Color"][2] = colorConfig.color[2];
+            colorJson["Color"][3] = colorConfig.color[3];
 
             colorJson["Rainbow"] = colorConfig.rainbow;
             colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
