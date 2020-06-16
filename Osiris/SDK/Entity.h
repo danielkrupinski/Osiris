@@ -47,6 +47,7 @@ public:
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
@@ -120,15 +121,6 @@ public:
         interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
-
-    [[deprecated]] bool isEnemy() noexcept
-    {
-        // SHOULD NEVER HAPPEN
-        if (!localPlayer)
-            return false;
-
-        return memory->isOtherEnemy(this, localPlayer.get());
-    }
     
     bool isOtherEnemy(Entity* other) noexcept;
 
@@ -139,7 +131,7 @@ public:
    
     AnimState* getAnimstate() noexcept
     {
-        return *reinterpret_cast<AnimState**>(this + 0x3900);
+        return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
 
     float getMaxDesyncAngle() noexcept
@@ -160,11 +152,6 @@ public:
     bool isInReload() noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
-
-    matrix3x4& coordinateFrame() noexcept
-    {
-        return *reinterpret_cast<matrix3x4*>(this + 0x444);
     }
 
     auto getAimPunch() noexcept

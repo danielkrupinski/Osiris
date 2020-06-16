@@ -124,7 +124,7 @@ void Config::load(size_t id) noexcept
         const auto& chamsJson = json["Chams"][i];
         auto& chamsConfig = chams[i];
 
-        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
             const auto& materialsJson = chamsJson[j];
             auto& materialsConfig = chams[i].materials[j];
 
@@ -135,18 +135,21 @@ void Config::load(size_t id) noexcept
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
             if (materialsJson.isMember("Color")) {
                 const auto& colorJson = materialsJson["Color"];
-                auto& colorConfig = materialsConfig.color;
+                auto& colorConfig = materialsConfig; // leftover
 
                 if (colorJson.isMember("Color")) {
                     colorConfig.color[0] = colorJson["Color"][0].asFloat();
                     colorConfig.color[1] = colorJson["Color"][1].asFloat();
                     colorConfig.color[2] = colorJson["Color"][2].asFloat();
+
+                    if (colorJson["Color"].size() == 4)
+                        colorConfig.color[3] = colorJson["Color"][3].asFloat();
                 }
 
                 if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
                 if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
             }
-            if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
+            if (materialsJson.isMember("Alpha")) materialsConfig.color[3] = materialsJson["Alpha"].asFloat();
         }
     }
 
@@ -837,7 +840,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
-        if (miscJson.isMember("Clan tag")) misc.clanTag = miscJson["Clan tag"].asString();
+        if (miscJson.isMember("Clan tag")) strncpy_s(misc.clanTag, miscJson["Clan tag"].asCString(), _TRUNCATE);
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
@@ -1072,7 +1075,7 @@ void Config::save(size_t id) const noexcept
         auto& chamsJson = json["Chams"][i];
         const auto& chamsConfig = chams[i];
 
-        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
             auto& materialsJson = chamsJson[j];
             const auto& materialsConfig = chams[i].materials[j];
 
@@ -1084,17 +1087,16 @@ void Config::save(size_t id) const noexcept
 
             {
                 auto& colorJson = materialsJson["Color"];
-                const auto& colorConfig = materialsConfig.color;
+                const auto& colorConfig = materialsConfig; // leftover
 
                 colorJson["Color"][0] = colorConfig.color[0];
                 colorJson["Color"][1] = colorConfig.color[1];
                 colorJson["Color"][2] = colorConfig.color[2];
+                colorJson["Color"][3] = colorConfig.color[3];
 
                 colorJson["Rainbow"] = colorConfig.rainbow;
                 colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
             }
-
-            materialsJson["Alpha"] = materialsConfig.alpha;
         }
     }
 

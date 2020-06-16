@@ -26,7 +26,7 @@ Memory::Memory() noexcept
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(L"client", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
     // scopeArc = findPattern(L"client", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7") + 5;
     // scopeLens = findPattern(L"client", "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
-    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x02\xC0") + 1));
+    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(reinterpret_cast<int*>(findPattern(L"client", "\x8B\xCE\xE8????\x02\xC0") + 3));
     auto temp = reinterpret_cast<std::uintptr_t*>(findPattern(L"client", "\xB9????\xE8????\x8B\x5D\x08") + 1);
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));

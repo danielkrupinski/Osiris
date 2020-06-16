@@ -119,16 +119,14 @@ public:
     std::array<Glow, 21> glow;
 
     struct Chams {
-        struct Material {
+        struct Material : ColorA {
             bool enabled = false;
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
-            Color color;
             int material = 0;
-            float alpha = 1.0f;
         };
-        std::array<Material, 2> materials;
+        std::vector<Material> materials{ {}, {} };
     };
 
     std::array<Chams, 20> chams;
@@ -264,7 +262,7 @@ public:
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
-        std::string clanTag;
+        char clanTag[16];
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ 0 };

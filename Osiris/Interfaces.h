@@ -5,31 +5,8 @@
 #include <type_traits>
 #include <Windows.h>
 
-class Client;
-class Cvar;
-class Engine;
-class EngineTrace;
-class EntityList;
-class GameEventManager;
-class GameMovement;
-class GameUI;
-class InputSystem;
-class Localize;
-class MaterialSystem;
-class ModelInfo;
-class ModelRender;
-class NetworkStringTableContainer;
-class Panel;
-class PhysicsSurfaceProps;
-class Prediction;
-class RenderView;
-class Surface;
-class Sound;
-class SoundEmitter;
-class StudioRender;
-
 #define GAME_INTERFACE(type, name, module, version) \
-type* name = reinterpret_cast<type*>(find(L##module, version));
+class type* name = reinterpret_cast<type*>(find(L##module, version));
 
 class Interfaces {
 public:

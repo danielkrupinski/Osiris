@@ -79,7 +79,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 
     interfaces->inputSystem->enableInput(!gui->open);
 
-    return CallWindowProc(hooks->originalWndProc, window, msg, wParam, lParam);
+    return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
 
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
@@ -602,7 +602,7 @@ Hooks::Hooks(HMODULE module) noexcept
     memory = std::make_unique<const Memory>();
 
     window = FindWindowW(L"Valve001", nullptr);
-    originalWndProc = WNDPROC(SetWindowLongPtrA(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
+    originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
 
 void Hooks::install() noexcept
@@ -691,7 +691,7 @@ void Hooks::uninstall() noexcept
 
     Glow::clearCustomObjects();
 
-    SetWindowLongPtrA(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
+    SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory->present) = originalPresent;
     **reinterpret_cast<void***>(memory->reset) = originalReset;
 

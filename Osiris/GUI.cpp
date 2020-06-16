@@ -511,7 +511,11 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"); //Server Position\0Real Angles\0");
+    static int material = 1;
+
+    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+        material = 1;
+
     ImGui::PopID();
     static int currentItem{ 0 };
 
@@ -519,7 +523,8 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        if (ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0"))
+            material = 1;
         ImGui::PopID();
         currentItem = currentCategory * 3 + currentType;
     } else {
@@ -527,14 +532,19 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    static int material = 1;
 
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && material > 1)
+    if (material <= 1)
+        ImGuiCustom::arrowButtonDisabled("##left", ImGuiDir_Left);
+    else if (ImGui::ArrowButton("##left", ImGuiDir_Left))
         --material;
+
     ImGui::SameLine();
     ImGui::Text("%d", material);
     ImGui::SameLine();
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && material < int(config->chams[0].materials.size()))
+
+    if (material >= int(config->chams[0].materials.size()))
+        ImGuiCustom::arrowButtonDisabled("##right", ImGuiDir_Right);
+    else if (ImGui::ArrowButton("##right", ImGuiDir_Right))
         ++material;
 
     ImGui::SameLine();
@@ -544,11 +554,9 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Checkbox("Health based", &chams.healthBased);
     ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0");
+    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
     ImGui::Checkbox("Wireframe", &chams.wireframe);
-    ImGuiCustom::colorPicker("Color", chams.color.color, nullptr, &chams.color.rainbow, &chams.color.rainbowSpeed);
-    ImGui::SetNextItemWidth(220.0f);
-    ImGui::SliderFloat("Alpha", &chams.alpha, 0.0f, 1.0f, "%.2f");
+    ImGuiCustom::colorPopup("Color", chams.color, &chams.rainbow, &chams.rainbowSpeed);
 
     if (!contentOnly) {
         ImGui::End();
@@ -785,8 +793,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
-    ImGui::Combo("T Player Model", &config->visuals.playerModelT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0Pirate\0");
-    ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0Pirate\0");
+    constexpr auto playerModels = "Default\0Special Agent Ava | FBI\0Operator | FBI SWAT\0Markus Delrow | FBI HRT\0Michael Syfers | FBI Sniper\0B Squadron Officer | SAS\0Seal Team 6 Soldier | NSWC SEAL\0Buckshot | NSWC SEAL\0Lt. Commander Ricksaw | NSWC SEAL\0Third Commando Company | KSK\0'Two Times' McCoy | USAF TACP\0Dragomir | Sabre\0Rezan The Ready | Sabre\0'The Doctor' Romanov | Sabre\0Maximus | Sabre\0Blackwolf | Sabre\0The Elite Mr. Muhlik | Elite Crew\0Ground Rebel | Elite Crew\0Osiris | Elite Crew\0Prof. Shahmat | Elite Crew\0Enforcer | Phoenix\0Slingshot | Phoenix\0Soldier | Phoenix\0Pirate\0Pirate Variant A\0Pirate Variant B\0Pirate Variant C\0Pirate Variant D\0Anarchist\0Anarchist Variant A\0Anarchist Variant B\0Anarchist Variant C\0Anarchist Variant D\0Balkan Variant A\0Balkan Variant B\0Balkan Variant C\0Balkan Variant D\0Balkan Variant E\0Jumpsuit Variant A\0Jumpsuit Variant B\0Jumpsuit Variant C\0";
+    ImGui::Combo("T Player Model", &config->visuals.playerModelT, playerModels);
+    ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, playerModels);
     ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
     ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
     ImGui::Checkbox("No fog", &config->visuals.noFog);
@@ -897,7 +906,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Separator();
         ImGui::Columns(2, nullptr, false);
         ImGui::InputInt("Seed", &selected_entry.seed);
-        ImGui::InputInt("StatTrak", &selected_entry.stat_trak);
+        ImGui::InputInt("StatTrak\u2122", &selected_entry.stat_trak);
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
@@ -1085,7 +1094,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
-    if (ImGui::InputText("", &config->misc.clanTag))
+
+    if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
         Misc::updateClanTag(true);
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &config->misc.killMessage);
