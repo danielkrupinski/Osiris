@@ -84,7 +84,7 @@ namespace Backtrack {
         if (!network)
             return 0.f;
 
-        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, 0.2f);
+        return std::clamp(network->getLatency(0) + network->getLatency(1), 0.f, 0.2f);
     }
     
     int timeToTicks(float time) noexcept;
