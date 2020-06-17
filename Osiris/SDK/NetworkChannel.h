@@ -16,3 +16,9 @@ public:
     int InReliableState;
     int chokedPackets;
 };
+
+class NetworkMessage
+{
+public:
+    VIRTUAL_METHOD(int, getType, 7, (), (this))
+};
