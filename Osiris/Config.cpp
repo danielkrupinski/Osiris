@@ -14,6 +14,7 @@ Config::Config(const char* name) noexcept
     }
 
     listConfigs();
+    misc.clanTag[0] = '\0';
 }
 
 void Config::load(size_t id) noexcept
@@ -92,17 +93,24 @@ void Config::load(size_t id) noexcept
 
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-        if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
-        if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
+
+        // if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
+
+        // TODO: remove soon
+        if (glowJson.isMember("alpha")) glowConfig.color[3] = glowJson["alpha"].asFloat();
+
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
         if (glowJson.isMember("Color")) {
             const auto& colorJson = glowJson["Color"];
-            auto& colorConfig = glowConfig.color;
+            auto& colorConfig = glowConfig;
 
             if (colorJson.isMember("Color")) {
                 colorConfig.color[0] = colorJson["Color"][0].asFloat();
                 colorConfig.color[1] = colorJson["Color"][1].asFloat();
                 colorConfig.color[2] = colorJson["Color"][2].asFloat();
+
+                if (colorJson["Color"].size() == 4)
+                    colorConfig.color[3] = colorJson["Color"][3].asFloat();
             }
 
             if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
@@ -1006,17 +1014,18 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["thickness"] = glowConfig.thickness;
-        glowJson["alpha"] = glowConfig.alpha;
+        // glowJson["thickness"] = glowConfig.thickness;
+        // glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
 
         {
             auto& colorJson = glowJson["Color"];
-            const auto& colorConfig = glowConfig.color;
+            const auto& colorConfig = glowConfig;
 
             colorJson["Color"][0] = colorConfig.color[0];
             colorJson["Color"][1] = colorConfig.color[1];
             colorJson["Color"][2] = colorConfig.color[2];
+            colorJson["Color"][3] = colorConfig.color[3];
 
             colorJson["Rainbow"] = colorConfig.rainbow;
             colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;

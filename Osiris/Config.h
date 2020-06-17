@@ -90,13 +90,12 @@ public:
         float pitchAngle{ 0.0f };
     } antiAim;
 
-    struct Glow {
+    struct Glow : ColorA {
         bool enabled{ false };
         bool healthBased{ false };
-        float thickness{ 1.0f };
-        float alpha{ 1.0f };
+        [[deprecated]] float thickness{ 1.0f };
+        [[deprecated]] float alpha{ 1.0f };
         int style{ 0 };
-        Color color;
     };
     std::array<Glow, 21> glow;
 
