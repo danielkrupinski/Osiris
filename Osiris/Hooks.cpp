@@ -136,7 +136,7 @@ static int __fastcall SendDatagram(void* networkchannel, void* edx, bf_write* da
 
 static bool __fastcall SendNetMsg(void* networkchannel, void* edx, NetworkMessage& msg, bool bForceReliable, bool bVoice)
 {
-    static auto original = hooks->networkChannel.getOriginal<bool, NetworkMessage&,bool,bool>(40, msg, bForceReliable, bVoice);
+    auto original = hooks->networkChannel.getOriginal<bool, NetworkMessage&,bool,bool>(40, msg, bForceReliable, bVoice);
 
     if (msg.getType() == 14 && config->misc.svpurebypass) // Return and don't send messsage if its FileCRCCheck
         return false;
