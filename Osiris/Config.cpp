@@ -94,8 +94,6 @@ void Config::load(size_t id) noexcept
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
 
-        // if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
-
         // TODO: remove soon
         if (glowJson.isMember("alpha")) glowConfig.color[3] = glowJson["alpha"].asFloat();
 
@@ -1015,8 +1013,6 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        // glowJson["thickness"] = glowConfig.thickness;
-        // glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
 
         {
