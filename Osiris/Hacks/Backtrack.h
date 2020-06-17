@@ -19,6 +19,9 @@ struct UserCmd;
 namespace Backtrack {
     void update(FrameStage) noexcept;
     void run(UserCmd*) noexcept;
+    
+    void AddLatencyToNetwork(NetworkChannel* , float) noexcept;
+    void UpdateIncomingSequences() noexcept;
 
     struct Record {
         Vector origin;
@@ -40,6 +43,23 @@ namespace Backtrack {
 
     extern Cvars cvars;
 
+    struct IncomingSequence
+    {
+        IncomingSequence(int instate, int outstate, int seqnr, float time)
+        {
+            inreliablestate = instate;
+            outreliablestate = outstate;
+            sequencenr = seqnr;
+            realtime = time;
+        }
+        int inreliablestate;
+        int outreliablestate;
+        int sequencenr;
+        float realtime;
+    };
+
+    extern std::deque<IncomingSequence>sequences;
+    
     constexpr auto getLerp() noexcept
     {
         auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
