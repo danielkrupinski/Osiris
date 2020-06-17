@@ -407,6 +407,10 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
     ImGui::PushItemWidth(220.0f);
     ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
+    ImGui::Checkbox("Enabled Fake Latency", &config->backtrack.fakeLatency);
+    ImGui::PushItemWidth(220.0f);
+    ImGui::SliderInt("Latency Ammount", &config->backtrack.fakeLatencyAmmount, 0, 200, "%d ms");
+    ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
 }
