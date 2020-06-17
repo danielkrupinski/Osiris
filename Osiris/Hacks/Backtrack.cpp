@@ -6,6 +6,7 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
+std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
@@ -108,6 +109,43 @@ void Backtrack::run(UserCmd* cmd) noexcept
         auto record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
+    }
+}
+void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
+{
+    for (auto& sequence : sequences)
+    {
+        if (memory->globalVars->realtime - sequence.realtime >= latency)
+        {
+            network->InReliableState = sequence.inreliablestate;
+            network->InSequenceNr = sequence.sequencenr;
+            break;
+        }
+    }
+}
+
+void Backtrack::UpdateIncomingSequences() noexcept
+{
+    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static float lastIncomingSequenceNumber = 0.f;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (network)
+    {
+        if (network->InSequenceNr > lastIncomingSequenceNumber)
+        {
+            lastIncomingSequenceNumber = network->InSequenceNr;
+
+            sequences.push_front(IncomingSequence(network->InReliableState, network->OutReliableState, network->InSequenceNr, memory->globalVars->realtime));
+        }
+
+        if (sequences.size() > 2048)
+            sequences.pop_back();
     }
 }
 
