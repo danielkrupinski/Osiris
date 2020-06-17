@@ -68,6 +68,7 @@ public:
     Vmt surface;
     Vmt svCheats;
     Vmt viewRender;
+    Vmt networkChannel;
 private:
     HMODULE module;
     HWND window;
