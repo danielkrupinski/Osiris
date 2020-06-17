@@ -1012,7 +1012,6 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        // glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
 
         {
