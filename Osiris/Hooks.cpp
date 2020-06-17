@@ -111,14 +111,13 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return hooks->originalReset(device, params);
 }
 
-static int __fastcall SendDatagram(void* networkchannel, void* edx, void* datagram)
+static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
 {
     auto original = hooks->networkChannel.getOriginal<int, void*>(46, datagram);
-    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0 || datagram || !interfaces->engine->isInGame() || !localPlayer)
+    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0 || datagram)
     {
-        return original(networkchannel,datagram);
+        return original(network,datagram);
     }
-    NetworkChannel* network = reinterpret_cast<NetworkChannel*>(networkchannel);
     int instate = network->InReliableState;
     int insequencenr = network->InSequenceNr;
 
@@ -126,7 +125,7 @@ static int __fastcall SendDatagram(void* networkchannel, void* edx, void* datagr
 
     Backtrack::AddLatencyToNetwork(network, delta);
 
-    int result = original(networkchannel, datagram);
+    int result = original(network, datagram);
 
     network->InReliableState = instate;
     network->InSequenceNr = insequencenr;
