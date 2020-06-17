@@ -50,7 +50,7 @@ namespace Backtrack {
             inreliablestate = instate;
             outreliablestate = outstate;
             sequencenr = seqnr;
-            realtime = time;
+            servertime = time;
         }
         int inreliablestate;
         int outreliablestate;
