@@ -134,6 +134,16 @@ static int __fastcall SendDatagram(void* networkchannel, void* edx, bf_write* da
     return ret;
 }
 
+static bool __fastcall SendNetMsg(void* networkchannel, void* edx, NetworkMessage& msg, bool bForceReliable, bool bVoice)
+{
+    static auto original = hooks->networkChannel.getOriginal<bool, NetworkMessage&,bool,bool>(40, msg, bForceReliable, bVoice);
+
+    if (msg.getType() == 14 && config->misc.svpurebypass) // Return and don't send messsage if its FileCRCCheck
+        return false;
+
+    return original(networkchannel ,msg, bForceReliable, bVoice);
+}
+
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
@@ -179,6 +189,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     {
         oldPointer = network;
         hooks->networkChannel.init(network);
+        hooks->networkChannel.hookAt(40, SendNetMsg);
         hooks->networkChannel.hookAt(46, SendDatagram);
     }
     
