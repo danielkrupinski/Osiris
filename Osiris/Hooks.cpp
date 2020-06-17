@@ -181,7 +181,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
-
+    
+    Backtrack::UpdateIncomingSequences();
+    
     static void* oldPointer = nullptr;
     
     auto network = interfaces->engine->getNetworkChannel();
@@ -300,9 +302,6 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
-    }
-    if (stage == FrameStage::NET_UPDATE_POSTDATAUPDATE_START) {
-        Backtrack::UpdateIncomingSequences();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::playerModel(stage);
