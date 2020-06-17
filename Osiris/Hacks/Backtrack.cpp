@@ -31,7 +31,9 @@ void Backtrack::update(FrameStage stage) noexcept
 
             Record record{ };
             record.origin = entity->getAbsOrigin();
+            record.head = entity->getBonePosition(8);
             record.simulationTime = entity->simulationTime();
+            
 
             entity->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
 
@@ -51,9 +53,6 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (!config->backtrack.enabled)
         return;
 
-    if (!(cmd->buttons & UserCmd::IN_ATTACK))
-        return;
-
     if (!localPlayer)
         return;
 
@@ -62,7 +61,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    Vector bestTargetOrigin{ };
+    Vector bestTargetHead{ };
     int bestRecord{ };
 
     const auto aimPunch = localPlayer->getAimPunch();
@@ -73,20 +72,20 @@ void Backtrack::run(UserCmd* cmd) noexcept
             || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-        auto origin = entity->getAbsOrigin();
+        auto head = entity->getBonePosition(8);
 
-        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = entity;
             bestTargetIndex = i;
-            bestTargetOrigin = origin;
+            bestTargetHead = head;
         }
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetHead, 1)))
             return;
 
         bestFov = 255.f;
@@ -96,7 +95,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
@@ -105,12 +104,13 @@ void Backtrack::run(UserCmd* cmd) noexcept
         }
     }
 
-    if (bestRecord) {
+    if (bestRecord && cmd->buttons & UserCmd::IN_ATTACK) {
         auto record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime); // + getLerp());
     }
 }
+
 void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
 {
     for (auto& sequence : sequences)
