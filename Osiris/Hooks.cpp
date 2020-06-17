@@ -113,8 +113,8 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static int __fastcall SendDatagram(void* networkchannel, void* edx, bf_write* datagram)
 {
-    static auto original = hooks->networkChannel.getOriginal<int, bf_write*>(46, datagram);
-    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0 || datagram)
+    auto original = hooks->networkChannel.getOriginal<int, bf_write*>(46, datagram);
+    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0 || datagram || !interfaces->engine->isInGame())
     {
         return original(networkchannel,datagram);
     }
@@ -126,12 +126,12 @@ static int __fastcall SendDatagram(void* networkchannel, void* edx, bf_write* da
 
     Backtrack::AddLatencyToNetwork(network, delta);
 
-    int ret = original(networkchannel, datagram);
+    int result = original(networkchannel, datagram);
 
     network->InReliableState = instate;
     network->InSequenceNr = insequencenr;
 
-    return ret;
+    return result;
 }
 
 static bool __fastcall SendNetMsg(void* networkchannel, void* edx, NetworkMessage& msg, bool bForceReliable, bool bVoice)
