@@ -2,8 +2,6 @@
 
 #include "VirtualMethod.h"
 
-class bf_write;
-
 class NetworkChannel {
 public:
     VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
