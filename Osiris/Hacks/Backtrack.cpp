@@ -110,14 +110,14 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
-        cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
+        cmd->tickCount = timeToTicks(record.simulationTime); // + getLerp());
     }
 }
 void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
 {
     for (auto& sequence : sequences)
     {
-        if (memory->globalVars->realtime - sequence.realtime >= latency)
+        if (memory->globalVars->serverTime() - sequence.servertime >= latency)
         {
             network->InReliableState = sequence.inreliablestate;
             network->InSequenceNr = sequence.sequencenr;
@@ -143,7 +143,7 @@ void Backtrack::UpdateIncomingSequences() noexcept
         {
             lastIncomingSequenceNumber = network->InSequenceNr;
 
-            sequences.push_front(IncomingSequence(network->InReliableState, network->OutReliableState, network->InSequenceNr, memory->globalVars->realtime));
+            sequences.push_front(IncomingSequence(network->InReliableState, network->OutReliableState, network->InSequenceNr, memory->globalVars->serverTime()));
         }
 
         if (sequences.size() > 2048)
