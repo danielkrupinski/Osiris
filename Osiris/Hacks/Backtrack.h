@@ -76,7 +76,16 @@ namespace Backtrack {
         auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
         return std::fabsf(delta) <= 0.2f;
     }
+    
+    constexpr float getExtraTicks() noexcept
+    {
+        auto network = interfaces->engine->getNetworkChannel();
+        if (!network)
+            return 0.f;
 
+        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, 0.2f);
+    }
+    
     int timeToTicks(float time) noexcept;
 
     static void init() noexcept
