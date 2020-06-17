@@ -5,11 +5,11 @@
 #include <type_traits>
 #include <Windows.h>
 
+class Interfaces {
+public:
 #define GAME_INTERFACE(type, name, module, version) \
 class type* name = reinterpret_cast<type*>(find(L##module, version));
 
-class Interfaces {
-public:
     GAME_INTERFACE(Client, client, "client", "VClient018")
     GAME_INTERFACE(Cvar, cvar, "vstdlib", "VEngineCvar007")
     GAME_INTERFACE(Engine, engine, "engine", "VEngineClient014")
@@ -32,6 +32,8 @@ public:
     GAME_INTERFACE(Sound, sound, "engine", "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, "soundemittersystem", "VSoundEmitter003")
     GAME_INTERFACE(StudioRender, studioRender, "studiorender", "VStudioRender026")
+
+#undef GAME_INTERFACE
 private:
     static void* find(const wchar_t* module, const char* name) noexcept
     {
