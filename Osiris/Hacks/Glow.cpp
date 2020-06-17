@@ -57,7 +57,7 @@ void Glow::render() noexcept
                 glowobject.renderWhenOccluded = true;
                 glowobject.glowAlpha = glow.color[3];
                 glowobject.glowStyle = glow.style;
-                glowobject.glowAlphaMax = glow.thickness;
+                // glowobject.glowAlphaMax = glow.thickness;
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
                 else if (glow.rainbow) {
