@@ -124,16 +124,19 @@ void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noex
     }
 }
 
-void Backtrack::UpdateIncomingSequences() noexcept
+void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 {
+    static float lastIncomingSequenceNumber = 0.f;
+    
+    if (reset)
+        lastIncomingSequenceNumber = 0.f;
+    
     if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmmount == 0)
         return;
 
     if (!localPlayer)
         return;
-
-    static float lastIncomingSequenceNumber = 0.f;
-
+    
     auto network = interfaces->engine->getNetworkChannel();
     if (network)
     {
