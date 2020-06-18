@@ -21,7 +21,7 @@ namespace Backtrack {
     void run(UserCmd*) noexcept;
     
     void AddLatencyToNetwork(NetworkChannel* , float) noexcept;
-    void UpdateIncomingSequences() noexcept;
+    void UpdateIncomingSequences(bool reset = false) noexcept;
 
     struct Record {
         Vector head;
