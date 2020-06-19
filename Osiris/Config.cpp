@@ -1705,8 +1705,10 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
-    if (*name && std::find(std::cbegin(configs), std::cend(configs), name) == std::cend(configs))
+    if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
         configs.emplace_back(name);
+        save(configs.size() - 1);
+    }
 }
 
 void Config::remove(size_t id) noexcept
