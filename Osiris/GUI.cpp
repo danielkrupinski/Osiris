@@ -1233,8 +1233,11 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config->save(currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config->remove(currentConfig);
+                currentConfig = -1;
+                buffer.clear();
+            }
         }
         ImGui::Columns(1);
         if (!contentOnly)
