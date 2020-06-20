@@ -670,10 +670,11 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 const auto weaponName = event->getString("weapon");
+                auto& purchase = purchaseDetails[player->getPlayerName(true)];
 
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
-                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
                 }
@@ -691,7 +692,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
                 else if (weapon.starts_with("usp_s"))
                     weapon.erase(5);
 
-                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
+                purchase.first.push_back(weapon);
                 ++purchaseTotal[weapon];
             }
             break;
