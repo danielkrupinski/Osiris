@@ -138,18 +138,22 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
         return;
     
     auto network = interfaces->engine->getNetworkChannel();
-    if (network)
+    if (!network)
+        return;
+    
+    if (network->InSequenceNr > lastIncomingSequenceNumber)
     {
-        if (network->InSequenceNr > lastIncomingSequenceNumber)
-        {
-            lastIncomingSequenceNumber = network->InSequenceNr;
+        lastIncomingSequenceNumber = network->InSequenceNr;
 
-            sequences.push_front(IncomingSequence(network->InReliableState, network->OutReliableState, network->InSequenceNr, memory->globalVars->serverTime()));
-        }
-
-        if (sequences.size() > 2048)
-            sequences.pop_back();
+        IncomingSequence sequence{ };
+        sequence.inreliablestate = network->InReliableState;
+        sequence.sequencenr = network->InSequenceNr;
+        sequence.servertime = memory->globalVars->serverTime();
+        sequences.push_front(sequence);
     }
+
+    while (sequences.size() > 2048)
+        sequences.pop_back();
 }
 
 int Backtrack::timeToTicks(float time) noexcept
