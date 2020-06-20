@@ -46,15 +46,7 @@ namespace Backtrack {
 
     struct IncomingSequence
     {
-        IncomingSequence(int instate, int outstate, int seqnr, float time)
-        {
-            inreliablestate = instate;
-            outreliablestate = outstate;
-            sequencenr = seqnr;
-            servertime = time;
-        }
         int inreliablestate;
-        int outreliablestate;
         int sequencenr;
         float servertime;
     };
