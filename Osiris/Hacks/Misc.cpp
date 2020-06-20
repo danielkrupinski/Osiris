@@ -683,11 +683,11 @@ void Misc::purchaseList(GameEvent* event) noexcept
                     weapon.erase(0, 5);
 
                 if (weapon.starts_with("smoke"))
-                    weapon = "smoke";
+                    weapon.erase(5);
                 else if (weapon.starts_with("m4a1_s"))
-                    weapon = "m4a1_s";
+                    weapon.erase(6);
                 else if (weapon.starts_with("usp_s"))
-                    weapon = "usp_s";
+                    weapon.erase(5);
 
                 purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
                 ++purchaseTotal[weapon];
