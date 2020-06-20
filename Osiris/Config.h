@@ -82,7 +82,7 @@ public:
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
         bool fakeLatency{ false };
-        int fakeLatencyAmmount{ 0 };
+        int fakeLatencyAmmount{ 200 };
     } backtrack;
 
     struct {
