@@ -443,13 +443,11 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 150.0f);
     ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
 
-    ImGuiCustom::colorPicker("Color", config->glow[currentItem].color.color, nullptr, &config->glow[currentItem].color.rainbow, &config->glow[currentItem].color.rainbowSpeed);
+    ImGuiCustom::colorPopup("Color", config->glow[currentItem].color, &config->glow[currentItem].rainbow, &config->glow[currentItem].rainbowSpeed);
 
     ImGui::NextColumn();
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderFloat("Thickness", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderFloat("Alpha", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderInt("Style", &config->glow[currentItem].style, 0, 3);
+    ImGui::SetNextItemWidth(100.0f);
+    ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
 
     ImGui::Checkbox("On key", &config->visualKeys.glowOnKey);
     ImGui::SameLine();
@@ -1072,7 +1070,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
-    if (ImGui::InputText("", &config->misc.clanTag))
+
+    if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
         Misc::updateClanTag(true);
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &config->misc.killMessage);
@@ -1201,7 +1200,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;
 
-    if (static_cast<size_t>(currentConfig) >= configItems.size())
+    if (static_cast<std::size_t>(currentConfig) >= configItems.size())
         currentConfig = -1;
 
     static std::string buffer;
@@ -1214,7 +1213,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             buffer = configItems[currentConfig];
 
         ImGui::PushID(0);
-        if (ImGui::InputText("", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
+        if (ImGui::InputTextWithHint("", "config name", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
             if (currentConfig != -1)
                 config->rename(currentConfig, buffer.c_str());
         }
@@ -1264,8 +1263,11 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
                 config->save(currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
+            if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config->remove(currentConfig);
+                currentConfig = -1;
+                buffer.clear();
+            }
         }
         ImGui::Columns(1);
         if (!contentOnly)
