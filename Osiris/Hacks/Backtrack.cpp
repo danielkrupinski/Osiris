@@ -56,6 +56,9 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (!localPlayer)
         return;
 
+    if (!(cmd->buttons & UserCmd::IN_ATTACK))
+        return;
+    
     auto localPlayerEyePosition = localPlayer->getEyePosition();
 
     auto bestFov{ 255.f };
@@ -104,10 +107,10 @@ void Backtrack::run(UserCmd* cmd) noexcept
         }
     }
 
-    if (bestRecord && cmd->buttons & UserCmd::IN_ATTACK) {
+    if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
-        cmd->tickCount = timeToTicks(record.simulationTime); // + getLerp());
+        cmd->tickCount = timeToTicks(record.simulationTime);
     }
 }
 
