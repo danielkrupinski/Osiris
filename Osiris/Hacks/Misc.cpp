@@ -669,13 +669,15 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                const auto weaponName = event->getString("weapon");
+
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
                         purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
                 }
-                std::string weapon = event->getString("weapon");
+                std::string weapon = weaponName;
 
                 if (weapon.starts_with("weapon_"))
                     weapon.erase(0, 7);
