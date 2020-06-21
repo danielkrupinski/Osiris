@@ -225,12 +225,12 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
-static bool __stdcall svCheatsGetBool() noexcept
+static bool __fastcall svCheatsGetBool(void* _this) noexcept
 {
     if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config->visuals.thirdperson)
         return true;
     else
-        return hooks->svCheats.callOriginal<bool, 13>();
+        return hooks->svCheats.getOriginal<bool>(13)(_this);
 }
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
