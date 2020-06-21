@@ -552,7 +552,8 @@ void Hooks::install() noexcept
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
     **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
 
-    MH_Initialize();
+    if constexpr (std::is_same_v<HookType, MinHook>)
+        MH_Initialize();
 
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
     client.init(interfaces->client);
@@ -594,7 +595,8 @@ void Hooks::install() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    MH_EnableHook(MH_ALL_HOOKS);
+    if constexpr (std::is_same_v<HookType, MinHook>)
+        MH_EnableHook(MH_ALL_HOOKS);
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
@@ -617,8 +619,10 @@ static DWORD WINAPI unload(HMODULE module) noexcept
 
 void Hooks::uninstall() noexcept
 {
-    MH_DisableHook(MH_ALL_HOOKS);
-    MH_Uninitialize();
+    if constexpr (std::is_same_v<HookType, MinHook>) {
+        MH_DisableHook(MH_ALL_HOOKS);
+        MH_Uninitialize();
+    }
 
     bspQuery.restore();
     client.restore();
