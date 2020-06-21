@@ -11,6 +11,8 @@
 
 struct SoundInfo;
 
+using HookType = MinHook;
+
 class Hooks {
 public:
     Hooks(HMODULE module) noexcept;
@@ -25,16 +27,16 @@ public:
 
     VmtSwap svCheats;
 
-    MinHook bspQuery;
-    MinHook client;
-    MinHook clientMode;
-    MinHook engine;
-    MinHook gameEventManager;
-    MinHook modelRender;
-    MinHook panel;
-    MinHook sound;
-    MinHook surface;
-    MinHook viewRender;
+    HookType bspQuery;
+    HookType client;
+    HookType clientMode;
+    HookType engine;
+    HookType gameEventManager;
+    HookType modelRender;
+    HookType panel;
+    HookType sound;
+    HookType surface;
+    HookType viewRender;
 private:
     HMODULE module;
     HWND window;
