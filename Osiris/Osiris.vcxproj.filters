@@ -24,6 +24,9 @@
     <Filter Include="json">
       <UniqueIdentifier>{a5ac10c7-4d96-4bca-80b2-b5e98f0d672a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MinHook">
+      <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -127,6 +130,21 @@
     </ClCompile>
     <ClCompile Include="SDK\Entity.cpp">
       <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHook\hde\hde32.c">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHook\buffer.c">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHook\hde\hde64.c">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHook\hook.c">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHook\trampoline.c">
+      <Filter>MinHook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +408,30 @@
     </ClInclude>
     <ClInclude Include="SDK\NetworkStringTable.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\MinHook.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\hde\pstdint.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\hde\table32.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\hde\table64.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\trampoline.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\hde\hde32.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\hde\hde64.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook\buffer.h">
+      <Filter>MinHook</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,6 +27,11 @@
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
+    <ClCompile Include="MinHook\buffer.c" />
+    <ClCompile Include="MinHook\hde\hde32.c" />
+    <ClCompile Include="MinHook\hde\hde64.c" />
+    <ClCompile Include="MinHook\hook.c" />
+    <ClCompile Include="MinHook\trampoline.c" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\config_.cpp" />
     <ClCompile Include="nSkinz\item_definitions.cpp" />
@@ -67,6 +72,14 @@
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
+    <ClInclude Include="MinHook\buffer.h" />
+    <ClInclude Include="MinHook\hde\hde32.h" />
+    <ClInclude Include="MinHook\hde\hde64.h" />
+    <ClInclude Include="MinHook\hde\pstdint.h" />
+    <ClInclude Include="MinHook\hde\table32.h" />
+    <ClInclude Include="MinHook\hde\table64.h" />
+    <ClInclude Include="MinHook\MinHook.h" />
+    <ClInclude Include="MinHook\trampoline.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
