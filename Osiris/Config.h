@@ -303,17 +303,21 @@ public:
         float wposConfigY{ 250.0f };
         float wposStyle2X{ 250.0f };
         float wposStyle2Y{ 250.0f };
-        const char* wposLockFlags[15] = { // "wpos Locks" //
+        float wposPurchaseListX{ 250.0f };
+        float wposPurchaseListY{ 250.0f };
+        float wposPurchaseListScaleX{ 200.0f };
+        float wposPurchaseListScaleY{ 200.0f };
+        const char* wposLockFlags[16] = { // "wpos Locks" //
             "Aimbot", "Anti Aim", "Triggerbot", "Backtrack",
             "Glow", "Chams", "Esp", "Visuals", "Skinchanger",
             "Sound", "Style", "Misc", "Reportbot", "Config",
-            "Style2"
+            "Style2", "PurchaseList"
         };
-        bool wposLockSelectedFlags[15] = {
+        bool wposLockSelectedFlags[16] = {
             false, false, false, false,
             false, false, false, false,
             false, false, false, false,
-            false, false, false
+            false, false, false, false
         };
     } misc;
 

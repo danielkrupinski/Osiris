@@ -955,6 +955,10 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("wpos Config Y")) misc.wposConfigY = miscJson["wpos Config Y"].asFloat();
         if (miscJson.isMember("wpos Style2 X")) misc.wposStyle2X = miscJson["wpos Style2 X"].asFloat();
         if (miscJson.isMember("wpos Style2 Y")) misc.wposStyle2Y = miscJson["wpos Style2 Y"].asFloat();
+        if (miscJson.isMember("wpos PurchaseList X")) misc.wposPurchaseListX = miscJson["wpos PurchaseList X"].asFloat();
+        if (miscJson.isMember("wpos PurchaseList Y")) misc.wposPurchaseListY = miscJson["wpos PurchaseList Y"].asFloat();
+        if (miscJson.isMember("wpos PurchaseList ScaleX")) misc.wposPurchaseListScaleX = miscJson["wpos PurchaseList ScaleX"].asFloat();
+        if (miscJson.isMember("wpos PurchaseList ScaleY")) misc.wposPurchaseListScaleY = miscJson["wpos PurchaseList ScaleY"].asFloat();
         if (miscJson.isMember("wpos Aimbot Lock")) misc.wposLockSelectedFlags[0] = miscJson["wpos Aimbot Lock"].asBool();   // "wpos Locks" //
         if (miscJson.isMember("wpos Anti Aim Lock")) misc.wposLockSelectedFlags[1] = miscJson["wpos Anti Aim Lock"].asBool();
         if (miscJson.isMember("wpos Triggerbot Lock")) misc.wposLockSelectedFlags[2] = miscJson["wpos Triggerbot Lock"].asBool();
@@ -970,6 +974,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("wpos Reportbot Lock")) misc.wposLockSelectedFlags[12] = miscJson["wpos Reportbot Lock"].asBool();
         if (miscJson.isMember("wpos Config Lock")) misc.wposLockSelectedFlags[13] = miscJson["wpos Config Lock"].asBool();
         if (miscJson.isMember("wpos Style2 Lock")) misc.wposLockSelectedFlags[14] = miscJson["wpos Style2 Lock"].asBool();
+        if (miscJson.isMember("wpos PurchaseList Lock")) misc.wposLockSelectedFlags[15] = miscJson["wpos PurchaseList Lock"].asBool();
     }
 
     {
@@ -1757,6 +1762,10 @@ void Config::save(size_t id) const noexcept
         miscJson["wpos Config Y"] = misc.wposConfigY;
         miscJson["wpos Style2 X"] = misc.wposStyle2X;
         miscJson["wpos Style2 Y"] = misc.wposStyle2Y;
+        miscJson["wpos PurchaseList X"] = misc.wposPurchaseListX;
+        miscJson["wpos PurchaseList Y"] = misc.wposPurchaseListY;
+        miscJson["wpos PurchaseList ScaleX"] = misc.wposPurchaseListScaleX;
+        miscJson["wpos PurchaseList ScaleY"] = misc.wposPurchaseListScaleY;
         miscJson["wpos Aimbot Lock"] = misc.wposLockSelectedFlags[0]; // "wpos Locks" //
         miscJson["wpos Anti Aim Lock"] = misc.wposLockSelectedFlags[1];
         miscJson["wpos Triggerbot Lock"] = misc.wposLockSelectedFlags[2];
@@ -1772,6 +1781,7 @@ void Config::save(size_t id) const noexcept
         miscJson["wpos Reportbot Lock"] = misc.wposLockSelectedFlags[12];
         miscJson["wpos Config Lock"] = misc.wposLockSelectedFlags[13];
         miscJson["wpos Style2 Lock"] = misc.wposLockSelectedFlags[14];
+        miscJson["wpos PurchaseList Lock"] = misc.wposLockSelectedFlags[15];
     }
 
     {
