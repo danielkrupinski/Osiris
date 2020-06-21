@@ -25,8 +25,6 @@ public:
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
     std::add_pointer_t<int __fastcall(SoundInfo&)> originalDispatchSound;
 
-    VmtSwap svCheats;
-
     HookType bspQuery;
     HookType client;
     HookType clientMode;
@@ -37,6 +35,8 @@ public:
     HookType sound;
     HookType surface;
     HookType viewRender;
+
+    HookType svCheats;
 private:
     HMODULE module;
     HWND window;
