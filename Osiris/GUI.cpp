@@ -1242,6 +1242,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGuiCustom::MultiCombo("Save and Lock Window Position", config->misc.wposLockFlags, config->misc.wposLockSelectedFlags, 14);
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
