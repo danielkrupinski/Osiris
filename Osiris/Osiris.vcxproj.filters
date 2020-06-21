@@ -442,5 +442,8 @@
     <ClInclude Include="Hooks\VmtSwap.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\MinHook.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
