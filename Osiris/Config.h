@@ -273,52 +273,6 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
-        float wposAimbotX{ 250.0f }; // wpos config .h //
-        float wposAimbotY{ 250.0f };
-        float wposAntiAimX{ 250.0f };
-        float wposAntiAimY{ 250.0f };
-        float wposTriggerBotX{ 250.0f };
-        float wposTriggerBotY{ 250.0f };
-        float wposBacktrackX{ 250.0f };
-        float wposBacktrackY{ 250.0f };
-        float wposGlowX{ 250.0f };
-        float wposGlowY{ 250.0f };
-        float wposChamsX{ 250.0f };
-        float wposChamsY{ 250.0f };
-        float wposEspX{ 250.0f };
-        float wposEspY{ 250.0f };
-        float wposVisualsX{ 250.0f };
-        float wposVisualsY{ 250.0f };
-        float wposSkinchangerX{ 250.0f };
-        float wposSkinchangerY{ 250.0f };
-        float wposSoundX{ 250.0f };
-        float wposSoundY{ 250.0f };
-        float wposStyleX{ 250.0f };
-        float wposStyleY{ 250.0f };
-        float wposMiscX{ 250.0f };
-        float wposMiscY{ 250.0f };
-        float wposReportbotX{ 250.0f };
-        float wposReportbotY{ 250.0f };
-        float wposConfigX{ 250.0f };
-        float wposConfigY{ 250.0f };
-        float wposStyle2X{ 250.0f };
-        float wposStyle2Y{ 250.0f };
-        float wposPurchaseListX{ 250.0f };
-        float wposPurchaseListY{ 250.0f };
-        float wposPurchaseListScaleX{ 200.0f };
-        float wposPurchaseListScaleY{ 200.0f };
-        const char* wposLockFlags[16] = { // "wpos Locks" //
-            "Aimbot", "Anti Aim", "Triggerbot", "Backtrack",
-            "Glow", "Chams", "Esp", "Visuals", "Skinchanger",
-            "Sound", "Style", "Misc", "Reportbot", "Config",
-            "Style2", "PurchaseList"
-        };
-        bool wposLockSelectedFlags[16] = {
-            false, false, false, false,
-            false, false, false, false,
-            false, false, false, false,
-            false, false, false, false
-        };
     } misc;
 
     struct {
@@ -332,6 +286,56 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct {
+        float AimbotX{ 250.0f }; // wpos config .h //
+        float AimbotY{ 250.0f };
+        float AntiAimX{ 250.0f };
+        float AntiAimY{ 250.0f };
+        float TriggerBotX{ 250.0f };
+        float TriggerBotY{ 250.0f };
+        float BacktrackX{ 250.0f };
+        float BacktrackY{ 250.0f };
+        float GlowX{ 250.0f };
+        float GlowY{ 250.0f };
+        float ChamsX{ 250.0f };
+        float ChamsY{ 250.0f };
+        float EspX{ 250.0f };
+        float EspY{ 250.0f };
+        float VisualsX{ 250.0f };
+        float VisualsY{ 250.0f };
+        float SkinchangerX{ 250.0f };
+        float SkinchangerY{ 250.0f };
+        float SoundX{ 250.0f };
+        float SoundY{ 250.0f };
+        float StyleX{ 250.0f };
+        float StyleY{ 250.0f };
+        float MiscX{ 250.0f };
+        float MiscY{ 250.0f };
+        float ReportbotX{ 250.0f };
+        float ReportbotY{ 250.0f };
+        float ConfigX{ 250.0f };
+        float ConfigY{ 250.0f };
+        float Style2X{ 250.0f };
+        float Style2Y{ 250.0f };
+        float PurchaseListX{ 250.0f };
+        float PurchaseListY{ 250.0f };
+        float PurchaseListScaleX{ 200.0f };
+        float PurchaseListScaleY{ 200.0f };
+
+        const char* LockFlags[16] = { // "wpos Locks" //
+            "Aimbot", "Anti Aim", "Triggerbot", "Backtrack",
+            "Glow", "Chams", "Esp", "Visuals", "Skinchanger",
+            "Sound", "Style", "Misc", "Reportbot", "Config",
+            "Style2", "PurchaseList"
+        };
+        bool LockSelectedFlags[16] = {
+            false, false, false, false,
+            false, false, false, false,
+            false, false, false, false,
+            false, false, false, false
+        };
+    } wpos;
 private:
     std::filesystem::path path;
     std::vector<std::string> configs;

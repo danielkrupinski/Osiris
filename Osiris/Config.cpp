@@ -924,57 +924,6 @@ void Config::load(size_t id) noexcept
             if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
                 misc.purchaseList.mode = mode.asInt();
         }
-
-        if (miscJson.isMember("wpos Aimbot X")) misc.wposAimbotX = miscJson["wpos Aimbot X"].asFloat(); // "wpos Config" //
-        if (miscJson.isMember("wpos Aimbot Y")) misc.wposAimbotY = miscJson["wpos Aimbot Y"].asFloat();
-        if (miscJson.isMember("wpos AntiAim X")) misc.wposAntiAimX = miscJson["wpos AntiAim X"].asFloat();
-        if (miscJson.isMember("wpos AntiAim Y")) misc.wposAntiAimY = miscJson["wpos AntiAim Y"].asFloat();
-        if (miscJson.isMember("wpos TriggerBot X")) misc.wposTriggerBotX = miscJson["wpos TriggerBot X"].asFloat();
-        if (miscJson.isMember("wpos TriggerBot Y")) misc.wposTriggerBotY = miscJson["wpos TriggerBot Y"].asFloat();
-        if (miscJson.isMember("wpos Backtrack X")) misc.wposBacktrackX = miscJson["wpos Backtrack X"].asFloat();
-        if (miscJson.isMember("wpos Backtrack Y")) misc.wposBacktrackY = miscJson["wpos Backtrack Y"].asFloat();
-        if (miscJson.isMember("wpos Glow X")) misc.wposGlowX = miscJson["wpos Glow X"].asFloat();
-        if (miscJson.isMember("wpos Glow Y")) misc.wposGlowY = miscJson["wpos Glow Y"].asFloat();
-        if (miscJson.isMember("wpos Chams X")) misc.wposChamsX = miscJson["wpos Chams X"].asFloat();
-        if (miscJson.isMember("wpos Chams Y")) misc.wposChamsY = miscJson["wpos Chams Y"].asFloat();
-        if (miscJson.isMember("wpos ESP X")) misc.wposEspX = miscJson["wpos ESP X"].asFloat();
-        if (miscJson.isMember("wpos ESP Y")) misc.wposEspY = miscJson["wpos ESP Y"].asFloat();
-        if (miscJson.isMember("wpos Visuals X")) misc.wposVisualsX = miscJson["wpos Visuals X"].asFloat();
-        if (miscJson.isMember("wpos Visuals Y")) misc.wposVisualsY = miscJson["wpos Visuals Y"].asFloat();
-        if (miscJson.isMember("wpos Skinchanger X")) misc.wposSkinchangerX = miscJson["wpos Skinchanger X"].asFloat();
-        if (miscJson.isMember("wpos Skinchanger Y")) misc.wposSkinchangerY = miscJson["wpos Skinchanger Y"].asFloat();
-        if (miscJson.isMember("wpos Sound X")) misc.wposSoundX = miscJson["wpos Sound X"].asFloat();
-        if (miscJson.isMember("wpos Sound Y")) misc.wposSoundY = miscJson["wpos Sound Y"].asFloat();
-        if (miscJson.isMember("wpos Style X")) misc.wposStyleX = miscJson["wpos Style X"].asFloat();
-        if (miscJson.isMember("wpos Style Y")) misc.wposStyleY = miscJson["wpos Style Y"].asFloat();
-        if (miscJson.isMember("wpos Misc X")) misc.wposMiscX = miscJson["wpos Misc X"].asFloat();
-        if (miscJson.isMember("wpos Misc Y")) misc.wposMiscY = miscJson["wpos Misc Y"].asFloat();
-        if (miscJson.isMember("wpos Reportbot X")) misc.wposReportbotX = miscJson["wpos Reportbot X"].asFloat();
-        if (miscJson.isMember("wpos Reportbot Y")) misc.wposReportbotY = miscJson["wpos Reportbot Y"].asFloat();
-        if (miscJson.isMember("wpos Config X")) misc.wposConfigX = miscJson["wpos Config X"].asFloat();
-        if (miscJson.isMember("wpos Config Y")) misc.wposConfigY = miscJson["wpos Config Y"].asFloat();
-        if (miscJson.isMember("wpos Style2 X")) misc.wposStyle2X = miscJson["wpos Style2 X"].asFloat();
-        if (miscJson.isMember("wpos Style2 Y")) misc.wposStyle2Y = miscJson["wpos Style2 Y"].asFloat();
-        if (miscJson.isMember("wpos PurchaseList X")) misc.wposPurchaseListX = miscJson["wpos PurchaseList X"].asFloat();
-        if (miscJson.isMember("wpos PurchaseList Y")) misc.wposPurchaseListY = miscJson["wpos PurchaseList Y"].asFloat();
-        if (miscJson.isMember("wpos PurchaseList ScaleX")) misc.wposPurchaseListScaleX = miscJson["wpos PurchaseList ScaleX"].asFloat();
-        if (miscJson.isMember("wpos PurchaseList ScaleY")) misc.wposPurchaseListScaleY = miscJson["wpos PurchaseList ScaleY"].asFloat();
-        if (miscJson.isMember("wpos Aimbot Lock")) misc.wposLockSelectedFlags[0] = miscJson["wpos Aimbot Lock"].asBool();   // "wpos Locks" //
-        if (miscJson.isMember("wpos Anti Aim Lock")) misc.wposLockSelectedFlags[1] = miscJson["wpos Anti Aim Lock"].asBool();
-        if (miscJson.isMember("wpos Triggerbot Lock")) misc.wposLockSelectedFlags[2] = miscJson["wpos Triggerbot Lock"].asBool();
-        if (miscJson.isMember("wpos Backtrack Lock")) misc.wposLockSelectedFlags[3] = miscJson["wpos Backtrack Lock"].asBool();
-        if (miscJson.isMember("wpos Glow Lock")) misc.wposLockSelectedFlags[4] = miscJson["wpos Glow Lock"].asBool();
-        if (miscJson.isMember("wpos Chams Lock")) misc.wposLockSelectedFlags[5] = miscJson["wpos Chams Lock"].asBool();
-        if (miscJson.isMember("wpos Esp Lock")) misc.wposLockSelectedFlags[6] = miscJson["wpos Esp Lock"].asBool();
-        if (miscJson.isMember("wpos Visuals Lock")) misc.wposLockSelectedFlags[7] = miscJson["wpos Visuals Lock"].asBool();
-        if (miscJson.isMember("wpos Skinchanger Lock")) misc.wposLockSelectedFlags[8] = miscJson["wpos Skinchanger Lock"].asBool();
-        if (miscJson.isMember("wpos Sound Lock")) misc.wposLockSelectedFlags[9] = miscJson["wpos Sound Lock"].asBool();
-        if (miscJson.isMember("wpos Style Lock")) misc.wposLockSelectedFlags[10] = miscJson["wpos Style Lock"].asBool();
-        if (miscJson.isMember("wpos Misc Lock")) misc.wposLockSelectedFlags[11] = miscJson["wpos Misc Lock"].asBool();
-        if (miscJson.isMember("wpos Reportbot Lock")) misc.wposLockSelectedFlags[12] = miscJson["wpos Reportbot Lock"].asBool();
-        if (miscJson.isMember("wpos Config Lock")) misc.wposLockSelectedFlags[13] = miscJson["wpos Config Lock"].asBool();
-        if (miscJson.isMember("wpos Style2 Lock")) misc.wposLockSelectedFlags[14] = miscJson["wpos Style2 Lock"].asBool();
-        if (miscJson.isMember("wpos PurchaseList Lock")) misc.wposLockSelectedFlags[15] = miscJson["wpos PurchaseList Lock"].asBool();
     }
 
     {
@@ -989,6 +938,62 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Wall Hacking")) reportbot.wallhack = reportbotJson["Wall Hacking"].asBool();
         if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
         if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
+    }
+
+    {
+        const auto& wposJson = json["Window Position Save/Lock"];
+
+        if (wposJson.isMember("wpos Aimbot X")) wpos.AimbotX = wposJson["wpos Aimbot X"].asFloat(); // "wpos Config" //
+        if (wposJson.isMember("wpos Aimbot Y")) wpos.AimbotY = wposJson["wpos Aimbot Y"].asFloat();
+        if (wposJson.isMember("wpos AntiAim X")) wpos.AntiAimX = wposJson["wpos AntiAim X"].asFloat();
+        if (wposJson.isMember("wpos AntiAim Y")) wpos.AntiAimY = wposJson["wpos AntiAim Y"].asFloat();
+        if (wposJson.isMember("wpos TriggerBot X")) wpos.TriggerBotX = wposJson["wpos TriggerBot X"].asFloat();
+        if (wposJson.isMember("wpos TriggerBot Y")) wpos.TriggerBotY = wposJson["wpos TriggerBot Y"].asFloat();
+        if (wposJson.isMember("wpos Backtrack X")) wpos.BacktrackX = wposJson["wpos Backtrack X"].asFloat();
+        if (wposJson.isMember("wpos Backtrack Y")) wpos.BacktrackY = wposJson["wpos Backtrack Y"].asFloat();
+        if (wposJson.isMember("wpos Glow X")) wpos.GlowX = wposJson["wpos Glow X"].asFloat();
+        if (wposJson.isMember("wpos Glow Y")) wpos.GlowY = wposJson["wpos Glow Y"].asFloat();
+        if (wposJson.isMember("wpos Chams X")) wpos.ChamsX = wposJson["wpos Chams X"].asFloat();
+        if (wposJson.isMember("wpos Chams Y")) wpos.ChamsY = wposJson["wpos Chams Y"].asFloat();
+        if (wposJson.isMember("wpos ESP X")) wpos.EspX = wposJson["wpos ESP X"].asFloat();
+        if (wposJson.isMember("wpos ESP Y")) wpos.EspY = wposJson["wpos ESP Y"].asFloat();
+        if (wposJson.isMember("wpos Visuals X")) wpos.VisualsX = wposJson["wpos Visuals X"].asFloat();
+        if (wposJson.isMember("wpos Visuals Y")) wpos.VisualsY = wposJson["wpos Visuals Y"].asFloat();
+        if (wposJson.isMember("wpos Skinchanger X")) wpos.SkinchangerX = wposJson["wpos Skinchanger X"].asFloat();
+        if (wposJson.isMember("wpos Skinchanger Y")) wpos.SkinchangerY = wposJson["wpos Skinchanger Y"].asFloat();
+        if (wposJson.isMember("wpos Sound X")) wpos.SoundX = wposJson["wpos Sound X"].asFloat();
+        if (wposJson.isMember("wpos Sound Y")) wpos.SoundY = wposJson["wpos Sound Y"].asFloat();
+        if (wposJson.isMember("wpos Style X")) wpos.StyleX = wposJson["wpos Style X"].asFloat();
+        if (wposJson.isMember("wpos Style Y")) wpos.StyleY = wposJson["wpos Style Y"].asFloat();
+        if (wposJson.isMember("wpos Misc X")) wpos.MiscX = wposJson["wpos Misc X"].asFloat();
+        if (wposJson.isMember("wpos Misc Y")) wpos.MiscY = wposJson["wpos Misc Y"].asFloat();
+        if (wposJson.isMember("wpos Reportbot X")) wpos.ReportbotX = wposJson["wpos Reportbot X"].asFloat();
+        if (wposJson.isMember("wpos Reportbot Y")) wpos.ReportbotY = wposJson["wpos Reportbot Y"].asFloat();
+        if (wposJson.isMember("wpos Config X"))wpos.ConfigX = wposJson["wpos Config X"].asFloat();
+        if (wposJson.isMember("wpos Config Y")) wpos.ConfigY = wposJson["wpos Config Y"].asFloat();
+        if (wposJson.isMember("wpos Style2 X")) wpos.Style2X = wposJson["wpos Style2 X"].asFloat();
+        if (wposJson.isMember("wpos Style2 Y")) wpos.Style2Y = wposJson["wpos Style2 Y"].asFloat();
+        if (wposJson.isMember("wpos PurchaseList X")) wpos.PurchaseListX = wposJson["wpos PurchaseList X"].asFloat();
+        if (wposJson.isMember("wpos PurchaseList Y")) wpos.PurchaseListY = wposJson["wpos PurchaseList Y"].asFloat();
+        if (wposJson.isMember("wpos PurchaseList ScaleX")) wpos.PurchaseListScaleX = wposJson["wpos PurchaseList ScaleX"].asFloat();
+        if (wposJson.isMember("wpos PurchaseList ScaleY")) wpos.PurchaseListScaleY = wposJson["wpos PurchaseList ScaleY"].asFloat();
+
+        if (wposJson.isMember("wpos Aimbot Lock")) wpos.LockSelectedFlags[0] = wposJson["wpos Aimbot Lock"].asBool();   // "wpos Locks" //
+        if (wposJson.isMember("wpos Anti Aim Lock")) wpos.LockSelectedFlags[1] = wposJson["wpos Anti Aim Lock"].asBool();
+        if (wposJson.isMember("wpos Triggerbot Lock")) wpos.LockSelectedFlags[2] = wposJson["wpos Triggerbot Lock"].asBool();
+        if (wposJson.isMember("wpos Backtrack Lock")) wpos.LockSelectedFlags[3] = wposJson["wpos Backtrack Lock"].asBool();
+        if (wposJson.isMember("wpos Glow Lock")) wpos.LockSelectedFlags[4] = wposJson["wpos Glow Lock"].asBool();
+        if (wposJson.isMember("wpos Chams Lock")) wpos.LockSelectedFlags[5] = wposJson["wpos Chams Lock"].asBool();
+        if (wposJson.isMember("wpos Esp Lock")) wpos.LockSelectedFlags[6] = wposJson["wpos Esp Lock"].asBool();
+        if (wposJson.isMember("wpos Visuals Lock")) wpos.LockSelectedFlags[7] = wposJson["wpos Visuals Lock"].asBool();
+        if (wposJson.isMember("wpos Skinchanger Lock")) wpos.LockSelectedFlags[8] = wposJson["wpos Skinchanger Lock"].asBool();
+        if (wposJson.isMember("wpos Sound Lock")) wpos.LockSelectedFlags[9] = wposJson["wpos Sound Lock"].asBool();
+        if (wposJson.isMember("wpos Style Lock")) wpos.LockSelectedFlags[10] = wposJson["wpos Style Lock"].asBool();
+        if (wposJson.isMember("wpos Misc Lock")) wpos.LockSelectedFlags[11] = wposJson["wpos Misc Lock"].asBool();
+        if (wposJson.isMember("wpos Reportbot Lock")) wpos.LockSelectedFlags[12] = wposJson["wpos Reportbot Lock"].asBool();
+        if (wposJson.isMember("wpos Config Lock")) wpos.LockSelectedFlags[13] = wposJson["wpos Config Lock"].asBool();
+        if (wposJson.isMember("wpos Style2 Lock")) wpos.LockSelectedFlags[14] = wposJson["wpos Style2 Lock"].asBool();
+        if (wposJson.isMember("wpos PurchaseList Lock")) wpos.LockSelectedFlags[15] = wposJson["wpos PurchaseList Lock"].asBool();
     }
 }
 
@@ -1731,57 +1736,6 @@ void Config::save(size_t id) const noexcept
             purchaseListJson["No Title Bar"] = misc.purchaseList.noTitleBar;
             purchaseListJson["Mode"] = misc.purchaseList.mode;
         }
-
-        miscJson["wpos Aimbot X"] = misc.wposAimbotX; // wps config save //
-        miscJson["wpos Aimbot Y"] = misc.wposAimbotY;
-        miscJson["wpos AntiAim X"] = misc.wposAntiAimX;
-        miscJson["wpos AntiAim Y"] = misc.wposAntiAimY;
-        miscJson["wpos TriggerBot X"] = misc.wposTriggerBotX;
-        miscJson["wpos TriggerBot Y"] = misc.wposTriggerBotY;
-        miscJson["wpos Backtrack X"] = misc.wposBacktrackX;
-        miscJson["wpos Backtrack Y"] = misc.wposBacktrackY;
-        miscJson["wpos Glow X"] = misc.wposGlowX;
-        miscJson["wpos Glow Y"] = misc.wposGlowY;
-        miscJson["wpos Chams X"] = misc.wposChamsX;
-        miscJson["wpos Chams Y"] = misc.wposChamsY;
-        miscJson["wpos ESP X"] = misc.wposEspX;
-        miscJson["wpos ESP Y"] = misc.wposEspY;
-        miscJson["wpos Visuals X"] = misc.wposVisualsX;
-        miscJson["wpos Visuals Y"] = misc.wposVisualsY;
-        miscJson["wpos Skinchanger X"] = misc.wposSkinchangerX;
-        miscJson["wpos Skinchanger Y"] = misc.wposSkinchangerY;
-        miscJson["wpos Sound X"] = misc.wposSoundX;
-        miscJson["wpos Sound Y"] = misc.wposSoundY;
-        miscJson["wpos Style X"] = misc.wposStyleX;
-        miscJson["wpos Style Y"] = misc.wposStyleY;
-        miscJson["wpos Misc X"] = misc.wposMiscX;
-        miscJson["wpos Misc Y"] = misc.wposMiscY;
-        miscJson["wpos Reportbot X"] = misc.wposReportbotX;
-        miscJson["wpos Reportbot Y"] = misc.wposReportbotY;
-        miscJson["wpos Config X"] = misc.wposConfigX;
-        miscJson["wpos Config Y"] = misc.wposConfigY;
-        miscJson["wpos Style2 X"] = misc.wposStyle2X;
-        miscJson["wpos Style2 Y"] = misc.wposStyle2Y;
-        miscJson["wpos PurchaseList X"] = misc.wposPurchaseListX;
-        miscJson["wpos PurchaseList Y"] = misc.wposPurchaseListY;
-        miscJson["wpos PurchaseList ScaleX"] = misc.wposPurchaseListScaleX;
-        miscJson["wpos PurchaseList ScaleY"] = misc.wposPurchaseListScaleY;
-        miscJson["wpos Aimbot Lock"] = misc.wposLockSelectedFlags[0]; // "wpos Locks" //
-        miscJson["wpos Anti Aim Lock"] = misc.wposLockSelectedFlags[1];
-        miscJson["wpos Triggerbot Lock"] = misc.wposLockSelectedFlags[2];
-        miscJson["wpos Backtrack Lock"] = misc.wposLockSelectedFlags[3];
-        miscJson["wpos Glow Lock"] = misc.wposLockSelectedFlags[4];
-        miscJson["wpos Chams Lock"] = misc.wposLockSelectedFlags[5];
-        miscJson["wpos Esp Lock"] = misc.wposLockSelectedFlags[6];
-        miscJson["wpos Visuals Lock"] = misc.wposLockSelectedFlags[7];
-        miscJson["wpos Skinchanger Lock"] = misc.wposLockSelectedFlags[8];
-        miscJson["wpos Sound Lock"] = misc.wposLockSelectedFlags[9];
-        miscJson["wpos Style Lock"] = misc.wposLockSelectedFlags[10];
-        miscJson["wpos Misc Lock"] = misc.wposLockSelectedFlags[11];
-        miscJson["wpos Reportbot Lock"] = misc.wposLockSelectedFlags[12];
-        miscJson["wpos Config Lock"] = misc.wposLockSelectedFlags[13];
-        miscJson["wpos Style2 Lock"] = misc.wposLockSelectedFlags[14];
-        miscJson["wpos PurchaseList Lock"] = misc.wposLockSelectedFlags[15];
     }
 
     {
@@ -1796,6 +1750,62 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Wall Hacking"] = reportbot.wallhack;
         reportbotJson["Aim Hacking"] = reportbot.aimbot;
         reportbotJson["Other Hacking"] = reportbot.other;
+    }
+
+    {
+        auto& wposJson = json["Window Position Save/Lock"];
+
+        wposJson["wpos Aimbot X"] = wpos.AimbotX; // wpos XY config save //
+        wposJson["wpos Aimbot Y"] = wpos.AimbotY;
+        wposJson["wpos AntiAim X"] = wpos.AntiAimX;
+        wposJson["wpos AntiAim Y"] = wpos.AntiAimY;
+        wposJson["wpos TriggerBot X"] = wpos.TriggerBotX;
+        wposJson["wpos TriggerBot Y"] = wpos.TriggerBotY;
+        wposJson["wpos Backtrack X"] = wpos.BacktrackX;
+        wposJson["wpos Backtrack Y"] = wpos.BacktrackY;
+        wposJson["wpos Glow X"] = wpos.GlowX;
+        wposJson["wpos Glow Y"] = wpos.GlowY;
+        wposJson["wpos Chams X"] = wpos.ChamsX;
+        wposJson["wpos Chams Y"] = wpos.ChamsY;
+        wposJson["wpos ESP X"] = wpos.EspX;
+        wposJson["wpos ESP Y"] = wpos.EspY;
+        wposJson["wpos Visuals X"] = wpos.VisualsX;
+        wposJson["wpos Visuals Y"] = wpos.VisualsY;
+        wposJson["wpos Skinchanger X"] = wpos.SkinchangerX;
+        wposJson["wpos Skinchanger Y"] = wpos.SkinchangerY;
+        wposJson["wpos Sound X"] = wpos.SoundX;
+        wposJson["wpos Sound Y"] = wpos.SoundY;
+        wposJson["wpos Style X"] = wpos.StyleX;
+        wposJson["wpos Style Y"] = wpos.StyleY;
+        wposJson["wpos Misc X"] = wpos.MiscX;
+        wposJson["wpos Misc Y"] = wpos.MiscY;
+        wposJson["wpos Reportbot X"] = wpos.ReportbotX;
+        wposJson["wpos Reportbot Y"] = wpos.ReportbotY;
+        wposJson["wpos Config X"] = wpos.ConfigX;
+        wposJson["wpos Config Y"] = wpos.ConfigY;
+        wposJson["wpos Style2 X"] = wpos.Style2X;
+        wposJson["wpos Style2 Y"] = wpos.Style2Y;
+        wposJson["wpos PurchaseList X"] = wpos.PurchaseListX;
+        wposJson["wpos PurchaseList Y"] = wpos.PurchaseListY;
+        wposJson["wpos PurchaseList ScaleX"] = wpos.PurchaseListScaleX;
+        wposJson["wpos PurchaseList ScaleY"] = wpos.PurchaseListScaleY;
+
+        wposJson["wpos Aimbot Lock"] = wpos.LockSelectedFlags[0]; // "wpos Locks" //
+        wposJson["wpos Anti Aim Lock"] = wpos.LockSelectedFlags[1];
+        wposJson["wpos Triggerbot Lock"] = wpos.LockSelectedFlags[2];
+        wposJson["wpos Backtrack Lock"] = wpos.LockSelectedFlags[3];
+        wposJson["wpos Glow Lock"] = wpos.LockSelectedFlags[4];
+        wposJson["wpos Chams Lock"] = wpos.LockSelectedFlags[5];
+        wposJson["wpos Esp Lock"] = wpos.LockSelectedFlags[6];
+        wposJson["wpos Visuals Lock"] = wpos.LockSelectedFlags[7];
+        wposJson["wpos Skinchanger Lock"] = wpos.LockSelectedFlags[8];
+        wposJson["wpos Sound Lock"] = wpos.LockSelectedFlags[9];
+        wposJson["wpos Style Lock"] = wpos.LockSelectedFlags[10];
+        wposJson["wpos Misc Lock"] = wpos.LockSelectedFlags[11];
+        wposJson["wpos Reportbot Lock"] = wpos.LockSelectedFlags[12];
+        wposJson["wpos Config Lock"] = wpos.LockSelectedFlags[13];
+        wposJson["wpos Style2 Lock"] = wpos.LockSelectedFlags[14];
+        wposJson["wpos PurchaseList Lock"] = wpos.LockSelectedFlags[15];
     }
 
     std::error_code ec;

@@ -721,7 +721,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        if (config->misc.wposLockSelectedFlags[15]) {
+        if (config->wpos.LockSelectedFlags[15]) {
             windowFlags |= ImGuiWindowFlags_NoMove;
             windowFlags |= ImGuiWindowFlags_NoResize;
         }
@@ -736,18 +736,18 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
 
-        if (!config->misc.wposLockSelectedFlags[15]) {
-            if (config->misc.wposPurchaseListX != ImGui::GetWindowPos().x) { config->misc.wposPurchaseListX = ImGui::GetWindowPos().x; }
-            if (config->misc.wposPurchaseListY != ImGui::GetWindowPos().y) { config->misc.wposPurchaseListY = ImGui::GetWindowPos().y; }
-            if (config->misc.wposPurchaseListScaleX != ImGui::GetWindowSize().x) { config->misc.wposPurchaseListScaleX = ImGui::GetWindowSize().x; }
-            if (config->misc.wposPurchaseListScaleY != ImGui::GetWindowSize().y) { config->misc.wposPurchaseListScaleY = ImGui::GetWindowSize().y; }
+        if (!config->wpos.LockSelectedFlags[15]) {
+            if (config->wpos.PurchaseListX != ImGui::GetWindowPos().x) { config->wpos.PurchaseListX = ImGui::GetWindowPos().x; }
+            if (config->wpos.PurchaseListY != ImGui::GetWindowPos().y) { config->wpos.PurchaseListY = ImGui::GetWindowPos().y; }
+            if (config->wpos.PurchaseListScaleX != ImGui::GetWindowSize().x) { config->wpos.PurchaseListScaleX = ImGui::GetWindowSize().x; }
+            if (config->wpos.PurchaseListScaleY != ImGui::GetWindowSize().y) { config->wpos.PurchaseListScaleY = ImGui::GetWindowSize().y; }
         }
         else {
-            if (ImGui::GetWindowPos().x != config->misc.wposPurchaseListX || ImGui::GetWindowPos().y != config->misc.wposPurchaseListY) {
-                ImGui::SetWindowPos({ config->misc.wposPurchaseListX, config->misc.wposPurchaseListY });
+            if (ImGui::GetWindowPos().x != config->wpos.PurchaseListX || ImGui::GetWindowPos().y != config->wpos.PurchaseListY) {
+                ImGui::SetWindowPos({ config->wpos.PurchaseListX, config->wpos.PurchaseListY });
             }
-            if (ImGui::GetWindowSize().x != config->misc.wposPurchaseListScaleX || ImGui::GetWindowSize().y != config->misc.wposPurchaseListScaleY) {
-                ImGui::SetWindowSize({ config->misc.wposPurchaseListScaleX, config->misc.wposPurchaseListScaleY });
+            if (ImGui::GetWindowSize().x != config->wpos.PurchaseListScaleX || ImGui::GetWindowSize().y != config->wpos.PurchaseListScaleY) {
+                ImGui::SetWindowSize({ config->wpos.PurchaseListScaleX, config->wpos.PurchaseListScaleY });
             }
 
         }
