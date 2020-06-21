@@ -308,6 +308,17 @@ static void __stdcall emitSound(SoundData data) noexcept
 
 static bool __stdcall shouldDrawFog() noexcept
 {
+#ifdef _DEBUG
+    // Check if we always get the same return address
+    if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x6274C084) {
+        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
+        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
+    }
+#endif
+
+    if (*static_cast<std::uint32_t*>(_ReturnAddress()) != 0x6274C084)
+        return hooks->clientMode.callOriginal<bool, 17>();
+
     return !config->visuals.noFog;
 }
 
@@ -539,6 +550,8 @@ void Hooks::install() noexcept
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
     **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
 
+    MH_Initialize();
+
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
     client.init(interfaces->client);
     clientMode.init(memory->clientMode);
@@ -578,6 +591,8 @@ void Hooks::install() noexcept
         *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
+
+    MH_EnableHook(MH_ALL_HOOKS);
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
@@ -600,6 +615,9 @@ static DWORD WINAPI unload(HMODULE module) noexcept
 
 void Hooks::uninstall() noexcept
 {
+    MH_DisableHook(MH_ALL_HOOKS);
+    MH_Uninitialize();
+
     bspQuery.restore();
     client.restore();
     clientMode.restore();
@@ -685,4 +703,10 @@ void Hooks::Vmt::restore() noexcept
         *reinterpret_cast<uintptr_t**>(base) = oldVmt;
     if (newVmt)
         ZeroMemory(newVmt, length * sizeof(uintptr_t));
+}
+
+bool Hooks::MinHook::init(void* const base) noexcept
+{
+    this->base = base;
+    return true;
 }

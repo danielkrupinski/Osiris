@@ -3,7 +3,10 @@
 #include <d3d9.h>
 #include <memory>
 #include <type_traits>
+#include <unordered_map>
 #include <Windows.h>
+
+#include "MinHook/MinHook.h"
 
 struct SoundInfo;
 
@@ -21,12 +24,6 @@ public:
 
     class Vmt {
     public:
-        Vmt(void* const base) noexcept
-        {
-            init(base);
-        }
-
-        Vmt() = default;
         bool init(void* const) noexcept;
         void restore() noexcept;
 
@@ -57,17 +54,48 @@ public:
         size_t length = 0;
     };
 
-    Vmt bspQuery;
-    Vmt client;
-    Vmt clientMode;
-    Vmt engine;
-    Vmt gameEventManager;
-    Vmt modelRender;
-    Vmt panel;
-    Vmt sound;
-    Vmt surface;
+    // TODO: Make an interface class to easily switch between hooking methods
+    class MinHook {
+    public:
+        bool init(void* const) noexcept;
+
+        void hookAt(std::size_t index, void* fun) noexcept
+        {
+            void* orig;
+            MH_CreateHook((*reinterpret_cast<void***>(base))[index], fun, &orig);
+            originals[index] = std::uintptr_t(orig);
+        }
+
+        template <typename T, std::size_t Idx, typename ...Args>
+        auto callOriginal(Args... args) noexcept
+        {
+            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[Idx])(base, args...);
+        }
+
+        template <typename T, typename ...Args>
+        auto getOriginal(std::size_t index, Args... args) noexcept
+        {
+            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[index]);
+        }
+
+        void restore() noexcept {}
+    private:
+        void* base = nullptr;
+        std::unordered_map<std::size_t, std::uintptr_t> originals;
+    };
+
     Vmt svCheats;
-    Vmt viewRender;
+
+    MinHook bspQuery;
+    MinHook client;
+    MinHook clientMode;
+    MinHook engine;
+    MinHook gameEventManager;
+    MinHook modelRender;
+    MinHook panel;
+    MinHook sound;
+    MinHook surface;
+    MinHook viewRender;
 private:
     HMODULE module;
     HWND window;
