@@ -273,6 +273,45 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+        float wposAimbotX{ 250.0f }; // wpos config .h //
+        float wposAimbotY{ 250.0f };
+        float wposAntiAimX{ 250.0f };
+        float wposAntiAimY{ 250.0f };
+        float wposTriggerBotX{ 250.0f };
+        float wposTriggerBotY{ 250.0f };
+        float wposBacktrackX{ 250.0f };
+        float wposBacktrackY{ 250.0f };
+        float wposGlowX{ 250.0f };
+        float wposGlowY{ 250.0f };
+        float wposChamsX{ 250.0f };
+        float wposChamsY{ 250.0f };
+        float wposEspX{ 250.0f };
+        float wposEspY{ 250.0f };
+        float wposVisualsX{ 250.0f };
+        float wposVisualsY{ 250.0f };
+        float wposSkinchangerX{ 250.0f };
+        float wposSkinchangerY{ 250.0f };
+        float wposSoundX{ 250.0f };
+        float wposSoundY{ 250.0f };
+        float wposStyleX{ 250.0f };
+        float wposStyleY{ 250.0f };
+        float wposMiscX{ 250.0f };
+        float wposMiscY{ 250.0f };
+        float wposReportbotX{ 250.0f };
+        float wposReportbotY{ 250.0f };
+        float wposConfigX{ 250.0f };
+        float wposConfigY{ 250.0f };
+        const char* wposLockFlags[14] = { // "wpos Locks" //
+            "Aimbot", "Anti Aim", "Triggerbot", "Backtrack",
+            "Glow", "Chams", "Esp", "Visuals", "Skinchanger",
+            "Sound", "Style", "Misc", "Reportbot", "Config"
+        };
+        bool wposLockSelectedFlags[14] = {
+            false, false, false, false,
+            false, false, false, false,
+            false, false, false, false,
+            false, false
+        };
     } misc;
 
     struct {
