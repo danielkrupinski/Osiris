@@ -149,6 +149,9 @@
     <ClCompile Include="MinHook\trampoline.c">
       <Filter>MinHook</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks\VmtSwap.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
