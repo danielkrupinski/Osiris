@@ -152,6 +152,9 @@
     <ClCompile Include="Hooks\VmtSwap.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks\MinHook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
