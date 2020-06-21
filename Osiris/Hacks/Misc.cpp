@@ -410,15 +410,35 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 
 void Misc::bunnyHop(UserCmd* cmd) noexcept
 {
+
+    const int h_hc = config->misc.h_hc;
+    const int r_l = 12;
+    const int h_l = config->misc.h_l;
+    const int h_m = config->misc.h_m;
+    static int h_r = 0;
+    static int h_h = 0;
+
+    if (!config->misc.bunnyHop)
+        return;
+
     if (!localPlayer)
         return;
 
-    static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
+    if (localPlayer->moveType() == MoveType::LADDER || localPlayer->moveType() == MoveType::NOCLIP)
+        return;
 
-    if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+    if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & flags::FL_ONGROUND)) {
         cmd->buttons &= ~UserCmd::IN_JUMP;
-
-    wasLastTimeOnGround = localPlayer->flags() & 1;
+        h_r = 0;
+    }
+    else if ((rand() % 100 > h_hc && h_r < r_l) || (h_l > 0 && h_h > h_l && h_m > 0 && h_h > h_m)) {
+        cmd->buttons &= ~UserCmd::IN_JUMP;
+        h_r++;
+        h_h = 0;
+    }
+    else {
+        h_h++;
+    }
 }
 
 void Misc::fakeBan(bool set) noexcept

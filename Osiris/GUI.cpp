@@ -265,7 +265,9 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
     ImGui::Checkbox("##pitch", &config->antiAim.pitch);
     ImGui::SameLine();
     ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-    ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+    ImGui::Checkbox("##yaw", &config->antiAim.yaw);
+    ImGui::SameLine();
+    ImGui::SliderFloat("Yaw", &config->antiAim.yawAngle, -180.0f, 180.0f, "%.2f");
     if (!contentOnly)
         ImGui::End();
 }
@@ -1008,6 +1010,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
+    ImGui::SliderInt("Hit chance", &config->misc.h_hc, 0, 100);
+    ImGui::SliderInt("Minimum hops", &config->misc.h_m, 0, 20);
+    ImGui::SliderInt("Maximum hops", &config->misc.h_l, 0, 20);
     ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
     ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);
     ImGui::Checkbox("Edge Jump", &config->misc.edgejump);

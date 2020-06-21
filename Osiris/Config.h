@@ -88,6 +88,7 @@ public:
         bool pitch{ false };
         bool yaw{ false };
         float pitchAngle{ 0.0f };
+        float yawAngle{ 0.0f };
     } antiAim;
 
     struct Glow : ColorA {
@@ -224,6 +225,9 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        int  h_hc{ 0 };
+        int  h_l{ 0 };
+        int  h_m{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16];
