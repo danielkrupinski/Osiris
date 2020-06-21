@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <Windows.h>
 
-#include "MinHook/MinHook.h"
+#include "Hooks/MinHook.h"
 
 struct SoundInfo;
 
@@ -52,36 +52,6 @@ public:
         uintptr_t* oldVmt = nullptr;
         uintptr_t* newVmt = nullptr;
         size_t length = 0;
-    };
-
-    // TODO: Make an interface class to easily switch between hooking methods
-    class MinHook {
-    public:
-        bool init(void* const) noexcept;
-
-        void hookAt(std::size_t index, void* fun) noexcept
-        {
-            void* orig;
-            MH_CreateHook((*reinterpret_cast<void***>(base))[index], fun, &orig);
-            originals[index] = std::uintptr_t(orig);
-        }
-
-        template <typename T, std::size_t Idx, typename ...Args>
-        auto callOriginal(Args... args) noexcept
-        {
-            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[Idx])(base, args...);
-        }
-
-        template <typename T, typename ...Args>
-        auto getOriginal(std::size_t index, Args... args) noexcept
-        {
-            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[index]);
-        }
-
-        void restore() noexcept {}
-    private:
-        void* base = nullptr;
-        std::unordered_map<std::size_t, std::uintptr_t> originals;
     };
 
     Vmt svCheats;

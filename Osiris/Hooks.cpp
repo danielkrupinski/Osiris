@@ -8,6 +8,8 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "MinHook/MinHook.h"
+
 #include "Config.h"
 #include "EventListener.h"
 #include "GUI.h"
@@ -703,10 +705,4 @@ void Hooks::Vmt::restore() noexcept
         *reinterpret_cast<uintptr_t**>(base) = oldVmt;
     if (newVmt)
         ZeroMemory(newVmt, length * sizeof(uintptr_t));
-}
-
-bool Hooks::MinHook::init(void* const base) noexcept
-{
-    this->base = base;
-    return true;
 }
