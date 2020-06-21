@@ -2,6 +2,12 @@
 
 #include "Vector.h"
 
+struct flags {
+    enum {
+        FL_ONGROUND = 1 << 0
+    };
+};
+
 struct UserCmd {
     enum {
         IN_ATTACK = 1 << 0,

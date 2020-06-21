@@ -15,14 +15,9 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         if (config->antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)
             cmd->viewangles.x = config->antiAim.pitchAngle;
 
-        if (config->antiAim.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
-            cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
-            if (fabsf(cmd->sidemove) < 5.0f) {
-                if (cmd->buttons & UserCmd::IN_DUCK)
-                    cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-                else
-                    cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
-            }
+        if (config->antiAim.yaw && cmd->viewangles.y == currentViewAngles.y) {
+            cmd->viewangles.y = config->antiAim.yawAngle;
+          
         }
     }
 }
