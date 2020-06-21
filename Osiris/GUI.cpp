@@ -127,13 +127,16 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[0]) {
-        if (config->misc.wposAimbotX != ImGui::GetWindowPos().x) { config->misc.wposAimbotX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposAimbotY != ImGui::GetWindowPos().y) { config->misc.wposAimbotY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposAimbotX || ImGui::GetWindowPos().y != config->misc.wposAimbotY) {
-            ImGui::SetWindowPos({ config->misc.wposAimbotX, config->misc.wposAimbotY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[0]) {
+            if (config->misc.wposAimbotX != ImGui::GetWindowPos().x) { config->misc.wposAimbotX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposAimbotY != ImGui::GetWindowPos().y) { config->misc.wposAimbotY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposAimbotX || ImGui::GetWindowPos().y != config->misc.wposAimbotY) {
+                ImGui::SetWindowPos({ config->misc.wposAimbotX, config->misc.wposAimbotY });
+            }
         }
     }
 
@@ -273,13 +276,16 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[1]) {
-        if (config->misc.wposAntiAimX != ImGui::GetWindowPos().x) { config->misc.wposAntiAimX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposAntiAimY != ImGui::GetWindowPos().y) { config->misc.wposAntiAimY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposAntiAimX || ImGui::GetWindowPos().y != config->misc.wposAntiAimY) {
-            ImGui::SetWindowPos({ config->misc.wposAntiAimX, config->misc.wposAntiAimY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[1]) {
+            if (config->misc.wposAntiAimX != ImGui::GetWindowPos().x) { config->misc.wposAntiAimX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposAntiAimY != ImGui::GetWindowPos().y) { config->misc.wposAntiAimY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposAntiAimX || ImGui::GetWindowPos().y != config->misc.wposAntiAimY) {
+                ImGui::SetWindowPos({ config->misc.wposAntiAimX, config->misc.wposAntiAimY });
+            }
         }
     }
 
@@ -301,13 +307,16 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[2]) {
-        if (config->misc.wposTriggerBotX != ImGui::GetWindowPos().x) { config->misc.wposTriggerBotX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposTriggerBotY != ImGui::GetWindowPos().y) { config->misc.wposTriggerBotY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposTriggerBotX || ImGui::GetWindowPos().y != config->misc.wposTriggerBotY) {
-            ImGui::SetWindowPos({ config->misc.wposTriggerBotX, config->misc.wposTriggerBotY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[2]) {
+            if (config->misc.wposTriggerBotX != ImGui::GetWindowPos().x) { config->misc.wposTriggerBotX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposTriggerBotY != ImGui::GetWindowPos().y) { config->misc.wposTriggerBotY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposTriggerBotX || ImGui::GetWindowPos().y != config->misc.wposTriggerBotY) {
+                ImGui::SetWindowPos({ config->misc.wposTriggerBotX, config->misc.wposTriggerBotY });
+            }
         }
     }
 
@@ -435,13 +444,16 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[3]) {
-        if (config->misc.wposBacktrackX != ImGui::GetWindowPos().x) { config->misc.wposBacktrackX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposBacktrackY != ImGui::GetWindowPos().y) { config->misc.wposBacktrackY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposBacktrackX || ImGui::GetWindowPos().y != config->misc.wposBacktrackY) {
-            ImGui::SetWindowPos({ config->misc.wposBacktrackX, config->misc.wposBacktrackY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[3]) {
+            if (config->misc.wposBacktrackX != ImGui::GetWindowPos().x) { config->misc.wposBacktrackX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposBacktrackY != ImGui::GetWindowPos().y) { config->misc.wposBacktrackY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposBacktrackX || ImGui::GetWindowPos().y != config->misc.wposBacktrackY) {
+                ImGui::SetWindowPos({ config->misc.wposBacktrackX, config->misc.wposBacktrackY });
+            }
         }
     }
 
@@ -464,13 +476,16 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
         ImGui::Begin("Glow", &window.glow, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[4]) {
-        if (config->misc.wposGlowX != ImGui::GetWindowPos().x) { config->misc.wposGlowX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposGlowY != ImGui::GetWindowPos().y) { config->misc.wposGlowY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposGlowX || ImGui::GetWindowPos().y != config->misc.wposGlowY) {
-            ImGui::SetWindowPos({ config->misc.wposGlowX, config->misc.wposGlowY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[4]) {
+            if (config->misc.wposGlowX != ImGui::GetWindowPos().x) { config->misc.wposGlowX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposGlowY != ImGui::GetWindowPos().y) { config->misc.wposGlowY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposGlowX || ImGui::GetWindowPos().y != config->misc.wposGlowY) {
+                ImGui::SetWindowPos({ config->misc.wposGlowX, config->misc.wposGlowY });
+            }
         }
     }
 
@@ -518,13 +533,16 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ImGui::Begin("Chams", &window.chams, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[5]) {
-        if (config->misc.wposChamsX != ImGui::GetWindowPos().x) { config->misc.wposChamsX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposChamsY != ImGui::GetWindowPos().y) { config->misc.wposChamsY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposChamsX || ImGui::GetWindowPos().y != config->misc.wposChamsY) {
-            ImGui::SetWindowPos({ config->misc.wposChamsX, config->misc.wposChamsY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[5]) {
+            if (config->misc.wposChamsX != ImGui::GetWindowPos().x) { config->misc.wposChamsX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposChamsY != ImGui::GetWindowPos().y) { config->misc.wposChamsY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposChamsX || ImGui::GetWindowPos().y != config->misc.wposChamsY) {
+                ImGui::SetWindowPos({ config->misc.wposChamsX, config->misc.wposChamsY });
+            }
         }
     }
 
@@ -593,13 +611,16 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
         ImGui::Begin("Esp", &window.esp, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[6]) {
-        if (config->misc.wposEspX != ImGui::GetWindowPos().x) { config->misc.wposEspX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposEspY != ImGui::GetWindowPos().y) { config->misc.wposEspY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposEspX || ImGui::GetWindowPos().y != config->misc.wposEspY) {
-            ImGui::SetWindowPos({ config->misc.wposEspX, config->misc.wposEspY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[6]) {
+            if (config->misc.wposEspX != ImGui::GetWindowPos().x) { config->misc.wposEspX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposEspY != ImGui::GetWindowPos().y) { config->misc.wposEspY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposEspX || ImGui::GetWindowPos().y != config->misc.wposEspY) {
+                ImGui::SetWindowPos({ config->misc.wposEspX, config->misc.wposEspY });
+            }
         }
     }
 
@@ -823,16 +844,18 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::Begin("Visuals", &window.visuals, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[7]) {
-        if (config->misc.wposVisualsX != ImGui::GetWindowPos().x) { config->misc.wposVisualsX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposVisualsY != ImGui::GetWindowPos().y) { config->misc.wposVisualsY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposVisualsX || ImGui::GetWindowPos().y != config->misc.wposVisualsY) {
-            ImGui::SetWindowPos({ config->misc.wposVisualsX, config->misc.wposVisualsY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[7]) {
+            if (config->misc.wposVisualsX != ImGui::GetWindowPos().x) { config->misc.wposVisualsX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposVisualsY != ImGui::GetWindowPos().y) { config->misc.wposVisualsY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposVisualsX || ImGui::GetWindowPos().y != config->misc.wposVisualsY) {
+                ImGui::SetWindowPos({ config->misc.wposVisualsX, config->misc.wposVisualsY });
+            }
         }
     }
-
 
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
@@ -922,13 +945,16 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[8]) {
-        if (config->misc.wposSkinchangerX != ImGui::GetWindowPos().x) { config->misc.wposSkinchangerX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposSkinchangerY != ImGui::GetWindowPos().y) { config->misc.wposSkinchangerY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposSkinchangerX || ImGui::GetWindowPos().y != config->misc.wposSkinchangerY) {
-            ImGui::SetWindowPos({ config->misc.wposSkinchangerX, config->misc.wposSkinchangerY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[8]) {
+            if (config->misc.wposSkinchangerX != ImGui::GetWindowPos().x) { config->misc.wposSkinchangerX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposSkinchangerY != ImGui::GetWindowPos().y) { config->misc.wposSkinchangerY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposSkinchangerX || ImGui::GetWindowPos().y != config->misc.wposSkinchangerY) {
+                ImGui::SetWindowPos({ config->misc.wposSkinchangerX, config->misc.wposSkinchangerY });
+            }
         }
     }
 
@@ -1046,13 +1072,16 @@ void GUI::renderSoundWindow(bool contentOnly) noexcept
         ImGui::Begin("Sound", &window.sound, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[9]) {
-        if (config->misc.wposSoundX != ImGui::GetWindowPos().x) { config->misc.wposSoundX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposSoundY != ImGui::GetWindowPos().y) { config->misc.wposSoundY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposSoundX || ImGui::GetWindowPos().y != config->misc.wposSoundY) {
-            ImGui::SetWindowPos({ config->misc.wposSoundX, config->misc.wposSoundY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[9]) {
+            if (config->misc.wposSoundX != ImGui::GetWindowPos().x) { config->misc.wposSoundX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposSoundY != ImGui::GetWindowPos().y) { config->misc.wposSoundY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposSoundX || ImGui::GetWindowPos().y != config->misc.wposSoundY) {
+                ImGui::SetWindowPos({ config->misc.wposSoundX, config->misc.wposSoundY });
+            }
         }
     }
 
@@ -1079,14 +1108,16 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Style", &window.style, windowFlags);
     }
-
-    if (!config->misc.wposLockSelectedFlags[10]) {
-        if (config->misc.wposStyleX != ImGui::GetWindowPos().x) { config->misc.wposStyleX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposStyleY != ImGui::GetWindowPos().y) { config->misc.wposStyleY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposStyleX || ImGui::GetWindowPos().y != config->misc.wposStyleY) {
+    if (config->style.menuStyle == 0){
+        if (!config->misc.wposLockSelectedFlags[10]) 
+        {
+            if (config->misc.wposStyleX != ImGui::GetWindowPos().x) { config->misc.wposStyleX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposStyleY != ImGui::GetWindowPos().y) { config->misc.wposStyleY = ImGui::GetWindowPos().y; }
+        } else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposStyleX || ImGui::GetWindowPos().y != config->misc.wposStyleY) {
             ImGui::SetWindowPos({ config->misc.wposStyleX, config->misc.wposStyleY });
+        }
         }
     }
 
@@ -1119,13 +1150,16 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::Begin("Misc", &window.misc, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[11]) {
-        if (config->misc.wposMiscX != ImGui::GetWindowPos().x) { config->misc.wposMiscX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposMiscY != ImGui::GetWindowPos().y) { config->misc.wposMiscY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposMiscX || ImGui::GetWindowPos().y != config->misc.wposMiscY) {
-            ImGui::SetWindowPos({ config->misc.wposMiscX, config->misc.wposMiscY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[11]) {
+            if (config->misc.wposMiscX != ImGui::GetWindowPos().x) { config->misc.wposMiscX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposMiscY != ImGui::GetWindowPos().y) { config->misc.wposMiscY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposMiscX || ImGui::GetWindowPos().y != config->misc.wposMiscY) {
+                ImGui::SetWindowPos({ config->misc.wposMiscX, config->misc.wposMiscY });
+            }
         }
     }
 
@@ -1242,7 +1276,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
-    ImGuiCustom::MultiCombo("Save and Lock Window Position", config->misc.wposLockFlags, config->misc.wposLockSelectedFlags, 14);
+    if (config->style.menuStyle != 1){
+    ImGuiCustom::MultiCombo("Save and lock window position", config->misc.wposLockFlags, config->misc.wposLockSelectedFlags, 14);
+    } else { ImGui::Checkbox("Save and lock window position", &config->misc.wposLockSelectedFlags[14]); }
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
@@ -1261,13 +1297,16 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[12]) {
-        if (config->misc.wposReportbotX != ImGui::GetWindowPos().x) { config->misc.wposReportbotX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposReportbotY != ImGui::GetWindowPos().y) { config->misc.wposReportbotY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposReportbotX || ImGui::GetWindowPos().y != config->misc.wposReportbotY) {
-            ImGui::SetWindowPos({ config->misc.wposReportbotX, config->misc.wposReportbotY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[12]) {
+            if (config->misc.wposReportbotX != ImGui::GetWindowPos().x) { config->misc.wposReportbotX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposReportbotY != ImGui::GetWindowPos().y) { config->misc.wposReportbotY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposReportbotX || ImGui::GetWindowPos().y != config->misc.wposReportbotY) {
+                ImGui::SetWindowPos({ config->misc.wposReportbotX, config->misc.wposReportbotY });
+            }
         }
     }
 
@@ -1302,13 +1341,16 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         ImGui::Begin("Config", &window.config, windowFlags);
     }
 
-    if (!config->misc.wposLockSelectedFlags[13]) {
-        if (config->misc.wposConfigX != ImGui::GetWindowPos().x) { config->misc.wposConfigX = ImGui::GetWindowPos().x; }
-        if (config->misc.wposConfigY != ImGui::GetWindowPos().y) { config->misc.wposConfigY = ImGui::GetWindowPos().y; }
-    } else {
-        ImGuiWindowFlags_NoMove;
-        if (ImGui::GetWindowPos().x != config->misc.wposConfigX || ImGui::GetWindowPos().y != config->misc.wposConfigY) {
-            ImGui::SetWindowPos({ config->misc.wposConfigX, config->misc.wposConfigY });
+    if (config->style.menuStyle == 0) {
+        if (!config->misc.wposLockSelectedFlags[13]) {
+            if (config->misc.wposConfigX != ImGui::GetWindowPos().x) { config->misc.wposConfigX = ImGui::GetWindowPos().x; }
+            if (config->misc.wposConfigY != ImGui::GetWindowPos().y) { config->misc.wposConfigY = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposConfigX || ImGui::GetWindowPos().y != config->misc.wposConfigY) {
+                ImGui::SetWindowPos({ config->misc.wposConfigX, config->misc.wposConfigY });
+            }
         }
     }
 
@@ -1401,6 +1443,17 @@ void GUI::renderGuiStyle2() noexcept
 {
     ImGui::SetNextWindowSize({ 600.0f, 0.0f });
     ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+
+        if (!config->misc.wposLockSelectedFlags[14]) {
+            if (config->misc.wposStyle2X != ImGui::GetWindowPos().x) { config->misc.wposStyle2X = ImGui::GetWindowPos().x; }
+            if (config->misc.wposStyle2Y != ImGui::GetWindowPos().y) { config->misc.wposStyle2Y = ImGui::GetWindowPos().y; }
+        }
+        else {
+            ImGuiWindowFlags_NoMove;
+            if (ImGui::GetWindowPos().x != config->misc.wposStyle2X || ImGui::GetWindowPos().y != config->misc.wposStyle2Y) {
+                ImGui::SetWindowPos({ config->misc.wposStyle2X, config->misc.wposStyle2Y });
+            }
+        }
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
         if (ImGui::BeginTabItem("Aimbot")) {

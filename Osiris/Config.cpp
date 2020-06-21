@@ -953,6 +953,8 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("wpos Reportbot Y")) misc.wposReportbotY = miscJson["wpos Reportbot Y"].asFloat();
         if (miscJson.isMember("wpos Config X")) misc.wposConfigX = miscJson["wpos Config X"].asFloat();
         if (miscJson.isMember("wpos Config Y")) misc.wposConfigY = miscJson["wpos Config Y"].asFloat();
+        if (miscJson.isMember("wpos Style2 X")) misc.wposStyle2X = miscJson["wpos Style2 X"].asFloat();
+        if (miscJson.isMember("wpos Style2 Y")) misc.wposStyle2Y = miscJson["wpos Style2 Y"].asFloat();
         if (miscJson.isMember("wpos Aimbot Lock")) misc.wposLockSelectedFlags[0] = miscJson["wpos Aimbot Lock"].asBool();   // "wpos Locks" //
         if (miscJson.isMember("wpos Anti Aim Lock")) misc.wposLockSelectedFlags[1] = miscJson["wpos Anti Aim Lock"].asBool();
         if (miscJson.isMember("wpos Triggerbot Lock")) misc.wposLockSelectedFlags[2] = miscJson["wpos Triggerbot Lock"].asBool();
@@ -967,6 +969,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("wpos Misc Lock")) misc.wposLockSelectedFlags[11] = miscJson["wpos Misc Lock"].asBool();
         if (miscJson.isMember("wpos Reportbot Lock")) misc.wposLockSelectedFlags[12] = miscJson["wpos Reportbot Lock"].asBool();
         if (miscJson.isMember("wpos Config Lock")) misc.wposLockSelectedFlags[13] = miscJson["wpos Config Lock"].asBool();
+        if (miscJson.isMember("wpos Style2 Lock")) misc.wposLockSelectedFlags[14] = miscJson["wpos Style2 Lock"].asBool();
     }
 
     {
@@ -1752,6 +1755,8 @@ void Config::save(size_t id) const noexcept
         miscJson["wpos Reportbot Y"] = misc.wposReportbotY;
         miscJson["wpos Config X"] = misc.wposConfigX;
         miscJson["wpos Config Y"] = misc.wposConfigY;
+        miscJson["wpos Style2 X"] = misc.wposStyle2X;
+        miscJson["wpos Style2 Y"] = misc.wposStyle2Y;
         miscJson["wpos Aimbot Lock"] = misc.wposLockSelectedFlags[0]; // "wpos Locks" //
         miscJson["wpos Anti Aim Lock"] = misc.wposLockSelectedFlags[1];
         miscJson["wpos Triggerbot Lock"] = misc.wposLockSelectedFlags[2];
@@ -1766,6 +1771,7 @@ void Config::save(size_t id) const noexcept
         miscJson["wpos Misc Lock"] = misc.wposLockSelectedFlags[11];
         miscJson["wpos Reportbot Lock"] = misc.wposLockSelectedFlags[12];
         miscJson["wpos Config Lock"] = misc.wposLockSelectedFlags[13];
+        miscJson["wpos Style2 Lock"] = misc.wposLockSelectedFlags[14];
     }
 
     {
