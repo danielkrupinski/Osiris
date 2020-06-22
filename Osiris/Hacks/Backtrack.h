@@ -23,6 +23,7 @@ namespace Backtrack {
     void UpdateIncomingSequences(bool reset = false) noexcept;
     
     struct Record {
+        Vector head;
         Vector origin;
         float simulationTime;
         matrix3x4 matrix[256];
