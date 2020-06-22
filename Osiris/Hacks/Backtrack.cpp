@@ -6,6 +6,7 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
+std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
