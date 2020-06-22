@@ -81,6 +81,8 @@ public:
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
+        bool fakeLatency{ false };
+        int fakeLatencyAmmount{ 200 };
     } backtrack;
 
     struct {
@@ -273,6 +275,7 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+        bool svpurebypass{ false };
     } misc;
 
     struct {
