@@ -155,6 +155,9 @@
     <ClCompile Include="Hooks\MinHook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks\VmtHook.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
