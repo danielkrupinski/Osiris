@@ -19,7 +19,9 @@ struct UserCmd;
 namespace Backtrack {
     void update(FrameStage) noexcept;
     void run(UserCmd*) noexcept;
-
+    void AddLatencyToNetwork(NetworkChannel*, float) noexcept;
+    void UpdateIncomingSequences(bool reset = false) noexcept;
+    
     struct Record {
         Vector origin;
         float simulationTime;
@@ -39,12 +41,30 @@ namespace Backtrack {
     };
 
     extern Cvars cvars;
+    
+    struct IncomingSequence
+    {
+        int inreliablestate;
+        int sequencenr;
+        float servertime;
+    };
+
+    extern std::deque<IncomingSequence>sequences;
 
     constexpr auto getLerp() noexcept
     {
         auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
 
         return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+    }
+    
+    constexpr auto getExtraTicks() noexcept
+    {
+        auto network = interfaces->engine->getNetworkChannel();
+        if (!network)
+            return 0.f;
+
+        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, 0.2f);
     }
 
     constexpr auto valid(float simtime) noexcept
