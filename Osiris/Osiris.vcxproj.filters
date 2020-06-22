@@ -448,5 +448,8 @@
     <ClInclude Include="Hooks\MinHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="Hooks\VmtHook.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
