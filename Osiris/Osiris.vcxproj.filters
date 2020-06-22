@@ -155,6 +155,9 @@
     <ClCompile Include="Hooks\MinHook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks\VmtHook.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -446,6 +449,9 @@
       <Filter>Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Hooks\MinHook.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\VmtHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
   </ItemGroup>
