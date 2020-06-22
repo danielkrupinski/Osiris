@@ -669,13 +669,16 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                const auto weaponName = event->getString("weapon");
+                auto& purchase = purchaseDetails[player->getPlayerName(true)];
+
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
-                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
                 }
-                std::string weapon = event->getString("weapon");
+                std::string weapon = weaponName;
 
                 if (weapon.starts_with("weapon_"))
                     weapon.erase(0, 7);
@@ -683,13 +686,13 @@ void Misc::purchaseList(GameEvent* event) noexcept
                     weapon.erase(0, 5);
 
                 if (weapon.starts_with("smoke"))
-                    weapon = "smoke";
+                    weapon.erase(5);
                 else if (weapon.starts_with("m4a1_s"))
-                    weapon = "m4a1_s";
+                    weapon.erase(6);
                 else if (weapon.starts_with("usp_s"))
-                    weapon = "usp_s";
+                    weapon.erase(5);
 
-                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
+                purchase.first.push_back(weapon);
                 ++purchaseTotal[weapon];
             }
             break;
