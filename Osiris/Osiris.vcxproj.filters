@@ -27,6 +27,9 @@
     <Filter Include="MinHook">
       <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hooks">
+      <UniqueIdentifier>{8899dcd1-0468-4bfa-b60d-c2af1c97a39e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -145,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="MinHook\trampoline.c">
       <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\VmtSwap.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\MinHook.cpp">
+      <Filter>Hooks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,6 +441,12 @@
     </ClInclude>
     <ClInclude Include="MinHook\buffer.h">
       <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\VmtSwap.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\MinHook.h">
+      <Filter>Hooks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

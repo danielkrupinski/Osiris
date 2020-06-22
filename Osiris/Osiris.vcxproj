@@ -25,6 +25,8 @@
     <ClCompile Include="Hacks\SkinChanger.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
+    <ClCompile Include="Hooks\MinHook.cpp" />
+    <ClCompile Include="Hooks\VmtSwap.cpp" />
     <ClCompile Include="imguiCustom.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
@@ -70,6 +72,8 @@
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
+    <ClInclude Include="Hooks\MinHook.h" />
+    <ClInclude Include="Hooks\VmtSwap.h" />
     <ClInclude Include="imguiCustom.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="json\json-forwards.h" />
