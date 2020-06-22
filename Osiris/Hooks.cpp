@@ -192,7 +192,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
         hooks->networkChannel.hookAt(40, SendNetMsg);
         hooks->networkChannel.hookAt(46, SendDatagram);
     }
-    Backtrack::UpdateIncomingSequences():
+    Backtrack::UpdateIncomingSequences();
     
     EnginePrediction::run(cmd);
 
