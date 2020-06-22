@@ -111,6 +111,51 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 }
 
+void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
+{
+    for (auto& sequence : sequences)
+    {
+        if (memory->globalVars->serverTime() - sequence.servertime >= latency)
+        {
+            network->InReliableState = sequence.inreliablestate;
+            network->InSequenceNr = sequence.sequencenr;
+            break;
+        }
+    }
+}
+
+void Backtrack::UpdateIncomingSequences(bool reset) noexcept
+{
+    static float lastIncomingSequenceNumber = 0.f;
+
+    if (reset)
+        lastIncomingSequenceNumber = 0.f;
+
+    if (!config->backtrack.fakeLatency)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return;
+
+    if (network->InSequenceNr > lastIncomingSequenceNumber)
+    {
+        lastIncomingSequenceNumber = network->InSequenceNr;
+
+        IncomingSequence sequence{ };
+        sequence.inreliablestate = network->InReliableState;
+        sequence.sequencenr = network->InSequenceNr;
+        sequence.servertime = memory->globalVars->serverTime();
+        sequences.push_front(sequence);
+    }
+
+    while (sequences.size() > 2048)
+        sequences.pop_back();
+}
+
 int Backtrack::timeToTicks(float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
