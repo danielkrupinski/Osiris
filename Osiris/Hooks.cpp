@@ -680,7 +680,8 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
-
+    networkChannel.restore();
+    
     netvars->restore();
 
     Glow::clearCustomObjects();
