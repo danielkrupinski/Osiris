@@ -12,6 +12,7 @@
 struct SoundInfo;
 
 using HookType = MinHook;
+using Vmt = VmtSwap;
 
 class Hooks {
 public:
@@ -35,7 +36,8 @@ public:
     HookType sound;
     HookType surface;
     HookType viewRender;
-
+    Vmt networkChannel;
+    
     HookType svCheats;
 private:
     HMODULE module;
