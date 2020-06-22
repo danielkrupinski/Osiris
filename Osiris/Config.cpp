@@ -77,6 +77,8 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
+        if (backtrackJson.isMember("Fake Latency")) backtrack.fakeLatency = backtrackJson["Fake Latency"].asBool();
+        if (backtrackJson.isMember("Latency Ammount")) backtrack.fakeLatencyAmmount = backtrackJson["Latency Ammount"].asInt();
     }
 
     {
@@ -924,6 +926,8 @@ void Config::load(size_t id) noexcept
             if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
                 misc.purchaseList.mode = mode.asInt();
         }
+        
+        if (miscJson.isMember("Sv pure bypass")) misc.svpurebypass = miscJson["Sv pure bypass"].asBool();
     }
 
     {
@@ -996,6 +1000,8 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
         backtrackJson["Time limit"] = backtrack.timeLimit;
+        backtrackJson["Fake Latency"] = backtrack.fakeLatency;
+        backtrackJson["Latency Ammount"] = backtrack.fakeLatencyAmmount;
     }
 
     {
@@ -1680,6 +1686,8 @@ void Config::save(size_t id) const noexcept
             purchaseListJson["No Title Bar"] = misc.purchaseList.noTitleBar;
             purchaseListJson["Mode"] = misc.purchaseList.mode;
         }
+        
+        miscJson["Sv pure bypass"] = misc.svpurebypass;
     }
 
     {
