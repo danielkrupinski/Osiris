@@ -181,19 +181,18 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
     
-    Backtrack::UpdateIncomingSequences();
-    
     static void* oldPointer = nullptr;
     
     auto network = interfaces->engine->getNetworkChannel();
-    if (oldPointer != network && network)
+    if (oldPointer != network && network && localPlayer)
     {
         oldPointer = network;
+        Backtrack::UpdateIncomingSequences(true);
         hooks->networkChannel.init(network);
         hooks->networkChannel.hookAt(40, SendNetMsg);
         hooks->networkChannel.hookAt(46, SendDatagram);
-        Backtrack::UpdateIncomingSequences(true);
     }
+    Backtrack::UpdateIncomingSequences():
     
     EnginePrediction::run(cmd);
 
