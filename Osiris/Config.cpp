@@ -1287,6 +1287,9 @@ void Config::save(size_t id) const noexcept
 
         espJson["Dead ESP"] = espConfig.deadesp;
         espJson["Max distance"] = espConfig.maxDistance;
+        espJson["Draw multi points"] = espConfig.drawMultiPoints;
+        espJson["Draw multi points only head"] = espConfig.drawMultiPointsOnlyHead;
+        espJson["Draw multi points expansion"] = espConfig.drawMultiPointsExpansion;
     }
 
     {
