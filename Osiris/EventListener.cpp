@@ -4,6 +4,7 @@
 #include "fnv.h"
 #include "Hacks/Misc.h"
 #include "Hacks/SkinChanger.h"
+#include "Hacks/Visuals.h"
 #include "Interfaces.h"
 
 EventListener::EventListener() noexcept
@@ -14,6 +15,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "round_start");
     interfaces->gameEventManager->addListener(this, "round_freeze_end");
     interfaces->gameEventManager->addListener(this, "player_death");
+    interfaces->gameEventManager->addListener(this, "player_hurt");
 }
 
 void EventListener::remove() noexcept
@@ -34,5 +36,13 @@ void EventListener::fireGameEvent(GameEvent* event)
         break;
     case fnv::hash("player_death"):
         SkinChanger::updateStatTrak(*event);
+        Misc::killMessage(*event);
+        Misc::killSound(*event);
+        break;
+    case fnv::hash("player_hurt"):
+        Misc::playHitSound(*event);
+        Visuals::hitEffect(event);
+        Visuals::hitMarker(event);
+        break;
     }
 }

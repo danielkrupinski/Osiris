@@ -364,14 +364,7 @@ static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("player_death"):
-            Misc::killMessage(*event);
-            Misc::killSound(*event);
             SkinChanger::overrideHudIcon(*event);
-            break;
-        case fnv::hash("player_hurt"):
-            Misc::playHitSound(*event);
-            Visuals::hitEffect(event);
-            Visuals::hitMarker(event);
             break;
         }
     }
