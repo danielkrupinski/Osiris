@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "Esp.h"
+#include "Multipoints.h"
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
