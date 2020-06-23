@@ -741,15 +741,13 @@ void Misc::purchaseList(GameEvent* event) noexcept
             if (config->wpos.PurchaseListY != ImGui::GetWindowPos().y) { config->wpos.PurchaseListY = ImGui::GetWindowPos().y; }
             if (config->wpos.PurchaseListScaleX != ImGui::GetWindowSize().x) { config->wpos.PurchaseListScaleX = ImGui::GetWindowSize().x; }
             if (config->wpos.PurchaseListScaleY != ImGui::GetWindowSize().y) { config->wpos.PurchaseListScaleY = ImGui::GetWindowSize().y; }
-        }
-        else {
+        } else {
             if (ImGui::GetWindowPos().x != config->wpos.PurchaseListX || ImGui::GetWindowPos().y != config->wpos.PurchaseListY) {
                 ImGui::SetWindowPos({ config->wpos.PurchaseListX, config->wpos.PurchaseListY });
             }
             if (ImGui::GetWindowSize().x != config->wpos.PurchaseListScaleX || ImGui::GetWindowSize().y != config->wpos.PurchaseListScaleY) {
                 ImGui::SetWindowSize({ config->wpos.PurchaseListScaleX, config->wpos.PurchaseListScaleY });
             }
-
         }
 
         if (config->misc.purchaseList.mode == PurchaseList::Details) {
