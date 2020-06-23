@@ -361,10 +361,11 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 
 static bool __stdcall fireEventClientSide(GameEvent* event) noexcept
 {
+    // TODO: remove this hook after testing the new method of overriding knife icon
     if (event) {
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("player_death"):
-            SkinChanger::overrideHudIcon(*event);
+            // SkinChanger::overrideHudIcon(*event);
             break;
         }
     }
