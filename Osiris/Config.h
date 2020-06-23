@@ -154,6 +154,9 @@ public:
             int hpside{ 0 };
             int armorside{ 0 };
             bool deadesp{ false };
+            bool drawMultiPoints{ false };
+            bool drawMultiPointsOnlyHead{ false };
+            float drawMultiPointsExpansion{ 0.42f };
         };
 
         struct Weapon : public Shared { } weapon;
