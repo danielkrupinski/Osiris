@@ -134,6 +134,9 @@
     <ClCompile Include="SDK\Entity.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Multipoints.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
     <ClCompile Include="MinHook\hde\hde32.c">
       <Filter>MinHook</Filter>
     </ClCompile>
@@ -420,6 +423,9 @@
     </ClInclude>
     <ClInclude Include="SDK\NetworkStringTable.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Multipoints.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="MinHook\MinHook.h">
       <Filter>MinHook</Filter>
