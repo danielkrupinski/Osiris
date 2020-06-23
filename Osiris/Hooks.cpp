@@ -8,6 +8,8 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "MinHook/MinHook.h"
+
 #include "Config.h"
 #include "EventListener.h"
 #include "GUI.h"
@@ -255,12 +257,12 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
-static bool __stdcall svCheatsGetBool() noexcept
+static bool __fastcall svCheatsGetBool(void* _this) noexcept
 {
     if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config->visuals.thirdperson)
         return true;
     else
-        return hooks->svCheats.callOriginal<bool, 13>();
+        return hooks->svCheats.getOriginal<bool>(13)(_this);
 }
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -349,6 +351,19 @@ static void __stdcall emitSound(SoundData data) noexcept
 
 static bool __stdcall shouldDrawFog() noexcept
 {
+    if constexpr (std::is_same_v<HookType, MinHook>) {
+#ifdef _DEBUG
+    // Check if we always get the same return address
+    if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x6274C084) {
+        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
+        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
+    }
+#endif
+
+    if (*static_cast<std::uint32_t*>(_ReturnAddress()) != 0x6274C084)
+        return hooks->clientMode.callOriginal<bool, 17>();
+    }
+
     return !config->visuals.noFog;
 }
 
@@ -614,6 +629,9 @@ void Hooks::install() noexcept
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
     **reinterpret_cast<decltype(reset)***>(memory->reset) = reset;
 
+    if constexpr (std::is_same_v<HookType, MinHook>)
+        MH_Initialize();
+
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
     client.init(interfaces->client);
     clientMode.init(memory->clientMode);
@@ -653,6 +671,9 @@ void Hooks::install() noexcept
         *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
+
+    if constexpr (std::is_same_v<HookType, MinHook>)
+        MH_EnableHook(MH_ALL_HOOKS);
 }
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
@@ -675,6 +696,11 @@ static DWORD WINAPI unload(HMODULE module) noexcept
 
 void Hooks::uninstall() noexcept
 {
+    if constexpr (std::is_same_v<HookType, MinHook>) {
+        MH_DisableHook(MH_ALL_HOOKS);
+        MH_Uninitialize();
+    }
+
     bspQuery.restore();
     client.restore();
     clientMode.restore();
@@ -702,62 +728,4 @@ void Hooks::uninstall() noexcept
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
         CloseHandle(thread);
-}
-
-uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
-{
-    MEMORY_BASIC_INFORMATION mbi;
-    VirtualQuery(base, &mbi, sizeof(mbi));
-    MODULEINFO moduleInfo;
-    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
-
-    auto moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
-
-    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
-        if (!*currentAddress)
-            if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
-                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(uintptr_t)
-                && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
-                return currentAddress;
-
-    return nullptr;
-}
-
-auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
-{
-    size_t length{ 0 };
-    MEMORY_BASIC_INFORMATION memoryInfo;
-    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
-        length++;
-    return length;
-}
-
-bool Hooks::Vmt::init(void* const base) noexcept
-{
-    assert(base);
-    this->base = base;
-    bool init = false;
-
-    if (!oldVmt) {
-        oldVmt = *reinterpret_cast<uintptr_t**>(base);
-        length = calculateLength(oldVmt) + 1;
-
-        // Temporary fix for unstable hooks, newVmt is never freed
-        // BEFORE: if (newVmt = findFreeDataPage(base, length))
-        if (newVmt = new std::uintptr_t[length])
-            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-        assert(newVmt);
-        init = true;
-    }
-    if (newVmt)
-        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
-    return init;
-}
-
-void Hooks::Vmt::restore() noexcept
-{
-    if (base && oldVmt)
-        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
-    if (newVmt)
-        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
