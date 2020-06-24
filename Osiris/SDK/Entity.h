@@ -304,6 +304,7 @@ public:
         SetAngle(this, Angle);
     }
     
+    NETVAR(animations, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
