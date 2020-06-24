@@ -24,24 +24,34 @@ bool AntiAim::LbyUpdate()
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / config->globals.tickRate); };
 
-    if (!(localPlayer->flags() & 1))
+    if (!config->antiAim.fakeWalk.keyToggled)
     {
-        return false;
+        if (!(localPlayer->flags() & 1))
+        {
+            return false;
+        }
+        if (localPlayer->velocity() > 0.f)
+        {
+            config->globals.nextLBY = 0.22f;
+            return false;
+        }
+        if (config->globals.serverTime - config->globals.lastLBY - config->globals.nextLBY >= 0)
+        {
+            config->globals.nextLBY = 1.125f;
+            config->globals.lastLBY = config->globals.serverTime;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
-    if (localPlayer->velocity() > 0.f)
+    else if (config->antiAim.fakeWalk.keyToggled)
     {
-        config->globals.nextLBY = 0.22f;
-        return false;
-    }
-    if (config->globals.serverTime - config->globals.lastLBY - config->globals.nextLBY >= 0)
-    {
-        config->globals.nextLBY = 1.125f;
-        config->globals.lastLBY = config->globals.serverTime;
-        return true;
-    }
-    else
-    {
-        return false;
+        if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke)
+            return true;
+        else
+            return false;
     }
 }
 
@@ -135,6 +145,63 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
             float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
 
             setYaw(cmd->viewangles.y, desyncYaw, cmd, sendPacket);
+        }
+    }
+}
+
+void AntiAim::fakeWalk(UserCmd* cmd, bool& sendPacket) noexcept
+{
+    if (config->antiAim.fakeWalk.key != 0) {
+        if (config->antiAim.fakeWalk.keyMode == 0) {
+            if (!GetAsyncKeyState(config->antiAim.fakeWalk.key))
+            {
+                config->antiAim.fakeWalk.keyToggled = false;
+            }
+            else
+                config->antiAim.fakeWalk.keyToggled = true;
+        }
+        else {
+            if (GetAsyncKeyState(config->antiAim.fakeWalk.key) & 1)
+                config->antiAim.fakeWalk.keyToggled = !config->antiAim.fakeWalk.keyToggled;
+        }
+    }
+
+    if (config->antiAim.fakeWalk.enabled && config->antiAim.fakeWalk.keyToggled && config->antiAim.LBYBreaker)
+    {
+        if (interfaces->engine->getNetworkChannel()->chokedPackets < config->antiAim.fakeWalk.maxChoke)
+        {
+            sendPacket = false;
+        }
+        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke)
+        {
+            sendPacket = false;
+
+            if (config->antiAim.yawInversed)
+                cmd->viewangles.y += config->antiAim.LBYAngle;
+            else
+                cmd->viewangles.y -= config->antiAim.LBYAngle;
+        }
+        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke + 1)
+        {
+            cmd->forwardmove = 0;
+
+            if (cmd->buttons & UserCmd::IN_DUCK)
+                cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+            else
+                cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+
+            sendPacket = false;
+        }
+        else
+        {
+            cmd->forwardmove = 0;
+
+            if (cmd->buttons & UserCmd::IN_DUCK)
+                cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+            else
+                cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+
+            sendPacket = true;
         }
     }
 }
