@@ -106,6 +106,13 @@ public:
         float jitterMin{ 0.0f };
         bool LBYBreaker{ false };
         float LBYAngle{ 0.0f };
+        struct {
+            bool enabled{ false };
+            int key{ 0 };
+            int keyMode{ 0 };
+            bool keyToggled{ 0 };
+            int maxChoke{ 3 };
+        } fakeWalk;
     } antiAim;
 
     struct Glow : ColorA {
