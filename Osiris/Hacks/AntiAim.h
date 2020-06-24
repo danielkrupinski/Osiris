@@ -9,4 +9,5 @@ namespace AntiAim {
 	bool LbyUpdate();
 	void setYaw(float yaw, float desyncYaw, UserCmd* cmd, bool sendPacket) noexcept;
 	void run(UserCmd*, const Vector&, const Vector&, bool&) noexcept;
+	void fakeWalk(UserCmd* cmd, bool& sendPacket) noexcept;
 }
