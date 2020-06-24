@@ -268,13 +268,13 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         if (config->antiAim.pitch) {
             ImGui::SameLine();
             ImGui::SetNextItemWidth(240.0f);
-            ImGui::SliderFloat("Pitch Angle", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f", 1);
+            ImGui::SliderFloat("Pitch Angle", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f°", 1);
         }
         ImGui::Checkbox("Yaw", &config->antiAim.yaw);
         if (config->antiAim.yaw) {
             ImGui::SameLine();
             ImGui::SetNextItemWidth(240.0f);
-            ImGui::SliderFloat("Yaw Angle", &config->antiAim.yawAngle, -179.0f, 179.0f, "%.2f", 1);
+            ImGui::SliderFloat("Yaw Angle", &config->antiAim.yawAngle, -179.0f, 179.0f, "%.2f°", 1);
             ImGui::Text("Invert Key");
             ImGui::SameLine();
             hotkey(config->antiAim.yawInverseAngleKey);
@@ -298,7 +298,19 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             ImGui::Checkbox("LBY Breaker", &config->antiAim.LBYBreaker);
             if (config->antiAim.LBYBreaker)
             {
-                ImGui::SliderFloat("LBY Angle", &config->antiAim.LBYAngle, 0.0f, 180.0f, "%.2f", 1);
+                ImGui::SliderFloat("LBY Angle", &config->antiAim.LBYAngle, -180.0f, 180.0f, "%.2f°", 1);
+                ImGui::Checkbox("Fakewalk", &config->antiAim.fakeWalk.enabled);
+                if (config->antiAim.fakeWalk.enabled) {
+                    ImGui::SameLine();
+                    hotkey(config->antiAim.fakeWalk.key);
+                    ImGui::SameLine();
+                    ImGui::PushID(2);
+                    ImGui::SetNextItemWidth(75.0f);
+                    ImGui::Combo("", &config->antiAim.fakeWalk.keyMode, "Hold\0Toggle\0");
+                    ImGui::PopID();
+                    ImGui::SetNextItemWidth(240.0f);
+                    ImGui::SliderInt("Speed", &config->antiAim.fakeWalk.maxChoke, 3, 15);
+                }
             }
         }
         ImGui::SetNextItemWidth(85.0f);
@@ -306,9 +318,9 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         if (config->antiAim.mode == 1)
         {
             ImGui::SetNextItemWidth(240.0f);
-            ImGui::SliderFloat("Jitter Max", &config->antiAim.jitterMax, -179.0f, 179.0f, "%.2f", 1);
+            ImGui::SliderFloat("Jitter Max", &config->antiAim.jitterMax, -179.0f, 179.0f, "%.2f°", 1);
             ImGui::SetNextItemWidth(240.0f);
-            ImGui::SliderFloat("Jitter Min", &config->antiAim.jitterMin, -179.0f, 179.0f, "%.2f", 1);
+            ImGui::SliderFloat("Jitter Min", &config->antiAim.jitterMin, -179.0f, 179.0f, "%.2f°", 1);
         }
     }
     if (!contentOnly)
@@ -1151,13 +1163,11 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         {
             ImGui::SetNextItemWidth(120.0f);
             ImGui::SliderInt("Min Fakelag Amount", &config->misc.fakeLagTicks, 1, 16);
-            config->misc.fakeLagTicks = std::clamp(config->misc.fakeLagTicks, 1, 64);
         }
         else if (!(config->misc.fakeLagMode == 4))
         {
             ImGui::SetNextItemWidth(120.0f);
             ImGui::SliderInt("Fakelag Amount", &config->misc.fakeLagTicks, 1, 16);
-            config->misc.fakeLagTicks = std::clamp(config->misc.fakeLagTicks, 1, 64);
         }
     }
     ImGui::Text("Quick healthshot");
