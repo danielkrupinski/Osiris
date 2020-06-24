@@ -51,9 +51,8 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="SDK\Entity.cpp" />
-    <ClCompile Include="SDK\GlobalVars.cpp" />
-    <ClCompile Include="SDK\KeyValues.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
   </ItemGroup>
@@ -95,6 +94,7 @@
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
+    <ClInclude Include="Pattern.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Beams.h" />
     <ClInclude Include="SDK\Client.h" />
