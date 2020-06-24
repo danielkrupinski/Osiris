@@ -16,6 +16,7 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "Listener.h"
 
 #include "Hacks/Aimbot.h"
 #include "Hacks/AntiAim.h"
@@ -154,6 +155,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
+    hookListener.init();
+
     EnginePrediction::run(cmd);
 
     Aimbot::run(cmd);
@@ -173,6 +176,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fakeDuck(cmd, sendPacket);
 
     //if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE)))
+    AntiAim::fakeWalk(cmd, sendPacket);
     AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
@@ -213,6 +217,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
         config->globals.thirdPersonAnglesSet = true;
     }
 
+    config->globals.sendPacket = sendPacket;
+    
     return false;
 }
 
@@ -288,11 +294,20 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces->engine->isConnected() && interfaces->engine->isInGame())
     {
         if (config->antiAim.thirdpersonMode == 0)
+        {
             Visuals::thirdperson(stage, config->globals.fakeAngle);
+            Visuals::AnimationFix(stage, config->globals.fakeAngle, 0);
+        }
         if (config->antiAim.thirdpersonMode == 1)
+        {
             Visuals::thirdperson(stage, config->globals.realAngle);
+            Visuals::AnimationFix(stage, config->globals.realAngle, 1);
+        }
         if (config->antiAim.thirdpersonMode == 2)
+        {
             Visuals::thirdperson(stage, config->globals.cmdAngle);
+            Visuals::AnimationFix(stage, config->globals.fakeAngle, 0);
+        }
     }
 
     if (stage == FrameStage::RENDER_START) {
@@ -722,4 +737,62 @@ void Hooks::uninstall() noexcept
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
         CloseHandle(thread);
+}
+
+uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
+{
+    MEMORY_BASIC_INFORMATION mbi;
+    VirtualQuery(base, &mbi, sizeof(mbi));
+    MODULEINFO moduleInfo;
+    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
+
+    auto moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
+
+    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
+        if (!*currentAddress)
+            if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
+                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(uintptr_t)
+                && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
+                return currentAddress;
+
+    return nullptr;
+}
+
+auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
+{
+    size_t length{ 0 };
+    MEMORY_BASIC_INFORMATION memoryInfo;
+    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
+        length++;
+    return length;
+}
+
+bool Hooks::Vmt::init(void* const base) noexcept
+{
+    assert(base);
+    this->base = base;
+    bool init = false;
+
+    if (!oldVmt) {
+        oldVmt = *reinterpret_cast<uintptr_t**>(base);
+        length = calculateLength(oldVmt) + 1;
+
+        // Temporary fix for unstable hooks, newVmt is never freed
+        // BEFORE: if (newVmt = findFreeDataPage(base, length))
+        if (newVmt = new std::uintptr_t[length])
+            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
+        assert(newVmt);
+        init = true;
+    }
+    if (newVmt)
+        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
+    return init;
+}
+
+void Hooks::Vmt::restore() noexcept
+{
+    if (base && oldVmt)
+        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+    if (newVmt)
+        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
