@@ -465,6 +465,7 @@
     </ClInclude>
     <ClInclude Include="Hooks\VmtHook.h">
       <Filter>Hooks</Filter>
+    </ClInclude>
     <ClInclude Include="SDK\Beams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
