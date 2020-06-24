@@ -95,6 +95,12 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Jitter Min")) config->antiAim.jitterMin = antiAimJson["Jitter Min"].asFloat();
         if (antiAimJson.isMember("LBY Breaker")) config->antiAim.LBYBreaker = antiAimJson["LBY Breaker"].asBool();
         if (antiAimJson.isMember("LBY Angle")) antiAim.LBYAngle = antiAimJson["LBY Angle"].asFloat();
+        
+        const auto& fakeWalkJson = json["FakeWalk"];
+        if (fakeWalkJson.isMember("Enabled")) config->antiAim.fakeWalk.enabled = fakeWalkJson["Enabled"].asBool();
+        if (fakeWalkJson.isMember("Fakewalk Key")) antiAim.fakeWalk.key = fakeWalkJson["Fakewalk Key"].asInt();
+        if (fakeWalkJson.isMember("Fakewalk Key Mode")) antiAim.fakeWalk.keyMode = fakeWalkJson["Fakewalk Key Mode"].asInt();
+        if (fakeWalkJson.isMember("Fakewalk Max Choke")) antiAim.fakeWalk.keyMode = fakeWalkJson["Fakewalk Max Choke"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -1055,6 +1061,12 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Jitter Min"] = antiAim.jitterMin;
         antiAimJson["LBY Breaker"] = antiAim.LBYBreaker;
         antiAimJson["LBY Angle"] = antiAim.LBYAngle;
+        
+        auto& fakeWalkJson = json["FakeWalk"];
+        fakeWalkJson["Enabled"] = antiAim.fakeWalk.enabled;
+        fakeWalkJson["Fakewalk Key"] = antiAim.fakeWalk.key;
+        fakeWalkJson["Fakewalk Key Mode"] = antiAim.fakeWalk.keyMode;
+        fakeWalkJson["Fakewalk Max Choke"] = antiAim.fakeWalk.maxChoke;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
