@@ -1,15 +1,10 @@
 #pragma once
 
 #include "../Config.h"
-#include "../Interfaces.h"
-#include "../Memory.h"
-#include "../SDK/Entity.h"
-#include "../SDK/Material.h"
-#include "../SDK/ModelRender.h"
-#include "../SDK/StudioRender.h"
-#include "../SDK/GlobalVars.h"
-#include "../SDK/RenderView.h"
-#include "../SDK/Utils.h"
+
+struct ModelRenderInfo;
+class matrix3x4;
+class Material;
 
 class Chams {
 public:
@@ -79,42 +74,5 @@ private:
         }
     }
 
-    // TODO: move to Chams.cpp
-    constexpr void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept
-    {
-        const auto material = dispatchMaterial(chams.material);
-        if (!material)
-            return;
-
-        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
-            if (chams.healthBased && health) {
-                material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (chams.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, chams.rainbowSpeed) };
-                material->findVar("$envmaptint")->setVectorValue(r, g, b);
-            } else {
-                material->findVar("$envmaptint")->setVectorValue(chams.color[0], chams.color[1], chams.color[2]);
-            }
-        } else {
-            if (chams.healthBased && health) {
-                material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (chams.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, chams.rainbowSpeed) };
-                material->colorModulate(r, g, b);
-            } else {
-                material->colorModulate(chams.color[0], chams.color[1], chams.color[2]);
-            }
-        }
-
-        const auto pulse = chams.color[3] * (chams.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
-
-        if (material == glow)
-            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
-        else
-            material->alphaModulate(pulse);
-
-        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
-        interfaces->studioRender->forcedMaterialOverride(material);
-    }
+    void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept;
 };
