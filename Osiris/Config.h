@@ -361,6 +361,7 @@ public:
         float nextLBY{ 0.f };
         float lastLBY{ 0.f };
         int chokedPackets{ 0 };
+        bool sendPacket{ false };
     } globals;
 private:
     std::filesystem::path path;
