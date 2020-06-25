@@ -412,12 +412,10 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(125, 300.0f);
     ImGui::Checkbox("เลือดในตัว", &config->glow[currentItem].healthBased);
 
-    ImGuiCustom::colorPicker("สี", config->glow[currentItem].color.color, nullptr, &config->glow[currentItem].color.rainbow, &config->glow[currentItem].color.rainbowSpeed);
+    ImGuiCustom::colorPopup("สี", config->glow[currentItem].color, &config->glow[currentItem].rainbow, &config->glow[currentItem].rainbowSpeed);
 
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderFloat("ความหนา", &config->glow[currentItem].thickness, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderFloat("ความใส", &config->glow[currentItem].alpha, 0.0f, 1.0f, "%.2f");
-    ImGui::SliderInt("รูปแบบ", &config->glow[currentItem].style, 0, 3);
+    ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -1247,7 +1245,8 @@ void GUI::renderGuiStyle2() noexcept
         ImGui::Separator();
         if (tabb == 0) {
             ImGui::PushItemWidth(110.0f);
-            ImGui::Text("อัพเดตเมื่อ 16/6/2563");
+            ImGui::Text(" ");
+            ImGui::TextUnformatted("อัพเดตเมื่อ: " __DATE__ " " __TIME__);
             ImGui::Text(" ");
             ImGui::Text("โอซีริส (Osiris)");
             ImGui::Text("1. ควรใช้ด้วยความระมัดระวังหากโดนแบนทางเราจะไม่รับผิดชอบใดๆทั้งสิ้น");
@@ -1255,24 +1254,11 @@ void GUI::renderGuiStyle2() noexcept
             ImGui::Text("3. โอซีริส เป็นโปรฟรี บางฟังก์ชั่นอาจใช้ไม่ได้ หรือ ไม่โหดเท่าโปรเติม");
             ImGui::Text("4. โอซีริส เป็นโอเพนซอร์ซ สามารถนำไปปรับแต่ง หรือ พัฒนาต่อได้");
             ImGui::Text(" ");
-            ImGui::Text("เครดิต");
-            if (ImGui::Button("Daniel Krupiński", { 200.0f, 30.0f }))
-                system("start https://github.com/danielkrupinski/Osiris");
-            ImGui::SameLine();
-            if (ImGui::Button("NetnetZ", { 200.0f, 30.0f }))
-                system("start https://github.com/NetnetZ/Osiris");
-            if (ImGui::Button("TqzDev", { 200.0f, 30.0f }))
-                system("start https://www.youtube.com/tqzdev");
-            ImGui::SameLine();
-            if (ImGui::Button("SSense", { 200.0f, 30.0f }))
-                system("start https://ssense.ml/");
-            if (ImGui::Button("Discord", { 408.0f, 30.0f }))
-                system("start https://discord.com/invite/yaxBYd7");
             ImGui::Text(" ");
-            if (ImGui::Button("ปิดใช้งานเมนู", { 200.0f, 30.0f }))
+            ImGui::Text(" ");
+            if (ImGui::Button("ปิดใช้งานเมนู", { 408.0f, 30.0f }))
                 hooks->uninstall();
-            ImGui::SameLine();
-            if (ImGui::Button("ปิดเกม", { 200.0f, 30.0f }))
+            if (ImGui::Button("ปิดเกม", { 408.0f, 30.0f }))
                 system("taskkill /f /im csgo.exe");
         }
         if (tabb == 1) {
