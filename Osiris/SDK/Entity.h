@@ -25,6 +25,18 @@
 
 struct AnimState;
 
+struct AnimationLayer
+{
+public:
+    std::byte pad[20];
+    unsigned int order;
+    unsigned int sequence;
+    std::byte pad2[4];
+    float weight;
+    std::byte pad3[8];
+    float cycle;
+};
+
 enum class MoveType {
     NOCLIP = 8,
     LADDER = 9
@@ -46,12 +58,14 @@ public:
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
 
+    VIRTUAL_METHOD(Vector&, getRenderOrigin, 1, (), (this + 4))
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(Vector&, getAbsAngle, 11, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
@@ -63,6 +77,7 @@ public:
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+    VIRTUAL_METHOD(void, UpdateClientSideAnimation, 223, (), (this))
 
     constexpr auto isPistol() noexcept
     {
@@ -84,6 +99,19 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+        if (localPlayer && this == localPlayer.get() && localPlayer->isAlive())
+        {
+            uint32_t* effects = (uint32_t*)((uintptr_t)this + 0xF0);
+            uint32_t* shouldskipframe = (uint32_t*)((uintptr_t)this + 0xA68);
+            uint32_t backup_effects = *effects;
+            uint32_t backup_shouldskipframe = *shouldskipframe;
+            *shouldskipframe = 0;
+            *effects |= 8;
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            *effects = backup_effects;
+            *shouldskipframe = backup_shouldskipframe;
+            return result;
+        }
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -193,6 +221,56 @@ public:
         return playerName;
     }
 
+    int getAnimationLayerCount() noexcept
+    {
+        return *reinterpret_cast<int*>(this + 0x298C);
+    }
+
+    AnimationLayer* animOverlays()
+    {
+        return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2980);
+    }
+
+    AnimationLayer* getAnimationLayer(int overlay) noexcept
+    {
+        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
+    }
+
+    std::array<float, 24>& pose_parameters()
+    {
+        return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
+    }
+
+    void CreateState(AnimState* state)
+    {
+        static auto CreateAnimState = reinterpret_cast<void(__thiscall*)(AnimState*, Entity*)>(memory->CreateState);
+        if (!CreateAnimState)
+            return;
+
+        CreateAnimState(state, this);
+    }
+
+    void UpdateState(AnimState* state, Vector angle) {
+        if (!state || !angle)
+            return;
+        static auto UpdateAnimState = reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(memory->UpdateState);
+        if (!UpdateAnimState)
+            return;
+        UpdateAnimState(state, nullptr, 0.0f, angle.y, angle.x, nullptr);
+    }
+
+    float spawnTime()
+    {
+        return *(float*)((uintptr_t)this + 0xA370);
+    }
+
+    void InvalidateBoneCache()
+    {
+        static auto invalidate_bone_cache = memory->InvalidateBoneCache;
+        reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
+    }
+
+    NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
