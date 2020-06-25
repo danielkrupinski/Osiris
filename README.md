@@ -25,70 +25,35 @@
 * **รีพอร์ต**
 * **คอนฟิก**
 
-## Getting started
+## เริ่มต้นใช้งาน
 
-### Prerequisites
+### ข้อกำหนดเบื้องต้น
 Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
-### Downloading
+### ดาวน์โหลด
+ซอร์สโค้ด [กดตรงนี้](https://codeload.github.com/TqzDev/Osiris/zip/master).
 
-There are two options of downloading the source code:
+### คอมไพล์
+เปิดไฟล์**Osiris.sln** ใน Microsoft Visual Studio 2019.
+แล้วเปลี่ยนเป็น `Release | x86` และกด **Build solution**
+หากทุกอย่างถูกต้องจะได้ไฟล์ `Osiris.dll`
 
-#### Without [git](https://git-scm.com)
+### วิธีใช้
+ใช้ Injector ตัวไหนก็ได้ฉีดไฟล์ `Osiris.dll` เข้า `csgo.exe`
+หลังจากฉีดไฟล์เสร็จจะมีเมนูเด้งขึ้นมา
 
-Choose this option if you want pure source and you're not going to contribute to the repo. Download size ~600 kB.
+### วิธีเปิดเมนู
+เปิด-ปิดเมนูปุ่ม`INSERT`
 
-To download source code this way [click here](https://github.com/danielkrupinski/Osiris/archive/master.zip).
+### คอนฟิก
+อยู่ใน(`Documents\Osiris`)
 
-#### With [git](https://git-scm.com)
+## เครดิต
+* [ocornut](https://github.com/ocornut) [contributors](https://github.com/ocornut/imgui/graphs/contributors) [imgui](https://github.com/ocornut/imgui).
+* [Zer0Mem0ry](https://github.com/Zer0Mem0ry)
 
-Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~100 MB (because of full commit history). Git is required to step further, if not installed download it [here](https://git-scm.com).
-
-Open git command prompt and enter following command:
-```
-git clone https://github.com/danielkrupinski/Osiris.git
-```
-`Osiris` folder should have been succesfully created, containing all the source files.
-
-### Compiling from source
-
-When you have equiped a copy of source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
-
-Then change build configuration to `Release | x86` and simply press **Build solution**.
-
-If everything went right you should receive `Osiris.dll`  binary file.
-
-### Loading / Injecting into game process
-
-Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
-
-When injected, menu is openable under `INSERT` key.
-
-### Further optimizations
-If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
-
-## FAQ
-
-### How do I open menu?
-Press <kbd>INSERT</kbd> while focused on CS:GO window.
-
-### Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
-
-### What is cheat execution entry point and where is it located?
-Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
-
-## Acknowledgments
-
-* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
-* [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
-
-## License
+## การอนุญาต
 
 > Copyright (c) 2018-2020 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
-
-## See also
-- [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
-- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source stream-proof ESP hack for Counter-Strike: Global Offensive, written in modern C++
