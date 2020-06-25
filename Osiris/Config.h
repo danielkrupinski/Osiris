@@ -108,7 +108,7 @@ public:
         std::vector<Material> materials{ {}, {} };
     };
 
-    std::array<Chams, 18> chams;
+    std::array<Chams, 19> chams;
 
     struct Esp {
         struct Shared {
