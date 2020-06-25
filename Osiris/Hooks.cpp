@@ -12,7 +12,6 @@
 
 #include "Config.h"
 #include "EventListener.h"
-#include "extraHooks.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
@@ -151,8 +150,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
-
-    extraHook.init();
 
     EnginePrediction::run(cmd);
 
@@ -634,7 +631,6 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
-    extraHook.restore();
 
     netvars->restore();
 
