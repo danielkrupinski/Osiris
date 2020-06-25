@@ -10,22 +10,22 @@
 
 Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the latest version of the game on Steam.
 
-## Features
-* **Aimbot** - aim assistance
-* **Triggerbot** - automatically fires when crosshair is on enemy
-* **Backtrack** - abuse lag compensation to move players back in time
-* **Glow** - render glow effect on entities
-* **Chams** - color player models to improve visibility
-* **Esp** - show information about players, dropped weapons and projectiles
-* **Visuals** - miscellaneous visual options
-* **Skin changer** - change weapon skins, knives and stickers
-* **Sound** - modify volume of certain sound effects
-* **Style** - select menu window layout and colors
-* **Misc** - miscellaneous features
-* **Reportbot** - automatically report players on server for cheating or other abusive actions
-* **Config** - JSON-based configuration system
+## ฟีเจอร์
+* **ล็อคเป้า**
+* **ยิงอัตโนมัติ**
+* **ยิงซ้ำรอย**
+* **ตัวละครเรืองแสง**
+* **สีตัวละคร**
+* **รายละเอียดตัวละคร**
+* **การมองเห็น**
+* **เปลี่ยนสกินปืน**
+* **ปรับเสียงในเกม**
+* **ธีม**
+* **อื่นๆ**
+* **รีพอร์ต**
+* **คอนฟิก**
 
-<details>
+<รายละเอียดENG>
 
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
@@ -201,7 +201,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
     * **Save selected** - save selected configuration file
     * **Delete selected** - delete selected configuration file
     * **Reload configs** - reload configs list
-</details>
+</รายละเอียดENG>
 
 ## Getting started
 
