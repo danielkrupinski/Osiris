@@ -31,26 +31,32 @@
 Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### ดาวน์โหลด
-ซอร์สโค้ด [กดตรงนี้](https://codeload.github.com/TqzDev/Osiris/zip/master).
+ซอร์สโค้ด [กดตรงนี้](https://codeload.github.com/TqzDev/Osiris/zip/master
+
 
 ### คอมไพล์
 เปิดไฟล์**Osiris.sln** ใน Microsoft Visual Studio 2019.
 แล้วเปลี่ยนเป็น `Release | x86` และกด **Build solution**
 หากทุกอย่างถูกต้องจะได้ไฟล์ `Osiris.dll`
 
+
 ### วิธีใช้
 ใช้ Injector ตัวไหนก็ได้ฉีดไฟล์ `Osiris.dll` เข้า `csgo.exe`
 หลังจากฉีดไฟล์เสร็จจะมีเมนูเด้งขึ้นมา
 
+
 ### วิธีเปิดเมนู
 เปิด-ปิดเมนูปุ่ม`INSERT`
+
 
 ### คอนฟิก
 อยู่ใน(`Documents\Osiris`)
 
+
 ## เครดิต
-* [ocornut](https://github.com/ocornut) [contributors](https://github.com/ocornut/imgui/graphs/contributors) [imgui](https://github.com/ocornut/imgui).
+* [ocornut](https://github.com/ocornut) - [contributors](https://github.com/ocornut/imgui/graphs/contributors) - [imgui](https://github.com/ocornut/imgui)
 * [Zer0Mem0ry](https://github.com/Zer0Mem0ry)
+
 
 ## การอนุญาต
 
