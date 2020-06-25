@@ -237,10 +237,12 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
+    bool shouldDraw = true;
+
     if (config->visualKeys.chamsOnKey) {
         if (!config->visualKeys.chamsKeyMode) {
             if (!GetAsyncKeyState(config->visualKeys.chamsKey))
-                return;
+                shouldDraw = false;
         } else {
             static bool toggle = true;
 
@@ -250,13 +252,17 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
             }
 
             if (!toggle)
-                return;
+                shouldDraw = false;
         }
     }
 
-    static Chams chams;
-    if (chams.render(ctx, state, info, customBoneToWorld))
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    if (shouldDraw) {
+        static Chams chams;
+
+        if (chams.render(ctx, state, info, customBoneToWorld))
+            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    }
+
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
@@ -279,8 +285,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
                     Misc::watermark();
                     Visuals::hitMarker();
 
-                    hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
-                    return;
+                    return hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
                 }
             } else {
                 static bool toggle = true;
@@ -296,8 +301,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
                     Misc::watermark();
                     Visuals::hitMarker();
 
-                    hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
-                    return;
+                    return hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
                 }
             }
         }
