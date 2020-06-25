@@ -1,6 +1,7 @@
 #include "Animations.h"
 
 #include "../Memory.h"
+#include "../MemAlloc.h"
 #include "../Interfaces.h"
 
 #include "../SDK/LocalPlayer.h"
@@ -9,7 +10,6 @@
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/ConVar.h"
-#include "../SDK/MemAlloc.h"
 
 Animations::Datas Animations::data;
 

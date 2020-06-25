@@ -19,6 +19,7 @@
 #include "Memory.h"
 
 #include "Hacks/Aimbot.h"
+#include "Hacks/Animations.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
@@ -184,7 +185,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
-
+    Animations::update(cmd, sendPacket);
+    Animations::fake();
     return false;
 }
 
@@ -261,6 +263,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Animations::real();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::playerModel(stage);
