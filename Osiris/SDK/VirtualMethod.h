@@ -12,7 +12,7 @@ namespace VirtualMethod
 }
 
 #define VIRTUAL_METHOD(returnType, name, idx, args, argsRaw) \
-constexpr auto name##args noexcept \
+constexpr auto name args noexcept \
 { \
-    return VirtualMethod::call<returnType, idx>##argsRaw; \
+    return VirtualMethod::call<returnType, idx>argsRaw; \
 }
