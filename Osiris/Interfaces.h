@@ -5,6 +5,8 @@
 #include <type_traits>
 #include <Windows.h>
 
+class MemAlloc;
+
 class Interfaces {
 public:
 #define GAME_INTERFACE(type, name, module, version) \
@@ -21,6 +23,7 @@ class type* name = reinterpret_cast<type*>(find(L##module, version));
     GAME_INTERFACE(InputSystem, inputSystem, "inputsystem", "InputSystemVersion001")
     GAME_INTERFACE(Localize, localize, "localize", "Localize_001")
     GAME_INTERFACE(MaterialSystem, materialSystem, "materialsystem", "VMaterialSystem080")
+    MemAlloc* memalloc = *(MemAlloc**)(GetProcAddress(GetModuleHandleA("tier0.dll"), "g_pMemAlloc"));
     GAME_INTERFACE(ModelInfo, modelInfo, "engine", "VModelInfoClient004")
     GAME_INTERFACE(ModelRender, modelRender, "engine", "VEngineModel016")
     GAME_INTERFACE(NetworkStringTableContainer, networkStringTableContainer, "engine", "VEngineClientStringTable001")
