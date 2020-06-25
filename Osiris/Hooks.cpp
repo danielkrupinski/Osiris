@@ -186,7 +186,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     static void* oldPointer = nullptr;
 
     auto network = interfaces->engine->getNetworkChannel();
-    if (oldPointer != network && network && localPlayer)
+    if (oldPointer != network && network && interfaces->engine->isInGame())
     {
         oldPointer = network;
         Backtrack::UpdateIncomingSequences(true);
