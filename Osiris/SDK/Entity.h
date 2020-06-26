@@ -20,65 +20,10 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
-#include "../Pattern.h"
 
 #include <functional>
 
 struct AnimState;
-class CCSGOPlayerAnimState
-{
-public:
-    void* pThis;
-    char pad2[91];
-    void* pBaseEntity; //0x60
-    void* pActiveWeapon; //0x64
-    void* pLastActiveWeapon; //0x68
-    float m_flLastClientSideAnimationUpdateTime; //0x6C
-    int m_iLastClientSideAnimationUpdateFramecount; //0x70
-    float m_flEyePitch; //0x74
-    float m_flEyeYaw; //0x78
-    float m_flPitch; //0x7C
-    float m_flGoalFeetYaw; //0x80
-    float m_flCurrentFeetYaw; //0x84
-    float m_flCurrentTorsoYaw; //0x88
-    float m_flUnknownVelocityLean; //0x8C //changes when moving/jumping/hitting ground
-    float m_flLeanAmount; //0x90
-    char pad4[4]; //NaN
-    float m_flFeetCycle; //0x98 0 to 1
-    float m_flFeetYawRate; //0x9C 0 to 1
-    float m_fUnknown2;
-    float m_fDuckAmount; //0xA4
-    float m_fLandingDuckAdditiveSomething; //0xA8
-    float m_fUnknown3; //0xAC
-    Vector m_vOrigin; //0xB0, 0xB4, 0xB8
-    Vector m_vLastOrigin; //0xBC, 0xC0, 0xC4
-    float m_vVelocityX; //0xC8
-    float m_vVelocityY; //0xCC
-    char pad5[4];
-    float m_flUnknownFloat1; //0xD4 Affected by movement and direction
-    char pad6[8];
-    float m_flUnknownFloat2; //0xE0 //from -1 to 1 when moving and affected by direction
-    float m_flUnknownFloat3; //0xE4 //from -1 to 1 when moving and affected by direction
-    float m_unknown; //0xE8
-    float speed_2d; //0xEC
-    float flUpVelocity; //0xF0
-    float m_flSpeedNormalized; //0xF4 //from 0 to 1
-    float m_flFeetSpeedForwardsOrSideWays; //0xF8 //from 0 to 2. something  is 1 when walking, 2.something when running, 0.653 when crouch walking
-    float m_flFeetSpeedUnknownForwardOrSideways; //0xFC //from 0 to 3. something
-    float m_flTimeSinceStartedMoving; //0x100
-    float m_flTimeSinceStoppedMoving; //0x104
-    unsigned char m_bOnGround; //0x108
-    unsigned char m_bInHitGroundAnimation; //0x109
-    char pad7[10];
-    float m_flLastOriginZ; //0x114
-    float m_flHeadHeightOrOffsetFromHittingGroundAnimation; //0x118 from 0 to 1, is 1 when standing
-    float stopToFullRunningFractio1n; //0x11C from 0 to 1, doesnt change when walking or crouching, only running
-    char pad8[4]; //NaN
-    float m_flUnknownFraction; //0x124 affected while jumping and running, or when just jumping, 0 to 1
-    char pad9[4]; //NaN
-    float m_flUnknown3;
-    char pad10[528];
-}; //Size=0x344
 
 struct AnimationLayer
 {
@@ -112,6 +57,7 @@ public:
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+    VIRTUAL_METHOD(Vector&, getRenderOrigin, 1, (), (this + 4))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
@@ -119,6 +65,7 @@ public:
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(Vector&, getAbsAngle, 11, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
@@ -152,6 +99,19 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+        if (localPlayer && this == localPlayer.get() && localPlayer->isAlive())
+        {
+            uint32_t* effects = (uint32_t*)((uintptr_t)this + 0xF0);
+            uint32_t* shouldskipframe = (uint32_t*)((uintptr_t)this + 0xA68);
+            uint32_t backup_effects = *effects;
+            uint32_t backup_shouldskipframe = *shouldskipframe;
+            *shouldskipframe = 0;
+            *effects |= 8;
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            *effects = backup_effects;
+            *shouldskipframe = backup_shouldskipframe;
+            return result;
+        }
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -201,11 +161,6 @@ public:
     AnimState* getAnimstate() noexcept
     {
         return *reinterpret_cast<AnimState**>(this + 0x3914);
-    }
-
-    CCSGOPlayerAnimState* getAnimstate2() noexcept
-    {
-        return *reinterpret_cast<CCSGOPlayerAnimState**>(this + 0x3914);
     }
     
     float getMaxDesyncAngle() noexcept
@@ -281,30 +236,41 @@ public:
         return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
     }
 
-    std::array<float, 24>& pos_par()
+    std::array<float, 24>& pose_parameters()
     {
         return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
     }
 
-    //can use memory for this
-    void UpdateState(CCSGOPlayerAnimState* state, Vector ang) {
-        using fn = void(__vectorcall*)(void*, void*, float, float, float, void*);
-        static auto ret = reinterpret_cast<fn>(Pattern::FindPattern("client.dll", "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24"));
-
-        if (!ret)
+    void CreateState(AnimState* state)
+    {
+        static auto CreateAnimState = reinterpret_cast<void(__thiscall*)(AnimState*, Entity*)>(memory->CreateState);
+        if (!CreateAnimState)
             return;
 
-        ret(state, NULL, NULL, ang.y, ang.x, NULL);
+        CreateAnimState(state, this);
     }
 
-    void setAbsAngle(Vector Angle)
-    {
-        typedef void(__thiscall* SetAngleFn)(void*, const Vector&);
-        static SetAngleFn SetAngle = (SetAngleFn)((DWORD)Pattern::FindPattern("client.dll", "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
-        SetAngle(this, Angle);
+    void UpdateState(AnimState* state, Vector angle) {
+        if (!state || !angle)
+            return;
+        static auto UpdateAnimState = reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(memory->UpdateState);
+        if (!UpdateAnimState)
+            return;
+        UpdateAnimState(state, nullptr, 0.0f, angle.y, angle.x, nullptr);
     }
-    
-    NETVAR(animations, "CBaseAnimating", "m_bClientSideAnimation", bool)
+
+    float spawnTime()
+    {
+        return *(float*)((uintptr_t)this + 0xA370);
+    }
+
+    void InvalidateBoneCache()
+    {
+        static auto invalidate_bone_cache = memory->InvalidateBoneCache;
+        reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
+    }
+
+    NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 

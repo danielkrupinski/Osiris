@@ -6,12 +6,10 @@ class GameEvent;
 
 namespace Visuals
 {
-    void AnimationFix(FrameStage stage, Vector angle, int updateTime) noexcept;
-    void manageLocalFakeAnimstate(FrameStage stage) noexcept;
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke() noexcept;
-    void thirdperson(FrameStage stage, Vector angle) noexcept;
+    void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;

@@ -18,157 +18,6 @@
 
 #include <array>
 
-void Visuals::AnimationFix(FrameStage stage, Vector angle, int updateTime) noexcept
-{
-    if (stage == FrameStage::RENDER_START && localPlayer->isAlive() && memory->input->isCameraInThirdPerson)
-    {
-        //https://github.com/perilouswithadollarsign/cstrike15_src/blob/master/game/client/c_baseanimating.cpp#L81
-        //disables shaking attachments
-        static auto jigglebones = interfaces->cvar->findVar("r_jiggle_bones");
-        jigglebones->setValue(0);
-        if (!localPlayer || !localPlayer->isAlive() || !localPlayer.get()->getAnimstate2())
-            return;
-        //*reinterpret_cast<int*>(localPlayer.get() + 0xF0) |= 8; //No Interp
-        //*reinterpret_cast<int*>(localPlayer.get() + 0xA68) = 0; //shouldskipframe
-
-        static auto backup_poses = localPlayer.get()->pos_par();
-        static auto backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-
-        static std::array<AnimationLayer, 15> networked_layers;
-
-        if (localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount == memory->globalVars->framecount)
-            localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount -= 1;
-
-        static int old_tick = 0;
-        if (old_tick != memory->globalVars->tickCount)
-        {
-            old_tick = memory->globalVars->tickCount;
-            std::memcpy(&networked_layers, localPlayer.get()->animOverlays(), sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
-            localPlayer.get()->animations() = true;
-            localPlayer.get()->UpdateState(localPlayer->getAnimstate2(), angle);
-            localPlayer.get()->UpdateClientSideAnimation();
-            localPlayer.get()->animations() = false;
-            if (!updateTime && config->antiAim.thirdpersonMode == 0)
-            {
-                backup_poses = localPlayer.get()->pos_par();
-                backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-            }
-            else if (updateTime == 1 && config->antiAim.thirdpersonMode == 1)
-            {
-                backup_poses = localPlayer.get()->pos_par();
-                backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-            }
-            else if (config->antiAim.thirdpersonMode == 2)
-            {
-                backup_poses = localPlayer.get()->pos_par();
-                backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-            }
-        }
-        localPlayer.get()->getAnimstate2()->m_fDuckAmount = std::clamp(localPlayer.get()->getAnimstate2()->m_fDuckAmount, 0.f, 1.f);
-        localPlayer.get()->getAnimstate2()->m_flFeetYawRate = 0.f;
-        localPlayer->setAbsAngle(Vector{ 0,backup_abs,0 });
-        localPlayer.get()->getAnimstate2()->m_flUnknownFraction = 0.f;
-        std::memcpy(localPlayer.get()->animOverlays(), &networked_layers, sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
-        localPlayer.get()->pos_par() = backup_poses;
-    }
-}
-
-void Visuals::manageLocalFakeAnimstate(FrameStage stage) noexcept
-{
-    if (stage == FrameStage::RENDER_START)
-    {/*
-        if (!localPlayer || !localPlayer->isAlive())
-            return;
-        
-        static auto handle = ->get_ref_ehandle();
-        static auto spawn_time = game::local->get_spawn_time();
-
-        bool allocate = (!fake_anim_state),
-            change = (!allocate) && (game::local->get_ref_ehandle() != handle),
-            reset = (!allocate && !change) && (localPlayer->get_spawn_time() != spawn_time);
-
-        if (change)
-            free(fake_anim_state);
-
-        if (reset)
-        {
-            sdk::cs_player::reset_anim_state(fake_anim_state);
-
-            spawn_time = game::local->get_spawn_time();
-        }
-
-        if (allocate || change)
-        {
-            auto* state = reinterpret_cast<CCSGOPlayerAnimState*>(malloc(sizeof(CCSGOPlayerAnimState)));
-
-            if (state != nullptr)
-                localPlayer->create_anim_state(state);
-
-            handle = game::local->get_ref_ehandle();
-            spawn_time = game::local->get_spawn_time();
-
-            fake_anim_state = state;
-        }
-        else if (localPlayer->simulationTime() != game::local->get_old_sim_time())
-        {
-            std::array<AnimationLayer, 13> networked_layers;
-            std::copy(localPlayer->getAnimationLayerCount(), localPlayer->getAnimationLayerCount() + networked_layers.size(), networked_layers);
-
-            auto backup_abs_angles = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-            auto backup_poses = localPlayer.get()->pos_par();
-
-            localPlayer->UpdateState(fake_anim_state, config->globals.realAngle);
-            localPlayer->setupBones(config->globals.realMatrix, 128, 0x7FF00, memory->globalVars->currenttime);
-
-            std::copy(networked_layers.begin(), networked_layers.end(), localPlayer->getAnimationLayerCount());
-
-            localPlayer.get()->pos_par() = backup_poses;
-            localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw = backup_abs_angles;
-        }*/
-
-        ///////////////////// OLD CODE START /////////////////////
-
-        //https://github.com/perilouswithadollarsign/cstrike15_src/blob/master/game/client/c_baseanimating.cpp#L81
-        //disables shaking attachments
-        static auto jigglebones = interfaces->cvar->findVar("r_jiggle_bones");
-        jigglebones->setValue(0);
-        if (!localPlayer || !localPlayer->isAlive() || !localPlayer.get()->getAnimstate2())
-            return;
-        //*reinterpret_cast<int*>(localPlayer.get() + 0xF0) |= 8; //No Interp
-        //*reinterpret_cast<int*>(localPlayer.get() + 0xA68) = 0; //shouldskipframe
-
-        static auto backup_poses = localPlayer.get()->pos_par();
-        static auto backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-
-        static std::array<AnimationLayer, 15> networked_layers;
-
-        if (localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount == memory->globalVars->framecount)
-            localPlayer.get()->getAnimstate2()->m_iLastClientSideAnimationUpdateFramecount -= 1;
-
-        static int old_tick = 0;
-        if (old_tick != memory->globalVars->tickCount)
-        {
-            old_tick = memory->globalVars->tickCount;
-            std::memcpy(&networked_layers, localPlayer.get()->animOverlays(), sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
-            localPlayer.get()->animations() = true;
-            localPlayer.get()->UpdateState(localPlayer->getAnimstate2(), config->globals.realAngle);
-            localPlayer.get()->UpdateClientSideAnimation();
-            localPlayer.get()->animations() = false;
-            if (!config->globals.sendPacket)
-            {
-                backup_poses = localPlayer.get()->pos_par();
-                backup_abs = localPlayer.get()->getAnimstate2()->m_flGoalFeetYaw;
-            }
-        }
-        localPlayer.get()->getAnimstate2()->m_fDuckAmount = std::clamp(localPlayer.get()->getAnimstate2()->m_fDuckAmount, 0.f, 1.f);
-        localPlayer.get()->getAnimstate2()->m_flFeetYawRate = 0.f;
-        localPlayer->setAbsAngle(Vector{ 0,backup_abs,0 });
-        localPlayer.get()->getAnimstate2()->m_flUnknownFraction = 0.f;
-        std::memcpy(localPlayer.get()->animOverlays(), &networked_layers, sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
-        localPlayer.get()->pos_par() = backup_poses;
-    }
-}
-
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
@@ -297,7 +146,7 @@ void Visuals::modifySmoke() noexcept
     }
 }
 
-void Visuals::thirdperson(FrameStage stage, Vector angle) noexcept
+void Visuals::thirdperson() noexcept
 {
     static bool isInThirdperson{ false };
     static float lastTime{ 0.0f };
@@ -310,11 +159,7 @@ void Visuals::thirdperson(FrameStage stage, Vector angle) noexcept
     if (config->visuals.thirdperson)
         if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson) && localPlayer && localPlayer->isAlive())
         {
-            memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);/*
-            if (config->globals.thirdPersonAnglesSet && stage == FrameStage::RENDER_START)
-            {
-                *(Vector*)((uintptr_t)(localPlayer.get()) + 0x31D8) = angle;
-            }*/
+            memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
         }
 }
 
@@ -597,11 +442,9 @@ void Visuals::indicators() noexcept
             int LBYHeight = 0;
             int FDHeight = 0;
 
-            float desyncAmount = 0;
             float lbyDifference = 0;
 
-            if (config->antiAim.yawReal && config->antiAim.enabled)
-                desyncAmount = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
+            float desyncAmount = localPlayer->getMaxDesyncAngle();
 
             int desyncGreenPercentage;
 

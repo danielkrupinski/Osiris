@@ -13,18 +13,11 @@ float AntiAim::RandomFloat(float min, float max) noexcept
     return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
 };
 
-void AntiAim::setPitch(float pitch, UserCmd* cmd, bool sendPacket) noexcept
-{
-    float newviewangle = pitch;
-
-    cmd->viewangles.x = newviewangle;
-};
-
 bool AntiAim::LbyUpdate()
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / config->globals.tickRate); };
 
-    if (!config->antiAim.fakeWalk.keyToggled)
+    if (!config->antiAim.general.fakeWalk.keyToggled)
     {
         if (!(localPlayer->flags() & 1))
         {
@@ -46,142 +39,331 @@ bool AntiAim::LbyUpdate()
             return false;
         }
     }
-    else if (config->antiAim.fakeWalk.keyToggled)
+    else if (config->antiAim.general.fakeWalk.keyToggled)
     {
-        if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke)
+        if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.general.fakeWalk.maxChoke)
             return true;
         else
             return false;
     }
 }
 
-void AntiAim::setYaw(float yaw, float desyncYaw, UserCmd* cmd, bool sendPacket) noexcept
+void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
-    float newviewangle = yaw;
-    //float LBYDifference = localPlayer->lby() - localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
-
-    if (config->antiAim.yawReal)
-    {
-        if (!sendPacket)
-        {
-            if (!config->antiAim.yawInversed)
-                newviewangle += desyncYaw;
+    if (config->antiAim.general.yawInverseAngleKey != 0) {
+        if (config->antiAim.general.yawInverseKeyMode == 0) {
+            if (!GetAsyncKeyState(config->antiAim.general.yawInverseAngleKey))
+            {
+                config->antiAim.general.yawInversed = false;
+            }
             else
-                newviewangle -= desyncYaw;
+                config->antiAim.general.yawInversed = true;
+        }
+        else {
+            if (GetAsyncKeyState(config->antiAim.general.yawInverseAngleKey) & 1)
+                config->antiAim.general.yawInversed = !config->antiAim.general.yawInversed;
         }
     }
 
-    if (config->antiAim.LBYBreaker && config->antiAim.yawReal)
-        if (!sendPacket)
+    auto activeWeapon = localPlayer->getActiveWeapon();
+
+    if (activeWeapon)
+        auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+
+    if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == MoveType::LADDER) || (localPlayer->moveType() == MoveType::NOCLIP))
+        return;
+
+    if (config->antiAim.standing.enabled && localPlayer->isAlive() && interfaces->engine->isConnected() && interfaces->engine->isInGame() && localPlayer->flags() & 1 && fabsf(cmd->sidemove) < 1.1f && fabsf(cmd->forwardmove) < 1.1f)
+    {
+        if (config->antiAim.standing.pitch.enabled)
+            cmd->viewangles.x = config->antiAim.standing.pitch.angle;
+
+        if (config->antiAim.standing.yaw.enabled)
         {
-            if (LbyUpdate())
+            if (sendPacket || !config->antiAim.standing.yaw.desync.enabled)
             {
-                if (config->antiAim.yawInversed)
-                    newviewangle += config->antiAim.LBYAngle;
-                else
-                    newviewangle -= config->antiAim.LBYAngle;
-            }
-        }
-
-    cmd->viewangles.y = newviewangle;
-};
-
-void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
-{
-    if (config->antiAim.enabled && localPlayer->isAlive() && interfaces->engine->isConnected() && interfaces->engine->isInGame()) {
-        if (config->antiAim.yawInverseAngleKey != 0) {
-            if (config->antiAim.yawInverseKeyMode == 0) {
-                if (!GetAsyncKeyState(config->antiAim.yawInverseAngleKey))
+                if (!config->antiAim.standing.yaw.fake.mode)
+                    cmd->viewangles.y += config->antiAim.standing.yaw.angle;
+                else if (config->antiAim.standing.yaw.fake.mode == 1)
                 {
-                    config->antiAim.yawInversed = false;
+                    float jitter = RandomFloat(config->antiAim.standing.yaw.fake.jitterMin, config->antiAim.standing.yaw.fake.jitterMax);
+                    float minJitter = config->antiAim.standing.yaw.fake.jitterMin;
+                    float maxJiter = config->antiAim.standing.yaw.fake.jitterMax;
+
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
+
+                    if (maxJiter < 0)
+                        maxJiter = -maxJiter;
+
+                    if (config->antiAim.standing.yaw.fake.step > (maxJiter || minJitter))
+                        std::clamp(jitter, -minJitter, maxJiter);
+                    else
+                        std::clamp(jitter, -config->antiAim.standing.yaw.fake.step, config->antiAim.standing.yaw.fake.step);
+
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y += -config->antiAim.standing.yaw.angle + -jitter;
+                    else
+                        cmd->viewangles.y += config->antiAim.standing.yaw.angle + jitter;
                 }
-                else
-                    config->antiAim.yawInversed = true;
             }
-            else {
-                if (GetAsyncKeyState(config->antiAim.yawInverseAngleKey) & 1)
-                    config->antiAim.yawInversed = !config->antiAim.yawInversed;
+            else if (!sendPacket && config->antiAim.standing.yaw.desync.enabled)
+            {
+                if (fabsf(cmd->sidemove) < 5.0f) {
+                    if (cmd->buttons & UserCmd::IN_DUCK)
+                        cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+                    else
+                        cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+                }
+
+                if (!config->antiAim.standing.yaw.fake.mode)
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y = cmd->viewangles.y + -config->antiAim.standing.yaw.angle + -(localPlayer->getMaxDesyncAngle() * config->antiAim.standing.yaw.desync.bodyLean / 100);
+                    else
+                        cmd->viewangles.y = cmd->viewangles.y + config->antiAim.standing.yaw.angle + (localPlayer->getMaxDesyncAngle() * config->antiAim.standing.yaw.desync.bodyLean / 100);
+                else if (config->antiAim.standing.yaw.fake.mode == 1)
+                {
+                    float jitter = RandomFloat(config->antiAim.standing.yaw.desync.jitterMin, config->antiAim.standing.yaw.desync.jitterMax);
+                    float minJitter = config->antiAim.standing.yaw.desync.jitterMin;
+                    float maxJitter = config->antiAim.standing.yaw.desync.jitterMax;
+
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
+
+                    if (maxJitter < 0)
+                        maxJitter = -maxJitter;
+
+                    if (config->antiAim.standing.yaw.desync.step > (maxJitter || minJitter))
+                        if (-minJitter > maxJitter)
+                            std::clamp(jitter, maxJitter, -minJitter);
+                        else
+                            std::clamp(jitter, -minJitter, maxJitter);
+                    else
+                        std::clamp(jitter, -config->antiAim.standing.yaw.desync.step, config->antiAim.standing.yaw.desync.step);
+
+                    jitter = jitter * localPlayer->getMaxDesyncAngle() / 100;
+
+                    if (config->antiAim.general.yawInversed)
+                        jitter = -jitter;
+
+                    if (LbyUpdate() && config->antiAim.standing.yaw.desync.LBYBreaker.enabled)
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.standing.yaw.desync.LBYBreaker.angle;
+                        else
+                            cmd->viewangles.y += -config->antiAim.standing.yaw.desync.LBYBreaker.angle;
+                    else
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.standing.yaw.angle + jitter;
+                        else
+                            cmd->viewangles.y += config->antiAim.standing.yaw.angle + jitter;
+                }
             }
         }
+    }
+    else if (config->antiAim.moving.enabled && localPlayer->isAlive() && interfaces->engine->isConnected() && interfaces->engine->isInGame() && !(fabsf(cmd->sidemove) < 1.1f || fabsf(cmd->forwardmove) < 1.1f) || fabsf(cmd->sidemove) > -1.1f || fabsf(cmd->forwardmove) > -1.1f)
+    {
+        if (config->antiAim.moving.pitch.enabled)
+            cmd->viewangles.x = config->antiAim.moving.pitch.angle;
 
-        auto activeWeapon = localPlayer->getActiveWeapon();
-        //auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
-        
-        if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == MoveType::LADDER) || (localPlayer->moveType() == MoveType::NOCLIP))
-            return;
+        if (config->antiAim.moving.yaw.enabled)
+        {
+            if (sendPacket || !config->antiAim.moving.yaw.desync.enabled)
+            {
+                if (!config->antiAim.moving.yaw.fake.mode)
+                    cmd->viewangles.y += config->antiAim.moving.yaw.angle;
+                else if (config->antiAim.moving.yaw.fake.mode == 1)
+                {
+                    float jitter = RandomFloat(config->antiAim.moving.yaw.fake.jitterMin, config->antiAim.moving.yaw.fake.jitterMax);
+                    float minJitter = config->antiAim.moving.yaw.fake.jitterMin;
+                    float maxJitter = config->antiAim.moving.yaw.fake.jitterMax;
 
-        if (config->antiAim.pitch)
-            setPitch(config->antiAim.pitchAngle, cmd, sendPacket);
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
 
-        if (config->antiAim.yawReal) {
-            if (fabsf(cmd->sidemove) < 5.0f) {
-                if (cmd->buttons & UserCmd::IN_DUCK)
-                    cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
-                else
-                    cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+                    if (maxJitter < 0)
+                        maxJitter = -maxJitter;
+
+                    if (config->antiAim.moving.yaw.fake.step > (maxJitter || minJitter))
+                        if (-minJitter > maxJitter)
+                            std::clamp(jitter, maxJitter, -minJitter);
+                        else
+                            std::clamp(jitter, -minJitter, maxJitter);
+                    else
+                        std::clamp(jitter, -config->antiAim.moving.yaw.fake.step, config->antiAim.moving.yaw.fake.step);
+
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y += -config->antiAim.moving.yaw.angle + -jitter;
+                    else
+                        cmd->viewangles.y += config->antiAim.moving.yaw.angle + jitter;
+                }
+            }
+            else if (!sendPacket && config->antiAim.moving.yaw.desync.enabled)
+            {
+                if (fabsf(cmd->sidemove) < 5.0f) {
+                    if (cmd->buttons & UserCmd::IN_DUCK)
+                        cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+                    else
+                        cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+                }
+
+                if (!config->antiAim.moving.yaw.fake.mode)
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y = -cmd->viewangles.y + -config->antiAim.moving.yaw.angle + (localPlayer->getMaxDesyncAngle() * config->antiAim.moving.yaw.desync.bodyLean / 100);
+                    else
+                        cmd->viewangles.y = cmd->viewangles.y + config->antiAim.moving.yaw.angle + (localPlayer->getMaxDesyncAngle() * config->antiAim.moving.yaw.desync.bodyLean / 100);
+                else if (config->antiAim.moving.yaw.fake.mode == 1)
+                {
+                    float jitter = RandomFloat(config->antiAim.moving.yaw.desync.jitterMin, config->antiAim.moving.yaw.desync.jitterMax);
+                    float minJitter = config->antiAim.moving.yaw.desync.jitterMin;
+                    float maxJitter = config->antiAim.moving.yaw.desync.jitterMax;
+
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
+
+                    if (maxJitter < 0)
+                        maxJitter = -maxJitter;
+
+                    if (config->antiAim.moving.yaw.desync.step > (maxJitter || minJitter))
+                        if (-minJitter > maxJitter)
+                            std::clamp(jitter, maxJitter, -minJitter);
+                        else
+                            std::clamp(jitter, -minJitter, maxJitter);
+                    else
+                        std::clamp(jitter, -config->antiAim.moving.yaw.desync.step, config->antiAim.moving.yaw.desync.step);
+
+                    jitter = jitter * localPlayer->getMaxDesyncAngle() / 100;
+
+                    if (config->antiAim.general.yawInversed)
+                        jitter = -jitter;
+
+                    if (LbyUpdate() && config->antiAim.moving.yaw.desync.LBYBreaker.enabled)
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.moving.yaw.desync.LBYBreaker.angle;
+                        else
+                            cmd->viewangles.y += config->antiAim.moving.yaw.desync.LBYBreaker.angle;
+                    else
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.moving.yaw.angle + jitter;
+                        else
+                            cmd->viewangles.y += config->antiAim.moving.yaw.angle + jitter;
+                }
             }
         }
+    }
+    else if (config->antiAim.inAir.enabled && localPlayer->isAlive() && interfaces->engine->isConnected() && interfaces->engine->isInGame() && !(localPlayer->flags() & 1))
+    {
+        if (config->antiAim.inAir.pitch.enabled)
+            cmd->viewangles.x = config->antiAim.inAir.pitch.angle;
 
-        if (config->antiAim.yaw && !(config->antiAim.yawInversed))
+        if (config->antiAim.inAir.yaw.enabled)
         {
-            float desyncYaw = localPlayer->getMaxDesyncAngle()* config->antiAim.bodyLean / 100;
+            if (sendPacket || !config->antiAim.inAir.yaw.desync.enabled)
+            {
+                if (!config->antiAim.inAir.yaw.fake.mode)
+                    cmd->viewangles.y += config->antiAim.inAir.yaw.angle;
+                else if (config->antiAim.inAir.yaw.fake.mode == 1)
+                {
+                    float jitter = RandomFloat(config->antiAim.inAir.yaw.fake.jitterMin, config->antiAim.inAir.yaw.fake.jitterMax);
+                    float minJitter = config->antiAim.inAir.yaw.fake.jitterMin;
+                    float maxJiter = config->antiAim.inAir.yaw.fake.jitterMax;
 
-            if (config->antiAim.mode == 0)
-                setYaw(cmd->viewangles.y + config->antiAim.yawAngle, desyncYaw, cmd, sendPacket);
-            else if (config->antiAim.mode == 1)
-                setYaw(cmd->viewangles.y + config->antiAim.yawAngle + RandomFloat(config->antiAim.jitterMin, config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-        }
-        else if (config->antiAim.yaw && config->antiAim.yawInversed)
-        {
-            float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
 
-            if (config->antiAim.mode == 0)
-                setYaw(cmd->viewangles.y + -config->antiAim.yawAngle, desyncYaw, cmd, sendPacket);
-            else if (config->antiAim.mode == 1)
-                setYaw(cmd->viewangles.y + -config->antiAim.yawAngle + RandomFloat(-config->antiAim.jitterMin, -config->antiAim.jitterMax), desyncYaw, cmd, sendPacket);
-        }
-        else if (!config->antiAim.yaw && config->antiAim.yawReal)
-        {
-            float desyncYaw = localPlayer->getMaxDesyncAngle() * config->antiAim.bodyLean / 100;
+                    if (maxJiter < 0)
+                        maxJiter = -maxJiter;
 
-            setYaw(cmd->viewangles.y, desyncYaw, cmd, sendPacket);
+                    if (config->antiAim.inAir.yaw.fake.step > (maxJiter || minJitter))
+                        std::clamp(jitter, -minJitter, maxJiter);
+                    else
+                        std::clamp(jitter, -config->antiAim.inAir.yaw.fake.step, config->antiAim.inAir.yaw.fake.step);
+
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y += -config->antiAim.inAir.yaw.angle + -jitter;
+                    else
+                        cmd->viewangles.y += config->antiAim.inAir.yaw.angle + jitter;
+                }
+            }
+            else if (!sendPacket && config->antiAim.inAir.yaw.desync.enabled)
+            {
+                if (fabsf(cmd->sidemove) < 5.0f) {
+                    if (cmd->buttons & UserCmd::IN_DUCK)
+                        cmd->sidemove = cmd->tickCount & 1 ? 3.25f : -3.25f;
+                    else
+                        cmd->sidemove = cmd->tickCount & 1 ? 1.1f : -1.1f;
+                }
+
+                if (!config->antiAim.inAir.yaw.fake.mode)
+                    if (config->antiAim.general.yawInversed)
+                        cmd->viewangles.y = cmd->viewangles.y + -config->antiAim.inAir.yaw.angle + -(localPlayer->getMaxDesyncAngle() * config->antiAim.inAir.yaw.desync.bodyLean / 100);
+                    else
+                        cmd->viewangles.y = cmd->viewangles.y + config->antiAim.inAir.yaw.angle + (localPlayer->getMaxDesyncAngle() * config->antiAim.inAir.yaw.desync.bodyLean / 100);
+                else if (config->antiAim.inAir.yaw.fake.mode == 1)
+                {
+                    float jitter = RandomFloat(config->antiAim.inAir.yaw.desync.jitterMin, config->antiAim.inAir.yaw.desync.jitterMax);
+                    float minJitter = config->antiAim.inAir.yaw.desync.jitterMin;
+                    float maxJiter = config->antiAim.inAir.yaw.desync.jitterMax;
+
+                    if (minJitter < 0)
+                        minJitter = -minJitter;
+
+                    if (maxJiter < 0)
+                        maxJiter = -maxJiter;
+
+                    if (config->antiAim.inAir.yaw.desync.step > (maxJiter || minJitter))
+                        std::clamp(jitter, -minJitter, maxJiter);
+                    else
+                        std::clamp(jitter, -config->antiAim.inAir.yaw.desync.step, config->antiAim.inAir.yaw.desync.step);
+
+                    jitter = jitter * localPlayer->getMaxDesyncAngle() / 100;
+
+                    if (config->antiAim.general.yawInversed)
+                        jitter = -jitter;
+
+                    if (LbyUpdate() && config->antiAim.inAir.yaw.desync.LBYBreaker.enabled)
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.inAir.yaw.desync.LBYBreaker.angle;
+                        else
+                            cmd->viewangles.y += config->antiAim.inAir.yaw.desync.LBYBreaker.angle;
+                    else
+                        if (config->antiAim.general.yawInversed)
+                            cmd->viewangles.y += -config->antiAim.inAir.yaw.angle + jitter;
+                        else
+                            cmd->viewangles.y += -config->antiAim.inAir.yaw.angle + jitter;
+                }
+            }
         }
     }
 }
 
 void AntiAim::fakeWalk(UserCmd* cmd, bool& sendPacket) noexcept
 {
-    if (config->antiAim.fakeWalk.key != 0) {
-        if (config->antiAim.fakeWalk.keyMode == 0) {
-            if (!GetAsyncKeyState(config->antiAim.fakeWalk.key))
+    if (config->antiAim.general.fakeWalk.key != 0) {
+        if (config->antiAim.general.fakeWalk.keyMode == 0) {
+            if (!GetAsyncKeyState(config->antiAim.general.fakeWalk.key))
             {
-                config->antiAim.fakeWalk.keyToggled = false;
+                config->antiAim.general.fakeWalk.keyToggled = false;
             }
             else
-                config->antiAim.fakeWalk.keyToggled = true;
+                config->antiAim.general.fakeWalk.keyToggled = true;
         }
         else {
-            if (GetAsyncKeyState(config->antiAim.fakeWalk.key) & 1)
-                config->antiAim.fakeWalk.keyToggled = !config->antiAim.fakeWalk.keyToggled;
+            if (GetAsyncKeyState(config->antiAim.general.fakeWalk.key) & 1)
+                config->antiAim.general.fakeWalk.keyToggled = !config->antiAim.general.fakeWalk.keyToggled;
         }
     }
 
-    if (config->antiAim.fakeWalk.enabled && config->antiAim.fakeWalk.keyToggled && config->antiAim.LBYBreaker)
+    if (config->antiAim.general.fakeWalk.enabled && config->antiAim.general.fakeWalk.keyToggled)
     {
-        if (interfaces->engine->getNetworkChannel()->chokedPackets < config->antiAim.fakeWalk.maxChoke)
+        if (interfaces->engine->getNetworkChannel()->chokedPackets < config->antiAim.general.fakeWalk.maxChoke)
         {
             sendPacket = false;
         }
-        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke)
+        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.general.fakeWalk.maxChoke)
         {
             sendPacket = false;
-
-            if (config->antiAim.yawInversed)
-                cmd->viewangles.y += config->antiAim.LBYAngle;
-            else
-                cmd->viewangles.y -= config->antiAim.LBYAngle;
         }
-        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.fakeWalk.maxChoke + 1)
+        else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.general.fakeWalk.maxChoke + 1)
         {
             cmd->forwardmove = 0;
 

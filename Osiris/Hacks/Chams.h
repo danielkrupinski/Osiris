@@ -37,7 +37,8 @@ private:
         WEAPONS,
         HANDS,
         BACKTRACK,
-        SLEEVES
+        SLEEVES,
+        DESYNC
     };
 
     Material* normal;

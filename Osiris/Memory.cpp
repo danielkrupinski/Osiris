@@ -55,6 +55,10 @@ Memory::Memory() noexcept
     getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x89\x87????\x6A\x00") + 1));
     renderBeams = *reinterpret_cast<IViewRenderBeams**>(findPattern(L"client", "\xB9????\xA1????\xFF\x10\xA1????\xB9" + 1));
     getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(reinterpret_cast<int*>(findPattern(L"engine", "\xE8????\x8B\xD8\x85\xDB\x75\x27") + 1));
+    setAbsAngle = reinterpret_cast<decltype(setAbsAngle)>(reinterpret_cast<DWORD*>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x64\x53\x56\x57\x8B\xF1")));
+    CreateState = findPattern(L"client", "\x55\x8B\xEC\x56\x8B\xF1\xB9????\xC7\x46");
+    UpdateState = findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x18\x56\x57\x8B\xF9\xF3\x0F\x11\x54\x24");
+    InvalidateBoneCache = findPattern(L"client", "\x80\x3D?????\x74\x16\xA1????\x48\xC7\x81");
   
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0" + 1)));
 }

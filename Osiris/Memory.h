@@ -75,6 +75,10 @@ public:
     IViewRenderBeams* renderBeams;
     std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
     GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    void(__thiscall* setAbsAngle)(Entity*, const Vector&);
+    uintptr_t UpdateState;
+    uintptr_t CreateState;
+    uintptr_t InvalidateBoneCache;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

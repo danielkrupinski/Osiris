@@ -81,26 +81,89 @@ void Config::load(size_t id) noexcept
 
     {
         const auto& antiAimJson = json["Anti aim"];
-        if (antiAimJson.isMember("Enabled")) config->antiAim.enabled = antiAimJson["Enabled"].asBool();
-        if (antiAimJson.isMember("Pitch")) config->antiAim.pitch = antiAimJson["Pitch"].asBool();
-        if (antiAimJson.isMember("Pitch angle")) config->antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
-        if (antiAimJson.isMember("Yaw")) config->antiAim.yaw = antiAimJson["Yaw"].asBool();
-        if (antiAimJson.isMember("Yaw angle")) config->antiAim.yawAngle = antiAimJson["Yaw angle"].asFloat();
-        if (antiAimJson.isMember("Inverse Yaw Key")) config->antiAim.yawInverseAngleKey = antiAimJson["Inverse Yaw Key"].asInt();
-        if (antiAimJson.isMember("Inverse Yaw Key Mode")) config->antiAim.yawInverseKeyMode = antiAimJson["Inverse Yaw Key Mode"].asInt();
-        if (antiAimJson.isMember("Yaw Real")) config->antiAim.yawReal = antiAimJson["Yaw Real"].asBool();
-        if (antiAimJson.isMember("Body Lean")) config->antiAim.bodyLean = antiAimJson["Body Lean"].asFloat();
-        if (antiAimJson.isMember("AntiAim Mode")) config->antiAim.mode = antiAimJson["AntiAim Mode"].asInt();
-        if (antiAimJson.isMember("Jitter Max")) config->antiAim.jitterMax = antiAimJson["Jitter Max"].asFloat();
-        if (antiAimJson.isMember("Jitter Min")) config->antiAim.jitterMin = antiAimJson["Jitter Min"].asFloat();
-        if (antiAimJson.isMember("LBY Breaker")) config->antiAim.LBYBreaker = antiAimJson["LBY Breaker"].asBool();
-        if (antiAimJson.isMember("LBY Angle")) antiAim.LBYAngle = antiAimJson["LBY Angle"].asFloat();
-        
-        const auto& fakeWalkJson = json["FakeWalk"];
-        if (fakeWalkJson.isMember("Enabled")) config->antiAim.fakeWalk.enabled = fakeWalkJson["Enabled"].asBool();
-        if (fakeWalkJson.isMember("Fakewalk Key")) antiAim.fakeWalk.key = fakeWalkJson["Fakewalk Key"].asInt();
-        if (fakeWalkJson.isMember("Fakewalk Key Mode")) antiAim.fakeWalk.keyMode = fakeWalkJson["Fakewalk Key Mode"].asInt();
-        if (fakeWalkJson.isMember("Fakewalk Max Choke")) antiAim.fakeWalk.keyMode = fakeWalkJson["Fakewalk Max Choke"].asInt();
+        {
+            const auto& generalAAJson = json["Anti aim"]["General"];
+            if (generalAAJson.isMember("Enabled")) config->antiAim.general.enabled = generalAAJson["Enabled"].asBool();
+            if (generalAAJson.isMember("Inverse Yaw Key")) config->antiAim.general.yawInverseAngleKey = generalAAJson["Inverse Yaw Key"].asInt();
+            if (generalAAJson.isMember("Inverse Yaw Key Mode")) config->antiAim.general.yawInverseKeyMode = generalAAJson["Inverse Yaw Key Mode"].asInt();
+
+            {
+                const auto& fakeWalkJson = json["Anti aim"]["General"]["Fakewalk"];
+                if (fakeWalkJson.isMember("Enabled")) config->antiAim.general.fakeWalk.enabled = fakeWalkJson["Enabled"].asBool();
+                if (fakeWalkJson.isMember("Fakewalk Key")) antiAim.general.fakeWalk.key = fakeWalkJson["Fakewalk Key"].asInt();
+                if (fakeWalkJson.isMember("Fakewalk Key Mode")) antiAim.general.fakeWalk.keyMode = fakeWalkJson["Fakewalk Key Mode"].asInt();
+                if (fakeWalkJson.isMember("Fakewalk Max Choke")) antiAim.general.fakeWalk.maxChoke = fakeWalkJson["Fakewalk Max Choke"].asInt();
+            }
+        }
+
+        {
+            const auto& standingAAJson = json["Anti aim"]["Standing"];
+            if (standingAAJson.isMember("Enabled")) config->antiAim.standing.enabled = standingAAJson["Enabled"].asBool();
+            if (standingAAJson.isMember("Pitch Enabled")) config->antiAim.standing.pitch.enabled = standingAAJson["Pitch Enabled"].asBool();
+            if (standingAAJson.isMember("Pitch Angle")) config->antiAim.standing.pitch.angle = standingAAJson["Pitch Angle"].asFloat();
+            if (standingAAJson.isMember("Yaw Enabled")) config->antiAim.standing.yaw.enabled = standingAAJson["Yaw Enabled"].asBool();
+            if (standingAAJson.isMember("Yaw Angle")) config->antiAim.standing.yaw.angle = standingAAJson["Yaw Angle"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Mode")) config->antiAim.standing.yaw.fake.mode = standingAAJson["Yaw Fake Mode"].asInt();
+            if (standingAAJson.isMember("Yaw Fake Step")) config->antiAim.standing.yaw.fake.step = standingAAJson["Yaw Fake Step"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.standing.yaw.fake.jitterMin = standingAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.standing.yaw.fake.jitterMax = standingAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (standingAAJson.isMember("Yaw Desync Enabled")) config->antiAim.standing.yaw.desync.enabled = standingAAJson["Yaw Desync Enabled"].asBool();
+            if (standingAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.standing.yaw.desync.bodyLean = standingAAJson["Yaw Desync Body Lean"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Mode")) config->antiAim.standing.yaw.desync.mode = standingAAJson["Yaw Desync Mode"].asInt();
+            if (standingAAJson.isMember("Yaw Desync Step")) config->antiAim.standing.yaw.desync.step = standingAAJson["Yaw Desync Step"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.standing.yaw.desync.jitterMin = standingAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.standing.yaw.desync.jitterMax = standingAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (standingAAJson.isMember("LBY Breaker Enabled")) config->antiAim.standing.yaw.desync.LBYBreaker.enabled = standingAAJson["LBY Breaker Enabled"].asBool();
+            if (standingAAJson.isMember("LBY Breaker Angle")) config->antiAim.standing.yaw.desync.LBYBreaker.angle = standingAAJson["LBY Breaker Angle"].asFloat();
+        }
+
+        {
+            const auto& movingAAJson = json["Anti aim"]["Moving"];
+            if (movingAAJson.isMember("Enabled")) config->antiAim.moving.enabled = movingAAJson["Enabled"].asBool();
+            if (movingAAJson.isMember("Pitch Enabled")) config->antiAim.moving.pitch.enabled = movingAAJson["Pitch Enabled"].asBool();
+            if (movingAAJson.isMember("Pitch Angle")) config->antiAim.moving.pitch.angle = movingAAJson["Pitch Angle"].asFloat();
+            if (movingAAJson.isMember("Yaw Enabled")) config->antiAim.moving.yaw.enabled = movingAAJson["Yaw Enabled"].asBool();
+            if (movingAAJson.isMember("Yaw Angle")) config->antiAim.moving.yaw.angle = movingAAJson["Yaw Angle"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Mode")) config->antiAim.moving.yaw.fake.mode = movingAAJson["Yaw Fake Mode"].asInt();
+            if (movingAAJson.isMember("Yaw Fake Step")) config->antiAim.moving.yaw.fake.step = movingAAJson["Yaw Fake Step"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.moving.yaw.fake.jitterMin = movingAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.moving.yaw.fake.jitterMax = movingAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (movingAAJson.isMember("Yaw Desync Enabled")) config->antiAim.moving.yaw.desync.enabled = movingAAJson["Yaw Desync Enabled"].asBool();
+            if (movingAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.moving.yaw.desync.bodyLean = movingAAJson["Yaw Desync Body Lean"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Mode")) config->antiAim.moving.yaw.desync.mode = movingAAJson["Yaw Desync Mode"].asInt();
+            if (movingAAJson.isMember("Yaw Desync Step")) config->antiAim.moving.yaw.desync.step = movingAAJson["Yaw Desync Step"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.moving.yaw.desync.jitterMin = movingAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.moving.yaw.desync.jitterMax = movingAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (movingAAJson.isMember("LBY Breaker Enabled")) config->antiAim.moving.yaw.desync.LBYBreaker.enabled = movingAAJson["LBY Breaker Enabled"].asBool();
+            if (movingAAJson.isMember("LBY Breaker Angle")) config->antiAim.moving.yaw.desync.LBYBreaker.angle = movingAAJson["LBY Breaker Angle"].asFloat();
+        }
+
+        {
+            const auto& inAirAAJson = json["Anti aim"]["In Air"];
+            if (inAirAAJson.isMember("Enabled")) config->antiAim.inAir.enabled = inAirAAJson["Enabled"].asBool();
+            if (inAirAAJson.isMember("Pitch Enabled")) config->antiAim.inAir.pitch.enabled = inAirAAJson["Pitch Enabled"].asBool();
+            if (inAirAAJson.isMember("Pitch Angle")) config->antiAim.inAir.pitch.angle = inAirAAJson["Pitch Angle"].asFloat();
+            if (inAirAAJson.isMember("Yaw Enabled")) config->antiAim.inAir.yaw.enabled = inAirAAJson["Yaw Enabled"].asBool();
+            if (inAirAAJson.isMember("Yaw Angle")) config->antiAim.inAir.yaw.angle = inAirAAJson["Yaw Angle"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Mode")) config->antiAim.inAir.yaw.fake.mode = inAirAAJson["Yaw Fake Mode"].asInt();
+            if (inAirAAJson.isMember("Yaw Fake Step")) config->antiAim.inAir.yaw.fake.step = inAirAAJson["Yaw Fake Step"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.inAir.yaw.fake.jitterMin = inAirAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.inAir.yaw.fake.jitterMax = inAirAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (inAirAAJson.isMember("Yaw Desync Enabled")) config->antiAim.inAir.yaw.desync.enabled = inAirAAJson["Yaw Desync Enabled"].asBool();
+            if (inAirAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.inAir.yaw.desync.bodyLean = inAirAAJson["Yaw Desync Body Lean"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Mode")) config->antiAim.inAir.yaw.desync.mode = inAirAAJson["Yaw Desync Mode"].asInt();
+            if (inAirAAJson.isMember("Yaw Desync Step")) config->antiAim.inAir.yaw.desync.step = inAirAAJson["Yaw Desync Step"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.inAir.yaw.desync.jitterMin = inAirAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.inAir.yaw.desync.jitterMax = inAirAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (inAirAAJson.isMember("LBY Breaker Enabled")) config->antiAim.inAir.yaw.desync.LBYBreaker.enabled = inAirAAJson["LBY Breaker Enabled"].asBool();
+            if (inAirAAJson.isMember("LBY Breaker Angle")) config->antiAim.inAir.yaw.desync.LBYBreaker.angle = inAirAAJson["LBY Breaker Angle"].asFloat();
+        }
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -705,7 +768,6 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
         if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
         if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
-        if (visualsJson.isMember("Thirdperson Mode")) config->antiAim.thirdpersonMode = visualsJson["Thirdperson Mode"].asInt();
         if (visualsJson.isMember("Indicators Enabled")) visuals.indicatorsEnabled = visualsJson["Indicators Enabled"].asBool();
         if (visualsJson.isMember("Desync Indicator")) visuals.selectedIndicators[0] = visualsJson["Desync Indicator"].asBool();
         if (visualsJson.isMember("LBY Indicator")) visuals.selectedIndicators[1] = visualsJson["LBY Indicator"].asBool();
@@ -1047,26 +1109,82 @@ void Config::save(size_t id) const noexcept
 
     {
         auto& antiAimJson = json["Anti aim"];
-        antiAimJson["Enabled"] = antiAim.enabled;
-        antiAimJson["Pitch"] = antiAim.pitch;
-        antiAimJson["Pitch angle"] = antiAim.pitchAngle;
-        antiAimJson["Yaw"] = antiAim.yaw;
-        antiAimJson["Yaw angle"] = antiAim.yawAngle;
-        antiAimJson["Inverse Yaw Key"] = antiAim.yawInverseAngleKey;
-        antiAimJson["Inverse Yaw Key Mode"] = antiAim.yawInverseKeyMode;
-        antiAimJson["Yaw Real"] = antiAim.yawReal;
-        antiAimJson["Body Lean"] = antiAim.bodyLean;
-        antiAimJson["AntiAim Mode"] = antiAim.mode;
-        antiAimJson["Jitter Max"] = antiAim.jitterMax;
-        antiAimJson["Jitter Min"] = antiAim.jitterMin;
-        antiAimJson["LBY Breaker"] = antiAim.LBYBreaker;
-        antiAimJson["LBY Angle"] = antiAim.LBYAngle;
-        
-        auto& fakeWalkJson = json["FakeWalk"];
-        fakeWalkJson["Enabled"] = antiAim.fakeWalk.enabled;
-        fakeWalkJson["Fakewalk Key"] = antiAim.fakeWalk.key;
-        fakeWalkJson["Fakewalk Key Mode"] = antiAim.fakeWalk.keyMode;
-        fakeWalkJson["Fakewalk Max Choke"] = antiAim.fakeWalk.maxChoke;
+        {
+            auto& generalAAJson = json["Anti aim"]["General"];
+            generalAAJson["Enabled"] = antiAim.general.enabled;
+            generalAAJson["Inverse Yaw Key"] = antiAim.general.yawInverseAngleKey;
+            generalAAJson["Inverse Yaw Key Mode"] = antiAim.general.yawInverseKeyMode;
+            {
+                auto& fakeWalkJson = json["Anti aim"]["General"]["Fakewalk"];
+                fakeWalkJson["Enabled"] = antiAim.general.fakeWalk.enabled;
+                fakeWalkJson["Fakewalk Key"] = antiAim.general.fakeWalk.key;
+                fakeWalkJson["Fakewalk Key Mode"] = antiAim.general.fakeWalk.keyMode;
+                fakeWalkJson["Fakewalk Max Choke"] = antiAim.general.fakeWalk.maxChoke;
+            }
+        }
+
+        {
+            auto& standingAAJson = json["Anti aim"]["Standing"];
+            standingAAJson["Enabled"] = config->antiAim.standing.enabled;
+            standingAAJson["Pitch Enabled"] = config->antiAim.standing.pitch.enabled;
+            standingAAJson["Pitch Angle"] = config->antiAim.standing.pitch.angle;
+            standingAAJson["Yaw Enabled"] = config->antiAim.standing.yaw.enabled;
+            standingAAJson["Yaw Angle"] = config->antiAim.standing.yaw.angle;
+            standingAAJson["Yaw Fake Mode"] = antiAim.standing.yaw.fake.mode;
+            standingAAJson["Yaw Fake Step"] = antiAim.standing.yaw.fake.step;
+            standingAAJson["Yaw Fake Jitter Min"] = antiAim.standing.yaw.fake.jitterMin;
+            standingAAJson["Yaw Fake Jitter Max"] = antiAim.standing.yaw.fake.jitterMax;
+
+            standingAAJson["Yaw Desync Mode"] = antiAim.standing.yaw.desync.mode;
+            standingAAJson["Yaw Desync Step"] = antiAim.standing.yaw.desync.step;
+            standingAAJson["Yaw Desync Jitter Min"] = antiAim.standing.yaw.desync.jitterMin;
+            standingAAJson["Yaw Desync Jitter Max"] = antiAim.standing.yaw.desync.jitterMax;
+
+            standingAAJson["LBY Breaker Enabled"] = config->antiAim.standing.yaw.desync.LBYBreaker.enabled;
+            standingAAJson["LBY Breaker Angle"] = config->antiAim.standing.yaw.desync.LBYBreaker.angle;
+        }
+
+        {
+            auto& movingAAJson = json["Anti aim"]["Moving"];
+            movingAAJson["Enabled"] = config->antiAim.moving.enabled;
+            movingAAJson["Pitch Enabled"] = config->antiAim.moving.pitch.enabled;
+            movingAAJson["Pitch Angle"] = config->antiAim.moving.pitch.angle;
+            movingAAJson["Yaw Enabled"] = config->antiAim.moving.yaw.enabled;
+            movingAAJson["Yaw Angle"] = config->antiAim.moving.yaw.angle;
+            movingAAJson["Yaw Fake Mode"] = antiAim.moving.yaw.fake.mode;
+            movingAAJson["Yaw Fake Step"] = antiAim.moving.yaw.fake.step;
+            movingAAJson["Yaw Fake Jitter Min"] = antiAim.moving.yaw.fake.jitterMin;
+            movingAAJson["Yaw Fake Jitter Max"] = antiAim.moving.yaw.fake.jitterMax;
+
+            movingAAJson["Yaw Desync Mode"] = antiAim.moving.yaw.desync.mode;
+            movingAAJson["Yaw Desync Step"] = antiAim.moving.yaw.desync.step;
+            movingAAJson["Yaw Desync Jitter Min"] = antiAim.moving.yaw.desync.jitterMin;
+            movingAAJson["Yaw Desync Jitter Max"] = antiAim.moving.yaw.desync.jitterMax;
+
+            movingAAJson["LBY Breaker Enabled"] = config->antiAim.moving.yaw.desync.LBYBreaker.enabled;
+            movingAAJson["LBY Breaker Angle"] = config->antiAim.moving.yaw.desync.LBYBreaker.angle;
+        }
+
+        {
+            auto& inAirAAJson = json["Anti aim"]["In Air"];
+            inAirAAJson["Enabled"] = config->antiAim.inAir.enabled;
+            inAirAAJson["Pitch Enabled"] = config->antiAim.inAir.pitch.enabled;
+            inAirAAJson["Pitch Angle"] = config->antiAim.inAir.pitch.angle;
+            inAirAAJson["Yaw Enabled"] = config->antiAim.inAir.yaw.enabled;
+            inAirAAJson["Yaw Angle"] = config->antiAim.inAir.yaw.angle;
+            inAirAAJson["Yaw Fake Mode"] = antiAim.inAir.yaw.fake.mode;
+            inAirAAJson["Yaw Fake Step"] = antiAim.inAir.yaw.fake.step;
+            inAirAAJson["Yaw Fake Jitter Min"] = antiAim.inAir.yaw.fake.jitterMin;
+            inAirAAJson["Yaw Fake Jitter Max"] = antiAim.inAir.yaw.fake.jitterMax;
+
+            inAirAAJson["Yaw Desync Mode"] = antiAim.inAir.yaw.desync.mode;
+            inAirAAJson["Yaw Desync Step"] = antiAim.inAir.yaw.desync.step;
+            inAirAAJson["Yaw Desync Jitter Min"] = antiAim.inAir.yaw.desync.jitterMin;
+            inAirAAJson["Yaw Desync Jitter Max"] = antiAim.inAir.yaw.desync.jitterMax;
+
+            inAirAAJson["LBY Breaker Enabled"] = config->antiAim.inAir.yaw.desync.LBYBreaker.enabled;
+            inAirAAJson["LBY Breaker Angle"] = config->antiAim.inAir.yaw.desync.LBYBreaker.angle;
+        }
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -1545,7 +1663,6 @@ void Config::save(size_t id) const noexcept
         visualsJson["flashReduction"] = visuals.flashReduction;
         visualsJson["brightness"] = visuals.brightness;
         visualsJson["skybox"] = visuals.skybox;
-        visualsJson["Thirdperson Mode"] = config->antiAim.thirdpersonMode;
         visualsJson["Indicators Enabled"] = visuals.indicatorsEnabled;
         visualsJson["Desync Indicator"] = visuals.selectedIndicators[0];
         visualsJson["LBY Indicator"] = visuals.selectedIndicators[1];

@@ -161,10 +161,10 @@
     <ClCompile Include="Hooks\VmtHook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="Listener.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Hacks\Animations.cpp">
+      <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Pattern.cpp">
+    <ClCompile Include="extraHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -469,10 +469,13 @@
     <ClInclude Include="SDK\Beams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Listener.h">
+    <ClInclude Include="Hacks\Animations.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="MemAlloc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pattern.h">
+    <ClInclude Include="extraHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

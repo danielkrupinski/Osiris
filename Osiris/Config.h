@@ -90,29 +90,117 @@ public:
     } backtrack;
 
     struct {
-        bool enabled{ false };
-        int thirdpersonMode{ 0 };
-        bool pitch{ false };
-        bool yaw{ false };
-        float pitchAngle{ 0.0f };
-        float yawAngle{ 0.0f };
-        int yawInverseAngleKey{ 0 };
-        int yawInverseKeyMode{ 0 };
-        bool yawInversed{ false };
-        bool yawReal{ false };
-        float bodyLean{ 0.0f };
-        int mode{ 0 };
-        float jitterMax{ 0.0f };
-        float jitterMin{ 0.0f };
-        bool LBYBreaker{ false };
-        float LBYAngle{ 0.0f };
         struct {
             bool enabled{ false };
-            int key{ 0 };
-            int keyMode{ 0 };
-            bool keyToggled{ 0 };
-            int maxChoke{ 3 };
-        } fakeWalk;
+            int yawInverseAngleKey{ 0 };
+            int yawInverseKeyMode{ 0 };
+            bool yawInversed{ false };
+            struct {
+                bool enabled{ false };
+                int key{ 0 };
+                int keyMode{ 0 };
+                bool keyToggled{ false };
+                int maxChoke{ 3 };
+            } fakeWalk;
+        } general;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+        } standing;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } LBYBreaker;
+        } moving;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } LBYBreaker;
+        } inAir;
     } antiAim;
 
     struct Glow : ColorA {

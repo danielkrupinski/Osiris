@@ -5,6 +5,7 @@
 #include "../Hooks.h"
 #include "../Interfaces.h"
 #include "Backtrack.h"
+#include "Animations.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/LocalPlayer.h"
@@ -165,7 +166,54 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
                 applyChams(config->chams[LOCALPLAYER].materials[i], false, entity->health());
                 applied = true;
-            }/*
+                if (config->chams[DESYNC].materials[i].enabled && Animations::data.gotMatrix) {
+                    for (auto& i : Animations::data.fakematrix)
+                    {
+                        i[0][3] += info.origin.x;
+                        i[1][3] += info.origin.y;
+                        i[2][3] += info.origin.z;
+                    }
+                    if (applied)
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                    applyChams(config->chams[DESYNC].materials[i], false, entity->health());
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), Animations::data.fakematrix);
+                    interfaces->studioRender->forcedMaterialOverride(nullptr);
+                    applied = true;
+                    for (auto& i : Animations::data.fakematrix)
+                    {
+                        i[0][3] -= info.origin.x;
+                        i[1][3] -= info.origin.y;
+                        i[2][3] -= info.origin.z;
+                    }
+                }
+            }
+            if (config->chams[DESYNC].materials[i].enabled && Animations::data.gotMatrix) {
+                for (auto& i : Animations::data.fakematrix)
+                {
+                    i[0][3] += info.origin.x;
+                    i[1][3] += info.origin.y;
+                    i[2][3] += info.origin.z;
+                }
+                if (applied)
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                applyChams(config->chams[DESYNC].materials[i], false, entity->health());
+                hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), Animations::data.fakematrix);
+                interfaces->studioRender->forcedMaterialOverride(nullptr);
+                applied = true;
+                for (auto& i : Animations::data.fakematrix)
+                {
+                    i[0][3] -= info.origin.x;
+                    i[1][3] -= info.origin.y;
+                    i[2][3] -= info.origin.z;
+                }
+                if (config->chams[LOCALPLAYER].materials[i].enabled) {
+                    if (applied)
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                    applyChams(config->chams[LOCALPLAYER].materials[i], false, entity->health());
+                    applied = true;
+                }
+            }
+            /*
             if (config->misc.fakeLagMode != 0 && config->chams[SERVERPOS].materials[i].enabled) {
                 auto record = config->globals.serverPos;
                 if (record.matrix && record.origin && record.simulationTime) {

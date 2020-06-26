@@ -12,13 +12,14 @@
 
 #include "Config.h"
 #include "EventListener.h"
+#include "extraHooks.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
-#include "Listener.h"
 
 #include "Hacks/Aimbot.h"
+#include "Hacks/Animations.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
@@ -155,7 +156,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
-    hookListener.init();
+    extraHook.init();
 
     EnginePrediction::run(cmd);
 
@@ -190,6 +191,11 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixMovement(cmd, currentViewAngles.y);
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
+    if (cmd->viewangles.y > 180.0f)
+        cmd->viewangles.y = 180.0f - cmd->viewangles.y;
+    else if (cmd->viewangles.y < -180.0f)
+        cmd->viewangles.y = -180.0f + cmd->viewangles.y;
+
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
     cmd->viewangles.z = 0.0f;
     cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
@@ -219,6 +225,9 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     config->globals.sendPacket = sendPacket;
     
+    Animations::update(cmd, sendPacket);
+    Animations::fake();
+
     return false;
 }
 
@@ -233,6 +242,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::updateBrightness();
         Visuals::removeGrass();
         Visuals::remove3dSky();
+        Visuals::thirdperson();
         Glow::render();
     }
     return hooks->clientMode.callOriginal<int, 44>(param);
@@ -291,29 +301,11 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
-    if (interfaces->engine->isConnected() && interfaces->engine->isInGame())
-    {
-        if (config->antiAim.thirdpersonMode == 0)
-        {
-            Visuals::thirdperson(stage, config->globals.fakeAngle);
-            Visuals::AnimationFix(stage, config->globals.fakeAngle, 0);
-        }
-        if (config->antiAim.thirdpersonMode == 1)
-        {
-            Visuals::thirdperson(stage, config->globals.realAngle);
-            Visuals::AnimationFix(stage, config->globals.realAngle, 1);
-        }
-        if (config->antiAim.thirdpersonMode == 2)
-        {
-            Visuals::thirdperson(stage, config->globals.cmdAngle);
-            Visuals::AnimationFix(stage, config->globals.fakeAngle, 0);
-        }
-    }
-
     if (stage == FrameStage::RENDER_START) {
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Animations::real();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::playerModel(stage);
@@ -721,6 +713,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+    extraHook.restore();
 
     netvars->restore();
 
@@ -737,62 +730,4 @@ void Hooks::uninstall() noexcept
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
         CloseHandle(thread);
-}
-
-uintptr_t* Hooks::Vmt::findFreeDataPage(void* const base, size_t vmtSize) noexcept
-{
-    MEMORY_BASIC_INFORMATION mbi;
-    VirtualQuery(base, &mbi, sizeof(mbi));
-    MODULEINFO moduleInfo;
-    GetModuleInformation(GetCurrentProcess(), static_cast<HMODULE>(mbi.AllocationBase), &moduleInfo, sizeof(moduleInfo));
-
-    auto moduleEnd{ reinterpret_cast<uintptr_t*>(static_cast<std::byte*>(moduleInfo.lpBaseOfDll) + moduleInfo.SizeOfImage) };
-
-    for (auto currentAddress = moduleEnd - vmtSize; currentAddress > moduleInfo.lpBaseOfDll; currentAddress -= *currentAddress ? vmtSize : 1)
-        if (!*currentAddress)
-            if (VirtualQuery(currentAddress, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT
-                && mbi.Protect == PAGE_READWRITE && mbi.RegionSize >= vmtSize * sizeof(uintptr_t)
-                && std::all_of(currentAddress, currentAddress + vmtSize, [](uintptr_t a) { return !a; }))
-                return currentAddress;
-
-    return nullptr;
-}
-
-auto Hooks::Vmt::calculateLength(uintptr_t* vmt) noexcept
-{
-    size_t length{ 0 };
-    MEMORY_BASIC_INFORMATION memoryInfo;
-    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect == PAGE_EXECUTE_READ)
-        length++;
-    return length;
-}
-
-bool Hooks::Vmt::init(void* const base) noexcept
-{
-    assert(base);
-    this->base = base;
-    bool init = false;
-
-    if (!oldVmt) {
-        oldVmt = *reinterpret_cast<uintptr_t**>(base);
-        length = calculateLength(oldVmt) + 1;
-
-        // Temporary fix for unstable hooks, newVmt is never freed
-        // BEFORE: if (newVmt = findFreeDataPage(base, length))
-        if (newVmt = new std::uintptr_t[length])
-            std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt);
-        assert(newVmt);
-        init = true;
-    }
-    if (newVmt)
-        *reinterpret_cast<uintptr_t**>(base) = newVmt + 1;
-    return init;
-}
-
-void Hooks::Vmt::restore() noexcept
-{
-    if (base && oldVmt)
-        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
-    if (newVmt)
-        ZeroMemory(newVmt, length * sizeof(uintptr_t));
 }
