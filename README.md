@@ -30,6 +30,7 @@
 </details>
 
 ## เริ่มต้นใช้งาน
+<details>
 
 ### ข้อกำหนดเบื้องต้น
 Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), platform toolset v142 and Windows SDK 10.0
@@ -42,6 +43,11 @@ Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), pl
 แล้วเปลี่ยนเป็น `Release | x86` และกด **Build solution**
 หากทุกอย่างถูกต้องจะได้ไฟล์ `Osiris.dll`
 
+</details>
+
+## วิธีใช้
+<details>
+  
 ### วิธีใช้
 ใช้ Injector ตัวไหนก็ได้ฉีดไฟล์ `Osiris.dll` เข้า `csgo.exe`
 หลังจากฉีดไฟล์เสร็จจะมีเมนูเด้งขึ้นมา
@@ -51,7 +57,7 @@ Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), pl
 
 ### วิธีใส่คอนฟิก
 ก็อปไฟล์ไปวางใน(`Documents\Osiris`)
-
+</details>
 
 ## เครดิต
 * [ocornut](https://github.com/ocornut) - [contributors](https://github.com/ocornut/imgui/graphs/contributors) - [imgui](https://github.com/ocornut/imgui)
