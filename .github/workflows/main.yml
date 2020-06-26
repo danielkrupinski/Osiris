@@ -4,7 +4,7 @@ name: Windows
 
 # Controls when the action will run. Triggers the workflow on push or pull request 
 # events but only for the master branch
-on: [push, pull_request]
+on: [push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,8 +20,53 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
+    # Delete Release and Tag
+    - uses: dev-drprasad/delete-tag-and-release@v0.1.2
+      with:
+        delete_release: true # default: false
+        tag_name: v1.0 # tag name to delete
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # Build command
     - name: Build
       shell: cmd
       run: '"%MSBUILD_PATH%\MSBuild.exe" Osiris/Osiris.vcxproj /p:Platform=Win32 /p:Configuration=Release'
+    # Create Release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1.0
+        release_name: v1.0
+        draft: false
+        prerelease: false
+    # Upload DLL to Release
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above
+        asset_path: Osiris\Release\Osiris.dll
+        asset_name: Osiris.dll
+        asset_content_type: application/x-msdownload
+    # Zip the DLL
+    - name: Zip the DLL
+      uses: papeloto/action-zip@v1
+      with:
+        files: Osiris\Release\Osiris.dll
+        dest: Osiris.dll.zip
+    # Upload Zipped DLL to Release
+    - name: Upload Release Asset
+      id: upload-zipped-release-asset
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above
+        asset_path: Osiris.dll.zip
+        asset_name: Osiris.dll.zip
+        asset_content_type: application/zip
