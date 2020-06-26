@@ -70,7 +70,7 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
     if (activeWeapon)
         auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
 
-    if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == MoveType::LADDER) || (localPlayer->moveType() == MoveType::NOCLIP))
+    if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == MoveType::LADDER) || (localPlayer->moveType() == MoveType::NOCLIP) || !localPlayer->isAlive())
         return;
 
     if (config->antiAim.standing.enabled && localPlayer->isAlive() && interfaces->engine->isConnected() && interfaces->engine->isInGame() && localPlayer->flags() & 1 && fabsf(cmd->sidemove) < 1.1f && fabsf(cmd->forwardmove) < 1.1f)
