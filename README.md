@@ -39,7 +39,7 @@ Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), pl
 โหลดซอร์สโค้ด [กดตรงนี้](https://codeload.github.com/TqzDev/Osiris/zip/master)
 
 ### คอมไพล์
-เปิดไฟล์**Osiris.sln** ใน Microsoft Visual Studio 2019.
+เปิดไฟล์ **Osiris.sln** ใน Microsoft Visual Studio 2019.
 แล้วเปลี่ยนเป็น `Release | x86` และกด **Build solution**
 หากทุกอย่างถูกต้องจะได้ไฟล์ `Osiris.dll`
 
