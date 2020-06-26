@@ -36,7 +36,9 @@
 Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), platform toolset v142 and Windows SDK 10.0
 
 ### ดาวน์โหลด
+
 โหลดซอร์สโค้ด [กดตรงนี้](https://codeload.github.com/TqzDev/Osiris/zip/master)
+
 โหลดdll [กดตรงนี้](https://github.com/TqzDev/Osiris/releases/download/v1.0/Osiris.dll)
 
 ### คอมไพล์
