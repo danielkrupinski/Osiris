@@ -14,6 +14,7 @@ class GameEventManager;
 class Input;
 class ItemSystem;
 class KeyValues;
+class MemAlloc;
 class MoveHelper;
 class MoveData;
 class ViewRender;
@@ -77,6 +78,7 @@ public:
     uintptr_t UpdateState;
     uintptr_t CreateState;
     uintptr_t InvalidateBoneCache;
+    MemAlloc* memalloc;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

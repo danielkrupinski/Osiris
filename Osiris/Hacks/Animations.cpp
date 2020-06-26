@@ -34,6 +34,7 @@ void Animations::fake() noexcept
         initfakeanim = true;
         spawnTime = 0.f;
         fakeanimstate = nullptr;
+        return;
     }
 
     if (!localPlayer || !localPlayer->isAlive())
@@ -48,7 +49,7 @@ void Animations::fake() noexcept
 
     if (!initfakeanim)
     {
-        fakeanimstate = static_cast<AnimState*>(interfaces->memalloc->Alloc(sizeof(AnimState)));
+        fakeanimstate = static_cast<AnimState*>(memory->memalloc->Alloc(sizeof(AnimState)));
 
         if (fakeanimstate != nullptr)
             localPlayer.get()->CreateState(fakeanimstate);
