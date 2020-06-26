@@ -28,4 +28,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         owner: danielkrupinski
         # Branch to keep updated
-        base: autopull # optional, default is master
+        base: master # optional, default is master
