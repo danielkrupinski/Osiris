@@ -10,6 +10,7 @@
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/ConVar.h"
+#include "../SDK/Input.h"
 
 Animations::Datas Animations::data;
 
@@ -97,6 +98,13 @@ void Animations::real() noexcept
     static auto backup_poses = localPlayer.get()->pose_parameters();
     static auto backup_abs = localPlayer.get()->getAnimstate()->GoalFeetYaw;
 
+    if (!memory->input->isCameraInThirdPerson) {
+        localPlayer.get()->ClientSideAnimation() = true;
+        localPlayer.get()->UpdateClientSideAnimation();
+        localPlayer.get()->ClientSideAnimation() = false;
+        return;
+    }
+    
     static std::array<AnimationLayer, 15> networked_layers;
 
     while (localPlayer.get()->getAnimstate()->LastClientSideAnimationUpdateFramecount == memory->globalVars->framecount)
