@@ -49,7 +49,7 @@ void Animations::fake() noexcept
 
     if (!initfakeanim)
     {
-        fakeanimstate = static_cast<AnimState*>(interfaces->memalloc->Alloc(sizeof(AnimState)));
+        fakeanimstate = static_cast<AnimState*>(memory->memalloc->Alloc(sizeof(AnimState)));
 
         if (fakeanimstate != nullptr)
             localPlayer.get()->CreateState(fakeanimstate);
