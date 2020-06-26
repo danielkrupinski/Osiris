@@ -1135,7 +1135,8 @@ void Config::save(size_t id) const noexcept
             standingAAJson["Yaw Fake Jitter Min"] = antiAim.standing.yaw.fake.jitterMin;
             standingAAJson["Yaw Fake Jitter Max"] = antiAim.standing.yaw.fake.jitterMax;
 
-            standingAAJson["Yaw Desync Enabled"] = antiAim.standing.yaw.desync.mode;
+            standingAAJson["Yaw Desync Enabled"] = antiAim.standing.yaw.desync.enabled;
+            standingAAJson["Yaw Desync Body Lean"] = antiAim.standing.yaw.desync.bodyLean;
             standingAAJson["Yaw Desync Mode"] = antiAim.standing.yaw.desync.mode;
             standingAAJson["Yaw Desync Step"] = antiAim.standing.yaw.desync.step;
             standingAAJson["Yaw Desync Jitter Min"] = antiAim.standing.yaw.desync.jitterMin;
@@ -1157,7 +1158,8 @@ void Config::save(size_t id) const noexcept
             movingAAJson["Yaw Fake Jitter Min"] = antiAim.moving.yaw.fake.jitterMin;
             movingAAJson["Yaw Fake Jitter Max"] = antiAim.moving.yaw.fake.jitterMax;
 
-            movingAAJson["Yaw Desync Enabled"] = antiAim.moving.yaw.desync.mode;
+            movingAAJson["Yaw Desync Enabled"] = antiAim.moving.yaw.desync.enabled;
+            movingAAJson["Yaw Desync Body Lean"] = antiAim.moving.yaw.desync.bodyLean;
             movingAAJson["Yaw Desync Mode"] = antiAim.moving.yaw.desync.mode;
             movingAAJson["Yaw Desync Step"] = antiAim.moving.yaw.desync.step;
             movingAAJson["Yaw Desync Jitter Min"] = antiAim.moving.yaw.desync.jitterMin;
@@ -1179,7 +1181,8 @@ void Config::save(size_t id) const noexcept
             inAirAAJson["Yaw Fake Jitter Min"] = antiAim.inAir.yaw.fake.jitterMin;
             inAirAAJson["Yaw Fake Jitter Max"] = antiAim.inAir.yaw.fake.jitterMax;
 
-            inAirAAJson["Yaw Desync Enabled"] = antiAim.inAir.yaw.desync.mode;
+            inAirAAJson["Yaw Desync Enabled"] = antiAim.inAir.yaw.desync.enabled;
+            inAirAAJson["Yaw Desync Body Lean"] = antiAim.inAir.yaw.desync.bodyLean;
             inAirAAJson["Yaw Desync Mode"] = antiAim.inAir.yaw.desync.mode;
             inAirAAJson["Yaw Desync Step"] = antiAim.inAir.yaw.desync.step;
             inAirAAJson["Yaw Desync Jitter Min"] = antiAim.inAir.yaw.desync.jitterMin;
