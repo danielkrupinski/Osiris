@@ -1,4 +1,4 @@
-﻿#include <fstream>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -357,11 +357,11 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
                 if (config->antiAim.moving.yaw.fake.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Step", &config->antiAim.moving.yaw.fake.step, 0.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Step", &config->antiAim.moving.yaw.fake.step, 0.0f, 180.0f, "%.2f°", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Jitter Max", &config->antiAim.moving.yaw.fake.jitterMax, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Jitter Max", &config->antiAim.moving.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2f°", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Jitter Min", &config->antiAim.moving.yaw.fake.jitterMin, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Jitter Min", &config->antiAim.moving.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2f°", 1);
                 }
             }
             ImGui::Checkbox("Moving Yaw Desync", &config->antiAim.moving.yaw.desync.enabled);
