@@ -56,7 +56,7 @@ Microsoft Visual Studio 2019 (เวอร์ชั่นล่าสุด), pl
 เปิด-ปิดเมนูปุ่ม`INSERT`
 
 ### วิธีใส่คอนฟิก
-ก็อปไฟล์ไปวางใน(`Documents\Osiris`)
+ก็อปคอนฟิกไปวางใน(`Documents\Osiris`)
 </details>
 
 ## เครดิต
