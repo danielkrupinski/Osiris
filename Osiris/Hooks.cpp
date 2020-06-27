@@ -157,6 +157,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
+    Misc::jumpbug(cmd);
     Misc::moonwalk(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
