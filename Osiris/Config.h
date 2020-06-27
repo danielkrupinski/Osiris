@@ -270,6 +270,8 @@ public:
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
         int killSound{ 0 };
+        bool jumpbug{ false };
+        int jumpbugkey{ 0 };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
