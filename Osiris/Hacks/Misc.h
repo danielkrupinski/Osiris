@@ -6,7 +6,6 @@ struct UserCmd;
 
 namespace Misc
 {
-    void jumpbug(UserCmd* cmd) noexcept;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;

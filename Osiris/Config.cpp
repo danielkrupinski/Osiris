@@ -911,8 +911,6 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
         if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
         if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
-        if (miscJson.isMember("Jumpbug")) misc.jumpbug = miscJson["Jumpbug"].asBool();
-        if (miscJson.isMember("Jumpbug Key")) misc.jumpbugkey = miscJson["Jumpbug Key"].asInt();
 
         if (const auto& purchaseList = miscJson["Purchase List"]; purchaseList.isObject()) {
             if (const auto& enabled{ purchaseList["Enabled"] }; enabled.isBool())
@@ -1673,8 +1671,6 @@ void Config::save(size_t id) const noexcept
         miscJson["Custom Hit Sound"] = misc.customHitSound;
         miscJson["Kill sound"] = misc.killSound;
         miscJson["Custom Kill Sound"] = misc.customKillSound;
-        miscJson["Jumpbug"] = misc.jumpbug;
-        miscJson["Jumpbug Key"] = misc.jumpbugkey;
 
         {
             auto& purchaseListJson = miscJson["Purchase List"];
