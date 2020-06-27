@@ -50,8 +50,6 @@ struct AnimState {
     float LastOriginZ;
     float HeadHeightOrOffsetFromHittingGroundAnimation;
     float stopToFullRunningFraction;
-    std::byte pad5[4];
-    float UnknownFraction;
-    std::byte pad6[526];
+    std::byte pad5[532];
     float velocitySubtractY;
 };

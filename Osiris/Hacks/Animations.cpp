@@ -128,7 +128,6 @@ void Animations::real() noexcept
     }
     localPlayer.get()->getAnimstate()->FeetYawRate = 0.f;
     memory->setAbsAngle(localPlayer.get(), Vector{ 0,backup_abs,0 });
-    localPlayer.get()->getAnimstate()->UnknownFraction = 0.f;
     std::memcpy(localPlayer.get()->animOverlays(), &networked_layers, sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
     localPlayer.get()->pose_parameters() = backup_poses;
 }
