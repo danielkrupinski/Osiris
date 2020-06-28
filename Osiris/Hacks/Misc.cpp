@@ -761,8 +761,6 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
 
     auto unduck = true;
 
-    const auto plocalPlayer = localPlayer.get();
-
     float max_radias = M_PI * 2;
     float step = max_radias / 128;
     float xThick = 23;
@@ -792,7 +790,7 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
 
             Trace target;
 
-            TraceFilter flt = plocalPlayer;
+            TraceFilter flt = localPlayer.get();
 
             interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
@@ -814,7 +812,7 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
 
             Trace target;
 
-            TraceFilter flt = plocalPlayer;
+            TraceFilter flt = localPlayer.get();
             interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
             if (target.fraction != 1.f && target.fraction != 0.f) {
@@ -835,7 +833,7 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
 
             Trace target;
 
-            TraceFilter flt = plocalPlayer;
+            TraceFilter flt = localPlayer.get();
             interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
             if (target.fraction != 1.f && target.fraction != 0.f) {
