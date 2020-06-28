@@ -77,6 +77,8 @@ void Config::load(size_t id) noexcept
         if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
         if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
         if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
+        if (backtrackJson.isMember("Fake Latency")) backtrack.fakeLatency = backtrackJson["Fake Latency"].asBool();
+        if (backtrackJson.isMember("Latency Amount")) backtrack.fakeLatencyAmount = backtrackJson["Latency Amount"].asInt();
     }
 
     {
@@ -996,6 +998,8 @@ void Config::save(size_t id) const noexcept
         backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
         backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
         backtrackJson["Time limit"] = backtrack.timeLimit;
+        backtrackJson["Fake Latency"] = backtrack.fakeLatency;
+        backtrackJson["Latency Amount"] = backtrack.fakeLatencyAmount;
     }
 
     {
