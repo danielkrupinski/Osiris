@@ -756,7 +756,7 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
     if (!config->misc.jumpbug || !localPlayer || !localPlayer->isAlive())
         return;
 
-    bool bhopWasEnabled = false;
+    static bool bhopWasEnabled = false;
     bool JumpDone;
 
     auto unduck = true;
