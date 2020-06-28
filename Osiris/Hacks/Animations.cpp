@@ -71,7 +71,7 @@ void Animations::fake() noexcept
         localPlayer.get()->InvalidateBoneCache();
         memory->setAbsAngle(localPlayer.get(), Vector{ 0, fakeanimstate->GoalFeetYaw, 0 });
         std::memcpy(localPlayer.get()->animOverlays(), &networked_layers, sizeof(AnimationLayer) * localPlayer->getAnimationLayerCount());
-
+        localPlayer.get()->getAnimationLayer(12)->weight = std::numeric_limits<float>::epsilon();
         data.gotMatrix = localPlayer.get()->setupBones(data.fakematrix, 256, 0x7FF00, memory->globalVars->currenttime);
         const auto origin = localPlayer.get()->getRenderOrigin();
         if (data.gotMatrix)

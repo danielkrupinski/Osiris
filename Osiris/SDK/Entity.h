@@ -28,13 +28,20 @@ struct AnimState;
 struct AnimationLayer
 {
 public:
-    std::byte pad[20];
+    bool clientblend;
+    float blendin;
+    void* studioHdr;
+    int dispatchedsrc;
+    int dispatcheddst;
     unsigned int order;
     unsigned int sequence;
-    std::byte pad2[4];
+    float prevcycle;
     float weight;
-    std::byte pad3[8];
+    float weightdeltarate;
+    float playbackRate;
     float cycle;
+    void* owner;
+    int invalidatephysicsbits;
 };
 
 enum class MoveType {
@@ -233,7 +240,7 @@ public:
 
     AnimationLayer* getAnimationLayer(int overlay) noexcept
     {
-        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
+        return &animOverlays()[overlay];
     }
 
     std::array<float, 24>& pose_parameters()
