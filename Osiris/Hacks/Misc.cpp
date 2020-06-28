@@ -757,9 +757,9 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
         return;
 
     bool bhopWasEnabled = false;
-    auto unduck = true;
+    bool JumpDone;
 
-    bool bDidJump;
+    auto unduck = true;
 
     const auto plocalPlayer = localPlayer.get();
 
@@ -775,8 +775,9 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
         }
 
         if (unduck) {
-            bDidJump = false;
+            JumpDone = false;
             cmd->buttons &= ~UserCmd::IN_DUCK;
+			// cmd->buttons |= UserCmd::IN_JUMP; // If you want to hold JB key only.
             unduck = false;
         }
         Vector pos = localPlayer->origin();
@@ -789,14 +790,14 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
             Vector pt2 = pt;
             pt2.z -= 6;
 
-            Trace fag;
+            Trace target;
 
             TraceFilter flt = plocalPlayer;
 
-            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, fag);
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
-            if (fag.fraction != 1.0f && fag.fraction != 0.0f) {
-                bDidJump = true;
+            if (target.fraction != 1.0f && target.fraction != 0.0f) {
+                JumpDone = true;
                 cmd->buttons |= UserCmd::IN_DUCK;
                 cmd->buttons &= ~UserCmd::IN_JUMP;
                 unduck = true;
@@ -811,13 +812,13 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
             Vector pt2 = pt;
             pt2.z -= 6;
 
-            Trace fag;
+            Trace target;
 
             TraceFilter flt = plocalPlayer;
-            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, fag);
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
-            if (fag.fraction != 1.f && fag.fraction != 0.f) {
-                bDidJump = true;
+            if (target.fraction != 1.f && target.fraction != 0.f) {
+                JumpDone = true;
                 cmd->buttons |= UserCmd::IN_DUCK;
                 cmd->buttons &= ~UserCmd::IN_JUMP;
                 unduck = true;
@@ -832,13 +833,13 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
             Vector pt2 = pt;
             pt2.z -= 6;
 
-            Trace fag;
+            Trace target;
 
             TraceFilter flt = plocalPlayer;
-            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, fag);
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, flt, target);
 
-            if (fag.fraction != 1.f && fag.fraction != 0.f) {
-                bDidJump = true;
+            if (target.fraction != 1.f && target.fraction != 0.f) {
+                JumpDone = true;
                 cmd->buttons |= UserCmd::IN_DUCK;
                 cmd->buttons &= ~UserCmd::IN_JUMP;
                 unduck = true;
