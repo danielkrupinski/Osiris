@@ -78,7 +78,7 @@ void GUI::startdevices(IDirect3DDevice9* device) noexcept {
     if (first_started == false) {
         first_started = true;
         
-        tImage = D3DXCreateTextureFromFileInMemory(device, &My_Image_Bytes, sizeof(My_Image_Bytes), &my_texture);
+        tImage = D3DXCreateTextureFromFileInMemory(device, &LogoLW, sizeof(LogoLW), &my_texture);
     }
     //Call Render to start Menu.
     GUI::render();
