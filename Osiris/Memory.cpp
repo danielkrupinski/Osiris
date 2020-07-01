@@ -20,7 +20,6 @@ Memory::Memory() noexcept
     loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(L"engine", "\xE8????\x84\xC0\x74\x2D\xA1") + 1);
     setClanTag = reinterpret_cast<decltype(setClanTag)>(findPattern(L"engine", "\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15"));
     lineGoesThroughSmoke = relativeToAbsolute<decltype(lineGoesThroughSmoke)>(findPattern(L"client", "\xE8????\x8B\x4C\x24\x30\x33\xD2") + 1);
-    smokeCount = *(reinterpret_cast<int**>(lineGoesThroughSmoke) + 2);
     cameraThink = findPattern(L"client", "\x85\xC0\x75\x30\x38\x86");
     acceptMatch = reinterpret_cast<decltype(acceptMatch)>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12"));
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(L"client", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
