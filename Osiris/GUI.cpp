@@ -18,6 +18,8 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
+//Add Bytesa.h with My Images Bytes
+#include "Bytesa.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -68,6 +70,18 @@ void GUI::render() noexcept
     } else {
         renderGuiStyle2();
     }
+}
+
+void GUI::startdevices(IDirect3DDevice9* device) noexcept {
+    
+    //Check first start for solve fps lag.
+    if (first_started == false) {
+        first_started = true;
+        
+        tImage = D3DXCreateTextureFromFileInMemory(device, &My_Image_Bytes, sizeof(My_Image_Bytes), &my_texture);
+    }
+    //Call Render to start Menu.
+    GUI::render();
 }
 
 void GUI::updateColors() const noexcept
@@ -1304,6 +1318,12 @@ void GUI::renderGuiStyle2() noexcept
         }
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(true);
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("ImageTest")) {
+        
+            ImGui::Text("ImageTest");
+            ImGui::Image(my_texture, ImVec2(648.f, 548.f));
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
