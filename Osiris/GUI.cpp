@@ -448,7 +448,17 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
-   
+
+    ImGui::Checkbox("On key", &config->visualKeys.glowOnKey);
+    ImGui::SameLine();
+    hotkey(config->visualKeys.glowKey);
+    ImGui::SameLine();
+    ImGui::PushID("visualKeysToggleGlow");
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &config->visualKeys.glowKeyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
+    ImGui::PopID();
+
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -512,6 +522,16 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGuiCustom::colorPopup("Color", chams.color, &chams.rainbow, &chams.rainbowSpeed);
+
+    ImGui::Checkbox("On key", &config->visualKeys.chamsOnKey);
+    ImGui::SameLine();
+    hotkey(config->visualKeys.chamsKey);
+    ImGui::SameLine();
+    ImGui::PushID("visualKeysToggleChams");
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &config->visualKeys.chamsKeyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
+    ImGui::PopID();
 
     if (!contentOnly) {
         ImGui::End();
@@ -730,6 +750,16 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             break;
         }
         }
+
+        ImGui::Checkbox("On key", &config->visualKeys.espOnKey);
+        ImGui::SameLine();
+        hotkey(config->visualKeys.espKey);
+        ImGui::SameLine();
+        ImGui::PushID("visualKeysToggleEsp");
+        ImGui::PushItemWidth(70.0f);
+        ImGui::Combo("", &config->visualKeys.espKeyMode, "Hold\0Toggle\0");
+        ImGui::PopItemWidth();
+        ImGui::PopID();
 
         ImGui::EndChild();
     }

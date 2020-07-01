@@ -129,8 +129,12 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 return;
         } else {
             static bool toggle = true;
-            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
+
+            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1) {
                 toggle = !toggle;
+                interfaces->engine->clientCmdUnrestricted("play buttons/arena_switch_press_02;");
+            }
+
             if (!toggle)
                 return;
         }

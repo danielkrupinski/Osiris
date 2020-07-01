@@ -197,6 +197,24 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::updateBrightness();
         Visuals::removeGrass();
         Visuals::remove3dSky();
+
+        if (config->visualKeys.glowOnKey) {
+            if (!config->visualKeys.glowKeyMode) {
+                if (!GetAsyncKeyState(config->visualKeys.glowKey))
+                    return hooks->clientMode.callOriginal<int, 44>(param);
+            } else {
+                static bool toggle = true;
+
+                if (GetAsyncKeyState(config->visualKeys.glowKey) & 1) {
+                    toggle = !toggle;
+                    interfaces->engine->clientCmdUnrestricted("play buttons/arena_switch_press_02;");
+                }
+
+                if (!toggle)
+                    return hooks->clientMode.callOriginal<int, 44>(param);
+            }
+        }
+
         Glow::render();
     }
     return hooks->clientMode.callOriginal<int, 44>(param);
@@ -221,9 +239,32 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
-    static Chams chams;
-    if (chams.render(ctx, state, info, customBoneToWorld))
-        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    bool shouldDraw = true;
+
+    if (config->visualKeys.chamsOnKey) {
+        if (!config->visualKeys.chamsKeyMode) {
+            if (!GetAsyncKeyState(config->visualKeys.chamsKey))
+                shouldDraw = false;
+        } else {
+            static bool toggle = true;
+
+            if (GetAsyncKeyState(config->visualKeys.chamsKey) & 1) {
+                toggle = !toggle;
+                interfaces->engine->clientCmdUnrestricted("play buttons/arena_switch_press_02;");
+            }
+
+            if (!toggle)
+                shouldDraw = false;
+        }
+    }
+
+    if (shouldDraw) {
+        static Chams chams;
+
+        if (chams.render(ctx, state, info, customBoneToWorld))
+            hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+    }
+
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
@@ -238,6 +279,35 @@ static bool __fastcall svCheatsGetBool(void* _this) noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
+        if (config->visualKeys.espOnKey) {
+            if (!config->visualKeys.espKeyMode) {
+                if (!GetAsyncKeyState(config->visualKeys.espKey)) {
+                    Misc::drawBombTimer();
+                    Misc::spectatorList();
+                    Misc::watermark();
+                    Visuals::hitMarker();
+
+                    return hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
+                }
+            } else {
+                static bool toggle = true;
+
+                if (GetAsyncKeyState(config->visualKeys.espKey) & 1) {
+                    toggle = !toggle;
+                    interfaces->engine->clientCmdUnrestricted("play buttons/arena_switch_press_02;");
+                }
+
+                if (!toggle) {
+                    Misc::drawBombTimer();
+                    Misc::spectatorList();
+                    Misc::watermark();
+                    Visuals::hitMarker();
+
+                    return hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
+                }
+            }
+        }
+
         Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
