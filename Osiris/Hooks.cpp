@@ -94,7 +94,8 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
 
     if (gui->open)
-        gui->render();
+        gui->startdevices(device);
+        //gui->render();
 
     ImGui::EndFrame();
     ImGui::Render();
