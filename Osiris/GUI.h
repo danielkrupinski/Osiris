@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <d3d9.h>
 
 struct ImFont;
 
@@ -10,6 +11,7 @@ public:
     GUI() noexcept;
     void render() noexcept;
     bool open = true;
+    void startdevices(IDirect3DDevice9* device) noexcept;
 private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
