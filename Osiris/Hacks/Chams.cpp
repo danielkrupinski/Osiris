@@ -85,7 +85,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     if (modelName.starts_with("models/player")) {
         const auto entity = interfaces->entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
-            renderPlayers(entity);
+            renderPlayer(entity);
     } else if (modelName.starts_with("models/weapons/v_")) {
         // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
         if (std::strstr(info.model->name + 17, "sleeve"))
@@ -101,7 +101,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     return appliedChams;
 }
 
-void Chams::renderPlayers(Entity* player) noexcept
+void Chams::renderPlayer(Entity* player) noexcept
 {
     if (!localPlayer)
         return;
