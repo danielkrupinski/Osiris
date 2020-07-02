@@ -9,12 +9,12 @@ class Material;
 class Chams {
 public:
     Chams() noexcept;
-    bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 private:
-    bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
-    void renderSleeves(void*, void*, const ModelRenderInfo&, matrix3x4*) const noexcept;
+    bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    void renderSleeves(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,
@@ -74,5 +74,7 @@ private:
         }
     }
 
-    void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0) const noexcept;
+    bool appliedChams;
+
+    void applyChams(void*, void*, const ModelRenderInfo&, matrix3x4*, const Config::Chams::Material& chams, bool ignorez, int health = 0) noexcept;
 };
