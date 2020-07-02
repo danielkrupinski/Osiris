@@ -83,31 +83,29 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     this->customBoneToWorld = customBoneToWorld;
 
     if (modelName.starts_with("models/player")) {
-        renderPlayers(ctx, state, info, customBoneToWorld);
+        const auto entity = interfaces->entityList->getEntity(info.entityIndex);
+        if (entity && !entity->isDormant() && entity->isPlayer())
+            renderPlayers(entity);
     } else if (modelName.starts_with("models/weapons/v_")) {
         // info.model->name + 17 -> small optimization, skip "models/weapons/v_"
         if (std::strstr(info.model->name + 17, "sleeve"))
-            renderSleeves(ctx, state, info, customBoneToWorld);
+            renderSleeves();
         else if (std::strstr(info.model->name + 17, "arms"))
-            renderHands(ctx, state, info, customBoneToWorld);
+            renderHands();
         else if (!std::strstr(info.model->name + 17, "tablet")
             && !std::strstr(info.model->name + 17, "parachute")
             && !std::strstr(info.model->name + 17, "fists"))
-            renderWeapons(ctx, state, info, customBoneToWorld);
+            renderWeapons();
     }
 
     return !appliedChams;
 }
 
-void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderPlayers(Entity* entity) noexcept
 {
     if (!localPlayer)
         return;
-
-    const auto entity = interfaces->entityList->getEntity(info.entityIndex);
-    if (!entity || entity->isDormant() || !entity->isPlayer())
-        return;
-
+    
     for (size_t i = 0; i < config->chams[ALLIES_ALL].materials.size(); ++i) {
         if (const auto activeWeapon = entity->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()
             && (config->chams[PLANTING_ALL].materials[i].enabled || config->chams[PLANTING_OCCLUDED].materials[i].enabled || config->chams[PLANTING_VISIBLE].materials[i].enabled)) {
@@ -132,7 +130,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                 if (config->chams[DEFUSING_VISIBLE].materials[i].enabled)
                     applyChams(config->chams[DEFUSING_VISIBLE].materials[i], false, entity->health());
             }
-        } else if (info.entityIndex == localPlayer->index()) {
+        } else if (entity == localPlayer.get()) {
             if (config->chams[LOCALPLAYER].materials[i].enabled)
                 applyChams(config->chams[LOCALPLAYER].materials[i], false, entity->health());
         } else if (entity->isOtherEnemy(localPlayer.get())) {
@@ -148,7 +146,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
 
             if (config->chams[BACKTRACK].materials[i].enabled && config->backtrack.enabled) {
-                auto record = &Backtrack::records[info.entityIndex];
+                auto record = &Backtrack::records[entity->index()];
                 if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     if (!appliedChams)
                         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -172,7 +170,7 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     return;
 }
 
-void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderWeapons() noexcept
 {
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
         return;
@@ -183,7 +181,7 @@ void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, m
     }
 }
 
-void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderHands() noexcept
 {
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -195,7 +193,7 @@ void Chams::renderHands(void* ctx, void* state, const ModelRenderInfo& info, mat
     }
 }
 
-void Chams::renderSleeves(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderSleeves() noexcept
 {
     if (!localPlayer || !localPlayer->isAlive())
         return;

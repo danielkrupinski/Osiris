@@ -2,6 +2,7 @@
 
 #include "../Config.h"
 
+class Entity;
 struct ModelRenderInfo;
 class matrix3x4;
 class Material;
@@ -11,10 +12,10 @@ public:
     Chams() noexcept;
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 private:
-    void renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
-    void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
-    void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
-    void renderSleeves(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    void renderPlayers(Entity* player) noexcept;
+    void renderWeapons() noexcept;
+    void renderHands() noexcept;
+    void renderSleeves() noexcept;
 
     enum ChamsId {
         ALLIES_ALL = 0,
