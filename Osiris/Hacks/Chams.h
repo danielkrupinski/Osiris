@@ -12,7 +12,7 @@ public:
     Chams() noexcept;
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 private:
-    void renderPlayers(Entity* player) noexcept;
+    void renderPlayer(Entity* player) noexcept;
     void renderWeapons() noexcept;
     void renderHands() noexcept;
     void renderSleeves() noexcept;
