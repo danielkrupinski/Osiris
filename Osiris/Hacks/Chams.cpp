@@ -95,14 +95,14 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     return !appliedChams;
 }
 
-bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (!localPlayer)
-        return true;
+        return;
 
     const auto entity = interfaces->entityList->getEntity(info.entityIndex);
     if (!entity || entity->isDormant() || !entity->isPlayer())
-        return true;
+        return;
 
     for (size_t i = 0; i < config->chams[ALLIES_ALL].materials.size(); ++i) {
         if (const auto activeWeapon = entity->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()
@@ -165,7 +165,7 @@ bool Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
             }
         }
     }
-    return true;
+    return;
 }
 
 void Chams::renderWeapons(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept

@@ -11,7 +11,7 @@ public:
     Chams() noexcept;
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 private:
-    bool renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
+    void renderPlayers(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     void renderWeapons(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     void renderHands(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
     void renderSleeves(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
