@@ -243,6 +243,6 @@ void Chams::applyChams(const Config::Chams::Material& chams, bool ignorez, int h
     material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
     material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
     interfaces->studioRender->forcedMaterialOverride(material);
-    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customMatrix ? customMatrix : customBoneToWorld);
+    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
     appliedChams = true;
 }
