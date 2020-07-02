@@ -98,7 +98,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
             renderWeapons();
     }
 
-    return !appliedChams;
+    return appliedChams;
 }
 
 void Chams::renderPlayers(Entity* player) noexcept
@@ -169,7 +169,6 @@ void Chams::renderPlayers(Entity* player) noexcept
             }
         }
     }
-    return;
 }
 
 void Chams::renderWeapons() noexcept
@@ -244,5 +243,8 @@ void Chams::applyChams(const Config::Chams::Material& chams, bool ignorez, int h
     material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
     interfaces->studioRender->forcedMaterialOverride(material);
     hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-    appliedChams = true;
+    if (!ignorez)
+        appliedChams = true;
+    else
+        interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
