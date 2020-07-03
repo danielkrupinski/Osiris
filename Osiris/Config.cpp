@@ -386,6 +386,9 @@ void Config::load(size_t id) noexcept
 
         if (espJson.isMember("Dead ESP")) espConfig.deadesp = espJson["Dead ESP"].asBool();
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
+        if (espJson.isMember("Draw multi points")) espConfig.drawMultiPoints = espJson["Draw multi points"].asBool();
+        if (espJson.isMember("Draw multi points only head")) espConfig.drawMultiPointsOnlyHead = espJson["Draw multi points only head"].asBool();
+        if (espJson.isMember("Draw multi points expansion")) espConfig.drawMultiPointsExpansion = espJson["Draw multi points expansion"].asFloat();
     }
 
     {
@@ -1240,6 +1243,9 @@ void Config::save(size_t id) const noexcept
 
         espJson["Dead ESP"] = espConfig.deadesp;
         espJson["Max distance"] = espConfig.maxDistance;
+        espJson["Draw multi points"] = espConfig.drawMultiPoints;
+        espJson["Draw multi points only head"] = espConfig.drawMultiPointsOnlyHead;
+        espJson["Draw multi points expansion"] = espConfig.drawMultiPointsExpansion;
     }
 
     {

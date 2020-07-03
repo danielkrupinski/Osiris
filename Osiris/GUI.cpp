@@ -645,6 +645,12 @@ void GUI::renderEspWindow(bool contentOnly) noexcept
             ImGui::SameLine(spacing);
             ImGui::Checkbox("Dead ESP", &config->esp.players[selected].deadesp);
             ImGui::SliderFloat("Max distance", &config->esp.players[selected].maxDistance, 0.0f, 200.0f, "%.2fm");
+            ImGui::Checkbox("Draw multi points", &config->esp.players[selected].drawMultiPoints);
+            ImGui::Checkbox("Draw multi points only head", &config->esp.players[selected].drawMultiPointsOnlyHead);
+            ImGui::TextUnformatted("Draw multi points expansion");
+            ImGui::PushID("multiPointsExpansion");
+            ImGui::SliderFloat("", &config->esp.players[selected].drawMultiPointsExpansion, 0.01f, 2.0f, "%.2f", 5.0f);
+            ImGui::PopID();
             break;
         }
         case 2: {

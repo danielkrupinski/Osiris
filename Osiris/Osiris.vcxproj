@@ -53,6 +53,7 @@
     <ClCompile Include="SDK\Entity.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
+    <ClCompile Include="Hacks\Multipoints.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
+    <ClInclude Include="Hacks\Multipoints.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />
