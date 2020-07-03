@@ -69,5 +69,5 @@ private:
     const ModelRenderInfo* info;
     matrix3x4* customBoneToWorld;
 
-    void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const Config::Chams::Material& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
 };
