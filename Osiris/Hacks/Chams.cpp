@@ -239,6 +239,8 @@ void Chams::applyChams(const Config::Chams::Material& chams, bool ignorez, int h
     else
         material->alphaModulate(pulse);
 
+    if (chams.cover && !appliedChams && !ignorez)
+        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
     material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, ignorez);
     material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
     interfaces->studioRender->forcedMaterialOverride(material);
