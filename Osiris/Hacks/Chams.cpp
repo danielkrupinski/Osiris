@@ -151,7 +151,7 @@ void Chams::renderPlayer(Entity* player) noexcept
                 auto record = &Backtrack::records[player->index()];
                 if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                     if (!appliedChams)
-                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
                     applyChams(config->chams[BACKTRACK].materials[i], false, health, record->back().matrix);
                     interfaces->studioRender->forcedMaterialOverride(nullptr);
                 }
