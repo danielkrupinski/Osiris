@@ -40,13 +40,10 @@ public:
 
     std::add_pointer_t<void __fastcall(const char*)> loadSky;
     std::add_pointer_t<void __fastcall(const char*, const char*)> setClanTag;
-    int* smokeCount;
     uintptr_t cameraThink;
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    // uintptr_t scopeArc;
-    // uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
