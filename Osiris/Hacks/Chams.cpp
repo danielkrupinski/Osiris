@@ -108,43 +108,22 @@ void Chams::renderPlayer(Entity* player) noexcept
 
     const auto health = player->health();
 
-    for (size_t i = 0; i < config->chams[ALLIES_ALL].materials.size(); ++i) {
+    for (size_t i = 0; i < config->chams[ALLIES].materials.size(); ++i) {
         if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()
-            && (config->chams[PLANTING_ALL].materials[i].enabled || config->chams[PLANTING_OCCLUDED].materials[i].enabled || config->chams[PLANTING_VISIBLE].materials[i].enabled)) {
-            if (config->chams[PLANTING_ALL].materials[i].enabled) {
-                applyChams(config->chams[PLANTING_ALL].materials[i], true, health);
-                applyChams(config->chams[PLANTING_ALL].materials[i], false, health);
-            } else {
-                if (config->chams[PLANTING_OCCLUDED].materials[i].enabled)
-                    applyChams(config->chams[PLANTING_OCCLUDED].materials[i], true, health);
-
-                if (config->chams[PLANTING_VISIBLE].materials[i].enabled)
-                    applyChams(config->chams[PLANTING_VISIBLE].materials[i], false, health);
+            && (config->chams[PLANTING].materials[i].enabled)) {
+            if (config->chams[PLANTING].materials[i].enabled) {
+                applyChams(config->chams[PLANTING].materials[i], false, health);
             }
-        } else if (player->isDefusing() && (config->chams[DEFUSING_ALL].materials[i].enabled || config->chams[DEFUSING_OCCLUDED].materials[i].enabled || config->chams[DEFUSING_VISIBLE].materials[i].enabled)) {
-            if (config->chams[DEFUSING_ALL].materials[i].enabled) {
-                applyChams(config->chams[DEFUSING_ALL].materials[i], true, health);
-                applyChams(config->chams[DEFUSING_ALL].materials[i], false, health);
-            } else {
-                if (config->chams[DEFUSING_OCCLUDED].materials[i].enabled)
-                    applyChams(config->chams[DEFUSING_OCCLUDED].materials[i], true, health);
-
-                if (config->chams[DEFUSING_VISIBLE].materials[i].enabled)
-                    applyChams(config->chams[DEFUSING_VISIBLE].materials[i], false, health);
+        } else if (player->isDefusing() && (config->chams[DEFUSING].materials[i].enabled)) {
+            if (config->chams[DEFUSING].materials[i].enabled) {
+                applyChams(config->chams[DEFUSING].materials[i], false, health);
             }
         } else if (player == localPlayer.get()) {
             if (config->chams[LOCALPLAYER].materials[i].enabled)
                 applyChams(config->chams[LOCALPLAYER].materials[i], false, health);
         } else if (player->isOtherEnemy(localPlayer.get())) {
-            if (config->chams[ENEMIES_ALL].materials[i].enabled) {
-                applyChams(config->chams[ENEMIES_ALL].materials[i], true, health);
-                applyChams(config->chams[ENEMIES_ALL].materials[i], false, health);
-            } else {
-                if (config->chams[ENEMIES_OCCLUDED].materials[i].enabled)
-                    applyChams(config->chams[ENEMIES_OCCLUDED].materials[i], true, health);
-
-                if (config->chams[ENEMIES_VISIBLE].materials[i].enabled)
-                    applyChams(config->chams[ENEMIES_VISIBLE].materials[i], false, health);
+            if (config->chams[ENEMIES].materials[i].enabled) {
+                applyChams(config->chams[ENEMIES].materials[i], false, health);
             }
 
             if (config->chams[BACKTRACK].materials[i].enabled && config->backtrack.enabled) {
@@ -157,15 +136,8 @@ void Chams::renderPlayer(Entity* player) noexcept
                 }
             }
         } else {
-            if (config->chams[ALLIES_ALL].materials[i].enabled) {
-                applyChams(config->chams[ALLIES_ALL].materials[i], true, health);
-                applyChams(config->chams[ALLIES_ALL].materials[i], false, health);
-            } else {
-                if (config->chams[ALLIES_OCCLUDED].materials[i].enabled)
-                    applyChams(config->chams[ALLIES_OCCLUDED].materials[i], true, health);
-
-                if (config->chams[ALLIES_VISIBLE].materials[i].enabled)
-                    applyChams(config->chams[ALLIES_VISIBLE].materials[i], false, health);
+            if (config->chams[ALLIES].materials[i].enabled) {
+                applyChams(config->chams[ALLIES].materials[i], false, health);
             }
         }
     }

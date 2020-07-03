@@ -472,19 +472,6 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         material = 1;
 
     ImGui::PopID();
-    static int currentItem{ 0 };
-
-    if (currentCategory <= 3) {
-        ImGui::SameLine();
-        static int currentType{ 0 };
-        ImGui::PushID(1);
-        if (ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0"))
-            material = 1;
-        ImGui::PopID();
-        currentItem = currentCategory * 3 + currentType;
-    } else {
-        currentItem = currentCategory + 8;
-    }
 
     ImGui::SameLine();
 
@@ -503,7 +490,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ++material;
 
     ImGui::SameLine();
-    auto& chams{ config->chams[currentItem].materials[material - 1] };
+    auto& chams{ config->chams[currentCategory].materials[material - 1] };
 
     ImGui::Checkbox("Enabled", &chams.enabled);
     ImGui::Separator();
