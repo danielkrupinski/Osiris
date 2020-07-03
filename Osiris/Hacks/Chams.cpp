@@ -108,13 +108,13 @@ void Chams::renderPlayer(Entity* player) noexcept
 
     const auto health = player->health();
 
-    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming()) {
+    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::any_of(config->chams[PLANTING].materials.cbegin(), config->chams[PLANTING].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(config->chams[PLANTING].materials, health);
-    } else if (player->isDefusing()) {
+    } else if (player->isDefusing() && std::any_of(config->chams[DEFUSING].materials.cbegin(), config->chams[DEFUSING].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(config->chams[DEFUSING].materials, health);
     } else if (player == localPlayer.get()) {
         applyChams(config->chams[LOCALPLAYER].materials, health);
-    } else if (player->isOtherEnemy(localPlayer.get())) {
+    } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams[ENEMIES].materials, health);
 
         if (config->backtrack.enabled) {
