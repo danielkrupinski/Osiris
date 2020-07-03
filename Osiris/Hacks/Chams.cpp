@@ -209,13 +209,13 @@ void Chams::applyChams(const Config::Chams::Material& chams, int health, matrix3
     else
         material->alphaModulate(pulse);
 
-    if (chams.cover && !appliedChams)// && !ignorez)
+    if (chams.cover && !appliedChams && !chams.ignorez)
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-    material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);// ignorez);
+    material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, chams.ignorez);
     material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, chams.wireframe);
     interfaces->studioRender->forcedMaterialOverride(material);
     hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-    if (true)// !ignorez)
+    if (!chams.ignorez)
         appliedChams = true;
     else
         interfaces->studioRender->forcedMaterialOverride(nullptr);
