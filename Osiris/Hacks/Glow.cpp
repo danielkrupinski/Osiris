@@ -15,7 +15,7 @@ void Glow::render() noexcept
     if (!localPlayer)
         return;
 
-    const auto& glow = config->glow;
+    auto& glow = config->glow;
 
     Glow::clearCustomObjects();
 
@@ -53,6 +53,18 @@ void Glow::render() noexcept
 
         auto applyGlow = [&glowobject](decltype(glow[0])& glow, int health = 0) noexcept
         {
+            if (glow.onKey) {
+                if (!glow.keyMode) {
+                    if (!GetAsyncKeyState(glow.key))
+                        return;
+                }
+                else {
+                    if (GetAsyncKeyState(glow.key) & 1)
+                        glow.toggle = !glow.toggle;
+                    if (!glow.toggle)
+                        return;
+                }
+            }
             if (glow.enabled) {
                 glowobject.renderWhenOccluded = true;
                 glowobject.glowAlpha = glow.color[3];

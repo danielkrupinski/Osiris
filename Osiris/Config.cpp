@@ -94,6 +94,11 @@ void Config::load(size_t id) noexcept
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
 
+        if (glowJson.isMember("On key")) glowConfig.onKey = glowJson["On key"].asBool();
+        if (glowJson.isMember("Toogle")) glowConfig.toggle = glowJson["Toogle"].asBool();
+        if (glowJson.isMember("Key")) glowConfig.key = glowJson["Key"].asInt();
+        if (glowJson.isMember("Key mode")) glowConfig.keyMode = glowJson["Key mode"].asInt();
+
         // TODO: remove soon
         if (glowJson.isMember("alpha")) glowConfig.color[3] = glowJson["alpha"].asFloat();
 
@@ -1013,6 +1018,10 @@ void Config::save(size_t id) const noexcept
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
         glowJson["style"] = glowConfig.style;
+        glowJson["On key"] = glowConfig.onKey;
+        glowJson["Toggle"] = glowConfig.toggle;
+        glowJson["Key"] = glowConfig.key;
+        glowJson["Key mode"] = glowConfig.keyMode;
 
         {
             auto& colorJson = glowJson["Color"];

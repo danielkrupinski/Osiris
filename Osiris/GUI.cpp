@@ -441,6 +441,15 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
+    ImGui::Checkbox("On key", &config->glow[currentItem].onKey);
+    ImGui::SameLine();
+    hotkey(config->glow[currentItem].key);
+    ImGui::SameLine();
+    ImGui::PushID(2);
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &config->glow[currentItem].keyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
+    ImGui::PopID();
     ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
 
     ImGuiCustom::colorPopup("Color", config->glow[currentItem].color, &config->glow[currentItem].rainbow, &config->glow[currentItem].rainbowSpeed);

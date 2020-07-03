@@ -94,6 +94,10 @@ public:
         bool enabled{ false };
         bool healthBased{ false };
         int style{ 0 };
+        bool onKey = false;
+        int key = 0;
+        bool toggle{ true };
+        int keyMode{ 0 };
     };
     std::array<Glow, 21> glow;
 
