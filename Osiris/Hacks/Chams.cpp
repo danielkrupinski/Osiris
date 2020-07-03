@@ -158,7 +158,7 @@ void Chams::renderSleeves() noexcept
 void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int health, matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
-        if (!cham.enabled)
+        if (!cham.enabled || !cham.ignorez)
             continue;
 
         const auto material = dispatchMaterial(cham.material);
@@ -192,15 +192,55 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
         else
             material->alphaModulate(pulse);
 
-        if (cham.cover && !appliedChams && !cham.ignorez)
-            hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, cham.ignorez);
+        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, true);
         material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
         interfaces->studioRender->forcedMaterialOverride(material);
         hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
-        if (!cham.ignorez)
-            appliedChams = true;
+        interfaces->studioRender->forcedMaterialOverride(nullptr);
+    }
+
+    for (const auto& cham : chams) {
+        if (!cham.enabled || cham.ignorez)
+            continue;
+
+        const auto material = dispatchMaterial(cham.material);
+        if (!material)
+            continue;
+
+        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
+            if (cham.healthBased && health) {
+                material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+            } else if (cham.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
+                material->findVar("$envmaptint")->setVectorValue(r, g, b);
+            } else {
+                material->findVar("$envmaptint")->setVectorValue(cham.color[0], cham.color[1], cham.color[2]);
+            }
+        } else {
+            if (cham.healthBased && health) {
+                material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
+            } else if (cham.rainbow) {
+                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
+                material->colorModulate(r, g, b);
+            } else {
+                material->colorModulate(cham.color[0], cham.color[1], cham.color[2]);
+            }
+        }
+
+        const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
+
+        if (material == glow)
+            material->findVar("$envmapfresnelminmaxexp")->setVecComponentValue(9.0f * (1.2f - pulse), 2);
         else
-            interfaces->studioRender->forcedMaterialOverride(nullptr);
+            material->alphaModulate(pulse);
+
+        if (cham.cover && !appliedChams)
+            hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+
+        material->setMaterialVarFlag(MaterialVarFlag::IGNOREZ, false);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, cham.wireframe);
+        interfaces->studioRender->forcedMaterialOverride(material);
+        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customMatrix ? customMatrix : customBoneToWorld);
+        appliedChams = true;
     }
 }
