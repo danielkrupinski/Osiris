@@ -15,6 +15,12 @@
 #include "../SDK/ModelInfo.h"
 
 #include <array>
+#include <sstream>
+#include <codecvt>
+#include <locale>
+
+using convert_t = std::codecvt_utf8<wchar_t>;
+std::wstring_convert<convert_t, wchar_t> strconverter;
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -392,4 +398,26 @@ void Visuals::skybox() noexcept
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
     }
+}
+
+std::wstring towstring(std::string str)
+{
+    return strconverter.from_bytes(str);
+}
+
+void Visuals::showVelocity() noexcept
+{
+    if (!config->visuals.showvelocity || !localPlayer)
+        return;
+
+    double velocity = localPlayer->velocity().length2D();
+    std::stringstream velocitystream;
+    velocitystream << std::fixed << std::setprecision(0) << velocity;
+    std::wstring velocitywstr = towstring(velocitystream.str());
+
+    interfaces->surface->setTextFont(Surface::font);
+    interfaces->surface->setTextColor(255, 255, 255);
+    const auto [width, height] = interfaces->surface->getScreenSize();
+    interfaces->surface->setTextPosition(width / 2 - 6, height - 200);
+    interfaces->surface->printText(velocitywstr);
 }

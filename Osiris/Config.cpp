@@ -721,6 +721,7 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
+        if (visualsJson.isMember("Show velocity")) visuals.showvelocity = visualsJson["Show velocity"].asBool();
 
         if (visualsJson.isMember("Color correction")) {
             const auto& cc = visualsJson["Color correction"];
@@ -1510,6 +1511,7 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
         visualsJson["Playermodel T"] = visuals.playerModelT;
         visualsJson["Playermodel CT"] = visuals.playerModelCT;
+        visualsJson["Show velocity"] = visuals.showvelocity;
 
         {
             auto& cc = visualsJson["Color correction"];
