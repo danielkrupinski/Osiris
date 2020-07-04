@@ -755,7 +755,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
-    ImGui::Checkbox("Show velocity", &config->visuals.showvelocity);
+    ImGuiCustom::colorPicker("Show velocity", config->visuals.showvelocity);
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();

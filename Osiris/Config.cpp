@@ -722,7 +722,20 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
-        if (visualsJson.isMember("Show velocity")) visuals.showvelocity = visualsJson["Show velocity"].asBool();
+
+        if (visualsJson.isMember("Show velocity")) {
+            const auto& velocityJson = visualsJson["Show velocity"];
+
+            if (velocityJson.isMember("Enabled")) visuals.showvelocity.enabled = velocityJson["Enabled"].asBool();
+
+            if (velocityJson.isMember("Color")) {
+                visuals.showvelocity.color[0] = velocityJson["Color"][0].asFloat();
+                visuals.showvelocity.color[1] = velocityJson["Color"][1].asFloat();
+                visuals.showvelocity.color[2] = velocityJson["Color"][2].asFloat();
+            }
+            if (velocityJson.isMember("Rainbow")) visuals.showvelocity.rainbow = velocityJson["Rainbow"].asBool();
+            if (velocityJson.isMember("Rainbow speed")) visuals.showvelocity.rainbowSpeed = velocityJson["Rainbow speed"].asFloat();
+        }
 
         if (visualsJson.isMember("Color correction")) {
             const auto& cc = visualsJson["Color correction"];
@@ -1513,7 +1526,16 @@ void Config::save(size_t id) const noexcept
         visualsJson["Hit marker time"] = visuals.hitMarkerTime;
         visualsJson["Playermodel T"] = visuals.playerModelT;
         visualsJson["Playermodel CT"] = visuals.playerModelCT;
-        visualsJson["Show velocity"] = visuals.showvelocity;
+
+        {
+            auto& velocityJson = visualsJson["Show velocity"];
+            velocityJson["Enabled"] = visuals.showvelocity.enabled;
+            velocityJson["Color"][0] = visuals.showvelocity.color[0];
+            velocityJson["Color"][1] = visuals.showvelocity.color[1];
+            velocityJson["Color"][2] = visuals.showvelocity.color[2];
+            velocityJson["Rainbow"] = visuals.showvelocity.rainbow;
+            velocityJson["Rainbow speed"] = visuals.showvelocity.rainbowSpeed;
+        }
 
         {
             auto& cc = visualsJson["Color correction"];

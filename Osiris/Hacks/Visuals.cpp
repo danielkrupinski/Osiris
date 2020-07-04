@@ -15,12 +15,6 @@
 #include "../SDK/ModelInfo.h"
 
 #include <array>
-#include <sstream>
-#include <codecvt>
-#include <locale>
-
-using convert_t = std::codecvt_utf8<wchar_t>;
-std::wstring_convert<convert_t, wchar_t> strconverter;
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -400,23 +394,21 @@ void Visuals::skybox() noexcept
     }
 }
 
-std::wstring towstring(std::string str)
-{
-    return strconverter.from_bytes(str);
-}
-
 void Visuals::showVelocity() noexcept
 {
-    if (!config->visuals.showvelocity || !localPlayer)
+    if (!config->visuals.showvelocity.enabled || !localPlayer->isAlive())
         return;
 
-    double velocity = localPlayer->velocity().length2D();
-    std::stringstream velocitystream;
-    velocitystream << std::fixed << std::setprecision(0) << velocity;
-    std::wstring velocitywstr = towstring(velocitystream.str());
+    float velocity = localPlayer->velocity().length2D();
+    float velocityint = (int)velocity;
+    std::wstring velocitywstr{ L"Velocity: " + std::to_wstring(static_cast<int>(velocityint)) };
 
     interfaces->surface->setTextFont(Surface::font);
-    interfaces->surface->setTextColor(255, 255, 255);
+    if (config->visuals.showvelocity.rainbow)
+        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->visuals.showvelocity.rainbowSpeed));
+    else
+        interfaces->surface->setTextColor((config->visuals.showvelocity.color));
+
     const auto [width, height] = interfaces->surface->getScreenSize();
     interfaces->surface->setTextPosition(width / 2 - 6, height - 200);
     interfaces->surface->printText(velocitywstr);

@@ -188,7 +188,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
-        bool showvelocity{ false };
+        ColorToggle showvelocity;
 
         struct {
             bool enabled = false;
