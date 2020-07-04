@@ -116,12 +116,12 @@ void Visuals::colorWorld() noexcept
 
         if (config->visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
             if (config->visuals.world.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.world.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.world.color);
         } else if (config->visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
             if (config->visuals.sky.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.sky.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.sky.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.sky.color);
         }

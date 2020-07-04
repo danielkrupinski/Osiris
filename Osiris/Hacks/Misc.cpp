@@ -117,7 +117,7 @@ void Misc::spectatorList() noexcept
     interfaces->surface->setTextFont(Surface::font);
 
     if (config->misc.spectatorList.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.spectatorList.rainbowSpeed));
+        interfaces->surface->setTextColor(rainbowColor(config->misc.spectatorList.rainbowSpeed));
     else
         interfaces->surface->setTextColor(config->misc.spectatorList.color);
 
@@ -162,7 +162,7 @@ void Misc::watermark() noexcept
         interfaces->surface->setTextFont(Surface::font);
 
         if (config->misc.watermark.rainbow)
-            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.watermark.rainbowSpeed));
+            interfaces->surface->setTextColor(rainbowColor(config->misc.watermark.rainbowSpeed));
         else
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
@@ -261,7 +261,7 @@ void Misc::drawBombTimer() noexcept
             interfaces->surface->setDrawColor(50, 50, 50);
             interfaces->surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
             if (config->misc.bombTimer.rainbow)
-                interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config->misc.bombTimer.rainbowSpeed));
+                interfaces->surface->setDrawColor(rainbowColor(config->misc.bombTimer.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config->misc.bombTimer.color);
 

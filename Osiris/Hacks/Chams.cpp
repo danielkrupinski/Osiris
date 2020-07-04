@@ -169,7 +169,7 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
             g = health / 100.0f;
             b = 0.0f;
         } else if (cham.rainbow) {
-            std::tie(r, g, b) = rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed);
+            std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
             r = cham.color[0];
             g = cham.color[1];
@@ -209,7 +209,7 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
             g = health / 100.0f;
             b = 0.0f;
         } else if (cham.rainbow) {
-            std::tie(r, g, b) = rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed);
+            std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
             r = cham.color[0];
             g = cham.color[1];
