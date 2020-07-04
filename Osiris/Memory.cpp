@@ -52,5 +52,5 @@ Memory::Memory() noexcept
     getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(findPattern(L"client", "\xE8????\x89\x87????\x6A\x00") + 1);
     getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(findPattern(L"engine", "\xE8????\x8B\xD8\x85\xDB\x75\x27") + 1);
 
-    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0" + 1)));
+    localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 }

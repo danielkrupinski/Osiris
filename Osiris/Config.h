@@ -103,9 +103,11 @@ public:
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
+            bool cover = false;
+            bool ignorez = false;
             int material = 0;
         };
-        std::vector<Material> materials{ {}, {} };
+        std::vector<Material> materials{ {}, {}, {}, {} };
     };
 
     std::array<Chams, 18> chams;

@@ -129,6 +129,8 @@ void Config::load(size_t id) noexcept
             if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
             if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
+            if (materialsJson.isMember("Cover")) materialsConfig.cover = materialsJson["Cover"].asBool();
+            if (materialsJson.isMember("Ignore-Z")) materialsConfig.ignorez = materialsJson["Ignore-Z"].asBool();
             if (materialsJson.isMember("Color")) {
                 const auto& colorJson = materialsJson["Color"];
                 auto& colorConfig = materialsConfig; // leftover
@@ -1041,6 +1043,8 @@ void Config::save(size_t id) const noexcept
             materialsJson["Blinking"] = materialsConfig.blinking;
             materialsJson["Material"] = materialsConfig.material;
             materialsJson["Wireframe"] = materialsConfig.wireframe;
+            materialsJson["Cover"] = materialsConfig.cover;
+            materialsJson["Ignore-Z"] = materialsConfig.ignorez;
 
             {
                 auto& colorJson = materialsJson["Color"];
