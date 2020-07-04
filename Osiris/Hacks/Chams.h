@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "../Config.h"
 
 class Entity;
@@ -18,22 +20,10 @@ private:
     void renderSleeves() noexcept;
 
     enum ChamsId {
-        ALLIES_ALL = 0,
-        ALLIES_VISIBLE,
-        ALLIES_OCCLUDED,
-
-        ENEMIES_ALL,
-        ENEMIES_VISIBLE,
-        ENEMIES_OCCLUDED,
-
-        PLANTING_ALL,
-        PLANTING_VISIBLE,
-        PLANTING_OCCLUDED,
-
-        DEFUSING_ALL,
-        DEFUSING_VISIBLE,
-        DEFUSING_OCCLUDED,
-
+        ALLIES = 0,
+        ENEMIES,
+        PLANTING,
+        DEFUSING,
         LOCALPLAYER,
         WEAPONS,
         HANDS,
@@ -81,5 +71,5 @@ private:
     const ModelRenderInfo* info;
     matrix3x4* customBoneToWorld;
 
-    void applyChams(const Config::Chams::Material& chams, bool ignorez, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const std::vector<Config::Chams::Material>& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
 };
