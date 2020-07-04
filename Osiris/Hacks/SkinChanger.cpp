@@ -149,10 +149,14 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
     item->accountID() = xuid_low;
+    item->entityQuality() = config->quality;
 
-    if (config->quality)
-        item->entityQuality() = config->quality;
-    else if (is_knife(item->itemDefinitionIndex()))
+    if (config->stat_trak > -1) {
+        item->fallbackStatTrak() = config->stat_trak;
+        item->entityQuality() = 9;
+    }
+
+    if (is_knife(item->itemDefinitionIndex()))
         item->entityQuality() = 3; // make a star appear on knife
 
     if (config->custom_name[0])
@@ -163,9 +167,6 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
     if (config->seed)
         item->fallbackSeed() = config->seed;
-
-    if (config->stat_trak > -1)
-        item->fallbackStatTrak() = config->stat_trak;
 
     item->fallbackWear() = config->wear;
 
