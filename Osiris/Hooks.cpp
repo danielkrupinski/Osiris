@@ -542,7 +542,6 @@ void Hooks::install() noexcept
     client.init(interfaces->client);
     clientMode.init(memory->clientMode);
     engine.init(interfaces->engine);
-    gameEventManager.init(interfaces->gameEventManager);
     modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
     sound.init(interfaces->sound);
@@ -610,7 +609,6 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
-    gameEventManager.restore();
     modelRender.restore();
     panel.restore();
     sound.restore();

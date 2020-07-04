@@ -29,7 +29,6 @@ public:
     HookType client;
     HookType clientMode;
     HookType engine;
-    HookType gameEventManager;
     HookType modelRender;
     HookType panel;
     HookType sound;
