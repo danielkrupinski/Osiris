@@ -162,26 +162,24 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
         const auto material = dispatchMaterial(cham.material);
         if (!material)
             continue;
-
-        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
-            if (cham.healthBased && health) {
-                material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (cham.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
-                material->findVar("$envmaptint")->setVectorValue(r, g, b);
-            } else {
-                material->findVar("$envmaptint")->setVectorValue(cham.color[0], cham.color[1], cham.color[2]);
-            }
+        
+        float r, g, b;
+        if (cham.healthBased && health) {
+            r = 1.0f - health / 100.0f;
+            g = health / 100.0f;
+            b = 0.0f;
+        } else if (cham.rainbow) {
+            std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
-            if (cham.healthBased && health) {
-                material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (cham.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
-                material->colorModulate(r, g, b);
-            } else {
-                material->colorModulate(cham.color[0], cham.color[1], cham.color[2]);
-            }
+            r = cham.color[0];
+            g = cham.color[1];
+            b = cham.color[2];
         }
+
+        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal)
+            material->findVar("$envmaptint")->setVectorValue(r, g, b);
+        else
+            material->colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 
@@ -205,25 +203,23 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
         if (!material)
             continue;
 
-        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal) {
-            if (cham.healthBased && health) {
-                material->findVar("$envmaptint")->setVectorValue(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (cham.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
-                material->findVar("$envmaptint")->setVectorValue(r, g, b);
-            } else {
-                material->findVar("$envmaptint")->setVectorValue(cham.color[0], cham.color[1], cham.color[2]);
-            }
+        float r, g, b;
+        if (cham.healthBased && health) {
+            r = 1.0f - health / 100.0f;
+            g = health / 100.0f;
+            b = 0.0f;
+        } else if (cham.rainbow) {
+            std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
-            if (cham.healthBased && health) {
-                material->colorModulate(1.0f - health / 100.0f, health / 100.0f, 0.0f);
-            } else if (cham.rainbow) {
-                const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed) };
-                material->colorModulate(r, g, b);
-            } else {
-                material->colorModulate(cham.color[0], cham.color[1], cham.color[2]);
-            }
+            r = cham.color[0];
+            g = cham.color[1];
+            b = cham.color[2];
         }
+
+        if (material == glow || material == chrome || material == plastic || material == glass || material == crystal)
+            material->findVar("$envmaptint")->setVectorValue(r, g, b);
+        else
+            material->colorModulate(r, g, b);
 
         const auto pulse = cham.color[3] * (cham.blinking ? std::sin(memory->globalVars->currenttime * 5) * 0.5f + 0.5f : 1.0f);
 

@@ -158,6 +158,9 @@
     <ClCompile Include="Hooks\VmtHook.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="SDK\Utils.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
