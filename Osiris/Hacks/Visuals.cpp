@@ -400,7 +400,7 @@ void Visuals::showVelocity() noexcept
         return;
 
     float velocity = localPlayer->velocity().length2D();
-    std::wstring velocitywstr{ L"Velocity: " + std::to_wstring(static_cast<int>(velocity)) };
+    std::wstring velocitywstr{ L"Velocity: " + std::to_wstring((int)velocity) };
 
     interfaces->surface->setTextFont(Surface::font);
     if (config->visuals.showvelocity.rainbow)
