@@ -74,7 +74,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         && (config->triggerbot[weaponIndex].ignoreSmoke
             || !memory->lineGoesThroughSmoke(startPos, endPos, 1))
         && (config->triggerbot[weaponIndex].ignoreFlash
-            || !localPlayer->flashDuration())
+            || localPlayer->flashDuration() <= 75.0f)
         && (!config->triggerbot[weaponIndex].scopedOnly
             || !activeWeapon->isSniperRifle()
             || localPlayer->isScoped())) {
