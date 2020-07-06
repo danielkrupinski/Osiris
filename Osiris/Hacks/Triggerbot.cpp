@@ -30,7 +30,9 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!config->triggerbot[weaponIndex].enabled)
         weaponIndex = 0;
 
-    if (!config->triggerbot[weaponIndex].enabled)
+    const auto& cfg = config->triggerbot[weaponIndex];
+
+    if (!cfg.enabled)
         return;
 
     static auto lastTime = 0.0f;
@@ -44,16 +46,16 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     }
     lastContact = 0.0f;
 
-    if (config->triggerbot[weaponIndex].onKey && !GetAsyncKeyState(config->triggerbot[weaponIndex].key))
+    if (cfg.onKey && !GetAsyncKeyState(cfg.key))
         return;
 
-    if (now - lastTime < config->triggerbot[weaponIndex].shotDelay / 1000.0f)
+    if (now - lastTime < cfg.shotDelay / 1000.0f)
         return;
 
-    if (!config->triggerbot[weaponIndex].ignoreFlash && localPlayer->flashDuration() > 75.0f)
+    if (!cfg.ignoreFlash && localPlayer->flashDuration() > 75.0f)
         return;
 
-    if (config->triggerbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+    if (cfg.scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
         return;
 
     const auto weaponData = activeWeapon->getWeaponData();
@@ -77,16 +79,16 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!trace.entity || !trace.entity->isPlayer())
         return;
 
-    if (!config->triggerbot[weaponIndex].friendlyFire && !localPlayer->isOtherEnemy(trace.entity))
+    if (!cfg.friendlyFire && !localPlayer->isOtherEnemy(trace.entity))
         return;
 
     if (trace.entity->gunGameImmunity())
         return;
 
-    if (config->triggerbot[weaponIndex].hitgroup && trace.hitgroup != config->triggerbot[weaponIndex].hitgroup)
+    if (cfg.hitgroup && trace.hitgroup != cfg.hitgroup)
         return;
 
-    if (!config->triggerbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(startPos, endPos, 1))
+    if (!cfg.ignoreSmoke && memory->lineGoesThroughSmoke(startPos, endPos, 1))
         return;
 
     float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
@@ -94,7 +96,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (float armorRatio{ weaponData->armorRatio / 2.0f }; activeWeapon->itemDefinitionIndex2() != WeaponId::Taser && HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
         damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
 
-    if (damage >= (config->triggerbot[weaponIndex].killshot ? trace.entity->health() : config->triggerbot[weaponIndex].minDamage)) {
+    if (damage >= (cfg.killshot ? trace.entity->health() : cfg.minDamage)) {
         cmd->buttons |= UserCmd::IN_ATTACK;
         lastTime = 0.0f;
         lastContact = now;
