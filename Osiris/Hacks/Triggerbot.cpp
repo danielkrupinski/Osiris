@@ -1,9 +1,6 @@
-#include <Windows.h>
-
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/UserCmd.h"
