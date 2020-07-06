@@ -49,7 +49,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (now - lastTime < cfg.shotDelay / 1000.0f)
         return;
 
-    if (!cfg.ignoreFlash && localPlayer->flashDuration() > 75.0f)
+    if (!cfg.ignoreFlash && localPlayer->isFlashed())
         return;
 
     if (cfg.scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())

@@ -265,4 +265,9 @@ public:
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
+
+    bool isFlashed() noexcept
+    {
+        return flashDuration() > 75.0f;
+    }
 };
