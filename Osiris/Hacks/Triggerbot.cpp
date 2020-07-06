@@ -50,6 +50,12 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (now - lastTime < config->triggerbot[weaponIndex].shotDelay / 1000.0f)
         return;
 
+    if (!config->triggerbot[weaponIndex].ignoreFlash && localPlayer->flashDuration() > 75.0f)
+        return;
+
+    if (config->triggerbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+        return;
+
     const auto weaponData = activeWeapon->getWeaponData();
     if (!weaponData)
         return;
@@ -65,19 +71,14 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
     Trace trace;
     interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
-    if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
+    if (trace.entity && trace.entity->isPlayer()
         && (config->triggerbot[weaponIndex].friendlyFire
-            || trace.entity->isOtherEnemy(localPlayer.get()))
+            || localPlayer->isOtherEnemy(trace.entity))
         && !trace.entity->gunGameImmunity()
         && (!config->triggerbot[weaponIndex].hitgroup
             || trace.hitgroup == config->triggerbot[weaponIndex].hitgroup)
         && (config->triggerbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(startPos, endPos, 1))
-        && (config->triggerbot[weaponIndex].ignoreFlash
-            || localPlayer->flashDuration() <= 75.0f)
-        && (!config->triggerbot[weaponIndex].scopedOnly
-            || !activeWeapon->isSniperRifle()
-            || localPlayer->isScoped())) {
+            || !memory->lineGoesThroughSmoke(startPos, endPos, 1))) {
 
         float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
 
