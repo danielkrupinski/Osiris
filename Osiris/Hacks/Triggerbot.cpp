@@ -59,8 +59,12 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     const Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
                              std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
                             -std::sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
+
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + viewAngles;
+
     Trace trace;
-    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
     if (trace.entity && trace.entity->getClientClass()->classId == ClassId::CSPlayer
         && (config->triggerbot[weaponIndex].friendlyFire
             || trace.entity->isOtherEnemy(localPlayer.get()))
@@ -68,7 +72,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         && (!config->triggerbot[weaponIndex].hitgroup
             || trace.hitgroup == config->triggerbot[weaponIndex].hitgroup)
         && (config->triggerbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles, 1))
+            || !memory->lineGoesThroughSmoke(startPos, endPos, 1))
         && (config->triggerbot[weaponIndex].ignoreFlash
             || !localPlayer->flashDuration())
         && (!config->triggerbot[weaponIndex].scopedOnly
