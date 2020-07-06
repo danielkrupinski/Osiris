@@ -69,6 +69,8 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
         if (triggerbotJson.isMember("Burst Time")) triggerbotConfig.burstTime = triggerbotJson["Burst Time"].asFloat();
+        if (triggerbotJson.isMember("Max aim inaccuracy")) triggerbotConfig.maxAimInaccuracy = triggerbotJson["Max aim inaccuracy"].asFloat();
+        if (triggerbotJson.isMember("Max shot inaccuracy")) triggerbotConfig.maxShotInaccuracy = triggerbotJson["Max shot inaccuracy"].asFloat();
     }
 
     {
@@ -990,6 +992,8 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
         triggerbotJson["Killshot"] = triggerbotConfig.killshot;
         triggerbotJson["Burst Time"] = triggerbotConfig.burstTime;
+        triggerbotJson["Max aim inaccuracy"] = triggerbotConfig.maxAimInaccuracy;
+        triggerbotJson["Max shot inaccuracy"] = triggerbotConfig.maxShotInaccuracy;
     }
 
     {

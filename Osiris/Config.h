@@ -73,6 +73,8 @@ public:
         int shotDelay = 0;
         int minDamage = 1;
         float burstTime = 0.0f;
+        float maxAimInaccuracy{ 1.0f };
+        float maxShotInaccuracy{ 1.0f };
     };
     std::array<Triggerbot, 40> triggerbot;
 
