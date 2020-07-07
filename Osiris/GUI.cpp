@@ -976,6 +976,10 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("O chams será exibido em Wireframe");
     }
+    ImGui::Checkbox("Cover", &chams.cover);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("O chams será exibido em Cover");
+    }
     ImGuiCustom::colorPopup("Cor", chams.color, &chams.rainbow, &chams.rainbowSpeed);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Escolha a cor do Chams");
