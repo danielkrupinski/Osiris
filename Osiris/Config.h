@@ -226,7 +226,7 @@ public:
             bool cover = false;
             int material = 0;
         };
-        std::vector<Material> materials{ {}, {} };
+        std::vector<Material> materials{ {}, {}, {}, {} };
     };
 
     std::array<Chams, 20> chams;
