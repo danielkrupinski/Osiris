@@ -7,7 +7,7 @@ namespace Visuals
 {
     void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
-    void modifySmoke() noexcept;
+    void modifySmoke(FrameStage stage) noexcept;
     void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur() noexcept;

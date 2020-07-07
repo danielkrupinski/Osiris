@@ -188,7 +188,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 static int __stdcall doPostScreenEffects(int param) noexcept
 {
     if (interfaces->engine->isInGame()) {
-        Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
         Visuals::disablePostProcessing();
@@ -260,6 +259,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fakePrime();
     }
     if (interfaces->engine->isInGame()) {
+        Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);

@@ -128,19 +128,22 @@ void Visuals::colorWorld() noexcept
     }
 }
 
-void Visuals::modifySmoke() noexcept
+void Visuals::modifySmoke(FrameStage stage) noexcept
 {
-    static constexpr const char* smokeMaterials[]{
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr std::array smokeMaterials{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
-        "particle/vistasmokev1/vistasmokev1_smokegrenade",
+        "particle/vistasmokev1/vistasmokev1_smokegrenade"
     };
 
     for (const auto mat : smokeMaterials) {
-        auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config->visuals.wireframeSmoke);
+        const auto material = interfaces->materialSystem->findMaterial(mat);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START ? config->visuals.noSmoke : false);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START ? config->visuals.wireframeSmoke : false);
     }
 }
 
