@@ -135,7 +135,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::sniperCrosshair();
     Misc::recoilCrosshair();
     Visuals::removeShadows();
-    Visuals::skybox();
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -257,6 +256,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fakePrime();
     }
     if (interfaces->engine->isInGame()) {
+        Visuals::skybox(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
