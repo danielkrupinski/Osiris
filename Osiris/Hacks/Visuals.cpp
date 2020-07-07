@@ -142,8 +142,8 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
 
     for (const auto mat : smokeMaterials) {
         const auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START ? config->visuals.noSmoke : false);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START ? config->visuals.wireframeSmoke : false);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START && config->visuals.wireframeSmoke);
     }
 }
 
