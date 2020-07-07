@@ -199,9 +199,12 @@ void Visuals::updateBrightness() noexcept
     brightness->setValue(config->visuals.brightness);
 }
 
-void Visuals::removeGrass() noexcept
+void Visuals::removeGrass(FrameStage stage) noexcept
 {
-    constexpr auto getGrassMaterialName = []() constexpr noexcept -> const char* {
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr auto getGrassMaterialName = []() noexcept -> const char* {
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
@@ -211,7 +214,7 @@ void Visuals::removeGrass() noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept

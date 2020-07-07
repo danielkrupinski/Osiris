@@ -12,7 +12,7 @@ namespace Visuals
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur() noexcept;
     void updateBrightness() noexcept;
-    void removeGrass() noexcept;
+    void removeGrass(FrameStage stage) noexcept;
     void remove3dSky() noexcept;
     void removeShadows() noexcept;
     void applyZoom(FrameStage stage) noexcept;

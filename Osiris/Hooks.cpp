@@ -194,7 +194,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
         Visuals::updateBrightness();
-        Visuals::removeGrass();
         Visuals::remove3dSky();
         Glow::render();
     }
@@ -259,6 +258,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fakePrime();
     }
     if (interfaces->engine->isInGame()) {
+        Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
         Visuals::removeVisualRecoil(stage);
