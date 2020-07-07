@@ -1,4 +1,4 @@
-#include "SDK/Utils.h"
+#include "Utils.h"
 
 std::tuple<float, float, float> rainbowColor(float time, float speed) noexcept
 {
