@@ -359,10 +359,12 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     }
 }
 
-void Visuals::disablePostProcessing() noexcept
+void Visuals::disablePostProcessing(FrameStage stage) noexcept
 {
-    if (*memory->disablePostProcessing != config->visuals.disablePostProcessing)
-        *memory->disablePostProcessing = config->visuals.disablePostProcessing;
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    *memory->disablePostProcessing = stage == FrameStage::RENDER_START && config->visuals.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept

@@ -190,7 +190,6 @@ static int __stdcall doPostScreenEffects(int param) noexcept
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
-        Visuals::disablePostProcessing();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
         Visuals::updateBrightness();
@@ -261,6 +260,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
+        Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
