@@ -105,21 +105,20 @@ void Visuals::colorWorld() noexcept
     if (!config->visuals.world.enabled && !config->visuals.sky.enabled)
         return;
 
-    if (config->visuals.world.enabled)
-        static auto _ = (interfaces->cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces->cvar->findVar("cl_brushfastpath")->setValue(0), true);
-
     for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
         const auto mat = interfaces->materialSystem->getMaterial(h);
 
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config->visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
+        const std::string_view textureGroup = mat->getTextureGroupName();
+
+        if (config->visuals.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (config->visuals.world.rainbow)
                 mat->colorModulate(rainbowColor(config->visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.world.color);
-        } else if (config->visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+        } else if (config->visuals.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (config->visuals.sky.rainbow)
                 mat->colorModulate(rainbowColor(config->visuals.sky.rainbowSpeed));
             else
