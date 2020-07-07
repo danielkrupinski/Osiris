@@ -105,42 +105,44 @@ void Visuals::colorWorld() noexcept
     if (!config->visuals.world.enabled && !config->visuals.sky.enabled)
         return;
 
-    if (config->visuals.world.enabled)
-        static auto _ = (interfaces->cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces->cvar->findVar("cl_brushfastpath")->setValue(0), true);
-
     for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
         const auto mat = interfaces->materialSystem->getMaterial(h);
 
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config->visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
+        const std::string_view textureGroup = mat->getTextureGroupName();
+
+        if (config->visuals.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (config->visuals.world.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.world.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.world.color);
-        } else if (config->visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+        } else if (config->visuals.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (config->visuals.sky.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.sky.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.sky.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.sky.color);
         }
     }
 }
 
-void Visuals::modifySmoke() noexcept
+void Visuals::modifySmoke(FrameStage stage) noexcept
 {
-    static constexpr const char* smokeMaterials[]{
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr std::array smokeMaterials{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
-        "particle/vistasmokev1/vistasmokev1_smokegrenade",
+        "particle/vistasmokev1/vistasmokev1_smokegrenade"
     };
 
     for (const auto mat : smokeMaterials) {
-        auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config->visuals.wireframeSmoke);
+        const auto material = interfaces->materialSystem->findMaterial(mat);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START && config->visuals.wireframeSmoke);
     }
 }
 
@@ -196,9 +198,12 @@ void Visuals::updateBrightness() noexcept
     brightness->setValue(config->visuals.brightness);
 }
 
-void Visuals::removeGrass() noexcept
+void Visuals::removeGrass(FrameStage stage) noexcept
 {
-    constexpr auto getGrassMaterialName = []() constexpr noexcept -> const char* {
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr auto getGrassMaterialName = []() noexcept -> const char* {
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
@@ -208,7 +213,7 @@ void Visuals::removeGrass() noexcept
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
@@ -353,10 +358,12 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     }
 }
 
-void Visuals::disablePostProcessing() noexcept
+void Visuals::disablePostProcessing(FrameStage stage) noexcept
 {
-    if (*memory->disablePostProcessing != config->visuals.disablePostProcessing)
-        *memory->disablePostProcessing = config->visuals.disablePostProcessing;
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    *memory->disablePostProcessing = stage == FrameStage::RENDER_START && config->visuals.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept
@@ -382,11 +389,14 @@ bool Visuals::removeWeapons(const char* modelName) noexcept
         && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
 }
 
-void Visuals::skybox() noexcept
+void Visuals::skybox(FrameStage stage) noexcept
 {
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
     constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
 
-    if (static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
+    if (stage == FrameStage::RENDER_START && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
         memory->loadSky(skyboxes[config->visuals.skybox - 1]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
