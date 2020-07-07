@@ -14,6 +14,7 @@ Config::Config(const char* name) noexcept
     }
 
     listConfigs();
+    misc.clanTag[0] = '\0';
 }
 
 void Config::load(size_t id) noexcept
@@ -45,11 +46,15 @@ void Config::load(size_t id) noexcept
         if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
         if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
         if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
-        if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
+        if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy= aimbotJson["Max aim inaccuracy"].asFloat();
         if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
         if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
         if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
         if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
+        if (aimbotJson.isMember("RCS")) aimbotConfig.recoilbasedFov = aimbotJson["RCS"].asBool();
+        if (aimbotJson.isMember("RCS X")) aimbotConfig.recoilControlX = aimbotJson["RCS X"].asFloat();
+        if (aimbotJson.isMember("RCS Y")) aimbotConfig.recoilControlY = aimbotJson["RCS Y"].asFloat();
+        if (aimbotJson.isMember("RCS Standalone")) aimbotConfig.standaloneRCS = aimbotJson["RCS Standalone"].asBool();
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -68,6 +73,8 @@ void Config::load(size_t id) noexcept
         if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
         if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
         if (triggerbotJson.isMember("Burst Time")) triggerbotConfig.burstTime = triggerbotJson["Burst Time"].asFloat();
+        if (triggerbotJson.isMember("Max aim inaccuracy")) triggerbotConfig.maxAimInaccuracy = triggerbotJson["Max aim inaccuracy"].asFloat();
+        if (triggerbotJson.isMember("Max shot inaccuracy")) triggerbotConfig.maxShotInaccuracy = triggerbotJson["Max shot inaccuracy"].asFloat();
     }
 
     {
@@ -80,10 +87,89 @@ void Config::load(size_t id) noexcept
 
     {
         const auto& antiAimJson = json["Anti aim"];
-        if (antiAimJson.isMember("Enabled")) antiAim.enabled = antiAimJson["Enabled"].asBool();
-        if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
-        if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
-        if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+        {
+            const auto& generalAAJson = json["Anti aim"]["General"];
+            if (generalAAJson.isMember("Enabled")) config->antiAim.general.enabled = generalAAJson["Enabled"].asBool();
+            if (generalAAJson.isMember("Inverse Yaw Key")) config->antiAim.general.yawInverseAngleKey = generalAAJson["Inverse Yaw Key"].asInt();
+            if (generalAAJson.isMember("Inverse Yaw Key Mode")) config->antiAim.general.yawInverseKeyMode = generalAAJson["Inverse Yaw Key Mode"].asInt();
+
+            {
+                const auto& fakeWalkJson = json["Anti aim"]["General"]["Fakewalk"];
+                if (fakeWalkJson.isMember("Enabled")) config->antiAim.general.fakeWalk.enabled = fakeWalkJson["Enabled"].asBool();
+                if (fakeWalkJson.isMember("Fakewalk Key")) antiAim.general.fakeWalk.key = fakeWalkJson["Fakewalk Key"].asInt();
+                if (fakeWalkJson.isMember("Fakewalk Key Mode")) antiAim.general.fakeWalk.keyMode = fakeWalkJson["Fakewalk Key Mode"].asInt();
+                if (fakeWalkJson.isMember("Fakewalk Max Choke")) antiAim.general.fakeWalk.maxChoke = fakeWalkJson["Fakewalk Max Choke"].asInt();
+            }
+        }
+
+        {
+            const auto& standingAAJson = json["Anti aim"]["Standing"];
+            if (standingAAJson.isMember("Enabled")) config->antiAim.standing.enabled = standingAAJson["Enabled"].asBool();
+            if (standingAAJson.isMember("Pitch Enabled")) config->antiAim.standing.pitch.enabled = standingAAJson["Pitch Enabled"].asBool();
+            if (standingAAJson.isMember("Pitch Angle")) config->antiAim.standing.pitch.angle = standingAAJson["Pitch Angle"].asFloat();
+            if (standingAAJson.isMember("Yaw Enabled")) config->antiAim.standing.yaw.enabled = standingAAJson["Yaw Enabled"].asBool();
+            if (standingAAJson.isMember("Yaw Angle")) config->antiAim.standing.yaw.angle = standingAAJson["Yaw Angle"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Mode")) config->antiAim.standing.yaw.fake.mode = standingAAJson["Yaw Fake Mode"].asInt();
+            if (standingAAJson.isMember("Yaw Fake Step")) config->antiAim.standing.yaw.fake.step = standingAAJson["Yaw Fake Step"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.standing.yaw.fake.jitterMin = standingAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (standingAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.standing.yaw.fake.jitterMax = standingAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (standingAAJson.isMember("Yaw Desync Enabled")) config->antiAim.standing.yaw.desync.enabled = standingAAJson["Yaw Desync Enabled"].asBool();
+            if (standingAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.standing.yaw.desync.bodyLean = standingAAJson["Yaw Desync Body Lean"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Mode")) config->antiAim.standing.yaw.desync.mode = standingAAJson["Yaw Desync Mode"].asInt();
+            if (standingAAJson.isMember("Yaw Desync Step")) config->antiAim.standing.yaw.desync.step = standingAAJson["Yaw Desync Step"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.standing.yaw.desync.jitterMin = standingAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (standingAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.standing.yaw.desync.jitterMax = standingAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (standingAAJson.isMember("LBY Breaker Enabled")) config->antiAim.standing.yaw.desync.LBYBreaker.enabled = standingAAJson["LBY Breaker Enabled"].asBool();
+            if (standingAAJson.isMember("LBY Breaker Angle")) config->antiAim.standing.yaw.desync.LBYBreaker.angle = standingAAJson["LBY Breaker Angle"].asFloat();
+        }
+
+        {
+            const auto& movingAAJson = json["Anti aim"]["Moving"];
+            if (movingAAJson.isMember("Enabled")) config->antiAim.moving.enabled = movingAAJson["Enabled"].asBool();
+            if (movingAAJson.isMember("Pitch Enabled")) config->antiAim.moving.pitch.enabled = movingAAJson["Pitch Enabled"].asBool();
+            if (movingAAJson.isMember("Pitch Angle")) config->antiAim.moving.pitch.angle = movingAAJson["Pitch Angle"].asFloat();
+            if (movingAAJson.isMember("Yaw Enabled")) config->antiAim.moving.yaw.enabled = movingAAJson["Yaw Enabled"].asBool();
+            if (movingAAJson.isMember("Yaw Angle")) config->antiAim.moving.yaw.angle = movingAAJson["Yaw Angle"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Mode")) config->antiAim.moving.yaw.fake.mode = movingAAJson["Yaw Fake Mode"].asInt();
+            if (movingAAJson.isMember("Yaw Fake Step")) config->antiAim.moving.yaw.fake.step = movingAAJson["Yaw Fake Step"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.moving.yaw.fake.jitterMin = movingAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (movingAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.moving.yaw.fake.jitterMax = movingAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (movingAAJson.isMember("Yaw Desync Enabled")) config->antiAim.moving.yaw.desync.enabled = movingAAJson["Yaw Desync Enabled"].asBool();
+            if (movingAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.moving.yaw.desync.bodyLean = movingAAJson["Yaw Desync Body Lean"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Mode")) config->antiAim.moving.yaw.desync.mode = movingAAJson["Yaw Desync Mode"].asInt();
+            if (movingAAJson.isMember("Yaw Desync Step")) config->antiAim.moving.yaw.desync.step = movingAAJson["Yaw Desync Step"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.moving.yaw.desync.jitterMin = movingAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (movingAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.moving.yaw.desync.jitterMax = movingAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (movingAAJson.isMember("LBY Breaker Enabled")) config->antiAim.moving.yaw.desync.LBYBreaker.enabled = movingAAJson["LBY Breaker Enabled"].asBool();
+            if (movingAAJson.isMember("LBY Breaker Angle")) config->antiAim.moving.yaw.desync.LBYBreaker.angle = movingAAJson["LBY Breaker Angle"].asFloat();
+        }
+
+        {
+            const auto& inAirAAJson = json["Anti aim"]["In Air"];
+            if (inAirAAJson.isMember("Enabled")) config->antiAim.inAir.enabled = inAirAAJson["Enabled"].asBool();
+            if (inAirAAJson.isMember("Pitch Enabled")) config->antiAim.inAir.pitch.enabled = inAirAAJson["Pitch Enabled"].asBool();
+            if (inAirAAJson.isMember("Pitch Angle")) config->antiAim.inAir.pitch.angle = inAirAAJson["Pitch Angle"].asFloat();
+            if (inAirAAJson.isMember("Yaw Enabled")) config->antiAim.inAir.yaw.enabled = inAirAAJson["Yaw Enabled"].asBool();
+            if (inAirAAJson.isMember("Yaw Angle")) config->antiAim.inAir.yaw.angle = inAirAAJson["Yaw Angle"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Mode")) config->antiAim.inAir.yaw.fake.mode = inAirAAJson["Yaw Fake Mode"].asInt();
+            if (inAirAAJson.isMember("Yaw Fake Step")) config->antiAim.inAir.yaw.fake.step = inAirAAJson["Yaw Fake Step"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Jitter Min")) config->antiAim.inAir.yaw.fake.jitterMin = inAirAAJson["Yaw Fake Jitter Min"].asFloat();
+            if (inAirAAJson.isMember("Yaw Fake Jitter Max")) config->antiAim.inAir.yaw.fake.jitterMax = inAirAAJson["Yaw Fake Jitter Max"].asFloat();
+
+            if (inAirAAJson.isMember("Yaw Desync Enabled")) config->antiAim.inAir.yaw.desync.enabled = inAirAAJson["Yaw Desync Enabled"].asBool();
+            if (inAirAAJson.isMember("Yaw Desync Body Lean")) config->antiAim.inAir.yaw.desync.bodyLean = inAirAAJson["Yaw Desync Body Lean"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Mode")) config->antiAim.inAir.yaw.desync.mode = inAirAAJson["Yaw Desync Mode"].asInt();
+            if (inAirAAJson.isMember("Yaw Desync Step")) config->antiAim.inAir.yaw.desync.step = inAirAAJson["Yaw Desync Step"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Jitter Min")) config->antiAim.inAir.yaw.desync.jitterMin = inAirAAJson["Yaw Desync Jitter Min"].asFloat();
+            if (inAirAAJson.isMember("Yaw Desync Jitter Max")) config->antiAim.inAir.yaw.desync.jitterMax = inAirAAJson["Yaw Desync Jitter Max"].asFloat();
+
+            if (inAirAAJson.isMember("LBY Breaker Enabled")) config->antiAim.inAir.yaw.desync.LBYBreaker.enabled = inAirAAJson["LBY Breaker Enabled"].asBool();
+            if (inAirAAJson.isMember("LBY Breaker Angle")) config->antiAim.inAir.yaw.desync.LBYBreaker.angle = inAirAAJson["LBY Breaker Angle"].asFloat();
+        }
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -92,17 +178,17 @@ void Config::load(size_t id) noexcept
 
         if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
         if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-        if (glowJson.isMember("thickness")) glowConfig.thickness = glowJson["thickness"].asFloat();
-        if (glowJson.isMember("alpha")) glowConfig.alpha = glowJson["alpha"].asFloat();
         if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
         if (glowJson.isMember("Color")) {
             const auto& colorJson = glowJson["Color"];
-            auto& colorConfig = glowConfig.color;
+            auto& colorConfig = glowConfig;
 
             if (colorJson.isMember("Color")) {
                 colorConfig.color[0] = colorJson["Color"][0].asFloat();
                 colorConfig.color[1] = colorJson["Color"][1].asFloat();
                 colorConfig.color[2] = colorJson["Color"][2].asFloat();
+                if (colorJson["Color"].size() == 4)
+                    colorConfig.color[3] = colorJson["Color"][3].asFloat();
             }
 
             if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
@@ -114,7 +200,7 @@ void Config::load(size_t id) noexcept
         const auto& chamsJson = json["Chams"][i];
         auto& chamsConfig = chams[i];
 
-        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
             const auto& materialsJson = chamsJson[j];
             auto& materialsConfig = chams[i].materials[j];
 
@@ -125,7 +211,7 @@ void Config::load(size_t id) noexcept
             if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
             if (materialsJson.isMember("Color")) {
                 const auto& colorJson = materialsJson["Color"];
-                auto& colorConfig = materialsConfig.color;
+                auto& colorConfig = materialsConfig; // leftover
 
                 if (colorJson.isMember("Color")) {
                     colorConfig.color[0] = colorJson["Color"][0].asFloat();
@@ -136,7 +222,7 @@ void Config::load(size_t id) noexcept
                 if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
                 if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
             }
-            if (materialsJson.isMember("Alpha")) materialsConfig.alpha = materialsJson["Alpha"].asFloat();
+            if (materialsJson.isMember("Alpha")) materialsConfig.color[3] = materialsJson["Alpha"].asFloat();
         }
     }
 
@@ -342,6 +428,7 @@ void Config::load(size_t id) noexcept
             if (outlineJson.isMember("Rainbow")) outlineConfig.rainbow = outlineJson["Rainbow"].asBool();
             if (outlineJson.isMember("Rainbow speed")) outlineConfig.rainbowSpeed = outlineJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Ammo")) {
             const auto& ammoJson = espJson["Ammo"];
             auto& ammoConfig = espConfig.ammo;
@@ -357,6 +444,7 @@ void Config::load(size_t id) noexcept
             if (ammoJson.isMember("Rainbow")) ammoConfig.rainbow = ammoJson["Rainbow"].asBool();
             if (ammoJson.isMember("Rainbow speed")) ammoConfig.rainbowSpeed = ammoJson["Rainbow speed"].asFloat();
         }
+
         if (espJson.isMember("Distance")) {
             const auto& distanceJson = espJson["Distance"];
             auto& distanceConfig = espConfig.distance;
@@ -375,6 +463,9 @@ void Config::load(size_t id) noexcept
 
         if (espJson.isMember("Dead ESP")) espConfig.deadesp = espJson["Dead ESP"].asBool();
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
+        if (espJson.isMember("Draw multi points")) espConfig.drawMultiPoints = espJson["Draw multi points"].asBool();
+        if (espJson.isMember("Draw multi points only head")) espConfig.drawMultiPointsOnlyHead = espJson["Draw multi points only head"].asBool();
+        if (espJson.isMember("Draw multi points expansion")) espConfig.drawMultiPointsExpansion = espJson["Draw multi points expansion"].asFloat();
     }
 
     {
@@ -677,7 +768,11 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
         if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
         if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
-        if (visualsJson.isMember("customSkybox")) visuals.customSkybox = visualsJson["customSkybox"].asString();
+        if (visualsJson.isMember("Indicators Enabled")) visuals.indicatorsEnabled = visualsJson["Indicators Enabled"].asBool();
+        if (visualsJson.isMember("Desync Indicator")) visuals.selectedIndicators[0] = visualsJson["Desync Indicator"].asBool();
+        if (visualsJson.isMember("LBY Indicator")) visuals.selectedIndicators[1] = visualsJson["LBY Indicator"].asBool();
+        if (visualsJson.isMember("Fakelag Indicator")) visuals.selectedIndicators[2] = visualsJson["Fakelag Indicator"].asBool();
+        if (visualsJson.isMember("Fakeduck Indicator")) visuals.selectedIndicators[3] = visualsJson["Fakeduck Indicator"].asBool();
         if (visualsJson.isMember("World")) {
             const auto& worldJson = visualsJson["World"];
 
@@ -712,6 +807,19 @@ void Config::load(size_t id) noexcept
         if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
         if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
         if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
+        if (visualsJson.isMember("Bullet Beams")) {
+            const auto& worldJson = visualsJson["Bullet Beams"];
+
+            if (worldJson.isMember("Enabled")) visuals.bulletTracers.enabled = worldJson["Enabled"].asBool();
+
+            if (worldJson.isMember("Color")) {
+                visuals.bulletTracers.color[0] = worldJson["Color"][0].asFloat();
+                visuals.bulletTracers.color[1] = worldJson["Color"][1].asFloat();
+                visuals.bulletTracers.color[2] = worldJson["Color"][2].asFloat();
+            }
+            if (worldJson.isMember("Rainbow")) visuals.bulletTracers.rainbow = worldJson["Rainbow"].asBool();
+            if (worldJson.isMember("Rainbow speed")) visuals.bulletTracers.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
+        }
 
         if (visualsJson.isMember("Color correction")) {
             const auto& cc = visualsJson["Color correction"];
@@ -783,6 +891,8 @@ void Config::load(size_t id) noexcept
 
         if (styleJson.isMember("Menu style")) style.menuStyle = styleJson["Menu style"].asInt();
         if (styleJson.isMember("Menu colors")) style.menuColors = styleJson["Menu colors"].asInt();
+        if (styleJson.isMember("Close Msg")) style.menuColors = styleJson["Close Msg"].asBool();
+
 
         if (styleJson.isMember("Colors")) {
             const auto& colorsJson = styleJson["Colors"];
@@ -808,9 +918,13 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
+        if (miscJson.isMember("Bunny Human")) misc.bunnyHuman = miscJson["Bunny Human"].asBool();
+        if (miscJson.isMember("Bhop hitchance")) misc.bhopHitchance = miscJson["Bhop hitchance"].asInt();
+        if (miscJson.isMember("Min hits")) misc.bhopMinHits = miscJson["Min hits"].asInt();
+        if (miscJson.isMember("Max hits")) misc.bhopMaxHits = miscJson["Max hits"].asInt();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
-        if (miscJson.isMember("Clan tag")) misc.clanTag = miscJson["Clan tag"].asString();
+        if (miscJson.isMember("Clan tag")) strncpy_s(misc.clanTag, miscJson["Clan tag"].asCString(), _TRUNCATE);
         if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
         if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
         if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
@@ -827,6 +941,7 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
         if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
         if (miscJson.isMember("Reveal suspect")) misc.revealSuspect = miscJson["Reveal suspect"].asBool();
+        if (miscJson.isMember("Team Damage Counter")) misc.showTeamDamage = miscJson["Team Damage Counter"].asBool();
 
         if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
             if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
@@ -862,7 +977,7 @@ void Config::load(size_t id) noexcept
 
         if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
         if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
-        if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
+        if (miscJson.isMember("Fix movement")) antiAim.general.fixMovement = miscJson["Fix movement"].asBool();
         if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
         if (miscJson.isMember("Aspect Ratio")) misc.aspectratio = miscJson["Aspect Ratio"].asFloat();
         if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
@@ -893,27 +1008,38 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
         if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
         if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
-        if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
-        if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
+        if (miscJson.isMember("Fakelag Ticks")) misc.fakeLagTicks = miscJson["Fakelag Ticks"].asInt();
+        if (miscJson.isMember("Fakelag Mode")) misc.fakeLagMode = miscJson["Fakelag Mode"].asInt();
+        if (miscJson.isMember("Fakelag While Shooting")) misc.fakeLagSelectedFlags[0] = miscJson["Fakelag While Shooting"].asBool();
+        if (miscJson.isMember("Fakelag While Standing")) misc.fakeLagSelectedFlags[1] = miscJson["Fakelag While Standing"].asBool();
+        if (miscJson.isMember("Fakelag While Moving")) misc.fakeLagSelectedFlags[2] = miscJson["Fakelag While Moving"].asBool();
+        if (miscJson.isMember("Fakelag In Air")) misc.fakeLagSelectedFlags[3] = miscJson["Fakelag In Air"].asBool();
+        if (miscJson.isMember("Fakelag key")) misc.fakeLagKey = miscJson["Fakelag key"].asInt();
+        if (miscJson.isMember("Autozeus")) misc.autoZeus = miscJson["Autozeus"].asBool();
+        if (miscJson.isMember("Autozeus BAIM Only")) misc.autoZeusBaimOnly = miscJson["Autozeus BAIM Only"].asBool();
+        if (miscJson.isMember("Autozeus Max Pen Dist")) misc.autoZeusMaxPenDist = miscJson["Autozeus Max Pen Dist"].asInt();
         if (miscJson.isMember("Quick healthshot key")) misc.quickHealthshotKey = miscJson["Quick healthshot key"].asInt();
         if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
         if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
         if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
         if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
+        if (miscJson.isMember("Draw aimbot FOV")) misc.drawAimbotFov = miscJson["Draw aimbot FOV"].asBool();
         if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
         if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
         if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
+        if (miscJson.isMember("Fake Duck")) misc.fakeDuck = miscJson["Fake Duck"].asBool();
+        if (miscJson.isMember("Fake Duck Key")) misc.fakeDuckKey = miscJson["Fake Duck Key"].asInt();
 
-        if (const auto& purchaseList = miscJson["Purchase List"]; purchaseList.isObject()) {
+        if (const auto& purchaseList = miscJson["Lista de Compras"]; purchaseList.isObject()) {
             if (const auto& enabled{ purchaseList["Enabled"] }; enabled.isBool())
                 misc.purchaseList.enabled = enabled.asBool();
-            if (const auto& onlyDuringFreezeTime{ purchaseList["Only During Freeze Time"] }; onlyDuringFreezeTime.isBool())
+            if (const auto& onlyDuringFreezeTime{ purchaseList["Somente durante compra"] }; onlyDuringFreezeTime.isBool())
                 misc.purchaseList.onlyDuringFreezeTime = onlyDuringFreezeTime.asBool();
-            if (const auto& showPrices{ purchaseList["Show Prices"] }; showPrices.isBool())
+            if (const auto& showPrices{ purchaseList["Mostrar preços"] }; showPrices.isBool())
                 misc.purchaseList.showPrices = showPrices.asBool();
-            if (const auto& noTitleBar{ purchaseList["No Title Bar"] }; noTitleBar.isBool())
+            if (const auto& noTitleBar{ purchaseList["Sem título"] }; noTitleBar.isBool())
                 misc.purchaseList.noTitleBar = noTitleBar.asBool();
-            if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
+            if (const auto& mode{ purchaseList["Modo"] }; mode.isInt())
                 misc.purchaseList.mode = mode.asInt();
         }
     }
@@ -930,6 +1056,12 @@ void Config::load(size_t id) noexcept
         if (reportbotJson.isMember("Wall Hacking")) reportbot.wallhack = reportbotJson["Wall Hacking"].asBool();
         if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
         if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
+    }
+    {
+        const auto& skinsearchJson = json["SkinSearch"];
+
+        if (skinsearchJson.isMember("SearchMode")) SkinSearch.Searchmode = skinsearchJson["SearchMode"].asInt();
+
     }
 }
 
@@ -958,10 +1090,15 @@ void Config::save(size_t id) const noexcept
         aimbotJson["Smooth"] = aimbotConfig.smooth;
         aimbotJson["Bone"] = aimbotConfig.bone;
         aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
-        aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
+        aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxAimInaccuracy;
         aimbotJson["Min damage"] = aimbotConfig.minDamage;
         aimbotJson["Killshot"] = aimbotConfig.killshot;
         aimbotJson["Between shots"] = aimbotConfig.betweenShots;
+        aimbotJson["RCS"] = aimbotConfig.recoilbasedFov;
+        aimbotJson["RCS X"] = aimbotConfig.recoilControlX;
+        aimbotJson["RCS Y"] = aimbotConfig.recoilControlY;
+        aimbotJson["RCS Standalone"] = aimbotConfig.standaloneRCS;
+        
     }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
@@ -980,6 +1117,8 @@ void Config::save(size_t id) const noexcept
         triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
         triggerbotJson["Killshot"] = triggerbotConfig.killshot;
         triggerbotJson["Burst Time"] = triggerbotConfig.burstTime;
+        triggerbotJson["Max aim inaccuracy"] = triggerbotConfig.maxAimInaccuracy;
+        triggerbotJson["Max shot inaccuracy"] = triggerbotConfig.maxShotInaccuracy;
     }
 
     {
@@ -992,10 +1131,88 @@ void Config::save(size_t id) const noexcept
 
     {
         auto& antiAimJson = json["Anti aim"];
-        antiAimJson["Enabled"] = antiAim.enabled;
-        antiAimJson["Pitch"] = antiAim.pitch;
-        antiAimJson["Pitch angle"] = antiAim.pitchAngle;
-        antiAimJson["Yaw"] = antiAim.yaw;
+        {
+            auto& generalAAJson = json["Anti aim"]["General"];
+            generalAAJson["Enabled"] = antiAim.general.enabled;
+            generalAAJson["Inverse Yaw Key"] = antiAim.general.yawInverseAngleKey;
+            generalAAJson["Inverse Yaw Key Mode"] = antiAim.general.yawInverseKeyMode;
+            {
+                auto& fakeWalkJson = json["Anti aim"]["General"]["Fakewalk"];
+                fakeWalkJson["Enabled"] = antiAim.general.fakeWalk.enabled;
+                fakeWalkJson["Fakewalk Key"] = antiAim.general.fakeWalk.key;
+                fakeWalkJson["Fakewalk Key Mode"] = antiAim.general.fakeWalk.keyMode;
+                fakeWalkJson["Fakewalk Max Choke"] = antiAim.general.fakeWalk.maxChoke;
+            }
+        }
+
+        {
+            auto& standingAAJson = json["Anti aim"]["Standing"];
+            standingAAJson["Enabled"] = config->antiAim.standing.enabled;
+            standingAAJson["Pitch Enabled"] = config->antiAim.standing.pitch.enabled;
+            standingAAJson["Pitch Angle"] = config->antiAim.standing.pitch.angle;
+            standingAAJson["Yaw Enabled"] = config->antiAim.standing.yaw.enabled;
+            standingAAJson["Yaw Angle"] = config->antiAim.standing.yaw.angle;
+            standingAAJson["Yaw Fake Mode"] = antiAim.standing.yaw.fake.mode;
+            standingAAJson["Yaw Fake Step"] = antiAim.standing.yaw.fake.step;
+            standingAAJson["Yaw Fake Jitter Min"] = antiAim.standing.yaw.fake.jitterMin;
+            standingAAJson["Yaw Fake Jitter Max"] = antiAim.standing.yaw.fake.jitterMax;
+
+            standingAAJson["Yaw Desync Enabled"] = antiAim.standing.yaw.desync.enabled;
+            standingAAJson["Yaw Desync Body Lean"] = antiAim.standing.yaw.desync.bodyLean;
+            standingAAJson["Yaw Desync Mode"] = antiAim.standing.yaw.desync.mode;
+            standingAAJson["Yaw Desync Step"] = antiAim.standing.yaw.desync.step;
+            standingAAJson["Yaw Desync Jitter Min"] = antiAim.standing.yaw.desync.jitterMin;
+            standingAAJson["Yaw Desync Jitter Max"] = antiAim.standing.yaw.desync.jitterMax;
+
+            standingAAJson["LBY Breaker Enabled"] = config->antiAim.standing.yaw.desync.LBYBreaker.enabled;
+            standingAAJson["LBY Breaker Angle"] = config->antiAim.standing.yaw.desync.LBYBreaker.angle;
+        }
+
+        {
+            auto& movingAAJson = json["Anti aim"]["Moving"];
+            movingAAJson["Enabled"] = config->antiAim.moving.enabled;
+            movingAAJson["Pitch Enabled"] = config->antiAim.moving.pitch.enabled;
+            movingAAJson["Pitch Angle"] = config->antiAim.moving.pitch.angle;
+            movingAAJson["Yaw Enabled"] = config->antiAim.moving.yaw.enabled;
+            movingAAJson["Yaw Angle"] = config->antiAim.moving.yaw.angle;
+            movingAAJson["Yaw Fake Mode"] = antiAim.moving.yaw.fake.mode;
+            movingAAJson["Yaw Fake Step"] = antiAim.moving.yaw.fake.step;
+            movingAAJson["Yaw Fake Jitter Min"] = antiAim.moving.yaw.fake.jitterMin;
+            movingAAJson["Yaw Fake Jitter Max"] = antiAim.moving.yaw.fake.jitterMax;
+
+            movingAAJson["Yaw Desync Enabled"] = antiAim.moving.yaw.desync.enabled;
+            movingAAJson["Yaw Desync Body Lean"] = antiAim.moving.yaw.desync.bodyLean;
+            movingAAJson["Yaw Desync Mode"] = antiAim.moving.yaw.desync.mode;
+            movingAAJson["Yaw Desync Step"] = antiAim.moving.yaw.desync.step;
+            movingAAJson["Yaw Desync Jitter Min"] = antiAim.moving.yaw.desync.jitterMin;
+            movingAAJson["Yaw Desync Jitter Max"] = antiAim.moving.yaw.desync.jitterMax;
+
+            movingAAJson["LBY Breaker Enabled"] = config->antiAim.moving.yaw.desync.LBYBreaker.enabled;
+            movingAAJson["LBY Breaker Angle"] = config->antiAim.moving.yaw.desync.LBYBreaker.angle;
+        }
+
+        {
+            auto& inAirAAJson = json["Anti aim"]["In Air"];
+            inAirAAJson["Enabled"] = config->antiAim.inAir.enabled;
+            inAirAAJson["Pitch Enabled"] = config->antiAim.inAir.pitch.enabled;
+            inAirAAJson["Pitch Angle"] = config->antiAim.inAir.pitch.angle;
+            inAirAAJson["Yaw Enabled"] = config->antiAim.inAir.yaw.enabled;
+            inAirAAJson["Yaw Angle"] = config->antiAim.inAir.yaw.angle;
+            inAirAAJson["Yaw Fake Mode"] = antiAim.inAir.yaw.fake.mode;
+            inAirAAJson["Yaw Fake Step"] = antiAim.inAir.yaw.fake.step;
+            inAirAAJson["Yaw Fake Jitter Min"] = antiAim.inAir.yaw.fake.jitterMin;
+            inAirAAJson["Yaw Fake Jitter Max"] = antiAim.inAir.yaw.fake.jitterMax;
+
+            inAirAAJson["Yaw Desync Enabled"] = antiAim.inAir.yaw.desync.enabled;
+            inAirAAJson["Yaw Desync Body Lean"] = antiAim.inAir.yaw.desync.bodyLean;
+            inAirAAJson["Yaw Desync Mode"] = antiAim.inAir.yaw.desync.mode;
+            inAirAAJson["Yaw Desync Step"] = antiAim.inAir.yaw.desync.step;
+            inAirAAJson["Yaw Desync Jitter Min"] = antiAim.inAir.yaw.desync.jitterMin;
+            inAirAAJson["Yaw Desync Jitter Max"] = antiAim.inAir.yaw.desync.jitterMax;
+
+            inAirAAJson["LBY Breaker Enabled"] = config->antiAim.inAir.yaw.desync.LBYBreaker.enabled;
+            inAirAAJson["LBY Breaker Angle"] = config->antiAim.inAir.yaw.desync.LBYBreaker.angle;
+        }
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -1004,17 +1221,16 @@ void Config::save(size_t id) const noexcept
 
         glowJson["Enabled"] = glowConfig.enabled;
         glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["thickness"] = glowConfig.thickness;
-        glowJson["alpha"] = glowConfig.alpha;
         glowJson["style"] = glowConfig.style;
 
         {
             auto& colorJson = glowJson["Color"];
-            const auto& colorConfig = glowConfig.color;
+            const auto& colorConfig = glowConfig;
 
             colorJson["Color"][0] = colorConfig.color[0];
             colorJson["Color"][1] = colorConfig.color[1];
             colorJson["Color"][2] = colorConfig.color[2];
+            colorJson["Color"][3] = colorConfig.color[3];
 
             colorJson["Rainbow"] = colorConfig.rainbow;
             colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
@@ -1025,7 +1241,7 @@ void Config::save(size_t id) const noexcept
         auto& chamsJson = json["Chams"][i];
         const auto& chamsConfig = chams[i];
 
-        for (size_t j = 0; j < chams[0].materials.size(); j++) {
+        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
             auto& materialsJson = chamsJson[j];
             const auto& materialsConfig = chams[i].materials[j];
 
@@ -1037,23 +1253,23 @@ void Config::save(size_t id) const noexcept
 
             {
                 auto& colorJson = materialsJson["Color"];
-                const auto& colorConfig = materialsConfig.color;
+                const auto& colorConfig = materialsConfig; // leftover
 
                 colorJson["Color"][0] = colorConfig.color[0];
                 colorJson["Color"][1] = colorConfig.color[1];
                 colorJson["Color"][2] = colorConfig.color[2];
+                colorJson["Color"][3] = colorConfig.color[3];
 
                 colorJson["Rainbow"] = colorConfig.rainbow;
                 colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
             }
-
-            materialsJson["Alpha"] = materialsConfig.alpha;
         }
     }
 
     for (size_t i = 0; i < esp.players.size(); i++) {
         auto& espJson = json["Esp"]["Players"][i];
         const auto& espConfig = esp.players[i];
+
 
         espJson["Enabled"] = espConfig.enabled;
         espJson["Font"] = espConfig.font;
@@ -1183,6 +1399,18 @@ void Config::save(size_t id) const noexcept
         }
 
         {
+            auto& ammoJson = espJson["Ammo"];
+            const auto& ammoConfig = espConfig.ammo;
+
+            ammoJson["Enabled"] = ammoConfig.enabled;
+            ammoJson["Color"][0] = ammoConfig.color[0];
+            ammoJson["Color"][1] = ammoConfig.color[1];
+            ammoJson["Color"][2] = ammoConfig.color[2];
+            ammoJson["Rainbow"] = ammoConfig.rainbow;
+            ammoJson["Rainbow speed"] = ammoConfig.rainbowSpeed;
+        }
+
+        {
             auto& activeWeaponJson = espJson["Active weapon"];
             const auto& activeWeaponConfig = espConfig.activeWeapon;
 
@@ -1205,17 +1433,7 @@ void Config::save(size_t id) const noexcept
             outlineJson["Rainbow"] = outlineConfig.rainbow;
             outlineJson["Rainbow speed"] = outlineConfig.rainbowSpeed;
         }
-        {
-            auto& ammoJson = espJson["Ammo"];
-            const auto& ammoConfig = espConfig.ammo;
 
-            ammoJson["Enabled"] = ammoConfig.enabled;
-            ammoJson["Color"][0] = ammoConfig.color[0];
-            ammoJson["Color"][1] = ammoConfig.color[1];
-            ammoJson["Color"][2] = ammoConfig.color[2];
-            ammoJson["Rainbow"] = ammoConfig.rainbow;
-            ammoJson["Rainbow speed"] = ammoConfig.rainbowSpeed;
-        }
         {
             auto& distanceJson = espJson["Distance"];
             const auto& distanceConfig = espConfig.distance;
@@ -1230,6 +1448,9 @@ void Config::save(size_t id) const noexcept
 
         espJson["Dead ESP"] = espConfig.deadesp;
         espJson["Max distance"] = espConfig.maxDistance;
+        espJson["Draw multi points"] = espConfig.drawMultiPoints;
+        espJson["Draw multi points only head"] = espConfig.drawMultiPointsOnlyHead;
+        espJson["Draw multi points expansion"] = espConfig.drawMultiPointsExpansion;
     }
 
     {
@@ -1473,7 +1694,11 @@ void Config::save(size_t id) const noexcept
         visualsJson["flashReduction"] = visuals.flashReduction;
         visualsJson["brightness"] = visuals.brightness;
         visualsJson["skybox"] = visuals.skybox;
-        visualsJson["customSkybox"] = visuals.customSkybox;
+        visualsJson["Indicators Enabled"] = visuals.indicatorsEnabled;
+        visualsJson["Desync Indicator"] = visuals.selectedIndicators[0];
+        visualsJson["LBY Indicator"] = visuals.selectedIndicators[1];
+        visualsJson["Fakelag Indicator"] = visuals.selectedIndicators[2];
+        visualsJson["Fakeduck Indicator"] = visuals.selectedIndicators[3];
 
         {
             auto& worldJson = visualsJson["World"];
@@ -1493,6 +1718,16 @@ void Config::save(size_t id) const noexcept
             skyJson["Color"][2] = visuals.sky.color[2];
             skyJson["Rainbow"] = visuals.sky.rainbow;
             skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
+        }
+
+        {
+            auto& skyJson = visualsJson["Bullet Beams"];
+            skyJson["Enabled"] = visuals.bulletTracers.enabled;
+            skyJson["Color"][0] = visuals.bulletTracers.color[0];
+            skyJson["Color"][1] = visuals.bulletTracers.color[1];
+            skyJson["Color"][2] = visuals.bulletTracers.color[2];
+            skyJson["Rainbow"] = visuals.bulletTracers.rainbow;
+            skyJson["Rainbow speed"] = visuals.bulletTracers.rainbowSpeed;
         }
 
         visualsJson["Deagle spinner"] = visuals.deagleSpinner;
@@ -1568,6 +1803,7 @@ void Config::save(size_t id) const noexcept
 
         styleJson["Menu style"] = style.menuStyle;
         styleJson["Menu colors"] = style.menuColors;
+        styleJson["Close Msg"] = style.closeMsg;
 
         auto& colorsJson = styleJson["Colors"];
 
@@ -1589,6 +1825,11 @@ void Config::save(size_t id) const noexcept
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
         miscJson["Bunny hop"] = misc.bunnyHop;
+        miscJson["Bunny style"] = misc.bunnyStyle;
+        miscJson["Bunny Human"] = misc.bunnyHuman;
+        miscJson["Bhop hitchance"] = misc.bhopHitchance;
+        miscJson["Max hits"] = misc.bhopMaxHits;
+        miscJson["Min hits"] = misc.bhopMinHits;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Clock tag"] = misc.clocktag;
         miscJson["Clan tag"] = misc.clanTag;
@@ -1608,6 +1849,7 @@ void Config::save(size_t id) const noexcept
         miscJson["Reveal ranks"] = misc.revealRanks;
         miscJson["Reveal money"] = misc.revealMoney;
         miscJson["Reveal suspect"] = misc.revealSuspect;
+        miscJson["Team Damage Counter"] = misc.showTeamDamage;
 
         {
             auto& spectatorListJson = miscJson["Spectator list"];
@@ -1631,7 +1873,7 @@ void Config::save(size_t id) const noexcept
 
         miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
         miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
-        miscJson["Fix movement"] = misc.fixMovement;
+        miscJson["Fix movement"] = antiAim.general.fixMovement;
         miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
         miscJson["Aspect Ratio"] = misc.aspectratio;
         miscJson["Kill message"] = misc.killMessage;
@@ -1656,16 +1898,27 @@ void Config::save(size_t id) const noexcept
         miscJson["Prepare revolver"] = misc.prepareRevolver;
         miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
         miscJson["Hit sound"] = misc.hitSound;
-        miscJson["Choked packets"] = misc.chokedPackets;
-        miscJson["Choked packets key"] = misc.chokedPacketsKey;
+        miscJson["Fakelag Ticks"] = misc.fakeLagTicks;
+        miscJson["Fakelag Mode"] = misc.fakeLagMode;
+        miscJson["Fakelag While Shooting"] = misc.fakeLagSelectedFlags[0];
+        miscJson["Fakelag While Standing"] = misc.fakeLagSelectedFlags[1];
+        miscJson["Fakelag While Moving"] = misc.fakeLagSelectedFlags[2];
+        miscJson["Fakelag In Air"] = misc.fakeLagSelectedFlags[3];
+        miscJson["Fakelag key"] = misc.fakeLagKey;
         miscJson["Quick healthshot key"] = misc.quickHealthshotKey;
         miscJson["Grenade predict"] = misc.nadePredict;
         miscJson["Fix tablet signal"] = misc.fixTabletSignal;
         miscJson["Max angle delta"] = misc.maxAngleDelta;
         miscJson["Fake prime"] = misc.fakePrime;
+        miscJson["Draw aimbot FOV"] = misc.drawAimbotFov;
+        miscJson["Autozeus"] = misc.autoZeus;
+        miscJson["Autozeus BAIM Only"] = misc.autoZeusBaimOnly;
+        miscJson["Autozeus Max Pen Dist"] = misc.autoZeusMaxPenDist;
         miscJson["Custom Hit Sound"] = misc.customHitSound;
         miscJson["Kill sound"] = misc.killSound;
         miscJson["Custom Kill Sound"] = misc.customKillSound;
+        miscJson["Fake Duck"] = misc.fakeDuck;
+        miscJson["Fake Duck Key"] = misc.fakeDuckKey;
 
         {
             auto& purchaseListJson = miscJson["Purchase List"];
@@ -1690,6 +1943,12 @@ void Config::save(size_t id) const noexcept
         reportbotJson["Aim Hacking"] = reportbot.aimbot;
         reportbotJson["Other Hacking"] = reportbot.other;
     }
+    {
+        auto& skinsearchJson = json["SkinSearch"];
+
+
+        skinsearchJson["SearchMode"] = SkinSearch.Searchmode;
+    }
 
     std::error_code ec;
     std::filesystem::create_directory(path, ec);
@@ -1700,8 +1959,10 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
-    if (*name && std::find(std::cbegin(configs), std::cend(configs), name) == std::cend(configs))
+    if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
         configs.emplace_back(name);
+        save(configs.size() - 1);
+}
 }
 
 void Config::remove(size_t id) noexcept
@@ -1733,14 +1994,13 @@ void Config::reset() noexcept
     misc = { };
     reportbot = { };
 }
-
 void Config::listConfigs() noexcept
 {
     configs.clear();
 
     std::error_code ec;
     std::transform(std::filesystem::directory_iterator{ path, ec },
-                   std::filesystem::directory_iterator{ },
-                   std::back_inserter(configs),
-                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+        std::filesystem::directory_iterator{ },
+        std::back_inserter(configs),
+        [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
 }

@@ -147,39 +147,39 @@ namespace game_data
     const weapon_info* get_weapon_info(int defindex);
 
     constexpr weapon_name knife_names[]{
-        {0, "Default"},
-        {WEAPON_KNIFE_BAYONET, "Bayonet"},
-        {WEAPON_KNIFE_CSS, "Classic Knife"},
-        {WEAPON_KNIFE_SKELETON, "Skeleton Knife"},
-        {WEAPON_KNIFE_OUTDOOR, "Nomad Knife"},
-        {WEAPON_KNIFE_CORD, "Paracord Knife"},
-        {WEAPON_KNIFE_CANIS, "Survival Knife"},
-        {WEAPON_KNIFE_FLIP, "Flip Knife"},
-        {WEAPON_KNIFE_GUT, "Gut Knife"},
+        {0, "Padrao"},
+        {WEAPON_KNIFE_BAYONET, "Baioneta"},
+        {WEAPON_KNIFE_CSS, "Faca Classica"},
+        {WEAPON_KNIFE_SKELETON, "Faca Esqueleto"},
+        {WEAPON_KNIFE_OUTDOOR, "Faca Nomade"},
+        {WEAPON_KNIFE_CORD, "Faca de Cordame"},
+        {WEAPON_KNIFE_CANIS, "Faca de Sobrevivencia"},
+        {WEAPON_KNIFE_FLIP, "Canivete"},
+        {WEAPON_KNIFE_GUT, "Faca Gut Hook"},
         {WEAPON_KNIFE_KARAMBIT, "Karambit"},
-        {WEAPON_KNIFE_M9_BAYONET, "M9 Bayonet"},
-        {WEAPON_KNIFE_TACTICAL, "Huntsman Knife"},
-        {WEAPON_KNIFE_FALCHION, "Falchion Knife"},
-        {WEAPON_KNIFE_SURVIVAL_BOWIE, "Bowie Knife"},
-        {WEAPON_KNIFE_BUTTERFLY, "Butterfly Knife"},
-        {WEAPON_KNIFE_PUSH, "Shadow Daggers"},
-        {WEAPON_KNIFE_URSUS, "Ursus Knife"},
-        {WEAPON_KNIFE_GYPSY_JACKKNIFE, "Navaja Knife"},
-        {WEAPON_KNIFE_STILETTO, "Stiletto Knife"},
-        {WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"}
+        {WEAPON_KNIFE_M9_BAYONET, "M9 Baioneta"},
+        {WEAPON_KNIFE_TACTICAL, "Faca do Cacador"},
+        {WEAPON_KNIFE_FALCHION, "Canivete Fashion"},
+        {WEAPON_KNIFE_SURVIVAL_BOWIE, "Faca Bowie"},
+        {WEAPON_KNIFE_BUTTERFLY, "Canivete Borboleta"},
+        {WEAPON_KNIFE_PUSH, "Adagas Sombrias"},
+        {WEAPON_KNIFE_URSUS, "Faca Ursos"},
+        {WEAPON_KNIFE_GYPSY_JACKKNIFE, "Faca Najava"},
+        {WEAPON_KNIFE_STILETTO, "Faca Stiletto"},
+        {WEAPON_KNIFE_WIDOWMAKER, "Faca Talon"}
     };
 
 
     constexpr weapon_name glove_names[]{
-        {0, "Default"},
+        {0, "Padrao"},
         {GLOVE_STUDDED_BLOODHOUND, "Bloodhound"},
-        {GLOVE_T_SIDE, "Default (Terrorists)"},
-        {GLOVE_CT_SIDE, "Default (Counter-Terrorists)"},
-        {GLOVE_SPORTY, "Sporty"},
+        {GLOVE_T_SIDE, "Padrao (Terrorista)"},
+        {GLOVE_CT_SIDE, "Padrao (Contra-Terroristas)"},
+        {GLOVE_SPORTY, "Esportiva"},
         {GLOVE_SLICK, "Slick"},
-        {GLOVE_LEATHER_WRAP, "Handwrap"},
-        {GLOVE_MOTORCYCLE, "Motorcycle"},
-        {GLOVE_SPECIALIST, "Specialist"},
+        {GLOVE_LEATHER_WRAP, "Faixas"},
+        {GLOVE_MOTORCYCLE, "Motorista"},
+        {GLOVE_SPECIALIST, "Especialista"},
         {GLOVE_HYDRA, "Hydra"}
     };
 
@@ -223,16 +223,16 @@ namespace game_data
     };
 
     constexpr quality_name quality_names[]{
-        {0, "Default"},
-        {1, "Genuine"},
+        {0, "Padrao"},
+        {1, "Genuino"},
         {2, "Vintage"},
-        {3, "Unusual"},
-        {5, "Community"},
-        {6, "Developer"},
-        {7, "Self-Made"},
-        {8, "Customized"},
-        {9, "Strange"},
-        {10, "Completed"},
-        {12, "Tournament"}
+        {3, "Incomum"},
+        {5, "Comunidade"},
+        {6, "Desenvolvedor"},
+        {7, "Propria"},
+        {8, "Customizado"},
+        {9, "Estranho"},
+        {10, "Completo"},
+        {12, "Torneio"}
     };
 }

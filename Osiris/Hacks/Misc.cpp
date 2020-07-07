@@ -24,6 +24,8 @@
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
 
+
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
@@ -76,13 +78,12 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
+
     if (config->misc.clocktag) {
         const auto time = std::time(nullptr);
         const auto localTime = std::localtime(&time);
-        char s[11];
-        s[0] = '\0';
-        sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        memory->setClanTag(s, s);
+        const auto timeString = '[' + std::to_string(localTime->tm_hour) + ':' + std::to_string(localTime->tm_min) + ':' + std::to_string(localTime->tm_sec) + ']';
+        memory->setClanTag(timeString.c_str(), timeString.c_str());
     }
 
     if (config->misc.customClanTag) {
@@ -94,15 +95,16 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 clanTag.push_back(' ');
         }
 
-        static auto lastTime = 0.0f;
+        static auto lastTime{ 0.0f };
         if (memory->globalVars->realtime - lastTime < 0.6f)
             return;
         lastTime = memory->globalVars->realtime;
 
         if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
+            std::rotate(std::begin(clanTag), std::next(std::begin(clanTag)), std::end(clanTag));
 
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+
     }
 }
 
@@ -167,7 +169,7 @@ void Misc::watermark() noexcept
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
         interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Osiris");
+        interfaces->surface->printText(L"BRCheats.org");
 
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
@@ -248,7 +250,7 @@ void Misc::drawBombTimer() noexcept
             interfaces->surface->setTextFont(font);
             interfaces->surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces->surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
+            auto bombText{ (std::wstringstream{ } << L"Plantado no bomb " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
             const auto bombTextX{ interfaces->surface->getScreenSize().first / 2 - static_cast<int>((interfaces->surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces->surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces->surface->getTextSize(font, bombText.c_str()).second;
@@ -273,7 +275,7 @@ void Misc::drawBombTimer() noexcept
                 if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(interfaces->entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
                     if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
                         drawPositionY += interfaces->surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
+                        const auto defusingText{ (std::wstringstream{ } << name << L" esta defusando: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
 
                         interfaces->surface->setTextPosition((interfaces->surface->getScreenSize().first - interfaces->surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces->surface->printText(defusingText.c_str());
@@ -288,10 +290,10 @@ void Misc::drawBombTimer() noexcept
                         const wchar_t* canDefuseText;
 
                         if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
-                            canDefuseText = L"Can Defuse";
+                            canDefuseText = L"Consegue Defusar";
                             interfaces->surface->setTextColor(0, 255, 0);
                         } else {
-                            canDefuseText = L"Cannot Defuse";
+                            canDefuseText = L"Nao consegue defusar";
                             interfaces->surface->setTextColor(255, 0, 0);
                         }
 
@@ -408,7 +410,7 @@ bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
     return false;
 }
 
-void Misc::bunnyHop(UserCmd* cmd) noexcept
+void Misc::bunnyHop2(UserCmd* cmd) noexcept
 {
     if (!localPlayer)
         return;
@@ -421,6 +423,30 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     wasLastTimeOnGround = localPlayer->flags() & 1;
 }
 
+void Misc::bunnyHop(UserCmd* cmd) noexcept
+{
+    static int hopsHit = 0;
+
+    if (!config->misc.bunnyHuman || !localPlayer)
+        return;
+
+    //if (config->misc.bunnyHop && !(localPlayer->flags() & 1) && localPlayer->moveType() != MoveType::LADDER && !wasLastTimeOnGround)
+    //    cmd->buttons &= ~UserCmd::IN_JUMP;
+
+    if (localPlayer->moveType() != MoveType::LADDER) {
+        if (cmd->buttons & UserCmd::IN_JUMP && !(localPlayer->flags() & 1)) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+        }
+        else if ((hopsHit >= config->misc.bhopMinHits && rand() % 100 + 1 > config->misc.bhopHitchance) || hopsHit >= config->misc.bhopMaxHits) {
+            cmd->buttons &= ~UserCmd::IN_JUMP;
+            hopsHit = 0;
+        }
+        else {
+            hopsHit++;
+        }
+    }
+}
+
 void Misc::fakeBan(bool set) noexcept
 {
     static bool shouldSet = false;
@@ -428,8 +454,225 @@ void Misc::fakeBan(bool set) noexcept
     if (set)
         shouldSet = set;
 
-    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ "\x1\xB" }.append(std::string{ static_cast<char>(config->misc.banColor + 1) }).append(config->misc.banText).append("\x1").c_str(), 5.0f))
+    if (shouldSet && interfaces->engine->isInGame() && changeName(false, std::string{ " \x1\xB" }.append(std::string{ static_cast<char>(config->misc.banColor + 1) }).append(config->misc.banText).append("\n\x1").c_str(), 5.0f))
         shouldSet = false;
+}
+
+void Misc::setName(bool set) noexcept
+{
+    static bool shouldSet = false;
+    static bool shouldResetOrigName = false;
+
+    if (set)
+        shouldSet = set;
+
+    if (shouldSet && changeName(false, std::string{ "" }.append(config->misc.customName).c_str(), 5.0f) && !(config->misc.customName.c_str() == NULL))
+    {
+        shouldSet = false;
+        shouldResetOrigName = true;
+    }
+}
+
+void Misc::fakeItem(bool set) noexcept
+{
+    static auto name{ interfaces->cvar->findVar("name") };
+    static auto disconnect{ interfaces->cvar->findVar("disconnect") };
+
+    static int shouldSet = 0;
+
+    std::string playercolor;
+    std::string color;
+    std::string team;
+    std::string star;
+    std::string stattrak;
+    std::string skinName;
+    std::string item;
+
+    if (set)
+        if (shouldSet == 0)
+            shouldSet = 1;
+
+    if (shouldSet == 1)
+    {
+        if (config->misc.fakeItemRarity == 0)
+            color = "\x08"; // Consumer Grade(White)
+        else if (config->misc.fakeItemRarity == 1)
+            color = "\x0D"; // Industrial Grade(Light blue)
+        else if (config->misc.fakeItemRarity == 2)
+            color = "\x0B"; // Mil-Spec(Blue)
+        else if (config->misc.fakeItemRarity == 3)
+            color = "\x03"; // Restricted(Purple)
+        else if (config->misc.fakeItemRarity == 4)
+            color = "\x0E"; // Classified(Pink)
+        else if (config->misc.fakeItemRarity == 5)
+            color = "\x02"; // Covert(Red)
+        else if (config->misc.fakeItemRarity == 6)
+            color = "\x10"; // Contrabanned(Orange / Gold)
+
+        if (config->misc.fakeItemTeam == 1)
+            team = "\x09";
+        else
+            team = "\x0B";
+
+        if (config->misc.selectedFakeItemFlags[3])
+            star = "★ ";
+        else
+            star = "";
+
+        if (config->misc.selectedFakeItemFlags[2])
+            stattrak = "StatTrak™ ";
+        else
+            stattrak = "";
+
+        if (!config->misc.fakeItemName.empty())
+            skinName.append(" | ").append(config->misc.fakeItemName);
+        else
+            skinName = "";
+
+        if (config->misc.fakeItemType == 0)
+            item = "AK-47";
+        else if (config->misc.fakeItemType == 1)
+            item = "AUG";
+        else if (config->misc.fakeItemType == 2)
+            item = "AWP";
+        else if (config->misc.fakeItemType == 3)
+            item = "Faca Baioneta";
+        else if (config->misc.fakeItemType == 4)
+            item = "Faca Bowie";
+        else if (config->misc.fakeItemType == 5)
+            item = "Canivete Borboleta";
+        else if (config->misc.fakeItemType == 6)
+            item = "CZ75";
+        else if (config->misc.fakeItemType == 7)
+            item = "Faca Clássica";
+        else if (config->misc.fakeItemType == 8)
+            item = "Desert Eagle";
+        else if (config->misc.fakeItemType == 9)
+            item = "Dual Berettas";
+        else if (config->misc.fakeItemType == 10)
+            item = "FAMAS";
+        else if (config->misc.fakeItemType == 11)
+            item = "Canivete Falchion";
+        else if (config->misc.fakeItemType == 12)
+            item = "FiveSeveN";
+        else if (config->misc.fakeItemType == 13)
+            item = "Flip Knife";
+        else if (config->misc.fakeItemType == 14)
+            item = "G3SG1";
+        else if (config->misc.fakeItemType == 15)
+            item = "Galil AR";
+        else if (config->misc.fakeItemType == 16)
+            item = "Glock-18";
+        else if (config->misc.fakeItemType == 17)
+            item = "Gut Knife";
+        else if (config->misc.fakeItemType == 18)
+            item = "Huntsman Knife";
+        else if (config->misc.fakeItemType == 19)
+            item = "Karambit";
+        else if (config->misc.fakeItemType == 20)
+            item = "M249";
+        else if (config->misc.fakeItemType == 21)
+            item = "M4A1-S";
+        else if (config->misc.fakeItemType == 22)
+            item = "M4A4";
+        else if (config->misc.fakeItemType == 23)
+            item = "M9 Baioneta";
+        else if (config->misc.fakeItemType == 24)
+            item = "MAC-10";
+        else if (config->misc.fakeItemType == 25)
+            item = "MAG-7";
+        else if (config->misc.fakeItemType == 26)
+            item = "MP5-SD";
+        else if (config->misc.fakeItemType == 27)
+            item = "MP7";
+        else if (config->misc.fakeItemType == 28)
+            item = "MP9";
+        else if (config->misc.fakeItemType == 29)
+            item = "Navaja Knife";
+        else if (config->misc.fakeItemType == 30)
+            item = "Negev";
+        else if (config->misc.fakeItemType == 31)
+            item = "Nomad Knife";
+        else if (config->misc.fakeItemType == 32)
+            item = "P2000";
+        else if (config->misc.fakeItemType == 33)
+            item = "P250";
+        else if (config->misc.fakeItemType == 34)
+            item = "P90";
+        else if (config->misc.fakeItemType == 35)
+            item = "PP-Bizon";
+        else if (config->misc.fakeItemType == 36)
+            item = "Paracord Knife";
+        else if (config->misc.fakeItemType == 37)
+            item = "SCAR-20";
+        else if (config->misc.fakeItemType == 38)
+            item = "SG 553";
+        else if (config->misc.fakeItemType == 39)
+            item = "Cano-Curto";
+        else if (config->misc.fakeItemType == 40)
+            item = "Adagas Sombrias";
+        else if (config->misc.fakeItemType == 41)
+            item = "Faca Esqueleto";
+        else if (config->misc.fakeItemType == 42)
+            item = "Stiletto Knife";
+        else if (config->misc.fakeItemType == 43)
+            item = "Survival Knife";
+        else if (config->misc.fakeItemType == 44)
+            item = "Talon Knife";
+        else if (config->misc.fakeItemType == 45)
+            item = "Tec-9";
+        else if (config->misc.fakeItemType == 46)
+            item = "UMP-45";
+        else if (config->misc.fakeItemType == 47)
+            item = "USP-S";
+        else if (config->misc.fakeItemType == 48)
+            item = "Ursus Knife";
+        else if (config->misc.fakeItemType == 49)
+            item = "XM1014";
+        else if (config->misc.fakeItemType == 50)
+            item = "Hand Wraps";
+        else if (config->misc.fakeItemType == 51)
+            item = "Moto Gloves";
+        else if (config->misc.fakeItemType == 52)
+            item = "Specialist Gloves";
+        else if (config->misc.fakeItemType == 53)
+            item = "Sport Gloves";
+        else if (config->misc.fakeItemType == 54)
+            item = "Bloodhound Gloves";
+        else if (config->misc.fakeItemType == 55)
+            item = "Hydra Gloves";
+        else if (config->misc.fakeItemType == 56)
+            item = "Driver Gloves";
+
+        if (config->misc.fakeItemPlayerColor == 0)
+            playercolor = "\x09"; // Yellow
+        else if (config->misc.fakeItemPlayerColor == 1)
+            playercolor = "\x04"; // Green
+        else if (config->misc.fakeItemPlayerColor == 2)
+            playercolor = "\x0D"; // Blue
+        else if (config->misc.fakeItemPlayerColor == 3)
+            playercolor = "\x03"; // Purple
+        else if (config->misc.fakeItemPlayerColor == 4)
+            playercolor = "\x10"; // Orange
+
+        if (config->misc.fakeItemMessageType == 0)
+        {
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(playercolor).append("• • ").append(team).append(config->misc.fakeItemPlayerName).append("\x01 abriu uma caixa e encontrou: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+                shouldSet = 2;
+        }
+        else
+        {
+            if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(playercolor).append("• • ").append(team).append(config->misc.fakeItemPlayerName).append("\x01 recebeu em uma troca: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+                shouldSet = 2;
+        }
+    }
+
+    if (shouldSet == 2)
+    {
+        if (config->misc.selectedFakeItemFlags[1])
+            disconnect->setValue(1);
+        shouldSet = 0;
+    }
 }
 
 void Misc::nadePredict() noexcept
@@ -511,7 +754,7 @@ void Misc::killMessage(GameEvent& event) noexcept
 
 void Misc::fixMovement(UserCmd* cmd, float yaw) noexcept
 {
-    if (config->misc.fixMovement) {
+    if (config->antiAim.general.fixMovement) {
         float oldYaw = yaw + (yaw < 0.0f ? 360.0f : 0.0f);
         float newYaw = cmd->viewangles.y + (cmd->viewangles.y < 0.0f ? 360.0f : 0.0f);
         float yawDelta = newYaw < oldYaw ? fabsf(newYaw - oldYaw) : 360.0f - fabsf(newYaw - oldYaw);
@@ -529,6 +772,8 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
     if (config->misc.antiAfkKick && cmd->commandNumber % 2)
         cmd->buttons |= 1 << 26;
 }
+
+
 
 void Misc::fixAnimationLOD(FrameStage stage) noexcept
 {
@@ -558,12 +803,58 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::chokePackets(bool& sendPacket) noexcept
+float Misc::RandomFloat(float min, float max) noexcept
 {
-    if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
-        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
+    return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
 }
 
+void Misc::chokePackets(bool& sendPacket, UserCmd* cmd) noexcept
+{
+    bool doFakeLag{ false };
+    auto position = localPlayer->getAbsOrigin();
+    auto velocity = localPlayer->velocity();
+    auto extrapolatedVelocity = sqrt(sqrt(velocity.x * velocity.y * velocity.z));
+    auto& records = config->globals.serverPos;
+    float distanceDifToServerSide = sqrt(sqrt(records.origin.x * records.origin.y * records.origin.z));
+
+    if (config->misc.fakeLagMode != 0)
+    {
+        if ((config->misc.fakeLagSelectedFlags[0] && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+            || (config->misc.fakeLagSelectedFlags[1] && !(cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT)))
+            || (config->misc.fakeLagSelectedFlags[2] && cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
+            || (config->misc.fakeLagSelectedFlags[3] && !(localPlayer->flags() & 1)))
+            doFakeLag = true;
+        else
+            doFakeLag = false;
+    }
+
+    if (doFakeLag)
+    {
+        if (config->misc.fakeLagMode == 1)
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.fakeLagTicks;
+        if (config->misc.fakeLagMode == 2)
+        {
+            auto requiredPacketsToBreakLagComp = 65 / extrapolatedVelocity;
+            if (!(requiredPacketsToBreakLagComp > config->misc.fakeLagTicks) && requiredPacketsToBreakLagComp <= 16)
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= requiredPacketsToBreakLagComp;
+            else
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= 16;
+        }
+        if (config->misc.fakeLagMode == 3)
+        {
+            float lagTicks = RandomFloat(config->misc.fakeLagTicks, 16);
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= lagTicks;
+        }
+        if (config->misc.fakeLagMode == 4)
+        {
+            if (distanceDifToServerSide < 64.f && interfaces->engine->getNetworkChannel()->chokedPackets < 16)
+                sendPacket = false;
+            else
+                sendPacket = true;
+        }
+    }
+}
+        
 void Misc::autoReload(UserCmd* cmd) noexcept
 {
     if (config->misc.autoReload && localPlayer) {
@@ -628,6 +919,24 @@ void Misc::playHitSound(GameEvent& event) noexcept
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customHitSound).c_str());
 }
 
+void Misc::drawAimbotFOV() noexcept
+{
+    auto local = localPlayer.get();
+    if (config->misc.drawAimbotFov)
+    {
+        if (!local || !local->isAlive()) return;
+        int weaponId = getWeaponIndex(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+        if (!config->aimbot[weaponId].enabled) weaponId = 0;
+        if (!config->aimbot[weaponId].enabled) return;
+        auto screenSize = interfaces->surface->getScreenSize();
+        if (config->aimbot[weaponId].silent) interfaces->surface->setDrawColor(255, 10, 10, 255);
+        else interfaces->surface->setDrawColor(10, 255, 10, 255);
+        float radius = std::tan(degreesToRadians(config->aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(local->isScoped() ? local->fov() : (105 + config->visuals.fov)) / 2.f) * screenSize.first;
+        interfaces->surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, radius, 100);
+    }
+
+}
+
 void Misc::killSound(GameEvent& event) noexcept
 {
     if (!config->misc.killSound)
@@ -652,6 +961,107 @@ void Misc::killSound(GameEvent& event) noexcept
         interfaces->engine->clientCmdUnrestricted(("play " + config->misc.customKillSound).c_str());
 }
 
+void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
+{
+    auto state = localPlayer->getAnimstate();
+
+    if (config->misc.fakeDuck)
+    {
+        if (config->misc.fakeDuckKey != 0) {
+            if (!GetAsyncKeyState(config->misc.fakeDuckKey))
+            {
+                config->misc.fakeDucking = false;
+                return;
+            }
+            else
+                config->misc.fakeDucking = true;
+        }
+
+        if (config->misc.fakeDucking)
+        {
+            if (cmd->buttons & UserCmd::IN_ATTACK || config->misc.fakeDuckShotState != 0)
+            {
+                if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 0)
+                {
+                    sendPacket = true; // clear up sendPacket for fakeduck going up to choke
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 1;
+                }
+                else if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 1)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons &= ~UserCmd::IN_DUCK;
+                    cmd->buttons &= ~UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 1;
+                }
+                else if (localPlayer->getAnimstate()->duckAmount <= 0.2 && config->misc.fakeDuckShotState == 1)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons &= ~UserCmd::IN_DUCK;
+                    cmd->buttons |= UserCmd::IN_ATTACK;
+                    config->misc.fakeDuckShotState = 2;
+                }
+                else if (config->misc.fakeDuckShotState == 2)
+                {
+                    sendPacket = false;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    config->misc.fakeDuckShotState = 3;
+                }
+                else if (config->misc.fakeDuckShotState == 3)
+                {
+                    sendPacket = true;
+                    cmd->buttons |= UserCmd::IN_BULLRUSH;
+                    cmd->buttons |= UserCmd::IN_DUCK;
+                    config->misc.fakeDuckShotState = 0;
+                }
+            }
+            else
+            {
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                config->misc.fakeDuckShotState = 0;
+            }
+        }
+        else
+        {
+            config->misc.fakeDuckShotState = 0;
+        }
+    }
+}
+
+void Misc::teamDamageCounter(GameEvent* event) noexcept {
+
+
+    if (!event || !interfaces->engine->isInGame()) return;
+    int local = localPlayer->getUserId();
+        if (interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == local) { // we attacked.
+        int victim = interfaces->engine->getPlayerForUserID(event->getInt("userid"));
+
+        if (victim == local) return; // did damage to ourself, does not count.
+
+        Entity* ent = interfaces->entityList->getEntity(victim);
+
+        if (ent) { // teammate got hurt
+            switch (fnv::hashRuntime(event->getName())) {
+            case fnv::hash("player_hurt"):
+                teamDamage += event->getInt("dmg_health");
+                break;
+            case fnv::hash("player_death"):
+                teamKills += 1;
+                break;
+            }
+
+            if (config->misc.showTeamDamage)
+                memory->conColorMsg({ 0, 255, 55, 255 },"[ Fogo-Amigo ] Kills: <%d> Dano: <%d>)\n", teamKills, teamDamage);
+        }
+    }
+}
+
 void Misc::purchaseList(GameEvent* event) noexcept
 {
     static std::mutex mtx;
@@ -669,13 +1079,16 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                const auto weaponName = event->getString("weapon");
+                auto& purchase = purchaseDetails[player->getPlayerName(true)];
+
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
-                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
                 }
-                std::string weapon = event->getString("weapon");
+                std::string weapon = weaponName;
 
                 if (weapon.starts_with("weapon_"))
                     weapon.erase(0, 7);
@@ -683,13 +1096,13 @@ void Misc::purchaseList(GameEvent* event) noexcept
                     weapon.erase(0, 5);
 
                 if (weapon.starts_with("smoke"))
-                    weapon = "smoke";
+                    weapon.erase(5);
                 else if (weapon.starts_with("m4a1_s"))
-                    weapon = "m4a1_s";
+                    weapon.erase(6);
                 else if (weapon.starts_with("usp_s"))
-                    weapon = "usp_s";
+                    weapon.erase(5);
 
-                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
+                purchase.first.push_back(weapon);
                 ++purchaseTotal[weapon];
             }
             break;
@@ -704,7 +1117,8 @@ void Misc::purchaseList(GameEvent* event) noexcept
             freezeEnd = memory->globalVars->realtime;
             break;
         }
-    } else {
+    }
+    else {
         if (!config->misc.purchaseList.enabled)
             return;
 
@@ -720,7 +1134,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
@@ -736,7 +1150,8 @@ void Misc::purchaseList(GameEvent* event) noexcept
                 else
                     ImGui::TextWrapped("%s: %s", playerName.c_str(), s.c_str());
             }
-        } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
+        }
+        else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
             for (const auto& purchase : purchaseTotal)
                 ImGui::TextWrapped("%d x %s", purchase.second, purchase.first.c_str());
 

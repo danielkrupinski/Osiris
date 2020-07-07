@@ -20,6 +20,8 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
+
+
 void SkinChanger::initializeKits() noexcept
 {
     std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
@@ -94,9 +96,10 @@ struct GetStickerAttributeBySlotIndexFloat {
         }
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
-
-    inline static decltype(&hooked) m_original;
+    static decltype(&hooked) m_original;
 };
+
+decltype(GetStickerAttributeBySlotIndexFloat::m_original) GetStickerAttributeBySlotIndexFloat::m_original;
 
 struct GetStickerAttributeBySlotIndexInt {
     static int __fastcall hooked(void* thisptr, void*, const int slot,
@@ -110,8 +113,10 @@ struct GetStickerAttributeBySlotIndexInt {
         return m_original(thisptr, nullptr, slot, attribute, unknown);
     }
 
-    inline static decltype(&hooked) m_original;
+    static decltype(&hooked) m_original;
 };
+
+decltype(GetStickerAttributeBySlotIndexInt::m_original) GetStickerAttributeBySlotIndexInt::m_original;
 
 void apply_sticker_changer(Entity* item) noexcept
 {
@@ -153,7 +158,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (config->quality)
         item->entityQuality() = config->quality;
     else if (is_knife(item->itemDefinitionIndex()))
-        item->entityQuality() = 3; // make a star appear on knife
+        item->entityQuality() = 3;
 
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);

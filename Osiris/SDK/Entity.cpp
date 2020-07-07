@@ -6,3 +6,4 @@ bool Entity::isOtherEnemy(Entity* other) noexcept
 {
     return memory->isOtherEnemy(this, other);
 }
+

@@ -7,20 +7,25 @@
 #include <Windows.h>
 #include <Psapi.h>
 
+
+class GameEventDescriptor;
+class GameEventManager;
 class ClientMode;
 class Entity;
 class Input;
 class ItemSystem;
 class KeyValues;
+class MemAlloc;
 class MoveHelper;
 class MoveData;
 class ViewRender;
 class WeaponSystem;
+class IViewRenderBeams;
 
 struct GlobalVars;
 struct GlowObjectManager;
-struct Trace;
 struct Vector;
+struct Trace;
 
 class Memory {
 public:
@@ -43,11 +48,11 @@ public:
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    // uintptr_t scopeArc;
-    // uintptr_t scopeLens;
+    uintptr_t scopeArc;
+    uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
-    int*(__thiscall* findHudElement)(uintptr_t, const char*);
+    int* (__thiscall* findHudElement)(uintptr_t, const char*);
     int(__thiscall* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __cdecl()> itemSystem;
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
@@ -66,12 +71,20 @@ public:
     MoveData* moveData;
     MoveHelper* moveHelper;
     std::uintptr_t keyValuesFromString;
-    KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
+    KeyValues* (__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
+    IViewRenderBeams* renderBeams;
     std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
+    GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    void(__thiscall* setAbsAngle)(Entity*, const Vector&);
+    uintptr_t UpdateState;
+    uintptr_t CreateState;
+    uintptr_t InvalidateBoneCache;
+    MemAlloc* memalloc;
+
 private:
-    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
+    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
     {
         static auto id = 0;
         ++id;
@@ -88,14 +101,15 @@ private:
                     if (*first == *second || *second == '?') {
                         ++first;
                         ++second;
-                    } else {
+                    }
+                    else {
                         first = ++start;
                         second = pattern;
                     }
                 }
 
                 if (!*second)
-                    return reinterpret_cast<std::uintptr_t>(start);
+                    return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
             }
         }
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);

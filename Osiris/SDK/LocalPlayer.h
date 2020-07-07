@@ -29,6 +29,8 @@ public:
         assert(localEntity && *localEntity);
         return *localEntity;
     }
+
+
 private:
     Entity** localEntity = nullptr;
 };

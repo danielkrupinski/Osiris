@@ -13,7 +13,7 @@ public:
 private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
-    void renderMenuBar() noexcept;
+    void drawLuaItems(int tab, int column);
     void renderAimbotWindow(bool contentOnly = false) noexcept;
     void renderAntiAimWindow(bool contentOnly = false) noexcept;
     void renderTriggerbotWindow(bool contentOnly = false) noexcept;
@@ -28,6 +28,13 @@ private:
     void renderMiscWindow(bool contentOnly = false) noexcept;
     void renderReportbotWindow(bool contentOnly = false) noexcept;
     void renderConfigWindow(bool contentOnly = false) noexcept;
+    void renderAutoConfigWindow(bool contentOnly = false) noexcept;
+    void renderaimhacksWindow(bool contentOnly = false) noexcept;
+    void renderwallhacksWindow(bool contentOnly = false) noexcept;
+    void renderotherhacksWindow(bool contentOnly = false) noexcept;
+    void renderPopupMenu(bool contentOnly = false) noexcept;
+    void renderskinchangersWindow(bool contentOnly = false) noexcept;
+    void renderPlayerWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
     struct {
@@ -45,11 +52,19 @@ private:
         bool misc = false;
         bool reportbot = false;
         bool config = false;
+        bool autoconfig = false;
+        bool aimhacks = false;
+        bool wallhacks = false;
+        bool other = false;
+        bool popupMenu = true;
+        bool SkinChangers = false;
+        bool playerChanger = false;
     } window;
 
     struct {
         ImFont* tahoma = nullptr;
         ImFont* segoeui = nullptr;
+        ImFont* arial = nullptr;
     } fonts;
 };
 

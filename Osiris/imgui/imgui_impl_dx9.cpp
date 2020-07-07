@@ -133,6 +133,8 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     if (d3d9_state_block->Capture() != D3D_OK)
         return;
 
+
+
     // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
     // FIXME-OPT: This is a waste of resource, the ideal is to use imconfig.h and
     //  1) to avoid repacking colors:   #define IMGUI_USE_BGRA_PACKED_COLOR
@@ -195,6 +197,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
         global_idx_offset += cmd_list->IdxBuffer.Size;
         global_vtx_offset += cmd_list->VtxBuffer.Size;
     }
+
 
     // Restore the DX9 state
     d3d9_state_block->Apply();

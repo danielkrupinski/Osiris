@@ -6,6 +6,8 @@ struct UserCmd;
 
 namespace Misc
 {
+    inline int teamDamage = 0;
+    inline int teamKills = 0;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
@@ -22,8 +24,11 @@ namespace Misc
     void quickReload(UserCmd*) noexcept;
     bool changeName(bool, const char*, float) noexcept;
     void bunnyHop(UserCmd*) noexcept;
+    void bunnyHop2(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
-    void nadePredict() noexcept;
+    void setName(bool set) noexcept;
+    void fakeItem(bool set) noexcept;
+	void nadePredict() noexcept;
     void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
@@ -32,7 +37,9 @@ namespace Misc
     void antiAfkKick(UserCmd* cmd) noexcept;
     void fixAnimationLOD(FrameStage stage) noexcept;
     void autoPistol(UserCmd* cmd) noexcept;
-    void chokePackets(bool& sendPacket) noexcept;
+    void fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept;
+    float RandomFloat(float min, float max) noexcept;
+    void chokePackets(bool& sendPacket, UserCmd* cmd) noexcept;
     void autoReload(UserCmd* cmd) noexcept;
     void revealRanks(UserCmd* cmd) noexcept;
     void autoStrafe(UserCmd* cmd) noexcept;
@@ -41,4 +48,8 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
+    void teamDamageCounter(GameEvent* event) noexcept;
+    void drawAimbotFOV() noexcept;
+
 }
+

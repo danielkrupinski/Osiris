@@ -8,13 +8,14 @@ static constexpr auto relativeToAbsolute(int* address) noexcept
     return reinterpret_cast<T>(reinterpret_cast<char*>(address + 1) + *address);
 }
 
+
 Memory::Memory() noexcept
 {
     present = findPattern(L"gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB") + 2;
     reset = findPattern(L"gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8") + 9;
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 5);
     input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces->client))[16] + 1);
-    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[11] + 10);
+    globalVars = **reinterpret_cast<GlobalVars***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[11] + 10);  
     glowObjectManager = *reinterpret_cast<GlowObjectManager**>(findPattern(L"client", "\x0F\x11\x05????\x83\xC8\x01") + 3);
     disablePostProcessing = *reinterpret_cast<bool**>(findPattern(L"client", "\x83\xEC\x4C\x80\x3D") + 5);
     loadSky = relativeToAbsolute<decltype(loadSky)>(reinterpret_cast<int*>(findPattern(L"engine", "\xE8????\x84\xC0\x74\x2D\xA1") + 1));
@@ -24,9 +25,9 @@ Memory::Memory() noexcept
     cameraThink = findPattern(L"client", "\x85\xC0\x75\x30\x38\x86");
     acceptMatch = reinterpret_cast<decltype(acceptMatch)>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x8B\x4D\x08\xBA????\xE8????\x85\xC0\x75\x12"));
     getSequenceActivity = reinterpret_cast<decltype(getSequenceActivity)>(findPattern(L"client", "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x8B\xF1\x83"));
-    // scopeArc = findPattern(L"client", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7") + 5;
-    // scopeLens = findPattern(L"client", "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
-    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x02\xC0") + 1));
+    scopeArc = findPattern(L"client", "\x6A?\xFF\x50\x3C\x8B\x0D????\xFF\xB7") + 5;
+    scopeLens = findPattern(L"client", "\xFF\x50\x3C\x8B\x4C\x24\x20") + 3;
+    isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(reinterpret_cast<int*>(findPattern(L"client", "\x8B\xCE\xE8????\x02\xC0") + 3));
     auto temp = reinterpret_cast<std::uintptr_t*>(findPattern(L"client", "\xB9????\xE8????\x8B\x5D\x08") + 1);
     hud = *temp;
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(reinterpret_cast<int*>(reinterpret_cast<char*>(temp) + 5));
@@ -53,6 +54,12 @@ Memory::Memory() noexcept
     keyValuesSetString = relativeToAbsolute<decltype(keyValuesSetString)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x89\x77\x38") + 1));
     weaponSystem = *reinterpret_cast<WeaponSystem**>(findPattern(L"client", "\x8B\x35????\xFF\x10\x0F\xB7\xC0") + 2);
     getPlayerViewmodelArmConfigForPlayerModel = relativeToAbsolute<decltype(getPlayerViewmodelArmConfigForPlayerModel)>(reinterpret_cast<int*>(findPattern(L"client", "\xE8????\x89\x87????\x6A\x00") + 1));
-
+    getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(reinterpret_cast<int*>(findPattern(L"engine", "\xE8????\x8B\xD8\x85\xDB\x75\x27") + 1));
+    setAbsAngle = reinterpret_cast<decltype(setAbsAngle)>(reinterpret_cast<DWORD*>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x64\x53\x56\x57\x8B\xF1")));
+    CreateState = findPattern(L"client", "\x55\x8B\xEC\x56\x8B\xF1\xB9????\xC7\x46");
+    UpdateState = findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x18\x56\x57\x8B\xF9\xF3\x0F\x11\x54\x24");
+    InvalidateBoneCache = findPattern(L"client", "\x80\x3D?????\x74\x16\xA1????\x48\xC7\x81");
+    memalloc = *reinterpret_cast<MemAlloc**>(GetProcAddress(GetModuleHandleA("tier0.dll"), "g_pMemAlloc"));
+    renderBeams = *reinterpret_cast<IViewRenderBeams**>(findPattern(L"client", "\xB9????\xA1????\xFF\x10\xA1????\xB9" + 1));
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0" + 1)));
 }

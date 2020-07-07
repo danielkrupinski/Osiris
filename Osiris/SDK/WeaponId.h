@@ -32,7 +32,15 @@ enum class WeaponId : short {
     Scar20 = 38,
     Sg553,
     Ssg08,
+    Knife = 42,
+    Flash,
+    HEGrenade,
+    SmokeGrenade,
+    Molotov,
+    Decoy,
+    IncGrenade,
     GoldenKnife,
+    KnifeT = 59,
     M4a1_s = 60,
     Usp_s,
     Cz75a = 63,
@@ -107,6 +115,13 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
 
     case WeaponId::Taser: return 39;
+
+    case WeaponId::Flash: return 41;
+    case WeaponId::Decoy: return 42;
+    case WeaponId::HEGrenade: return 43;
+    case WeaponId::IncGrenade: return 44;
+    case WeaponId::Molotov: return 45;
+    case WeaponId::SmokeGrenade: return 46;
     }
 }
 
@@ -152,5 +167,12 @@ constexpr int getWeaponClass(WeaponId weaponId) noexcept
     case WeaponId::Awp:
     case WeaponId::G3SG1:
     case WeaponId::Scar20: return 38;
+
+    case WeaponId::Flash:
+    case WeaponId::Decoy:
+    case WeaponId::HEGrenade:
+    case WeaponId::IncGrenade:
+    case WeaponId::Molotov:
+    case WeaponId::SmokeGrenade: return 40;
     }
 }

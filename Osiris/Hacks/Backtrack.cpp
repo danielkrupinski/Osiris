@@ -1,9 +1,18 @@
 #include "Backtrack.h"
 #include "Aimbot.h"
-#include "Chams.h"
 #include "../Config.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/UserCmd.h"
+#include "../Interfaces.h"
+#include "../Memory.h"
+#include "../SDK/Entity.h"
+#include "../SDK/Material.h"
+#include "../SDK/ModelRender.h"
+#include "../SDK/StudioRender.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/RenderView.h"
+#include "../SDK/Utils.h"
+
 
 std::deque<Backtrack::Record> Backtrack::records[65];
 Backtrack::Cvars Backtrack::cvars;
@@ -20,7 +29,7 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()) {
                 records[i].clear();
                 continue;
             }

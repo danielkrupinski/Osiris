@@ -16,7 +16,7 @@ static int random(int min, int max) noexcept
 
 static std::unordered_map<uint32_t, recvProxy> proxies;
 
-static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void  __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config->misc.radarHack)
         data.value._int = 1;

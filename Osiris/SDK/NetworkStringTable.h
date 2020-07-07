@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "VirtualMethod.h"
 
 class NetworkStringTable {

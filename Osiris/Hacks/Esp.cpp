@@ -6,7 +6,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-
+#include "../SDK/Multipoints.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/GlobalVars.h"
@@ -102,7 +102,7 @@ struct BoundingBox {
                                 i & 2 ? maxs.y : mins.y,
                                 i & 4 ? maxs.z : mins.z };
 
-            if (!worldToScreen(point.transform(entity->coordinateFrame()), vertices[i])) {
+            if (!worldToScreen(point.transform(entity->toWorldTransform()), vertices[i])) {
                 valid = false;
                 return;
             }
@@ -435,6 +435,38 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 }
             } else {
                 renderPositionedText(config.font, (std::wostringstream{ } << std::fixed << std::showpoint << std::setprecision(2) << (entity->getAbsOrigin() - localPlayer->getAbsOrigin()).length() * 0.0254f << L'm').str().c_str(), { bbox.x1 + 5, drawPositionY });
+            }
+        }
+        if (config.drawMultiPoints) {
+            if (config.drawMultiPointsOnlyHead) {
+                static Vector multiPoints[Multipoints::MULTIPOINTS_MAX];
+
+                if (Multipoints::retrieveOne(entity, config.drawMultiPointsExpansion, multiPoints, Multipoints::HITBOX_HEAD)) {
+                    interfaces->surface->setDrawColor(255, 255, 255);
+
+                    for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
+                        static Vector screen;
+
+                        if (worldToScreen(multiPoints[multiPoint], screen))
+                            interfaces->surface->drawOutlinedCircle(screen.x, screen.y, 1, 8);
+                    }
+                }
+            }
+            else {
+                static Vector multiPoints[Multipoints::HITBOX_MAX][Multipoints::MULTIPOINTS_MAX];
+
+                if (Multipoints::retrieveAll(entity, config.drawMultiPointsExpansion, multiPoints)) {
+                    interfaces->surface->setDrawColor(255, 255, 255);
+
+                    for (int hitBox = Multipoints::HITBOX_START; hitBox < Multipoints::HITBOX_MAX; hitBox++) {
+                        for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
+                            static Vector screen;
+
+                            if (worldToScreen(multiPoints[hitBox][multiPoint], screen))
+                                interfaces->surface->drawOutlinedCircle(screen.x, screen.y, 1, 8);
+                        }
+                    }
+                }
             }
         }
     }

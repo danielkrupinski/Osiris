@@ -1,4 +1,5 @@
 #pragma once
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 class GameEvent;
@@ -25,4 +26,6 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox() noexcept;
+    void indicators() noexcept;
+    void bulletBeams(GameEvent* event = nullptr) noexcept;
 }

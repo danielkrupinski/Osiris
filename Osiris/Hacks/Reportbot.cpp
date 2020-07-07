@@ -35,8 +35,7 @@ void Reportbot::run() noexcept
         if (!entity || entity == localPlayer.get())
             continue;
 
-        if (config->reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->reportbot.target != 0 : config->reportbot.target != 1))
-            continue;
+        if (config->reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->reportbot.target != 0 : config->reportbot.target != 1))            continue;
 
         PlayerInfo playerInfo;
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))

@@ -15,6 +15,7 @@
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
+#include "UserCmd.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -24,6 +25,18 @@
 #include <functional>
 
 struct AnimState;
+
+struct AnimationLayer
+{
+public:
+    std::byte pad[20];
+    unsigned int order;
+    unsigned int sequence;
+    std::byte pad2[4];
+    float weight;
+    std::byte pad3[8];
+    float cycle;
+};
 
 enum class MoveType {
     NOCLIP = 8,
@@ -45,13 +58,17 @@ public:
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+    VIRTUAL_METHOD(Vector&, getRenderOrigin, 1, (), (this + 4))
 
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(Vector&, getAbsAngle, 11, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
+    VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
     VIRTUAL_METHOD(bool, isPlayer, 157, (), (this))
     VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
@@ -61,6 +78,9 @@ public:
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+    VIRTUAL_METHOD(void, UpdateClientSideAnimation, 223, (), (this))
+
+    
 
     constexpr auto isPistol() noexcept
     {
@@ -82,6 +102,19 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+        if (localPlayer && this == localPlayer.get() && localPlayer->isAlive())
+        {
+            uint32_t* effects = (uint32_t*)((uintptr_t)this + 0xF0);
+            uint32_t* shouldskipframe = (uint32_t*)((uintptr_t)this + 0xA68);
+            uint32_t backup_effects = *effects;
+            uint32_t backup_shouldskipframe = *shouldskipframe;
+            *shouldskipframe = 0;
+            *effects |= 8;
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            *effects = backup_effects;
+            *shouldskipframe = backup_shouldskipframe;
+            return result;
+        }
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -121,16 +154,9 @@ public:
         return trace.entity == this || trace.fraction > 0.97f;
     }
 
-    [[deprecated]] bool isEnemy() noexcept
-    {
-        // SHOULD NEVER HAPPEN
-        if (!localPlayer)
-            return false;
-
-        return memory->isOtherEnemy(this, localPlayer.get());
-    }
-    
+  
     bool isOtherEnemy(Entity* other) noexcept;
+
 
     VarMap* getVarMap() noexcept
     {
@@ -139,7 +165,7 @@ public:
    
     AnimState* getAnimstate() noexcept
     {
-        return *reinterpret_cast<AnimState**>(this + 0x3900);
+        return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
 
     float getMaxDesyncAngle() noexcept
@@ -162,11 +188,6 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    matrix3x4& coordinateFrame() noexcept
-    {
-        return *reinterpret_cast<matrix3x4*>(this + 0x444);
-    }
-
     auto getAimPunch() noexcept
     {
         Vector vec;
@@ -180,6 +201,22 @@ public:
             return playerInfo.userId;
 
         return -1;
+    }
+
+    bool throwing(UserCmd* cmd)
+    {
+        auto weapon = localPlayer->getActiveWeapon();
+        auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
+        if (weaponClass == 40) {
+            if (!weapon->pinPulled())
+                if (weapon->throwTime() > 0.f)
+                    return true;
+
+            if ((cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+                if (weapon->throwTime() > 0.f)
+                    return true;
+        }
+        return false;
     }
 
     [[nodiscard]] auto getPlayerName(bool normalize) noexcept
@@ -205,6 +242,56 @@ public:
         return playerName;
     }
 
+    int getAnimationLayerCount() noexcept
+    {
+        return *reinterpret_cast<int*>(this + 0x298C);
+    }
+
+    AnimationLayer* animOverlays()
+    {
+        return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2980);
+    }
+
+    AnimationLayer* getAnimationLayer(int overlay) noexcept
+    {
+        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
+    }
+
+    std::array<float, 24>& pose_parameters()
+    {
+        return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
+    }
+
+    void CreateState(AnimState* state)
+    {
+        static auto CreateAnimState = reinterpret_cast<void(__thiscall*)(AnimState*, Entity*)>(memory->CreateState);
+        if (!CreateAnimState)
+            return;
+
+        CreateAnimState(state, this);
+    }
+
+    void UpdateState(AnimState* state, Vector angle) {
+        if (!state || !angle)
+            return;
+        static auto UpdateAnimState = reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(memory->UpdateState);
+        if (!UpdateAnimState)
+            return;
+        UpdateAnimState(state, nullptr, 0.0f, angle.y, angle.x, nullptr);
+    }
+
+    float spawnTime()
+    {
+        return *(float*)((uintptr_t)this + 0xA370);
+    }
+
+    void InvalidateBoneCache()
+    {
+        static auto invalidate_bone_cache = memory->InvalidateBoneCache;
+        reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
+    }
+
+    NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
@@ -219,7 +306,7 @@ public:
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
-    NETVAR(health, "CBasePlayer", "m_iHealth", int)
+    //NETVAR(health, "CBasePlayer", "m_iHealth", int)
     NETVAR(fov, "CBasePlayer", "m_iFOV", int)
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
     NETVAR(flags, "CBasePlayer", "m_fFlags", int)
@@ -274,6 +361,9 @@ public:
     NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
     NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
+
+    NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
