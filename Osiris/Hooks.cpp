@@ -278,7 +278,7 @@ static void __stdcall drawModelExecute(void* ctx, void* state, const ModelRender
         return;
 
     static Chams chams;
-    if (chams.render(ctx, state, info, customBoneToWorld))
+    if (!chams.render(ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }

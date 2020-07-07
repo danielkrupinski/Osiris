@@ -223,6 +223,7 @@ public:
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
+            bool cover = false;
             int material = 0;
         };
         std::vector<Material> materials{ {}, {} };

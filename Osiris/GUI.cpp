@@ -936,25 +936,13 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ImGui::SetTooltip("Escolha os alvos que o Chams exibirá");
     }
     static int currentItem{ 0 };
-    auto& chams{ config->chams[currentItem].materials[material - 1] };
+    auto& chams{ config->chams[currentCategory].materials[material - 1] };
     ImGui::SameLine();
     ImGui::Checkbox("Ligado?", &chams.enabled);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip("Ativa o Chams");
     }
     ImGui::PopID();
-
-
-    if (currentCategory <= 3) {
-        static int currentType{ 0 };
-        ImGui::PushID(1);
-        if (ImGui::Combo("", &currentType, "Todos\0Visíveis\0Ocultos\0"))
-            material = 1;
-        ImGui::PopID();
-        currentItem = currentCategory * 3 + currentType;
-    } else {
-        currentItem = currentCategory + 8;
-    }
 
     ImGui::SameLine();
 
