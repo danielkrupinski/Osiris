@@ -396,7 +396,7 @@ void Visuals::skybox() noexcept
 
 void Visuals::showVelocity() noexcept
 {
-    if (!config->visuals.showvelocity.enabled || !localPlayer->isAlive())
+    if (!config->visuals.showvelocity.enabled || !localPlayer || !localPlayer->isAlive())
         return;
 
     float velocity = localPlayer->velocity().length2D();
@@ -404,7 +404,7 @@ void Visuals::showVelocity() noexcept
 
     interfaces->surface->setTextFont(Surface::font);
     if (config->visuals.showvelocity.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->visuals.showvelocity.rainbowSpeed));
+        interfaces->surface->setTextColor(rainbowColor(config->visuals.showvelocity.rainbowSpeed));
     else
         interfaces->surface->setTextColor((config->visuals.showvelocity.color));
 
