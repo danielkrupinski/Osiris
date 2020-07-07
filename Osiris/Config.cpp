@@ -1036,9 +1036,9 @@ void Config::load(size_t id) noexcept
                 misc.purchaseList.enabled = enabled.asBool();
             if (const auto& onlyDuringFreezeTime{ purchaseList["Somente durante compra"] }; onlyDuringFreezeTime.isBool())
                 misc.purchaseList.onlyDuringFreezeTime = onlyDuringFreezeTime.asBool();
-            if (const auto& showPrices{ purchaseList["Mostrar preï¿½os"] }; showPrices.isBool())
+            if (const auto& showPrices{ purchaseList["Mostrar preços"] }; showPrices.isBool())
                 misc.purchaseList.showPrices = showPrices.asBool();
-            if (const auto& noTitleBar{ purchaseList["Sem tï¿½tulo"] }; noTitleBar.isBool())
+            if (const auto& noTitleBar{ purchaseList["Sem título"] }; noTitleBar.isBool())
                 misc.purchaseList.noTitleBar = noTitleBar.asBool();
             if (const auto& mode{ purchaseList["Modo"] }; mode.isInt())
                 misc.purchaseList.mode = mode.asInt();

@@ -90,7 +90,8 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
             && !std::strstr(info.model->name + 17, "parachute")
             && !std::strstr(info.model->name + 17, "fists"))
             renderWeapons();
-    } else {
+    }
+    else {
         const auto entity = interfaces->entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
             renderPlayer(entity);
@@ -116,11 +117,6 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams[LOCALPLAYER].materials, health);
     }
     else if (localPlayer->isOtherEnemy(player)) {
-    } else if (player->isDefusing() && std::any_of(config->chams[DEFUSING].materials.cbegin(), config->chams[DEFUSING].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(config->chams[DEFUSING].materials, health);
-    } else if (player == localPlayer.get()) {
-        applyChams(config->chams[LOCALPLAYER].materials, health);
-    } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams[ENEMIES].materials, health);
 
         if (config->backtrack.enabled) {
@@ -132,8 +128,6 @@ void Chams::renderPlayer(Entity* player) noexcept
                 interfaces->studioRender->forcedMaterialOverride(nullptr);
             }
         }
-    } else {
-        applyChams(config->chams[ALLIES].materials, health);
     }
     else {
         applyChams(config->chams[ALLIES].materials, health);
@@ -173,6 +167,7 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
         const auto material = dispatchMaterial(cham.material);
         if (!material)
             continue;
+
         float r, g, b;
         if (cham.healthBased && health) {
             r = 1.0f - health / 100.0f;
@@ -183,9 +178,6 @@ void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int he
             std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         }
         else {
-        } else if (cham.rainbow) {
-            std::tie(r, g, b) = rainbowColor(memory->globalVars->realtime, cham.rainbowSpeed);
-        } else {
             r = cham.color[0];
             g = cham.color[1];
             b = cham.color[2];
