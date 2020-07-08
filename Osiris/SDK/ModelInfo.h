@@ -69,6 +69,11 @@ struct StudioHdr {
     int numHitboxSets;
     int hitboxSetIndex;
 
+    const StudioBone* getBone(int i) const noexcept
+    {
+        return i >= 0 && i < numBones ? reinterpret_cast<StudioBone*>(std::uintptr_t(this) + boneIndex) + i : nullptr;
+    }
+
     StudioHitboxSet* getHitboxSet(int i) noexcept
     {
         return i >= 0 && i < numHitboxSets ? reinterpret_cast<StudioHitboxSet*>(std::uintptr_t(this) + hitboxSetIndex) + i : nullptr;
