@@ -204,6 +204,8 @@ public:
         return playerName;
     }
 
+    bool canSee(Entity* other, const Vector& pos) noexcept;
+
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 
