@@ -69,6 +69,7 @@ public:
     VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, 293, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
