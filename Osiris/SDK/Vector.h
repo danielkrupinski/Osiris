@@ -91,5 +91,10 @@ struct Vector {
                        dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
     }
 
+    auto distTo(const Vector& v) const noexcept
+    {
+        return (*this - v).length();
+    }
+
     float x, y, z;
 };
