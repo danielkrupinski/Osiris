@@ -135,7 +135,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::sniperCrosshair();
     Misc::recoilCrosshair();
     Visuals::removeShadows();
-    Visuals::skybox();
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
@@ -188,14 +187,11 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 static int __stdcall doPostScreenEffects(int param) noexcept
 {
     if (interfaces->engine->isInGame()) {
-        Visuals::modifySmoke();
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
-        Visuals::disablePostProcessing();
         Visuals::reduceFlashEffect();
         Visuals::removeBlur();
         Visuals::updateBrightness();
-        Visuals::removeGrass();
         Visuals::remove3dSky();
         Glow::render();
     }
@@ -260,7 +256,11 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fakePrime();
     }
     if (interfaces->engine->isInGame()) {
+        Visuals::skybox(stage);
+        Visuals::removeGrass(stage);
+        Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
+        Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
