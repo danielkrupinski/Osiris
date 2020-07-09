@@ -19,6 +19,7 @@ class MoveData;
 class ViewRender;
 class WeaponSystem;
 
+struct ActiveChannels;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Trace;
@@ -70,6 +71,7 @@ public:
     WeaponSystem* weaponSystem;
     std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
     GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    ActiveChannels* activeChannels;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {
