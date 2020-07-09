@@ -457,5 +457,8 @@
     <ClInclude Include="Hooks\VmtHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Sound.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

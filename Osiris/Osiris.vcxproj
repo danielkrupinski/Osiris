@@ -141,6 +141,7 @@
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\RenderContext.h" />
     <ClInclude Include="SDK\RenderView.h" />
+    <ClInclude Include="SDK\Sound.h" />
     <ClInclude Include="SDK\SoundEmitter.h" />
     <ClInclude Include="SDK\SoundInfo.h" />
     <ClInclude Include="SDK\StudioRender.h" />
