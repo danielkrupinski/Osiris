@@ -204,6 +204,7 @@ public:
         return playerName;
     }
 
+    void getPlayerName(char(&out)[128]) noexcept;
     bool canSee(Entity* other, const Vector& pos) noexcept;
     bool visibleTo(Entity* other) noexcept;
 

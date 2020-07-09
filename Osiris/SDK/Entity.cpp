@@ -2,12 +2,37 @@
 
 #include "../Memory.h"
 #include "../Interfaces.h"
-#include "ModelInfo.h"
 #include "GlobalVars.h"
+#include "Localize.h"
+#include "ModelInfo.h"
 
 bool Entity::isOtherEnemy(Entity* other) noexcept
 {
     return memory->isOtherEnemy(this, other);
+}
+
+void Entity::getPlayerName(char(&out)[128]) noexcept
+{
+    PlayerInfo playerInfo;
+    if (!interfaces->engine->getPlayerInfo(index(), playerInfo)) {
+        strcpy(out, "unknown");
+        return;
+    }
+
+    auto end = std::remove(playerInfo.name, playerInfo.name + strlen(playerInfo.name), '\n');
+    *end = '\0';
+    end = std::unique(playerInfo.name, end, [](char a, char b) { return a == b && a == ' '; });
+    *end = '\0';
+
+#ifdef _WIN32
+    wchar_t wide[128];
+    interfaces->localize->convertAnsiToUnicode(playerInfo.name, wide, sizeof(wide));
+    wchar_t wideNormalized[128];
+    NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128);
+    interfaces->localize->convertUnicodeToAnsi(wideNormalized, playerInfo.name, 128);
+#endif
+
+    strcpy(out, playerInfo.name);
 }
 
 bool Entity::canSee(Entity* other, const Vector& pos) noexcept
