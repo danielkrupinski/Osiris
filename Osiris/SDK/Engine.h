@@ -8,6 +8,19 @@
 #include "Vector.h"
 #include "VirtualMethod.h"
 
+struct Matrix4x4 {
+    union {
+        struct {
+            float _11, _12, _13, _14;
+            float _21, _22, _23, _24;
+            float _31, _32, _33, _34;
+            float _41, _42, _43, _44;
+
+        };
+        float m[4][4];
+    };
+};
+
 struct PlayerInfo {
     std::uint64_t version;
     union {
@@ -51,4 +64,5 @@ public:
     VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
     VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd), (this, cmd, false))
     VIRTUAL_METHOD(const D3DMATRIX&, worldToScreenMatrix, 37, (), (this))
+    VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix2, 37, (), (this))
 };
