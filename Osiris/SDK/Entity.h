@@ -288,4 +288,9 @@ public:
     {
         return flashDuration() > 75.0f;
     }
+
+    bool grenadeExploded() noexcept
+    {
+        return *reinterpret_cast<bool*>(this + 0x29E8);
+    }
 };
