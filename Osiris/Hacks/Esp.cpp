@@ -136,7 +136,7 @@ static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config
 
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
-                    interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                    interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
@@ -156,7 +156,7 @@ static void renderBox(const BoundingBox& bbox, const Config::Esp::Shared& config
 
             if (config.outline.enabled) {
                 if (config.outline.rainbow)
-                    interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                    interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                 else
                     interfaces->surface->setDrawColor(config.outline.color);
 
@@ -244,7 +244,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->drawFilledRect(drawPositionLeft - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionLeft, bbox.y1);
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -257,7 +257,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -270,7 +270,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
                 interfaces->surface->drawFilledRect(drawPositionRight - 3, bbox.y0 + abs(bbox.y1 - bbox.y0) * (maxHealth - entity->health()) / static_cast<float>(maxHealth), drawPositionRight, bbox.y1);
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -292,7 +292,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -305,7 +305,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -319,7 +319,7 @@ static void renderPlayerBox(Entity* entity, const Config::Esp::Player& config) n
 
                 if (config.outline.enabled) {
                     if (config.outline.rainbow)
-                        interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config.outline.rainbowSpeed));
+                        interfaces->surface->setDrawColor(rainbowColor(config.outline.rainbowSpeed));
                     else
                         interfaces->surface->setDrawColor(config.outline.color);
 
@@ -661,7 +661,7 @@ void Esp::render() noexcept
             else {
                 switch (entity->getClientClass()->classId) {
                 case ClassId::Dronegun: {
-                    renderEntityEsp(entity, config->esp.dangerZone[0], std::wstring{ interfaces->localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->sentryHealth())).append(L" HP)").c_str());
+                    renderEntityEsp(entity, config->esp.dangerZone[0], std::wstring{ interfaces->localize->find("#SFUI_WPNHUD_AutoSentry") }.append(L" (").append(std::to_wstring(entity->health())).append(L" HP)").c_str());
                     break;
                 }
                 case ClassId::Drone: {

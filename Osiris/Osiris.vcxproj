@@ -58,6 +58,9 @@
     <ClCompile Include="SDK\Listener.cpp" />
     <ClCompile Include="SDK\Multipoints.cpp" />
     <ClCompile Include="SDK\Pattern.cpp" />
+    <ClCompile Include="SDK\Utils.cpp">
+      <DeploymentContent>false</DeploymentContent>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
