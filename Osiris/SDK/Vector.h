@@ -5,7 +5,7 @@
 class matrix3x4;
 
 struct Vector {
-    constexpr operator bool() const noexcept
+    constexpr auto notNull() const noexcept
     {
         return x || y || z;
     }
