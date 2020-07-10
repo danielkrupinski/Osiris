@@ -204,7 +204,9 @@ public:
         return playerName;
     }
 
+    void getPlayerName(char(&out)[128]) noexcept;
     bool canSee(Entity* other, const Vector& pos) noexcept;
+    bool visibleTo(Entity* other) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -215,6 +217,7 @@ public:
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
     NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
+    NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
@@ -280,8 +283,15 @@ public:
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
+    NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
+    }
+
+    bool grenadeExploded() noexcept
+    {
+        return *reinterpret_cast<bool*>(this + 0x29E8);
     }
 };
