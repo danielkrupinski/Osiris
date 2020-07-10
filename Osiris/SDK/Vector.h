@@ -2,12 +2,22 @@
 
 #include <cmath>
 
-#include "matrix3x4.h"
+class matrix3x4;
 
 struct Vector {
-    constexpr operator bool() const noexcept
+    constexpr auto notNull() const noexcept
     {
         return x || y || z;
+    }
+    
+    constexpr auto operator==(const Vector& v) const noexcept
+    {
+        return x == v.x && y == v.y && z == v.z;
+    }
+
+    constexpr auto operator!=(const Vector& v) const noexcept
+    {
+        return !(*this == v);
     }
 
     constexpr Vector& operator=(const float array[3]) noexcept
@@ -84,12 +94,21 @@ struct Vector {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    constexpr auto transform(const matrix3x4& mat) const noexcept
+    constexpr auto transform(const matrix3x4& mat) const noexcept;
+
+    auto distTo(const Vector& v) const noexcept
     {
-        return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
-                       dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],
-                       dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
+        return (*this - v).length();
     }
 
     float x, y, z;
 };
+
+#include "Matrix3x4.h"
+
+constexpr auto Vector::transform(const matrix3x4& mat) const noexcept
+{
+    return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],
+                   dotProduct({ mat[1][0], mat[1][1], mat[1][2] }) + mat[1][3],
+                   dotProduct({ mat[2][0], mat[2][1], mat[2][2] }) + mat[2][3] };
+}
