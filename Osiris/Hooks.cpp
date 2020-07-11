@@ -12,6 +12,7 @@
 
 #include "Config.h"
 #include "EventListener.h"
+#include "GameData.h"
 #include "GUI.h"
 #include "Hooks.h"
 #include "Interfaces.h"
@@ -23,6 +24,7 @@
 #include "Hacks/Chams.h"
 #include "Hacks/EnginePrediction.h"
 #include "Hacks/Esp.h"
+#include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
@@ -87,10 +89,14 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 {
     static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
+    if (config->loadScheduledFonts())
+        ImGui_ImplDX9_InvalidateDeviceObjects();
+
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    StreamProofESP::render();
     Misc::purchaseList();
 
     if (gui->open)
@@ -253,6 +259,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        GameData::update();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);

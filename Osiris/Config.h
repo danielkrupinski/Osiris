@@ -151,6 +151,24 @@ public:
         std::array<Player, 6> players;
     } esp;
 
+    struct StreamProofESP {
+        std::unordered_map<std::string, Player> allies;
+        std::unordered_map<std::string, Player> enemies;
+        std::unordered_map<std::string, Weapon> weapons;
+        std::unordered_map<std::string, Projectile> projectiles;
+        std::unordered_map<std::string, Shared> lootCrates;
+        std::unordered_map<std::string, Shared> otherEntities;
+    } streamProofESP;
+
+    struct Font {
+        ImFont* tiny;
+        ImFont* medium;
+        ImFont* big;
+    };
+
+    std::vector<std::string> systemFonts{ "Default" };
+    std::unordered_map<std::string, Font> fonts;
+
     struct {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
@@ -288,7 +306,11 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    void scheduleFontLoad(const std::string& name) noexcept;
+    bool loadScheduledFonts() noexcept;
 private:
+    std::vector<std::string> scheduledFonts{ "Default" };
     std::filesystem::path path;
     std::vector<std::string> configs;
 };
