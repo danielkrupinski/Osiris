@@ -5,9 +5,19 @@
 class matrix3x4;
 
 struct Vector {
-    constexpr operator bool() const noexcept
+    constexpr auto notNull() const noexcept
     {
         return x || y || z;
+    }
+    
+    constexpr auto operator==(const Vector& v) const noexcept
+    {
+        return x == v.x && y == v.y && z == v.z;
+    }
+
+    constexpr auto operator!=(const Vector& v) const noexcept
+    {
+        return !(*this == v);
     }
 
     constexpr Vector& operator=(const float array[3]) noexcept
