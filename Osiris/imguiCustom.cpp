@@ -98,6 +98,31 @@ void ImGuiCustom::colorPicker(const char* name, Config::ColorToggle& colorConfig
     colorPicker(name, colorConfig.color, &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
 }
 
+void ImGuiCustom::colorPicker(const char* name, ColorA& colorConfig, bool* enable, float* thickness) noexcept
+{
+    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, enable, thickness);
+}
+
+void ImGuiCustom::colorPicker(const char* name, ColorToggle& colorConfig) noexcept
+{
+    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled);
+}
+
+void ImGuiCustom::colorPicker(const char* name, ColorToggleRounding& colorConfig) noexcept
+{
+    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, nullptr, &colorConfig.rounding);
+}
+
+void ImGuiCustom::colorPicker(const char* name, ColorToggleThickness& colorConfig) noexcept
+{
+    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness);
+}
+
+void ImGuiCustom::colorPicker(const char* name, ColorToggleThicknessRounding& colorConfig) noexcept
+{
+    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness, &colorConfig.rounding);
+}
+
 void ImGuiCustom::arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept
 {
     float sz = ImGui::GetFrameHeight();

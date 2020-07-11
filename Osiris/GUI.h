@@ -21,6 +21,7 @@ private:
     void renderGlowWindow(bool contentOnly = false) noexcept;
     void renderChamsWindow(bool contentOnly = false) noexcept;
     void renderEspWindow(bool contentOnly = false) noexcept;
+    void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
     void renderVisualsWindow(bool contentOnly = false) noexcept;
     void renderSkinChangerWindow(bool contentOnly = false) noexcept;
     void renderSoundWindow(bool contentOnly = false) noexcept;
@@ -38,6 +39,7 @@ private:
         bool glow = false;
         bool chams = false;
         bool esp = false;
+        bool streamProofESP = false;
         bool visuals = false;
         bool skinChanger = false;
         bool sound = false;

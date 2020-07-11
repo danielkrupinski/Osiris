@@ -5,6 +5,37 @@
 
 #include "Config.h"
 
+#ifdef _WIN32
+int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPARAM lParam)
+{
+    const auto fontName = (const char*)reinterpret_cast<const ENUMLOGFONTEXA*>(lpelfe)->elfFullName;
+
+    if (fontName[0] == '@')
+        return TRUE;
+
+    if (HFONT font = CreateFontA(0, 0, 0, 0,
+        FW_NORMAL, FALSE, FALSE, FALSE,
+        ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+        DEFAULT_PITCH, fontName)) {
+
+        DWORD fontData = GDI_ERROR;
+
+        if (HDC hdc = CreateCompatibleDC(nullptr)) {
+            SelectObject(hdc, font);
+            // Do not use TTC fonts as we only support TTF fonts
+            fontData = GetFontData(hdc, 'fctt', 0, NULL, 0);
+            DeleteDC(hdc);
+        }
+        DeleteObject(font);
+
+        if (fontData == GDI_ERROR)
+            reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(fontName);
+    }
+    return TRUE;
+}
+#endif
+
 Config::Config(const char* name) noexcept
 {
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
@@ -15,6 +46,14 @@ Config::Config(const char* name) noexcept
 
     listConfigs();
     misc.clanTag[0] = '\0';
+
+    LOGFONTA logfont;
+    logfont.lfCharSet = ANSI_CHARSET;
+    logfont.lfPitchAndFamily = DEFAULT_PITCH;
+    logfont.lfFaceName[0] = '\0';
+
+    EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+    std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
 void Config::load(size_t id) noexcept
@@ -1754,4 +1793,94 @@ void Config::listConfigs() noexcept
                    std::filesystem::directory_iterator{ },
                    std::back_inserter(configs),
                    [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+}
+
+void Config::scheduleFontLoad(const std::string& name) noexcept
+{
+    scheduledFonts.push_back(name);
+}
+
+#ifdef _WIN32
+static auto getFontData(const std::string& fontName) noexcept
+{
+    HFONT font = CreateFontA(0, 0, 0, 0,
+        FW_NORMAL, FALSE, FALSE, FALSE,
+        ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+        DEFAULT_PITCH, fontName.c_str());
+
+    std::unique_ptr<std::byte[]> data;
+    DWORD dataSize = GDI_ERROR;
+
+    if (font) {
+        HDC hdc = CreateCompatibleDC(nullptr);
+
+        if (hdc) {
+            SelectObject(hdc, font);
+            dataSize = GetFontData(hdc, 0, 0, nullptr, 0);
+
+            if (dataSize != GDI_ERROR) {
+                data = std::make_unique<std::byte[]>(dataSize);
+                dataSize = GetFontData(hdc, 0, 0, data.get(), dataSize);
+
+                if (dataSize == GDI_ERROR)
+                    data.reset();
+            }
+            DeleteDC(hdc);
+        }
+        DeleteObject(font);
+    }
+    return std::make_pair(std::move(data), dataSize);
+}
+#endif
+
+bool Config::loadScheduledFonts() noexcept
+{
+    bool result = false;
+
+    for (const auto& fontName : scheduledFonts) {
+        if (fontName == "Default") {
+            if (fonts.find("Default") == fonts.cend()) {
+                ImFontConfig cfg;
+                cfg.OversampleH = cfg.OversampleV = 1;
+                cfg.PixelSnapH = true;
+
+                Font newFont;
+
+                cfg.SizePixels = 13.0f;
+                newFont.big = ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+
+                cfg.SizePixels = 10.0f;
+                newFont.medium = ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+
+                cfg.SizePixels = 8.0f;
+                newFont.tiny = ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+
+                fonts.emplace(fontName, newFont);
+                result = true;
+            }
+            continue;
+        }
+
+#ifdef _WIN32
+        const auto [fontData, fontDataSize] = getFontData(fontName);
+        if (fontDataSize == GDI_ERROR)
+            continue;
+
+        static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
+        ImFontConfig cfg;
+        cfg.FontDataOwnedByAtlas = false;
+
+        if (fonts.find(fontName) == fonts.cend()) {
+            Font newFont;
+            newFont.tiny = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 8.0f, &cfg, ranges);
+            newFont.medium = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 10.0f, &cfg, ranges);
+            newFont.big = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 13.0f, &cfg, ranges);
+            fonts.emplace(fontName, newFont);
+            result = true;
+        }
+#endif
+    }
+    scheduledFonts.clear();
+    return result;
 }

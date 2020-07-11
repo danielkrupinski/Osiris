@@ -167,6 +167,9 @@
     <ClCompile Include="Hacks\StreamProofESP.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -471,6 +474,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\StreamProofESP.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
