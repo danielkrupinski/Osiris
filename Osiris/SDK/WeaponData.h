@@ -13,7 +13,13 @@ enum class WeaponType {
     C4,
     Placeholder,
     Grenade,
-    Unknown
+    Unknown,
+    StackableItem,
+    Fists,
+    BreachCharge,
+    BumpMine,
+    Tablet,
+    Melee
 };
 
 struct WeaponInfo {

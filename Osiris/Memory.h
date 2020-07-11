@@ -22,6 +22,8 @@ class ViewRender;
 class WeaponSystem;
 class IViewRenderBeams;
 
+struct ActiveChannels;
+struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Vector;
@@ -82,6 +84,8 @@ public:
     uintptr_t CreateState;
     uintptr_t InvalidateBoneCache;
     MemAlloc* memalloc;
+    ActiveChannels* activeChannels;
+    Channel* channels;
 
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept

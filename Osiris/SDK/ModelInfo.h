@@ -22,6 +22,11 @@ struct StudioHitboxSet {
     int numHitboxes;
     int hitboxIndex;
 
+    const StudioBone* getBone(int i) const noexcept
+    {
+        return i >= 0 && i < numBones ? reinterpret_cast<StudioBone*>(std::uintptr_t(this) + boneIndex) + i : nullptr;
+    }
+
     const char* getName() noexcept
     {
         return nameIndex ? reinterpret_cast<const char*>(std::uintptr_t(this) + nameIndex) : nullptr;

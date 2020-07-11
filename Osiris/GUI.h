@@ -34,6 +34,7 @@ private:
     void renderotherhacksWindow(bool contentOnly = false) noexcept;
     void renderPopupMenu(bool contentOnly = false) noexcept;
     void renderskinchangersWindow(bool contentOnly = false) noexcept;
+    void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
     void renderPlayerWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
@@ -54,6 +55,7 @@ private:
         bool config = false;
         bool autoconfig = false;
         bool aimhacks = false;
+        bool streamProofESP = false;
         bool wallhacks = false;
         bool other = false;
         bool popupMenu = true;
