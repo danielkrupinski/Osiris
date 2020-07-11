@@ -2738,38 +2738,38 @@ void GUI::renderPopupMenu(bool contentOnly) noexcept
                 CloseMenu();
             }
         }
-        ImGui::PushItemWidth(-1.0f);
-        if (ImGui::Button("    Aimbot   ")) {
+        ImGui::PushItemWidth(80.0f);
+        if (ImGui::Button("Aimbot", { 80.0f, 20.0f })) {
             window.aimbot = !window.aimbot;
         }
-        if (ImGui::Button("  Autoshot   ")) {
+        if (ImGui::Button("Autoshot", { 80.0f, 20.0f })) {
             window.triggerbot = !window.triggerbot;
         }
-        if (ImGui::Button(" Backtrack ")) {
+        if (ImGui::Button("Backtrack", { 80.0f, 20.0f })) {
             window.backtrack = !window.backtrack;
         }
-        if (ImGui::Button(" Contornos ")) {
+        if (ImGui::Button("Contornos", { 80.0f, 20.0f })) {
             window.glow = !window.glow;
         }
-        if (ImGui::Button("     ESP     ")) {
+        if (ImGui::Button("ESP", { 80.0f, 20.0f })) {
             window.esp = !window.esp;
         }
-        if (ImGui::Button("    Chams    ")) {
+        if (ImGui::Button("Chams", { 80.0f, 20.0f })) {
             window.chams = !window.chams;
         }
-        if (ImGui::Button("  Visuais  ")) {
+        if (ImGui::Button("Visuais", { 80.0f, 20.0f })) {
             window.visuals = !window.visuals;
         }
-        if (ImGui::Button("SkinChanger")) {
+        if (ImGui::Button("SkinChanger", { 80.0f, 20.0f })) {
             window.skinChanger = !window.skinChanger;
         }
-        if (ImGui::Button("   Outros  ")) {
+        if (ImGui::Button("Outros", { 80.0f, 20.0f })) {
             window.misc = !window.misc;
         }
-        if (ImGui::Button(" Anti Aim  ")) {
-            window.antiAim = !window.antiAim;
-        }
-        if (ImGui::Button("  Config   ")) {
+      //  if (ImGui::Button(" Anti Aim  ")) {
+      //      window.antiAim = !window.antiAim;
+     //   }
+        if (ImGui::Button("Config", { 80.0f, 20.0f })) {
             window.config = !window.config;
         }
         ImGui::PopItemWidth();
