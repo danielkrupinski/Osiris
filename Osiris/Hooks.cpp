@@ -13,7 +13,7 @@
 #include "Config.h"
 #include "EventListener.h"
 #include "GUI.h"
-#include "extraHooks.h"
+//#include "extraHooks.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "Memory.h"
@@ -153,7 +153,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
-    extraHook.init();
+   // extraHook.init();
 
     EnginePrediction::run(cmd);
 
@@ -173,10 +173,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     Misc::fakeDuck(cmd, sendPacket);
 
-    //if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE)))
-    AntiAim::fakeWalk(cmd, sendPacket);
-    AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-
+  //  if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE))) 
+  //      AntiAim::fakeWalk(cmd, sendPacket);
+  //      AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+    
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
     viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
@@ -734,7 +734,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
-    extraHook.restore();
+    //extraHook.restore();
 
     netvars->restore();
 
