@@ -226,14 +226,30 @@ static void from_json(const json& j, Config::Aimbot& a)
     read<value_t::boolean>(j, "Ignore smoke", a.ignoreSmoke);
     read<value_t::boolean>(j, "Auto shot", a.autoShot);
     read<value_t::boolean>(j, "Auto scope", a.autoScope);
-    read_number(j, "Fov", a.keyMode);
-    read_number(j, "Smooth", a.keyMode);
-    read_number(j, "Bone", a.keyMode);
-    read_number(j, "Max aim inaccuracy", a.keyMode);
-    read_number(j, "Max shot inaccuracy", a.keyMode);
-    read_number(j, "Min damage", a.keyMode);
+    read_number(j, "Fov", a.fov);
+    read_number(j, "Smooth", a.smooth);
+    read_number(j, "Bone", a.bone);
+    read_number(j, "Max aim inaccuracy", a.maxAimInaccuracy);
+    read_number(j, "Max shot inaccuracy", a.maxShotInaccuracy);
+    read_number(j, "Min damage", a.minDamage);
     read<value_t::boolean>(j, "Killshot", a.killshot);
     read<value_t::boolean>(j, "Between shots", a.betweenShots);
+}
+
+static void from_json(const json& j, Config::Triggerbot& t)
+{
+    read<value_t::boolean>(j, "Enabled", t.enabled);
+    read<value_t::boolean>(j, "On key", t.onKey);
+    read_number(j, "Key", t.key);
+    read<value_t::boolean>(j, "Friendly fire", t.friendlyFire);
+    read<value_t::boolean>(j, "Scoped only", t.scopedOnly);
+    read<value_t::boolean>(j, "Ignore flash", t.ignoreFlash);
+    read<value_t::boolean>(j, "Ignore smoke", t.ignoreSmoke);
+    read_number(j, "Hitgroup", t.hitgroup);
+    read_number(j, "Shot delay", t.shotDelay);
+    read_number(j, "Min damage", t.minDamage);
+    read<value_t::boolean>(j, "Killshot", t.killshot);
+    read_number(j, "Burst Time", t.burstTime);
 }
 
 void Config::load(size_t id) noexcept
@@ -246,6 +262,7 @@ void Config::load(size_t id) noexcept
         return;
 
     read<value_t::array>(j, "Aimbot", aimbot);
+    read<value_t::array>(j, "Triggerbot", triggerbot);
 
     Json::Value json;
 
@@ -253,24 +270,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    for (size_t i = 0; i < triggerbot.size(); i++) {
-        const auto& triggerbotJson = json["Triggerbot"][i];
-        auto& triggerbotConfig = triggerbot[i];
-
-        if (triggerbotJson.isMember("Enabled")) triggerbotConfig.enabled = triggerbotJson["Enabled"].asBool();
-        if (triggerbotJson.isMember("On key")) triggerbotConfig.onKey = triggerbotJson["On key"].asBool();
-        if (triggerbotJson.isMember("Key")) triggerbotConfig.key = triggerbotJson["Key"].asInt();
-        if (triggerbotJson.isMember("Friendly fire")) triggerbotConfig.friendlyFire = triggerbotJson["Friendly fire"].asBool();
-        if (triggerbotJson.isMember("Scoped only")) triggerbotConfig.scopedOnly = triggerbotJson["Scoped only"].asBool();
-        if (triggerbotJson.isMember("Ignore flash")) triggerbotConfig.ignoreFlash = triggerbotJson["Ignore flash"].asBool();
-        if (triggerbotJson.isMember("Ignore smoke")) triggerbotConfig.ignoreSmoke = triggerbotJson["Ignore smoke"].asBool();
-        if (triggerbotJson.isMember("Hitgroup")) triggerbotConfig.hitgroup = triggerbotJson["Hitgroup"].asInt();
-        if (triggerbotJson.isMember("Shot delay")) triggerbotConfig.shotDelay = triggerbotJson["Shot delay"].asInt();
-        if (triggerbotJson.isMember("Min damage")) triggerbotConfig.minDamage = triggerbotJson["Min damage"].asInt();
-        if (triggerbotJson.isMember("Killshot")) triggerbotConfig.killshot = triggerbotJson["Killshot"].asBool();
-        if (triggerbotJson.isMember("Burst Time")) triggerbotConfig.burstTime = triggerbotJson["Burst Time"].asFloat();
-    }
 
     {
         const auto& backtrackJson = json["Backtrack"];
