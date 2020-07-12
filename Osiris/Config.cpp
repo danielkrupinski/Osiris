@@ -825,6 +825,102 @@ static void to_json(json& j, const Config::Reportbot& o)
     WRITE("Other Hacking", other)
 }
 
+static void to_json(json& j, const Config::Sound::Player& o)
+{
+    const Config::Sound::Player dummy;
+
+    WRITE("Master volume", masterVolume)
+    WRITE("Headshot volume", headshotVolume)
+    WRITE("Weapon volume", weaponVolume)
+    WRITE("Footstep volume", footstepVolume)
+}
+
+static void to_json(json& j, const Config::Sound& o)
+{
+    const Config::Sound dummy;
+
+    WRITE("Chicken volume", chickenVolume)
+    j["Players"] = o.players;
+}
+
+static void to_json(json& j, const PurchaseList& o)
+{
+    const PurchaseList dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Only During Freeze Time", onlyDuringFreezeTime)
+    WRITE("Show Prices", showPrices)
+    WRITE("No Title Bar", noTitleBar)
+    WRITE("Mode", mode)
+}
+
+static void to_json(json& j, const Config::Misc& o)
+{
+    const Config::Misc dummy;
+
+    WRITE("Menu key", menuKey);
+    WRITE("Anti AFK kick", antiAfkKick);
+    WRITE("Auto strafe", autoStrafe);
+    WRITE("Bunny hop", bunnyHop);
+    WRITE("Custom clan tag", customClanTag);
+    WRITE("Clock tag", clocktag);
+
+    if (o.clanTag[0])
+        j["Clan tag"] = o.clanTag;
+
+    WRITE("Animated clan tag", animatedClanTag);
+    WRITE("Fast duck", fastDuck);
+    WRITE("Moonwalk", moonwalk);
+    WRITE("Edge Jump", edgejump);
+    WRITE("Edge Jump Key", edgejumpkey);
+
+    WRITE("Slowwalk", slowwalk);
+    WRITE("Slowwalk key", slowwalkKey);
+    WRITE("Sniper crosshair", sniperCrosshair);
+    WRITE("Recoil crosshair", recoilCrosshair);
+    WRITE("Auto pistol", autoPistol);
+    WRITE("Auto reload", autoReload);
+    WRITE("Auto accept", autoAccept);
+    WRITE("Radar hack", radarHack);
+    WRITE("Reveal ranks", revealRanks);
+    WRITE("Reveal money", revealMoney);
+    WRITE("Reveal suspect", revealSuspect);
+
+    //  WRITE("Spectator list", spectatorList);
+    //  WRITE("Watermark", watermark);
+    WRITE("Fix animation LOD", fixAnimationLOD);
+    WRITE("Fix bone matrix", fixBoneMatrix);
+    WRITE("Fix movement", fixMovement);
+    WRITE("Disable model occlusion", disableModelOcclusion);
+    WRITE("Aspect Ratio", aspectratio);
+    WRITE("Kill message", killMessage);
+    WRITE("Kill message string", killMessageString);
+
+    WRITE("Name stealer", nameStealer);
+    WRITE("Disable HUD blur", disablePanoramablur);
+    WRITE("Ban color", banColor);
+    WRITE("Ban text", banText);
+    WRITE("Fast plant", fastPlant);
+    // WRITE("Bomb timer", bombTimer);
+
+    WRITE("Quick reload", quickReload);
+    WRITE("Prepare revolver", prepareRevolver);
+    WRITE("Prepare revolver key", prepareRevolverKey);
+    WRITE("Hit sound", hitSound);
+    WRITE("Choked packets", chokedPackets);
+    WRITE("Choked packets key", chokedPacketsKey);
+    WRITE("Quick healthshot key", quickHealthshotKey);
+    WRITE("Grenade predict", nadePredict);
+    WRITE("Fix tablet signal", fixTabletSignal);
+    WRITE("Max angle delta", maxAngleDelta);
+    WRITE("Fake prime", fakePrime);
+    WRITE("Fix tablet signal", fixTabletSignal);
+    WRITE("Custom Hit Sound", customHitSound);
+    WRITE("Kill sound", killSound);
+    WRITE("Custom Kill Sound", customKillSound);
+    WRITE("Purchase List", purchaseList);
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -836,6 +932,8 @@ void Config::save(size_t id) const noexcept
     j["Chams"] = chams;
     j["ESP"] = streamProofESP;
     j["Reportbot"] = reportbot;
+    j["Sound"] = sound;
+    j["Misc"] = misc;
 
     std::error_code ec;
     std::filesystem::create_directory(path, ec);
@@ -949,22 +1047,6 @@ void Config::save(size_t id) const noexcept
     }
 
     {
-        auto& soundJson = json["Sound"];
-
-        soundJson["Chicken volume"] = sound.chickenVolume;
-
-        for (size_t i = 0; i < sound.players.size(); i++) {
-            auto& playerJson = soundJson["Players"][i];
-            const auto& playerConfig = sound.players[i];
-
-            playerJson["Master volume"] = playerConfig.masterVolume;
-            playerJson["Headshot volume"] = playerConfig.headshotVolume;
-            playerJson["Weapon volume"] = playerConfig.weaponVolume;
-            playerJson["Footstep volume"] = playerConfig.footstepVolume;
-        }
-    }
-
-    {
         auto& styleJson = json["Style"];
 
         styleJson["Menu style"] = style.menuStyle;
@@ -982,102 +1064,6 @@ void Config::save(size_t id) const noexcept
             colorJson[3] = style.Colors[i].w;
         }
     }
-
-    {
-        auto& miscJson = json["Misc"];
-
-        miscJson["Menu key"] = misc.menuKey;
-        miscJson["Anti AFK kick"] = misc.antiAfkKick;
-        miscJson["Auto strafe"] = misc.autoStrafe;
-        miscJson["Bunny hop"] = misc.bunnyHop;
-        miscJson["Custom clan tag"] = misc.customClanTag;
-        miscJson["Clock tag"] = misc.clocktag;
-        miscJson["Clan tag"] = misc.clanTag;
-        miscJson["Animated clan tag"] = misc.animatedClanTag;
-        miscJson["Fast duck"] = misc.fastDuck;
-        miscJson["Moonwalk"] = misc.moonwalk;
-        miscJson["Edge Jump"] = misc.edgejump;
-        miscJson["Edge Jump Key"] = misc.edgejumpkey;
-        miscJson["Slowwalk"] = misc.slowwalk;
-        miscJson["Slowwalk key"] = misc.slowwalkKey;
-        miscJson["Sniper crosshair"] = misc.sniperCrosshair;
-        miscJson["Recoil crosshair"] = misc.recoilCrosshair;
-        miscJson["Auto pistol"] = misc.autoPistol;
-        miscJson["Auto reload"] = misc.autoReload;
-        miscJson["Auto accept"] = misc.autoAccept;
-        miscJson["Radar hack"] = misc.radarHack;
-        miscJson["Reveal ranks"] = misc.revealRanks;
-        miscJson["Reveal money"] = misc.revealMoney;
-        miscJson["Reveal suspect"] = misc.revealSuspect;
-
-        {
-            auto& spectatorListJson = miscJson["Spectator list"];
-            spectatorListJson["Enabled"] = misc.spectatorList.enabled;
-            spectatorListJson["Color"][0] = misc.spectatorList.color[0];
-            spectatorListJson["Color"][1] = misc.spectatorList.color[1];
-            spectatorListJson["Color"][2] = misc.spectatorList.color[2];
-            spectatorListJson["Rainbow"] = misc.spectatorList.rainbow;
-            spectatorListJson["Rainbow speed"] = misc.spectatorList.rainbowSpeed;
-        }
-
-        {
-            auto& watermarkJson = miscJson["Watermark"];
-            watermarkJson["Enabled"] = misc.watermark.enabled;
-            watermarkJson["Color"][0] = misc.watermark.color[0];
-            watermarkJson["Color"][1] = misc.watermark.color[1];
-            watermarkJson["Color"][2] = misc.watermark.color[2];
-            watermarkJson["Rainbow"] = misc.watermark.rainbow;
-            watermarkJson["Rainbow speed"] = misc.watermark.rainbowSpeed;
-        }
-
-        miscJson["Fix animation LOD"] = misc.fixAnimationLOD;
-        miscJson["Fix bone matrix"] = misc.fixBoneMatrix;
-        miscJson["Fix movement"] = misc.fixMovement;
-        miscJson["Disable model occlusion"] = misc.disableModelOcclusion;
-        miscJson["Aspect Ratio"] = misc.aspectratio;
-        miscJson["Kill message"] = misc.killMessage;
-        miscJson["Kill message string"] = misc.killMessageString;
-        miscJson["Name stealer"] = misc.nameStealer;
-        miscJson["Disable HUD blur"] = misc.disablePanoramablur;
-        miscJson["Ban color"] = misc.banColor;
-        miscJson["Ban text"] = misc.banText;
-        miscJson["Fast plant"] = misc.fastPlant;
-
-        {
-            auto& bombTimerJson = miscJson["Bomb timer"];
-            bombTimerJson["Enabled"] = misc.bombTimer.enabled;
-            bombTimerJson["Color"][0] = misc.bombTimer.color[0];
-            bombTimerJson["Color"][1] = misc.bombTimer.color[1];
-            bombTimerJson["Color"][2] = misc.bombTimer.color[2];
-            bombTimerJson["Rainbow"] = misc.bombTimer.rainbow;
-            bombTimerJson["Rainbow speed"] = misc.bombTimer.rainbowSpeed;
-        }
-
-        miscJson["Quick reload"] = misc.quickReload;
-        miscJson["Prepare revolver"] = misc.prepareRevolver;
-        miscJson["Prepare revolver key"] = misc.prepareRevolverKey;
-        miscJson["Hit sound"] = misc.hitSound;
-        miscJson["Choked packets"] = misc.chokedPackets;
-        miscJson["Choked packets key"] = misc.chokedPacketsKey;
-        miscJson["Quick healthshot key"] = misc.quickHealthshotKey;
-        miscJson["Grenade predict"] = misc.nadePredict;
-        miscJson["Fix tablet signal"] = misc.fixTabletSignal;
-        miscJson["Max angle delta"] = misc.maxAngleDelta;
-        miscJson["Fake prime"] = misc.fakePrime;
-        miscJson["Custom Hit Sound"] = misc.customHitSound;
-        miscJson["Kill sound"] = misc.killSound;
-        miscJson["Custom Kill Sound"] = misc.customKillSound;
-
-        {
-            auto& purchaseListJson = miscJson["Purchase List"];
-            purchaseListJson["Enabled"] = misc.purchaseList.enabled;
-            purchaseListJson["Only During Freeze Time"] = misc.purchaseList.onlyDuringFreezeTime;
-            purchaseListJson["Show Prices"] = misc.purchaseList.showPrices;
-            purchaseListJson["No Title Bar"] = misc.purchaseList.noTitleBar;
-            purchaseListJson["Mode"] = misc.purchaseList.mode;
-        }
-    }
-
 }
 
 void Config::add(const char* name) noexcept
