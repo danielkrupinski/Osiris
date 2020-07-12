@@ -435,6 +435,76 @@ static void from_json(const json& j, Config::Style& s)
     }
 }
 
+static void from_json(const json& j, PurchaseList& pl)
+{
+    read<value_t::boolean>(j, "Enabled", pl.enabled);
+    read<value_t::boolean>(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
+    read<value_t::boolean>(j, "Show Prices", pl.showPrices);
+    read<value_t::boolean>(j, "No Title Bar", pl.noTitleBar);
+    read_number(j, "Mode", pl.mode);
+}
+
+static void from_json(const json& j, Config::Misc& m)
+{
+    read_number(j, "Menu key", m.menuKey);
+    read<value_t::boolean>(j, "Anti AFK kick", m.antiAfkKick);
+    read<value_t::boolean>(j, "Auto strafe", m.autoStrafe);
+    read<value_t::boolean>(j, "Bunny hop", m.bunnyHop);
+    read<value_t::boolean>(j, "Custom clan tag", m.customClanTag);
+    read<value_t::boolean>(j, "Clock tag", m.clocktag);
+    if (j.contains("Clan tag"))
+        strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
+    read<value_t::boolean>(j, "Animated clan tag", m.animatedClanTag);
+    read<value_t::boolean>(j, "Fast duck", m.fastDuck);
+    read<value_t::boolean>(j, "Moonwalk", m.moonwalk);
+    read<value_t::boolean>(j, "Edge Jump", m.edgejump);
+    read_number(j, "Edge Jump Key", m.edgejumpkey);
+    read<value_t::boolean>(j, "Slowwalk", m.slowwalk);
+    read_number(j, "Slowwalk key", m.slowwalkKey);
+    read<value_t::boolean>(j, "Sniper crosshair", m.sniperCrosshair);
+    read<value_t::boolean>(j, "Recoil crosshair", m.recoilCrosshair);
+    read<value_t::boolean>(j, "Auto pistol", m.autoPistol);
+    read<value_t::boolean>(j, "Auto reload", m.autoReload);
+    read<value_t::boolean>(j, "Auto accept", m.autoAccept);
+    read<value_t::boolean>(j, "Radar hack", m.radarHack);
+    read<value_t::boolean>(j, "Reveal ranks", m.revealRanks);
+    read<value_t::boolean>(j, "Reveal money", m.revealMoney);
+    read<value_t::boolean>(j, "Reveal suspect", m.revealSuspect);
+    //  read<value_t::object>(j, "Spectator list", m.spectatorList);
+    //  read<value_t::object>(j, "Watermark", m.watermark);
+    read<value_t::boolean>(j, "Fix animation LOD", m.fixAnimationLOD);
+    read<value_t::boolean>(j, "Fix bone matrix", m.fixBoneMatrix);
+    read<value_t::boolean>(j, "Fix movement", m.fixMovement);
+    read<value_t::boolean>(j, "Disable model occlusion", m.disableModelOcclusion);
+    read_number(j, "Aspect Ratio", m.aspectratio);
+    read<value_t::boolean>(j, "Kill message", m.killMessage);
+    read<value_t::object>(j, "Kill message string", m.killMessageString);
+
+    read<value_t::boolean>(j, "Name stealer", m.nameStealer);
+    read<value_t::boolean>(j, "Disable HUD blur", m.disablePanoramablur);
+    read_number(j, "Ban color", m.banColor);
+    read<value_t::object>(j, "Ban text", m.banText);
+    read<value_t::boolean>(j, "Fast plant", m.fastPlant);
+    // read<value_t::object>(j, "Bomb timer", m.bombTimer);
+
+    read<value_t::boolean>(j, "Quick reload", m.quickReload);
+    read<value_t::boolean>(j, "Prepare revolver", m.prepareRevolver);
+    read_number(j, "Prepare revolver key", m.prepareRevolverKey);
+    read_number(j, "Hit sound", m.hitSound);
+    read_number(j, "Choked packets", m.chokedPackets);
+    read_number(j, "Choked packets key", m.chokedPacketsKey);
+    read_number(j, "Quick healthshot key", m.quickHealthshotKey);
+    read<value_t::boolean>(j, "Grenade predict", m.nadePredict);
+    read<value_t::boolean>(j, "Fix tablet signal", m.fixTabletSignal);
+    read_number(j, "Max angle delta", m.maxAngleDelta);
+    read<value_t::boolean>(j, "Fake prime", m.fakePrime);
+    read<value_t::boolean>(j, "Fix tablet signal", m.fixTabletSignal);
+    read<value_t::object>(j, "Custom Hit Sound", m.customHitSound);
+    read_number(j, "Kill sound", m.killSound);
+    read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
+    read<value_t::object>(j, "Purchase List", m.purchaseList);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -455,6 +525,7 @@ void Config::load(size_t id) noexcept
     read<value_t::array>(j, "Skin changer", skinChanger);
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
+    read<value_t::object>(j, "Misc", misc);
 
     Json::Value json;
 
@@ -462,123 +533,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    {
-        const auto& miscJson = json["Misc"];
-
-        if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
-        if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
-        if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
-        if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
-        if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
-        if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
-        if (miscJson.isMember("Clan tag")) strncpy_s(misc.clanTag, miscJson["Clan tag"].asCString(), _TRUNCATE);
-        if (miscJson.isMember("Animated clan tag")) misc.animatedClanTag = miscJson["Animated clan tag"].asBool();
-        if (miscJson.isMember("Fast duck")) misc.fastDuck = miscJson["Fast duck"].asBool();
-        if (miscJson.isMember("Moonwalk")) misc.moonwalk = miscJson["Moonwalk"].asBool();
-        if (miscJson.isMember("Edge Jump")) misc.edgejump = miscJson["Edge Jump"].asBool();
-        if (miscJson.isMember("Edge Jump Key")) misc.edgejumpkey = miscJson["Edge Jump Key"].asInt();
-        if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
-        if (miscJson.isMember("Slowwalk key")) misc.slowwalkKey = miscJson["Slowwalk key"].asInt();
-        if (miscJson.isMember("Sniper crosshair")) misc.sniperCrosshair = miscJson["Sniper crosshair"].asBool();
-        if (miscJson.isMember("Recoil crosshair")) misc.recoilCrosshair = miscJson["Recoil crosshair"].asBool();
-        if (miscJson.isMember("Auto pistol")) misc.autoPistol = miscJson["Auto pistol"].asBool();
-        if (miscJson.isMember("Auto reload")) misc.autoReload = miscJson["Auto reload"].asBool();
-        if (miscJson.isMember("Auto accept")) misc.autoAccept = miscJson["Auto accept"].asBool();
-        if (miscJson.isMember("Radar hack")) misc.radarHack = miscJson["Radar hack"].asBool();
-        if (miscJson.isMember("Reveal ranks")) misc.revealRanks = miscJson["Reveal ranks"].asBool();
-        if (miscJson.isMember("Reveal money")) misc.revealMoney = miscJson["Reveal money"].asBool();
-        if (miscJson.isMember("Reveal suspect")) misc.revealSuspect = miscJson["Reveal suspect"].asBool();
-
-        if (const auto& spectatorList{ miscJson["Spectator list"] }; spectatorList.isObject()) {
-            if (const auto& enabled{ spectatorList["Enabled"] }; enabled.isBool())
-                misc.spectatorList.enabled = enabled.asBool();
-
-            if (const auto& color{ spectatorList["Color"] }; color.isArray()) {
-                misc.spectatorList.color[0] = color[0].asFloat();
-                misc.spectatorList.color[1] = color[1].asFloat();
-                misc.spectatorList.color[2] = color[2].asFloat();
-            }
-            if (const auto& rainbow{ spectatorList["Rainbow"] }; rainbow.isBool())
-                misc.spectatorList.rainbow = rainbow.asBool();
-
-            if (const auto& rainbowSpeed{ spectatorList["Rainbow speed"] }; rainbowSpeed.isDouble())
-                misc.spectatorList.rainbowSpeed = rainbowSpeed.asFloat();
-        }
-
-        if (const auto& watermark{ miscJson["Watermark"] }; watermark.isObject()) {
-            if (const auto& enabled{ watermark["Enabled"] }; enabled.isBool())
-                misc.watermark.enabled = enabled.asBool();
-
-            if (const auto& color{ watermark["Color"] }; color.isArray()) {
-                misc.watermark.color[0] = color[0].asFloat();
-                misc.watermark.color[1] = color[1].asFloat();
-                misc.watermark.color[2] = color[2].asFloat();
-            }
-            if (const auto& rainbow{ watermark["Rainbow"] }; rainbow.isBool())
-                misc.watermark.rainbow = rainbow.asBool();
-
-            if (const auto& rainbowSpeed{ watermark["Rainbow speed"] }; rainbowSpeed.isDouble())
-                misc.watermark.rainbowSpeed = rainbowSpeed.asFloat();
-        }
-
-        if (miscJson.isMember("Fix animation LOD")) misc.fixAnimationLOD = miscJson["Fix animation LOD"].asBool();
-        if (miscJson.isMember("Fix bone matrix")) misc.fixBoneMatrix = miscJson["Fix bone matrix"].asBool();
-        if (miscJson.isMember("Fix movement")) misc.fixMovement = miscJson["Fix movement"].asBool();
-        if (miscJson.isMember("Disable model occlusion")) misc.disableModelOcclusion = miscJson["Disable model occlusion"].asBool();
-        if (miscJson.isMember("Aspect Ratio")) misc.aspectratio = miscJson["Aspect Ratio"].asFloat();
-        if (miscJson.isMember("Kill message")) misc.killMessage = miscJson["Kill message"].asBool();
-        if (miscJson.isMember("Kill message string")) misc.killMessageString = miscJson["Kill message string"].asString();
-        if (miscJson.isMember("Name stealer"))  misc.nameStealer = miscJson["Name stealer"].asBool();
-        if (miscJson.isMember("Disable HUD blur"))  misc.disablePanoramablur = miscJson["Disable HUD blur"].asBool();
-        if (miscJson.isMember("Ban color")) misc.banColor = miscJson["Ban color"].asInt();
-        if (miscJson.isMember("Ban text")) misc.banText = miscJson["Ban text"].asString();
-        if (miscJson.isMember("Fast plant")) misc.fastPlant = miscJson["Fast plant"].asBool();
-
-        if (const auto& bombTimer{ miscJson["Bomb timer"] }; bombTimer.isObject()) {
-            if (const auto& enabled{ bombTimer["Enabled"] }; enabled.isBool())
-                misc.bombTimer.enabled = enabled.asBool();
-
-            if (const auto& color{ bombTimer["Color"] }; color.isArray()) {
-                misc.bombTimer.color[0] = color[0].asFloat();
-                misc.bombTimer.color[1] = color[1].asFloat();
-                misc.bombTimer.color[2] = color[2].asFloat();
-            }
-            if (const auto& rainbow{ bombTimer["Rainbow"] }; rainbow.isBool())
-                misc.bombTimer.rainbow = rainbow.asBool();
-
-            if (const auto& rainbowSpeed{ bombTimer["Rainbow speed"] }; rainbowSpeed.isDouble())
-                misc.bombTimer.rainbowSpeed = rainbowSpeed.asFloat();
-        }
-
-        if (miscJson.isMember("Quick reload")) misc.quickReload = miscJson["Quick reload"].asBool();
-        if (miscJson.isMember("Prepare revolver")) misc.prepareRevolver = miscJson["Prepare revolver"].asBool();
-        if (miscJson.isMember("Prepare revolver key")) misc.prepareRevolverKey = miscJson["Prepare revolver key"].asInt();
-        if (miscJson.isMember("Hit sound")) misc.hitSound = miscJson["Hit sound"].asInt();
-        if (miscJson.isMember("Choked packets")) misc.chokedPackets = miscJson["Choked packets"].asInt();
-        if (miscJson.isMember("Choked packets key")) misc.chokedPacketsKey = miscJson["Choked packets key"].asInt();
-        if (miscJson.isMember("Quick healthshot key")) misc.quickHealthshotKey = miscJson["Quick healthshot key"].asInt();
-        if (miscJson.isMember("Grenade predict")) misc.nadePredict = miscJson["Grenade predict"].asBool();
-        if (miscJson.isMember("Fix tablet signal")) misc.fixTabletSignal = miscJson["Fix tablet signal"].asBool();
-        if (miscJson.isMember("Max angle delta")) misc.maxAngleDelta = miscJson["Max angle delta"].asFloat();
-        if (miscJson.isMember("Fake prime")) misc.fakePrime = miscJson["Fake prime"].asBool();
-        if (miscJson.isMember("Custom Hit Sound")) misc.customHitSound = miscJson["Custom Hit Sound"].asString();
-        if (miscJson.isMember("Kill sound")) misc.killSound = miscJson["Kill sound"].asInt();
-        if (miscJson.isMember("Custom Kill Sound")) misc.customKillSound = miscJson["Custom Kill Sound"].asString();
-
-        if (const auto& purchaseList = miscJson["Purchase List"]; purchaseList.isObject()) {
-            if (const auto& enabled{ purchaseList["Enabled"] }; enabled.isBool())
-                misc.purchaseList.enabled = enabled.asBool();
-            if (const auto& onlyDuringFreezeTime{ purchaseList["Only During Freeze Time"] }; onlyDuringFreezeTime.isBool())
-                misc.purchaseList.onlyDuringFreezeTime = onlyDuringFreezeTime.asBool();
-            if (const auto& showPrices{ purchaseList["Show Prices"] }; showPrices.isBool())
-                misc.purchaseList.showPrices = showPrices.asBool();
-            if (const auto& noTitleBar{ purchaseList["No Title Bar"] }; noTitleBar.isBool())
-                misc.purchaseList.noTitleBar = noTitleBar.asBool();
-            if (const auto& mode{ purchaseList["Mode"] }; mode.isInt())
-                misc.purchaseList.mode = mode.asInt();
-        }
-    }
 
     {
         const auto& reportbotJson = json["Reportbot"];

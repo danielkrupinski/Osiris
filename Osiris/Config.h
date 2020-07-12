@@ -239,7 +239,7 @@ public:
         int menuColors{ 0 };
     } style;
 
-    struct {
+    struct Misc {
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
