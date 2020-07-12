@@ -76,7 +76,7 @@ public:
     };
     std::array<Triggerbot, 40> triggerbot;
 
-    struct {
+    struct Backtrack {
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };

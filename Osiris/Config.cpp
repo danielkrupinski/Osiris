@@ -252,6 +252,14 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read_number(j, "Burst Time", t.burstTime);
 }
 
+static void from_json(const json& j, Config::Backtrack& b)
+{
+    read<value_t::boolean>(j, "Enabled", b.enabled);
+    read<value_t::boolean>(j, "Ignore smoke", b.ignoreSmoke);
+    read<value_t::boolean>(j, "Recoil based fov", b.recoilBasedFov);
+    read_number(j, "Time limit", b.timeLimit);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -263,6 +271,7 @@ void Config::load(size_t id) noexcept
 
     read<value_t::array>(j, "Aimbot", aimbot);
     read<value_t::array>(j, "Triggerbot", triggerbot);
+    read<value_t::object>(j, "Backtrack", backtrack);
 
     Json::Value json;
 
@@ -270,14 +279,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    {
-        const auto& backtrackJson = json["Backtrack"];
-        if (backtrackJson.isMember("Enabled")) backtrack.enabled = backtrackJson["Enabled"].asBool();
-        if (backtrackJson.isMember("Ignore smoke")) backtrack.ignoreSmoke = backtrackJson["Ignore smoke"].asBool();
-        if (backtrackJson.isMember("Recoil based fov")) backtrack.recoilBasedFov = backtrackJson["Recoil based fov"].asBool();
-        if (backtrackJson.isMember("Time limit")) backtrack.timeLimit = backtrackJson["Time limit"].asInt();
-    }
 
     {
         const auto& antiAimJson = json["Anti aim"];
