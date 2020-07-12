@@ -67,6 +67,13 @@ static void read(const json& j, const char* key, T& o) noexcept
         o = j[key];
 }
 
+template <typename T>
+static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
+{
+    if (j.contains(key) && j[key].type() == value_t::array)
+        o = j[key].get<std::vector<T>>();
+}
+
 template <value_t Type, typename T, size_t Size>
 static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
@@ -89,7 +96,6 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
             o[element.key()] = static_cast<const T&>(element.value());
     }
 }
-
 
 static void from_json(const json& j, ColorA& c)
 {
@@ -277,6 +283,24 @@ static void from_json(const json& j, Config::Glow& g)
     read_number(j, "Style", g.style);
 }
 
+static void from_json(const json& j, Config::Chams::Material& m)
+{
+    from_json(j, static_cast<ColorA&>(m));
+
+    read<value_t::boolean>(j, "Enabled", m.enabled);
+    read<value_t::boolean>(j, "Health based", m.healthBased);
+    read<value_t::boolean>(j, "Blinking", m.healthBased);
+    read<value_t::boolean>(j, "Wireframe", m.wireframe);
+    read<value_t::boolean>(j, "Cover", m.cover);
+    read<value_t::boolean>(j, "Ignore-Z", m.ignorez);
+    read_number(j, "Material", m.material);
+}
+
+static void from_json(const json& j, Config::Chams& c)
+{
+    read_vector(j, "Materials", c.materials);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -291,6 +315,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read<value_t::array>(j, "Glow", glow);
+    read<value_t::array>(j, "Chams", chams);
 
     Json::Value json;
 
@@ -298,41 +323,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    for (size_t i = 0; i < chams.size(); i++) {
-        const auto& chamsJson = json["Chams"][i];
-        auto& chamsConfig = chams[i];
-
-        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
-            const auto& materialsJson = chamsJson[j];
-            auto& materialsConfig = chams[i].materials[j];
-
-            if (materialsJson.isMember("Enabled")) materialsConfig.enabled = materialsJson["Enabled"].asBool();
-            if (materialsJson.isMember("Health based")) materialsConfig.healthBased = materialsJson["Health based"].asBool();
-            if (materialsJson.isMember("Blinking")) materialsConfig.blinking = materialsJson["Blinking"].asBool();
-            if (materialsJson.isMember("Material")) materialsConfig.material = materialsJson["Material"].asInt();
-            if (materialsJson.isMember("Wireframe")) materialsConfig.wireframe = materialsJson["Wireframe"].asBool();
-            if (materialsJson.isMember("Cover")) materialsConfig.cover = materialsJson["Cover"].asBool();
-            if (materialsJson.isMember("Ignore-Z")) materialsConfig.ignorez = materialsJson["Ignore-Z"].asBool();
-            if (materialsJson.isMember("Color")) {
-                const auto& colorJson = materialsJson["Color"];
-                auto& colorConfig = materialsConfig; // leftover
-
-                if (colorJson.isMember("Color")) {
-                    colorConfig.color[0] = colorJson["Color"][0].asFloat();
-                    colorConfig.color[1] = colorJson["Color"][1].asFloat();
-                    colorConfig.color[2] = colorJson["Color"][2].asFloat();
-
-                    if (colorJson["Color"].size() == 4)
-                        colorConfig.color[3] = colorJson["Color"][3].asFloat();
-                }
-
-                if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
-                if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
-            }
-            if (materialsJson.isMember("Alpha")) materialsConfig.color[3] = materialsJson["Alpha"].asFloat();
-        }
-    }
 
     for (size_t i = 0; i < esp.players.size(); i++) {
         const auto& espJson = json["Esp"]["Players"][i];
