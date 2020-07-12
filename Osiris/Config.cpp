@@ -268,6 +268,15 @@ static void from_json(const json& j, Config::AntiAim& a)
     read_number(j, "Pitch angle", a.pitchAngle);
 }
 
+static void from_json(const json& j, Config::Glow& g)
+{
+    from_json(j, static_cast<ColorA&>(g));
+
+    read<value_t::boolean>(j, "Enabled", g.enabled);
+    read<value_t::boolean>(j, "Health based", g.enabled);
+    read_number(j, "Style", g.style);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -281,6 +290,7 @@ void Config::load(size_t id) noexcept
     read<value_t::array>(j, "Triggerbot", triggerbot);
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
+    read<value_t::array>(j, "Glow", glow);
 
     Json::Value json;
 
@@ -288,35 +298,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    for (size_t i = 0; i < glow.size(); i++) {
-        const auto& glowJson = json["glow"][i];
-        auto& glowConfig = glow[i];
-
-        if (glowJson.isMember("Enabled")) glowConfig.enabled = glowJson["Enabled"].asBool();
-        if (glowJson.isMember("healthBased")) glowConfig.healthBased = glowJson["healthBased"].asBool();
-
-        // TODO: remove soon
-        if (glowJson.isMember("alpha")) glowConfig.color[3] = glowJson["alpha"].asFloat();
-
-        if (glowJson.isMember("style")) glowConfig.style = glowJson["style"].asInt();
-        if (glowJson.isMember("Color")) {
-            const auto& colorJson = glowJson["Color"];
-            auto& colorConfig = glowConfig;
-
-            if (colorJson.isMember("Color")) {
-                colorConfig.color[0] = colorJson["Color"][0].asFloat();
-                colorConfig.color[1] = colorJson["Color"][1].asFloat();
-                colorConfig.color[2] = colorJson["Color"][2].asFloat();
-
-                if (colorJson["Color"].size() == 4)
-                    colorConfig.color[3] = colorJson["Color"][3].asFloat();
-            }
-
-            if (colorJson.isMember("Rainbow")) colorConfig.rainbow = colorJson["Rainbow"].asBool();
-            if (colorJson.isMember("Rainbow speed")) colorConfig.rainbowSpeed = colorJson["Rainbow speed"].asFloat();
-        }
-    }
 
     for (size_t i = 0; i < chams.size(); i++) {
         const auto& chamsJson = json["Chams"][i];
