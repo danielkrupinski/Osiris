@@ -540,13 +540,6 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
     read<value_t::object>(j, "Reportbot", reportbot);
-
-    Json::Value json;
-
-    if (std::ifstream in{ path / (const char8_t*)configs[id].c_str() }; in.good())
-        in >> json;
-    else
-        return;
 }
 
 void Config::save(size_t id) const noexcept
