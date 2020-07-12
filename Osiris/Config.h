@@ -234,7 +234,7 @@ public:
         std::array<Player, 3> players;
     } sound;
 
-    struct {
+    struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;

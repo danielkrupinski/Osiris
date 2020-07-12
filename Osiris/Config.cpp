@@ -412,6 +412,29 @@ static void from_json(const json& j, Config::Sound& s)
     read<value_t::array>(j, "Players", s.players);
 }
 
+static void from_json(const json& j, Config::Style& s)
+{
+    read_number(j, "Menu style", s.menuStyle);
+    read_number(j, "Menu colors", s.menuColors);
+
+    if (j.contains("Colors") && j["Colors"].is_object()) {
+        const auto& colors = j["Colors"];
+
+        ImGuiStyle& style = ImGui::GetStyle();
+
+        for (int i = 0; i < ImGuiCol_COUNT; i++) {
+            if (const char* name = ImGui::GetStyleColorName(i); colors.contains(name)) {
+                std::array<float, 4> temp;
+                read<value_t::array>(colors, name, temp);
+                style.Colors[i].x = temp[0];
+                style.Colors[i].y = temp[1];
+                style.Colors[i].z = temp[2];
+                style.Colors[i].w = temp[3];
+            }
+        }
+    }
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -431,6 +454,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Visuals", visuals);
     read<value_t::array>(j, "Skin changer", skinChanger);
     read<value_t::object>(j, "Sound", sound);
+    read<value_t::object>(j, "Style", style);
 
     Json::Value json;
 
@@ -438,29 +462,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    {
-        const auto& styleJson = json["Style"];
-
-        if (styleJson.isMember("Menu style")) style.menuStyle = styleJson["Menu style"].asInt();
-        if (styleJson.isMember("Menu colors")) style.menuColors = styleJson["Menu colors"].asInt();
-
-        if (styleJson.isMember("Colors")) {
-            const auto& colorsJson = styleJson["Colors"];
-
-            ImGuiStyle& style = ImGui::GetStyle();
-
-            for (int i = 0; i < ImGuiCol_COUNT; i++) {
-                if (const char* name = ImGui::GetStyleColorName(i); colorsJson.isMember(name)) {
-                    const auto& colorJson = styleJson["Colors"][name];
-                    style.Colors[i].x = colorJson[0].asFloat();
-                    style.Colors[i].y = colorJson[1].asFloat();
-                    style.Colors[i].z = colorJson[2].asFloat();
-                    style.Colors[i].w = colorJson[3].asFloat();
-                }
-            }
-        }
-    }
 
     {
         const auto& miscJson = json["Misc"];
