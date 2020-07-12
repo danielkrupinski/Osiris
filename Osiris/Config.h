@@ -295,7 +295,7 @@ public:
         PurchaseList purchaseList;
     } misc;
 
-    struct {
+    struct Reportbot {
         bool enabled{ false };
         bool textAbuse{ false };
         bool griefing{ false };

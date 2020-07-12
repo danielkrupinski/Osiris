@@ -505,6 +505,19 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Purchase List", m.purchaseList);
 }
 
+static void from_json(const json& j, Config::Reportbot& r)
+{
+    read<value_t::boolean>(j, "Enabled", r.enabled);
+    read_number(j, "Target", r.target);
+    read_number(j, "Delay", r.delay);
+    read_number(j, "Rounds", r.rounds);
+    read<value_t::boolean>(j, "Abusive Communications", r.textAbuse);
+    read<value_t::boolean>(j, "Griefing", r.griefing);
+    read<value_t::boolean>(j, "Wall Hacking", r.wallhack);
+    read<value_t::boolean>(j, "Aim Hacking", r.aimbot);
+    read<value_t::boolean>(j, "Other Hacking", r.other);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -526,6 +539,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
+    read<value_t::object>(j, "Reportbot", reportbot);
 
     Json::Value json;
 
@@ -533,20 +547,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    {
-        const auto& reportbotJson = json["Reportbot"];
-
-        if (reportbotJson.isMember("Enabled")) reportbot.enabled = reportbotJson["Enabled"].asBool();
-        if (reportbotJson.isMember("Target")) reportbot.target = reportbotJson["Target"].asInt();
-        if (reportbotJson.isMember("Delay")) reportbot.delay = reportbotJson["Delay"].asInt();
-        if (reportbotJson.isMember("Rounds")) reportbot.rounds = reportbotJson["Rounds"].asInt();
-        if (reportbotJson.isMember("Abusive Communications")) reportbot.textAbuse = reportbotJson["Abusive Communications"].asBool();
-        if (reportbotJson.isMember("Griefing")) reportbot.griefing = reportbotJson["Griefing"].asBool();
-        if (reportbotJson.isMember("Wall Hacking")) reportbot.wallhack = reportbotJson["Wall Hacking"].asBool();
-        if (reportbotJson.isMember("Aim Hacking")) reportbot.aimbot = reportbotJson["Aim Hacking"].asBool();
-        if (reportbotJson.isMember("Other Hacking")) reportbot.other = reportbotJson["Other Hacking"].asBool();
-    }
 }
 
 void Config::save(size_t id) const noexcept
