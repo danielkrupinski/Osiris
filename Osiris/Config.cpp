@@ -789,6 +789,27 @@ static void to_json(json& j, const Config::Chams& o)
     j = o.materials;
 }
 
+template <typename T>
+static void save_map(json& j, const char* name, const std::unordered_map<std::string, T>& map)
+{
+    const T dummy;
+
+    for (const auto& [key, value] : map) {
+        if (!(value == dummy))
+            j[name][key] = value;
+    }
+}
+
+static void to_json(json& j, const Config::StreamProofESP& o)
+{
+    save_map(j, "Allies", o.allies);
+    save_map(j, "Enemies", o.enemies);
+    save_map(j, "Weapons", o.weapons);
+    save_map(j, "Projectiles", o.projectiles);
+    save_map(j, "Loot Crates", o.lootCrates);
+    save_map(j, "Other Entities", o.otherEntities);
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -798,6 +819,7 @@ void Config::save(size_t id) const noexcept
     j["Anti aim"] = antiAim;
     j["Glow"] = glow;
     j["Chams"] = chams;
+    j["ESP"] = streamProofESP;
 
     Json::Value json;
 
