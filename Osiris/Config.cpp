@@ -301,6 +301,16 @@ static void from_json(const json& j, Config::Chams& c)
     read_vector(j, "Materials", c.materials);
 }
 
+static void from_json(const json& j, Config::StreamProofESP& e)
+{
+    read_map(j, "Allies", e.allies);
+    read_map(j, "Enemies", e.enemies);
+    read_map(j, "Weapons", e.weapons);
+    read_map(j, "Projectiles", e.projectiles);
+    read_map(j, "Loot Crates", e.lootCrates);
+    read_map(j, "Other Entities", e.otherEntities);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -316,6 +326,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Anti aim", antiAim);
     read<value_t::array>(j, "Glow", glow);
     read<value_t::array>(j, "Chams", chams);
+    read<value_t::object>(j, "ESP", streamProofESP);
 
     Json::Value json;
 
@@ -324,6 +335,7 @@ void Config::load(size_t id) noexcept
     else
         return;
 
+    // Legacy ESP - to be removed
     for (size_t i = 0; i < esp.players.size(); i++) {
         const auto& espJson = json["Esp"]["Players"][i];
         auto& espConfig = esp.players[i];
