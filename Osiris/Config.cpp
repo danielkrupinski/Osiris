@@ -542,36 +542,54 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Reportbot", reportbot);
 }
 
+// WRITE macro requires:
+// - json object named 'j'
+// - object holding default values named 'dummy'
+// - object to write to json named 'o'
+#define WRITE(name, valueName) \
+if (!(o.valueName == dummy.valueName)) \
+    j[name] = o.valueName;
+
+// WRITE_BASE macro requires:
+// - json object named 'j'
+// - object to write to json named 'o'
+#define WRITE_BASE(structName) \
+if (!(static_cast<const structName&>(o) == static_cast<const structName&>(dummy))) \
+    j = static_cast<const structName&>(o);
+
+static void to_json(json& j, const Config::Aimbot& o)
+{
+    const Config::Aimbot dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("On key", onKey)
+    WRITE("Key", key)
+    WRITE("Key mode", keyMode)
+    WRITE("Aimlock", aimlock)
+    WRITE("Silent", silent)
+    WRITE("Friendly fire", friendlyFire)
+    WRITE("Visible only", visibleOnly)
+    WRITE("Scoped only", scopedOnly)
+    WRITE("Ignore flash", ignoreFlash)
+    WRITE("Ignore smoke", ignoreSmoke)
+    WRITE("Auto shot", autoShot)
+    WRITE("Auto scope", autoScope)
+    WRITE("Fov", fov)
+    WRITE("Smooth", smooth)
+    WRITE("Bone", bone)
+    WRITE("Max aim inaccuracy", maxAimInaccuracy)
+    WRITE("Max shot inaccuracy", maxShotInaccuracy)
+    WRITE("Min damage", minDamage)
+    WRITE("Killshot", killshot)
+    WRITE("Between shots", betweenShots)
+}
+
 void Config::save(size_t id) const noexcept
 {
+    ::json j;
+    j["Aimbot"] = aimbot;
+
     Json::Value json;
-
-    for (size_t i = 0; i < aimbot.size(); i++) {
-        auto& aimbotJson = json["Aimbot"][i];
-        const auto& aimbotConfig = aimbot[i];
-
-        aimbotJson["Enabled"] = aimbotConfig.enabled;
-        aimbotJson["On key"] = aimbotConfig.onKey;
-        aimbotJson["Key"] = aimbotConfig.key;
-        aimbotJson["Key mode"] = aimbotConfig.keyMode;
-        aimbotJson["Aimlock"] = aimbotConfig.aimlock;
-        aimbotJson["Silent"] = aimbotConfig.silent;
-        aimbotJson["Friendly fire"] = aimbotConfig.friendlyFire;
-        aimbotJson["Visible only"] = aimbotConfig.visibleOnly;
-        aimbotJson["Scoped only"] = aimbotConfig.scopedOnly;
-        aimbotJson["Ignore flash"] = aimbotConfig.ignoreFlash;;
-        aimbotJson["Ignore smoke"] = aimbotConfig.ignoreSmoke;
-        aimbotJson["Auto shot"] = aimbotConfig.autoShot;
-        aimbotJson["Auto scope"] = aimbotConfig.autoScope;
-        aimbotJson["Fov"] = aimbotConfig.fov;
-        aimbotJson["Smooth"] = aimbotConfig.smooth;
-        aimbotJson["Bone"] = aimbotConfig.bone;
-        aimbotJson["Max aim inaccuracy"] = aimbotConfig.maxAimInaccuracy;
-        aimbotJson["Max shot inaccuracy"] = aimbotConfig.maxShotInaccuracy;
-        aimbotJson["Min damage"] = aimbotConfig.minDamage;
-        aimbotJson["Killshot"] = aimbotConfig.killshot;
-        aimbotJson["Between shots"] = aimbotConfig.betweenShots;
-    }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
         auto& triggerbotJson = json["Triggerbot"][i];
