@@ -768,6 +768,27 @@ static void to_json(json& j, const Config::Glow& o)
     WRITE("Style", style)
 }
 
+static void to_json(json& j, const Config::Chams::Material& o)
+{
+    const Config::Chams::Material dummy;
+
+    WRITE_BASE(ColorA)
+    WRITE("Enabled", enabled)
+    WRITE("Health based", healthBased)
+    WRITE("Blinking", blinking)
+    WRITE("Wireframe", wireframe)
+    WRITE("Cover", cover)
+    WRITE("Ignore-Z", ignorez)
+    WRITE("Material", material)
+}
+
+static void to_json(json& j, const Config::Chams& o)
+{
+    const Config::Chams dummy;
+
+    j = o.materials;
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -776,39 +797,9 @@ void Config::save(size_t id) const noexcept
     j["Backtrack"] = backtrack;
     j["Anti aim"] = antiAim;
     j["Glow"] = glow;
+    j["Chams"] = chams;
 
     Json::Value json;
-
-    for (size_t i = 0; i < chams.size(); i++) {
-        auto& chamsJson = json["Chams"][i];
-        const auto& chamsConfig = chams[i];
-
-        for (size_t j = 0; j < chamsConfig.materials.size(); j++) {
-            auto& materialsJson = chamsJson[j];
-            const auto& materialsConfig = chams[i].materials[j];
-
-            materialsJson["Enabled"] = materialsConfig.enabled;
-            materialsJson["Health based"] = materialsConfig.healthBased;
-            materialsJson["Blinking"] = materialsConfig.blinking;
-            materialsJson["Material"] = materialsConfig.material;
-            materialsJson["Wireframe"] = materialsConfig.wireframe;
-            materialsJson["Cover"] = materialsConfig.cover;
-            materialsJson["Ignore-Z"] = materialsConfig.ignorez;
-
-            {
-                auto& colorJson = materialsJson["Color"];
-                const auto& colorConfig = materialsConfig; // leftover
-
-                colorJson["Color"][0] = colorConfig.color[0];
-                colorJson["Color"][1] = colorConfig.color[1];
-                colorJson["Color"][2] = colorConfig.color[2];
-                colorJson["Color"][3] = colorConfig.color[3];
-
-                colorJson["Rainbow"] = colorConfig.rainbow;
-                colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
-            }
-        }
-    }
 
     {
         auto& visualsJson = json["visuals"];
