@@ -810,6 +810,21 @@ static void to_json(json& j, const Config::StreamProofESP& o)
     save_map(j, "Other Entities", o.otherEntities);
 }
 
+static void to_json(json& j, const Config::Reportbot& o)
+{
+    const Config::Reportbot dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Target", target)
+    WRITE("Delay", delay)
+    WRITE("Rounds", rounds)
+    WRITE("Abusive Communications", textAbuse)
+    WRITE("Griefing", griefing)
+    WRITE("Wall Hacking", wallhack)
+    WRITE("Aim Hacking", aimbot)
+    WRITE("Other Hacking", other)
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -820,6 +835,15 @@ void Config::save(size_t id) const noexcept
     j["Glow"] = glow;
     j["Chams"] = chams;
     j["ESP"] = streamProofESP;
+    j["Reportbot"] = reportbot;
+
+    std::error_code ec;
+    std::filesystem::create_directory(path, ec);
+
+    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
+        out << std::setw(2) << j;
+
+    return;
 
     Json::Value json;
 
@@ -1054,25 +1078,6 @@ void Config::save(size_t id) const noexcept
         }
     }
 
-    {
-        auto& reportbotJson = json["Reportbot"];
-
-        reportbotJson["Enabled"] = reportbot.enabled;
-        reportbotJson["Target"] = reportbot.target;
-        reportbotJson["Delay"] = reportbot.delay;
-        reportbotJson["Rounds"] = reportbot.rounds;
-        reportbotJson["Abusive Communications"] = reportbot.textAbuse;
-        reportbotJson["Griefing"] = reportbot.griefing;
-        reportbotJson["Wall Hacking"] = reportbot.wallhack;
-        reportbotJson["Aim Hacking"] = reportbot.aimbot;
-        reportbotJson["Other Hacking"] = reportbot.other;
-    }
-
-    std::error_code ec;
-    std::filesystem::create_directory(path, ec);
-
-    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
-        out << json;
 }
 
 void Config::add(const char* name) noexcept
