@@ -83,7 +83,7 @@ public:
         int timeLimit{ 200 };
     } backtrack;
 
-    struct {
+    struct AntiAim {
         bool enabled{ false };
         bool pitch{ false };
         bool yaw{ false };
