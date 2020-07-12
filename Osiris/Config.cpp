@@ -584,30 +584,31 @@ static void to_json(json& j, const Config::Aimbot& o)
     WRITE("Between shots", betweenShots)
 }
 
+static void to_json(json& j, const Config::Triggerbot& o)
+{
+    const Config::Triggerbot dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("On key", onKey)
+    WRITE("Key", key)
+    WRITE("Friendly fire", friendlyFire)
+    WRITE("Scoped only", scopedOnly)
+    WRITE("Ignore flash", ignoreFlash)
+    WRITE("Ignore smoke", ignoreSmoke)
+    WRITE("Hitgroup", hitgroup)
+    WRITE("Shot delay", shotDelay)
+    WRITE("Min damage", minDamage)
+    WRITE("Killshot", killshot)
+    WRITE("Burst Time", burstTime)
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
     j["Aimbot"] = aimbot;
+    j["Triggerbot"] = triggerbot;
 
     Json::Value json;
-
-    for (size_t i = 0; i < triggerbot.size(); i++) {
-        auto& triggerbotJson = json["Triggerbot"][i];
-        const auto& triggerbotConfig = triggerbot[i];
-
-        triggerbotJson["Enabled"] = triggerbotConfig.enabled;
-        triggerbotJson["On key"] = triggerbotConfig.onKey;
-        triggerbotJson["Key"] = triggerbotConfig.key;
-        triggerbotJson["Friendly fire"] = triggerbotConfig.friendlyFire;
-        triggerbotJson["Scoped only"] = triggerbotConfig.scopedOnly;
-        triggerbotJson["Ignore flash"] = triggerbotConfig.ignoreFlash;
-        triggerbotJson["Ignore smoke"] = triggerbotConfig.ignoreSmoke;
-        triggerbotJson["Hitgroup"] = triggerbotConfig.hitgroup;
-        triggerbotJson["Shot delay"] = triggerbotConfig.shotDelay;
-        triggerbotJson["Min damage"] = triggerbotConfig.minDamage;
-        triggerbotJson["Killshot"] = triggerbotConfig.killshot;
-        triggerbotJson["Burst Time"] = triggerbotConfig.burstTime;
-    }
 
     {
         auto& backtrackJson = json["Backtrack"];
