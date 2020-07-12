@@ -602,21 +602,24 @@ static void to_json(json& j, const Config::Triggerbot& o)
     WRITE("Burst Time", burstTime)
 }
 
+static void to_json(json& j, const Config::Backtrack& o)
+{
+    const Config::Backtrack dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Ignore smoke", ignoreSmoke)
+    WRITE("Recoil based fov", recoilBasedFov)
+    WRITE("Time limit", timeLimit)
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
     j["Aimbot"] = aimbot;
     j["Triggerbot"] = triggerbot;
+    j["Backtrack"] = backtrack;
 
     Json::Value json;
-
-    {
-        auto& backtrackJson = json["Backtrack"];
-        backtrackJson["Enabled"] = backtrack.enabled;
-        backtrackJson["Ignore smoke"] = backtrack.ignoreSmoke;
-        backtrackJson["Recoil based fov"] = backtrack.recoilBasedFov;
-        backtrackJson["Time limit"] = backtrack.timeLimit;
-    }
 
     {
         auto& antiAimJson = json["Anti aim"];
