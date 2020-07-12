@@ -2,6 +2,7 @@
 #include <ShlObj.h>
 
 #include "json/json.h"
+#include "nlohmann/json.hpp"
 
 #include "Config.h"
 
@@ -56,41 +57,202 @@ Config::Config(const char* name) noexcept
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
+using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
+using value_t = json::value_t;
+
+template <value_t Type, typename T>
+static void read(const json& j, const char* key, T& o) noexcept
+{
+    if (j.contains(key) && j[key].type() == Type)
+        o = j[key];
+}
+
+template <value_t Type, typename T, size_t Size>
+static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
+{
+    if (j.contains(key) && j[key].type() == Type && j[key].size() == o.size())
+        o = j[key];
+}
+
+template <typename T>
+static void read_number(const json& j, const char* key, T& o) noexcept
+{
+    if (j.contains(key) && j[key].is_number())
+        o = j[key];
+}
+
+template <typename T>
+static void read_map(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+{
+    if (j.contains(key) && j[key].is_object()) {
+        for (auto& element : j[key].items())
+            o[element.key()] = static_cast<const T&>(element.value());
+    }
+}
+
+
+static void from_json(const json& j, ColorA& c)
+{
+    read<value_t::array>(j, "Color", c.color);
+    read<value_t::boolean>(j, "Rainbow", c.rainbow);
+    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+}
+
+static void from_json(const json& j, ColorToggle& ct)
+{
+    from_json(j, static_cast<ColorA&>(ct));
+
+    read<value_t::boolean>(j, "Enabled", ct.enabled);
+}
+
+static void from_json(const json& j, ColorToggleRounding& ctr)
+{
+    from_json(j, static_cast<ColorToggle&>(ctr));
+
+    read_number(j, "Rounding", ctr.rounding);
+}
+
+static void from_json(const json& j, ColorToggleThickness& ctt)
+{
+    from_json(j, static_cast<ColorToggle&>(ctt));
+
+    read_number(j, "Thickness", ctt.thickness);
+}
+
+static void from_json(const json& j, ColorToggleThicknessRounding& cttr)
+{
+    from_json(j, static_cast<ColorToggleRounding&>(cttr));
+
+    read_number(j, "Thickness", cttr.thickness);
+}
+
+static void from_json(const json& j, Font& f)
+{
+    read<value_t::string>(j, "Name", f.name);
+
+    if (!f.name.empty())
+        config->scheduleFontLoad(f.name);
+
+    if (const auto it = std::find_if(std::cbegin(config->systemFonts), std::cend(config->systemFonts), [&f](const auto& e) { return e == f.name; }); it != std::cend(config->systemFonts))
+        f.index = std::distance(std::cbegin(config->systemFonts), it);
+    else
+        f.index = 0;
+}
+
+static void from_json(const json& j, Snapline& s)
+{
+    from_json(j, static_cast<ColorToggleThickness&>(s));
+
+    read_number(j, "Type", s.type);
+}
+
+static void from_json(const json& j, Box& b)
+{
+    from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
+
+    read_number(j, "Type", b.type);
+    read<value_t::array>(j, "Scale", b.scale);
+}
+
+static void from_json(const json& j, Shared& s)
+{
+    read<value_t::boolean>(j, "Enabled", s.enabled);
+    read<value_t::object>(j, "Font", s.font);
+    read<value_t::object>(j, "Snapline", s.snapline);
+    read<value_t::object>(j, "Box", s.box);
+    read<value_t::object>(j, "Name", s.name);
+    read_number(j, "Text Cull Distance", s.textCullDistance);
+}
+
+static void from_json(const json& j, Weapon& w)
+{
+    from_json(j, static_cast<Shared&>(w));
+
+    read<value_t::object>(j, "Ammo", w.ammo);
+}
+
+static void from_json(const json& j, Trail& t)
+{
+    from_json(j, static_cast<ColorToggleThickness&>(t));
+
+    read_number(j, "Type", t.type);
+    read_number(j, "Time", t.time);
+}
+
+static void from_json(const json& j, Trails& t)
+{
+    read<value_t::boolean>(j, "Enabled", t.enabled);
+    read<value_t::object>(j, "Local Player", t.localPlayer);
+    read<value_t::object>(j, "Allies", t.allies);
+    read<value_t::object>(j, "Enemies", t.enemies);
+}
+
+static void from_json(const json& j, Projectile& p)
+{
+    from_json(j, static_cast<Shared&>(p));
+
+    read<value_t::object>(j, "Trails", p.trails);
+}
+
+static void from_json(const json& j, Player& p)
+{
+    from_json(j, static_cast<Shared&>(p));
+
+    read<value_t::object>(j, "Weapon", p.weapon);
+    read<value_t::object>(j, "Flash Duration", p.flashDuration);
+    read<value_t::boolean>(j, "Audible Only", p.audibleOnly);
+    read<value_t::boolean>(j, "Spotted Only", p.spottedOnly);
+    read<value_t::object>(j, "Skeleton", p.skeleton);
+}
+
+static void from_json(const json& j, ImVec2& v)
+{
+    read_number(j, "X", v.x);
+    read_number(j, "Y", v.y);
+}
+
+static void from_json(const json& j, Config::Aimbot& a)
+{
+    read<value_t::boolean>(j, "Enabled", a.enabled);
+    read<value_t::boolean>(j, "On key", a.onKey);
+    read_number(j, "Key", a.key);
+    read_number(j, "Key mode", a.keyMode);
+    read<value_t::boolean>(j, "Aimlock", a.aimlock);
+    read<value_t::boolean>(j, "Silent", a.silent);
+    read<value_t::boolean>(j, "Friendly fire", a.friendlyFire);
+    read<value_t::boolean>(j, "Visible only", a.visibleOnly);
+    read<value_t::boolean>(j, "Scoped only", a.scopedOnly);
+    read<value_t::boolean>(j, "Ignore flash", a.ignoreFlash);
+    read<value_t::boolean>(j, "Ignore smoke", a.ignoreSmoke);
+    read<value_t::boolean>(j, "Auto shot", a.autoShot);
+    read<value_t::boolean>(j, "Auto scope", a.autoScope);
+    read_number(j, "Fov", a.keyMode);
+    read_number(j, "Smooth", a.keyMode);
+    read_number(j, "Bone", a.keyMode);
+    read_number(j, "Max aim inaccuracy", a.keyMode);
+    read_number(j, "Max shot inaccuracy", a.keyMode);
+    read_number(j, "Min damage", a.keyMode);
+    read<value_t::boolean>(j, "Killshot", a.killshot);
+    read<value_t::boolean>(j, "Between shots", a.betweenShots);
+}
+
 void Config::load(size_t id) noexcept
 {
+    json j;
+
+    if (std::ifstream in{ path / (const char8_t*)configs[id].c_str() }; in.good())
+        in >> j;
+    else
+        return;
+
+    read<value_t::array>(j, "Aimbot", aimbot);
+
     Json::Value json;
 
     if (std::ifstream in{ path / (const char8_t*)configs[id].c_str() }; in.good())
         in >> json;
     else
         return;
-
-    for (size_t i = 0; i < aimbot.size(); i++) {
-        const auto& aimbotJson = json["Aimbot"][i];
-        auto& aimbotConfig = aimbot[i];
-
-        if (aimbotJson.isMember("Enabled")) aimbotConfig.enabled = aimbotJson["Enabled"].asBool();
-        if (aimbotJson.isMember("On key")) aimbotConfig.onKey = aimbotJson["On key"].asBool();
-        if (aimbotJson.isMember("Key")) aimbotConfig.key = aimbotJson["Key"].asInt();
-        if (aimbotJson.isMember("Key mode")) aimbotConfig.keyMode = aimbotJson["Key mode"].asInt();
-        if (aimbotJson.isMember("Aimlock")) aimbotConfig.aimlock = aimbotJson["Aimlock"].asBool();
-        if (aimbotJson.isMember("Silent")) aimbotConfig.silent = aimbotJson["Silent"].asBool();
-        if (aimbotJson.isMember("Friendly fire")) aimbotConfig.friendlyFire = aimbotJson["Friendly fire"].asBool();
-        if (aimbotJson.isMember("Visible only")) aimbotConfig.visibleOnly = aimbotJson["Visible only"].asBool();
-        if (aimbotJson.isMember("Scoped only")) aimbotConfig.scopedOnly = aimbotJson["Scoped only"].asBool();
-        if (aimbotJson.isMember("Ignore flash")) aimbotConfig.ignoreFlash = aimbotJson["Ignore flash"].asBool();
-        if (aimbotJson.isMember("Ignore smoke")) aimbotConfig.ignoreSmoke = aimbotJson["Ignore smoke"].asBool();
-        if (aimbotJson.isMember("Auto shot")) aimbotConfig.autoShot = aimbotJson["Auto shot"].asBool();
-        if (aimbotJson.isMember("Auto scope")) aimbotConfig.autoScope = aimbotJson["Auto scope"].asBool();
-        if (aimbotJson.isMember("Fov")) aimbotConfig.fov = aimbotJson["Fov"].asFloat();
-        if (aimbotJson.isMember("Smooth")) aimbotConfig.smooth = aimbotJson["Smooth"].asFloat();
-        if (aimbotJson.isMember("Bone")) aimbotConfig.bone = aimbotJson["Bone"].asInt();
-        if (aimbotJson.isMember("Max aim inaccuracy")) aimbotConfig.maxAimInaccuracy = aimbotJson["Max aim inaccuracy"].asFloat();
-        if (aimbotJson.isMember("Max shot inaccuracy")) aimbotConfig.maxShotInaccuracy = aimbotJson["Max shot inaccuracy"].asFloat();
-        if (aimbotJson.isMember("Min damage")) aimbotConfig.minDamage = aimbotJson["Min damage"].asInt();
-        if (aimbotJson.isMember("Killshot")) aimbotConfig.killshot = aimbotJson["Killshot"].asBool();
-        if (aimbotJson.isMember("Between shots")) aimbotConfig.betweenShots = aimbotJson["Between shots"].asBool();
-    }
 
     for (size_t i = 0; i < triggerbot.size(); i++) {
         const auto& triggerbotJson = json["Triggerbot"][i];
