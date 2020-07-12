@@ -398,6 +398,20 @@ static void from_json(const json& j, item_setting& i)
     read<value_t::array>(j, "Stickers", i.stickers);
 }
 
+static void from_json(const json& j, Config::Sound::Player& p)
+{
+    read_number(j, "Master volume", p.masterVolume);
+    read_number(j, "Headshot volume", p.headshotVolume);
+    read_number(j, "Weapon volume", p.weaponVolume);
+    read_number(j, "Footstep volume", p.footstepVolume);
+}
+
+static void from_json(const json& j, Config::Sound& s)
+{
+    read_number(j, "Chicken volume", s.chickenVolume);
+    read<value_t::array>(j, "Players", s.players);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -416,6 +430,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read<value_t::array>(j, "Skin changer", skinChanger);
+    read<value_t::object>(j, "Sound", sound);
 
     Json::Value json;
 
@@ -423,25 +438,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    {
-        const auto& soundJson = json["Sound"];
-
-        if (soundJson.isMember("Chicken volume")) sound.chickenVolume = soundJson["Chicken volume"].asInt();
-
-        if (soundJson.isMember("Players")) {
-            for (size_t i = 0; i < sound.players.size(); i++) {
-                const auto& playerJson = soundJson["Players"][i];
-                auto& playerConfig = sound.players[i];
-
-                if (playerJson.isMember("Master volume")) playerConfig.masterVolume = playerJson["Master volume"].asInt();
-                if (playerJson.isMember("Headshot volume")) playerConfig.headshotVolume = playerJson["Headshot volume"].asInt();
-                if (playerJson.isMember("Weapon volume")) playerConfig.weaponVolume = playerJson["Weapon volume"].asInt();
-                if (playerJson.isMember("Footstep volume")) playerConfig.footstepVolume = playerJson["Footstep volume"].asInt();
-            }
-        }
-    }
-
 
     {
         const auto& styleJson = json["Style"];
