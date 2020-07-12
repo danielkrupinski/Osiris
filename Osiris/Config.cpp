@@ -557,6 +557,142 @@ if (!(o.valueName == dummy.valueName)) \
 if (!(static_cast<const structName&>(o) == static_cast<const structName&>(dummy))) \
     j = static_cast<const structName&>(o);
 
+
+static void to_json(json& j, const ColorA& o)
+{
+    const ColorA dummy;
+
+    WRITE("Color", color)
+    WRITE("Rainbow", rainbow)
+    WRITE("Rainbow Speed", rainbowSpeed)
+}
+
+static void to_json(json& j, const ColorToggle& o)
+{
+    const ColorToggle dummy;
+
+    WRITE_BASE(ColorA)
+    WRITE("Enabled", enabled)
+}
+
+static void to_json(json& j, const ColorToggleRounding& o)
+{
+    const ColorToggleRounding dummy;
+
+    WRITE_BASE(ColorToggle)
+    WRITE("Rounding", rounding)
+}
+
+static void to_json(json& j, const ColorToggleThickness& o)
+{
+    const ColorToggleThickness dummy;
+
+    WRITE_BASE(ColorToggle)
+    WRITE("Thickness", thickness)
+}
+
+static void to_json(json& j, const ColorToggleThicknessRounding& o)
+{
+    const ColorToggleThicknessRounding dummy;
+
+    WRITE_BASE(ColorToggleRounding)
+    WRITE("Thickness", thickness)
+}
+
+static void to_json(json& j, const Font& o)
+{
+    const Font dummy;
+
+    WRITE("Name", name)
+}
+
+static void to_json(json& j, const Snapline& o)
+{
+    const Snapline dummy;
+
+    WRITE_BASE(ColorToggleThickness)
+    WRITE("Type", type)
+}
+
+static void to_json(json& j, const Box& o)
+{
+    const Box dummy;
+
+    WRITE_BASE(ColorToggleThicknessRounding)
+    WRITE("Type", type)
+    WRITE("Scale", scale)
+}
+
+static void to_json(json& j, const Shared& o)
+{
+    const Shared dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Font", font)
+    WRITE("Snapline", snapline)
+    WRITE("Box", box)
+    WRITE("Name", name)
+    WRITE("Text Cull Distance", textCullDistance)
+}
+
+static void to_json(json& j, const Player& o)
+{
+    const Player dummy;
+
+    WRITE_BASE(Shared)
+    WRITE("Weapon", weapon)
+    WRITE("Flash Duration", flashDuration)
+    WRITE("Audible Only", audibleOnly)
+    WRITE("Spotted Only", spottedOnly)
+    WRITE("Skeleton", skeleton)
+}
+
+static void to_json(json& j, const Weapon& o)
+{
+    j = static_cast<Shared>(o);
+
+    const Weapon dummy;
+
+    WRITE("Ammo", ammo)
+}
+
+static void to_json(json& j, const Trail& o)
+{
+    j = static_cast<ColorToggleThickness>(o);
+
+    const Trail dummy;
+
+    WRITE("Type", type)
+    WRITE("Time", time)
+}
+
+static void to_json(json& j, const Trails& o)
+{
+    const Trails dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Local Player", localPlayer)
+    WRITE("Allies", allies)
+    WRITE("Enemies", enemies)
+}
+
+static void to_json(json& j, const Projectile& o)
+{
+    j = static_cast<Shared>(o);
+
+    const Projectile dummy;
+
+    WRITE("Trails", trails)
+}
+
+static void to_json(json& j, const ImVec2& o)
+{
+    const ImVec2 dummy;
+
+    WRITE("X", x)
+    WRITE("Y", y)
+}
+
 static void to_json(json& j, const Config::Aimbot& o)
 {
     const Config::Aimbot dummy;
@@ -622,6 +758,16 @@ static void to_json(json& j, const Config::AntiAim& o)
     WRITE("Yaw", yaw)
 }
 
+static void to_json(json& j, const Config::Glow& o)
+{
+    const Config::Glow dummy;
+
+    WRITE_BASE(ColorA)
+    WRITE("Enabled", enabled)
+    WRITE("Health based", healthBased)
+    WRITE("Style", style)
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -629,30 +775,9 @@ void Config::save(size_t id) const noexcept
     j["Triggerbot"] = triggerbot;
     j["Backtrack"] = backtrack;
     j["Anti aim"] = antiAim;
+    j["Glow"] = glow;
 
     Json::Value json;
-
-    for (size_t i = 0; i < glow.size(); i++) {
-        auto& glowJson = json["glow"][i];
-        const auto& glowConfig = glow[i];
-
-        glowJson["Enabled"] = glowConfig.enabled;
-        glowJson["healthBased"] = glowConfig.healthBased;
-        glowJson["style"] = glowConfig.style;
-
-        {
-            auto& colorJson = glowJson["Color"];
-            const auto& colorConfig = glowConfig;
-
-            colorJson["Color"][0] = colorConfig.color[0];
-            colorJson["Color"][1] = colorConfig.color[1];
-            colorJson["Color"][2] = colorConfig.color[2];
-            colorJson["Color"][3] = colorConfig.color[3];
-
-            colorJson["Rainbow"] = colorConfig.rainbow;
-            colorJson["Rainbow speed"] = colorConfig.rainbowSpeed;
-        }
-    }
 
     for (size_t i = 0; i < chams.size(); i++) {
         auto& chamsJson = json["Chams"][i];
