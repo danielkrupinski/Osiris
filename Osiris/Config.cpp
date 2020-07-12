@@ -612,22 +612,25 @@ static void to_json(json& j, const Config::Backtrack& o)
     WRITE("Time limit", timeLimit)
 }
 
+static void to_json(json& j, const Config::AntiAim& o)
+{
+    const Config::AntiAim dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Pitch", pitch)
+    WRITE("Pitch angle", pitchAngle)
+    WRITE("Yaw", yaw)
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
     j["Aimbot"] = aimbot;
     j["Triggerbot"] = triggerbot;
     j["Backtrack"] = backtrack;
+    j["Anti aim"] = antiAim;
 
     Json::Value json;
-
-    {
-        auto& antiAimJson = json["Anti aim"];
-        antiAimJson["Enabled"] = antiAim.enabled;
-        antiAimJson["Pitch"] = antiAim.pitch;
-        antiAimJson["Pitch angle"] = antiAim.pitchAngle;
-        antiAimJson["Yaw"] = antiAim.yaw;
-    }
 
     for (size_t i = 0; i < glow.size(); i++) {
         auto& glowJson = json["glow"][i];
