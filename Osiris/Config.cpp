@@ -366,6 +366,38 @@ static void from_json(const json& j, Config::Visuals& v)
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
+static void from_json(const json& j, sticker_setting& s)
+{
+    read_number(j, "Kit", s.kit);
+    read_number(j, "Kit vector index", s.kit_vector_index);
+    read_number(j, "Wear", s.wear);
+    read_number(j, "Scale", s.scale);
+    read_number(j, "Rotation", s.rotation);
+}
+
+static void from_json(const json& j, item_setting& i)
+{
+    read<value_t::boolean>(j, "Enabled", i.enabled);
+    read_number(j, "Definition index", i.itemId);
+    read_number(j, "Definition vector index", i.itemIdIndex);
+    read_number(j, "Quality", i.quality);
+    read_number(j, "Quality vector index", i.entity_quality_vector_index);
+
+    read_number(j, "Paint Kit", i.paintKit);
+    read_number(j, "Paint Kit vector index", i.paint_kit_vector_index);
+
+    read_number(j, "Definition override", i.definition_override_index);
+    read_number(j, "Definition override vector index", i.definition_override_vector_index);
+
+    read_number(j, "Seed", i.seed);
+    read_number(j, "StatTrak", i.stat_trak);
+    read_number(j, "Wear", i.wear);
+
+    // if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, sizeof(skinChangerConfig.custom_name), skinChangerJson["custom_name"].asCString());
+
+    read<value_t::array>(j, "Stickers", i.stickers);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -383,6 +415,7 @@ void Config::load(size_t id) noexcept
     read<value_t::array>(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
+    read<value_t::array>(j, "Skin changer", skinChanger);
 
     Json::Value json;
 
@@ -390,38 +423,6 @@ void Config::load(size_t id) noexcept
         in >> json;
     else
         return;
-
-    for (size_t i = 0; i < skinChanger.size(); i++) {
-        const auto& skinChangerJson = json["skinChanger"][i];
-        auto& skinChangerConfig = skinChanger[i];
-
-        if (skinChangerJson.isMember("Enabled")) skinChangerConfig.enabled = skinChangerJson["Enabled"].asBool();
-        if (skinChangerJson.isMember("definition_vector_index")) skinChangerConfig.itemIdIndex = skinChangerJson["definition_vector_index"].asInt();
-        if (skinChangerJson.isMember("definition_index")) skinChangerConfig.itemId = skinChangerJson["definition_index"].asInt();
-        if (skinChangerJson.isMember("entity_quality_vector_index")) skinChangerConfig.entity_quality_vector_index = skinChangerJson["entity_quality_vector_index"].asInt();
-        if (skinChangerJson.isMember("entity_quality_index")) skinChangerConfig.quality = skinChangerJson["entity_quality_index"].asInt();
-        if (skinChangerJson.isMember("paint_kit_vector_index")) skinChangerConfig.paint_kit_vector_index = skinChangerJson["paint_kit_vector_index"].asInt();
-        if (skinChangerJson.isMember("paint_kit_index")) skinChangerConfig.paintKit = skinChangerJson["paint_kit_index"].asInt();
-        if (skinChangerJson.isMember("definition_override_vector_index")) skinChangerConfig.definition_override_vector_index = skinChangerJson["definition_override_vector_index"].asInt();
-        if (skinChangerJson.isMember("definition_override_index")) skinChangerConfig.definition_override_index = skinChangerJson["definition_override_index"].asInt();
-        if (skinChangerJson.isMember("seed")) skinChangerConfig.seed = skinChangerJson["seed"].asInt();
-        if (skinChangerJson.isMember("stat_trak")) skinChangerConfig.stat_trak = skinChangerJson["stat_trak"].asInt();
-        if (skinChangerJson.isMember("wear")) skinChangerConfig.wear = skinChangerJson["wear"].asFloat();
-        if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, sizeof(skinChangerConfig.custom_name), skinChangerJson["custom_name"].asCString());
-
-        if (skinChangerJson.isMember("stickers")) {
-            for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
-                const auto& stickerJson = skinChangerJson["stickers"][j];
-                auto& stickerConfig = skinChangerConfig.stickers[j];
-
-                if (stickerJson.isMember("kit")) stickerConfig.kit = stickerJson["kit"].asInt();
-                if (stickerJson.isMember("kit_vector_index")) stickerConfig.kit_vector_index = stickerJson["kit_vector_index"].asInt();
-                if (stickerJson.isMember("wear")) stickerConfig.wear = stickerJson["wear"].asFloat();
-                if (stickerJson.isMember("scale")) stickerConfig.scale = stickerJson["scale"].asFloat();
-                if (stickerJson.isMember("rotation")) stickerConfig.rotation = stickerJson["rotation"].asFloat();
-            }
-        }
-    }
 
     {
         const auto& soundJson = json["Sound"];

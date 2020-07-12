@@ -221,7 +221,7 @@ public:
 
     std::array<item_setting, 36> skinChanger;
 
-    struct {
+    struct Sound {
         int chickenVolume{ 100 };
 
         struct Player {
