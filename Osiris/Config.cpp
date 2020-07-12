@@ -311,6 +311,61 @@ static void from_json(const json& j, Config::StreamProofESP& e)
     read_map(j, "Other Entities", e.otherEntities);
 }
 
+static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
+{
+    read<value_t::boolean>(j, "Enabled", c.enabled);
+    read_number(j, "Blue", c.blue);
+    read_number(j, "Red", c.red);
+    read_number(j, "Mono", c.mono);
+    read_number(j, "Saturation", c.saturation);
+    read_number(j, "Ghost", c.ghost);
+    read_number(j, "Green", c.green);
+    read_number(j, "Yellow", c.yellow);
+}
+
+static void from_json(const json& j, Config::Visuals& v)
+{
+    read<value_t::boolean>(j, "Disable post-processing", v.disablePostProcessing);
+    read<value_t::boolean>(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
+    read<value_t::boolean>(j, "No fog", v.noFog);
+    read<value_t::boolean>(j, "No 3d sky", v.no3dSky);
+    read<value_t::boolean>(j, "No aim punch", v.noAimPunch);
+    read<value_t::boolean>(j, "No view punch", v.noViewPunch);
+    read<value_t::boolean>(j, "No hands", v.noHands);
+    read<value_t::boolean>(j, "No sleeves", v.noSleeves);
+    read<value_t::boolean>(j, "No weapons", v.noWeapons);
+    read<value_t::boolean>(j, "No smoke", v.noSmoke);
+    read<value_t::boolean>(j, "No blur", v.noBlur);
+    read<value_t::boolean>(j, "No scope overlay", v.noScopeOverlay);
+    read<value_t::boolean>(j, "No grass", v.noGrass);
+    read<value_t::boolean>(j, "No shadows", v.noShadows);
+    read<value_t::boolean>(j, "Wireframe smoke", v.wireframeSmoke);
+    read<value_t::boolean>(j, "Zoom", v.noScopeOverlay);
+    read_number(j, "Zoom key", v.zoomKey);
+    read<value_t::boolean>(j, "Thirdperson", v.thirdperson);
+    read_number(j, "Thirdperson key", v.thirdpersonKey);
+    read_number(j, "Thirdperson distance", v.thirdpersonDistance);
+    read_number(j, "Viewmodel FOV", v.viewmodelFov);
+    read_number(j, "FOV", v.fov);
+    read_number(j, "Far Z", v.farZ);
+    read_number(j, "Flash reduction", v.flashReduction);
+    read_number(j, "Brightness", v.brightness);
+    read_number(j, "Skybox", v.skybox);
+
+  //  read<value_t::object>(j, "World", v.world);
+  //  read<value_t::object>(j, "Sky", v.sky);
+
+    read<value_t::boolean>(j, "Deagle spinner", v.deagleSpinner);
+    read_number(j, "Screen effect", v.screenEffect);
+    read_number(j, "Hit effect", v.hitEffect);
+    read_number(j, "Hit effect time", v.hitEffectTime);
+    read_number(j, "Hit marker", v.hitMarker);
+    read_number(j, "Hit marker time", v.hitMarkerTime);
+    read_number(j, "Playermodel T", v.playerModelT);
+    read_number(j, "Playermodel CT", v.playerModelCT);
+    read<value_t::object>(j, "Color correction", v.colorCorrection);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -327,6 +382,7 @@ void Config::load(size_t id) noexcept
     read<value_t::array>(j, "Glow", glow);
     read<value_t::array>(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
+    read<value_t::object>(j, "Visuals", visuals);
 
     Json::Value json;
 
@@ -843,83 +899,6 @@ void Config::load(size_t id) noexcept
         }
 
         if (espJson.isMember("Max distance")) espConfig.maxDistance = espJson["Max distance"].asFloat();
-    }
-
-    {
-        const auto& visualsJson = json["visuals"];
-        if (visualsJson.isMember("disablePostProcessing")) visuals.disablePostProcessing = visualsJson["disablePostProcessing"].asBool();
-        if (visualsJson.isMember("inverseRagdollGravity")) visuals.inverseRagdollGravity = visualsJson["inverseRagdollGravity"].asBool();
-        if (visualsJson.isMember("noFog")) visuals.noFog = visualsJson["noFog"].asBool();
-        if (visualsJson.isMember("no3dSky")) visuals.no3dSky = visualsJson["no3dSky"].asBool();
-        if (visualsJson.isMember("No aim punch")) visuals.noAimPunch = visualsJson["No aim punch"].asBool();
-        if (visualsJson.isMember("No view punch")) visuals.noViewPunch = visualsJson["No view punch"].asBool();
-        if (visualsJson.isMember("noHands")) visuals.noHands = visualsJson["noHands"].asBool();
-        if (visualsJson.isMember("noSleeves")) visuals.noSleeves = visualsJson["noSleeves"].asBool();
-        if (visualsJson.isMember("noWeapons")) visuals.noWeapons = visualsJson["noWeapons"].asBool();
-        if (visualsJson.isMember("noSmoke")) visuals.noSmoke = visualsJson["noSmoke"].asBool();
-        if (visualsJson.isMember("noBlur")) visuals.noBlur = visualsJson["noBlur"].asBool();
-        if (visualsJson.isMember("noScopeOverlay")) visuals.noScopeOverlay = visualsJson["noScopeOverlay"].asBool();
-        if (visualsJson.isMember("noGrass")) visuals.noGrass = visualsJson["noGrass"].asBool();
-        if (visualsJson.isMember("noShadows")) visuals.noShadows = visualsJson["noShadows"].asBool();
-        if (visualsJson.isMember("wireframeSmoke")) visuals.wireframeSmoke = visualsJson["wireframeSmoke"].asBool();
-        if (visualsJson.isMember("Zoom")) visuals.zoom = visualsJson["Zoom"].asBool();
-        if (visualsJson.isMember("Zoom key")) visuals.zoomKey = visualsJson["Zoom key"].asInt();
-        if (visualsJson.isMember("thirdperson")) visuals.thirdperson = visualsJson["thirdperson"].asBool();
-        if (visualsJson.isMember("thirdpersonKey")) visuals.thirdpersonKey = visualsJson["thirdpersonKey"].asInt();
-        if (visualsJson.isMember("thirdpersonDistance")) visuals.thirdpersonDistance = visualsJson["thirdpersonDistance"].asInt();
-        if (visualsJson.isMember("viewmodelFov")) visuals.viewmodelFov = visualsJson["viewmodelFov"].asInt();
-        if (visualsJson.isMember("Fov")) visuals.fov = visualsJson["Fov"].asInt();
-        if (visualsJson.isMember("farZ")) visuals.farZ = visualsJson["farZ"].asInt();
-        if (visualsJson.isMember("flashReduction")) visuals.flashReduction = visualsJson["flashReduction"].asInt();
-        if (visualsJson.isMember("brightness")) visuals.brightness = visualsJson["brightness"].asFloat();
-        if (visualsJson.isMember("skybox")) visuals.skybox = visualsJson["skybox"].asInt();
-        if (visualsJson.isMember("World")) {
-            const auto& worldJson = visualsJson["World"];
-
-            if (worldJson.isMember("Enabled")) visuals.world.enabled = worldJson["Enabled"].asBool();
-
-            if (worldJson.isMember("Color")) {
-                visuals.world.color[0] = worldJson["Color"][0].asFloat();
-                visuals.world.color[1] = worldJson["Color"][1].asFloat();
-                visuals.world.color[2] = worldJson["Color"][2].asFloat();
-            }
-            if (worldJson.isMember("Rainbow")) visuals.world.rainbow = worldJson["Rainbow"].asBool();
-            if (worldJson.isMember("Rainbow speed")) visuals.world.rainbowSpeed = worldJson["Rainbow speed"].asFloat();
-        }
-        if (visualsJson.isMember("Sky")) {
-            const auto& skyJson = visualsJson["Sky"];
-
-            if (skyJson.isMember("Enabled")) visuals.sky.enabled = skyJson["Enabled"].asBool();
-
-            if (skyJson.isMember("Color")) {
-                visuals.sky.color[0] = skyJson["Color"][0].asFloat();
-                visuals.sky.color[1] = skyJson["Color"][1].asFloat();
-                visuals.sky.color[2] = skyJson["Color"][2].asFloat();
-            }
-            if (skyJson.isMember("Rainbow")) visuals.sky.rainbow = skyJson["Rainbow"].asBool();
-            if (skyJson.isMember("Rainbow speed")) visuals.sky.rainbowSpeed = skyJson["Rainbow speed"].asFloat();
-        }
-        if (visualsJson.isMember("Deagle spinner")) visuals.deagleSpinner = visualsJson["Deagle spinner"].asBool();
-        if (visualsJson.isMember("Screen effect")) visuals.screenEffect = visualsJson["Screen effect"].asInt();
-        if (visualsJson.isMember("Hit effect")) visuals.hitEffect = visualsJson["Hit effect"].asInt();
-        if (visualsJson.isMember("Hit effect time")) visuals.hitEffectTime = visualsJson["Hit effect time"].asFloat();
-        if (visualsJson.isMember("Hit marker")) visuals.hitMarker = visualsJson["Hit marker"].asInt();
-        if (visualsJson.isMember("Hit marker time")) visuals.hitMarkerTime = visualsJson["Hit marker time"].asFloat();
-        if (visualsJson.isMember("Playermodel T")) visuals.playerModelT = visualsJson["Playermodel T"].asInt();
-        if (visualsJson.isMember("Playermodel CT")) visuals.playerModelCT = visualsJson["Playermodel CT"].asInt();
-
-        if (visualsJson.isMember("Color correction")) {
-            const auto& cc = visualsJson["Color correction"];
-
-            if (cc.isMember("Enabled")) visuals.colorCorrection.enabled = cc["Enabled"].asBool();
-            if (cc.isMember("Blue")) visuals.colorCorrection.blue = cc["Blue"].asFloat();
-            if (cc.isMember("Red")) visuals.colorCorrection.red = cc["Red"].asFloat();
-            if (cc.isMember("Mono")) visuals.colorCorrection.mono = cc["Mono"].asFloat();
-            if (cc.isMember("Saturation")) visuals.colorCorrection.saturation = cc["Saturation"].asFloat();
-            if (cc.isMember("Ghost")) visuals.colorCorrection.ghost = cc["Ghost"].asFloat();
-            if (cc.isMember("Green")) visuals.colorCorrection.green = cc["Green"].asFloat();
-            if (cc.isMember("Yellow")) visuals.colorCorrection.yellow = cc["Yellow"].asFloat();
-        }
     }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {

@@ -30,7 +30,7 @@ public:
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -169,7 +169,7 @@ public:
     std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
 
-    struct {
+    struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
         bool noFog{ false };
@@ -207,7 +207,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
-        struct {
+        struct ColorCorrection {
             bool enabled = false;
             float blue = 0.0f;
             float red = 0.0f;
