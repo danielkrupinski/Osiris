@@ -8,6 +8,7 @@
 #include "imgui/imgui.h"
 #include "nSkinz/config_.hpp"
 #include "ConfigStructs.h"
+#include <string>
 
 class Config {
 public:
@@ -245,9 +246,9 @@ public:
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };
-        bool clocktag{ false };
+        int tagType{ 0 };
+        std::string currentClanTag;
         char clanTag[16];
-        bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };

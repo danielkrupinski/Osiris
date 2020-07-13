@@ -76,22 +76,54 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
-    if (config->misc.clocktag) {
-        const auto time = std::time(nullptr);
-        const auto localTime = std::localtime(&time);
-        char s[11];
-        s[0] = '\0';
-        sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        memory->setClanTag(s, s);
-    }
 
     if (config->misc.customClanTag) {
         static std::string clanTag;
+
+        const auto time = std::time(nullptr);
+        const auto localTime = std::localtime(&time);
 
         if (tagChanged) {
             clanTag = config->misc.clanTag;
             if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
                 clanTag.push_back(' ');
+        }
+        switch (config->misc.tagType) {
+        case 0: // Animated clantag
+            if (!clanTag.empty())
+                std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
+            break;
+        case 1: // Clock tag
+            char s[11];
+            s[0] = '\0';
+            sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+            memory->setClanTag(s, s);
+            break;
+        case 2: // Reverse tag
+            if (!clanTag.empty()) {
+                const int n = clanTag.length();
+                for (int i = 0; i < n / 2; i++)
+                    std::swap(clanTag[i], clanTag[n - i - 1]);
+            }
+        case 3: // Reverse animation
+            if (!clanTag.empty())
+                std::rotate(clanTag.begin(), clanTag.begin() - 1, clanTag.end());
+        case 4: // Reverse clantag animated
+            if (!clanTag.empty()) {
+                const int n = clanTag.length();
+                for (int i = 0; i < n / 2; i++)
+                    std::swap(clanTag[i], clanTag[n - i - 1]);
+                std::rotate(clanTag.begin(), clanTag.begin() - 1, clanTag.end());
+            }
+        case 5: // Auto reverse animation
+            if (!clanTag.empty()) {
+                if (config->misc.currentClanTag.length() == 0) {
+                    clanTag = clanTag.substr(0, config->misc.currentClanTag.length() + 1);
+                }
+                if (config->misc.currentClanTag.length() == clanTag.length()) {
+                    clanTag = clanTag.substr(0, config->misc.currentClanTag.length() - 1);
+                }
+            }
         }
 
         static auto lastTime = 0.0f;
@@ -99,10 +131,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             return;
         lastTime = memory->globalVars->realtime;
 
-        if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
-
-        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+        if (config->misc.tagType!=1)
+            memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+            config->misc.currentClanTag = clanTag.c_str();
     }
 }
 

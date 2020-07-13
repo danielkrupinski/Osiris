@@ -1383,9 +1383,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &config->misc.clocktag);
     ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
+    ImGui::Combo("", &config->misc.tagType, "Animated\0Clock\0Reverse tag\0Reverse tag animated\0Reverse animation\0Auto reverse animation");
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
     ImGui::PushID(0);
