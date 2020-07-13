@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="EventListener.cpp" />
+    <ClCompile Include="GameData.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
     <ClCompile Include="Hacks\AntiAim.cpp" />
     <ClCompile Include="Hacks\Backtrack.cpp" />
@@ -22,8 +23,10 @@
     <ClCompile Include="Hacks\Glow.cpp" />
     <ClCompile Include="Hacks\Reportbot.cpp" />
     <ClCompile Include="Hacks\SkinChanger.cpp" />
+    <ClCompile Include="Hacks\StreamProofESP.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
     <ClCompile Include="Hacks\Visuals.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Hooks\MinHook.cpp" />
     <ClCompile Include="Hooks\VmtHook.cpp" />
     <ClCompile Include="Hooks\VmtSwap.cpp" />
@@ -53,12 +56,14 @@
     <ClCompile Include="SDK\Entity.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
+    <ClCompile Include="SDK\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="fnv.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\AntiAim.h" />
     <ClInclude Include="Hacks\Backtrack.h" />
@@ -69,8 +74,10 @@
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Reportbot.h" />
     <ClInclude Include="Hacks\SkinChanger.h" />
+    <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
     <ClInclude Include="Hacks\Visuals.h" />
+    <ClInclude Include="Helpers.h" />
     <ClInclude Include="Hooks\MinHook.h" />
     <ClInclude Include="Hooks\VmtHook.h" />
     <ClInclude Include="Hooks\VmtSwap.h" />
@@ -87,6 +94,7 @@
     <ClInclude Include="MinHook\MinHook.h" />
     <ClInclude Include="MinHook\trampoline.h" />
     <ClInclude Include="Netvars.h" />
+    <ClInclude Include="nlohmann\json.hpp" />
     <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
@@ -140,6 +148,7 @@
     <ClInclude Include="SDK\Recv.h" />
     <ClInclude Include="SDK\RenderContext.h" />
     <ClInclude Include="SDK\RenderView.h" />
+    <ClInclude Include="SDK\Sound.h" />
     <ClInclude Include="SDK\SoundEmitter.h" />
     <ClInclude Include="SDK\SoundInfo.h" />
     <ClInclude Include="SDK\StudioRender.h" />

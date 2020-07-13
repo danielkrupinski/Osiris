@@ -19,6 +19,8 @@ class MoveData;
 class ViewRender;
 class WeaponSystem;
 
+struct ActiveChannels;
+struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
 struct Trace;
@@ -40,13 +42,10 @@ public:
 
     std::add_pointer_t<void __fastcall(const char*)> loadSky;
     std::add_pointer_t<void __fastcall(const char*, const char*)> setClanTag;
-    int* smokeCount;
     uintptr_t cameraThink;
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    // uintptr_t scopeArc;
-    // uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
@@ -73,6 +72,8 @@ public:
     WeaponSystem* weaponSystem;
     std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
     GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    ActiveChannels* activeChannels;
+    Channel* channels;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

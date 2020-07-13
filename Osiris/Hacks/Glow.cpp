@@ -61,7 +61,7 @@ void Glow::render() noexcept
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
                 else if (glow.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, glow.rainbowSpeed) };
+                    const auto [r, g, b] { rainbowColor(glow.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
                 }
                 else
@@ -71,7 +71,7 @@ void Glow::render() noexcept
 
         auto applyPlayerGlow = [applyGlow](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
             if (glowAll.enabled) applyGlow(glowAll, entity->health());
-            else if (entity->isVisible() && !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glowVisible, entity->health());
+            else if (entity->visibleTo(localPlayer.get())) applyGlow(glowVisible, entity->health());
             else applyGlow(glowOccluded, entity->health());
         };
 

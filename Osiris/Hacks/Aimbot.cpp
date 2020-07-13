@@ -120,7 +120,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;
 
-    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->flashDuration())
+    if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
         return;
 
     if (config->aimbot[weaponIndex].onKey) {
@@ -171,12 +171,12 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
-        if (bestTarget && (config->aimbot[weaponIndex].ignoreSmoke
+        if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke
             || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
-            if (lastCommand == cmd->commandNumber - 1 && lastAngles && config->aimbot[weaponIndex].silent)
+            if (lastCommand == cmd->commandNumber - 1 && lastAngles.notNull() && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
             auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
