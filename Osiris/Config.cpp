@@ -921,6 +921,65 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Purchase List", purchaseList);
 }
 
+static void to_json(json& j, const Config::Visuals::ColorCorrection& o)
+{
+    const Config::Visuals::ColorCorrection dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Blue", blue)
+    WRITE("Red", red)
+    WRITE("Mono", mono)
+    WRITE("Saturation", saturation)
+    WRITE("Ghost", ghost)
+    WRITE("Green", green)
+    WRITE("Yellow", yellow)  
+}
+
+static void to_json(json& j, const Config::Visuals& o)
+{
+    const Config::Visuals dummy;
+
+    WRITE("Disable post-processing", disablePostProcessing);
+    WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
+    WRITE("No fog", noFog);
+    WRITE("No 3d sky", no3dSky);
+    WRITE("No aim punch", noAimPunch);
+    WRITE("No view punch", noViewPunch);
+    WRITE("No hands", noHands);
+    WRITE("No sleeves", noSleeves);
+    WRITE("No weapons", noWeapons);
+    WRITE("No smoke", noSmoke);
+    WRITE("No blur", noBlur);
+    WRITE("No scope overlay", noScopeOverlay);
+    WRITE("No grass", noGrass);
+    WRITE("No shadows", noShadows);
+    WRITE("Wireframe smoke", wireframeSmoke);
+    WRITE("Zoom", noScopeOverlay);
+    WRITE("Zoom key", zoomKey);
+    WRITE("Thirdperson", thirdperson);
+    WRITE("Thirdperson key", thirdpersonKey);
+    WRITE("Thirdperson distance", thirdpersonDistance);
+    WRITE("Viewmodel FOV", viewmodelFov);
+    WRITE("FOV", fov);
+    WRITE("Far Z", farZ);
+    WRITE("Flash reduction", flashReduction);
+    WRITE("Brightness", brightness);
+    WRITE("Skybox", skybox);
+
+    // WRITE("World", world);
+    // WRITE("Sky", sky);
+
+    WRITE("Deagle spinner", deagleSpinner);
+    WRITE("Screen effect", screenEffect);
+    WRITE("Hit effect", hitEffect);
+    WRITE("Hit effect time", hitEffectTime);
+    WRITE("Hit marker", hitMarker);
+    WRITE("Hit marker time", hitMarkerTime);
+    WRITE("Playermodel T", playerModelT);
+    WRITE("Playermodel CT", playerModelCT);
+    WRITE("Color correction", colorCorrection);
+}
+
 void Config::save(size_t id) const noexcept
 {
     ::json j;
@@ -933,6 +992,7 @@ void Config::save(size_t id) const noexcept
     j["ESP"] = streamProofESP;
     j["Reportbot"] = reportbot;
     j["Sound"] = sound;
+    j["Visuals"] = visuals;
     j["Misc"] = misc;
 
     std::error_code ec;
@@ -944,77 +1004,6 @@ void Config::save(size_t id) const noexcept
     return;
 
     Json::Value json;
-
-    {
-        auto& visualsJson = json["visuals"];
-        visualsJson["disablePostProcessing"] = visuals.disablePostProcessing;
-        visualsJson["inverseRagdollGravity"] = visuals.inverseRagdollGravity;
-        visualsJson["noFog"] = visuals.noFog;
-        visualsJson["no3dSky"] = visuals.no3dSky;
-        visualsJson["No aim punch"] = visuals.noAimPunch;
-        visualsJson["No view punch"] = visuals.noViewPunch;
-        visualsJson["noHands"] = visuals.noHands;
-        visualsJson["noSleeves"] = visuals.noSleeves;
-        visualsJson["noWeapons"] = visuals.noWeapons;
-        visualsJson["noSmoke"] = visuals.noSmoke;
-        visualsJson["noBlur"] = visuals.noBlur;
-        visualsJson["noScopeOverlay"] = visuals.noScopeOverlay;
-        visualsJson["noGrass"] = visuals.noGrass;
-        visualsJson["noShadows"] = visuals.noShadows;
-        visualsJson["wireframeSmoke"] = visuals.wireframeSmoke;
-        visualsJson["Zoom"] = visuals.zoom;
-        visualsJson["Zoom key"] = visuals.zoomKey;
-        visualsJson["thirdperson"] = visuals.thirdperson;
-        visualsJson["thirdpersonKey"] = visuals.thirdpersonKey;
-        visualsJson["thirdpersonDistance"] = visuals.thirdpersonDistance;
-        visualsJson["viewmodelFov"] = visuals.viewmodelFov;
-        visualsJson["Fov"] = visuals.fov;
-        visualsJson["farZ"] = visuals.farZ;
-        visualsJson["flashReduction"] = visuals.flashReduction;
-        visualsJson["brightness"] = visuals.brightness;
-        visualsJson["skybox"] = visuals.skybox;
-
-        {
-            auto& worldJson = visualsJson["World"];
-            worldJson["Enabled"] = visuals.world.enabled;
-            worldJson["Color"][0] = visuals.world.color[0];
-            worldJson["Color"][1] = visuals.world.color[1];
-            worldJson["Color"][2] = visuals.world.color[2];
-            worldJson["Rainbow"] = visuals.world.rainbow;
-            worldJson["Rainbow speed"] = visuals.world.rainbowSpeed;
-        }
-
-        {
-            auto& skyJson = visualsJson["Sky"];
-            skyJson["Enabled"] = visuals.sky.enabled;
-            skyJson["Color"][0] = visuals.sky.color[0];
-            skyJson["Color"][1] = visuals.sky.color[1];
-            skyJson["Color"][2] = visuals.sky.color[2];
-            skyJson["Rainbow"] = visuals.sky.rainbow;
-            skyJson["Rainbow speed"] = visuals.sky.rainbowSpeed;
-        }
-
-        visualsJson["Deagle spinner"] = visuals.deagleSpinner;
-        visualsJson["Screen effect"] = visuals.screenEffect;
-        visualsJson["Hit effect"] = visuals.hitEffect;
-        visualsJson["Hit effect time"] = visuals.hitEffectTime;
-        visualsJson["Hit marker"] = visuals.hitMarker;
-        visualsJson["Hit marker time"] = visuals.hitMarkerTime;
-        visualsJson["Playermodel T"] = visuals.playerModelT;
-        visualsJson["Playermodel CT"] = visuals.playerModelCT;
-
-        {
-            auto& cc = visualsJson["Color correction"];
-            cc["Enabled"] = visuals.colorCorrection.enabled;
-            cc["Blue"] = visuals.colorCorrection.blue;
-            cc["Red"] = visuals.colorCorrection.red;
-            cc["Mono"] = visuals.colorCorrection.mono;
-            cc["Saturation"] = visuals.colorCorrection.saturation;
-            cc["Ghost"] = visuals.colorCorrection.ghost;
-            cc["Green"] = visuals.colorCorrection.green;
-            cc["Yellow"] = visuals.colorCorrection.yellow;
-        }
-    }
 
     for (size_t i = 0; i < skinChanger.size(); i++) {
         auto& skinChangerJson = json["skinChanger"][i];
