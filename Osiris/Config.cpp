@@ -982,12 +982,10 @@ static void to_json(json& j, const Config::Visuals& o)
 
 static void to_json(json& j, const ImVec4& o)
 {
-    const ImVec4 dummy;
-
-    WRITE(0, x)
-    WRITE(0, y)
-    WRITE(0, z)
-    WRITE(0, w)
+    j[0] = o.x;
+    j[1] = o.y;
+    j[2] = o.z;
+    j[3] = o.w;
 }
 
 static void to_json(json& j, const Config::Style& o)
@@ -1004,60 +1002,61 @@ static void to_json(json& j, const Config::Style& o)
         colors[ImGui::GetStyleColorName(i)] = style.Colors[i];
 }
 
+static void to_json(json& j, const sticker_setting& o)
+{
+    const sticker_setting dummy;
+
+    WRITE("Kit", kit)
+    WRITE("Kit vector index", kit_vector_index)
+    WRITE("Wear", wear)
+    WRITE("Scale", scale)
+    WRITE("Rotation", rotation)
+}
+
+static void to_json(json& j, const item_setting& o)
+{
+    const item_setting dummy;
+
+    WRITE("Enabled", enabled)
+    WRITE("Definition index", itemId)
+    WRITE("Definition vector index", itemIdIndex)
+    WRITE("Quality", quality)
+    WRITE("Quality vector index", entity_quality_vector_index)
+    WRITE("Paint Kit", paintKit)
+    WRITE("Paint Kit vector index", paint_kit_vector_index)
+    WRITE("Definition override", definition_override_index)
+    WRITE("Definition override vector index", definition_override_vector_index)
+    WRITE("Seed", seed)
+    WRITE("StatTrak", stat_trak)
+    WRITE("Wear", wear)
+    if (o.custom_name[0])
+        j["Custom name"] = o.custom_name;
+    WRITE("Stickers", stickers)
+}
+
 void Config::save(size_t id) const noexcept
 {
-    ::json j;
-    j["Aimbot"] = aimbot;
-    j["Triggerbot"] = triggerbot;
-    j["Backtrack"] = backtrack;
-    j["Anti aim"] = antiAim;
-    j["Glow"] = glow;
-    j["Chams"] = chams;
-    j["ESP"] = streamProofESP;
-    j["Reportbot"] = reportbot;
-    j["Sound"] = sound;
-    j["Visuals"] = visuals;
-    j["Misc"] = misc;
-    j["Style"] = style;
-
     std::error_code ec;
     std::filesystem::create_directory(path, ec);
 
-    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
+    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good()) {
+        json j;
+
+        j["Aimbot"] = aimbot;
+        j["Triggerbot"] = triggerbot;
+        j["Backtrack"] = backtrack;
+        j["Anti aim"] = antiAim;
+        j["Glow"] = glow;
+        j["Chams"] = chams;
+        j["ESP"] = streamProofESP;
+        j["Reportbot"] = reportbot;
+        j["Sound"] = sound;
+        j["Visuals"] = visuals;
+        j["Misc"] = misc;
+        j["Style"] = style;
+        j["Skin changer"] = skinChanger;
+
         out << std::setw(2) << j;
-
-    return;
-
-    Json::Value json;
-
-    for (size_t i = 0; i < skinChanger.size(); i++) {
-        auto& skinChangerJson = json["skinChanger"][i];
-        const auto& skinChangerConfig = skinChanger[i];
-
-        skinChangerJson["Enabled"] = skinChangerConfig.enabled;
-        skinChangerJson["definition_vector_index"] = skinChangerConfig.itemIdIndex;
-        skinChangerJson["definition_index"] = skinChangerConfig.itemId;
-        skinChangerJson["entity_quality_vector_index"] = skinChangerConfig.entity_quality_vector_index;
-        skinChangerJson["entity_quality_index"] = skinChangerConfig.quality;
-        skinChangerJson["paint_kit_vector_index"] = skinChangerConfig.paint_kit_vector_index;
-        skinChangerJson["paint_kit_index"] = skinChangerConfig.paintKit;
-        skinChangerJson["definition_override_vector_index"] = skinChangerConfig.definition_override_vector_index;
-        skinChangerJson["definition_override_index"] = skinChangerConfig.definition_override_index;
-        skinChangerJson["seed"] = skinChangerConfig.seed;
-        skinChangerJson["stat_trak"] = skinChangerConfig.stat_trak;
-        skinChangerJson["wear"] = skinChangerConfig.wear;
-        skinChangerJson["custom_name"] = skinChangerConfig.custom_name;
-
-        for (size_t j = 0; j < skinChangerConfig.stickers.size(); j++) {
-            auto& stickerJson = skinChangerJson["stickers"][j];
-            const auto& stickerConfig = skinChangerConfig.stickers[j];
-
-            stickerJson["kit"] = stickerConfig.kit;
-            stickerJson["kit_vector_index"] = stickerConfig.kit_vector_index;
-            stickerJson["wear"] = stickerConfig.wear;
-            stickerJson["scale"] = stickerConfig.scale;
-            stickerJson["rotation"] = stickerConfig.rotation;
-        }
     }
 }
 
