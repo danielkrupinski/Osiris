@@ -939,45 +939,69 @@ static void to_json(json& j, const Config::Visuals& o)
 {
     const Config::Visuals dummy;
 
-    WRITE("Disable post-processing", disablePostProcessing);
-    WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
-    WRITE("No fog", noFog);
-    WRITE("No 3d sky", no3dSky);
-    WRITE("No aim punch", noAimPunch);
-    WRITE("No view punch", noViewPunch);
-    WRITE("No hands", noHands);
-    WRITE("No sleeves", noSleeves);
-    WRITE("No weapons", noWeapons);
-    WRITE("No smoke", noSmoke);
-    WRITE("No blur", noBlur);
-    WRITE("No scope overlay", noScopeOverlay);
-    WRITE("No grass", noGrass);
-    WRITE("No shadows", noShadows);
-    WRITE("Wireframe smoke", wireframeSmoke);
-    WRITE("Zoom", noScopeOverlay);
-    WRITE("Zoom key", zoomKey);
-    WRITE("Thirdperson", thirdperson);
-    WRITE("Thirdperson key", thirdpersonKey);
-    WRITE("Thirdperson distance", thirdpersonDistance);
-    WRITE("Viewmodel FOV", viewmodelFov);
-    WRITE("FOV", fov);
-    WRITE("Far Z", farZ);
-    WRITE("Flash reduction", flashReduction);
-    WRITE("Brightness", brightness);
-    WRITE("Skybox", skybox);
+    WRITE("Disable post-processing", disablePostProcessing)
+    WRITE("Inverse ragdoll gravity", inverseRagdollGravity)
+    WRITE("No fog", noFog)
+    WRITE("No 3d sky", no3dSky)
+    WRITE("No aim punch", noAimPunch)
+    WRITE("No view punch", noViewPunch)
+    WRITE("No hands", noHands)
+    WRITE("No sleeves", noSleeves)
+    WRITE("No weapons", noWeapons)
+    WRITE("No smoke", noSmoke)
+    WRITE("No blur", noBlur)
+    WRITE("No scope overlay", noScopeOverlay)
+    WRITE("No grass", noGrass)
+    WRITE("No shadows", noShadows)
+    WRITE("Wireframe smoke", wireframeSmoke)
+    WRITE("Zoom", noScopeOverlay)
+    WRITE("Zoom key", zoomKey)
+    WRITE("Thirdperson", thirdperson)
+    WRITE("Thirdperson key", thirdpersonKey)
+    WRITE("Thirdperson distance", thirdpersonDistance)
+    WRITE("Viewmodel FOV", viewmodelFov)
+    WRITE("FOV", fov)
+    WRITE("Far Z", farZ)
+    WRITE("Flash reduction", flashReduction)
+    WRITE("Brightness", brightness)
+    WRITE("Skybox", skybox)
 
-    // WRITE("World", world);
-    // WRITE("Sky", sky);
+    // WRITE("World", world)
+    // WRITE("Sky", sky)
 
-    WRITE("Deagle spinner", deagleSpinner);
-    WRITE("Screen effect", screenEffect);
-    WRITE("Hit effect", hitEffect);
-    WRITE("Hit effect time", hitEffectTime);
-    WRITE("Hit marker", hitMarker);
-    WRITE("Hit marker time", hitMarkerTime);
-    WRITE("Playermodel T", playerModelT);
-    WRITE("Playermodel CT", playerModelCT);
-    WRITE("Color correction", colorCorrection);
+    WRITE("Deagle spinner", deagleSpinner)
+    WRITE("Screen effect", screenEffect)
+    WRITE("Hit effect", hitEffect)
+    WRITE("Hit effect time", hitEffectTime)
+    WRITE("Hit marker", hitMarker)
+    WRITE("Hit marker time", hitMarkerTime)
+    WRITE("Playermodel T", playerModelT)
+    WRITE("Playermodel CT", playerModelCT)
+    WRITE("Color correction", colorCorrection)
+}
+
+static void to_json(json& j, const ImVec4& o)
+{
+    const ImVec4 dummy;
+
+    WRITE(0, x)
+    WRITE(0, y)
+    WRITE(0, z)
+    WRITE(0, w)
+}
+
+static void to_json(json& j, const Config::Style& o)
+{
+    const Config::Style dummy;
+
+    WRITE("Menu style", menuStyle)
+    WRITE("Menu colors", menuColors)
+
+    auto& colors = j["Colors"];
+    ImGuiStyle& style = ImGui::GetStyle();
+
+    for (int i = 0; i < ImGuiCol_COUNT; i++)
+        colors[ImGui::GetStyleColorName(i)] = style.Colors[i];
 }
 
 void Config::save(size_t id) const noexcept
@@ -994,6 +1018,7 @@ void Config::save(size_t id) const noexcept
     j["Sound"] = sound;
     j["Visuals"] = visuals;
     j["Misc"] = misc;
+    j["Style"] = style;
 
     std::error_code ec;
     std::filesystem::create_directory(path, ec);
@@ -1032,25 +1057,6 @@ void Config::save(size_t id) const noexcept
             stickerJson["wear"] = stickerConfig.wear;
             stickerJson["scale"] = stickerConfig.scale;
             stickerJson["rotation"] = stickerConfig.rotation;
-        }
-    }
-
-    {
-        auto& styleJson = json["Style"];
-
-        styleJson["Menu style"] = style.menuStyle;
-        styleJson["Menu colors"] = style.menuColors;
-
-        auto& colorsJson = styleJson["Colors"];
-
-        const ImGuiStyle& style = ImGui::GetStyle();
-
-        for (int i = 0; i < ImGuiCol_COUNT; i++) {
-            auto& colorJson = styleJson["Colors"][ImGui::GetStyleColorName(i)];
-            colorJson[0] = style.Colors[i].x;
-            colorJson[1] = style.Colors[i].y;
-            colorJson[2] = style.Colors[i].z;
-            colorJson[3] = style.Colors[i].w;
         }
     }
 }
