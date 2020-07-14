@@ -255,11 +255,13 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
+    if (stage == FrameStage::START)
+        GameData::update();
+
     if (stage == FrameStage::RENDER_START) {
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
-        GameData::update();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
