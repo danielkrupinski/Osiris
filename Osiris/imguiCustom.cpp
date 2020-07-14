@@ -95,7 +95,7 @@ void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bo
 
 void ImGuiCustom::colorPicker(const char* name, Config::ColorToggle& colorConfig) noexcept
 {
-    colorPicker(name, colorConfig.color, &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
 }
 
 void ImGuiCustom::colorPicker(const char* name, ColorA& colorConfig, bool* enable, float* thickness) noexcept

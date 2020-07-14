@@ -26,7 +26,7 @@ public:
     }
 
     struct Color {
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };

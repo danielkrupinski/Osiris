@@ -25,7 +25,7 @@ public:
     VIRTUAL_METHOD(void, incrementReferenceCount, 12, (), (this))
     VIRTUAL_METHOD(void, decrementReferenceCount, 13, (), (this))
     VIRTUAL_METHOD(void, alphaModulate, 27, (float alpha), (this, alpha))
-    VIRTUAL_METHOD(void, colorModulate, 28, (const float color[3]), (this, color[0], color[1], color[2]))
+    VIRTUAL_METHOD(void, colorModulate, 28, (const std::array<float, 3>& color), (this, color[0], color[1], color[2]))
     VIRTUAL_METHOD(void, colorModulate, 28, (float r, float g, float b), (this, r, g, b))
     VIRTUAL_METHOD(void, colorModulate, 28, (const std::tuple<float, float, float>& color), (this, std::get<0>(color), std::get<1>(color), std::get<2>(color)))
     VIRTUAL_METHOD(void, setMaterialVarFlag, 29, (MaterialVarFlag flag, bool on), (this, flag, on))
