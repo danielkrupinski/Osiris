@@ -15,6 +15,7 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
+#include "Helpers.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
@@ -41,18 +42,8 @@ GUI::GUI() noexcept
         ImFontConfig cfg;
         cfg.OversampleV = 3;
 
-        static ImVector<ImWchar> ranges;
-        ImFontGlyphRangesBuilder builder;
-
-        constexpr ImWchar latinExtended[]{ 0x0100, 0x024F, 0 };
-        builder.AddRanges(latinExtended);
-        builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
-        builder.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
-        builder.AddText("\u9F8D\u738B\u2122");
-        builder.BuildRanges(&ranges);
-
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, ranges.Data);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges.Data);
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
 }
 

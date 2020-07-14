@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 
 #include "Config.h"
+#include "Helpers.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPARAM lParam)
@@ -1182,11 +1183,11 @@ bool Config::loadScheduledFonts() noexcept
         if (fontDataSize == GDI_ERROR)
             continue;
 
-        static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
-        ImFontConfig cfg;
-        cfg.FontDataOwnedByAtlas = false;
-
         if (fonts.find(fontName) == fonts.cend()) {
+            const auto ranges = Helpers::getFontGlyphRanges();
+            ImFontConfig cfg;
+            cfg.FontDataOwnedByAtlas = false;
+
             Font newFont;
             newFont.tiny = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 8.0f, &cfg, ranges);
             newFont.medium = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 10.0f, &cfg, ranges);
