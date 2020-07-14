@@ -39,6 +39,16 @@ struct sticker_setting
         kit = SkinChanger::stickerKits[kit_vector_index].id;
 	}
 
+
+	auto operator==(const sticker_setting& o) const
+	{
+		return kit == o.kit
+			&& kit_vector_index == o.kit_vector_index
+			&& wear == o.wear
+			&& scale == o.scale
+			&& rotation == o.rotation;
+	}
+
 	int kit = 0;
 	int kit_vector_index = 0;
 	float wear = std::numeric_limits<float>::min();

@@ -130,7 +130,7 @@ public:
             return false;
 
         Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
     
@@ -204,7 +204,9 @@ public:
         return playerName;
     }
 
+    void getPlayerName(char(&out)[128]) noexcept;
     bool canSee(Entity* other, const Vector& pos) noexcept;
+    bool visibleTo(Entity* other) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -215,6 +217,7 @@ public:
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
     NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
+    NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
@@ -222,6 +225,7 @@ public:
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
     NETVAR(fov, "CBasePlayer", "m_iFOV", int)
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
+    NETVAR(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
     NETVAR(flags, "CBasePlayer", "m_fFlags", int)
     NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
@@ -280,8 +284,15 @@ public:
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
+    NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
+    }
+
+    bool grenadeExploded() noexcept
+    {
+        return *reinterpret_cast<bool*>(this + 0x29E8);
     }
 };
