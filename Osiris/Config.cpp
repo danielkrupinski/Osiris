@@ -355,6 +355,7 @@ static void from_json(const json& j, Config::Visuals& v)
 
   //  read<value_t::object>(j, "World", v.world);
   //  read<value_t::object>(j, "Sky", v.sky);
+  //  read<value_t::object>(j, "Showvelocity", v.showvelocity);
 
     read<value_t::boolean>(j, "Deagle spinner", v.deagleSpinner);
     read_number(j, "Screen effect", v.screenEffect);
@@ -969,6 +970,7 @@ static void to_json(json& j, const Config::Visuals& o)
 
     // WRITE("World", world)
     // WRITE("Sky", sky)
+    // WRITE("Showvelocity", showvelocity)
 
     WRITE("Deagle spinner", deagleSpinner)
     WRITE("Screen effect", screenEffect)
