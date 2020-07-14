@@ -1090,6 +1090,7 @@ void Config::reset() noexcept
     glow = { };
     chams = { };
     esp = { };
+    streamProofESP = { };
     visuals = { };
     skinChanger = { };
     sound = { };
