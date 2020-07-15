@@ -1,7 +1,6 @@
 #include <fstream>
 #include <ShlObj.h>
 
-#include "json/json.h"
 #include "nlohmann/json.hpp"
 
 #include "Config.h"
