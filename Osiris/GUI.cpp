@@ -15,6 +15,7 @@
 #include "Hacks/Misc.h"
 #include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
+#include "Helpers.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
@@ -38,12 +39,11 @@ GUI::GUI() noexcept
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
 
-        static constexpr ImWchar ranges[]{ 0x0020, 0xFFFF, 0 };
         ImFontConfig cfg;
         cfg.OversampleV = 3;
 
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, ranges);
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, ranges);
+        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
 }
 
@@ -57,7 +57,7 @@ void GUI::render() noexcept
         renderBacktrackWindow();
         renderGlowWindow();
         renderChamsWindow();
-        renderEspWindow();
+        // renderEspWindow();
         renderStreamProofESPWindow();
         renderVisualsWindow();
         renderSkinChangerWindow();
@@ -107,7 +107,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Esp", nullptr, &window.esp);
+        // ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Stream Proof ESP", nullptr, &window.streamProofESP);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
@@ -1548,7 +1548,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Stream Proof ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1562,12 +1562,13 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 5: config->glow = { }; break;
                     case 6: config->chams = { }; break;
                     case 7: config->esp = { }; break;
-                    case 8: config->visuals = { }; break;
-                    case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 10: config->sound = { }; break;
-                    case 11: config->style = { }; updateColors(); break;
-                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 13: config->reportbot = { }; break;
+                    case 8: config->streamProofESP = { }; break;
+                    case 9: config->visuals = { }; break;
+                    case 10: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
+                    case 11: config->sound = { }; break;
+                    case 12: config->style = { }; updateColors(); break;
+                    case 13: config->misc = { };  Misc::updateClanTag(true); break;
+                    case 14: config->reportbot = { }; break;
                     }
                 }
             }
@@ -1623,10 +1624,12 @@ void GUI::renderGuiStyle2() noexcept
             renderChamsWindow(true);
             ImGui::EndTabItem();
         }
+        /*
         if (ImGui::BeginTabItem("Esp")) {
             renderEspWindow(true);
             ImGui::EndTabItem();
         }
+        */
         if (ImGui::BeginTabItem("Stream Proof ESP")) {
             renderStreamProofESPWindow(true);
             ImGui::EndTabItem();

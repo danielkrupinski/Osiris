@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui/imgui.h"
+
 struct ColorA;
 
 namespace Helpers
@@ -10,4 +12,6 @@ namespace Helpers
     {
         return units * 0.0254f;
     }
+
+    ImWchar* getFontGlyphRanges() noexcept;
 }

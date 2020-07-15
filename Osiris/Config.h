@@ -26,11 +26,11 @@ public:
     }
 
     struct Color {
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -76,14 +76,14 @@ public:
     };
     std::array<Triggerbot, 40> triggerbot;
 
-    struct {
+    struct Backtrack {
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
     } backtrack;
 
-    struct {
+    struct AntiAim {
         bool enabled{ false };
         bool pitch{ false };
         bool yaw{ false };
@@ -169,7 +169,7 @@ public:
     std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
 
-    struct {
+    struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
         bool noFog{ false };
@@ -207,7 +207,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
-        struct {
+        struct ColorCorrection {
             bool enabled = false;
             float blue = 0.0f;
             float red = 0.0f;
@@ -216,12 +216,24 @@ public:
             float ghost = 0.0f;
             float green = 0.0f;
             float yellow = 0.0f;
+
+            auto operator==(const ColorCorrection& o) const
+            {
+                return enabled == o.enabled
+                    && blue == o.blue
+                    && red == o.red
+                    && mono == o.mono
+                    && saturation == o.saturation
+                    && ghost == o.ghost
+                    && green == o.green
+                    && yellow == o.yellow;
+            }
         } colorCorrection;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
 
-    struct {
+    struct Sound {
         int chickenVolume{ 100 };
 
         struct Player {
@@ -234,12 +246,12 @@ public:
         std::array<Player, 3> players;
     } sound;
 
-    struct {
+    struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
 
-    struct {
+    struct Misc {
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
@@ -295,7 +307,7 @@ public:
         PurchaseList purchaseList;
     } misc;
 
-    struct {
+    struct Reportbot {
         bool enabled{ false };
         bool textAbuse{ false };
         bool griefing{ false };

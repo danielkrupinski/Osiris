@@ -11,7 +11,7 @@ public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
     VIRTUAL_METHOD(void, setDrawColor, 15, (int r, int g, int b, int a = 255), (this, r, g, b, a))
-    VIRTUAL_METHOD(void, setDrawColor, 15, (const float color[3], int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setDrawColor, 15, (const std::array<float, 3>& color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
     VIRTUAL_METHOD(void, setDrawColor, 15, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
@@ -26,7 +26,7 @@ public:
     VIRTUAL_METHOD(void, drawPolyLine, 20, (int* xs, int* ys, int pointCount), (this, xs, ys, pointCount))
     VIRTUAL_METHOD(void, setTextFont, 23, (unsigned font), (this, font))
     VIRTUAL_METHOD(void, setTextColor, 25, (int r, int g, int b, int a = 255), (this, r, g, b, a))
-    VIRTUAL_METHOD(void, setTextColor, 25, (const float color[3], int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setTextColor, 25, (const std::array<float, 3> color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
     VIRTUAL_METHOD(void, setTextColor, 25, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
