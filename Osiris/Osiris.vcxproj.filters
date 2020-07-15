@@ -30,6 +30,9 @@
     <Filter Include="Hooks">
       <UniqueIdentifier>{8899dcd1-0468-4bfa-b60d-c2af1c97a39e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nlohmann">
+      <UniqueIdentifier>{44d5d3e3-0072-4a5a-b725-1b9807c24a06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="Hacks\StreamProofESP.cpp">
       <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -471,6 +477,12 @@
     </ClInclude>
     <ClInclude Include="Hacks\StreamProofESP.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nlohmann\json.hpp">
+      <Filter>nlohmann</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
