@@ -409,6 +409,10 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
     ImGui::PushItemWidth(220.0f);
     ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
+    ImGui::Checkbox("Enabled Fake Latency", &config->backtrack.fakeLatency);
+    ImGui::PushItemWidth(220.0f);
+    ImGui::SliderInt("Latency Amount", &config->backtrack.fakeLatencyAmount, 0, 200, "%d ms");
+    ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
 }
@@ -450,7 +454,7 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
-   
+
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();

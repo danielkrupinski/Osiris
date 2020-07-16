@@ -119,6 +119,28 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return hooks->originalReset(device, params);
 }
 
+static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
+{
+    auto original = hooks->networkChannel.getOriginal<int, void*>(46, datagram);
+    if (!config->backtrack.fakeLatency || datagram || !interfaces->engine->isInGame())
+    {
+        return original(network, datagram);
+    }
+    int instate = network->InReliableState;
+    int insequencenr = network->InSequenceNr;
+
+    float delta = max(0.f, std::clamp(config->backtrack.fakeLatencyAmount / 1000.f, 0.f, Backtrack::cvars.maxUnlag->getFloat()) - network->getLatency(0));
+
+    Backtrack::AddLatencyToNetwork(network, delta);
+
+    int result = original(network, datagram);
+
+    network->InReliableState = instate;
+    network->InSequenceNr = insequencenr;
+
+    return result;
+}
+
 static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
@@ -155,6 +177,18 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+
+    static void* oldPointer = nullptr;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (oldPointer != network && network && localPlayer)
+    {
+        oldPointer = network;
+        Backtrack::UpdateIncomingSequences(true);
+        hooks->networkChannel.init(network);
+        hooks->networkChannel.hookAt(46, SendDatagram);
+    }
+    Backtrack::UpdateIncomingSequences();
 
     EnginePrediction::run(cmd);
 
@@ -624,6 +658,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+    networkChannel.restore();
 
     netvars->restore();
 

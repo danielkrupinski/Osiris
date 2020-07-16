@@ -19,8 +19,11 @@ struct UserCmd;
 namespace Backtrack {
     void update(FrameStage) noexcept;
     void run(UserCmd*) noexcept;
+    void AddLatencyToNetwork(NetworkChannel*, float) noexcept;
+    void UpdateIncomingSequences(bool reset = false) noexcept;
 
     struct Record {
+        Vector head;
         Vector origin;
         float simulationTime;
         matrix3x4 matrix[256];
@@ -40,6 +43,15 @@ namespace Backtrack {
 
     extern Cvars cvars;
 
+    struct IncomingSequence
+    {
+        int inreliablestate;
+        int sequencenr;
+        float servertime;
+    };
+
+    extern std::deque<IncomingSequence>sequences;
+
     constexpr auto getLerp() noexcept
     {
         auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
@@ -55,6 +67,15 @@ namespace Backtrack {
 
         auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
         return std::fabsf(delta) <= 0.2f;
+    }
+
+    constexpr float getExtraTicks() noexcept
+    {
+        auto network = interfaces->engine->getNetworkChannel();
+        if (!network)
+            return 0.f;
+
+        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, 0.2f);
     }
 
     int timeToTicks(float time) noexcept;

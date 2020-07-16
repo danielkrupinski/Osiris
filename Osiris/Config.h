@@ -81,6 +81,8 @@ public:
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
+        bool fakeLatency{ false };
+        int fakeLatencyAmount{ 200 };
     } backtrack;
 
     struct AntiAim {
