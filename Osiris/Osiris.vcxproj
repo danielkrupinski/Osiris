@@ -19,7 +19,6 @@
     <ClCompile Include="Hacks\Backtrack.cpp" />
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
-    <ClCompile Include="Hacks\Esp.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
     <ClCompile Include="Hacks\Reportbot.cpp" />
     <ClCompile Include="Hacks\SkinChanger.cpp" />
@@ -68,7 +67,6 @@
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
-    <ClInclude Include="Hacks\Esp.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Reportbot.h" />

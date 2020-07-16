@@ -23,7 +23,6 @@
 #include "Hacks/Backtrack.h"
 #include "Hacks/Chams.h"
 #include "Hacks/EnginePrediction.h"
-#include "Hacks/Esp.h"
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
@@ -273,7 +272,6 @@ static bool __fastcall svCheatsGetBool(void* _this) noexcept
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
-        // Esp::render();
         Misc::drawBombTimer();
         Misc::spectatorList();
         Misc::watermark();
