@@ -24,6 +24,10 @@
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
 
+// for UTF-8 tools
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_internal.h"
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
@@ -83,7 +87,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
             clanTag.push_back(' ');
     }
-
+    
     static auto lastTime = 0.0f;
 
     if (config->misc.clocktag) {
@@ -101,10 +105,11 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (memory->globalVars->realtime - lastTime < 0.6f)
             return;
 
-        // TODO: support UTF-8 string rotation
-        if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
-
+        if (config->misc.animatedClanTag && !clanTag.empty()) {
+            unsigned int _;
+            // TODO: implement ImTextCharFromUtf8 in a simpler way
+            std::rotate(clanTag.begin(), clanTag.begin() + ImTextCharFromUtf8(&_, clanTag.c_str(), clanTag.c_str() + clanTag.length()), clanTag.end());
+        }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
     }
