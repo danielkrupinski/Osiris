@@ -80,7 +80,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
     if (tagChanged) {
         clanTag = config->misc.clanTag;
-        if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
+        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
             clanTag.push_back(' ');
     }
 
