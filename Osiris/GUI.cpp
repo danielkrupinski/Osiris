@@ -57,7 +57,7 @@ void GUI::render() noexcept
         renderBacktrackWindow();
         renderGlowWindow();
         renderChamsWindow();
-        renderEspWindow();
+        // renderEspWindow();
         renderStreamProofESPWindow();
         renderVisualsWindow();
         renderSkinChangerWindow();
@@ -107,7 +107,7 @@ void GUI::renderMenuBar() noexcept
         ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
         ImGui::MenuItem("Glow", nullptr, &window.glow);
         ImGui::MenuItem("Chams", nullptr, &window.chams);
-        ImGui::MenuItem("Esp", nullptr, &window.esp);
+        // ImGui::MenuItem("Esp", nullptr, &window.esp);
         ImGui::MenuItem("Stream Proof ESP", nullptr, &window.streamProofESP);
         ImGui::MenuItem("Visuals", nullptr, &window.visuals);
         ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
@@ -1629,10 +1629,12 @@ void GUI::renderGuiStyle2() noexcept
             renderChamsWindow(true);
             ImGui::EndTabItem();
         }
+        /*
         if (ImGui::BeginTabItem("Esp")) {
             renderEspWindow(true);
             ImGui::EndTabItem();
         }
+        */
         if (ImGui::BeginTabItem("Stream Proof ESP")) {
             renderStreamProofESPWindow(true);
             ImGui::EndTabItem();
