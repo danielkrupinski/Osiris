@@ -307,9 +307,6 @@
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Esp.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\SkinChanger.h">
       <Filter>Hacks</Filter>
     </ClInclude>
