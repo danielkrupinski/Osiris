@@ -71,9 +71,16 @@ template <typename T>
 static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
 {
     if (j.contains(key) && j[key].type() == value_t::array) {
-        for (std::size_t i = 0; i < o.size(); ++i) {
-            if (!j[key][i].is_null())
-                o[i] = j[key][i];
+        std::size_t i = 0;
+        for (const auto& e : j[key]) {
+            if (i >= o.size())
+                break;
+
+            if (e.is_null())
+                continue;
+
+            o[i] = e;
+            ++i;
         }
     }
 }
@@ -788,9 +795,16 @@ static void to_json(json& j, const Config::Chams::Material& o)
 
 static void to_json(json& j, const Config::Chams& o)
 {
-    const Config::Chams dummy;
+    const Config::Chams::Material dummy;
 
-    j["Materials"] = o.materials;
+    std::size_t i = 0;
+    for (const auto& mat : o.materials) {
+        if (dummy == mat)
+            continue;
+
+        j["Materials"][i] = o.materials[i];
+        ++i;
+    }
 }
 
 template <typename T>
