@@ -483,15 +483,19 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
 
     ImGui::SameLine();
     ImGui::Text("%d", material);
+
+    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+
     ImGui::SameLine();
 
-    if (material >= int(config->chams[0].materials.size()))
+    if (material >= int(config->chams[categories[currentCategory]].materials.size()))
         ImGuiCustom::arrowButtonDisabled("##right", ImGuiDir_Right);
     else if (ImGui::ArrowButton("##right", ImGuiDir_Right))
         ++material;
 
     ImGui::SameLine();
-    auto& chams{ config->chams[currentCategory].materials[material - 1] };
+
+    auto& chams{ config->chams[categories[currentCategory]].materials[material - 1] };
 
     ImGui::Checkbox("Enabled", &chams.enabled);
     ImGui::Separator();

@@ -70,8 +70,12 @@ static void read(const json& j, const char* key, T& o) noexcept
 template <typename T>
 static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == value_t::array)
-        o = j[key].get<std::vector<T>>();
+    if (j.contains(key) && j[key].type() == value_t::array) {
+        for (std::size_t i = 0; i < o.size(); ++i) {
+            if (!j[key][i].is_null())
+                o[i] = j[key][i];
+        }
+    }
 }
 
 template <value_t Type, typename T, size_t Size>
@@ -532,7 +536,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read<value_t::array>(j, "Glow", glow);
-    read<value_t::array>(j, "Chams", chams);
+    read_map(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read<value_t::array>(j, "Skin changer", skinChanger);
@@ -786,7 +790,7 @@ static void to_json(json& j, const Config::Chams& o)
 {
     const Config::Chams dummy;
 
-    j = o.materials;
+    j["Materials"] = o.materials;
 }
 
 template <typename T>
@@ -1047,7 +1051,7 @@ void Config::save(size_t id) const noexcept
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
         j["Glow"] = glow;
-        j["Chams"] = chams;
+        save_map(j, "Chams", chams);
         j["ESP"] = streamProofESP;
         j["Reportbot"] = reportbot;
         j["Sound"] = sound;
