@@ -38,8 +38,8 @@ void Backtrack::update(FrameStage stage) noexcept
             entity->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
 
             records[i].push_front(record);
-
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.timeLimit) / 1000.f + getExtraTicks())))
+            int timeLimit = config->backtrack.timeLimit; if (timeLimit > 200) timeLimit = 200;
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(timeLimit) / 1000.f + getExtraTicks())))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
@@ -135,8 +135,8 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 
     if (reset)
         lastIncomingSequenceNumber = 0.f;
-
-    if (!config->backtrack.fakeLatency || config->backtrack.fakeLatencyAmount == 0)
+    int timeLimit = config->backtrack.timeLimit; if (timeLimit <= 200) { timeLimit = 0; } else { timeLimit - 200; }
+    if (!config->backtrack.fakeLatency || timeLimit == 0)
         return;
 
     if (!localPlayer)
