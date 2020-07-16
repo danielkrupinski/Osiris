@@ -750,9 +750,6 @@ static void to_json(json& j, const Config::Backtrack& o)
     WRITE("Time limit", timeLimit)
     WRITE("Fake Latency", fakeLatency)
     WRITE("Latency Amount", fakeLatencyAmount)
-
-    read<value_t::boolean>(j, "Fake Latency", b.fakeLatency);
-    read_number(j, "Latency Amount", b.fakeLatencyAmount);
 }
 
 static void to_json(json& j, const Config::AntiAim& o)
