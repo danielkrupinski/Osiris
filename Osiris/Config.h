@@ -147,7 +147,7 @@ public:
             ColorToggle distance;
             float maxDistance{ 0.0f };
         };
-       
+
         struct Player : public Shared {
             ColorToggle eyeTraces;
             ColorToggle health;
@@ -341,8 +341,59 @@ public:
         int rounds{ 1 };
     } reportbot;
 
+    struct {
+        float AimbotX{ 250.0f }; // wpos config .h //
+        float AimbotY{ 250.0f };
+        float AntiAimX{ 250.0f };
+        float AntiAimY{ 250.0f };
+        float TriggerBotX{ 250.0f };
+        float TriggerBotY{ 250.0f };
+        float BacktrackX{ 250.0f };
+        float BacktrackY{ 250.0f };
+        float GlowX{ 250.0f };
+        float GlowY{ 250.0f };
+        float ChamsX{ 250.0f };
+        float ChamsY{ 250.0f };
+        float EspX{ 250.0f };
+        float EspY{ 250.0f };
+        float VisualsX{ 250.0f };
+        float VisualsY{ 250.0f };
+        float SkinchangerX{ 250.0f };
+        float SkinchangerY{ 250.0f };
+        float SoundX{ 250.0f };
+        float SoundY{ 250.0f };
+        float StyleX{ 250.0f };
+        float StyleY{ 250.0f };
+        float MiscX{ 250.0f };
+        float MiscY{ 250.0f };
+        float ReportbotX{ 250.0f };
+        float ReportbotY{ 250.0f };
+        float ConfigX{ 250.0f };
+        float ConfigY{ 250.0f };
+        float Style2X{ 250.0f };
+        float Style2Y{ 250.0f };
+        float PurchaseListX{ 250.0f };
+        float PurchaseListY{ 250.0f };
+        float PurchaseListScaleX{ 200.0f };
+        float PurchaseListScaleY{ 200.0f };
+
+        const char* LockFlags[16] = { // "wpos Locks" //
+            "Aimbot", "Anti Aim", "Triggerbot", "Backtrack",
+            "Glow", "Chams", "Esp", "Visuals", "Skinchanger",
+            "Sound", "Style", "Misc", "Reportbot", "Config",
+            "Style2", "PurchaseList"
+        };
+        bool LockSelectedFlags[16] = {
+            false, false, false, false,
+            false, false, false, false,
+            false, false, false, false,
+            false, false, false, false
+        };
+    } wpos;
+
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
+
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::filesystem::path path;

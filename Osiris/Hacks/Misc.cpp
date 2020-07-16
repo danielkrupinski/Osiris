@@ -723,17 +723,39 @@ void Misc::purchaseList(GameEvent* event) noexcept
         if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || purchaseDetails.empty() || purchaseTotal.empty()) && !gui->open)
             return;
 
-        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
-
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
         if (!gui->open)
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
+        if (config->wpos.LockSelectedFlags[15]) {
+            windowFlags |= ImGuiWindowFlags_NoMove;
+            windowFlags |= ImGuiWindowFlags_NoResize;
+        }
+
+        const auto [width, height] = interfaces->surface->getScreenSize();
+        float textPositionY = static_cast<float>(0.5f * height);
+
+        ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+        ImGui::SetNextWindowPos({ 0.0f, textPositionY }, ImGuiCond_Once);
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
+
+        if (!config->wpos.LockSelectedFlags[15]) {
+            if (config->wpos.PurchaseListX != ImGui::GetWindowPos().x) { config->wpos.PurchaseListX = ImGui::GetWindowPos().x; }
+            if (config->wpos.PurchaseListY != ImGui::GetWindowPos().y) { config->wpos.PurchaseListY = ImGui::GetWindowPos().y; }
+            if (config->wpos.PurchaseListScaleX != ImGui::GetWindowSize().x) { config->wpos.PurchaseListScaleX = ImGui::GetWindowSize().x; }
+            if (config->wpos.PurchaseListScaleY != ImGui::GetWindowSize().y) { config->wpos.PurchaseListScaleY = ImGui::GetWindowSize().y; }
+        } else {
+            if (ImGui::GetWindowPos().x != config->wpos.PurchaseListX || ImGui::GetWindowPos().y != config->wpos.PurchaseListY) {
+                ImGui::SetWindowPos({ config->wpos.PurchaseListX, config->wpos.PurchaseListY });
+            }
+            if (ImGui::GetWindowSize().x != config->wpos.PurchaseListScaleX || ImGui::GetWindowSize().y != config->wpos.PurchaseListScaleY) {
+                ImGui::SetWindowSize({ config->wpos.PurchaseListScaleX, config->wpos.PurchaseListScaleY });
+            }
+        }
 
         if (config->misc.purchaseList.mode == PurchaseList::Details) {
             for (const auto& [playerName, purchases] : purchaseDetails) {

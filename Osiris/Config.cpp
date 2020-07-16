@@ -532,6 +532,44 @@ static void from_json(const json& j, Config::Reportbot& r)
     read<value_t::boolean>(j, "Other Hacking", r.other);
 }
 
+static void from_json(const json& j, Config::Wpos& w)
+{
+    read<value_t::float>(j, "wpos Aimbot X", wpos.AimbotX);                         read<value_t::float>(j, "wpos Aimbot Y", wpos.AimbotY);
+    read<value_t::float>(j, "wpos AntiAim X", wpos.AntiAimX);                       read<value_t::float>(j, "wpos AntiAim Y", wpos.AntiAimY);
+    read<value_t::float>(j, "wpos TriggerBot X", wpos.TriggerBotX);                 read<value_t::float>(j, "wpos TriggerBot Y", wpos.TriggerBotY);
+    read<value_t::float>(j, "wpos Backtrack X", wpos.BacktrackX);                   read<value_t::float>(j, "wpos Backtrack Y", wpos.BacktrackY);
+    read<value_t::float>(j, "wpos Glow X", wpos.GlowX);                             read<value_t::float>(j, "wpos Glow Y", wpos.GlowY);
+    read<value_t::float>(j, "wpos Chams X", wpos.ChamsX);                           read<value_t::float>(j, "wpos Chams Y", wpos.ChamsY);
+    read<value_t::float>(j, "wpos ESP X", wpos.EspX);                               read<value_t::float>(j, "wpos ESP Y", wpos.EspY);
+    read<value_t::float>(j, "wpos Visuals X", wpos.VisualsX);                       read<value_t::float>(j, "wpos Visuals Y", wpos.VisualsY);
+    read<value_t::float>(j, "wpos Skinchanger X", wpos.SkinchangerX);               read<value_t::float>(j, "wpos Skinchanger Y", wpos.SkinchangerY);
+    read<value_t::float>(j, "wpos Sound X", wpos.SoundX);                           read<value_t::float>(j, "wpos Sound Y", wpos.SoundY);
+    read<value_t::float>(j, "wpos Style X", wpos.StyleX);                           read<value_t::float>(j, "wpos Style Y", wpos.StyleY);
+    read<value_t::float>(j, "wpos Misc X", wpos.MiscX);                             read<value_t::float>(j, "wpos Misc Y", wpos.MiscY);
+    read<value_t::float>(j, "wpos Reportbot X", wpos.ReportbotX);                   read<value_t::float>(j, "wpos Reportbot Y", wpos.ReportbotY);
+    read<value_t::float>(j, "wpos Config X", wpos.ConfigX);                         read<value_t::float>(j, "wpos Config Y", wpos.ConfigY);
+    read<value_t::float>(j, "wpos Style2 X", wpos.Style2X);                         read<value_t::float>(j, "wpos Style2 Y", wpos.Style2Y);
+    read<value_t::float>(j, "wpos PurchaseList X", wpos.PurchaseListX);             read<value_t::float>(j, "wpos PurchaseList Y", wpos.PurchaseListY);
+    read<value_t::float>(j, "wpos PurchaseList ScaleX", wpos.PurchaseListScaleX);   read<value_t::float>(j, "PurchaseList ScaleY", wpos.PurchaseListScaleY);
+    //
+    read<value_t::boolean>(j, "wpos Aimbot Lock", wpos.LockSelectedFlags[0]);
+    read<value_t::boolean>(j, "wpos Anti Aim Lock", wpos.LockSelectedFlags[1]);
+    read<value_t::boolean>(j, "wpos Triggerbot Lock", wpos.LockSelectedFlags[2]);
+    read<value_t::boolean>(j, "wpos Backtrack Lock", wpos.LockSelectedFlags[3]);
+    read<value_t::boolean>(j, "wpos Glow Lock", wpos.LockSelectedFlags[4]);
+    read<value_t::boolean>(j, "wpos Chams Lock", wpos.LockSelectedFlags[5]);
+    read<value_t::boolean>(j, "wpos Esp Lock", wpos.LockSelectedFlags[6]);
+    read<value_t::boolean>(j, "wpos Visuals Lock", wpos.LockSelectedFlags[7]);
+    read<value_t::boolean>(j, "wpos Skinchanger Lock", wpos.LockSelectedFlags[8]);
+    read<value_t::boolean>(j, "wpos Sound Lock", wpos.LockSelectedFlags[9]);
+    read<value_t::boolean>(j, "wpos Style Lock", wpos.LockSelectedFlags[10]);
+    read<value_t::boolean>(j, "wpos Misc Lock", wpos.LockSelectedFlags[11]);
+    read<value_t::boolean>(j, "wpos Reportbot Lock", wpos.LockSelectedFlags[12]);
+    read<value_t::boolean>(j, "wpos Config Lock", wpos.LockSelectedFlags[13]);
+    read<value_t::boolean>(j, "wpos Style2 Lock", wpos.LockSelectedFlags[14]);
+    read<value_t::boolean>(j, "wpos PurchaseList Lock", wpos.LockSelectedFlags[15]);
+}
+
 void Config::load(size_t id) noexcept
 {
     json j;
@@ -953,7 +991,7 @@ static void to_json(json& j, const Config::Visuals::ColorCorrection& o)
     WRITE("Saturation", saturation)
     WRITE("Ghost", ghost)
     WRITE("Green", green)
-    WRITE("Yellow", yellow)  
+    WRITE("Yellow", yellow)
 }
 
 static void to_json(json& j, const Config::Visuals& o)
@@ -1053,6 +1091,44 @@ static void to_json(json& j, const item_setting& o)
     if (o.custom_name[0])
         j["Custom name"] = o.custom_name;
     WRITE("Stickers", stickers)
+}
+
+static void to_json(json& j, const Config::Wpos& w)
+{
+    WRITE("wpos Aimbot X", AimbotX) WRITE("wpos Aimbot Y", AimbotY)
+    WRITE("wpos AntiAim X", AimbotX) WRITE("wpos AntiAim Y", AimbotY)
+    WRITE("wpos TriggerBot X", AimbotX) WRITE("wpos TriggerBot Y", AimbotY)
+    WRITE("wpos Backtrack X", AimbotX) WRITE("wpos Backtrack Y", AimbotY)
+    WRITE("wpos Glow X", AimbotX) WRITE("wpos Glow Y", AimbotY)
+    WRITE("wpos Chams X", AimbotX) WRITE("wpos Chams Y", AimbotY)
+    WRITE("wpos ESP X", AimbotX) WRITE("wpos ESP Y", AimbotY)
+    WRITE("wpos Visuals X", AimbotX) WRITE("wpos Visuals Y", AimbotY)
+    WRITE("wpos Skinchanger X", AimbotX) WRITE("wpos Skinchanger Y", AimbotY)
+    WRITE("wpos Sound X", AimbotX) WRITE("wpos Sound Y", AimbotY)
+    WRITE("wpos Style X", AimbotX) WRITE("wpos Style Y", AimbotY)
+    WRITE("wpos Misc X", AimbotX) WRITE("wpos Misc Y", AimbotY)
+    WRITE("wpos Reportbot X", AimbotX) WRITE("wpos Reportbot Y", AimbotY)
+    WRITE("wpos Config X", AimbotX) WRITE("wpos Config Y", AimbotY)
+    WRITE("wpos Style2 X", AimbotX) WRITE("wpos Style2 Y", AimbotY)
+    WRITE("wpos PurchaseList X", AimbotX) WRITE("wpos PurchaseList Y", AimbotY)
+    WRITE("wpos PurchaseList ScaleX", AimbotX) WRITE("wpos PurchaseList ScaleY", AimbotY)
+    //
+    WRITE("wpos Aimbot Lock", LockSelectedFlags[0])
+    WRITE("wpos Anti Aim Lock", LockSelectedFlags[1])
+    WRITE("wpos Triggerbot Lock", LockSelectedFlags[2])
+    WRITE("wpos Backtrack Lock", LockSelectedFlags[3])
+    WRITE("wpos Glow Lock", LockSelectedFlags[4])
+    WRITE("wpos Chams Lock", LockSelectedFlags[5])
+    WRITE("wpos Esp Lock", LockSelectedFlags[6])
+    WRITE("wpos Visuals Lock", LockSelectedFlags[7])
+    WRITE("wpos Skinchanger Lock", LockSelectedFlags[8])
+    WRITE("wpos Sound Lock", LockSelectedFlags[9])
+    WRITE("wpos Style Lock", LockSelectedFlags[10])
+    WRITE("wpos Misc Lock", LockSelectedFlags[11])
+    WRITE("wpos Reportbot Lock", LockSelectedFlags[12])
+    WRITE("wpos Config Lock", LockSelectedFlags[13])
+    WRITE("wpos Style2 Lock", LockSelectedFlags[14])
+    WRITE("wpos PurchaseList Lock", LockSelectedFlags[15])
 }
 
 void Config::save(size_t id) const noexcept
