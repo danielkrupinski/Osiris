@@ -283,7 +283,7 @@ static void from_json(const json& j, Config::Glow& g)
     from_json(j, static_cast<ColorA&>(g));
 
     read<value_t::boolean>(j, "Enabled", g.enabled);
-    read<value_t::boolean>(j, "Health based", g.enabled);
+    read<value_t::boolean>(j, "Health based", g.healthBased);
     read_number(j, "Style", g.style);
 }
 
@@ -293,7 +293,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
     read<value_t::boolean>(j, "Enabled", m.enabled);
     read<value_t::boolean>(j, "Health based", m.healthBased);
-    read<value_t::boolean>(j, "Blinking", m.healthBased);
+    read<value_t::boolean>(j, "Blinking", m.blinking);
     read<value_t::boolean>(j, "Wireframe", m.wireframe);
     read<value_t::boolean>(j, "Cover", m.cover);
     read<value_t::boolean>(j, "Ignore-Z", m.ignorez);
