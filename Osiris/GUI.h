@@ -20,7 +20,6 @@ private:
     void renderBacktrackWindow(bool contentOnly = false) noexcept;
     void renderGlowWindow(bool contentOnly = false) noexcept;
     void renderChamsWindow(bool contentOnly = false) noexcept;
-    void renderEspWindow(bool contentOnly = false) noexcept;
     void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
     void renderVisualsWindow(bool contentOnly = false) noexcept;
     void renderSkinChangerWindow(bool contentOnly = false) noexcept;
