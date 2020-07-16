@@ -534,40 +534,40 @@ static void from_json(const json& j, Config::Reportbot& r)
 
 static void from_json(const json& j, Config::Wpos& w)
 {
-    read<value_t::float>(j, "wpos Aimbot X", wpos.AimbotX);                         read<value_t::float>(j, "wpos Aimbot Y", wpos.AimbotY);
-    read<value_t::float>(j, "wpos AntiAim X", wpos.AntiAimX);                       read<value_t::float>(j, "wpos AntiAim Y", wpos.AntiAimY);
-    read<value_t::float>(j, "wpos TriggerBot X", wpos.TriggerBotX);                 read<value_t::float>(j, "wpos TriggerBot Y", wpos.TriggerBotY);
-    read<value_t::float>(j, "wpos Backtrack X", wpos.BacktrackX);                   read<value_t::float>(j, "wpos Backtrack Y", wpos.BacktrackY);
-    read<value_t::float>(j, "wpos Glow X", wpos.GlowX);                             read<value_t::float>(j, "wpos Glow Y", wpos.GlowY);
-    read<value_t::float>(j, "wpos Chams X", wpos.ChamsX);                           read<value_t::float>(j, "wpos Chams Y", wpos.ChamsY);
-    read<value_t::float>(j, "wpos ESP X", wpos.EspX);                               read<value_t::float>(j, "wpos ESP Y", wpos.EspY);
-    read<value_t::float>(j, "wpos Visuals X", wpos.VisualsX);                       read<value_t::float>(j, "wpos Visuals Y", wpos.VisualsY);
-    read<value_t::float>(j, "wpos Skinchanger X", wpos.SkinchangerX);               read<value_t::float>(j, "wpos Skinchanger Y", wpos.SkinchangerY);
-    read<value_t::float>(j, "wpos Sound X", wpos.SoundX);                           read<value_t::float>(j, "wpos Sound Y", wpos.SoundY);
-    read<value_t::float>(j, "wpos Style X", wpos.StyleX);                           read<value_t::float>(j, "wpos Style Y", wpos.StyleY);
-    read<value_t::float>(j, "wpos Misc X", wpos.MiscX);                             read<value_t::float>(j, "wpos Misc Y", wpos.MiscY);
-    read<value_t::float>(j, "wpos Reportbot X", wpos.ReportbotX);                   read<value_t::float>(j, "wpos Reportbot Y", wpos.ReportbotY);
-    read<value_t::float>(j, "wpos Config X", wpos.ConfigX);                         read<value_t::float>(j, "wpos Config Y", wpos.ConfigY);
-    read<value_t::float>(j, "wpos Style2 X", wpos.Style2X);                         read<value_t::float>(j, "wpos Style2 Y", wpos.Style2Y);
-    read<value_t::float>(j, "wpos PurchaseList X", wpos.PurchaseListX);             read<value_t::float>(j, "wpos PurchaseList Y", wpos.PurchaseListY);
-    read<value_t::float>(j, "wpos PurchaseList ScaleX", wpos.PurchaseListScaleX);   read<value_t::float>(j, "PurchaseList ScaleY", wpos.PurchaseListScaleY);
+    read_number(j, "wpos Aimbot X", w.AimbotX);                         read_number(j, "wpos Aimbot Y", w.AimbotY);
+    read_number(j, "wpos AntiAim X", w.AntiAimX);                       read_number(j, "wpos AntiAim Y", w.AntiAimY);
+    read_number(j, "wpos TriggerBot X", w.TriggerBotX);                 read_number(j, "wpos TriggerBot Y", w.TriggerBotY);
+    read_number(j, "wpos Backtrack X", w.BacktrackX);                   read_number(j, "wpos Backtrack Y", w.BacktrackY);
+    read_number(j, "wpos Glow X", w.GlowX);                             read_number(j, "wpos Glow Y", w.GlowY);
+    read_number(j, "wpos Chams X", w.ChamsX);                           read_number(j, "wpos Chams Y", w.ChamsY);
+    read_number(j, "wpos ESP X", w.EspX);                               read_number(j, "wpos ESP Y", w.EspY);
+    read_number(j, "wpos Visuals X", w.VisualsX);                       read_number(j, "wpos Visuals Y", w.VisualsY);
+    read_number(j, "wpos Skinchanger X", w.SkinchangerX);               read_number(j, "wpos Skinchanger Y", w.SkinchangerY);
+    read_number(j, "wpos Sound X", w.SoundX);                           read_number(j, "wpos Sound Y", w.SoundY);
+    read_number(j, "wpos Style X", w.StyleX);                           read_number(j, "wpos Style Y", w.StyleY);
+    read_number(j, "wpos Misc X", w.MiscX);                             read_number(j, "wpos Misc Y", w.MiscY);
+    read_number(j, "wpos Reportbot X", w.ReportbotX);                   read_number(j, "wpos Reportbot Y", w.ReportbotY);
+    read_number(j, "wpos Config X", w.ConfigX);                         read_number(j, "wpos Config Y", w.ConfigY);
+    read_number(j, "wpos Style2 X", w.Style2X);                         read_number(j, "wpos Style2 Y", w.Style2Y);
+    read_number(j, "wpos PurchaseList X", w.PurchaseListX);             read_number(j, "wpos PurchaseList Y", w.PurchaseListY);
+    read_number(j, "wpos PurchaseList ScaleX", w.PurchaseListScaleX);   read_number(j, "PurchaseList ScaleY", w.PurchaseListScaleY);
     //
-    read<value_t::boolean>(j, "wpos Aimbot Lock", wpos.LockSelectedFlags[0]);
-    read<value_t::boolean>(j, "wpos Anti Aim Lock", wpos.LockSelectedFlags[1]);
-    read<value_t::boolean>(j, "wpos Triggerbot Lock", wpos.LockSelectedFlags[2]);
-    read<value_t::boolean>(j, "wpos Backtrack Lock", wpos.LockSelectedFlags[3]);
-    read<value_t::boolean>(j, "wpos Glow Lock", wpos.LockSelectedFlags[4]);
-    read<value_t::boolean>(j, "wpos Chams Lock", wpos.LockSelectedFlags[5]);
-    read<value_t::boolean>(j, "wpos Esp Lock", wpos.LockSelectedFlags[6]);
-    read<value_t::boolean>(j, "wpos Visuals Lock", wpos.LockSelectedFlags[7]);
-    read<value_t::boolean>(j, "wpos Skinchanger Lock", wpos.LockSelectedFlags[8]);
-    read<value_t::boolean>(j, "wpos Sound Lock", wpos.LockSelectedFlags[9]);
-    read<value_t::boolean>(j, "wpos Style Lock", wpos.LockSelectedFlags[10]);
-    read<value_t::boolean>(j, "wpos Misc Lock", wpos.LockSelectedFlags[11]);
-    read<value_t::boolean>(j, "wpos Reportbot Lock", wpos.LockSelectedFlags[12]);
-    read<value_t::boolean>(j, "wpos Config Lock", wpos.LockSelectedFlags[13]);
-    read<value_t::boolean>(j, "wpos Style2 Lock", wpos.LockSelectedFlags[14]);
-    read<value_t::boolean>(j, "wpos PurchaseList Lock", wpos.LockSelectedFlags[15]);
+    read<value_t::boolean>(j, "wpos Aimbot Lock", w.LockSelectedFlags[0]);
+    read<value_t::boolean>(j, "wpos Anti Aim Lock", w.LockSelectedFlags[1]);
+    read<value_t::boolean>(j, "wpos Triggerbot Lock", w.LockSelectedFlags[2]);
+    read<value_t::boolean>(j, "wpos Backtrack Lock", w.LockSelectedFlags[3]);
+    read<value_t::boolean>(j, "wpos Glow Lock", w.LockSelectedFlags[4]);
+    read<value_t::boolean>(j, "wpos Chams Lock", w.LockSelectedFlags[5]);
+    read<value_t::boolean>(j, "wpos Esp Lock", w.LockSelectedFlags[6]);
+    read<value_t::boolean>(j, "wpos Visuals Lock", w.LockSelectedFlags[7]);
+    read<value_t::boolean>(j, "wpos Skinchanger Lock", w.LockSelectedFlags[8]);
+    read<value_t::boolean>(j, "wpos Sound Lock", w.LockSelectedFlags[9]);
+    read<value_t::boolean>(j, "wpos Style Lock", w.LockSelectedFlags[10]);
+    read<value_t::boolean>(j, "wpos Misc Lock", w.LockSelectedFlags[11]);
+    read<value_t::boolean>(j, "wpos Reportbot Lock", w.LockSelectedFlags[12]);
+    read<value_t::boolean>(j, "wpos Config Lock", w.LockSelectedFlags[13]);
+    read<value_t::boolean>(j, "wpos Style2 Lock", w.LockSelectedFlags[14]);
+    read<value_t::boolean>(j, "wpos PurchaseList Lock", w.LockSelectedFlags[15]);
 }
 
 void Config::load(size_t id) noexcept
@@ -1093,25 +1093,27 @@ static void to_json(json& j, const item_setting& o)
     WRITE("Stickers", stickers)
 }
 
-static void to_json(json& j, const Config::Wpos& w)
+static void to_json(json& j, const Config::Wpos& o)
 {
+    const Config::Wpos dummy;
+
     WRITE("wpos Aimbot X", AimbotX) WRITE("wpos Aimbot Y", AimbotY)
-    WRITE("wpos AntiAim X", AimbotX) WRITE("wpos AntiAim Y", AimbotY)
-    WRITE("wpos TriggerBot X", AimbotX) WRITE("wpos TriggerBot Y", AimbotY)
-    WRITE("wpos Backtrack X", AimbotX) WRITE("wpos Backtrack Y", AimbotY)
-    WRITE("wpos Glow X", AimbotX) WRITE("wpos Glow Y", AimbotY)
-    WRITE("wpos Chams X", AimbotX) WRITE("wpos Chams Y", AimbotY)
-    WRITE("wpos ESP X", AimbotX) WRITE("wpos ESP Y", AimbotY)
-    WRITE("wpos Visuals X", AimbotX) WRITE("wpos Visuals Y", AimbotY)
-    WRITE("wpos Skinchanger X", AimbotX) WRITE("wpos Skinchanger Y", AimbotY)
-    WRITE("wpos Sound X", AimbotX) WRITE("wpos Sound Y", AimbotY)
-    WRITE("wpos Style X", AimbotX) WRITE("wpos Style Y", AimbotY)
-    WRITE("wpos Misc X", AimbotX) WRITE("wpos Misc Y", AimbotY)
-    WRITE("wpos Reportbot X", AimbotX) WRITE("wpos Reportbot Y", AimbotY)
-    WRITE("wpos Config X", AimbotX) WRITE("wpos Config Y", AimbotY)
-    WRITE("wpos Style2 X", AimbotX) WRITE("wpos Style2 Y", AimbotY)
-    WRITE("wpos PurchaseList X", AimbotX) WRITE("wpos PurchaseList Y", AimbotY)
-    WRITE("wpos PurchaseList ScaleX", AimbotX) WRITE("wpos PurchaseList ScaleY", AimbotY)
+    WRITE("wpos AntiAim X", AntiAimX) WRITE("wpos AntiAim Y", AntiAimY)
+    WRITE("wpos TriggerBot X", TriggerBotX) WRITE("wpos TriggerBot Y", TriggerBotY)
+    WRITE("wpos Backtrack X", BacktrackX) WRITE("wpos Backtrack Y", BacktrackY)
+    WRITE("wpos Glow X", GlowX) WRITE("wpos Glow Y", GlowY)
+    WRITE("wpos Chams X", ChamsX) WRITE("wpos Chams Y", ChamsY)
+    WRITE("wpos ESP X", EspX) WRITE("wpos ESP Y", EspY)
+    WRITE("wpos Visuals X", VisualsX) WRITE("wpos Visuals Y", VisualsY)
+    WRITE("wpos Skinchanger X", SkinchangerX) WRITE("wpos Skinchanger Y", SkinchangerY)
+    WRITE("wpos Sound X", SoundX) WRITE("wpos Sound Y", SoundY)
+    WRITE("wpos Style X", StyleX) WRITE("wpos Style Y", StyleY)
+    WRITE("wpos Misc X", MiscX) WRITE("wpos Misc Y", MiscY)
+    WRITE("wpos Reportbot X", ReportbotX) WRITE("wpos Reportbot Y", ReportbotY)
+    WRITE("wpos Config X", ConfigX) WRITE("wpos Config Y", ConfigY)
+    WRITE("wpos Style2 X", Style2X) WRITE("wpos Style2 Y", Style2Y)
+    WRITE("wpos PurchaseList X", PurchaseListX) WRITE("wpos PurchaseList Y", PurchaseListY)
+    WRITE("wpos PurchaseList ScaleX", PurchaseListScaleX) WRITE("wpos PurchaseList ScaleY", PurchaseListScaleY)
     //
     WRITE("wpos Aimbot Lock", LockSelectedFlags[0])
     WRITE("wpos Anti Aim Lock", LockSelectedFlags[1])

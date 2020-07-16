@@ -341,7 +341,7 @@ public:
         int rounds{ 1 };
     } reportbot;
 
-    struct {
+    struct Wpos {
         float AimbotX{ 250.0f }; // wpos config .h //
         float AimbotY{ 250.0f };
         float AntiAimX{ 250.0f };
