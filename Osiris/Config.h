@@ -106,11 +106,33 @@ public:
             bool cover = false;
             bool ignorez = false;
             int material = 0;
+
+            auto operator==(const Material& o) const
+            {
+                return static_cast<const ColorA&>(*this) == static_cast<const ColorA&>(o)
+                    && enabled == o.enabled
+                    && healthBased == o.healthBased
+                    && blinking == o.blinking
+                    && wireframe == o.wireframe
+                    && cover == o.cover
+                    && ignorez == o.ignorez
+                    && material == o.material;
+            }
         };
         std::vector<Material> materials{ {}, {}, {}, {} };
+
+
+        auto operator==(const Chams& o) const
+        {
+            for (std::size_t i = 0; i < materials.size() && i < o.materials.size(); ++i) {
+                if (!(materials[i] == o.materials[i]))
+                    return false;
+            }
+            return true;
+        }
     };
 
-    std::array<Chams, 18> chams;
+    std::unordered_map<std::string, Chams> chams;
 
     struct Esp {
         struct Shared {

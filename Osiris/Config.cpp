@@ -63,15 +63,29 @@ using value_t = json::value_t;
 template <value_t Type, typename T>
 static void read(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == Type)
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == Type)
+        o = val;
 }
 
 template <typename T>
 static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == value_t::array)
-        o = j[key].get<std::vector<T>>();
+    if (j.contains(key) && j[key].type() == value_t::array) {
+        std::size_t i = 0;
+        for (const auto& e : j[key]) {
+            if (i >= o.size())
+                break;
+
+            if (e.is_null())
+                continue;
+
+            o[i] = e;
+            ++i;
+        }
+    }
 }
 
 template <value_t Type, typename T, size_t Size>
@@ -279,7 +293,7 @@ static void from_json(const json& j, Config::Glow& g)
     from_json(j, static_cast<ColorA&>(g));
 
     read<value_t::boolean>(j, "Enabled", g.enabled);
-    read<value_t::boolean>(j, "Health based", g.enabled);
+    read<value_t::boolean>(j, "Health based", g.healthBased);
     read_number(j, "Style", g.style);
 }
 
@@ -289,7 +303,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
     read<value_t::boolean>(j, "Enabled", m.enabled);
     read<value_t::boolean>(j, "Health based", m.healthBased);
-    read<value_t::boolean>(j, "Blinking", m.healthBased);
+    read<value_t::boolean>(j, "Blinking", m.blinking);
     read<value_t::boolean>(j, "Wireframe", m.wireframe);
     read<value_t::boolean>(j, "Cover", m.cover);
     read<value_t::boolean>(j, "Ignore-Z", m.ignorez);
@@ -533,7 +547,7 @@ void Config::load(size_t id) noexcept
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read<value_t::array>(j, "Glow", glow);
-    read<value_t::array>(j, "Chams", chams);
+    read_map(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read<value_t::array>(j, "Skin changer", skinChanger);
@@ -785,9 +799,16 @@ static void to_json(json& j, const Config::Chams::Material& o)
 
 static void to_json(json& j, const Config::Chams& o)
 {
-    const Config::Chams dummy;
+    const Config::Chams::Material dummy;
 
-    j = o.materials;
+    std::size_t i = 0;
+    for (const auto& mat : o.materials) {
+        if (dummy == mat)
+            continue;
+
+        j["Materials"][i] = o.materials[i];
+        ++i;
+    }
 }
 
 template <typename T>
@@ -1049,7 +1070,7 @@ void Config::save(size_t id) const noexcept
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
         j["Glow"] = glow;
-        j["Chams"] = chams;
+        save_map(j, "Chams", chams);
         j["ESP"] = streamProofESP;
         j["Reportbot"] = reportbot;
         j["Sound"] = sound;
