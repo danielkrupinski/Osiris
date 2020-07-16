@@ -83,6 +83,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         clanTag = config->misc.clanTag;
         if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
             clanTag.push_back(' ');
+        return;
     }
     
     static auto lastTime = 0.0f;
