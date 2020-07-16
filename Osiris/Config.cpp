@@ -63,8 +63,11 @@ using value_t = json::value_t;
 template <value_t Type, typename T>
 static void read(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == Type)
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == Type)
+        o = val;
 }
 
 template <typename T>
