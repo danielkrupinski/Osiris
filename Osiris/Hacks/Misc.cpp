@@ -23,10 +23,7 @@
 #include "../SDK/WeaponSystem.h"
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
-
-// for UTF-8 tools
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_internal.h"
+#include "../Helpers.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -106,9 +103,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
             return;
 
         if (config->misc.animatedClanTag && !clanTag.empty()) {
-            unsigned int _;
-            // TODO: implement ImTextCharFromUtf8 in a simpler way
-            std::rotate(clanTag.begin(), clanTag.begin() + ImTextCharFromUtf8(&_, clanTag.c_str(), clanTag.c_str() + clanTag.length()), clanTag.end());
+            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
+            if (offset != -1)
+                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
