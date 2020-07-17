@@ -127,7 +127,7 @@ static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* dat
     }
     int instate = network->InReliableState;
     int insequencenr = network->InSequenceNr;
-    int faketimeLimit = config->backtrack.timeLimit; if (faketimeLimit <= 200) { faketimeLimit = 0; } else { faketimeLimit - 200; }
+    int faketimeLimit = config->backtrack.timeLimit; if (faketimeLimit <= 200) { faketimeLimit = 0; } else { faketimeLimit -= 200; }
     float delta = max(0.f, std::clamp(faketimeLimit / 1000.f, 0.f, Backtrack::cvars.maxUnlag->getFloat()) - network->getLatency(0));
 
     Backtrack::AddLatencyToNetwork(network, delta);
