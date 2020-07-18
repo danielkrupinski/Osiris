@@ -98,8 +98,11 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 template <typename T>
 static void read_number(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].is_number())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number())
+        o = val;
 }
 
 template <typename T>
