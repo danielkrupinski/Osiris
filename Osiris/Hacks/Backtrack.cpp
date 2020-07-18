@@ -133,8 +133,6 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 {
     static float lastIncomingSequenceNumber = 0.f;
 
-    if (reset)
-        lastIncomingSequenceNumber = 0.f;
     int timeLimit = config->backtrack.timeLimit; if (timeLimit <= 200) { timeLimit = 0; } else { timeLimit - 200; }
     if (!config->backtrack.fakeLatency || timeLimit == 0)
         return;
@@ -146,7 +144,7 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
     if (!network)
         return;
 
-    if (network->InSequenceNr > lastIncomingSequenceNumber)
+    if (network->InSequenceNr != lastIncomingSequenceNumber)
     {
         lastIncomingSequenceNumber = network->InSequenceNr;
 
@@ -156,7 +154,7 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
         sequence.servertime = memory->globalVars->serverTime();
         sequences.push_front(sequence);
     }
-
+    
     while (sequences.size() > 2048)
         sequences.pop_back();
 }

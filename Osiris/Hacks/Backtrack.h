@@ -75,7 +75,7 @@ namespace Backtrack {
         if (!network)
             return 0.f;
 
-        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, 0.2f);
+        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, cvars.maxUnlag->getFloat());
     }
 
     int timeToTicks(float time) noexcept;
