@@ -134,45 +134,6 @@ public:
 
     std::unordered_map<std::string, Chams> chams;
 
-    struct Esp {
-        struct Shared {
-            bool enabled{ false };
-            int font{ 0x1d };
-            ColorToggle snaplines;
-            ColorToggle box;
-            int boxType{ 0 };
-            ColorToggle name;
-            ColorToggle ammo;
-            ColorToggle outline{ 0.0f, 0.0f, 0.0f };
-            ColorToggle distance;
-            float maxDistance{ 0.0f };
-        };
-       
-        struct Player : public Shared {
-            ColorToggle eyeTraces;
-            ColorToggle health;
-            ColorToggle healthBar;
-            ColorToggle armor;
-            ColorToggle armorBar;
-            ColorToggle money;
-            ColorToggle headDot;
-            ColorToggle activeWeapon;
-            int hpside{ 0 };
-            int armorside{ 0 };
-            bool deadesp { false };
-        };
-
-        struct Weapon : public Shared { } weapon;
-
-        struct Projectile : public Shared { };
-        std::array<Projectile, 9> projectiles;
-
-        struct DangerZone : public Shared { };
-        std::array<DangerZone, 18> dangerZone;
-
-        std::array<Player, 6> players;
-    } esp;
-
     struct StreamProofESP {
         std::unordered_map<std::string, Player> allies;
         std::unordered_map<std::string, Player> enemies;

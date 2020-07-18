@@ -1112,7 +1112,6 @@ void Config::reset() noexcept
     backtrack = { };
     glow = { };
     chams = { };
-    esp = { };
     streamProofESP = { };
     visuals = { };
     skinChanger = { };

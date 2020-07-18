@@ -1,4 +1,4 @@
-﻿#include <fstream>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <ShlObj.h>
@@ -1349,7 +1349,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 4: config->antiAim = { }; break;
                     case 5: config->glow = { }; break;
                     case 6: config->chams = { }; break;
-                    case 7: config->esp = { }; break;
+                    case 7: break;
                     case 8: config->streamProofESP = { }; break;
                     case 9: config->visuals = { }; break;
                     case 10: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
