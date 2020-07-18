@@ -91,8 +91,11 @@ static void read_vector(const json& j, const char* key, std::vector<T>& o) noexc
 template <typename T, size_t Size>
 static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == value_t::array && j[key].size() == o.size())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
+        o = val;
 }
 
 template <typename T>
