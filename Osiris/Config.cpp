@@ -88,18 +88,24 @@ static void read_vector(const json& j, const char* key, std::vector<T>& o) noexc
     }
 }
 
-template <value_t Type, typename T, size_t Size>
+template <typename T, size_t Size>
 static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == Type && j[key].size() == o.size())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
+        o = val;
 }
 
 template <typename T>
 static void read_number(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].is_number())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number())
+        o = val;
 }
 
 template <typename T>
@@ -113,7 +119,7 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
 
 static void from_json(const json& j, ColorA& c)
 {
-    read<value_t::array>(j, "Color", c.color);
+    read(j, "Color", c.color);
     read<value_t::boolean>(j, "Rainbow", c.rainbow);
     read_number(j, "Rainbow Speed", c.rainbowSpeed);
 }
@@ -171,7 +177,7 @@ static void from_json(const json& j, Box& b)
     from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
 
     read_number(j, "Type", b.type);
-    read<value_t::array>(j, "Scale", b.scale);
+    read(j, "Scale", b.scale);
 }
 
 static void from_json(const json& j, Shared& s)
@@ -409,7 +415,7 @@ static void from_json(const json& j, item_setting& i)
 
     // if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, sizeof(skinChangerConfig.custom_name), skinChangerJson["custom_name"].asCString());
 
-    read<value_t::array>(j, "Stickers", i.stickers);
+    read(j, "Stickers", i.stickers);
 }
 
 static void from_json(const json& j, Config::Sound::Player& p)
@@ -423,7 +429,7 @@ static void from_json(const json& j, Config::Sound::Player& p)
 static void from_json(const json& j, Config::Sound& s)
 {
     read_number(j, "Chicken volume", s.chickenVolume);
-    read<value_t::array>(j, "Players", s.players);
+    read(j, "Players", s.players);
 }
 
 static void from_json(const json& j, Config::Style& s)
@@ -439,7 +445,7 @@ static void from_json(const json& j, Config::Style& s)
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (const char* name = ImGui::GetStyleColorName(i); colors.contains(name)) {
                 std::array<float, 4> temp;
-                read<value_t::array>(colors, name, temp);
+                read(colors, name, temp);
                 style.Colors[i].x = temp[0];
                 style.Colors[i].y = temp[1];
                 style.Colors[i].z = temp[2];
@@ -542,15 +548,15 @@ void Config::load(size_t id) noexcept
     else
         return;
 
-    read<value_t::array>(j, "Aimbot", aimbot);
-    read<value_t::array>(j, "Triggerbot", triggerbot);
+    read(j, "Aimbot", aimbot);
+    read(j, "Triggerbot", triggerbot);
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
-    read<value_t::array>(j, "Glow", glow);
+    read(j, "Glow", glow);
     read_map(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
-    read<value_t::array>(j, "Skin changer", skinChanger);
+    read(j, "Skin changer", skinChanger);
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
