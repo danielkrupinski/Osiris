@@ -146,11 +146,7 @@ struct Player : Shared {
             && skeleton == p.skeleton;
     }
 
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct Weapon : Shared {
@@ -162,11 +158,7 @@ struct Weapon : Shared {
             && ammo == w.ammo;
     }
 
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct Trail : ColorToggleThickness {
@@ -212,11 +204,7 @@ struct Projectile : Shared {
             && trails == p.trails;
     }
 
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct PurchaseList {
