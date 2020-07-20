@@ -1064,12 +1064,14 @@ static void to_json(json& j, const item_setting& o)
 
 void removeEmptyObjects(json& j) noexcept
 {
-    for (auto& el : j.items()) {
-        auto& val = el.value();
+    for (auto it = j.begin(); it != j.end();) {
+        auto& val = it.value();
         if (val.is_object())
             removeEmptyObjects(val);
         if (val.empty())
-            j.erase(el.key());
+            it = j.erase(it);
+        else
+            ++it;
     }
 }
 
