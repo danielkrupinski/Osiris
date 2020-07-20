@@ -857,10 +857,8 @@ static void to_json(json& j, const Config::Sound& o)
     j["Players"] = o.players;
 }
 
-static void to_json(json& j, const PurchaseList& o)
+static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
 {
-    const PurchaseList dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Only During Freeze Time", onlyDuringFreezeTime)
     WRITE("Show Prices", showPrices)
@@ -932,7 +930,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
-    WRITE("Purchase List", purchaseList);
+    to_json(j["Purchase List"], o.purchaseList, dummy.purchaseList);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
