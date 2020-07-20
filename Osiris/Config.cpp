@@ -1061,6 +1061,17 @@ static void to_json(json& j, const item_setting& o)
     WRITE("Stickers", stickers)
 }
 
+void removeEmptyObjects(json& j) noexcept
+{
+    for (auto& el : j.items()) {
+        auto& val = el.value();
+        if (val.is_object())
+            removeEmptyObjects(val);
+        if (val.empty())
+            j.erase(el.key());
+    }
+}
+
 void Config::save(size_t id) const noexcept
 {
     std::error_code ec;
@@ -1083,6 +1094,7 @@ void Config::save(size_t id) const noexcept
         j["Style"] = style;
         j["Skin changer"] = skinChanger;
 
+        removeEmptyObjects(j);
         out << std::setw(2) << j;
     }
 }
