@@ -413,7 +413,8 @@ static void from_json(const json& j, item_setting& i)
     read_number(j, "StatTrak", i.stat_trak);
     read_number(j, "Wear", i.wear);
 
-    // if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, sizeof(skinChangerConfig.custom_name), skinChangerJson["custom_name"].asCString());
+    if (j.contains("Custom name"))
+        strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
 
     read(j, "Stickers", i.stickers);
 }
