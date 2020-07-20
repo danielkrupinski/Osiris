@@ -809,9 +809,6 @@ static void to_json(json& j, const Config::Chams& o)
 
     std::size_t i = 0;
     for (const auto& mat : o.materials) {
-        if (dummy == mat)
-            continue;
-
         j["Materials"][i] = o.materials[i];
         ++i;
     }
@@ -1055,7 +1052,7 @@ void removeEmptyObjects(json& j) noexcept
 {
     for (auto it = j.begin(); it != j.end();) {
         auto& val = it.value();
-        if (val.is_object())
+        if (val.is_object() || val.is_array() && it.key() == "Materials")
             removeEmptyObjects(val);
         if (val.empty())
             it = j.erase(it);
