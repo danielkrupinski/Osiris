@@ -935,10 +935,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Purchase List", purchaseList);
 }
 
-static void to_json(json& j, const Config::Visuals::ColorCorrection& o)
+static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
 {
-    const Config::Visuals::ColorCorrection dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Blue", blue)
     WRITE("Red", red)
@@ -991,7 +989,8 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime)
     WRITE("Playermodel T", playerModelT)
     WRITE("Playermodel CT", playerModelCT)
-    WRITE("Color correction", colorCorrection)
+
+    to_json(j["Color correction"], o.colorCorrection, dummy.colorCorrection);
 }
 
 static void to_json(json& j, const ImVec4& o)

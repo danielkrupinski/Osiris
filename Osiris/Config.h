@@ -177,18 +177,6 @@ public:
             float ghost = 0.0f;
             float green = 0.0f;
             float yellow = 0.0f;
-
-            auto operator==(const ColorCorrection& o) const
-            {
-                return enabled == o.enabled
-                    && blue == o.blue
-                    && red == o.red
-                    && mono == o.mono
-                    && saturation == o.saturation
-                    && ghost == o.ghost
-                    && green == o.green
-                    && yellow == o.yellow;
-            }
         } colorCorrection;
     } visuals;
 
