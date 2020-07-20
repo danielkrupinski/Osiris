@@ -170,13 +170,6 @@ struct Trail : ColorToggleThickness {
 
     int type = Line;
     float time = 2.0f;
-
-    auto operator==(const Trail& t) const
-    {
-        return static_cast<const ColorToggleThickness&>(*this) == static_cast<const ColorToggleThickness&>(t)
-            && type == t.type
-            && time == t.time;
-    }
 };
 
 struct Trails {
