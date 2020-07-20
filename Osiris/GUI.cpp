@@ -97,25 +97,32 @@ void GUI::hotkey(int& key) noexcept
             key = i + (i > 1 ? 2 : 1);
 }
 
+static void menuBarItem(const char* name, bool& enabled) noexcept
+{
+    if (ImGui::MenuItem(name)) {
+        enabled = true;
+        ImGui::SetWindowFocus(name);
+    }
+}
+
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        ImGui::MenuItem("Aimbot", nullptr, &window.aimbot);
-        ImGui::MenuItem("Anti aim", nullptr, &window.antiAim);
-        ImGui::MenuItem("Triggerbot", nullptr, &window.triggerbot);
-        ImGui::MenuItem("Backtrack", nullptr, &window.backtrack);
-        ImGui::MenuItem("Glow", nullptr, &window.glow);
-        ImGui::MenuItem("Chams", nullptr, &window.chams);
-        // ImGui::MenuItem("Esp", nullptr, &window.esp);
-        ImGui::MenuItem("Stream Proof ESP", nullptr, &window.streamProofESP);
-        ImGui::MenuItem("Visuals", nullptr, &window.visuals);
-        ImGui::MenuItem("Skin changer", nullptr, &window.skinChanger);
-        ImGui::MenuItem("Sound", nullptr, &window.sound);
-        ImGui::MenuItem("Style", nullptr, &window.style);
-        ImGui::MenuItem("Misc", nullptr, &window.misc);
-        ImGui::MenuItem("Reportbot", nullptr, &window.reportbot);
-        ImGui::MenuItem("Config", nullptr, &window.config);
-        ImGui::EndMainMenuBar();
+        menuBarItem("Aimbot", window.aimbot);
+        menuBarItem("Anti aim", window.antiAim);
+        menuBarItem("Triggerbot", window.triggerbot);
+        menuBarItem("Backtrack", window.backtrack);
+        menuBarItem("Glow", window.glow);
+        menuBarItem("Chams", window.chams);
+        menuBarItem("Stream Proof ESP", window.streamProofESP);
+        menuBarItem("Visuals", window.visuals);
+        menuBarItem("Skin changer", window.skinChanger);
+        menuBarItem("Sound", window.sound);
+        menuBarItem("Style", window.style);
+        menuBarItem("Misc", window.misc);
+        menuBarItem("Reportbot", window.reportbot);
+        menuBarItem("Config", window.config);
+        ImGui::EndMainMenuBar();   
     }
 }
 
