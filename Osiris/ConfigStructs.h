@@ -136,37 +136,13 @@ struct Player : Shared {
     bool spottedOnly = false;
     ColorToggleThickness skeleton;
 
-    auto operator==(const Player& p) const
-    {
-        return static_cast<const Shared&>(*this) == static_cast<const Shared&>(p)
-            && weapon == p.weapon
-            && flashDuration == p.flashDuration
-            && audibleOnly == p.audibleOnly
-            && spottedOnly == p.spottedOnly
-            && skeleton == p.skeleton;
-    }
-
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct Weapon : Shared {
     ColorToggle ammo;
 
-    auto operator==(const Weapon& w) const
-    {
-        return static_cast<const Shared&>(*this) == static_cast<const Shared&>(w)
-            && ammo == w.ammo;
-    }
-
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct Trail : ColorToggleThickness {
@@ -178,13 +154,6 @@ struct Trail : ColorToggleThickness {
 
     int type = Line;
     float time = 2.0f;
-
-    auto operator==(const Trail& t) const
-    {
-        return static_cast<const ColorToggleThickness&>(*this) == static_cast<const ColorToggleThickness&>(t)
-            && type == t.type
-            && time == t.time;
-    }
 };
 
 struct Trails {
@@ -193,30 +162,12 @@ struct Trails {
     Trail localPlayer;
     Trail allies;
     Trail enemies;
-
-    auto operator==(const Trails& t) const
-    {
-        return enabled == t.enabled
-            && localPlayer == t.localPlayer
-            && allies == t.allies
-            && enemies == t.enemies;
-    }
 };
 
 struct Projectile : Shared {
     Trails trails;
 
-    auto operator==(const Projectile& p) const
-    {
-        return static_cast<const Shared&>(*this) == static_cast<const Shared&>(p)
-            && trails == p.trails;
-    }
-
-    auto& operator=(const Shared& s)
-    {
-        static_cast<Shared&>(*this) = s;
-        return *this;
-    }
+    using Shared::operator=;
 };
 
 struct PurchaseList {
@@ -230,13 +181,4 @@ struct PurchaseList {
         Summary
     };
     int mode = Details;
-
-    auto operator==(const PurchaseList& pl) const
-    {
-        return enabled == pl.enabled
-            && onlyDuringFreezeTime == pl.onlyDuringFreezeTime
-            && showPrices == pl.showPrices
-            && noTitleBar == pl.noTitleBar
-            && mode == pl.mode;
-    }
 };

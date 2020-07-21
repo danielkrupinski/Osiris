@@ -106,30 +106,8 @@ public:
             bool cover = false;
             bool ignorez = false;
             int material = 0;
-
-            auto operator==(const Material& o) const
-            {
-                return static_cast<const ColorA&>(*this) == static_cast<const ColorA&>(o)
-                    && enabled == o.enabled
-                    && healthBased == o.healthBased
-                    && blinking == o.blinking
-                    && wireframe == o.wireframe
-                    && cover == o.cover
-                    && ignorez == o.ignorez
-                    && material == o.material;
-            }
         };
         std::vector<Material> materials{ {}, {}, {}, {} };
-
-
-        auto operator==(const Chams& o) const
-        {
-            for (std::size_t i = 0; i < materials.size() && i < o.materials.size(); ++i) {
-                if (!(materials[i] == o.materials[i]))
-                    return false;
-            }
-            return true;
-        }
     };
 
     std::unordered_map<std::string, Chams> chams;
@@ -199,18 +177,6 @@ public:
             float ghost = 0.0f;
             float green = 0.0f;
             float yellow = 0.0f;
-
-            auto operator==(const ColorCorrection& o) const
-            {
-                return enabled == o.enabled
-                    && blue == o.blue
-                    && red == o.red
-                    && mono == o.mono
-                    && saturation == o.saturation
-                    && ghost == o.ghost
-                    && green == o.green
-                    && yellow == o.yellow;
-            }
         } colorCorrection;
     } visuals;
 
