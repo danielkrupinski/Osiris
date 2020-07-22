@@ -127,7 +127,19 @@ static void from_json(const json& j, ColorA& c)
 static void from_json(const json& j, ColorToggle& ct)
 {
     from_json(j, static_cast<ColorA&>(ct));
+    read<value_t::boolean>(j, "Enabled", ct.enabled);
+}
 
+static void from_json(const json& j, Config::Color& c)
+{
+    read(j, "Color", c.color);
+    read<value_t::boolean>(j, "Rainbow", c.rainbow);
+    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+}
+
+static void from_json(const json& j, Config::ColorToggle& ct)
+{
+    from_json(j, static_cast<Config::Color&>(ct));
     read<value_t::boolean>(j, "Enabled", ct.enabled);
 }
 
@@ -371,10 +383,8 @@ static void from_json(const json& j, Config::Visuals& v)
     read_number(j, "Flash reduction", v.flashReduction);
     read_number(j, "Brightness", v.brightness);
     read_number(j, "Skybox", v.skybox);
-
-  //  read<value_t::object>(j, "World", v.world);
-  //  read<value_t::object>(j, "Sky", v.sky);
-
+    read<value_t::object>(j, "World", v.world);
+    read<value_t::object>(j, "Sky", v.sky);
     read<value_t::boolean>(j, "Deagle spinner", v.deagleSpinner);
     read_number(j, "Screen effect", v.screenEffect);
     read_number(j, "Hit effect", v.hitEffect);
@@ -491,8 +501,8 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::boolean>(j, "Reveal ranks", m.revealRanks);
     read<value_t::boolean>(j, "Reveal money", m.revealMoney);
     read<value_t::boolean>(j, "Reveal suspect", m.revealSuspect);
-    //  read<value_t::object>(j, "Spectator list", m.spectatorList);
-    //  read<value_t::object>(j, "Watermark", m.watermark);
+    read<value_t::object>(j, "Spectator list", m.spectatorList);
+    read<value_t::object>(j, "Watermark", m.watermark);
     read<value_t::boolean>(j, "Fix animation LOD", m.fixAnimationLOD);
     read<value_t::boolean>(j, "Fix bone matrix", m.fixBoneMatrix);
     read<value_t::boolean>(j, "Fix movement", m.fixMovement);
@@ -500,14 +510,12 @@ static void from_json(const json& j, Config::Misc& m)
     read_number(j, "Aspect Ratio", m.aspectratio);
     read<value_t::boolean>(j, "Kill message", m.killMessage);
     read<value_t::object>(j, "Kill message string", m.killMessageString);
-
     read<value_t::boolean>(j, "Name stealer", m.nameStealer);
     read<value_t::boolean>(j, "Disable HUD blur", m.disablePanoramablur);
     read_number(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
     read<value_t::boolean>(j, "Fast plant", m.fastPlant);
-    // read<value_t::object>(j, "Bomb timer", m.bombTimer);
-
+    read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read<value_t::boolean>(j, "Quick reload", m.quickReload);
     read<value_t::boolean>(j, "Prepare revolver", m.prepareRevolver);
     read_number(j, "Prepare revolver key", m.prepareRevolverKey);
@@ -588,6 +596,19 @@ static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
     to_json(j, static_cast<const ColorA&>(o), dummy);
+    WRITE("Enabled", enabled)
+}
+
+static void to_json(json& j, const Config::Color& o, const Config::Color& dummy = {})
+{
+    WRITE("Color", color)
+    WRITE("Rainbow", rainbow)
+    WRITE("Rainbow Speed", rainbowSpeed)
+}
+
+static void to_json(json& j, const Config::ColorToggle& o, const Config::ColorToggle& dummy = {})
+{
+    to_json(j, static_cast<const Config::Color&>(o), dummy);
     WRITE("Enabled", enabled)
 }
 
@@ -854,7 +875,6 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);
     WRITE("Edge Jump Key", edgejumpkey);
-
     WRITE("Slowwalk", slowwalk);
     WRITE("Slowwalk key", slowwalkKey);
     WRITE("Sniper crosshair", sniperCrosshair);
@@ -866,9 +886,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reveal ranks", revealRanks);
     WRITE("Reveal money", revealMoney);
     WRITE("Reveal suspect", revealSuspect);
-
-    //  WRITE("Spectator list", spectatorList);
-    //  WRITE("Watermark", watermark);
+    to_json(j["Spectator list"], o.spectatorList, dummy.spectatorList);
+    to_json(j["Watermark"], o.watermark, dummy.watermark);
     WRITE("Fix animation LOD", fixAnimationLOD);
     WRITE("Fix bone matrix", fixBoneMatrix);
     WRITE("Fix movement", fixMovement);
@@ -876,14 +895,12 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Aspect Ratio", aspectratio);
     WRITE("Kill message", killMessage);
     WRITE("Kill message string", killMessageString);
-
     WRITE("Name stealer", nameStealer);
     WRITE("Disable HUD blur", disablePanoramablur);
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
-    // WRITE("Bomb timer", bombTimer);
-
+    to_json(j["Bomb timer"], o.bombTimer, dummy.bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
@@ -944,10 +961,8 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Flash reduction", flashReduction)
     WRITE("Brightness", brightness)
     WRITE("Skybox", skybox)
-
-    // WRITE("World", world)
-    // WRITE("Sky", sky)
-
+    to_json(j["World"], o.world, dummy.world);
+    to_json(j["Sky"], o.sky, dummy.sky);
     WRITE("Deagle spinner", deagleSpinner)
     WRITE("Screen effect", screenEffect)
     WRITE("Hit effect", hitEffect)
