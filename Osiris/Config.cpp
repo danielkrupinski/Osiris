@@ -63,29 +63,49 @@ using value_t = json::value_t;
 template <value_t Type, typename T>
 static void read(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == Type)
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == Type)
+        o = val;
 }
 
 template <typename T>
 static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == value_t::array)
-        o = j[key].get<std::vector<T>>();
+    if (j.contains(key) && j[key].type() == value_t::array) {
+        std::size_t i = 0;
+        for (const auto& e : j[key]) {
+            if (i >= o.size())
+                break;
+
+            if (e.is_null())
+                continue;
+
+            o[i] = e;
+            ++i;
+        }
+    }
 }
 
-template <value_t Type, typename T, size_t Size>
+template <typename T, size_t Size>
 static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
-    if (j.contains(key) && j[key].type() == Type && j[key].size() == o.size())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
+        o = val;
 }
 
 template <typename T>
 static void read_number(const json& j, const char* key, T& o) noexcept
 {
-    if (j.contains(key) && j[key].is_number())
-        o = j[key];
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number())
+        o = val;
 }
 
 template <typename T>
@@ -99,7 +119,7 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
 
 static void from_json(const json& j, ColorA& c)
 {
-    read<value_t::array>(j, "Color", c.color);
+    read(j, "Color", c.color);
     read<value_t::boolean>(j, "Rainbow", c.rainbow);
     read_number(j, "Rainbow Speed", c.rainbowSpeed);
 }
@@ -157,7 +177,7 @@ static void from_json(const json& j, Box& b)
     from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
 
     read_number(j, "Type", b.type);
-    read<value_t::array>(j, "Scale", b.scale);
+    read(j, "Scale", b.scale);
 }
 
 static void from_json(const json& j, Shared& s)
@@ -279,7 +299,7 @@ static void from_json(const json& j, Config::Glow& g)
     from_json(j, static_cast<ColorA&>(g));
 
     read<value_t::boolean>(j, "Enabled", g.enabled);
-    read<value_t::boolean>(j, "Health based", g.enabled);
+    read<value_t::boolean>(j, "Health based", g.healthBased);
     read_number(j, "Style", g.style);
 }
 
@@ -289,7 +309,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
     read<value_t::boolean>(j, "Enabled", m.enabled);
     read<value_t::boolean>(j, "Health based", m.healthBased);
-    read<value_t::boolean>(j, "Blinking", m.healthBased);
+    read<value_t::boolean>(j, "Blinking", m.blinking);
     read<value_t::boolean>(j, "Wireframe", m.wireframe);
     read<value_t::boolean>(j, "Cover", m.cover);
     read<value_t::boolean>(j, "Ignore-Z", m.ignorez);
@@ -393,9 +413,10 @@ static void from_json(const json& j, item_setting& i)
     read_number(j, "StatTrak", i.stat_trak);
     read_number(j, "Wear", i.wear);
 
-    // if (skinChangerJson.isMember("custom_name")) strcpy_s(skinChangerConfig.custom_name, sizeof(skinChangerConfig.custom_name), skinChangerJson["custom_name"].asCString());
+    if (j.contains("Custom name"))
+        strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
 
-    read<value_t::array>(j, "Stickers", i.stickers);
+    read(j, "Stickers", i.stickers);
 }
 
 static void from_json(const json& j, Config::Sound::Player& p)
@@ -409,7 +430,7 @@ static void from_json(const json& j, Config::Sound::Player& p)
 static void from_json(const json& j, Config::Sound& s)
 {
     read_number(j, "Chicken volume", s.chickenVolume);
-    read<value_t::array>(j, "Players", s.players);
+    read(j, "Players", s.players);
 }
 
 static void from_json(const json& j, Config::Style& s)
@@ -425,7 +446,7 @@ static void from_json(const json& j, Config::Style& s)
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (const char* name = ImGui::GetStyleColorName(i); colors.contains(name)) {
                 std::array<float, 4> temp;
-                read<value_t::array>(colors, name, temp);
+                read(colors, name, temp);
                 style.Colors[i].x = temp[0];
                 style.Colors[i].y = temp[1];
                 style.Colors[i].z = temp[2];
@@ -527,15 +548,15 @@ void Config::load(size_t id) noexcept
     else
         return;
 
-    read<value_t::array>(j, "Aimbot", aimbot);
-    read<value_t::array>(j, "Triggerbot", triggerbot);
+    read(j, "Aimbot", aimbot);
+    read(j, "Triggerbot", triggerbot);
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
-    read<value_t::array>(j, "Glow", glow);
-    read<value_t::array>(j, "Chams", chams);
+    read(j, "Glow", glow);
+    read_map(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
-    read<value_t::array>(j, "Skin changer", skinChanger);
+    read(j, "Skin changer", skinChanger);
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
@@ -557,132 +578,101 @@ if (!(o.valueName == dummy.valueName)) \
 if (!(static_cast<const structName&>(o) == static_cast<const structName&>(dummy))) \
     j = static_cast<const structName&>(o);
 
-
-static void to_json(json& j, const ColorA& o)
+static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
 {
-    const ColorA dummy;
-
     WRITE("Color", color)
     WRITE("Rainbow", rainbow)
     WRITE("Rainbow Speed", rainbowSpeed)
 }
 
-static void to_json(json& j, const ColorToggle& o)
+static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
-    const ColorToggle dummy;
-
-    WRITE_BASE(ColorA)
+    to_json(j, static_cast<const ColorA&>(o), dummy);
     WRITE("Enabled", enabled)
 }
 
-static void to_json(json& j, const ColorToggleRounding& o)
+static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
 {
-    const ColorToggleRounding dummy;
-
-    WRITE_BASE(ColorToggle)
+    to_json(j, static_cast<const ColorToggle&>(o), dummy);
     WRITE("Rounding", rounding)
 }
 
-static void to_json(json& j, const ColorToggleThickness& o)
+static void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness& dummy = {})
 {
-    const ColorToggleThickness dummy;
-
-    WRITE_BASE(ColorToggle)
+    to_json(j, static_cast<const ColorToggle&>(o), dummy);
     WRITE("Thickness", thickness)
 }
 
-static void to_json(json& j, const ColorToggleThicknessRounding& o)
+static void to_json(json& j, const ColorToggleThicknessRounding& o, const ColorToggleThicknessRounding& dummy = {})
 {
-    const ColorToggleThicknessRounding dummy;
-
-    WRITE_BASE(ColorToggleRounding)
+    to_json(j, static_cast<const ColorToggleRounding&>(o), dummy);
     WRITE("Thickness", thickness)
 }
 
-static void to_json(json& j, const Font& o)
+static void to_json(json& j, const Font& o, const Font& dummy = {})
 {
-    const Font dummy;
-
     WRITE("Name", name)
 }
 
-static void to_json(json& j, const Snapline& o)
+static void to_json(json& j, const Snapline& o, const Snapline& dummy = {})
 {
-    const Snapline dummy;
-
-    WRITE_BASE(ColorToggleThickness)
+    to_json(j, static_cast<const ColorToggleThickness&>(o), dummy);
     WRITE("Type", type)
 }
 
-static void to_json(json& j, const Box& o)
+static void to_json(json& j, const Box& o, const Box& dummy = {})
 {
-    const Box dummy;
-
-    WRITE_BASE(ColorToggleThicknessRounding)
+    to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
     WRITE("Type", type)
     WRITE("Scale", scale)
 }
 
-static void to_json(json& j, const Shared& o)
+static void to_json(json& j, const Shared& o, const Shared& dummy = {})
 {
-    const Shared dummy;
-
     WRITE("Enabled", enabled)
-    WRITE("Font", font)
-    WRITE("Snapline", snapline)
-    WRITE("Box", box)
-    WRITE("Name", name)
+    to_json(j["Font"], o.font, dummy.font);
+    to_json(j["Snapline"], o.snapline, dummy.snapline);
+    to_json(j["Box"], o.box, dummy.box);
+    to_json(j["Name"], o.name, dummy.name);
     WRITE("Text Cull Distance", textCullDistance)
 }
 
-static void to_json(json& j, const Player& o)
+static void to_json(json& j, const Player& o, const Player& dummy = {})
 {
-    const Player dummy;
-
-    WRITE_BASE(Shared)
-    WRITE("Weapon", weapon)
-    WRITE("Flash Duration", flashDuration)
+    to_json(j, static_cast<const Shared&>(o), dummy);
+    to_json(j["Weapon"], o.weapon, dummy.weapon);
+    to_json(j["Flash Duration"], o.flashDuration, dummy.flashDuration);
     WRITE("Audible Only", audibleOnly)
     WRITE("Spotted Only", spottedOnly)
-    WRITE("Skeleton", skeleton)
+    to_json(j["Skeleton"], o.skeleton, dummy.skeleton);
 }
 
-static void to_json(json& j, const Weapon& o)
+static void to_json(json& j, const Weapon& o, const Weapon& dummy = {})
 {
-    j = static_cast<Shared>(o);
-
-    const Weapon dummy;
-
-    WRITE("Ammo", ammo)
+    to_json(j, static_cast<const Shared&>(o), dummy);
+    to_json(j["Ammo"], o.ammo, dummy.ammo);
 }
 
-static void to_json(json& j, const Trail& o)
+static void to_json(json& j, const Trail& o, const Trail& dummy = {})
 {
-    j = static_cast<ColorToggleThickness>(o);
-
-    const Trail dummy;
-
+    to_json(j, static_cast<const ColorToggleThickness&>(o), dummy);
     WRITE("Type", type)
     WRITE("Time", time)
 }
 
-static void to_json(json& j, const Trails& o)
+static void to_json(json& j, const Trails& o, const Trails& dummy = {})
 {
-    const Trails dummy;
-
     WRITE("Enabled", enabled)
-    WRITE("Local Player", localPlayer)
-    WRITE("Allies", allies)
-    WRITE("Enemies", enemies)
+    to_json(j["Local Player"], o.localPlayer, dummy.localPlayer);
+    to_json(j["Allies"], o.allies, dummy.allies);
+    to_json(j["Enemies"], o.enemies, dummy.enemies);
 }
 
-static void to_json(json& j, const Projectile& o)
+static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
 {
-    j = static_cast<Shared>(o);
+    j = static_cast<const Shared&>(o);
 
-    const Projectile dummy;
-
-    WRITE("Trails", trails)
+    to_json(j["Trails"], o.trails, dummy.trails);
 }
 
 static void to_json(json& j, const ImVec2& o)
@@ -784,30 +774,23 @@ static void to_json(json& j, const Config::Chams::Material& o)
 
 static void to_json(json& j, const Config::Chams& o)
 {
-    const Config::Chams dummy;
+    const Config::Chams::Material dummy;
 
-    j = o.materials;
-}
-
-template <typename T>
-static void save_map(json& j, const char* name, const std::unordered_map<std::string, T>& map)
-{
-    const T dummy;
-
-    for (const auto& [key, value] : map) {
-        if (!(value == dummy))
-            j[name][key] = value;
+    std::size_t i = 0;
+    for (const auto& mat : o.materials) {
+        j["Materials"][i] = o.materials[i];
+        ++i;
     }
 }
 
 static void to_json(json& j, const Config::StreamProofESP& o)
 {
-    save_map(j, "Allies", o.allies);
-    save_map(j, "Enemies", o.enemies);
-    save_map(j, "Weapons", o.weapons);
-    save_map(j, "Projectiles", o.projectiles);
-    save_map(j, "Loot Crates", o.lootCrates);
-    save_map(j, "Other Entities", o.otherEntities);
+    j["Allies"] = o.allies;
+    j["Enemies"] = o.enemies;
+    j["Weapons"] = o.weapons;
+    j["Projectiles"] = o.projectiles;
+    j["Loot Crates"] = o.lootCrates;
+    j["Other Entities"] = o.otherEntities;
 }
 
 static void to_json(json& j, const Config::Reportbot& o)
@@ -843,10 +826,8 @@ static void to_json(json& j, const Config::Sound& o)
     j["Players"] = o.players;
 }
 
-static void to_json(json& j, const PurchaseList& o)
+static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
 {
-    const PurchaseList dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Only During Freeze Time", onlyDuringFreezeTime)
     WRITE("Show Prices", showPrices)
@@ -918,13 +899,11 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
-    WRITE("Purchase List", purchaseList);
+    to_json(j["Purchase List"], o.purchaseList, dummy.purchaseList);
 }
 
-static void to_json(json& j, const Config::Visuals::ColorCorrection& o)
+static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
 {
-    const Config::Visuals::ColorCorrection dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Blue", blue)
     WRITE("Red", red)
@@ -977,7 +956,8 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime)
     WRITE("Playermodel T", playerModelT)
     WRITE("Playermodel CT", playerModelCT)
-    WRITE("Color correction", colorCorrection)
+
+    to_json(j["Color correction"], o.colorCorrection, dummy.colorCorrection);
 }
 
 static void to_json(json& j, const ImVec4& o)
@@ -1034,6 +1014,19 @@ static void to_json(json& j, const item_setting& o)
     WRITE("Stickers", stickers)
 }
 
+void removeEmptyObjects(json& j) noexcept
+{
+    for (auto it = j.begin(); it != j.end();) {
+        auto& val = it.value();
+        if (val.is_object() || val.is_array() && it.key() == "Materials")
+            removeEmptyObjects(val);
+        if (val.empty())
+            it = j.erase(it);
+        else
+            ++it;
+    }
+}
+
 void Config::save(size_t id) const noexcept
 {
     std::error_code ec;
@@ -1056,6 +1049,7 @@ void Config::save(size_t id) const noexcept
         j["Style"] = style;
         j["Skin changer"] = skinChanger;
 
+        removeEmptyObjects(j);
         out << std::setw(2) << j;
     }
 }
@@ -1089,7 +1083,6 @@ void Config::reset() noexcept
     backtrack = { };
     glow = { };
     chams = { };
-    esp = { };
     streamProofESP = { };
     visuals = { };
     skinChanger = { };

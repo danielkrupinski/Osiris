@@ -86,9 +86,6 @@
     <ClCompile Include="Hacks\Visuals.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Esp.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\SkinChanger.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -309,9 +306,6 @@
     </ClInclude>
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Esp.h">
-      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\SkinChanger.h">
       <Filter>Hacks</Filter>

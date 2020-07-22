@@ -23,6 +23,7 @@
 #include "../SDK/WeaponSystem.h"
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
+#include "../Helpers.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -80,10 +81,11 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
     if (tagChanged) {
         clanTag = config->misc.clanTag;
-        if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
+        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
             clanTag.push_back(' ');
+        return;
     }
-
+    
     static auto lastTime = 0.0f;
 
     if (config->misc.clocktag) {
@@ -101,10 +103,11 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (memory->globalVars->realtime - lastTime < 0.6f)
             return;
 
-        // TODO: support UTF-8 string rotation
-        if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
-
+        if (config->misc.animatedClanTag && !clanTag.empty()) {
+            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
+            if (offset != -1)
+                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+        }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
     }
@@ -179,7 +182,7 @@ void Misc::watermark() noexcept
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
-        std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1 / frameRate)) };
+        std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
         const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
         interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces->surface->printText(fps.c_str());
