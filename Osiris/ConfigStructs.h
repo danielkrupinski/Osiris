@@ -47,12 +47,6 @@ struct ColorToggleRounding : ColorToggle {
 
 struct ColorToggleThicknessRounding : ColorToggleRounding {
     float thickness = 1.0f;
-
-    auto operator==(const ColorToggleThicknessRounding& cttr) const
-    {
-        return static_cast<const ColorToggleRounding&>(*this) == static_cast<const ColorToggleRounding&>(cttr)
-            && thickness == cttr.thickness;
-    }
 };
 
 struct Font {
