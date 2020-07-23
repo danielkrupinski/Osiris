@@ -74,12 +74,6 @@ struct Snapline : ColorToggleThickness {
     };
 
     int type = Bottom;
-
-    auto operator==(const Snapline& s) const
-    {
-        return static_cast<const ColorToggleThickness&>(*this) == static_cast<const ColorToggleThickness&>(s)
-            && type == s.type;
-    }
 };
 
 struct Box : ColorToggleThicknessRounding {
