@@ -108,16 +108,6 @@ struct Shared {
     Box box;
     ColorToggle name;
     float textCullDistance = 0.0f;
-
-    auto operator==(const Shared& s) const
-    {
-        return enabled == s.enabled
-            && font == s.font
-            && snapline == s.snapline
-            && box == s.box
-            && name == s.name
-            && textCullDistance == s.textCullDistance;
-    }
 };
 
 struct Bar : ColorToggleRounding {
