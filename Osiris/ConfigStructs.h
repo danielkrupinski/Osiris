@@ -15,12 +15,6 @@ struct ColorA {
 
 struct ColorToggle : ColorA {
     bool enabled = false;
-
-    auto operator==(const ColorToggle& ct) const
-    {
-        return static_cast<const ColorA&>(*this) == static_cast<const ColorA&>(ct)
-            && enabled == ct.enabled;
-    }
 };
 
 struct ColorToggleThickness : ColorToggle {
