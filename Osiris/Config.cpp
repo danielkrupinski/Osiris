@@ -579,13 +579,6 @@ void Config::load(size_t id) noexcept
 if (!(o.valueName == dummy.valueName)) \
     j[name] = o.valueName;
 
-// WRITE_BASE macro requires:
-// - json object named 'j'
-// - object to write to json named 'o'
-#define WRITE_BASE(structName) \
-if (!(static_cast<const structName&>(o) == static_cast<const structName&>(dummy))) \
-    j = static_cast<const structName&>(o);
-
 static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
 {
     WRITE("Color", color)
@@ -773,7 +766,7 @@ static void to_json(json& j, const Config::Glow& o)
 {
     const Config::Glow dummy;
 
-    WRITE_BASE(ColorA)
+    to_json(j, static_cast<const ColorA&>(o), dummy);
     WRITE("Enabled", enabled)
     WRITE("Health based", healthBased)
     WRITE("Style", style)
@@ -783,7 +776,7 @@ static void to_json(json& j, const Config::Chams::Material& o)
 {
     const Config::Chams::Material dummy;
 
-    WRITE_BASE(ColorA)
+    to_json(j, static_cast<const ColorA&>(o), dummy);
     WRITE("Enabled", enabled)
     WRITE("Health based", healthBased)
     WRITE("Blinking", blinking)
