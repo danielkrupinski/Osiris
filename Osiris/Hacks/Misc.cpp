@@ -758,3 +758,22 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::End();
     }
 }
+
+void Misc::showVelocity() noexcept
+{
+    if (!config->visuals.showvelocity.enabled || !localPlayer || !localPlayer->isAlive())
+        return;
+
+    float velocity = localPlayer->velocity().length2D();
+    std::wstring velocitywstr{ L"(" + std::to_wstring(static_cast<int>(velocity)) + L")" };
+
+    interfaces->surface->setTextFont(Surface::font);
+    if (config->visuals.showvelocity.rainbow)
+        interfaces->surface->setTextColor(rainbowColor(config->visuals.showvelocity.rainbowSpeed));
+    else
+        interfaces->surface->setTextColor((config->visuals.showvelocity.color));
+
+    const auto [width, height] = interfaces->surface->getScreenSize();
+    interfaces->surface->setTextPosition(width / 2 - 6, height - 200);
+    interfaces->surface->printText(velocitywstr);
+}
