@@ -92,13 +92,6 @@ struct Box : ColorToggleThicknessRounding {
 
     int type = _2d;
     std::array<float, 3> scale{ 0.25f, 0.25f, 0.25f };
-
-    auto operator==(const Box& b) const
-    {
-        return static_cast<const ColorToggleThicknessRounding&>(*this) == static_cast<const ColorToggleThicknessRounding&>(b)
-            && type == b.type
-            && scale == b.scale;
-    }
 };
 
 struct Shared {
