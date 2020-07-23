@@ -7,6 +7,7 @@
 #include <Windows.h>
 
 #include "Hooks/MinHook.h"
+#include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 
 struct SoundInfo;

@@ -1,8 +1,7 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
-#include <unordered_map>
+#include <memory>
 
 class MinHook {
 public:
@@ -10,26 +9,19 @@ public:
     void restore() noexcept {}
     void hookAt(std::size_t index, void* fun) noexcept;
 
-    template <typename T, std::size_t Idx, typename ...Args>
-    auto callOriginal(Args... args) const noexcept
+    template<typename T, std::size_t Idx, typename ...Args>
+    constexpr auto getOriginal(Args... args) const noexcept
     {
-        const auto it = originals.find(Idx);
-        if (it != originals.cend())
-            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(it->second)(base, args...);
-        assert(false);
-        std::exit(1);
+        return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[Idx]);
     }
 
-    template <typename T, typename ...Args>
-    auto getOriginal(std::size_t index, Args... args) const noexcept
+    template<typename T, std::size_t Idx, typename ...Args>
+    constexpr auto callOriginal(Args... args) const noexcept
     {
-        const auto it = originals.find(index);
-        if (it != originals.cend())
-            return reinterpret_cast<T(__thiscall*)(void*, Args...)>(it->second);
-        assert(false);
-        std::exit(1);
+        return getOriginal<T, Idx>(args...)(base, args...);
     }
+
 private:
     void* base;
-    std::unordered_map<std::size_t, uintptr_t> originals;
+    std::unique_ptr<uintptr_t[]> originals;
 };

@@ -21,9 +21,6 @@
     <Filter Include="nSkinz">
       <UniqueIdentifier>{6f9a1532-1c54-4497-8809-a84d6dfcb206}</UniqueIdentifier>
     </Filter>
-    <Filter Include="json">
-      <UniqueIdentifier>{a5ac10c7-4d96-4bca-80b2-b5e98f0d672a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MinHook">
       <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
     </Filter>
@@ -89,9 +86,6 @@
     <ClCompile Include="Hacks\Visuals.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Esp.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\SkinChanger.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -109,9 +103,6 @@
     </ClCompile>
     <ClCompile Include="nSkinz\Utilities\Platform.cpp">
       <Filter>nSkinz</Filter>
-    </ClCompile>
-    <ClCompile Include="jsoncpp.cpp">
-      <Filter>json</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
@@ -316,9 +307,6 @@
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Esp.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\SkinChanger.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -354,12 +342,6 @@
     </ClInclude>
     <ClInclude Include="SDK\ConVar.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="json\json.h">
-      <Filter>json</Filter>
-    </ClInclude>
-    <ClInclude Include="json\json-forwards.h">
-      <Filter>json</Filter>
     </ClInclude>
     <ClInclude Include="SDK\SoundInfo.h">
       <Filter>SDK</Filter>

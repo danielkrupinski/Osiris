@@ -30,8 +30,8 @@ ImWchar* Helpers::getFontGlyphRanges() noexcept
     static ImVector<ImWchar> ranges;
     if (ranges.empty()) {
         ImFontGlyphRangesBuilder builder;
-        constexpr ImWchar latinExtended[]{ 0x0100, 0x024F, 0 };
-        builder.AddRanges(latinExtended);
+        constexpr ImWchar baseRanges[]{ 0x0100, 0x024F, 0x0370, 0x03FF, 0x0600, 0x06FF, 0x0E00, 0x0E7F, 0 };
+        builder.AddRanges(baseRanges);
         builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
         builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesChineseSimplifiedCommon());
         builder.AddText("\u9F8D\u738B\u2122");

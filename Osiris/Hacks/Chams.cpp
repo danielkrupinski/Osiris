@@ -106,26 +106,26 @@ void Chams::renderPlayer(Entity* player) noexcept
 
     const auto health = player->health();
 
-    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::any_of(config->chams[PLANTING].materials.cbegin(), config->chams[PLANTING].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(config->chams[PLANTING].materials, health);
-    } else if (player->isDefusing() && std::any_of(config->chams[DEFUSING].materials.cbegin(), config->chams[DEFUSING].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
-        applyChams(config->chams[DEFUSING].materials, health);
+    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::any_of(config->chams["Planting"].materials.cbegin(), config->chams["Planting"].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+        applyChams(config->chams["Planting"].materials, health);
+    } else if (player->isDefusing() && std::any_of(config->chams["Defusing"].materials.cbegin(), config->chams["Defusing"].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+        applyChams(config->chams["Defusing"].materials, health);
     } else if (player == localPlayer.get()) {
-        applyChams(config->chams[LOCALPLAYER].materials, health);
+        applyChams(config->chams["Local player"].materials, health);
     } else if (localPlayer->isOtherEnemy(player)) {
-        applyChams(config->chams[ENEMIES].materials, health);
+        applyChams(config->chams["Enemies"].materials, health);
 
         if (config->backtrack.enabled) {
             auto record = &Backtrack::records[player->index()];
             if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
                 if (!appliedChams)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams[BACKTRACK].materials, health, record->back().matrix);
+                applyChams(config->chams["Backtrack"].materials, health, record->back().matrix);
                 interfaces->studioRender->forcedMaterialOverride(nullptr);
             }
         }
     } else {
-        applyChams(config->chams[ALLIES].materials, health);
+        applyChams(config->chams["Allies"].materials, health);
     }
 }
 
@@ -134,7 +134,7 @@ void Chams::renderWeapons() noexcept
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->isScoped())
         return;
 
-    applyChams(config->chams[WEAPONS].materials, localPlayer->health());
+    applyChams(config->chams["Weapons"].materials, localPlayer->health());
 }
 
 void Chams::renderHands() noexcept
@@ -142,7 +142,7 @@ void Chams::renderHands() noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    applyChams(config->chams[HANDS].materials, localPlayer->health());
+    applyChams(config->chams["Hands"].materials, localPlayer->health());
 }
 
 void Chams::renderSleeves() noexcept
@@ -150,7 +150,7 @@ void Chams::renderSleeves() noexcept
     if (!localPlayer || !localPlayer->isAlive())
         return;
 
-    applyChams(config->chams[SLEEVES].materials, localPlayer->health());
+    applyChams(config->chams["Sleeves"].materials, localPlayer->health());
 }
 
 void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int health, matrix3x4* customMatrix) noexcept
