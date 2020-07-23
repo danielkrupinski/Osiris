@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
 #include <memory>
 
@@ -16,10 +15,10 @@ public:
         return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[Idx])(base, args...);
     }
 
-    template <typename T, typename ...Args>
-    auto getOriginal(std::size_t index, Args... args) const noexcept
+    template <typename T, std::size_t Idx, typename ...Args>
+    auto getOriginal(Args... args) const noexcept
     {
-        return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[index]);
+        return reinterpret_cast<T(__thiscall*)(void*, Args...)>(originals[Idx]);
     }
 private:
     void* base;
