@@ -58,12 +58,6 @@ struct ColorToggleThicknessRounding : ColorToggleRounding {
 struct Font {
     int index = 0; // do not save
     std::string name;
-
-    auto operator==(const Font& f) const
-    {
-        return index == f.index
-            && name == f.name;
-    }
 };
 
 struct Snapline : ColorToggleThickness {
