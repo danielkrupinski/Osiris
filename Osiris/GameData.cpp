@@ -308,6 +308,8 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
     if (!entity->setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
         return;
 
+    bones.reserve(20);
+
     for (int i = 0; i < studioModel->numBones; ++i) {
         const auto bone = studioModel->getBone(i);
 
