@@ -830,6 +830,24 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             ImGui::Checkbox("Audible Only", &playerConfig.audibleOnly);
             ImGui::SameLine(spacing);
             ImGui::Checkbox("Spotted Only", &playerConfig.spottedOnly);
+
+            ImGuiCustom::colorPicker("Head Box", playerConfig.headBox);
+            ImGui::SameLine();
+
+            ImGui::PushID("Head Box");
+
+            if (ImGui::Button("..."))
+                ImGui::OpenPopup("");
+
+            if (ImGui::BeginPopup("")) {
+                ImGui::SetNextItemWidth(95.0f);
+                ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
+                ImGui::SetNextItemWidth(275.0f);
+                ImGui::SliderFloat3("Scale", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
+                ImGui::EndPopup();
+            }
+
+            ImGui::PopID();
         } else if (currentCategory == 2) {
             auto& weaponConfig = config->streamProofESP.weapons[currentItem];
             ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
