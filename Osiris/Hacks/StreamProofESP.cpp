@@ -364,6 +364,9 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
     renderPlayerBox(playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
 
+    if (const BoundingBox headBbox{ playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale })
+        renderBox(headBbox, playerConfig.headBox);
+
     return true;
 }
 

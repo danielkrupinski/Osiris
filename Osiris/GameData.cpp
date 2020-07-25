@@ -318,6 +318,20 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 
         bones.emplace_back(boneMatrices[i].origin(), boneMatrices[bone->parent].origin());
     }
+
+    const auto set = studioModel->getHitboxSet(entity->hitboxSet());
+    if (!set)
+        return;
+
+    const auto headBox = set->getHitbox(0);
+
+    headMins = headBox->bbMin.transform(boneMatrices[headBox->bone]);
+    headMaxs = headBox->bbMax.transform(boneMatrices[headBox->bone]);
+
+    if (headBox->capsuleRadius > 0.0f) {
+        headMins -= headBox->capsuleRadius;
+        headMaxs += headBox->capsuleRadius;
+    }
 }
 
 WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
