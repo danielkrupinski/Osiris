@@ -67,7 +67,7 @@ static void read(const json& j, const char* key, T& o) noexcept
         return;
 
     if (const auto& val = j[key]; val.type() == Type)
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -82,7 +82,7 @@ static void read_vector(const json& j, const char* key, std::vector<T>& o) noexc
             if (e.is_null())
                 continue;
 
-            o[i] = e;
+            e.get_to(o[i]);
             ++i;
         }
     }
@@ -95,7 +95,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
         return;
 
     if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -105,7 +105,7 @@ static void read_number(const json& j, const char* key, T& o) noexcept
         return;
 
     if (const auto& val = j[key]; val.is_number())
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -113,7 +113,7 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
 {
     if (j.contains(key) && j[key].is_object()) {
         for (auto& element : j[key].items())
-            o[element.key()] = static_cast<const T&>(element.value());
+            element.value().get_to(o[element.key()]);
     }
 }
 
