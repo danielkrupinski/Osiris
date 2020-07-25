@@ -1013,6 +1013,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
+        static ImGuiTextFilter filter;
+        filter.Draw( );
+        
         if ( ImGui::ListBoxHeader( "Paint Kit" ) ) {
             for ( int i = 0; i < ( itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits ).size( ); ++i ) {
                 if ( filter.PassFilter( ( itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits )[ i ].name.c_str( ) ) )
