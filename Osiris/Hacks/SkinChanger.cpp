@@ -52,6 +52,10 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
+    // this makes skins with same names work when selecting them
+    for ( size_t i = 0; i < skinKits.size( ); ++i ) skinKits.at( i ).name += "###" + std::to_string( i );
+    for ( size_t i = 0; i < gloveKits.size( ); ++i ) gloveKits.at( i ).name += "###" + std::to_string( i );
+    
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastElement; i++) {
         const auto stickerKit = memory->itemSystem()->getItemSchema()->stickerKits.memory[i].value;
         stickerKits.emplace_back(stickerKit->id, interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold"));
