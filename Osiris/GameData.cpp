@@ -308,6 +308,8 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
     if (!entity->setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
         return;
 
+    bones.reserve(20);
+
     for (int i = 0; i < studioModel->numBones; ++i) {
         const auto bone = studioModel->getBone(i);
 
@@ -315,6 +317,20 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
             continue;
 
         bones.emplace_back(boneMatrices[i].origin(), boneMatrices[bone->parent].origin());
+    }
+
+    const auto set = studioModel->getHitboxSet(entity->hitboxSet());
+    if (!set)
+        return;
+
+    const auto headBox = set->getHitbox(0);
+
+    headMins = headBox->bbMin.transform(boneMatrices[headBox->bone]);
+    headMaxs = headBox->bbMax.transform(boneMatrices[headBox->bone]);
+
+    if (headBox->capsuleRadius > 0.0f) {
+        headMins -= headBox->capsuleRadius;
+        headMaxs += headBox->capsuleRadius;
     }
 }
 
