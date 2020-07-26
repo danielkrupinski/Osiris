@@ -1014,9 +1014,9 @@ void removeEmptyObjects(json& j) noexcept
 {
     for (auto it = j.begin(); it != j.end();) {
         auto& val = it.value();
-        if (val.is_object() || val.is_array() && it.key() == "Materials")
+        if (val.is_object() || val.is_array())
             removeEmptyObjects(val);
-        if (val.empty())
+        if (val.empty() && !j.is_array())
             it = j.erase(it);
         else
             ++it;
