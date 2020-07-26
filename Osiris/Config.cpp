@@ -783,13 +783,7 @@ static void to_json(json& j, const Config::Chams::Material& o)
 
 static void to_json(json& j, const Config::Chams& o)
 {
-    const Config::Chams::Material dummy;
-
-    std::size_t i = 0;
-    for (const auto& mat : o.materials) {
-        j["Materials"][i] = o.materials[i];
-        ++i;
-    }
+    j["Materials"] = o.materials;
 }
 
 static void to_json(json& j, const Config::StreamProofESP& o)
