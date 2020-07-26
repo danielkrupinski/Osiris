@@ -691,18 +691,14 @@ static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
     to_json(j["Trails"], o.trails, dummy.trails);
 }
 
-static void to_json(json& j, const ImVec2& o)
+static void to_json(json& j, const ImVec2& o, const ImVec2& dummy = {})
 {
-    const ImVec2 dummy;
-
     WRITE("X", x)
     WRITE("Y", y)
 }
 
-static void to_json(json& j, const Config::Aimbot& o)
+static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dummy = {})
 {
-    const Config::Aimbot dummy;
-
     WRITE("Enabled", enabled)
     WRITE("On key", onKey)
     WRITE("Key", key)
@@ -726,10 +722,8 @@ static void to_json(json& j, const Config::Aimbot& o)
     WRITE("Between shots", betweenShots)
 }
 
-static void to_json(json& j, const Config::Triggerbot& o)
+static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
 {
-    const Config::Triggerbot dummy;
-
     WRITE("Enabled", enabled)
     WRITE("On key", onKey)
     WRITE("Key", key)
@@ -744,30 +738,24 @@ static void to_json(json& j, const Config::Triggerbot& o)
     WRITE("Burst Time", burstTime)
 }
 
-static void to_json(json& j, const Config::Backtrack& o)
+static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack& dummy = {})
 {
-    const Config::Backtrack dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Ignore smoke", ignoreSmoke)
     WRITE("Recoil based fov", recoilBasedFov)
     WRITE("Time limit", timeLimit)
 }
 
-static void to_json(json& j, const Config::AntiAim& o)
+static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
 {
-    const Config::AntiAim dummy;
-
     WRITE("Enabled", enabled)
     WRITE("Pitch", pitch)
     WRITE("Pitch angle", pitchAngle)
     WRITE("Yaw", yaw)
 }
 
-static void to_json(json& j, const Config::Glow& o)
+static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
 {
-    const Config::Glow dummy;
-
     to_json(j, static_cast<const ColorA&>(o), dummy);
     WRITE("Enabled", enabled)
     WRITE("Health based", healthBased)
