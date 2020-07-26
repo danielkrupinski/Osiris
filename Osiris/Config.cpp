@@ -331,7 +331,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
 static void from_json(const json& j, Config::Chams& c)
 {
-    read_vector(j, "Materials", c.materials);
+    read<value_t::array>(j, "Materials", c.materials);
 }
 
 static void from_json(const json& j, Config::StreamProofESP& e)

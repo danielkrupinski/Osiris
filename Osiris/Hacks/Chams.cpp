@@ -153,7 +153,7 @@ void Chams::renderSleeves() noexcept
     applyChams(config->chams["Sleeves"].materials, localPlayer->health());
 }
 
-void Chams::applyChams(const std::vector<Config::Chams::Material>& chams, int health, matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)
