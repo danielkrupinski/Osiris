@@ -587,8 +587,8 @@ static void to_json(json& j, const T& o, const T& dummy)
 
 static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
 {
-    to_json(j["Color"], o.color, dummy.color);
-    to_json(j["Rainbow"], o.rainbow, dummy.rainbow);
+    WRITE("Color", color);
+    WRITE("Rainbow", rainbow);
     WRITE("Rainbow Speed", rainbowSpeed);
 }
 
@@ -874,8 +874,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reveal ranks", revealRanks);
     WRITE("Reveal money", revealMoney);
     WRITE("Reveal suspect", revealSuspect);
-    to_json(j["Spectator list"], o.spectatorList, dummy.spectatorList);
-    to_json(j["Watermark"], o.watermark, dummy.watermark);
+    WRITE("Spectator list", spectatorList);
+    WRITE("Watermark", watermark);
     WRITE("Fix animation LOD", fixAnimationLOD);
     WRITE("Fix bone matrix", fixBoneMatrix);
     WRITE("Fix movement", fixMovement);
@@ -888,7 +888,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
-    to_json(j["Bomb timer"], o.bombTimer, dummy.bombTimer);
+    WRITE("Bomb timer", bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
@@ -904,7 +904,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
-    to_json(j["Purchase List"], o.purchaseList, dummy.purchaseList);
+    WRITE("Purchase List", purchaseList);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
