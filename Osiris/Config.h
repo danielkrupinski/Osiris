@@ -107,7 +107,7 @@ public:
             bool ignorez = false;
             int material = 0;
         };
-        std::vector<Material> materials{ {}, {}, {}, {} };
+        std::array<Material, 7> materials;
     };
 
     std::unordered_map<std::string, Chams> chams;
