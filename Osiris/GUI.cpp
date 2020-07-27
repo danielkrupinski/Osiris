@@ -1018,15 +1018,44 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
+
+            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
+            const std::locale original;
+            if (!filter.empty())
+                std::locale::global(std::locale{ "en_US.utf8" });
+
+            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+
             for (std::size_t i = 0; i < kits.size(); ++i) {
-                // TODO: support UTF-8 case-insensitive search
-                if (kits[i].name.find(filter) != std::string::npos) {
+                bool passedTheFilter = filter.empty();
+
+                if (!passedTheFilter) {
+                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filter.length();) {
+                        wchar_t w;
+                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
+                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
+                        const auto upper1 = facet.toupper(w);
+                        mbstowcs(&w, filter.c_str() + j2, 1);
+                        j2 += Helpers::utf8SeqLen(filter[j2]);
+                        const auto upper2 = facet.toupper(w);
+
+                        if (upper1 != upper2)
+                            j2 = 0;
+
+                        if (j2 >= filter.length())
+                            passedTheFilter = true;
+                    }
+                }
+
+                if (passedTheFilter) {
                     ImGui::PushID(i);
                     if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
                         selected_entry.paint_kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
+
+            std::locale::global(original);
             ImGui::ListBoxFooter();
         }
 
