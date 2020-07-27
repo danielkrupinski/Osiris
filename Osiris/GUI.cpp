@@ -988,7 +988,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (!window.skinChanger)
             return;
         ImGui::SetNextWindowSize({ 700.0f, 0.0f });
-        ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
+        ImGui::Begin("Skin changer", &window.skinChanger, windowFlags);
     }
 
     static auto itemIndex = 0;
