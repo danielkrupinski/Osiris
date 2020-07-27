@@ -1013,10 +1013,22 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
-        ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
-            return true;
-            }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
+        static std::string filter;
+        ImGui::InputTextWithHint("", "Search", &filter);
+
+        if (ImGui::ListBoxHeader("Paint Kit")) {
+            const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
+            for (std::size_t i = 0; i < kits.size(); ++i) {
+                // TODO: support UTF-8 case-insensitive search
+                if (kits[i].name.find(filter) != std::string::npos) {
+                    ImGui::PushID(i);
+                    if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
+                        selected_entry.paint_kit_vector_index = i;
+                    ImGui::PopID();
+                }
+            }
+            ImGui::ListBoxFooter();
+        }
 
         ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
             *out_text = game_data::quality_names[idx].name;
