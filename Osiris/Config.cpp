@@ -67,7 +67,7 @@ static void read(const json& j, const char* key, T& o) noexcept
         return;
 
     if (const auto& val = j[key]; val.type() == Type)
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -82,7 +82,7 @@ static void read_vector(const json& j, const char* key, std::vector<T>& o) noexc
             if (e.is_null())
                 continue;
 
-            o[i] = e;
+            e.get_to(o[i]);
             ++i;
         }
     }
@@ -95,7 +95,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
         return;
 
     if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -105,7 +105,7 @@ static void read_number(const json& j, const char* key, T& o) noexcept
         return;
 
     if (const auto& val = j[key]; val.is_number())
-        o = val;
+        val.get_to(o);
 }
 
 template <typename T>
@@ -113,7 +113,7 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
 {
     if (j.contains(key) && j[key].is_object()) {
         for (auto& element : j[key].items())
-            o[element.key()] = static_cast<const T&>(element.value());
+            element.value().get_to(o[element.key()]);
     }
 }
 
@@ -331,7 +331,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
 static void from_json(const json& j, Config::Chams& c)
 {
-    read_vector(j, "Materials", c.materials);
+    read<value_t::array>(j, "Materials", c.materials);
 }
 
 static void from_json(const json& j, Config::StreamProofESP& e)
@@ -576,202 +576,195 @@ void Config::load(size_t id) noexcept
 // - json object named 'j'
 // - object holding default values named 'dummy'
 // - object to write to json named 'o'
-#define WRITE(name, valueName) \
-if (!(o.valueName == dummy.valueName)) \
-    j[name] = o.valueName;
+#define WRITE(name, valueName) to_json(j[name], o.valueName, dummy.valueName)
+
+template <typename T>
+static void to_json(json& j, const T& o, const T& dummy)
+{
+    if (o != dummy)
+        j = o;
+}
 
 static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
 {
-    WRITE("Color", color)
-    WRITE("Rainbow", rainbow)
-    WRITE("Rainbow Speed", rainbowSpeed)
+    WRITE("Color", color);
+    WRITE("Rainbow", rainbow);
+    WRITE("Rainbow Speed", rainbowSpeed);
 }
 
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
     to_json(j, static_cast<const ColorA&>(o), dummy);
-    WRITE("Enabled", enabled)
+    WRITE("Enabled", enabled);
 }
 
 static void to_json(json& j, const Config::Color& o, const Config::Color& dummy = {})
 {
-    WRITE("Color", color)
-    WRITE("Rainbow", rainbow)
-    WRITE("Rainbow Speed", rainbowSpeed)
+    WRITE("Color", color);
+    WRITE("Rainbow", rainbow);
+    WRITE("Rainbow Speed", rainbowSpeed);
 }
 
 static void to_json(json& j, const Config::ColorToggle& o, const Config::ColorToggle& dummy = {})
 {
     to_json(j, static_cast<const Config::Color&>(o), dummy);
-    WRITE("Enabled", enabled)
+    WRITE("Enabled", enabled);
 }
 
 static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
 {
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
-    WRITE("Rounding", rounding)
+    WRITE("Rounding", rounding);
 }
 
 static void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness& dummy = {})
 {
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
-    WRITE("Thickness", thickness)
+    WRITE("Thickness", thickness);
 }
 
 static void to_json(json& j, const ColorToggleThicknessRounding& o, const ColorToggleThicknessRounding& dummy = {})
 {
     to_json(j, static_cast<const ColorToggleRounding&>(o), dummy);
-    WRITE("Thickness", thickness)
+    WRITE("Thickness", thickness);
 }
 
 static void to_json(json& j, const Font& o, const Font& dummy = {})
 {
-    WRITE("Name", name)
+    WRITE("Name", name);
 }
 
 static void to_json(json& j, const Snapline& o, const Snapline& dummy = {})
 {
     to_json(j, static_cast<const ColorToggleThickness&>(o), dummy);
-    WRITE("Type", type)
+    WRITE("Type", type);
 }
 
 static void to_json(json& j, const Box& o, const Box& dummy = {})
 {
     to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
-    WRITE("Type", type)
-    WRITE("Scale", scale)
+    WRITE("Type", type);
+    WRITE("Scale", scale);
 }
 
 static void to_json(json& j, const Shared& o, const Shared& dummy = {})
 {
-    WRITE("Enabled", enabled)
-    to_json(j["Font"], o.font, dummy.font);
-    to_json(j["Snapline"], o.snapline, dummy.snapline);
-    to_json(j["Box"], o.box, dummy.box);
-    to_json(j["Name"], o.name, dummy.name);
-    WRITE("Text Cull Distance", textCullDistance)
+    WRITE("Enabled", enabled);
+    WRITE("Font", font);
+    WRITE("Snapline", snapline);
+    WRITE("Box", box);
+    WRITE("Name", name);
+    WRITE("Text Cull Distance", textCullDistance);
 }
 
 static void to_json(json& j, const Player& o, const Player& dummy = {})
 {
     to_json(j, static_cast<const Shared&>(o), dummy);
-    to_json(j["Weapon"], o.weapon, dummy.weapon);
-    to_json(j["Flash Duration"], o.flashDuration, dummy.flashDuration);
-    WRITE("Audible Only", audibleOnly)
-    WRITE("Spotted Only", spottedOnly)
-    to_json(j["Skeleton"], o.skeleton, dummy.skeleton);
-    to_json(j["Head Box"], o.headBox, dummy.headBox);
+    WRITE("Weapon", weapon);
+    WRITE("Flash Duration", flashDuration);
+    WRITE("Audible Only", audibleOnly);
+    WRITE("Spotted Only", spottedOnly);
+    WRITE("Skeleton", skeleton);
+    WRITE("Head Box", headBox);
 }
 
 static void to_json(json& j, const Weapon& o, const Weapon& dummy = {})
 {
     to_json(j, static_cast<const Shared&>(o), dummy);
-    to_json(j["Ammo"], o.ammo, dummy.ammo);
+    WRITE("Ammo", ammo);
 }
 
 static void to_json(json& j, const Trail& o, const Trail& dummy = {})
 {
     to_json(j, static_cast<const ColorToggleThickness&>(o), dummy);
-    WRITE("Type", type)
-    WRITE("Time", time)
+    WRITE("Type", type);
+    WRITE("Time", time);
 }
 
 static void to_json(json& j, const Trails& o, const Trails& dummy = {})
 {
-    WRITE("Enabled", enabled)
-    to_json(j["Local Player"], o.localPlayer, dummy.localPlayer);
-    to_json(j["Allies"], o.allies, dummy.allies);
-    to_json(j["Enemies"], o.enemies, dummy.enemies);
+    WRITE("Enabled", enabled);
+    WRITE("Local Player", localPlayer);
+    WRITE("Allies", allies);
+    WRITE("Enemies", enemies);
 }
 
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
 {
     j = static_cast<const Shared&>(o);
 
-    to_json(j["Trails"], o.trails, dummy.trails);
+    WRITE("Trails", trails);
 }
 
-static void to_json(json& j, const ImVec2& o)
+static void to_json(json& j, const ImVec2& o, const ImVec2& dummy = {})
 {
-    const ImVec2 dummy;
-
-    WRITE("X", x)
-    WRITE("Y", y)
+    WRITE("X", x);
+    WRITE("Y", y);
 }
 
-static void to_json(json& j, const Config::Aimbot& o)
+static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dummy = {})
 {
-    const Config::Aimbot dummy;
-
-    WRITE("Enabled", enabled)
-    WRITE("On key", onKey)
-    WRITE("Key", key)
-    WRITE("Key mode", keyMode)
-    WRITE("Aimlock", aimlock)
-    WRITE("Silent", silent)
-    WRITE("Friendly fire", friendlyFire)
-    WRITE("Visible only", visibleOnly)
-    WRITE("Scoped only", scopedOnly)
-    WRITE("Ignore flash", ignoreFlash)
-    WRITE("Ignore smoke", ignoreSmoke)
-    WRITE("Auto shot", autoShot)
-    WRITE("Auto scope", autoScope)
-    WRITE("Fov", fov)
-    WRITE("Smooth", smooth)
-    WRITE("Bone", bone)
-    WRITE("Max aim inaccuracy", maxAimInaccuracy)
-    WRITE("Max shot inaccuracy", maxShotInaccuracy)
-    WRITE("Min damage", minDamage)
-    WRITE("Killshot", killshot)
-    WRITE("Between shots", betweenShots)
+    WRITE("Enabled", enabled);
+    WRITE("On key", onKey);
+    WRITE("Key", key);
+    WRITE("Key mode", keyMode);
+    WRITE("Aimlock", aimlock);
+    WRITE("Silent", silent);
+    WRITE("Friendly fire", friendlyFire);
+    WRITE("Visible only", visibleOnly);
+    WRITE("Scoped only", scopedOnly);
+    WRITE("Ignore flash", ignoreFlash);
+    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Auto shot", autoShot);
+    WRITE("Auto scope", autoScope);
+    WRITE("Fov", fov);
+    WRITE("Smooth", smooth);
+    WRITE("Bone", bone);
+    WRITE("Max aim inaccuracy", maxAimInaccuracy);
+    WRITE("Max shot inaccuracy", maxShotInaccuracy);
+    WRITE("Min damage", minDamage);
+    WRITE("Killshot", killshot);
+    WRITE("Between shots", betweenShots);
 }
 
-static void to_json(json& j, const Config::Triggerbot& o)
+static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
 {
-    const Config::Triggerbot dummy;
-
-    WRITE("Enabled", enabled)
-    WRITE("On key", onKey)
-    WRITE("Key", key)
-    WRITE("Friendly fire", friendlyFire)
-    WRITE("Scoped only", scopedOnly)
-    WRITE("Ignore flash", ignoreFlash)
-    WRITE("Ignore smoke", ignoreSmoke)
-    WRITE("Hitgroup", hitgroup)
-    WRITE("Shot delay", shotDelay)
-    WRITE("Min damage", minDamage)
-    WRITE("Killshot", killshot)
-    WRITE("Burst Time", burstTime)
+    WRITE("Enabled", enabled);
+    WRITE("On key", onKey);
+    WRITE("Key", key);
+    WRITE("Friendly fire", friendlyFire);
+    WRITE("Scoped only", scopedOnly);
+    WRITE("Ignore flash", ignoreFlash);
+    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Hitgroup", hitgroup);
+    WRITE("Shot delay", shotDelay);
+    WRITE("Min damage", minDamage);
+    WRITE("Killshot", killshot);
+    WRITE("Burst Time", burstTime);
 }
 
-static void to_json(json& j, const Config::Backtrack& o)
+static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack& dummy = {})
 {
-    const Config::Backtrack dummy;
-
-    WRITE("Enabled", enabled)
-    WRITE("Ignore smoke", ignoreSmoke)
-    WRITE("Recoil based fov", recoilBasedFov)
-    WRITE("Time limit", timeLimit)
+    WRITE("Enabled", enabled);
+    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Recoil based fov", recoilBasedFov);
+    WRITE("Time limit", timeLimit);
 }
 
-static void to_json(json& j, const Config::AntiAim& o)
+static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
 {
-    const Config::AntiAim dummy;
-
-    WRITE("Enabled", enabled)
-    WRITE("Pitch", pitch)
-    WRITE("Pitch angle", pitchAngle)
-    WRITE("Yaw", yaw)
+    WRITE("Enabled", enabled);
+    WRITE("Pitch", pitch);
+    WRITE("Pitch angle", pitchAngle);
+    WRITE("Yaw", yaw);
 }
 
-static void to_json(json& j, const Config::Glow& o)
+static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
 {
-    const Config::Glow dummy;
-
     to_json(j, static_cast<const ColorA&>(o), dummy);
-    WRITE("Enabled", enabled)
-    WRITE("Health based", healthBased)
-    WRITE("Style", style)
+    WRITE("Enabled", enabled);
+    WRITE("Health based", healthBased);
+    WRITE("Style", style);
 }
 
 static void to_json(json& j, const Config::Chams::Material& o)
@@ -779,24 +772,18 @@ static void to_json(json& j, const Config::Chams::Material& o)
     const Config::Chams::Material dummy;
 
     to_json(j, static_cast<const ColorA&>(o), dummy);
-    WRITE("Enabled", enabled)
-    WRITE("Health based", healthBased)
-    WRITE("Blinking", blinking)
-    WRITE("Wireframe", wireframe)
-    WRITE("Cover", cover)
-    WRITE("Ignore-Z", ignorez)
-    WRITE("Material", material)
+    WRITE("Enabled", enabled);
+    WRITE("Health based", healthBased);
+    WRITE("Blinking", blinking);
+    WRITE("Wireframe", wireframe);
+    WRITE("Cover", cover);
+    WRITE("Ignore-Z", ignorez);
+    WRITE("Material", material);
 }
 
 static void to_json(json& j, const Config::Chams& o)
 {
-    const Config::Chams::Material dummy;
-
-    std::size_t i = 0;
-    for (const auto& mat : o.materials) {
-        j["Materials"][i] = o.materials[i];
-        ++i;
-    }
+    j["Materials"] = o.materials;
 }
 
 static void to_json(json& j, const Config::StreamProofESP& o)
@@ -813,42 +800,42 @@ static void to_json(json& j, const Config::Reportbot& o)
 {
     const Config::Reportbot dummy;
 
-    WRITE("Enabled", enabled)
-    WRITE("Target", target)
-    WRITE("Delay", delay)
-    WRITE("Rounds", rounds)
-    WRITE("Abusive Communications", textAbuse)
-    WRITE("Griefing", griefing)
-    WRITE("Wall Hacking", wallhack)
-    WRITE("Aim Hacking", aimbot)
-    WRITE("Other Hacking", other)
+    WRITE("Enabled", enabled);
+    WRITE("Target", target);
+    WRITE("Delay", delay);
+    WRITE("Rounds", rounds);
+    WRITE("Abusive Communications", textAbuse);
+    WRITE("Griefing", griefing);
+    WRITE("Wall Hacking", wallhack);
+    WRITE("Aim Hacking", aimbot);
+    WRITE("Other Hacking", other);
 }
 
 static void to_json(json& j, const Config::Sound::Player& o)
 {
     const Config::Sound::Player dummy;
 
-    WRITE("Master volume", masterVolume)
-    WRITE("Headshot volume", headshotVolume)
-    WRITE("Weapon volume", weaponVolume)
-    WRITE("Footstep volume", footstepVolume)
+    WRITE("Master volume", masterVolume);
+    WRITE("Headshot volume", headshotVolume);
+    WRITE("Weapon volume", weaponVolume);
+    WRITE("Footstep volume", footstepVolume);
 }
 
 static void to_json(json& j, const Config::Sound& o)
 {
     const Config::Sound dummy;
 
-    WRITE("Chicken volume", chickenVolume)
+    WRITE("Chicken volume", chickenVolume);
     j["Players"] = o.players;
 }
 
 static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
 {
-    WRITE("Enabled", enabled)
-    WRITE("Only During Freeze Time", onlyDuringFreezeTime)
-    WRITE("Show Prices", showPrices)
-    WRITE("No Title Bar", noTitleBar)
-    WRITE("Mode", mode)
+    WRITE("Enabled", enabled);
+    WRITE("Only During Freeze Time", onlyDuringFreezeTime);
+    WRITE("Show Prices", showPrices);
+    WRITE("No Title Bar", noTitleBar);
+    WRITE("Mode", mode);
 }
 
 static void to_json(json& j, const Config::Misc& o)
@@ -881,8 +868,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reveal ranks", revealRanks);
     WRITE("Reveal money", revealMoney);
     WRITE("Reveal suspect", revealSuspect);
-    to_json(j["Spectator list"], o.spectatorList, dummy.spectatorList);
-    to_json(j["Watermark"], o.watermark, dummy.watermark);
+    WRITE("Spectator list", spectatorList);
+    WRITE("Watermark", watermark);
     WRITE("Fix animation LOD", fixAnimationLOD);
     WRITE("Fix bone matrix", fixBoneMatrix);
     WRITE("Fix movement", fixMovement);
@@ -895,7 +882,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
-    to_json(j["Bomb timer"], o.bombTimer, dummy.bombTimer);
+    WRITE("Bomb timer", bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
     WRITE("Prepare revolver key", prepareRevolverKey);
@@ -911,63 +898,62 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
-    to_json(j["Purchase List"], o.purchaseList, dummy.purchaseList);
+    WRITE("Purchase List", purchaseList);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
 {
-    WRITE("Enabled", enabled)
-    WRITE("Blue", blue)
-    WRITE("Red", red)
-    WRITE("Mono", mono)
-    WRITE("Saturation", saturation)
-    WRITE("Ghost", ghost)
-    WRITE("Green", green)
-    WRITE("Yellow", yellow)  
+    WRITE("Enabled", enabled);
+    WRITE("Blue", blue);
+    WRITE("Red", red);
+    WRITE("Mono", mono);
+    WRITE("Saturation", saturation);
+    WRITE("Ghost", ghost);
+    WRITE("Green", green);
+    WRITE("Yellow", yellow);
 }
 
 static void to_json(json& j, const Config::Visuals& o)
 {
     const Config::Visuals dummy;
 
-    WRITE("Disable post-processing", disablePostProcessing)
-    WRITE("Inverse ragdoll gravity", inverseRagdollGravity)
-    WRITE("No fog", noFog)
-    WRITE("No 3d sky", no3dSky)
-    WRITE("No aim punch", noAimPunch)
-    WRITE("No view punch", noViewPunch)
-    WRITE("No hands", noHands)
-    WRITE("No sleeves", noSleeves)
-    WRITE("No weapons", noWeapons)
-    WRITE("No smoke", noSmoke)
-    WRITE("No blur", noBlur)
-    WRITE("No scope overlay", noScopeOverlay)
-    WRITE("No grass", noGrass)
-    WRITE("No shadows", noShadows)
-    WRITE("Wireframe smoke", wireframeSmoke)
-    WRITE("Zoom", noScopeOverlay)
-    WRITE("Zoom key", zoomKey)
-    WRITE("Thirdperson", thirdperson)
-    WRITE("Thirdperson key", thirdpersonKey)
-    WRITE("Thirdperson distance", thirdpersonDistance)
-    WRITE("Viewmodel FOV", viewmodelFov)
-    WRITE("FOV", fov)
-    WRITE("Far Z", farZ)
-    WRITE("Flash reduction", flashReduction)
-    WRITE("Brightness", brightness)
-    WRITE("Skybox", skybox)
-    to_json(j["World"], o.world, dummy.world);
-    to_json(j["Sky"], o.sky, dummy.sky);
-    WRITE("Deagle spinner", deagleSpinner)
-    WRITE("Screen effect", screenEffect)
-    WRITE("Hit effect", hitEffect)
-    WRITE("Hit effect time", hitEffectTime)
-    WRITE("Hit marker", hitMarker)
-    WRITE("Hit marker time", hitMarkerTime)
-    WRITE("Playermodel T", playerModelT)
-    WRITE("Playermodel CT", playerModelCT)
-
-    to_json(j["Color correction"], o.colorCorrection, dummy.colorCorrection);
+    WRITE("Disable post-processing", disablePostProcessing);
+    WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
+    WRITE("No fog", noFog);
+    WRITE("No 3d sky", no3dSky);
+    WRITE("No aim punch", noAimPunch);
+    WRITE("No view punch", noViewPunch);
+    WRITE("No hands", noHands);
+    WRITE("No sleeves", noSleeves);
+    WRITE("No weapons", noWeapons);
+    WRITE("No smoke", noSmoke);
+    WRITE("No blur", noBlur);
+    WRITE("No scope overlay", noScopeOverlay);
+    WRITE("No grass", noGrass);
+    WRITE("No shadows", noShadows);
+    WRITE("Wireframe smoke", wireframeSmoke);
+    WRITE("Zoom", noScopeOverlay);
+    WRITE("Zoom key", zoomKey);
+    WRITE("Thirdperson", thirdperson);
+    WRITE("Thirdperson key", thirdpersonKey);
+    WRITE("Thirdperson distance", thirdpersonDistance);
+    WRITE("Viewmodel FOV", viewmodelFov);
+    WRITE("FOV", fov);
+    WRITE("Far Z", farZ);
+    WRITE("Flash reduction", flashReduction);
+    WRITE("Brightness", brightness);
+    WRITE("Skybox", skybox);
+    WRITE("World", world);
+    WRITE("Sky", sky);
+    WRITE("Deagle spinner", deagleSpinner);
+    WRITE("Screen effect", screenEffect);
+    WRITE("Hit effect", hitEffect);
+    WRITE("Hit effect time", hitEffectTime);
+    WRITE("Hit marker", hitMarker);
+    WRITE("Hit marker time", hitMarkerTime);
+    WRITE("Playermodel T", playerModelT);
+    WRITE("Playermodel CT", playerModelCT);
+    WRITE("Color correction", colorCorrection);
 }
 
 static void to_json(json& j, const ImVec4& o)
@@ -982,8 +968,8 @@ static void to_json(json& j, const Config::Style& o)
 {
     const Config::Style dummy;
 
-    WRITE("Menu style", menuStyle)
-    WRITE("Menu colors", menuColors)
+    WRITE("Menu style", menuStyle);
+    WRITE("Menu colors", menuColors);
 
     auto& colors = j["Colors"];
     ImGuiStyle& style = ImGui::GetStyle();
@@ -996,41 +982,41 @@ static void to_json(json& j, const sticker_setting& o)
 {
     const sticker_setting dummy;
 
-    WRITE("Kit", kit)
-    WRITE("Kit vector index", kit_vector_index)
-    WRITE("Wear", wear)
-    WRITE("Scale", scale)
-    WRITE("Rotation", rotation)
+    WRITE("Kit", kit);
+    WRITE("Kit vector index", kit_vector_index);
+    WRITE("Wear", wear);
+    WRITE("Scale", scale);
+    WRITE("Rotation", rotation);
 }
 
 static void to_json(json& j, const item_setting& o)
 {
     const item_setting dummy;
 
-    WRITE("Enabled", enabled)
-    WRITE("Definition index", itemId)
-    WRITE("Definition vector index", itemIdIndex)
-    WRITE("Quality", quality)
-    WRITE("Quality vector index", entity_quality_vector_index)
-    WRITE("Paint Kit", paintKit)
-    WRITE("Paint Kit vector index", paint_kit_vector_index)
-    WRITE("Definition override", definition_override_index)
-    WRITE("Definition override vector index", definition_override_vector_index)
-    WRITE("Seed", seed)
-    WRITE("StatTrak", stat_trak)
-    WRITE("Wear", wear)
+    WRITE("Enabled", enabled);
+    WRITE("Definition index", itemId);
+    WRITE("Definition vector index", itemIdIndex);
+    WRITE("Quality", quality);
+    WRITE("Quality vector index", entity_quality_vector_index);
+    WRITE("Paint Kit", paintKit);
+    WRITE("Paint Kit vector index", paint_kit_vector_index);
+    WRITE("Definition override", definition_override_index);
+    WRITE("Definition override vector index", definition_override_vector_index);
+    WRITE("Seed", seed);
+    WRITE("StatTrak", stat_trak);
+    WRITE("Wear", wear);
     if (o.custom_name[0])
         j["Custom name"] = o.custom_name;
-    WRITE("Stickers", stickers)
+    WRITE("Stickers", stickers);
 }
 
 void removeEmptyObjects(json& j) noexcept
 {
     for (auto it = j.begin(); it != j.end();) {
         auto& val = it.value();
-        if (val.is_object() || val.is_array() && it.key() == "Materials")
+        if (val.is_object() || val.is_array())
             removeEmptyObjects(val);
-        if (val.empty())
+        if (val.empty() && !j.is_array())
             it = j.erase(it);
         else
             ++it;
@@ -1108,9 +1094,9 @@ void Config::listConfigs() noexcept
 
     std::error_code ec;
     std::transform(std::filesystem::directory_iterator{ path, ec },
-                   std::filesystem::directory_iterator{ },
-                   std::back_inserter(configs),
-                   [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+        std::filesystem::directory_iterator{ },
+        std::back_inserter(configs),
+        [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
 }
 
 void Config::scheduleFontLoad(const std::string& name) noexcept

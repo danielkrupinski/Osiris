@@ -114,7 +114,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Backtrack", window.backtrack);
         menuBarItem("Glow", window.glow);
         menuBarItem("Chams", window.chams);
-        menuBarItem("Stream Proof ESP", window.streamProofESP);
+        menuBarItem("ESP", window.streamProofESP);
         menuBarItem("Visuals", window.visuals);
         menuBarItem("Skin changer", window.skinChanger);
         menuBarItem("Sound", window.sound);
@@ -525,7 +525,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         if (!window.streamProofESP)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Stream Proof ESP", &window.streamProofESP, windowFlags);
+        ImGui::Begin("ESP", &window.streamProofESP, windowFlags);
     }
 
     static std::size_t currentCategory;
@@ -988,7 +988,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (!window.skinChanger)
             return;
         ImGui::SetNextWindowSize({ 700.0f, 0.0f });
-        ImGui::Begin("nSkinz", &window.skinChanger, windowFlags);
+        ImGui::Begin("Skin changer", &window.skinChanger, windowFlags);
     }
 
     static auto itemIndex = 0;
@@ -1013,10 +1013,56 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
-        ImGui::Combo("Paint Kit", &selected_entry.paint_kit_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits)[idx].name.c_str();
-            return true;
-            }, nullptr, (itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits).size(), 10);
+        static std::string filter;
+        ImGui::PushID("Search");
+        ImGui::InputTextWithHint("", "Search", &filter);
+        ImGui::PopID();
+
+        if (ImGui::ListBoxHeader("Paint Kit")) {
+            const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
+
+            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
+            const std::locale original;
+            if (!filter.empty())
+                std::locale::global(std::locale{ "en_US.utf8" });
+
+            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+            std::wstring filterWide(filter.length(), L'\0');
+            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
+            if (newLen != static_cast<std::size_t>(-1))
+                filterWide.resize(newLen);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+
+            for (std::size_t i = 0; i < kits.size(); ++i) {
+                bool passedTheFilter = filter.empty();
+
+                if (!passedTheFilter) {
+                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
+                        wchar_t w;
+                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
+                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
+
+                        if (facet.toupper(w) != filterWide[j2])
+                            j2 = 0;
+                        else
+                            ++j2;
+
+                        if (j2 >= filterWide.length())
+                            passedTheFilter = true;
+                    }
+                }
+
+                if (passedTheFilter) {
+                    ImGui::PushID(i);
+                    if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
+                        selected_entry.paint_kit_vector_index = i;
+                    ImGui::PopID();
+                }
+            }
+
+            std::locale::global(original);
+            ImGui::ListBoxFooter();
+        }
 
         ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
             *out_text = game_data::quality_names[idx].name;
@@ -1356,7 +1402,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Stream Proof ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1369,14 +1415,13 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 4: config->antiAim = { }; break;
                     case 5: config->glow = { }; break;
                     case 6: config->chams = { }; break;
-                    case 7: break;
-                    case 8: config->streamProofESP = { }; break;
-                    case 9: config->visuals = { }; break;
-                    case 10: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 11: config->sound = { }; break;
-                    case 12: config->style = { }; updateColors(); break;
-                    case 13: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 14: config->reportbot = { }; break;
+                    case 7: config->streamProofESP = { }; break;
+                    case 8: config->visuals = { }; break;
+                    case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
+                    case 10: config->sound = { }; break;
+                    case 11: config->style = { }; updateColors(); break;
+                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
+                    case 13: config->reportbot = { }; break;
                     }
                 }
             }
@@ -1432,7 +1477,7 @@ void GUI::renderGuiStyle2() noexcept
             renderChamsWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Stream Proof ESP")) {
+        if (ImGui::BeginTabItem("ESP")) {
             renderStreamProofESPWindow(true);
             ImGui::EndTabItem();
         }

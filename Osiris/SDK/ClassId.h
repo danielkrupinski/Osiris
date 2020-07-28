@@ -7,6 +7,7 @@ enum class ClassId {
     C4,
     Chicken = 36,
     CSPlayer = 40,
+    CSPlayerResource,
     CSRagdoll = 42,
     Deagle = 46,
     DecoyProjectile = 48,
