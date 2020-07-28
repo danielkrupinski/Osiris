@@ -1014,7 +1014,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
         static std::string filter;
+        ImGui::PushID("Search");
         ImGui::InputTextWithHint("", "Search", &filter);
+        ImGui::PopID();
 
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
