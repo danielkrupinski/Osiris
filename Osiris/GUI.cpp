@@ -1027,24 +1027,27 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+            std::wstring filterWide(filter.length(), L'\0');
+            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
+            if (newLen != static_cast<std::size_t>(-1))
+                filterWide.resize(newLen);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 bool passedTheFilter = filter.empty();
 
                 if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filter.length();) {
+                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
                         wchar_t w;
                         mbstowcs(&w, kits[i].name.c_str() + j1, 1);
                         j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-                        const auto upper1 = facet.toupper(w);
-                        mbstowcs(&w, filter.c_str() + j2, 1);
-                        j2 += Helpers::utf8SeqLen(filter[j2]);
-                        const auto upper2 = facet.toupper(w);
 
-                        if (upper1 != upper2)
+                        if (facet.toupper(w) != filterWide[j2])
                             j2 = 0;
+                        else
+                            ++j2;
 
-                        if (j2 >= filter.length())
+                        if (j2 >= filterWide.length())
                             passedTheFilter = true;
                     }
                 }
