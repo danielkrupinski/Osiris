@@ -70,8 +70,8 @@ static void read(const json& j, const char* key, T& o) noexcept
         val.get_to(o);
 }
 
-template <typename T>
-static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
+template <typename T, size_t Size>
+static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
     if (j.contains(key) && j[key].type() == value_t::array) {
         std::size_t i = 0;
@@ -331,7 +331,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
 static void from_json(const json& j, Config::Chams& c)
 {
-    read<value_t::array>(j, "Materials", c.materials);
+    read_array_opt(j, "Materials", c.materials);
 }
 
 static void from_json(const json& j, Config::StreamProofESP& e)
