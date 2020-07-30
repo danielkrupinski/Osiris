@@ -746,11 +746,11 @@ static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerb
 
 static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack& dummy = {})
 {
-    WRITE("Enabled", enabled)
-    WRITE("Ignore smoke", ignoreSmoke)
-    WRITE("Recoil based fov", recoilBasedFov)
-    WRITE("Time limit", timeLimit)
-    WRITE("Fake Latency", fakeLatency)
+    WRITE("Enabled", enabled);
+    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Recoil based fov", recoilBasedFov);
+    WRITE("Time limit", timeLimit);
+    WRITE("Fake Latency", fakeLatency);
 }
 
 static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
