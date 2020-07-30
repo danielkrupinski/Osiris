@@ -102,6 +102,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
     if (ImGui::MenuItem(name)) {
         enabled = true;
         ImGui::SetWindowFocus(name);
+        ImGui::SetWindowPos(name, { 100.0f, 100.0f });
     }
 }
 
@@ -1116,10 +1117,56 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
 
-        ImGui::Combo("Sticker Kit", &selected_sticker.kit_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = SkinChanger::stickerKits[idx].name.c_str();
-            return true;
-            }, nullptr, SkinChanger::stickerKits.size(), 10);
+        static std::string filter;
+        ImGui::PushID("Search");
+        ImGui::InputTextWithHint("", "Search", &filter);
+        ImGui::PopID();
+
+        if (ImGui::ListBoxHeader("Sticker")) {
+            const auto& kits = SkinChanger::stickerKits;
+
+            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
+            const std::locale original;
+            if (!filter.empty())
+                std::locale::global(std::locale{ "en_US.utf8" });
+
+            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+            std::wstring filterWide(filter.length(), L'\0');
+            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
+            if (newLen != static_cast<std::size_t>(-1))
+                filterWide.resize(newLen);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+
+            for (std::size_t i = 0; i < kits.size(); ++i) {
+                bool passedTheFilter = filter.empty();
+
+                if (!passedTheFilter) {
+                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
+                        wchar_t w;
+                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
+                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
+
+                        if (facet.toupper(w) != filterWide[j2])
+                            j2 = 0;
+                        else
+                            ++j2;
+
+                        if (j2 >= filterWide.length())
+                            passedTheFilter = true;
+                    }
+                }
+
+                if (passedTheFilter) {
+                    ImGui::PushID(i);
+                    if (ImGui::Selectable(kits[i].name.c_str(), i == selected_sticker.kit_vector_index))
+                        selected_sticker.kit_vector_index = i;
+                    ImGui::PopID();
+                }
+            }
+
+            std::locale::global(original);
+            ImGui::ListBoxFooter();
+        }
 
         ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
         ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
@@ -1186,7 +1233,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-            ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
+            ImGuiCustom::colorPopup(ImGui::GetStyleColorName(i), (std::array<float, 4>&)style.Colors[i]);
         }
     }
 
