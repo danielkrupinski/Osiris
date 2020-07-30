@@ -24,6 +24,12 @@
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
 #include "../Helpers.h"
+#include "../GameData.h"
+
+
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -151,18 +157,38 @@ void Misc::spectatorList() noexcept
     }
 }
 
-void Misc::sniperCrosshair() noexcept
+static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, float thickness) noexcept
 {
-    static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
+    drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
 
-	if (!config->misc.sniperCrosshairInscope)
-	{
-		showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped()  ? 3 : 0);
-	}
-	else
-	{
-		showSpread->setValue(config->misc.sniperCrosshair ? 3 : 0);
-	}
+    drawList->AddLine(ImVec2{ pos.x, pos.y - 10 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y - 3 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    drawList->AddLine(ImVec2{ pos.x, pos.y + 3 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y + 10 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+
+    drawList->AddLine(ImVec2{ pos.x - 10, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x - 3, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    drawList->AddLine(ImVec2{ pos.x + 3, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x + 10, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+
+    drawList->AddLine({ pos.x, pos.y - 10 }, { pos.x, pos.y - 3 }, color, thickness);
+    drawList->AddLine({ pos.x, pos.y + 3 }, { pos.x, pos.y + 10 }, color, thickness);
+
+    drawList->AddLine({ pos.x - 10, pos.y }, { pos.x - 3, pos.y }, color, thickness);
+    drawList->AddLine({ pos.x + 3, pos.y }, { pos.x + 10, pos.y }, color, thickness);
+
+    drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
+}
+
+void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
+{
+    if (!config->misc.noscopeCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& local = GameData::local();
+
+    //if (!local.exists || !local.alive || !local.noScope)
+    if (!local.exists || !local.alive)
+        return;
+
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
 void Misc::recoilCrosshair() noexcept
@@ -319,41 +345,6 @@ void Misc::drawBombTimer() noexcept
         }
     }
 }
-
-/*
-void Misc::drawBombTimer2() noexcept
-{
-	if (config.misc.bombTimer2.enabled) 
-	{
-		for (int i = interfaces.engine->getMaxClients(); i <= interfaces.entityList->getHighestEntityIndex(); i++) 
-		{
-			Entity* entity = interfaces.entityList->getEntity(i);
-			if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
-				continue;
-			
-			constexpr unsigned bombfont{ 0x77 };
-			interfaces.surface->setTextBombFont(bombfont);
-			interfaces.surface->setTextColor(98, 209, 0); // default 255, 255, 255
-			auto drawPositionY{ interfaces.surface->getScreenSize().second / 60 }; // hight // higher the nummer higher the text go
-			auto bombText{ (std::wstringstream{ } << (!entity->c4BombSite() ?  'A' : 'B') << L" - " << std::fixed << std::showpoint << std::setprecision(1) << (std::max)(entity->c4BlowTime() - memory.globalVars->currenttime, 0.0f) << L" s").str() }; // "setprecision" how many sec its shows
-			const auto bombTextX{ interfaces.surface->getScreenSize().first / 25 - static_cast<int>((interfaces.surface->getTextSize(bombfont, bombText.c_str())).first / 5) }; // 5 dose nothing?
-			interfaces.surface->setTextPosition(bombTextX, drawPositionY);
-			drawPositionY += interfaces.surface->getTextSize(bombfont, bombText.c_str()).second;
-			interfaces.surface->printText(bombText.c_str());
-
-			 
-			if (config.misc.bombTimer2.rainbow)
-				interfaces.surface->setDrawColor(rainbowColor(memory.globalVars->realtime, config.misc.bombTimer2.rainbowSpeed));
-			else
-				interfaces.surface->setDrawColor(config.misc.bombTimer2.color);
-
-			static auto c4Timer = interfaces.cvar->findVar("mp_c4timer");
-
-			break;
-		}
-	}
-}
-*/
 
 void Misc::stealNames() noexcept
 {

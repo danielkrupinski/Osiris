@@ -114,7 +114,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Backtrack", window.backtrack);
         menuBarItem("Glow", window.glow);
         menuBarItem("Chams", window.chams);
-        menuBarItem("Stream Proof ESP", window.streamProofESP);
+        menuBarItem("ESP", window.streamProofESP);
         menuBarItem("Visuals", window.visuals);
         menuBarItem("Skin changer", window.skinChanger);
         menuBarItem("Sound", window.sound);
@@ -525,7 +525,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         if (!window.streamProofESP)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Stream Proof ESP", &window.streamProofESP, windowFlags);
+        ImGui::Begin("ESP", &window.streamProofESP, windowFlags);
     }
 
     static std::size_t currentCategory;
@@ -1014,7 +1014,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
 
         static std::string filter;
+        ImGui::PushID("Search");
         ImGui::InputTextWithHint("", "Search", &filter);
+        ImGui::PopID();
 
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
@@ -1025,24 +1027,27 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+            std::wstring filterWide(filter.length(), L'\0');
+            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
+            if (newLen != static_cast<std::size_t>(-1))
+                filterWide.resize(newLen);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 bool passedTheFilter = filter.empty();
 
                 if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filter.length();) {
+                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
                         wchar_t w;
                         mbstowcs(&w, kits[i].name.c_str() + j1, 1);
                         j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-                        const auto upper1 = facet.toupper(w);
-                        mbstowcs(&w, filter.c_str() + j2, 1);
-                        j2 += Helpers::utf8SeqLen(filter[j2]);
-                        const auto upper2 = facet.toupper(w);
 
-                        if (upper1 != upper2)
+                        if (facet.toupper(w) != filterWide[j2])
                             j2 = 0;
+                        else
+                            ++j2;
 
-                        if (j2 >= filter.length())
+                        if (j2 >= filterWide.length())
                             passedTheFilter = true;
                     }
                 }
@@ -1214,13 +1219,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
     ImGui::SameLine();
     hotkey(config->misc.slowwalkKey);
+    ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
     ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
-    ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
-    if (config->misc.sniperCrosshair)
-    {
-        ImGui::SameLine();
-        ImGui::Checkbox("In scope", &config->misc.sniperCrosshairInscope);
-    }
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);
     ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
@@ -1402,7 +1402,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "Esp", "Stream Proof ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1415,14 +1415,13 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 4: config->antiAim = { }; break;
                     case 5: config->glow = { }; break;
                     case 6: config->chams = { }; break;
-                    case 7: break;
-                    case 8: config->streamProofESP = { }; break;
-                    case 9: config->visuals = { }; break;
-                    case 10: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 11: config->sound = { }; break;
-                    case 12: config->style = { }; updateColors(); break;
-                    case 13: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 14: config->reportbot = { }; break;
+                    case 7: config->streamProofESP = { }; break;
+                    case 8: config->visuals = { }; break;
+                    case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
+                    case 10: config->sound = { }; break;
+                    case 11: config->style = { }; updateColors(); break;
+                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
+                    case 13: config->reportbot = { }; break;
                     }
                 }
             }
@@ -1478,7 +1477,7 @@ void GUI::renderGuiStyle2() noexcept
             renderChamsWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Stream Proof ESP")) {
+        if (ImGui::BeginTabItem("ESP")) {
             renderStreamProofESPWindow(true);
             ImGui::EndTabItem();
         }
