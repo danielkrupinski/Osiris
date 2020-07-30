@@ -102,6 +102,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
     if (ImGui::MenuItem(name)) {
         enabled = true;
         ImGui::SetWindowFocus(name);
+        ImGui::SetWindowPos(name, { 100.0f, 100.0f });
     }
 }
 
