@@ -121,7 +121,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* datagram)
 {
-    auto original = hooks->networkChannel.getOriginal<int, void*>(46, datagram);
+    auto original = hooks->networkChannel.getOriginal<int, 46, void*>( datagram);
     if (!config->backtrack.fakeLatency || datagram || !interfaces->engine->isInGame() || !config->backtrack.enabled)
     {
         return original(network, datagram);
