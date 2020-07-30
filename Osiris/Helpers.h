@@ -23,4 +23,11 @@ namespace Helpers
                (firstByte & 0xF8) == 0xF0 ? 4 :
                -1;
     }
+
+    constexpr auto utf8Substr(char* start, char* end, int n) noexcept
+    {
+        while (start < end && --n)
+            start += utf8SeqLen(*start);
+        return start;
+    }
 }

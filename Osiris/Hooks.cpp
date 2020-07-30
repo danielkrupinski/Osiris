@@ -97,6 +97,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     StreamProofESP::render();
     Misc::purchaseList();
+    Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
 
     if (gui->open)
         gui->render();
@@ -159,7 +160,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::antiAfkKick(cmd);
     Misc::fastPlant(cmd);
     Misc::prepareRevolver(cmd);
-    Misc::sniperCrosshair();
     Misc::recoilCrosshair();
     Visuals::removeShadows();
     Reportbot::run();
@@ -266,7 +266,7 @@ static bool __fastcall svCheatsGetBool(void* _this) noexcept
     if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config->visuals.thirdperson)
         return true;
     else
-        return hooks->svCheats.getOriginal<bool>(13)(_this);
+        return hooks->svCheats.getOriginal<bool, 13>()(_this);
 }
 
 static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept

@@ -8,7 +8,7 @@
 [![PayPal](https://img.shields.io/badge/donate-PayPal-104098.svg?style=plastic&logo=PayPal)](https://paypal.me/DanielK19)
 ![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 
-Free open-source training software / cheat for **Counter-Strike: Global Offensive** game. Designed as internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the latest version of the game on Steam.
+Free open-source cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game.
 
 ## Features
 * **Aimbot** - aim assistance
@@ -16,7 +16,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 * **Backtrack** - abuse lag compensation to move players back in time
 * **Glow** - render glow effect on entities
 * **Chams** - color player models to improve visibility
-* **Esp** - show information about players, dropped weapons and projectiles
+* **Stream Proof ESP** - show information about players, dropped weapons and projectiles
 * **Visuals** - miscellaneous visual options
 * **Skin changer** - change weapon skins, knives and stickers
 * **Sound** - modify volume of certain sound effects
@@ -206,7 +206,7 @@ Free open-source training software / cheat for **Counter-Strike: Global Offensiv
 ## Getting started
 
 ### Prerequisites
-Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0 are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
+Microsoft Visual Studio 2019 (preferably the latest version), platform toolset v142 and Windows SDK 10.0.x.x are required in order to compile Osiris. If you don't have ones, you can download VS [here](https://visualstudio.microsoft.com/) (Windows SDK is installed during Visual Studio Setup).
 
 ### Downloading
 

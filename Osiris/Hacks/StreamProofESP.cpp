@@ -42,13 +42,10 @@ public:
     ImVec2 min, max;
     std::array<ImVec2, 8> vertices;
 
-    BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept
+    BoundingBox(const Vector& mins, const Vector& maxs, const std::array<float, 3>& scale, const matrix3x4* matrix = nullptr) noexcept
     {
         min.y = min.x = std::numeric_limits<float>::max();
         max.y = max.x = -std::numeric_limits<float>::max();
-
-        const auto& mins = data.obbMins;
-        const auto& maxs = data.obbMaxs;
 
         const auto scaledMins = mins + (maxs - mins) * 2 * (0.25f - scale);
         const auto scaledMaxs = maxs - (maxs - mins) * 2 * (0.25f - scale);
@@ -58,10 +55,11 @@ public:
                                 i & 2 ? scaledMaxs.y : scaledMins.y,
                                 i & 4 ? scaledMaxs.z : scaledMins.z };
 
-            if (!worldToScreen(point.transform(data.coordinateFrame), vertices[i])) {
+            if (!worldToScreen(matrix ? point.transform(*matrix) : point, vertices[i])) {
                 valid = false;
                 return;
             }
+
             min.x = std::min(min.x, vertices[i].x);
             min.y = std::min(min.y, vertices[i].y);
             max.x = std::max(max.x, vertices[i].x);
@@ -70,31 +68,8 @@ public:
         valid = true;
     }
 
-    BoundingBox(const Vector& center) noexcept
-    {
-        min.y = min.x = std::numeric_limits<float>::max();
-        max.y = max.x = -std::numeric_limits<float>::max();
-
-        const auto mins = center - 2.0f;
-        const auto maxs = center + 2.0f;
-
-        for (int i = 0; i < 8; ++i) {
-            const Vector point{ i & 1 ? maxs.x : mins.x,
-                                i & 2 ? maxs.y : mins.y,
-                                i & 4 ? maxs.z : mins.z };
-
-            if (!worldToScreen(point, vertices[i])) {
-                valid = false;
-                return;
-            }
-            min.x = std::min(min.x, vertices[i].x);
-            min.y = std::min(min.y, vertices[i].y);
-            max.x = std::max(max.x, vertices[i].x);
-            max.y = std::max(max.y, vertices[i].y);
-        }
-        valid = true;
-    }
-
+    BoundingBox(const BaseData& data, const std::array<float, 3>& scale) noexcept : BoundingBox{ data.obbMins, data.obbMaxs, scale, &data.coordinateFrame } {}
+    BoundingBox(const Vector& center) noexcept : BoundingBox{ center - 2.0f, center + 2.0f, { 0.25f, 0.25f, 0.25f } } {}
 
     operator bool() const noexcept
     {
@@ -388,6 +363,9 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
 
     renderPlayerBox(playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
+
+    if (const BoundingBox headBbox{ playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale })
+        renderBox(headBbox, playerConfig.headBox);
 
     return true;
 }

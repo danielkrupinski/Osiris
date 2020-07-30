@@ -107,72 +107,11 @@ public:
             bool cover = false;
             bool ignorez = false;
             int material = 0;
-
-            auto operator==(const Material& o) const
-            {
-                return static_cast<const ColorA&>(*this) == static_cast<const ColorA&>(o)
-                    && enabled == o.enabled
-                    && healthBased == o.healthBased
-                    && blinking == o.blinking
-                    && wireframe == o.wireframe
-                    && cover == o.cover
-                    && ignorez == o.ignorez
-                    && material == o.material;
-            }
         };
-        std::vector<Material> materials{ {}, {}, {}, {} };
-
-
-        auto operator==(const Chams& o) const
-        {
-            for (std::size_t i = 0; i < materials.size() && i < o.materials.size(); ++i) {
-                if (!(materials[i] == o.materials[i]))
-                    return false;
-            }
-            return true;
-        }
+        std::array<Material, 7> materials;
     };
 
     std::unordered_map<std::string, Chams> chams;
-
-    struct Esp {
-        struct Shared {
-            bool enabled{ false };
-            int font{ 0x1d };
-            ColorToggle snaplines;
-            ColorToggle box;
-            int boxType{ 0 };
-            ColorToggle name;
-            ColorToggle ammo;
-            ColorToggle outline{ 0.0f, 0.0f, 0.0f };
-            ColorToggle distance;
-            float maxDistance{ 0.0f };
-        };
-       
-        struct Player : public Shared {
-            ColorToggle eyeTraces;
-            ColorToggle health;
-            ColorToggle healthBar;
-            ColorToggle armor;
-            ColorToggle armorBar;
-            ColorToggle money;
-            ColorToggle headDot;
-            ColorToggle activeWeapon;
-            int hpside{ 0 };
-            int armorside{ 0 };
-            bool deadesp { false };
-        };
-
-        struct Weapon : public Shared { } weapon;
-
-        struct Projectile : public Shared { };
-        std::array<Projectile, 9> projectiles;
-
-        struct DangerZone : public Shared { };
-        std::array<DangerZone, 18> dangerZone;
-
-        std::array<Player, 6> players;
-    } esp;
 
     struct StreamProofESP {
         std::unordered_map<std::string, Player> allies;
@@ -239,18 +178,6 @@ public:
             float ghost = 0.0f;
             float green = 0.0f;
             float yellow = 0.0f;
-
-            auto operator==(const ColorCorrection& o) const
-            {
-                return enabled == o.enabled
-                    && blue == o.blue
-                    && red == o.red
-                    && mono == o.mono
-                    && saturation == o.saturation
-                    && ghost == o.ghost
-                    && green == o.green
-                    && yellow == o.yellow;
-            }
         } colorCorrection;
     } visuals;
 
@@ -289,7 +216,7 @@ public:
         int edgejumpkey{ 0 };
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
-        bool sniperCrosshair{ false };
+        ColorToggleThickness noscopeCrosshair;
         bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool autoReload{ false };

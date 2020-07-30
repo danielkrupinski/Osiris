@@ -36,11 +36,27 @@ struct Vector {
         return *this;
     }
 
+    constexpr Vector& operator+=(float f) noexcept
+    {
+        x += f;
+        y += f;
+        z += f;
+        return *this;
+    }
+
     constexpr Vector& operator-=(const Vector& v) noexcept
     {
         x -= v.x;
         y -= v.y;
         z -= v.z;
+        return *this;
+    }
+
+    constexpr Vector& operator-=(float f) noexcept
+    {
+        x -= f;
+        y -= f;
+        z -= f;
         return *this;
     }
 
