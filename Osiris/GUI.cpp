@@ -1219,7 +1219,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
     ImGui::SameLine();
     hotkey(config->misc.slowwalkKey);
-    ImGui::Checkbox("Sniper crosshair", &config->misc.sniperCrosshair);
+    ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
     ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);

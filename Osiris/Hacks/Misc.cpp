@@ -24,6 +24,12 @@
 #include "../SDK/WeaponData.h"
 #include "../GUI.h"
 #include "../Helpers.h"
+#include "../GameData.h"
+
+
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -151,10 +157,37 @@ void Misc::spectatorList() noexcept
     }
 }
 
-void Misc::sniperCrosshair() noexcept
+static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, float thickness) noexcept
 {
-    static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped() ? 3 : 0);
+    drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
+
+    drawList->AddLine(ImVec2{ pos.x, pos.y - 10 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y - 3 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    drawList->AddLine(ImVec2{ pos.x, pos.y + 3 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y + 10 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+
+    drawList->AddLine(ImVec2{ pos.x - 10, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x - 3, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    drawList->AddLine(ImVec2{ pos.x + 3, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x + 10, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+
+    drawList->AddLine({ pos.x, pos.y - 10 }, { pos.x, pos.y - 3 }, color, thickness);
+    drawList->AddLine({ pos.x, pos.y + 3 }, { pos.x, pos.y + 10 }, color, thickness);
+
+    drawList->AddLine({ pos.x - 10, pos.y }, { pos.x - 3, pos.y }, color, thickness);
+    drawList->AddLine({ pos.x + 3, pos.y }, { pos.x + 10, pos.y }, color, thickness);
+
+    drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
+}
+
+void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
+{
+    if (!config->misc.noscopeCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& local = GameData::local();
+
+    if (!local.exists || !local.alive || !local.noScope)
+        return;
+
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
 void Misc::recoilCrosshair() noexcept
