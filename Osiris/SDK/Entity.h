@@ -85,6 +85,14 @@ public:
         return getWeaponType() == WeaponType::SniperRifle;
     }
 
+    constexpr auto isFullAuto() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->fullAuto;
+        return false;
+    }
+
     constexpr auto requiresRecoilControl() noexcept
     {
         const auto weaponData = getWeaponData();
