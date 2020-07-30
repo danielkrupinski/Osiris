@@ -52,6 +52,7 @@ struct LocalPlayerData {
     bool inReload = false;
     bool shooting = false;
     bool noScope = false;
+    bool usesSniperRifel = false;
     float nextWeaponAttack = 0.0f;
     int fov;
     float flashDuration;
