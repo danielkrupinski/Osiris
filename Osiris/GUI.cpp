@@ -1233,7 +1233,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-            ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i]);
+            ImGuiCustom::colorPopup(ImGui::GetStyleColorName(i), (std::array<float, 4>&)style.Colors[i]);
         }
     }
 
