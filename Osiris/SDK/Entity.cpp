@@ -47,6 +47,9 @@ bool Entity::visibleTo(Entity* other) noexcept
     if (other->canSee(this, getAbsOrigin() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 
+    if (other->canSee(this, getEyePosition() + Vector{ 0.0f, 0.0f, 5.0f }))
+        return true;
+
     const auto model = getModel();
     if (!model)
         return false;
@@ -63,7 +66,8 @@ bool Entity::visibleTo(Entity* other) noexcept
     if (!setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
         return false;
 
-    for (const auto boxNum : { 12, 9, 14, 17 }) { // head, guts, left & right elbow hitbox
+    // TODO: use correct hitboxes
+    for (const auto boxNum : { 9, 14, 17 }) { // head, guts, left & right elbow hitbox
         if (boxNum < set->numHitboxes && other->canSee(this, boneMatrices[set->getHitbox(boxNum)->bone].origin()))
             return true;
     }
