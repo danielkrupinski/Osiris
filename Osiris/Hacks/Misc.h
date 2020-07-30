@@ -2,6 +2,7 @@
 
 enum class FrameStage;
 class GameEvent;
+struct ImDrawList;
 struct UserCmd;
 
 namespace Misc
@@ -11,7 +12,7 @@ namespace Misc
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
-    void sniperCrosshair() noexcept;
+    void noscopeCrosshair(ImDrawList* drawlist) noexcept;
     void recoilCrosshair() noexcept;
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;

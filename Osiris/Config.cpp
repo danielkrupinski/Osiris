@@ -70,8 +70,8 @@ static void read(const json& j, const char* key, T& o) noexcept
         val.get_to(o);
 }
 
-template <typename T>
-static void read_vector(const json& j, const char* key, std::vector<T>& o) noexcept
+template <typename T, size_t Size>
+static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
     if (j.contains(key) && j[key].type() == value_t::array) {
         std::size_t i = 0;
@@ -331,7 +331,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
 
 static void from_json(const json& j, Config::Chams& c)
 {
-    read<value_t::array>(j, "Materials", c.materials);
+    read_array_opt(j, "Materials", c.materials);
 }
 
 static void from_json(const json& j, Config::StreamProofESP& e)
@@ -493,7 +493,7 @@ static void from_json(const json& j, Config::Misc& m)
     read_number(j, "Edge Jump Key", m.edgejumpkey);
     read<value_t::boolean>(j, "Slowwalk", m.slowwalk);
     read_number(j, "Slowwalk key", m.slowwalkKey);
-    read<value_t::boolean>(j, "Sniper crosshair", m.sniperCrosshair);
+    read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
     read<value_t::boolean>(j, "Recoil crosshair", m.recoilCrosshair);
     read<value_t::boolean>(j, "Auto pistol", m.autoPistol);
     read<value_t::boolean>(j, "Auto reload", m.autoReload);
@@ -859,7 +859,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Edge Jump Key", edgejumpkey);
     WRITE("Slowwalk", slowwalk);
     WRITE("Slowwalk key", slowwalkKey);
-    WRITE("Sniper crosshair", sniperCrosshair);
+    WRITE("Noscope crosshair", noscopeCrosshair);
     WRITE("Recoil crosshair", recoilCrosshair);
     WRITE("Auto pistol", autoPistol);
     WRITE("Auto reload", autoReload);
