@@ -167,6 +167,11 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        bool viewmodelxyz{ false };
+        bool viewmodel_clright{ true };
+        float viewmodel_x{ 0.0f };
+        float viewmodel_y{ 0.0f };
+        float viewmodel_z{ 0.0f };
 
         struct ColorCorrection {
             bool enabled = false;

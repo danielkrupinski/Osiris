@@ -394,6 +394,11 @@ static void from_json(const json& j, Config::Visuals& v)
     read_number(j, "Hit marker time", v.hitMarkerTime);
     read_number(j, "Playermodel T", v.playerModelT);
     read_number(j, "Playermodel CT", v.playerModelCT);
+    read<value_t::boolean>(j, "ViewmodelXYZ", v.viewmodelxyz);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", v.viewmodel_clright);
+    read_number(j, "ViewmodelXYZ X", v.viewmodel_x);
+    read_number(j, "ViewmodelXYZ Y", v.viewmodel_y);
+    read_number(j, "ViewmodelXYZ Z", v.viewmodel_z);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
@@ -953,6 +958,11 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime);
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
+    WRITE("ViewmodelXYZ", viewmodelxyz);
+    WRITE("ViewmodelXYZ cl_right", viewmodel_clright);
+    WRITE("ViewmodelXYZ X", viewmodel_x);
+    WRITE("ViewmodelXYZ Y", viewmodel_y);
+    WRITE("ViewmodelXYZ Z", viewmodel_z);
     WRITE("Color correction", colorCorrection);
 }
 
