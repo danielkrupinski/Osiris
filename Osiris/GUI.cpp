@@ -924,19 +924,25 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
-
     ImGui::Checkbox("Viewmodel XYZ", &config->visuals.viewmodelxyz);
-    ImGui::PushID("viewmodel_x");
-    ImGui::SliderFloat("", &config->visuals.viewmodel_x, -20, 20, "Left/Right: %.2f");
-    ImGui::PopID();
-    ImGui::PushID("viewmodel_y");
-    ImGui::SliderFloat("", &config->visuals.viewmodel_y, -20, 20, "Close/Far: %.2f");
-    ImGui::PopID();
-    ImGui::PushID("viewmodel_z");
-    ImGui::SliderFloat("", &config->visuals.viewmodel_z, -20, 20, "Down/Up: %.2f");
-    ImGui::PopID();
-    ImGui::Checkbox("cl_righthand", &config->visuals.viewmodel_clright);
+    ImGui::SameLine();
+    bool viewmodelPopup = ImGui::Button("Edit");
+    if (viewmodelPopup) 
+        ImGui::OpenPopup("##viewmodelPopup");
 
+    if (ImGui::BeginPopup("##viewmodelPopup")) {
+        ImGui::Checkbox("cl_righthand", &config->visuals.viewmodel_clright);
+        ImGui::PushID("viewmodel_x");
+        ImGui::SliderFloat("", &config->visuals.viewmodel_x, -20, 20, "Left/Right: %.2f");
+        ImGui::PopID();
+        ImGui::PushID("viewmodel_y");
+        ImGui::SliderFloat("", &config->visuals.viewmodel_y, -20, 20, "Close/Far: %.2f");
+        ImGui::PopID();
+        ImGui::PushID("viewmodel_z");
+        ImGui::SliderFloat("", &config->visuals.viewmodel_z, -20, 20, "Down/Up: %.2f");
+        ImGui::PopID();
+        ImGui::EndPopup();
+    }
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();

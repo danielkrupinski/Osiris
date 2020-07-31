@@ -411,24 +411,20 @@ void Visuals::viewmodelxyz() noexcept
 {
     if (!localPlayer)
         return;
+    float config_x = config->visuals.viewmodel_x;
+    float config_y = config->visuals.viewmodel_y;
+    float config_z = config->visuals.viewmodel_z;
 
     static ConVar* viewmodel_x = interfaces->cvar->findVar("viewmodel_offset_x");
-    float config_x = config->visuals.viewmodel_x;
     static ConVar* viewmodel_y = interfaces->cvar->findVar("viewmodel_offset_y");
-    float config_y = config->visuals.viewmodel_y;
     static ConVar* viewmodel_z = interfaces->cvar->findVar("viewmodel_offset_z");
-    float config_z = config->visuals.viewmodel_z;
 
     static ConVar* cl_righthand = interfaces->cvar->findVar("cl_righthand");
     bool config_righthand = config->visuals.viewmodel_clright;
 
-    //const auto activeWeapon = localPlayer->getActiveWeapon();
-
     static ConVar* sv_minspec = interfaces->cvar->findVar("sv_competitive_minspec");
     
     bool sv_minspec_toggle = false;
-    if (sv_minspec_toggle) { *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 0;/* sv_minspec->setValue(0); */}
-    else { *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 1; sv_minspec->setValue(1); }
 
     if (config->visuals.viewmodelxyz) {
         sv_minspec_toggle = true;
@@ -442,5 +438,12 @@ void Visuals::viewmodelxyz() noexcept
         viewmodel_y->setValue(0);
         viewmodel_z->setValue(0);
         cl_righthand->setValue(1);
+    }
+
+    if (sv_minspec_toggle) {
+        *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 0;
+        sv_minspec->setValue(0);
+    } else {
+        sv_minspec->setValue(1);
     }
 }
