@@ -37,9 +37,13 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
 
 bool Entity::canSee(Entity* other, const Vector& pos) noexcept
 {
+    const auto eyePos = getEyePosition();
+    if (memory->lineGoesThroughSmoke(eyePos, pos, 1))
+        return false;
+
     Trace trace;
-    interfaces->engineTrace->traceRay({ getEyePosition(), pos }, 0x46004009, this, trace);
-    return (trace.entity == other || trace.fraction > 0.97f) && !memory->lineGoesThroughSmoke(getEyePosition(), pos, 1);
+    interfaces->engineTrace->traceRay({ eyePos, pos }, 0x46004009, this, trace);
+    return trace.entity == other || trace.fraction > 0.97f;
 }
 
 bool Entity::visibleTo(Entity* other) noexcept
