@@ -186,6 +186,7 @@ void LocalPlayerData::update() noexcept
         shooting = localPlayer->shotsFired() > 1;
         noScope = activeWeapon->isSniperRifle() && !localPlayer->isScoped();
         usesSniperRifel = activeWeapon->isSniperRifle();
+        isScoped = localPlayer->isScoped();
         nextWeaponAttack = activeWeapon->nextPrimaryAttack();
     }
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
