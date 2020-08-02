@@ -112,7 +112,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (bestRecord) {
         auto record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
-        cmd->tickCount = timeToTicks(record.simulationTime);
+        cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
 }
 
