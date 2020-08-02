@@ -197,11 +197,8 @@ void Visuals::removeBlur(FrameStage stage) noexcept
 
 void Visuals::removeBloom() noexcept
 {
-    if (!localPlayer)
-        return;
-
     static ConVar* bloomCvar = interfaces->cvar->findVar("mat_disable_bloom");
-    bloomCvar->setValue(config->visuals.noBloom ? 1 : 0);
+    bloomCvar->setValue(config->visuals.noBloom);
 }
 
 void Visuals::updateBrightness() noexcept
