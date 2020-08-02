@@ -919,7 +919,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No sleeves", &config->visuals.noSleeves);
     ImGui::Checkbox("No weapons", &config->visuals.noWeapons);
     ImGui::Checkbox("No smoke", &config->visuals.noSmoke);
-    ImGui::Checkbox("No blur", &config->visuals.noBlur);//mat_disable_bloom
+    ImGui::Checkbox("No blur", &config->visuals.noBlur);
     ImGui::Checkbox("No bloom", &config->visuals.noBloom);
     ImGui::Checkbox("No scope overlay", &config->visuals.noScopeOverlay);
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
