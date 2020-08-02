@@ -195,6 +195,15 @@ void Visuals::removeBlur(FrameStage stage) noexcept
     blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noBlur);
 }
 
+void Visuals::removeBloom() noexcept
+{
+    if (!localPlayer)
+        return;
+
+    static ConVar* bloomCvar = interfaces->cvar->findVar("mat_disable_bloom");
+    bloomCvar->setValue(config->visuals.noBloom ? 1 : 0);
+}
+
 void Visuals::updateBrightness() noexcept
 {
     static auto brightness = interfaces->cvar->findVar("mat_force_tonemap_scale");

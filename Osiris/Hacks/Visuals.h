@@ -11,6 +11,7 @@ namespace Visuals
     void thirdperson() noexcept;
     void removeVisualRecoil(FrameStage stage) noexcept;
     void removeBlur(FrameStage stage) noexcept;
+    void removeBloom() noexcept;
     void updateBrightness() noexcept;
     void removeGrass(FrameStage stage) noexcept;
     void remove3dSky() noexcept;

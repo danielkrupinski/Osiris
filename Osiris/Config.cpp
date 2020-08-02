@@ -369,6 +369,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read<value_t::boolean>(j, "No weapons", v.noWeapons);
     read<value_t::boolean>(j, "No smoke", v.noSmoke);
     read<value_t::boolean>(j, "No blur", v.noBlur);
+    read<value_t::boolean>(j, "No bloom", v.noBloom);
     read<value_t::boolean>(j, "No scope overlay", v.noScopeOverlay);
     read<value_t::boolean>(j, "No grass", v.noGrass);
     read<value_t::boolean>(j, "No shadows", v.noShadows);
@@ -928,6 +929,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("No weapons", noWeapons);
     WRITE("No smoke", noSmoke);
     WRITE("No blur", noBlur);
+    WRITE("No bloom", noBloom);
     WRITE("No scope overlay", noScopeOverlay);
     WRITE("No grass", noGrass);
     WRITE("No shadows", noShadows);
