@@ -791,3 +791,17 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::End();
     }
 }
+
+void Misc::doorSpam(UserCmd* cmd) noexcept {
+
+    if (!localPlayer)
+        return;
+
+    if (!config->misc.doorSpam)
+        return;
+
+    static bool doorSpam = true;
+    if (cmd->buttons & UserCmd::IN_USE) {
+        doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
+    }
+}
