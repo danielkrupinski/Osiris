@@ -154,6 +154,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Visuals::viewmodelxyz();
 
     EnginePrediction::run(cmd);
 
@@ -273,7 +274,6 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);
-        Visuals::viewmodelxyz();
     }
     hooks->client.callOriginal<void, 37>(stage);
 }
@@ -613,7 +613,7 @@ void Hooks::uninstall() noexcept
         interfaces->cvar->findVar("viewmodel_offset_x")->setValue(0);
         interfaces->cvar->findVar("viewmodel_offset_y")->setValue(0);
         interfaces->cvar->findVar("viewmodel_offset_z")->setValue(0);
-        interfaces->cvar->findVar("cl_righthand")->setValue(0);
+        interfaces->cvar->findVar("cl_righthand")->setValue(1);
         interfaces->cvar->findVar("sv_competitive_minspec")->setValue(1);
         Sleep(100);
     }
