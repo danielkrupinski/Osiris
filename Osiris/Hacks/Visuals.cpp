@@ -443,15 +443,14 @@ void Visuals::viewmodelxyz() noexcept
     bool config_righthand_pistols = config->visuals.viewmodelXYZ.viewmodel_clright_pistols;
 
     static ConVar* sv_minspec = interfaces->cvar->findVar("sv_competitive_minspec");
-    
     bool sv_minspec_toggle = false;
-    //classID
+
     const auto activeWeapon = localPlayer->getActiveWeapon(); auto classid = activeWeapon->getClientClass()->classId;
-    //weaponType
     auto weaponType = getWeaponClass(activeWeapon->itemDefinitionIndex2());
-    //weaponIndex 
     auto weaponIndex = activeWeapon->itemDefinitionIndex();
     auto weaponIndex2 = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+
+    //bool isReloading = activeWeapon->isInReload(); //isReloading
 
     if (!config->visuals.viewmodelXYZ.enabled) {
         sv_minspec_toggle = false;

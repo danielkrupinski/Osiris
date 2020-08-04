@@ -980,10 +980,10 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
             ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Left/Right: %.2f");
             ImGui::PopID();
             ImGui::PushID("viewmodel_y_dangermisc");
-            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Close/Far: %.2f");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_y_dangermisc, -20, 20, "Close/Far: %.2f");
             ImGui::PopID();
             ImGui::PushID("viewmodel_z_dangermisc");
-            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Down/Up: %.2f");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_z_dangermisc, -20, 20, "Down/Up: %.2f");
             ImGui::PopID();
         }
         if (weaponType == 4) { //Pistols
