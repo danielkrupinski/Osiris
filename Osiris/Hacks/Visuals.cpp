@@ -469,12 +469,12 @@ void Visuals::viewmodelxyz() noexcept
             if (cl_righthand->getInt() != static_cast<int>(handSwitchKnife))cl_righthand->setValue(handSwitchKnife);
         }
 
-        if (weaponClass == 46) { //grenades
-            if (viewmodel_pos[0]->getFloat() != config_grenades[0])viewmodel_pos[0]->setValue(config_grenades[0]);
-            if (viewmodel_pos[1]->getFloat() != config_grenades[1])viewmodel_pos[1]->setValue(config_grenades[1]);
-            if (viewmodel_pos[2]->getFloat() != config_grenades[2])viewmodel_pos[2]->setValue(config_grenades[2]);
-            if (cl_righthand->getInt() != static_cast<int>(handSwitchNade))cl_righthand->setValue(handSwitchNade);
-        }
+        //if (weaponClass == 46) { //grenades
+        //    if (viewmodel_pos[0]->getFloat() != config_grenades[0])viewmodel_pos[0]->setValue(config_grenades[0]);
+        //    if (viewmodel_pos[1]->getFloat() != config_grenades[1])viewmodel_pos[1]->setValue(config_grenades[1]);
+        //    if (viewmodel_pos[2]->getFloat() != config_grenades[2])viewmodel_pos[2]->setValue(config_grenades[2]);
+        //    if (cl_righthand->getInt() != static_cast<int>(handSwitchNade))cl_righthand->setValue(handSwitchNade);
+        //}
 
         if (weaponClass == 35 && weaponIndex2 != 4) { //pistols
             if (viewmodel_pos[0]->getFloat() != config_pistols[0])viewmodel_pos[0]->setValue(config_pistols[0]);
@@ -483,12 +483,12 @@ void Visuals::viewmodelxyz() noexcept
             if (cl_righthand->getInt() != static_cast<int>(handSwitchPistol))cl_righthand->setValue(handSwitchPistol);
         }
 
-        if (weaponClass == 47) { //misc and dangerzone
-            if (viewmodel_pos[0]->getFloat() != config_dangermisc[0])viewmodel_pos[0]->setValue(config_dangermisc[0]);
-            if (viewmodel_pos[1]->getFloat() != config_dangermisc[1])viewmodel_pos[1]->setValue(config_dangermisc[1]);
-            if (viewmodel_pos[2]->getFloat() != config_dangermisc[2])viewmodel_pos[2]->setValue(config_dangermisc[2]);
-            if (cl_righthand->getInt() != static_cast<int>(handSwitchMisc))cl_righthand->setValue(handSwitchMisc);
-        }
+        //if (weaponClass == 47) { //misc and dangerzone
+        //    if (viewmodel_pos[0]->getFloat() != config_dangermisc[0])viewmodel_pos[0]->setValue(config_dangermisc[0]);
+        //    if (viewmodel_pos[1]->getFloat() != config_dangermisc[1])viewmodel_pos[1]->setValue(config_dangermisc[1]);
+        //    if (viewmodel_pos[2]->getFloat() != config_dangermisc[2])viewmodel_pos[2]->setValue(config_dangermisc[2]);
+        //    if (cl_righthand->getInt() != static_cast<int>(handSwitchMisc))cl_righthand->setValue(handSwitchMisc);
+        //}
 
         if (weaponIndex2 == 4) { //elite
             if (viewmodel_pos[0]->getFloat() != 0)viewmodel_pos[0]->setValue(0);
