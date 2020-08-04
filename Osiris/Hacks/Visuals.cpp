@@ -454,8 +454,8 @@ void Visuals::viewmodelxyz() noexcept
             && weaponClass != 48
             && weaponIndex2 != 4
             && weaponClass != 35
-            && weaponClass != 46
-            && weaponClass != 47) {
+          /*&& weaponClass != 46
+            && weaponClass != 47*/ ) {
             if (viewmodel_pos[0]->getFloat() != config_guns[0])viewmodel_pos[0]->setValue(config_guns[0]);
             if (viewmodel_pos[1]->getFloat() != config_guns[1])viewmodel_pos[1]->setValue(config_guns[1]);
             if (viewmodel_pos[2]->getFloat() != config_guns[2])viewmodel_pos[2]->setValue(config_guns[2]);
