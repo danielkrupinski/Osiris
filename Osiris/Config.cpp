@@ -360,22 +360,22 @@ static void from_json(const json& j, Config::Visuals::ViewmodelXYZ& vxyz)
 {
     read<value_t::boolean>(j, "Enabled", vxyz.enabled);
     read<value_t::boolean>(j, "Menu Type", vxyz.menuType);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", vxyz.clright_guns);
-    read_number(j, "ViewmodelXYZ X", vxyz.x_guns);
-    read_number(j, "ViewmodelXYZ Y", vxyz.y_guns);
-    read_number(j, "ViewmodelXYZ Z", vxyz.z_guns);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Knife", vxyz.clright_knife);
-    read_number(j, "ViewmodelXYZ X Knife", vxyz.x_knife);
-    read_number(j, "ViewmodelXYZ Y Knife", vxyz.y_knife);
-    read_number(j, "ViewmodelXYZ Z Knife", vxyz.z_knife);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Grenades", vxyz.clright_grenades);
-    read_number(j, "ViewmodelXYZ X Grenades", vxyz.x_grenades);
-    read_number(j, "ViewmodelXYZ Y Grenades", vxyz.y_grenades);
-    read_number(j, "ViewmodelXYZ Z Grenades", vxyz.z_grenades);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Pistols", vxyz.clright_pistols);
-    read_number(j, "ViewmodelXYZ X Pistols", vxyz.x_pistols);
-    read_number(j, "ViewmodelXYZ Y Pistols", vxyz.y_pistols);
-    read_number(j, "ViewmodelXYZ Z Pistols", vxyz.z_pistols);
+    read<value_t::boolean>(j, "cl_right Guns", vxyz.clright_guns);
+    read_number(j, "X Guns", vxyz.x_guns);
+    read_number(j, "Y Guns", vxyz.y_guns);
+    read_number(j, "Z Guns", vxyz.z_guns);
+    read<value_t::boolean>(j, "cl_right Knife", vxyz.clright_knife);
+    read_number(j, "X Knife", vxyz.x_knife);
+    read_number(j, "Y Knife", vxyz.y_knife);
+    read_number(j, "Z Knife", vxyz.z_knife);
+    read<value_t::boolean>(j, "cl_right Grenades", vxyz.clright_grenades);
+    read_number(j, "X Grenades", vxyz.x_grenades);
+    read_number(j, "Y Grenades", vxyz.y_grenades);
+    read_number(j, "Z Grenades", vxyz.z_grenades);
+    read<value_t::boolean>(j, "cl_right Pistols", vxyz.clright_pistols);
+    read_number(j, "X Pistols", vxyz.x_pistols);
+    read_number(j, "Y Pistols", vxyz.y_pistols);
+    read_number(j, "Z Pistols", vxyz.z_pistols);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
