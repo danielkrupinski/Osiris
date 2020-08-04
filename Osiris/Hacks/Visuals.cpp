@@ -411,12 +411,10 @@ void Visuals::viewmodelxyz(FrameStage stage) noexcept
 {   
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
+    auto x = localPlayer;
+    auto localPlayer = x;
 
     if (!localPlayer) return;
-
-    //if (!localPlayer->isAlive()) {
-    //    return;
-    //
 
     static ConVar* viewmodel_x = interfaces->cvar->findVar("viewmodel_offset_x");
     static ConVar* viewmodel_y = interfaces->cvar->findVar("viewmodel_offset_y");
@@ -450,10 +448,21 @@ void Visuals::viewmodelxyz(FrameStage stage) noexcept
     const bool config_righthand_dangermisc = config->visuals.viewmodelXYZ.viewmodel_clright_dangermisc;
     const bool config_righthand_pistols = config->visuals.viewmodelXYZ.viewmodel_clright_pistols;
 
-    const auto activeWeapon = localPlayer->getActiveWeapon(); 
+    auto activeWeapon = localPlayer->getActiveWeapon();
+
+    if (!localPlayer->isAlive())
+    {
+        if (!localPlayer->getObserverTarget())
+            return;
+        if (localPlayer->getObserverMode() != ObsMode::InEye)
+            return;
+        const auto activeWeapon = localPlayer->getObserverTarget()->getActiveWeapon();
+    }
+
     const auto classid = activeWeapon->getClientClass()->classId;
     const auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
     const auto weaponIndex2 = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+
     //bool isReloading = activeWeapon->isInReload(); //isReloading
 
     if (!config->visuals.viewmodelXYZ.enabled) {
