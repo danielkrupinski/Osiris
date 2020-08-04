@@ -411,8 +411,6 @@ void Visuals::viewmodelxyz(FrameStage stage) noexcept
 {   
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
-    auto x = localPlayer;
-    auto localPlayer = x;
 
     if (!localPlayer) return;
 
@@ -520,8 +518,8 @@ void Visuals::viewmodelxyz(FrameStage stage) noexcept
         if (   classid != ClassId::Knife  // other equipables not covered by the previous if's
             && classid != ClassId::C4
             && weaponIndex2 != 4 
-            && weaponClass != 46
             && weaponClass != 35
+            && weaponClass != 46
             && weaponClass != 47) {
             if (viewmodel_x->getFloat() != config_x)viewmodel_x->setValue(config_x);
             if (viewmodel_y->getFloat() != config_y)viewmodel_y->setValue(config_y);

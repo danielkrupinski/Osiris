@@ -926,15 +926,13 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
     ImGui::Checkbox("Viewmodel XYZ", &config->visuals.viewmodelXYZ.enabled);
     ImGui::SameLine();
-    bool viewmodelPopup = ImGui::Button("Edit");
-
-    static int weaponType = config->visuals.viewmodelXYZ.menuType; 
-    constexpr auto weaponList = "Guns\0Knife\0Grenades\0Dangerzone & Healthshot\0Pistols\0";
-    if (viewmodelPopup) 
+    if (ImGui::Button("Edit"))
         ImGui::OpenPopup("##viewmodelPopup");
 
     if (ImGui::BeginPopup("##viewmodelPopup")) {
         ImGui::PushID("weaponType");
+        static int weaponType = config->visuals.viewmodelXYZ.menuType;
+        constexpr auto weaponList = "Guns\0Knife\0Grenades\0Dangerzone & Healthshot\0Pistols\0";
         ImGui::Combo("", &weaponType, weaponList);
         ImGui::PopID();
 
