@@ -416,6 +416,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read_number(j, "Hit marker time", v.hitMarkerTime);
     read_number(j, "Playermodel T", v.playerModelT);
     read_number(j, "Playermodel CT", v.playerModelCT);
+    read<value_t::object>(j, "Color correction", v.colorCorrection);
     read<value_t::object>(j, "ViewmodelXYZ", v.viewmodelXYZ);
 }
 
