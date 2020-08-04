@@ -167,11 +167,31 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
-        bool viewmodelxyz{ false };
-        bool viewmodel_clright{ true };
-        float viewmodel_x{ 0.0f };
-        float viewmodel_y{ 0.0f };
-        float viewmodel_z{ 0.0f };
+
+        struct ViewmodelXYZ {
+            bool enabled{ false };
+            int menuType{ 0 };
+            bool viewmodel_clright{ true };
+            float viewmodel_x{ 0.0f };
+            float viewmodel_y{ 0.0f };
+            float viewmodel_z{ 0.0f };
+            bool viewmodel_clright_knife{ true };
+            float viewmodel_x_knife{ 0.0f };
+            float viewmodel_y_knife{ 0.0f };
+            float viewmodel_z_knife{ 0.0f };
+            bool viewmodel_clright_grenades{ true };
+            float viewmodel_x_grenades{ 0.0f };
+            float viewmodel_y_grenades{ 0.0f };
+            float viewmodel_z_grenades{ 0.0f };
+            bool viewmodel_clright_dangermisc{ true };
+            float viewmodel_x_dangermisc{ 0.0f };
+            float viewmodel_y_dangermisc{ 0.0f };
+            float viewmodel_z_dangermisc{ 0.0f };
+            bool viewmodel_clright_pistols{ true };
+            float viewmodel_x_pistols{ 0.0f };
+            float viewmodel_y_pistols{ 0.0f };
+            float viewmodel_z_pistols{ 0.0f };
+        } viewmodelXYZ;
 
         struct ColorCorrection {
             bool enabled = false;

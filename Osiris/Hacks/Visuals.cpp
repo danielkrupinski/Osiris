@@ -409,35 +409,107 @@ void Visuals::skybox(FrameStage stage) noexcept
 
 void Visuals::viewmodelxyz() noexcept
 {
-    if (!localPlayer)
-        return;
-    float config_x = config->visuals.viewmodel_x;
-    float config_y = config->visuals.viewmodel_y;
-    float config_z = config->visuals.viewmodel_z;
+    if (!localPlayer) return;
+
+    float config_x = config->visuals.viewmodelXYZ.viewmodel_x;
+    float config_y = config->visuals.viewmodelXYZ.viewmodel_y;
+    float config_z = config->visuals.viewmodelXYZ.viewmodel_z;
+
+    float config_x_knife = config->visuals.viewmodelXYZ.viewmodel_x_knife;
+    float config_y_knife = config->visuals.viewmodelXYZ.viewmodel_y_knife;
+    float config_z_knife = config->visuals.viewmodelXYZ.viewmodel_z_knife;
+
+    float config_x_grenades = config->visuals.viewmodelXYZ.viewmodel_x_grenades;
+    float config_y_grenades = config->visuals.viewmodelXYZ.viewmodel_y_grenades;
+    float config_z_grenades = config->visuals.viewmodelXYZ.viewmodel_z_grenades;
+
+    float config_x_pistols = config->visuals.viewmodelXYZ.viewmodel_x_pistols;
+    float config_y_pistols = config->visuals.viewmodelXYZ.viewmodel_y_pistols;
+    float config_z_pistols = config->visuals.viewmodelXYZ.viewmodel_z_pistols;
+
+    float config_x_dangermisc = config->visuals.viewmodelXYZ.viewmodel_x_dangermisc;
+    float config_y_dangermisc = config->visuals.viewmodelXYZ.viewmodel_y_dangermisc;
+    float config_z_dangermisc = config->visuals.viewmodelXYZ.viewmodel_z_dangermisc;
 
     static ConVar* viewmodel_x = interfaces->cvar->findVar("viewmodel_offset_x");
     static ConVar* viewmodel_y = interfaces->cvar->findVar("viewmodel_offset_y");
     static ConVar* viewmodel_z = interfaces->cvar->findVar("viewmodel_offset_z");
 
     static ConVar* cl_righthand = interfaces->cvar->findVar("cl_righthand");
-    bool config_righthand = config->visuals.viewmodel_clright;
+    bool config_righthand = config->visuals.viewmodelXYZ.viewmodel_clright;
+    bool config_righthand_knife = config->visuals.viewmodelXYZ.viewmodel_clright_knife;
+    bool config_righthand_grenades = config->visuals.viewmodelXYZ.viewmodel_clright_grenades;
+    bool config_righthand_dangermisc = config->visuals.viewmodelXYZ.viewmodel_clright_dangermisc;
+    bool config_righthand_pistols = config->visuals.viewmodelXYZ.viewmodel_clright_pistols;
 
     static ConVar* sv_minspec = interfaces->cvar->findVar("sv_competitive_minspec");
     
     bool sv_minspec_toggle = false;
+    //classID
+    const auto activeWeapon = localPlayer->getActiveWeapon(); auto classid = activeWeapon->getClientClass()->classId;
+    //weaponType
+    auto weaponType = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+    //weaponIndex 
+    auto weaponIndex = activeWeapon->itemDefinitionIndex();
+    auto weaponIndex2 = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
 
-    if (config->visuals.viewmodelxyz) {
-        sv_minspec_toggle = true;
-        viewmodel_x->setValue(config_x);
-        viewmodel_y->setValue(config_y);
-        viewmodel_z->setValue(config_z);
-        cl_righthand->setValue(config_righthand);
-    } else {
+    if (!config->visuals.viewmodelXYZ.enabled) {
         sv_minspec_toggle = false;
         viewmodel_x->setValue(0);
         viewmodel_y->setValue(0);
         viewmodel_z->setValue(0);
         cl_righthand->setValue(1);
+    } else {
+        sv_minspec_toggle = true;
+
+        if (weaponType == 47) { //misc and dangerzone
+            viewmodel_x->setValue(config_x_dangermisc);
+            viewmodel_y->setValue(config_y_dangermisc);
+            viewmodel_z->setValue(config_z_dangermisc);
+            cl_righthand->setValue(config_righthand_dangermisc);
+        }
+
+        if (weaponType == 46) { //grenades
+            viewmodel_x->setValue(config_x_grenades);
+            viewmodel_y->setValue(config_y_grenades);
+            viewmodel_z->setValue(config_z_grenades);
+            cl_righthand->setValue(config_righthand_grenades);
+        }
+
+        if (weaponType == 35 && weaponIndex2 != 4) { //pistols
+            viewmodel_x->setValue(config_x_pistols);
+            viewmodel_y->setValue(config_y_pistols);
+            viewmodel_z->setValue(config_z_pistols);
+            cl_righthand->setValue(config_righthand_pistols);
+        }
+
+        if (weaponIndex2 == 4) { //elite
+            viewmodel_x->setValue(0);
+            viewmodel_y->setValue(0);
+            viewmodel_z->setValue(0);
+            cl_righthand->setValue(1);
+        }
+
+        if (classid == ClassId::C4) { //c4
+            viewmodel_x->setValue(0);
+            viewmodel_y->setValue(0);
+            viewmodel_z->setValue(0);
+            cl_righthand->setValue(1);
+        }
+
+        if (classid == ClassId::Knife) { //knife
+            viewmodel_x->setValue(config_x_knife);
+            viewmodel_y->setValue(config_y_knife);
+            viewmodel_z->setValue(config_z_knife);
+            cl_righthand->setValue(config_righthand_knife);
+        }
+
+        if (classid != ClassId::Knife && classid != ClassId::C4 && weaponIndex2 != 4 && weaponType != 46 && weaponType != 35 && weaponType != 47) {
+            viewmodel_x->setValue(config_x);
+            viewmodel_y->setValue(config_y);
+            viewmodel_z->setValue(config_z);
+            cl_righthand->setValue(config_righthand);
+        }
     }
 
     if (sv_minspec_toggle) {

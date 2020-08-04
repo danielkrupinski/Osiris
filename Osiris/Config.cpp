@@ -356,6 +356,28 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read_number(j, "Yellow", c.yellow);
 }
 
+static void from_json(const json& j, Config::Visuals::ViewmodelXYZ& vxyz)
+{
+    read<value_t::boolean>(j, "Enabled", vxyz.enabled);
+    read<value_t::boolean>(j, "Menu Type", vxyz.menuType);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", vxyz.viewmodel_clright);
+    read_number(j, "ViewmodelXYZ X", vxyz.viewmodel_x);
+    read_number(j, "ViewmodelXYZ Y", vxyz.viewmodel_y);
+    read_number(j, "ViewmodelXYZ Z", vxyz.viewmodel_z);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Knife", vxyz.viewmodel_clright_knife);
+    read_number(j, "ViewmodelXYZ X Knife", vxyz.viewmodel_x_knife);
+    read_number(j, "ViewmodelXYZ Y Knife", vxyz.viewmodel_y_knife);
+    read_number(j, "ViewmodelXYZ Z Knife", vxyz.viewmodel_z_knife);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Grenades", vxyz.viewmodel_clright_grenades);
+    read_number(j, "ViewmodelXYZ X Grenades", vxyz.viewmodel_x_grenades);
+    read_number(j, "ViewmodelXYZ Y Grenades", vxyz.viewmodel_y_grenades);
+    read_number(j, "ViewmodelXYZ Z Grenades", vxyz.viewmodel_z_grenades);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Pistols", vxyz.viewmodel_clright_pistols);
+    read_number(j, "ViewmodelXYZ X Pistols", vxyz.viewmodel_x_pistols);
+    read_number(j, "ViewmodelXYZ Y Pistols", vxyz.viewmodel_y_pistols);
+    read_number(j, "ViewmodelXYZ Z Pistols", vxyz.viewmodel_z_pistols);
+}
+
 static void from_json(const json& j, Config::Visuals& v)
 {
     read<value_t::boolean>(j, "Disable post-processing", v.disablePostProcessing);
@@ -394,12 +416,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read_number(j, "Hit marker time", v.hitMarkerTime);
     read_number(j, "Playermodel T", v.playerModelT);
     read_number(j, "Playermodel CT", v.playerModelCT);
-    read<value_t::boolean>(j, "ViewmodelXYZ", v.viewmodelxyz);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", v.viewmodel_clright);
-    read_number(j, "ViewmodelXYZ X", v.viewmodel_x);
-    read_number(j, "ViewmodelXYZ Y", v.viewmodel_y);
-    read_number(j, "ViewmodelXYZ Z", v.viewmodel_z);
-    read<value_t::object>(j, "Color correction", v.colorCorrection);
+    read<value_t::object>(j, "ViewmodelXYZ", v.viewmodelXYZ);
 }
 
 static void from_json(const json& j, sticker_setting& s)
@@ -918,6 +935,28 @@ static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Co
     WRITE("Yellow", yellow);
 }
 
+static void to_json(json& j, const Config::Visuals::ViewmodelXYZ& o, const Config::Visuals::ViewmodelXYZ& dummy)
+{
+    WRITE("Enabled", enabled);
+    WRITE("Menu Type", menuType);
+    WRITE("ViewmodelXYZ cl_right", viewmodel_clright);
+    WRITE("ViewmodelXYZ X", viewmodel_x);
+    WRITE("ViewmodelXYZ Y", viewmodel_y);
+    WRITE("ViewmodelXYZ Z", viewmodel_z);
+    WRITE("ViewmodelXYZ cl_right Knife", viewmodel_clright_knife);
+    WRITE("ViewmodelXYZ X Knife", viewmodel_x_knife);
+    WRITE("ViewmodelXYZ Y Knife", viewmodel_y_knife);
+    WRITE("ViewmodelXYZ Z Knife", viewmodel_z_knife);
+    WRITE("ViewmodelXYZ cl_right Grenades", viewmodel_clright_grenades);
+    WRITE("ViewmodelXYZ X Grenades", viewmodel_x_grenades);
+    WRITE("ViewmodelXYZ Y Grenades", viewmodel_y_grenades);
+    WRITE("ViewmodelXYZ Z Grenades", viewmodel_z_grenades);
+    WRITE("ViewmodelXYZ cl_right Pistols", viewmodel_clright_pistols);
+    WRITE("ViewmodelXYZ X Pistols", viewmodel_x_pistols);
+    WRITE("ViewmodelXYZ Y Pistols", viewmodel_y_pistols);
+    WRITE("ViewmodelXYZ Z Pistols", viewmodel_z_pistols);
+}
+
 static void to_json(json& j, const Config::Visuals& o)
 {
     const Config::Visuals dummy;
@@ -958,12 +997,8 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime);
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
-    WRITE("ViewmodelXYZ", viewmodelxyz);
-    WRITE("ViewmodelXYZ cl_right", viewmodel_clright);
-    WRITE("ViewmodelXYZ X", viewmodel_x);
-    WRITE("ViewmodelXYZ Y", viewmodel_y);
-    WRITE("ViewmodelXYZ Z", viewmodel_z);
     WRITE("Color correction", colorCorrection);
+    WRITE("ViewmodelXYZ", viewmodelXYZ);
 }
 
 static void to_json(json& j, const ImVec4& o)

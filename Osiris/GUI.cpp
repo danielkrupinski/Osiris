@@ -924,23 +924,80 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
-    ImGui::Checkbox("Viewmodel XYZ", &config->visuals.viewmodelxyz);
+    ImGui::Checkbox("Viewmodel XYZ", &config->visuals.viewmodelXYZ.enabled);
     ImGui::SameLine();
     bool viewmodelPopup = ImGui::Button("Edit");
+
+    static int weaponType = config->visuals.viewmodelXYZ.menuType; 
+    constexpr auto weaponList = "Guns\0Knife\0Grenades\0Dangerzone & Healthshot\0Pistols\0";
     if (viewmodelPopup) 
         ImGui::OpenPopup("##viewmodelPopup");
 
     if (ImGui::BeginPopup("##viewmodelPopup")) {
-        ImGui::Checkbox("cl_righthand", &config->visuals.viewmodel_clright);
-        ImGui::PushID("viewmodel_x");
-        ImGui::SliderFloat("", &config->visuals.viewmodel_x, -20, 20, "Left/Right: %.2f");
+        ImGui::PushID("weaponType");
+        ImGui::Combo("", &weaponType, weaponList);
         ImGui::PopID();
-        ImGui::PushID("viewmodel_y");
-        ImGui::SliderFloat("", &config->visuals.viewmodel_y, -20, 20, "Close/Far: %.2f");
-        ImGui::PopID();
-        ImGui::PushID("viewmodel_z");
-        ImGui::SliderFloat("", &config->visuals.viewmodel_z, -20, 20, "Down/Up: %.2f");
-        ImGui::PopID();
+
+        if (weaponType == 0) { //Guns
+            ImGui::Checkbox("cl_righthand", &config->visuals.viewmodelXYZ.viewmodel_clright);
+            ImGui::PushID("viewmodel_x_guns");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x, -20, 20, "Left/Right: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_y_guns");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_y, -20, 20, "Close/Far: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_z_guns");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_z, -20, 20, "Down/Up: %.2f");
+            ImGui::PopID();
+        }
+        if (weaponType == 1) { //Knife
+            ImGui::Checkbox("cl_righthand", &config->visuals.viewmodelXYZ.viewmodel_clright_knife);
+            ImGui::PushID("viewmodel_x_knife");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_knife, -20, 20, "Left/Right: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_y_knife");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_y_knife, -20, 20, "Close/Far: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_z_knife");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_z_knife, -20, 20, "Down/Up: %.2f");
+            ImGui::PopID();
+        }
+        if (weaponType == 2) { //Grenades
+            ImGui::Checkbox("cl_righthand", &config->visuals.viewmodelXYZ.viewmodel_clright_grenades);
+            ImGui::PushID("viewmodel_x_grenades");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_grenades, -20, 20, "Left/Right: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_y_grenades");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_y_grenades, -20, 20, "Close/Far: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_z_grenades");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_z_grenades, -20, 20, "Down/Up: %.2f");
+            ImGui::PopID();
+        }
+        if (weaponType == 3) { //Dangerzone and misc (healthshot)
+            ImGui::Checkbox("cl_righthand", &config->visuals.viewmodelXYZ.viewmodel_clright_dangermisc);
+            ImGui::PushID("viewmodel_x_dangermisc");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Left/Right: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_y_dangermisc");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Close/Far: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_z_dangermisc");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_dangermisc, -20, 20, "Down/Up: %.2f");
+            ImGui::PopID();
+        }
+        if (weaponType == 4) { //Pistols
+            ImGui::Checkbox("cl_righthand", &config->visuals.viewmodelXYZ.viewmodel_clright_pistols);
+            ImGui::PushID("viewmodel_x_pistols");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_x_pistols, -20, 20, "Left/Right: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_y_pistols");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_y_pistols, -20, 20, "Close/Far: %.2f");
+            ImGui::PopID();
+            ImGui::PushID("viewmodel_z_pistols");
+            ImGui::SliderFloat("", &config->visuals.viewmodelXYZ.viewmodel_z_pistols, -20, 20, "Down/Up: %.2f");
+            ImGui::PopID();
+        }
         ImGui::EndPopup();
     }
     ImGui::NextColumn();

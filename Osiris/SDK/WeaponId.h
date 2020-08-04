@@ -126,6 +126,13 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
 
     case WeaponId::Taser: return 39;
+
+    case WeaponId::Flashbang: return 40;
+    case WeaponId::SmokeGrenade: return 41;
+    case WeaponId::HeGrenade: return 42;
+    case WeaponId::IncGrenade: return 43;
+    case WeaponId::Molotov: return 44;
+    case WeaponId::Decoy: return 45;
     }
 }
 
@@ -171,5 +178,25 @@ constexpr int getWeaponClass(WeaponId weaponId) noexcept
     case WeaponId::Awp:
     case WeaponId::G3SG1:
     case WeaponId::Scar20: return 38;
+
+    case WeaponId::Flashbang:
+    case WeaponId::SmokeGrenade:
+    case WeaponId::HeGrenade:
+    case WeaponId::IncGrenade:
+    case WeaponId::Molotov:
+    case WeaponId::Decoy: return 46;
+
+    case WeaponId::Shield:
+    case WeaponId::Healthshot:
+    case WeaponId::ZoneRepulsor:
+    case WeaponId::TaGrenade:
+    case WeaponId::Axe:
+    case WeaponId::Hammer:
+    case WeaponId::Spanner:
+    case WeaponId::Firebomb:
+    case WeaponId::Diversion:
+    case WeaponId::FragGrenade:
+    case WeaponId::Snowball:
+    case WeaponId::BumpMine: return 47;
     }
 }
