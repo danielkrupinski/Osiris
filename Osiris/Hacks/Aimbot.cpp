@@ -271,7 +271,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (config->aimbot[weaponIndex].bone)
                     break;
             }
-            if (bestTarget)
+            if (bestTarget.notNull())
             {
                 if (!hitChance(localPlayer.get(), entity, activeWeapon, bestAngle, cmd, config->aimbot[weaponIndex].hitchance))
                 {
