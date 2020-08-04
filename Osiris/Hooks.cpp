@@ -154,7 +154,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
-    Visuals::viewmodelxyz();
 
     EnginePrediction::run(cmd);
 
@@ -274,6 +273,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);
+        Visuals::viewmodelxyz(stage);
     }
     hooks->client.callOriginal<void, 37>(stage);
 }
