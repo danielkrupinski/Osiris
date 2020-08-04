@@ -360,22 +360,22 @@ static void from_json(const json& j, Config::Visuals::ViewmodelXYZ& vxyz)
 {
     read<value_t::boolean>(j, "Enabled", vxyz.enabled);
     read<value_t::boolean>(j, "Menu Type", vxyz.menuType);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", vxyz.viewmodel_clright);
-    read_number(j, "ViewmodelXYZ X", vxyz.viewmodel_x);
-    read_number(j, "ViewmodelXYZ Y", vxyz.viewmodel_y);
-    read_number(j, "ViewmodelXYZ Z", vxyz.viewmodel_z);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Knife", vxyz.viewmodel_clright_knife);
-    read_number(j, "ViewmodelXYZ X Knife", vxyz.viewmodel_x_knife);
-    read_number(j, "ViewmodelXYZ Y Knife", vxyz.viewmodel_y_knife);
-    read_number(j, "ViewmodelXYZ Z Knife", vxyz.viewmodel_z_knife);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Grenades", vxyz.viewmodel_clright_grenades);
-    read_number(j, "ViewmodelXYZ X Grenades", vxyz.viewmodel_x_grenades);
-    read_number(j, "ViewmodelXYZ Y Grenades", vxyz.viewmodel_y_grenades);
-    read_number(j, "ViewmodelXYZ Z Grenades", vxyz.viewmodel_z_grenades);
-    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Pistols", vxyz.viewmodel_clright_pistols);
-    read_number(j, "ViewmodelXYZ X Pistols", vxyz.viewmodel_x_pistols);
-    read_number(j, "ViewmodelXYZ Y Pistols", vxyz.viewmodel_y_pistols);
-    read_number(j, "ViewmodelXYZ Z Pistols", vxyz.viewmodel_z_pistols);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right", vxyz.clright_guns);
+    read_number(j, "ViewmodelXYZ X", vxyz.x_guns);
+    read_number(j, "ViewmodelXYZ Y", vxyz.y_guns);
+    read_number(j, "ViewmodelXYZ Z", vxyz.z_guns);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Knife", vxyz.clright_knife);
+    read_number(j, "ViewmodelXYZ X Knife", vxyz.x_knife);
+    read_number(j, "ViewmodelXYZ Y Knife", vxyz.y_knife);
+    read_number(j, "ViewmodelXYZ Z Knife", vxyz.z_knife);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Grenades", vxyz.clright_grenades);
+    read_number(j, "ViewmodelXYZ X Grenades", vxyz.x_grenades);
+    read_number(j, "ViewmodelXYZ Y Grenades", vxyz.y_grenades);
+    read_number(j, "ViewmodelXYZ Z Grenades", vxyz.z_grenades);
+    read<value_t::boolean>(j, "ViewmodelXYZ cl_right Pistols", vxyz.clright_pistols);
+    read_number(j, "ViewmodelXYZ X Pistols", vxyz.x_pistols);
+    read_number(j, "ViewmodelXYZ Y Pistols", vxyz.y_pistols);
+    read_number(j, "ViewmodelXYZ Z Pistols", vxyz.z_pistols);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
@@ -940,22 +940,22 @@ static void to_json(json& j, const Config::Visuals::ViewmodelXYZ& o, const Confi
 {
     WRITE("Enabled", enabled);
     WRITE("Menu Type", menuType);
-    WRITE("ViewmodelXYZ cl_right", viewmodel_clright);
-    WRITE("ViewmodelXYZ X", viewmodel_x);
-    WRITE("ViewmodelXYZ Y", viewmodel_y);
-    WRITE("ViewmodelXYZ Z", viewmodel_z);
-    WRITE("ViewmodelXYZ cl_right Knife", viewmodel_clright_knife);
-    WRITE("ViewmodelXYZ X Knife", viewmodel_x_knife);
-    WRITE("ViewmodelXYZ Y Knife", viewmodel_y_knife);
-    WRITE("ViewmodelXYZ Z Knife", viewmodel_z_knife);
-    WRITE("ViewmodelXYZ cl_right Grenades", viewmodel_clright_grenades);
-    WRITE("ViewmodelXYZ X Grenades", viewmodel_x_grenades);
-    WRITE("ViewmodelXYZ Y Grenades", viewmodel_y_grenades);
-    WRITE("ViewmodelXYZ Z Grenades", viewmodel_z_grenades);
-    WRITE("ViewmodelXYZ cl_right Pistols", viewmodel_clright_pistols);
-    WRITE("ViewmodelXYZ X Pistols", viewmodel_x_pistols);
-    WRITE("ViewmodelXYZ Y Pistols", viewmodel_y_pistols);
-    WRITE("ViewmodelXYZ Z Pistols", viewmodel_z_pistols);
+    WRITE("cl_right Guns", clright_guns);
+    WRITE("X Guns", x_guns);
+    WRITE("Y Guns", y_guns);
+    WRITE("Z Guns", z_guns);
+    WRITE("cl_right Knife", clright_knife);
+    WRITE("X Knife", x_knife);
+    WRITE("Y Knife", y_knife);
+    WRITE("Z Knife", z_knife);
+    WRITE("cl_right Grenades", clright_grenades);
+    WRITE("X Grenades", x_grenades);
+    WRITE("Y Grenades", y_grenades);
+    WRITE("Z Grenades", z_grenades);
+    WRITE("cl_right Pistols", clright_pistols);
+    WRITE("X Pistols", x_pistols);
+    WRITE("Y Pistols", y_pistols);
+    WRITE("Z Pistols", z_pistols);
 }
 
 static void to_json(json& j, const Config::Visuals& o)

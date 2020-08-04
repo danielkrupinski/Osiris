@@ -171,26 +171,26 @@ public:
         struct ViewmodelXYZ {
             bool enabled{ false };
             int menuType{ 0 };
-            bool viewmodel_clright{ true };
-            float viewmodel_x{ 0.0f };
-            float viewmodel_y{ 0.0f };
-            float viewmodel_z{ 0.0f };
-            bool viewmodel_clright_knife{ true };
-            float viewmodel_x_knife{ 0.0f };
-            float viewmodel_y_knife{ 0.0f };
-            float viewmodel_z_knife{ 0.0f };
-            bool viewmodel_clright_grenades{ true };
-            float viewmodel_x_grenades{ 0.0f };
-            float viewmodel_y_grenades{ 0.0f };
-            float viewmodel_z_grenades{ 0.0f };
-            bool viewmodel_clright_dangermisc{ true };
-            float viewmodel_x_dangermisc{ 0.0f };
-            float viewmodel_y_dangermisc{ 0.0f };
-            float viewmodel_z_dangermisc{ 0.0f };
-            bool viewmodel_clright_pistols{ true };
-            float viewmodel_x_pistols{ 0.0f };
-            float viewmodel_y_pistols{ 0.0f };
-            float viewmodel_z_pistols{ 0.0f };
+            bool clright_guns{ true };
+            float x_guns{ 0.0f };
+            float y_guns{ 0.0f };
+            float z_guns{ 0.0f };
+            bool clright_knife{ true };
+            float x_knife{ 0.0f };
+            float y_knife{ 0.0f };
+            float z_knife{ 0.0f };
+            bool clright_grenades{ true };
+            float x_grenades{ 0.0f };
+            float y_grenades{ 0.0f };
+            float z_grenades{ 0.0f };
+            bool clright_dangermisc{ true };
+            float x_dangermisc{ 0.0f };
+            float y_dangermisc{ 0.0f };
+            float z_dangermisc{ 0.0f };
+            bool clright_pistols{ true };
+            float x_pistols{ 0.0f };
+            float y_pistols{ 0.0f };
+            float z_pistols{ 0.0f };
         } viewmodelXYZ;
 
         struct ColorCorrection {

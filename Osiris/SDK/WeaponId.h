@@ -133,6 +133,8 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::IncGrenade: return 43;
     case WeaponId::Molotov: return 44;
     case WeaponId::Decoy: return 45;
+
+    case WeaponId::C4: return 48;
     }
 }
 
