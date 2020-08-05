@@ -798,7 +798,15 @@ void Misc::doorSpam(UserCmd* cmd) noexcept {
         return;
 
     static bool doorSpam = true;
-    if (cmd->buttons & UserCmd::IN_USE) {
-        doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
+    constexpr float doorRange{ 200.0f };
+    Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
+                       cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
+                      -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
+    Trace trace;
+    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+
+    if (trace.entity || trace.entity->getClientClass()->classId == ClassId::PropDoorRotating)
+        if (cmd->buttons & UserCmd::IN_USE) {
+            doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
     }
 }
