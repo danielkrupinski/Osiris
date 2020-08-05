@@ -1405,12 +1405,15 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     if (!contentOnly) {
         if (!window.config)
             return;
-        ImGui::SetNextWindowSize({ 290.0f, 200.0f });
+        ImGui::SetNextWindowSize({ 290.0f, 0.0f });
         ImGui::Begin("Config", &window.config, windowFlags);
     }
 
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 170.0f);
+
+    static bool incrementalLoad = false;
+    ImGui::Checkbox("Incremental Load", &incrementalLoad);
 
     ImGui::PushItemWidth(160.0f);
 
@@ -1476,7 +1479,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         }
         if (currentConfig != -1) {
             if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config->load(currentConfig);
+                config->load(currentConfig, incrementalLoad);
                 updateColors();
                 SkinChanger::scheduleHudUpdate();
                 Misc::updateClanTag(true);
@@ -1496,8 +1499,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Osiris", nullptr, windowFlags | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
         if (ImGui::BeginTabItem("Aimbot")) {

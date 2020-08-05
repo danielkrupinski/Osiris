@@ -94,8 +94,12 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
     if (!j.contains(key))
         return;
 
-    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size())
-        val.get_to(o);
+    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size()) {
+        for (std::size_t i = 0; i < val.size(); ++i) {
+            if (!val[i].empty())
+                val[i].get_to(o[i]);
+        }
+    }
 }
 
 template <typename T>
@@ -548,7 +552,7 @@ static void from_json(const json& j, Config::Reportbot& r)
     read<value_t::boolean>(j, "Other Hacking", r.other);
 }
 
-void Config::load(size_t id) noexcept
+void Config::load(size_t id, bool incremental) noexcept
 {
     json j;
 
@@ -556,6 +560,9 @@ void Config::load(size_t id) noexcept
         in >> j;
     else
         return;
+
+    if (!incremental)
+        reset();
 
     read(j, "Aimbot", aimbot);
     read(j, "Triggerbot", triggerbot);
