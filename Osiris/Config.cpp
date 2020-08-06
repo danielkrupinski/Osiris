@@ -130,7 +130,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static void read_map(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+static void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
 {
     if (j.contains(key) && j[key].is_object()) {
         for (auto& element : j[key].items())
@@ -357,12 +357,12 @@ static void from_json(const json& j, Config::Chams& c)
 
 static void from_json(const json& j, Config::StreamProofESP& e)
 {
-    read_map(j, "Allies", e.allies);
-    read_map(j, "Enemies", e.enemies);
-    read_map(j, "Weapons", e.weapons);
-    read_map(j, "Projectiles", e.projectiles);
-    read_map(j, "Loot Crates", e.lootCrates);
-    read_map(j, "Other Entities", e.otherEntities);
+    read(j, "Allies", e.allies);
+    read(j, "Enemies", e.enemies);
+    read(j, "Weapons", e.weapons);
+    read(j, "Projectiles", e.projectiles);
+    read(j, "Loot Crates", e.lootCrates);
+    read(j, "Other Entities", e.otherEntities);
 }
 
 static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
@@ -587,7 +587,7 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read(j, "Glow", glow);
-    read_map(j, "Chams", chams);
+    read(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read(j, "Skin changer", skinChanger);
