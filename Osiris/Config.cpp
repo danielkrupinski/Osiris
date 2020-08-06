@@ -79,6 +79,15 @@ static void read(const json& j, const char* key, bool& o) noexcept
         val.get_to(o);
 }
 
+static void read(const json& j, const char* key, float& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::number_float)
+        val.get_to(o);
+}
+
 template <typename T, size_t Size>
 static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
@@ -112,7 +121,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static void read_number(const json& j, const char* key, T& o) noexcept
+static typename std::enable_if_t<!std::is_same_v<T, float>> read_number(const json& j, const char* key, T& o) noexcept
 {
     if (!j.contains(key))
         return;
@@ -134,7 +143,7 @@ static void from_json(const json& j, ColorA& c)
 {
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);
-    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+    read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
 static void from_json(const json& j, ColorToggle& ct)
@@ -147,7 +156,7 @@ static void from_json(const json& j, Config::Color& c)
 {
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);
-    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+    read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
 static void from_json(const json& j, Config::ColorToggle& ct)
@@ -160,21 +169,21 @@ static void from_json(const json& j, ColorToggleRounding& ctr)
 {
     from_json(j, static_cast<ColorToggle&>(ctr));
 
-    read_number(j, "Rounding", ctr.rounding);
+    read(j, "Rounding", ctr.rounding);
 }
 
 static void from_json(const json& j, ColorToggleThickness& ctt)
 {
     from_json(j, static_cast<ColorToggle&>(ctt));
 
-    read_number(j, "Thickness", ctt.thickness);
+    read(j, "Thickness", ctt.thickness);
 }
 
 static void from_json(const json& j, ColorToggleThicknessRounding& cttr)
 {
     from_json(j, static_cast<ColorToggleRounding&>(cttr));
 
-    read_number(j, "Thickness", cttr.thickness);
+    read(j, "Thickness", cttr.thickness);
 }
 
 static void from_json(const json& j, Font& f)
@@ -212,7 +221,7 @@ static void from_json(const json& j, Shared& s)
     read<value_t::object>(j, "Snapline", s.snapline);
     read<value_t::object>(j, "Box", s.box);
     read<value_t::object>(j, "Name", s.name);
-    read_number(j, "Text Cull Distance", s.textCullDistance);
+    read(j, "Text Cull Distance", s.textCullDistance);
 }
 
 static void from_json(const json& j, Weapon& w)
@@ -227,7 +236,7 @@ static void from_json(const json& j, Trail& t)
     from_json(j, static_cast<ColorToggleThickness&>(t));
 
     read_number(j, "Type", t.type);
-    read_number(j, "Time", t.time);
+    read(j, "Time", t.time);
 }
 
 static void from_json(const json& j, Trails& t)
@@ -259,8 +268,8 @@ static void from_json(const json& j, Player& p)
 
 static void from_json(const json& j, ImVec2& v)
 {
-    read_number(j, "X", v.x);
-    read_number(j, "Y", v.y);
+    read(j, "X", v.x);
+    read(j, "Y", v.y);
 }
 
 static void from_json(const json& j, Config::Aimbot& a)
@@ -278,11 +287,11 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Ignore smoke", a.ignoreSmoke);
     read(j, "Auto shot", a.autoShot);
     read(j, "Auto scope", a.autoScope);
-    read_number(j, "Fov", a.fov);
-    read_number(j, "Smooth", a.smooth);
+    read(j, "Fov", a.fov);
+    read(j, "Smooth", a.smooth);
     read_number(j, "Bone", a.bone);
-    read_number(j, "Max aim inaccuracy", a.maxAimInaccuracy);
-    read_number(j, "Max shot inaccuracy", a.maxShotInaccuracy);
+    read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
+    read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
     read_number(j, "Min damage", a.minDamage);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
@@ -301,7 +310,7 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read_number(j, "Shot delay", t.shotDelay);
     read_number(j, "Min damage", t.minDamage);
     read(j, "Killshot", t.killshot);
-    read_number(j, "Burst Time", t.burstTime);
+    read(j, "Burst Time", t.burstTime);
 }
 
 static void from_json(const json& j, Config::Backtrack& b)
@@ -317,7 +326,7 @@ static void from_json(const json& j, Config::AntiAim& a)
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
     read(j, "Yaw", a.yaw);
-    read_number(j, "Pitch angle", a.pitchAngle);
+    read(j, "Pitch angle", a.pitchAngle);
 }
 
 static void from_json(const json& j, Config::Glow& g)
@@ -360,13 +369,14 @@ static void from_json(const json& j, Config::StreamProofESP& e)
 static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
 {
     read(j, "Enabled", c.enabled);
-    read_number(j, "Blue", c.blue);
-    read_number(j, "Red", c.red);
-    read_number(j, "Mono", c.mono);
-    read_number(j, "Saturation", c.saturation);
-    read_number(j, "Ghost", c.ghost);
-    read_number(j, "Green", c.green);
-    read_number(j, "Yellow", c.yellow);
+    read(j, "Blue", c.blue);
+    read(j, "Red", c.red);
+    read(j, "Mono", c.mono);
+    read(j, "Saturation", c.saturation);
+    read(j, "Ghost", c.ghost);
+    read(j, "Green", c.green);
+    read(j, "Yellow", c.yellow);
+    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
@@ -395,16 +405,16 @@ static void from_json(const json& j, Config::Visuals& v)
     read_number(j, "FOV", v.fov);
     read_number(j, "Far Z", v.farZ);
     read_number(j, "Flash reduction", v.flashReduction);
-    read_number(j, "Brightness", v.brightness);
+    read(j, "Brightness", v.brightness);
     read_number(j, "Skybox", v.skybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
     read(j, "Deagle spinner", v.deagleSpinner);
     read_number(j, "Screen effect", v.screenEffect);
     read_number(j, "Hit effect", v.hitEffect);
-    read_number(j, "Hit effect time", v.hitEffectTime);
+    read(j, "Hit effect time", v.hitEffectTime);
     read_number(j, "Hit marker", v.hitMarker);
-    read_number(j, "Hit marker time", v.hitMarkerTime);
+    read(j, "Hit marker time", v.hitMarkerTime);
     read_number(j, "Playermodel T", v.playerModelT);
     read_number(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
@@ -414,9 +424,9 @@ static void from_json(const json& j, sticker_setting& s)
 {
     read_number(j, "Kit", s.kit);
     read_number(j, "Kit vector index", s.kit_vector_index);
-    read_number(j, "Wear", s.wear);
-    read_number(j, "Scale", s.scale);
-    read_number(j, "Rotation", s.rotation);
+    read(j, "Wear", s.wear);
+    read(j, "Scale", s.scale);
+    read(j, "Rotation", s.rotation);
 }
 
 static void from_json(const json& j, item_setting& i)
@@ -435,7 +445,7 @@ static void from_json(const json& j, item_setting& i)
 
     read_number(j, "Seed", i.seed);
     read_number(j, "StatTrak", i.stat_trak);
-    read_number(j, "Wear", i.wear);
+    read(j, "Wear", i.wear);
 
     if (j.contains("Custom name"))
         strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
@@ -521,7 +531,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Fix bone matrix", m.fixBoneMatrix);
     read(j, "Fix movement", m.fixMovement);
     read(j, "Disable model occlusion", m.disableModelOcclusion);
-    read_number(j, "Aspect Ratio", m.aspectratio);
+    read(j, "Aspect Ratio", m.aspectratio);
     read(j, "Kill message", m.killMessage);
     read<value_t::object>(j, "Kill message string", m.killMessageString);
     read(j, "Name stealer", m.nameStealer);
@@ -539,7 +549,7 @@ static void from_json(const json& j, Config::Misc& m)
     read_number(j, "Quick healthshot key", m.quickHealthshotKey);
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
-    read_number(j, "Max angle delta", m.maxAngleDelta);
+    read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::object>(j, "Custom Hit Sound", m.customHitSound);
