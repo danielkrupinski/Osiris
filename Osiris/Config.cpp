@@ -130,16 +130,6 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static typename std::enable_if_t<!std::is_same_v<T, float> && !std::is_same_v<T, int>> read_number(const json& j, const char* key, T& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_number())
-        val.get_to(o);
-}
-
-template <typename T>
 static void read_map(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
 {
     if (j.contains(key) && j[key].is_object()) {
