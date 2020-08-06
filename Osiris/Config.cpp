@@ -61,12 +61,39 @@ using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std:
 using value_t = json::value_t;
 
 template <value_t Type, typename T>
-static void read(const json& j, const char* key, T& o) noexcept
+static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
 {
     if (!j.contains(key))
         return;
 
     if (const auto& val = j[key]; val.type() == Type)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, bool& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::boolean)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, float& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::number_float)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, int& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number_integer())
         val.get_to(o);
 }
 
@@ -103,17 +130,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static void read_number(const json& j, const char* key, T& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_number())
-        val.get_to(o);
-}
-
-template <typename T>
-static void read_map(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+static void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
 {
     if (j.contains(key) && j[key].is_object()) {
         for (auto& element : j[key].items())
@@ -124,48 +141,48 @@ static void read_map(const json& j, const char* key, std::unordered_map<std::str
 static void from_json(const json& j, ColorA& c)
 {
     read(j, "Color", c.color);
-    read<value_t::boolean>(j, "Rainbow", c.rainbow);
-    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+    read(j, "Rainbow", c.rainbow);
+    read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
 static void from_json(const json& j, ColorToggle& ct)
 {
     from_json(j, static_cast<ColorA&>(ct));
-    read<value_t::boolean>(j, "Enabled", ct.enabled);
+    read(j, "Enabled", ct.enabled);
 }
 
 static void from_json(const json& j, Config::Color& c)
 {
     read(j, "Color", c.color);
-    read<value_t::boolean>(j, "Rainbow", c.rainbow);
-    read_number(j, "Rainbow Speed", c.rainbowSpeed);
+    read(j, "Rainbow", c.rainbow);
+    read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
 static void from_json(const json& j, Config::ColorToggle& ct)
 {
     from_json(j, static_cast<Config::Color&>(ct));
-    read<value_t::boolean>(j, "Enabled", ct.enabled);
+    read(j, "Enabled", ct.enabled);
 }
 
 static void from_json(const json& j, ColorToggleRounding& ctr)
 {
     from_json(j, static_cast<ColorToggle&>(ctr));
 
-    read_number(j, "Rounding", ctr.rounding);
+    read(j, "Rounding", ctr.rounding);
 }
 
 static void from_json(const json& j, ColorToggleThickness& ctt)
 {
     from_json(j, static_cast<ColorToggle&>(ctt));
 
-    read_number(j, "Thickness", ctt.thickness);
+    read(j, "Thickness", ctt.thickness);
 }
 
 static void from_json(const json& j, ColorToggleThicknessRounding& cttr)
 {
     from_json(j, static_cast<ColorToggleRounding&>(cttr));
 
-    read_number(j, "Thickness", cttr.thickness);
+    read(j, "Thickness", cttr.thickness);
 }
 
 static void from_json(const json& j, Font& f)
@@ -185,25 +202,25 @@ static void from_json(const json& j, Snapline& s)
 {
     from_json(j, static_cast<ColorToggleThickness&>(s));
 
-    read_number(j, "Type", s.type);
+    read(j, "Type", s.type);
 }
 
 static void from_json(const json& j, Box& b)
 {
     from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
 
-    read_number(j, "Type", b.type);
+    read(j, "Type", b.type);
     read(j, "Scale", b.scale);
 }
 
 static void from_json(const json& j, Shared& s)
 {
-    read<value_t::boolean>(j, "Enabled", s.enabled);
+    read(j, "Enabled", s.enabled);
     read<value_t::object>(j, "Font", s.font);
     read<value_t::object>(j, "Snapline", s.snapline);
     read<value_t::object>(j, "Box", s.box);
     read<value_t::object>(j, "Name", s.name);
-    read_number(j, "Text Cull Distance", s.textCullDistance);
+    read(j, "Text Cull Distance", s.textCullDistance);
 }
 
 static void from_json(const json& j, Weapon& w)
@@ -217,13 +234,13 @@ static void from_json(const json& j, Trail& t)
 {
     from_json(j, static_cast<ColorToggleThickness&>(t));
 
-    read_number(j, "Type", t.type);
-    read_number(j, "Time", t.time);
+    read(j, "Type", t.type);
+    read(j, "Time", t.time);
 }
 
 static void from_json(const json& j, Trails& t)
 {
-    read<value_t::boolean>(j, "Enabled", t.enabled);
+    read(j, "Enabled", t.enabled);
     read<value_t::object>(j, "Local Player", t.localPlayer);
     read<value_t::object>(j, "Allies", t.allies);
     read<value_t::object>(j, "Enemies", t.enemies);
@@ -242,95 +259,95 @@ static void from_json(const json& j, Player& p)
 
     read<value_t::object>(j, "Weapon", p.weapon);
     read<value_t::object>(j, "Flash Duration", p.flashDuration);
-    read<value_t::boolean>(j, "Audible Only", p.audibleOnly);
-    read<value_t::boolean>(j, "Spotted Only", p.spottedOnly);
+    read(j, "Audible Only", p.audibleOnly);
+    read(j, "Spotted Only", p.spottedOnly);
     read<value_t::object>(j, "Skeleton", p.skeleton);
     read<value_t::object>(j, "Head Box", p.headBox);
 }
 
 static void from_json(const json& j, ImVec2& v)
 {
-    read_number(j, "X", v.x);
-    read_number(j, "Y", v.y);
+    read(j, "X", v.x);
+    read(j, "Y", v.y);
 }
 
 static void from_json(const json& j, Config::Aimbot& a)
 {
-    read<value_t::boolean>(j, "Enabled", a.enabled);
-    read<value_t::boolean>(j, "On key", a.onKey);
-    read_number(j, "Key", a.key);
-    read_number(j, "Key mode", a.keyMode);
-    read<value_t::boolean>(j, "Aimlock", a.aimlock);
-    read<value_t::boolean>(j, "Silent", a.silent);
-    read<value_t::boolean>(j, "Friendly fire", a.friendlyFire);
-    read<value_t::boolean>(j, "Visible only", a.visibleOnly);
-    read<value_t::boolean>(j, "Scoped only", a.scopedOnly);
-    read<value_t::boolean>(j, "Ignore flash", a.ignoreFlash);
-    read<value_t::boolean>(j, "Ignore smoke", a.ignoreSmoke);
-    read<value_t::boolean>(j, "Auto shot", a.autoShot);
-    read<value_t::boolean>(j, "Auto scope", a.autoScope);
-    read_number(j, "Fov", a.fov);
-    read_number(j, "Smooth", a.smooth);
-    read_number(j, "Bone", a.bone);
-    read_number(j, "Max aim inaccuracy", a.maxAimInaccuracy);
-    read_number(j, "Max shot inaccuracy", a.maxShotInaccuracy);
-    read_number(j, "Min damage", a.minDamage);
-    read<value_t::boolean>(j, "Killshot", a.killshot);
-    read<value_t::boolean>(j, "Between shots", a.betweenShots);
+    read(j, "Enabled", a.enabled);
+    read(j, "On key", a.onKey);
+    read(j, "Key", a.key);
+    read(j, "Key mode", a.keyMode);
+    read(j, "Aimlock", a.aimlock);
+    read(j, "Silent", a.silent);
+    read(j, "Friendly fire", a.friendlyFire);
+    read(j, "Visible only", a.visibleOnly);
+    read(j, "Scoped only", a.scopedOnly);
+    read(j, "Ignore flash", a.ignoreFlash);
+    read(j, "Ignore smoke", a.ignoreSmoke);
+    read(j, "Auto shot", a.autoShot);
+    read(j, "Auto scope", a.autoScope);
+    read(j, "Fov", a.fov);
+    read(j, "Smooth", a.smooth);
+    read(j, "Bone", a.bone);
+    read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
+    read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
+    read(j, "Min damage", a.minDamage);
+    read(j, "Killshot", a.killshot);
+    read(j, "Between shots", a.betweenShots);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
 {
-    read<value_t::boolean>(j, "Enabled", t.enabled);
-    read<value_t::boolean>(j, "On key", t.onKey);
-    read_number(j, "Key", t.key);
-    read<value_t::boolean>(j, "Friendly fire", t.friendlyFire);
-    read<value_t::boolean>(j, "Scoped only", t.scopedOnly);
-    read<value_t::boolean>(j, "Ignore flash", t.ignoreFlash);
-    read<value_t::boolean>(j, "Ignore smoke", t.ignoreSmoke);
-    read_number(j, "Hitgroup", t.hitgroup);
-    read_number(j, "Shot delay", t.shotDelay);
-    read_number(j, "Min damage", t.minDamage);
-    read<value_t::boolean>(j, "Killshot", t.killshot);
-    read_number(j, "Burst Time", t.burstTime);
+    read(j, "Enabled", t.enabled);
+    read(j, "On key", t.onKey);
+    read(j, "Key", t.key);
+    read(j, "Friendly fire", t.friendlyFire);
+    read(j, "Scoped only", t.scopedOnly);
+    read(j, "Ignore flash", t.ignoreFlash);
+    read(j, "Ignore smoke", t.ignoreSmoke);
+    read(j, "Hitgroup", t.hitgroup);
+    read(j, "Shot delay", t.shotDelay);
+    read(j, "Min damage", t.minDamage);
+    read(j, "Killshot", t.killshot);
+    read(j, "Burst Time", t.burstTime);
 }
 
 static void from_json(const json& j, Config::Backtrack& b)
 {
-    read<value_t::boolean>(j, "Enabled", b.enabled);
-    read<value_t::boolean>(j, "Ignore smoke", b.ignoreSmoke);
-    read<value_t::boolean>(j, "Recoil based fov", b.recoilBasedFov);
-    read_number(j, "Time limit", b.timeLimit);
+    read(j, "Enabled", b.enabled);
+    read(j, "Ignore smoke", b.ignoreSmoke);
+    read(j, "Recoil based fov", b.recoilBasedFov);
+    read(j, "Time limit", b.timeLimit);
 }
 
 static void from_json(const json& j, Config::AntiAim& a)
 {
-    read<value_t::boolean>(j, "Enabled", a.enabled);
-    read<value_t::boolean>(j, "Pitch", a.pitch);
-    read<value_t::boolean>(j, "Yaw", a.yaw);
-    read_number(j, "Pitch angle", a.pitchAngle);
+    read(j, "Enabled", a.enabled);
+    read(j, "Pitch", a.pitch);
+    read(j, "Yaw", a.yaw);
+    read(j, "Pitch angle", a.pitchAngle);
 }
 
 static void from_json(const json& j, Config::Glow& g)
 {
     from_json(j, static_cast<ColorA&>(g));
 
-    read<value_t::boolean>(j, "Enabled", g.enabled);
-    read<value_t::boolean>(j, "Health based", g.healthBased);
-    read_number(j, "Style", g.style);
+    read(j, "Enabled", g.enabled);
+    read(j, "Health based", g.healthBased);
+    read(j, "Style", g.style);
 }
 
 static void from_json(const json& j, Config::Chams::Material& m)
 {
     from_json(j, static_cast<ColorA&>(m));
 
-    read<value_t::boolean>(j, "Enabled", m.enabled);
-    read<value_t::boolean>(j, "Health based", m.healthBased);
-    read<value_t::boolean>(j, "Blinking", m.blinking);
-    read<value_t::boolean>(j, "Wireframe", m.wireframe);
-    read<value_t::boolean>(j, "Cover", m.cover);
-    read<value_t::boolean>(j, "Ignore-Z", m.ignorez);
-    read_number(j, "Material", m.material);
+    read(j, "Enabled", m.enabled);
+    read(j, "Health based", m.healthBased);
+    read(j, "Blinking", m.blinking);
+    read(j, "Wireframe", m.wireframe);
+    read(j, "Cover", m.cover);
+    read(j, "Ignore-Z", m.ignorez);
+    read(j, "Material", m.material);
 }
 
 static void from_json(const json& j, Config::Chams& c)
@@ -340,93 +357,94 @@ static void from_json(const json& j, Config::Chams& c)
 
 static void from_json(const json& j, Config::StreamProofESP& e)
 {
-    read_map(j, "Allies", e.allies);
-    read_map(j, "Enemies", e.enemies);
-    read_map(j, "Weapons", e.weapons);
-    read_map(j, "Projectiles", e.projectiles);
-    read_map(j, "Loot Crates", e.lootCrates);
-    read_map(j, "Other Entities", e.otherEntities);
+    read(j, "Allies", e.allies);
+    read(j, "Enemies", e.enemies);
+    read(j, "Weapons", e.weapons);
+    read(j, "Projectiles", e.projectiles);
+    read(j, "Loot Crates", e.lootCrates);
+    read(j, "Other Entities", e.otherEntities);
 }
 
 static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
 {
-    read<value_t::boolean>(j, "Enabled", c.enabled);
-    read_number(j, "Blue", c.blue);
-    read_number(j, "Red", c.red);
-    read_number(j, "Mono", c.mono);
-    read_number(j, "Saturation", c.saturation);
-    read_number(j, "Ghost", c.ghost);
-    read_number(j, "Green", c.green);
-    read_number(j, "Yellow", c.yellow);
+    read(j, "Enabled", c.enabled);
+    read(j, "Blue", c.blue);
+    read(j, "Red", c.red);
+    read(j, "Mono", c.mono);
+    read(j, "Saturation", c.saturation);
+    read(j, "Ghost", c.ghost);
+    read(j, "Green", c.green);
+    read(j, "Yellow", c.yellow);
+    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
 {
-    read<value_t::boolean>(j, "Disable post-processing", v.disablePostProcessing);
-    read<value_t::boolean>(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
-    read<value_t::boolean>(j, "No fog", v.noFog);
-    read<value_t::boolean>(j, "No 3d sky", v.no3dSky);
-    read<value_t::boolean>(j, "No aim punch", v.noAimPunch);
-    read<value_t::boolean>(j, "No view punch", v.noViewPunch);
-    read<value_t::boolean>(j, "No hands", v.noHands);
-    read<value_t::boolean>(j, "No sleeves", v.noSleeves);
-    read<value_t::boolean>(j, "No weapons", v.noWeapons);
-    read<value_t::boolean>(j, "No smoke", v.noSmoke);
-    read<value_t::boolean>(j, "No blur", v.noBlur);
-    read<value_t::boolean>(j, "No scope overlay", v.noScopeOverlay);
-    read<value_t::boolean>(j, "No grass", v.noGrass);
-    read<value_t::boolean>(j, "No shadows", v.noShadows);
-    read<value_t::boolean>(j, "Wireframe smoke", v.wireframeSmoke);
-    read<value_t::boolean>(j, "Zoom", v.noScopeOverlay);
-    read_number(j, "Zoom key", v.zoomKey);
-    read<value_t::boolean>(j, "Thirdperson", v.thirdperson);
-    read_number(j, "Thirdperson key", v.thirdpersonKey);
-    read_number(j, "Thirdperson distance", v.thirdpersonDistance);
-    read_number(j, "Viewmodel FOV", v.viewmodelFov);
-    read_number(j, "FOV", v.fov);
-    read_number(j, "Far Z", v.farZ);
-    read_number(j, "Flash reduction", v.flashReduction);
-    read_number(j, "Brightness", v.brightness);
-    read_number(j, "Skybox", v.skybox);
+    read(j, "Disable post-processing", v.disablePostProcessing);
+    read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
+    read(j, "No fog", v.noFog);
+    read(j, "No 3d sky", v.no3dSky);
+    read(j, "No aim punch", v.noAimPunch);
+    read(j, "No view punch", v.noViewPunch);
+    read(j, "No hands", v.noHands);
+    read(j, "No sleeves", v.noSleeves);
+    read(j, "No weapons", v.noWeapons);
+    read(j, "No smoke", v.noSmoke);
+    read(j, "No blur", v.noBlur);
+    read(j, "No scope overlay", v.noScopeOverlay);
+    read(j, "No grass", v.noGrass);
+    read(j, "No shadows", v.noShadows);
+    read(j, "Wireframe smoke", v.wireframeSmoke);
+    read(j, "Zoom", v.noScopeOverlay);
+    read(j, "Zoom key", v.zoomKey);
+    read(j, "Thirdperson", v.thirdperson);
+    read(j, "Thirdperson key", v.thirdpersonKey);
+    read(j, "Thirdperson distance", v.thirdpersonDistance);
+    read(j, "Viewmodel FOV", v.viewmodelFov);
+    read(j, "FOV", v.fov);
+    read(j, "Far Z", v.farZ);
+    read(j, "Flash reduction", v.flashReduction);
+    read(j, "Brightness", v.brightness);
+    read(j, "Skybox", v.skybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
-    read<value_t::boolean>(j, "Deagle spinner", v.deagleSpinner);
-    read_number(j, "Screen effect", v.screenEffect);
-    read_number(j, "Hit effect", v.hitEffect);
-    read_number(j, "Hit effect time", v.hitEffectTime);
-    read_number(j, "Hit marker", v.hitMarker);
-    read_number(j, "Hit marker time", v.hitMarkerTime);
-    read_number(j, "Playermodel T", v.playerModelT);
-    read_number(j, "Playermodel CT", v.playerModelCT);
+    read(j, "Deagle spinner", v.deagleSpinner);
+    read(j, "Screen effect", v.screenEffect);
+    read(j, "Hit effect", v.hitEffect);
+    read(j, "Hit effect time", v.hitEffectTime);
+    read(j, "Hit marker", v.hitMarker);
+    read(j, "Hit marker time", v.hitMarkerTime);
+    read(j, "Playermodel T", v.playerModelT);
+    read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
 static void from_json(const json& j, sticker_setting& s)
 {
-    read_number(j, "Kit", s.kit);
-    read_number(j, "Kit vector index", s.kit_vector_index);
-    read_number(j, "Wear", s.wear);
-    read_number(j, "Scale", s.scale);
-    read_number(j, "Rotation", s.rotation);
+    read(j, "Kit", s.kit);
+    read(j, "Kit vector index", s.kit_vector_index);
+    read(j, "Wear", s.wear);
+    read(j, "Scale", s.scale);
+    read(j, "Rotation", s.rotation);
 }
 
 static void from_json(const json& j, item_setting& i)
 {
-    read<value_t::boolean>(j, "Enabled", i.enabled);
-    read_number(j, "Definition index", i.itemId);
-    read_number(j, "Definition vector index", i.itemIdIndex);
-    read_number(j, "Quality", i.quality);
-    read_number(j, "Quality vector index", i.entity_quality_vector_index);
+    read(j, "Enabled", i.enabled);
+    read(j, "Definition index", i.itemId);
+    read(j, "Definition vector index", i.itemIdIndex);
+    read(j, "Quality", i.quality);
+    read(j, "Quality vector index", i.entity_quality_vector_index);
 
-    read_number(j, "Paint Kit", i.paintKit);
-    read_number(j, "Paint Kit vector index", i.paint_kit_vector_index);
+    read(j, "Paint Kit", i.paintKit);
+    read(j, "Paint Kit vector index", i.paint_kit_vector_index);
 
-    read_number(j, "Definition override", i.definition_override_index);
-    read_number(j, "Definition override vector index", i.definition_override_vector_index);
+    read(j, "Definition override", i.definition_override_index);
+    read(j, "Definition override vector index", i.definition_override_vector_index);
 
-    read_number(j, "Seed", i.seed);
-    read_number(j, "StatTrak", i.stat_trak);
-    read_number(j, "Wear", i.wear);
+    read(j, "Seed", i.seed);
+    read(j, "StatTrak", i.stat_trak);
+    read(j, "Wear", i.wear);
 
     if (j.contains("Custom name"))
         strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
@@ -436,22 +454,22 @@ static void from_json(const json& j, item_setting& i)
 
 static void from_json(const json& j, Config::Sound::Player& p)
 {
-    read_number(j, "Master volume", p.masterVolume);
-    read_number(j, "Headshot volume", p.headshotVolume);
-    read_number(j, "Weapon volume", p.weaponVolume);
-    read_number(j, "Footstep volume", p.footstepVolume);
+    read(j, "Master volume", p.masterVolume);
+    read(j, "Headshot volume", p.headshotVolume);
+    read(j, "Weapon volume", p.weaponVolume);
+    read(j, "Footstep volume", p.footstepVolume);
 }
 
 static void from_json(const json& j, Config::Sound& s)
 {
-    read_number(j, "Chicken volume", s.chickenVolume);
+    read(j, "Chicken volume", s.chickenVolume);
     read(j, "Players", s.players);
 }
 
 static void from_json(const json& j, Config::Style& s)
 {
-    read_number(j, "Menu style", s.menuStyle);
-    read_number(j, "Menu colors", s.menuColors);
+    read(j, "Menu style", s.menuStyle);
+    read(j, "Menu colors", s.menuColors);
 
     if (j.contains("Colors") && j["Colors"].is_object()) {
         const auto& colors = j["Colors"];
@@ -473,83 +491,83 @@ static void from_json(const json& j, Config::Style& s)
 
 static void from_json(const json& j, PurchaseList& pl)
 {
-    read<value_t::boolean>(j, "Enabled", pl.enabled);
-    read<value_t::boolean>(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
-    read<value_t::boolean>(j, "Show Prices", pl.showPrices);
-    read<value_t::boolean>(j, "No Title Bar", pl.noTitleBar);
-    read_number(j, "Mode", pl.mode);
+    read(j, "Enabled", pl.enabled);
+    read(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
+    read(j, "Show Prices", pl.showPrices);
+    read(j, "No Title Bar", pl.noTitleBar);
+    read(j, "Mode", pl.mode);
 }
 
 static void from_json(const json& j, Config::Misc& m)
 {
-    read_number(j, "Menu key", m.menuKey);
-    read<value_t::boolean>(j, "Anti AFK kick", m.antiAfkKick);
-    read<value_t::boolean>(j, "Auto strafe", m.autoStrafe);
-    read<value_t::boolean>(j, "Bunny hop", m.bunnyHop);
-    read<value_t::boolean>(j, "Custom clan tag", m.customClanTag);
-    read<value_t::boolean>(j, "Clock tag", m.clocktag);
+    read(j, "Menu key", m.menuKey);
+    read(j, "Anti AFK kick", m.antiAfkKick);
+    read(j, "Auto strafe", m.autoStrafe);
+    read(j, "Bunny hop", m.bunnyHop);
+    read(j, "Custom clan tag", m.customClanTag);
+    read(j, "Clock tag", m.clocktag);
     if (j.contains("Clan tag"))
         strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
-    read<value_t::boolean>(j, "Animated clan tag", m.animatedClanTag);
-    read<value_t::boolean>(j, "Fast duck", m.fastDuck);
-    read<value_t::boolean>(j, "Moonwalk", m.moonwalk);
-    read<value_t::boolean>(j, "Edge Jump", m.edgejump);
-    read_number(j, "Edge Jump Key", m.edgejumpkey);
-    read<value_t::boolean>(j, "Slowwalk", m.slowwalk);
-    read_number(j, "Slowwalk key", m.slowwalkKey);
+    read(j, "Animated clan tag", m.animatedClanTag);
+    read(j, "Fast duck", m.fastDuck);
+    read(j, "Moonwalk", m.moonwalk);
+    read(j, "Edge Jump", m.edgejump);
+    read(j, "Edge Jump Key", m.edgejumpkey);
+    read(j, "Slowwalk", m.slowwalk);
+    read(j, "Slowwalk key", m.slowwalkKey);
     read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
-    read<value_t::boolean>(j, "Recoil crosshair", m.recoilCrosshair);
-    read<value_t::boolean>(j, "Auto pistol", m.autoPistol);
-    read<value_t::boolean>(j, "Auto reload", m.autoReload);
-    read<value_t::boolean>(j, "Auto accept", m.autoAccept);
-    read<value_t::boolean>(j, "Radar hack", m.radarHack);
-    read<value_t::boolean>(j, "Reveal ranks", m.revealRanks);
-    read<value_t::boolean>(j, "Reveal money", m.revealMoney);
-    read<value_t::boolean>(j, "Reveal suspect", m.revealSuspect);
+    read(j, "Recoil crosshair", m.recoilCrosshair);
+    read(j, "Auto pistol", m.autoPistol);
+    read(j, "Auto reload", m.autoReload);
+    read(j, "Auto accept", m.autoAccept);
+    read(j, "Radar hack", m.radarHack);
+    read(j, "Reveal ranks", m.revealRanks);
+    read(j, "Reveal money", m.revealMoney);
+    read(j, "Reveal suspect", m.revealSuspect);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
     read<value_t::object>(j, "Watermark", m.watermark);
-    read<value_t::boolean>(j, "Fix animation LOD", m.fixAnimationLOD);
-    read<value_t::boolean>(j, "Fix bone matrix", m.fixBoneMatrix);
-    read<value_t::boolean>(j, "Fix movement", m.fixMovement);
-    read<value_t::boolean>(j, "Disable model occlusion", m.disableModelOcclusion);
-    read_number(j, "Aspect Ratio", m.aspectratio);
-    read<value_t::boolean>(j, "Kill message", m.killMessage);
+    read(j, "Fix animation LOD", m.fixAnimationLOD);
+    read(j, "Fix bone matrix", m.fixBoneMatrix);
+    read(j, "Fix movement", m.fixMovement);
+    read(j, "Disable model occlusion", m.disableModelOcclusion);
+    read(j, "Aspect Ratio", m.aspectratio);
+    read(j, "Kill message", m.killMessage);
     read<value_t::object>(j, "Kill message string", m.killMessageString);
-    read<value_t::boolean>(j, "Name stealer", m.nameStealer);
-    read<value_t::boolean>(j, "Disable HUD blur", m.disablePanoramablur);
-    read_number(j, "Ban color", m.banColor);
+    read(j, "Name stealer", m.nameStealer);
+    read(j, "Disable HUD blur", m.disablePanoramablur);
+    read(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
-    read<value_t::boolean>(j, "Fast plant", m.fastPlant);
+    read(j, "Fast plant", m.fastPlant);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
-    read<value_t::boolean>(j, "Quick reload", m.quickReload);
-    read<value_t::boolean>(j, "Prepare revolver", m.prepareRevolver);
-    read_number(j, "Prepare revolver key", m.prepareRevolverKey);
-    read_number(j, "Hit sound", m.hitSound);
-    read_number(j, "Choked packets", m.chokedPackets);
-    read_number(j, "Choked packets key", m.chokedPacketsKey);
-    read_number(j, "Quick healthshot key", m.quickHealthshotKey);
-    read<value_t::boolean>(j, "Grenade predict", m.nadePredict);
-    read<value_t::boolean>(j, "Fix tablet signal", m.fixTabletSignal);
-    read_number(j, "Max angle delta", m.maxAngleDelta);
-    read<value_t::boolean>(j, "Fake prime", m.fakePrime);
-    read<value_t::boolean>(j, "Fix tablet signal", m.fixTabletSignal);
+    read(j, "Quick reload", m.quickReload);
+    read(j, "Prepare revolver", m.prepareRevolver);
+    read(j, "Prepare revolver key", m.prepareRevolverKey);
+    read(j, "Hit sound", m.hitSound);
+    read(j, "Choked packets", m.chokedPackets);
+    read(j, "Choked packets key", m.chokedPacketsKey);
+    read(j, "Quick healthshot key", m.quickHealthshotKey);
+    read(j, "Grenade predict", m.nadePredict);
+    read(j, "Fix tablet signal", m.fixTabletSignal);
+    read(j, "Max angle delta", m.maxAngleDelta);
+    read(j, "Fake prime", m.fakePrime);
+    read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::object>(j, "Custom Hit Sound", m.customHitSound);
-    read_number(j, "Kill sound", m.killSound);
+    read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
 {
-    read<value_t::boolean>(j, "Enabled", r.enabled);
-    read_number(j, "Target", r.target);
-    read_number(j, "Delay", r.delay);
-    read_number(j, "Rounds", r.rounds);
-    read<value_t::boolean>(j, "Abusive Communications", r.textAbuse);
-    read<value_t::boolean>(j, "Griefing", r.griefing);
-    read<value_t::boolean>(j, "Wall Hacking", r.wallhack);
-    read<value_t::boolean>(j, "Aim Hacking", r.aimbot);
-    read<value_t::boolean>(j, "Other Hacking", r.other);
+    read(j, "Enabled", r.enabled);
+    read(j, "Target", r.target);
+    read(j, "Delay", r.delay);
+    read(j, "Rounds", r.rounds);
+    read(j, "Abusive Communications", r.textAbuse);
+    read(j, "Griefing", r.griefing);
+    read(j, "Wall Hacking", r.wallhack);
+    read(j, "Aim Hacking", r.aimbot);
+    read(j, "Other Hacking", r.other);
 }
 
 void Config::load(size_t id, bool incremental) noexcept
@@ -569,7 +587,7 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read(j, "Glow", glow);
-    read_map(j, "Chams", chams);
+    read(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read(j, "Skin changer", skinChanger);
