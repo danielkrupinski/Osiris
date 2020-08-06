@@ -88,6 +88,15 @@ static void read(const json& j, const char* key, float& o) noexcept
         val.get_to(o);
 }
 
+static void read(const json& j, const char* key, int& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number_integer())
+        val.get_to(o);
+}
+
 template <typename T, size_t Size>
 static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
@@ -121,7 +130,7 @@ static void read(const json& j, const char* key, std::array<T, Size>& o) noexcep
 }
 
 template <typename T>
-static typename std::enable_if_t<!std::is_same_v<T, float>> read_number(const json& j, const char* key, T& o) noexcept
+static typename std::enable_if_t<!std::is_same_v<T, float> && !std::is_same_v<T, int>> read_number(const json& j, const char* key, T& o) noexcept
 {
     if (!j.contains(key))
         return;
@@ -203,14 +212,14 @@ static void from_json(const json& j, Snapline& s)
 {
     from_json(j, static_cast<ColorToggleThickness&>(s));
 
-    read_number(j, "Type", s.type);
+    read(j, "Type", s.type);
 }
 
 static void from_json(const json& j, Box& b)
 {
     from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
 
-    read_number(j, "Type", b.type);
+    read(j, "Type", b.type);
     read(j, "Scale", b.scale);
 }
 
@@ -235,7 +244,7 @@ static void from_json(const json& j, Trail& t)
 {
     from_json(j, static_cast<ColorToggleThickness&>(t));
 
-    read_number(j, "Type", t.type);
+    read(j, "Type", t.type);
     read(j, "Time", t.time);
 }
 
@@ -276,8 +285,8 @@ static void from_json(const json& j, Config::Aimbot& a)
 {
     read(j, "Enabled", a.enabled);
     read(j, "On key", a.onKey);
-    read_number(j, "Key", a.key);
-    read_number(j, "Key mode", a.keyMode);
+    read(j, "Key", a.key);
+    read(j, "Key mode", a.keyMode);
     read(j, "Aimlock", a.aimlock);
     read(j, "Silent", a.silent);
     read(j, "Friendly fire", a.friendlyFire);
@@ -289,10 +298,10 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Auto scope", a.autoScope);
     read(j, "Fov", a.fov);
     read(j, "Smooth", a.smooth);
-    read_number(j, "Bone", a.bone);
+    read(j, "Bone", a.bone);
     read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
     read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
-    read_number(j, "Min damage", a.minDamage);
+    read(j, "Min damage", a.minDamage);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
 }
@@ -301,14 +310,14 @@ static void from_json(const json& j, Config::Triggerbot& t)
 {
     read(j, "Enabled", t.enabled);
     read(j, "On key", t.onKey);
-    read_number(j, "Key", t.key);
+    read(j, "Key", t.key);
     read(j, "Friendly fire", t.friendlyFire);
     read(j, "Scoped only", t.scopedOnly);
     read(j, "Ignore flash", t.ignoreFlash);
     read(j, "Ignore smoke", t.ignoreSmoke);
-    read_number(j, "Hitgroup", t.hitgroup);
-    read_number(j, "Shot delay", t.shotDelay);
-    read_number(j, "Min damage", t.minDamage);
+    read(j, "Hitgroup", t.hitgroup);
+    read(j, "Shot delay", t.shotDelay);
+    read(j, "Min damage", t.minDamage);
     read(j, "Killshot", t.killshot);
     read(j, "Burst Time", t.burstTime);
 }
@@ -318,7 +327,7 @@ static void from_json(const json& j, Config::Backtrack& b)
     read(j, "Enabled", b.enabled);
     read(j, "Ignore smoke", b.ignoreSmoke);
     read(j, "Recoil based fov", b.recoilBasedFov);
-    read_number(j, "Time limit", b.timeLimit);
+    read(j, "Time limit", b.timeLimit);
 }
 
 static void from_json(const json& j, Config::AntiAim& a)
@@ -335,7 +344,7 @@ static void from_json(const json& j, Config::Glow& g)
 
     read(j, "Enabled", g.enabled);
     read(j, "Health based", g.healthBased);
-    read_number(j, "Style", g.style);
+    read(j, "Style", g.style);
 }
 
 static void from_json(const json& j, Config::Chams::Material& m)
@@ -348,7 +357,7 @@ static void from_json(const json& j, Config::Chams::Material& m)
     read(j, "Wireframe", m.wireframe);
     read(j, "Cover", m.cover);
     read(j, "Ignore-Z", m.ignorez);
-    read_number(j, "Material", m.material);
+    read(j, "Material", m.material);
 }
 
 static void from_json(const json& j, Config::Chams& c)
@@ -397,33 +406,33 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "No shadows", v.noShadows);
     read(j, "Wireframe smoke", v.wireframeSmoke);
     read(j, "Zoom", v.noScopeOverlay);
-    read_number(j, "Zoom key", v.zoomKey);
+    read(j, "Zoom key", v.zoomKey);
     read(j, "Thirdperson", v.thirdperson);
-    read_number(j, "Thirdperson key", v.thirdpersonKey);
-    read_number(j, "Thirdperson distance", v.thirdpersonDistance);
-    read_number(j, "Viewmodel FOV", v.viewmodelFov);
-    read_number(j, "FOV", v.fov);
-    read_number(j, "Far Z", v.farZ);
-    read_number(j, "Flash reduction", v.flashReduction);
+    read(j, "Thirdperson key", v.thirdpersonKey);
+    read(j, "Thirdperson distance", v.thirdpersonDistance);
+    read(j, "Viewmodel FOV", v.viewmodelFov);
+    read(j, "FOV", v.fov);
+    read(j, "Far Z", v.farZ);
+    read(j, "Flash reduction", v.flashReduction);
     read(j, "Brightness", v.brightness);
-    read_number(j, "Skybox", v.skybox);
+    read(j, "Skybox", v.skybox);
     read<value_t::object>(j, "World", v.world);
     read<value_t::object>(j, "Sky", v.sky);
     read(j, "Deagle spinner", v.deagleSpinner);
-    read_number(j, "Screen effect", v.screenEffect);
-    read_number(j, "Hit effect", v.hitEffect);
+    read(j, "Screen effect", v.screenEffect);
+    read(j, "Hit effect", v.hitEffect);
     read(j, "Hit effect time", v.hitEffectTime);
-    read_number(j, "Hit marker", v.hitMarker);
+    read(j, "Hit marker", v.hitMarker);
     read(j, "Hit marker time", v.hitMarkerTime);
-    read_number(j, "Playermodel T", v.playerModelT);
-    read_number(j, "Playermodel CT", v.playerModelCT);
+    read(j, "Playermodel T", v.playerModelT);
+    read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
 static void from_json(const json& j, sticker_setting& s)
 {
-    read_number(j, "Kit", s.kit);
-    read_number(j, "Kit vector index", s.kit_vector_index);
+    read(j, "Kit", s.kit);
+    read(j, "Kit vector index", s.kit_vector_index);
     read(j, "Wear", s.wear);
     read(j, "Scale", s.scale);
     read(j, "Rotation", s.rotation);
@@ -432,19 +441,19 @@ static void from_json(const json& j, sticker_setting& s)
 static void from_json(const json& j, item_setting& i)
 {
     read(j, "Enabled", i.enabled);
-    read_number(j, "Definition index", i.itemId);
-    read_number(j, "Definition vector index", i.itemIdIndex);
-    read_number(j, "Quality", i.quality);
-    read_number(j, "Quality vector index", i.entity_quality_vector_index);
+    read(j, "Definition index", i.itemId);
+    read(j, "Definition vector index", i.itemIdIndex);
+    read(j, "Quality", i.quality);
+    read(j, "Quality vector index", i.entity_quality_vector_index);
 
-    read_number(j, "Paint Kit", i.paintKit);
-    read_number(j, "Paint Kit vector index", i.paint_kit_vector_index);
+    read(j, "Paint Kit", i.paintKit);
+    read(j, "Paint Kit vector index", i.paint_kit_vector_index);
 
-    read_number(j, "Definition override", i.definition_override_index);
-    read_number(j, "Definition override vector index", i.definition_override_vector_index);
+    read(j, "Definition override", i.definition_override_index);
+    read(j, "Definition override vector index", i.definition_override_vector_index);
 
-    read_number(j, "Seed", i.seed);
-    read_number(j, "StatTrak", i.stat_trak);
+    read(j, "Seed", i.seed);
+    read(j, "StatTrak", i.stat_trak);
     read(j, "Wear", i.wear);
 
     if (j.contains("Custom name"))
@@ -455,22 +464,22 @@ static void from_json(const json& j, item_setting& i)
 
 static void from_json(const json& j, Config::Sound::Player& p)
 {
-    read_number(j, "Master volume", p.masterVolume);
-    read_number(j, "Headshot volume", p.headshotVolume);
-    read_number(j, "Weapon volume", p.weaponVolume);
-    read_number(j, "Footstep volume", p.footstepVolume);
+    read(j, "Master volume", p.masterVolume);
+    read(j, "Headshot volume", p.headshotVolume);
+    read(j, "Weapon volume", p.weaponVolume);
+    read(j, "Footstep volume", p.footstepVolume);
 }
 
 static void from_json(const json& j, Config::Sound& s)
 {
-    read_number(j, "Chicken volume", s.chickenVolume);
+    read(j, "Chicken volume", s.chickenVolume);
     read(j, "Players", s.players);
 }
 
 static void from_json(const json& j, Config::Style& s)
 {
-    read_number(j, "Menu style", s.menuStyle);
-    read_number(j, "Menu colors", s.menuColors);
+    read(j, "Menu style", s.menuStyle);
+    read(j, "Menu colors", s.menuColors);
 
     if (j.contains("Colors") && j["Colors"].is_object()) {
         const auto& colors = j["Colors"];
@@ -496,12 +505,12 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
     read(j, "Show Prices", pl.showPrices);
     read(j, "No Title Bar", pl.noTitleBar);
-    read_number(j, "Mode", pl.mode);
+    read(j, "Mode", pl.mode);
 }
 
 static void from_json(const json& j, Config::Misc& m)
 {
-    read_number(j, "Menu key", m.menuKey);
+    read(j, "Menu key", m.menuKey);
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
     read(j, "Bunny hop", m.bunnyHop);
@@ -513,9 +522,9 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
-    read_number(j, "Edge Jump Key", m.edgejumpkey);
+    read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
-    read_number(j, "Slowwalk key", m.slowwalkKey);
+    read(j, "Slowwalk key", m.slowwalkKey);
     read<value_t::object>(j, "Noscope crosshair", m.noscopeCrosshair);
     read(j, "Recoil crosshair", m.recoilCrosshair);
     read(j, "Auto pistol", m.autoPistol);
@@ -536,24 +545,24 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Kill message string", m.killMessageString);
     read(j, "Name stealer", m.nameStealer);
     read(j, "Disable HUD blur", m.disablePanoramablur);
-    read_number(j, "Ban color", m.banColor);
+    read(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
     read(j, "Fast plant", m.fastPlant);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Quick reload", m.quickReload);
     read(j, "Prepare revolver", m.prepareRevolver);
-    read_number(j, "Prepare revolver key", m.prepareRevolverKey);
-    read_number(j, "Hit sound", m.hitSound);
-    read_number(j, "Choked packets", m.chokedPackets);
-    read_number(j, "Choked packets key", m.chokedPacketsKey);
-    read_number(j, "Quick healthshot key", m.quickHealthshotKey);
+    read(j, "Prepare revolver key", m.prepareRevolverKey);
+    read(j, "Hit sound", m.hitSound);
+    read(j, "Choked packets", m.chokedPackets);
+    read(j, "Choked packets key", m.chokedPacketsKey);
+    read(j, "Quick healthshot key", m.quickHealthshotKey);
     read(j, "Grenade predict", m.nadePredict);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read<value_t::object>(j, "Custom Hit Sound", m.customHitSound);
-    read_number(j, "Kill sound", m.killSound);
+    read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
 }
@@ -561,9 +570,9 @@ static void from_json(const json& j, Config::Misc& m)
 static void from_json(const json& j, Config::Reportbot& r)
 {
     read(j, "Enabled", r.enabled);
-    read_number(j, "Target", r.target);
-    read_number(j, "Delay", r.delay);
-    read_number(j, "Rounds", r.rounds);
+    read(j, "Target", r.target);
+    read(j, "Delay", r.delay);
+    read(j, "Rounds", r.rounds);
     read(j, "Abusive Communications", r.textAbuse);
     read(j, "Griefing", r.griefing);
     read(j, "Wall Hacking", r.wallhack);
