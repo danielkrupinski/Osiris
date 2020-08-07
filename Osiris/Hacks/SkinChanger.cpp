@@ -156,7 +156,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
         item->entityQuality() = 9;
     }
 
-    if (is_knife(item->itemDefinitionIndex()))
+    if (is_knife(item->itemDefinitionIndex2()))
         item->entityQuality() = 3; // make a star appear on knife
 
     if (config->custom_name[0])
@@ -311,7 +311,7 @@ static void post_data_update_start(int localHandle) noexcept
             auto& definition_index = weapon->itemDefinitionIndex();
 
             // All knives are terrorist knives.
-            if (const auto active_conf = get_by_definition_index(is_knife(definition_index) ? WEAPON_KNIFE : definition_index))
+            if (const auto active_conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WEAPON_KNIFE : definition_index))
                 apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
             else
                 erase_override_if_exists_by_index(definition_index);
@@ -395,7 +395,7 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
     if (!weapon)
         return;
 
-    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > -1) {
+    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WEAPON_KNIFE : weapon->itemDefinitionIndex()); conf && conf->stat_trak > -1) {
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
