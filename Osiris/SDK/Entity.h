@@ -69,8 +69,10 @@ public:
     VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 284, (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, 293, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 345, (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
@@ -125,13 +127,6 @@ public:
             return Vector{ };
     }
 
-    auto getEyePosition() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 284>(this, std::ref(vec));
-        return vec;
-    }
-
     bool isVisible(const Vector& position = { }) noexcept
     {
         if (!localPlayer)
@@ -172,13 +167,6 @@ public:
     bool isInReload() noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
-
-    auto getAimPunch() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 345>(this, std::ref(vec));
-        return vec;
     }
 
     auto getUserId() noexcept
