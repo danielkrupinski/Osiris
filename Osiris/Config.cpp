@@ -380,24 +380,24 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
 
 static void from_json(const json& j, Config::Visuals::ViewmodelXYZ& vxyz)
 {
-    read<value_t::boolean>(j, "Enabled", vxyz.enabled);
-    read<value_t::boolean>(j, "Menu Type", vxyz.menuType);
-    read<value_t::boolean>(j, "cl_right Guns", vxyz.clright_guns);
-    read_number(j, "X Guns", vxyz.x_guns);
-    read_number(j, "Y Guns", vxyz.y_guns);
-    read_number(j, "Z Guns", vxyz.z_guns);
-    read<value_t::boolean>(j, "cl_right Knife", vxyz.clright_knife);
-    read_number(j, "X Knife", vxyz.x_knife);
-    read_number(j, "Y Knife", vxyz.y_knife);
-    read_number(j, "Z Knife", vxyz.z_knife);
-    read<value_t::boolean>(j, "cl_right Grenades", vxyz.clright_grenades);
-    read_number(j, "X Grenades", vxyz.x_grenades);
-    read_number(j, "Y Grenades", vxyz.y_grenades);
-    read_number(j, "Z Grenades", vxyz.z_grenades);
-    read<value_t::boolean>(j, "cl_right Pistols", vxyz.clright_pistols);
-    read_number(j, "X Pistols", vxyz.x_pistols);
-    read_number(j, "Y Pistols", vxyz.y_pistols);
-    read_number(j, "Z Pistols", vxyz.z_pistols);
+    read(j, "Enabled", vxyz.enabled);
+    read(j, "Menu Type", vxyz.menuType);
+    read(j, "cl_right Guns", vxyz.clright_guns);
+    read(j, "X Guns", vxyz.x_guns);
+    read(j, "Y Guns", vxyz.y_guns);
+    read(j, "Z Guns", vxyz.z_guns);
+    read(j, "cl_right Knife", vxyz.clright_knife);
+    read(j, "X Knife", vxyz.x_knife);
+    read(j, "Y Knife", vxyz.y_knife);
+    read(j, "Z Knife", vxyz.z_knife);
+    read(j, "cl_right Grenades", vxyz.clright_grenades);
+    read(j, "X Grenades", vxyz.x_grenades);
+    read(j, "Y Grenades", vxyz.y_grenades);
+    read(j, "Z Grenades", vxyz.z_grenades);
+    read(j, "cl_right Pistols", vxyz.clright_pistols);
+    read(j, "X Pistols", vxyz.x_pistols);
+    read(j, "Y Pistols", vxyz.y_pistols);
+    read(j, "Z Pistols", vxyz.z_pistols);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
