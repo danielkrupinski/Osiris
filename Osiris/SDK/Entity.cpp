@@ -13,26 +13,20 @@ bool Entity::isOtherEnemy(Entity* other) noexcept
 
 void Entity::getPlayerName(char(&out)[128]) noexcept
 {
-    PlayerInfo playerInfo;
-    if (!interfaces->engine->getPlayerInfo(index(), playerInfo)) {
+    if (!*memory->playerResource) {
         strcpy(out, "unknown");
         return;
     }
 
-    auto end = std::remove(playerInfo.name, playerInfo.name + strlen(playerInfo.name), '\n');
-    *end = '\0';
-    end = std::unique(playerInfo.name, end, [](char a, char b) { return a == b && a == ' '; });
-    *end = '\0';
-
-#ifdef _WIN32
     wchar_t wide[128];
-    interfaces->localize->convertAnsiToUnicode(playerInfo.name, wide, sizeof(wide));
-    wchar_t wideNormalized[128];
-    NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128);
-    interfaces->localize->convertUnicodeToAnsi(wideNormalized, playerInfo.name, 128);
-#endif
+    memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 28);
 
-    strcpy(out, playerInfo.name);
+    auto end = std::remove(wide, wide + wcslen(wide), L'\n');
+    *end = L'\0';
+    end = std::unique(wide, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
+    *end = L'\0';
+
+    interfaces->localize->convertUnicodeToAnsi(wide, out, 128);
 }
 
 bool Entity::canSee(Entity* other, const Vector& pos) noexcept
