@@ -106,7 +106,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!activeWeapon || !activeWeapon->clip())
         return;
 
-    // TODO: do the same for the triggerbot
     if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
         return;
 
