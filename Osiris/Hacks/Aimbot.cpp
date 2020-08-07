@@ -99,14 +99,13 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
 
 void Aimbot::run(UserCmd* cmd) noexcept
 {
-    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
+    if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
     if (!activeWeapon || !activeWeapon->clip())
         return;
 
-    // TODO: do the same for the triggerbot
     if (localPlayer->shotsFired() > 0 && !activeWeapon->isFullAuto())
         return;
 
