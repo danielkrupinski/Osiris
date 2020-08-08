@@ -725,7 +725,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 const auto weaponName = event->getString("weapon");
-                auto& purchase = purchaseDetails[player->getPlayerName(true)];
+                auto& purchase = purchaseDetails[player->getPlayerName()];
 
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {

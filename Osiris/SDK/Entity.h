@@ -178,7 +178,7 @@ public:
     }
 
     void getPlayerName(char(&out)[128]) noexcept;
-    [[nodiscard]] std::string getPlayerName(bool normalize) noexcept
+    [[nodiscard]] std::string getPlayerName() noexcept
     {
         char name[128];
         getPlayerName(name);
