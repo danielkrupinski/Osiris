@@ -174,6 +174,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Name stealer** - mimic other players names
     * **Custom clantag** - set a custom clantag
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
+    * **Fast Stop** - stops the player faster than normal
     * **Quick reload** - perform quick weapon switch during reload for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Fix tablet signal** - allow use tablet on underground (dangerzone)
