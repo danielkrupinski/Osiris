@@ -216,7 +216,7 @@ public:
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
         ColorToggleThickness noscopeCrosshair;
-        bool recoilCrosshair{ false };
+        ColorToggleThickness recoilCrosshair;
         bool autoPistol{ false };
         bool autoReload{ false };
         bool autoAccept{ false };

@@ -190,10 +190,25 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
-void Misc::recoilCrosshair() noexcept
+void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
-    static auto recoilCrosshair = interfaces->cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config->misc.recoilCrosshair ? 1 : 0);
+    if (!config->misc.recoilCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& localPlayerData = GameData::local();
+
+    if (!localPlayerData.exists || !localPlayerData.alive)
+        return;
+
+    if (!localPlayerData.shooting)
+        return;
+
+    auto pos = ImGui::GetIO().DisplaySize;
+    pos.x *= 0.5f - localPlayerData.aimPunch.y / (localPlayerData.fov * 2.0f);
+    pos.y *= 0.5f + localPlayerData.aimPunch.x / (localPlayerData.fov * 2.0f);
+
+    drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
 
 void Misc::watermark() noexcept
@@ -713,7 +728,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 const auto weaponName = event->getString("weapon");
-                auto& purchase = purchaseDetails[player->getPlayerName(true)];
+                auto& purchase = purchaseDetails[player->getPlayerName()];
 
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
