@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "Utils.h"
+
 class matrix3x4;
 
 struct Vector {
@@ -130,6 +132,13 @@ struct Vector {
     auto distTo(const Vector& v) const noexcept
     {
         return (*this - v).length();
+    }
+
+    auto toAngle() const noexcept
+    {
+        return Vector{ radiansToDegrees(std::atan2(-z, std::hypot(x, y))),
+                       radiansToDegrees(std::atan2(y, x)),
+                       0.0f };
     }
 
     float x, y, z;
