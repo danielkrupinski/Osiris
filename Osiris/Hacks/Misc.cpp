@@ -206,9 +206,11 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
+    static const auto view_recoil_tracking = interfaces->cvar->findVar("view_recoil_tracking");
+
     auto pos = ImGui::GetIO().DisplaySize;
-    pos.x *= 0.5f - localPlayerData.aimPunch.y / (localPlayerData.fov * 2.0f);
-    pos.y *= 0.5f + localPlayerData.aimPunch.x / (localPlayerData.fov * 2.0f);
+    pos.x *= 0.5f - localPlayerData.aimPunch.y * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
+    pos.y *= 0.5f + localPlayerData.aimPunch.x * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
 
     drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
