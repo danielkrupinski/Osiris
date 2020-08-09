@@ -100,11 +100,12 @@ struct Vector {
         return Vector{ x + add, y + add, z + add };
     }
 
-    constexpr void normalize() noexcept
+    constexpr Vector& normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainder(x, 360.0f) : 0.0f;
         y = std::isfinite(y) ? std::remainder(y, 360.0f) : 0.0f;
         z = 0.0f;
+        return *this;
     }
 
     auto length() const noexcept
