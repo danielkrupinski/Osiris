@@ -142,6 +142,13 @@ struct Vector {
                        0.0f };
     }
 
+    static auto fromAngle(const Vector& angle) noexcept
+    {
+        return Vector{ std::cos(degreesToRadians(angle.x)) * std::cos(degreesToRadians(angle.y)),
+                       std::cos(degreesToRadians(angle.x)) * std::sin(degreesToRadians(angle.y)),
+                      -std::sin(degreesToRadians(angle.x)) };
+    }
+
     float x, y, z;
 };
 
