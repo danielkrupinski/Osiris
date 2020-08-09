@@ -6,26 +6,28 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
-#include "Misc.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Surface.h"
-#include "../SDK/GlobalVars.h"
-#include "../SDK/NetworkChannel.h"
-#include "../SDK/WeaponData.h"
+
 #include "EnginePrediction.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/Entity.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/GameEvent.h"
-#include "../SDK/FrameStage.h"
+#include "Misc.h"
+
 #include "../SDK/Client.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Entity.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
-#include "../SDK/WeaponSystem.h"
+#include "../SDK/Localize.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/NetworkChannel.h"
+#include "../SDK/Surface.h"
+#include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/WeaponSystem.h"
+
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
-
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -204,9 +206,11 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
+    static const auto view_recoil_tracking = interfaces->cvar->findVar("view_recoil_tracking");
+
     auto pos = ImGui::GetIO().DisplaySize;
-    pos.x *= 0.5f - localPlayerData.aimPunch.y / (localPlayerData.fov * 2.0f);
-    pos.y *= 0.5f + localPlayerData.aimPunch.x / (localPlayerData.fov * 2.0f);
+    pos.x *= 0.5f - localPlayerData.aimPunch.y * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
+    pos.y *= 0.5f + localPlayerData.aimPunch.x * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
 
     drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
@@ -727,31 +731,16 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                const auto weaponName = event->getString("weapon");
-                auto& purchase = purchaseDetails[player->getPlayerName()];
-
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                    auto& purchase = purchaseDetails[player->getPlayerName()];
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
                         purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
+                    const std::string weapon = interfaces->localize->findAsUTF8(definition->getItemBaseName());
+                    ++purchaseTotal[weapon];
+                    purchase.first.push_back(weapon);
                 }
-                std::string weapon = weaponName;
-
-                if (weapon.starts_with("weapon_"))
-                    weapon.erase(0, 7);
-                else if (weapon.starts_with("item_"))
-                    weapon.erase(0, 5);
-
-                if (weapon.starts_with("smoke"))
-                    weapon.erase(5);
-                else if (weapon.starts_with("m4a1_s"))
-                    weapon.erase(6);
-                else if (weapon.starts_with("usp_s"))
-                    weapon.erase(5);
-
-                purchase.first.push_back(weapon);
-                ++purchaseTotal[weapon];
             }
             break;
         }
@@ -781,7 +770,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
