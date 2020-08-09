@@ -62,14 +62,8 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!weaponData)
         return;
 
-    const auto aimPunch = localPlayer->getAimPunch();
-
-    const Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                             std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                            -std::sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
-
     const auto startPos = localPlayer->getEyePosition();
-    const auto endPos = startPos + viewAngles;
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles + localPlayer->getAimPunch()) * weaponData->range;
 
     Trace trace;
     interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
