@@ -908,7 +908,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
-    WRITE("Fast plant", fastStop);
+    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
