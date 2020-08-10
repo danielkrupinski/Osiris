@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "Pad.h"
+#include "UtlVector.h"
 #include "VirtualMethod.h"
 
 enum class WeaponId : short;
@@ -72,6 +73,12 @@ struct ItemListEntry {
     {
         return WeaponId{ itemDef };
     }
+};
+
+class EconLootListDefinition {
+public:
+    VIRTUAL_METHOD(const char*, getName, 0, (), (this))
+    VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), (this))
 };
 
 class ItemSchema {
