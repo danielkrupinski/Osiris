@@ -27,7 +27,7 @@ struct Node {
 };
 
 template <typename Key, typename Value>
-struct Head {
+struct UtlMap {
 	void* lessFunc;
 	UtlMemory<Node<Key, Value>> memory;
     int root;
@@ -66,8 +66,8 @@ public:
 class ItemSchema {
 public:
     PAD(0x288)
-    Head<int, PaintKit*> paintKits;
-    Head<int, StickerKit*> stickerKits;
+    UtlMap<int, PaintKit*> paintKits;
+    UtlMap<int, StickerKit*> stickerKits;
 
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
