@@ -98,6 +98,7 @@ public:
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
     VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
+    VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
 
