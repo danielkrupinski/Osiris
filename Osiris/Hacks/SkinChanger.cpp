@@ -41,7 +41,7 @@ void SkinChanger::initializeKits() noexcept
 
     const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
   
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastElement; i++) {
+    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
         const auto paintKit = memory->itemSystem()->getItemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001) // ignore workshop_default
@@ -67,7 +67,7 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastElement; i++) {
+    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastAlloc; i++) {
         const auto stickerKit = memory->itemSystem()->getItemSchema()->stickerKits.memory[i].value;
         std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name, facet));
