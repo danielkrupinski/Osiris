@@ -39,10 +39,10 @@ struct UtlMap {
 };
 
 struct String {
-    char* buffer;
-    int capacity;
-    int growSize;
+    UtlMemory<char> buffer;
     int length;
+
+    char* data() noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
