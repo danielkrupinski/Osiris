@@ -44,7 +44,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
         const auto paintKit = memory->itemSystem()->getItemSchema()->paintKits.memory[i].value;
 
-        if (paintKit->id == 9001) // ignore workshop_default
+        if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
 
         std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
@@ -64,7 +64,7 @@ void SkinChanger::initializeKits() noexcept
         }
     }
 
-    std::sort(skinKits.begin(), skinKits.end());
+    std::sort(skinKits.begin() + 1, skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastAlloc; i++) {
