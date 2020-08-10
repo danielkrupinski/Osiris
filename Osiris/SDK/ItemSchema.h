@@ -63,6 +63,17 @@ public:
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
 };
 
+struct ItemListEntry {
+    int itemDef;
+    int paintKit;
+    PAD(20)
+
+    auto weaponId() noexcept
+    {
+        return WeaponId{ itemDef };
+    }
+};
+
 class ItemSchema {
 public:
     PAD(0x288)
