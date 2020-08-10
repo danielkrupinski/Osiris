@@ -20,13 +20,28 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
+static std::wstring toUpperWide(const std::string& s, const std::ctype<wchar_t>& facet) noexcept
+{
+    std::wstring upperCase(s.length(), L'\0');
+    const auto newLen = mbstowcs(upperCase.data(), s.c_str(), s.length());
+    if (newLen != static_cast<std::size_t>(-1))
+        upperCase.resize(newLen);
+    std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+    return upperCase;
+}
+
 void SkinChanger::initializeKits() noexcept
 {
     std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
     const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
     items.close();
 
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastElement; i++) {
+    const std::locale original;
+    std::locale::global(std::locale{ "en_US.utf8" });
+
+    const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
+  
+    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
         const auto paintKit = memory->itemSystem()->getItemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 9001) // ignore workshop_default
@@ -40,23 +55,26 @@ void SkinChanger::initializeKits() noexcept
                     name += '(' + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')';
                 }
             }
-            skinKits.emplace_back(paintKit->id, std::move(name));
+            skinKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         } else {
             std::string_view gloveName{ paintKit->name.buffer };
             name += ' ';
             name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } +')';
-            gloveKits.emplace_back(paintKit->id, std::move(name));
+            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         }
     }
 
     std::sort(skinKits.begin(), skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastElement; i++) {
+    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastAlloc; i++) {
         const auto stickerKit = memory->itemSystem()->getItemSchema()->stickerKits.memory[i].value;
-        stickerKits.emplace_back(stickerKit->id, interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold"));
+        std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
+        stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name, facet));
     }
+
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
+    std::locale::global(original);
 }
 
 static std::unordered_map<std::string, const char*> iconOverrides;
