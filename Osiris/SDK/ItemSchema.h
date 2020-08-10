@@ -81,6 +81,14 @@ public:
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), (this))
 };
 
+class EconItemSetDefinition {
+public:
+    VIRTUAL_METHOD(const char*, getLocKey, 1, (), (this))
+    VIRTUAL_METHOD(int, getItemCount, 4, (), (this))
+    VIRTUAL_METHOD(WeaponId, getItemDef, 5, (int index), (this, index))
+    VIRTUAL_METHOD(int, getItemPaintKit, 6, (int index), (this, index))
+};
+
 class ItemSchema {
 public:
     PAD(0x288)
