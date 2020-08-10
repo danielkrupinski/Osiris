@@ -1120,8 +1120,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                     ImGui::PushID(i);
-                    if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
-                        selected_entry.paint_kit_vector_index = i;
+                    if (ImGui::Selectable(kits[i].name.c_str(), i == selected_sticker.kit_vector_index))
+                        selected_sticker.kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
