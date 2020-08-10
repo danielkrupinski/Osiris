@@ -20,6 +20,16 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
+static std::wstring toUpperWide(const std::string& s, const std::ctype<wchar_t>& facet) noexcept
+{
+    std::wstring upperCase(s.length(), L'\0');
+    const auto newLen = mbstowcs(upperCase.data(), s.c_str(), s.length());
+    if (newLen != static_cast<std::size_t>(-1))
+        upperCase.resize(newLen);
+    std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+    return upperCase;
+}
+
 void SkinChanger::initializeKits() noexcept
 {
     std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
@@ -45,22 +55,12 @@ void SkinChanger::initializeKits() noexcept
                     name += '(' + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')';
                 }
             }
-            std::wstring nameUpperCase(name.length(), L'\0');
-            const auto newLen = mbstowcs(nameUpperCase.data(), name.c_str(), name.length());
-            if (newLen != static_cast<std::size_t>(-1))
-                nameUpperCase.resize(newLen);
-            std::transform(nameUpperCase.begin(), nameUpperCase.end(), nameUpperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
-            skinKits.emplace_back(paintKit->id, std::move(name), std::move(nameUpperCase));
+            skinKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         } else {
             std::string_view gloveName{ paintKit->name.buffer };
             name += ' ';
             name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } +')';
-            std::wstring nameUpperCase(name.length(), L'\0');
-            const auto newLen = mbstowcs(nameUpperCase.data(), name.c_str(), name.length());
-            if (newLen != static_cast<std::size_t>(-1))
-                nameUpperCase.resize(newLen);
-            std::transform(nameUpperCase.begin(), nameUpperCase.end(), nameUpperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
-            gloveKits.emplace_back(paintKit->id, std::move(name), std::move(nameUpperCase));
+            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         }
     }
 
@@ -70,12 +70,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastElement; i++) {
         const auto stickerKit = memory->itemSystem()->getItemSchema()->stickerKits.memory[i].value;
         std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.buffer + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-        std::wstring nameUpperCase(name.length(), L'\0');
-        const auto newLen = mbstowcs(nameUpperCase.data(), name.c_str(), name.length());
-        if (newLen != static_cast<std::size_t>(-1))
-            nameUpperCase.resize(newLen);
-        std::transform(nameUpperCase.begin(), nameUpperCase.end(), nameUpperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
-        stickerKits.emplace_back(stickerKit->id, std::move(name), std::move(nameUpperCase));
+        stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name, facet));
     }
 
     std::sort(std::next(stickerKits.begin()), stickerKits.end());

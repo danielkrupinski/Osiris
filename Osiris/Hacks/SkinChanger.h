@@ -15,7 +15,7 @@ namespace SkinChanger
     void updateStatTrak(GameEvent& event) noexcept;
 
     struct PaintKit {
-        PaintKit(int id, std::string&& name, std::wstring&& nameUpperCase) noexcept : id(id), name(name), nameUpperCase(nameUpperCase) { }
+        PaintKit(int id, const std::string& name, const std::wstring& nameUpperCase) noexcept : id(id), name(name), nameUpperCase(nameUpperCase) { }
         int id;
         std::string name;
         std::wstring nameUpperCase;
