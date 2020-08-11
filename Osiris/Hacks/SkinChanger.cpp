@@ -32,10 +32,6 @@ static std::wstring toUpperWide(const std::string& s, const std::ctype<wchar_t>&
 
 void SkinChanger::initializeKits() noexcept
 {
-    std::ifstream items{ "csgo/scripts/items/items_game_cdn.txt" };
-    const std::string gameItems{ std::istreambuf_iterator<char>{ items }, std::istreambuf_iterator<char>{ } };
-    items.close();
-
     const std::locale original;
     std::locale::global(std::locale{ "en_US.utf8" });
 
