@@ -41,25 +41,43 @@ void SkinChanger::initializeKits() noexcept
 
     const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
   
+    std::vector<std::pair<int, WeaponId>> kitsWeapons;
+
+    for (int i = 0; i < memory->itemSystem()->getItemSchema()->getLootListCount(); ++i) {
+        const auto& contents = memory->itemSystem()->getItemSchema()->getLootList(i)->getLootListContents();
+
+        for (int j = 0; j < contents.size; ++j)
+            kitsWeapons.emplace_back(contents[j].paintKit, contents[j].weaponId());
+    }
+
+    for (int i = 0; i < memory->itemSystem()->getItemSchema()->getItemSetCount(); ++i) {
+        const auto set = memory->itemSystem()->getItemSchema()->getItemSet(i);
+
+        for (int j = 0; j < set->getItemCount(); ++j)
+            kitsWeapons.emplace_back(set->getItemPaintKit(j), set->getItemDef(j));
+    }
+
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
         const auto paintKit = memory->itemSystem()->getItemSchema()->paintKits.memory[i].value;
 
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
 
-        std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+        std::string name;
+
+        if (const auto it = std::find_if(kitsWeapons.begin(), kitsWeapons.end(), [&paintKit](const auto& p) { return p.first == paintKit->id; }); it != kitsWeapons.end()) {
+            name = interfaces->localize->findAsUTF8(memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(it->second)->getItemBaseName());
+            name += " | ";
+        }
+
+        name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+
         if (paintKit->id < 10000) {
-            if (auto pos = gameItems.find('_' + std::string{ paintKit->name.data() } +'='); pos != std::string::npos && gameItems.substr(pos + paintKit->name.length).find('_' + std::string{ paintKit->name.data() } +'=') == std::string::npos) {
-                if (auto weaponName = gameItems.rfind("weapon_", pos); weaponName != std::string::npos) {
-                    name += ' ';
-                    name += '(' + gameItems.substr(weaponName + 7, pos - weaponName - 7) + ')';
-                }
-            }
             skinKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         } else {
             std::string_view gloveName{ paintKit->name.data() };
             name += ' ';
-            name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } +')';
+            name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } + ')';
             gloveKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
         }
     }
