@@ -69,9 +69,9 @@ struct ItemListEntry {
     int paintKit;
     PAD(20)
 
-    auto weaponId() noexcept
+    auto weaponId() const noexcept
     {
-        return WeaponId{ itemDef };
+        return static_cast<WeaponId>(itemDef);
     }
 };
 
