@@ -46,15 +46,20 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i < memory->itemSystem()->getItemSchema()->getLootListCount(); ++i) {
         const auto& contents = memory->itemSystem()->getItemSchema()->getLootList(i)->getLootListContents();
 
-        for (int j = 0; j < contents.size; ++j)
-            kitsWeapons.emplace_back(contents[j].paintKit, contents[j].weaponId());
+        for (int j = 0; j < contents.size; ++j) {
+            if (contents[j].paintKit != 0)
+                kitsWeapons.emplace_back(contents[j].paintKit, contents[j].weaponId());
+        }
     }
 
     for (int i = 0; i < memory->itemSystem()->getItemSchema()->getItemSetCount(); ++i) {
         const auto set = memory->itemSystem()->getItemSchema()->getItemSet(i);
 
-        for (int j = 0; j < set->getItemCount(); ++j)
-            kitsWeapons.emplace_back(set->getItemPaintKit(j), set->getItemDef(j));
+        for (int j = 0; j < set->getItemCount(); ++j) {
+            const auto paintKit = set->getItemPaintKit(j);
+            if (paintKit != 0)
+                kitsWeapons.emplace_back(paintKit, set->getItemDef(j));
+        }
     }
 
     for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
