@@ -926,15 +926,18 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::SameLine();
         ImGui::Checkbox("Custom Value", &config->visuals.inverseRagdollGravityCustomize);
         if (config->visuals.inverseRagdollGravityCustomize) {
-            ImGui::PushItemWidth(290.0f);
-            ImGui::InputInt("", &config->visuals.inverseRagdollGravityValue, -2400, 2400);
-            ImGui::PopItemWidth();
+            ImGui::PushItemWidth(280.0f);
+            ImGui::PushID(0);
+            ImGui::SliderInt("", &config->visuals.inverseRagdollGravityValue, -2400, 2400, "Ragdoll gravity value: %d");
+            ImGui::PopID();
         };
     };
     ImGui::Checkbox("Custom Physics Timescale", &config->visuals.ragdollTimescale);
     if (config->visuals.ragdollTimescale) {
-        ImGui::PushItemWidth(290.0f);
-        ImGui::InputFloat("", &config->visuals.ragdollTimescaleValue, 0, 10, "%.2f");
+        ImGui::PushItemWidth(280.0f);
+        ImGui::PushID(1);
+        ImGui::SliderFloat("", &config->visuals.ragdollTimescaleValue, 0, 10, "Physics timescale: %.2f");
+        ImGui::PopID();
         ImGui::PopItemWidth();
     };
     ImGui::Checkbox("No fog", &config->visuals.noFog);
@@ -955,16 +958,12 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::SameLine();
         ImGui::Checkbox("Custom pos", &config->visuals.showvelocityM);
         if (config->visuals.showvelocityM) {
-            ImGui::PushID(0);
+            ImGui::PushID(2);
             ImGui::SliderInt("", &config->visuals.showvelocityPosX, 0, config->visuals.showvelocityResX, "X pos: %d");
             ImGui::PopID();
-            ImGui::PushID(1);
+            ImGui::PushID(3);
             ImGui::SliderInt("", &config->visuals.showvelocityPosY, 0, config->visuals.showvelocityResY, "Y pos: %d");
             ImGui::PopID();
-        }
-        else {
-            config->visuals.showvelocityPosX = config->visuals.showvelocityResX / 2;
-            config->visuals.showvelocityPosY = config->visuals.showvelocityResY / 2;
         }
     }
     ImGui::NextColumn();
@@ -981,22 +980,22 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->visuals.thirdpersonKey);
     ImGui::PushItemWidth(290.0f);
-    ImGui::PushID(2);
+    ImGui::PushID(4);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
     ImGui::PopID();
-    ImGui::PushID(3);
+    ImGui::PushID(5);
     ImGui::SliderInt("", &config->visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
     ImGui::PopID();
-    ImGui::PushID(4);
+    ImGui::PushID(6);
     ImGui::SliderInt("", &config->visuals.fov, -60, 60, "FOV: %d");
     ImGui::PopID();
-    ImGui::PushID(5);
+    ImGui::PushID(7);
     ImGui::SliderInt("", &config->visuals.farZ, 0, 2000, "Far Z: %d");
     ImGui::PopID();
-    ImGui::PushID(6);
+    ImGui::PushID(8);
     ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
     ImGui::PopID();
-    ImGui::PushID(7);
+    ImGui::PushID(9);
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
@@ -1261,7 +1260,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (!window.misc)
             return;
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc", &window.misc, windowFlags);
+        ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
