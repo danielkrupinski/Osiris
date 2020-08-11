@@ -41,10 +41,12 @@ void SkinChanger::initializeKits() noexcept
 
     const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
   
+    const auto itemSchema = memory->itemSystem()->getItemSchema();
+
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
 
-    for (int i = 0; i < memory->itemSystem()->getItemSchema()->getLootListCount(); ++i) {
-        const auto& contents = memory->itemSystem()->getItemSchema()->getLootList(i)->getLootListContents();
+    for (int i = 0; i < itemSchema->getLootListCount(); ++i) {
+        const auto& contents = itemSchema->getLootList(i)->getLootListContents();
 
         for (int j = 0; j < contents.size; ++j) {
             if (contents[j].paintKit != 0)
@@ -52,8 +54,8 @@ void SkinChanger::initializeKits() noexcept
         }
     }
 
-    for (int i = 0; i < memory->itemSystem()->getItemSchema()->getItemSetCount(); ++i) {
-        const auto set = memory->itemSystem()->getItemSchema()->getItemSet(i);
+    for (int i = 0; i < itemSchema->getItemSetCount(); ++i) {
+        const auto set = itemSchema->getItemSet(i);
 
         for (int j = 0; j < set->getItemCount(); ++j) {
             const auto paintKit = set->getItemPaintKit(j);
@@ -62,8 +64,8 @@ void SkinChanger::initializeKits() noexcept
         }
     }
 
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->paintKits.lastAlloc; i++) {
-        const auto paintKit = memory->itemSystem()->getItemSchema()->paintKits.memory[i].value;
+    for (int i = 0; i <= itemSchema->paintKits.lastAlloc; i++) {
+        const auto paintKit = itemSchema->paintKits.memory[i].value;
 
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
@@ -71,7 +73,7 @@ void SkinChanger::initializeKits() noexcept
         std::string name;
 
         if (const auto it = std::find_if(kitsWeapons.begin(), kitsWeapons.end(), [&paintKit](const auto& p) { return p.first == paintKit->id; }); it != kitsWeapons.end()) {
-            name = interfaces->localize->findAsUTF8(memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(it->second)->getItemBaseName());
+            name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(it->second)->getItemBaseName());
             name += " | ";
         }
 
@@ -90,8 +92,8 @@ void SkinChanger::initializeKits() noexcept
     std::sort(skinKits.begin() + 1, skinKits.end());
     std::sort(gloveKits.begin(), gloveKits.end());
 
-    for (int i = 0; i <= memory->itemSystem()->getItemSchema()->stickerKits.lastAlloc; i++) {
-        const auto stickerKit = memory->itemSystem()->getItemSchema()->stickerKits.memory[i].value;
+    for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
+        const auto stickerKit = itemSchema->stickerKits.memory[i].value;
         std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name, facet));
     }
