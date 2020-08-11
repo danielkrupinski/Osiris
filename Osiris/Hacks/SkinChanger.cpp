@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cwctype>
 #include <fstream>
 
 #include "../Interfaces.h"
@@ -26,7 +27,7 @@ static std::wstring toUpperWide(const std::string& s, const std::ctype<wchar_t>&
     const auto newLen = mbstowcs(upperCase.data(), s.c_str(), s.length());
     if (newLen != static_cast<std::size_t>(-1))
         upperCase.resize(newLen);
-    std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+    std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [](wchar_t w) { return std::towupper(w); });
     return upperCase;
 }
 
