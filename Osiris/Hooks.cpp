@@ -148,6 +148,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::autoReload(cmd);
     Misc::updateClanTag();
     Misc::fakeBan();
+    Misc::HookRecorder(cmd);
     Misc::stealNames();
     Misc::revealRanks(cmd);
     Misc::quickReload(cmd);
@@ -241,6 +242,8 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::drawBombTimer();
         Misc::spectatorList();
         Misc::watermark();
+        Misc::DrawRecorder();
+        Misc::VisualizeRecorder();
         Visuals::hitMarker();
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
