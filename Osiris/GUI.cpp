@@ -417,9 +417,16 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
     ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
     ImGui::Checkbox("Draw all ticks", &config->backtrack.drawAllTicks);
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
-    ImGui::PopItemWidth();
+    ImGui::Checkbox("Ping based", &config->backtrack.pingBased);
+    if (config->backtrack.pingBased) {
+        ImGui::SameLine();
+        ImGui::Text("(%d ms)", config->backtrack.pingBasedVal);
+    }
+    else {
+        ImGui::PushItemWidth(220.0f);
+        ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
+        ImGui::PopItemWidth();
+    };
     if (!contentOnly)
         ImGui::End();
 }

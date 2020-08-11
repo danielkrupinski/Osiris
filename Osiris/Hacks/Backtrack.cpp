@@ -37,7 +37,12 @@ void Backtrack::update(FrameStage stage) noexcept
 
             records[i].push_front(record);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.timeLimit) / 1000.f)))
+            config->backtrack.pingBasedVal = config->backtrack.timeLimit;
+            if (config->backtrack.pingBased)
+                if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+                    config->backtrack.pingBasedVal = static_cast<int>(networkChannel->getLatency(0) * 1000);
+
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.pingBasedVal) / 1000.f)))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
