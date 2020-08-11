@@ -43,5 +43,9 @@ namespace Misc
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
 
+    inline int teamDamage = 0;
+    inline int teamKills = 0;
+
     void jumpbug(UserCmd* cmd) noexcept;
+    void teamDamageCounter(GameEvent* event) noexcept;
 }
