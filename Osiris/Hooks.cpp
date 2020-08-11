@@ -244,6 +244,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::watermark();
         Visuals::hitMarker();
         Misc::drawAimbotFov();
+        Misc::showVelocity();
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }

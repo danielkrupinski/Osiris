@@ -928,6 +928,23 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
+    ImGuiCustom::colorPicker("Show velocity", config->visuals.showvelocity);
+    if (config->visuals.showvelocity.enabled) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Custom pos", &config->visuals.showvelocityM);
+        if (config->visuals.showvelocityM) {
+            ImGui::PushID(0);
+            ImGui::SliderInt("", &config->visuals.showvelocityPosX, 0, config->visuals.showvelocityResX, "X pos: %d");
+            ImGui::PopID();
+            ImGui::PushID(1);
+            ImGui::SliderInt("", &config->visuals.showvelocityPosY, 0, config->visuals.showvelocityResY, "Y pos: %d");
+            ImGui::PopID();
+        }
+        else {
+            config->visuals.showvelocityPosX = config->visuals.showvelocityResX / 2;
+            config->visuals.showvelocityPosY = config->visuals.showvelocityResY / 2;
+        }
+    }
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();
@@ -936,22 +953,22 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->visuals.thirdpersonKey);
     ImGui::PushItemWidth(290.0f);
-    ImGui::PushID(0);
+    ImGui::PushID(2);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
     ImGui::PopID();
-    ImGui::PushID(1);
+    ImGui::PushID(3);
     ImGui::SliderInt("", &config->visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
     ImGui::PopID();
-    ImGui::PushID(2);
+    ImGui::PushID(4);
     ImGui::SliderInt("", &config->visuals.fov, -60, 60, "FOV: %d");
     ImGui::PopID();
-    ImGui::PushID(3);
+    ImGui::PushID(5);
     ImGui::SliderInt("", &config->visuals.farZ, 0, 2000, "Far Z: %d");
     ImGui::PopID();
-    ImGui::PushID(4);
+    ImGui::PushID(6);
     ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
     ImGui::PopID();
-    ImGui::PushID(5);
+    ImGui::PushID(7);
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();

@@ -941,3 +941,27 @@ void Misc::drawAimbotFov() noexcept {
         interfaces->surface->drawOutlinedCircle(width / 2, heigth / 2, (int)(radius * 0.776), 100); // idk how to fix it correctly
     }
 }
+
+void Misc::showVelocity() noexcept
+{
+    if (!config->visuals.showvelocity.enabled || !localPlayer || !localPlayer->isAlive())
+        return;
+
+    float velocity = localPlayer->velocity().length2D();
+    std::wstring velocitywstr{ L"(" + std::to_wstring(static_cast<int>(velocity)) + L")" };
+
+    interfaces->surface->setTextFont(Surface::font);
+    if (config->visuals.showvelocity.rainbow)
+        interfaces->surface->setTextColor(rainbowColor(config->visuals.showvelocity.rainbowSpeed));
+    else
+        interfaces->surface->setTextColor((config->visuals.showvelocity.color));
+
+    const auto [width, height] = interfaces->surface->getScreenSize();
+    config->visuals.showvelocityResX = width;
+    config->visuals.showvelocityResY = height;
+    if (config->visuals.showvelocityM)
+        interfaces->surface->setTextPosition(config->visuals.showvelocityPosX, config->visuals.showvelocityPosY);
+    else
+        interfaces->surface->setTextPosition(width / 2 - 6, height - 200);
+    interfaces->surface->printText(velocitywstr);
+}
