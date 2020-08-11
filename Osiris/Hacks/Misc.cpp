@@ -419,7 +419,7 @@ Vector MCalculateRelativeAngle(const Vector& source, const Vector& destination, 
 	return angles;
 }
 
-static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+static bool mWorldToScreen(const Vector& in, ImVec2& out) noexcept
 {
     const auto& matrix = GameData::toScreenMatrix();
 
@@ -557,14 +557,14 @@ void Misc::VisualizeRecorder() noexcept
 
 		for (int i = 1; i < recording.size(); i++)
 		{
-			if (worldToScreen(movePositions[i], pos))
+			if (mWorldToScreen(movePositions[i], pos))
 			{
 
 				interfaces->surface->setDrawColor(255, 0, 0);
 				interfaces->surface->drawCircle(pos.x, pos.y, 1, 3);
 			}
 		}
-		if (worldToScreen(startVec, pos2))
+		if (mWorldToScreen(startVec, pos2))
 		{
 			interfaces->surface->setDrawColor(0, 255, 0);
 			interfaces->surface->drawCircle(pos2.x, pos2.y, 1, 5);
