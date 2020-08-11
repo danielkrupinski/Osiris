@@ -9,6 +9,9 @@ namespace Misc
 {
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
+    void DrawRecorder() noexcept;
+    void HookRecorder(UserCmd*) noexcept;
+    void VisualizeRecorder() noexcept;
     void inverseRagdollGravity() noexcept;
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
