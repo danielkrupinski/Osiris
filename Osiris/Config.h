@@ -211,6 +211,8 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool Recorder{ false };
+        bool visualizeRecorder{ false };
         bool edgejump{ false };
         int edgejumpkey{ 0 };
         bool slowwalk{ false };
