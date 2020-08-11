@@ -213,6 +213,9 @@ public:
         bool moonwalk{ false };
         bool edgejump{ false };
         int edgejumpkey{ 0 };
+        bool jumpbug{ false };
+        int jumpbugkey{ 0 };
+        bool jumpbughold{ false };
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
         ColorToggleThickness noscopeCrosshair;

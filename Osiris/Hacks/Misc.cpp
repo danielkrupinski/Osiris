@@ -798,3 +798,102 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::End();
     }
 }
+
+
+void Misc::jumpbug(UserCmd* cmd) noexcept {
+    if (!config->misc.jumpbug || !localPlayer || !localPlayer->isAlive())
+        return;
+
+    static bool bhopWasEnabled = true;
+    bool JumpDone;
+
+    bool unduck = true;
+
+    float max_radius = M_PI * 2;
+    float step = max_radius / 128;
+    float xThick = 23;
+
+    if (GetAsyncKeyState(config->misc.jumpbugkey) && (localPlayer->flags() & 1) && !(EnginePrediction::getFlags() & 1)) {
+
+        if (config->misc.bunnyHop) {
+            config->misc.bunnyHop = false;
+            bhopWasEnabled = false;
+        }
+
+        if (unduck) {
+            JumpDone = false;
+            if (config->misc.jumpbughold)
+                cmd->buttons |= UserCmd::IN_JUMP; // If you want to hold JB key only.
+            else
+                cmd->buttons &= ~UserCmd::IN_DUCK;
+            unduck = false;
+        }
+
+        Vector pos = localPlayer->origin();
+
+        for (float a = 0.f; a < max_radius; a += step) {
+            Vector pt;
+            pt.x = (xThick * cos(a)) + pos.x;
+            pt.y = (xThick * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace target;
+
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, localPlayer.get(), target);
+
+            if (target.fraction != 1.0f && target.fraction != 0.0f) {
+                JumpDone = true;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                cmd->buttons &= ~UserCmd::IN_JUMP;
+                unduck = true;
+            }
+        }
+        for (float a = 0.f; a < max_radius; a += step) {
+            Vector pt;
+            pt.x = ((xThick - 2.f) * cos(a)) + pos.x;
+            pt.y = ((xThick - 2.f) * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace target;
+
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, localPlayer.get(), target);
+
+            if (target.fraction != 1.f && target.fraction != 0.f) {
+                JumpDone = true;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                cmd->buttons &= ~UserCmd::IN_JUMP;
+                unduck = true;
+            }
+        }
+        for (float a = 0.f; a < max_radius; a += step) {
+            Vector pt;
+            pt.x = ((xThick - 20.f) * cos(a)) + pos.x;
+            pt.y = ((xThick - 20.f) * sin(a)) + pos.y;
+            pt.z = pos.z;
+
+            Vector pt2 = pt;
+            pt2.z -= 6;
+
+            Trace target;
+
+            interfaces->engineTrace->traceRay({ pt, pt2 }, 0x1400B, localPlayer.get(), target);
+
+            if (target.fraction != 1.f && target.fraction != 0.f) {
+                JumpDone = true;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                cmd->buttons &= ~UserCmd::IN_JUMP;
+                unduck = true;
+            }
+        }
+    }
+    else if (!bhopWasEnabled) {
+        config->misc.bunnyHop = true;
+        bhopWasEnabled = true;
+    }
+}
