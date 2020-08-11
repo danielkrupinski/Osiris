@@ -1022,10 +1022,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
 
-            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
             const std::locale original;
-            if (!filter.empty())
-                std::locale::global(std::locale{ "en_US.utf8" });
+            std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
@@ -1034,34 +1032,16 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
+            std::locale::global(original);
+
             for (std::size_t i = 0; i < kits.size(); ++i) {
-                bool passedTheFilter = filter.empty();
-
-                if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
-                        wchar_t w;
-                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
-                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-
-                        if (facet.toupper(w) != filterWide[j2])
-                            j2 = 0;
-                        else
-                            ++j2;
-
-                        if (j2 >= filterWide.length())
-                            passedTheFilter = true;
-                    }
-                }
-
-                if (passedTheFilter) {
+                if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                     ImGui::PushID(i);
                     if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
                         selected_entry.paint_kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
-
-            std::locale::global(original);
             ImGui::ListBoxFooter();
         }
 
@@ -1125,10 +1105,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Sticker")) {
             const auto& kits = SkinChanger::stickerKits;
 
-            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
             const std::locale original;
-            if (!filter.empty())
-                std::locale::global(std::locale{ "en_US.utf8" });
+            std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
@@ -1137,34 +1115,16 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
+            std::locale::global(original);
+
             for (std::size_t i = 0; i < kits.size(); ++i) {
-                bool passedTheFilter = filter.empty();
-
-                if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
-                        wchar_t w;
-                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
-                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-
-                        if (facet.toupper(w) != filterWide[j2])
-                            j2 = 0;
-                        else
-                            ++j2;
-
-                        if (j2 >= filterWide.length())
-                            passedTheFilter = true;
-                    }
-                }
-
-                if (passedTheFilter) {
+                if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                     ImGui::PushID(i);
                     if (ImGui::Selectable(kits[i].name.c_str(), i == selected_sticker.kit_vector_index))
                         selected_sticker.kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
-
-            std::locale::global(original);
             ImGui::ListBoxFooter();
         }
 

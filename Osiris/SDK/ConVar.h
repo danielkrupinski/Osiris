@@ -18,5 +18,5 @@ struct ConVar {
     const char* defaultValue;
     char* string;
     std::byte pad1[28];
-    UtlVector<void __cdecl()> onChangeCallbacks;
+    UtlVector<void(__cdecl*)()> onChangeCallbacks;
 };
