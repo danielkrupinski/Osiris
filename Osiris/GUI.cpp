@@ -1446,18 +1446,36 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::EndPopup();
         }
         if (currentConfig != -1) {
-            if (ImGui::Button("Load selected", { 100.0f, 25.0f })) {
-                config->load(currentConfig, incrementalLoad);
-                updateColors();
-                SkinChanger::scheduleHudUpdate();
-                Misc::updateClanTag(true);
+            if (ImGui::Button("Load selected", { 100.0f, 25.0f }))
+                ImGui::OpenPopup("Config to load");
+            if (ImGui::BeginPopup("Config to load")) {
+                if (ImGui::Selectable("Confirm")) {
+                    config->load(currentConfig, incrementalLoad);
+                    updateColors();
+                    SkinChanger::scheduleHudUpdate();
+                    Misc::updateClanTag(true);
+                }
+                if (ImGui::Selectable("Cancel")) {/*nothing to do*/ }
+                ImGui::EndPopup();
             }
             if (ImGui::Button("Save selected", { 100.0f, 25.0f }))
-                config->save(currentConfig);
-            if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
-                config->remove(currentConfig);
-                currentConfig = -1;
-                buffer.clear();
+                ImGui::OpenPopup("Config to save");
+            if (ImGui::BeginPopup("Config to save")) {
+                if (ImGui::Selectable("Confirm"))
+                    config->save(currentConfig);
+                if (ImGui::Selectable("Cancel")) {/*nothing to do*/ }
+                ImGui::EndPopup();
+            }
+            if (ImGui::Button("Delete selected", { 100.0f, 25.0f }))
+                ImGui::OpenPopup("Config to delete");
+            if (ImGui::BeginPopup("Config to delete")) {
+                if (ImGui::Selectable("Confirm")) {
+                    config->remove(currentConfig);
+                    currentConfig = -1;
+                    buffer.clear();
+                }
+                if (ImGui::Selectable("Cancel")) {/*nothing to do*/ }
+                ImGui::EndPopup();
             }
         }
         ImGui::Columns(1);
