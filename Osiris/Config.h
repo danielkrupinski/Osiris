@@ -80,6 +80,7 @@ public:
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
+        bool drawAllTicks{ false };
         int timeLimit{ 200 };
     } backtrack;
 

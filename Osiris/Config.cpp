@@ -317,6 +317,7 @@ static void from_json(const json& j, Config::Backtrack& b)
     read(j, "Enabled", b.enabled);
     read(j, "Ignore smoke", b.ignoreSmoke);
     read(j, "Recoil based fov", b.recoilBasedFov);
+    read(j, "Draw all ticks", b.drawAllTicks);
     read(j, "Time limit", b.timeLimit);
 }
 
@@ -776,6 +777,7 @@ static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack
     WRITE("Enabled", enabled);
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Recoil based fov", recoilBasedFov);
+    WRITE("Draw all ticks", drawAllTicks);
     WRITE("Time limit", timeLimit);
 }
 
