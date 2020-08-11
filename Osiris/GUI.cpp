@@ -397,6 +397,8 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
     ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
+    ImGui::SliderFloat("Max aim inaccuracy", &config->triggerbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+    ImGui::SliderFloat("Max shot inaccuracy", &config->triggerbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
 
     if (!contentOnly)
         ImGui::End();
