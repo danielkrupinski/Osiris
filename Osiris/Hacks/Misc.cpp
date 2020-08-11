@@ -207,6 +207,376 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     return true;
 }
 
+//Movement Recorder
+//Movement Recorder
+//Movement Recorder
+
+Vector movePositions[100000]; //Max 100000 Frame
+bool gotostartpos = false;
+
+struct Frame
+{
+	float viewangles[2];
+	float forwardmove;
+	float sidemove;
+	float upmove;
+	int buttons;
+	unsigned char impulse;
+	short mousedx;
+	short mousedy;
+
+	Frame(UserCmd* cmd)
+	{
+		this->viewangles[0] = cmd->viewangles.x;
+		this->viewangles[1] = cmd->viewangles.y;
+		this->forwardmove = cmd->forwardmove;
+		this->sidemove = cmd->sidemove;
+		this->upmove = cmd->upmove;
+		this->buttons = cmd->buttons;
+		this->impulse = cmd->impulse;
+		this->mousedx = cmd->mousedx;
+		this->mousedy = cmd->mousedy;
+	}
+
+	void Replay(UserCmd* cmd)
+	{
+		cmd->viewangles.x = this->viewangles[0];
+		cmd->viewangles.y = this->viewangles[1];
+		cmd->forwardmove = this->forwardmove;
+		cmd->sidemove = this->sidemove;
+		cmd->upmove = this->upmove;
+		cmd->buttons = this->buttons;
+		cmd->impulse = this->impulse;
+		cmd->mousedx = this->mousedx;
+		cmd->mousedy = this->mousedy;
+	}
+};
+
+typedef std::vector<Frame> FrameContainer;
+
+Vector startVec;
+
+class Recorder
+{
+private:
+	bool is_recording_active = false;
+	bool is_rerecording_active = false;
+
+	size_t rerecording_start_frame;
+
+	FrameContainer recording_frames;
+	FrameContainer rerecording_frames;
+
+public:
+
+	void StartRecording()
+	{
+		startVec = localPlayer->getAbsOrigin();
+		this->is_recording_active = true;
+	}
+
+	void StopRecording()
+	{
+		this->is_recording_active = false;
+	}
+
+	bool IsRecordingActive() const
+	{
+		return this->is_recording_active;
+	}
+
+	void StartRerecording(size_t start_frame) {
+		this->is_rerecording_active = true;
+		this->rerecording_start_frame = start_frame;
+	}
+
+	void StopRerecording(bool merge = false) {
+		if (merge) {
+			this->recording_frames.erase(this->recording_frames.begin() + (this->rerecording_start_frame + 1), this->recording_frames.end());
+			this->recording_frames.reserve(this->recording_frames.size() + this->rerecording_frames.size());
+			this->recording_frames.insert(this->recording_frames.end(), this->rerecording_frames.begin(), this->rerecording_frames.end());
+			this->rerecording_frames.clear();
+			this->rerecording_start_frame = 0;
+		}
+		this->is_rerecording_active = false;
+		this->rerecording_frames.clear();
+		this->rerecording_start_frame = 0;
+	}
+
+	bool IsRerecordingActive() const {
+		return this->is_rerecording_active;
+	}
+
+	FrameContainer& GetActiveRerecording() {
+		return this->rerecording_frames;
+	}
+
+	FrameContainer& GetActiveRecording()
+	{
+		return this->recording_frames;
+	}
+};
+
+class Playback
+{
+private:
+	bool is_playback_active = false;
+	size_t current_frame = 0;
+	FrameContainer active_demo = FrameContainer();
+
+public:
+	void StartPlayback(FrameContainer& frames)
+	{
+		this->is_playback_active = true;
+		this->active_demo = frames;
+	};
+
+	void StopPlayback()
+	{
+		this->is_playback_active = false;
+		this->current_frame = 0;
+	};
+
+	bool IsPlaybackActive() const
+	{
+		return this->is_playback_active;
+	}
+
+	size_t GetCurrentFrame() const
+	{
+		return this->current_frame;
+	};
+
+	void SetCurrentFrame(size_t frame)
+	{
+		this->current_frame = frame;
+	};
+
+	FrameContainer GetActiveDemo() const {
+		return this->active_demo;
+	}
+};
+
+Playback playback;
+Recorder recorder;
+
+void Misc::DrawRecorder() noexcept
+{
+	if (!config->misc.Recorder)
+		return;
+
+	FrameContainer frames;
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+	if (!gui->open) windowFlags |= ImGuiWindowFlags_NoInputs;
+	ImGui::Begin("Recorder");
+	{
+		ImGui::Columns(2, NULL, true);
+		{
+			if (ImGui::Button("Begin recording (3)", ImVec2(-1, 20))) { recorder.StartRecording(); }
+			if (ImGui::Button("Stop recording (4)", ImVec2(-1, 20))) { recorder.StopRecording(); }
+			if (ImGui::Button("Begin playback (X)", ImVec2(-1, 20))) { playback.StartPlayback(recorder.GetActiveRecording()); }
+			if (ImGui::Button("Stop playback (C)", ImVec2(-1, 20))) { playback.StopPlayback(); }
+
+			if (ImGui::Button("Clear frames (ALT)", ImVec2(-1, 20))) { recorder.GetActiveRecording().clear(); }
+
+			if (recorder.IsRecordingActive()) {
+			}
+			else if (recorder.IsRerecordingActive()) {
+				if (ImGui::Button("Save Re-recording (5)"))
+					recorder.StopRerecording(true);
+
+				if (ImGui::Button("Clear Re-recording (6)"))
+					recorder.StopRerecording(false);
+			}
+			else{
+			}
+
+		}
+		ImGui::NextColumn();
+		{
+			FrameContainer& recording = recorder.GetActiveRecording();
+
+			int currentFrame = playback.GetCurrentFrame();
+			int maxFrames = recording.size();
+
+			ImGui::Text(std::string("Current frame: " + std::to_string(currentFrame) + " / " + std::to_string(maxFrames)).c_str());
+
+			ImGui::Text(recorder.IsRecordingActive() ? "Recording: yes" : "Recording: no");
+			ImGui::Text(recorder.IsRerecordingActive() ? "ReRecording: yes" : "ReRecording: no");
+			ImGui::Text(playback.IsPlaybackActive() ? "Playing: yes" : "Playing: no");
+		}
+		ImGui::Columns(1);
+	}
+	ImGui::End();
+}
+
+Vector MCalculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
+{
+	Vector delta = destination - source;
+	Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
+				   radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
+	angles.normalize();
+	return angles;
+}
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+	const auto& matrix = interfaces->engine->worldToScreenMatrix();
+
+	const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+	if (w < 0.001f)
+		return false;
+
+	out = ImGui::GetIO().DisplaySize;
+	out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+	out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+	return true;
+}
+
+void Misc::HookRecorder(UserCmd* cmd) noexcept
+{
+	if (!config->misc.Recorder)
+		return;
+
+	bool isPlaybackActive = playback.IsPlaybackActive();
+	bool isRecordingActive = recorder.IsRecordingActive();
+
+	FrameContainer& recording = recorder.GetActiveRecording();
+
+	bool is_rerecording_active = recorder.IsRerecordingActive();
+	FrameContainer& rerecording = recorder.GetActiveRerecording();
+
+	if (GetAsyncKeyState(0x33)) //Key: 3 Start Recording
+		if (recording.empty())
+			recorder.StartRecording();
+
+	if (GetAsyncKeyState(0x34)) //Key: 4 Stop Recording
+		recorder.StopRecording();
+
+
+	if (GetAsyncKeyState(0x58)) //Key: X Start Playback
+		gotostartpos = true;
+
+	if (gotostartpos)
+	{
+
+		auto dist = localPlayer->getAbsOrigin().distTo(startVec);
+
+		if (cmd->buttons != 0)
+			gotostartpos = false;
+
+		if (dist < 1)
+		{
+			playback.StartPlayback(recorder.GetActiveRecording());
+			gotostartpos = false;
+		}
+
+		else
+		{
+			auto cangle = MCalculateRelativeAngle(localPlayer->getAbsOrigin(), startVec, cmd->viewangles);
+			cmd->viewangles += cangle;
+			cmd->forwardmove = dist;
+		}
+	}
+
+	if (GetAsyncKeyState(0x43)) //Key: C Stop Playback
+		playback.StopPlayback();
+
+	if (GetAsyncKeyState(VK_MENU)) //Key: ALT Clear frames
+		recorder.GetActiveRecording().clear();
+
+	if (GetAsyncKeyState(0x35)) //Key: 5 Save Rerecording
+	{
+		if (recorder.IsRerecordingActive())
+		{
+			recorder.StopRerecording(true);
+			playback.StopPlayback();
+		}
+	}
+
+	if (GetAsyncKeyState(0x36)) //Key: 6 Clear Rerecording
+	{
+		if (recorder.IsRerecordingActive())
+		{
+			recorder.StopRerecording(false);
+			playback.StopPlayback();
+		}
+	}
+
+	if (isRecordingActive)
+	{
+		const size_t current_recording_frame = recording.size();
+
+		movePositions[current_recording_frame] = localPlayer->getAbsOrigin(); //To visualize the movement
+		recording.push_back({ cmd });
+	}
+	else if (is_rerecording_active)
+		rerecording.push_back({ cmd });
+
+	if (isPlaybackActive)
+	{
+		const size_t current_playback_frame = playback.GetCurrentFrame();
+
+		if (cmd->buttons != 0) {
+			recorder.StartRerecording(current_playback_frame);
+			playback.StopPlayback();
+		}
+
+		try
+		{
+			recording.at(current_playback_frame).Replay(cmd);
+			interfaces->engine->setViewAngles(cmd->viewangles); //You can make a config bool for lock the view or not
+
+			if (current_playback_frame + 1 == recording.size())
+			{
+				playback.StopPlayback();
+			}
+			else
+			{
+				playback.SetCurrentFrame(current_playback_frame + 1);
+			}
+		}
+		catch (std::out_of_range)
+		{
+			playback.StopPlayback();
+		}
+	}
+}
+
+void Misc::VisualizeRecorder() noexcept
+{
+	if (config->misc.visualizeRecorder)
+	{
+		/*This isnt working good, its rendering in not good position: https://streamable.com/imlwj8
+		if you have idea how to fix that, please let me know'*/
+
+		ImVec2 pos;
+		ImVec2 pos2;
+
+		FrameContainer& recording = recorder.GetActiveRecording();
+
+		for (int i = 1; i < recording.size(); i++)
+		{
+			if (worldToScreen(movePositions[i], pos))
+			{
+
+				interfaces->surface->setDrawColor(255, 0, 0);
+				interfaces->surface->drawCircle(pos.x, pos.y, 1, 3);
+			}
+		}
+		if (worldToScreen(startVec, pos2))
+		{
+			interfaces->surface->setDrawColor(0, 255, 0);
+			interfaces->surface->drawCircle(pos2.x, pos2.y, 1, 5);
+		}
+
+	}
+}
+
+//Movement Recorder
+//Movement Recorder
+//Movement Recorder
+
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!config->misc.recoilCrosshair.enabled)
