@@ -411,3 +411,11 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+
+void Visuals::physicsTimescale() noexcept {
+
+    static ConVar* cl_phys_timescale = interfaces->cvar->findVar("cl_phys_timescale");
+
+    cl_phys_timescale->setValue(config->visuals.ragdollTimescale ? config->visuals.ragdollTimescaleValue : 1);
+};

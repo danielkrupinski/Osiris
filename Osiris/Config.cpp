@@ -389,6 +389,8 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
     read(j, "Inverse ragdoll gravity Custom", v.inverseRagdollGravityCustomize);
     read(j, "Inverse ragdoll gravity Value", v.inverseRagdollGravityValue);
+    read(j, "Physics Timescale", v.ragdollTimescale);
+    read(j, "Physics Timescale Value", v.ragdollTimescaleValue);
     read(j, "No fog", v.noFog);
     read(j, "No 3d sky", v.no3dSky);
     read(j, "No aim punch", v.noAimPunch);
@@ -980,6 +982,8 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
     WRITE("Inverse ragdoll gravity Custom", inverseRagdollGravityCustomize);
     WRITE("Inverse ragdoll gravity Value", inverseRagdollGravityValue);
+    WRITE("Physics Timescale", ragdollTimescale);
+    WRITE("Physics Timescale Value", ragdollTimescaleValue);
     WRITE("No fog", noFog);
     WRITE("No 3d sky", no3dSky);
     WRITE("No aim punch", noAimPunch);
