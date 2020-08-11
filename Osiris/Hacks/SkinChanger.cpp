@@ -21,7 +21,7 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 
-static std::wstring toUpperWide(const std::string& s, const std::ctype<wchar_t>& facet) noexcept
+static std::wstring toUpperWide(const std::string& s) noexcept
 {
     std::wstring upperCase(s.length(), L'\0');
     const auto newLen = mbstowcs(upperCase.data(), s.c_str(), s.length());
@@ -77,12 +77,12 @@ void SkinChanger::initializeKits() noexcept
         name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
 
         if (paintKit->id < 10000) {
-            skinKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
+            skinKits.emplace_back(paintKit->id, name, toUpperWide(name));
         } else {
             std::string_view gloveName{ paintKit->name.data() };
             name += ' ';
             name += '(' + std::string{ gloveName.substr(0, gloveName.find('_')) } + ')';
-            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name, facet));
+            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name));
         }
     }
 
@@ -92,7 +92,7 @@ void SkinChanger::initializeKits() noexcept
     for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
         const auto stickerKit = itemSchema->stickerKits.memory[i].value;
         std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-        stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name, facet));
+        stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
     }
 
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
