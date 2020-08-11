@@ -922,6 +922,15 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Combo("CT Player Model", &config->visuals.playerModelCT, playerModels);
     ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
     ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
+    if (config->visuals.inverseRagdollGravity) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Custom Value", &config->visuals.inverseRagdollGravityCustomize);
+        if (config->visuals.inverseRagdollGravityCustomize) {
+            ImGui::PushItemWidth(290.0f);
+            ImGui::InputInt("", &config->visuals.inverseRagdollGravityValue, -2400, 2400);
+            ImGui::PopItemWidth();
+        };
+    };
     ImGui::Checkbox("No fog", &config->visuals.noFog);
     ImGui::Checkbox("No 3d sky", &config->visuals.no3dSky);
     ImGui::Checkbox("No aim punch", &config->visuals.noAimPunch);
