@@ -9,6 +9,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "EnginePrediction.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -119,6 +120,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (!config->aimbot[weaponIndex].enabled)
         weaponIndex = 0;
+
+    if ((EnginePrediction::getFlags() & 1) && !(localPlayer->flags() & 1) && config->aimbot[weaponIndex].jumpCheck)
+        return;
 
     if (!config->aimbot[weaponIndex].betweenShots && activeWeapon->nextPrimaryAttack() > memory->globalVars->serverTime())
         return;

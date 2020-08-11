@@ -256,6 +256,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
+    ImGui::Checkbox("Jump Check", &config->aimbot[currentWeapon].jumpCheck);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
