@@ -950,6 +950,12 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->visuals.zoomKey);
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
+    if (config->visuals.thirdperson) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Dead thirdperson", &config->visuals.deadThirdperson);
+    }
+    else
+        config->visuals.deadThirdperson = false;
     ImGui::SameLine();
     hotkey(config->visuals.thirdpersonKey);
     ImGui::PushItemWidth(290.0f);

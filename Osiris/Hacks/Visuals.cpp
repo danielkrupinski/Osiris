@@ -160,6 +160,8 @@ void Visuals::thirdperson() noexcept
         if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
             && localPlayer && localPlayer->isAlive())
             memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
+        else if (!localPlayer->isAlive() && config->visuals.deadThirdperson)
+            localPlayer->setObserverMode() = (!config->visuals.thirdpersonKey || isInThirdperson) ? setObsMode::Chase : setObsMode::InEye;
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept

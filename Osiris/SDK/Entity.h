@@ -30,6 +30,16 @@ enum class MoveType {
     LADDER = 9
 };
 
+enum setObsMode {
+    None = 0,
+    Deathcam,
+    Freezecam,
+    Fixed,
+    InEye,
+    Chase,
+    Roaming
+};
+
 enum class ObsMode {
     None = 0,
     Deathcam,
@@ -211,6 +221,7 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
+    NETVAR(setObserverMode, "CBasePlayer", "m_iObserverMode", setObsMode)
     
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
