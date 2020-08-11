@@ -50,4 +50,5 @@ namespace Misc
     void teamDamageCounter(GameEvent* event) noexcept;
     void drawAimbotFov() noexcept;
     void showVelocity() noexcept;
+    void drawBombDamage() noexcept;
 }

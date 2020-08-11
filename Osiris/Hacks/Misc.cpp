@@ -965,3 +965,62 @@ void Misc::showVelocity() noexcept
         interfaces->surface->setTextPosition(width / 2 - 6, height - 200);
     interfaces->surface->printText(velocitywstr);
 }
+
+void Misc::drawBombDamage() noexcept
+{
+    if (!config->misc.bombDamage) return;
+
+    //No Alive return since it is useful if you want to call it out to a mate that he will die
+    if (!localPlayer) return;
+
+    for (int i = interfaces->engine->getMaxClients(); i <= interfaces->entityList->getHighestEntityIndex(); i++)
+    {
+        auto entity = interfaces->entityList->getEntity(i);
+        if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->
+            c4Ticking())
+            continue;
+
+        auto vecBombDistance = entity->origin() - localPlayer->origin();
+
+        const auto d = (vecBombDistance.length() - 75.68f) / 789.2f;
+        auto flDamage = 450.7f * exp(-d * d);
+
+        if (localPlayer->armor() > 0)
+        {
+            auto flNew = flDamage * 0.5f;
+            auto flArmor = (flDamage - flNew) * 0.5f;
+
+            if (flArmor > localPlayer->armor())
+            {
+                flArmor = localPlayer->armor() * 2.f;
+                flNew = flDamage - flArmor;
+            }
+
+            flDamage = flNew;
+        }
+
+        //Could get the specator target here as well and set the color based on the spaceted player
+        //I'm too lazy for that tho, green while you are dead just looks nicer
+        if (localPlayer->isAlive() && max(ceilf(flDamage), 0) >= localPlayer->health())
+            interfaces->surface->setTextColor(255, 0, 0);
+        else
+            interfaces->surface->setTextColor(0, 255, 0);
+
+        auto bombDmgText{ (std::wstringstream{} << L"Bomb Damage: " << max(ceilf(flDamage), 0)).str() };
+
+        constexpr unsigned font{ 0xc1 };
+        interfaces->surface->setTextFont(font);
+
+        auto drawPositionY{ interfaces->surface->getScreenSize().second / 8 };
+        const auto bombDmgX{
+            interfaces->surface->getScreenSize().first / 2 - static_cast<int>((interfaces
+                                                                              ->surface->getTextSize(
+                                                                                  font, bombDmgText.c_str())).first / 2)
+        };
+
+        drawPositionY -= interfaces->surface->getTextSize(font, bombDmgText.c_str()).second;
+
+        interfaces->surface->setTextPosition(bombDmgX, drawPositionY);
+        interfaces->surface->printText(bombDmgText.c_str());
+    }
+}
