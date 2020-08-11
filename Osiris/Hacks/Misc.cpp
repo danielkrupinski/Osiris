@@ -421,16 +421,16 @@ Vector MCalculateRelativeAngle(const Vector& source, const Vector& destination, 
 
 static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 {
-	const auto& matrix = interfaces->engine->worldToScreenMatrix();
+    const auto& matrix = GameData::toScreenMatrix();
 
-	const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
-	if (w < 0.001f)
-		return false;
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
 
-	out = ImGui::GetIO().DisplaySize;
-	out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
-	out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-	return true;
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    return true;
 }
 
 void Misc::HookRecorder(UserCmd* cmd) noexcept
