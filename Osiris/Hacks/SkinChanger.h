@@ -22,11 +22,11 @@ namespace SkinChanger
 
         auto operator<(const PaintKit& other) const noexcept
         {
-            return name < other.name;
+            return nameUpperCase < other.nameUpperCase;
         }
     };
 
-    inline std::vector<PaintKit> skinKits;
+    inline std::vector<PaintKit> skinKits{ { 0, "-", L"-" } };
     inline std::vector<PaintKit> gloveKits;
     inline std::vector<PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 }

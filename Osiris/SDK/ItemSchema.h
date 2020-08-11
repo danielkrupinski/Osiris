@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "Pad.h"
+#include "UtlVector.h"
 #include "VirtualMethod.h"
 
 enum class WeaponId : short;
@@ -38,10 +39,10 @@ struct UtlMap {
 };
 
 struct String {
-    char* buffer;
-    int capacity;
-    int growSize;
+    UtlMemory<char> buffer;
     int length;
+
+    char* data() noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
@@ -63,12 +64,42 @@ public:
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
 };
 
+struct ItemListEntry {
+    int itemDef;
+    int paintKit;
+    PAD(20)
+
+    auto weaponId() const noexcept
+    {
+        return static_cast<WeaponId>(itemDef);
+    }
+};
+
+class EconLootListDefinition {
+public:
+    VIRTUAL_METHOD(const char*, getName, 0, (), (this))
+    VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), (this))
+};
+
+class EconItemSetDefinition {
+public:
+    VIRTUAL_METHOD(const char*, getLocKey, 1, (), (this))
+    VIRTUAL_METHOD(int, getItemCount, 4, (), (this))
+    VIRTUAL_METHOD(WeaponId, getItemDef, 5, (int index), (this, index))
+    VIRTUAL_METHOD(int, getItemPaintKit, 6, (int index), (this, index))
+};
+
 class ItemSchema {
 public:
     PAD(0x288)
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 
+    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
+    VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
+    VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
+    VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
 
