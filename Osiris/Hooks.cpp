@@ -163,6 +163,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::jumpbug(cmd);
+    Misc::playerBlocker(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);

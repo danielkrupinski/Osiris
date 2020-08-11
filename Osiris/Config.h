@@ -268,6 +268,8 @@ public:
         bool drawAimbotFov{ false };
         float actualFov{ 0.0f };
         bool teamDamageCounter{ false };
+        bool playerBlocker{ false };
+        int playerBlockerKey{ 0 };
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;

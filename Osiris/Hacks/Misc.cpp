@@ -1024,3 +1024,57 @@ void Misc::drawBombDamage() noexcept
         interfaces->surface->printText(bombDmgText.c_str());
     }
 }
+
+void Misc::playerBlocker(UserCmd* cmd) noexcept
+{
+    if (config->misc.playerBlocker && GetAsyncKeyState(config->misc.playerBlockerKey)) {
+        float bestdist = 250.f;
+        int index = -1;
+        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
+            auto entity = interfaces->entityList->getEntity(i);
+
+            if (!entity)
+                continue;
+
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get())
+                continue;
+
+            float dist;
+
+            double distance;
+            distance = sqrt(((int)localPlayer->origin().x - (int)entity->origin().x) * ((int)localPlayer->origin().x - (int)entity->origin().x) +
+                ((int)localPlayer->origin().y - (int)entity->origin().y) * ((int)localPlayer->origin().y - (int)entity->origin().y) +
+                ((int)localPlayer->origin().z - (int)entity->origin().z) * ((int)localPlayer->origin().z - (int)entity->origin().z));
+            dist = (float)abs(round(distance));
+
+            if (dist < bestdist)
+            {
+                bestdist = dist;
+                index = i;
+            }
+        }
+
+        if (index == -1)
+            return;
+
+        auto target = interfaces->entityList->getEntity(index);
+
+        if (!target)
+            return;
+
+
+        Vector delta = target->origin() - localPlayer->origin();
+        Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))), radiansToDegrees(atan2f(delta.y, delta.x)) };
+        angles.normalize();
+
+        angles.y -= localPlayer->eyeAngles().y;
+        angles.normalize();
+        angles.y = std::clamp(angles.y, -180.f, 180.f);
+
+        if (angles.y < -1.0f)
+            cmd->sidemove = 450.f;
+        else if (angles.y > 1.0f)
+            cmd->sidemove = -450.f;
+
+    }
+}

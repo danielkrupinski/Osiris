@@ -51,4 +51,5 @@ namespace Misc
     void drawAimbotFov() noexcept;
     void showVelocity() noexcept;
     void drawBombDamage() noexcept;
+    void playerBlocker(UserCmd* cmd) noexcept;
 }
