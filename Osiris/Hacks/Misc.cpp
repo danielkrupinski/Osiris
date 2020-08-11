@@ -439,18 +439,15 @@ void Misc::quickReload(UserCmd* cmd) noexcept
 
 bool Misc::changeName(bool reconnect, const char* newName, float delay) noexcept
 {
-    static auto exploitInitialized{ false };
-
     static auto name{ interfaces->cvar->findVar("name") };
 
     if (reconnect) {
-        exploitInitialized = false;
         return false;
     }
 
-    if (!exploitInitialized && interfaces->engine->isInGame()) {
+    if (interfaces->engine->isInGame()) {
         if (PlayerInfo playerInfo; localPlayer && interfaces->engine->getPlayerInfo(localPlayer->index(), playerInfo) && (!strcmp(playerInfo.name, "?empty") || !strcmp(playerInfo.name, "\n\xAD\xAD\xAD"))) {
-            exploitInitialized = true;
+
         } else {
             name->onChangeCallbacks.size = 0;
             name->setValue("\n\xAD\xAD\xAD");
