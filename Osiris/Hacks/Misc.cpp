@@ -192,6 +192,21 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    return true;
+}
+
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!config->misc.recoilCrosshair.enabled)
@@ -206,13 +221,8 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
-    static const auto view_recoil_tracking = interfaces->cvar->findVar("view_recoil_tracking");
-
-    auto pos = ImGui::GetIO().DisplaySize;
-    pos.x *= 0.5f - localPlayerData.aimPunch.y * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
-    pos.y *= 0.5f + localPlayerData.aimPunch.x * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
-
-    drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
+    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+        drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
 
 void Misc::watermark() noexcept
