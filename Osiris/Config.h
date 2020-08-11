@@ -254,6 +254,8 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        bool drawAimbotFov{ false };
+        float actualFov{ 0.0f };
         bool teamDamageCounter{ false };
         int killSound{ 0 };
         std::string customKillSound;

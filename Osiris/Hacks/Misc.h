@@ -48,4 +48,5 @@ namespace Misc
 
     void jumpbug(UserCmd* cmd) noexcept;
     void teamDamageCounter(GameEvent* event) noexcept;
+    void drawAimbotFov() noexcept;
 }

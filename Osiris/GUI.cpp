@@ -1313,6 +1313,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
     ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
     if (config->misc.teamDamageCounter)
         if (ImGui::Button("Reset Counter")) {
