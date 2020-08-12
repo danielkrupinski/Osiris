@@ -152,6 +152,7 @@ public:
         bool noWeapons{ false };
         bool noSmoke{ false };
         bool noBlur{ false };
+        bool noBloom{ false };
         bool noScopeOverlay{ false };
         bool noGrass{ false };
         bool noShadows{ false };

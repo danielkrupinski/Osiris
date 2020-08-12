@@ -201,6 +201,7 @@ static int __stdcall doPostScreenEffects(int param) noexcept
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness();
         Visuals::remove3dSky();
+        Visuals::noBloom();
         Glow::render();
     }
     return hooks->clientMode.callOriginal<int, 44>(param);

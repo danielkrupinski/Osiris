@@ -400,6 +400,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "No weapons", v.noWeapons);
     read(j, "No smoke", v.noSmoke);
     read(j, "No blur", v.noBlur);
+    read(j, "No bloom", v.noBloom);
     read(j, "No scope overlay", v.noScopeOverlay);
     read(j, "No grass", v.noGrass);
     read(j, "No shadows", v.noShadows);
@@ -1007,6 +1008,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("No weapons", noWeapons);
     WRITE("No smoke", noSmoke);
     WRITE("No blur", noBlur);
+    WRITE("No bloom", noBloom);
     WRITE("No scope overlay", noScopeOverlay);
     WRITE("No grass", noGrass);
     WRITE("No shadows", noShadows);

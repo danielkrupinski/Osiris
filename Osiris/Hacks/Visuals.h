@@ -31,4 +31,5 @@ namespace Visuals
     void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
     void hitMarkerDamageIndicator() noexcept;
     void noZoom() noexcept;
+    void noBloom() noexcept;
 }

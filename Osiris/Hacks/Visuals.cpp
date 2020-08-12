@@ -483,3 +483,9 @@ void Visuals::noZoom() noexcept
         }
     }
 }
+
+void Visuals::noBloom() noexcept
+{
+    static ConVar* bloomCvar = interfaces->cvar->findVar("mat_disable_bloom");
+    bloomCvar->setValue(config->visuals.noBloom ? 1 : 0);
+}
