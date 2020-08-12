@@ -551,7 +551,7 @@ void Misc::visRecorder(ImDrawList* drawList) noexcept
 	if (!localPlayerData.exists || !localPlayerData.alive)
 		return;
 	
-	else if (localPlayer->getAbsOrigin().distTo(startVec) < 100.f || recorder.IsRecordingActive())
+	if (localPlayer->getAbsOrigin().distTo(startVec) < 100.f || recorder.IsRecordingActive())
 	{
 		if (!playback.IsPlaybackActive() && !recorder.IsRerecordingActive())
 		{
