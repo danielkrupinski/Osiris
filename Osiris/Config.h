@@ -87,6 +87,8 @@ public:
         bool pingBased{ false };
         int pingBasedVal{ 0 };
         int timeLimit{ 200 };
+        bool fakeLatency{ false };
+        int fakeLatencyAmmount{ 200 };
     } backtrack;
 
     struct AntiAim {
@@ -287,6 +289,7 @@ public:
         bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
+        bool svpurebypass{ false };
         bool drawAimbotFov{ false };
         float actualFov{ 0.0f };
         bool teamDamageCounter{ false };

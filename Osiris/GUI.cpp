@@ -427,6 +427,10 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
         ImGui::PopItemWidth();
     };
+    ImGui::Checkbox("Enabled Fake Latency", &config->backtrack.fakeLatency);
+    ImGui::PushItemWidth(220.0f);
+    ImGui::SliderInt("Latency Ammount", &config->backtrack.fakeLatencyAmmount, 1, 200, "%d ms");
+    ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
 }
@@ -1402,6 +1406,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
     ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
     ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
     if (config->misc.teamDamageCounter)

@@ -323,6 +323,8 @@ static void from_json(const json& j, Config::Backtrack& b)
     read(j, "Draw all ticks", b.drawAllTicks);
     read(j, "Ping based", b.pingBased);
     read(j, "Time limit", b.timeLimit);
+    read(j, "Fake Latency", b.fakeLatency);
+    read(j, "Fake Latency Ammount", b.fakeLatencyAmmount);
 }
 
 static void from_json(const json& j, Config::AntiAim& a)
@@ -583,6 +585,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
+    read(j, "Bypass sv_pure", m.svpurebypass);
     read(j, "Draw aimbot FOV", m.drawAimbotFov);
     read(j, "Team Damage Counter", m.teamDamageCounter);
     read(j, "Player Blocker", m.playerBlocker);
@@ -816,6 +819,8 @@ static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack
     WRITE("Draw all ticks", drawAllTicks);
     WRITE("Ping based", pingBased);
     WRITE("Time limit", timeLimit);
+    WRITE("Fake Latency", fakeLatency);
+    WRITE("Fake Latency Ammount", fakeLatencyAmmount);
 }
 
 static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
@@ -968,6 +973,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
     WRITE("Fake prime", fakePrime);
+    WRITE("Bypass sv_pure", svpurebypass);
     WRITE("Draw aimbot FOV", drawAimbotFov);
     WRITE("Team Damage Counter", teamDamageCounter);
     WRITE("Player Blocker", playerBlocker);

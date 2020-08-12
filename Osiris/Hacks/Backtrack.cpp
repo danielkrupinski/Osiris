@@ -7,6 +7,7 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
+std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
@@ -30,6 +31,7 @@ void Backtrack::update(FrameStage stage) noexcept
                 continue;
 
             Record record{ };
+            record.head = entity->getBonePosition(8);
             record.origin = entity->getAbsOrigin();
             record.simulationTime = entity->simulationTime();
 
@@ -42,7 +44,7 @@ void Backtrack::update(FrameStage stage) noexcept
                 if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
                     config->backtrack.pingBasedVal = static_cast<int>(networkChannel->getLatency(0) * 1000);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.pingBasedVal) / 1000.f)))
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.pingBasedVal) / 1000.f + getExtraTicks())))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
@@ -67,7 +69,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    Vector bestTargetOrigin{ };
+    Vector bestTargetHead{ };
     int bestRecord{ };
 
     const auto aimPunch = localPlayer->getAimPunch();
@@ -78,20 +80,21 @@ void Backtrack::run(UserCmd* cmd) noexcept
             || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
+        auto head = entity->getBonePosition(8);
         auto origin = entity->getAbsOrigin();
 
-        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = entity;
             bestTargetIndex = i;
-            bestTargetOrigin = origin;
+            bestTargetHead = head;
         }
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetHead, 1)))
             return;
 
         bestFov = 255.f;
@@ -101,7 +104,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
@@ -116,6 +119,47 @@ void Backtrack::run(UserCmd* cmd) noexcept
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
 }
+
+void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
+{
+    for (auto& sequence : sequences)
+        if (memory->globalVars->serverTime() - sequence.servertime >= latency)
+        {
+            network->InReliableState = sequence.inreliablestate;
+            network->InSequenceNr = sequence.sequencenr;
+            break;
+        }
+}
+
+void Backtrack::UpdateIncomingSequences(bool reset) noexcept
+{
+    static int lastIncomingSequenceNumber = 0;
+
+    if (!config->backtrack.fakeLatency)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return;
+
+    if (network->InSequenceNr != lastIncomingSequenceNumber)
+    {
+        lastIncomingSequenceNumber = network->InSequenceNr;
+
+        IncomingSequence sequence{ };
+        sequence.inreliablestate = network->InReliableState;
+        sequence.sequencenr = network->InSequenceNr;
+        sequence.servertime = memory->globalVars->serverTime();
+        sequences.push_front(sequence);
+    }
+
+    while (sequences.size() > 2048)
+        sequences.pop_back();
+}
+
 
 int Backtrack::timeToTicks(float time) noexcept
 {
