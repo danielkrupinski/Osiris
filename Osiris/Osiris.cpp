@@ -1,4 +1,7 @@
 #include <Windows.h>
+#include "AntiDetection.h"
+
+AntiDetection antiDetection;
 
 #include "Hooks.h"
 
