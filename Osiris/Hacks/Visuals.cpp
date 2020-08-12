@@ -418,4 +418,11 @@ void Visuals::physicsTimescale() noexcept {
     static ConVar* cl_phys_timescale = interfaces->cvar->findVar("cl_phys_timescale");
 
     cl_phys_timescale->setValue(config->visuals.ragdollTimescale ? config->visuals.ragdollTimescaleValue : 1);
-};
+}
+
+void Visuals::fullBright() noexcept {
+
+    static ConVar* full_bright = interfaces->cvar->findVar("mat_fullbright");
+
+    full_bright->setValue(config->visuals.fullBright ? 1 : 0);
+}

@@ -995,10 +995,18 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::PushID(8);
     ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
     ImGui::PopID();
-    ImGui::PushID(9);
-    ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
-    ImGui::PopID();
+    if (!config->visuals.fullBright) {
+        ImGui::PushID(9);
+        ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
+        ImGui::PopID();
+    }
+    else {
+        ImGui::PushID(10);
+        ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 0.0f, "Disabled for Full Bright");
+        ImGui::PopID();
+    }
     ImGui::PopItemWidth();
+    ImGui::Checkbox("Full Bright", &config->visuals.fullBright);
     ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0Custom\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
     if (config->visuals.skybox == 1) {
         ImGui::InputText("Skybox filename", &config->visuals.customSkybox);

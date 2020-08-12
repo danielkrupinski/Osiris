@@ -27,4 +27,5 @@ namespace Visuals
     void skybox(FrameStage stage) noexcept;
 
     void physicsTimescale() noexcept;
+    void fullBright() noexcept;
 }
