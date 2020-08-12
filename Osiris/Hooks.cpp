@@ -278,6 +278,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
+        Visuals::noZoom();
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);

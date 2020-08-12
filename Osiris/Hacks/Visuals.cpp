@@ -473,3 +473,13 @@ void Visuals::hitMarkerDamageIndicator() noexcept
         }
     }
 }
+
+void Visuals::noZoom() noexcept
+{
+    if (config->visuals.noZoom) {
+        if (localPlayer && localPlayer->isScoped()) {
+            localPlayer->fov() = 90 + config->visuals.fov;
+            localPlayer->fovStart() = 90 + config->visuals.fov;
+        }
+    }
+}

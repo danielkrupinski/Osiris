@@ -164,6 +164,7 @@ public:
         int showvelocityResY;
         bool zoom{ false };
         int zoomKey{ 0 };
+        bool noZoom{ false };
         bool thirdperson{ false };
         bool deadThirdperson{ false };
         int thirdpersonKey{ 0 };
