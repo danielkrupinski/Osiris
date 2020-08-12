@@ -1383,10 +1383,17 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
-    ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
-    config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
+    if (!config->misc.pingBasedChoked) {
+        ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
+        config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
+    }
+    else {
+        ImGui::Text("Choked packets: %d", config->misc.pingBasedChokedVal);
+    }
     ImGui::SameLine();
     hotkey(config->misc.chokedPacketsKey);
+    ImGui::SameLine();
+    ImGui::Checkbox("Ping Based", &config->misc.pingBasedChoked);
     ImGui::Text("Quick healthshot");
     ImGui::SameLine();
     hotkey(config->misc.quickHealthshotKey);

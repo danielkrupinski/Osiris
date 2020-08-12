@@ -635,8 +635,12 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
+    config->misc.pingBasedChokedVal = config->misc.chokedPackets;
+    if (config->misc.pingBasedChoked)
+        if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+            config->misc.pingBasedChokedVal = static_cast<int>(networkChannel->getLatency(0) * 64);
     if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
-        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
+        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.pingBasedChokedVal;
 }
 
 void Misc::autoReload(UserCmd* cmd) noexcept
