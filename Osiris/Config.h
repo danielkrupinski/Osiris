@@ -238,6 +238,10 @@ public:
         int autoStrafeKey{ 0 };
         int autoStrafeStyle{ 0 };
         bool bunnyHop{ false };
+        bool bhopHitchanceEnable{ false };
+        int bhopHitchance{ 100 };
+        int bhopMinHits{ 20 };
+        int bhopMaxHits{ 20 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16];
