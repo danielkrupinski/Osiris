@@ -426,3 +426,50 @@ void Visuals::fullBright() noexcept {
 
     full_bright->setValue(config->visuals.fullBright ? 1 : 0);
 }
+
+struct HitMarkerInfo {
+    float hitMarkerExpTime;
+    int hitMarkerDmg;
+};
+
+std::vector<HitMarkerInfo> hitMarkerInfo;
+
+void Visuals::hitMarkerSetDamageIndicator(GameEvent* event) noexcept {
+    if (!localPlayer)
+        return;
+
+    if (config->visuals.hitMarkerDamageIndicator.enabled)
+        if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index())
+            hitMarkerInfo.push_back({ memory->globalVars->realtime + config->visuals.hitMarkerTime, event->getInt("dmg_health") });
+}
+
+void Visuals::hitMarkerDamageIndicator() noexcept
+{
+    if (config->visuals.hitMarkerDamageIndicator.enabled) {
+        if (hitMarkerInfo.empty()) return;
+
+        const auto [width, height] = interfaces->surface->getScreenSize();
+
+        for (size_t i = 0; i < hitMarkerInfo.size(); i++) {
+            const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory->globalVars->realtime;
+
+            if (diff < 0.f) {
+                hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
+                continue;
+            }
+
+            const auto dist = config->visuals.hitMarkerDamageIndicatorCustomize ? config->visuals.hitMarkerDamageIndicatorDist : 150;
+            const auto ratio = (config->visuals.hitMarkerDamageIndicatorCustomize ? config->visuals.hitMarkerDamageIndicatorRatio : 0.0f) - diff;
+            const auto alpha = diff * (config->visuals.hitMarkerDamageIndicatorCustomize ? config->visuals.hitMarkerDamageIndicatorAlpha : 800);
+            const auto font_id = config->visuals.hitMarkerDamageIndicatorCustomize ? config->visuals.hitMarkerDamageIndicatorFont : 31;
+
+            interfaces->surface->setTextFont(font_id);
+            interfaces->surface->setTextPosition(width / 2 + config->visuals.hitMarkerDamageIndicatorTextX + ratio * dist / 2, height / 2 + config->visuals.hitMarkerDamageIndicatorTextY + ratio * dist);
+            if (config->visuals.hitMarkerDamageIndicator.rainbow)
+                interfaces->surface->setTextColor(rainbowColor(config->visuals.hitMarkerDamageIndicator.rainbowSpeed));
+            else
+                interfaces->surface->setTextColor(config->visuals.hitMarkerDamageIndicator.color);
+            interfaces->surface->printText(std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg));
+        }
+    }
+}

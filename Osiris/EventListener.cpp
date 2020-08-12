@@ -53,6 +53,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Visuals::hitEffect(event);
         Visuals::hitMarker(event);
         Misc::teamDamageCounter(event);
+        Visuals::hitMarkerSetDamageIndicator(event);
         break;
     case fnv::hash("round_announce_match_start"):
         Misc::teamKills = 0;

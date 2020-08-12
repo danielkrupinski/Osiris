@@ -249,6 +249,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::drawAimbotFov();
         Misc::showVelocity();
         Misc::drawBombDamage();
+        Visuals::hitMarkerDamageIndicator();
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }

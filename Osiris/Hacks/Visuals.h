@@ -28,4 +28,6 @@ namespace Visuals
 
     void physicsTimescale() noexcept;
     void fullBright() noexcept;
+    void hitMarkerSetDamageIndicator(GameEvent* = nullptr) noexcept;
+    void hitMarkerDamageIndicator() noexcept;
 }
