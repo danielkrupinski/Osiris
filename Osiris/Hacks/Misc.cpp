@@ -210,7 +210,6 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 
 //Movement Recorder
 //Movement Recorder
-//Movement Recorder
 
 std::deque<Vector> movePositions;
 bool gotostartpos = false;
@@ -541,7 +540,6 @@ void Misc::HookRecorder(UserCmd* cmd) noexcept
 		}
 	}
 }
-
 void Misc::visRecorder(ImDrawList* drawList) noexcept
 {
 	if (!config->misc.visualizeRecorder)
@@ -581,8 +579,6 @@ void Misc::visRecorder(ImDrawList* drawList) noexcept
 		}
 	}
 }
-
-//Movement Recorder
 //Movement Recorder
 //Movement Recorder
 
