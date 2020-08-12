@@ -1297,6 +1297,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::SameLine();
     hotkey(config->misc.autoStrafeKey);
+    ImGui::Combo("Auto strafe style", &config->misc.autoStrafeStyle, "Legit\0Normal\0");
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
     ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
     ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);

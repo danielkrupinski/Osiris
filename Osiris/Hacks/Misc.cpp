@@ -661,10 +661,23 @@ void Misc::autoStrafe(UserCmd* cmd) noexcept
         && (!config->misc.autoStrafeKey || GetAsyncKeyState(config->misc.autoStrafeKey))
         && !(localPlayer->flags() & 1)
         && localPlayer->moveType() != MoveType::NOCLIP) {
-        if (cmd->mousedx < 0)
-            cmd->sidemove = -450.0f;
-        else if (cmd->mousedx > 0)
-            cmd->sidemove = 450.0f;
+        if (config->misc.autoStrafeStyle == 0) {
+            if (cmd->mousedx < 0)
+                cmd->sidemove = -450.0f;
+            else if (cmd->mousedx > 0)
+                cmd->sidemove = 450.0f;
+        }
+        else if (config->misc.autoStrafeStyle == 1) {
+            float flYawBhop = (localPlayer->velocity().length() > 50.f) ? (30.f * fabsf(30.f / localPlayer->velocity().length())) : 0.f;
+            if (cmd->mousedx < 0) {
+                cmd->viewangles.y -= flYawBhop;
+                cmd->sidemove = -450.0f;
+            }
+            else if (cmd->mousedx > 0) {
+                cmd->viewangles.y += flYawBhop;
+                cmd->sidemove = 450.0f;
+            }
+        }
     }
 }
 

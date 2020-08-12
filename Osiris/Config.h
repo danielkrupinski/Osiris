@@ -233,6 +233,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         int autoStrafeKey{ 0 };
+        int autoStrafeStyle{ 0 };
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
