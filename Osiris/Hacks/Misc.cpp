@@ -27,8 +27,8 @@
 
 #include "../GUI.h"
 #include "../Helpers.h"
-#include "../GameData.h"
 #include <deque>
+#include "../GameData.h"
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -557,10 +557,10 @@ void Misc::visRecorder(ImDrawList* drawList) noexcept
 		{
 			for (int i = 2; i < movePositions.size(); i++)
 			{
-				if (ImVec2 spos; worldToScreen(startVec, spos))
+				if (ImVec2 spos; mWorldToScreen(startVec, spos))
 					drawList->AddCircle({ spos.x, spos.y }, 5, ImColor(0.f, 1.f, 0.f, 1.f), 0, 7.f);
-				if (ImVec2 cpos; worldToScreen(movePositions[i - 1], cpos))
-					if (ImVec2 cpos2; worldToScreen(movePositions[i], cpos2))
+				if (ImVec2 cpos; mWorldToScreen(movePositions[i - 1], cpos))
+					if (ImVec2 cpos2; mWorldToScreen(movePositions[i], cpos2))
 						drawList->AddLine({ cpos.x, cpos.y }, { cpos2.x, cpos2.y }, ImColor(1.f, 0.f, 0.f, 1.f), 2.f);
 			}
 		}
@@ -572,8 +572,8 @@ void Misc::visRecorder(ImDrawList* drawList) noexcept
 		{
 			if (i > movePositions.size() - current_playback_frame - 50 && i < movePositions.size() - current_playback_frame)
 			{
-			if (ImVec2 cpos; worldToScreen(movePositions[i - 1], cpos))
-					if (ImVec2 cpos2; worldToScreen(movePositions[i], cpos2))
+			if (ImVec2 cpos; mWorldToScreen(movePositions[i - 1], cpos))
+					if (ImVec2 cpos2; mWorldToScreen(movePositions[i], cpos2))
 						drawList->AddLine({ cpos.x, cpos.y }, { cpos2.x, cpos2.y }, ImColor(1.f, 0.f, 0.f, 1.f), 2.f);
 			}
 		}
