@@ -99,6 +99,8 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+    Misc::DrawRecorder();
+    Misc::visRecorder(ImGui::GetBackgroundDrawList());
 
     if (gui->open)
         gui->render();
@@ -243,7 +245,6 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
         Misc::spectatorList();
         Misc::watermark();
         Misc::DrawRecorder();
-        Misc::VisualizeRecorder();
         Visuals::hitMarker();
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
