@@ -232,6 +232,7 @@ public:
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
+        int autoStrafeKey{ 0 };
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };

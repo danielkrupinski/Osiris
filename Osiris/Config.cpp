@@ -528,6 +528,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Menu key", m.menuKey);
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
+    read(j, "Auto strafe Key", m.autoStrafeKey);
     read(j, "Bunny hop", m.bunnyHop);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
@@ -908,6 +909,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Menu key", menuKey);
     WRITE("Anti AFK kick", antiAfkKick);
     WRITE("Auto strafe", autoStrafe);
+    WRITE("Auto strafe Key", autoStrafeKey);
     WRITE("Bunny hop", bunnyHop);
     WRITE("Custom clan tag", customClanTag);
     WRITE("Clock tag", clocktag);
