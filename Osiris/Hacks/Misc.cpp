@@ -516,7 +516,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
     static bool inProgress{ false };
 
-    if (GetAsyncKeyState(config->misc.quickHealthshotKey))
+    if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
         inProgress = true;
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
