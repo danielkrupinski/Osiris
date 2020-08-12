@@ -28,6 +28,7 @@
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
+#include <deque>
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
