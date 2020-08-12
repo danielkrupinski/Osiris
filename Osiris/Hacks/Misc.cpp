@@ -211,7 +211,7 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 //Movement Recorder
 //Movement Recorder
 
-Vector movePositions[100000]; //Max 100000 Frame
+std::deque<Vector> movePositions;
 bool gotostartpos = false;
 
 struct Frame
@@ -505,9 +505,7 @@ void Misc::HookRecorder(UserCmd* cmd) noexcept
 
 	if (isRecordingActive)
 	{
-		const size_t current_recording_frame = recording.size();
-
-		movePositions[current_recording_frame] = localPlayer->getAbsOrigin(); //To visualize the movement
+		movePositions.push_front(localPlayer->getAbsOrigin()); //To visualize the movement
 		recording.push_back({ cmd });
 	}
 	else if (is_rerecording_active)
@@ -543,33 +541,43 @@ void Misc::HookRecorder(UserCmd* cmd) noexcept
 	}
 }
 
-void Misc::VisualizeRecorder() noexcept
+void Misc::visRecorder(ImDrawList* drawList) noexcept
 {
-	if (config->misc.visualizeRecorder)
+	if (!config->misc.visualizeRecorder)
+		return;
+
+	GameData::Lock lock;
+	const auto& localPlayerData = GameData::local();
+
+	if (!localPlayerData.exists || !localPlayerData.alive)
+		return;
+	
+	else if (localPlayer->getAbsOrigin().distTo(startVec) < 100.f || recorder.IsRecordingActive())
 	{
-		/*This isnt working good, its rendering in not good position: https://streamable.com/imlwj8
-		if you have idea how to fix that, please let me know'*/
-
-		ImVec2 pos;
-		ImVec2 pos2;
-
-		FrameContainer& recording = recorder.GetActiveRecording();
-
-		for (int i = 1; i < recording.size(); i++)
+		if (!playback.IsPlaybackActive() && !recorder.IsRerecordingActive())
 		{
-			if (mWorldToScreen(movePositions[i], pos))
+			for (int i = 2; i < movePositions.size(); i++)
 			{
-
-				interfaces->surface->setDrawColor(255, 0, 0);
-				interfaces->surface->drawCircle(pos.x, pos.y, 1, 3);
+				if (ImVec2 spos; worldToScreen(startVec, spos))
+					drawList->AddCircle({ spos.x, spos.y }, 5, ImColor(0.f, 1.f, 0.f, 1.f), 0, 7.f);
+				if (ImVec2 cpos; worldToScreen(movePositions[i - 1], cpos))
+					if (ImVec2 cpos2; worldToScreen(movePositions[i], cpos2))
+						drawList->AddLine({ cpos.x, cpos.y }, { cpos2.x, cpos2.y }, ImColor(1.f, 0.f, 0.f, 1.f), 2.f);
 			}
 		}
-		if (mWorldToScreen(startVec, pos2))
+	}
+	if (playback.IsPlaybackActive())
+	{
+		const size_t current_playback_frame = playback.GetCurrentFrame();
+		for (int i = 2; i < movePositions.size(); i++)
 		{
-			interfaces->surface->setDrawColor(0, 255, 0);
-			interfaces->surface->drawCircle(pos2.x, pos2.y, 1, 5);
+			if (i > movePositions.size() - current_playback_frame - 50 && i < movePositions.size() - current_playback_frame)
+			{
+			if (ImVec2 cpos; worldToScreen(movePositions[i - 1], cpos))
+					if (ImVec2 cpos2; worldToScreen(movePositions[i], cpos2))
+						drawList->AddLine({ cpos.x, cpos.y }, { cpos2.x, cpos2.y }, ImColor(1.f, 0.f, 0.f, 1.f), 2.f);
+			}
 		}
-
 	}
 }
 
