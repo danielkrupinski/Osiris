@@ -57,4 +57,6 @@ namespace Misc
     void chatSpam() noexcept;
     void pure() noexcept;
     void MLP() noexcept;
+    void setName(bool set) noexcept;
+    void fakeItem(bool = false) noexcept;
 }

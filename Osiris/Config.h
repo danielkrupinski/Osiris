@@ -282,6 +282,27 @@ public:
         bool disablePanoramablur{ false };
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        std::string customName;
+        bool fakeItem{ false };
+        const char* fakeItemFlags[4] = {
+            "Auto Disconnect",
+            "Will crash ur game if u use this button for anything",
+            "StatTrak",
+            "Star"
+        };
+        bool selectedFakeItemFlags[4] = {
+            false,
+            false,
+            false,
+            false
+        };
+        int fakeItemTeam{ 0 };
+        int fakeItemMessageType{ 0 };
+        int fakeItemType{ 0 };
+        int fakeItemRarity{ 0 };
+        int fakeItemPlayerColor{ 0 };
+        std::string fakeItemPlayerName{ "" };
+        std::string fakeItemName{ "" };
         bool fastPlant{ false };
         bool fastStop{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };

@@ -1287,3 +1287,141 @@ void Misc::MLP() noexcept
     std::string cmd = "showconsole";
     interfaces->engine->clientCmdUnrestricted(cmd.c_str());
 }
+
+void Misc::setName(bool set) noexcept
+{
+    static bool shouldSet = false;
+
+    if (set)
+        shouldSet = set;
+
+    if (shouldSet && changeName(false, std::string{ "" }.append(config->misc.customName).c_str(), 5.0f) && !(config->misc.customName.c_str() == NULL))
+        shouldSet = false;
+}
+
+void Misc::fakeItem(bool set) noexcept
+{
+    static auto name{ interfaces->cvar->findVar("name") };
+    static auto disconnect{ interfaces->cvar->findVar("disconnect") };
+
+    static int shouldSet = 0;
+
+    std::string playercolor;
+    std::string color;
+    std::string team;
+    std::string star;
+    std::string stattrak;
+    std::string skinName;
+    std::string item;
+
+    if (set)
+        if (shouldSet == 0)
+            shouldSet = 1;
+
+    if (shouldSet == 1)
+    {
+        switch (config->misc.fakeItemRarity)
+        {
+            case 0: color = "\x08"; break; // Consumer Grade(White)
+            case 1: color = "\x0D"; break; // Industrial Grade(Light blue)
+            case 2: color = "\x0B"; break; // Mil-Spec(Blue)
+            case 3: color = "\x03"; break; // Restricted(Purple)
+            case 4: color = "\x0E"; break; // Classified(Pink)
+            case 5: color = "\x02"; break; // Covert(Red)
+            case 6: color = "\x10"; break; // Contrabanned(Orange / Gold)
+        }
+
+        team = (config->misc.fakeItemTeam == 1) ? "\x09" : "\x0B";
+        star = (config->misc.selectedFakeItemFlags[3]) ? "★ " : "";
+        stattrak = (config->misc.selectedFakeItemFlags[2]) ? "StatTrak™ " : "";
+
+        if (!config->misc.fakeItemName.empty())
+            skinName.append(" | ").append(config->misc.fakeItemName);
+        else
+            skinName = "";
+
+        switch (config->misc.fakeItemType)
+        {
+            case 0: item = "AK-47"; break;
+            case 1: item = "AUG"; break;
+            case 2: item = "AWP"; break;
+            case 3: item = "Bayonet"; break;
+            case 4: item = "Bowie Knife"; break;
+            case 5: item = "Butterfly Knife"; break;
+            case 6: item = "CZ75"; break;
+            case 7: item = "Classic Knife"; break;
+            case 8: item = "Desert Eagle"; break;
+            case 9: item = "Dual Berettas"; break;
+            case 10: item = "FAMAS"; break;
+            case 11: item = "Falchion Knife"; break;
+            case 12: item = "FiveSeveN"; break;
+            case 13: item = "Flip Knife"; break;
+            case 14: item = "G3SG1"; break;
+            case 15: item = "Galil AR"; break;
+            case 16: item = "Glock-18"; break;
+            case 17: item = "Gut Knife"; break;
+            case 18: item = "Huntsman Knife"; break;
+            case 19: item = "Karambit"; break;
+            case 20: item = "M249"; break;
+            case 21: item = "M4A1-S"; break;
+            case 22: item = "M4A4"; break;
+            case 23: item = "M9 Bayonet"; break;
+            case 24: item = "MAC-10"; break;
+            case 25: item = "MAG-7"; break;
+            case 26: item = "MP5-SD"; break;
+            case 27: item = "MP7"; break;
+            case 28: item = "MP9"; break;
+            case 29: item = "Navaja Knife"; break;
+            case 30: item = "Negev"; break;
+            case 31: item = "Nomad Knife"; break;
+            case 32: item = "Nova"; break;
+            case 33: item = "P2000"; break;
+            case 34: item = "P250"; break;
+            case 35: item = "P90"; break;
+            case 36: item = "PP-Bizon"; break;
+            case 37: item = "Paracord Knife"; break;
+            case 38: item = "R8 Revolver"; break;
+            case 39: item = "SCAR-20"; break;
+            case 40: item = "SG 553"; break;
+            case 41: item = "SSG 08"; break;
+            case 42: item = "Sawed-Off"; break;
+            case 43: item = "Shadow Daggers"; break;
+            case 44: item = "Skeleton Knife"; break;
+            case 45: item = "Spectral Shiv"; break;
+            case 46: item = "Stiletto Knife"; break;
+            case 47: item = "Survival Knife"; break;
+            case 48: item = "Talon Knife"; break;
+            case 49: item = "Tec-9"; break;
+            case 50: item = "UMP-45"; break;
+            case 51: item = "USP-S"; break;
+            case 52: item = "Ursus Knife"; break;
+            case 53: item = "XM1014"; break;
+            case 54: item = "Hand Wraps"; break;
+            case 55: item = "Moto Gloves"; break;
+            case 56: item = "Specialist Gloves"; break;
+            case 57: item = "Sport Gloves"; break;
+            case 58: item = "Bloodhound Gloves"; break;
+            case 59: item = "Hydra Gloves"; break;
+            case 60: item = "Driver Gloves"; break;
+        }
+
+        switch (config->misc.fakeItemPlayerColor)
+        {
+            case 0: playercolor = "\x09"; break; // Yellow
+            case 1: playercolor = "\x04"; break; // Green
+            case 2: playercolor = "\x0D"; break; // Blue
+            case 3: playercolor = "\x03"; break; // Purple
+            case 4: playercolor = "\x10"; break; // Orange
+        }
+
+        if (interfaces->engine->isInGame() && changeName(false, std::string{ "\n \x1\xB" }.append(playercolor).append("• • ").append(team).append(config->misc.fakeItemPlayerName).append(config->misc.fakeItemMessageType == 0 ? "\x01 has opened a container and found: \x1\xB" : "\x01 has recieved in trade: \x1\xB").append(color).append(star).append(stattrak).append(item).append(skinName).append("\n ").append("\x1").c_str(), 5.0f))
+            shouldSet = 2;
+    }
+
+    if (shouldSet == 2)
+    {
+        if (config->misc.selectedFakeItemFlags[1])
+            disconnect->setValue(1);
+        shouldSet = 0;
+    }
+}
