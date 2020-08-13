@@ -53,4 +53,5 @@ namespace Misc
     void drawBombDamage() noexcept;
     void playerBlocker(UserCmd* cmd) noexcept;
     void fastStop(UserCmd*) noexcept;
+    void doorSpam(UserCmd* cmd) noexcept;
 }

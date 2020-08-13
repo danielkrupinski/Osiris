@@ -185,6 +185,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
     Misc::fastStop(cmd);
+    Misc::doorSpam(cmd);
 
     static void* oldPointer = nullptr;
 

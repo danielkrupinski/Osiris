@@ -255,6 +255,7 @@ public:
         bool jumpbughold{ false };
         bool slowwalk{ false };
         int slowwalkKey{ 0 };
+        bool doorSpam{ false };
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
         bool autoPistol{ false };
