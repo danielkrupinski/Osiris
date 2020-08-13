@@ -1030,17 +1030,26 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGuiCustom::colorPicker("Hit marker damage indicator", config->visuals.hitMarkerDamageIndicator);
     if (config->visuals.hitMarkerDamageIndicator.enabled) {
         ImGui::SameLine();
-        ImGui::Checkbox("Customize Hitmarker", &config->visuals.hitMarkerDamageIndicatorCustomize);
-        if (config->visuals.hitMarkerDamageIndicatorCustomize) {
-            ImGui::InputInt("Font", &config->visuals.hitMarkerDamageIndicatorFont, 1, 294);
-            ImGui::InputInt("Alpha", &config->visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
-            ImGui::InputInt("Dist", &config->visuals.hitMarkerDamageIndicatorDist, -100, 100);
-            ImGui::InputInt("Text X", &config->visuals.hitMarkerDamageIndicatorTextX, -100, 100);
-            ImGui::InputInt("Text Y", &config->visuals.hitMarkerDamageIndicatorTextY, -100, 100);
-            ImGui::PushID(11);
-            ImGui::SliderFloat(" ", &config->visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Ratio: %.2f");
-            ImGui::PopID();
-        };
+        ImGui::PushID("Hit marker damage indicator");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("HMDI");
+
+        if (ImGui::BeginPopup("HMDI")) {
+            ImGui::SetNextItemWidth(75.0f);
+            ImGui::Checkbox("Customize Hitmarker", &config->visuals.hitMarkerDamageIndicatorCustomize);
+            if (config->visuals.hitMarkerDamageIndicatorCustomize) {
+                ImGui::InputInt("Font", &config->visuals.hitMarkerDamageIndicatorFont, 1, 294);
+                ImGui::InputInt("Alpha", &config->visuals.hitMarkerDamageIndicatorAlpha, 1, 1000);
+                ImGui::InputInt("Dist", &config->visuals.hitMarkerDamageIndicatorDist, -100, 100);
+                ImGui::InputInt("Text X", &config->visuals.hitMarkerDamageIndicatorTextX, -100, 100);
+                ImGui::InputInt("Text Y", &config->visuals.hitMarkerDamageIndicatorTextY, -100, 100);
+                ImGui::PushID(11);
+                ImGui::SliderFloat(" ", &config->visuals.hitMarkerDamageIndicatorRatio, -1.0f, 1.0f, "Ratio: %.2f");
+                ImGui::PopID();
+            };
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
     };
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
