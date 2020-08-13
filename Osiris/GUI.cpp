@@ -1321,7 +1321,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("BH");
 
         if (ImGui::BeginPopup("BH")) {
-            ImGui::SetNextItemWidth(75.0f);
             ImGui::Checkbox("Hitchance", &config->misc.bhopHitchanceEnable);
             if (config->misc.bhopHitchanceEnable) {
                 ImGui::SliderInt("Bhop hitchance", &config->misc.bhopHitchance, 0, 100, "%d%");
