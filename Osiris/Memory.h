@@ -77,6 +77,7 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    void* CheckFileCRCsWithServer;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

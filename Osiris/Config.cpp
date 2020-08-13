@@ -596,6 +596,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
     read(j, "Bypass sv_pure", m.svpurebypass);
+    read(j, "Bypass sv_pure (OLD)", m.svpurebypassOLD);
     read(j, "Draw aimbot FOV", m.drawAimbotFov);
     read(j, "Team Damage Counter", m.teamDamageCounter);
     read(j, "Player Blocker", m.playerBlocker);
@@ -994,6 +995,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Max angle delta", maxAngleDelta);
     WRITE("Fake prime", fakePrime);
     WRITE("Bypass sv_pure", svpurebypass);
+    WRITE("Bypass sv_pure (OLD)", svpurebypassOLD);
     WRITE("Draw aimbot FOV", drawAimbotFov);
     WRITE("Team Damage Counter", teamDamageCounter);
     WRITE("Player Blocker", playerBlocker);

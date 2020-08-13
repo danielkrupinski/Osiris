@@ -1264,3 +1264,18 @@ void Misc::chatSpam() noexcept
         }
     }
 }
+
+void __fastcall hkCheckFileCRCsWithServer(void* ecx, void* edx)
+{
+    // dont do anything.. to prevent CRC check from happening
+    return;
+}
+
+void Misc::pure() noexcept
+{
+    if (config->misc.svpurebypassOLD)
+    {
+        hkCheckFileCRCsWithServer(memory->CheckFileCRCsWithServer, hkCheckFileCRCsWithServer);
+    }
+
+}

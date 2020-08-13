@@ -56,6 +56,7 @@ Memory::Memory() noexcept
     channels = *reinterpret_cast<Channel**>(findPattern(L"engine", "\x81\xC2????\x8B\x72\x54") + 2);
     playerResource = *reinterpret_cast<PlayerResource***>(findPattern(L"client", "\x74\x30\x8B\x35????\x85\xF6") + 4);
     getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(L"client", "\xE8????\x66\x83\x3E") + 1);
+    CheckFileCRCsWithServer = reinterpret_cast<void*>(findPattern(L"engine.dll", "\x55\x8B\xEC\x81\xEC????\x53\x8B\xD9\x89\x5D\xF8\x80"));
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 }

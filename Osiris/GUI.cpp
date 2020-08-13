@@ -1452,6 +1452,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
     ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
+    ImGui::Checkbox("Bypass sv_pure (OLD)", &config->misc.svpurebypassOLD);
     ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
     ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
     if (config->misc.teamDamageCounter)
