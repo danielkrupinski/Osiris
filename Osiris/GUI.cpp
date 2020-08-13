@@ -1382,7 +1382,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::OpenPopup("CS");
 
     if (ImGui::BeginPopup("CS")) {
-        ImGui::SetNextItemWidth(75.0f);
         ImGui::Checkbox("Random", &config->misc.chatSpamRandom);
         ImGui::SliderInt("Delay", &config->misc.chatSpamDelay, 1, 60, "%d s");
         ImGui::TextUnformatted("Phrases");
