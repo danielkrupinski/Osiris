@@ -1299,7 +1299,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (!window.misc)
             return;
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc (OsirisBETA by PlayDay)", &window.misc, windowFlags);
+        ImGui::Begin("Misc (OsirisBETA by PlayDay)", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
@@ -1718,8 +1719,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
 
 void GUI::renderGuiStyle2() noexcept
 {
-    ImGui::Begin("Osiris by danielkrupinski, Beta by PlayDay", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-        | ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::Begin("Osiris by danielkrupinski, Beta by PlayDay", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollWithMouse);
 
     if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
         if (ImGui::BeginTabItem("Aimbot")) {
