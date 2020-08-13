@@ -1037,7 +1037,6 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("HMDI");
 
         if (ImGui::BeginPopup("HMDI")) {
-            ImGui::SetNextItemWidth(75.0f);
             ImGui::Checkbox("Customize Hitmarker", &config->visuals.hitMarkerDamageIndicatorCustomize);
             if (config->visuals.hitMarkerDamageIndicatorCustomize) {
                 ImGui::InputInt("Font", &config->visuals.hitMarkerDamageIndicatorFont, 1, 294);
