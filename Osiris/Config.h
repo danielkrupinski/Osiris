@@ -246,6 +246,10 @@ public:
         bool clocktag{ false };
         char clanTag[16];
         bool animatedClanTag{ false };
+        bool chatSpam{ false };
+        bool chatSpamRandom{ false };
+        int chatSpamDelay{ 1 };
+        std::string chatSpamPhrases{ "MLP is the best\ndiscord.gg/xWEtQAn" };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };

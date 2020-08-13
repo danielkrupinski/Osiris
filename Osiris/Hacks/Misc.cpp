@@ -1,6 +1,7 @@
 ﻿#include <mutex>
 #include <numeric>
 #include <sstream>
+#include <random>
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -1213,4 +1214,53 @@ void Misc::doorSpam(UserCmd* cmd) noexcept {
             doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
             doorSpam = !doorSpam;
         }
+}
+
+void Misc::chatSpam() noexcept
+{
+    static int lastSpam = 0;
+
+    const int curTime = (int)memory->globalVars->currenttime;
+
+    if (!config->misc.chatSpam || lastSpam == curTime || curTime % config->misc.chatSpamDelay != 0)
+        return;
+
+    lastSpam = curTime;
+
+    if (!localPlayer || localPlayer->team() == 0)
+        return;
+
+    std::istringstream Stream(config->misc.chatSpamPhrases);
+    std::vector <std::string> Phrases;
+    std::string Phrase;
+
+    while (std::getline(Stream, Phrase, '\n'))
+        if (Phrase.length() > 0)
+            Phrases.push_back(Phrase);
+
+    if (Phrases.size() > 0)
+    {
+        static int phraseId = 0;
+
+        if (config->misc.chatSpamRandom)
+        {
+            std::mt19937 gen(std::random_device().operator()());
+            std::uniform_int_distribution<int> uid(0, Phrases.size() - 1);
+            const int randNum = uid(gen);
+            const std::string Cmd = "say \"" + Phrases[randNum] + "\"";
+
+            interfaces->engine->clientCmdUnrestricted(Cmd.c_str());
+
+            phraseId = randNum + 1;
+        }
+        else
+        {
+            if (phraseId >= static_cast<int>(Phrases.size()))
+                phraseId = 0;
+
+            const std::string Cmd = "say \"" + Phrases[phraseId++] + "\"";
+
+            interfaces->engine->clientCmdUnrestricted(Cmd.c_str());
+        }
+    }
 }

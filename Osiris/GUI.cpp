@@ -1373,11 +1373,28 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
     if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
         Misc::updateClanTag(true);
+    ImGui::Checkbox("Chat spam", &config->misc.chatSpam);
+    ImGui::SameLine();
+    ImGui::PushID("Chat Spam");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("CS");
+
+    if (ImGui::BeginPopup("CS")) {
+        ImGui::SetNextItemWidth(75.0f);
+        ImGui::Checkbox("Random", &config->misc.chatSpamRandom);
+        ImGui::SliderInt("Delay", &config->misc.chatSpamDelay, 1, 60, "%d s");
+        ImGui::TextUnformatted("Phrases");
+        ImGui::PushID(1);
+        ImGui::InputTextMultiline("", &config->misc.chatSpamPhrases, { 280.0f, 120.0f });
+        ImGui::PopID();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &config->misc.killMessage);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
-    ImGui::PushID(1);
+    ImGui::PushID(2);
     ImGui::InputText("", &config->misc.killMessageString);
     ImGui::PopID();
     ImGui::Checkbox("Name stealer", &config->misc.nameStealer);
