@@ -92,7 +92,7 @@ jobs:
             Remove-Item -Path Osiris-inj\JunkDef.h
             Move-Item -Path junk.h -Destination Osiris-inj\JunkDef.h
             cd .\Osiris-inj
-            ((Get-Content Osiris-inj.vcxproj -Raw) -replace '<PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>','<PreprocessorDefinitions>WIN32;BETA;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>') | Set-Content Osiris-inj.vcxproj
+            ((Get-Content Main.cpp -Raw) -replace '//#define BETA','#define BETA') | Set-Content Main.cpp
             msbuild Osiris-inj.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m
             Copy-Item -Path D:\a\Osiris\Osiris\Osiris-GOESP-inj\src\Osiris-inj\Release\Osiris-inj.exe -Destination "D:\a\Osiris\Osiris\Osiris\ready\Osiris-Injector.exe"
       shell: pwsh
