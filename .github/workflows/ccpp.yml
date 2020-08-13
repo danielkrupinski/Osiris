@@ -1,4 +1,4 @@
-name: Osiris
+name: OsirisBETA
 
 on: [pull_request, push]
 
@@ -16,17 +16,17 @@ jobs:
       run: msbuild Osiris.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\SSE2\"
     - name: Rename SSE2
       working-directory: Osiris/Release/SSE2
-      run: ren Osiris.dll Osiris_SSE2.dll
+      run: ren Osiris.dll Osiris_BETA_SSE2.dll
       shell: cmd
     - name: Move to one folder SSE2
       working-directory: Osiris
       run: |
             mkdir D:\a\Osiris\Osiris\Osiris\ready
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\SSE2\Osiris_SSE2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\SSE2\Osiris_BETA_SSE2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
             Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 SSE2
       working-directory: Osiris/ready
-      run: sha1sum Osiris_SSE2.dll > Osiris_SSE2.dll.sha1
+      run: sha1sum Osiris_BETA_SSE2.dll > Osiris_BETA_SSE2.dll.sha1
       
     - name: Rename AVX
       working-directory: Osiris
@@ -43,14 +43,18 @@ jobs:
     - name: MSBuild AVX
       working-directory: Osiris
       run: msbuild Osiris_AVX.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX\"
+    - name: Rename AVX
+      working-directory: Osiris/Release/AVX
+      run: ren Osiris_AVX.dll Osiris_BETA_AVX.dll
+      shell: cmd
     - name: Move to one folder AVX
       working-directory: Osiris
       run: |
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\Osiris_AVX.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX\Osiris_BETA_AVX.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
             Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX
       working-directory: Osiris/ready
-      run: sha1sum Osiris_AVX.dll > Osiris_AVX.dll.sha1
+      run: sha1sum Osiris_BETA_AVX.dll > Osiris_BETA_AVX.dll.sha1
       
     - name: Rename AVX2
       working-directory: Osiris
@@ -67,14 +71,18 @@ jobs:
     - name: MSBuild AVX2
       working-directory: Osiris
       run: msbuild Osiris_AVX2.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m /p:OutDir="D:\a\Osiris\Osiris\Osiris\Release\AVX2\"
+    - name: Rename AVX2
+      working-directory: Osiris/Release/AVX2
+      run: ren Osiris_AVX2.dll Osiris_BETA_AVX2.dll
+      shell: cmd
     - name: Move to one folder AVX2
       working-directory: Osiris
       run: |
-            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\Osiris_AVX2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
+            Copy-Item -Path D:\a\Osiris\Osiris\Osiris\Release\AVX2\Osiris_BETA_AVX2.dll -Destination D:\a\Osiris\Osiris\Osiris\ready\
             Remove-Item -LiteralPath "Release" -Force -Recurse
     - name: SHA1 AVX2
       working-directory: Osiris/ready
-      run: sha1sum Osiris_AVX2.dll > Osiris_AVX2.dll.sha1
+      run: sha1sum Osiris_BETA_AVX2.dll > Osiris_BETA_AVX2.dll.sha1
       
     - name: Get Injector
       run: |
@@ -84,6 +92,7 @@ jobs:
             Remove-Item -Path Osiris-inj\JunkDef.h
             Move-Item -Path junk.h -Destination Osiris-inj\JunkDef.h
             cd .\Osiris-inj
+            ((Get-Content Osiris-inj.vcxproj -Raw) -replace '<PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>','<PreprocessorDefinitions>WIN32;BETA;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>') | Set-Content Osiris-inj.vcxproj
             msbuild Osiris-inj.vcxproj /p:Configuration=Release /p:VisualStudioVersion=16.0 /v:m
             Copy-Item -Path D:\a\Osiris\Osiris\Osiris-GOESP-inj\src\Osiris-inj\Release\Osiris-inj.exe -Destination "D:\a\Osiris\Osiris\Osiris\ready\Osiris-Injector.exe"
       shell: pwsh
@@ -95,5 +104,5 @@ jobs:
       
     - uses: actions/upload-artifact@v1
       with:
-        name: Osiris Release All
+        name: Osiris Beta All
         path: Osiris/ready
