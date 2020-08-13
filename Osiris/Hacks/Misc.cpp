@@ -805,8 +805,9 @@ void Misc::doorSpam(UserCmd* cmd) noexcept {
     Trace trace;
     interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
 
-    if (trace.entity || trace.entity->getClientClass()->classId == ClassId::PropDoorRotating)
+    if (trace.entity && trace.entity->getClientClass()->classId == ClassId::PropDoorRotating)
         if (cmd->buttons & UserCmd::IN_USE) {
             doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
-    }
+            doorSpam = !doorSpam;
+        }
 }
