@@ -575,6 +575,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
     read(j, "Fast plant", m.fastPlant);
+    read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Bomb Damage Indicator", m.bombDamage);
     read(j, "Quick reload", m.quickReload);
@@ -967,6 +968,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
+    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Bomb Damage Indicator", bombDamage);
     WRITE("Quick reload", quickReload);

@@ -52,4 +52,5 @@ namespace Misc
     void showVelocity() noexcept;
     void drawBombDamage() noexcept;
     void playerBlocker(UserCmd* cmd) noexcept;
+    void fastStop(UserCmd*) noexcept;
 }
