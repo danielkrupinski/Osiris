@@ -406,3 +406,50 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+void Visuals::NightMode()noexcept
+{
+	static std::string old_Skyname = "";
+	static bool OldNightmode;
+	static int OldSky;
+	if (!interfaces->engine->isInGame() || !interfaces->engine->isConnected() || !localPlayer || !localPlayer->isAlive())
+	{
+		old_Skyname = "";
+		OldNightmode = false;
+		OldSky = 0;
+		return;
+	}
+
+	static ConVar* r_DrawSpecificStaticProp;
+
+	if (OldNightmode != config->visuals.nightMode)
+	{
+
+		r_DrawSpecificStaticProp = interfaces->cvar->findVar("r_DrawSpecificStaticProp");
+		r_DrawSpecificStaticProp->setValue(0);
+
+		for (auto i = interfaces->materialSystem->firstMaterial(); i != interfaces->materialSystem->invalidMaterial(); i = interfaces->materialSystem->nextMaterial(i))
+		{
+			Material* pMaterial = interfaces->materialSystem->getMaterial(i);
+			if (!pMaterial)
+				continue;
+			if (strstr(pMaterial->getTextureGroupName(), "World") || strstr(pMaterial->getTextureGroupName(), "StaticProp"))
+			{
+				if (config->visuals.nightMode) {
+					memory->loadSky("sky_csgo_night02");
+
+					if (strstr(pMaterial->getTextureGroupName(), "StaticProp"))
+						pMaterial->colorModulate(0.11f, 0.11f, 0.11f);
+					else
+						pMaterial->colorModulate(0.05f, 0.05f, 0.05f);
+				}
+				else {
+					memory->loadSky("sky_cs15_daylight04_hdr");
+					pMaterial->colorModulate(1.0f, 1.0f, 1.0f);
+				}
+			}
+		}
+		OldNightmode = config->visuals.nightMode;
+	}
+
+}
