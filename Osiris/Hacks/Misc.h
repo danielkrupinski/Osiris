@@ -56,4 +56,5 @@ namespace Misc
     void doorSpam(UserCmd* cmd) noexcept;
     void chatSpam() noexcept;
     void pure() noexcept;
+    void MLP() noexcept;
 }
