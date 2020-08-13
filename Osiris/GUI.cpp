@@ -1421,7 +1421,10 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
         if (ImGui::BeginPopup("FI")) {
             ImGui::SetNextItemWidth(200.0f);
-            ImGuiCustom::MultiCombo("Fake Item Flags", config->misc.fakeItemFlags, config->misc.selectedFakeItemFlags, 4);
+            ImGui::Text("Item flags:");
+            ImGui::Checkbox("StatTrak", &config->misc.fakeItemFlagsST);
+            ImGui::SameLine();
+            ImGui::Checkbox("Star", &config->misc.fakeItemFlagsStar);
             ImGui::SetNextItemWidth(200.0f);
             ImGui::Combo("Team", &config->misc.fakeItemTeam, "Counter-Terrorist\0Terrorist\0");
             ImGui::SetNextItemWidth(200.0f);

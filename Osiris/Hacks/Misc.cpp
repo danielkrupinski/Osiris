@@ -1302,7 +1302,6 @@ void Misc::setName(bool set) noexcept
 void Misc::fakeItem(bool set) noexcept
 {
     static auto name{ interfaces->cvar->findVar("name") };
-    static auto disconnect{ interfaces->cvar->findVar("disconnect") };
 
     static int shouldSet = 0;
 
@@ -1332,8 +1331,8 @@ void Misc::fakeItem(bool set) noexcept
         }
 
         team = (config->misc.fakeItemTeam == 1) ? "\x09" : "\x0B";
-        star = (config->misc.selectedFakeItemFlags[3]) ? "★ " : "";
-        stattrak = (config->misc.selectedFakeItemFlags[2]) ? "StatTrak™ " : "";
+        star = config->misc.fakeItemFlagsStar ? "★ " : "";
+        stattrak = config->misc.fakeItemFlagsST ? "StatTrak™ " : "";
 
         if (!config->misc.fakeItemName.empty())
             skinName.append(" | ").append(config->misc.fakeItemName);
@@ -1419,9 +1418,5 @@ void Misc::fakeItem(bool set) noexcept
     }
 
     if (shouldSet == 2)
-    {
-        if (config->misc.selectedFakeItemFlags[1])
-            disconnect->setValue(1);
         shouldSet = 0;
-    }
 }

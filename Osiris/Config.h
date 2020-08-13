@@ -284,18 +284,8 @@ public:
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
         std::string customName;
         bool fakeItem{ false };
-        const char* fakeItemFlags[4] = {
-            "Auto Disconnect",
-            "Will crash ur game if u use this button for anything",
-            "StatTrak",
-            "Star"
-        };
-        bool selectedFakeItemFlags[4] = {
-            false,
-            false,
-            false,
-            false
-        };
+        bool fakeItemFlagsST{ false };
+        bool fakeItemFlagsStar{ false };
         int fakeItemTeam{ 0 };
         int fakeItemMessageType{ 0 };
         int fakeItemType{ 0 };

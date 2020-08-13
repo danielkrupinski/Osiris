@@ -581,6 +581,8 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Ban text", m.banText);
     read<value_t::object>(j, "Custom Name", m.customName);
     read(j, "Fake Item", m.fakeItem);
+    read(j, "Fake Item flag StatTrack", m.fakeItemFlagsST);
+    read(j, "Fake Item flag Star", m.fakeItemFlagsStar);
     read(j, "Fake Item Team", m.fakeItemTeam);
     read(j, "Fake Item Message Type", m.fakeItemMessageType);
     read(j, "Fake Item Type", m.fakeItemType);
@@ -989,6 +991,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban text", banText);
     WRITE("Custom Name", customName);
     WRITE("Fake Item", fakeItem);
+    WRITE("Fake Item flag StatTrack", fakeItemFlagsST);
+    WRITE("Fake Item flag Star", fakeItemFlagsStar);
     WRITE("Fake Item Team", fakeItemTeam);
     WRITE("Fake Item Message Type", fakeItemMessageType);
     WRITE("Fake Item Type", fakeItemType);
