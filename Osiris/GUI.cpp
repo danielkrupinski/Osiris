@@ -1298,8 +1298,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (!window.misc)
             return;
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-            | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Misc", &window.misc, windowFlags);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
