@@ -977,14 +977,14 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     hotkey(config->visuals.zoomKey);
     ImGui::Checkbox("No zoom", &config->visuals.noZoom);
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
+    ImGui::SameLine();
+    hotkey(config->visuals.thirdpersonKey);
     if (config->visuals.thirdperson) {
         ImGui::SameLine();
         ImGui::Checkbox("Dead thirdperson", &config->visuals.deadThirdperson);
     }
     else
         config->visuals.deadThirdperson = false;
-    ImGui::SameLine();
-    hotkey(config->visuals.thirdpersonKey);
     ImGui::PushItemWidth(290.0f);
     ImGui::PushID(4);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
