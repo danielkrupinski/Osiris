@@ -1306,12 +1306,21 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
     if (config->misc.bunnyHop) {
         ImGui::SameLine();
-        ImGui::Checkbox("Hitchance", &config->misc.bhopHitchanceEnable);
-        if (config->misc.bhopHitchanceEnable) {
-            ImGui::SliderInt("Bhop hitchance", &config->misc.bhopHitchance, 0, 100, "%d%");
-            ImGui::SliderInt("Min hits", &config->misc.bhopMinHits, 0, 20, "%d%");
-            ImGui::SliderInt("Max hits", &config->misc.bhopMaxHits, 0, 20, "%d%");
+        ImGui::PushID("Bunny hop");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("BH");
+
+        if (ImGui::BeginPopup("BH")) {
+            ImGui::SetNextItemWidth(75.0f);
+            ImGui::Checkbox("Hitchance", &config->misc.bhopHitchanceEnable);
+            if (config->misc.bhopHitchanceEnable) {
+                ImGui::SliderInt("Bhop hitchance", &config->misc.bhopHitchance, 0, 100, "%d%");
+                ImGui::SliderInt("Min hits", &config->misc.bhopMinHits, 0, 20, "%d%");
+                ImGui::SliderInt("Max hits", &config->misc.bhopMaxHits, 0, 20, "%d%");
+            }
+            ImGui::EndPopup();
         }
+        ImGui::PopID();
     }
     ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
     ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);
