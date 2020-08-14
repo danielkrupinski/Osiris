@@ -32,4 +32,5 @@ namespace Visuals
     void hitMarkerDamageIndicator() noexcept;
     void noZoom() noexcept;
     void noBloom() noexcept;
+    void NightMode() noexcept;
 }

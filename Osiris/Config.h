@@ -145,6 +145,7 @@ public:
         int inverseRagdollGravityValue{ -600 };
         bool ragdollTimescale{ false };
         float ragdollTimescaleValue{ 1.0f };
+        bool nightMode{ false };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };

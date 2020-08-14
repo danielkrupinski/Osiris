@@ -316,6 +316,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Visuals::NightMode();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
