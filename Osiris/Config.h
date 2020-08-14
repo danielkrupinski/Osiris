@@ -62,6 +62,45 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+	struct Ragebot {
+		bool enabled{ false };
+		bool onKey{ false };
+		int key{ 0 };
+		int keyMode{ 0 };
+		bool slient{ false };
+		bool betweenShots{ false };
+		bool friendlyFire{ false };
+		bool autoStop{ false };
+		float bodyChance{ 0.0f };
+		float pointChance{ 0.0f };
+		float CanSeeDamage{ 0.0f };
+        float WallDamage{ 0.0f };
+		float hitChance{ 0.0f };
+		bool BonesBools[8]{
+			false,
+			false,
+			false,
+			false,
+			false,
+			false,
+			false,
+			false
+		};
+	};
+	std::array<Ragebot, 45> ragebot;
+
+	const char* BonesTexts[8] = 
+	{
+			"Head",
+			"Neck",
+			"UpperChest",
+			"Body",
+			"Pelvis",
+			"Hands",
+			"Legs",
+			"FeetS"
+	};
+
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;

@@ -130,3 +130,66 @@ void ImGuiCustom::arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept
     ImGui::ArrowButtonEx(id, dir, { sz, sz }, ImGuiButtonFlags_Disabled);
     ImGui::PopStyleVar();
 }
+
+bool ImGuiCustom::MultiCombo(const char* label, const char** displayName, bool* data, int dataSize)noexcept 
+{
+
+	ImGui::PushID(label);
+
+	char previewText[1024] = { 0 };
+	char buf[1024] = { 0 };
+	char buf2[1024] = { 0 };
+	int currentPreviewTextLen = 0;
+	float multicomboWidth = 115.f;
+
+	for (int i = 0; i < dataSize; i++) {
+
+		if (data[i] == true) {
+
+			if (currentPreviewTextLen == 0)
+				sprintf(buf, "%s", displayName[i]);
+			else
+				sprintf(buf, ", %s", displayName[i]);
+
+			strcpy(buf2, previewText);
+			sprintf(buf2 + currentPreviewTextLen, buf);
+			ImVec2 textSize = ImGui::CalcTextSize(buf2);
+
+			if (textSize.x > multicomboWidth) {
+
+				sprintf(previewText + currentPreviewTextLen, "...");
+				currentPreviewTextLen += (int)strlen("...");
+				break;
+			}
+
+			sprintf(previewText + currentPreviewTextLen, buf);
+			currentPreviewTextLen += (int)strlen(buf);
+		}
+	}
+
+	if (currentPreviewTextLen > 0)
+		previewText[currentPreviewTextLen] = NULL;
+	else
+		sprintf(previewText, " -");
+
+	bool isDataChanged = false;
+
+	if (ImGui::BeginCombo(label, previewText)) {
+
+		for (int i = 0; i < dataSize; i++) {
+
+			sprintf(buf, displayName[i]);
+
+			if (ImGui::Selectable(buf, data[i], ImGuiSelectableFlags_DontClosePopups)) {
+
+				data[i] = !data[i];
+				isDataChanged = true;
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+
+	ImGui::PopID();
+	return isDataChanged;
+}

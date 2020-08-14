@@ -16,10 +16,12 @@
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
     <ClCompile Include="Hacks\AntiAim.cpp" />
+    <ClCompile Include="Hacks\AutoWall.cpp" />
     <ClCompile Include="Hacks\Backtrack.cpp" />
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
+    <ClCompile Include="Hacks\Ragebot.cpp" />
     <ClCompile Include="Hacks\Reportbot.cpp" />
     <ClCompile Include="Hacks\SkinChanger.cpp" />
     <ClCompile Include="Hacks\StreamProofESP.cpp" />
@@ -64,11 +66,13 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\AntiAim.h" />
+    <ClInclude Include="Hacks\AutoWall.h" />
     <ClInclude Include="Hacks\Backtrack.h" />
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
+    <ClInclude Include="Hacks\Ragebot.h" />
     <ClInclude Include="Hacks\Reportbot.h" />
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
@@ -130,6 +134,7 @@
     <ClInclude Include="SDK\LocalPlayer.h" />
     <ClInclude Include="SDK\Material.h" />
     <ClInclude Include="SDK\MaterialSystem.h" />
+    <ClInclude Include="SDK\Math.h" />
     <ClInclude Include="SDK\matrix3x4.h" />
     <ClInclude Include="SDK\ModelInfo.h" />
     <ClInclude Include="SDK\ModelRender.h" />
