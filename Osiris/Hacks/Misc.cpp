@@ -286,7 +286,7 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
     if (plantAnywhere->getInt())
         return;
 
-    if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
+    if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->flags() & 1))
         return;
 
     const auto activeWeapon = localPlayer->getActiveWeapon();
