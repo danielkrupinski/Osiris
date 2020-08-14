@@ -1459,11 +1459,11 @@ void Misc::buyBot(GameEvent* event) noexcept
     std::string buy = "";
 
     if (event) {
-        if (!config->misc.buyBot)
-            return;
-
         switch (fnv::hashRuntime(event->getName())) {
         case fnv::hash("round_start"):
+            if (!config->misc.buyBot)
+                return;
+
             if (config->misc.buyBotPrimary != 0)
                 buy += primaryList[config->misc.buyBotPrimary];
             if (config->misc.buyBotSecondary != 0)
