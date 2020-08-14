@@ -278,31 +278,32 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
-    if (config->misc.fastPlant) {
-        static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
+    if (!config->misc.fastPlant)
+        return;
 
-        if (plantAnywhere->getInt())
-            return;
+    static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
-        if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
-            return;
+    if (plantAnywhere->getInt())
+        return;
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
-            return;
+    if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
+        return;
 
-        cmd->buttons &= ~UserCmd::IN_ATTACK;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+        return;
 
-        constexpr float doorRange{ 200.0f };
-        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                           cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                          -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-        if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
-            cmd->buttons &= ~UserCmd::IN_USE;
-    }
+    constexpr auto doorRange = 200.0f;
+
+    Trace trace;
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+
+    if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+        cmd->buttons &= ~UserCmd::IN_USE;
 }
 
 void Misc::drawBombTimer() noexcept
