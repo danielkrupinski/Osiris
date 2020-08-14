@@ -265,6 +265,21 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Head Box", p.headBox);
 }
 
+static void from_json(const json& j, ImGuiStruct& i)
+{
+    read(j, "Enabled", i.enabled);
+    read(j, "No BackGround",i.noBackGround);
+    read(j, "No TittleBar",i.noTittleBar);
+}
+
+static void from_json(const json& j, StatusBar& s)
+{
+	from_json(j, static_cast<ImGuiStruct&>(s));
+    read(j, "Show Player Real ViewAngles", s.ShowPlayerRealViewAngles);
+    read(j, "Show Player Status", s.ShowPlayerStatus);
+    read(j, "Show GameGlobalVars", s.ShowGameGlobalVars);
+}
+
 static void from_json(const json& j, ImVec2& v)
 {
     read(j, "X", v.x);
@@ -582,7 +597,7 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Purchase List", m.purchaseList);
     read(j, "Draw Inaccuracy", m.drawInaccuracy);
     read(j, "Draw Inaccuracy Thickness", m.drawInaccuracyThickness);
-
+    read<value_t::object>(j, "Status Bar", m.Sbar);
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
@@ -748,6 +763,21 @@ static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
     j = static_cast<const Shared&>(o);
 
     WRITE("Trails", trails);
+}
+
+static void to_json(json& j, const ImGuiStruct& o, const ImGuiStruct& dummy = {})
+{
+	WRITE("Enabled", enabled);
+	WRITE("No BackGround", noBackGround);
+	WRITE("No TittleBar", noTittleBar);
+}
+
+static void to_json(json& j, const StatusBar& o, const StatusBar& dummy = {})
+{
+    to_json(j, static_cast<const ImGuiStruct&>(o), dummy);
+    WRITE("Show Player Real ViewAngles", ShowPlayerRealViewAngles);
+    WRITE("Show Player Status", ShowPlayerStatus);
+    WRITE("Show GameGlobalVars", ShowGameGlobalVars);
 }
 
 static void to_json(json& j, const ImVec2& o, const ImVec2& dummy = {})
@@ -979,6 +1009,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Purchase List", purchaseList);
     WRITE("Draw Inaccuracy", drawInaccuracy);
     WRITE("Draw InaccuracyThickness", drawInaccuracyThickness);
+    WRITE("Status Bar",Sbar);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)

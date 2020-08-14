@@ -123,39 +123,53 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
 void Misc::spectatorList() noexcept
 {
-    if (!config->misc.spectatorList.enabled)
-        return;
+    auto& cfg = config->misc.spectatorList;
+    if (cfg.enabled) {
+        std::string name;
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+        if (!gui->open)
+            windowFlags |= ImGuiWindowFlags_NoInputs;
+        if(cfg.noBackGround)
+            windowFlags |= ImGuiWindowFlags_NoBackground;
+        if (cfg.noTittleBar)
+            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+        if (!localPlayer && !gui->open)
+            return;
 
-    if (!localPlayer || !localPlayer->isAlive())
-        return;
+        const auto size = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, NULL, name.c_str());
+        ImGui::SetNextWindowSize(ImVec2(300.0f, size.y + ImGui::GetFontSize() * 3.0f));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+        ImGui::Begin("Spectator List", nullptr, windowFlags);
+        ImGui::PopStyleVar();
+        if (!localPlayer || !localPlayer->isAlive())
+            return;
 
-    interfaces->surface->setTextFont(Surface::font);
+            /*if (!localPlayer->isAlive())      Make Player can see who are watching your friends 
+            {                                           but sometime crash . I need some one he
+                if (!localPlayer->getObserverTarget())
+                    return;
+                auto a = localPlayer.get();
+                a = localPlayer->getObserverTarget();
+            }*/
 
-    if (config->misc.spectatorList.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(config->misc.spectatorList.rainbowSpeed));
-    else
-        interfaces->surface->setTextColor(config->misc.spectatorList.color);
+		for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+			const auto entity = interfaces->entityList->getEntity(i);
+			if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer.get())
+				continue;
 
-    const auto [width, height] = interfaces->surface->getScreenSize();
+			PlayerInfo playerInfo;
+			if (!interfaces->engine->getPlayerInfo(i, playerInfo))
+				continue;
 
-    auto textPositionY = static_cast<int>(0.5f * height);
+			name += std::string(playerInfo.name) + "\n";
+		}
+        
 
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
-        const auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer.get())
-            continue;
+        ImGui::SetCursorPos(ImVec2(ImGui::GetStyle().FramePadding.x, ImGui::GetStyle().FramePadding.y * 3 + ImGui::GetFontSize()));
+        ImGui::Text(name.c_str());
 
-        PlayerInfo playerInfo;
 
-        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
-            continue;
-
-        if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-            const auto [textWidth, textHeight] = interfaces->surface->getTextSize(Surface::font, name);
-            interfaces->surface->setTextPosition(width - textWidth - 5, textPositionY);
-            textPositionY -= textHeight;
-            interfaces->surface->printText(name);
-        }
+        ImGui::End();
     }
 }
 

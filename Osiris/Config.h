@@ -266,7 +266,7 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
-        ColorToggle spectatorList;
+        ImGuiStruct spectatorList{ false };
         ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
