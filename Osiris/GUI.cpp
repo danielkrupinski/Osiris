@@ -111,6 +111,7 @@ void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
         menuBarItem("Aimbot", window.aimbot);
+        menuBarItem("Ragebot", window.ragebot);
         menuBarItem("Anti aim", window.antiAim);
         menuBarItem("Triggerbot", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
@@ -1608,7 +1609,11 @@ void GUI::renderGuiStyle2() noexcept
         if (ImGui::BeginTabItem("Aimbot")) {
             renderAimbotWindow(true);
             ImGui::EndTabItem();
-        }
+		}        
+        if (ImGui::BeginTabItem("Ragebot")) {
+			renderRagebotWindow(true);
+			ImGui::EndTabItem();
+		}
         if (ImGui::BeginTabItem("Anti aim")) {
             renderAntiAimWindow(true);
             ImGui::EndTabItem();
