@@ -820,7 +820,7 @@ void Misc::StatusBar()noexcept
     if (cfg.noBackGround)
         windowFlags |= ImGuiWindowFlags_NoBackground;
 
-    ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f), ImGuiCond_Once); //在第一次运行此函数时就只设置一次
+    ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f), ImGuiCond_Once);
     ImGui::Begin("Status Bar",nullptr,windowFlags);
     if (localPlayer && localPlayer->isAlive()) {
         if (cfg.ShowPlyaerRealViewAngles) {
@@ -830,18 +830,33 @@ void Misc::StatusBar()noexcept
 
         if (cfg.ShowPlayerStatus)
         {
-            std::string st;
+            std::string message = "LocalPlayer: ";
             auto local = GameData::local();
 
-            if (localPlayer->isDefusing())
-                st += "Defusing \n";
-            if (localPlayer->flags() & 1)
-                st += "OnGround \n";
-           if (local.shooting == true)
-               st += "Shooting";
+			if (localPlayer->flags() & PlayerFlags::ONGROUND)
+				message += "OnGound;\n";
+			if (!(localPlayer->flags() & PlayerFlags::ONGROUND))
+				message += "InAir;\n";
+			if (localPlayer->flags() & PlayerFlags::DUCKING)
+				message += "Ducking;\n";
+			if (localPlayer->flags() & PlayerFlags::GODMODE)
+				message += "Cheater Mode On;\n";
+			if (localPlayer->flags() & PlayerFlags::ONFIRE)
+				message += "OnFire;\n";
+			if (localPlayer->flags() & PlayerFlags::SWIM)
+				message += "Swimming;\n";
+			if (localPlayer->isDefusing())
+				message += "Defusing;\n";
+			if (localPlayer->isFlashed())
+				message += "Flashed~;\n";
+			if (localPlayer->inBombZone())
+				message += "in BombZone~\n";
+			if (local.shooting)
+				message += "Shooting...\n";
 
+            if(!cfg.noBackGround) //if no background draw a line will make GUI now good
            ImGui::Separator();//Draw A line
-           ImGui::Text("Player: \n", st.c_str());
+           ImGui::Text(message.c_str());
 
         }
 

@@ -40,6 +40,40 @@ enum class ObsMode {
     Roaming
 };
 
+enum PlayerFlags {
+	ONGROUND = 1 << 0,
+	DUCKING = 1 << 1,
+	WATERJUMP = 1 << 2,
+	ONTRAIN = 1 << 3,
+	INRAIN = 1 << 4,
+	FROZEN = 1 << 5,
+	ATCONTROLS = 1 << 6,
+	CLIENT = 1 << 7,
+	FAKECLIENT = 1 << 8,
+	INWATER = 1 << 9,
+	FLY = 1 << 10,
+	SWIM = 1 << 11,
+	CONVEYOR = 1 << 12,
+	NPC = 1 << 13,
+	GODMODE = 1 << 14,
+	NOTARGET = 1 << 15,
+	AIMTARGET = 1 << 16,
+	PARTIALGROUND = 1 << 17,
+	STATICPROP = 1 << 18,
+	GRAPHED = 1 << 19,
+	GRENADE = 1 << 20,
+	STEPMOVEMENT = 1 << 21,
+	DONTTOUCH = 1 << 22,
+	BASEVELOCITY = 1 << 23,
+	WORLDBRUSH = 1 << 24,
+	OBJECT = 1 << 25,
+	KILLME = 1 << 26,
+	ONFIRE = 1 << 27,
+	DISSOLVING = 1 << 28,
+	TRANSRAGDOLL = 1 << 29,
+	UNBLOCKABLE_BY_PLAYER = 1 << 30
+};
+
 class Collideable {
 public:
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
