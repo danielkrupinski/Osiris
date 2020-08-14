@@ -805,3 +805,50 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::End();
     }
 }
+
+void Misc::StatusBar()noexcept
+{
+    auto & cfg = config->misc.Sbar;
+    if (cfg.enabled == false)
+        return;
+
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+    
+    if (cfg.noTittleBar)
+        windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+    if (cfg.noBackGround)
+        windowFlags |= ImGuiWindowFlags_NoBackground;
+
+    ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f), ImGuiCond_Once); //在第一次运行此函数时就只设置一次
+    ImGui::Begin("Status Bar",nullptr,windowFlags);
+    if (localPlayer && localPlayer->isAlive()) {
+        if (cfg.ShowPlyaerRealViewAngles) {
+            ImGui::Text("Pitch: %.1f", config->globalvars.viewangles.x);
+            ImGui::Text("Yaw: %.1f", config->globalvars.viewangles.y);
+        }
+
+        if (cfg.ShowPlayerStatus)
+        {
+            std::string st;
+            auto local = GameData::local();
+
+            if (localPlayer->isDefusing())
+                st += "Defusing \n";
+            if (localPlayer->flags() & 1)
+                st += "OnGround \n";
+           if (local.shooting == true)
+               st += "Shooting";
+
+           ImGui::Separator();//Draw A line
+           ImGui::Text("Player: \n", st.c_str());
+
+        }
+
+        if (cfg.ShowGameGlobalVars) {
+            ImGui::Text("CurTime: %.1f",memory->globalVars->currenttime);
+            ImGui::Text("RealTime: %.1f",memory->globalVars->realtime);
+        }
+    }
+    ImGui::End();
+}

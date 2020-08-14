@@ -1323,6 +1323,23 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+	ImGui::Checkbox("Status Bar", &config->misc.Sbar.enabled);
+	ImGui::SameLine();
+
+	ImGui::PushID("StatusBar");
+	if (ImGui::Button("..."))
+		ImGui::OpenPopup("S");
+
+	if (ImGui::BeginPopup("S")) {
+		ImGui::Checkbox("NoBackGround", &config->misc.Sbar.noBackGround);
+		ImGui::Checkbox("NoTittleBar", &config->misc.Sbar.noTittleBar);
+		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlyaerRealViewAngles);
+		ImGui::Checkbox("ShowPlayerStatus", &config->misc.Sbar.ShowPlayerStatus);
+		ImGui::Checkbox("ShowGameGlobalVars", &config->misc.Sbar.ShowGameGlobalVars);
+		ImGui::EndPopup();
+	}
+	ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 

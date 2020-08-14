@@ -125,3 +125,13 @@ struct PurchaseList {
     };
     int mode = Details;
 };
+
+struct StatusBar
+{
+    bool enabled{ false };
+    bool noBackGround{ false };
+    bool noTittleBar{ false };
+    bool ShowPlyaerRealViewAngles{ false };
+    bool ShowPlayerStatus{ false };
+    bool ShowGameGlobalVars{ false };
+};

@@ -9,6 +9,8 @@
 #include "nSkinz/config_.hpp"
 #include "ConfigStructs.h"
 
+#include "SDK/Vector.h"
+
 class Config {
 public:
     explicit Config(const char*) noexcept;
@@ -255,6 +257,7 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+        StatusBar Sbar;
     } misc;
 
     struct Reportbot {
@@ -268,6 +271,11 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+    struct{
+        Vector viewangles;
+
+    }globalvars;
 
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;

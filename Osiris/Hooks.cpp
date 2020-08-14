@@ -97,6 +97,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     StreamProofESP::render();
     Misc::purchaseList();
+    Misc::StatusBar();
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
 
@@ -186,6 +187,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     previousViewAngles = cmd->viewangles;
 
+
+    if (sendPacket) //because of sendpacket == true --- return real angles
+        config->globalvars.viewangles = cmd->viewangles;
+
     return false;
 }
 
@@ -260,6 +265,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Visuals::NightMode();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
