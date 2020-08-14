@@ -51,6 +51,7 @@ struct Box : ColorToggleThicknessRounding {
 
     int type = _2d;
     std::array<float, 3> scale{ 0.25f, 0.25f, 0.25f };
+    ColorToggle fill{ 1.0f, 1.0f, 1.0f, 0.4f };
 };
 
 struct Shared {
