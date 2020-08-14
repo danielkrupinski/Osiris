@@ -1738,6 +1738,8 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Door Spam by ME");
     ImGui::Text("Chat Spam by ClaudiuHKS;");
     ImGui::Text("sv_pure Bypass (OLD) by Cyk-Fad;");
+    ImGui::Text("BuyBot by ME;");
+    ImGui::Text("Nightmode by Cyk-Fad;");
     //ImGui::Text("Reworked anti-aim and fakelag, made thirdperson show cmd->viewangles by DoomFishWasTaken;");
     ImGui::Text("Fake items (fake unbox and trade messages) by DoomFishWasTaken;");
     //ImGui::Text("Standalone RCS by tirziz;");
