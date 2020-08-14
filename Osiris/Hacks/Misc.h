@@ -59,4 +59,5 @@ namespace Misc
     void MLP() noexcept;
     void setName(bool set) noexcept;
     void fakeItem(bool = false) noexcept;
+    void buyBot(GameEvent* event) noexcept;
 }

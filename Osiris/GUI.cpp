@@ -1348,6 +1348,36 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->misc.slowwalkKey);
     ImGui::Checkbox("Door spam", &config->misc.doorSpam);
+    ImGui::Checkbox("BuyBot", &config->misc.buyBot);
+    ImGui::SameLine();
+    ImGui::PushID("BuyBot");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("BB");
+    if (ImGui::BeginPopup("BB")) {
+        ImGui::Combo("Primary Weapon", &config->misc.buyBotPrimary, "None\0Famas/Galil\0M4A1-S/M4A4/AK-47\0SSG 08\0AUG/SG 553\0AWP\0SCAR-20/G3GS1\0MP9/MAC-10\0MP7/MP5-SD\0UMP-45\0P90\0PP-Bizon\0Nova\0XM1014\0MAG-7/Sawed-Off\0M249\0Negev\0");
+        ImGui::Combo("Secnodary Weapon", &config->misc.buyBotSecondary, "None\0P2000/USP-S/Glock-18\0P250\0Dual Berettas\0Five-Seven/Tec-9/CZ75-Auto\0Desert Eagle/R8 Revolver");
+        ImGui::Text("Gear:");
+        ImGui::Checkbox("Kevlar Vest", &config->misc.buyBotVest);
+        if (config->misc.buyBotVest) {
+            ImGui::SameLine();
+            ImGui::Checkbox("+ Helmet", &config->misc.buyBotVestHelm);
+        }
+        ImGui::Checkbox("Zeus x27", &config->misc.buyBotTaser);
+        ImGui::Checkbox("Defuser", &config->misc.buyBotDefuser);
+        ImGui::Text("Grenade:");
+        ImGui::Checkbox("Incendiary/Molotov", &config->misc.buyBotMolotov);
+        ImGui::Checkbox("Decoy", &config->misc.buyBotDecoy);
+        ImGui::Checkbox("Flashbang", &config->misc.buyBotFlashbang);
+        if (config->misc.buyBotFlashbang) {
+            ImGui::SameLine();
+            ImGui::Checkbox("x2", &config->misc.buyBotFlashbangX2);
+        }
+        ImGui::Checkbox("High Explosive", &config->misc.buyBotHE);
+        ImGui::Checkbox("Smoke", &config->misc.buyBotSmoke);
+
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", config->misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);

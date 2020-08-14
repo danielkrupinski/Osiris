@@ -1420,3 +1420,68 @@ void Misc::fakeItem(bool set) noexcept
     if (shouldSet == 2)
         shouldSet = 0;
 }
+
+void Misc::buyBot(GameEvent* event) noexcept
+{
+    const char* primaryList[] = {
+        "",
+        "buy famas; buy galilar; ",
+        "buy m4a1; buy ak47; ",
+        "buy ssg08; ",
+        "buy aug; buy sg556; ",
+        "buy awp; ",
+        "buy scar20; buy g3sg1; ",
+
+        "buy mp9; buy mac10; ",
+        "buy mp7; buy mp5sd; ",
+        "buy ump45; ",
+        "buy p90; ",
+        "buy bizon; ",
+
+        "buy nova; ",
+        "buy xm1014; ",
+        "buy mag7; buy sawedoff; ",
+        "buy m249; ",
+        "buy negev; "
+    };
+
+    const char* secondaryList[] = {
+        "",
+        "buy hkp2000; buy glock; ",
+        "buy p250; ",
+        "buy elite; ",
+        "buy fiveseven; buy tec9; ",
+        "buy deagle; buy revolver; "
+    };
+
+    static bool start = false;
+
+    std::string buy = "";
+
+    if (event) {
+        if (!config->misc.buyBot)
+            return;
+
+        switch (fnv::hashRuntime(event->getName())) {
+        case fnv::hash("round_start"):
+            if (config->misc.buyBotPrimary != 0)
+                buy += primaryList[config->misc.buyBotPrimary];
+            if (config->misc.buyBotSecondary != 0)
+                buy += secondaryList[config->misc.buyBotSecondary];
+
+            buy += config->misc.buyBotVest ? (config->misc.buyBotVestHelm ? "buy vesthelm; " : "buy vest; ") : ""; // Kevlar Vest + Helmet
+            buy += config->misc.buyBotTaser ? "buy taser 34; " : ""; // Zeus x27
+            buy += config->misc.buyBotDefuser ? "buy defuser; " : ""; // Defuse Kit
+
+            buy += config->misc.buyBotMolotov ? "buy incgrenade; buy molotov; " : "";  // Incendiary/Molotov
+            buy += config->misc.buyBotDecoy ? "buy decoy; " : ""; // Decoy
+            buy += config->misc.buyBotFlashbang ? (config->misc.buyBotFlashbangX2 ? "buy flashbang; buy flashbang; " : "buy flashbang; ") : ""; // Flashbang
+            buy += config->misc.buyBotHE ? "buy hegrenade; " : ""; // High Explosive
+            buy += config->misc.buyBotSmoke ? "buy smokegrenade; " : ""; // Smoke
+
+            if (buy != "")
+                interfaces->engine->clientCmdUnrestricted(buy.c_str());
+            break;
+        }
+    }
+}
