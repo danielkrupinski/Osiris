@@ -489,7 +489,7 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
     static auto wasLastTimeOnGround{ localPlayer->flags() & 1 };
     static int hopsHit = 0;
 
-    if (!localPlayer || config->misc.bunnyHop)
+    if (!localPlayer || !config->misc.bunnyHop)
         return;
 
     if (config->misc.bhopHitchanceEnable) {
