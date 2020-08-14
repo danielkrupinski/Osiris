@@ -293,6 +293,8 @@ public:
         float maxAngleDelta{ 255.0f };
         bool fakePrime{ false };
         int killSound{ 0 };
+        bool drawInaccuracy{ false };
+        float drawInaccuracyThickness{ 0.0f };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;

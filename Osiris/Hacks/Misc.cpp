@@ -867,3 +867,26 @@ void Misc::StatusBar()noexcept
     }
     ImGui::End();
 }
+
+void Misc::DrawInaccuracy(ImDrawList* draw)noexcept
+{
+    const auto [w, h] = interfaces->surface->getScreenSize();
+
+    if (!config->misc.drawInaccuracy)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    const auto Acweapon = localPlayer->getActiveWeapon();
+    if (!Acweapon || Acweapon->isNade() || Acweapon->isKnife())
+		return;
+
+	const float Inaccuracy = Acweapon->getInaccuracy() * 500.0f;
+	if (Inaccuracy <= 0.0f)
+		return;
+
+    //TODO: Add Slider in GUI.CPP to change color
+	draw->AddCircle(ImVec2(static_cast<float>(w) / 2.0f, static_cast<float>(h) / 2.0f), Inaccuracy,
+	/* Red */ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), config->misc.drawInaccuracyThickness);
+}

@@ -99,6 +99,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     StreamProofESP::render();
     Misc::purchaseList();
     Misc::StatusBar();
+    Misc::DrawInaccuracy(ImGui::GetBackgroundDrawList());
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
 

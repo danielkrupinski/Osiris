@@ -296,6 +296,30 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Between shots", a.betweenShots);
 }
 
+static void from_json(const json& j, Config::Ragebot& r)
+{
+	read(j, "Enabled", r.enabled);
+	read(j, "On key", r.onKey);
+	read(j, "Key", r.key);
+	read(j, "Key mode", r.keyMode);
+	read(j, "Silent", r.slient);
+	read(j, "Friendly fire", r.friendlyFire);
+	read(j, "Min damage", r.WallDamage);
+	read(j, "Hit Chance", r.hitChance);
+	read(j, "Auto Stop", r.autoStop);
+	read(j, "Head", r.BonesBools[0]);
+	read(j, "Neck", r.BonesBools[1]);
+	read(j, "Upper Chest", r.BonesBools[2]);
+	read(j, "Body", r.BonesBools[3]);
+	read(j, "Pelvis", r.BonesBools[4]);
+	read(j, "Hands", r.BonesBools[5]);
+	read(j, "Thigh & Calf", r.BonesBools[6]);
+	read(j, "Feet", r.BonesBools[7]);
+	read(j, "Between shots", r.betweenShots);
+	read(j, "Point Chance", r.pointChance);
+	read(j, "Body Chance", r.bodyChance);
+}
+
 static void from_json(const json& j, Config::Triggerbot& t)
 {
     read(j, "Enabled", t.enabled);
@@ -556,6 +580,9 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
+    read(j, "Draw Inaccuracy", m.drawInaccuracy);
+    read(j, "Draw Inaccuracy Thickness", m.drawInaccuracyThickness);
+
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
@@ -584,6 +611,7 @@ void Config::load(size_t id, bool incremental) noexcept
         reset();
 
     read(j, "Aimbot", aimbot);
+    read(j, "Ragebot", ragebot);
     read(j, "Triggerbot", triggerbot);
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
@@ -751,6 +779,30 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Min damage", minDamage);
     WRITE("Killshot", killshot);
     WRITE("Between shots", betweenShots);
+}
+
+static void to_json(json& j, const Config::Ragebot& o, const Config::Ragebot& dummy = {})
+{
+	WRITE("Enabled", enabled);
+	WRITE("On key", onKey);
+	WRITE("Key", key);
+	WRITE("Key mode", keyMode);
+	WRITE("Silent", slient);
+	WRITE("Friendly fire", friendlyFire);
+	WRITE("Min damage", WallDamage);
+	WRITE("Hit Chance", hitChance);
+	WRITE("Auto Stop", autoStop);
+	WRITE("Head", BonesBools[0]);
+	WRITE("Neck", BonesBools[1]);
+	WRITE("Upper Chest", BonesBools[2]);
+	WRITE("Body", BonesBools[3]);
+	WRITE("Pelvis", BonesBools[4]);
+	WRITE("Hands", BonesBools[5]);
+	WRITE("Thigh & Calf", BonesBools[6]);
+	WRITE("Feet", BonesBools[7]);
+	WRITE("Between shots", betweenShots);
+	WRITE("Point Chance", pointChance);
+	WRITE("Body Chance", bodyChance);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
@@ -925,6 +977,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
+    WRITE("Draw Inaccuracy", drawInaccuracy);
+    WRITE("Draw InaccuracyThickness", drawInaccuracyThickness);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
@@ -1059,6 +1113,7 @@ void Config::save(size_t id) const noexcept
         json j;
 
         j["Aimbot"] = aimbot;
+        j["Ragebot"] = ragebot;
         j["Triggerbot"] = triggerbot;
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
@@ -1102,6 +1157,7 @@ void Config::rename(size_t item, const char* newName) noexcept
 void Config::reset() noexcept
 {
     aimbot = { };
+    ragebot = { };
     triggerbot = { };
     backtrack = { };
     glow = { };

@@ -1466,6 +1466,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 	}
 	ImGui::PopID();
 
+    ImGui::Checkbox("Draw Inaccuracy", &config->misc.drawInaccuracy);
+    ImGui::SliderFloat("Draw Inaccuracy Thickness", &config->misc.drawInaccuracyThickness,0.0f,100.0f);
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
@@ -1556,7 +1559,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Ragebot" ,"Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1564,18 +1567,19 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     switch (i) {
                     case 0: config->reset(); updateColors(); Misc::updateClanTag(true); SkinChanger::scheduleHudUpdate(); break;
                     case 1: config->aimbot = { }; break;
-                    case 2: config->triggerbot = { }; break;
-                    case 3: config->backtrack = { }; break;
-                    case 4: config->antiAim = { }; break;
-                    case 5: config->glow = { }; break;
-                    case 6: config->chams = { }; break;
-                    case 7: config->streamProofESP = { }; break;
-                    case 8: config->visuals = { }; break;
-                    case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 10: config->sound = { }; break;
-                    case 11: config->style = { }; updateColors(); break;
-                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 13: config->reportbot = { }; break;
+                    case 2: config->ragebot = { }; break;
+                    case 3: config->triggerbot = { }; break;
+                    case 4: config->backtrack = { }; break;
+                    case 5: config->antiAim = { }; break;
+                    case 6: config->glow = { }; break;
+                    case 7: config->chams = { }; break;
+                    case 8: config->streamProofESP = { }; break;
+                    case 9: config->visuals = { }; break;
+                    case 10: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
+                    case 11: config->sound = { }; break;
+                    case 12: config->style = { }; updateColors(); break;
+                    case 13: config->misc = { };  Misc::updateClanTag(true); break;
+                    case 14: config->reportbot = { }; break;
                     }
                 }
             }

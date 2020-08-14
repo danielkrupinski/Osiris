@@ -43,4 +43,5 @@ namespace Misc
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
     void StatusBar() noexcept;
+    void DrawInaccuracy(ImDrawList* draw) noexcept;
 }
