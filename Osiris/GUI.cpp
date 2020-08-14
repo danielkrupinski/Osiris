@@ -23,6 +23,21 @@
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
+namespace ImGui {
+
+    void ImGuiStructItem(ImGuiStruct i)noexcept
+    {
+        Checkbox("Enabled", &i.enabled);
+        SameLine();
+        if (Button("..."))
+            OpenPopup("");
+
+        BeginPopup("");
+        Checkbox("No BackGround", &i.noBackGround);
+        Checkbox("No TittleBar", &i.noTittleBar);
+    }
+}
+
 GUI::GUI() noexcept
 {
     ImGui::StyleColorsDark();
@@ -1359,10 +1374,14 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);
     ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
     ImGui::Checkbox("Radar hack", &config->misc.radarHack);
+    ImGui::PushID("Spectator List");
+    ImGui::ImGuiStructItem(config->misc.spectatorList);
+    ImGui::EndPopup();
+    ImGui::PopID();
+
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
     ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
     ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
-    ImGuiCustom::colorPicker("Spectator list", config->misc.spectatorList);
     ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
     ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
     ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
@@ -1459,7 +1478,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 	if (ImGui::BeginPopup("S")) {
 		ImGui::Checkbox("NoBackGround", &config->misc.Sbar.noBackGround);
 		ImGui::Checkbox("NoTittleBar", &config->misc.Sbar.noTittleBar);
-		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlyaerRealViewAngles);
+		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlayerRealViewAngles);
 		ImGui::Checkbox("ShowPlayerStatus", &config->misc.Sbar.ShowPlayerStatus);
 		ImGui::Checkbox("ShowGameGlobalVars", &config->misc.Sbar.ShowGameGlobalVars);
 		ImGui::EndPopup();

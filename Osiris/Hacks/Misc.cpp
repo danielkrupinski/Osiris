@@ -833,11 +833,13 @@ void Misc::StatusBar()noexcept
 
     if (cfg.noBackGround)
         windowFlags |= ImGuiWindowFlags_NoBackground;
+    if (!localPlayer && !gui->open)
+        return;
 
     ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f), ImGuiCond_Once);
     ImGui::Begin("Status Bar",nullptr,windowFlags);
     if (localPlayer && localPlayer->isAlive()) {
-        if (cfg.ShowPlyaerRealViewAngles) {
+        if (cfg.ShowPlayerRealViewAngles) {
             ImGui::Text("Pitch: %.1f", config->globalvars.viewangles.x);
             ImGui::Text("Yaw: %.1f", config->globalvars.viewangles.y);
         }
