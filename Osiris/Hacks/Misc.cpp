@@ -806,3 +806,29 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::End();
     }
 }
+
+void Misc::oppositeHandKnife(FrameStage stage) noexcept
+{
+    if (!config->misc.oppositeHandKnife)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static const auto cl_righthand = interfaces->cvar->findVar("cl_righthand");
+    static bool original;
+
+    if (stage == FrameStage::RENDER_START) {
+        original = cl_righthand->getInt();
+
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+            if (const auto classId = activeWeapon->getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
+                cl_righthand->setValue(!original);
+        }
+    } else {
+        cl_righthand->setValue(original);
+    }
+}

@@ -264,6 +264,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
         Visuals::removeBlur(stage);
+        Misc::oppositeHandKnife(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);
