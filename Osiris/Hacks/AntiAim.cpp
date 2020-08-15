@@ -35,7 +35,7 @@ bool AntiAim::LbyUpdate()
     }
     if (config->globals.serverTime - config->globals.lastLBY - config->globals.nextLBY >= 0)
     {
-        config->globals.nextLBY = 1.125f;
+        config->globals.nextLBY = 1.1f;
         config->globals.lastLBY = config->globals.serverTime;
         return true;
     }
