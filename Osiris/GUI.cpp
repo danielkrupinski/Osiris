@@ -23,21 +23,6 @@
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
-namespace ImGui {
-
-    void ImGuiStructItem(ImGuiStruct i)noexcept
-    {
-        Checkbox("Enabled", &i.enabled);
-        SameLine();
-        if (Button("..."))
-            OpenPopup("");
-
-        BeginPopup("");
-        Checkbox("No BackGround", &i.noBackGround);
-        Checkbox("No TittleBar", &i.noTittleBar);
-    }
-}
-
 GUI::GUI() noexcept
 {
     ImGui::StyleColorsDark();
@@ -1374,8 +1359,20 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);
     ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
     ImGui::Checkbox("Radar hack", &config->misc.radarHack);
+    
+    ImGui::Checkbox("Spectator List", &config->misc.purchaseList.enabled);
     ImGui::PushID("Spectator List");
-    ImGui::ImGuiStructItem(config->misc.spectatorList);
+    ImGui::SameLine();
+	if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    ImGui::BeginPopup("");
+    ImGui::Checkbox("No BackGround", &config->misc.purchaseList.noBackGround);
+    ImGui::Checkbox("No TittleBar", &config->misc.purchaseList.noTittleBar);
+	ImGui::SetNextItemWidth(75.0f);
+	ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
+	ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
+	ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
     ImGui::EndPopup();
     ImGui::PopID();
 
@@ -1452,28 +1449,45 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
 
-    ImGui::PushID("Purchase List");
-    ImGui::ImGuiStructItem(config->misc.purchaseList);
-        ImGui::SetNextItemWidth(75.0f);
-        ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
-        ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
-        ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
-        ImGui::EndPopup();
-    
+	ImGui::Checkbox("Spectator List", &config->misc.spectatorList.enabled);
+	ImGui::PushID("Purchase List");
+	ImGui::SameLine();
+	if (ImGui::Button("..."))
+		ImGui::OpenPopup("");
+
+	ImGui::BeginPopup("");
+	ImGui::Checkbox("No BackGround", &config->misc.spectatorList.noBackGround);
+	ImGui::Checkbox("No TittleBar", &config->misc.spectatorList.noTittleBar);
+	ImGui::EndPopup();
     ImGui::PopID();
 
-    ImGui::PushID("StatusBar");
-    ImGui::ImGuiStructItem(config->misc.Sbar);
+	ImGui::Checkbox("StatusBar", &config->misc.Sbar.enabled);
+	ImGui::PushID("StatusBar");
+	ImGui::SameLine();
+	if (ImGui::Button("..."))
+		ImGui::OpenPopup("");
+
+	ImGui::BeginPopup("");
+	ImGui::Checkbox("No BackGround", &config->misc.Sbar.noBackGround);
+	ImGui::Checkbox("No TittleBar", &config->misc.Sbar.noTittleBar);
 		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlayerRealViewAngles);
 		ImGui::Checkbox("ShowPlayerStatus", &config->misc.Sbar.ShowPlayerStatus);
 		ImGui::Checkbox("ShowGameGlobalVars", &config->misc.Sbar.ShowGameGlobalVars);
 		ImGui::EndPopup();
 	ImGui::PopID();
 
-    ImGui::PushID("Shots Cout");
-    ImGui::ImGuiStructItem(config->misc.ShotsCout);
+	ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
+	ImGui::PushID("ShotsCout");
+	ImGui::SameLine();
+	if (ImGui::Button("..."))
+		ImGui::OpenPopup("");
 
+	ImGui::BeginPopup("");
+	ImGui::Checkbox("No BackGround", &config->misc.ShotsCout.noBackGround);
+	ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
+	ImGui::EndPopup();
     ImGui::PopID();
+
     ImGui::Checkbox("Draw Inaccuracy", &config->misc.drawInaccuracy);
     ImGui::SliderFloat("Draw Thickness", &config->misc.drawInaccuracyThickness,0.0f,100.0f);
 
