@@ -1,5 +1,8 @@
 #include <fstream>
+
+#ifdef _WIN32
 #include <ShlObj.h>
+#endif
 
 #include "nlohmann/json.hpp"
 
@@ -39,21 +42,26 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
 
 Config::Config(const char* name) noexcept
 {
+#ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#endif
 
     listConfigs();
     misc.clanTag[0] = '\0';
 
+#ifdef _WIN32
     LOGFONTA logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
     logfont.lfFaceName[0] = '\0';
 
     EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+#endif
+
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
