@@ -232,6 +232,7 @@ public:
         bool fastPlant{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
+        bool oppositeHandKnife = false;
         char clanTag[16];
         int edgejumpkey{ 0 };
         int slowwalkKey{ 0 };
