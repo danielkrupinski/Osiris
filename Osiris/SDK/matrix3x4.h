@@ -7,6 +7,7 @@ class matrix3x4 {
 public:
     constexpr auto operator[](int i) const noexcept { return mat[i]; }
     constexpr auto origin() const noexcept;
+	 auto operator[](int i) noexcept { return mat[i]; }
 };
 
 #include "Vector.h"

@@ -9,6 +9,8 @@
 #include "nSkinz/config_.hpp"
 #include "ConfigStructs.h"
 
+#include "SDK/Vector.h"
+
 class Config {
 public:
     explicit Config(const char*) noexcept;
@@ -19,6 +21,11 @@ public:
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
+	struct Record {
+        Vector origin;
+        float simulationTime;
+        matrix3x4 matrix[256];
+    };
 
     constexpr auto& getConfigs() noexcept
     {
@@ -60,6 +67,45 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+	struct Ragebot {
+		bool enabled{ false };
+		bool onKey{ false };
+		int key{ 0 };
+		int keyMode{ 0 };
+		bool slient{ false };
+		bool betweenShots{ false };
+		bool friendlyFire{ false };
+		bool autoStop{ false };
+		float bodyChance{ 0.0f };
+		float pointChance{ 0.0f };
+		float CanSeeDamage{ 0.0f };
+        float WallDamage{ 0.0f };
+		float hitChance{ 0.0f };
+		bool BonesBools[8]{
+			false,
+			false,
+			false,
+			false,
+			false,
+			false,
+			false,
+			false
+		};
+	};
+	std::array<Ragebot, 45> ragebot;
+
+	const char* BonesTexts[8] = 
+	{
+			"Head",
+			"Neck",
+			"UpperChest",
+			"Body",
+			"Pelvis",
+			"Hands",
+			"Legs",
+			"FeetS"
+	};
+
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;
@@ -80,14 +126,123 @@ public:
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
-        int timeLimit{ 200 };
+		int timeLimit{ 0 };
+        bool fakeLatency{ false };
     } backtrack;
 
     struct AntiAim {
-        bool enabled{ false };
-        bool pitch{ false };
-        bool yaw{ false };
         float pitchAngle{ 0.0f };
+    	 struct {
+            bool enabled{ false };
+            int yawInverseAngleKey{ 0 };
+            int yawInverseKeyMode{ 0 };
+            bool yawInversed{ false };
+            struct {
+                bool enabled{ false };
+                int key{ 0 };
+                int keyMode{ 0 };
+                bool keyToggled{ false };
+                int maxChoke{ 3 };
+            } fakeWalk;
+        } general;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+        } standing;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } LBYBreaker;
+        } moving;
+
+        struct {
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+                struct {
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                } fake;
+                struct {
+                    bool enabled{ false };
+                    float bodyLean{ 0.0f };
+                    int mode{ 0 };
+                    float step{ 0.0f };
+                    float jitterMax{ 0.0f };
+                    float jitterMin{ 0.0f };
+                    struct {
+                        bool enabled{ false };
+                        float angle{ 0.0f };
+                    } LBYBreaker;
+                } desync;
+            } yaw;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } pitch;
+            struct {
+                bool enabled{ false };
+                float angle{ 0.0f };
+            } LBYBreaker;
+        } inAir;
     } antiAim;
 
     struct Glow : ColorA {
@@ -167,6 +322,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        bool nightMode{ false };
 
         struct ColorCorrection {
             bool enabled = false;
@@ -178,6 +334,24 @@ public:
             float green = 0.0f;
             float yellow = 0.0f;
         } colorCorrection;
+
+
+          bool indicatorsEnabled{ false };
+        const char* indicators[4] = {
+            "Desync",
+            "LBY",
+            "Fakelag",
+            "Fakeduck"
+        };
+        bool selectedIndicators[4] = {
+            false,
+            false,
+            false,
+            false
+        };
+    	
+    	 ColorToggle bulletTracers;
+    
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -207,11 +381,16 @@ public:
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
+        char clanTag[16];
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };
+        int edgejumpkey{ 0 };
         bool slowwalk{ false };
+        int slowwalkKey{ 0 };
+        ColorToggleThickness noscopeCrosshair;
+        ColorToggleThickness recoilCrosshair;
         bool autoPistol{ false };
         bool autoReload{ false };
         bool autoAccept{ false };
@@ -219,42 +398,56 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
+        ImGuiStruct spectatorList{ false };
+        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+        float aspectratio{ 0 };
+        bool killMessage{ false };
+        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
-        bool killMessage{ false };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
-        bool fakePrime{ false };
-        bool fastPlant{ false };
-        bool quickReload{ false };
-        bool prepareRevolver{ false };
-        bool oppositeHandKnife = false;
-        char clanTag[16];
-        int edgejumpkey{ 0 };
-        int slowwalkKey{ 0 };
-        ColorToggleThickness noscopeCrosshair;
-        ColorToggleThickness recoilCrosshair;
-        ColorToggle spectatorList;
-        ColorToggle watermark;
-        float aspectratio{ 0 };
-        std::string killMessageString{ "Gotcha!" };
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
+        bool quickReload{ false };
+        bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
-        int chokedPackets{ 0 };
-        int chokedPacketsKey{ 0 };
+         int fakeLagMode{ 0 };
+        int fakeLagTicks{ 0 };
+        int fakeLagKey{ 0 };
+        const char* fakeLagFlags[4] = {
+            "While Shooting",
+            "While Standing",
+            "While Moving",
+            "In Air"
+        };
+        bool fakeLagSelectedFlags[4] = {
+            false,
+            false,
+            false,
+            false
+        };
         int quickHealthshotKey{ 0 };
+        bool nadePredict{ false };
+        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
+        bool fakePrime{ false };
+    	 bool fakeDuck{ false };
+        int fakeDuckKey{ 0 };
+        bool fakeDucking{ false };
+        int fakeDuckShotState{ 0 };
         int killSound{ 0 };
+        bool drawInaccuracy{ false };
+        float drawInaccuracyThickness{ 0.0f };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+        StatusBar Sbar;
     } misc;
 
     struct Reportbot {
@@ -268,6 +461,25 @@ public:
         int delay{ 1 };
         int rounds{ 1 };
     } reportbot;
+
+	 struct {
+        bool thirdPersonAnglesSet{ false };
+        Vector fakeAngle;
+        Vector realAngle;
+        Vector cmdAngle;
+        Record serverPos;
+        float serverTime{ 0.f };
+        int tickRate{ 0 };
+        float nextLBY{ 0.f };
+        float lastLBY{ 0.f };
+        int chokedPackets{ 0 };
+        bool sendPacket{ false };
+    } globals;
+
+    struct{
+        Vector viewangles;
+
+    }globalvars;
 
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;

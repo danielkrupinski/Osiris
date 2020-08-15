@@ -10,6 +10,7 @@
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 
+
 struct SoundInfo;
 
 using HookType = MinHook;
@@ -35,6 +36,8 @@ public:
     HookType sound;
     HookType surface;
     HookType viewRender;
+	HookType gameEventManager;
+	VmtSwap networkChannel;
 
     HookType svCheats;
 private:

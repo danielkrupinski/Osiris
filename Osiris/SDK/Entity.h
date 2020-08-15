@@ -22,8 +22,107 @@
 #include "../Netvars.h"
 
 #include <functional>
+enum Contents
+{
+	contents_empty = 0x0,
+	contents_solid = 0x1,
+	contents_window = 0x2,
+	contents_aux = 0x4,
+	contents_grate = 0x8,
+	contents_slime = 0x10,
+	contents_water = 0x20,
+	contents_blocklos = 0x40,
+	contents_opaque = 0x80,
+	contents_testfogvolume = 0x100,
+	contents_unused = 0x200,
+	contents_blocklight = 0x400,
+	contents_team1 = 0x800,
+	contents_team2 = 0x1000,
+	contents_ignore_nodraw_opaque = 0x2000,
+	contents_moveable = 0x4000,
+	contents_areaportal = 0x8000,
+	contents_playerclip = 0x10000,
+	contents_monsterclip = 0x20000,
+	contents_current0 = 0x40000,
+	contents_current90 = 0x80000,
+	contents_current180 = 0x100000,
+	contents_current270 = 0x200000,
+	contents_current_up = 0x400000,
+	contents_current_down = 0x800000,
+	contents_origin = 0x1000000,
+	contents_monster = 0x2000000,
+	contents_debris = 0x4000000,
+	contents_detail = 0x8000000,
+	contents_translucent = 0x10000000,
+	contents_ladder = 0x20000000,
+	contents_hitbox = 0x40000000,
+
+	last_visible_contents = contents_opaque,
+	all_visible_contents = last_visible_contents | last_visible_contents - 1
+};
+
+enum surf
+{
+	surf_light = 0x1,
+	surf_sky2d = 0x2,
+	surf_sky = 0x4,
+	surf_warp = 0x8,
+	surf_trans = 0x10,
+	surf_noportal = 0x20,
+	surf_trigger = 0x40,
+	surf_nodraw = 0x80,
+	surf_hint = 0x100,
+	surf_skip = 0x200,
+	surf_nolight = 0x400,
+	surf_bumplight = 0x800,
+	surf_noshadows = 0x1000,
+	surf_nodecals = 0x2000,
+	surf_nopaint = surf_nodecals,
+	surf_nochop = 0x4000,
+	surf_hitbox = 0x8000
+};
+
+enum mask
+{
+	mask_all = 0xFFFFFFFF,
+	mask_solid = (contents_solid | contents_moveable | contents_window | contents_monster | contents_grate),
+	mask_playersolid = (contents_solid | contents_moveable | contents_playerclip | contents_window | contents_monster | contents_grate),
+	mask_npcsolid = (contents_solid | contents_moveable | contents_monsterclip | contents_window | contents_monster | contents_grate),
+	mask_npcfluid = (contents_solid | contents_moveable | contents_monsterclip | contents_window | contents_monster),
+	mask_water = (contents_water | contents_moveable | contents_slime),
+	mask_opaque = (contents_water | contents_moveable | contents_opaque),
+	mask_opaque_npc = (mask_opaque | contents_monster),
+	mask_blocklos = (contents_solid | contents_moveable | contents_slime),
+	mask_blocklos_npc = (mask_blocklos | contents_monster),
+	mask_visible = (mask_opaque | contents_ignore_nodraw_opaque),
+	mask_visible_npc = (mask_opaque_npc | contents_ignore_nodraw_opaque),
+	mask_shot = (contents_solid | contents_moveable | contents_monster | contents_window | contents_debris | contents_hitbox),
+	mask_shot_brushonly = (contents_solid | contents_moveable | contents_window | contents_debris),
+	mask_shot_hull = (contents_solid | contents_moveable | contents_monster | contents_window | contents_debris | contents_grate),
+	mask_shot_portal = (contents_solid | contents_moveable | contents_window | contents_monster),
+	mask_solid_brushonly = (contents_solid | contents_moveable | contents_window | contents_grate),
+	mask_playersolid_brushonly = (contents_solid | contents_moveable | contents_window | contents_playerclip | contents_grate),
+	mask_npcsolid_brushonly = (contents_solid | contents_moveable | contents_window | contents_monsterclip | contents_grate),
+	mask_npcworldstatic = (contents_solid | contents_window | contents_monsterclip | contents_grate),
+	mask_npcworldstatic_fluid = (contents_solid | contents_window | contents_monsterclip),
+	mask_splitareaportal = (contents_water | contents_slime),
+	mask_current = (contents_current0 | contents_current90 | contents_current180 | contents_current270 | contents_current_up | contents_current_down),
+	mask_deadsolid = (contents_solid | contents_playerclip | contents_window | contents_grate)
+};
 
 struct AnimState;
+
+struct AnimationLayer
+{
+public:
+    std::byte pad[20];
+    unsigned int order;
+    unsigned int sequence;
+    std::byte pad2[4];
+    float weight;
+    std::byte pad3[8];
+    float cycle;
+};
 
 enum class MoveType {
     NOCLIP = 8,
@@ -38,6 +137,64 @@ enum class ObsMode {
     InEye,
     Chase,
     Roaming
+};
+
+enum PlayerFlags {
+	ONGROUND = 1 << 0,
+	DUCKING = 1 << 1,
+	WATERJUMP = 1 << 2,
+	ONTRAIN = 1 << 3,
+	INRAIN = 1 << 4,
+	FROZEN = 1 << 5,
+	ATCONTROLS = 1 << 6,
+	CLIENT = 1 << 7,
+	FAKECLIENT = 1 << 8,
+	INWATER = 1 << 9,
+	FLY = 1 << 10,
+	SWIM = 1 << 11,
+	CONVEYOR = 1 << 12,
+	NPC = 1 << 13,
+	GODMODE = 1 << 14,
+	NOTARGET = 1 << 15,
+	AIMTARGET = 1 << 16,
+	PARTIALGROUND = 1 << 17,
+	STATICPROP = 1 << 18,
+	GRAPHED = 1 << 19,
+	GRENADE = 1 << 20,
+	STEPMOVEMENT = 1 << 21,
+	DONTTOUCH = 1 << 22,
+	BASEVELOCITY = 1 << 23,
+	WORLDBRUSH = 1 << 24,
+	OBJECT = 1 << 25,
+	KILLME = 1 << 26,
+	ONFIRE = 1 << 27,
+	DISSOLVING = 1 << 28,
+	TRANSRAGDOLL = 1 << 29,
+	UNBLOCKABLE_BY_PLAYER = 1 << 30
+};
+
+enum HitBoxes
+{
+	HITBOX_HEAD = 0,
+	HITBOX_NECK = 1,
+	HITBOX_PELVIS = 2,
+	HITBOX_BODY = 3,
+	HITBOX_THORAX = 4,
+	HITBOX_LOWER_CHEST = 5,
+	HITBOX_UPPER_CHEST = 6,
+	HITBOX_RIGHT_THIGH = 7,
+	HITBOX_LEFT_THIGH = 8,
+	HITBOX_RIGHT_CALF = 9,
+	HITBOX_LEFT_CALF = 10,
+	HITBOX_RIGHT_FOOT = 11,
+	HITBOX_LEFT_FOOT = 12,
+	HITBOX_RIGHT_HAND = 13,
+	HITBOX_LEFT_HAND = 14,
+	HITBOX_RIGHT_UPPER_ARM = 15,
+	HITBOX_RIGHT_FOREARM = 16,
+	HITBOX_LEFT_UPPER_ARM = 17,
+	HITBOX_LEFT_FOREARM = 18,
+	HITBOX_MAX = 19
 };
 
 class Collideable {
@@ -55,6 +212,7 @@ public:
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+	 VIRTUAL_METHOD(Vector&, getRenderOrigin, 1, (), (this + 4))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
@@ -62,6 +220,8 @@ public:
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
+	 VIRTUAL_METHOD(Vector&, getAbsAngle, 11, (), (this))
+	
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
@@ -74,8 +234,11 @@ public:
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
     VIRTUAL_METHOD(Vector, getAimPunch, 345, (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
+    VIRTUAL_METHOD(float, getSpread, 452, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+    VIRTUAL_METHOD(void, UpdateAccuracyPenalty, 483, (), (this))
+	 VIRTUAL_METHOD(void, UpdateClientSideAnimation, 223, (), (this))
 
     constexpr auto isPistol() noexcept
     {
@@ -95,6 +258,17 @@ public:
         return false;
     }
 
+	constexpr auto isKnife() noexcept
+	{
+		return getWeaponType() == WeaponType::Knife;
+	}
+
+	constexpr auto isNade() noexcept
+	{
+		return getWeaponType() == WeaponType::Grenade;
+	}
+
+
     constexpr auto requiresRecoilControl() noexcept
     {
         const auto weaponData = getWeaponData();
@@ -105,6 +279,20 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+         if (localPlayer && this == localPlayer.get() && localPlayer->isAlive())
+        {
+            uint32_t* effects = (uint32_t*)((uintptr_t)this + 0xF0);
+            uint32_t* shouldskipframe = (uint32_t*)((uintptr_t)this + 0xA68);
+            uint32_t backup_effects = *effects;
+            uint32_t backup_shouldskipframe = *shouldskipframe;
+            *shouldskipframe = 0;
+            *effects |= 8;
+            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            *effects = backup_effects;
+            *shouldskipframe = backup_shouldskipframe;
+            return result;
+        }
+    	
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -177,6 +365,60 @@ public:
         return -1;
     }
 
+	  int getAnimationLayerCount() noexcept
+    {
+        return *reinterpret_cast<int*>(this + 0x298C);
+    }
+
+    AnimationLayer* animOverlays()
+    {
+        return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2980);
+    }
+
+    AnimationLayer* getAnimationLayer(int overlay) noexcept
+    {
+        return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
+    }
+
+    std::array<float, 24>& pose_parameters()
+    {
+        return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
+    }
+
+    void CreateState(AnimState* state)
+    {
+        static auto CreateAnimState = reinterpret_cast<void(__thiscall*)(AnimState*, Entity*)>(memory->CreateState);
+        if (!CreateAnimState)
+            return;
+
+        CreateAnimState(state, this);
+    }
+
+    void UpdateState(AnimState* state, Vector angle) {
+        if (!angle.notNull())
+        {
+	        return;
+        }
+    	
+        if (!state)
+            return;
+        static auto UpdateAnimState = reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(memory->UpdateState);
+        if (!UpdateAnimState)
+            return;
+        UpdateAnimState(state, nullptr, 0.0f, angle.y, angle.x, nullptr);
+    }
+
+    float spawnTime()
+    {
+        return *(float*)((uintptr_t)this + 0xA370);
+    }
+
+    void InvalidateBoneCache()
+    {
+        static auto invalidate_bone_cache = memory->InvalidateBoneCache;
+        reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
+    }
+
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
     {
@@ -188,6 +430,7 @@ public:
     bool canSee(Entity* other, const Vector& pos) noexcept;
     bool visibleTo(Entity* other) noexcept;
 
+	NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
 

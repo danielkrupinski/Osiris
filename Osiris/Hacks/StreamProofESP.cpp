@@ -116,18 +116,21 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
         return;
 
     const ImU32 color = Helpers::calculateColor(config);
-    const ImU32 fillColor = Helpers::calculateColor(config.fill);
+	const ImU32 fillColor = Helpers::calculateColor(config.fill);
 
     switch (config.type) {
     case Box::_2d:
-        if (config.fill.enabled)
+     
+           if (config.fill.enabled)
             drawList->AddRectFilled(bbox.min, bbox.max, fillColor, config.rounding, ImDrawCornerFlags_All);
         else
             drawList->AddRect(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.rounding, ImDrawCornerFlags_All, config.thickness);
+       
         drawList->AddRect(bbox.min, bbox.max, color, config.rounding, ImDrawCornerFlags_All, config.thickness);
         break;
     case Box::_2dCorners:
-        if (config.fill.enabled) {
+
+         if (config.fill.enabled) {
             drawList->AddRectFilled(bbox.min, bbox.max, fillColor, config.rounding, ImDrawCornerFlags_All);
 
             drawList->AddLine(bbox.min, { bbox.min.x, bbox.min.y * 0.75f + bbox.max.y * 0.25f }, color, config.thickness);
@@ -136,16 +139,18 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
             drawList->AddLine({ bbox.max.x, bbox.min.y }, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.min.y }, color, config.thickness);
             drawList->AddLine({ bbox.max.x, bbox.min.y }, { bbox.max.x, bbox.min.y * 0.75f + bbox.max.y * 0.25f }, color, config.thickness);
 
-            drawList->AddLine({ bbox.min.x, bbox.max.y }, { bbox.min.x, bbox.max.y * 0.75f + bbox.min.y * 0.25f }, color, config.thickness);
+         	
+
+        drawList->AddLine({ bbox.min.x, bbox.max.y }, { bbox.min.x, bbox.max.y * 0.75f + bbox.min.y * 0.25f }, color, config.thickness);
             drawList->AddLine({ bbox.min.x, bbox.max.y }, { bbox.min.x * 0.75f + bbox.max.x * 0.25f, bbox.max.y }, color, config.thickness);
 
-            drawList->AddLine(bbox.max, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.max.y }, color, config.thickness);
+        drawList->AddLine(bbox.max, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.max.y }, color, config.thickness);
             drawList->AddLine(bbox.max, { bbox.max.x, bbox.max.y * 0.75f + bbox.min.y * 0.25f }, color, config.thickness);
-        } else {
+             } else {
             addLineWithShadow(bbox.min, { bbox.min.x, bbox.min.y * 0.75f + bbox.max.y * 0.25f }, color, config.thickness);
             addLineWithShadow(bbox.min, { bbox.min.x * 0.75f + bbox.max.x * 0.25f, bbox.min.y }, color, config.thickness);
-
-            addLineWithShadow({ bbox.max.x, bbox.min.y }, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.min.y }, color, config.thickness);
+         	
+             addLineWithShadow({ bbox.max.x, bbox.min.y }, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.min.y }, color, config.thickness);
             addLineWithShadow({ bbox.max.x, bbox.min.y }, { bbox.max.x, bbox.min.y * 0.75f + bbox.max.y * 0.25f }, color, config.thickness);
 
             addLineWithShadow({ bbox.min.x, bbox.max.y }, { bbox.min.x, bbox.max.y * 0.75f + bbox.min.y * 0.25f }, color, config.thickness);
@@ -154,20 +159,16 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
             addLineWithShadow(bbox.max, { bbox.max.x * 0.75f + bbox.min.x * 0.25f, bbox.max.y }, color, config.thickness);
             addLineWithShadow(bbox.max, { bbox.max.x, bbox.max.y * 0.75f + bbox.min.y * 0.25f }, color, config.thickness);
         }
+             	
         break;
     case Box::_3d:
-        if (config.fill.enabled) {
-            const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
-            drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
-        } else {
-            for (int i = 0; i < 8; ++i) {
-                for (int j = 1; j <= 4; j <<= 1) {
-                    if (!(i & j))
-                        drawList->AddLine(bbox.vertices[i] + ImVec2{ 1.0f, 1.0f }, bbox.vertices[i + j] + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
-                }
+        // two separate loops to make shadows not overlap normal lines
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 1; j <= 4; j <<= 1) {
+                if (!(i & j))
+                    drawList->AddLine(bbox.vertices[i] + ImVec2{ 1.0f, 1.0f }, bbox.vertices[i + j] + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
             }
         }
-
         for (int i = 0; i < 8; ++i) {
             for (int j = 1; j <= 4; j <<= 1) {
                 if (!(i & j))
@@ -176,16 +177,12 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
         }
         break;
     case Box::_3dCorners:
-        if (config.fill.enabled) {
-            const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
-            drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
-        } else {
-            for (int i = 0; i < 8; ++i) {
-                for (int j = 1; j <= 4; j <<= 1) {
-                    if (!(i & j)) {
-                        drawList->AddLine(bbox.vertices[i] + ImVec2{ 1.0f, 1.0f }, ImVec2{ bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
-                        drawList->AddLine(ImVec2{ bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f } + ImVec2{ 1.0f, 1.0f }, bbox.vertices[i + j] + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
-                    }
+        // two separate loops to make shadows not overlap normal lines
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 1; j <= 4; j <<= 1) {
+                if (!(i & j)) {
+                    drawList->AddLine(bbox.vertices[i] + ImVec2{ 1.0f, 1.0f }, ImVec2{ bbox.vertices[i].x * 0.75f + bbox.vertices[i + j].x * 0.25f, bbox.vertices[i].y * 0.75f + bbox.vertices[i + j].y * 0.25f } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
+                    drawList->AddLine(ImVec2{ bbox.vertices[i].x * 0.25f + bbox.vertices[i + j].x * 0.75f, bbox.vertices[i].y * 0.25f + bbox.vertices[i + j].y * 0.75f } + ImVec2{ 1.0f, 1.0f }, bbox.vertices[i + j] + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.thickness);
                 }
             }
         }

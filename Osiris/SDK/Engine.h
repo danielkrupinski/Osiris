@@ -42,6 +42,7 @@ struct PlayerInfo {
     int entityIndex;
 };
 
+
 struct DemoPlaybackParameters {
     PAD(16)
     bool anonymousPlayerIdentity;

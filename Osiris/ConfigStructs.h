@@ -51,7 +51,7 @@ struct Box : ColorToggleThicknessRounding {
 
     int type = _2d;
     std::array<float, 3> scale{ 0.25f, 0.25f, 0.25f };
-    ColorToggle fill{ 1.0f, 1.0f, 1.0f, 0.4f };
+	ColorToggle fill{ 1.0f, 1.0f, 1.0f, 0.4f };
 };
 
 struct Shared {
@@ -125,4 +125,20 @@ struct PurchaseList {
         Summary
     };
     int mode = Details;
+};
+
+struct ImGuiStruct
+{
+    bool enabled{ false };
+    bool noBackGround{ false };
+    bool noTittleBar{ false };
+    
+};
+
+struct StatusBar : ImGuiStruct
+{
+	bool ShowPlayerRealViewAngles{ false };
+	bool ShowPlayerStatus{ false };
+	bool ShowGameGlobalVars{ false };
+
 };
