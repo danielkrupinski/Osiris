@@ -44,4 +44,5 @@ namespace Misc
     void purchaseList(GameEvent* event = nullptr) noexcept;
     void StatusBar() noexcept;
     void DrawInaccuracy(ImDrawList* draw) noexcept;
+    void ShotsCout(GameEvent* event = nullptr) noexcept;
 }

@@ -107,31 +107,29 @@ struct Trails {
     Trail enemies;
 };
 
+struct ImGuiStruct
+{
+	bool enabled{ false };
+	bool noBackGround{ false };
+	bool noTittleBar{ false };
+
+};
+
 struct Projectile : Shared {
     Trails trails;
 
     using Shared::operator=;
 };
 
-struct PurchaseList {
-    bool enabled = false;
+struct PurchaseList : ImGuiStruct{
     bool onlyDuringFreezeTime = false;
     bool showPrices = false;
-    bool noTitleBar = false;
 
     enum Mode {
         Details = 0,
         Summary
     };
     int mode = Details;
-};
-
-struct ImGuiStruct
-{
-    bool enabled{ false };
-    bool noBackGround{ false };
-    bool noTittleBar{ false };
-    
 };
 
 struct StatusBar : ImGuiStruct

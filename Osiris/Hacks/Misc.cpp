@@ -789,8 +789,10 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
         if (!gui->open)
             windowFlags |= ImGuiWindowFlags_NoInputs;
-        if (config->misc.purchaseList.noTitleBar)
-            windowFlags |= ImGuiWindowFlags_NoTitleBar;
+        if (config->misc.purchaseList.noTittleBar)
+			windowFlags |= ImGuiWindowFlags_NoTitleBar; 
+        if (config->misc.purchaseList.noBackGround)
+			windowFlags |= ImGuiWindowFlags_NoBackground;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
@@ -870,7 +872,7 @@ void Misc::StatusBar()noexcept
 			if (local.shooting)
 				message += "Shooting...\n";
 
-            if(!cfg.noBackGround) //if no background draw a line will make GUI now good
+            if(!cfg.noBackGround) //if no background draw a line will make GUI not good
            ImGui::Separator();//Draw A line
            ImGui::Text(message.c_str());
 
@@ -905,4 +907,66 @@ void Misc::DrawInaccuracy(ImDrawList* draw)noexcept
     //TODO: Add Slider in GUI.CPP to change color
 	draw->AddCircle(ImVec2(static_cast<float>(w) / 2.0f, static_cast<float>(h) / 2.0f), Inaccuracy,
 	/* Red */ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), config->misc.drawInaccuracyThickness);
+}
+
+static int missedshots;
+static float hitchance;
+static int TotalShots;
+static int HitShots;
+void Misc::ShotsCout(GameEvent* event)noexcept
+{
+	if (!config->misc.ShotsCout.enabled)
+		return;
+
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+
+	if (config->misc.ShotsCout.noTittleBar)
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+	if (config->misc.ShotsCout.noBackGround)
+		windowFlags |= ImGuiWindowFlags_NoBackground;
+
+	if (!gui->open)
+		windowFlags |= ImGuiWindowFlags_NoInputs;
+
+	ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+	ImGui::Begin("空枪输出", nullptr, windowFlags);
+
+    if (localPlayer) {
+        if (localPlayer->isAlive()) {
+            PlayerInfo Info;
+            interfaces->engine->getPlayerInfo(localPlayer, Info);
+            auto acweapon = localPlayer->getActiveWeapon();
+
+            if (event && acweapon && (!acweapon->isKnife() || !acweapon->isNade())) {
+
+                switch (fnv::hashRuntime(event->getName())) {
+                case fnv::hash("weapon_fire"): {
+                    int userID = event->getInt("userid"); //获取开枪的玩家的ID
+
+                    if (userID == Info.userId) //ID 是本人开枪
+                        TotalShots++; // 总数++ 
+                    break;
+                }
+                case fnv::hash("player_hurt"): {
+                    int userID2 = event->getInt("userid"); //被击中的人的id
+                    if (userID2 != Info.userId) //不是本人被击中 意味着是敌人或者队友
+                        HitShots++;
+                    break;
+                }
+                }
+
+
+                }
+            }
+        }
+    
+    missedshots = TotalShots - HitShots;
+    hitchance = HitShots / TotalShots;
+	ImGui::Text("TotalShots: %.1f", TotalShots);
+	ImGui::Text("HitShots: %.1f", HitShots);
+	ImGui::Text("Missed Shots: %.1f", missedshots);
+	ImGui::Text("Hitchance: %.1f", hitchance);
+
+	ImGui::End();
 }

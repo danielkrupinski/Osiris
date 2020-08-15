@@ -1451,42 +1451,31 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
-    ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
-    ImGui::SameLine();
 
     ImGui::PushID("Purchase List");
-    if (ImGui::Button("..."))
-        ImGui::OpenPopup("");
-
-    if (ImGui::BeginPopup("")) {
+    ImGui::ImGuiStructItem(config->misc.purchaseList);
         ImGui::SetNextItemWidth(75.0f);
         ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
         ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
         ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
-        ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
         ImGui::EndPopup();
-    }
+    
     ImGui::PopID();
 
-	ImGui::Checkbox("Status Bar", &config->misc.Sbar.enabled);
-	ImGui::SameLine();
-
-	ImGui::PushID("StatusBar");
-	if (ImGui::Button("..."))
-		ImGui::OpenPopup("S");
-
-	if (ImGui::BeginPopup("S")) {
-		ImGui::Checkbox("NoBackGround", &config->misc.Sbar.noBackGround);
-		ImGui::Checkbox("NoTittleBar", &config->misc.Sbar.noTittleBar);
+    ImGui::PushID("StatusBar");
+    ImGui::ImGuiStructItem(config->misc.Sbar);
 		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlayerRealViewAngles);
 		ImGui::Checkbox("ShowPlayerStatus", &config->misc.Sbar.ShowPlayerStatus);
 		ImGui::Checkbox("ShowGameGlobalVars", &config->misc.Sbar.ShowGameGlobalVars);
 		ImGui::EndPopup();
-	}
 	ImGui::PopID();
 
+    ImGui::PushID("Shots Cout");
+    ImGui::ImGuiStructItem(config->misc.ShotsCout);
+
+    ImGui::PopID();
     ImGui::Checkbox("Draw Inaccuracy", &config->misc.drawInaccuracy);
-    ImGui::SliderFloat("Draw Inaccuracy Thickness", &config->misc.drawInaccuracyThickness,0.0f,100.0f);
+    ImGui::SliderFloat("Draw Thickness", &config->misc.drawInaccuracyThickness,0.0f,100.0f);
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();

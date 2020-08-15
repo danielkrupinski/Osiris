@@ -531,10 +531,9 @@ static void from_json(const json& j, Config::Style& s)
 
 static void from_json(const json& j, PurchaseList& pl)
 {
-    read(j, "Enabled", pl.enabled);
+    from_json(j, static_cast<ImGuiStruct&>(pl));
     read(j, "Only During Freeze Time", pl.onlyDuringFreezeTime);
     read(j, "Show Prices", pl.showPrices);
-    read(j, "No Title Bar", pl.noTitleBar);
     read(j, "Mode", pl.mode);
 }
 
@@ -598,6 +597,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Draw Inaccuracy", m.drawInaccuracy);
     read(j, "Draw Inaccuracy Thickness", m.drawInaccuracyThickness);
     read<value_t::object>(j, "Status Bar", m.Sbar);
+    read<value_t::object>(j, "ShotsCout", m.ShotsCout);
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
@@ -939,10 +939,10 @@ static void to_json(json& j, const Config::Sound& o)
 
 static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = {})
 {
+    to_json(j, static_cast<const ImGuiStruct&>(o), dummy);
     WRITE("Enabled", enabled);
     WRITE("Only During Freeze Time", onlyDuringFreezeTime);
     WRITE("Show Prices", showPrices);
-    WRITE("No Title Bar", noTitleBar);
     WRITE("Mode", mode);
 }
 
@@ -1010,6 +1010,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Draw Inaccuracy", drawInaccuracy);
     WRITE("Draw InaccuracyThickness", drawInaccuracyThickness);
     WRITE("Status Bar",Sbar);
+    WRITE("ShotsCout", ShotsCout);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
