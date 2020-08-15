@@ -1220,6 +1220,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
+    ImGui::SliderInt("", &config->misc.bunnyHopChance, 0, 100, "BhopChance: %d %");
     ImGui::Checkbox("Fast duck", &config->misc.fastDuck);
     ImGui::Checkbox("Moonwalk", &config->misc.moonwalk);
     ImGui::Checkbox("Edge Jump", &config->misc.edgejump);
