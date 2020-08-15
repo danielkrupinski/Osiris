@@ -938,19 +938,20 @@ void Misc::ShotsCout(GameEvent* event)noexcept
             interfaces->engine->getPlayerInfo(localPlayer, Info);
             auto acweapon = localPlayer->getActiveWeapon();
 
+
             if (event && acweapon && (!acweapon->isKnife() || !acweapon->isNade())) {
 
                 switch (fnv::hashRuntime(event->getName())) {
                 case fnv::hash("weapon_fire"): {
-                    int userID = event->getInt("userid"); //获取开枪的玩家的ID
+                    int userID = event->getInt("userid"); //get userID
 
-                    if (userID == Info.userId) //ID 是本人开枪
-                        TotalShots++; // 总数++ 
+                    if (userID == Info.userId) //ID is localId
+                        TotalShots++; // total++ 
                     break;
                 }
                 case fnv::hash("player_hurt"): {
-                    int userID2 = event->getInt("userid"); //被击中的人的id
-                    if (userID2 != Info.userId) //不是本人被击中 意味着是敌人或者队友
+                    int userID2 = event->getInt("userid"); //get userid
+                    if (userID2 != Info.userId)
                         HitShots++;
                     break;
                 }
