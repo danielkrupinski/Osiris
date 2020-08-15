@@ -517,6 +517,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Clock tag", m.clocktag);
     if (j.contains("Clan tag"))
         strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
+    read(j, "Gamesense Tag", m.gamesenseTag);
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);

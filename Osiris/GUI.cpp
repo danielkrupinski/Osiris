@@ -1248,6 +1248,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
     ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
     ImGui::Checkbox("Clock tag", &config->misc.clocktag);
+    ImGui::Checkbox("Gamesense Tag", &config->misc.gamesenseTag);
     ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);

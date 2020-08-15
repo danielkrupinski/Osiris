@@ -208,6 +208,7 @@ public:
         bool customClanTag{ false };
         bool clocktag{ false };
         bool animatedClanTag{ false };
+        bool gamesenseTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };

@@ -121,6 +121,52 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     }
 }
 
+void Misc::gamesenseTag(bool tagChanged) noexcept
+{
+    if (config->misc.gamesenseTag) {
+        static int prevtime;
+        static int prevval;
+        if (int(memory->globalVars->currenttime * 2.4) != prevtime)
+        {
+            if (prevval != int(memory->globalVars->currenttime * 2.4) % 26)
+            {
+                prevval = int(memory->globalVars->currenttime * 2.4) % 26;
+                switch (int(memory->globalVars->currenttime * 2.4) % 26) {
+                case 26: { memory->setClanTag("e                 ", "e                 ");; break; }
+                case 25: { memory->setClanTag("se                ", "se                ");; break; }
+                case 24: { memory->setClanTag("nse               ", "nse               ");; break; }
+                case 23: { memory->setClanTag("ense              ", "ense              ");; break; }
+                case 22: { memory->setClanTag("sense             ", "sense             ");; break; }
+                case 21: { memory->setClanTag("esense            ", "esense            ");; break; }
+                case 20: { memory->setClanTag("mesense           ", "mesense           ");; break; }
+                case 19: { memory->setClanTag("amesense          ", "amesense          ");; break; }
+                case 18: { memory->setClanTag("gamesense         ", "gamesense         ");; break; }
+                case 17: { memory->setClanTag(" gamesense        ", " gamesense        ");; break; }
+                case 16: { memory->setClanTag("  gamesense       ", "  gamesense       ");; break; }
+                case 15: { memory->setClanTag("   gamesense      ", "   gamesense      ");; break; }
+                case 14: { memory->setClanTag("    gamesense     ", "    gamesense     ");; break; }
+                case 13: { memory->setClanTag("     gamesense    ", "     gamesense    ");; break; }
+                case 12: { memory->setClanTag("      gamesense   ", "      gamesense   ");; break; }
+                case 11: { memory->setClanTag("       gamesense  ", "       gamesense  ");; break; }
+                case 10: { memory->setClanTag("        gamesense ", "        gamesense ");; break; }
+                case 9: { memory->setClanTag("         gamesense", "         gamesense");; break; }
+                case 8: { memory->setClanTag("          gamesens", "          gamesens");; break; }
+                case 7: { memory->setClanTag("           gamesen", "           gamesen");; break; }
+                case 6: { memory->setClanTag("            gamese", "            gamese");; break; }
+                case 5: { memory->setClanTag("             games", "             games");; break; }
+                case 4: { memory->setClanTag("              game", "              game");; break; }
+                case 3: { memory->setClanTag("               gam", "               gam");; break; }
+                case 2: { memory->setClanTag("                ga", "                ga");; break; }
+                case 1: { memory->setClanTag("                 g", "                 g");; break; }
+                case 0: { memory->setClanTag("                  ", "                  ");; break; }
+                default:;
+                }
+            }
+        }
+        prevtime = int(memory->globalVars->currenttime);
+    }
+}
+
 void Misc::spectatorList() noexcept
 {
     if (!config->misc.spectatorList.enabled)
