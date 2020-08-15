@@ -1360,21 +1360,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
     ImGui::Checkbox("Radar hack", &config->misc.radarHack);
     
-    ImGui::Checkbox("Spectator List", &config->misc.purchaseList.enabled);
-    ImGui::PushID("Spectator List");
-    ImGui::SameLine();
-	if (ImGui::Button("..."))
-        ImGui::OpenPopup("");
-
-    ImGui::BeginPopup("");
-    ImGui::Checkbox("No BackGround", &config->misc.purchaseList.noBackGround);
-    ImGui::Checkbox("No TittleBar", &config->misc.purchaseList.noTittleBar);
-	ImGui::SetNextItemWidth(75.0f);
-	ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
-	ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
-	ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
-    ImGui::EndPopup();
-    ImGui::PopID();
+    
 
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
     ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
@@ -1449,13 +1435,29 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
 
-	ImGui::Checkbox("Spectator List", &config->misc.spectatorList.enabled);
-	ImGui::PushID("Purchase List");
+	ImGui::Checkbox("PurchaseList List", &config->misc.purchaseList.enabled);
+	ImGui::PushID("PurchaseList List");
 	ImGui::SameLine();
 	if (ImGui::Button("..."))
-		ImGui::OpenPopup("");
+		ImGui::OpenPopup("D");
 
-	ImGui::BeginPopup("");
+	ImGui::BeginPopup("D");
+	ImGui::Checkbox("No BackGround", &config->misc.purchaseList.noBackGround);
+	ImGui::Checkbox("No TittleBar", &config->misc.purchaseList.noTittleBar);
+	ImGui::SetNextItemWidth(75.0f);
+	ImGui::Combo("Mode", &config->misc.purchaseList.mode, "Details\0Summary\0");
+	ImGui::Checkbox("Only During Freeze Time", &config->misc.purchaseList.onlyDuringFreezeTime);
+	ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
+	ImGui::EndPopup();
+	ImGui::PopID();
+
+	ImGui::Checkbox("Spectator List", &config->misc.spectatorList.enabled);
+	ImGui::PushID("Spectator List");
+	ImGui::SameLine();
+	if (ImGui::Button("..."))
+		ImGui::OpenPopup("C");
+
+	ImGui::BeginPopup("C");
 	ImGui::Checkbox("No BackGround", &config->misc.spectatorList.noBackGround);
 	ImGui::Checkbox("No TittleBar", &config->misc.spectatorList.noTittleBar);
 	ImGui::EndPopup();
@@ -1465,9 +1467,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 	ImGui::PushID("StatusBar");
 	ImGui::SameLine();
 	if (ImGui::Button("..."))
-		ImGui::OpenPopup("");
+		ImGui::OpenPopup("B");
 
-	ImGui::BeginPopup("");
+	ImGui::BeginPopup("B");
 	ImGui::Checkbox("No BackGround", &config->misc.Sbar.noBackGround);
 	ImGui::Checkbox("No TittleBar", &config->misc.Sbar.noTittleBar);
 		ImGui::Checkbox("ShowViewAngles", &config->misc.Sbar.ShowPlayerRealViewAngles);
@@ -1477,12 +1479,12 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 	ImGui::PopID();
 
 	ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
-	ImGui::PushID("ShotsCout");
+	ImGui::PushID("Shots Cout");
 	ImGui::SameLine();
 	if (ImGui::Button("..."))
-		ImGui::OpenPopup("");
+		ImGui::OpenPopup("A");
 
-	ImGui::BeginPopup("");
+	ImGui::BeginPopup("A");
 	ImGui::Checkbox("No BackGround", &config->misc.ShotsCout.noBackGround);
 	ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
 	ImGui::EndPopup();
