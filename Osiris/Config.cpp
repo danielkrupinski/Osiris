@@ -425,6 +425,10 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Hit marker time", v.hitMarkerTime);
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
+    read(j, "Indicators Enabled", v.indicatorsEnabled);
+    read(j, "Aimbot Indicator", v.selectedIndicators[0]);
+    read(j, "Triggerbot Indicator", v.selectedIndicators[1]);
+
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
@@ -991,6 +995,9 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime);
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
+    WRITE("Indicators Enabled", indicatorsEnabled);
+    WRITE("Aimbot Indicator", selectedIndicators[0]);
+    WRITE("Triggerbot Indicator", selectedIndicators[1]);
     WRITE("Color correction", colorCorrection);
 }
 

@@ -167,6 +167,15 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        bool indicatorsEnabled{ false };
+        const char* indicators[2] = {
+            "Aimbot",
+            "Triggerbot",
+        };
+        bool selectedIndicators[2] = {
+            false,
+            false,
+        };
 
         struct ColorCorrection {
             bool enabled = false;

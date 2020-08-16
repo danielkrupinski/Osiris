@@ -19,5 +19,6 @@ namespace ImGuiCustom
     void colorPicker(const char* name, ColorToggleRounding& colorConfig) noexcept;
     void colorPicker(const char* name, ColorToggleThickness& colorConfig) noexcept;
     void colorPicker(const char* name, ColorToggleThicknessRounding& colorConfig) noexcept;
+    bool MultiCombo(const char* label, const char** displayName, bool* data, int dataSize);
     void arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept;
 }

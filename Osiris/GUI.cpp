@@ -962,6 +962,11 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit effect time", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+    ImGui::Checkbox("Indicators", &config->visuals.indicatorsEnabled);
+    ImGui::SameLine();
+    ImGui::PushID(6);
+    ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 2);
+    ImGui::PopID();
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");

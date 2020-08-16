@@ -406,3 +406,78 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+void Visuals::indicators() noexcept
+{
+    if (config->visuals.indicatorsEnabled && interfaces->engine->isConnected() && interfaces->engine->isInGame())
+    {
+        if (localPlayer->isAlive())
+        {
+            const auto [width, height] = interfaces->surface->getScreenSize();
+
+            const auto x = width / 2;
+            const auto y = height / 2;
+
+            const int bottomLeft[2] = {
+                x - x,
+                y + y
+            };
+            const int upperLeft[2] = {
+                x - x,
+                y - y
+            };
+            const int bottomRight[2] = {
+                x + x,
+                y + y
+            };
+            const int upperRight[2] = {
+                x + width,
+                y - height
+            };
+            const int screenSizeMultiplier[2] = {
+                2560 / width,
+                1440 / height
+            };
+
+            int aimbotHeight = 0;
+            int triggerbotHeight = 0;
+
+            if (config->visuals.selectedIndicators[0])
+            {
+                aimbotHeight += 25;
+            }
+            if (config->visuals.selectedIndicators[1])
+            {
+                triggerbotHeight += 25;
+            }
+
+            std::wstring aimbotIndicator;
+            aimbotIndicator = aimbotIndicator + L"AIM";
+
+            std::wstring triggerbotIndicator;
+            triggerbotIndicator = triggerbotIndicator + L"TRIGGER";
+
+            if (config->visuals.selectedIndicators[0])
+            {
+                interfaces->surface->setTextFont(62); // aimbot indicator
+                interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - aimbotHeight);
+                if (config->aimbot.enabled) 
+                    interfaces->surface->setTextColor(0, 255, 0, 255);
+                else
+                    interfaces->surface->setTextColor(255, 0, 0, 255);
+                interfaces->surface->printText(aimbotIndicator);
+            }
+
+            if (config->visuals.selectedIndicators[1])
+            {
+                interfaces->surface->setTextFont(62); // triggerbot indicator
+                interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - triggerbotHeight);
+                if (config->triggerbot.enabled)
+                    interfaces->surface->setTextColor(0, 255, 0, 255);
+                else
+                    interfaces->surface->setTextColor(255, 0, 0, 255);
+                interfaces->surface->printText(triggerbotIndicator);
+            }
+        }
+    }
+}
