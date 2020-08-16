@@ -71,13 +71,15 @@ public:
 		bool betweenShots{ false };
 		bool friendlyFire{ false };
 		bool autoStop{ false };
+		bool DamageOverride{ false };
+        int DamageOverrideKey{ 0 };
+		bool Baim{ false };
+		int BaimKey{ false };
 		float bodyChance{ 0.0f };
 		float pointChance{ 0.0f };
-		float CanSeeDamage{ 0.0f };
+		float minOverrideDamage{ 0.0f };
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
-        bool Baim{ false };
-        int BaimKey{ false };
 		bool BonesBools[8]{
 			false,
 			false,

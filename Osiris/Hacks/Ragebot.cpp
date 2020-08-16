@@ -218,8 +218,11 @@ Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex)noexcept
 		hitboxes.push_back(HitBoxes::HITBOX_PELVIS);
 	}
 
-
-	float minDamage = config->ragebot[weaponIndex].WallDamage;
+	float minDamage;
+	if (!config->ragebot[weaponIndex].DamageOverride || !GetAsyncKeyState(config->ragebot[weaponIndex].DamageOverrideKey))
+		minDamage = config->ragebot[weaponIndex].WallDamage;
+	else if (config->ragebot[weaponIndex].DamageOverride && GetAsyncKeyState(config->ragebot[weaponIndex].DamageOverrideKey))
+		minDamage = config->ragebot[weaponIndex].minOverrideDamage;
 	Vector BestPoint{ };
 
 	matrix3x4 matrix[256];

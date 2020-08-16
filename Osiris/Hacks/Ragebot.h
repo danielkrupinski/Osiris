@@ -1,6 +1,4 @@
 #pragma once
-
-
 struct UserCmd;
 struct Vector;
 

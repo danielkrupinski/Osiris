@@ -96,7 +96,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     
     static auto lastTime = 0.0f;
 
-    if (config->misc.clocktag) {
+    if (config->misc.clocktag)
+    {
         if (memory->globalVars->realtime - lastTime < 1.0f)
             return;
 
@@ -107,7 +108,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
-    } else if (config->misc.customClanTag) {
+    } 
+    else if (config->misc.customClanTag) {
         if (memory->globalVars->realtime - lastTime < 0.6f)
             return;
 
@@ -118,6 +120,53 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+    }
+    else if(config->misc.osirisClanTag){
+		static std::vector<std::string> ClanTags
+		{
+			"",
+			"O",
+			"O^",
+			"Os",
+			"Os^",
+			"Osi",
+			"Osi^",
+			"Osir",
+			"Osir^",
+			"Osirs ",
+			"Osirs^",
+			"Osirs.",
+			"Osirs.^",
+			"Osirs.c",
+			"Osirs.c^",
+			"Osirs.cc ^_^",
+			"Osirs.c^",
+			"Osirs.c", //  ^
+			"Osirs.^",
+			"Osirs.",
+			"Osirs^",
+			"Osirs",
+			"Osir^",
+			"Osir",
+			"Osi^",
+			"Osi",
+			"Os^",
+			"Os",
+			"O^",
+			"O",
+			""
+		};
+
+		static float lastTime = 0.0f;
+		float currentTime = memory->globalVars->currenttime * 2.0f;
+
+		if (lastTime != currentTime)
+		{
+			std::string buf = ClanTags[(int)currentTime % ClanTags.size()];
+			memory->setClanTag(buf.c_str(), "amaterasu");
+			lastTime = currentTime;
+		}
+
     }
 }
 
@@ -141,16 +190,16 @@ void Misc::spectatorList() noexcept
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Spectator List", nullptr, windowFlags);
         ImGui::PopStyleVar();
-        if (!localPlayer || !localPlayer->isAlive())
+        if (!localPlayer)
             return;
 
-            /*if (!localPlayer->isAlive())      Make Player can see who are watching your friends 
-            {                                           but sometime crash . I need some one he
-                if (!localPlayer->getObserverTarget())
-                    return;
-                auto a = localPlayer.get();
-                a = localPlayer->getObserverTarget();
-            }*/
+		if (!localPlayer->isAlive())      
+        {
+			if (!localPlayer->getObserverTarget())
+				return;
+			auto a = localPlayer.get();
+			a = localPlayer->getObserverTarget();
+		}
 
 		for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
 			const auto entity = interfaces->entityList->getEntity(i);

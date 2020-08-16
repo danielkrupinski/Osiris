@@ -335,6 +335,9 @@ static void from_json(const json& j, Config::Ragebot& r)
 	read(j, "Body Chance", r.bodyChance);
 	read(j, "Baim", r.Baim);
 	read(j, "Baim Key", r.BaimKey);
+	read(j, "Damage Override", r.DamageOverride);
+	read(j, "Min Damage Override", r.minOverrideDamage);
+	read(j, "Damage Override Key", r.DamageOverrideKey);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
@@ -837,6 +840,9 @@ static void to_json(json& j, const Config::Ragebot& o, const Config::Ragebot& du
 	WRITE("Body Chance", bodyChance);
 	WRITE("Baim", Baim);
 	WRITE("Baim Key", BaimKey);
+	WRITE("Damage Override", DamageOverride);
+	WRITE("Min Damage Override", minOverrideDamage);
+	WRITE("Damage Override Key", DamageOverrideKey);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
