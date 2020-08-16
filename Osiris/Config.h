@@ -299,6 +299,7 @@ public:
         int killSound{ 0 };
         bool drawInaccuracy{ false };
         float drawInaccuracyThickness{ 0.0f };
+        bool osirisClanTag{ false };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;

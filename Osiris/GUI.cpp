@@ -385,7 +385,6 @@ void GUI::renderRagebotWindow(bool contentOnly) noexcept
         ImGui::Checkbox("BaimKey", &config->ragebot[currentWeapon].Baim);
         ImGui::SameLine();
         hotkey(config->ragebot[currentWeapon].BaimKey);
-
         ImGui::Checkbox("DamageOverride", &config->ragebot[currentWeapon].DamageOverride);
 		ImGui::SameLine();
 		hotkey(config->ragebot[currentWeapon].DamageOverrideKey);
@@ -1390,6 +1389,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
         Misc::updateClanTag(true);
     ImGui::PopID();
+
+    ImGui::Checkbox("Osiris ClanTag", &config->misc.osirisClanTag);
     ImGui::Checkbox("Kill message", &config->misc.killMessage);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
