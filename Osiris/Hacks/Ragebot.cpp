@@ -161,61 +161,70 @@ std::vector<Vector> GetMultiplePointsForHitbox(Entity* entity, int iHitbox, matr
 		}
 		return vecArray;
 	}
-	return std::vector<Vector>{};
+	return std::vector<Vector>{ };
 }
 
 Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex)noexcept
 {
-	if (!localPlayer->isAlive())
-		return Vector{ 0.0f,0.0f,0.0f };
 	if (weapon->isKnife() || weapon->isNade()) //check weapon
 		return Vector{ 0.0f,0.0f,0.0f };
 
 	int bestHitbox = -1;
 	std::vector<int> hitboxes;
 
-	if (config->ragebot[weaponIndex].BonesBools[0])
-		hitboxes.push_back(HitBoxes::HITBOX_HEAD);
-	if (config->ragebot[weaponIndex].BonesBools[1])
-		hitboxes.push_back(HitBoxes::HITBOX_NECK);
-	if (config->ragebot[weaponIndex].BonesBools[2])
-		hitboxes.push_back(HitBoxes::HITBOX_UPPER_CHEST);
-	if (config->ragebot[weaponIndex].BonesBools[3]) {
-		hitboxes.push_back(HITBOX_LOWER_CHEST);
-		hitboxes.push_back(HITBOX_BODY);
-		hitboxes.push_back(HITBOX_THORAX);
-	}
-	if (config->ragebot[weaponIndex].BonesBools[4])
-		hitboxes.push_back(HitBoxes::HITBOX_PELVIS); //PELVIS
+	if (!config->ragebot[weaponIndex].Baim || !GetAsyncKeyState(config->ragebot[weaponIndex].BaimKey))
+	{
+		if (config->ragebot[weaponIndex].BonesBools[0])
+			hitboxes.push_back(HitBoxes::HITBOX_HEAD);
+		if (config->ragebot[weaponIndex].BonesBools[1])
+			hitboxes.push_back(HitBoxes::HITBOX_NECK);
+		if (config->ragebot[weaponIndex].BonesBools[2])
+			hitboxes.push_back(HitBoxes::HITBOX_UPPER_CHEST);
+		if (config->ragebot[weaponIndex].BonesBools[3]) {
+			hitboxes.push_back(HitBoxes::HITBOX_LOWER_CHEST);
+			hitboxes.push_back(HitBoxes::HITBOX_BODY);
+			hitboxes.push_back(HitBoxes::HITBOX_THORAX);
+		}
+		if (config->ragebot[weaponIndex].BonesBools[4])
+			hitboxes.push_back(HitBoxes::HITBOX_PELVIS); //PELVIS
 
-	if (config->ragebot[weaponIndex].BonesBools[5])//hands
-	{
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_HAND);
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_FOREARM);
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_UPPER_ARM);
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_HAND);
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_FOREARM);
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_UPPER_ARM);
+		if (config->ragebot[weaponIndex].BonesBools[5])//hands
+		{
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_HAND);
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_FOREARM);
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_UPPER_ARM);
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_HAND);
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_FOREARM);
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_UPPER_ARM);
+		}
+		if (config->ragebot[weaponIndex].BonesBools[6])
+		{
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_THIGH);
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_CALF);
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_CALF);
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_THIGH);
+		}
+		if (config->ragebot[weaponIndex].BonesBools[7])
+		{
+			hitboxes.push_back(HitBoxes::HITBOX_LEFT_FOOT);
+			hitboxes.push_back(HitBoxes::HITBOX_RIGHT_FOOT);
+		}
 	}
-	if (config->ragebot[weaponIndex].BonesBools[6]) 
+	else if(config->ragebot[weaponIndex].Baim && GetAsyncKeyState(config->ragebot[weaponIndex].BaimKey));
 	{
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_THIGH);
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_CALF);
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_CALF);
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_THIGH);
+		hitboxes.push_back(HitBoxes::HITBOX_LOWER_CHEST);
+		hitboxes.push_back(HitBoxes::HITBOX_BODY);
+		hitboxes.push_back(HitBoxes::HITBOX_THORAX);
+		hitboxes.push_back(HitBoxes::HITBOX_PELVIS);
 	}
-	if (config->ragebot[weaponIndex].BonesBools[7])
-	{
-		hitboxes.push_back(HitBoxes::HITBOX_LEFT_FOOT);
-		hitboxes.push_back(HitBoxes::HITBOX_RIGHT_FOOT);
-	}
+
 
 	float minDamage = config->ragebot[weaponIndex].WallDamage;
-	Vector BestPoint{};
+	Vector BestPoint{ };
 
 	matrix3x4 matrix[256];
 	if (!entity->setupBones(matrix, 256, 256, memory->globalVars->currenttime))
-		return Vector{};
+		return Vector{ };
 
 	for (auto HitBoxID : hitboxes)
 	{
@@ -297,15 +306,13 @@ void Ragebot::run(UserCmd* cmd)noexcept
 			AimPoint = Hitboxes;
 			Target = entity;
 		}
-
-
 	}
 
-	if (Target) //if has taget
+	if (Target)
 	{
 		Vector Angle = Math::CalcAngle(localPlayer->getEyePosition(), AimPoint);
 		static float MinimumVelocity = 0.0f;
-		MinimumVelocity = localPlayer->getActiveWeapon()->getWeaponData()->maxSpeedAlt * .34f;
+		MinimumVelocity = localPlayer->getActiveWeapon()->getWeaponData()->maxSpeedAlt * 0.34f;
 
 		if (localPlayer->velocity().length() >= MinimumVelocity && config->ragebot[weaponIndex].autoStop && (localPlayer->flags() & PlayerFlags::ONGROUND))
 			Autostop(cmd); //Auto Stop
@@ -315,14 +322,13 @@ void Ragebot::run(UserCmd* cmd)noexcept
 			cmd->buttons |= UserCmd::IN_ATTACK2; //Auto Scope
 			//return;
 		}
-#define M_Left  0x1 //M_LEFT
+        #define M_Left  0x1 //M_LEFT
 		if (cmd->buttons & UserCmd::IN_ATTACK && GetAsyncKeyState(M_Left)) //if localPlayer is using mouse to shoot
 			return;
-		auto canShoot = activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime();
 
 		//No recoil
 		Angle -= (localPlayer->aimPunchAngle() * interfaces->cvar->findVar("weapon_recoil_scale")->getFloat());
-		if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance) && canShoot)
+		if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance) && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
 		{
 			cmd->viewangles = Angle; //Set Angles
 

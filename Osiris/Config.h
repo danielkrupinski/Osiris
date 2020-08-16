@@ -76,6 +76,8 @@ public:
 		float CanSeeDamage{ 0.0f };
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
+        bool Baim{ false };
+        int BaimKey{ false };
 		bool BonesBools[8]{
 			false,
 			false,

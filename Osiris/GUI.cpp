@@ -377,13 +377,14 @@ ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].slient);
 ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
 ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
 ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
-
-
 ImGui::SliderFloat("Min WallDamage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
 ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
+
 ImGui::SliderFloat("Head Value", &config->ragebot[currentWeapon].pointChance, 0, 100);
 ImGui::SliderFloat("Body Value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
-
+ImGui::Checkbox("BaimKey", &config->ragebot[currentWeapon].Baim);
+ImGui::SameLine();
+hotkey(config->ragebot[currentWeapon].BaimKey);
 if (!contentOnly)
 ImGui::End();
 }

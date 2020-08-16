@@ -333,6 +333,8 @@ static void from_json(const json& j, Config::Ragebot& r)
 	read(j, "Between shots", r.betweenShots);
 	read(j, "Point Chance", r.pointChance);
 	read(j, "Body Chance", r.bodyChance);
+	read(j, "Baim", r.Baim);
+	read(j, "Baim Key", r.BaimKey);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
@@ -833,6 +835,8 @@ static void to_json(json& j, const Config::Ragebot& o, const Config::Ragebot& du
 	WRITE("Between shots", betweenShots);
 	WRITE("Point Chance", pointChance);
 	WRITE("Body Chance", bodyChance);
+	WRITE("Baim", Baim);
+	WRITE("Baim Key", BaimKey);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
