@@ -126,12 +126,12 @@ void Misc::gamesenseTag(bool tagChanged) noexcept
     if (config->misc.gamesenseTag) {
         static int prevtime;
         static int prevval;
-        if (int(memory->globalVars->currenttime * 2.1) != prevtime)
+        if (int(memory->globalVars->currenttime * 4) != prevtime)
         {
-            if (prevval != int(memory->globalVars->currenttime * 2.1) % 26)
+            if (prevval != int(memory->globalVars->currenttime * 4) % 16)
             {
-                prevval = int(memory->globalVars->currenttime * 2.1) % 25;
-                switch (int(memory->globalVars->currenttime * 2.1) % 25) {
+                prevval = int(memory->globalVars->currenttime * 4) % 16;
+                switch (int(memory->globalVars->currenttime * 4) % 16) {
                 case 24: { memory->setClanTag("e                 ", "e                 ");; break; }
                 case 23: { memory->setClanTag("se                ", "se                ");; break; }
                 case 22: { memory->setClanTag("nse               ", "nse               ");; break; }
