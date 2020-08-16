@@ -6,26 +6,28 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
-#include "Misc.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Surface.h"
-#include "../SDK/GlobalVars.h"
-#include "../SDK/NetworkChannel.h"
-#include "../SDK/WeaponData.h"
+
 #include "EnginePrediction.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/Entity.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/GameEvent.h"
-#include "../SDK/FrameStage.h"
+#include "Misc.h"
+
 #include "../SDK/Client.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Entity.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
-#include "../SDK/WeaponSystem.h"
+#include "../SDK/Localize.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/NetworkChannel.h"
+#include "../SDK/Surface.h"
+#include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/WeaponSystem.h"
+
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
-
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -190,10 +192,37 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
-void Misc::recoilCrosshair() noexcept
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 {
-    static auto recoilCrosshair = interfaces->cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config->misc.recoilCrosshair ? 1 : 0);
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    return true;
+}
+
+void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
+{
+    if (!config->misc.recoilCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& localPlayerData = GameData::local();
+
+    if (!localPlayerData.exists || !localPlayerData.alive)
+        return;
+
+    if (!localPlayerData.shooting)
+        return;
+
+    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+        drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
 
 void Misc::watermark() noexcept
@@ -249,31 +278,32 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
-    if (config->misc.fastPlant) {
-        static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
+    if (!config->misc.fastPlant)
+        return;
 
-        if (plantAnywhere->getInt())
-            return;
+    static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
-        if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
-            return;
+    if (plantAnywhere->getInt())
+        return;
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
-            return;
+    if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->flags() & 1))
+        return;
 
-        cmd->buttons &= ~UserCmd::IN_ATTACK;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+        return;
 
-        constexpr float doorRange{ 200.0f };
-        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                           cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                          -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-        if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
-            cmd->buttons &= ~UserCmd::IN_USE;
-    }
+    constexpr auto doorRange = 200.0f;
+
+    Trace trace;
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+
+    if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+        cmd->buttons &= ~UserCmd::IN_USE;
 }
 
 void Misc::drawBombTimer() noexcept
@@ -487,7 +517,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
     static bool inProgress{ false };
 
-    if (GetAsyncKeyState(config->misc.quickHealthshotKey))
+    if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
         inProgress = true;
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
@@ -709,31 +739,16 @@ void Misc::purchaseList(GameEvent* event) noexcept
             const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
-                const auto weaponName = event->getString("weapon");
-                auto& purchase = purchaseDetails[player->getPlayerName(true)];
-
-                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(weaponName)) {
+                if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                    auto& purchase = purchaseDetails[player->getPlayerName()];
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
                         purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
+                    const std::string weapon = interfaces->localize->findAsUTF8(definition->getItemBaseName());
+                    ++purchaseTotal[weapon];
+                    purchase.first.push_back(weapon);
                 }
-                std::string weapon = weaponName;
-
-                if (weapon.starts_with("weapon_"))
-                    weapon.erase(0, 7);
-                else if (weapon.starts_with("item_"))
-                    weapon.erase(0, 5);
-
-                if (weapon.starts_with("smoke"))
-                    weapon.erase(5);
-                else if (weapon.starts_with("m4a1_s"))
-                    weapon.erase(6);
-                else if (weapon.starts_with("usp_s"))
-                    weapon.erase(5);
-
-                purchase.first.push_back(weapon);
-                ++purchaseTotal[weapon];
             }
             break;
         }
@@ -763,7 +778,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
@@ -798,12 +813,12 @@ void Misc::doorSpam(UserCmd* cmd) noexcept {
         return;
 
     static bool doorSpam = true;
-    constexpr float doorRange{ 200.0f };
-    Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                       cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                      -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
+    constexpr auto doorRange = 200.0f;
+
     Trace trace;
-    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
 
     if (trace.entity && trace.entity->getClientClass()->classId == ClassId::PropDoorRotating)
         if (cmd->buttons & UserCmd::IN_USE) {

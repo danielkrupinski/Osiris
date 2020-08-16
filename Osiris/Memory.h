@@ -16,6 +16,7 @@ class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PlayerResource;
 class ViewRender;
 class WeaponSystem;
 
@@ -74,6 +75,8 @@ public:
     GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
     ActiveChannels* activeChannels;
     Channel* channels;
+    PlayerResource** playerResource;
+    const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {
