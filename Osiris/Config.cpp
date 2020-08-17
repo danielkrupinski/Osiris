@@ -319,7 +319,7 @@ static void from_json(const json& j, Config::Ragebot& r)
 	read(j, "Key mode", r.keyMode);
 	read(j, "Silent", r.slient);
 	read(j, "Friendly fire", r.friendlyFire);
-	read(j, "Min damage", r.WallDamage);
+	read(j, "Min damage", r.MinDamage);
 	read(j, "Hit Chance", r.hitChance);
 	read(j, "Auto Stop", r.autoStop);
 	read(j, "Head", r.BonesBools[0]);
@@ -569,7 +569,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Reveal money", m.revealMoney);
     read(j, "Reveal suspect", m.revealSuspect);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
-    read<value_t::object>(j, "Watermark", m.watermark);
+    read(j, "Watermark", m.watermark);
     read(j, "Fix animation LOD", m.fixAnimationLOD);
     read(j, "Fix bone matrix", m.fixBoneMatrix);
     read(j, "Fix movement", m.fixMovement);
@@ -824,7 +824,7 @@ static void to_json(json& j, const Config::Ragebot& o, const Config::Ragebot& du
 	WRITE("Key mode", keyMode);
 	WRITE("Silent", slient);
 	WRITE("Friendly fire", friendlyFire);
-	WRITE("Min damage", WallDamage);
+	WRITE("Min damage", MinDamage);
 	WRITE("Hit Chance", hitChance);
 	WRITE("Auto Stop", autoStop);
 	WRITE("Head", BonesBools[0]);

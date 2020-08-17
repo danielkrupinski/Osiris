@@ -377,7 +377,7 @@ void GUI::renderRagebotWindow(bool contentOnly) noexcept
         ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
         ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
         ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
-        ImGui::SliderFloat("Min WallDamage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
+        ImGui::SliderFloat("Min WallDamage", &config->ragebot[currentWeapon].MinDamage, 0, 250);
         ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
 
         ImGui::SliderFloat("Head Value", &config->ragebot[currentWeapon].pointChance, 0, 100);
@@ -1371,7 +1371,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
     ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
     ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
-    ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
+    ImGui::Checkbox("Watermark", &config->misc.watermark);
     ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
     ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
     ImGui::Checkbox("Fix movement", &config->misc.fixMovement);

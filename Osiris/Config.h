@@ -78,7 +78,7 @@ public:
 		float bodyChance{ 0.0f };
 		float pointChance{ 0.0f };
 		float minOverrideDamage{ 0.0f };
-        float WallDamage{ 0.0f };
+        float MinDamage{ 0.0f };
 		float hitChance{ 0.0f };
 		bool BonesBools[8]{
 			false,
@@ -271,7 +271,7 @@ public:
         bool revealMoney{ false };
         bool revealSuspect{ false };
         ImGuiStruct spectatorList{ false };
-        ColorToggle watermark;
+        bool watermark{ false };
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
