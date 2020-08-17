@@ -94,16 +94,16 @@ static std::vector<ImVec2> convexHull(std::vector<ImVec2> points) noexcept
 
     std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto& a, const auto& b) { return (a.x < b.x || (a.x == b.x && a.y < b.y)); }));
 
-    constexpr auto isClockwise = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
-        return (b.x - a.x) * (c.y - a.y) > (b.y - a.y) * (c.x - a.x);
+    constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
+        return (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
     };
 
-    std::sort(points.begin() + 1, points.end(), [&](const auto& a, const auto& b) { return isClockwise(points[0], a, b); });
+    std::sort(points.begin() + 1, points.end(), [&](const auto& a, const auto& b) { return orientation(points[0], a, b) > 0.0f; });
 
     std::vector<ImVec2> hull;
 
     for (const auto& p : points) {
-        while (hull.size() >= 2 && !isClockwise(hull[hull.size() - 2], hull[hull.size() - 1], p))
+        while (hull.size() >= 2 && orientation(hull[hull.size() - 2], hull[hull.size() - 1], p) < 0.0f)
             hull.pop_back();
         hull.push_back(p);
     }
