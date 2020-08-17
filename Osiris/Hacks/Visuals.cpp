@@ -1,4 +1,5 @@
 #include "../fnv.h"
+#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -52,7 +53,7 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
         "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
         "models/player/custom_player/legacy/tm_phoenix_varianth.mdl",
-        
+
         "models/player/custom_player/legacy/tm_pirate.mdl",
         "models/player/custom_player/legacy/tm_pirate_varianta.mdl",
         "models/player/custom_player/legacy/tm_pirate_variantb.mdl",
@@ -318,7 +319,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
                 return effects[config->visuals.hitEffect - 2];
             };
 
-           
+
             auto material = interfaces->materialSystem->findMaterial(getEffectMaterial());
             if (config->visuals.hitEffect == 1)
                 material->findVar("$c0_x")->setValue(0.0f);
@@ -399,10 +400,8 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
-
-    if (stage == FrameStage::RENDER_START && static_cast<std::size_t>(config->visuals.skybox - 2) < skyboxes.size() && config->visuals.skybox != 1) {
-        memory->loadSky(skyboxes[config->visuals.skybox - 2]);
+    if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size() && config->visuals.skybox != 1) {
+        memory->loadSky(skyboxes[config->visuals.skybox]);
     }
     else if (config->visuals.skybox == 1)
         memory->loadSky(config->visuals.customSkybox.c_str());

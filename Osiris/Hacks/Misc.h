@@ -42,6 +42,7 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
+    void oppositeHandKnife(FrameStage stage) noexcept;
 
     inline int teamDamage = 0;
     inline int teamKills = 0;

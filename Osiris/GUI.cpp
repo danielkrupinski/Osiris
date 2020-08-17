@@ -125,7 +125,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Reportbot", window.reportbot);
         menuBarItem("Config", window.config);
         menuBarItem("OsirisBETA ", window.BETA);
-        ImGui::EndMainMenuBar();   
+        ImGui::EndMainMenuBar();
     }
 }
 
@@ -474,7 +474,7 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
-   
+
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -830,6 +830,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             ImGui::Combo("Type", &sharedConfig.box.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
             ImGui::SetNextItemWidth(275.0f);
             ImGui::SliderFloat3("Scale", sharedConfig.box.scale.data(), 0.0f, 0.50f, "%.2f");
+            ImGuiCustom::colorPicker("Fill", sharedConfig.box.fill);
             ImGui::EndPopup();
         }
 
@@ -862,6 +863,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
                 ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
                 ImGui::SetNextItemWidth(275.0f);
                 ImGui::SliderFloat3("Scale", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
+                ImGuiCustom::colorPicker("Fill", playerConfig.headBox.fill);
                 ImGui::EndPopup();
             }
 
@@ -1016,7 +1018,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     }
     ImGui::PopItemWidth();
     ImGui::Checkbox("Full Bright", &config->visuals.fullBright);
-    ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0Custom\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
+    ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::getSkyboxes().data(), Helpers::getSkyboxes().size());
     if (config->visuals.skybox == 1) {
         ImGui::InputText("Skybox filename", &config->visuals.customSkybox);
         if (ImGui::IsItemHovered())
@@ -1527,6 +1529,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Player Blocker", &config->misc.playerBlocker);
     ImGui::SameLine();
     hotkey(config->misc.playerBlockerKey);
+    ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
