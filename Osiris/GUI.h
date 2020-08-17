@@ -10,6 +10,10 @@ public:
     GUI() noexcept;
     void render() noexcept;
     bool open = true;
+	struct {
+		ImFont* tahoma = nullptr;
+		ImFont* segoeui = nullptr;
+	} fonts;
 private:
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
@@ -50,10 +54,7 @@ private:
         bool config = false;
     } window;
 
-    struct {
-        ImFont* tahoma = nullptr;
-        ImFont* segoeui = nullptr;
-    } fonts;
+   
 };
 
 inline std::unique_ptr<GUI> gui;

@@ -291,28 +291,30 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 void Misc::watermark() noexcept
 {
     if (config->misc.watermark) {
-		/*
+        static auto frameRate = 1.0f;
+        frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
+        float latency = 0.0f;
+      
+        if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+            latency = networkChannel->getLatency(0);
+        const auto [w, h] = interfaces->surface->getScreenSize();
+        ImGui::SetNextWindowPos(ImVec2());
+            ImGui::SetNextWindowSize(ImVec2(300.0F, 80.0F));
+            
+            ImGui::Begin("WaterMark",nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+            auto draw = ImGui::GetWindowDrawList();
+            auto pos = ImGui::GetWindowPos();
+            ImGui::Spacing();
+            ImGui::BeginChild("##First",ImVec2(200.0F,75.0F));
+            ImGui::Text("Fps %.1f", static_cast<int>(1 / frameRate));
+            ImGui::SameLine();
+            ImGui::Text("Ping %.1f",static_cast<int>(latency * 1000));
+            ImGui::EndChild();
+            ImGui::SameLine();
+            ImGui::BeginChild("##Second",ImVec2(80.0f,75.0f));
+            draw->AddText(gui->fonts.segoeui,26.0f, ImVec2(pos.x + 285.0f, pos.y + 2.0f),ImColor(),"O");
 
-		static auto frameRate = 1.0f;
-		frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
-		const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
-		std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
-		const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
-		interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
-		interfaces->surface->printText(fps.c_str());
-
-		float latency = 0.0f;
-		if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-			latency = networkChannel->getLatency(0);
-
-		std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
-		const auto pingWidth = interfaces->surface->getTextSize(Surface::font, ping.c_str()).first;
-		interfaces->surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
-		interfaces->surface->printText(ping.c_str());*/
-
-
-
-
+            ImGui::End();
     }
 }
 
