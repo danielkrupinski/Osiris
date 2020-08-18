@@ -403,10 +403,9 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
         ImGui::Begin("Anti aim", &window.antiAim, windowFlags);
     }
     ImGui::Checkbox("Enabled", &config->antiAim.enabled);
-    ImGui::Checkbox("##pitch", &config->antiAim.pitch);
     ImGui::SameLine();
-    ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-    ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+    hotkey(config->antiAim.hotKey);
+    ImGui::Checkbox("Visual AA",&config->antiAim.ShowAA);
     if (!contentOnly)
         ImGui::End();
 }

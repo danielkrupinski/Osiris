@@ -366,7 +366,7 @@ bool AutoWall::CanWallbang(float& dmg)noexcept
 
 bool AutoWall::PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex)noexcept
 {
-	float min_damage = 15.0f; //mindamage
+	float min_damage = config->ragebot[weaponIndex].MinDamage; //mindamage
 	if (pBaseEntity->health() < min_damage)
 		min_damage = pBaseEntity->health();
 

@@ -1020,3 +1020,24 @@ void Misc::ShotsCout(GameEvent* event)noexcept
 
 	ImGui::End();
 }
+
+void Misc::ShowAA(ImDrawList* draw)noexcept
+{
+    if (!config->antiAim.enabled || !config->antiAim.ShowAA)
+        return;
+
+    auto [w, h] = interfaces->surface->getScreenSize();
+
+
+	if (!inver)
+	{
+		draw->AddCircle(ImVec2((w / 2) - 50, (h / 2) + 5), 3,
+			ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), 0.0f);
+	}
+    else
+    {
+		draw->AddCircle(ImVec2((w / 2) + 50, (h / 2) + 5), 3,
+			ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), 0.0f);
+    }
+
+}

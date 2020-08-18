@@ -45,4 +45,5 @@ namespace Misc
     void StatusBar() noexcept;
     void DrawInaccuracy(ImDrawList* draw) noexcept;
     void ShotsCout(GameEvent* event = nullptr) noexcept;
+    void ShowAA(ImDrawList* draw) noexcept;
 }

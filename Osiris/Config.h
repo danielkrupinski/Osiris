@@ -130,6 +130,8 @@ public:
 
     struct AntiAim {
         bool enabled{ false };
+        int hotKey{ 0 };
+        bool ShowAA{ false };
         bool pitch{ false };
         bool yaw{ false };
         float pitchAngle{ 0.0f };
