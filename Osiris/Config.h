@@ -206,6 +206,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        int bunnyHopChance{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16];
