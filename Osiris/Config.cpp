@@ -293,6 +293,7 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
     read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
     read(j, "Min damage", a.minDamage);
+    read(j, "Max Distance", a.maxDistance);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
 }
