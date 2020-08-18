@@ -6,6 +6,7 @@
 #include "Hacks/Misc.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/Aimbot.h"
 #include "Interfaces.h"
 #include "Memory.h"
 
@@ -48,6 +49,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         SkinChanger::overrideHudIcon(*event);
         Misc::killMessage(*event);
         Misc::killSound(*event);
+        Aimbot::handleKill(*event);
         break;
     case fnv::hash("player_hurt"):
         Misc::playHitSound(*event);

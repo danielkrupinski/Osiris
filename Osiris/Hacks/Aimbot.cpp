@@ -9,6 +9,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/GameEvent.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -97,6 +98,18 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
     return false;
 }
 
+void Aimbot::handleKill(GameEvent& event) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    lastKillTime = memory->globalVars->realtime;
+    return;
+}
+
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -125,6 +138,15 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
         return;
+
+    const auto now = memory->globalVars->realtime;
+
+    if (lastKillTime + config->aimbot[weaponIndex].killDelay / 1000.0f > now)
+        return;
+
+    static auto pressedTime = 0.0f;
+    if (!cmd->buttons | !UserCmd::IN_ATTACK)
+        pressedTime = now;
 
     if (config->aimbot[weaponIndex].onKey) {
         if (!config->aimbot[weaponIndex].keyMode) {
@@ -207,6 +229,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             if (clamped || config->aimbot[weaponIndex].smooth > 1.0f) lastAngles = cmd->viewangles;
             else lastAngles = Vector{ };
+
+            if (pressedTime + config->aimbot[weaponIndex].firstShotDelay / 1000.0f > now)
+                cmd->buttons ^= UserCmd::IN_ATTACK;
 
             lastCommand = cmd->commandNumber;
         }

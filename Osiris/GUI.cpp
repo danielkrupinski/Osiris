@@ -255,6 +255,8 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+    ImGui::SliderInt("First shot delay", &config->aimbot[currentWeapon].firstShotDelay, 0, 250, "%d ms");
+    ImGui::SliderInt("Kill delay", &config->aimbot[currentWeapon].killDelay, 0, 500, "%d ms");
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);

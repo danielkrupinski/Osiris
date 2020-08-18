@@ -301,6 +301,8 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
     read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
     read(j, "Min damage", a.minDamage);
+    read(j, "First shot delay", a.firstShotDelay);
+    read(j, "Kill delay", a.killDelay);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
 }
@@ -759,6 +761,8 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Max aim inaccuracy", maxAimInaccuracy);
     WRITE("Max shot inaccuracy", maxShotInaccuracy);
     WRITE("Min damage", minDamage);
+    WRITE("First shot delay", firstShotDelay);
+    WRITE("Kill delay", killDelay);
     WRITE("Killshot", killshot);
     WRITE("Between shots", betweenShots);
 }
