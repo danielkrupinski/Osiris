@@ -1008,9 +1008,11 @@ void Misc::ShotsCout(GameEvent* event)noexcept
                 }
             }
         }
-    
-    missedshots = TotalShots - HitShots;
-    hitchance = HitShots / TotalShots;
+
+    if (TotalShots && HitShots) {
+        missedshots = TotalShots - HitShots;
+        hitchance = HitShots / TotalShots;
+    }
 	ImGui::Text("TotalShots: %.1f", TotalShots);
 	ImGui::Text("HitShots: %.1f", HitShots);
 	ImGui::Text("Missed Shots: %.1f", missedshots);
