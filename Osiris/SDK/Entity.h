@@ -61,7 +61,7 @@ public:
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
-    VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))

@@ -1,5 +1,8 @@
 #include <fstream>
+
+#ifdef _WIN32
 #include <ShlObj.h>
+#endif
 
 #include "nlohmann/json.hpp"
 
@@ -39,21 +42,26 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
 
 Config::Config(const char* name) noexcept
 {
+#ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#endif
 
     listConfigs();
     misc.clanTag[0] = '\0';
 
+#ifdef _WIN32
     LOGFONTA logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
     logfont.lfFaceName[0] = '\0';
 
     EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+#endif
+
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
@@ -211,6 +219,7 @@ static void from_json(const json& j, Box& b)
 
     read(j, "Type", b.type);
     read(j, "Scale", b.scale);
+    read<value_t::object>(j, "Fill", b.fill);
 }
 
 static void from_json(const json& j, Shared& s)
@@ -555,6 +564,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
+    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
@@ -670,6 +680,7 @@ static void to_json(json& j, const Box& o, const Box& dummy = {})
     to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
     WRITE("Type", type);
     WRITE("Scale", scale);
+    WRITE("Fill", fill);
 }
 
 static void to_json(json& j, const Shared& o, const Shared& dummy = {})
@@ -924,6 +935,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
+    WRITE("Opposite Hand Knife", oppositeHandKnife);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)

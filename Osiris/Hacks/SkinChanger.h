@@ -22,7 +22,7 @@ namespace SkinChanger
 
         auto operator<(const PaintKit& other) const noexcept
         {
-            return name < other.name;
+            return nameUpperCase < other.nameUpperCase;
         }
     };
 

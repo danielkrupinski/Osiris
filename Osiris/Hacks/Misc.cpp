@@ -193,6 +193,22 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
         drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
 
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
+    return true;
+}
+
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {
     if (!config->misc.recoilCrosshair.enabled)
@@ -207,13 +223,8 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
     if (!localPlayerData.shooting)
         return;
 
-    static const auto view_recoil_tracking = interfaces->cvar->findVar("view_recoil_tracking");
-
-    auto pos = ImGui::GetIO().DisplaySize;
-    pos.x *= 0.5f - localPlayerData.aimPunch.y * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
-    pos.y *= 0.5f + localPlayerData.aimPunch.x * (1.0f - (!config->visuals.noAimPunch ? view_recoil_tracking->getFloat() : 0.0f)) / localPlayerData.fov;
-
-    drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
+    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+        drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
 
 void Misc::watermark() noexcept
@@ -269,31 +280,32 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
-    if (config->misc.fastPlant) {
-        static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
+    if (!config->misc.fastPlant)
+        return;
 
-        if (plantAnywhere->getInt())
-            return;
+    static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
-        if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
-            return;
+    if (plantAnywhere->getInt())
+        return;
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
-            return;
+    if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->flags() & 1))
+        return;
 
-        cmd->buttons &= ~UserCmd::IN_ATTACK;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+        return;
 
-        constexpr float doorRange{ 200.0f };
-        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                           cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                          -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-        if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
-            cmd->buttons &= ~UserCmd::IN_USE;
-    }
+    constexpr auto doorRange = 200.0f;
+
+    Trace trace;
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+
+    if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+        cmd->buttons &= ~UserCmd::IN_USE;
 }
 
 void Misc::drawBombTimer() noexcept
@@ -507,7 +519,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
     static bool inProgress{ false };
 
-    if (GetAsyncKeyState(config->misc.quickHealthshotKey))
+    if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
         inProgress = true;
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
@@ -794,5 +806,31 @@ void Misc::purchaseList(GameEvent* event) noexcept
             }
         }
         ImGui::End();
+    }
+}
+
+void Misc::oppositeHandKnife(FrameStage stage) noexcept
+{
+    if (!config->misc.oppositeHandKnife)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static const auto cl_righthand = interfaces->cvar->findVar("cl_righthand");
+    static bool original;
+
+    if (stage == FrameStage::RENDER_START) {
+        original = cl_righthand->getInt();
+
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+            if (const auto classId = activeWeapon->getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
+                cl_righthand->setValue(!original);
+        }
+    } else {
+        cl_righthand->setValue(original);
     }
 }
