@@ -511,12 +511,10 @@ void Misc::bunnyHop(UserCmd* cmd) noexcept
         hasLanded = true;
         if (memory->globalVars->realtime - lastTimeInAir >= 3) {
             bhopInSeries = 0;
-            //config->misc.DEBUG = 2115;
         }
     }
-
-         wasLastTimeOnGround = localPlayer->flags() & 1;
-
+    
+    wasLastTimeOnGround = localPlayer->flags() & 1;
 }
 
 void Misc::fakeBan(bool set) noexcept
