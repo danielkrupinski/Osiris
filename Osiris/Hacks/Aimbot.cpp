@@ -9,6 +9,8 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../GameData.h"
+#include "../Helpers.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -174,6 +176,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
+        if (config->aimbot[weaponIndex].maxDistance == 0 || Helpers::units2meters(bestTarget.distTo(localPlayerEyePosition)) < config->aimbot[weaponIndex].maxDistance) {
+        
         if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke
             || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
@@ -209,6 +213,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
             else lastAngles = Vector{ };
 
             lastCommand = cmd->commandNumber;
+            }
         }
     }
 }
