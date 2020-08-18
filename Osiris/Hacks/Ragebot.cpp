@@ -342,7 +342,3 @@ void Ragebot::run(UserCmd* cmd)noexcept
 		}
 	}
 }
-
-
-
-
