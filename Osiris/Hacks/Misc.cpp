@@ -1029,7 +1029,7 @@ void Misc::ShowAA(ImDrawList* draw)noexcept
     auto [w, h] = interfaces->surface->getScreenSize();
 
 
-	if (!inver)
+	if (!config->antiAim.inver)
 	{
 		draw->AddCircle(ImVec2((w / 2) - 50, (h / 2) + 5), 3,
 			ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), 0.0f);

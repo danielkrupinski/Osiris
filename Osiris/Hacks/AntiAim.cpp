@@ -35,7 +35,6 @@ bool Lby()
 	}
 }
 
-static bool inver;
 void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
 {
     if (config->antiAim.enabled) {
@@ -53,7 +52,7 @@ void AntiAim::run(UserCmd* cmd, bool& sendPacket) noexcept
 		if ((GetAsyncKeyState(config->antiAim.hotKey)) && realtime - lastTime > 0.5f) {
 			invert = !invert;
 			lastTime = realtime;
-			inver = invert;
+			config->antiAim.inver = invert;
 		}
         
 		if (Lby())
