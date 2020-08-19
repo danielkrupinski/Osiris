@@ -977,13 +977,12 @@ void Misc::ShotsCout(GameEvent* event)noexcept
 		windowFlags |= ImGuiWindowFlags_NoInputs;
 
 	ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
-	ImGui::Begin("空枪输出", nullptr, windowFlags);
+	ImGui::Begin("Missed Shots", nullptr, windowFlags);
 
     if (localPlayer) {
         if (localPlayer->isAlive()) {
            
             auto acweapon = localPlayer->getActiveWeapon();
-
             auto Lid = localPlayer->getUserId();
             if (event && acweapon && (!acweapon->isKnife() || !acweapon->isNade())) {
 
