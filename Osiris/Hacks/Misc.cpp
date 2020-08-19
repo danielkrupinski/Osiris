@@ -173,24 +173,102 @@ void Misc::spectatorList() noexcept
     }
 }
 
+static int missedshots;
+static float hitchance;
+static int TotalShots;
+static int HitShots;
+void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance)noexcept
+{
+	if (!config->misc.ShotsCout.enabled)
+		return;
+
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+
+	if (config->misc.ShotsCout.noTittleBar)
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+	if (config->misc.ShotsCout.noBackGround)
+		windowFlags |= ImGuiWindowFlags_NoBackground;
+
+	if (!gui->open)
+		windowFlags |= ImGuiWindowFlags_NoInputs;
+
+	ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
+	ImGui::Begin("Missed Shots", nullptr, windowFlags);
+
+    if (localPlayer) {
+        if (localPlayer->isAlive()) {
+
+            auto acweapon = localPlayer->getActiveWeapon();
+            auto Lid = localPlayer->getUserId();
+            if (event && acweapon && (!acweapon->isKnife() || !acweapon->isNade())) {
+
+                switch (fnv::hashRuntime(event->getName())) {
+                case fnv::hash("weapon_fire"): {
+                    int userID = event->getInt("userid"); //get userID
+
+                    if (userID == Lid) //ID is localId
+                        TotalShots++; // total++ 
+                    break;
+                }
+                case fnv::hash("player_hurt"): {
+                    int userID2 = event->getInt("userid"); //get userid
+                    if (userID2 != Lid)
+                        HitShots++;
+                    break;
+                }
+                }
+
+
+                }
+            }
+        }
+
+    if (TotalShots && HitShots) {
+        missedshots = TotalShots - HitShots;
+        hitchance = HitShots / TotalShots;
+    }
+
+	
+    ImGui::Text("Best rage dmg now: %d", bestRageDmg);
+	ImGui::Text("Best rage chance now: %d", bestRageChance);
+
+	
+	ImGui::Text("TotalShots: %.1f", TotalShots);
+	ImGui::Text("HitShots: %.1f", HitShots);
+	ImGui::Text("Missed Shots: %.1f", missedshots);
+	ImGui::Text("Hitchance: %.1f", hitchance);
+
+	ImGui::End();
+}
+
 static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, float thickness) noexcept
 {
     drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
 
-    drawList->AddLine(ImVec2{ pos.x, pos.y - 10 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y - 3 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x, pos.y + 3 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y + 10 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // dot
+    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
 
-    drawList->AddLine(ImVec2{ pos.x - 10, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x - 3, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x + 3, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x + 10, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // left
+    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x, pos.y - 10 }, { pos.x, pos.y - 3 }, color, thickness);
-    drawList->AddLine({ pos.x, pos.y + 3 }, { pos.x, pos.y + 10 }, color, thickness);
+    // right
+    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x - 10, pos.y }, { pos.x - 3, pos.y }, color, thickness);
-    drawList->AddLine({ pos.x + 3, pos.y }, { pos.x + 10, pos.y }, color, thickness);
+    // top (left with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
+
+    // bottom (right with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
 
     drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
 }
+
 
 void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
 {
@@ -218,6 +296,7 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     out = ImGui::GetIO().DisplaySize / 2.0f;
     out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
     out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+	out = ImFloor(out);
     return true;
 }
 

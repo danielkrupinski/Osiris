@@ -43,6 +43,7 @@ namespace Misc
     void purchaseList(GameEvent* event = nullptr) noexcept;
     void StatusBar() noexcept;
     void DrawInaccuracy(ImDrawList* draw) noexcept;
+	void ShotsCout(GameEvent* event = nullptr, int bestRageDmg = 0, int bestRageChance = 0) noexcept;
 	 void fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept;
     float RandomFloat(float min, float max) noexcept;
     void chokePackets(bool& sendPacket, UserCmd* cmd) noexcept;

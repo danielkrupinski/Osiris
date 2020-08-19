@@ -20,8 +20,7 @@
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
 
-constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 namespace ImGui {
 
@@ -268,8 +267,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::PushItemWidth(240.0f);
     ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
     ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+	ImGui::SliderInt("Hit chance", &config->aimbot[currentWeapon].hitchance, 0, 100, "%d");
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
@@ -394,11 +392,14 @@ ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
 ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
 
 
-ImGui::SliderFloat("Min WallDamage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
+ImGui::SliderFloat("Min damage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
 ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
-ImGui::SliderFloat("Head Value", &config->ragebot[currentWeapon].pointChance, 0, 100);
-ImGui::SliderFloat("Body Value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
-
+ImGui::SliderFloat("Head value", &config->ragebot[currentWeapon].pointChance, 0, 100);
+ImGui::SliderFloat("Body value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
+ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
+ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
+ImGui::SameLine();
+hotkey(config->ragebot[currentWeapon].keyForceShot);
 if (!contentOnly)
 ImGui::End();
 }
@@ -1176,6 +1177,8 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             }
 
             ImGui::PopID();
+        	ImGui::SameLine(spacing);
+            ImGui::Checkbox("Health Bar", &playerConfig.healthBar);
         } else if (currentCategory == 2) {
             auto& weaponConfig = config->streamProofESP.weapons[currentItem];
             ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
@@ -1239,6 +1242,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
     ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
     ImGui::Checkbox("Night Mode", &config->visuals.nightMode);
+	ImGui::Checkbox("Asus walls", &config->visuals.asusWalls);
     ImGui::Checkbox("No fog", &config->visuals.noFog);
     ImGui::Checkbox("No 3d sky", &config->visuals.no3dSky);
     ImGui::Checkbox("No aim punch", &config->visuals.noAimPunch);
@@ -1279,8 +1283,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
-    ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
-    ImGuiCustom::colorPicker("World color", config->visuals.world);
+	ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::getSkyboxes().data(), Helpers::getSkyboxes().size());  ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
     ImGui::Combo("Screen effect", &config->visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
@@ -1678,6 +1681,19 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::Checkbox("Show Prices", &config->misc.purchaseList.showPrices);
         ImGui::Checkbox("No Title Bar", &config->misc.purchaseList.noTitleBar);
         ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
+	 ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
+    ImGui::PushID("Shots Cout");
+    ImGui::SameLine();
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("A");
+
+    if (ImGui::BeginPopup("A")){
+        ImGui::Checkbox("No BackGround", &config->misc.ShotsCout.noBackGround);
+    ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
+    ImGui::EndPopup();
     }
     ImGui::PopID();
 

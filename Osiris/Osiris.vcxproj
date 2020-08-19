@@ -105,6 +105,7 @@
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
     <ClInclude Include="Pattern.h" />
+    <ClInclude Include="SDK\Angle.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Beams.h" />
     <ClInclude Include="SDK\Client.h" />

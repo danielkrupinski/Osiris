@@ -29,4 +29,5 @@ namespace Visuals
     void NightMode() noexcept;
 	 void indicators() noexcept;
 	void bulletBeams(GameEvent* event = nullptr) noexcept;
+	 void transparentWorld() noexcept;
 }

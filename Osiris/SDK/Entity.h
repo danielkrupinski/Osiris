@@ -15,6 +15,7 @@
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
+#include "UserCmd.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -419,6 +420,22 @@ public:
         reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
     }
 
+    bool throwing(UserCmd* cmd) 
+    {
+        auto weapon = localPlayer->getActiveWeapon();
+        auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
+        if (weaponClass == 40) {
+            if (!weapon->pinPulled())
+                if (weapon->throwTime() > 0.f)
+                    return true;
+
+            if ((cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
+                if (weapon->throwTime() > 0.f)
+                    return true;
+        }
+        return false;
+    }
+	
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
     {
@@ -478,6 +495,7 @@ public:
     NETVAR(clip, "CBaseCombatWeapon", "m_iClip1", int)
     NETVAR(reserveAmmoCount, "CBaseCombatWeapon", "m_iPrimaryReserveAmmoCount", int)
     NETVAR(nextPrimaryAttack, "CBaseCombatWeapon", "m_flNextPrimaryAttack", float)
+	NETVAR(recoilIndex, "CBaseCombatWeapon", "m_flRecoilIndex", float)
 
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
@@ -503,6 +521,8 @@ public:
     NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
     NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
+	NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool);
+    NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     

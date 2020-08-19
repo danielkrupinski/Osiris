@@ -61,6 +61,7 @@ public:
         int bone{ 0 };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
+    	 int hitchance{ 0 };
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
@@ -81,6 +82,9 @@ public:
 		float CanSeeDamage{ 0.0f };
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
+		bool Baim {false};
+		bool keyForceShotEnabled {false};
+		int keyForceShot {0};
 		bool BonesBools[8]{
 			false,
 			false,
@@ -323,6 +327,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
         bool nightMode{ false };
+    	bool asusWalls {false};
 
         struct ColorCorrection {
             bool enabled = false;
@@ -448,6 +453,7 @@ public:
         std::string customHitSound;
         PurchaseList purchaseList;
         StatusBar Sbar;
+    	ImGuiStruct ShotsCout;
     } misc;
 
     struct Reportbot {

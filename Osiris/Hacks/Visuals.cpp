@@ -13,6 +13,7 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
+#include "../Helpers.h"
 
 #include <array>
 
@@ -332,6 +333,30 @@ void Visuals::hitEffect(GameEvent* event) noexcept
     }
 }
 
+
+void Visuals::transparentWorld() noexcept
+{
+	if (!config->visuals.asusWalls)
+	return;
+
+	for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
+	    const auto mat = interfaces->materialSystem->getMaterial(h);
+
+	    const std::string_view textureGroup = mat->getTextureGroupName();
+
+	    if (textureGroup.starts_with("World")) {
+	            mat->alphaModulate(0.5);
+	    }
+	    if ((textureGroup.starts_with("StaticProp"))) {
+	        
+	        ConVar* static_Prop = interfaces->cvar->findVar("r_DrawSpecificStaticProp");
+	        static_Prop->setValue(0);    
+	        mat->alphaModulate(0.5);
+	    }
+
+	}
+}
+
 void Visuals::hitMarker(GameEvent* event) noexcept
 {
     if (config->visuals.hitMarker == 0 || !localPlayer)
@@ -399,10 +424,8 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
-
-    if (stage == FrameStage::RENDER_START && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox - 1]);
+   if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
+         memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
@@ -603,14 +626,14 @@ void Visuals::bulletBeams(GameEvent* event) noexcept
     BeamInfo_t beam_info;
     beam_info.m_nType = TE_BEAMPOINTS;
     beam_info.m_pszModelName = "sprites/physbeam.vmt";
-    beam_info.m_nModelIndex = -1;
-    beam_info.m_flHaloScale = 0.f;
-    beam_info.m_flLife = 4.f;
-    beam_info.m_flWidth = 1.f;
+    beam_info.m_nModelIndex = 1;
+    beam_info.m_flHaloScale = 0.2f;
+    beam_info.m_flLife = 2.f;
+    beam_info.m_flWidth = 0.f;
     beam_info.m_flEndWidth = 1.f;
     beam_info.m_flFadeLength = 0.1f;
-    beam_info.m_flAmplitude = 2.f;
-    beam_info.m_flBrightness = 255.f;
+    beam_info.m_flAmplitude = 2.3f;
+    beam_info.m_flBrightness = 64.f;
     beam_info.m_flSpeed = 0.2f;
     beam_info.m_nStartFrame = 0;
     beam_info.m_flFrameRate = 0.f;
@@ -619,7 +642,7 @@ void Visuals::bulletBeams(GameEvent* event) noexcept
     beam_info.m_flBlue = config->visuals.bulletTracers.color[2] * 255;
     beam_info.m_nSegments = 2;
     beam_info.m_bRenderable = true;
-    beam_info.m_nFlags = FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
+    beam_info.m_nFlags = FBEAM_FADEIN | FBEAM_FADEOUT | FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
 
     // create beam backwards because it looks nicer.
     beam_info.m_vecStart = position;

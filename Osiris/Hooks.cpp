@@ -52,6 +52,9 @@
 #include "extraHooks.h"
 #include "Hacks/Animations.h"
 
+int rageBestDmg = 0;
+int rageBestChance = 0;
+
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     static const auto once = [](HWND window) noexcept {
@@ -103,6 +106,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
     Misc::spectatorList();
     Misc::StatusBar();
+	 Misc::ShotsCout(nullptr, rageBestDmg, rageBestChance);
     Misc::DrawInaccuracy(ImGui::GetBackgroundDrawList());
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
@@ -185,8 +189,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::slowwalk(cmd);
     extraHook.init();
 
-
-     static void* oldPointer = nullptr;
+    static void* oldPointer = nullptr;
 
     auto network = interfaces->engine->getNetworkChannel();
     if (oldPointer != network && network && localPlayer)
@@ -201,25 +204,32 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     EnginePrediction::run(cmd);
 
+    rageBestDmg = 0;
+	rageBestChance = 0;
+	
     Aimbot::run(cmd);
-    Ragebot::run(cmd);
+    Ragebot::run(cmd, rageBestDmg, rageBestChance);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(cmd);
 	
-     config->globals.serverTime = memory->globalVars->serverTime();
+    config->globals.serverTime = memory->globalVars->serverTime();
     config->globals.chokedPackets = interfaces->engine->getNetworkChannel()->chokedPackets;
     config->globals.tickRate = memory->globalVars->intervalPerTick;
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)) || config->misc.fakeLagSelectedFlags[0])
-        if (config->misc.fakeLagKey == 0 || GetAsyncKeyState(config->misc.fakeLagKey))
-            Misc::chokePackets(sendPacket, cmd);
+    {
+	   if (config->misc.fakeLagKey == 0 || GetAsyncKeyState(config->misc.fakeLagKey))
+	   {
+			Misc::chokePackets(sendPacket, cmd);      
+	   }
+    }
+     
 
     Misc::fakeDuck(cmd, sendPacket);
-
-	 AntiAim::fakeWalk(cmd, sendPacket);
+	AntiAim::fakeWalk(cmd, sendPacket);
     AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
@@ -342,6 +352,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::fakePrime();
     	Animations::real();
         Visuals::NightMode();
+    	Visuals::transparentWorld();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);

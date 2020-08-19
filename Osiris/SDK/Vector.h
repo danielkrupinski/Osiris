@@ -163,6 +163,12 @@ struct Vector {
                       -std::sin(degreesToRadians(angle.x)) };
     }
 
+	auto distance(const Vector& v) const noexcept
+    {
+        return std::hypot(x - v.x, y - v.y, z - v.z);
+    }
+
+
     float x, y, z;
 };
 

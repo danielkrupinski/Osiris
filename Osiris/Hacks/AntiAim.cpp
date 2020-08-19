@@ -48,6 +48,21 @@ bool AntiAim::LbyUpdate()
 
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
+    if (!localPlayer)
+        return;
+
+	auto weapon = localPlayer->getActiveWeapon();
+    auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+
+    if (!weapon)
+        return;
+
+    if (weaponClass != 40 && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+        return;
+	
+    if (localPlayer->throwing(cmd))
+        return;
+	
    if (config->antiAim.general.yawInverseAngleKey != 0) {
         if (config->antiAim.general.yawInverseKeyMode == 0) {
             if (!GetAsyncKeyState(config->antiAim.general.yawInverseAngleKey))

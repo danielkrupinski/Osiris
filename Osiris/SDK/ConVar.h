@@ -11,6 +11,7 @@ struct ConVar {
     VIRTUAL_METHOD(void, setValue, 14, (const char* value), (this, value))
     VIRTUAL_METHOD(void, setValue, 15, (float value), (this, value))
     VIRTUAL_METHOD(void, setValue, 16, (int value), (this, value))
+	bool getBool() { return !!getInt(); }
 
     std::byte pad[24];
     std::add_pointer_t<void __cdecl()> changeCallback;

@@ -60,6 +60,7 @@ enum class WeaponId : short {
     Snowball,
     BumpMine,
     Bayonet = 500,
+	ClassicKnife = 503,
     Flip = 505,
     Gut,
     Karambit,
@@ -69,10 +70,14 @@ enum class WeaponId : short {
     Bowie = 514,
     Butterfly,
     Daggers,
+	Paracord,
+    SurvivalKnife,
     Ursus = 519,
     Navaja,
+	NomadKnife,
     Stiletto = 522,
     Talon,
+	SkeletonKnife = 525,
     GloveStuddedBloodhound = 5027,
     GloveT,
     GloveCT,
@@ -128,6 +133,12 @@ constexpr int getWeaponIndex(WeaponId weaponId) noexcept
     case WeaponId::Scar20: return 34;
 
     case WeaponId::Taser: return 39;
+    case WeaponId::Flashbang: return 41;
+    case WeaponId::Decoy: return 42;
+    case WeaponId::HeGrenade: return 43;
+    case WeaponId::IncGrenade: return 44;
+    case WeaponId::Molotov: return 45;
+    case WeaponId::SmokeGrenade: return 46;
     }
 }
 
@@ -173,5 +184,12 @@ constexpr int getWeaponClass(WeaponId weaponId) noexcept
     case WeaponId::Awp:
     case WeaponId::G3SG1:
     case WeaponId::Scar20: return 38;
+
+    case WeaponId::Flashbang:
+    case WeaponId::Decoy:
+    case WeaponId::HeGrenade:
+    case WeaponId::IncGrenade:
+    case WeaponId::Molotov:
+    case WeaponId::SmokeGrenade: return 40;
     }
 }

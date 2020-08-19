@@ -1,5 +1,5 @@
 #pragma once
-
+#include <array>
 #include "imgui/imgui.h"
 
 struct ColorA;
@@ -7,6 +7,7 @@ struct ColorA;
 namespace Helpers
 {
     unsigned int calculateColor(ColorA color) noexcept;
+	  unsigned int calculateColor(int r, int g, int b, int a) noexcept;
 
     constexpr auto units2meters(float units) noexcept
     {
@@ -22,6 +23,13 @@ namespace Helpers
                (firstByte & 0xF0) == 0xE0 ? 3 :
                (firstByte & 0xF8) == 0xF0 ? 4 :
                -1;
+    }
+
+	static const auto& getSkyboxes() noexcept
+    {
+        static constexpr std::array skyboxes{  "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy" };
+
+        return skyboxes;
     }
 
     constexpr auto utf8Substr(char* start, char* end, int n) noexcept

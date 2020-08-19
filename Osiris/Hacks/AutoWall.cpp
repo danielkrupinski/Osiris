@@ -58,19 +58,47 @@ float GetHitgroupDamageMult(int iHitGroup)noexcept
 	return 1.0f;
 }
 
+bool IsArmored(Entity* enemy, int ArmorValue, int Hitgroup)
+{
+	bool result = false;
+ 
+	if (ArmorValue > 0)
+	{
+		switch (Hitgroup)
+		{
+		case HITGROUP_GENERIC:
+		case HITGROUP_CHEST:
+		case HITGROUP_STOMACH:
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			result = true;
+			break;
+		case HITGROUP_HEAD:
+			result = enemy->hasHelmet();
+			break;
+		}
+	}
+ 
+	return result;
+}
+
 void ScaleDamage(int hitgroup, Entity* enemy, float weapon_armor_ratio, float& current_damage)noexcept
 {
 	current_damage *= GetHitgroupDamageMult(hitgroup);
-
-	if (enemy->armor() > 0.0f && hitgroup < HitGroup::LeftLeg)
+	int ArmorValue = enemy->armor();
+	
+	if (IsArmored(enemy, ArmorValue, hitgroup))
 	{
-		if (hitgroup == HitGroup::Head && !enemy->hasHelmet())
-			return;
+		float Damage = current_damage;
+		float v47 = 1.f, ArmorBonusRatio = 0.5f, ArmorRatio = weapon_armor_ratio * 0.5f;
+		auto NewDamage = Damage * ArmorRatio;
 
-		float armorscaled = (weapon_armor_ratio * 0.5f) * current_damage;
-		if ((current_damage - armorscaled) * 0.5f > enemy->armor())
-			armorscaled = current_damage - (enemy->armor() * 2.0f);
-		current_damage = armorscaled;
+		if (((Damage - (Damage * ArmorRatio)) * (v47 * ArmorBonusRatio)) > ArmorValue)
+		{
+			NewDamage = Damage - (ArmorValue / ArmorBonusRatio);	
+		}
+
+		current_damage = Damage;
 	}
 }
 
@@ -194,21 +222,40 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 	int exit_material = exit_surface_data->material;
 	float exit_surf_penetration_mod = exit_surface_data->penetrationmodifier;
 	float final_damage_modifier = 0.16f;
-	float combined_penetration_modifier = 0.0f;
-	if (((data.enter_trace.contents & contents_grate) != 0) || (enter_material == 89) || (enter_material == 71))
+	float combined_penetration_modifier = ( enter_surface_data->penetrationmodifier + exit_surface_data->penetrationmodifier ) * 0.5f;
+
+	bool a5 = data.enter_trace.contents >> 3 & CONTENTS_SOLID;
+	bool v19 = data.enter_trace.surface.flags >> 7 & SURF_LIGHT;
+	
+	if (((data.enter_trace.contents & contents_grate) != 0) || (enter_material == CHAR_TEX_GLASS) || (enter_material == CHAR_TEX_GRATE))
 	{
 		combined_penetration_modifier = 3.0f;
 		final_damage_modifier = 0.05f;
 	}
-	else
-		combined_penetration_modifier = (enter_surf_penetration_mod + exit_surf_penetration_mod) * 0.5f;
+	else if( a5 || v19 ) 
+	{
+		final_damage_modifier = 0.16f;
+		combined_penetration_modifier = 1.0f;
+	}
+
+
 	if (enter_material == exit_material)
 	{
-		if (exit_material == 87 || exit_material == 85)combined_penetration_modifier = 3.0f;
-		else if (exit_material == 76)combined_penetration_modifier = 2.0f;
+		if (exit_material == CHAR_TEX_WOOD || exit_material == CHAR_TEX_CARDBOARD)
+		{
+			combined_penetration_modifier = 3.0f;
+		}
+		else if (exit_material == CHAR_TEX_PLASTIC) 
+		{
+			combined_penetration_modifier = 2.0f;
+		}
 	}
+
+	
 	float v34 = fmaxf(0.f, 1.0f / combined_penetration_modifier);
 	float v35 = (data.current_damage * final_damage_modifier) + v34 * 3.0f * fmaxf(0.0f, (3.0f / wpn_data->penetration) * 1.25f);
+
+		
 	Vector tem{ trace_exit.endpos - data.enter_trace.endpos };
 	float thickness = tem.length();
 	if (extracheck)
@@ -229,6 +276,7 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 
 	return true;
 }
+
 
 float AutoWall::Damage(const Vector& point)noexcept
 {
@@ -366,7 +414,7 @@ bool AutoWall::CanWallbang(float& dmg)noexcept
 
 bool AutoWall::PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex)noexcept
 {
-	float min_damage = 15.0f; //mindamage
+	float min_damage = 5.0f; //mindamage
 	if (pBaseEntity->health() < min_damage)
 		min_damage = pBaseEntity->health();
 

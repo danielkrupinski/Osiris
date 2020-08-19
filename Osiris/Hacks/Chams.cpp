@@ -102,7 +102,7 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
     }
 
 	if (std::string_view{ info.model->name }.starts_with("models/player")) {
-        renderPlayers(ctx, state, info, customBoneToWorld);
+       // renderPlayers(ctx, state, info, customBoneToWorld);
     } 
 
     return appliedChams;
@@ -197,17 +197,24 @@ void Chams::renderPlayer(Entity* player) noexcept
       
    
     } else if (localPlayer->isOtherEnemy(player)) {
-        applyChams(config->chams["Enemies"].materials, health);
+        
 
-        if (config->backtrack.enabled) {
-            auto record = &Backtrack::records[player->index()];
-            if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
-                if (!appliedChams)
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record->back().matrix);
-                interfaces->studioRender->forcedMaterialOverride(nullptr);
-            }
-        }
+    	        if (config->backtrack.enabled) {
+	    auto record = &Backtrack::records[player->index()];
+	    for (int x = 0; x < record->size(); x++) {
+	        if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
+	            if (!appliedChams)
+	                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+	            applyChams(config->chams["Backtrack"].materials, health, record->at(x).matrix);
+	            interfaces->studioRender->forcedMaterialOverride(nullptr);
+	        }
+	    }
+		}
+                else
+                {
+	                applyChams(config->chams["Enemies"].materials, health);
+                }
+    	
     } else {
         applyChams(config->chams["Allies"].materials, health);
     }
