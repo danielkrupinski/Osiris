@@ -163,17 +163,25 @@ static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, 
 {
     drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
 
-    drawList->AddLine(ImVec2{ pos.x, pos.y - 10 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y - 3 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x, pos.y + 3 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y + 10 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // dot
+    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
 
-    drawList->AddLine(ImVec2{ pos.x - 10, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x - 3, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x + 3, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x + 10, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // left
+    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x, pos.y - 10 }, { pos.x, pos.y - 3 }, color, thickness);
-    drawList->AddLine({ pos.x, pos.y + 3 }, { pos.x, pos.y + 10 }, color, thickness);
+    // right
+    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x - 10, pos.y }, { pos.x - 3, pos.y }, color, thickness);
-    drawList->AddLine({ pos.x + 3, pos.y }, { pos.x + 10, pos.y }, color, thickness);
+    // top (left with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
+
+    // bottom (right with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
 
     drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
 }

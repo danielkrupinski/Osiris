@@ -25,6 +25,11 @@ unsigned int Helpers::calculateColor(ColorA color) noexcept
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, color.color[3]) : color.color);
 }
 
+unsigned int Helpers::calculateColor(int r, int g, int b, int a) noexcept
+{
+    return IM_COL32(r, g, b, a);
+}
+
 ImWchar* Helpers::getFontGlyphRanges() noexcept
 {
     static ImVector<ImWchar> ranges;

@@ -77,6 +77,7 @@ struct Player : Shared {
     ColorToggle flashDuration;
     bool audibleOnly = false;
     bool spottedOnly = false;
+    bool healthBar = false;
     ColorToggleThickness skeleton;
     Box headBox;
 
