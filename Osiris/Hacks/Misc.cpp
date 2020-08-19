@@ -981,24 +981,23 @@ void Misc::ShotsCout(GameEvent* event)noexcept
 
     if (localPlayer) {
         if (localPlayer->isAlive()) {
-            PlayerInfo Info;
-            interfaces->engine->getPlayerInfo(localPlayer, Info);
+           
             auto acweapon = localPlayer->getActiveWeapon();
 
-
+            auto Lid = localPlayer->getUserId();
             if (event && acweapon && (!acweapon->isKnife() || !acweapon->isNade())) {
 
                 switch (fnv::hashRuntime(event->getName())) {
                 case fnv::hash("weapon_fire"): {
                     int userID = event->getInt("userid"); //get userID
 
-                    if (userID == Info.userId) //ID is localId
+                    if (userID == Lid) //ID is localId
                         TotalShots++; // total++ 
                     break;
                 }
                 case fnv::hash("player_hurt"): {
                     int userID2 = event->getInt("userid"); //get userid
-                    if (userID2 != Info.userId)
+                    if (userID2 != Lid)
                         HitShots++;
                     break;
                 }
