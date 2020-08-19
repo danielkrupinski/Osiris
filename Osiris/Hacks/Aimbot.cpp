@@ -145,7 +145,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         return;
 
     static auto pressedTime = 0.0f;
-    if (!cmd->buttons | !UserCmd::IN_ATTACK)
+    if (!(cmd->buttons & UserCmd::IN_ATTACK))
         pressedTime = now;
 
     if (config->aimbot[weaponIndex].onKey) {
