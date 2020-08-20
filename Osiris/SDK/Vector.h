@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "Utils.h"
+
 class matrix3x4;
 
 struct Vector {
@@ -98,11 +100,12 @@ struct Vector {
         return Vector{ x + add, y + add, z + add };
     }
 
-    constexpr void normalize() noexcept
+    constexpr Vector& normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainder(x, 360.0f) : 0.0f;
         y = std::isfinite(y) ? std::remainder(y, 360.0f) : 0.0f;
         z = 0.0f;
+        return *this;
     }
 
     auto length() const noexcept
@@ -130,6 +133,20 @@ struct Vector {
     auto distTo(const Vector& v) const noexcept
     {
         return (*this - v).length();
+    }
+
+    auto toAngle() const noexcept
+    {
+        return Vector{ radiansToDegrees(std::atan2(-z, std::hypot(x, y))),
+                       radiansToDegrees(std::atan2(y, x)),
+                       0.0f };
+    }
+
+    static auto fromAngle(const Vector& angle) noexcept
+    {
+        return Vector{ std::cos(degreesToRadians(angle.x)) * std::cos(degreesToRadians(angle.y)),
+                       std::cos(degreesToRadians(angle.x)) * std::sin(degreesToRadians(angle.y)),
+                      -std::sin(degreesToRadians(angle.x)) };
     }
 
     float x, y, z;

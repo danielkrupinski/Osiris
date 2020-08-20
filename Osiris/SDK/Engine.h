@@ -63,6 +63,12 @@ public:
     VIRTUAL_METHOD(const char*, getLevelName, 53, (), (this))
     VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
     VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd), (this, cmd, false))
-    VIRTUAL_METHOD(const D3DMATRIX&, worldToScreenMatrix, 37, (), (this))
-    VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix2, 37, (), (this))
+    VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix, 37, (), (this))
+
+    auto getViewAngles() noexcept
+    {
+        Vector ang;
+        getViewAngles(ang);
+        return ang;
+    }
 };

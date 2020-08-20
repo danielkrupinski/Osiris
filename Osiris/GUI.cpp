@@ -817,6 +817,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             ImGui::Combo("Type", &sharedConfig.box.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
             ImGui::SetNextItemWidth(275.0f);
             ImGui::SliderFloat3("Scale", sharedConfig.box.scale.data(), 0.0f, 0.50f, "%.2f");
+            ImGuiCustom::colorPicker("Fill", sharedConfig.box.fill);
             ImGui::EndPopup();
         }
 
@@ -849,10 +850,14 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
                 ImGui::Combo("Type", &playerConfig.headBox.type, "2D\0" "2D corners\0" "3D\0" "3D corners\0");
                 ImGui::SetNextItemWidth(275.0f);
                 ImGui::SliderFloat3("Scale", playerConfig.headBox.scale.data(), 0.0f, 0.50f, "%.2f");
+                ImGuiCustom::colorPicker("Fill", playerConfig.headBox.fill);
                 ImGui::EndPopup();
             }
 
             ImGui::PopID();
+        
+            ImGui::SameLine(spacing);
+            ImGui::Checkbox("Health Bar", &playerConfig.healthBar);
         } else if (currentCategory == 2) {
             auto& weaponConfig = config->streamProofESP.weapons[currentItem];
             ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
@@ -955,7 +960,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
-    ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
+    ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::getSkyboxes().data(), Helpers::getSkyboxes().size());
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
@@ -1026,10 +1031,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
 
-            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
             const std::locale original;
-            if (!filter.empty())
-                std::locale::global(std::locale{ "en_US.utf8" });
+            std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
@@ -1038,34 +1041,16 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
+            std::locale::global(original);
+
             for (std::size_t i = 0; i < kits.size(); ++i) {
-                bool passedTheFilter = filter.empty();
-
-                if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
-                        wchar_t w;
-                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
-                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-
-                        if (facet.toupper(w) != filterWide[j2])
-                            j2 = 0;
-                        else
-                            ++j2;
-
-                        if (j2 >= filterWide.length())
-                            passedTheFilter = true;
-                    }
-                }
-
-                if (passedTheFilter) {
+                if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                     ImGui::PushID(i);
                     if (ImGui::Selectable(kits[i].name.c_str(), i == selected_entry.paint_kit_vector_index))
                         selected_entry.paint_kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
-
-            std::locale::global(original);
             ImGui::ListBoxFooter();
         }
 
@@ -1129,10 +1114,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Sticker")) {
             const auto& kits = SkinChanger::stickerKits;
 
-            // Case-insensitive UTF-8 compatible text filtering, when compiled in Debug mode it drops fps grately (toupper()), in Release only a bit
             const std::locale original;
-            if (!filter.empty())
-                std::locale::global(std::locale{ "en_US.utf8" });
+            std::locale::global(std::locale{ "en_US.utf8" });
 
             const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
@@ -1141,34 +1124,16 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
 
+            std::locale::global(original);
+
             for (std::size_t i = 0; i < kits.size(); ++i) {
-                bool passedTheFilter = filter.empty();
-
-                if (!passedTheFilter) {
-                    for (std::size_t j1 = 0, j2 = 0; j1 < kits[i].name.length() && j2 < filterWide.length();) {
-                        wchar_t w;
-                        mbstowcs(&w, kits[i].name.c_str() + j1, 1);
-                        j1 += Helpers::utf8SeqLen(kits[i].name[j1]);
-
-                        if (facet.toupper(w) != filterWide[j2])
-                            j2 = 0;
-                        else
-                            ++j2;
-
-                        if (j2 >= filterWide.length())
-                            passedTheFilter = true;
-                    }
-                }
-
-                if (passedTheFilter) {
+                if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                     ImGui::PushID(i);
                     if (ImGui::Selectable(kits[i].name.c_str(), i == selected_sticker.kit_vector_index))
                         selected_sticker.kit_vector_index = i;
                     ImGui::PopID();
                 }
             }
-
-            std::locale::global(original);
             ImGui::ListBoxFooter();
         }
 
@@ -1271,7 +1236,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->misc.slowwalkKey);
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
-    ImGui::Checkbox("Recoil crosshair", &config->misc.recoilCrosshair);
+    ImGuiCustom::colorPicker("Recoil crosshair", config->misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);
     ImGui::Checkbox("Auto accept", &config->misc.autoAccept);
@@ -1349,6 +1314,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 

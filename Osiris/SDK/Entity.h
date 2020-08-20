@@ -61,7 +61,7 @@ public:
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
-    VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
@@ -69,8 +69,10 @@ public:
     VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 284, (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, 293, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 345, (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
@@ -125,13 +127,6 @@ public:
             return Vector{ };
     }
 
-    auto getEyePosition() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 284>(this, std::ref(vec));
-        return vec;
-    }
-
     bool isVisible(const Vector& position = { }) noexcept
     {
         if (!localPlayer)
@@ -174,13 +169,6 @@ public:
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
     }
 
-    auto getAimPunch() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 345>(this, std::ref(vec));
-        return vec;
-    }
-
     auto getUserId() noexcept
     {
         if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
@@ -189,30 +177,14 @@ public:
         return -1;
     }
 
-    [[nodiscard]] auto getPlayerName(bool normalize) noexcept
+    void getPlayerName(char(&out)[128]) noexcept;
+    [[nodiscard]] std::string getPlayerName() noexcept
     {
-        std::string playerName = "unknown";
-
-        PlayerInfo playerInfo;
-        if (!interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerName;
-
-        playerName = playerInfo.name;
-
-        if (normalize) {
-            if (wchar_t wide[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, 128, wide, 128)) {
-                if (wchar_t wideNormalized[128]; NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128)) {
-                    if (char nameNormalized[128]; WideCharToMultiByte(CP_UTF8, 0, wideNormalized, -1, nameNormalized, 128, nullptr, nullptr))
-                        playerName = nameNormalized;
-                }
-            }
-        }
-
-        playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
-        return playerName;
+        char name[128];
+        getPlayerName(name);
+        return name;
     }
 
-    void getPlayerName(char(&out)[128]) noexcept;
     bool canSee(Entity* other, const Vector& pos) noexcept;
     bool visibleTo(Entity* other) noexcept;
 

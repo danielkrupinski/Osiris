@@ -54,6 +54,8 @@ Memory::Memory() noexcept
     getEventDescriptor = relativeToAbsolute<decltype(getEventDescriptor)>(findPattern(L"engine", "\xE8????\x8B\xD8\x85\xDB\x75\x27") + 1);
     activeChannels = *reinterpret_cast<ActiveChannels**>(findPattern(L"engine", "\x8B\x1D????\x89\x5C\x24\x48") + 2);
     channels = *reinterpret_cast<Channel**>(findPattern(L"engine", "\x81\xC2????\x8B\x72\x54") + 2);
+    playerResource = *reinterpret_cast<PlayerResource***>(findPattern(L"client", "\x74\x30\x8B\x35????\x85\xF6") + 4);
+    getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(L"client", "\xE8????\x66\x83\x3E") + 1);
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(L"client", "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 }

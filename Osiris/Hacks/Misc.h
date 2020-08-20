@@ -13,7 +13,7 @@ namespace Misc
     void updateClanTag(bool = false) noexcept;
     void spectatorList() noexcept;
     void noscopeCrosshair(ImDrawList* drawlist) noexcept;
-    void recoilCrosshair() noexcept;
+    void recoilCrosshair(ImDrawList* drawList) noexcept;
     void watermark() noexcept;
     void prepareRevolver(UserCmd*) noexcept;
     void fastPlant(UserCmd*) noexcept;
@@ -42,4 +42,5 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
+    void oppositeHandKnife(FrameStage stage) noexcept;
 }

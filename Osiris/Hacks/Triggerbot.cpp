@@ -62,14 +62,11 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!weaponData)
         return;
 
-    const auto aimPunch = localPlayer->getAimPunch();
-
-    const Vector viewAngles{ std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::cos(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                             std::cos(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * std::sin(degreesToRadians(cmd->viewangles.y + aimPunch.y)) * weaponData->range,
-                            -std::sin(degreesToRadians(cmd->viewangles.x + aimPunch.x)) * weaponData->range };
-
     const auto startPos = localPlayer->getEyePosition();
-    const auto endPos = startPos + viewAngles;
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles + localPlayer->getAimPunch()) * weaponData->range;
+
+    if (!cfg.ignoreSmoke && memory->lineGoesThroughSmoke(startPos, endPos, 1))
+        return;
 
     Trace trace;
     interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
@@ -86,9 +83,6 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         return;
 
     if (cfg.hitgroup && trace.hitgroup != cfg.hitgroup)
-        return;
-
-    if (!cfg.ignoreSmoke && memory->lineGoesThroughSmoke(startPos, endPos, 1))
         return;
 
     float damage = (activeWeapon->itemDefinitionIndex2() != WeaponId::Taser ? HitGroup::getDamageMultiplier(trace.hitgroup) : 1.0f) * weaponData->damage * std::pow(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
