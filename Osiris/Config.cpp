@@ -339,6 +339,8 @@ static void from_json(const json& j, Config::Ragebot& r)
 	read(j, "Baim", r.Baim);
 	read(j, "KeyForceEnabled", r.keyForceShotEnabled);
 	read(j, "KeyForce", r.keyForceShot);
+	read(j, "QuickPeekEnabled", r.QuickPeekEnabled);
+	read(j, "QuickPeekKey", r.QuickPeekKey);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
@@ -902,6 +904,8 @@ static void to_json(json& j, const Config::Ragebot& o, const Config::Ragebot& du
 	WRITE("Baim", Baim);
 	WRITE("KeyForceEnabled", keyForceShotEnabled);
 	WRITE("KeyForce", keyForceShot);
+	WRITE("QuickPeekEnabled", QuickPeekEnabled);
+	WRITE( "QuickPeekKey", QuickPeekKey);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})

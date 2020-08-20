@@ -400,6 +400,9 @@ ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
 ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
 ImGui::SameLine();
 hotkey(config->ragebot[currentWeapon].keyForceShot);
+ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
+ImGui::SameLine();
+hotkey(config->ragebot[currentWeapon].QuickPeekKey);
 if (!contentOnly)
 ImGui::End();
 }

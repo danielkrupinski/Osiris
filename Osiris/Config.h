@@ -68,6 +68,8 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+    bool QuickPeekHasShot {false}; // dynamic, do not persist
+	
 	struct Ragebot {
 		bool enabled{ false };
 		bool onKey{ false };
@@ -83,6 +85,8 @@ public:
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
 		bool Baim {false};
+		bool QuickPeekEnabled {false};
+		int QuickPeekKey {0};
 		bool keyForceShotEnabled {false};
 		int keyForceShot {0};
 		bool BonesBools[8]{

@@ -177,7 +177,7 @@ static int missedshots;
 static float hitchance;
 static int TotalShots;
 static int HitShots;
-void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance)noexcept
+void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance, Vector quickpeekVector)noexcept
 {
 	if (!config->misc.ShotsCout.enabled)
 		return;
@@ -232,7 +232,7 @@ void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance)noexc
 	
     ImGui::Text("Best rage dmg now: %d", bestRageDmg);
 	ImGui::Text("Best rage chance now: %d", bestRageChance);
-
+    ImGui::Text("Quickpeek: x:%d y:%d z:%d", static_cast<int>(quickpeekVector.x), static_cast<int>(quickpeekVector.y), static_cast<int>(quickpeekVector.z));
 	
 	ImGui::Text("TotalShots: %.1f", TotalShots);
 	ImGui::Text("HitShots: %.1f", HitShots);
@@ -299,6 +299,63 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 	out = ImFloor(out);
     return true;
 }
+
+void Misc::drawStartPos(ImDrawList* dl, Vector &quickpeekstartpos) noexcept {
+    if (quickpeekstartpos != Vector{ 0, 0, 0 }) {
+        ImVec2 startpos;
+        if (worldToScreen(quickpeekstartpos, startpos))
+            dl->AddCircleFilled(startpos, 10, ImColor(1.f, 1.f, 1.f, 1.f), 32);
+    }
+}
+
+void gotoStart(UserCmd* cmd, Vector &quickpeekstartpos) noexcept {
+
+    if (!localPlayer || localPlayer->isDormant() || !localPlayer->isAlive()) return;
+    Vector playerLoc = localPlayer->getAbsOrigin();
+ 
+    float yaw = cmd->viewangles.y;
+    Vector VecForward = playerLoc - quickpeekstartpos;
+ 
+    Vector translatedVelocity = Vector{
+        (float)(VecForward.x * cos(yaw / 180 * (float)M_PI) + VecForward.y * sin(yaw / 180 * (float)M_PI)),
+        (float)(VecForward.y * cos(yaw / 180 * (float)M_PI) - VecForward.x * sin(yaw / 180 * (float)M_PI)),
+        VecForward.z
+    };
+	
+    cmd->forwardmove = -translatedVelocity.x * 20.f;
+    cmd->sidemove = translatedVelocity.y * 20.f;
+}
+
+void Misc::quickpeek(UserCmd* cmd, Vector &quickpeekstartpos) noexcept {
+   
+    if (!localPlayer || !localPlayer->isAlive()) return;
+
+     auto* const activeWeapon = localPlayer->getActiveWeapon();
+     int currentWeapon = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+	
+     if (config->ragebot[currentWeapon].QuickPeekEnabled && config->ragebot[currentWeapon].QuickPeekKey > 0 && GetAsyncKeyState(config->ragebot[currentWeapon].QuickPeekKey)) {
+
+     	 if (!quickpeekstartpos.notNull()) {
+            quickpeekstartpos = localPlayer->getAbsOrigin();
+        }
+         else
+         {
+	      
+	        if (cmd->buttons & UserCmd::IN_ATTACK) {
+	            config->QuickPeekHasShot = true;
+	        }
+	        if (config->QuickPeekHasShot) {
+	            gotoStart(cmd, quickpeekstartpos);
+	        }   
+         }
+        
+    }
+    else {
+        config->QuickPeekHasShot = false;
+        quickpeekstartpos = Vector{ 0, 0, 0 };
+    }
+}
+
 
 void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 {

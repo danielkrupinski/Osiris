@@ -54,6 +54,7 @@
 
 int rageBestDmg = 0;
 int rageBestChance = 0;
+Vector quickPeekVector = {0, 0, 0};
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -106,10 +107,11 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
     Misc::spectatorList();
     Misc::StatusBar();
-	 Misc::ShotsCout(nullptr, rageBestDmg, rageBestChance);
+	Misc::ShotsCout(nullptr, rageBestDmg, rageBestChance, quickPeekVector);
     Misc::DrawInaccuracy(ImGui::GetBackgroundDrawList());
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+	Misc::drawStartPos(ImGui::GetBackgroundDrawList(), quickPeekVector);
 
     if (gui->open)
         gui->render();
@@ -214,6 +216,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(cmd);
+	Misc::quickpeek(cmd, quickPeekVector);
 	
     config->globals.serverTime = memory->globalVars->serverTime();
     config->globals.chokedPackets = interfaces->engine->getNetworkChannel()->chokedPackets;
