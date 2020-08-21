@@ -461,7 +461,7 @@ void Visuals::indicators() noexcept
             {
                 interfaces->surface->setTextFont(62); // aimbot indicator
                 interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - aimbotHeight);
-                if (config->aimbot.enabled) 
+                if (&config->aimbot) 
                     interfaces->surface->setTextColor(0, 255, 0, 255);
                 else
                     interfaces->surface->setTextColor(255, 0, 0, 255);
@@ -472,7 +472,7 @@ void Visuals::indicators() noexcept
             {
                 interfaces->surface->setTextFont(62); // triggerbot indicator
                 interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - triggerbotHeight);
-                if (config->triggerbot.enabled)
+                if (&config->triggerbot)
                     interfaces->surface->setTextColor(0, 255, 0, 255);
                 else
                     interfaces->surface->setTextColor(255, 0, 0, 255);
