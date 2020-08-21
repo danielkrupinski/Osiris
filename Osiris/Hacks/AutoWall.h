@@ -22,9 +22,9 @@ struct FireBulletData
 class AutoWall
 {
 public:
-	float Damage(const Vector& point)noexcept;
-	bool CanHitFloatingPoint(const Vector& point, const Vector& source)noexcept;
-	bool CanWallbang(float& dmg)noexcept;
-	bool PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex) noexcept;
+	float Damage(const Vector& point, Vector& wallbangVector)noexcept;
+	bool CanHitFloatingPoint(const Vector& point, const Vector& source, Vector& wallbangPos)noexcept;
+	bool CanWallbang(float& dmg, Vector& wallbangPos)noexcept;
+	bool PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex, Vector& wallbangVector) noexcept;
 };
 extern AutoWall* Autowall;

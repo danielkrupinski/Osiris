@@ -43,6 +43,37 @@ namespace Math {
 		return static_cast<float>(M_PIF / 180.0f) * t_this;
 	}
 
+	inline void sinCos2(float radians, PFLOAT sine, PFLOAT cosine)
+	{
+		__asm
+		{
+			fld dword ptr[radians]
+			fsincos
+			mov edx, dword ptr[cosine]
+			mov eax, dword ptr[sine]
+			fstp dword ptr[edx]
+			fstp dword ptr[eax]
+		}
+	}
+
+	inline double deg2rad2 (double degrees) {
+		return degrees * 4.0 * atan (1.0) / 180.0;
+	}
+	
+	inline void AngleVectorsFast(const Vector& angles, Vector* f)
+	{
+		float sp, sy, sr, cp, cy, cr;
+
+		sinCos2(deg2rad2(angles.x), &sp, &cp);
+		sinCos2(deg2rad2(angles.y), &sy, &cy);
+		sinCos2(deg2rad2(angles.z), &sr, &cr);
+
+		f->x = cp * cy;
+		f->y = cp * sy;
+		f->z = -sp;
+	}
+
+
 	inline void AngleVectors(const Vector& angles, Vector* forward) noexcept
 	{
 		//assert(s_bMathlibInitialized);

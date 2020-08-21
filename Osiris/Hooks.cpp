@@ -55,6 +55,7 @@
 int rageBestDmg = 0;
 int rageBestChance = 0;
 Vector quickPeekVector = {0, 0, 0};
+Vector wallbangVector = {0, 0, 0};
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -112,7 +113,9 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
 	Misc::drawStartPos(ImGui::GetBackgroundDrawList(), quickPeekVector);
-
+    Misc::drawWallbangVector(ImGui::GetBackgroundDrawList(), wallbangVector, rageBestDmg, rageBestChance);
+	Visuals::updateBeams();
+	
     if (gui->open)
         gui->render();
 
@@ -208,9 +211,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     rageBestDmg = 0;
 	rageBestChance = 0;
+	wallbangVector = {0, 0,0};
 	
     Aimbot::run(cmd);
-    Ragebot::run(cmd, rageBestDmg, rageBestChance);
+    Ragebot::run(cmd, rageBestDmg, rageBestChance, wallbangVector);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);

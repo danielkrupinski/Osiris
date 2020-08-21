@@ -27,7 +27,8 @@ namespace Visuals
     bool removeWeapons(const char* modelName) noexcept;
     void skybox(FrameStage stage) noexcept;
     void NightMode() noexcept;
-	 void indicators() noexcept;
+	void indicators() noexcept;
 	void bulletBeams(GameEvent* event = nullptr) noexcept;
-	 void transparentWorld() noexcept;
+	void transparentWorld() noexcept;
+	void updateBeams() noexcept;
 }

@@ -31,6 +31,8 @@
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include <charconv>
+
 #include "../imgui/imgui_internal.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
@@ -298,6 +300,19 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
 	out = ImFloor(out);
     return true;
+}
+
+void Misc::drawWallbangVector(ImDrawList* dl, Vector &wallbangVector, int wallDmg, int wallChance) noexcept
+{
+	 if (wallbangVector != Vector{ 0, 0, 0 }) {
+        ImVec2 startpos;
+        if (worldToScreen(wallbangVector, startpos))
+        {
+		   dl->AddText(ImGui::GetFont(), 32.0f, startpos, ImColor(1.f, 0.f, 0.f, 1.0f), (std::to_string(wallDmg) + " / " + std::to_string(wallChance) + "%").c_str());
+	       dl->AddCircleFilled(startpos, 4, ImColor(1.f, 1.f, 1.f, 0.4f), 32);  
+        }
+          
+    }
 }
 
 void Misc::drawStartPos(ImDrawList* dl, Vector &quickpeekstartpos) noexcept {

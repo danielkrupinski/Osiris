@@ -50,4 +50,5 @@ namespace Misc
     void chokePackets(bool& sendPacket, UserCmd* cmd) noexcept;
 	void drawStartPos(ImDrawList* dl, Vector &quickpeekstartpos) noexcept;
 	void quickpeek(UserCmd* cmd, Vector &quickpeekstartpos) noexcept;
+	void drawWallbangVector(ImDrawList* dl, Vector &wallbangVector, int wallDmg, int wallChance) noexcept;
 }

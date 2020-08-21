@@ -19,6 +19,8 @@
 
 #include "../SDK/Beams.h"
 
+std::vector<BeamRef> activeBeams;
+
 void Visuals::playerModel(FrameStage stage) noexcept
 {
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
@@ -83,10 +85,12 @@ void Visuals::playerModel(FrameStage stage) noexcept
         }
     };
 
+    const auto modelprecache = interfaces->networkStringTableContainer->findTable("modelprecache");
+	
     if (const auto model = getModel(localPlayer->team())) {
         if (stage == FrameStage::RENDER_START) {
             originalIdx = localPlayer->modelIndex();
-            if (const auto modelprecache = interfaces->networkStringTableContainer->findTable("modelprecache")) {
+            if (modelprecache) {
                 modelprecache->addString(false, model);
                 const auto viewmodelArmConfig = memory->getPlayerViewmodelArmConfigForPlayerModel(model);
                 modelprecache->addString(false, viewmodelArmConfig[2]);
@@ -101,6 +105,11 @@ void Visuals::playerModel(FrameStage stage) noexcept
         if (const auto ragdoll = interfaces->entityList->getEntityFromHandle(localPlayer->ragdoll()))
             ragdoll->setModelIndex(idx);
     }
+
+	if (modelprecache)
+	{
+			modelprecache->addString(false, "sprites/bloodspray.vmt");
+	}
 }
 
 void Visuals::colorWorld() noexcept
@@ -608,6 +617,32 @@ void Visuals::indicators() noexcept
 }
 
 
+void Visuals::updateBeams() noexcept
+{
+/*	auto beam = std::begin(activeBeams);
+
+	while (beam != std::end(activeBeams)) {
+
+		  if (beam->beamPtr != nullptr && beam->beamPtr)
+		  {
+			 if (beam->info.m_flBrightness > 1.f)
+			  {
+			    	//float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			 	   // float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			 	   // float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+			 	   // beam->info.m_flRed = 255.f;
+				   // beam->info.m_flGreen = 0.f;
+				   // beam->info.m_flBlue = 0.f;
+					//beam->info.m_flBrightness -= 0.01f;
+       				//memory->renderBeams->SetBeamAttributes(beam->beamPtr, beam->info);
+			  }  
+		  }
+       
+		++beam;
+	}*/
+}
+
 void Visuals::bulletBeams(GameEvent* event) noexcept
 {
    if (!config->visuals.bulletTracers.enabled || !interfaces->engine->isInGame() || !interfaces->engine->isConnected() || memory->renderBeams == nullptr)
@@ -618,22 +653,23 @@ void Visuals::bulletBeams(GameEvent* event) noexcept
     if (!player || !localPlayer)
         return;
 
-    Vector position;
+	Vector position;
     position.x = event->getFloat("x");
     position.y = event->getFloat("y");
     position.z = event->getFloat("z");
 
+
     BeamInfo_t beam_info;
     beam_info.m_nType = TE_BEAMPOINTS;
-    beam_info.m_pszModelName = "sprites/physbeam.vmt";
-    beam_info.m_nModelIndex = 1;
-    beam_info.m_flHaloScale = 0.2f;
+    beam_info.m_pszModelName = "sprites/bloodspray.vmt";//"sprites/glow01.vmt";
+    beam_info.m_nModelIndex = -1;
+    beam_info.m_flHaloScale = 0.f;
     beam_info.m_flLife = 2.f;
-    beam_info.m_flWidth = 0.f;
+    beam_info.m_flWidth = 1.f;
     beam_info.m_flEndWidth = 1.f;
     beam_info.m_flFadeLength = 0.1f;
-    beam_info.m_flAmplitude = 2.3f;
-    beam_info.m_flBrightness = 64.f;
+    beam_info.m_flAmplitude = 2.f;
+    beam_info.m_flBrightness = 255.f;
     beam_info.m_flSpeed = 0.2f;
     beam_info.m_nStartFrame = 0;
     beam_info.m_flFrameRate = 0.f;
@@ -642,13 +678,18 @@ void Visuals::bulletBeams(GameEvent* event) noexcept
     beam_info.m_flBlue = config->visuals.bulletTracers.color[2] * 255;
     beam_info.m_nSegments = 2;
     beam_info.m_bRenderable = true;
-    beam_info.m_nFlags = FBEAM_FADEIN | FBEAM_FADEOUT | FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
+    beam_info.m_nFlags = FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
 
     // create beam backwards because it looks nicer.
     beam_info.m_vecStart = position;
-    beam_info.m_vecEnd = player->getBonePosition(38);
+    beam_info.m_vecEnd = player->getEyePosition();
 
     auto beam = memory->renderBeams->CreateBeamPoints(beam_info);
+
     if (beam)
-        memory->renderBeams->DrawBeam(beam);
+    {
+	     memory->renderBeams->DrawBeam(beam);
+    	 activeBeams.push_back({beam_info, beam});
+    }
+       
 }

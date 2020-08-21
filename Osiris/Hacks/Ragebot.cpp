@@ -11,16 +11,16 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/ModelInfo.h"
 
-
 //this working
-static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponIndex, UserCmd* cmd, const int chance, int &outHitchance) noexcept
+static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponIndex, UserCmd* cmd, const int chance, int &outHitchance, Vector &firstWallToPen, int& raysHit, Vector& bestVector) noexcept
 {
+	raysHit = 0;
 	outHitchance = 0;
 	
 	if (!chance)
 		return true;
 
-	int hitseed = 256;
+	int hitseed = 512;
 
 	int iHit = 0;
 	int iHitsNeed = (int)((float)hitseed * ((float)chance / 100.f));
@@ -29,19 +29,22 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 	Vector forward, right, up;
 	Math::AngleVectors(angles, &forward, &right, &up);
 
+	bestVector = {0, 0, 0};
+	float bestChance = 0;
+
 	weapon->UpdateAccuracyPenalty();
 
 	for (auto i = 0; i < hitseed; ++i) {
 
-		float RandomA = Math::RandomFloat(0.0f, 1.0f);
-		float RandomB = 1.0f - RandomA * RandomA;
-		RandomA = Math::RandomFloat(0.0f, M_PIF * 2.0f);
+		float RandomA = Math::RandomFloat(0.0f, 1.0f); // random 1
+		float RandomB = 1.0f - RandomA * RandomA; 
+		RandomA = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 2
 		RandomB *= weapon->getSpread() + weapon->getInaccuracy();
 		float SpreadX1 = (cos(RandomA) * RandomB);
 		float SpreadY1 = (sin(RandomA) * RandomB);
-		float RandomC = Math::RandomFloat(0.0f, 1.0f);
+		float RandomC = Math::RandomFloat(0.0f, 1.0f); // random 3
 		float RandomF = RandomF = 1.0f - RandomC * RandomC;
-		RandomC = Math::RandomFloat(0.0f, M_PIF * 2.0f);
+		RandomC = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 4
 		RandomF *= weapon->getSpread();
 		float SpreadX2 = (cos(RandomC) * RandomF);
 		float SpreadY2 = (sin(RandomC) * RandomF);
@@ -52,6 +55,9 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 		vSpreadForward.x = forward.x + (fSpreadX * right.x) + (fSpreadY * up.x);
 		vSpreadForward.y = forward.y + (fSpreadX * right.y) + (fSpreadY * up.y);
 		vSpreadForward.z = forward.z + (fSpreadX * right.z) + (fSpreadY * up.z);
+
+		Vector rawNew = {angles.x + (fSpreadX * right.x) + (fSpreadY * up.x), angles.y + (fSpreadX * right.y) + (fSpreadY * up.y), angles.z + (fSpreadX * right.z) + (fSpreadY * up.z)};
+		
 		vSpreadForward.NormalizeInPlace();
 
 		Vector qaNewAngle;
@@ -62,12 +68,17 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 		Math::AngleVectors(qaNewAngle, &vEnd);
 		vEnd = localPlayer->getEyePosition() + (vEnd * 8192.f);
 
-		if (Autowall->PenetrateWall(entity, vEnd, weaponIndex))
+		if (Autowall->PenetrateWall(entity, vEnd, weaponIndex, firstWallToPen))
+		{
 			iHit++;
+		}
 
-		int percentChance = static_cast<int>((static_cast<float>(iHit) / 256.f) * 100.f);
+		float currentHitChance = (static_cast<float>(iHit) / static_cast<float>(hitseed)) * 100.f;
+		int percentChance = static_cast<int>(currentHitChance);
+		
 		outHitchance = percentChance;
-
+		raysHit = iHit;
+		
 		if (percentChance >= 2 && config->ragebot[weaponIndex].keyForceShotEnabled && config->ragebot[weaponIndex].keyForceShot > 0 && GetAsyncKeyState(config->ragebot[weaponIndex].keyForceShot))
 		{
 			bHitchance = true;
@@ -76,14 +87,20 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 
 		if (percentChance >= chance) {
 			bHitchance = true;
-			break;
+
+			if (currentHitChance > bestChance)
+			{
+				bestChance = currentHitChance;
+				bestVector = rawNew;
+			}
 		}
 		
-		if ((256.f - 1 - i + iHit) < iHitsNeed)
+		if ((static_cast<float>(hitseed) - 1 - i + iHit) < iHitsNeed)
 		{
 			break;	
 		}
 	}
+	
 	return bHitchance;
 }
 
@@ -177,17 +194,21 @@ std::vector<Vector> GetMultiplePointsForHitbox(Entity* entity, int iHitbox, matr
 	return std::vector<Vector>{};
 }
 
-Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex, int &bestDmgFound)noexcept
+std::vector<VectorAndDamage> GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex, int &bestDmgFound, Vector &firstWallToPen, int& sumDmg, int &bestSingleDamage)noexcept
 {
+	std::vector<VectorAndDamage> possibleVectors;
+	sumDmg = 0;
+	bestSingleDamage = 0;
+	
 	if (!localPlayer)
-		return Vector{ 0.0f,0.0f,0.0f };
+		return possibleVectors;
 	
 	bestDmgFound = 0;
 	
 	if (!localPlayer->isAlive())
-		return Vector{ 0.0f,0.0f,0.0f };
-	if (weapon->isKnife() || weapon->isNade()) //check weapon
-		return Vector{ 0.0f,0.0f,0.0f };
+		return possibleVectors;
+	if (weapon->isKnife() || weapon->isNade())
+		return possibleVectors;
 
 	int bestHitbox = -1;
 	std::vector<int> hitboxes;
@@ -246,7 +267,7 @@ Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex, int &bestDmg
 
 	matrix3x4 matrix[256];
 	if (!entity->setupBones(matrix, 256, 256, memory->globalVars->currenttime))
-		return Vector{};
+		return possibleVectors;
 
 	minDamage = std::min(minDamage, static_cast<float>(entity->health()));
 
@@ -259,7 +280,7 @@ Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex, int &bestDmg
 	{
 		for (Vector point : GetMultiplePointsForHitbox(entity, HitBoxID, matrix, weaponIndex))
 		{
-			float damage = Autowall->Damage(point);
+			float damage = Autowall->Damage(point, firstWallToPen);
 
 			if (damage > bestDmgFound)
 			{
@@ -272,19 +293,20 @@ Vector GetHitBoxes(Entity* entity, Entity* weapon, int weaponIndex, int &bestDmg
 				minDamage = damage;
 				BestPoint = point;
 
-				if (minDamage >= entity->health())
-				{
-					return BestPoint;	
-				}
+				sumDmg += damage;
+				bestSingleDamage = damage;
+				possibleVectors.push_back({point, damage});
 			}
 		}
 	}
 
-	return BestPoint;
+	return possibleVectors;
 }
 
-void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance)noexcept
+void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wallbangVector)noexcept
 {
+	Vector firstWallToPen;
+	
 	if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
 		return;
 
@@ -330,50 +352,92 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance)noexcept
 		return;
 
 	Entity* Target{};
-	Vector AimPoint{};
+	std::vector<VectorAndDamage> AimPoints;
+
+	int bestCandidateDmg = 0;
+	
 	for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-		auto entity = interfaces->entityList->getEntity(i);
+		Entity* entity = interfaces->entityList->getEntity(i);
+		
 		if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get()) && !config->ragebot[weaponIndex].friendlyFire || entity->gunGameImmunity())
-			continue;
-		Vector Hitboxes = GetHitBoxes(entity, activeWeapon, weaponIndex, bestDamage);
-		if (Hitboxes != Vector{ 0.f,0.f,0.f })
 		{
-			AimPoint = Hitboxes;
-			Target = entity;
-			break;
+			continue;	
+		}
+
+		int sumDmg = 0;
+		int bestDmg = 0;
+		
+		std::vector<VectorAndDamage> Hitboxes = GetHitBoxes(entity, activeWeapon, weaponIndex, bestDamage, wallbangVector, sumDmg, bestDmg);
+		
+		if (!Hitboxes.empty())
+		{
+			if (bestDmg > bestCandidateDmg)
+			{
+				AimPoints = Hitboxes;
+				Target = entity;
+			}
 		}
 	}
 
-	if (Target) //if has taget
+	if (Target && Target->isAlive() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime()) //if has taget
 	{
-		Vector Angle = Math::CalcAngle(localPlayer->getEyePosition(), AimPoint);
+		int bestDmg = 0;
+		int bestChance = 0;
+		Vector bestAngle = {0, 0, 0};
+		Vector bestModifiedAngle {0, 0, 0};
+
 		static float MinimumVelocity = 0.0f;
 		MinimumVelocity = localPlayer->getActiveWeapon()->getWeaponData()->maxSpeedAlt * 0.34f;
 
 		if (localPlayer->velocity().length() >= MinimumVelocity && config->ragebot[weaponIndex].autoStop && (localPlayer->flags() & PlayerFlags::ONGROUND))
-			Autostop(cmd); //Auto Stop
+		{
+			Autostop(cmd);
+		}
 
+		
 		if (activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
 		{
-			cmd->buttons |= UserCmd::IN_ATTACK2; //Auto Scope
-			//return;
+			cmd->buttons |= UserCmd::IN_ATTACK2; 
 		}
 		
 		#define M_Left  0x1 //M_LEFT
-		if (cmd->buttons & UserCmd::IN_ATTACK && GetAsyncKeyState(M_Left)) //if localPlayer is using mouse to shoot
-			return;
-
-		//No recoil
-		Angle -= (localPlayer->aimPunchAngle() * interfaces->cvar->findVar("weapon_recoil_scale")->getFloat());
-		if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance, bestHitchance) && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
+		if (cmd->buttons & UserCmd::IN_ATTACK && GetAsyncKeyState(M_Left))
 		{
-			cmd->viewangles = Angle; //Set Angles
+			return;	
+		}
+			
+		for (auto const& aimPoint: AimPoints) {
+			int raysHit = 0;
+			Vector Angle = Math::CalcAngle(localPlayer->getEyePosition(), aimPoint.vec);
 
-			if (!config->ragebot[weaponIndex].slient) 
+			//No recoil
+			Angle -= (localPlayer->aimPunchAngle() * interfaces->cvar->findVar("weapon_recoil_scale")->getFloat());
+			Vector bestVector {0, 0,0};
+			
+			if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance, bestHitchance, firstWallToPen, raysHit, bestVector))
+			{
+				if (aimPoint.damage > bestDmg)
+				{
+					bestDmg = aimPoint.damage;
+					bestChance = bestHitchance;
+					bestAngle = Angle;
+					bestModifiedAngle = bestVector;
+				}
+			}
+		}
+
+		if (bestDmg > 0)
+		{
+			cmd->viewangles = bestModifiedAngle;//bestAngle;
+
+			if (!config->ragebot[weaponIndex].slient)
+			{
 				interfaces->engine->setViewAngles(cmd->viewangles);
-
+			}
+					
 			cmd->buttons |= UserCmd::IN_ATTACK; //shoot
 		}
+		
 	}
 }
 

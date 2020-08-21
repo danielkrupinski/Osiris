@@ -40,7 +40,7 @@ bool VectortoVectorVisible(Vector src, Vector point)noexcept
 	return false;
 }
 
-bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck)noexcept;
+bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck, Vector& wallbangPos)noexcept;
 
 float GetHitgroupDamageMult(int iHitGroup)noexcept
 {
@@ -152,12 +152,23 @@ void UTIL_ClipTraceToPlayers(const Vector& vecAbsStart, const Vector& vecAbsEnd,
 	}
 }
 
-bool SimulateFireBullet(Entity* local, Entity* weapon, FireBulletData& data)noexcept
+bool SimulateFireBullet(Entity* local, Entity* weapon, FireBulletData& data, Vector& wallbangVector)noexcept
 {
-	data.penetrate_count = 4; // Max Amount Of Penitration
-	data.trace_length = 0.0f; // wow what a meme
+	if (!localPlayer  || !local || !weapon)
+	{
+		return false;
+	}
+	
+	data.penetrate_count = 4; // Max Amount Of Penetration
+	data.trace_length = 0.0f; 
 	auto wpn_data = weapon->getWeaponData(); // Get Weapon Info
-	data.current_damage = (float)wpn_data->damage;// Set Damage Memes
+
+	if (!wpn_data)
+	{
+		return false;	
+	}
+	
+	data.current_damage = static_cast<float>(wpn_data->damage);
 	while ((data.penetrate_count > 0) && (data.current_damage >= 1.0f))
 	{
 		data.trace_length_remaining = wpn_data->range - data.trace_length;
@@ -173,7 +184,7 @@ bool SimulateFireBullet(Entity* local, Entity* weapon, FireBulletData& data)noex
 			ScaleDamage(data.enter_trace.hitgroup, data.enter_trace.entity, wpn_data->armorRatio, data.current_damage);
 			return true;
 		}
-		if (!HandleBulletPenetration(wpn_data, data, false))
+		if (!HandleBulletPenetration(wpn_data, data, false, wallbangVector))
 			break;
 	}
 	return false;
@@ -203,7 +214,7 @@ bool TraceToExitalt(Vector& end, Trace& tr, Vector start, Vector vEnd, Trace* tr
 	}
 }
 
-bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck)noexcept
+bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck, Vector& wallbangPos)noexcept
 {
 	SurfaceData* enter_surface_data = interfaces->physicsSurfaceProps->getSurfaceData(data.enter_trace.surface.surfaceProps);
 	int enter_material = enter_surface_data->material;
@@ -264,13 +275,22 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 	thickness *= thickness;
 	thickness *= v34;
 	thickness /= 24.0f;
-	float lost_damage = fmaxf(0.0f, v35 + thickness);
+	float lost_damage = fmaxf(0.0f, v35 + thickness); // in karma they substract 1.6f here for some reason
 	if (lost_damage > data.current_damage)
 		return false;
 	if (lost_damage >= 0.0f)
 		data.current_damage -= lost_damage;
 	if (data.current_damage < 1.0f)
 		return false;
+
+	// only updated on first wallbang
+	if (data.penetrate_count >= 4)
+	{
+		wallbangPos.x = trace_exit.endpos.x;
+		wallbangPos.y = trace_exit.endpos.y;
+		wallbangPos.z = trace_exit.endpos.z;	
+	}
+	
 	data.src = trace_exit.endpos;
 	data.penetrate_count--;
 
@@ -278,7 +298,7 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 }
 
 
-float AutoWall::Damage(const Vector& point)noexcept
+float AutoWall::Damage(const Vector& point, Vector& wallbangVector)noexcept
 {
 	auto data = FireBulletData(localPlayer->getEyePosition(), localPlayer.get());
 
@@ -287,13 +307,13 @@ float AutoWall::Damage(const Vector& point)noexcept
 	Math::AngleVectors(angles, &data.direction);
 	Math::VectorNormalize(data.direction);
 
-	if (SimulateFireBullet(localPlayer.get(), localPlayer->getActiveWeapon(), data))
+	if (SimulateFireBullet(localPlayer.get(), localPlayer->getActiveWeapon(), data, wallbangVector))
 		return data.current_damage;
 
 	return 0.f;
 }
 
-bool AutoWall::CanHitFloatingPoint(const Vector& point, const Vector& source)noexcept
+bool AutoWall::CanHitFloatingPoint(const Vector& point, const Vector& source, Vector& wallbangPos)noexcept
 {
 	aim = point;
 
@@ -333,7 +353,7 @@ bool AutoWall::CanHitFloatingPoint(const Vector& point, const Vector& source)noe
 		return true;
 	}
 	static bool extra_check = true;
-	if (HandleBulletPenetration(weaponData, data, extra_check))
+	if (HandleBulletPenetration(weaponData, data, extra_check, wallbangPos))
 	{
 		return true;
 	}
@@ -352,7 +372,7 @@ void CalcAngle34(Vector src, Vector dst, Vector& angles)noexcept
 		angles.y += 180.0f;
 }
 
-bool AutoWall::CanWallbang(float& dmg)noexcept
+bool AutoWall::CanWallbang(float& dmg, Vector& wallbangPos)noexcept
 {
 
 	if (!localPlayer)
@@ -403,7 +423,7 @@ bool AutoWall::CanWallbang(float& dmg)noexcept
 	if (data.enter_trace.fraction == 1.0f)
 		return false;
 
-	if (HandleBulletPenetration(weaponData, data, false))
+	if (HandleBulletPenetration(weaponData, data, false, wallbangPos))
 	{
 		dmg = data.current_damage;
 		return true;
@@ -412,13 +432,13 @@ bool AutoWall::CanWallbang(float& dmg)noexcept
 	return false;
 }
 
-bool AutoWall::PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex)noexcept
+bool AutoWall::PenetrateWall(Entity* pBaseEntity, Vector& vecPoint, int weaponIndex, Vector& wallbangVector)noexcept
 {
 	float min_damage = 5.0f; //mindamage
 	if (pBaseEntity->health() < min_damage)
 		min_damage = pBaseEntity->health();
 
-	if (Damage(vecPoint) >= min_damage)
+	if (Damage(vecPoint, wallbangVector) >= min_damage)
 		return true;
 
 	return false;

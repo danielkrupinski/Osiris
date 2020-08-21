@@ -101,6 +101,14 @@ struct BeamInfo_t
 	}
 };
 
+
+struct BeamRef
+{
+	BeamInfo_t& info;
+	Beam_t* beamPtr;
+};
+
+
 class IViewRenderBeams
 {
 public:
