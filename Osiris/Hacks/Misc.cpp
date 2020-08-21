@@ -874,6 +874,7 @@ void Misc::oppositeHandKnife(FrameStage stage) noexcept
     }
 }
 
+
 void Misc::jumpbug(UserCmd* cmd) noexcept {
     if (!config->misc.jumpbug || !localPlayer || !localPlayer->isAlive())
         return;
@@ -1227,19 +1228,16 @@ void Misc::doorSpam(UserCmd* cmd) noexcept {
     if (!localPlayer || !config->misc.doorSpam || localPlayer->isDefusing())
         return;
 
-    static bool doorSpam = true;
-    constexpr float doorRange{ 200.0f };
-    Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                       cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                      -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
+    constexpr auto doorRange = 200.0f;
+
     Trace trace;
-    interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
 
     if (trace.entity && trace.entity->getClientClass()->classId == ClassId::PropDoorRotating)
-        if (cmd->buttons & UserCmd::IN_USE) {
-            doorSpam ? cmd->buttons |= UserCmd::IN_USE : cmd->buttons &= ~UserCmd::IN_USE;
-            doorSpam = !doorSpam;
-        }
+        if (cmd->buttons & UserCmd::IN_USE && cmd->tickCount & 1)
+            cmd->buttons &= ~UserCmd::IN_USE;
 }
 
 void Misc::chatSpam() noexcept
