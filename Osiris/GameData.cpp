@@ -47,7 +47,6 @@ void GameData::update() noexcept
     if (!localPlayer)
         return;
 
-    viewMatrix = interfaces->engine->worldToScreenMatrix();
     localPlayerData.update();
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
@@ -124,6 +123,12 @@ void GameData::update() noexcept
         }
         ++it;
     }
+}
+
+void GameData::updateViewMatrix() noexcept
+{
+    Lock lock;
+    viewMatrix = interfaces->engine->worldToScreenMatrix();
 }
 
 void GameData::clearProjectileList() noexcept

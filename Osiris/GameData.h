@@ -23,6 +23,7 @@ struct Matrix4x4;
 namespace GameData
 {
     void update() noexcept;
+    void updateViewMatrix() noexcept;
     void clearProjectileList() noexcept;
 
     class Lock {
