@@ -275,7 +275,7 @@ static void drawHealthBar(const ImVec2& pos, float height, int health) noexcept
 {
     constexpr float width = 3.0f;
 
-    drawList->PushClipRect(pos + ImVec2{ 0.0f, (100 - health) / 100.0f * height }, pos + ImVec2{ width, height });
+    drawList->PushClipRect(pos + ImVec2{ 0.0f, (100 - health) / 100.0f * height }, pos + ImVec2{ width + 1.0f, height + 1.0f });
 
     const auto green = Helpers::calculateColor(0, 255, 0, 255);
     const auto yellow = Helpers::calculateColor(255, 255, 0, 255);
@@ -284,10 +284,12 @@ static void drawHealthBar(const ImVec2& pos, float height, int health) noexcept
     ImVec2 min = pos;
     ImVec2 max = min + ImVec2{ width, height / 2.0f };
 
-    drawList->AddRectFilledMultiColor(min, max, green, green, yellow, yellow);
+    drawList->AddRectFilled(min + ImVec2{ 1.0f, 1.0f }, pos + ImVec2{ width + 1.0f, height + 1.0f }, Helpers::calculateColor(0, 0, 0, 255));
+
+    drawList->AddRectFilledMultiColor(ImFloor(min), ImFloor(max), green, green, yellow, yellow);
     min.y += height / 2.0f;
     max.y += height / 2.0f;
-    drawList->AddRectFilledMultiColor(min, max, yellow, yellow, red, red);
+    drawList->AddRectFilledMultiColor(ImFloor(min), ImFloor(max), yellow, yellow, red, red);
 
     drawList->PopClipRect();
 }
@@ -304,7 +306,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
     ImVec2 offsetMins{}, offsetMaxs{};
 
     if (config.healthBar)
-        drawHealthBar(bbox.min - ImVec2{ 4.0f, 0.0f }, (bbox.max.y - bbox.min.y), playerData.health);
+        drawHealthBar(bbox.min - ImVec2{ 5.0f, 0.0f }, (bbox.max.y - bbox.min.y), playerData.health);
 
     FontPush font{ config.font.name, playerData.distanceToLocal };
 
