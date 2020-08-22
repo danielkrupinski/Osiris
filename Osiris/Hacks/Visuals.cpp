@@ -346,8 +346,7 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     if (lastHitTime + config->visuals.hitMarkerTime < memory->globalVars->realtime)
         return;
 
-    switch (config->visuals.hitMarker.enabled) {
-    case 1:
+    if (config->visuals.hitMarker.enabled) {
         const auto [width, height] = interfaces->surface->getScreenSize();
 
         const auto width_mid = width / 2;
@@ -358,7 +357,6 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         interfaces->surface->drawLine(width_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid - config->visuals.hitMarkerGap, height_mid + config->visuals.hitMarkerGap);
         interfaces->surface->drawLine(width_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid + config->visuals.hitMarkerGap, height_mid - config->visuals.hitMarkerGap);
         interfaces->surface->drawLine(width_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid - config->visuals.hitMarkerGap, height_mid - config->visuals.hitMarkerGap);
-        break;
     }
 }
 
