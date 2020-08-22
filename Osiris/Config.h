@@ -167,6 +167,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int hitMarkerLength{ 6 };
         int hitMarkerGap{ 4 };
+        int hitMarkerAlpha{ 255 };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 

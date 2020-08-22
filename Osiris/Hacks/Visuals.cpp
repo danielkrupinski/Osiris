@@ -347,12 +347,14 @@ void Visuals::hitMarker(GameEvent* event) noexcept
         return;
 
     if (config->visuals.hitMarker.enabled) {
+        if (config->visuals.hitMarkerAlpha == 0)
+            return;
         const auto [width, height] = interfaces->surface->getScreenSize();
 
         const auto width_mid = width / 2;
         const auto height_mid = height / 2;
 
-        interfaces->surface->setDrawColor(config->visuals.hitMarker.color);
+        interfaces->surface->setDrawColor(config->visuals.hitMarker.color, config->visuals.hitMarkerAlpha);
         interfaces->surface->drawLine(width_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid + config->visuals.hitMarkerGap, height_mid + config->visuals.hitMarkerGap);
         interfaces->surface->drawLine(width_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid - config->visuals.hitMarkerGap, height_mid + config->visuals.hitMarkerGap);
         interfaces->surface->drawLine(width_mid + (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), height_mid - (config->visuals.hitMarkerGap + config->visuals.hitMarkerLength), width_mid + config->visuals.hitMarkerGap, height_mid - config->visuals.hitMarkerGap);

@@ -426,6 +426,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Hit marker time", v.hitMarkerTime);
     read(j, "Hit marker length", v.hitMarkerLength);
     read(j, "Hit marker gap", v.hitMarkerGap);
+    read(j, "Hit marker alpha", v.hitMarkerAlpha);
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
@@ -994,6 +995,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker time", hitMarkerTime);
     WRITE("Hit marker length", hitMarkerLength);
     WRITE("Hit marker gap", hitMarkerGap);
+    WRITE("Hit marker alpha", hitMarkerAlpha);
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
     WRITE("Color correction", colorCorrection);
