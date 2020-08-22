@@ -1024,6 +1024,46 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("skybox file must be put in csgo/materials/skybox directory");
     }
+    ImGuiCustom::colorPicker("Rainbow Bar", config->visuals.rainbowBar);
+    if (config->visuals.rainbowBar.enabled) {
+        ImGui::SameLine();
+        ImGui::PushID("Rainbow Bar");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("RB");
+
+        if (ImGui::BeginPopup("RB")) {
+            ImGui::Text("Position:");
+            ImGui::Checkbox("Upper", &config->visuals.rainbowUp);
+            ImGui::Checkbox("Bottom", &config->visuals.rainbowBottom);
+            ImGui::Checkbox("Left", &config->visuals.rainbowLeft);
+            ImGui::Checkbox("Right", &config->visuals.rainbowRight);
+            ImGui::Text("Scale:");
+            ImGui::SliderFloat("Scale", &config->visuals.rainbowScale, 0.03125f, 1.0f, "%.5f");
+            ImGui::Text("Scale presets:");
+            if (ImGui::Button("0.25x"))
+                config->visuals.rainbowScale = 0.03125f;
+            ImGui::SameLine();
+            if (ImGui::Button("0.5x"))
+                config->visuals.rainbowScale = 0.0625f;
+            ImGui::SameLine();
+            if (ImGui::Button("1x"))
+                config->visuals.rainbowScale = 0.125f;
+            ImGui::SameLine();
+            if (ImGui::Button("2x"))
+                config->visuals.rainbowScale = 0.25f;
+            ImGui::SameLine();
+            if (ImGui::Button("4x"))
+                config->visuals.rainbowScale = 0.5f;
+            ImGui::SameLine();
+            if (ImGui::Button("8x"))
+                config->visuals.rainbowScale = 1.0f;
+            ImGui::Text("Pulse:");
+            ImGui::Checkbox("Enable", &config->visuals.rainbowPulse);
+            ImGui::SliderFloat("Speed", &config->visuals.rainbowPulseSpeed, 0.1f, 25.0f, "%.1f");
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
+    }
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
@@ -1706,7 +1746,8 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
         if (!window.BETA)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Info (OsirisBETA by PlayDay)", &window.BETA, windowFlags);
+        ImGui::Begin("Info (OsirisBETA by PlayDay)", &window.BETA, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoScrollWithMouse);
     }
     ImGui::Text("Osiris by danielkrupinski;");
     ImGui::Text("OsirisBETA by PlayDay (playday3008(GitHub)), (FlutterShy);");
@@ -1747,6 +1788,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Fake items (fake unbox and trade messages) by DoomFishWasTaken;");
     //ImGui::Text("Standalone RCS by tirziz;");
     //ImGui::Text("Multipoints by ClaudiuHKS;");
+    ImGui::Text("Rainbow Bar by ME");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
     ImGui::Text("Build: " __DATE__ ", " __TIME__ "");

@@ -33,4 +33,5 @@ namespace Visuals
     void noZoom() noexcept;
     void noBloom() noexcept;
     void NightMode() noexcept;
+    void rainbowBar(ImDrawList* drawList) noexcept;
 }

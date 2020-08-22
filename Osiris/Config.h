@@ -181,6 +181,14 @@ public:
         bool fullBright{ false };
         int skybox{ 0 };
         std::string customSkybox;
+        ColorToggleThickness rainbowBar;
+        bool rainbowUp{ true };
+        bool rainbowBottom{ false };
+        bool rainbowLeft{ false };
+        bool rainbowRight{ false };
+        float rainbowScale{ 0.125f };
+        bool rainbowPulse{ false };
+        float rainbowPulseSpeed{ 1.0f };
         ColorToggle world;
         ColorToggle sky;
         bool deagleSpinner{ false };
