@@ -1131,7 +1131,6 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Brightness", brightness);
     WRITE("Full Bright", fullBright);
     WRITE("Skybox", skybox);
-    WRITE("custom Skybox", customSkybox);
     WRITE("Rainbow Bar", rainbowBar);
     WRITE("Rainbow Up", rainbowUp);
     WRITE("Rainbow Bottom", rainbowBottom);
