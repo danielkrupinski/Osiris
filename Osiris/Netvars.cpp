@@ -1,4 +1,3 @@
-#include <random>
 #include "Config.h"
 #include "Interfaces.h"
 #include "Netvars.h"
@@ -10,8 +9,7 @@
 
 static int random(int min, int max) noexcept
 {
-    static std::mt19937 gen{ std::random_device{ }() };
-    return std::uniform_int_distribution{ min, max }(gen);
+    return rand() % (max - min + 1) + min;
 }
 
 static std::unordered_map<uint32_t, recvProxy> proxies;

@@ -31,7 +31,7 @@
 // We need these for overriding viewmodels and icons
 const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 {
-    constexpr std::array<std::pair<int, weapon_info>, 30> info{ {
+    static constexpr std::array<std::pair<int, weapon_info>, 30> info{ {
         { WEAPON_KNIFE, { "models/weapons/v_knife_default_ct.mdl", "knife" } },
         { WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"} },
         { WEAPON_KNIFE_BAYONET,{"models/weapons/v_knife_bayonet.mdl", "bayonet"} },
