@@ -841,3 +841,69 @@ void Misc::oppositeHandKnife(FrameStage stage) noexcept
         cl_righthand->setValue(original);
     }
 }
+
+static std::vector<std::uint64_t> reportedPlayers;
+static int reportbotRound;
+
+void Misc::runReportbot() noexcept
+{
+    if (!config->misc.reportbot.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static auto lastReportTime = 0.0f;
+
+    if (lastReportTime + config->misc.reportbot.delay > memory->globalVars->realtime)
+        return;
+
+    if (reportbotRound >= config->misc.reportbot.rounds)
+        return;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (config->misc.reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->misc.reportbot.target != 0 : config->misc.reportbot.target != 1))
+            continue;
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+            continue;
+
+        std::string report;
+
+        if (config->misc.reportbot.textAbuse)
+            report += "textabuse,";
+        if (config->misc.reportbot.griefing)
+            report += "grief,";
+        if (config->misc.reportbot.wallhack)
+            report += "wallhack,";
+        if (config->misc.reportbot.aimbot)
+            report += "aimbot,";
+        if (config->misc.reportbot.other)
+            report += "speedhack,";
+
+        if (!report.empty()) {
+            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory->globalVars->realtime;
+            reportedPlayers.push_back(playerInfo.xuid);
+        }
+        return;
+    }
+
+    reportedPlayers.clear();
+    ++reportbotRound;
+}
+
+void Misc::resetReportbot() noexcept
+{
+    reportbotRound = 0;
+    reportedPlayers.clear();
+}

@@ -1,7 +1,1 @@
-#pragma once
-
-namespace Reportbot
-{
-    void run() noexcept;
-    void reset() noexcept;
-}
+// TODO: remove this file, moved to Misc.h

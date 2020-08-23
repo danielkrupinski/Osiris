@@ -139,7 +139,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::antiAfkKick(cmd);
     Misc::prepareRevolver(cmd);
     Visuals::removeShadows();
-    Reportbot::run();
+    Misc::runReportbot();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);

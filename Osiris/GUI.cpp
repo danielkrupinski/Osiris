@@ -1328,6 +1328,32 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Reportbot", &config->misc.reportbot.enabled);
+    ImGui::SameLine();
+    ImGui::PushID("Reportbot");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Combo("Target", &config->misc.reportbot.target, "Enemies\0Allies\0All\0");
+        ImGui::InputInt("Delay (s)", &config->misc.reportbot.delay);
+        config->misc.reportbot.delay = (std::max)(config->misc.reportbot.delay, 1);
+        ImGui::InputInt("Rounds", &config->misc.reportbot.rounds);
+        config->misc.reportbot.rounds = (std::max)(config->misc.reportbot.rounds, 1);
+        ImGui::PopItemWidth();
+        ImGui::Checkbox("Abusive Communications", &config->misc.reportbot.textAbuse);
+        ImGui::Checkbox("Griefing", &config->misc.reportbot.griefing);
+        ImGui::Checkbox("Wall Hacking", &config->misc.reportbot.wallhack);
+        ImGui::Checkbox("Aim Hacking", &config->misc.reportbot.aimbot);
+        ImGui::Checkbox("Other Hacking", &config->misc.reportbot.other);
+        if (ImGui::Button("Reset"))
+            Misc::resetReportbot();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
@@ -1344,23 +1370,7 @@ void GUI::renderReportbotWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
     }
-    ImGui::Checkbox("Enabled", &config->reportbot.enabled);
-    ImGui::SameLine(0.0f, 50.0f);
-    if (ImGui::Button("Reset"))
-        Reportbot::reset();
-    ImGui::Separator();
-    ImGui::PushItemWidth(80.0f);
-    ImGui::Combo("Target", &config->reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config->reportbot.delay);
-    config->reportbot.delay = (std::max)(config->reportbot.delay, 1);
-    ImGui::InputInt("Rounds", &config->reportbot.rounds);
-    config->reportbot.rounds = (std::max)(config->reportbot.rounds, 1);
-    ImGui::PopItemWidth();
-    ImGui::Checkbox("Abusive Communications", &config->reportbot.textAbuse);
-    ImGui::Checkbox("Griefing", &config->reportbot.griefing);
-    ImGui::Checkbox("Wall Hacking", &config->reportbot.wallhack);
-    ImGui::Checkbox("Aim Hacking", &config->reportbot.aimbot);
-    ImGui::Checkbox("Other Hacking", &config->reportbot.other);
+   
 
     if (!contentOnly)
         ImGui::End();
@@ -1418,7 +1428,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1437,7 +1447,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 10: config->sound = { }; break;
                     case 11: config->style = { }; updateColors(); break;
                     case 12: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 13: config->reportbot = { }; break;
                     }
                 }
             }
