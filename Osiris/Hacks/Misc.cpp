@@ -1510,3 +1510,67 @@ void Misc::buyBot(GameEvent* event) noexcept
         }
     }
 }
+
+void Misc::customViewmodelPosition(FrameStage stage) noexcept {
+
+    if (!localPlayer)
+        return;
+
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static const auto view_x = interfaces->cvar->findVar("viewmodel_offset_x");
+    static const auto view_y = interfaces->cvar->findVar("viewmodel_offset_y");
+    static const auto view_z = interfaces->cvar->findVar("viewmodel_offset_z");
+    static const auto sv_minspec = interfaces->cvar->findVar("sv_competitive_minspec");
+    static const auto cl_righthand = interfaces->cvar->findVar("cl_righthand");
+    static float viewmodel_x_orig = view_x->getFloat();
+    static float viewmodel_y_orig = view_y->getFloat();
+    static float viewmodel_z_orig = view_z->getFloat();
+
+    *(int*)((DWORD)&sv_minspec->onChangeCallbacks + 0xC) = 0;
+
+    sv_minspec->setValue(config->misc.customViewmodelToggle ? 0 : 1);
+
+    if (stage == FrameStage::RENDER_START) {
+
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+            if (const auto classId = activeWeapon->getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG) {
+                view_x->setValue(config->misc.viewmodel_x_knife);
+                view_y->setValue(config->misc.viewmodel_y_knife);
+                view_z->setValue(config->misc.viewmodel_z_knife);
+            }
+            else if (activeWeapon && classId != ClassId::C4) {
+                view_x->setValue(config->misc.viewmodel_x);
+                view_y->setValue(config->misc.viewmodel_y);
+                view_z->setValue(config->misc.viewmodel_z);
+                cl_righthand->setValue(config->misc.customViewmodelSwitchHand ? 0 : 1);
+                if (GetAsyncKeyState(config->misc.customViewmodelSwitchHandBind) & 1)
+                    config->misc.customViewmodelSwitchHand = !config->misc.customViewmodelSwitchHand;
+            }
+            else {
+                view_x->setValue(viewmodel_x_orig);
+                view_y->setValue(viewmodel_y_orig);
+                view_z->setValue(viewmodel_z_orig);
+            }
+        }
+    }
+    else {
+        view_x->setValue(viewmodel_x_orig);
+        view_y->setValue(viewmodel_y_orig);
+        view_z->setValue(viewmodel_z_orig);
+    }
+}
+
+void Misc::viewBob(FrameStage stage) noexcept {
+    if (!localPlayer)
+        return;
+
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static const auto view_bob = interfaces->cvar->findVar("cl_use_new_headbob");
+
+    if (stage == FrameStage::RENDER_START)
+        view_bob->setValue(config->misc.view_bob ? 0 : 1);
+};

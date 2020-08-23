@@ -1569,6 +1569,47 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Player Blocker", &config->misc.playerBlocker);
     ImGui::SameLine();
     hotkey(config->misc.playerBlockerKey);
+    ImGui::Checkbox("Viewmodel Position XYZ", &config->misc.customViewmodelToggle);
+    if (config->misc.customViewmodelToggle) {
+        ImGui::SameLine();
+        ImGui::PushID("Viewmodel Position");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("VP");
+
+        if (ImGui::BeginPopup("VP")) {
+            ImGui::Checkbox("Knife Position", &config->misc.customViewmodelKnifeToggle);
+            if (!config->misc.customViewmodelKnifeToggle) {
+                ImGui::PushItemWidth(280.0f);
+                ImGui::PushID(6);
+                ImGui::SliderFloat("", &config->misc.viewmodel_x, -20, 20, "Left/Right: %.2f");
+                ImGui::PopID();
+                ImGui::PushID(7);
+                ImGui::SliderFloat("", &config->misc.viewmodel_y, -20, 20, "Close/Far: %.2f");
+                ImGui::PopID();
+                ImGui::PushID(8);
+                ImGui::SliderFloat("", &config->misc.viewmodel_z, -20, 20, "Down/Up: %.2f");
+                ImGui::PopID();
+                ImGui::Checkbox("Right/Left hand Weapon", &config->misc.customViewmodelSwitchHand);
+                ImGui::SameLine();
+                hotkey(config->misc.customViewmodelSwitchHandBind);
+            }
+            else {
+                ImGui::PushItemWidth(280.0f);
+                ImGui::PushID(9);
+                ImGui::SliderFloat("", &config->misc.viewmodel_x_knife, -20, 20, "Left/Right: %.2f");
+                ImGui::PopID();
+                ImGui::PushID(10);
+                ImGui::SliderFloat("", &config->misc.viewmodel_y_knife, -20, 20, "Close/Far: %.2f");
+                ImGui::PopID();
+                ImGui::PushID(11);
+                ImGui::SliderFloat("", &config->misc.viewmodel_z_knife, -20, 20, "Down/Up: %.2f");
+                ImGui::PopID();
+            }
+            ImGui::Checkbox("HeadBob", &config->misc.view_bob);
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
+    };
     ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
@@ -1770,7 +1811,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Custom Physics Timescale by RyDeem;");
     ImGui::Text("mat_fullbright setting in visuals window by RyDeem;");
     ImGui::Text("Hitmarker Damage Indicator by ZerGo0, improved by RyDeem;");
-    //ImGui::Text("Custom View model Offset by effex1337, improved by RyDeem;");
+    ImGui::Text("Custom View model Offset by ME;");
     ImGui::Text("AntiDetection by 0xE232FE;");
     ImGui::Text("No zoom on scope by MinecraftGoodGame;");
     ImGui::Text("Provide hotkey for Auto Strafe by simonsmh;");

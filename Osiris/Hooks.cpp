@@ -331,6 +331,8 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Visuals::applyZoom(stage);
         Visuals::noZoom();
         Misc::fixAnimationLOD(stage);
+        Misc::viewBob(stage);
+        Misc::customViewmodelPosition(stage);
         Backtrack::update(stage);
         SkinChanger::run(stage);
     }

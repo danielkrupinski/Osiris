@@ -648,6 +648,17 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
+    read(j, "Custom Viewmodel", m.customViewmodelToggle);
+    read(j, "Custom Viewmodel X", m.viewmodel_x);
+    read(j, "Custom Viewmodel Y", m.viewmodel_y);
+    read(j, "Custom Viewmodel Z", m.viewmodel_z);
+    read(j, "Custom Viewmodel Knife", m.customViewmodelKnifeToggle);
+    read(j, "Custom Viewmodel Switch", m.customViewmodelSwitchHand);
+    read(j, "Custom Viewmodel Switch Bind", m.customViewmodelSwitchHandBind);
+    read(j, "Custom Viewmodel Knife X", m.viewmodel_x_knife);
+    read(j, "Custom Viewmodel Knife Y", m.viewmodel_y_knife);
+    read(j, "Custom Viewmodel Knife Z", m.viewmodel_z_knife);
+    read(j, "Custom Viewmodel HeadBob", m.view_bob);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
 }
 
@@ -1073,6 +1084,17 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
+    WRITE("Custom Viewmodel", customViewmodelToggle);
+    WRITE("Custom Viewmodel X", viewmodel_x);
+    WRITE("Custom Viewmodel Y", viewmodel_y);
+    WRITE("Custom Viewmodel Z", viewmodel_z);
+    WRITE("Custom Viewmodel Knife", customViewmodelKnifeToggle);
+    WRITE("Custom Viewmodel Switch", customViewmodelSwitchHand);
+    WRITE("Custom Viewmodel Switch Bind", customViewmodelSwitchHandBind);
+    WRITE("Custom Viewmodel Knife X", viewmodel_x_knife);
+    WRITE("Custom Viewmodel Knife Y", viewmodel_y_knife);
+    WRITE("Custom Viewmodel Knife Z", viewmodel_z_knife);
+    WRITE("Custom Viewmodel HeadBob", view_bob);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
 }
 

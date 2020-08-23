@@ -312,6 +312,17 @@ public:
         bool bombDamage{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
+        bool customViewmodelToggle{ false };
+        float viewmodel_x{ 0 };
+        float viewmodel_y{ 0 };
+        float viewmodel_z{ 0 };
+        bool customViewmodelKnifeToggle{ false };
+        bool customViewmodelSwitchHand{ false };
+        int customViewmodelSwitchHandBind{ 0 };
+        float viewmodel_x_knife{ 0 };
+        float viewmodel_y_knife{ 0 };
+        float viewmodel_z_knife{ 0 };
+        bool view_bob{ false };
         bool oppositeHandKnife = false;
         char clanTag[16];
         int edgejumpkey{ 0 };
