@@ -661,6 +661,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Custom Viewmodel Knife Z", m.viewmodel_z_knife);
     read(j, "Custom Viewmodel HeadBob", m.view_bob);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
+    read(j, "Opposite Hand Knife Bind", m.oppositeHandKnifeBind);
 }
 
 static void from_json(const json& j, Config::Reportbot& r)
@@ -1098,6 +1099,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Viewmodel Knife Z", viewmodel_z_knife);
     WRITE("Custom Viewmodel HeadBob", view_bob);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
+    WRITE("Opposite Hand Knife Bind", oppositeHandKnifeBind);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)

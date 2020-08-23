@@ -324,6 +324,7 @@ public:
         float viewmodel_z_knife{ 0 };
         bool view_bob{ false };
         bool oppositeHandKnife = false;
+        int oppositeHandKnifeBind{ 0 };
         char clanTag[16];
         int edgejumpkey{ 0 };
         int slowwalkKey{ 0 };

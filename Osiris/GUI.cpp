@@ -1614,6 +1614,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::PopID();
     };
     ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
+    ImGui::SameLine();
+    hotkey(config->misc.oppositeHandKnifeBind);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 

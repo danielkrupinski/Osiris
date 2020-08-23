@@ -859,6 +859,9 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
 void Misc::oppositeHandKnife(FrameStage stage) noexcept
 {
+    if (GetAsyncKeyState(config->misc.oppositeHandKnifeBind) & 1)
+        config->misc.oppositeHandKnife = !config->misc.oppositeHandKnife;
+
     if (!config->misc.oppositeHandKnife)
         return;
 
