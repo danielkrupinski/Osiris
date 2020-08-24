@@ -37,14 +37,12 @@ private:
         bool backtrack = false;
         bool glow = false;
         bool chams = false;
-        bool esp = false;
         bool streamProofESP = false;
         bool visuals = false;
         bool skinChanger = false;
         bool sound = false;
         bool style = false;
         bool misc = false;
-        bool reportbot = false;
         bool config = false;
     } window;
 

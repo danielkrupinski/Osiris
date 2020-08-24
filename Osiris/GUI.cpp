@@ -1363,16 +1363,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
 void GUI::renderReportbotWindow(bool contentOnly) noexcept
 {
-    if (!contentOnly) {
-        if (!window.reportbot)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
-    }
-   
 
-    if (!contentOnly)
-        ImGui::End();
 }
 
 void GUI::renderConfigWindow(bool contentOnly) noexcept
