@@ -199,7 +199,7 @@ public:
     NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
     NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
+    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
