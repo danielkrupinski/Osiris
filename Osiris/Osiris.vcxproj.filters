@@ -364,9 +364,6 @@
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Reportbot.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>
     </ClInclude>
