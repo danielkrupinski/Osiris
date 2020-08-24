@@ -13,7 +13,6 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
-#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Helpers.h"
 #include "Hooks.h"
