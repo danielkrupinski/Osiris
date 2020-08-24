@@ -62,7 +62,6 @@ void GUI::render() noexcept
         renderSoundWindow();
         renderStyleWindow();
         renderMiscWindow();
-        // renderReportbotWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -120,7 +119,6 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Sound", window.sound);
         menuBarItem("Style", window.style);
         menuBarItem("Misc", window.misc);
-        // menuBarItem("Reportbot", window.reportbot);
         menuBarItem("Config", window.config);
         ImGui::EndMainMenuBar();   
     }
@@ -1361,11 +1359,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderReportbotWindow(bool contentOnly) noexcept
-{
-
-}
-
 void GUI::renderConfigWindow(bool contentOnly) noexcept
 {
     if (!contentOnly) {
@@ -1515,12 +1508,6 @@ void GUI::renderGuiStyle2() noexcept
             renderMiscWindow(true);
             ImGui::EndTabItem();
         }
-        /*
-        if (ImGui::BeginTabItem("Reportbot")) {
-            renderReportbotWindow(true);
-            ImGui::EndTabItem();
-        }
-        */
         if (ImGui::BeginTabItem("Config")) {
             renderConfigWindow(true);
             ImGui::EndTabItem();
