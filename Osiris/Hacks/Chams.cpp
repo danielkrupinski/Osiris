@@ -17,6 +17,7 @@
 #include "../SDK/KeyValues.h"
 #include "Animations.h"
 #include "Misc.h"
+#include "../Interfaces.h"
 
 Chams::Chams() noexcept
 {
@@ -120,34 +121,6 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
     auto applied{ false };
     for (size_t i = 0; i < config->chams["ALLIES"].materials.size(); ++i) {
        if (info.entityIndex == localPlayer->index()) {
-            if (config->chams["LOCALPLAYER"].materials[i].enabled) {
-                if (applied)
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-
-                if (config->chams["DESYNC"].materials[i].enabled && Animations::data.gotMatrix) {
-                    for (auto& i : Animations::data.fakematrix)
-                    {
-                        i[0][3] += info.origin.x;
-                        i[1][3] += info.origin.y;
-                        i[2][3] += info.origin.z;
-                    }
-
-                	applied = true;
-                	
-                    if (applied)
-                        hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
-                    applyChams(config->chams["DESYNC"].materials, entity->health());
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), Animations::data.fakematrix);
-                    interfaces->studioRender->forcedMaterialOverride(nullptr);
-                    applied = true;
-                    for (auto& i : Animations::data.fakematrix)
-                    {
-                        i[0][3] -= info.origin.x;
-                        i[1][3] -= info.origin.y;
-                        i[2][3] -= info.origin.z;
-                    }
-                }
-            }
             if (config->chams["DESYNC"].materials[i].enabled && Animations::data.gotMatrix) {
                 for (auto& i : Animations::data.fakematrix)
                 {
@@ -174,6 +147,12 @@ void Chams::renderPlayers(void* ctx, void* state, const ModelRenderInfo& info, m
                     applied = true;
                 }
             }
+            else if (config->chams["DESYNC"].materials[i].enabled && !config->chams["LOCALPLAYER"].materials[i].enabled) {
+                if (applied)
+                    hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+                applyChams(config->chams["DESYNC"].materials, entity->health());
+                applied = true;
+            }
         } else if (entity->isOtherEnemy(localPlayer.get())) {
         }
     }
@@ -192,29 +171,23 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Defusing"].materials, health);
     } else if (player == localPlayer.get()) {
         applyChams(config->chams["Local player"].materials, health);
-       //   applyChamsDesync(config->chams["DESYNC"].materials, health);
-
-      
-   
+        applyChams(config->chams["DESYNC"].materials, health);
     } else if (localPlayer->isOtherEnemy(player)) {
-        
-
-    	        if (config->backtrack.enabled) {
-	    auto record = &Backtrack::records[player->index()];
-	    for (int x = 0; x < record->size(); x++) {
-	        if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
-	            if (!appliedChams)
-	                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-	            applyChams(config->chams["Backtrack"].materials, health, record->at(x).matrix);
-	            interfaces->studioRender->forcedMaterialOverride(nullptr);
-	        }
-	    }
-		}
-                else
-                {
-	                applyChams(config->chams["Enemies"].materials, health);
+        if (config->backtrack.enabled) {
+            auto record = &Backtrack::records[player->index()];
+            for (int x = 0; x < record->size(); x++) {
+                if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
+                    if (!appliedChams)
+                        hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+                    applyChams(config->chams["Backtrack"].materials, health, record->at(x).matrix);
+                    interfaces->studioRender->forcedMaterialOverride(nullptr);
                 }
-    	
+            }
+        }
+        else
+        {
+            applyChams(config->chams["Enemies"].materials, health);
+        }
     } else {
         applyChams(config->chams["Allies"].materials, health);
     }
@@ -242,11 +215,6 @@ void Chams::renderSleeves() noexcept
         return;
 
     applyChams(config->chams["Sleeves"].materials, localPlayer->health());
-}
-
-void Chams::applyChamsDesync(const std::array<Config::Chams::Material, 7>& chams, int health, matrix3x4* customMatrix) noexcept
-{
-
 }
 
 void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, matrix3x4* customMatrix) noexcept

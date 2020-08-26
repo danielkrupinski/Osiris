@@ -1,3 +1,5 @@
+#define _CRT_RAND_S
+
 #include "AntiAim.h"
 #include "../Interfaces.h"
 #include "../SDK/Engine.h"
@@ -7,6 +9,7 @@
 #include "../SDK/UserCmd.h"
 #include "../Memory.h"
 #include "../SDK/Cvar.h"
+#include <stdlib.h>
 
 float AntiAim::RandomFloat(float min, float max) noexcept
 {
@@ -52,12 +55,16 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         return;
 
 	auto weapon = localPlayer->getActiveWeapon();
-    auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
 
     if (!weapon)
         return;
 
-    if (weaponClass != 40 && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+    auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+
+    if (!weaponClass)
+        return;
+
+    if (weaponClass != (40 | 39 | 9 | 8 ) && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
         return;
 	
     if (localPlayer->throwing(cmd))
@@ -77,11 +84,6 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
                 config->antiAim.general.yawInversed = !config->antiAim.general.yawInversed;
         }
     }
-
-    auto activeWeapon = localPlayer->getActiveWeapon();
-
-    if (activeWeapon)
-        auto weaponClass = getWeaponClass(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
 
     if (cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2 | UserCmd::IN_USE) || (localPlayer->moveType() == MoveType::LADDER) || (localPlayer->moveType() == MoveType::NOCLIP) || !localPlayer->isAlive())
         return;

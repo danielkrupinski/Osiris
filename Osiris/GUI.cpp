@@ -20,7 +20,7 @@
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
 
-constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 namespace ImGui {
 
@@ -31,9 +31,12 @@ namespace ImGui {
         if (Button("..."))
             OpenPopup("");
 
-        BeginPopup("");
-        Checkbox("No BackGround", &i.noBackGround);
-        Checkbox("No TittleBar", &i.noTittleBar);
+        if (BeginPopup(""))
+        {
+            Checkbox("No BackGround", &i.noBackGround);
+            Checkbox("No TittleBar", &i.noTittleBar);
+            ImGui::EndPopup();
+        }
     }
 }
 
@@ -378,33 +381,46 @@ void GUI::renderRagebotWindow(bool contentOnly) noexcept
 	}
 	ImGui::PopID();
 
-ImGui::SameLine();
-ImGui::Checkbox("Enabled", &config->ragebot[currentWeapon].enabled);
-ImGui::Separator();
-ImGui::Checkbox("On Key", &config->ragebot[currentWeapon].onKey);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].key);
-ImGui::Combo("", &config->ragebot[currentWeapon].keyMode, "Hold\0Toggle\0");
-ImGuiCustom::MultiCombo("Hitboxes", config->BonesTexts, config->ragebot[currentWeapon].BonesBools, 8);
-ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].slient);
-ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
-ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
-ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
-
-
-ImGui::SliderFloat("Min damage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
-ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
-ImGui::SliderFloat("Head value", &config->ragebot[currentWeapon].pointChance, 0, 100);
-ImGui::SliderFloat("Body value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
-ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
-ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].keyForceShot);
-ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].QuickPeekKey);
-if (!contentOnly)
-ImGui::End();
+    ImGui::SameLine();
+    ImGui::Checkbox("Enabled", &config->ragebot[currentWeapon].enabled);
+    ImGui::Separator();
+    ImGui::Checkbox("On Key", &config->ragebot[currentWeapon].onKey);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].key);
+    ImGui::Combo("", &config->ragebot[currentWeapon].keyMode, "Hold\0Toggle\0");
+    ImGuiCustom::MultiCombo("Hitboxes", config->BonesTexts, config->ragebot[currentWeapon].BonesBools, 8);
+    ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].slient);
+    ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
+    ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
+    ImGui::Checkbox("Auto Scope", &config->ragebot[currentWeapon].autoScope);
+    ImGui::Checkbox("Auto Shot", &config->ragebot[currentWeapon].autoShot);
+    ImGui::SliderFloat("Min damage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
+    ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
+    ImGui::SliderFloat("Head value", &config->ragebot[currentWeapon].pointChance, 0, 100);
+    ImGui::SliderFloat("Body value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
+    ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
+    ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].keyForceShot);
+    ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].QuickPeekKey);
+    ImGui::Checkbox("Extra", &config->ragebotExtra.enabled);
+    if (config->ragebotExtra.enabled)
+    {
+        ImGui::Text("Exploit");
+        ImGui::Checkbox("Doubletap", &config->ragebotExtra.doubletap);
+        if (config->ragebotExtra.doubletap)
+        {
+            ImGui::Combo("Doubletap Speed", &config->ragebotExtra.doubletapSpeed, "Instant\0Fast\0Accurate\0");
+            ImGui::SameLine();
+            hotkey(config->ragebotExtra.doubleTapKey);
+            ImGui::Combo("Doubletap Key Mode", &config->ragebotExtra.doubleTapKeyMode, "Hold\0Toggle\0");
+        }
+    }
+    if (!contentOnly)
+        ImGui::End();
 }
 
 void GUI::renderAntiAimWindow(bool contentOnly) noexcept
@@ -821,7 +837,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves", "Desync" };
 
     ImGui::SameLine();
 
@@ -1298,7 +1314,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
 	ImGui::Checkbox("Indicators", &config->visuals.indicatorsEnabled);
     ImGui::SameLine();
     ImGui::PushID(6);
-    ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 4);
+    ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 5);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers);
 
@@ -1577,7 +1593,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Radar hack", &config->misc.radarHack);
     ImGui::PushID("Spectator List");
     ImGui::ImGuiStructItem(config->misc.spectatorList);
-    ImGui::EndPopup();
     ImGui::PopID();
 
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
@@ -1672,7 +1687,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 	
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
-
+    
     ImGui::PushID("Purchase List");
     if (ImGui::Button("..."))
         ImGui::OpenPopup("");
@@ -1687,19 +1702,20 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
-	 ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
+	ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
     ImGui::PushID("Shots Cout");
     ImGui::SameLine();
     if (ImGui::Button("..."))
         ImGui::OpenPopup("A");
-
+    
     if (ImGui::BeginPopup("A")){
         ImGui::Checkbox("No BackGround", &config->misc.ShotsCout.noBackGround);
-    ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
-    ImGui::EndPopup();
+        ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
+        ImGui::EndPopup();
     }
     ImGui::PopID();
 
+    
 	ImGui::Checkbox("Status Bar", &config->misc.Sbar.enabled);
 	ImGui::SameLine();
 

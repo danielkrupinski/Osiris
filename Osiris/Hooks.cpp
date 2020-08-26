@@ -51,6 +51,12 @@
 #include "SDK/Beams.h"
 #include "extraHooks.h"
 #include "Hacks/Animations.h"
+#include "SDK/Tickbase.h"
+#include "Memory.h"
+#include "Interfaces.h"
+#include "SDK/Input.h"
+#include "SDK/InputSystem.h"
+#include "SDK/StudioRender.h"
 
 int rageBestDmg = 0;
 int rageBestChance = 0;
@@ -215,6 +221,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 	
     Aimbot::run(cmd);
     Ragebot::run(cmd, rageBestDmg, rageBestChance, wallbangVector);
+    Tickbase::run(cmd, sendPacket);//run this after ragebot
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
@@ -227,16 +234,12 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     config->globals.tickRate = memory->globalVars->intervalPerTick;
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)) || config->misc.fakeLagSelectedFlags[0])
-    {
 	   if (config->misc.fakeLagKey == 0 || GetAsyncKeyState(config->misc.fakeLagKey))
-	   {
-			Misc::chokePackets(sendPacket, cmd);      
-	   }
-    }
+			Misc::chokePackets(sendPacket, cmd);
      
 
-    Misc::fakeDuck(cmd, sendPacket);
 	AntiAim::fakeWalk(cmd, sendPacket);
+    Misc::fakeDuck(cmd, sendPacket);
     AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
@@ -671,6 +674,73 @@ Hooks::Hooks(HMODULE module) noexcept
 
     window = FindWindowW(L"Valve001", nullptr);
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
+
+    Tickbase::tick = std::make_unique<Tickbase::Tick>();//put this on once on "wndProc"
+}
+
+void WriteUsercmd(void* buf, UserCmd* in, UserCmd* out)
+{
+    static DWORD WriteUsercmdF = (DWORD)memory->WriteUsercmd;
+
+    __asm
+    {
+        mov ecx, buf
+        mov edx, in
+        push out
+        call WriteUsercmdF
+        add esp, 4
+    }
+}
+
+static bool __fastcall WriteUsercmdDeltaToBuffer(void* ecx, void* edx, int slot, void* buffer, int from, int to, bool isnewcommand) noexcept
+{
+    auto original = hooks->client.getOriginal<bool, 24>(slot, buffer, from, to, isnewcommand);
+    if (_ReturnAddress() == memory->WriteUsercmdDeltaToBufferReturn || Tickbase::tick->tickshift <= 0 || !memory->clientState)
+        return original(ecx, slot, buffer, from, to, isnewcommand);
+
+    if (from != -1)
+        return true;
+
+    int* numBackupCommands = (int*)(reinterpret_cast <uintptr_t> (buffer) - 0x30);
+    int* numNewCommands = (int*)(reinterpret_cast <uintptr_t> (buffer) - 0x2C);
+
+    int32_t newcommands = *numNewCommands;
+
+    int nextcommmand = memory->clientState->lastOutgoingCommand + memory->clientState->chokedCommands + 1;
+    int totalcommands = std::min(Tickbase::tick->tickshift, Tickbase::tick->maxUsercmdProcessticks);
+    Tickbase::tick->tickshift = 0;
+
+    from = -1;
+    *numNewCommands = totalcommands;
+    *numBackupCommands = 0;
+
+    for (to = nextcommmand - newcommands + 1; to <= nextcommmand; to++)
+    {
+        if (!(original(ecx, slot, buffer, from, to, true)))
+            return false;
+
+        from = to;
+    }
+
+    UserCmd* lastRealCmd = memory->input->GetUserCmd(slot, from);
+    UserCmd fromcmd;
+
+    if (lastRealCmd)
+        fromcmd = *lastRealCmd;
+
+    UserCmd tocmd = fromcmd;
+    tocmd.tickCount += 200;
+    tocmd.commandNumber++;
+
+    for (int i = newcommands; i <= totalcommands; i++)
+    {
+        WriteUsercmd(buffer, &tocmd, &fromcmd);
+        fromcmd = tocmd;
+        tocmd.commandNumber++;
+        tocmd.tickCount++;
+    }
+
+    return true;
 }
 
 void Hooks::install() noexcept
@@ -698,6 +768,7 @@ void Hooks::install() noexcept
 	gameEventManager.init(interfaces->gameEventManager);
 
     bspQuery.hookAt(6, listLeavesInBox);
+    client.hookAt(24, WriteUsercmdDeltaToBuffer);
     client.hookAt(37, frameStageNotify);
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(18, overrideView);

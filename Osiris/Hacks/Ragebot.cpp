@@ -36,15 +36,15 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 
 	for (auto i = 0; i < hitseed; ++i) {
 
-		float RandomA = Math::RandomFloat(0.0f, 1.0f); // random 1
+		float RandomA = 0.6; //Math::RandomFloat(0.0f, 1.0f); // random 1 /* COMMENTED THIS OUT, DOENST EVEN MATTER WHAT YOU USE ANYWAYS DIFFERENT ON SERVER SIDE */
 		float RandomB = 1.0f - RandomA * RandomA; 
-		RandomA = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 2
+		RandomA = 0.3; //Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 2 /* COMMENTED THIS OUT, DOENST EVEN MATTER WHAT YOU USE ANYWAYS DIFFERENT ON SERVER SIDE */
 		RandomB *= weapon->getSpread() + weapon->getInaccuracy();
 		float SpreadX1 = (cos(RandomA) * RandomB);
 		float SpreadY1 = (sin(RandomA) * RandomB);
-		float RandomC = Math::RandomFloat(0.0f, 1.0f); // random 3
+		float RandomC = 0.2; //Math::RandomFloat(0.0f, 1.0f); // random 3
 		float RandomF = RandomF = 1.0f - RandomC * RandomC;
-		RandomC = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 4
+		RandomC = 3.14159265 * 1.5f; //Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 4 /* COMMENTED THIS OUT, DOENST EVEN MATTER WHAT YOU USE ANYWAYS DIFFERENT ON SERVER SIDE */
 		RandomF *= weapon->getSpread();
 		float SpreadX2 = (cos(RandomC) * RandomF);
 		float SpreadY2 = (sin(RandomC) * RandomF);
@@ -258,8 +258,6 @@ std::vector<VectorAndDamage> GetHitBoxes(Entity* entity, Entity* weapon, int wea
 		hitboxes.push_back(HitBoxes::HITBOX_THORAX);
 		hitboxes.push_back(HitBoxes::HITBOX_PELVIS);
 	}
-	
-
 
 	float minDamage = config->ragebot[weaponIndex].WallDamage;
 	
@@ -393,17 +391,10 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 		{
 			Autostop(cmd);
 		}
-
 		
-		if (activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+		if (activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped() && config->ragebot[weaponIndex].autoScope)
 		{
 			cmd->buttons |= UserCmd::IN_ATTACK2; 
-		}
-		
-		#define M_Left  0x1 //M_LEFT
-		if (cmd->buttons & UserCmd::IN_ATTACK && GetAsyncKeyState(M_Left))
-		{
-			return;	
 		}
 			
 		for (auto const& aimPoint: AimPoints) {
@@ -426,7 +417,7 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 			}
 		}
 
-		if (bestDmg > 0)
+		if (bestDmg > 0 && (config->ragebot[weaponIndex].autoShot || cmd->buttons & UserCmd::IN_ATTACK))
 		{
 			cmd->viewangles = bestModifiedAngle;//bestAngle;
 
@@ -434,7 +425,7 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 			{
 				interfaces->engine->setViewAngles(cmd->viewangles);
 			}
-					
+			
 			cmd->buttons |= UserCmd::IN_ATTACK; //shoot
 		}
 		

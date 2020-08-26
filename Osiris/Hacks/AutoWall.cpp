@@ -40,7 +40,7 @@ bool VectortoVectorVisible(Vector src, Vector point)noexcept
 	return false;
 }
 
-bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck, Vector& wallbangPos)noexcept;
+bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool extracheck, Vector& wallbangPos) noexcept;
 
 float GetHitgroupDamageMult(int iHitGroup)noexcept
 {
@@ -82,7 +82,7 @@ bool IsArmored(Entity* enemy, int ArmorValue, int Hitgroup)
 	return result;
 }
 
-void ScaleDamage(int hitgroup, Entity* enemy, float weapon_armor_ratio, float& current_damage)noexcept
+void ScaleDamage(int hitgroup, Entity* enemy, float weapon_armor_ratio, float& current_damage) noexcept
 {
 	current_damage *= GetHitgroupDamageMult(hitgroup);
 	int ArmorValue = enemy->armor();
@@ -261,8 +261,6 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 			combined_penetration_modifier = 2.0f;
 		}
 	}
-
-	
 	float v34 = fmaxf(0.f, 1.0f / combined_penetration_modifier);
 	float v35 = (data.current_damage * final_damage_modifier) + v34 * 3.0f * fmaxf(0.0f, (3.0f / wpn_data->penetration) * 1.25f);
 
@@ -364,8 +362,8 @@ void CalcAngle34(Vector src, Vector dst, Vector& angles)noexcept
 {
 	Vector delta = src - dst;
 	auto hyp = delta.length2D(); //delta.Length
-	angles.y = (atan(delta.y / delta.x) * 57.295779513082f);
-	angles.x = (atan(delta.z / hyp) * 57.295779513082f);
+	angles.y = (atan(delta.y / delta.x) * 57.29577f);
+	angles.x = (atan(delta.z / hyp) * 57.29577f);
 	angles.z = 0.00;
 
 	if (delta.x >= 0.0)
@@ -380,7 +378,6 @@ bool AutoWall::CanWallbang(float& dmg, Vector& wallbangPos)noexcept
 
 	if (!localPlayer->isAlive())
 		return false;
-
 
 	FireBulletData data = FireBulletData(localPlayer->getEyePosition(), localPlayer.get());
 	//	data.filter = trace;

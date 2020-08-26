@@ -68,7 +68,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
-    bool QuickPeekHasShot {false}; // dynamic, do not persist
+    bool QuickPeekHasShot { false }; // dynamic, do not persist
 	
 	struct Ragebot {
 		bool enabled{ false };
@@ -76,20 +76,23 @@ public:
 		int key{ 0 };
 		int keyMode{ 0 };
 		bool slient{ false };
+        bool autoScope{ false };
 		bool betweenShots{ false };
 		bool friendlyFire{ false };
 		bool autoStop{ false };
+        bool autoShot{ false };
 		float bodyChance{ 0.0f };
 		float pointChance{ 0.0f };
 		float CanSeeDamage{ 0.0f };
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
-		bool Baim {false};
-		bool QuickPeekEnabled {false};
-		int QuickPeekKey {0};
-		bool keyForceShotEnabled {false};
-		int keyForceShot {0};
-		bool BonesBools[8]{
+        float targetSelectionMode{ 0 };
+		bool Baim{ false };
+		bool QuickPeekEnabled { false };
+		int QuickPeekKey { 0 };
+		bool keyForceShotEnabled { false };
+		int keyForceShot { 0 };
+		bool BonesBools[8] {
 			false,
 			false,
 			false,
@@ -101,6 +104,15 @@ public:
 		};
 	};
 	std::array<Ragebot, 45> ragebot;
+
+    struct {
+        bool enabled{ false };
+        bool doubletap{ false };
+        int doubletapSpeed{ 0 };
+        int doubleTapKey{ 0 };
+        bool doubleTapToggled{ false };
+        int doubleTapKeyMode{ 0 };
+    } ragebotExtra;
 
 	const char* BonesTexts[8] = 
 	{
@@ -346,13 +358,15 @@ public:
 
 
           bool indicatorsEnabled{ false };
-        const char* indicators[4] = {
+        const char* indicators[5] = {
             "Desync",
             "LBY",
             "Fakelag",
-            "Fakeduck"
+            "Fakeduck",
+            "Doubletap"
         };
-        bool selectedIndicators[4] = {
+        bool selectedIndicators[5] = {
+            false,
             false,
             false,
             false,

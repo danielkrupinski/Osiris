@@ -384,6 +384,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j,"SYenabled",a.standing.yaw.enabled);
 	read(j,"SYangle",a.standing.yaw.angle);
 	read(j,"SYFmode",a.standing.yaw.fake.mode);
+    read(j,"SYFjitterStep", a.standing.yaw.fake.step);
 	read(j,"SYFjitterMax",a.standing.yaw.fake.jitterMax);
 	read(j,"SYFjitterMin",a.standing.yaw.fake.jitterMin);
 	read(j,"SYDenabled",a.standing.yaw.desync.enabled);
@@ -401,6 +402,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j, "MYenabled", a.moving.yaw.enabled);
 	read(j, "MYangle", a.moving.yaw.angle);
 	read(j, "MYFmode", a.moving.yaw.fake.mode);
+    read(j, "MYFjitterStep", a.moving.yaw.fake.step);
 	read(j, "MYFjitterMax", a.moving.yaw.fake.jitterMax);
 	read(j, "MYFjitterMin", a.moving.yaw.fake.jitterMin);
 	read(j, "MYDenabled", a.moving.yaw.desync.enabled);
@@ -418,6 +420,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j, "IYenabled", a.inAir.yaw.enabled);
 	read(j, "IYangle", a.inAir.yaw.angle);
 	read(j, "IYFmode", a.inAir.yaw.fake.mode);
+    read(j, "IYFjitterStep", a.inAir.yaw.fake.step);
 	read(j, "IYFjitterMax", a.inAir.yaw.fake.jitterMax);
 	read(j, "IYFjitterMin", a.inAir.yaw.fake.jitterMin);
 	read(j, "IYDenabled", a.inAir.yaw.desync.enabled);
@@ -949,6 +952,7 @@ static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& du
 
 	WRITE("SYangle", standing.yaw.angle);
 	WRITE("SYFmode", standing.yaw.fake.mode);
+    WRITE("SYFjitterstep", standing.yaw.fake.step);
 	WRITE("SYFjitterMax", standing.yaw.fake.jitterMax);
 	WRITE("SYFjitterMin", standing.yaw.fake.jitterMin);
 	WRITE("SYDenabled", standing.yaw.desync.enabled);
