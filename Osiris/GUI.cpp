@@ -1846,7 +1846,8 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Nightmode by Cyk-Fad;");
     //ImGui::Text("Reworked anti-aim and fakelag, made thirdperson show cmd->viewangles by DoomFishWasTaken;");
     ImGui::Text("Fake items (fake unbox and trade messages) by DoomFishWasTaken;");
-    //ImGui::Text("Standalone RCS by tirziz;");
+    ImGui::Text("Standalone RCS by steel4me and r3muxd;");
+    ImGui::Text("Zeusbot by DoomFishWasTaken and ME;");
     //ImGui::Text("Multipoints by ClaudiuHKS;");
     ImGui::Text("Rainbow Bar by ME");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
