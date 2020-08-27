@@ -168,8 +168,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (localPlayer->getShotsFired() > config->aimbot[weaponIndex].shotsFired) {
                 setRandomSeed(*memory->predictionRandomSeed);
                 Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
-                currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
-                currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
                 cmd->viewangles += currentPunch;
             }
             interfaces->engine->setViewAngles(cmd->viewangles);
