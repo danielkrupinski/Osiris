@@ -61,6 +61,7 @@ public:
         bool killshot{ false };
         bool betweenShots{ true };
         bool standaloneRCS{ false };
+        bool randomRCS{ true };
     };
     std::array<Aimbot, 40> aimbot;
 
