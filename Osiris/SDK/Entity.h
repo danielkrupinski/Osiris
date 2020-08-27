@@ -16,6 +16,7 @@
 #include "WeaponData.h"
 #include "WeaponId.h"
 #include "UserCmd.h"
+#include "EngineTrace.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -251,6 +252,11 @@ public:
         return getWeaponType() == WeaponType::SniperRifle;
     }
 
+    constexpr auto isShotgun() noexcept
+    {
+        return getWeaponType() == WeaponType::Shotgun;
+    }
+
     constexpr auto isFullAuto() noexcept
     {
         const auto weaponData = getWeaponData();
@@ -268,7 +274,6 @@ public:
 	{
 		return getWeaponType() == WeaponType::Grenade;
 	}
-
 
     constexpr auto requiresRecoilControl() noexcept
     {
