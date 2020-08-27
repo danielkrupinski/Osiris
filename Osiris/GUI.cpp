@@ -252,11 +252,14 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
-    if (config->aimbot[currentWeapon].standaloneRCS) {
-        ImGui::InputInt("Ignore Shots", &config->aimbot[currentWeapon].shotsFired);
-        ImGui::SliderFloat("Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f", 0);
-        ImGui::SliderFloat("Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f", 0);
+    // rcs turns off with silent on, and comboboxes don't fit here
+    if (!config->aimbot[currentWeapon].silent) {
+        ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
+        if (config->aimbot[currentWeapon].standaloneRCS) {
+            ImGui::InputInt("Ignore Shots", &config->aimbot[currentWeapon].shotsFired);
+            ImGui::SliderFloat("Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
+            ImGui::SliderFloat("Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
+        }
     }
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 150);
