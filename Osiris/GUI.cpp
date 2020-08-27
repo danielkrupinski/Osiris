@@ -397,8 +397,8 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
     ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->triggerbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->triggerbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+    ImGui::SliderFloat("Max aim inaccuracy", &config->triggerbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 0);
+    ImGui::SliderFloat("Max shot inaccuracy", &config->triggerbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 0);
 
     if (!contentOnly)
         ImGui::End();
@@ -1038,7 +1038,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
             ImGui::Checkbox("Left", &config->visuals.rainbowLeft);
             ImGui::Checkbox("Right", &config->visuals.rainbowRight);
             ImGui::Text("Scale:");
-            ImGui::SliderFloat("Scale", &config->visuals.rainbowScale, 0.03125f, 1.0f, "%.5f");
+            ImGui::SliderFloat("Scale", &config->visuals.rainbowScale, 0.03125f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
             ImGui::Text("Scale presets:");
             if (ImGui::Button("0.25x"))
                 config->visuals.rainbowScale = 0.03125f;
@@ -1059,7 +1059,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
                 config->visuals.rainbowScale = 1.0f;
             ImGui::Text("Pulse:");
             ImGui::Checkbox("Enable", &config->visuals.rainbowPulse);
-            ImGui::SliderFloat("Speed", &config->visuals.rainbowPulseSpeed, 0.1f, 25.0f, "%.1f");
+            ImGui::SliderFloat("Speed", &config->visuals.rainbowPulseSpeed, 0.1f, 25.0f, "%.1f", ImGuiSliderFlags_Logarithmic);
             ImGui::EndPopup();
         }
         ImGui::PopID();
@@ -1342,8 +1342,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         if (!window.misc)
             return;
         ImGui::SetNextWindowSize({ 580.0f, 0.0f });
-        ImGui::Begin("Misc (OsirisBETA by PlayDay)", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-            | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Misc (OsirisBETA by PlayDay)", &window.misc, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
@@ -1436,6 +1435,15 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
     ImGui::Checkbox("Disable model occlusion", &config->misc.disableModelOcclusion);
     ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
+    ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
+    ImGui::Checkbox("Bypass sv_pure (OLD)", &config->misc.svpurebypassOLD);
+    ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
+    ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
+    if (config->misc.teamDamageCounter)
+        if (ImGui::Button("Reset Counter")) {
+            Misc::teamKills = 0;
+            Misc::teamDamage = 0;
+        }
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
     ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
@@ -1564,15 +1572,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::SliderInt("Zeus Max Wall Penetration Distance", &config->misc.autoZeusMaxPenDist, 0, 50);
         config->misc.autoZeusMaxPenDist = std::clamp(config->misc.autoZeusMaxPenDist, 0, 50);
     }
-    ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
-    ImGui::Checkbox("Bypass sv_pure (OLD)", &config->misc.svpurebypassOLD);
-    ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
-    ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
-    if (config->misc.teamDamageCounter)
-        if (ImGui::Button("Reset Counter")) {
-            Misc::teamKills = 0;
-            Misc::teamDamage = 0;
-        }
     ImGui::Checkbox("Player Blocker", &config->misc.playerBlocker);
     ImGui::SameLine();
     hotkey(config->misc.playerBlockerKey);
@@ -1791,8 +1790,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
         if (!window.BETA)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Info (OsirisBETA by PlayDay)", &window.BETA, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
-            | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Info (OsirisBETA by PlayDay)", &window.BETA, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     }
     ImGui::Text("Osiris by danielkrupinski;");
     ImGui::Text("OsirisBETA by PlayDay (playday3008(GitHub)), (FlutterShy);");
