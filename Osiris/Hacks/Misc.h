@@ -44,4 +44,7 @@ namespace Misc
     void purchaseList(GameEvent* event = nullptr) noexcept;
     void oppositeHandKnife(FrameStage stage) noexcept;
     void doorSpam(UserCmd* cmd) noexcept;
+
+    void runReportbot() noexcept;
+    void resetReportbot() noexcept;
 }

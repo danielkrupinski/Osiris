@@ -41,7 +41,7 @@ struct Snapline : ColorToggleThickness {
     int type = Bottom;
 };
 
-struct Box : ColorToggleThicknessRounding {
+struct Box : ColorToggleRounding {
     enum Type {
         _2d = 0,
         _2dCorners,
@@ -77,6 +77,7 @@ struct Player : Shared {
     ColorToggle flashDuration;
     bool audibleOnly = false;
     bool spottedOnly = false;
+    bool healthBar = false;
     ColorToggleThickness skeleton;
     Box headBox;
 

@@ -163,17 +163,25 @@ static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, 
 {
     drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
 
-    drawList->AddLine(ImVec2{ pos.x, pos.y - 10 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y - 3 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x, pos.y + 3 } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x, pos.y + 10 } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // dot
+    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
 
-    drawList->AddLine(ImVec2{ pos.x - 10, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x - 3, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
-    drawList->AddLine(ImVec2{ pos.x + 3, pos.y } + ImVec2{ 1.0f, 1.0f }, ImVec2{ pos.x + 10, pos.y } + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, thickness);
+    // left
+    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x, pos.y - 10 }, { pos.x, pos.y - 3 }, color, thickness);
-    drawList->AddLine({ pos.x, pos.y + 3 }, { pos.x, pos.y + 10 }, color, thickness);
+    // right
+    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
 
-    drawList->AddLine({ pos.x - 10, pos.y }, { pos.x - 3, pos.y }, color, thickness);
-    drawList->AddLine({ pos.x + 3, pos.y }, { pos.x + 10, pos.y }, color, thickness);
+    // top (left with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
+
+    // bottom (right with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
 
     drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
 }
@@ -204,6 +212,7 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     out = ImGui::GetIO().DisplaySize / 2.0f;
     out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
     out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
     return true;
 }
 
@@ -848,4 +857,70 @@ void Misc::oppositeHandKnife(FrameStage stage) noexcept
     } else {
         cl_righthand->setValue(original);
     }
+}
+
+static std::vector<std::uint64_t> reportedPlayers;
+static int reportbotRound;
+
+void Misc::runReportbot() noexcept
+{
+    if (!config->misc.reportbot.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static auto lastReportTime = 0.0f;
+
+    if (lastReportTime + config->misc.reportbot.delay > memory->globalVars->realtime)
+        return;
+
+    if (reportbotRound >= config->misc.reportbot.rounds)
+        return;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (config->misc.reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->misc.reportbot.target != 0 : config->misc.reportbot.target != 1))
+            continue;
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+            continue;
+
+        std::string report;
+
+        if (config->misc.reportbot.textAbuse)
+            report += "textabuse,";
+        if (config->misc.reportbot.griefing)
+            report += "grief,";
+        if (config->misc.reportbot.wallhack)
+            report += "wallhack,";
+        if (config->misc.reportbot.aimbot)
+            report += "aimbot,";
+        if (config->misc.reportbot.other)
+            report += "speedhack,";
+
+        if (!report.empty()) {
+            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory->globalVars->realtime;
+            reportedPlayers.push_back(playerInfo.xuid);
+        }
+        return;
+    }
+
+    reportedPlayers.clear();
+    ++reportbotRound;
+}
+
+void Misc::resetReportbot() noexcept
+{
+    reportbotRound = 0;
+    reportedPlayers.clear();
 }

@@ -107,9 +107,6 @@
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Reportbot.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="imguiCustom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -362,9 +359,6 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="Hacks\AntiAim.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\Reportbot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
