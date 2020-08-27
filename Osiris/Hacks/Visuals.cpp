@@ -13,6 +13,7 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/LocalPlayer.h"
 
 #include <array>
 
@@ -459,9 +460,28 @@ void Visuals::indicators() noexcept
 
             if (config->visuals.selectedIndicators[0])
             {
+                if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime())
+                    return;
+
+                const auto activeWeapon = localPlayer->getActiveWeapon();
+                if (!activeWeapon || !activeWeapon->clip()) // does active weapon exist and have a clip in
+                    return;
+
+                auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2()); // get weapon index
+                if (!weaponIndex) // no weapon index? then exit
+                    return;
+
+                auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+                if (!config->aimbot[weaponIndex].enabled) //if weaponIndex is not enabled
+                    weaponIndex = weaponClass; // weaponClass is now weaponIndex
+
+                if (!config->aimbot[weaponIndex].enabled) // If weaponClass isnt set
+                    weaponIndex = 0; // weaponClass/Index is now 0 (ALL setting)
+
+
                 interfaces->surface->setTextFont(62); // aimbot indicator
                 interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - aimbotHeight);
-                if (&config->aimbot) 
+                if (config->aimbot[weaponIndex].enabled)
                     interfaces->surface->setTextColor(0, 255, 0, 255);
                 else
                     interfaces->surface->setTextColor(255, 0, 0, 255);
@@ -470,9 +490,25 @@ void Visuals::indicators() noexcept
 
             if (config->visuals.selectedIndicators[1])
             {
+
+                const auto activeWeapon = localPlayer->getActiveWeapon();
+                if (!activeWeapon || !activeWeapon->clip()) // does active weapon exist and have a clip in
+                    return;
+
+                auto weaponIndex = getWeaponIndex(activeWeapon->itemDefinitionIndex2()); // get weapon index
+                if (!weaponIndex) // no weapon index? then exit
+                    return;
+
+                auto weaponClass = getWeaponClass(activeWeapon->itemDefinitionIndex2());
+                if (!config->triggerbot[weaponIndex].enabled) //if weaponIndex is not enabled
+                    weaponIndex = weaponClass; // weaponClass is now weaponIndex
+
+                if (!config->triggerbot[weaponIndex].enabled) // If weaponClass isnt set
+                    weaponIndex = 0; // weaponClass/Index is now 0 (ALL setting)
+
                 interfaces->surface->setTextFont(62); // triggerbot indicator
                 interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - triggerbotHeight);
-                if (&config->triggerbot)
+                if (config->triggerbot[weaponIndex].enabled)
                     interfaces->surface->setTextColor(0, 255, 0, 255);
                 else
                     interfaces->surface->setTextColor(255, 0, 0, 255);
