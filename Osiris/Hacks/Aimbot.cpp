@@ -162,7 +162,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
         Vector bestTarget{ };
         auto localPlayerEyePosition = localPlayer->getEyePosition();
 
-        const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
+        auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
         if (config->aimbot[weaponIndex].standaloneRCS && !config->aimbot[weaponIndex].silent) {
             static Vector lastAimPunch{ };
             if (localPlayer->getShotsFired() > config->aimbot[weaponIndex].shotsFired) {
