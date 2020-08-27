@@ -22,6 +22,7 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
         DEFAULT_PITCH, fontName)) {
+
         DWORD fontData = GDI_ERROR;
 
         if (HDC hdc = CreateCompatibleDC(nullptr)) {
