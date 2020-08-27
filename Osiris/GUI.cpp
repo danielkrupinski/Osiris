@@ -1637,6 +1637,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
     ImGui::SameLine();
     hotkey(config->misc.oppositeHandKnifeBind);
+    ImGui::Checkbox("Fakeduck", &config->misc.fakeDuck);
+    ImGui::SameLine();
+    hotkey(config->misc.fakeDuckKey);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
@@ -1852,6 +1855,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     //ImGui::Text("Multipoints by ClaudiuHKS;");
     ImGui::Text("Rainbow Bar by ME");
     ImGui::Text("Bullet Tracer by DoomFishWasTaken");
+    ImGui::Text("Fake Duck by DoomFishWasTaken");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
     ImGui::Text("Build: " __DATE__ ", " __TIME__ "");

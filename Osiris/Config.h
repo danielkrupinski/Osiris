@@ -362,6 +362,9 @@ public:
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
+        bool fakeDuck{ false };
+        int fakeDuckKey{ 0 };
+        bool fakeDucking{ false };
         PurchaseList purchaseList;
 
         struct Reportbot {

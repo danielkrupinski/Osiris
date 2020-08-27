@@ -1650,3 +1650,66 @@ void Misc::viewBob(FrameStage stage) noexcept {
     if (stage == FrameStage::RENDER_START)
         view_bob->setValue(config->misc.view_bob ? 0 : 1);
 };
+
+void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
+{
+    auto state = localPlayer->getAnimstate()->duckAmount;
+    static int fakeDuckShotState = 0;
+
+    if (!config->misc.fakeDuck)
+        return;
+
+    if (config->misc.fakeDuckKey != 0) {
+        if (!GetAsyncKeyState(config->misc.fakeDuckKey)) {
+            config->misc.fakeDucking = false;
+            return;
+        }
+        else
+            config->misc.fakeDucking = true;
+    }
+
+    if (config->misc.fakeDucking) {
+        if (cmd->buttons & UserCmd::IN_ATTACK || fakeDuckShotState != 0) {
+            if (state > 0.2 && fakeDuckShotState == 0) {
+                sendPacket = true; // clear up sendPacket for fakeduck going up to choke
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
+                fakeDuckShotState = 1;
+            }
+            else if (state > 0.2 && fakeDuckShotState == 1) {
+                sendPacket = false;
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons &= ~UserCmd::IN_DUCK;
+                cmd->buttons &= ~UserCmd::IN_ATTACK;
+                fakeDuckShotState = 1;
+            }
+            else if (state <= 0.2 && fakeDuckShotState == 1) {
+                sendPacket = false;
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons &= ~UserCmd::IN_DUCK;
+                cmd->buttons |= UserCmd::IN_ATTACK;
+                fakeDuckShotState = 2;
+            }
+            else if (fakeDuckShotState == 2) {
+                sendPacket = false;
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                fakeDuckShotState = 3;
+            }
+            else if (fakeDuckShotState == 3) {
+                sendPacket = true;
+                cmd->buttons |= UserCmd::IN_BULLRUSH;
+                cmd->buttons |= UserCmd::IN_DUCK;
+                fakeDuckShotState = 0;
+            }
+        }
+        else {
+            cmd->buttons |= UserCmd::IN_BULLRUSH;
+            cmd->buttons |= UserCmd::IN_DUCK;
+            fakeDuckShotState = 0;
+        }
+    }
+    else
+        fakeDuckShotState = 0;
+}

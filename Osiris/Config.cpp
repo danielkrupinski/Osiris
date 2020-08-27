@@ -655,6 +655,8 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Custom Hit Sound", m.customHitSound);
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
+    read(j, "Fake Duck", m.fakeDuck);
+    read(j, "Fake Duck Bind", m.fakeDuckKey);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Custom Viewmodel", m.customViewmodelToggle);
@@ -1097,6 +1099,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Hit Sound", customHitSound);
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
+    WRITE("Fake Duck", fakeDuck);
+    WRITE("Fake Duck Bind", fakeDuckKey);
     WRITE("Purchase List", purchaseList);
     WRITE("Reportbot", reportbot);
     WRITE("Custom Viewmodel", customViewmodelToggle);

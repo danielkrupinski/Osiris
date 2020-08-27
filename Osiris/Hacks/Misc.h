@@ -65,4 +65,5 @@ namespace Misc
     void buyBot(GameEvent* event) noexcept;
     void customViewmodelPosition(FrameStage stage) noexcept;
     void viewBob(FrameStage stage) noexcept;
+    void fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept;
 }

@@ -186,6 +186,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fastStop(cmd);
     Misc::doorSpam(cmd);
     Misc::chatSpam();
+    Misc::fakeDuck(cmd, sendPacket);
 
     static void* oldPointer = nullptr;
 
@@ -428,10 +429,35 @@ static void __stdcall setDrawColor(int r, int g, int b, int a) noexcept
 }
 
 struct ViewSetup {
-    std::byte pad[176];
+    char _0x0000[16];
+    __int32 x;
+    __int32 x_old;
+    __int32 y;
+    __int32 y_old;
+    __int32 width;
+    __int32    width_old;
+    __int32 height;
+    __int32    height_old;
+    char _0x0030[128];
     float fov;
-    std::byte pad1[32];
+    float fovViewmodel;
+    Vector origin;
+    Vector angles;
+    float zNear;
     float farZ;
+    float zNearViewmodel;
+    float zFarViewmodel;
+    float m_flAspectRatio;
+    float m_flNearBlurDepth;
+    float m_flNearFocusDepth;
+    float m_flFarFocusDepth;
+    float m_flFarBlurDepth;
+    float m_flNearBlurRadius;
+    float m_flFarBlurRadius;
+    float m_nDoFQuality;
+    __int32 m_nMotionBlurMode;
+    char _0x0104[68];
+    __int32 m_EdgeBlur;
 };
 
 static void __stdcall overrideView(ViewSetup* setup) noexcept
@@ -440,6 +466,8 @@ static void __stdcall overrideView(ViewSetup* setup) noexcept
         setup->fov += config->visuals.fov;
     setup->farZ += config->visuals.farZ * 10;
     config->misc.actualFov = setup->fov;
+    if (config->misc.fakeDucking)
+        setup->origin.z = localPlayer->getAbsOrigin().z + 64.f;
     hooks->clientMode.callOriginal<void, 18>(setup);
 }
 
