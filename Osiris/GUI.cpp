@@ -253,6 +253,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
     // rcs turns off with silent on, and comboboxes don't fit here
+    // (you can't control recoil you can't see)
     if (!config->aimbot[currentWeapon].silent) {
         ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
         if (config->aimbot[currentWeapon].standaloneRCS) {
