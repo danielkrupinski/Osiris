@@ -207,7 +207,7 @@ static void from_json(const json& j, Snapline& s)
 
 static void from_json(const json& j, Box& b)
 {
-    from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
+    from_json(j, static_cast<ColorToggleRounding&>(b));
 
     read(j, "Type", b.type);
     read(j, "Scale", b.scale);
@@ -665,10 +665,12 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Draw Inaccuracy", m.drawInaccuracy);
     read(j, "Draw Inaccuracy Thickness", m.drawInaccuracyThickness);
     read<value_t::object>(j, "Status Bar", m.Sbar);
-	read<value_t::object>(j, "ShotsCout", m.ShotsCout);
+	  read<value_t::object>(j, "ShotsCout", m.ShotsCout);
+    read<value_t::object>(j, "Reportbot", m.reportbot);
+    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
 }
 
-static void from_json(const json& j, Config::Reportbot& r)
+static void from_json(const json& j, Config::Misc::Reportbot& r)
 {
     read(j, "Enabled", r.enabled);
     read(j, "Target", r.target);
@@ -706,7 +708,6 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
-    read<value_t::object>(j, "Reportbot", reportbot);
 }
 
 // WRITE macro requires:
@@ -779,7 +780,7 @@ static void to_json(json& j, const Snapline& o, const Snapline& dummy = {})
 
 static void to_json(json& j, const Box& o, const Box& dummy = {})
 {
-    to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
+    to_json(j, static_cast<const ColorToggleRounding&>(o), dummy);
     WRITE("Type", type);
     WRITE("Scale", scale);
 	WRITE("Fill", fill);
@@ -1038,10 +1039,8 @@ static void to_json(json& j, const Config::StreamProofESP& o)
     j["Other Entities"] = o.otherEntities;
 }
 
-static void to_json(json& j, const Config::Reportbot& o)
+static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Misc::Reportbot& dummy = {})
 {
-    const Config::Reportbot dummy;
-
     WRITE("Enabled", enabled);
     WRITE("Target", target);
     WRITE("Delay", delay);
@@ -1142,7 +1141,9 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Draw Inaccuracy", drawInaccuracy);
     WRITE("Draw InaccuracyThickness", drawInaccuracyThickness);
     WRITE("Status Bar",Sbar);
-	WRITE("ShotsCout", ShotsCout);
+	  WRITE("ShotsCout", ShotsCout);
+    WRITE("Reportbot", reportbot);
+    WRITE("Opposite Hand Knife", oppositeHandKnife);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
@@ -1285,7 +1286,6 @@ void Config::save(size_t id) const noexcept
         j["Glow"] = glow;
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
-        j["Reportbot"] = reportbot;
         j["Sound"] = sound;
         j["Visuals"] = visuals;
         j["Misc"] = misc;
@@ -1333,7 +1333,6 @@ void Config::reset() noexcept
     sound = { };
     style = { };
     misc = { };
-    reportbot = { };
 }
 
 void Config::listConfigs() noexcept

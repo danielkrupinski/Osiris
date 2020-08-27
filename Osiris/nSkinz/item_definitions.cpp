@@ -27,10 +27,14 @@
 #include <tuple>
 // These are std::vectors because else I'd have to write their size in the header or write my own container
 
+#include <array>
+#include <tuple>
+
 // We need these for overriding viewmodels and icons
 const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 {
-   constexpr std::array<std::pair<int, weapon_info>, 30> info{ {
+        static constexpr std::array<std::pair<int, weapon_info>, 30> info{ {
+
         { WEAPON_KNIFE, { "models/weapons/v_knife_default_ct.mdl", "knife" } },
         { WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"} },
         { WEAPON_KNIFE_BAYONET,{"models/weapons/v_knife_bayonet.mdl", "bayonet"} },
@@ -52,7 +56,7 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
         { WEAPON_KNIFE_GYPSY_JACKKNIFE,{"models/weapons/v_knife_gypsy_jackknife.mdl", "knife_gypsy_jackknife"} },
         { WEAPON_KNIFE_STILETTO,{"models/weapons/v_knife_stiletto.mdl", "knife_stiletto"} },
         { WEAPON_KNIFE_WIDOWMAKER,{"models/weapons/v_knife_widowmaker.mdl", "knife_widowmaker"} },
-   	    { GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"} },
+        { GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"} },
         { GLOVE_T_SIDE,{"models/weapons/w_models/arms/w_glove_fingerless.mdl"} },
         { GLOVE_CT_SIDE,{"models/weapons/w_models/arms/w_glove_hardknuckle.mdl"} },
         { GLOVE_SPORTY,{"models/weapons/w_models/arms/w_glove_sporty.mdl"} },

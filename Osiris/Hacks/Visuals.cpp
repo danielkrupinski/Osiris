@@ -1,4 +1,5 @@
 #include "../fnv.h"
+#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -433,8 +434,8 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-   if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
-         memory->loadSky(skyboxes[config->visuals.skybox]);
+    if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
+        memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
