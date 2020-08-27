@@ -175,10 +175,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
             interfaces->engine->setViewAngles(cmd->viewangles);
             lastAimPunch = aimPunch;
         }
-        else {
-            aimPunch.x *= config->aimbot[weaponIndex].recoilControlY;
-            aimPunch.y *= config->aimbot[weaponIndex].recoilControlX;
-        }
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
