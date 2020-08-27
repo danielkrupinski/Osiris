@@ -216,7 +216,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Visuals::fullBright();
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
-        Misc::chokePackets(sendPacket);
+        if (config->misc.chokedPacketsKey == 0 || GetAsyncKeyState(config->misc.chokedPacketsKey))
+            Misc::chokePackets(sendPacket, cmd);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
     }
 

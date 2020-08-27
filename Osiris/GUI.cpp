@@ -1564,17 +1564,36 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SetNextItemWidth(90.0f);
-    if (!config->misc.pingBasedChoked) {
-        ImGui::InputInt("Choked packets", &config->misc.chokedPackets, 1, 5);
-        config->misc.chokedPackets = std::clamp(config->misc.chokedPackets, 0, 64);
+    ImGui::Combo("Choked packets", &config->misc.chokedPackets, "Off\0Normal\0Adaptive\0Random\0Switch");
+    if (config->misc.chokedPackets != 0) {
+        ImGui::SameLine();
+        ImGui::PushID("Choked packets");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("CP");
+
+        if (ImGui::BeginPopup("CP")) {
+            ImGui::SetNextItemWidth(200.0f);
+            ImGui::Checkbox("Ping Based", &config->misc.pingBasedChoked);
+            ImGui::Text("Choked packets Flags:");
+            ImGui::Checkbox("While Shooting", &config->misc.chokedPacketsShooting);
+            ImGui::SameLine();
+            ImGui::Checkbox("While Standing", &config->misc.chokedPacketsStanding);
+            ImGui::Checkbox("While Moving", &config->misc.chokedPacketsMoving);
+            ImGui::SameLine();
+            ImGui::Checkbox("In Air", &config->misc.chokedPacketsAir);
+            if (config->misc.chokedPackets != 4)
+                if (config->misc.pingBasedChoked)
+                    ImGui::Text("Choked packets Amount: %d", config->misc.pingBasedChokedVal);
+                else {
+                    ImGui::SliderInt(config->misc.chokedPackets == 3 ? "Min Choked packets Amount" : "Choked packets Amount", &config->misc.chokedPacketsTicks, 1, 16);
+                    config->misc.chokedPacketsTicks = std::clamp(config->misc.chokedPacketsTicks, 0, 16);
+                }
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
+        ImGui::SameLine();
+        hotkey(config->misc.chokedPacketsKey);
     }
-    else {
-        ImGui::Text("Choked packets: %d", config->misc.pingBasedChokedVal);
-    }
-    ImGui::SameLine();
-    hotkey(config->misc.chokedPacketsKey);
-    ImGui::SameLine();
-    ImGui::Checkbox("Ping Based", &config->misc.pingBasedChoked);
     ImGui::Text("Quick healthshot");
     ImGui::SameLine();
     hotkey(config->misc.quickHealthshotKey);

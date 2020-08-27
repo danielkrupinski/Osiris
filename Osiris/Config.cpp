@@ -636,6 +636,11 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Prepare revolver key", m.prepareRevolverKey);
     read(j, "Hit sound", m.hitSound);
     read(j, "Choked packets", m.chokedPackets);
+    read(j, "Choked packets On Shooting", m.chokedPacketsShooting);
+    read(j, "Choked packets On Standing", m.chokedPacketsStanding);
+    read(j, "Choked packets On Moving", m.chokedPacketsMoving);
+    read(j, "Choked packets In Air", m.chokedPacketsAir);
+    read(j, "Choked packets Ticks", m.chokedPacketsTicks);
     read(j, "Choked packets key", m.chokedPacketsKey);
     read(j, "Choked packets Ping Based", m.pingBasedChoked);
     read(j, "Quick healthshot key", m.quickHealthshotKey);
@@ -1080,6 +1085,11 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Prepare revolver key", prepareRevolverKey);
     WRITE("Hit sound", hitSound);
     WRITE("Choked packets", chokedPackets);
+    WRITE("Choked packets On Shooting", chokedPacketsShooting);
+    WRITE("Choked packets On Standing", chokedPacketsStanding);
+    WRITE("Choked packets On Moving", chokedPacketsMoving);
+    WRITE("Choked packets In Air", chokedPacketsAir);
+    WRITE("Choked packets Ticks", chokedPacketsTicks);
     WRITE("Choked packets key", chokedPacketsKey);
     WRITE("Choked packets Ping Based", pingBasedChoked);
     WRITE("Quick healthshot key", quickHealthshotKey);

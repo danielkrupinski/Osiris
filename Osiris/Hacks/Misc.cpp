@@ -660,14 +660,68 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
-void Misc::chokePackets(bool& sendPacket) noexcept
+float RandomFloat(float min, float max) noexcept
 {
-    config->misc.pingBasedChokedVal = config->misc.chokedPackets;
-    if (config->misc.pingBasedChoked)
-        if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-            config->misc.pingBasedChokedVal = static_cast<int>(networkChannel->getLatency(0) * 64);
-    if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
-        sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.pingBasedChokedVal;
+    return (min + 1) + (((float)rand()) / (float)RAND_MAX) * (max - (min + 1));
+}
+
+struct Record {
+    Vector origin;
+    float simulationTime;
+    matrix3x4 matrix[256];
+};
+
+void Misc::chokePackets(bool& sendPacket, UserCmd* cmd) noexcept
+{
+    bool doFakeLag{ false };
+    auto position = localPlayer->getAbsOrigin();
+    auto velocity = localPlayer->velocity();
+    auto extrapolatedVelocity = sqrt(sqrt(velocity.x * velocity.y * velocity.z));
+    Record record{ };
+    record.origin = localPlayer->getAbsOrigin();
+    record.simulationTime = localPlayer->simulationTime();
+    localPlayer->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
+    auto& records = record;
+    float distanceDifToServerSide = sqrt(sqrt(records.origin.x * records.origin.y * records.origin.z));
+
+    if (config->misc.chokedPackets != 0)
+    {
+        if ((config->misc.chokedPacketsShooting && cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))
+            || (config->misc.chokedPacketsStanding && !(cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT)))
+            || (config->misc.chokedPacketsMoving && cmd->buttons & (UserCmd::IN_FORWARD | UserCmd::IN_BACK | UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT))
+            || (config->misc.chokedPacketsAir && !(localPlayer->flags() & 1)))
+            doFakeLag = true;
+        else
+            doFakeLag = false;
+    }
+
+    if (doFakeLag)
+    {
+        config->misc.pingBasedChokedVal = config->misc.chokedPacketsTicks;
+        if (config->misc.pingBasedChoked)
+            if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+                config->misc.pingBasedChokedVal = std::clamp(static_cast<int>(networkChannel->getLatency(0) * 64), 0, 16);
+
+        if (config->misc.chokedPackets == 1)
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.pingBasedChokedVal;
+        if (config->misc.chokedPackets == 2) {
+            auto requiredPacketsToBreakLagComp = 65 / extrapolatedVelocity;
+            if (requiredPacketsToBreakLagComp <= config->misc.pingBasedChokedVal && requiredPacketsToBreakLagComp <= 16)
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= requiredPacketsToBreakLagComp;
+            else
+                sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= 16;
+        }
+        if (config->misc.chokedPackets == 3) {
+            float lagTicks = RandomFloat(static_cast<float>(config->misc.pingBasedChokedVal), 16);
+            sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= lagTicks;
+        }
+        if (config->misc.chokedPackets == 4) {
+            if (distanceDifToServerSide < 64.f && interfaces->engine->getNetworkChannel()->chokedPackets < 16)
+                sendPacket = false;
+            else
+                sendPacket = true;
+        }
+    }
 }
 
 void Misc::autoReload(UserCmd* cmd) noexcept

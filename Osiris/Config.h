@@ -347,6 +347,11 @@ public:
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
+        bool chokedPacketsShooting{ false };
+        bool chokedPacketsStanding{ false };
+        bool chokedPacketsMoving{ false };
+        bool chokedPacketsAir{ false };
+        int chokedPacketsTicks{ 0 };
         int chokedPacketsKey{ 0 };
         bool pingBasedChoked{ false };
         int pingBasedChokedVal{ 0 };
