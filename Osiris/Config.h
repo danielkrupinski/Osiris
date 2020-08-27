@@ -58,6 +58,10 @@ public:
         bool killshot{ false };
         bool jumpCheck{ false };
         bool betweenShots{ true };
+        float recoilControlX{ 0.0f };
+        float recoilControlY{ 0.0f };
+        int shotsFired{ 0 };
+        bool standaloneRCS{ false };
     };
     std::array<Aimbot, 40> aimbot;
 

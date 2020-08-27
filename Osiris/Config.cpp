@@ -305,6 +305,10 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Killshot", a.killshot);
     read(j, "Jump Check", a.jumpCheck);
     read(j, "Between shots", a.betweenShots);
+    read(j, "Standalone RCS", a.standaloneRCS);
+    read(j, "Standalone RCS Ignore Shots", a.shotsFired);
+    read(j, "Recoil control X", a.recoilControlX);
+    read(j, "Recoil control Y", a.recoilControlY);
 }
 
 static void from_json(const json& j, Config::Triggerbot& t)
@@ -862,6 +866,10 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Killshot", killshot);
     WRITE("Jump Check", jumpCheck);
     WRITE("Between shots", betweenShots);
+    WRITE("Recoil control X", recoilControlX);
+    WRITE("Recoil control Y", recoilControlY);
+    WRITE("Standalone RCS", standaloneRCS);
+    WRITE("Standalone RCS Ignore Shots", shotsFired);
 }
 
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})

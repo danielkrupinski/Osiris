@@ -18,6 +18,7 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
+#include "imgui/imgui_internal.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -237,7 +238,15 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
+    if (config->aimbot[currentWeapon].standaloneRCS) {
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+    }
     ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
+    if (config->aimbot[currentWeapon].standaloneRCS) {
+        ImGui::PopItemFlag();
+        ImGui::PopStyleVar();
+    }
     ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
     ImGui::Checkbox("Visible only", &config->aimbot[currentWeapon].visibleOnly);
     ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
@@ -257,6 +266,14 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Jump Check", &config->aimbot[currentWeapon].jumpCheck);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
+    ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
+    if (config->aimbot[currentWeapon].standaloneRCS) {
+        config->aimbot[currentWeapon].silent = false;
+        ImGui::InputInt("Ignore Shots", &config->aimbot[currentWeapon].shotsFired);
+        config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 150);
+        ImGui::SliderFloat("Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
+        ImGui::SliderFloat("Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
+    }
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
