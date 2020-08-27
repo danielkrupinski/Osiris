@@ -16,7 +16,7 @@
 #include <limits>
 #include <tuple>
 
-static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept
 {
     const auto& matrix = GameData::toScreenMatrix();
 
@@ -27,7 +27,8 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     out = ImGui::GetIO().DisplaySize / 2.0f;
     out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
     out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-    out = ImFloor(out);
+    if (floor)
+        out = ImFloor(out);
     return true;
 }
 
@@ -386,7 +387,7 @@ static void drawProjectileTrajectory(const Trail& config, const std::vector<std:
     const auto color = Helpers::calculateColor(config);
 
     for (const auto& [time, point] : trajectory) {
-        if (ImVec2 pos; time + config.time >= memory->globalVars->realtime && worldToScreen(point, pos)) {
+        if (ImVec2 pos; time + config.time >= memory->globalVars->realtime && worldToScreen(point, pos, false)) {
             if (config.type == Trail::Line) {
                 points.push_back(pos);
                 shadowPoints.push_back(pos + ImVec2{ 1.0f, 1.0f });
