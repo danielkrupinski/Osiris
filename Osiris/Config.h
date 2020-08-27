@@ -296,6 +296,8 @@ public:
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
         bool fakePrime{ false };
+        bool autoZeus{ false };
+        int autoZeusMaxPenDist{ 0 };
         std::string customName;
         bool fakeItem{ false };
         bool fakeItemFlagsST{ false };

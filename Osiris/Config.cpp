@@ -638,6 +638,8 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Fix tablet signal", m.fixTabletSignal);
     read(j, "Max angle delta", m.maxAngleDelta);
     read(j, "Fake prime", m.fakePrime);
+    read(j, "Zeusbot", m.autoZeus);
+    read(j, "Zeus Max Wall Penetration Distance", m.autoZeusMaxPenDist);
     read(j, "Bypass sv_pure", m.svpurebypass);
     read(j, "Bypass sv_pure (OLD)", m.svpurebypassOLD);
     read(j, "Draw aimbot FOV", m.drawAimbotFov);
@@ -1076,6 +1078,8 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Fix tablet signal", fixTabletSignal);
     WRITE("Max angle delta", maxAngleDelta);
     WRITE("Fake prime", fakePrime);
+    WRITE("Zeusbot", autoZeus);
+    WRITE("Zeus Max Wall Penetration Distance", autoZeusMaxPenDist);
     WRITE("Bypass sv_pure", svpurebypass);
     WRITE("Bypass sv_pure (OLD)", svpurebypassOLD);
     WRITE("Draw aimbot FOV", drawAimbotFov);

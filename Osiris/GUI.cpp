@@ -1560,6 +1560,13 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Zeusbot", &config->misc.autoZeus);
+    if (config->misc.autoZeus)
+    {
+        ImGui::SetNextItemWidth(120.0f);
+        ImGui::SliderInt("Zeus Max Wall Penetration Distance", &config->misc.autoZeusMaxPenDist, 0, 50);
+        config->misc.autoZeusMaxPenDist = std::clamp(config->misc.autoZeusMaxPenDist, 0, 50);
+    }
     ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
     ImGui::Checkbox("Bypass sv_pure (OLD)", &config->misc.svpurebypassOLD);
     ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
