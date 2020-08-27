@@ -1,13 +1,16 @@
-#include "Config.h"
-#include "GUI.h"
-#include "Hooks.h"
-#include "Interfaces.h"
-#include "Memory.h"
-#include "Netvars.h"
+#include <Windows.h>
 
-Config config{ "Osiris" };
-GUI gui;
-const Interfaces interfaces;
-Memory memory;
-Netvars netvars;
-Hooks hooks;
+#include "Hooks.h"
+
+extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
+
+BOOL APIENTRY DllEntryPoint(HMODULE module, DWORD reason, LPVOID reserved)
+{
+    if (!_CRT_INIT(module, reason, reserved))
+        return FALSE;
+
+    if (reason == DLL_PROCESS_ATTACH)
+        hooks = std::make_unique<Hooks>(module);
+
+    return TRUE;
+}

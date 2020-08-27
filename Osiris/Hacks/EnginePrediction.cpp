@@ -15,30 +15,29 @@ static int localPlayerFlags;
 
 void EnginePrediction::run(UserCmd* cmd) noexcept
 {
-    const auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     if (!localPlayer)
         return;
     
     localPlayerFlags = localPlayer->flags();
 
-    *memory.predictionRandomSeed = 0;
+    *memory->predictionRandomSeed = 0;
 
-    const auto oldCurrenttime = memory.globalVars->currenttime;
-    const auto oldFrametime = memory.globalVars->frametime;
+    const auto oldCurrenttime = memory->globalVars->currenttime;
+    const auto oldFrametime = memory->globalVars->frametime;
 
-    memory.globalVars->currenttime = memory.globalVars->serverTime();
-    memory.globalVars->frametime = memory.globalVars->intervalPerTick;
+    memory->globalVars->currenttime = memory->globalVars->serverTime();
+    memory->globalVars->frametime = memory->globalVars->intervalPerTick;
 
-    memory.moveHelper->setHost(localPlayer);
-    interfaces.prediction->setupMove(localPlayer, cmd, memory.moveHelper, memory.moveData);
-    interfaces.gameMovement->processMovement(localPlayer, memory.moveData);
-    interfaces.prediction->finishMove(localPlayer, cmd, memory.moveData);
-    memory.moveHelper->setHost(nullptr);
+    memory->moveHelper->setHost(localPlayer.get());
+    interfaces->prediction->setupMove(localPlayer.get(), cmd, memory->moveHelper, memory->moveData);
+    interfaces->gameMovement->processMovement(localPlayer.get(), memory->moveData);
+    interfaces->prediction->finishMove(localPlayer.get(), cmd, memory->moveData);
+    memory->moveHelper->setHost(nullptr);
 
-    *memory.predictionRandomSeed = -1;
+    *memory->predictionRandomSeed = -1;
 
-    memory.globalVars->currenttime = oldCurrenttime;
-    memory.globalVars->frametime = oldFrametime;
+    memory->globalVars->currenttime = oldCurrenttime;
+    memory->globalVars->frametime = oldFrametime;
 }
 
 int EnginePrediction::getFlags() noexcept

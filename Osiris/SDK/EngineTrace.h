@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstddef>
-#include "Utils.h"
+
 #include "Vector.h"
+#include "VirtualMethod.h"
 
 struct Ray {
     Ray(const Vector& src, const Vector& dest) : start(src), delta(dest - src) { isSwept = delta.x || delta.y || delta.z; }
@@ -92,13 +93,6 @@ struct Trace {
 
 class EngineTrace {
 public:
-    constexpr auto getPointContents(const Vector& absPosition, int contentsMask) noexcept
-    {
-        return callVirtualMethod<int, const Vector&, int, Entity*>(this, 0, absPosition, contentsMask, nullptr);
-    }
-
-    constexpr void traceRay(const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace) noexcept
-    {
-        callVirtualMethod<void, const Ray&, unsigned int, const TraceFilter& , Trace&>(this, 5, ray, mask, filter, trace);
-    }
+    VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (this, std::cref(absPosition), contentsMask, nullptr))
+    VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (this, std::cref(ray), mask, std::cref(filter), std::ref(trace)))
 };

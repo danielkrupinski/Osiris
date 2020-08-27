@@ -1,27 +1,13 @@
 #pragma once
 
-#include <tuple>
-#include "Utils.h"
+#include <functional>
+
+#include "VirtualMethod.h"
 
 class RenderContext {
 public:
-    constexpr auto release() noexcept
-    {
-        callVirtualMethod<void>(this, 1);
-    }
-
-    constexpr auto beginRender() noexcept
-    {
-        callVirtualMethod<void>(this, 2);
-    }
-
-    constexpr auto endRender() noexcept
-    {
-        callVirtualMethod<void>(this, 3);
-    }
-
-    constexpr auto getViewport(int& x, int& y, int& width, int& height) noexcept
-    {
-        callVirtualMethod<void, int&, int&, int&, int&>(this, 41, x, y, width, height);
-    }
+    VIRTUAL_METHOD(void, release, 1, (), (this))
+    VIRTUAL_METHOD(void, beginRender, 2, (), (this))
+    VIRTUAL_METHOD(void, endRender, 3, (), (this))
+    VIRTUAL_METHOD(void, getViewport, 41, (int& x, int& y, int& width, int& height), (this, std::ref(x), std::ref(y), std::ref(width), std::ref(height)))
 };

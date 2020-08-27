@@ -7,16 +7,19 @@ class Entity;
 
 struct GlowObjectDefinition {
     Entity* entity;
+
+    // TODO: try to declare those as std::array<float, 4> for easier color copying
     Vector glowColor;
-    float   alpha;
-    std::byte pad[4];
-    float   m_flSomeFloat;
-    float   bloomAmount;
-    float   m_flAnotherFloat;
-    bool    renderWhenOccluded;
-    bool    renderWhenUnoccluded;
-    bool    fullBloomRender;
-    std::byte pad1;
+    float glowAlpha;
+    //
+
+    bool glowAlphaCappedByRenderAlpha;
+    float glowAlphaFunctionOfMaxVelocity;
+    float glowAlphaMax;
+    float glowPulseOverdrive;
+    bool renderWhenOccluded;
+    bool renderWhenUnoccluded;
+    bool fullBloomRender;
     int fullBloomStencilTestValue;
     int glowStyle;
     int splitScreenSlot;

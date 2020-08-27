@@ -8,6 +8,11 @@ class matrix3x4;
 struct Model {
     void* handle;
     char name[260];
+    int	loadFlags;
+    int	serverCount;
+    int	type;
+    int	flags;
+    Vector mins, maxs;
 };
 
 struct ModelRenderInfo {
@@ -21,14 +26,4 @@ struct ModelRenderInfo {
     const Vector* lightingOrigin;
     int flags;
     int entityIndex;
-};
-
-class Material;
-
-class ModelRender {
-public:
-    [[deprecated]] constexpr void forceMaterialOverride(Material* newMaterial) noexcept
-    {
-        callVirtualMethod<void, Material*, int, int>(this, 1, newMaterial, 0, 0);
-    }
 };

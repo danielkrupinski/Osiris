@@ -39,6 +39,16 @@ struct sticker_setting
         kit = SkinChanger::stickerKits[kit_vector_index].id;
 	}
 
+
+	auto operator==(const sticker_setting& o) const
+	{
+		return kit == o.kit
+			&& kit_vector_index == o.kit_vector_index
+			&& wear == o.wear
+			&& scale == o.scale
+			&& rotation == o.rotation;
+	}
+
 	int kit = 0;
 	int kit_vector_index = 0;
 	float wear = std::numeric_limits<float>::min();
@@ -84,7 +94,7 @@ struct item_setting
 	int definition_override_vector_index = 0;
 	int definition_override_index = 0;
 	int seed = 0;
-	int stat_trak = 0;
+	int stat_trak = -1;
 	float wear = std::numeric_limits<float>::min();
 	char custom_name[32] = "";
 	std::array<sticker_setting, 5> stickers;
