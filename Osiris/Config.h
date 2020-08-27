@@ -211,6 +211,7 @@ public:
         float hitMarkerDamageIndicatorRatio{ 0.0f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        ColorToggle bulletTracers;
 
         struct ColorCorrection {
             bool enabled = false;

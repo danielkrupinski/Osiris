@@ -633,3 +633,58 @@ void Visuals::rainbowBar(ImDrawList* drawList)noexcept
         drawList->AddRectFilledMultiColor({ ds.x / 2, zero.y }, { ds.x, tickness + (guiOpened ? 21.0f : 0.0f) }, amber, chartreuse, chartreuse0, amber0);
     }
 }
+
+#include "../SDK/Beams.h"
+
+void Visuals::bulletBeams(GameEvent* event) noexcept
+{
+    if (!config->visuals.bulletTracers.enabled || !interfaces->engine->isInGame() || !interfaces->engine->isConnected() || memory->renderBeams == nullptr)
+        return;
+
+    const auto player = interfaces->entityList->getEntity(interfaces->engine->getPlayerForUserID(event->getInt("userid")));
+
+    if (!player || !localPlayer)
+        return;
+
+    Vector position;
+    position.x = event->getFloat("x");
+    position.y = event->getFloat("y");
+    position.z = event->getFloat("z");
+
+    BeamInfo_t beam_info;
+    beam_info.m_nType = TE_BEAMPOINTS;
+    beam_info.m_pszModelName = "sprites/physbeam.vmt";
+    beam_info.m_nModelIndex = -1;
+    beam_info.m_flHaloScale = 0.f;
+    beam_info.m_flLife = 4.f;
+    beam_info.m_flWidth = 1.f;
+    beam_info.m_flEndWidth = 1.f;
+    beam_info.m_flFadeLength = 0.1f;
+    beam_info.m_flAmplitude = 2.f;
+    beam_info.m_flBrightness = 255.f;
+    beam_info.m_flSpeed = 0.2f;
+    beam_info.m_nStartFrame = 0;
+    beam_info.m_flFrameRate = 0.f;
+    if (config->visuals.bulletTracers.rainbow) {
+        auto rainbow = rainbowColor(config->visuals.bulletTracers.rainbowSpeed);
+        beam_info.m_flRed = std::get<0>(rainbow) * 255;
+        beam_info.m_flGreen = std::get<1>(rainbow) * 255;
+        beam_info.m_flBlue = std::get<2>(rainbow) * 255;
+    }
+    else {
+        beam_info.m_flRed = config->visuals.bulletTracers.color[0] * 255;
+        beam_info.m_flGreen = config->visuals.bulletTracers.color[1] * 255;
+        beam_info.m_flBlue = config->visuals.bulletTracers.color[2] * 255;
+    }
+    beam_info.m_nSegments = 2;
+    beam_info.m_bRenderable = true;
+    beam_info.m_nFlags = FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
+
+    // create beam backwards because it looks nicer.
+    beam_info.m_vecStart = position;
+    beam_info.m_vecEnd = player->getEyePosition();
+
+    auto beam = memory->renderBeams->CreateBeamPoints(beam_info);
+    if (beam)
+        memory->renderBeams->DrawBeam(beam);
+}

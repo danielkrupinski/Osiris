@@ -19,6 +19,7 @@ class MoveData;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;
+class IViewRenderBeams;
 
 struct ActiveChannels;
 struct Channel;
@@ -78,6 +79,7 @@ public:
     PlayerResource** playerResource;
     const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
     void* CheckFileCRCsWithServer;
+    IViewRenderBeams* renderBeams;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {

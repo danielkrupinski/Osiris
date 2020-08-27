@@ -467,6 +467,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Hit marker damage indicator Ratio", v.hitMarkerDamageIndicatorRatio);
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
+    read<value_t::object>(j, "Bullet Tracer", v.bulletTracers);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
 }
 
@@ -1195,6 +1196,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Hit marker damage indicator Ratio", hitMarkerDamageIndicatorRatio);
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
+    WRITE("Bullet Tracer", bulletTracers);
     WRITE("Color correction", colorCorrection);
 }
 

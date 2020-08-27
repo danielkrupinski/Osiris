@@ -1112,6 +1112,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         }
         ImGui::PopID();
     };
+    ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers);
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
@@ -1850,6 +1851,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Zeusbot by DoomFishWasTaken and ME;");
     //ImGui::Text("Multipoints by ClaudiuHKS;");
     ImGui::Text("Rainbow Bar by ME");
+    ImGui::Text("Bullet Tracer by DoomFishWasTaken");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
     ImGui::Text("Build: " __DATE__ ", " __TIME__ "");

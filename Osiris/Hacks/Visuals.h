@@ -34,4 +34,5 @@ namespace Visuals
     void noBloom() noexcept;
     void NightMode() noexcept;
     void rainbowBar(ImDrawList* drawList) noexcept;
+    void bulletBeams(GameEvent* event = nullptr) noexcept;
 }
