@@ -16,15 +16,14 @@ public:
 
     uint16_t operator[](const uint32_t hash) const noexcept
     {
-        const auto it = std::find_if(offsets.begin(), offsets.end(), [&hash](const auto& p) { return p.first == hash; });
-        if (it != offsets.end())
+        const auto it = std::lower_bound(offsets.begin(), offsets.end(), hash, [](const auto& p, auto hash) { return p.first < hash; });
+        if (it != offsets.end() && it->first == hash)
             return it->second;
         assert(false);
         return 0;
     }
 private:
     void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
-    // TODO: sort the vector to use std::lower_bound()
     std::vector<std::pair<uint32_t, uint16_t>> offsets;
 };
 

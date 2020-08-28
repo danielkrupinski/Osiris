@@ -181,6 +181,8 @@ Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(false, clientClass->networkName, clientClass->recvTable);
+
+    std::sort(offsets.begin(), offsets.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
 }
 
 void Netvars::restore() noexcept
