@@ -1587,10 +1587,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
             if (config->misc.chokedPackets != 4)
                 if (config->misc.pingBasedChoked)
                     ImGui::Text("Choked packets Amount: %d", config->misc.pingBasedChokedVal);
-                else {
-                    ImGui::SliderInt(config->misc.chokedPackets == 3 ? "Min Choked packets Amount" : "Choked packets Amount", &config->misc.chokedPacketsTicks, 1, 16);
-                    config->misc.chokedPacketsTicks = std::clamp(config->misc.chokedPacketsTicks, 0, 16);
-                }
+                else
+                    ImGui::SliderInt(config->misc.chokedPackets == 3 ? "Min Choked packets Amount" : "Choked packets Amount", &config->misc.chokedPacketsTicks, 1, 16, "%d", ImGuiSliderFlags_ClampOnInput);
             ImGui::EndPopup();
         }
         ImGui::PopID();
@@ -1609,8 +1607,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (config->misc.autoZeus)
     {
         ImGui::SetNextItemWidth(120.0f);
-        ImGui::SliderInt("Zeus Max Wall Penetration Distance", &config->misc.autoZeusMaxPenDist, 0, 50);
-        config->misc.autoZeusMaxPenDist = std::clamp(config->misc.autoZeusMaxPenDist, 0, 50);
+        ImGui::SliderInt("Zeus Max Wall Penetration Distance", &config->misc.autoZeusMaxPenDist, 0, 50, "%d", ImGuiSliderFlags_ClampOnInput);
     }
     ImGui::Checkbox("Player Blocker", &config->misc.playerBlocker);
     ImGui::SameLine();
