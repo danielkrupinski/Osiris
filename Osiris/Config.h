@@ -62,6 +62,7 @@ public:
         float recoilControlY{ 0.0f };
         int shotsFired{ 0 };
         bool standaloneRCS{ false };
+        bool randomRCS{ true };
     };
     std::array<Aimbot, 40> aimbot;
 

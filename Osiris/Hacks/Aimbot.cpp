@@ -300,16 +300,18 @@ void Aimbot::run(UserCmd* cmd) noexcept
             if (localPlayer->getShotsFired() > config->aimbot[weaponIndex].shotsFired) {
                 setRandomSeed(*memory->predictionRandomSeed);
                 Vector currentPunch{ lastAimPunch.x - aimPunch.x, lastAimPunch.y - aimPunch.y, 0 };
-                currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
-                currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                if (config->aimbot[weaponIndex].randomRCS) {
+                    currentPunch.x *= getRandom(config->aimbot[weaponIndex].recoilControlX, 1.f);
+                    currentPunch.y *= getRandom(config->aimbot[weaponIndex].recoilControlY, 1.f);
+                }
+                else {
+                    currentPunch.x *= config->aimbot[weaponIndex].recoilControlX;
+                    currentPunch.y *= config->aimbot[weaponIndex].recoilControlY;
+                }
                 cmd->viewangles += currentPunch;
             }
             interfaces->engine->setViewAngles(cmd->viewangles);
             lastAimPunch = aimPunch;
-        }
-        else {
-            aimPunch.x *= config->aimbot[weaponIndex].recoilControlY;
-            aimPunch.y *= config->aimbot[weaponIndex].recoilControlX;
         }
 
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {

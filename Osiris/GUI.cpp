@@ -271,11 +271,13 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Checkbox("Standalone RCS", &config->aimbot[currentWeapon].standaloneRCS);
     if (config->aimbot[currentWeapon].standaloneRCS) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Random RCS factor", &config->aimbot[currentWeapon].randomRCS);
         config->aimbot[currentWeapon].silent = false;
         ImGui::InputInt("Ignore Shots", &config->aimbot[currentWeapon].shotsFired);
         config->aimbot[currentWeapon].shotsFired = std::clamp(config->aimbot[currentWeapon].shotsFired, 0, 150);
-        ImGui::SliderFloat("Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
-        ImGui::SliderFloat("Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
+        ImGui::SliderFloat(config->aimbot[currentWeapon].randomRCS ? "Recoil control X odds" : "Recoil control X", &config->aimbot[currentWeapon].recoilControlX, 0.0f, 1.0f, "%.5f");
+        ImGui::SliderFloat(config->aimbot[currentWeapon].randomRCS ? "Recoil control Y odds" : "Recoil control Y", &config->aimbot[currentWeapon].recoilControlY, 0.0f, 1.0f, "%.5f");
     }
     ImGui::Columns(1);
     if (!contentOnly)
