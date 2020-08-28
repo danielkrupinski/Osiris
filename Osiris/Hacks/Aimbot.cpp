@@ -12,11 +12,7 @@
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
-    Vector delta = destination - source;
-    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
-                   radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
-    angles.normalize();
-    return angles;
+    return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
