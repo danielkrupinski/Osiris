@@ -654,6 +654,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Bypass sv_pure", m.svpurebypass);
     read(j, "Bypass sv_pure (OLD)", m.svpurebypassOLD);
     read(j, "Draw aimbot FOV", m.drawAimbotFov);
+    read<value_t::object>(j, "Draw Inaccuracy", m.drawInaccuracy);
     read(j, "Team Damage Counter", m.teamDamageCounter);
     read(j, "Player Blocker", m.playerBlocker);
     read(j, "Player Blocker Key", m.playerBlockerKey);
@@ -1104,6 +1105,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Bypass sv_pure", svpurebypass);
     WRITE("Bypass sv_pure (OLD)", svpurebypassOLD);
     WRITE("Draw aimbot FOV", drawAimbotFov);
+    WRITE("Draw Inaccuracy", drawInaccuracy);
     WRITE("Team Damage Counter", teamDamageCounter);
     WRITE("Player Blocker", playerBlocker);
     WRITE("Player Blocker Key", playerBlockerKey);

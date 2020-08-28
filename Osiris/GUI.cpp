@@ -1461,6 +1461,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Bypass sv_pure", &config->misc.svpurebypass);
     ImGui::Checkbox("Bypass sv_pure (OLD)", &config->misc.svpurebypassOLD);
     ImGui::Checkbox("Draw aimbot FOV", &config->misc.drawAimbotFov);
+    ImGuiCustom::colorPicker("Draw Inaccuracy", config->misc.drawInaccuracy);
     ImGui::Checkbox("Team Damage Counter", &config->misc.teamDamageCounter);
     if (config->misc.teamDamageCounter)
         if (ImGui::Button("Reset Counter")) {

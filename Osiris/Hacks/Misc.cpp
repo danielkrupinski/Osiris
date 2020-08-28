@@ -1767,3 +1767,38 @@ void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
     else
         fakeDuckShotState = 0;
 }
+
+void Misc::DrawInaccuracy(ImDrawList* draw)noexcept
+{
+    const auto [w, h] = interfaces->surface->getScreenSize();
+
+    if (!config->misc.drawInaccuracy.enabled)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    const auto Acweapon = localPlayer->getActiveWeapon();
+    if (!Acweapon || Acweapon->getWeaponType() == WeaponType::Knife || Acweapon->getWeaponType() == WeaponType::Grenade)
+        return;
+
+    const float Inaccuracy = Acweapon->getInaccuracy() * 500.0f;
+    if (Inaccuracy <= 0.0f)
+        return;
+
+    float r, g, b, a;
+    if (config->misc.drawInaccuracy.rainbow) {
+        auto rainbow = rainbowColor(config->misc.drawInaccuracy.rainbowSpeed);
+        r = std::get<0>(rainbow);
+        g = std::get<1>(rainbow);
+        b = std::get<2>(rainbow);
+    }
+    else {
+        r = config->misc.drawInaccuracy.color[0];
+        g = config->misc.drawInaccuracy.color[1];
+        b = config->misc.drawInaccuracy.color[2];
+    }
+    a = config->misc.drawInaccuracy.color[3];
+
+    draw->AddCircle(ImVec2(static_cast<float>(w) / 2.0f, static_cast<float>(h) / 2.0f), Inaccuracy, ImGui::GetColorU32(ImVec4(r, g, b, a)), static_cast<int>(config->misc.drawInaccuracy.thickness));
+}

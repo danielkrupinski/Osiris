@@ -365,6 +365,7 @@ public:
         bool teamDamageCounter{ false };
         bool playerBlocker{ false };
         int playerBlockerKey{ 0 };
+        ColorToggleThickness drawInaccuracy;
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;

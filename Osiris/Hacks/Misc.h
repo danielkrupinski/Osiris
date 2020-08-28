@@ -66,4 +66,5 @@ namespace Misc
     void customViewmodelPosition(FrameStage stage) noexcept;
     void viewBob(FrameStage stage) noexcept;
     void fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept;
+    void DrawInaccuracy(ImDrawList* draw) noexcept;
 }
