@@ -69,8 +69,16 @@ public:
     std::array<Aimbot, 40> aimbot;
 
     bool QuickPeekHasShot {false}; // dynamic, do not persist
+
+    struct Dt
+    {
+	   bool enabled {false};
+    	int mode {0};
+    } dt;
 	
 	struct Ragebot {
+		bool dtEnabled {false};
+		int dtMode {0};
 		bool enabled{ false };
 		bool onKey{ false };
 		int key{ 0 };
@@ -114,6 +122,59 @@ public:
 			"FeetS"
 	};
 
+        struct debug {
+        ColorToggle desync_info;
+        ColorToggle animStateMon;
+        ColorToggle box;
+        //out
+        bool AnimExtras{ false };
+        int overlay{ 13 };
+        int entityid{ 0 };
+        bool overlayall{ false };
+        bool weight{ false };
+        bool showall{ false };
+        
+
+
+        //in
+        struct {
+            bool enabled{ false };
+            ColorToggle color;
+            int entityid{ 0 };
+            bool newesttick{ false };
+            bool findactive{ false };
+        } backtrack;
+
+        struct {
+
+            bool enabled{ false };
+            struct {
+                bool enabled{ false };
+                bool basicResolver{ false };
+                bool overRide{ false };
+                int missed_shots{ 0 };
+            	int missedoffset{ 0 };
+                bool goforkill{ false };
+            }resolver;
+
+            bool manual{ false };
+        } animstatedebug;
+
+        struct {
+            bool enabled;
+            bool baim;
+            bool resolver;
+        } indicators;
+
+        bool AnimModifier{ false };
+        float GoalFeetYaw{ 0.0f };
+        float Pitch{ 0.0f };
+        float Yaw{ 0.0f };
+        bool FPSBar{ false };
+        int ResolverRecords {0};
+        bool TargetOnly {false};
+    } debug;
+	
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;
@@ -136,6 +197,8 @@ public:
         bool recoilBasedFov{ false };
 		int timeLimit{ 0 };
         bool fakeLatency{ false };
+    	bool onKey {false};
+    	int fakeLatencyKey {0};
     } backtrack;
 
     struct AntiAim {
@@ -346,17 +409,19 @@ public:
 
 
           bool indicatorsEnabled{ false };
-        const char* indicators[4] = {
+        const char* indicators[5] = {
             "Desync",
             "LBY",
             "Fakelag",
-            "Fakeduck"
+            "Fakeduck",
+        	"Resolver"
         };
-        bool selectedIndicators[4] = {
+        bool selectedIndicators[5] = {
             false,
             false,
             false,
-            false
+            false,
+        	false
         };
     	
     	 ColorToggle bulletTracers;

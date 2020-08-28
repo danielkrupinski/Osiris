@@ -17,19 +17,34 @@ enum class FrameStage;
 struct UserCmd;
 
 namespace Backtrack {
+
     void update(FrameStage) noexcept;
     void run(UserCmd*) noexcept;
 	void AddLatencyToNetwork(NetworkChannel*, float) noexcept;
     void UpdateIncomingSequences(bool reset = false) noexcept;
 
     struct Record {
-    	Vector head;
+        Vector head;
         Vector origin;
-        float simulationTime;
+        float resolvedaddition = 0.0f;
+        float simulationTime = 0.0f;
         matrix3x4 matrix[256];
+        int PreviousAct = 0;
+        int prevhealth = 0;
+        matrix3x4 prevResolvedMatrix[256];
+        int lastworkmissed = 0;
+        int missedshots = 0;
+        bool wasTargeted = 0;
+        bool invalid = false;
+        bool wasUpdated = false;
+        Vector mins;
+        Vector max; 
+        float alpha = 100; //ONLY USED FOR extended_records
     };
-
+	
     extern std::deque<Record> records[65];
+	extern std::deque<Record> extended_records[65];
+	extern std::deque<Record> invalid_record[2];
 
     struct Cvars {
         ConVar* updateRate;
@@ -50,22 +65,13 @@ namespace Backtrack {
         float servertime;
     };
 
-    extern std::deque<IncomingSequence>sequences;
+   extern std::deque<IncomingSequence>sequences;
 
     constexpr auto getLerp() noexcept
     {
         auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
 
         return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
-    }
-
-	constexpr float getExtraTicks() noexcept
-    {
-        auto network = interfaces->engine->getNetworkChannel();
-        if (!network)
-            return 0.f;
-
-        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, cvars.maxUnlag->getFloat());
     }
 
     constexpr auto valid(float simtime) noexcept
@@ -78,7 +84,17 @@ namespace Backtrack {
         return std::fabsf(delta) <= 0.2f;
     }
 
+    constexpr float getExtraTicks() noexcept
+    {
+        auto network = interfaces->engine->getNetworkChannel();
+        if (!network)
+            return 0.f;
+
+        return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, cvars.maxUnlag->getFloat());
+    }
+
     int timeToTicks(float time) noexcept;
+    
 
     static void init() noexcept
     {

@@ -15,8 +15,8 @@ void __fastcall DoExtraBoneProcessing(Entity* player, uint32_t, StudioHdr* hdr, 
 
 	if (state)
 	{
-		backup_onground = state->OnGround;
-		state->OnGround = false;
+		backup_onground = state->m_bOnGround;
+		state->m_bOnGround = false;
 
 		if (entity->velocity().length2D() < 0.1f)
 			*val = 0.f;
@@ -27,7 +27,7 @@ void __fastcall DoExtraBoneProcessing(Entity* player, uint32_t, StudioHdr* hdr, 
 	if (state)
 	{
 		*val = backup;
-		state->OnGround = backup_onground;
+		state->m_bOnGround = backup_onground;
 	}
 }
 

@@ -7,6 +7,8 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
+std::deque<Backtrack::Record> Backtrack::invalid_record[2];
+
 std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
@@ -20,6 +22,14 @@ void Backtrack::update(FrameStage stage) noexcept
     }
 
     if (stage == FrameStage::RENDER_START) {
+
+        Record record_inv{};
+        Record invalid{};
+        invalid.invalid = true;
+        invalid.wasTargeted = false;
+        invalid_record[0].push_front(invalid);
+        invalid_record[0].push_front(invalid);
+    	
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
@@ -32,12 +42,43 @@ void Backtrack::update(FrameStage stage) noexcept
 
             Record record{ };
             record.origin = entity->getAbsOrigin();
+        	record.head = entity->getBonePosition(8);
             record.simulationTime = entity->simulationTime();
+        	record.PreviousAct = -1;
+        	auto AnimState = entity->getAnimstate();
+
+        	if (AnimState) {
+                for (int b = 0; b < entity->getAnimationLayerCount(); b++) {
+                    auto AnimLayer = entity->getAnimationLayer(b);
+                    int currAct = entity->getSequenceActivity(AnimLayer->sequence);
+                    if ((currAct == ACT_CSGO_IDLE_TURN_BALANCEADJUST) || (currAct == 980)) {
+                        record.PreviousAct = currAct;
+                        break;
+                    }
+                    else{
+                        record.PreviousAct = currAct;
+                    }
+                }
+            }
+
+        	if (!(!records[i].empty() && records[i].size() && Backtrack::valid(records[i].front().simulationTime))) {
+                record.missedshots = 0;
+                record.prevhealth = entity->health();
+                record.wasTargeted = false;
+                record.wasUpdated = false;
+            }
+            else {
+                record.missedshots = records[i].front().missedshots;
+                record.prevhealth = entity->health();
+                record.wasTargeted = records[i].front().wasTargeted;
+                record.wasUpdated = records[i].front().wasUpdated;
+            }
 
             entity->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
 
             records[i].push_front(record);
 
+        	int timeLimit = config->backtrack.timeLimit; if (timeLimit > 200) timeLimit = 200;
             while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.timeLimit) / 1000.f + getExtraTicks())))
                 records[i].pop_back();
 
@@ -52,11 +93,22 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (!config->backtrack.enabled)
         return;
 
+    if (!(cmd->buttons & UserCmd::IN_ATTACK))
+		return;
+	
     if (!localPlayer)
         return;
 
-    if (!(cmd->buttons & UserCmd::IN_ATTACK))
-		return;
+	if (config->backtrack.onKey) {
+        if (GetAsyncKeyState(config->backtrack.fakeLatencyKey))
+            config->backtrack.fakeLatency = !(config->backtrack.fakeLatency);
+            if (config->backtrack.fakeLatency && (config->backtrack.timeLimit < 200)) {
+                config->backtrack.timeLimit += 200;
+            }
+            else if (!(config->backtrack.fakeLatency) &&  config->backtrack.timeLimit > 200) {
+                config->backtrack.timeLimit -= 200;
+            }
+    }
 
     auto localPlayerEyePosition = localPlayer->getEyePosition();
 
@@ -64,7 +116,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     Entity * bestTarget{ };
     int bestTargetIndex{ };
     Vector bestTargetOrigin{ };
-	  Vector bestTargetHead{ };
+	Vector bestTargetHead{ };
     int bestRecord{ };
 
     const auto aimPunch = localPlayer->getAimPunch();
@@ -132,7 +184,9 @@ void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noex
 void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 {
     static float lastIncomingSequenceNumber = 0.f;
-
+    int timeLimit = config->backtrack.timeLimit; if (timeLimit <= 200) { timeLimit = 0; }
+    else { timeLimit = 200; }
+	
     if (!config->backtrack.fakeLatency || config->backtrack.timeLimit == 0)
         return;
 

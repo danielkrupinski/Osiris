@@ -297,6 +297,56 @@ bool HandleBulletPenetration(WeaponInfo* wpn_data, FireBulletData& data, bool ex
 	return true;
 }
 
+/* bool canScan(Entity* entity, const Vector& destination, WeaponInfo* weaponData, int minDamage, bool allowFriendlyFire, float& damageret) noexcept
+{
+    if (!localPlayer)
+        return false;
+
+    float damage{ static_cast<float>(weaponData->damage) };
+
+    Vector start{ localPlayer->getEyePosition() };
+    Vector direction{ destination - start };
+    direction /= direction.length();
+
+    int hitsLeft = 4;
+
+    while (damage >= 1.0f && hitsLeft) {
+        Trace trace;
+        interfaces->engineTrace->traceRay({ start, destination }, 0x4600400B, localPlayer.get(), trace);
+
+        if (!allowFriendlyFire && trace.entity && trace.entity->isPlayer() && !localPlayer->isOtherEnemy(trace.entity))
+            return false;
+
+        if (trace.fraction == 1.0f)
+            break;
+
+        if (trace.entity == entity && trace.hitgroup > HitGroup::Generic && trace.hitgroup <= HitGroup::RightLeg) {
+            damage = HitGroup::getDamageMultiplier(trace.hitgroup) * damage * powf(weaponData->rangeModifier, trace.fraction * weaponData->range / 500.0f);
+
+            if (float armorRatio{ weaponData->armorRatio / 2.0f }; HitGroup::isArmored(trace.hitgroup, trace.entity->hasHelmet()))
+                damage -= (trace.entity->armor() < damage * armorRatio / 2.0f ? trace.entity->armor() * 4.0f : damage) * (1.0f - armorRatio);
+
+            damageret = damage;
+            return (damage >= minDamage) || (damage >= entity->health());
+
+
+        }
+        const auto surfaceData = interfaces->physicsSurfaceProps->getSurfaceData(trace.surface.surfaceProps);
+
+        if (surfaceData->penetrationmodifier < 0.1f)
+            break;
+
+        //damage = HandleBulletPenetration(weaponData, );
+
+        damageret = damage;
+
+        hitsLeft--;
+    }
+    return false;
+}*/
+
+
+
 
 float AutoWall::Damage(const Vector& point, Vector& wallbangVector)noexcept
 {

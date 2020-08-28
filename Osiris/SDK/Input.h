@@ -12,4 +12,8 @@ public:
     bool isCameraInThirdPerson;
     std::byte pad2;
     Vector cameraOffset;
+
+	UserCmd* GetUserCmd(int nSlot, int sequence_number) { 
+		return VirtualMethod::call<UserCmd*, 8, int, int>(this, nSlot, sequence_number);
+	}
 };

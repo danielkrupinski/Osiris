@@ -33,6 +33,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <charconv>
 
+
+#include "Tickbase.h"
 #include "../imgui/imgui_internal.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
@@ -231,10 +233,28 @@ void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance, Vect
         hitchance = HitShots / TotalShots;
     }
 
+    int ticks = 0;
+	
+	 switch (config->dt.mode) {
+    case 0: //Instant
+        ticks = 16;
+        break;
+    case 1: //Fast
+        ticks = 14;
+        break;
+    case 2: //Accurate
+        ticks = 12;
+        break;
+    }
+
 	
     ImGui::Text("Best rage dmg now: %d", bestRageDmg);
 	ImGui::Text("Best rage chance now: %d", bestRageChance);
     ImGui::Text("Quickpeek: x:%d y:%d z:%d", static_cast<int>(quickpeekVector.x), static_cast<int>(quickpeekVector.y), static_cast<int>(quickpeekVector.z));
+    ImGui::Text("Tick choked packets: %d", Tickbase::tick->chokedPackets);
+	ImGui::Text("Can shift: %d", Tickbase::canShift(ticks, false));
+   // ImGui::Text("Times shifted: %d", Tickbase::tick->timesShifted);
+   // ImGui::Text("Attempted: %d", Tickbase::tick->attempted);
 	
 	ImGui::Text("TotalShots: %.1f", TotalShots);
 	ImGui::Text("HitShots: %.1f", HitShots);

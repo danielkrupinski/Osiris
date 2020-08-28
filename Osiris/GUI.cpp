@@ -403,6 +403,8 @@ hotkey(config->ragebot[currentWeapon].keyForceShot);
 ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
 ImGui::SameLine();
 hotkey(config->ragebot[currentWeapon].QuickPeekKey);
+ImGui::Checkbox("Doubletap", &config->dt.enabled);
+ImGui::Combo("Doubletap mode", &config->dt.mode, "Instant (16)\0Fast (14)\0Accurate(12)\0");
 if (!contentOnly)
 ImGui::End();
 }

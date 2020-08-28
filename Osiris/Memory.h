@@ -7,6 +7,8 @@
 #include <Windows.h>
 #include <Psapi.h>
 
+#include "SDK/ModelInfo.h"
+
 class ClientMode;
 class Entity;
 class GameEventDescriptor;
@@ -22,6 +24,7 @@ class ViewRender;
 class WeaponSystem;
 class IViewRenderBeams;
 class MemAlloc;
+class ClientState;
 
 struct ActiveChannels;
 struct Channel;
@@ -30,6 +33,8 @@ struct GlowObjectManager;
 struct Trace;
 struct Vector;
 class IViewRenderBeams;
+
+
 
 class Memory {
 public:
@@ -42,7 +47,10 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
-
+    ClientState* clientState;
+	void* WriteUsercmdDeltaToBufferReturn;
+	uintptr_t WriteUsercmd;
+	
     bool* disablePostProcessing;
 
     std::add_pointer_t<void __fastcall(const char*)> loadSky;
@@ -50,7 +58,7 @@ public:
     uintptr_t cameraThink;
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
-    int(__thiscall* getSequenceActivity)(void*, int);
+    int(__fastcall* getSequenceActivity)(void*, StudioHdr*, int);
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);

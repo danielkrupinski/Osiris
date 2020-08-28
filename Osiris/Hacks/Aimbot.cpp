@@ -10,7 +10,13 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/EngineTrace.h"
+#include "../SDK/ModelInfo.h"
+#include "../SDK/matrix3x4.h"
 #include "../SDK/Angle.h"
+#include "../SDK/Math.h"
+#include "Multipoints.h"
+#include "AutoWall.h"
+#include "Backtrack.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {

@@ -107,6 +107,7 @@ struct Vector {
         z = 0.0f;
         return *this;
     }
+	
 
     auto length() const noexcept
     {

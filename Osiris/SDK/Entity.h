@@ -116,13 +116,20 @@ struct AnimState;
 struct AnimationLayer
 {
 public:
-    std::byte pad[20];
+    bool clientblend;
+    float blendin;
+    void* studioHdr;
+    int dispatchedsrc;
+    int dispatcheddst;
     unsigned int order;
     unsigned int sequence;
-    std::byte pad2[4];
+    float prevcycle;
     float weight;
-    std::byte pad3[8];
+    float weightdeltarate;
+    float playbackRate;
     float cycle;
+    void* owner;
+    int invalidatephysicsbits;
 };
 
 enum class MoveType {
@@ -200,8 +207,8 @@ enum HitBoxes
 
 class Collideable {
 public:
-    VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
-    VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
+    VIRTUAL_METHOD(Vector&, obbMins, 1, (), (this))
+    VIRTUAL_METHOD(Vector&, obbMaxs, 2, (), (this))
 };
 
 class Entity {
@@ -269,6 +276,25 @@ public:
 		return getWeaponType() == WeaponType::Grenade;
 	}
 
+    constexpr auto isGrenade() noexcept
+    {
+        return getWeaponType() == WeaponType::Grenade;
+    }
+
+    constexpr auto isShotgun() noexcept
+    {
+	     return getWeaponType() == WeaponType::Shotgun;
+    }
+
+	Vector* getAbsVelocity()
+	{
+	    return (Vector*)(this + 0x94);
+	}
+
+	uint32_t* getEffects()
+	{
+	    return (uint32_t*)((uintptr_t)this + 0xF0);
+	}
 
     constexpr auto requiresRecoilControl() noexcept
     {
@@ -316,6 +342,15 @@ public:
             return Vector{ };
     }
 
+	bool isInThrow() noexcept {
+        if (!m_bPinPulled()) {
+            float throwTime = m_fThrowTime();
+            if (throwTime > 0)
+                return 1;
+        }
+        return 0;
+    }
+
     bool isVisible(const Vector& position = { }) noexcept
     {
         if (!localPlayer)
@@ -337,7 +372,7 @@ public:
     {
         return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
-
+	
     float getMaxDesyncAngle() noexcept
     {
         const auto animState = getAnimstate();
@@ -381,6 +416,16 @@ public:
         return &(*reinterpret_cast<AnimationLayer**>(this + 0x2980))[overlay];
     }
 
+	int getSequenceActivity(int sequence) noexcept
+    {
+        auto hdr = interfaces->modelInfo->getStudioModel(this->getModel());
+
+        if (!hdr)
+            return 0 ;
+
+        return memory->getSequenceActivity(this, hdr, sequence);
+    }
+
     std::array<float, 24>& pose_parameters()
     {
         return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + netvars->operator[](fnv::hash("CBaseAnimating->m_flPoseParameter")));
@@ -420,6 +465,18 @@ public:
         reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
     }
 
+	bool isThrowing() 
+    {
+        auto weapon = localPlayer->getActiveWeapon();
+        auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
+        if (weaponClass == 40) {
+            if (!weapon->pinPulled())
+                if (weapon->throwTime() > 0.f)
+                    return true;
+        }
+        return false;
+    }
+
     bool throwing(UserCmd* cmd) 
     {
         auto weapon = localPlayer->getActiveWeapon();
@@ -435,18 +492,51 @@ public:
         }
         return false;
     }
-	
-    void getPlayerName(char(&out)[128]) noexcept;
+
+    Vector getVelocity() noexcept {
+        return velocity();
+    }
+
+    void setAbsAngle(Vector& Vec)
+    {
+        memory->setAbsAngle(this, Vec);
+    }
+
+    bool canSee(Entity* other, const Vector& pos) noexcept;
+    bool visibleTo(Entity* other) noexcept;
+
+	[[nodiscard]] auto getPlayerNameNew(bool normalize = false) noexcept
+    {
+        std::string playerName = "unknown";
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerName;
+
+        playerName = playerInfo.name;
+
+        if (normalize) {
+            if (wchar_t wide[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, 128, wide, 128)) {
+                if (wchar_t wideNormalized[128]; NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128)) {
+                    if (char nameNormalized[128]; WideCharToMultiByte(CP_UTF8, 0, wideNormalized, -1, nameNormalized, 128, nullptr, nullptr))
+                        playerName = nameNormalized;
+                }
+            }
+        }
+
+        playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
+        return playerName;
+    }
+
+  void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
     {
         char name[128];
         getPlayerName(name);
         return name;
     }
-
-    bool canSee(Entity* other, const Vector& pos) noexcept;
-    bool visibleTo(Entity* other) noexcept;
-
+  
+	
 	NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -459,7 +549,7 @@ public:
     NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
     NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
+    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
@@ -529,6 +619,8 @@ public:
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+	NETVAR(m_bPinPulled, "CBaseCSGrenade", "m_bPinPulled", bool)
+    NETVAR(m_fThrowTime, "CBaseCSGrenade", "m_fThrowTime", float_t)
 
     bool isFlashed() noexcept
     {

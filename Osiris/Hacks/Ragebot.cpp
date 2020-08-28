@@ -20,7 +20,48 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 	if (!chance)
 		return true;
 
-	int hitseed = 512;
+	constexpr float pif2 = M_PIF * 2.0f;
+
+	const int bw = 5;
+	const int bh = 4;
+    float coneBoundsToTry[bw][bh];
+
+	// default position
+	coneBoundsToTry[0][0] = 0;
+	coneBoundsToTry[0][1] = 0;
+	coneBoundsToTry[0][2] = 0;
+	coneBoundsToTry[0][3] = 0;
+
+	
+	/* 
+	 *  [0..1] ------- [0..2PI]
+	 *    |               |
+	 *    |               |
+	 *    |               |
+	 *    |               |
+	 *  [0..1] ------- [0..2PI]
+	 */
+	coneBoundsToTry[1][0] = 1;
+	coneBoundsToTry[1][1] = 0;
+	coneBoundsToTry[1][2] = 0;
+	coneBoundsToTry[1][3] = 0;
+
+	coneBoundsToTry[2][0] = 0;
+	coneBoundsToTry[2][1] = pif2;
+	coneBoundsToTry[2][2] = 0;
+	coneBoundsToTry[2][3] = 0;
+
+	coneBoundsToTry[3][0] = 0;
+	coneBoundsToTry[3][1] = 0;
+	coneBoundsToTry[3][2] = 1;
+	coneBoundsToTry[3][3] = 0;
+
+	coneBoundsToTry[4][0] = 0;
+	coneBoundsToTry[4][1] = 0;
+	coneBoundsToTry[4][2] = 0;
+	coneBoundsToTry[4][3] = pif2;
+
+	int hitseed = 256;
 
 	int iHit = 0;
 	int iHitsNeed = (int)((float)hitseed * ((float)chance / 100.f));
@@ -32,19 +73,17 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 	bestVector = {0, 0, 0};
 	float bestChance = 0;
 
-	weapon->UpdateAccuracyPenalty();
-
 	for (auto i = 0; i < hitseed; ++i) {
 
 		float RandomA = Math::RandomFloat(0.0f, 1.0f); // random 1
 		float RandomB = 1.0f - RandomA * RandomA; 
-		RandomA = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 2
+		RandomA = Math::RandomFloat(0.0f, pif2); // random 2
 		RandomB *= weapon->getSpread() + weapon->getInaccuracy();
 		float SpreadX1 = (cos(RandomA) * RandomB);
 		float SpreadY1 = (sin(RandomA) * RandomB);
 		float RandomC = Math::RandomFloat(0.0f, 1.0f); // random 3
 		float RandomF = RandomF = 1.0f - RandomC * RandomC;
-		RandomC = Math::RandomFloat(0.0f, M_PIF * 2.0f); // random 4
+		RandomC = Math::RandomFloat(0.0f, pif2); // random 4
 		RandomF *= weapon->getSpread();
 		float SpreadX2 = (cos(RandomC) * RandomF);
 		float SpreadY2 = (sin(RandomC) * RandomF);
@@ -82,7 +121,12 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 		if (percentChance >= 2 && config->ragebot[weaponIndex].keyForceShotEnabled && config->ragebot[weaponIndex].keyForceShot > 0 && GetAsyncKeyState(config->ragebot[weaponIndex].keyForceShot))
 		{
 			bHitchance = true;
-			break;
+
+			if (currentHitChance > bestChance)
+			{
+				bestChance = currentHitChance;
+				bestVector = rawNew;
+			}
 		}
 
 		if (percentChance >= chance) {
@@ -90,6 +134,7 @@ static bool HitChance(Vector angles, Entity* entity, Entity* weapon, int weaponI
 
 			if (currentHitChance > bestChance)
 			{
+				bHitchance = true;
 				bestChance = currentHitChance;
 				bestVector = rawNew;
 			}
@@ -109,7 +154,7 @@ void Ragebot::Autostop(UserCmd* cmd) noexcept
 	if (!localPlayer || !localPlayer->isAlive())
 		return;
 
-	Vector Velocity = localPlayer->velocity();
+	Vector Velocity = localPlayer->getVelocity();
 
 	if (Velocity.length2D() == 0)
 		return;
@@ -366,7 +411,8 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 
 		int sumDmg = 0;
 		int bestDmg = 0;
-		
+
+		activeWeapon->UpdateAccuracyPenalty();
 		std::vector<VectorAndDamage> Hitboxes = GetHitBoxes(entity, activeWeapon, weaponIndex, bestDamage, wallbangVector, sumDmg, bestDmg);
 		
 		if (!Hitboxes.empty())
@@ -386,16 +432,14 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 		Vector bestAngle = {0, 0, 0};
 		Vector bestModifiedAngle {0, 0, 0};
 
-		static float MinimumVelocity = 0.0f;
-		MinimumVelocity = localPlayer->getActiveWeapon()->getWeaponData()->maxSpeedAlt * 0.34f;
+		float MinimumVelocity = localPlayer->getActiveWeapon()->getWeaponData()->maxSpeedAlt * 0.34f;
 
-		if (localPlayer->velocity().length() >= MinimumVelocity && config->ragebot[weaponIndex].autoStop && (localPlayer->flags() & PlayerFlags::ONGROUND))
+		if (localPlayer->getVelocity().length() >= MinimumVelocity && config->ragebot[weaponIndex].autoStop && (localPlayer->flags() & PlayerFlags::ONGROUND))
 		{
 			Autostop(cmd);
 		}
 
-		
-		if (activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
+		if (activeWeapon->isSniperRifle() && !localPlayer->isScoped())
 		{
 			cmd->buttons |= UserCmd::IN_ATTACK2; 
 		}
@@ -412,9 +456,9 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 
 			//No recoil
 			Angle -= (localPlayer->aimPunchAngle() * interfaces->cvar->findVar("weapon_recoil_scale")->getFloat());
-			Vector bestVector {0, 0,0};
+			Vector bestVector {Angle.x, Angle.y, Angle.z};
 			
-			if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance, bestHitchance, firstWallToPen, raysHit, bestVector))
+			if (HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance, bestHitchance, firstWallToPen, raysHit, bestVector)) // || HitChance(Angle, Target, activeWeapon, weaponIndex, cmd, config->ragebot[weaponIndex].hitChance, bestHitchance, firstWallToPen, raysHit, bestVector)
 			{
 				if (aimPoint.damage > bestDmg)
 				{
@@ -428,7 +472,7 @@ void Ragebot::run(UserCmd* cmd, int &bestDamage, int &bestHitchance, Vector& wal
 
 		if (bestDmg > 0)
 		{
-			cmd->viewangles = bestModifiedAngle;//bestAngle;
+			cmd->viewangles = bestAngle;//bestModifiedAngle;
 
 			if (!config->ragebot[weaponIndex].slient)
 			{

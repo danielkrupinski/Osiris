@@ -31,6 +31,8 @@
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/Resolver.h"
+#include "Hacks/Tickbase.h"
 
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -51,6 +53,9 @@
 #include "SDK/Beams.h"
 #include "extraHooks.h"
 #include "Hacks/Animations.h"
+#include "Hacks/Debug.h"
+#include "SDK/GameEvent.h"
+#include "SDK/Input.h"
 
 int rageBestDmg = 0;
 int rageBestChance = 0;
@@ -89,7 +94,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
     interfaces->inputSystem->enableInput(!gui->open);
-
+    Tickbase::tick = std::make_unique<Tickbase::Tick>();
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
 
@@ -281,7 +286,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     Animations::update(cmd, sendPacket);
     Animations::fake();
-
+    Tickbase::run(cmd);//run this after ragebot
     return false;
 }
 
@@ -362,6 +367,8 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     	Visuals::transparentWorld();
     }
     if (interfaces->engine->isInGame()) {
+    	Resolver::Update();
+        Debug::AnimStateModifier();
         Visuals::skybox(stage);
         Visuals::removeBlur(stage);
         Visuals::removeGrass(stage);
@@ -673,6 +680,74 @@ Hooks::Hooks(HMODULE module) noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
 
+void WriteUsercmd(void* buf, UserCmd* in, UserCmd* out)
+{
+    static DWORD WriteUsercmdF = (DWORD)memory->WriteUsercmd;
+
+    __asm
+    {
+        mov ecx, buf
+        mov edx, in
+        push out
+        call WriteUsercmdF
+        add esp, 4
+    }
+}
+
+
+static bool __fastcall WriteUsercmdDeltaToBuffer(void* ecx, void* edx, int slot, void* buffer, int from, int to, bool isnewcommand) noexcept
+{
+    auto original = hooks->client.getOriginal<bool, 24, int, void*, int, int, bool>(slot, buffer, from, to, isnewcommand);
+
+    if (_ReturnAddress() == memory->WriteUsercmdDeltaToBufferReturn || Tickbase::tick->tickshift <= 0 || !memory->clientState)
+        return original(ecx, slot, buffer, from, to, isnewcommand);
+
+    if (from != -1)
+        return true;
+
+    int* numBackupCommands = (int*)(reinterpret_cast <uintptr_t> (buffer) - 0x30);
+    int* numNewCommands = (int*)(reinterpret_cast <uintptr_t> (buffer) - 0x2C);
+
+    int32_t newcommands = *numNewCommands;
+
+    int nextcommmand = memory->clientState->lastOutgoingCommand + memory->clientState->chokedCommands + 1;
+    int totalcommands = std::min(Tickbase::tick->tickshift, Tickbase::tick->maxUsercmdProcessticks);
+    Tickbase::tick->tickshift = 0;
+
+    from = -1;
+    *numNewCommands = totalcommands;
+    *numBackupCommands = 0;
+
+    for (to = nextcommmand - newcommands + 1; to <= nextcommmand; to++)
+    {
+        if (!(original(ecx, slot, buffer, from, to, true)))
+            return false;
+
+        from = to;
+    }
+
+    UserCmd* lastRealCmd = memory->input->GetUserCmd(slot, from);
+    UserCmd fromcmd;
+
+    if (lastRealCmd)
+        fromcmd = *lastRealCmd;
+
+    UserCmd tocmd = fromcmd;
+    tocmd.tickCount += 200;
+    tocmd.commandNumber++;
+
+    for (int i = newcommands; i <= totalcommands; i++)
+    {
+        WriteUsercmd(buffer, &tocmd, &fromcmd);
+        fromcmd = tocmd;
+        tocmd.commandNumber++;
+        tocmd.tickCount++;
+    }
+
+    return true;
+}
+
+
 void Hooks::install() noexcept
 {
     SkinChanger::initializeKits();
@@ -702,6 +777,7 @@ void Hooks::install() noexcept
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
+	client.hookAt(24, WriteUsercmdDeltaToBuffer);
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
