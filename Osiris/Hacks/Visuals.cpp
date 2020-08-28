@@ -1,4 +1,5 @@
 #include "../fnv.h"
+#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -108,7 +109,7 @@ void Visuals::playerModel(FrameStage stage) noexcept
 
 	if (modelprecache)
 	{
-			modelprecache->addString(false, "sprites/bloodspray.vmt");
+			modelprecache->addString(false, "sprites/physbeam.vmt");
 	}
 }
 
@@ -433,8 +434,8 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-   if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
-         memory->loadSky(skyboxes[config->visuals.skybox]);
+    if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
+        memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
@@ -531,6 +532,7 @@ void Visuals::indicators() noexcept
             int fakeLagHeight = 0;
             int LBYHeight = 0;
             int FDHeight = 0;
+            int DTHeight = 0;
 
             float lbyDifference = 0;
 
@@ -551,16 +553,22 @@ void Visuals::indicators() noexcept
                 LBYHeight += 25;
                 fakeLagHeight += 25;
                 FDHeight += 25;
+                DTHeight += 25;
             }
             if (config->visuals.selectedIndicators[1])
             {
-
                 fakeLagHeight += 25;
                 FDHeight += 25;
+                DTHeight += 25;
             }
             if (config->visuals.selectedIndicators[2])
             {
                 FDHeight += 25;
+                DTHeight += 25;
+            }
+            if (config->visuals.selectedIndicators[2])
+            {
+                DTHeight += 25;
             }
 
             desyncAmount = std::round(desyncAmount) / 2;
@@ -577,6 +585,9 @@ void Visuals::indicators() noexcept
 
             std::wstring fakeduckIndicator;
             fakeduckIndicator = fakeduckIndicator + L"FD";
+
+            std::wstring DTIndicator;
+            DTIndicator = DTIndicator + L"DT";
 
             if (config->visuals.selectedIndicators[0])
             {
@@ -611,6 +622,17 @@ void Visuals::indicators() noexcept
                 else
                     interfaces->surface->setTextColor(255, 0, 0, 255);
                 interfaces->surface->printText(fakeduckIndicator);
+            }
+
+            if (config->visuals.selectedIndicators[4])
+            {
+                interfaces->surface->setTextFont(18); // doubletap indicator
+                interfaces->surface->setTextPosition(bottomLeft[0], bottomLeft[1] - (screenSizeMultiplier[1] * 75) - DTHeight);
+                if (config->ragebotExtra.doubleTapToggled)
+                    interfaces->surface->setTextColor(0, 255, 0, 255);
+                else
+                    interfaces->surface->setTextColor(255, 0, 0, 255);
+                interfaces->surface->printText(DTIndicator);
             }
         }
     }
@@ -661,7 +683,7 @@ void Visuals::bulletBeams(GameEvent* event) noexcept
 
     BeamInfo_t beam_info;
     beam_info.m_nType = TE_BEAMPOINTS;
-    beam_info.m_pszModelName = "sprites/bloodspray.vmt";//"sprites/glow01.vmt";
+    beam_info.m_pszModelName = "sprites/physbeam.vmt";//"sprites/glow01.vmt";
     beam_info.m_nModelIndex = -1;
     beam_info.m_flHaloScale = 0.f;
     beam_info.m_flLife = 2.f;

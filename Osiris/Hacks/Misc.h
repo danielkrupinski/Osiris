@@ -51,4 +51,7 @@ namespace Misc
 	void drawStartPos(ImDrawList* dl, Vector &quickpeekstartpos) noexcept;
 	void quickpeek(UserCmd* cmd, Vector &quickpeekstartpos) noexcept;
 	void drawWallbangVector(ImDrawList* dl, Vector &wallbangVector, int wallDmg, int wallChance) noexcept;
+    void oppositeHandKnife(FrameStage stage) noexcept;
+    void runReportbot() noexcept;
+    void resetReportbot() noexcept;
 }

@@ -41,7 +41,9 @@ struct Snapline : ColorToggleThickness {
     int type = Bottom;
 };
 
+
 struct Box : ColorToggleRounding  {
+
     enum Type {
         _2d = 0,
         _2dCorners,
@@ -135,7 +137,7 @@ struct ImGuiStruct
     bool enabled{ false };
     bool noBackGround{ false };
     bool noTittleBar{ false };
-    
+
 };
 
 struct StatusBar : ImGuiStruct

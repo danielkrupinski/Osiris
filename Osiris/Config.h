@@ -68,6 +68,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+
     bool QuickPeekHasShot {false}; // dynamic, do not persist
 
     struct Dt
@@ -75,7 +76,8 @@ public:
 	   bool enabled {false};
     	int mode {0};
     } dt;
-	
+
+
 	struct Ragebot {
 		bool dtEnabled {false};
 		int dtMode {0};
@@ -84,20 +86,23 @@ public:
 		int key{ 0 };
 		int keyMode{ 0 };
 		bool slient{ false };
+        bool autoScope{ false };
 		bool betweenShots{ false };
 		bool friendlyFire{ false };
 		bool autoStop{ false };
+        bool autoShot{ false };
 		float bodyChance{ 0.0f };
 		float pointChance{ 0.0f };
 		float CanSeeDamage{ 0.0f };
         float WallDamage{ 0.0f };
 		float hitChance{ 0.0f };
-		bool Baim {false};
-		bool QuickPeekEnabled {false};
-		int QuickPeekKey {0};
-		bool keyForceShotEnabled {false};
-		int keyForceShot {0};
-		bool BonesBools[8]{
+        float targetSelectionMode{ 0 };
+		bool Baim{ false };
+		bool QuickPeekEnabled { false };
+		int QuickPeekKey { 0 };
+		bool keyForceShotEnabled { false };
+		int keyForceShot { 0 };
+		bool BonesBools[8] {
 			false,
 			false,
 			false,
@@ -110,7 +115,16 @@ public:
 	};
 	std::array<Ragebot, 45> ragebot;
 
-	const char* BonesTexts[8] = 
+    struct {
+        bool enabled{ false };
+        bool doubletap{ false };
+        int doubletapSpeed{ 0 };
+        int doubleTapKey{ 0 };
+        bool doubleTapToggled{ false };
+        int doubleTapKeyMode{ 0 };
+    } ragebotExtra;
+
+	const char* BonesTexts[8] =
 	{
 			"Head",
 			"Neck",
@@ -133,7 +147,7 @@ public:
         bool overlayall{ false };
         bool weight{ false };
         bool showall{ false };
-        
+
 
 
         //in
@@ -174,7 +188,7 @@ public:
         int ResolverRecords {0};
         bool TargetOnly {false};
     } debug;
-	
+
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;
@@ -409,23 +423,26 @@ public:
 
 
           bool indicatorsEnabled{ false };
-        const char* indicators[5] = {
+        const char* indicators[6] = {
             "Desync",
             "LBY",
             "Fakelag",
             "Fakeduck",
-        	"Resolver"
+            "Doubletap",
+            "Resolver"
         };
-        bool selectedIndicators[5] = {
+        
+        bool selectedIndicators[6] = {
+            false,
             false,
             false,
             false,
             false,
         	false
         };
-    	
+
     	 ColorToggle bulletTracers;
-    
+
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
@@ -521,21 +538,21 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
-        StatusBar Sbar;
-    	ImGuiStruct ShotsCout;
-    } misc;
+            StatusBar Sbar;
+    	      ImGuiStruct ShotsCout;
 
-    struct Reportbot {
-        bool enabled{ false };
-        bool textAbuse{ false };
-        bool griefing{ false };
-        bool wallhack{ true };
-        bool aimbot{ true };
-        bool other{ true };
-        int target{ 0 };
-        int delay{ 1 };
-        int rounds{ 1 };
-    } reportbot;
+        struct Reportbot {
+            bool enabled = false;
+            bool textAbuse = false;
+            bool griefing = false;
+            bool wallhack = true;
+            bool aimbot = true;
+            bool other = true;
+            int target = 0;
+            int delay = 1;
+            int rounds = 1;
+        } reportbot;
+   } misc;
 
 	 struct {
         bool thirdPersonAnglesSet{ false };

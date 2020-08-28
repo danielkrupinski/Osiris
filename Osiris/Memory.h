@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <Windows.h>
 #include <Psapi.h>
+#include "SDK/Tickbase.h"
 
 #include "SDK/ModelInfo.h"
 
@@ -33,6 +34,7 @@ struct GlowObjectManager;
 struct Trace;
 struct Vector;
 class IViewRenderBeams;
+class ClientState;
 
 
 
@@ -97,6 +99,9 @@ public:
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;
+    void* WriteUsercmdDeltaToBufferReturn;
+    uintptr_t WriteUsercmd;
+    ClientState* clientState;
     const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept

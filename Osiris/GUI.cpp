@@ -13,14 +13,13 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
-#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Helpers.h"
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
 
-constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 namespace ImGui {
 
@@ -31,9 +30,12 @@ namespace ImGui {
         if (Button("..."))
             OpenPopup("");
 
-        BeginPopup("");
-        Checkbox("No BackGround", &i.noBackGround);
-        Checkbox("No TittleBar", &i.noTittleBar);
+        if (BeginPopup(""))
+        {
+            Checkbox("No BackGround", &i.noBackGround);
+            Checkbox("No TittleBar", &i.noTittleBar);
+            ImGui::EndPopup();
+        }
     }
 }
 
@@ -78,7 +80,6 @@ void GUI::render() noexcept
         renderSoundWindow();
         renderStyleWindow();
         renderMiscWindow();
-        renderReportbotWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -137,9 +138,8 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Sound", window.sound);
         menuBarItem("Style", window.style);
         menuBarItem("Misc", window.misc);
-        menuBarItem("Reportbot", window.reportbot);
         menuBarItem("Config", window.config);
-        ImGui::EndMainMenuBar();   
+        ImGui::EndMainMenuBar();
     }
 }
 
@@ -265,9 +265,9 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
+    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
     ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-	ImGui::SliderInt("Hit chance", &config->aimbot[currentWeapon].hitchance, 0, 100, "%d");
+	  ImGui::SliderInt("Hit chance", &config->aimbot[currentWeapon].hitchance, 0, 100, "%d");
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
@@ -378,35 +378,46 @@ void GUI::renderRagebotWindow(bool contentOnly) noexcept
 	}
 	ImGui::PopID();
 
-ImGui::SameLine();
-ImGui::Checkbox("Enabled", &config->ragebot[currentWeapon].enabled);
-ImGui::Separator();
-ImGui::Checkbox("On Key", &config->ragebot[currentWeapon].onKey);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].key);
-ImGui::Combo("", &config->ragebot[currentWeapon].keyMode, "Hold\0Toggle\0");
-ImGuiCustom::MultiCombo("Hitboxes", config->BonesTexts, config->ragebot[currentWeapon].BonesBools, 8);
-ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].slient);
-ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
-ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
-ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
-
-
-ImGui::SliderFloat("Min damage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
-ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
-ImGui::SliderFloat("Head value", &config->ragebot[currentWeapon].pointChance, 0, 100);
-ImGui::SliderFloat("Body value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
-ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
-ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].keyForceShot);
-ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
-ImGui::SameLine();
-hotkey(config->ragebot[currentWeapon].QuickPeekKey);
-ImGui::Checkbox("Doubletap", &config->dt.enabled);
-ImGui::Combo("Doubletap mode", &config->dt.mode, "Instant (16)\0Fast (14)\0Accurate(12)\0");
-if (!contentOnly)
-ImGui::End();
+    ImGui::SameLine();
+    ImGui::Checkbox("Enabled", &config->ragebot[currentWeapon].enabled);
+    ImGui::Separator();
+    ImGui::Checkbox("On Key", &config->ragebot[currentWeapon].onKey);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].key);
+    ImGui::Combo("", &config->ragebot[currentWeapon].keyMode, "Hold\0Toggle\0");
+    ImGuiCustom::MultiCombo("Hitboxes", config->BonesTexts, config->ragebot[currentWeapon].BonesBools, 8);
+    ImGui::Checkbox("Silent", &config->ragebot[currentWeapon].slient);
+    ImGui::Checkbox("Auto Stop", &config->ragebot[currentWeapon].autoStop);
+    ImGui::Checkbox("FriendlyFire", &config->ragebot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("BetWeen Shots", &config->ragebot[currentWeapon].betweenShots);
+    ImGui::Checkbox("Auto Scope", &config->ragebot[currentWeapon].autoScope);
+    ImGui::Checkbox("Auto Shot", &config->ragebot[currentWeapon].autoShot);
+    ImGui::SliderFloat("Min damage", &config->ragebot[currentWeapon].WallDamage, 0, 250);
+    ImGui::SliderFloat("Hitchance", &config->ragebot[currentWeapon].hitChance, 0, 100);
+    ImGui::SliderFloat("Head value", &config->ragebot[currentWeapon].pointChance, 0, 100);
+    ImGui::SliderFloat("Body value", &config->ragebot[currentWeapon].bodyChance, 0, 100);
+    ImGui::Checkbox("Baim", &config->ragebot[currentWeapon].Baim);
+    ImGui::Checkbox("Force shot", &config->ragebot[currentWeapon].keyForceShotEnabled);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].keyForceShot);
+    ImGui::Checkbox("Quickpeek", &config->ragebot[currentWeapon].QuickPeekEnabled);
+    ImGui::SameLine();
+    hotkey(config->ragebot[currentWeapon].QuickPeekKey);
+    ImGui::Checkbox("Extra", &config->ragebotExtra.enabled);
+    if (config->ragebotExtra.enabled)
+    {
+        ImGui::Text("Exploit");
+        ImGui::Checkbox("Doubletap", &config->ragebotExtra.doubletap);
+        if (config->ragebotExtra.doubletap)
+        {
+            ImGui::Combo("Doubletap Speed", &config->ragebotExtra.doubletapSpeed, "Instant\0Fast\0Accurate\0");
+            ImGui::SameLine();
+            hotkey(config->ragebotExtra.doubleTapKey);
+            ImGui::Combo("Doubletap Key Mode", &config->ragebotExtra.doubleTapKeyMode, "Hold\0Toggle\0");
+        }
+    }
+    if (!contentOnly)
+        ImGui::End();
 }
 
 void GUI::renderAntiAimWindow(bool contentOnly) noexcept
@@ -449,23 +460,23 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             if (config->antiAim.standing.pitch.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("Standing Pitch Angle", &config->antiAim.standing.pitch.angle, -89.0f, 89.0f, "%.2f°", 1);
+                ImGui::SliderFloat("Standing Pitch Angle", &config->antiAim.standing.pitch.angle, -89.0f, 89.0f, "%.2fï¿½", 1);
             }
             ImGui::Checkbox("Standing Yaw", &config->antiAim.standing.yaw.enabled);
             if (config->antiAim.standing.yaw.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("Standing Yaw Angle", &config->antiAim.standing.yaw.angle, -180.0f, 180.0f, "%.2f°", 1);
+                ImGui::SliderFloat("Standing Yaw Angle", &config->antiAim.standing.yaw.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 ImGui::SetNextItemWidth(85.0f);
                 ImGui::Combo("Standing Yaw Mode", &config->antiAim.standing.yaw.fake.mode, "Static\0Jitter\0");
                 if (config->antiAim.standing.yaw.fake.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Step", &config->antiAim.standing.yaw.fake.step, 0.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Step", &config->antiAim.standing.yaw.fake.step, 0.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Jitter Max", &config->antiAim.standing.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Jitter Max", &config->antiAim.standing.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Jitter Min", &config->antiAim.standing.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Jitter Min", &config->antiAim.standing.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
             ImGui::Checkbox("Standing Yaw Desync", &config->antiAim.standing.yaw.desync.enabled);
@@ -481,16 +492,16 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
                 else if (config->antiAim.standing.yaw.desync.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Desync Step", &config->antiAim.standing.yaw.desync.step, 0.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Desync Step", &config->antiAim.standing.yaw.desync.step, 0.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Desync Jitter Max", &config->antiAim.standing.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Desync Jitter Max", &config->antiAim.standing.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Standing Desync Jitter Min", &config->antiAim.standing.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing Desync Jitter Min", &config->antiAim.standing.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2fï¿½", 1);
                 }
                 ImGui::Checkbox("Standing LBY Breaker", &config->antiAim.standing.yaw.desync.LBYBreaker.enabled);
                 if (config->antiAim.standing.yaw.desync.LBYBreaker.enabled)
                 {
-                    ImGui::SliderFloat("Standing LBY Angle", &config->antiAim.standing.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Standing LBY Angle", &config->antiAim.standing.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
         }
@@ -502,23 +513,23 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             if (config->antiAim.moving.pitch.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("Moving Pitch Angle", &config->antiAim.moving.pitch.angle, -89.0f, 89.0f, "%.2f°", 1);
+                ImGui::SliderFloat("Moving Pitch Angle", &config->antiAim.moving.pitch.angle, -89.0f, 89.0f, "%.2fï¿½", 1);
             }
             ImGui::Checkbox("Moving Yaw", &config->antiAim.moving.yaw.enabled);
             if (config->antiAim.moving.yaw.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("Moving Yaw Angle", &config->antiAim.moving.yaw.angle, -180.0f, 180.0f, "%.2f°", 1);
+                ImGui::SliderFloat("Moving Yaw Angle", &config->antiAim.moving.yaw.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 ImGui::SetNextItemWidth(85.0f);
                 ImGui::Combo("Moving Yaw Mode", &config->antiAim.moving.yaw.fake.mode, "Static\0Jitter\0");
                 if (config->antiAim.moving.yaw.fake.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Step", &config->antiAim.moving.yaw.fake.step, 0.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Step", &config->antiAim.moving.yaw.fake.step, 0.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Jitter Max", &config->antiAim.moving.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Jitter Max", &config->antiAim.moving.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Jitter Min", &config->antiAim.moving.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Jitter Min", &config->antiAim.moving.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
             ImGui::Checkbox("Moving Yaw Desync", &config->antiAim.moving.yaw.desync.enabled);
@@ -534,16 +545,16 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
                 else if (config->antiAim.moving.yaw.desync.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Desync Step", &config->antiAim.moving.yaw.desync.step, 0.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Desync Step", &config->antiAim.moving.yaw.desync.step, 0.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Desync Jitter Max", &config->antiAim.moving.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Desync Jitter Max", &config->antiAim.moving.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("Moving Desync Jitter Min", &config->antiAim.moving.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving Desync Jitter Min", &config->antiAim.moving.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2fï¿½", 1);
                 }
                 ImGui::Checkbox("Moving LBY Breaker", &config->antiAim.moving.yaw.desync.LBYBreaker.enabled);
                 if (config->antiAim.moving.yaw.desync.LBYBreaker.enabled)
                 {
-                    ImGui::SliderFloat("Moving LBY Angle", &config->antiAim.moving.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("Moving LBY Angle", &config->antiAim.moving.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
         }
@@ -555,23 +566,23 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
             if (config->antiAim.inAir.pitch.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("In Air Pitch Angle", &config->antiAim.inAir.pitch.angle, -89.0f, 89.0f, "%.2f°", 1);
+                ImGui::SliderFloat("In Air Pitch Angle", &config->antiAim.inAir.pitch.angle, -89.0f, 89.0f, "%.2fï¿½", 1);
             }
             ImGui::Checkbox("In Air Yaw", &config->antiAim.inAir.yaw.enabled);
             if (config->antiAim.inAir.yaw.enabled) {
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(240.0f);
-                ImGui::SliderFloat("In Air Yaw Angle", &config->antiAim.inAir.yaw.angle, -180.0f, 180.0f, "%.2f°", 1);
+                ImGui::SliderFloat("In Air Yaw Angle", &config->antiAim.inAir.yaw.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 ImGui::SetNextItemWidth(85.0f);
                 ImGui::Combo("In Air Yaw Mode", &config->antiAim.inAir.yaw.fake.mode, "Static\0Jitter\0");
                 if (config->antiAim.inAir.yaw.fake.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Air Step", &config->antiAim.inAir.yaw.fake.step, 0.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air Step", &config->antiAim.inAir.yaw.fake.step, 0.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Air Jitter Max", &config->antiAim.inAir.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air Jitter Max", &config->antiAim.inAir.yaw.fake.jitterMax, -180.0f, 180.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Air Jitter Min", &config->antiAim.inAir.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air Jitter Min", &config->antiAim.inAir.yaw.fake.jitterMin, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
             ImGui::Checkbox("In Air Yaw Desync", &config->antiAim.inAir.yaw.desync.enabled);
@@ -587,21 +598,21 @@ void GUI::renderAntiAimWindow(bool contentOnly) noexcept
                 else if (config->antiAim.inAir.yaw.desync.mode == 1)
                 {
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Desync Air Step", &config->antiAim.inAir.yaw.desync.step, 0.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Desync Air Step", &config->antiAim.inAir.yaw.desync.step, 0.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Air Desync Jitter Max", &config->antiAim.inAir.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air Desync Jitter Max", &config->antiAim.inAir.yaw.desync.jitterMax, -100.0f, 100.0f, "%.2fï¿½", 1);
                     ImGui::SetNextItemWidth(240.0f);
-                    ImGui::SliderFloat("In Air Desync Jitter Min", &config->antiAim.inAir.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air Desync Jitter Min", &config->antiAim.inAir.yaw.desync.jitterMin, -100.0f, 100.0f, "%.2fï¿½", 1);
                 }
                 ImGui::Checkbox("In Air LBY Breaker", &config->antiAim.inAir.yaw.desync.LBYBreaker.enabled);
                 if (config->antiAim.inAir.yaw.desync.LBYBreaker.enabled)
                 {
-                    ImGui::SliderFloat("In Air LBY Angle", &config->antiAim.inAir.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2f°", 1);
+                    ImGui::SliderFloat("In Air LBY Angle", &config->antiAim.inAir.yaw.desync.LBYBreaker.angle, -180.0f, 180.0f, "%.2fï¿½", 1);
                 }
             }
         }
     }
-	
+
     if (!contentOnly)
         ImGui::End();
 }
@@ -788,7 +799,7 @@ void GUI::renderGlowWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
     ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
-   
+
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -823,7 +834,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves", "Desync" };
 
     ImGui::SameLine();
 
@@ -1182,7 +1193,9 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             }
 
             ImGui::PopID();
+
         	ImGui::SameLine(spacing);
+
             ImGui::Checkbox("Health Bar", &playerConfig.healthBar);
         } else if (currentCategory == 2) {
             auto& weaponConfig = config->streamProofESP.weapons[currentItem];
@@ -1288,7 +1301,8 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
-	ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::getSkyboxes().data(), Helpers::getSkyboxes().size());  ImGuiCustom::colorPicker("World color", config->visuals.world);
+    ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::getSkyboxes().data(), Helpers::getSkyboxes().size());
+    ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
     ImGui::Combo("Screen effect", &config->visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
@@ -1300,11 +1314,11 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
 	ImGui::Checkbox("Indicators", &config->visuals.indicatorsEnabled);
     ImGui::SameLine();
     ImGui::PushID(6);
-    ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 4);
+    ImGuiCustom::MultiCombo("", config->visuals.indicators, config->visuals.selectedIndicators, 5);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers);
 
-	
+
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
@@ -1357,7 +1371,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak\u2122", &selected_entry.stat_trak);
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
-        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
+        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", ImGuiSliderFlags_Logarithmic);
 
         static std::string filter;
         ImGui::PushID("Search");
@@ -1473,7 +1487,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::ListBoxFooter();
         }
 
-        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
+        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", ImGuiSliderFlags_Logarithmic);
         ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
         ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.0f, 360.0f);
 
@@ -1579,7 +1593,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Radar hack", &config->misc.radarHack);
     ImGui::PushID("Spectator List");
     ImGui::ImGuiStructItem(config->misc.spectatorList);
-    ImGui::EndPopup();
     ImGui::PopID();
 
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
@@ -1658,7 +1671,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
             ImGui::SliderInt("Fakelag Amount", &config->misc.fakeLagTicks, 1, 16);
         }
     }
-	
+
     ImGui::Text("Quick healthshot");
     ImGui::SameLine();
     hotkey(config->misc.quickHealthshotKey);
@@ -1671,7 +1684,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Fakeduck", &config->misc.fakeDuck);
     ImGui::SameLine();
     hotkey(config->misc.fakeDuckKey);
-	
+
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
@@ -1689,7 +1702,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
-	 ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
+	ImGui::Checkbox("Shots Cout", &config->misc.ShotsCout.enabled);
     ImGui::PushID("Shots Cout");
     ImGui::SameLine();
     if (ImGui::Button("..."))
@@ -1697,10 +1710,11 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
     if (ImGui::BeginPopup("A")){
         ImGui::Checkbox("No BackGround", &config->misc.ShotsCout.noBackGround);
-    ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
-    ImGui::EndPopup();
+        ImGui::Checkbox("No TittleBar", &config->misc.ShotsCout.noTittleBar);
+        ImGui::EndPopup();
     }
     ImGui::PopID();
+
 
 	ImGui::Checkbox("Status Bar", &config->misc.Sbar.enabled);
 	ImGui::SameLine();
@@ -1721,41 +1735,36 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
     ImGui::Checkbox("Draw Inaccuracy", &config->misc.drawInaccuracy);
     ImGui::SliderFloat("Draw Inaccuracy Thickness", &config->misc.drawInaccuracyThickness,0.0f,100.0f);
+    ImGui::Checkbox("Reportbot", &config->misc.reportbot.enabled);
+    ImGui::SameLine();
+    ImGui::PushID("Reportbot");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Combo("Target", &config->misc.reportbot.target, "Enemies\0Allies\0All\0");
+        ImGui::InputInt("Delay (s)", &config->misc.reportbot.delay);
+        config->misc.reportbot.delay = (std::max)(config->misc.reportbot.delay, 1);
+        ImGui::InputInt("Rounds", &config->misc.reportbot.rounds);
+        config->misc.reportbot.rounds = (std::max)(config->misc.reportbot.rounds, 1);
+        ImGui::PopItemWidth();
+        ImGui::Checkbox("Abusive Communications", &config->misc.reportbot.textAbuse);
+        ImGui::Checkbox("Griefing", &config->misc.reportbot.griefing);
+        ImGui::Checkbox("Wall Hacking", &config->misc.reportbot.wallhack);
+        ImGui::Checkbox("Aim Hacking", &config->misc.reportbot.aimbot);
+        ImGui::Checkbox("Other Hacking", &config->misc.reportbot.other);
+        if (ImGui::Button("Reset"))
+            Misc::resetReportbot();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
     ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderReportbotWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.reportbot)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->reportbot.enabled);
-    ImGui::SameLine(0.0f, 50.0f);
-    if (ImGui::Button("Reset"))
-        Reportbot::reset();
-    ImGui::Separator();
-    ImGui::PushItemWidth(80.0f);
-    ImGui::Combo("Target", &config->reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config->reportbot.delay);
-    config->reportbot.delay = (std::max)(config->reportbot.delay, 1);
-    ImGui::InputInt("Rounds", &config->reportbot.rounds);
-    config->reportbot.rounds = (std::max)(config->reportbot.rounds, 1);
-    ImGui::PopItemWidth();
-    ImGui::Checkbox("Abusive Communications", &config->reportbot.textAbuse);
-    ImGui::Checkbox("Griefing", &config->reportbot.griefing);
-    ImGui::Checkbox("Wall Hacking", &config->reportbot.wallhack);
-    ImGui::Checkbox("Aim Hacking", &config->reportbot.aimbot);
-    ImGui::Checkbox("Other Hacking", &config->reportbot.other);
-
     if (!contentOnly)
         ImGui::End();
 }
@@ -1812,7 +1821,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Ragebot" ,"Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Ragebot" ,"Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1832,7 +1841,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 11: config->sound = { }; break;
                     case 12: config->style = { }; updateColors(); break;
                     case 13: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 14: config->reportbot = { }; break;
                     }
                 }
             }
@@ -1866,7 +1874,7 @@ void GUI::renderGuiStyle2() noexcept
         if (ImGui::BeginTabItem("Aimbot")) {
             renderAimbotWindow(true);
             ImGui::EndTabItem();
-		}        
+		}
         if (ImGui::BeginTabItem("Ragebot")) {
 			renderRagebotWindow(true);
 			ImGui::EndTabItem();
@@ -1913,10 +1921,6 @@ void GUI::renderGuiStyle2() noexcept
         }
         if (ImGui::BeginTabItem("Misc")) {
             renderMiscWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Reportbot")) {
-            renderReportbotWindow(true);
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Config")) {

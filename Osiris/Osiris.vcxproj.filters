@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -107,9 +107,6 @@
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Reportbot.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="imguiCustom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -179,6 +176,7 @@
     <ClCompile Include="extraHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="Hacks\Resolver.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -194,6 +192,7 @@
     <ClCompile Include="Hacks\Tickbase.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -394,9 +393,6 @@
     <ClInclude Include="Hacks\AntiAim.h">
       <Filter>Hacks</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Reportbot.h">
-      <Filter>Hacks</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\matrix3x4.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -523,6 +519,7 @@
     <ClInclude Include="SDK\Angle.h">
       <Filter>SDK</Filter>
     </ClInclude>
+
     <ClInclude Include="Hacks\Resolver.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -534,6 +531,7 @@
     </ClInclude>
     <ClInclude Include="Hacks\Tickbase.h">
       <Filter>Hacks</Filter>
+
     </ClInclude>
   </ItemGroup>
 </Project>

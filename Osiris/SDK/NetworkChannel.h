@@ -25,6 +25,7 @@ public:
 
 class EventInfo {
 public:
+
     enum {
         EVENT_INDEX_BITS = 8,
         EVENT_DATA_LEN_BITS = 11,
@@ -39,6 +40,7 @@ public:
     int flags;
     PAD(0x1C);
     EventInfo* m_next;
+
 };
 
 class ClientState

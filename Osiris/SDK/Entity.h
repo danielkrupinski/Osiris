@@ -16,6 +16,7 @@
 #include "WeaponData.h"
 #include "WeaponId.h"
 #include "UserCmd.h"
+#include "EngineTrace.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -229,7 +230,7 @@ public:
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
 	 VIRTUAL_METHOD(Vector&, getAbsAngle, 11, (), (this))
-	
+
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
@@ -258,6 +259,11 @@ public:
         return getWeaponType() == WeaponType::SniperRifle;
     }
 
+    constexpr auto isShotgun() noexcept
+    {
+        return getWeaponType() == WeaponType::Shotgun;
+    }
+
     constexpr auto isFullAuto() noexcept
     {
         const auto weaponData = getWeaponData();
@@ -275,6 +281,7 @@ public:
 	{
 		return getWeaponType() == WeaponType::Grenade;
 	}
+
 
     constexpr auto isGrenade() noexcept
     {
@@ -295,6 +302,7 @@ public:
 	{
 	    return (uint32_t*)((uintptr_t)this + 0xF0);
 	}
+
 
     constexpr auto requiresRecoilControl() noexcept
     {
@@ -319,7 +327,7 @@ public:
             *shouldskipframe = backup_shouldskipframe;
             return result;
         }
-    	
+
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -360,19 +368,19 @@ public:
         interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
-    
+
     bool isOtherEnemy(Entity* other) noexcept;
 
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
     }
-   
+
     AnimState* getAnimstate() noexcept
     {
         return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
-	
+
     float getMaxDesyncAngle() noexcept
     {
         const auto animState = getAnimstate();
@@ -445,7 +453,7 @@ public:
         {
 	        return;
         }
-    	
+
         if (!state)
             return;
         static auto UpdateAnimState = reinterpret_cast<void(__vectorcall*)(void*, void*, float, float, float, void*)>(memory->UpdateState);
@@ -465,7 +473,7 @@ public:
         reinterpret_cast<void(__fastcall*) (void*)> (invalidate_bone_cache) (this);
     }
 
-	bool isThrowing() 
+	bool isThrowing()
     {
         auto weapon = localPlayer->getActiveWeapon();
         auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
@@ -477,7 +485,7 @@ public:
         return false;
     }
 
-    bool throwing(UserCmd* cmd) 
+    bool throwing(UserCmd* cmd)
     {
         auto weapon = localPlayer->getActiveWeapon();
         auto weaponClass = getWeaponClass(weapon->itemDefinitionIndex2());
@@ -535,8 +543,8 @@ public:
         getPlayerName(name);
         return name;
     }
-  
-	
+
+
 	NETVAR(ClientSideAnimation, "CBaseAnimating", "m_bClientSideAnimation", bool)
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -561,7 +569,7 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-    
+
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
@@ -615,7 +623,7 @@ public:
     NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float);
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
-    
+
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)

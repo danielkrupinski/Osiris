@@ -24,6 +24,7 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponSystem.h"
+#include "../SDK/Tickbase.h"
 
 #include "../GUI.h"
 #include "../Helpers.h"
@@ -318,7 +319,7 @@ static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
     out = ImGui::GetIO().DisplaySize / 2.0f;
     out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
     out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
-	out = ImFloor(out);
+    out = ImFloor(out);
     return true;
 }
 
@@ -367,6 +368,9 @@ void Misc::quickpeek(UserCmd* cmd, Vector &quickpeekstartpos) noexcept {
 
      auto* const activeWeapon = localPlayer->getActiveWeapon();
      int currentWeapon = getWeaponIndex(activeWeapon->itemDefinitionIndex2());
+
+     if (!currentWeapon)
+         return;
 	
      if (config->ragebot[currentWeapon].QuickPeekEnabled && config->ragebot[currentWeapon].QuickPeekKey > 0 && GetAsyncKeyState(config->ragebot[currentWeapon].QuickPeekKey)) {
 
@@ -867,8 +871,6 @@ void Misc::chokePackets(bool& sendPacket, UserCmd* cmd) noexcept
 
 void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
 {
-    auto state = localPlayer->getAnimstate();
-
     if (config->misc.fakeDuck)
     {
         if (config->misc.fakeDuckKey != 0) {
@@ -883,57 +885,24 @@ void Misc::fakeDuck(UserCmd* cmd, bool& sendPacket) noexcept
 
         if (config->misc.fakeDucking)
         {
-            if (cmd->buttons & UserCmd::IN_ATTACK || config->misc.fakeDuckShotState != 0)
+            static bool counter = false;
+            static int counters = 0;
+            if (counters == 9)
             {
-                if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 0)
-                {
-                    sendPacket = true; // clear up sendPacket for fakeduck going up to choke
-                    cmd->buttons |= UserCmd::IN_BULLRUSH;
-                    cmd->buttons |= UserCmd::IN_DUCK;
-                    cmd->buttons &= ~UserCmd::IN_ATTACK;
-                    config->misc.fakeDuckShotState = 1;
-                }
-                else if (localPlayer->getAnimstate()->duckAmount > 0.2 && config->misc.fakeDuckShotState == 1)
-                {
-                    sendPacket = false;
-                    cmd->buttons |= UserCmd::IN_BULLRUSH;
-                    cmd->buttons &= ~UserCmd::IN_DUCK;
-                    cmd->buttons &= ~UserCmd::IN_ATTACK;
-                    config->misc.fakeDuckShotState = 1;
-                }
-                else if (localPlayer->getAnimstate()->duckAmount <= 0.2 && config->misc.fakeDuckShotState == 1)
-                {
-                    sendPacket = false;
-                    cmd->buttons |= UserCmd::IN_BULLRUSH;
-                    cmd->buttons &= ~UserCmd::IN_DUCK;
-                    cmd->buttons |= UserCmd::IN_ATTACK;
-                    config->misc.fakeDuckShotState = 2;
-                }
-                else if (config->misc.fakeDuckShotState == 2)
-                {
-                    sendPacket = false;
-                    cmd->buttons |= UserCmd::IN_BULLRUSH;
-                    cmd->buttons |= UserCmd::IN_DUCK;
-                    config->misc.fakeDuckShotState = 3;
-                }
-                else if (config->misc.fakeDuckShotState == 3)
-                {
-                    sendPacket = true;
-                    cmd->buttons |= UserCmd::IN_BULLRUSH;
-                    cmd->buttons |= UserCmd::IN_DUCK;
-                    config->misc.fakeDuckShotState = 0;
-                }
+                counters = 0;
+                counter = !counter;
+            }
+            counters++;
+            if (counter)
+            {
+                cmd->buttons |= UserCmd::IN_DUCK;
+                sendPacket = true;
             }
             else
             {
-                cmd->buttons |= UserCmd::IN_BULLRUSH;
-                cmd->buttons |= UserCmd::IN_DUCK;
-                config->misc.fakeDuckShotState = 0;
+                sendPacket = false;
+                cmd->buttons &= ~UserCmd::IN_DUCK;
             }
-        }
-        else
-        {
-            config->misc.fakeDuckShotState = 0;
         }
     }
 }
@@ -1168,8 +1137,12 @@ void Misc::StatusBar()noexcept
         }
 
         if (cfg.ShowGameGlobalVars) {
-            ImGui::Text("CurTime: %.1f",memory->globalVars->currenttime);
-            ImGui::Text("RealTime: %.1f",memory->globalVars->realtime);
+            ImGui::Text("CurTime: %.1f", memory->globalVars->currenttime);
+            ImGui::Text("RealTime: %.1f", memory->globalVars->realtime);
+            ImGui::Text("chokedPackets: %.1f", Tickbase::tick->chokedPackets);
+            ImGui::Text("lastShift: %.1f", Tickbase::lastShift);
+            ImGui::Text("commandNumber: %.1f", Tickbase::tick->commandNumber);
+            ImGui::Text("tickshift: %.1f", Tickbase::tick->tickshift);
         }
     }
     ImGui::End();
@@ -1196,4 +1169,70 @@ void Misc::DrawInaccuracy(ImDrawList* draw)noexcept
     //TODO: Add Slider in GUI.CPP to change color
 	draw->AddCircle(ImVec2(static_cast<float>(w) / 2.0f, static_cast<float>(h) / 2.0f), Inaccuracy,
 	/* Red */ImGui::GetColorU32(ImVec4(1.000f, 0.000f, 0.000f, 1.000f)), config->misc.drawInaccuracyThickness);
+}
+
+static std::vector<std::uint64_t> reportedPlayers;
+static int reportbotRound;
+
+void Misc::runReportbot() noexcept
+{
+    if (!config->misc.reportbot.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static auto lastReportTime = 0.0f;
+
+    if (lastReportTime + config->misc.reportbot.delay > memory->globalVars->realtime)
+        return;
+
+    if (reportbotRound >= config->misc.reportbot.rounds)
+        return;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (config->misc.reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->misc.reportbot.target != 0 : config->misc.reportbot.target != 1))
+            continue;
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+            continue;
+
+        std::string report;
+
+        if (config->misc.reportbot.textAbuse)
+            report += "textabuse,";
+        if (config->misc.reportbot.griefing)
+            report += "grief,";
+        if (config->misc.reportbot.wallhack)
+            report += "wallhack,";
+        if (config->misc.reportbot.aimbot)
+            report += "aimbot,";
+        if (config->misc.reportbot.other)
+            report += "speedhack,";
+
+        if (!report.empty()) {
+            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory->globalVars->realtime;
+            reportedPlayers.push_back(playerInfo.xuid);
+        }
+        return;
+    }
+
+    reportedPlayers.clear();
+    ++reportbotRound;
+}
+
+void Misc::resetReportbot() noexcept
+{
+    reportbotRound = 0;
+    reportedPlayers.clear();
 }

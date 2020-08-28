@@ -258,7 +258,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
          std::vector<Enemies> enemies;
-
     	
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
@@ -275,9 +274,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     	  std::sort(enemies.begin(), enemies.end());
 
-    	  Vector bestAngle{ };
+    	Vector bestAngle{ };
         auto boneList = config->aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
-
 
     	for (const auto& target : enemies)
         {
@@ -312,8 +310,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 }
                 break;
             }
-
-    		
         }
 
         if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke

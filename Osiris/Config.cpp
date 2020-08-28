@@ -384,6 +384,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j,"SYenabled",a.standing.yaw.enabled);
 	read(j,"SYangle",a.standing.yaw.angle);
 	read(j,"SYFmode",a.standing.yaw.fake.mode);
+    read(j,"SYFjitterStep", a.standing.yaw.fake.step);
 	read(j,"SYFjitterMax",a.standing.yaw.fake.jitterMax);
 	read(j,"SYFjitterMin",a.standing.yaw.fake.jitterMin);
 	read(j,"SYDenabled",a.standing.yaw.desync.enabled);
@@ -401,6 +402,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j, "MYenabled", a.moving.yaw.enabled);
 	read(j, "MYangle", a.moving.yaw.angle);
 	read(j, "MYFmode", a.moving.yaw.fake.mode);
+    read(j, "MYFjitterStep", a.moving.yaw.fake.step);
 	read(j, "MYFjitterMax", a.moving.yaw.fake.jitterMax);
 	read(j, "MYFjitterMin", a.moving.yaw.fake.jitterMin);
 	read(j, "MYDenabled", a.moving.yaw.desync.enabled);
@@ -418,6 +420,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 	read(j, "IYenabled", a.inAir.yaw.enabled);
 	read(j, "IYangle", a.inAir.yaw.angle);
 	read(j, "IYFmode", a.inAir.yaw.fake.mode);
+    read(j, "IYFjitterStep", a.inAir.yaw.fake.step);
 	read(j, "IYFjitterMax", a.inAir.yaw.fake.jitterMax);
 	read(j, "IYFjitterMin", a.inAir.yaw.fake.jitterMin);
 	read(j, "IYDenabled", a.inAir.yaw.desync.enabled);
@@ -662,10 +665,12 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Draw Inaccuracy", m.drawInaccuracy);
     read(j, "Draw Inaccuracy Thickness", m.drawInaccuracyThickness);
     read<value_t::object>(j, "Status Bar", m.Sbar);
-	read<value_t::object>(j, "ShotsCout", m.ShotsCout);
+	  read<value_t::object>(j, "ShotsCout", m.ShotsCout);
+    read<value_t::object>(j, "Reportbot", m.reportbot);
+    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
 }
 
-static void from_json(const json& j, Config::Reportbot& r)
+static void from_json(const json& j, Config::Misc::Reportbot& r)
 {
     read(j, "Enabled", r.enabled);
     read(j, "Target", r.target);
@@ -703,7 +708,6 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
-    read<value_t::object>(j, "Reportbot", reportbot);
 }
 
 // WRITE macro requires:
@@ -949,6 +953,7 @@ static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& du
 
 	WRITE("SYangle", standing.yaw.angle);
 	WRITE("SYFmode", standing.yaw.fake.mode);
+    WRITE("SYFjitterstep", standing.yaw.fake.step);
 	WRITE("SYFjitterMax", standing.yaw.fake.jitterMax);
 	WRITE("SYFjitterMin", standing.yaw.fake.jitterMin);
 	WRITE("SYDenabled", standing.yaw.desync.enabled);
@@ -1034,10 +1039,8 @@ static void to_json(json& j, const Config::StreamProofESP& o)
     j["Other Entities"] = o.otherEntities;
 }
 
-static void to_json(json& j, const Config::Reportbot& o)
+static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Misc::Reportbot& dummy = {})
 {
-    const Config::Reportbot dummy;
-
     WRITE("Enabled", enabled);
     WRITE("Target", target);
     WRITE("Delay", delay);
@@ -1138,7 +1141,9 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Draw Inaccuracy", drawInaccuracy);
     WRITE("Draw InaccuracyThickness", drawInaccuracyThickness);
     WRITE("Status Bar",Sbar);
-	WRITE("ShotsCout", ShotsCout);
+	  WRITE("ShotsCout", ShotsCout);
+    WRITE("Reportbot", reportbot);
+    WRITE("Opposite Hand Knife", oppositeHandKnife);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
@@ -1281,7 +1286,6 @@ void Config::save(size_t id) const noexcept
         j["Glow"] = glow;
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
-        j["Reportbot"] = reportbot;
         j["Sound"] = sound;
         j["Visuals"] = visuals;
         j["Misc"] = misc;
@@ -1329,7 +1333,6 @@ void Config::reset() noexcept
     sound = { };
     style = { };
     misc = { };
-    reportbot = { };
 }
 
 void Config::listConfigs() noexcept
