@@ -26,10 +26,7 @@
     <ClCompile Include="Hacks\Glow.cpp" />
     <ClCompile Include="Hacks\Multipoints.cpp" />
     <ClCompile Include="Hacks\Ragebot.cpp" />
-
-    <ClCompile Include="Hacks\Reportbot.cpp" />
     <ClCompile Include="Hacks\Resolver.cpp" />
-
     <ClCompile Include="Hacks\SkinChanger.cpp" />
     <ClCompile Include="Hacks\StreamProofESP.cpp" />
     <ClCompile Include="Hacks\Tickbase.cpp" />
@@ -66,7 +63,6 @@
     <ClCompile Include="SDK\Entity.cpp" />
     <ClCompile Include="SDK\GlobalVars.cpp" />
     <ClCompile Include="SDK\KeyValues.cpp" />
-    <ClCompile Include="SDK\Tickbase.cpp" />
     <ClCompile Include="SDK\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -88,10 +84,7 @@
     <ClInclude Include="Hacks\Misc.h" />
     <ClInclude Include="Hacks\Multipoints.h" />
     <ClInclude Include="Hacks\Ragebot.h" />
-
-    <ClInclude Include="Hacks\Reportbot.h" />
     <ClInclude Include="Hacks\Resolver.h" />
-
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Tickbase.h" />
@@ -176,7 +169,6 @@
     <ClInclude Include="SDK\SoundInfo.h" />
     <ClInclude Include="SDK\StudioRender.h" />
     <ClInclude Include="SDK\Surface.h" />
-    <ClInclude Include="SDK\Tickbase.h" />
     <ClInclude Include="SDK\UserCmd.h" />
     <ClInclude Include="SDK\UtlVector.h" />
     <ClInclude Include="SDK\VarMapping.h" />
@@ -277,6 +269,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ControlFlowGuard>false</ControlFlowGuard>
       <ExceptionHandling>false</ExceptionHandling>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

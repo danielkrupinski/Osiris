@@ -1,12 +1,12 @@
-#include "Backtrack.h"
+#include "../Hacks/Backtrack.h"
 #include "Tickbase.h"
 
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
 
-bool Tickbase::canShift(int ticks, bool shiftAnyways = false) noexcept
+bool canShift(int ticks, bool shiftAnyways = false)
 {
-    if (!localPlayer || !localPlayer->isAlive() || !config->dt.enabled || ticks <= 0)
+    if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled || ticks <= 0)
         return false;
 
     if (shiftAnyways)
@@ -23,10 +23,10 @@ bool Tickbase::canShift(int ticks, bool shiftAnyways = false) noexcept
         return false;
 
     auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon || !activeWeapon->clip() || activeWeapon->isInThrow())
+    if (!activeWeapon || !activeWeapon->clip())// || activeWeapon->throwing()) commented this bc it needs UserCmd* and im too lazy 2 fix
         return false;
 
-    if (activeWeapon->isKnife() || activeWeapon->isGrenade() || activeWeapon->isShotgun()
+    if (activeWeapon->isKnife() || activeWeapon->isNade() || activeWeapon->isShotgun()
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Awp
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Ssg08
@@ -38,7 +38,7 @@ bool Tickbase::canShift(int ticks, bool shiftAnyways = false) noexcept
 
     if (shiftTime < activeWeapon->nextPrimaryAttack())
         return false;
-	
+
     return true;
 }
 
@@ -51,26 +51,43 @@ void recalculateTicks() noexcept
 
 void Tickbase::shiftTicks(int ticks, UserCmd* cmd, bool shiftAnyways) noexcept //useful, for other funcs
 {
-    if (!localPlayer || !localPlayer->isAlive() || !config->dt.enabled)
+    if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled)
         return;
     if (!canShift(ticks, shiftAnyways))
         return;
 
-   // tick->timesShifted++;
-	
     tick->commandNumber = cmd->commandNumber;
     tick->tickbase = localPlayer->tickBase();
     tick->tickshift = ticks;
+    Tickbase::lastShift = cmd->commandNumber;
     //Teleport kinda buggy
     //tick->chokedPackets += ticks;
     //recalculateTicks();
 }
 
-void Tickbase::run(UserCmd* cmd) noexcept
+void Tickbase::run(UserCmd* cmd, bool& sendPacket) noexcept
 {
+    if (config->ragebotExtra.doubleTapKey != 0) {
+        if (config->ragebotExtra.doubleTapKeyMode == 0) {
+            if (!GetAsyncKeyState(config->ragebotExtra.doubleTapKey))
+            {
+                config->ragebotExtra.doubleTapToggled = false;
+            }
+            else
+                config->ragebotExtra.doubleTapToggled = true;
+        }
+        else {
+            if (GetAsyncKeyState(config->ragebotExtra.doubleTapKey) & 1)
+                config->ragebotExtra.doubleTapToggled = !config->ragebotExtra.doubleTapToggled;
+        }
+    }
+    else
+        config->ragebotExtra.doubleTapToggled = true;
+
+    constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick); };
 
     static void* oldNetwork = nullptr;
-    if(auto network = interfaces->engine->getNetworkChannel(); network && oldNetwork != network)
+    if (auto network = interfaces->engine->getNetworkChannel(); network && oldNetwork != network)
     {
         oldNetwork = network;
         tick->ticksAllowedForProcessing = tick->maxUsercmdProcessticks;
@@ -82,12 +99,12 @@ void Tickbase::run(UserCmd* cmd) noexcept
     recalculateTicks();
 
     tick->ticks = cmd->tickCount;
-    if (!localPlayer || !localPlayer->isAlive() || !config->dt.enabled)
+    if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled || (config->antiAim.general.fakeWalk.keyToggled && config->antiAim.general.fakeWalk.enabled))
         return;
 
     auto ticks = 0;
 
-    switch (config->dt.mode) {
+    switch (config->ragebotExtra.doubletapSpeed) {
     case 0: //Instant
         ticks = 16;
         break;
@@ -99,14 +116,12 @@ void Tickbase::run(UserCmd* cmd) noexcept
         break;
     }
 
-    if (config->dt.enabled && cmd->buttons & (UserCmd::IN_ATTACK))
-    {
-    //	tick->attempted++;
-		shiftTicks(ticks, cmd);   
-    }
+    if (config->ragebotExtra.doubletap && cmd->buttons & (UserCmd::IN_ATTACK) && config->ragebotExtra.doubleTapToggled)
+        shiftTicks(ticks, cmd);
 
-    if (tick->tickshift <= 0 && tick->ticksAllowedForProcessing < (tick->maxUsercmdProcessticks - tick->fakeLag) && !config->misc.fakeDucking && ((config->misc.fakeLagTicks <= (tick->maxUsercmdProcessticks - ticks)) || !config->misc.fakeLagTicks))
+    if (tick->tickshift <= 0 && tick->ticksAllowedForProcessing < (tick->maxUsercmdProcessticks - tick->fakeLag) && !config->misc.fakeDucking && (cmd->commandNumber - lastShift) >= tick->maxUsercmdProcessticks && config->ragebotExtra.doubleTapToggled) //&& ((config->misc.fakeLagMode != 0 && config->misc.fakeLagTicks <= (tick->maxUsercmdProcessticks - ticks)) || !config->misc.fakeLagMode))
     {
+        sendPacket = true;
         cmd->tickCount = INT_MAX; //recharge
         tick->chokedPackets--;
     }

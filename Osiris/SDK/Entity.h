@@ -288,11 +288,6 @@ public:
         return getWeaponType() == WeaponType::Grenade;
     }
 
-    constexpr auto isShotgun() noexcept
-    {
-	     return getWeaponType() == WeaponType::Shotgun;
-    }
-
 	Vector* getAbsVelocity()
 	{
 	    return (Vector*)(this + 0x94);

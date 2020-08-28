@@ -24,7 +24,7 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
 #include "../SDK/WeaponSystem.h"
-#include "../SDK/Tickbase.h"
+#include "../Hacks/Tickbase.h"
 
 #include "../GUI.h"
 #include "../Helpers.h"
@@ -253,7 +253,7 @@ void Misc::ShotsCout(GameEvent* event, int bestRageDmg, int bestRageChance, Vect
 	ImGui::Text("Best rage chance now: %d", bestRageChance);
     ImGui::Text("Quickpeek: x:%d y:%d z:%d", static_cast<int>(quickpeekVector.x), static_cast<int>(quickpeekVector.y), static_cast<int>(quickpeekVector.z));
     ImGui::Text("Tick choked packets: %d", Tickbase::tick->chokedPackets);
-	ImGui::Text("Can shift: %d", Tickbase::canShift(ticks, false));
+	//ImGui::Text("Can shift: %d", Tickbase::canShift(ticks, false));
    // ImGui::Text("Times shifted: %d", Tickbase::tick->timesShifted);
    // ImGui::Text("Attempted: %d", Tickbase::tick->attempted);
 	

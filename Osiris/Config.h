@@ -511,6 +511,7 @@ public:
          int fakeLagMode{ 0 };
         int fakeLagTicks{ 0 };
         int fakeLagKey{ 0 };
+    	bool oppositeHandKnife {false};
         const char* fakeLagFlags[4] = {
             "While Shooting",
             "While Standing",
