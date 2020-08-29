@@ -1470,15 +1470,32 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         }
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &config->misc.clocktag);
-    ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
-    ImGui::SameLine();
-    ImGui::PushItemWidth(120.0f);
-    ImGui::PushID(0);
+    ImGui::Combo("Clantag", &config->misc.clanTagStyle, "None\0Clock tag\0Custom clantag\0OsirisBETA\0Custom multiline clantag\0");
+    if (config->misc.clanTagStyle == 2) {
+        ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
+        ImGui::SliderFloat("Clantag Speed", &config->misc.customClanTagSpeed, 10.0f, 0.1f, "%.1f", ImGuiSliderFlags_ClampOnInput);
+        ImGui::PushItemWidth(120.0f);
+        ImGui::PushID(0);
 
-    if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
-        Misc::updateClanTag(true);
+        if (ImGui::InputText("Clantag Text", config->misc.clanTag, sizeof(config->misc.clanTag)))
+            Misc::updateClanTag(true);
+    }
+    else if (config->misc.clanTagStyle == 3)
+        ImGui::SliderFloat("Clantag Speed", &config->misc.OsirisBETAClanTagSpeed, 0.1f, 10.0f, "%.1f", ImGuiSliderFlags_ClampOnInput);
+    else if (config->misc.clanTagStyle == 4) {
+        ImGui::SameLine();
+        ImGui::PushID("Custom multiline clantag");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("CMC");
+
+        if (ImGui::BeginPopup("CMC")) {
+            ImGui::SliderFloat("Clantag Speed", &config->misc.customMultiClanTagSpeed, 0.1f, 10.0f, "%.1f", ImGuiSliderFlags_ClampOnInput);
+            ImGui::Text("Custom multiline clantag:");
+            ImGui::InputTextMultiline("", &config->misc.customMultiClanTag);
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
+    }
     ImGui::Checkbox("Chat spam", &config->misc.chatSpam);
     ImGui::SameLine();
     ImGui::PushID("Chat Spam");

@@ -563,11 +563,14 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Bunny hop hitchance", m.bhopHitchance);
     read(j, "Bunny hop Min hits", m.bhopMinHits);
     read(j, "Bunny hop Max hits", m.bhopMaxHits);
-    read(j, "Custom clan tag", m.customClanTag);
-    read(j, "Clock tag", m.clocktag);
     if (j.contains("Clan tag"))
         strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
+    read(j, "Clan tag Style", m.clanTagStyle);
     read(j, "Animated clan tag", m.animatedClanTag);
+    read<value_t::object>(j, "Custom Multi ClanTag", m.customMultiClanTag);
+    read(j, "Custom ClanTag Speed", m.customClanTagSpeed);
+    read(j, "OsirisBETA Clan tag Speed", m.OsirisBETAClanTagSpeed);
+    read(j, "Custom Multi ClanTag Speed", m.customMultiClanTagSpeed);
     read(j, "Chat spam", m.chatSpam);
     read(j, "Chat spam random", m.chatSpamRandom);
     read(j, "Chat spam delay", m.chatSpamDelay);
@@ -1012,13 +1015,16 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Bunny hop hitchance", bhopHitchance);
     WRITE("Bunny hop Min hits", bhopMinHits);
     WRITE("Bunny hop Max hits", bhopMaxHits);
-    WRITE("Custom clan tag", customClanTag);
-    WRITE("Clock tag", clocktag);
 
     if (o.clanTag[0])
         j["Clan tag"] = o.clanTag;
 
+    WRITE("Clan tag Style", clanTagStyle);
     WRITE("Animated clan tag", animatedClanTag);
+    WRITE("Custom Multi ClanTag", customMultiClanTag);
+    WRITE("Custom ClanTag Speed", customClanTagSpeed);
+    WRITE("OsirisBETA Clan tag Speed", OsirisBETAClanTagSpeed);
+    WRITE("Custom Multi ClanTag Speed", customMultiClanTagSpeed);
     WRITE("Chat spam", chatSpam);
     WRITE("Chat spam random", chatSpamRandom);
     WRITE("Chat spam delay", chatSpamDelay);

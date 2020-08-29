@@ -257,9 +257,12 @@ public:
         int bhopHitchance{ 100 };
         int bhopMinHits{ 20 };
         int bhopMaxHits{ 20 };
-        bool customClanTag{ false };
-        bool clocktag{ false };
+        int clanTagStyle{ 0 };
         bool animatedClanTag{ false };
+        std::string customMultiClanTag;
+        float customClanTagSpeed{ 0.6f };
+        float OsirisBETAClanTagSpeed{ 1.0f };
+        float customMultiClanTagSpeed{ 1.0f };
         bool chatSpam{ false };
         bool chatSpamRandom{ false };
         int chatSpamDelay{ 1 };

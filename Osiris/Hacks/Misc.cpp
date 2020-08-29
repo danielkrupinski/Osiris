@@ -99,8 +99,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     }
 
     static auto lastTime = 0.0f;
-
-    if (config->misc.clocktag) {
+    if (config->misc.clanTagStyle == 0)
+        memory->setClanTag("", "");
+    if (config->misc.clanTagStyle == 1) {
         if (memory->globalVars->realtime - lastTime < 1.0f)
             return;
 
@@ -111,8 +112,8 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
-    } else if (config->misc.customClanTag) {
-        if (memory->globalVars->realtime - lastTime < 0.6f)
+    } else if (config->misc.clanTagStyle == 2) {
+        if (memory->globalVars->realtime - lastTime < config->misc.customClanTagSpeed)
             return;
 
         if (config->misc.animatedClanTag && !clanTag.empty()) {
@@ -122,6 +123,79 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+    }
+    else if (config->misc.clanTagStyle == 3) {
+        static std::vector<std::string> OsirisBETA
+        {
+            "",
+            "O",
+            "O^",
+            "Os",
+            "Os^",
+            "Osi",
+            "Osi^",
+            "Osir",
+            "Osir^",
+            "Osirs ",
+            "Osirs^",
+            "OsirsB",
+            "OsirsB^",
+            "OsirsBE",
+            "OsirsBE^",
+            "OsirsBET",
+            "OsirsBET^",
+            "OsirsBETA ^_^",
+            "OsirsBET^",
+            "OsirsBET",
+            "OsirsBE^",
+            "OsirsBE",
+            "OsirsB^",
+            "OsirsB",
+            "Osirs^",
+            "Osirs",
+            "Osir^",
+            "Osir",
+            "Osi^",
+            "Osi",
+            "Os^",
+            "Os",
+            "O^",
+            "O",
+            ""
+        };
+
+        static float lastTime = 0.0f;
+        float currentTime = memory->globalVars->currenttime * config->misc.OsirisBETAClanTagSpeed;
+
+        if (lastTime != currentTime)
+        {
+            std::string buf = OsirisBETA[(int)currentTime % OsirisBETA.size()];
+            memory->setClanTag(buf.c_str(), buf.c_str());
+            lastTime = currentTime;
+        }
+
+    }
+    else if (config->misc.clanTagStyle == 4) {
+        if (config->misc.customMultiClanTag.empty())
+            return;
+
+        std::istringstream Stream(config->misc.customMultiClanTag);
+        std::vector <std::string> ClanTags;
+        std::string ClanTag;
+
+        while (std::getline(Stream, ClanTag, '\n'))
+            if (ClanTag.length() > 0)
+                ClanTags.push_back(ClanTag);
+        
+        static float lastTime = 0.0f;
+        float currentTime = memory->globalVars->currenttime * config->misc.customMultiClanTagSpeed;
+
+        if (lastTime != currentTime && ClanTags.size() > 0)
+        {
+            std::string buf = ClanTags[(int)currentTime % ClanTags.size()];
+            memory->setClanTag(buf.c_str(), buf.c_str());
+            lastTime = currentTime;
+        }
     }
 }
 
