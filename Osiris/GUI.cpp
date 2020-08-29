@@ -1908,6 +1908,9 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Rainbow Bar by ME");
     ImGui::Text("Bullet Tracer by DoomFishWasTaken");
     ImGui::Text("Fake Duck by DoomFishWasTaken");
+    ImGui::Text("Draw Inaccuracy by Cyk-Fad;");
+    ImGui::Text("Multiline ClanTag by ME;");
+    ImGui::Text("BSOD button by ME;");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
 
