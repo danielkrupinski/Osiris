@@ -20,6 +20,7 @@
 #include "../SDK/Localize.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/NetworkChannel.h"
+#include "../SDK/Panorama.h"
 #include "../SDK/Surface.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
@@ -906,4 +907,38 @@ void Misc::resetReportbot() noexcept
 {
     reportbotRound = 0;
     reportedPlayers.clear();
+}
+
+void Misc::preserveKillfeed(bool roundStart) noexcept
+{
+    if (!config->misc.preserveKillfeed)
+        return;
+
+    static auto nextUpdate = 0.0f;
+
+    if (roundStart) {
+        nextUpdate = memory->globalVars->realtime + 10.0f;
+        return;
+    }
+
+    if (nextUpdate > memory->globalVars->realtime)
+        return;
+
+    nextUpdate = memory->globalVars->realtime + 2.0f;
+
+    const auto deathNotice = memory->findHudElement(memory->hud, "CCSGO_HudDeathNotice");
+    if (!deathNotice)
+        return;
+
+    const auto deathNoticePanel = (*(UIPanel**)(*(deathNotice - 5 + 22) + 4));
+    const auto childPanelCount = deathNoticePanel->getChildCount();
+
+    for (int i = 0; i < childPanelCount; ++i) {
+        const auto child = deathNoticePanel->getChild(i);
+        if (!child)
+            continue;
+
+        if (child->hasClass("DeathNotice_Killer"))
+            child->setAttributeFloat("SpawnTime", memory->globalVars->currenttime);
+    }
 }

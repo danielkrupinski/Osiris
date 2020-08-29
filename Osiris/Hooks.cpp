@@ -256,6 +256,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         GameData::update();
 
     if (stage == FrameStage::RENDER_START) {
+        Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
