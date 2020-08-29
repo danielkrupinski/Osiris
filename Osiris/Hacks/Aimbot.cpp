@@ -142,7 +142,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
-        auto localPlayerEyePosition = localPlayer->getEyePosition();
+        const auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
 
@@ -171,14 +171,14 @@ void Aimbot::run(UserCmd* cmd) noexcept
         }
 
         if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+            || !memory->lineGoesThroughSmoke(localPlayerEyePosition, bestTarget, 1))) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles.notNull() && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
             if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
