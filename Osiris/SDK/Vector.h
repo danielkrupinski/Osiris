@@ -152,7 +152,7 @@ struct Vector {
     float x, y, z;
 };
 
-#include "Matrix3x4.h"
+#include "matrix3x4.h"
 
 constexpr auto Vector::transform(const matrix3x4& mat) const noexcept
 {
