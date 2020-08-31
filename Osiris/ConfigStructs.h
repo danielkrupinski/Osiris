@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <string>
+
 #pragma pack(push, 1)
 struct ColorA {
     std::array<float, 4> color{ 1.0f, 1.0f, 1.0f, 1.0f };
