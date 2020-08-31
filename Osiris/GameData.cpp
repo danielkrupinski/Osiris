@@ -44,11 +44,12 @@ void GameData::update() noexcept
     entityData.clear();
     lootCrateData.clear();
 
+    localPlayerData.update();
+
     if (!localPlayer)
         return;
 
     viewMatrix = interfaces->engine->worldToScreenMatrix();
-    localPlayerData.update();
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
