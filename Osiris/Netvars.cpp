@@ -180,7 +180,7 @@ static void __cdecl viewModelSequence(recvProxyData& data, void* arg2, void* arg
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        walkTable(false, clientClass->networkName, clientClass->recvTable);
+        walkTable(clientClass->networkName, clientClass->recvTable);
 
     std::sort(offsets.begin(), offsets.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
 }
@@ -194,7 +194,7 @@ void Netvars::restore() noexcept
     offsets.clear();
 }
 
-void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
+void Netvars::walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -208,7 +208,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         if (prop.type == 6
             && prop.dataTable
             && prop.dataTable->netTableName[0] == 'D')
-            walkTable(unload, networkName, prop.dataTable, prop.offset + offset);
+            walkTable(networkName, prop.dataTable, prop.offset + offset);
 
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
@@ -223,19 +223,17 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
              }
         } };
 
-        if (!unload) {
-            offsets.emplace_back(hash, uint16_t(offset + prop.offset));
+        offsets.emplace_back(hash, uint16_t(offset + prop.offset));
 
-            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
-                if (originalProxy != proxy) {
-                    proxies[hash].first = originalProxy;
-                    proxies[hash].second = &originalProxy;
-                    originalProxy = proxy;
-                }
-            } };
+        constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
+            if (originalProxy != proxy) {
+                proxies[hash].first = originalProxy;
+                proxies[hash].second = &originalProxy;
+                originalProxy = proxy;
+            }
+        } };
 
-            if (auto hook{ getHook(hash) })
-                hookProperty(hash, prop.proxy, hook);
-        }
+        if (auto hook{ getHook(hash) })
+            hookProperty(hash, prop.proxy, hook);
     }
 }
