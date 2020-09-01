@@ -70,9 +70,12 @@ void Glow::render() noexcept
         };
 
         auto applyPlayerGlow = [applyGlow](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
-            if (glowAll.enabled) applyGlow(glowAll, entity->health());
-            else if (entity->visibleTo(localPlayer.get())) applyGlow(glowVisible, entity->health());
-            else applyGlow(glowOccluded, entity->health());
+            if (glowAll.enabled)
+                applyGlow(glowAll, entity->health());
+            else if (glowVisible.enabled && entity->visibleTo(localPlayer.get()))
+                applyGlow(glowVisible, entity->health());
+            else if (glowOccluded.enabled)
+                applyGlow(glowOccluded, entity->health());
         };
 
         switch (entity->getClientClass()->classId) {
