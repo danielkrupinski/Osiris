@@ -551,6 +551,11 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Mode", pl.mode);
 }
 
+static void from_json(const json& j, PreserveKillfeed& o)
+{
+    read(j, "Enabled", o.enabled);
+}
+
 static void from_json(const json& j, Config::Misc& m)
 {
     read(j, "Menu key", m.menuKey);
@@ -682,6 +687,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Custom Viewmodel HeadBob", m.view_bob);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read(j, "Opposite Hand Knife Bind", m.oppositeHandKnifeBind);
+    read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
 }
 
 static void from_json(const json& j, Config::Misc::Reportbot& r)
@@ -1001,6 +1007,11 @@ static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = 
     WRITE("Mode", mode);
 }
 
+static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
+{
+    WRITE("Enabled", enabled);
+}
+
 static void to_json(json& j, const Config::Misc& o)
 {
     const Config::Misc dummy;
@@ -1136,6 +1147,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Custom Viewmodel HeadBob", view_bob);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Opposite Hand Knife Bind", oppositeHandKnifeBind);
+    WRITE("Preserve Killfeed", preserveKillfeed);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)

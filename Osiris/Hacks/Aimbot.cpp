@@ -13,11 +13,7 @@
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
-    Vector delta = destination - source;
-    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
-                   radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
-    angles.normalize();
-    return angles;
+    return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
@@ -292,7 +288,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
-        auto localPlayerEyePosition = localPlayer->getEyePosition();
+        const auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
         if (config->aimbot[weaponIndex].standaloneRCS && !config->aimbot[weaponIndex].silent) {
@@ -323,7 +319,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
             auto boneList = config->aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
 
             for (auto bone : boneList) {
-                auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                const auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+
+                if (!config->aimbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
+                    continue;
+
                 if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage, config->aimbot[weaponIndex].friendlyFire)))
                     continue;
 
@@ -338,15 +338,14 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
-        if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+        if (bestTarget.notNull()) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles.notNull() && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
             if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {

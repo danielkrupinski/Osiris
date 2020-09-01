@@ -336,6 +336,7 @@ public:
         bool view_bob{ false };
         bool oppositeHandKnife = false;
         int oppositeHandKnifeBind{ 0 };
+        PreserveKillfeed preserveKillfeed;
         char clanTag[16];
         int edgejumpkey{ 0 };
         int slowwalkKey{ 0 };

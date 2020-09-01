@@ -40,6 +40,7 @@ void EventListener::fireGameEvent(GameEvent* event)
     case fnv::hash("round_start"):
         Misc::buyBot(event);
         GameData::clearProjectileList();
+        Misc::preserveKillfeed(true);
         [[fallthrough]];
     case fnv::hash("item_purchase"):
     case fnv::hash("round_freeze_end"):

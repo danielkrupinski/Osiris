@@ -45,7 +45,8 @@ namespace Misc
     void oppositeHandKnife(FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
-    
+    void preserveKillfeed(bool roundStart = false) noexcept;
+
     inline int teamDamage = 0;
     inline int teamKills = 0;
 

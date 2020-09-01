@@ -53,13 +53,7 @@ namespace Backtrack {
 
     extern std::deque<IncomingSequence>sequences;
 
-
-    constexpr auto getLerp() noexcept
-    {
-        auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
-
-        return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
-    }
+    float getLerp() noexcept;
 
     constexpr auto getExtraTicks() noexcept
     {

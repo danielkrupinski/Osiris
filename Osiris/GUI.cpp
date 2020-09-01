@@ -1679,6 +1679,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Fakeduck", &config->misc.fakeDuck);
     ImGui::SameLine();
     hotkey(config->misc.fakeDuckKey);
+    ImGui::Checkbox("Preserve Killfeed", &config->misc.preserveKillfeed.enabled);
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
