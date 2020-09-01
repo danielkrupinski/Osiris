@@ -130,3 +130,9 @@ struct PurchaseList {
     };
     int mode = Details;
 };
+
+struct PreserveKillfeed {
+    bool enabled = false;
+    bool kills = true;
+    bool assists = true;
+};
