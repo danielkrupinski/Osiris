@@ -31,6 +31,10 @@ static std::wstring toUpperWide(const std::string& s) noexcept
     return upperCase;
 }
 
+static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
+static std::vector<SkinChanger::PaintKit> gloveKits;
+static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
+
 void SkinChanger::initializeKits() noexcept
 {
     const std::locale original;
@@ -443,4 +447,19 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
+{
+    return skinKits;
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
+{
+    return gloveKits;
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
+{
+    return stickerKits;
 }
