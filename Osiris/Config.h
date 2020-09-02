@@ -567,11 +567,11 @@ public:
         float lastLBY{ 0.f };
         int chokedPackets{ 0 };
         bool sendPacket{ false };
+	Vector lastTickMovements;
     } globals;
 
     struct{
         Vector viewangles;
-
     }globalvars;
 
     void scheduleFontLoad(const std::string& name) noexcept;
