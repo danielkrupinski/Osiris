@@ -96,6 +96,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     StreamProofESP::render();
     Misc::purchaseList();
+    Misc::watermark();
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
     Visuals::rainbowBar(ImGui::GetBackgroundDrawList());
@@ -295,7 +296,6 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
         Misc::drawBombTimer();
         Misc::spectatorList();
-        Misc::watermark();
         Visuals::hitMarker();
         Misc::drawAimbotFov();
         Misc::showVelocity();

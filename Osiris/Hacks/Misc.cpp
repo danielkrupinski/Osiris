@@ -316,35 +316,99 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 void Misc::watermark() noexcept
 {
     if (config->misc.watermark.enabled) {
-        interfaces->surface->setTextFont(Surface::font);
+        std::string watermark = "OsirisBETA";
+        
+        if (interfaces->engine->isInGame() && config->misc.watermarkNickname) {
+            PlayerInfo playerInfo;
+            auto nickname = interfaces->engine->getPlayerInfo(localPlayer->index(), playerInfo);
+            watermark.append(" | ").append(playerInfo.name);
+        };
 
-        if (config->misc.watermark.rainbow)
-            interfaces->surface->setTextColor(rainbowColor(config->misc.watermark.rainbowSpeed));
+        if (config->misc.watermarkUsername) {
+            auto username = getenv("USERNAME");
+            watermark.append(" | ").append(username);
+        }
+        
+        if (config->misc.watermarkFPS) {
+            static auto frameRate = 1.0f;
+            frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
+            watermark.append(" | FPS: ").append(std::to_string(static_cast<int>(1 / frameRate)));
+        }
+
+        if (config->misc.watermarkPing) {
+            float latency = 0.0f;
+            if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
+                latency = networkChannel->getLatency(0);
+            watermark.append(" | Ping: ").append(std::to_string(static_cast<int>(latency * 1000))).append(" ms");
+        }
+
+        if (config->misc.watermarkTickrate) {
+            auto tickRate = 1.0f / memory->globalVars->intervalPerTick;
+            watermark.append(" | ").append(std::to_string(static_cast<int>(tickRate))).append(" tick");
+        }
+
+        if (config->misc.watermarkTime) {
+            const auto time = std::time(nullptr);
+            const auto localTime = std::localtime(&time);
+            std::ostringstream timeShow;
+            timeShow << std::setfill('0') << std::setw(2) << localTime->tm_hour << ":" << std::setw(2) << localTime->tm_min << ":" << std::setw(2) << localTime->tm_sec;
+            watermark.append(" | ").append(timeShow.str());
+        }
+
+        auto rainbow = rainbowColor(config->misc.watermark.rainbowSpeed);
+
+        auto posX = config->misc.watermarkPosX * ImGui::GetIO().DisplaySize.x;
+        auto posY = config->misc.watermarkPosY * ImGui::GetIO().DisplaySize.y;
+        ImGuiCond nextFlag = ImGuiCond_None;
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f }, ImGuiCond_Always);
+        if (ImGui::IsMouseDown(0))
+            nextFlag |= ImGuiCond_Once;
         else
-            interfaces->surface->setTextColor(config->misc.watermark.color);
+            nextFlag |= ImGuiCond_Always;
+        ImGui::SetNextWindowPos({ posX ,posY }, nextFlag);
 
-        interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Osiris");
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+        if (!gui->open)
+            windowFlags |= ImGuiWindowFlags_NoInputs;
 
-        interfaces->surface->setTextPosition(5, 15);
-        interfaces->surface->printText(L"dll by PlayDay");
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+        ImGui::Begin("OsirisBETA", nullptr, windowFlags);
+        ImGui::PopStyleVar();
 
-        static auto frameRate = 1.0f;
-        frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
-        const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
-        std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
-        const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
-        interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
-        interfaces->surface->printText(fps.c_str());
+        auto [x, y] = ImGui::GetWindowPos();
+        auto [w, h] = ImGui::GetWindowSize();
+        auto ds = ImGui::GetIO().DisplaySize;
+        if (x > (ds.x - w) && y > (ds.y - h)) {
+            x = ds.x - w;
+            y = ds.y - h;
+        }
+        else if (x > (ds.x - w) && y <= (ds.y - h))
+            x = ds.x - w;
+        else if (x <= (ds.x - w) && y > (ds.y - h))
+            y = ds.y - h;
 
-        float latency = 0.0f;
-        if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-            latency = networkChannel->getLatency(0);
+        if (x < 0 && y < 0) {
+            x = 0;
+            y = 0;
+        }
+        else if (x < 0 && y >= 0)
+            x = 0;
+        else if (x >= 0 && y < 0)
+            y = 0;
+        x /= ds.x;
+        y /= ds.y;
 
-        std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
-        const auto pingWidth = interfaces->surface->getTextSize(Surface::font, ping.c_str()).first;
-        interfaces->surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
-        interfaces->surface->printText(ping.c_str());
+        config->misc.watermarkPosX = x;
+        config->misc.watermarkPosY = y;
+
+        ImGui::SetWindowFontScale(config->misc.watermarkScale);
+        if (config->misc.watermark.rainbow)
+            ImGui::TextColored({std::get<0>(rainbow), std::get<1>(rainbow) ,std::get<2>(rainbow), 1.0f }, watermark.c_str());
+        else
+            ImGui::TextColored({ config->misc.watermark.color[0], config->misc.watermark.color[1] ,config->misc.watermark.color[2], 1.0f }, watermark.c_str());
+
+        ImGui::End();
     }
 }
 

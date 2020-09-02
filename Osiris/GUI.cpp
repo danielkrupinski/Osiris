@@ -1453,6 +1453,24 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
     ImGuiCustom::colorPicker("Spectator list", config->misc.spectatorList);
     ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
+    if (config->misc.watermark.enabled) {
+        ImGui::SameLine();
+        ImGui::PushID("Watermark");
+        if (ImGui::Button("..."))
+            ImGui::OpenPopup("WM");
+
+        if (ImGui::BeginPopup("WM")) {
+            ImGui::Checkbox("Nickname", &config->misc.watermarkNickname);
+            ImGui::Checkbox("Username", &config->misc.watermarkUsername);
+            ImGui::Checkbox("FPS", &config->misc.watermarkFPS);
+            ImGui::Checkbox("Ping", &config->misc.watermarkPing);
+            ImGui::Checkbox("Tickrate", &config->misc.watermarkTickrate);
+            ImGui::Checkbox("Time", &config->misc.watermarkTime);
+            ImGui::DragFloat("Scale", &config->misc.watermarkScale, 0.005f, 0.3f, 2.0f, "%.2f", ImGuiSliderFlags_ClampOnInput);
+            ImGui::EndPopup();
+        }
+        ImGui::PopID();
+    }
     ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
     ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
     ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
@@ -1912,6 +1930,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Draw Inaccuracy by Cyk-Fad;");
     ImGui::Text("Multiline ClanTag by ME;");
     ImGui::Text("BSOD button by ME;");
+    ImGui::Text("Watermark by ME");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
 
