@@ -240,7 +240,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 			Misc::chokePackets(sendPacket, cmd);
 
 
-	AntiAim::fakeWalk(cmd, sendPacket);
+    AntiAim::fakeWalk(cmd, sendPacket);
     Misc::fakeDuck(cmd, sendPacket);
     AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
 
@@ -266,10 +266,13 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->forwardmove = std::clamp(cmd->forwardmove, -450.0f, 450.0f);
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
+    config->globals.lastTickMovements.y = cmd->forwardmove;
+    config->globals.lastTickMovements.x = cmd->sidemove;
+	
     previousViewAngles = cmd->viewangles;
 
 
-	if (sendPacket)
+    if (sendPacket)
     {
         config->globals.fakeAngle = cmd->viewangles;
         config->globals.cmdAngle = cmd->viewangles;
