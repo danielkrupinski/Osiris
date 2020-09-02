@@ -24,7 +24,7 @@ public:
         return 0;
     }
 private:
-    void walkTable(bool, const char*, RecvTable*, const std::size_t = 0) noexcept;
+    void walkTable(const char*, RecvTable*, const std::size_t = 0) noexcept;
     std::vector<std::pair<uint32_t, uint16_t>> offsets;
 };
 

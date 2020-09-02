@@ -211,7 +211,8 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-    
+    NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
+
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
