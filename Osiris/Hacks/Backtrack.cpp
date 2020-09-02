@@ -64,7 +64,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    Vector bestTargetOrigin{ };
+    //Vector bestTargetOrigin{ };
     Vector bestTargetHead{ };
     int bestRecord{ };
 
@@ -72,20 +72,19 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-            || !entity->isOtherEnemy(localPlayer.get()))
+        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-        auto origin = entity->getAbsOrigin();
-        auto head = entity->getBonePosition(8);
-
+        //auto origin = entity->getAbsOrigin();
+        auto head = entity->getBonePosition(8); 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
             bestTarget = entity;
             bestTargetIndex = i;
-            bestTargetOrigin = origin;
+            //bestTargetOrigin = origin;
+            bestTargetHead = head;
         }
     }
 
@@ -120,6 +119,14 @@ float Backtrack::getLerp() noexcept
 {
     auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
     return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+}
+
+float Backtrack::getExtraTicks() noexcept
+{
+    auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return 0.f;
+    return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, cvars.maxUnlag->getFloat());
 }
 
 void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
