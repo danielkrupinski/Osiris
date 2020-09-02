@@ -1022,7 +1022,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::PopID();
 
         if (ImGui::ListBoxHeader("Paint Kit")) {
-            const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
+            const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::getSkinKits();
 
             const std::locale original;
             std::locale::global(std::locale{ "en_US.utf8" });

@@ -73,7 +73,7 @@ struct item_setting
 		}
 		else
 		{
-			kit_names = &SkinChanger::skinKits;
+			kit_names = &SkinChanger::getSkinKits();
 			defindex_names = game_data::knife_names;
 		}
 
