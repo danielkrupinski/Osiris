@@ -911,7 +911,7 @@ void Misc::resetReportbot() noexcept
 
 void Misc::preserveKillfeed(bool roundStart) noexcept
 {
-    if (!config->misc.preserveKillfeed)
+    if (!config->misc.preserveKillfeed.enabled)
         return;
 
     static auto nextUpdate = 0.0f;

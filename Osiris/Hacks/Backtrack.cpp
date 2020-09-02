@@ -116,6 +116,12 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 }
 
+float Backtrack::getLerp() noexcept
+{
+    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
+    return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+}
+
 void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
 {
     for (auto& sequence : sequences)
