@@ -364,6 +364,9 @@ void AntiAim::fakeWalk(UserCmd* cmd, bool& sendPacket) noexcept
         }
         else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.general.fakeWalk.maxChoke)
         {
+	    cmd->forwardmove = -config->globals.lastTickMovements.x;
+            cmd->sidemove = -config->globals.lastTickMovements.y;
+		
             sendPacket = false;
         }
         else if (interfaces->engine->getNetworkChannel()->chokedPackets == config->antiAim.general.fakeWalk.maxChoke + 1)
