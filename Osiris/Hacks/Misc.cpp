@@ -938,7 +938,7 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
         if (!child)
             continue;
 
-        if (child->hasClass("DeathNotice_Killer"))
+        if (child->hasClass("DeathNotice_Killer") && (!config->misc.preserveKillfeed.onlyHeadshots || child->hasClass("DeathNoticeHeadShot")))
             child->setAttributeFloat("SpawnTime", memory->globalVars->currenttime);
     }
 }

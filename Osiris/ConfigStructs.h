@@ -133,6 +133,5 @@ struct PurchaseList {
 
 struct PreserveKillfeed {
     bool enabled = false;
-    bool kills = true;
-    bool assists = true;
+    bool onlyHeadshots = false;
 };
