@@ -28,6 +28,5 @@ namespace SkinChanger
 
     const std::vector<PaintKit>& getSkinKits() noexcept;
     const std::vector<PaintKit>& getGloveKits() noexcept;
-
-    inline std::vector<PaintKit> stickerKits{ { 0, "None", L"NONE" } };
+    const std::vector<PaintKit>& getStickerKits() noexcept;
 }

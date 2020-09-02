@@ -36,7 +36,7 @@ struct sticker_setting
 {
 	void update()
 	{
-        kit = SkinChanger::stickerKits[kit_vector_index].id;
+        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
 	}
 
 

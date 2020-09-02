@@ -33,6 +33,7 @@ static std::wstring toUpperWide(const std::string& s) noexcept
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
+static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 
 void SkinChanger::initializeKits() noexcept
 {
@@ -456,4 +457,9 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 {
     return gloveKits;
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
+{
+    return stickerKits;
 }
