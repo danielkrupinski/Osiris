@@ -68,7 +68,7 @@ struct item_setting
 
 		if (itemId == GLOVE_T_SIDE)
 		{
-			kit_names = &SkinChanger::gloveKits;
+			kit_names = &SkinChanger::getGloveKits();
 			defindex_names = game_data::glove_names;
 		}
 		else
