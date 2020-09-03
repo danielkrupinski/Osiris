@@ -54,6 +54,11 @@ struct StudioHitboxSet {
     {
         return i >= 0 && i < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + i : nullptr;
     }
+
+    StudioBbox* getHitbox(Hitbox i) noexcept
+    {
+        return static_cast<int>(i) < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + static_cast<int>(i) : nullptr;
+    }
 };
 
 constexpr auto MAXSTUDIOBONES = 256;
