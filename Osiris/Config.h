@@ -55,6 +55,7 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+        float killDelay{ 0 };
         bool killshot{ false };
         bool jumpCheck{ false };
         bool betweenShots{ true };

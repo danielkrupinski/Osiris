@@ -267,6 +267,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
+    ImGui::SliderFloat("Kill Delay", &config->aimbot[currentWeapon].killDelay, 0.f, 500.f, "%.0f ms", ImGuiSliderFlags_ClampOnInput);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Jump Check", &config->aimbot[currentWeapon].jumpCheck);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
@@ -3649,6 +3650,7 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Multiline ClanTag by ME;");
     ImGui::Text("BSOD button by ME;");
     ImGui::Text("Watermark by ME");
+    ImGui::Text("Kell Delay by W4tev3n");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
 

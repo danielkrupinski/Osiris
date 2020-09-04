@@ -3,6 +3,7 @@
 #include "EventListener.h"
 #include "fnv.h"
 #include "GameData.h"
+#include "Hacks/Aimbot.h"
 #include "Hacks/Misc.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Visuals.h"
@@ -52,6 +53,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::killMessage(*event);
         Misc::killSound(*event);
         Misc::teamDamageCounter(event);
+        Aimbot::handleKill(*event);
         break;
     case fnv::hash("player_hurt"):
         Misc::playHitSound(*event);

@@ -6,6 +6,7 @@
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
+#include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
@@ -232,6 +233,18 @@ static float getRandom(float min, float max) noexcept
     return randomFloat(min, max);
 }
 
+void Aimbot::handleKill(GameEvent& event) noexcept
+{
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (const auto localUserId = localPlayer->getUserId(); event.getInt("attacker") != localUserId || event.getInt("userid") == localUserId)
+        return;
+
+    lastKillTime = memory->globalVars->realtime;
+    return;
+}
+
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -266,6 +279,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
         return;
 
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
+        return;
+
+    if (lastKillTime + config->aimbot[weaponIndex].killDelay / 1000.0f > memory->globalVars->realtime)
         return;
 
     if (config->aimbot[weaponIndex].onKey) {
