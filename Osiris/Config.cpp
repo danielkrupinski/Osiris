@@ -1,5 +1,8 @@
 #include <fstream>
+
+#ifdef _WIN32
 #include <ShlObj.h>
+#endif
 
 #include "nlohmann/json.hpp"
 
@@ -39,21 +42,26 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
 
 Config::Config(const char* name) noexcept
 {
+#ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
         path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#endif
 
     listConfigs();
     misc.clanTag[0] = '\0';
 
+#ifdef _WIN32
     LOGFONTA logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
     logfont.lfFaceName[0] = '\0';
 
     EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+#endif
+
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
@@ -207,10 +215,11 @@ static void from_json(const json& j, Snapline& s)
 
 static void from_json(const json& j, Box& b)
 {
-    from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
+    from_json(j, static_cast<ColorToggleRounding&>(b));
 
     read(j, "Type", b.type);
     read(j, "Scale", b.scale);
+    read<value_t::object>(j, "Fill", b.fill);
 }
 
 static void from_json(const json& j, Shared& s)
@@ -261,6 +270,7 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Flash Duration", p.flashDuration);
     read(j, "Audible Only", p.audibleOnly);
     read(j, "Spotted Only", p.spottedOnly);
+    read(j, "Health Bar", p.healthBar);
     read<value_t::object>(j, "Skeleton", p.skeleton);
     read<value_t::object>(j, "Head Box", p.headBox);
 }
@@ -498,6 +508,12 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Mode", pl.mode);
 }
 
+static void from_json(const json& j, PreserveKillfeed& o)
+{
+    read(j, "Enabled", o.enabled);
+    read(j, "Only Headshots", o.onlyHeadshots);
+}
+
 static void from_json(const json& j, Config::Misc& m)
 {
     read(j, "Menu key", m.menuKey);
@@ -556,9 +572,12 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
+    read<value_t::object>(j, "Reportbot", m.reportbot);
+    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
+    read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
 }
 
-static void from_json(const json& j, Config::Reportbot& r)
+static void from_json(const json& j, Config::Misc::Reportbot& r)
 {
     read(j, "Enabled", r.enabled);
     read(j, "Target", r.target);
@@ -595,7 +614,6 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
-    read<value_t::object>(j, "Reportbot", reportbot);
 }
 
 // WRITE macro requires:
@@ -668,9 +686,10 @@ static void to_json(json& j, const Snapline& o, const Snapline& dummy = {})
 
 static void to_json(json& j, const Box& o, const Box& dummy = {})
 {
-    to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
+    to_json(j, static_cast<const ColorToggleRounding&>(o), dummy);
     WRITE("Type", type);
     WRITE("Scale", scale);
+    WRITE("Fill", fill);
 }
 
 static void to_json(json& j, const Shared& o, const Shared& dummy = {})
@@ -690,6 +709,7 @@ static void to_json(json& j, const Player& o, const Player& dummy = {})
     WRITE("Flash Duration", flashDuration);
     WRITE("Audible Only", audibleOnly);
     WRITE("Spotted Only", spottedOnly);
+    WRITE("Health Bar", healthBar);
     WRITE("Skeleton", skeleton);
     WRITE("Head Box", headBox);
 }
@@ -822,10 +842,8 @@ static void to_json(json& j, const Config::StreamProofESP& o)
     j["Other Entities"] = o.otherEntities;
 }
 
-static void to_json(json& j, const Config::Reportbot& o)
+static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Misc::Reportbot& dummy = {})
 {
-    const Config::Reportbot dummy;
-
     WRITE("Enabled", enabled);
     WRITE("Target", target);
     WRITE("Delay", delay);
@@ -862,6 +880,12 @@ static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = 
     WRITE("Show Prices", showPrices);
     WRITE("No Title Bar", noTitleBar);
     WRITE("Mode", mode);
+}
+
+static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Only Headshots", onlyHeadshots);
 }
 
 static void to_json(json& j, const Config::Misc& o)
@@ -926,6 +950,9 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
+    WRITE("Reportbot", reportbot);
+    WRITE("Opposite Hand Knife", oppositeHandKnife);
+    WRITE("Preserve Killfeed", preserveKillfeed);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
@@ -1065,7 +1092,6 @@ void Config::save(size_t id) const noexcept
         j["Glow"] = glow;
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
-        j["Reportbot"] = reportbot;
         j["Sound"] = sound;
         j["Visuals"] = visuals;
         j["Misc"] = misc;
@@ -1112,7 +1138,6 @@ void Config::reset() noexcept
     sound = { };
     style = { };
     misc = { };
-    reportbot = { };
 }
 
 void Config::listConfigs() noexcept

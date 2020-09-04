@@ -26,7 +26,6 @@
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
-#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
@@ -137,11 +136,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     memory->globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
-    Misc::fastPlant(cmd);
     Misc::fastStop(cmd);
     Misc::prepareRevolver(cmd);
     Visuals::removeShadows();
-    Reportbot::run();
+    Misc::runReportbot();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
     Misc::removeCrouchCooldown(cmd);
@@ -163,6 +161,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
+    Misc::fastPlant(cmd);
 
     if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
         Misc::chokePackets(sendPacket);
@@ -258,6 +257,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         GameData::update();
 
     if (stage == FrameStage::RENDER_START) {
+        Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
@@ -265,6 +265,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
         Visuals::removeBlur(stage);
+        Misc::oppositeHandKnife(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
         Visuals::playerModel(stage);

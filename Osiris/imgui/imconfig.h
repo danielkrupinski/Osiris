@@ -49,7 +49,6 @@
 
 //---- Pack colors to BGRA8 instead of RGBA8 (to avoid converting from one to another)
 #define IMGUI_USE_BGRA_PACKED_COLOR
-#define IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT struct ImDrawVert { ImVec2 pos; float z; ImU32 col; ImVec2 uv; }
 
 //---- Use 32-bit for ImWchar (default is 16-bit) to support full unicode code points.
 //#define IMGUI_USE_WCHAR32

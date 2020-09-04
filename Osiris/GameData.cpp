@@ -44,11 +44,12 @@ void GameData::update() noexcept
     entityData.clear();
     lootCrateData.clear();
 
+    localPlayerData.update();
+
     if (!localPlayer)
         return;
 
-    viewMatrix = interfaces->engine->worldToScreenMatrix2();
-    localPlayerData.update();
+    viewMatrix = interfaces->engine->worldToScreenMatrix();
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
@@ -77,6 +78,7 @@ void GameData::update() noexcept
                             it->exploded = true;
                         break;
                     }
+                    [[fallthrough]];
                 case ClassId::BreachChargeProjectile:
                 case ClassId::BumpMineProjectile:
                 case ClassId::DecoyProjectile:
@@ -190,7 +192,7 @@ void LocalPlayerData::update() noexcept
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
     flashDuration = localPlayer->flashDuration();
 
-    aimPunch = localPlayer->getAimPunch();
+    aimPunch = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
 
     const auto obsMode = localPlayer->getObserverMode();
     if (const auto obs = localPlayer->getObserverTarget(); obs && obsMode != ObsMode::Roaming && obsMode != ObsMode::Deathcam)
@@ -287,6 +289,7 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 
     audible = isEntityAudible(entity->index());
     spotted = entity->spotted();
+    health = entity->health();
     flashDuration = entity->flashDuration();
     entity->getPlayerName(name);
 

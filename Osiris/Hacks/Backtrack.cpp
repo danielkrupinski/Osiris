@@ -92,7 +92,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
         bestFov = 255.f;
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
-            auto& record = records[bestTargetIndex][i];
+            const auto& record = records[bestTargetIndex][i];
             if (!valid(record.simulationTime))
                 continue;
 
@@ -106,10 +106,16 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestRecord) {
-        auto record = records[bestTargetIndex][bestRecord];
+        const auto& record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
+}
+
+float Backtrack::getLerp() noexcept
+{
+    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
+    return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
 int Backtrack::timeToTicks(float time) noexcept

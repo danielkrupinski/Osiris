@@ -19,18 +19,6 @@ private:
     void renderHands() noexcept;
     void renderSleeves() noexcept;
 
-    enum ChamsId {
-        ALLIES = 0,
-        ENEMIES,
-        PLANTING,
-        DEFUSING,
-        LOCALPLAYER,
-        WEAPONS,
-        HANDS,
-        BACKTRACK,
-        SLEEVES
-    };
-
     Material* normal;
     Material* flat;
     Material* animated;

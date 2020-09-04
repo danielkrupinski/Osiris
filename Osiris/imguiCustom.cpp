@@ -44,7 +44,7 @@ void ImGuiCustom::colorPopup(const char* name, std::array<float, 4>& color, bool
 
                 if (thickness) {
                     ImGui::InputFloat("Thickness", thickness, 0.1f, 0.0f, "%.1f");
-                    *thickness = std::max(*thickness, 0.0f);
+                    *thickness = std::max(*thickness, 1.0f);
                 }
 
                 ImGui::PopItemWidth();
