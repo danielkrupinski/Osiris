@@ -540,6 +540,8 @@ static void from_json(const json& j, Config::Style& s)
             }
         }
     }
+
+    read<value_t::object>(j, "Custom Easy", s.customEasy);
 }
 
 static void from_json(const json& j, PurchaseList& pl)
@@ -710,6 +712,15 @@ static void from_json(const json& j, Config::Misc::Reportbot& r)
     read(j, "Wall Hacking", r.wallhack);
     read(j, "Aim Hacking", r.aimbot);
     read(j, "Other Hacking", r.other);
+}
+
+static void from_json(const json& j, Config::Style::StyleCustomEasy& s)
+{
+    read<value_t::object>(j, "Background Color", s.BackGroundColor);
+    read<value_t::object>(j, "Text Color", s.TextColor);
+    read<value_t::object>(j, "Main Color", s.MainColor);
+    read<value_t::object>(j, "Main Accent Color", s.MainAccentColor);
+    read<value_t::object>(j, "Highlight Color", s.HighlightColor);
 }
 
 void Config::load(size_t id, bool incremental) noexcept
@@ -987,6 +998,14 @@ static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Mis
     WRITE("Wall Hacking", wallhack);
     WRITE("Aim Hacking", aimbot);
     WRITE("Other Hacking", other);
+}
+static void to_json(json& j, const Config::Style::StyleCustomEasy& o, const Config::Style::StyleCustomEasy& dummy = {})
+{
+    WRITE("Background Color", BackGroundColor);
+    WRITE("Text Color", TextColor);
+    WRITE("Main Color", MainColor);
+    WRITE("Main Accent Color", MainAccentColor);
+    WRITE("Highlight Color", HighlightColor);
 }
 
 static void to_json(json& j, const Config::Sound::Player& o)
@@ -1274,6 +1293,8 @@ static void to_json(json& j, const Config::Style& o)
 
     for (int i = 0; i < ImGuiCol_COUNT; i++)
         colors[ImGui::GetStyleColorName(i)] = style.Colors[i];
+
+    WRITE("Custom Easy", customEasy);
 }
 
 static void to_json(json& j, const sticker_setting& o)

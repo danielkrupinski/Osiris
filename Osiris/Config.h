@@ -244,6 +244,13 @@ public:
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
+        struct StyleCustomEasy {
+            ColorA BackGroundColor;
+            ColorA TextColor;
+            ColorA MainColor;
+            ColorA MainAccentColor;
+            ColorA HighlightColor;
+        } customEasy;
     } style;
 
     struct Misc {
