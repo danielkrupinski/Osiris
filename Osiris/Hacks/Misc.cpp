@@ -330,21 +330,6 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT | UserCmd::IN_FORWARD | UserCmd::IN_BACK))
         return;
     
-    auto AngleVectors = [](const Vector& angles, Vector* forward)
-    {
-        float	sp, sy, cp, cy;
-
-        sy = sin(degreesToRadians(angles.y));
-        cy = cos(degreesToRadians(angles.y));
-
-        sp = sin(degreesToRadians(angles.x));
-        cp = cos(degreesToRadians(angles.x));
-
-        forward->x = cp * cy;
-        forward->y = cp * sy;
-        forward->z = -sp;
-    };
-
     Vector velocity = localPlayer->velocity();
     Vector direction = velocity.toAngle();
     
@@ -354,9 +339,7 @@ void Misc::fastStop(UserCmd* cmd) noexcept
 
     direction.y = cmd->viewangles.y - direction.y;
 
-    Vector forward;
-    AngleVectors(direction, &forward);
-
+    Vector forward = Vector::fromAngle(direction);
     Vector negated_direction = forward * speed;
 
     cmd->forwardmove = negated_direction.x;
