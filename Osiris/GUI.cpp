@@ -1680,6 +1680,18 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     hotkey(config->misc.fakeDuckKey);
     ImGui::Checkbox("Preserve Killfeed", &config->misc.preserveKillfeed.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Preserve Killfeed");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("Only Headshots", &config->misc.preserveKillfeed.onlyHeadshots);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
