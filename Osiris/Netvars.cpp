@@ -12,7 +12,7 @@ static int random(int min, int max) noexcept
     return rand() % (max - min + 1) + min;
 }
 
-static std::unordered_map<uint32_t, recvProxy> proxies;
+static std::unordered_map<uint32_t, std::pair<recvProxy, recvProxy*>> proxies;
 
 static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
@@ -20,7 +20,7 @@ static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noe
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
-    proxies[hash](data, arg2, arg3);
+    proxies[hash].first(data, arg2, arg3);
 }
 
 #include "nSkinz/config_.hpp"
@@ -174,25 +174,27 @@ static void __cdecl viewModelSequence(recvProxyData& data, void* arg2, void* arg
         }
     }
     constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
-    proxies[hash](data, arg2, arg3);
+    proxies[hash].first(data, arg2, arg3);
 }
 
 Netvars::Netvars() noexcept
 {
     for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        walkTable(false, clientClass->networkName, clientClass->recvTable);
+        walkTable(clientClass->networkName, clientClass->recvTable);
+
+    std::sort(offsets.begin(), offsets.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
 }
 
 void Netvars::restore() noexcept
 {
-    for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
-        walkTable(true, clientClass->networkName, clientClass->recvTable);
+    for (const auto& [hash, proxyPair] : proxies)
+        *proxyPair.second = proxyPair.first;
 
     proxies.clear();
     offsets.clear();
 }
 
-void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
+void Netvars::walkTable(const char* networkName, RecvTable* recvTable, const std::size_t offset) noexcept
 {
     for (int i = 0; i < recvTable->propCount; ++i) {
         auto& prop = recvTable->props[i];
@@ -206,7 +208,7 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
         if (prop.type == 6
             && prop.dataTable
             && prop.dataTable->netTableName[0] == 'D')
-            walkTable(unload, networkName, prop.dataTable, prop.offset + offset);
+            walkTable(networkName, prop.dataTable, prop.offset + offset);
 
         const auto hash{ fnv::hashRuntime((networkName + std::string{ "->" } + prop.name).c_str()) };
 
@@ -221,25 +223,17 @@ void Netvars::walkTable(bool unload, const char* networkName, RecvTable* recvTab
              }
         } };
 
-        if (!unload) {
-            offsets[hash] = uint16_t(offset + prop.offset);
+        offsets.emplace_back(hash, uint16_t(offset + prop.offset));
 
-            constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
-                if (originalProxy != proxy) {
-                    proxies[hash] = originalProxy;
-                    originalProxy = proxy;
-                }
-            } };
+        constexpr auto hookProperty{ [](uint32_t hash, recvProxy& originalProxy, recvProxy proxy) noexcept {
+            if (originalProxy != proxy) {
+                proxies[hash].first = originalProxy;
+                proxies[hash].second = &originalProxy;
+                originalProxy = proxy;
+            }
+        } };
 
-            if (auto hook{ getHook(hash) })
-                hookProperty(hash, prop.proxy, hook);
-        } else {
-            constexpr auto unhookProperty{ [](recvProxy& proxy, uint32_t hash) noexcept {
-                proxy = proxies[hash];
-            } };
-
-            if (auto hook{ getHook(hash) })
-                unhookProperty(prop.proxy, hash);
-        }
+        if (auto hook{ getHook(hash) })
+            hookProperty(hash, prop.proxy, hook);
     }
 }

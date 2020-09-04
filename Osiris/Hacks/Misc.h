@@ -42,9 +42,9 @@ namespace Misc
     void playHitSound(GameEvent& event) noexcept;
     void killSound(GameEvent& event) noexcept;
     void purchaseList(GameEvent* event = nullptr) noexcept;
-    void oppositeHandKnife(FrameStage stage) noexcept;
     void doorSpam(UserCmd* cmd) noexcept;
-
+    void oppositeHandKnife(FrameStage stage) noexcept;
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
+    void preserveKillfeed(bool roundStart = false) noexcept;
 }
