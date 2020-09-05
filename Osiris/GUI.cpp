@@ -945,7 +945,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         if (!window.visuals)
             return;
         ImGui::SetNextWindowSize({ 680.0f, 0.0f });
-        ImGui::Begin("Visuals (OsirisBETA by PlayDay)", &window.visuals, windowFlags);
+        ImGui::Begin("Visuals (OsirisBETA by PlayDay)", &window.visuals, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 280.0f);
@@ -3650,7 +3650,9 @@ void GUI::renderBETAWindow(bool contentOnly) noexcept
     ImGui::Text("Multiline ClanTag by ME;");
     ImGui::Text("BSOD button by ME;");
     ImGui::Text("Watermark by ME");
-    ImGui::Text("Kell Delay by W4tev3n");
+    ImGui::Text("Custom Easy style by ME");
+    ImGui::Text("26 styles by ME");
+    ImGui::Text("Kill Delay by W4tev3n");
     ImGui::Text("Osiris-Injector by danielkrupinski and ME;");
     ImGui::Text(" ");
 
