@@ -340,7 +340,7 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     direction.y = cmd->viewangles.y - direction.y;
 
     Vector forward = Vector::fromAngle(direction);
-    Vector negated_direction = forward * speed;
+    Vector negated_direction = forward * -speed;
 
     cmd->forwardmove = negated_direction.x;
     cmd->sidemove = negated_direction.y;
