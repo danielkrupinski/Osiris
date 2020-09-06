@@ -182,7 +182,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Max angle delta** - maximum viewangles change per tick
     * **Fake Prime** - set a fake prime (visible in lobby)
     * **Purchase List** - show the purchased equipment by enemies.
-* **Reportbot** - automatically report players on server for cheating or other abusive actions
+    * **Reportbot** - automatically report players on server for cheating or other abusive actions
         * **Enabled** - on / off master switch
         * **Target** - report target *Enemies/Allies/All*
         * **Delay** - delay between reports, in seconds
