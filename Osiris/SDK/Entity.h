@@ -31,6 +31,16 @@ enum class MoveType {
     LADDER = 9
 };
 
+enum class ObsMode {
+    None = 0,
+    Deathcam,
+    Freezecam,
+    Fixed,
+    InEye,
+    Chase,
+    Roaming
+};
+
 class Collideable {
 public:
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
@@ -42,32 +52,31 @@ public:
     VIRTUAL_METHOD(void, release, 1, (), (this + 8))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + 8, updateType))
     VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
     VIRTUAL_METHOD(int, index, 10, (), (this + 8))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
 
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
 
     VIRTUAL_METHOD(int&, handle, 2, (), (this))
     VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
-    VIRTUAL_METHOD(Vector&, getAbsOrigin, 10, (), (this))
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
+    VIRTUAL_METHOD(int, health, 121, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
     VIRTUAL_METHOD(bool, isPlayer, 157, (), (this))
     VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 284, (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, 293, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
-    VIRTUAL_METHOD(WeaponData*, getWeaponData, 460, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 345, (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
-
-    constexpr auto getWeaponType() noexcept
-    {
-        const auto weaponData = getWeaponData();
-        if (weaponData)
-            return weaponData->type;
-        return WeaponType::Unknown;
-    }
 
     constexpr auto isPistol() noexcept
     {
@@ -77,6 +86,14 @@ public:
     constexpr auto isSniperRifle() noexcept
     {
         return getWeaponType() == WeaponType::SniperRifle;
+    }
+
+    constexpr auto isFullAuto() noexcept
+    {
+        const auto weaponData = getWeaponData();
+        if (weaponData)
+            return weaponData->fullAuto;
+        return false;
     }
 
     constexpr auto requiresRecoilControl() noexcept
@@ -106,16 +123,9 @@ public:
     Vector getBonePosition(int bone) noexcept
     {
         if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
-            return Vector{ boneMatrices[bone][0][3], boneMatrices[bone][1][3], boneMatrices[bone][2][3] };
+            return boneMatrices[bone].origin();
         else
             return Vector{ };
-    }
-
-    auto getEyePosition() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 284>(this, std::ref(vec));
-        return vec;
     }
 
     bool isVisible(const Vector& position = { }) noexcept
@@ -124,19 +134,12 @@ public:
             return false;
 
         Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
+    
+    bool isOtherEnemy(Entity* other) noexcept;
 
-    bool isEnemy() noexcept
-    {
-        // SHOULD NEVER HAPPEN
-        if (!localPlayer)
-            return false;
-
-        return memory->isOtherEnemy(this, localPlayer.get());
-    }
-  
     VarMap* getVarMap() noexcept
     {
         return reinterpret_cast<VarMap*>(this + 0x24);
@@ -144,7 +147,7 @@ public:
    
     AnimState* getAnimstate() noexcept
     {
-        return *reinterpret_cast<AnimState**>(this + 0x3900);
+        return *reinterpret_cast<AnimState**>(this + 0x3914);
     }
 
     float getMaxDesyncAngle() noexcept
@@ -165,18 +168,6 @@ public:
     bool isInReload() noexcept
     {
         return *reinterpret_cast<bool*>(uintptr_t(&clip()) + 0x41);
-    }
-
-    matrix3x4& coordinateFrame() noexcept
-    {
-        return *reinterpret_cast<matrix3x4*>(this + 0x444);
-    }
-
-    auto getAimPunch() noexcept
-    {
-        Vector vec;
-        VirtualMethod::call<void, 345>(this, std::ref(vec));
-        return vec;
     }
 
     auto getUserId() noexcept
@@ -203,29 +194,16 @@ public:
         return false;
     }
 
-    [[nodiscard]] auto getPlayerName(bool normalize) noexcept
+    void getPlayerName(char(&out)[128]) noexcept;
+    [[nodiscard]] std::string getPlayerName() noexcept
     {
-        std::string playerName = "unknown";
-
-        PlayerInfo playerInfo;
-        if (!interfaces->engine->getPlayerInfo(index(), playerInfo))
-            return playerName;
-
-        playerName = playerInfo.name;
-
-        if (normalize) {
-            if (wchar_t wide[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, 128, wide, 128)) {
-                if (wchar_t wideNormalized[128]; NormalizeString(NormalizationKC, wide, -1, wideNormalized, 128)) {
-                    if (char nameNormalized[128]; WideCharToMultiByte(CP_UTF8, 0, wideNormalized, -1, nameNormalized, 128, nullptr, nullptr))
-                        playerName = nameNormalized;
-                }
-            }
-        }
-
-        playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.cend());
-        return playerName;
-
+        char name[128];
+        getPlayerName(name);
+        return name;
     }
+
+    bool canSee(Entity* other, const Vector& pos) noexcept;
+    bool visibleTo(Entity* other) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -236,25 +214,27 @@ public:
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
     NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
+    NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
-    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[48])
+    NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
     PNETVAR(wearables, "CBaseCombatCharacter", "m_hMyWearables", int)
 
     NETVAR(viewModel, "CBasePlayer", "m_hViewModel[0]", int)
-    NETVAR(health, "CBasePlayer", "m_iHealth", int)
     NETVAR(fov, "CBasePlayer", "m_iFOV", int)
     NETVAR(fovStart, "CBasePlayer", "m_iFOVStart", int)
+    NETVAR(defaultFov, "CBasePlayer", "m_iDefaultFOV", int)
     NETVAR(flags, "CBasePlayer", "m_fFlags", int)
     NETVAR(tickBase, "CBasePlayer", "m_nTickBase", int)
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-    
+    NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
+
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)
     NETVAR(isDefusing, "CCSPlayer", "m_bIsDefusing", bool)
-    NETVAR(flashDuration, "CCSPlayer", "m_flFlashDuration", float)
+    NETVAR_OFFSET(flashDuration, "CCSPlayer", "m_flFlashMaxAlpha", -8, float)
     NETVAR(flashMaxAlpha, "CCSPlayer", "m_flFlashMaxAlpha", float)
     NETVAR(gunGameImmunity, "CCSPlayer", "m_bGunGameImmunity", bool)
     NETVAR(account, "CCSPlayer", "m_iAccount", int)
@@ -263,6 +243,8 @@ public:
     NETVAR(hasHelmet, "CCSPlayer", "m_bHasHelmet", bool)
     NETVAR(lby, "CCSPlayer", "m_flLowerBodyYawTarget", float)
     NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
+    NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
+    NETVAR(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
@@ -304,5 +286,15 @@ public:
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
-    NETVAR(sentryHealth, "CDronegun", "m_iHealth", int)
+    NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+
+    bool isFlashed() noexcept
+    {
+        return flashDuration() > 75.0f;
+    }
+
+    bool grenadeExploded() noexcept
+    {
+        return *reinterpret_cast<bool*>(this + 0x29E8);
+    }
 };

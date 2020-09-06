@@ -7,8 +7,12 @@ class Entity;
 
 struct GlowObjectDefinition {
     Entity* entity;
+
+    // TODO: try to declare those as std::array<float, 4> for easier color copying
     Vector glowColor;
     float glowAlpha;
+    //
+
     bool glowAlphaCappedByRenderAlpha;
     float glowAlphaFunctionOfMaxVelocity;
     float glowAlphaMax;

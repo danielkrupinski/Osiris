@@ -1,8 +1,10 @@
 #include "Backtrack.h"
 #include "Aimbot.h"
-#include "Chams.h"
 #include "../Config.h"
+#include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
 Backtrack::Cvars Backtrack::cvars;
@@ -19,7 +21,7 @@ void Backtrack::update(FrameStage stage) noexcept
     if (stage == FrameStage::RENDER_START) {
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isEnemy()) {
+            if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
                 records[i].clear();
                 continue;
             }
@@ -68,7 +70,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-            || !entity->isEnemy())
+            || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
         auto origin = entity->getAbsOrigin();
@@ -90,7 +92,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
         bestFov = 255.f;
 
         for (size_t i = 0; i < records[bestTargetIndex].size(); i++) {
-            auto& record = records[bestTargetIndex][i];
+            const auto& record = records[bestTargetIndex][i];
             if (!valid(record.simulationTime))
                 continue;
 
@@ -104,10 +106,16 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestRecord) {
-        auto record = records[bestTargetIndex][bestRecord];
+        const auto& record = records[bestTargetIndex][bestRecord];
         memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
+}
+
+float Backtrack::getLerp() noexcept
+{
+    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
+    return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
 int Backtrack::timeToTicks(float time) noexcept

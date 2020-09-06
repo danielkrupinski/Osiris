@@ -102,9 +102,11 @@ enum ItemDefinitionIndex : int
     GLOVE_HYDRA = 5035
 };
 
-static auto is_knife(const int i) -> bool
+#include "../SDK/WeaponId.h"
+
+constexpr auto is_knife(WeaponId id)
 {
-    return (i >= WEAPON_KNIFE_BAYONET && i < GLOVE_STUDDED_BLOODHOUND) || i == WEAPON_KNIFE_T || i == WEAPON_KNIFE;
+    return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
 
 //extern const std::map<size_t, weapon_info> k_weapon_info;

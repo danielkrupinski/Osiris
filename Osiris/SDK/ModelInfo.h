@@ -17,6 +17,29 @@ struct StudioBbox {
     int	unused[4];
 };
 
+enum class Hitbox {
+    Head,
+    Neck,
+    Pelvis,
+    Belly,
+    Thorax,
+    LowerChest,
+    UpperChest,
+    RightThigh,
+    LeftThigh,
+    RightCalf,
+    LeftCalf,
+    RightFoot,
+    LeftFoot,
+    RightHand,
+    LeftHand,
+    RightUpperArm,
+    RightForearm,
+    LeftUpperArm,
+    LeftForearm,
+    Max
+};
+
 struct StudioHitboxSet {
     int nameIndex;
     int numHitboxes;
@@ -30,6 +53,11 @@ struct StudioHitboxSet {
     StudioBbox* getHitbox(int i) noexcept
     {
         return i >= 0 && i < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + i : nullptr;
+    }
+
+    StudioBbox* getHitbox(Hitbox i) noexcept
+    {
+        return static_cast<int>(i) < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + static_cast<int>(i) : nullptr;
     }
 };
 
@@ -68,6 +96,11 @@ struct StudioHdr {
     int boneControllerIndex;
     int numHitboxSets;
     int hitboxSetIndex;
+
+    const StudioBone* getBone(int i) const noexcept
+    {
+        return i >= 0 && i < numBones ? reinterpret_cast<StudioBone*>(std::uintptr_t(this) + boneIndex) + i : nullptr;
+    }
 
     StudioHitboxSet* getHitboxSet(int i) noexcept
     {

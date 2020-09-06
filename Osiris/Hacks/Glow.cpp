@@ -55,24 +55,27 @@ void Glow::render() noexcept
         {
             if (glow.enabled) {
                 glowobject.renderWhenOccluded = true;
-                glowobject.glowAlpha = glow.alpha;
+                glowobject.glowAlpha = glow.color[3];
                 glowobject.glowStyle = glow.style;
-                glowobject.glowAlphaMax = glow.thickness;
+                glowobject.glowAlphaMax = 0.6f;
                 if (glow.healthBased && health)
                     glowobject.glowColor = { 1.0f - health / 100.0f,  health / 100.0f, 0.0f };
-                else if (glow.color.rainbow) {
-                    const auto [r, g, b] { rainbowColor(memory->globalVars->realtime, glow.color.rainbowSpeed) };
+                else if (glow.rainbow) {
+                    const auto [r, g, b] { rainbowColor(glow.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
                 }
                 else
-                    glowobject.glowColor = glow.color.color;
+                    glowobject.glowColor = { glow.color[0], glow.color[1], glow.color[2] };
             }
         };
 
         auto applyPlayerGlow = [applyGlow](decltype(glow[0])& glowAll, decltype(glow[0])& glowVisible, decltype(glow[0])& glowOccluded, Entity* entity) noexcept {
-            if (glowAll.enabled) applyGlow(glowAll, entity->health());
-            else if (entity->isVisible() && !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), entity->getBonePosition(8), 1)) applyGlow(glowVisible, entity->health());
-            else applyGlow(glowOccluded, entity->health());
+            if (glowAll.enabled)
+                applyGlow(glowAll, entity->health());
+            else if (glowVisible.enabled && entity->visibleTo(localPlayer.get()))
+                applyGlow(glowVisible, entity->health());
+            else if (glowOccluded.enabled)
+                applyGlow(glowOccluded, entity->health());
         };
 
         switch (entity->getClientClass()->classId) {
@@ -83,7 +86,7 @@ void Glow::render() noexcept
                 applyPlayerGlow(glow[9], glow[10], glow[11], entity);
             else if (entity == localPlayer.get())
                 applyGlow(glow[12], entity->health());
-            else if (entity->isEnemy())
+            else if (entity->isOtherEnemy(localPlayer.get()))
                 applyPlayerGlow(glow[3], glow[4], glow[5], entity);
             else
                 applyPlayerGlow(glow[0], glow[1], glow[2], entity);

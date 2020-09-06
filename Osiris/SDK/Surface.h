@@ -10,74 +10,29 @@ class Surface {
 public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
-    constexpr void setDrawColor(int r, int g, int b, int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 15, r, g, b, a);
-    }
-
-    constexpr void setDrawColor(const float color[3], int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
-    }
-
-    constexpr void setDrawColor(std::tuple<float, float, float> color, int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 15, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a);
-    }
+    VIRTUAL_METHOD(void, setDrawColor, 15, (int r, int g, int b, int a = 255), (this, r, g, b, a))
+    VIRTUAL_METHOD(void, setDrawColor, 15, (const std::array<float, 3>& color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setDrawColor, 15, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
-    constexpr void drawFilledRect(T x0, T y0, T x1, T y1) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 16, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
-    }
+    VIRTUAL_METHOD(void, drawFilledRect, 16, (T x0, T y0, T x1, T y1), (this, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1)))
 
     template <typename T>
-    constexpr void drawOutlinedRect(T x0, T y0, T x1, T y1) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 18, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
-    }
+    VIRTUAL_METHOD(void, drawOutlinedRect, 18, (T x0, T y0, T x1, T y1), (this, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1)))
 
     template <typename T>
-    constexpr void drawLine(T x0, T y0, T x1, T y1) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 19, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1));
-    }
+    VIRTUAL_METHOD(void, drawLine, 19, (T x0, T y0, T x1, T y1), (this, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1)))
 
-    constexpr void drawPolyLine(int* xs, int* ys, int pointCount) noexcept
-    {
-        callVirtualMethod<void, int*, int*, int>(this, 20, xs, ys, pointCount);
-    }
-
-    constexpr void setTextFont(unsigned font) noexcept
-    {
-        callVirtualMethod<void, unsigned>(this, 23, font);
-    }
-
-    constexpr void setTextColor(int r, int g, int b, int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 25, r, g, b, a);
-    }
-
-    constexpr void setTextColor(const float color[3], int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a);
-    }
-
-    constexpr void setTextColor(std::tuple<float, float, float> color, int a = 255) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 25, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a);
-    }
+    VIRTUAL_METHOD(void, drawPolyLine, 20, (int* xs, int* ys, int pointCount), (this, xs, ys, pointCount))
+    VIRTUAL_METHOD(void, setTextFont, 23, (unsigned font), (this, font))
+    VIRTUAL_METHOD(void, setTextColor, 25, (int r, int g, int b, int a = 255), (this, r, g, b, a))
+    VIRTUAL_METHOD(void, setTextColor, 25, (const std::array<float, 3> color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setTextColor, 25, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
-    constexpr void setTextPosition(T x, T y) noexcept
-    {
-        callVirtualMethod<void, int, int>(this, 26, static_cast<int>(x), static_cast<int>(y));
-    }
+    VIRTUAL_METHOD(void, setTextPosition, 26, (T x, T y), (this, static_cast<int>(x), static_cast<int>(y)))
 
-    constexpr void printText(const std::wstring_view text, int drawType = 0) noexcept
-    {
-        callVirtualMethod<void, const wchar_t*, int, int>(this, 28, text.data(), text.length(), drawType);
-    }
+    VIRTUAL_METHOD(void, printText, 28, (const std::wstring_view text, int drawType = 0), (this, text.data(), text.length(), drawType))
     
     VIRTUAL_METHOD(void, getScreenSize, 44, (int& w, int& h), (this, std::ref(w), std::ref(h)))
 
@@ -88,33 +43,19 @@ public:
         return std::make_pair(w, h);
     }
 
-    constexpr void unlockCursor() noexcept
-    {
-        callVirtualMethod<void>(this, 66);
-    }
+    VIRTUAL_METHOD(void, unlockCursor, 66, (), (this))
+    VIRTUAL_METHOD(unsigned, createFont, 71, (), (this))
+    VIRTUAL_METHOD(bool, setFontGlyphSet, 72, (unsigned font, const char* fontName, int tall, int weight, int blur, int scanlines, int flags, int rangeMin = 0, int rangeMax = 0), (this, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax))
 
-    constexpr unsigned createFont() noexcept
+    auto getTextSize(unsigned font, const wchar_t* text) noexcept
     {
-        return callVirtualMethod<unsigned>(this, 71);
-    }
-
-    constexpr bool setFontGlyphSet(unsigned font, const char* fontName, int tall, int weight, int blur, int scanlines, int flags, int rangeMin = 0, int rangeMax = 0) noexcept
-    {
-        return callVirtualMethod<bool, unsigned, const char*, int, int, int, int, int, int, int>(this, 72, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax);
-    }
-
-    constexpr auto getTextSize(unsigned font, const wchar_t* text) noexcept
-    {
-        int width{ }, height{ };
-        callVirtualMethod<void, unsigned, const wchar_t*, int&, int&>(this, 79, font, text, width, height);
+        int width, height;
+        VirtualMethod::call<void, 79>(this, font, text, std::ref(width), std::ref(height));
         return std::make_pair(width, height);
     }
 
     template <typename T>
-    constexpr void drawOutlinedCircle(T x, T y, int r, int seg) noexcept
-    {
-        callVirtualMethod<void, int, int, int, int>(this, 103, static_cast<int>(x), static_cast<int>(y), r, seg);
-    }
+    VIRTUAL_METHOD(void, drawOutlinedCircle, 103, (T x, T y, int r, int seg), (this, static_cast<int>(x), static_cast<int>(y), r, seg))
 
     template <typename T>
     void drawCircle(T x, T y, int startRadius, int radius) noexcept

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Esp
+namespace StreamProofESP
 {
     void render() noexcept;
 }
