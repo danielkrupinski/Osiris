@@ -41,17 +41,7 @@ namespace Backtrack {
     extern Cvars cvars;
 
     float getLerp() noexcept;
-
-    constexpr auto valid(float simtime) noexcept
-    {
-        auto network = interfaces->engine->getNetworkChannel();
-        if (!network)
-            return false;
-
-        auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
-        return std::fabsf(delta) <= 0.2f;
-    }
-
+    bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;
 
     static void init() noexcept

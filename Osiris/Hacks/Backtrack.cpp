@@ -117,6 +117,16 @@ float Backtrack::getLerp() noexcept
     return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
+bool Backtrack::valid(float simtime) noexcept
+{
+    const auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return false;
+
+    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
+    return std::abs(delta) <= 0.2f;
+}
+
 int Backtrack::timeToTicks(float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
