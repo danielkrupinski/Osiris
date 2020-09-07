@@ -38,8 +38,6 @@ namespace Backtrack {
         ConVar* maxUnlag;
     };
 
-    extern Cvars cvars;
-
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;
