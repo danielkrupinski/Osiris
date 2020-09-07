@@ -11,14 +11,13 @@ Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-    if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
-        for (auto& record : records)
-            record.clear();
-
-        return;
-    }
-
     if (stage == FrameStage::RENDER_START) {
+        if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
+            for (auto& record : records)
+                record.clear();
+            return;
+        }
+
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
