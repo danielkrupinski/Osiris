@@ -131,3 +131,14 @@ int Backtrack::timeToTicks(float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
 }
+
+void Backtrack::init() noexcept
+{
+    cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
+    cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
+    cvars.interp = interfaces->cvar->findVar("cl_interp");
+    cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
+    cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
+    cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
+    cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
+}

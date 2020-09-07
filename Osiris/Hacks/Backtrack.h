@@ -43,17 +43,5 @@ namespace Backtrack {
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;
-
-    static void init() noexcept
-    {
-        records->clear();
-
-        cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
-        cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
-        cvars.interp = interfaces->cvar->findVar("cl_interp");
-        cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
-        cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
-        cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
-        cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
-    }
+    void init() noexcept;
 }
