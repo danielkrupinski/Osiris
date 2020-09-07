@@ -780,7 +780,7 @@ void Hooks::install() noexcept
     clientMode.hookAt(17, shouldDrawFog);
     clientMode.hookAt(18, overrideView);
     clientMode.hookAt(24, createMove);
-	client.hookAt(24, WriteUsercmdDeltaToBuffer);
+
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(35, getViewModelFov);
     clientMode.hookAt(44, doPostScreenEffects);
