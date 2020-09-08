@@ -36,6 +36,7 @@
 #include "SDK/FrameStage.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
+#include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"

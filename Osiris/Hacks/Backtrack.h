@@ -1,17 +1,10 @@
 #pragma once
 
-#include <algorithm>
+#include <array>
 #include <deque>
 
-#include "../Memory.h"
-#include "../Interfaces.h"
-#include "../SDK/Engine.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Cvar.h"
-#include "../SDK/GlobalVars.h"
 #include "../SDK/matrix3x4.h"
-#include "../SDK/ModelRender.h"
-#include "../SDK/NetworkChannel.h"
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 struct UserCmd;
@@ -29,17 +22,7 @@ namespace Backtrack {
         matrix3x4 matrix[256];
     };
 
-    extern std::deque<Record> records[65];
-
-    struct Cvars {
-        ConVar* updateRate;
-        ConVar* maxUpdateRate;
-        ConVar* interp;
-        ConVar* interpRatio;
-        ConVar* minInterpRatio;
-        ConVar* maxInterpRatio;
-        ConVar* maxUnlag;
-    };
+    extern std::array<std::deque<Record>, 65> records;
 
     extern Cvars cvars; // This to be removed (?) to comply with master
 
