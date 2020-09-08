@@ -28,16 +28,6 @@ namespace Backtrack {
 
     extern std::deque<Record> records[65];
 
-    struct Cvars {
-        ConVar* updateRate;
-        ConVar* maxUpdateRate;
-        ConVar* interp;
-        ConVar* interpRatio;
-        ConVar* minInterpRatio;
-        ConVar* maxInterpRatio;
-        ConVar* maxUnlag;
-    };
-
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;

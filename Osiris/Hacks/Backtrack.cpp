@@ -7,7 +7,18 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
-static Backtrack::Cvars cvars;
+
+struct Cvars {
+    ConVar* updateRate;
+    ConVar* maxUpdateRate;
+    ConVar* interp;
+    ConVar* interpRatio;
+    ConVar* minInterpRatio;
+    ConVar* maxInterpRatio;
+    ConVar* maxUnlag;
+};
+
+static Cvars cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
