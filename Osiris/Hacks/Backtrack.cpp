@@ -1,30 +1,15 @@
 #include "Backtrack.h"
 #include "Aimbot.h"
 #include "../Config.h"
-#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
-#include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
-#include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-std::array<std::deque<Backtrack::Record>, 65> Backtrack::records;
+std::deque<Backtrack::Record> Backtrack::records[65];
 // static Backtrack::Cvars cvars; // From Master, but this breaks code in hooks.cpp line 132 max() function
 std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
-Backtrack::Cvars Backtrack::cvars; // 
-
-//struct Cvars { // From Upstream/Master
-//    ConVar* updateRate;
-//    ConVar* maxUpdateRate;
-//    ConVar* interp;
-//    ConVar* interpRatio;
-//    ConVar* minInterpRatio;
-//    ConVar* maxInterpRatio;
-//    ConVar* maxUnlag;
-//};
-
-//static Cvars cvars;
+Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
@@ -91,7 +76,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             continue;
 
         //auto origin = entity->getAbsOrigin(); // [1]
-        auto head = entity->getBonePosition(8);
+        auto head = entity->getBonePosition(8); 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
@@ -191,7 +176,7 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
         sequence.servertime = memory->globalVars->serverTime();
         sequences.push_front(sequence);
     }
-
+    
     while (sequences.size() > 2048)
         sequences.pop_back();
 }
