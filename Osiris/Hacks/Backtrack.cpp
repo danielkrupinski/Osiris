@@ -6,7 +6,7 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 
-std::deque<Backtrack::Record> Backtrack::records[65];
+std::array<std::deque<Backtrack::Record>, 65> Backtrack::records;
 
 struct Cvars {
     ConVar* updateRate;

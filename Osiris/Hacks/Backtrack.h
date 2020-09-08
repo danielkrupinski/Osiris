@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <deque>
 
 #include "../Memory.h"
@@ -26,7 +27,7 @@ namespace Backtrack {
         matrix3x4 matrix[256];
     };
 
-    extern std::deque<Record> records[65];
+    extern std::array<std::deque<Record>, 65> records;
 
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
