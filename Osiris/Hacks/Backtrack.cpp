@@ -1,9 +1,12 @@
 #include "Backtrack.h"
 #include "Aimbot.h"
 #include "../Config.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
+#include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
 std::array<std::deque<Backtrack::Record>, 65> Backtrack::records;
