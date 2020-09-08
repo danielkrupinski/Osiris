@@ -64,7 +64,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    //Vector bestTargetOrigin{ };
+    //Vector bestTargetOrigin{ }; // [1] Not used because the other code contributors before me started using head not origin. It is used in a different form below tho.
     Vector bestTargetHead{ };
     int bestRecord{ };
 
@@ -75,7 +75,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
         if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-        //auto origin = entity->getAbsOrigin();
+        //auto origin = entity->getAbsOrigin(); // [1]
         auto head = entity->getBonePosition(8); 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
@@ -83,7 +83,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             bestFov = fov;
             bestTarget = entity;
             bestTargetIndex = i;
-            //bestTargetOrigin = origin;
+            //bestTargetOrigin = origin; // [1]
             bestTargetHead = head;
         }
     }
@@ -110,7 +110,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (bestRecord) {
         const auto& record = records[bestTargetIndex][bestRecord];
-        memory->setAbsOrigin(bestTarget, record.origin);
+        memory->setAbsOrigin(bestTarget, record.origin); // Here origin is used, but from the backtrack record struct, not this function.
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
 }
