@@ -385,7 +385,6 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
-    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
