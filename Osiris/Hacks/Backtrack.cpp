@@ -7,19 +7,19 @@
 #include "../SDK/UserCmd.h"
 
 std::deque<Backtrack::Record> Backtrack::records[65];
+// static Backtrack::Cvars cvars; // From Master, but this breaks code in hooks.cpp line 132 max() function
 std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-    if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
-        for (auto& record : records)
-            record.clear();
-
-        return;
-    }
-
     if (stage == FrameStage::RENDER_START) {
+        if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
+            for (auto& record : records)
+                record.clear();
+            return;
+        }
+
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
@@ -121,6 +121,16 @@ float Backtrack::getLerp() noexcept
     return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
+bool Backtrack::valid(float simtime) noexcept
+{
+    const auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return false;
+
+    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
+    return std::abs(delta) <= 0.2f;
+}
+
 float Backtrack::getExtraTicks() noexcept
 {
     auto network = interfaces->engine->getNetworkChannel();
@@ -174,4 +184,15 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 int Backtrack::timeToTicks(float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
+}
+
+void Backtrack::init() noexcept
+{
+    cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
+    cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
+    cvars.interp = interfaces->cvar->findVar("cl_interp");
+    cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
+    cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
+    cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
+    cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
 }

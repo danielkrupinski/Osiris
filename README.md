@@ -22,7 +22,6 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 * **Sound** - modify volume of certain sound effects
 * **Style** - select menu window layout and colors
 * **Misc** - miscellaneous features
-* **Reportbot** - automatically report players on server for cheating or other abusive actions
 * **Config** - JSON-based configuration system
 
 <details>
@@ -174,6 +173,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Name stealer** - mimic other players names
     * **Custom clantag** - set a custom clantag
     * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
+    * **Fast Stop** - stops the player faster than normal
     * **Quick reload** - perform quick weapon switch during reload for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Fix tablet signal** - allow use tablet on underground (dangerzone)
@@ -182,17 +182,16 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Max angle delta** - maximum viewangles change per tick
     * **Fake Prime** - set a fake prime (visible in lobby)
     * **Purchase List** - show the purchased equipment by enemies.
+    * **Reportbot** - automatically report players on server for cheating or other abusive actions
+        * **Enabled** - on / off master switch
+        * **Target** - report target *Enemies/Allies/All*
+        * **Delay** - delay between reports, in seconds
+        * **Aimbot** - report for aim assistance
+        * **Wallhack** - report for visual assistance
+        * **Other** - report for other assistance
+        * **Griefing** - report for griefing
+        * **Abusive Communications** - report for abusive communications
     * **Unhook** - unload cheat
-
-* **Reportbot** - automatically report players on server for cheating or other abusive actions
-    * **Enabled** - on / off master switch
-    * **Target** - report target *Enemies/Allies/All*
-    * **Delay** - delay between reports, in seconds
-    * **Aimbot** - report for aim assistance
-    * **Wallhack** - report for visual assistance
-    * **Other** - report for other assistance
-    * **Griefing** - report for griefing
-    * **Abusive Communications** - report for abusive communications
 
 * **Config** - JSON-based configuration system
     * **Create config** - create new configuration file
@@ -243,7 +242,7 @@ Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) a
 When injected, menu is openable under `INSERT` key.
 
 ### Further optimizations
-If your CPU supports AVX / AVX2 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
+If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
 
 ## FAQ
 
@@ -252,9 +251,6 @@ Press <kbd>INSERT</kbd> while focused on CS:GO window.
 
 ### Where is my config file saved?
 Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
-
-### What is cheat execution entry point and where is it located?
-Osiris is based on six main global objects ("modules") - see [Osiris.cpp](https://github.com/danielkrupinski/Osiris/blob/master/Osiris/Osiris.cpp) file for detailes. The modules are initialized in the order they are declared in above file as they depend on each other.
 
 ## Acknowledgments
 

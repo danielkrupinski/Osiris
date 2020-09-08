@@ -231,6 +231,7 @@ public:
         bool fixTabletSignal{ false };
         bool fakePrime{ false };
         bool fastPlant{ false };
+        bool fastStop{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
         bool oppositeHandKnife = false;

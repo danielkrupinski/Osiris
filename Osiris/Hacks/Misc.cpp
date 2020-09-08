@@ -316,6 +316,33 @@ void Misc::fastPlant(UserCmd* cmd) noexcept
         cmd->buttons &= ~UserCmd::IN_USE;
 }
 
+void Misc::fastStop(UserCmd* cmd) noexcept
+{
+    if (!config->misc.fastStop)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (localPlayer->moveType() == MoveType::NOCLIP || localPlayer->moveType() == MoveType::LADDER || !(localPlayer->flags() & 1) || cmd->buttons & UserCmd::IN_JUMP)
+        return;
+
+    if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT | UserCmd::IN_FORWARD | UserCmd::IN_BACK))
+        return;
+    
+    const auto velocity = localPlayer->velocity();
+    const auto speed = velocity.length2D();
+    if (speed < 15.0f)
+        return;
+    
+    Vector direction = velocity.toAngle();
+    direction.y = cmd->viewangles.y - direction.y;
+
+    const auto negatedDirection = Vector::fromAngle(direction) * -speed;
+    cmd->forwardmove = negatedDirection.x;
+    cmd->sidemove = negatedDirection.y;
+}
+
 void Misc::drawBombTimer() noexcept
 {
     if (config->misc.bombTimer.enabled) {
