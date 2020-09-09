@@ -15,6 +15,7 @@
 #include "VirtualMethod.h"
 #include "WeaponData.h"
 #include "WeaponId.h"
+#include "UserCmd.h"
 
 #include "../Config.h"
 #include "../Interfaces.h"
@@ -85,6 +86,11 @@ public:
     constexpr auto isSniperRifle() noexcept
     {
         return getWeaponType() == WeaponType::SniperRifle;
+    }
+
+    constexpr auto isGrenade() noexcept
+    {
+        return getWeaponType() == WeaponType::Grenade;
     }
 
     constexpr auto isFullAuto() noexcept
@@ -187,6 +193,7 @@ public:
 
     bool canSee(Entity* other, const Vector& pos) noexcept;
     bool visibleTo(Entity* other) noexcept;
+    bool throwing(UserCmd* cmd) noexcept;
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
@@ -267,6 +274,8 @@ public:
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+    NETVAR(pinPulled, "CBaseCSGrenade", "m_bPinPulled", bool)
+    NETVAR(throwTime, "CBaseCSGrenade", "m_fThrowTime", float)
 
     bool isFlashed() noexcept
     {
