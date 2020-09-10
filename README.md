@@ -79,7 +79,6 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Blinking** - change transparency frequently
     * **Material** - material applied to model (*Normal, Flat, Animated, Platinum,Glass, Chrome, Crystal, Silver, Gold, Plastic, Glow*)
     * **Wireframe** - render triangle mesh instead of solid material
-    * **Alpha** - maximum material transparency
 
 * **Esp** - show additional information about players and game world
     
@@ -92,7 +91,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
         * *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
     <br><br>
     * **Enabled** - on / off master switch
-    * **Font** - esp text font number (from `vgui_spew_fonts` command)
+    * **Font** - esp text font
     * **Snaplines** - draw snapline to player
     * **Eye traces** - draw player eye traces (shows where player looks)
     * **Box** - draw 2D box over player model
