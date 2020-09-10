@@ -133,7 +133,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
     * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
     * **Hit effect** - show screen effect on enemy hit
-    * **Hit maker** - show a cross detail on enemy hit
+    * **Hit marker** - show a cross detail on enemy hit
 
 * **Skin changer** - change weapon skins, knives and stickers
 
