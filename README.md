@@ -171,7 +171,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Kill message** - print message to chat after killing an enemy
     * **Name stealer** - mimic other players names
     * **Custom clantag** - set a custom clantag
-    * **Fast plant** - plants bomb on bombsite border, when holding LMB or `E` key
+    * **Fast plant** - plants bomb on bombsite border, when holding <kbd>LMB</kbd> or <kbd>E</kbd> key
     * **Fast Stop** - stops the player faster than normal
     * **Quick reload** - perform quick weapon switch during reload for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
@@ -253,7 +253,7 @@ Configuration files are saved inside `Osiris` folder in your `Documents` folder 
 
 ## Acknowledgments
 
-* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating such amazing GUI library - [imgui](https://github.com/ocornut/imgui).
+* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
 * [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
 
 ## License
