@@ -253,7 +253,7 @@ Configuration files are saved inside `Osiris` folder in your `Documents` folder 
 
 ## Acknowledgments
 
-* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
+* [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
 * [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
 
 ## License
@@ -264,4 +264,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ## See also
 - [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
-- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source stream-proof ESP hack for Counter-Strike: Global Offensive, written in modern C++
+- [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source cross-platform streamproof ESP hack for Counter-Strike: Global Offensive, written in modern C++
