@@ -2893,7 +2893,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
 
         style.Colors[ImGuiCol_Text] = ImVec4(1.f, 1.f, 1.f, 1.f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.59215686274f, 0.59215686274f, 0.59215686274f, 1.f);
-        style.Colors[ImGuiCol_WindowBg] = ImVec4(0.14509803921f, 0.14509803921f, 0.14901960784, 1.f);
+        style.Colors[ImGuiCol_WindowBg] = ImVec4(0.14509803921f, 0.14509803921f, 0.14901960784f, 1.f);
         style.Colors[ImGuiCol_ChildBg] = style.Colors[ImGuiCol_WindowBg];
         style.Colors[ImGuiCol_PopupBg] = style.Colors[ImGuiCol_WindowBg];
         style.Colors[ImGuiCol_Border] = ImVec4(0.30588235294f, 0.30588235294f, 0.30588235294f, 1.f);
@@ -2907,7 +2907,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         style.Colors[ImGuiCol_MenuBarBg] = style.Colors[ImGuiCol_FrameBg];
         style.Colors[ImGuiCol_ScrollbarBg] = style.Colors[ImGuiCol_FrameBg];
         style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.32156862745f, 0.32156862745f, 0.33333333333f, 1.f);
-        style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.35294117647f, 0.35294117647f, 0.3725490196, 1.f);
+        style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.35294117647f, 0.35294117647f, 0.3725490196f, 1.f);
         style.Colors[ImGuiCol_ScrollbarGrabActive] = style.Colors[ImGuiCol_ScrollbarGrabHovered];
         style.Colors[ImGuiCol_CheckMark] = style.Colors[ImGuiCol_FrameBgActive];
         style.Colors[ImGuiCol_SliderGrab] = style.Colors[ImGuiCol_FrameBgHovered];

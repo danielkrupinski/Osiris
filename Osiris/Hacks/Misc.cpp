@@ -1189,7 +1189,7 @@ void Misc::jumpbug(UserCmd* cmd) noexcept {
 
     bool unduck = true;
 
-    float max_radius = M_PI * 2;
+    float max_radius = static_cast<float>(M_PI) * 2;
     float step = max_radius / 128;
     float xThick = 23;
 
