@@ -160,6 +160,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
+	Misc::fastLadder(cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(cmd);

@@ -210,6 +210,7 @@ public:
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
+        bool fastLadder{ false };
         bool edgejump{ false };
         bool slowwalk{ false };
         bool autoPistol{ false };

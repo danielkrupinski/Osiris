@@ -526,6 +526,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
+    read(j, "Fast ladder", m.fastLadder);
     read(j, "Edge Jump", m.edgejump);
     read(j, "Edge Jump Key", m.edgejumpkey);
     read(j, "Slowwalk", m.slowwalk);
@@ -904,6 +905,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Animated clan tag", animatedClanTag);
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
+    WRITE("Fast ladder", fastLadder);
     WRITE("Edge Jump", edgejump);
     WRITE("Edge Jump Key", edgejumpkey);
     WRITE("Slowwalk", slowwalk);

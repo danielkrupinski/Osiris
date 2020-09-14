@@ -34,6 +34,60 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
 
+void Misc::fastLadder(UserCmd* cmd) noexcept
+{
+    if (!config->misc.fastLadder || !localPlayer)
+        return;
+
+    float upDown;
+
+    if (localPlayer->moveType() == MoveType::LADDER)
+    {
+        if (cmd->viewangles.x < 30)
+            upDown = -89.0f;
+        else
+            upDown = 89.0f;
+
+        if (cmd->buttons & UserCmd::IN_FORWARD && !GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
+        {
+            cmd->viewangles.x = upDown;
+            
+            if (cmd->viewangles.y > 135 && cmd->viewangles.y < 180 || cmd->viewangles.y < -135 && cmd->viewangles.y > -180.0f)
+            {
+                if (cmd->viewangles.y != -89.0f || !(cmd->buttons & UserCmd::IN_MOVERIGHT))
+                {
+                    cmd->viewangles.y = -89.0f;
+                    cmd->buttons |= UserCmd::IN_MOVERIGHT;
+                }
+            }
+            else if (cmd->viewangles.y < 135 && cmd->viewangles.y > 90 || cmd->viewangles.y < 90 && cmd->viewangles.y > 45)
+            {
+                if (cmd->viewangles.y != 179.150f || !(cmd->buttons & UserCmd::IN_MOVERIGHT))
+                {
+                    cmd->viewangles.y = 179.150f;
+                    cmd->buttons |= UserCmd::IN_MOVERIGHT;
+                }
+            }
+            else if (cmd->viewangles.y > -90 && cmd->viewangles.y < -45 || cmd->viewangles.y < -90 && cmd->viewangles.y > -135)
+            {
+                if (cmd->viewangles.y != 0.20f || !(cmd->buttons & UserCmd::IN_MOVERIGHT))
+                {
+                    cmd->viewangles.y = 0.20f;
+                    cmd->buttons |= UserCmd::IN_MOVERIGHT;
+                }
+            }
+            else if (cmd->viewangles.y < -0 && cmd->viewangles.y > -45 || cmd->viewangles.y < 45 && cmd->viewangles.y > 0)
+            {
+                if (cmd->viewangles.y != 89.20f || !(cmd->buttons & UserCmd::IN_MOVERIGHT))
+                {
+                    cmd->viewangles.y = 89.20f;
+                    cmd->buttons |= UserCmd::IN_MOVERIGHT;
+                }
+            }
+        }
+    }
+}
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
