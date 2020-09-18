@@ -273,7 +273,10 @@ void ImGui::TextColored(const ImVec4& col, const char* fmt, ...)
 void ImGui::TextColoredV(const ImVec4& col, const char* fmt, va_list args)
 {
     PushStyleColor(ImGuiCol_Text, col);
-    TextV(fmt, args);
+    if (fmt[0] == '%' && fmt[1] == 's' && fmt[2] == 0)
+        TextEx(va_arg(args, const char*), NULL, ImGuiTextFlags_NoWidthForLargeClippedText); // Skip formatting
+    else
+        TextV(fmt, args);
     PopStyleColor();
 }
 
@@ -287,8 +290,12 @@ void ImGui::TextDisabled(const char* fmt, ...)
 
 void ImGui::TextDisabledV(const char* fmt, va_list args)
 {
-    PushStyleColor(ImGuiCol_Text, GImGui->Style.Colors[ImGuiCol_TextDisabled]);
-    TextV(fmt, args);
+    ImGuiContext& g = *GImGui;
+    PushStyleColor(ImGuiCol_Text, g.Style.Colors[ImGuiCol_TextDisabled]);
+    if (fmt[0] == '%' && fmt[1] == 's' && fmt[2] == 0)
+        TextEx(va_arg(args, const char*), NULL, ImGuiTextFlags_NoWidthForLargeClippedText); // Skip formatting
+    else
+        TextV(fmt, args);
     PopStyleColor();
 }
 
@@ -302,11 +309,14 @@ void ImGui::TextWrapped(const char* fmt, ...)
 
 void ImGui::TextWrappedV(const char* fmt, va_list args)
 {
-    ImGuiWindow* window = GetCurrentWindow();
-    bool need_backup = (window->DC.TextWrapPos < 0.0f);  // Keep existing wrap position if one is already set
+    ImGuiContext& g = *GImGui;
+    bool need_backup = (g.CurrentWindow->DC.TextWrapPos < 0.0f);  // Keep existing wrap position if one is already set
     if (need_backup)
         PushTextWrapPos(0.0f);
-    TextV(fmt, args);
+    if (fmt[0] == '%' && fmt[1] == 's' && fmt[2] == 0)
+        TextEx(va_arg(args, const char*), NULL, ImGuiTextFlags_NoWidthForLargeClippedText); // Skip formatting
+    else
+        TextV(fmt, args);
     if (need_backup)
         PopTextWrapPos();
 }
@@ -2075,9 +2085,9 @@ bool ImGui::DragBehaviorT(ImGuiDataType data_type, TYPE* v, float v_speed, const
         logarithmic_zero_epsilon = ImPow(0.1f, (float)decimal_precision);
 
         // Convert to parametric space, apply delta, convert back
-        float v_old_parametric = ScaleRatioFromValueT<TYPE, FLOATTYPE>(data_type, v_cur, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+        float v_old_parametric = ScaleRatioFromValueT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, v_cur, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
         float v_new_parametric = v_old_parametric + g.DragCurrentAccum;
-        v_cur = ScaleValueFromRatioT<TYPE, FLOATTYPE>(data_type, v_new_parametric, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+        v_cur = ScaleValueFromRatioT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, v_new_parametric, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
         v_old_ref_for_accum_remainder = v_old_parametric;
     } else
     {
@@ -2093,7 +2103,7 @@ bool ImGui::DragBehaviorT(ImGuiDataType data_type, TYPE* v, float v_speed, const
     if (is_logarithmic)
     {
         // Convert to parametric space, apply delta, convert back
-        float v_new_parametric = ScaleRatioFromValueT<TYPE, FLOATTYPE>(data_type, v_cur, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+        float v_new_parametric = ScaleRatioFromValueT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, v_cur, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
         g.DragCurrentAccum -= (float)(v_new_parametric - v_old_ref_for_accum_remainder);
     } else
     {
@@ -2428,7 +2438,7 @@ bool ImGui::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data
 //-------------------------------------------------------------------------
 
 // Convert a value v in the output space of a slider into a parametric position on the slider itself (the logical opposite of ScaleValueFromRatioT)
-template<typename TYPE, typename FLOATTYPE>
+template<typename TYPE, typename SIGNEDTYPE, typename FLOATTYPE>
 float ImGui::ScaleRatioFromValueT(ImGuiDataType data_type, TYPE v, TYPE v_min, TYPE v_max, bool is_logarithmic, float logarithmic_zero_epsilon, float zero_deadzone_halfsize)
 {
     if (v_min == v_max)
@@ -2479,11 +2489,11 @@ float ImGui::ScaleRatioFromValueT(ImGuiDataType data_type, TYPE v, TYPE v_min, T
     }
 
     // Linear slider
-    return (float)((FLOATTYPE)(v_clamped - v_min) / (FLOATTYPE)(v_max - v_min));
+    return (float)((FLOATTYPE)(SIGNEDTYPE)(v_clamped - v_min) / (FLOATTYPE)(SIGNEDTYPE)(v_max - v_min));
 }
 
 // Convert a parametric position on a slider into a value v in the output space (the logical opposite of ScaleRatioFromValueT)
-template<typename TYPE, typename FLOATTYPE>
+template<typename TYPE, typename SIGNEDTYPE, typename FLOATTYPE>
 TYPE ImGui::ScaleValueFromRatioT(ImGuiDataType data_type, float t, TYPE v_min, TYPE v_max, bool is_logarithmic, float logarithmic_zero_epsilon, float zero_deadzone_halfsize)
 {
     if (v_min == v_max)
@@ -2539,15 +2549,18 @@ TYPE ImGui::ScaleValueFromRatioT(ImGuiDataType data_type, float t, TYPE v_min, T
             result = ImLerp(v_min, v_max, t);
         } else
         {
-            // For integer values we want the clicking position to match the grab box so we round above
-            // This code is carefully tuned to work with large values (e.g. high ranges of U64) while preserving this property..
-            FLOATTYPE v_new_off_f = (v_max - v_min) * t;
-            TYPE v_new_off_floor = (TYPE)(v_new_off_f);
-            TYPE v_new_off_round = (TYPE)(v_new_off_f + (FLOATTYPE)0.5);
-            if (v_new_off_floor < v_new_off_round)
-                result = v_min + v_new_off_round;
-            else
-                result = v_min + v_new_off_floor;
+            // - For integer values we want the clicking position to match the grab box so we round above
+            //   This code is carefully tuned to work with large values (e.g. high ranges of U64) while preserving this property..
+            // - Not doing a *1.0 multiply at the end of a range as it tends to be lossy. While absolute aiming at a large s64/u64
+            //   range is going to be imprecise anyway, with this check we at least make the edge values matches expected limits.
+            if (t < 1.0)
+            {
+                FLOATTYPE v_new_off_f = (SIGNEDTYPE)(v_max - v_min) * t;
+                result = (TYPE)((SIGNEDTYPE)v_min + (SIGNEDTYPE)(v_new_off_f + (FLOATTYPE)(v_min > v_max ? -0.5 : 0.5)));
+            } else
+            {
+                result = v_max;
+            }
         }
     }
 
@@ -2643,7 +2656,7 @@ bool ImGui::SliderBehaviorT(const ImRect& bb, ImGuiID id, ImGuiDataType data_typ
                 ClearActiveID();
             } else if (g.SliderCurrentAccumDirty)
             {
-                clicked_t = ScaleRatioFromValueT<TYPE, FLOATTYPE>(data_type, *v, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+                clicked_t = ScaleRatioFromValueT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, *v, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
 
                 if ((clicked_t >= 1.0f && delta > 0.0f) || (clicked_t <= 0.0f && delta < 0.0f)) // This is to avoid applying the saturation when already past the limits
                 {
@@ -2656,10 +2669,10 @@ bool ImGui::SliderBehaviorT(const ImRect& bb, ImGuiID id, ImGuiDataType data_typ
                     clicked_t = ImSaturate(clicked_t + delta);
 
                     // Calculate what our "new" clicked_t will be, and thus how far we actually moved the slider, and subtract this from the accumulator
-                    TYPE v_new = ScaleValueFromRatioT<TYPE, FLOATTYPE>(data_type, clicked_t, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+                    TYPE v_new = ScaleValueFromRatioT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, clicked_t, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
                     if (!(flags & ImGuiSliderFlags_NoRoundToFormat))
                         v_new = RoundScalarWithFormatT<TYPE, SIGNEDTYPE>(format, data_type, v_new);
-                    float new_clicked_t = ScaleRatioFromValueT<TYPE, FLOATTYPE>(data_type, v_new, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+                    float new_clicked_t = ScaleRatioFromValueT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, v_new, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
 
                     if (delta > 0)
                         g.SliderCurrentAccum -= ImMin(new_clicked_t - old_clicked_t, delta);
@@ -2673,7 +2686,7 @@ bool ImGui::SliderBehaviorT(const ImRect& bb, ImGuiID id, ImGuiDataType data_typ
 
         if (set_new_value)
         {
-            TYPE v_new = ScaleValueFromRatioT<TYPE, FLOATTYPE>(data_type, clicked_t, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+            TYPE v_new = ScaleValueFromRatioT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, clicked_t, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
 
             // Round to user desired precision based on format string
             if (!(flags & ImGuiSliderFlags_NoRoundToFormat))
@@ -2694,7 +2707,7 @@ bool ImGui::SliderBehaviorT(const ImRect& bb, ImGuiID id, ImGuiDataType data_typ
     } else
     {
         // Output grab position so it can be displayed by the caller
-        float grab_t = ScaleRatioFromValueT<TYPE, FLOATTYPE>(data_type, *v, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
+        float grab_t = ScaleRatioFromValueT<TYPE, SIGNEDTYPE, FLOATTYPE>(data_type, *v, v_min, v_max, is_logarithmic, logarithmic_zero_epsilon, zero_deadzone_halfsize);
         if (axis == ImGuiAxis_Y)
             grab_t = 1.0f - grab_t;
         const float grab_pos = ImLerp(slider_usable_pos_min, slider_usable_pos_max, grab_t);
@@ -3156,7 +3169,11 @@ bool ImGui::TempInputScalar(const ImRect& bb, ImGuiID id, const char* label, ImG
         // Apply new value (or operations) then clamp
         DataTypeApplyOpFromText(data_buf, g.InputTextState.InitialTextA.Data, data_type, p_data, NULL);
         if (p_clamp_min || p_clamp_max)
+        {
+            if (DataTypeCompare(data_type, p_clamp_min, p_clamp_max) > 0)
+                ImSwap(p_clamp_min, p_clamp_max);
             DataTypeClamp(data_type, p_data, p_clamp_min, p_clamp_max);
+        }
 
         // Only mark as edited if new value is different
         value_changed = memcmp(&data_backup, p_data, data_type_size) != 0;
@@ -3540,6 +3557,8 @@ namespace ImStb
 #define STB_TEXTEDIT_K_REDO         0x20000B // keyboard input to perform redo
 #define STB_TEXTEDIT_K_WORDLEFT     0x20000C // keyboard input to move cursor left one word
 #define STB_TEXTEDIT_K_WORDRIGHT    0x20000D // keyboard input to move cursor right one word
+#define STB_TEXTEDIT_K_PGUP         0x20000E // keyboard input to move cursor up a page
+#define STB_TEXTEDIT_K_PGDOWN       0x20000F // keyboard input to move cursor down a page
 #define STB_TEXTEDIT_K_SHIFT        0x400000
 
 #define STB_TEXTEDIT_IMPLEMENTATION
@@ -3805,6 +3824,8 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     bool clear_active_id = false;
     bool select_all = (g.ActiveId != id) && ((flags & ImGuiInputTextFlags_AutoSelectAll) != 0 || user_nav_input_start) && (!is_multiline);
 
+    float scroll_y = is_multiline ? draw_window->Scroll.y : FLT_MAX;
+
     const bool init_make_active = (focus_requested || user_clicked || user_scroll_finish || user_nav_input_start);
     const bool init_state = (init_make_active || user_scroll_active);
     if (init_state && g.ActiveId != id)
@@ -3864,7 +3885,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         g.ActiveIdUsingNavInputMask |= (1 << ImGuiNavInput_Cancel);
         g.ActiveIdUsingKeyInputMask |= ((ImU64)1 << ImGuiKey_Home) | ((ImU64)1 << ImGuiKey_End);
         if (is_multiline)
-            g.ActiveIdUsingKeyInputMask |= ((ImU64)1 << ImGuiKey_PageUp) | ((ImU64)1 << ImGuiKey_PageDown); // FIXME-NAV: Page up/down actually not supported yet by widget, but claim them ahead.
+            g.ActiveIdUsingKeyInputMask |= ((ImU64)1 << ImGuiKey_PageUp) | ((ImU64)1 << ImGuiKey_PageDown);
         if (flags & (ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_AllowTabInput))  // Disable keyboard tabbing out as we will use the \t character.
             g.ActiveIdUsingKeyInputMask |= ((ImU64)1 << ImGuiKey_Tab);
     }
@@ -3906,7 +3927,6 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         ImFont* password_font = &g.InputTextPasswordFont;
         password_font->FontSize = g.Font->FontSize;
         password_font->Scale = g.Font->Scale;
-        password_font->DisplayOffset = g.Font->DisplayOffset;
         password_font->Ascent = g.Font->Ascent;
         password_font->Descent = g.Font->Descent;
         password_font->ContainerAtlas = g.Font->ContainerAtlas;
@@ -4001,6 +4021,9 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         IM_ASSERT(state != NULL);
         IM_ASSERT(io.KeyMods == GetMergedKeyModFlags() && "Mismatching io.KeyCtrl/io.KeyShift/io.KeyAlt/io.KeySuper vs io.KeyMods"); // We rarely do this check, but if anything let's do it here.
 
+        const int row_count_per_page = ImMax((int)((inner_size.y - style.FramePadding.y) / g.FontSize), 1);
+        state->Stb.row_count_per_page = row_count_per_page;
+
         const int k_mask = (io.KeyShift ? STB_TEXTEDIT_K_SHIFT : 0);
         const bool is_osx = io.ConfigMacOSXBehaviors;
         const bool is_osx_shift_shortcut = is_osx && (io.KeyMods == (ImGuiKeyModFlags_Super | ImGuiKeyModFlags_Shift));
@@ -4016,7 +4039,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         const bool is_undo = ((is_shortcut_key && IsKeyPressedMap(ImGuiKey_Z)) && !is_readonly && is_undoable);
         const bool is_redo = ((is_shortcut_key && IsKeyPressedMap(ImGuiKey_Y)) || (is_osx_shift_shortcut && IsKeyPressedMap(ImGuiKey_Z))) && !is_readonly && is_undoable;
 
-        if (IsKeyPressedMap(ImGuiKey_LeftArrow)) { state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_LINESTART : is_wordmove_key_down ? STB_TEXTEDIT_K_WORDLEFT : STB_TEXTEDIT_K_LEFT) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_RightArrow)) { state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_LINEEND : is_wordmove_key_down ? STB_TEXTEDIT_K_WORDRIGHT : STB_TEXTEDIT_K_RIGHT) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_UpArrow) && is_multiline) { if (io.KeyCtrl) SetScrollY(draw_window, ImMax(draw_window->Scroll.y - g.FontSize, 0.0f)); else state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_TEXTSTART : STB_TEXTEDIT_K_UP) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_DownArrow) && is_multiline) { if (io.KeyCtrl) SetScrollY(draw_window, ImMin(draw_window->Scroll.y + g.FontSize, GetScrollMaxY())); else state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_TEXTEND : STB_TEXTEDIT_K_DOWN) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_Home)) { state->OnKeyPressed(io.KeyCtrl ? STB_TEXTEDIT_K_TEXTSTART | k_mask : STB_TEXTEDIT_K_LINESTART | k_mask); } else if (IsKeyPressedMap(ImGuiKey_End)) { state->OnKeyPressed(io.KeyCtrl ? STB_TEXTEDIT_K_TEXTEND | k_mask : STB_TEXTEDIT_K_LINEEND | k_mask); } else if (IsKeyPressedMap(ImGuiKey_Delete) && !is_readonly) { state->OnKeyPressed(STB_TEXTEDIT_K_DELETE | k_mask); } else if (IsKeyPressedMap(ImGuiKey_Backspace) && !is_readonly)
+        if (IsKeyPressedMap(ImGuiKey_LeftArrow)) { state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_LINESTART : is_wordmove_key_down ? STB_TEXTEDIT_K_WORDLEFT : STB_TEXTEDIT_K_LEFT) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_RightArrow)) { state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_LINEEND : is_wordmove_key_down ? STB_TEXTEDIT_K_WORDRIGHT : STB_TEXTEDIT_K_RIGHT) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_UpArrow) && is_multiline) { if (io.KeyCtrl) SetScrollY(draw_window, ImMax(draw_window->Scroll.y - g.FontSize, 0.0f)); else state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_TEXTSTART : STB_TEXTEDIT_K_UP) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_DownArrow) && is_multiline) { if (io.KeyCtrl) SetScrollY(draw_window, ImMin(draw_window->Scroll.y + g.FontSize, GetScrollMaxY())); else state->OnKeyPressed((is_startend_key_down ? STB_TEXTEDIT_K_TEXTEND : STB_TEXTEDIT_K_DOWN) | k_mask); } else if (IsKeyPressedMap(ImGuiKey_PageUp) && is_multiline) { state->OnKeyPressed(STB_TEXTEDIT_K_PGUP | k_mask); scroll_y -= row_count_per_page * g.FontSize; } else if (IsKeyPressedMap(ImGuiKey_PageDown) && is_multiline) { state->OnKeyPressed(STB_TEXTEDIT_K_PGDOWN | k_mask); scroll_y += row_count_per_page * g.FontSize; } else if (IsKeyPressedMap(ImGuiKey_Home)) { state->OnKeyPressed(io.KeyCtrl ? STB_TEXTEDIT_K_TEXTSTART | k_mask : STB_TEXTEDIT_K_LINESTART | k_mask); } else if (IsKeyPressedMap(ImGuiKey_End)) { state->OnKeyPressed(io.KeyCtrl ? STB_TEXTEDIT_K_TEXTEND | k_mask : STB_TEXTEDIT_K_LINEEND | k_mask); } else if (IsKeyPressedMap(ImGuiKey_Delete) && !is_readonly) { state->OnKeyPressed(STB_TEXTEDIT_K_DELETE | k_mask); } else if (IsKeyPressedMap(ImGuiKey_Backspace) && !is_readonly)
         {
             if (!state->HasSelection())
             {
@@ -4369,11 +4392,13 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             // Vertical scroll
             if (is_multiline)
             {
-                float scroll_y = draw_window->Scroll.y;
+                // Test if cursor is vertically visible
                 if (cursor_offset.y - g.FontSize < scroll_y)
                     scroll_y = ImMax(0.0f, cursor_offset.y - g.FontSize);
                 else if (cursor_offset.y - inner_size.y >= scroll_y)
-                    scroll_y = cursor_offset.y - inner_size.y;
+                    scroll_y = cursor_offset.y - inner_size.y + style.FramePadding.y * 2.0f;
+                const float scroll_max_y = ImMax((text_size.y + style.FramePadding.y * 2.0f) - inner_size.y, 0.0f);
+                scroll_y = ImClamp(scroll_y, 0.0f, scroll_max_y);
                 draw_pos.y += (draw_window->Scroll.y - scroll_y);   // Manipulate cursor pos immediately avoid a frame of lag
                 draw_window->Scroll.y = scroll_y;
             }
@@ -4460,7 +4485,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
 
     if (is_multiline)
     {
-        Dummy(text_size + ImVec2(0.0f, g.FontSize)); // Always add room to scroll an extra line
+        Dummy(text_size);
         EndChild();
         EndGroup();
     }
@@ -7839,7 +7864,7 @@ void ImGui::BeginColumns(const char* str_id, int columns_count, ImGuiColumnsFlag
         float clip_x1 = IM_ROUND(window->Pos.x + GetColumnOffset(n));
         float clip_x2 = IM_ROUND(window->Pos.x + GetColumnOffset(n + 1) - 1.0f);
         column->ClipRect = ImRect(clip_x1, -FLT_MAX, clip_x2, +FLT_MAX);
-        column->ClipRect.ClipWith(window->ClipRect);
+        column->ClipRect.ClipWithFull(window->ClipRect);
     }
 
     if (columns->Count > 1)
