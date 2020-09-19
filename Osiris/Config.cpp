@@ -10,14 +10,14 @@
 #include "Helpers.h"
 
 #ifdef _WIN32
-int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPARAM lParam)
+int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
-    const auto fontName = (const char*)reinterpret_cast<const ENUMLOGFONTEXA*>(lpelfe)->elfFullName;
+    const wchar_t* const fontName = reinterpret_cast<const ENUMLOGFONTEXW*>(lpelfe)->elfFullName;
 
-    if (fontName[0] == '@')
+    if (fontName[0] == L'@')
         return TRUE;
 
-    if (HFONT font = CreateFontA(0, 0, 0, 0,
+    if (HFONT font = CreateFontW(0, 0, 0, 0,
         FW_NORMAL, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -33,8 +33,10 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
         }
         DeleteObject(font);
 
-        if (fontData == GDI_ERROR)
-            reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(fontName);
+        if (fontData == GDI_ERROR) {
+            if (char buff[1024]; WideCharToMultiByte(CP_UTF8, 0, fontName, -1, buff, sizeof(buff), nullptr, nullptr))
+                reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(buff);
+        }
     }
     return TRUE;
 }
@@ -54,12 +56,12 @@ Config::Config(const char* name) noexcept
     misc.clanTag[0] = '\0';
 
 #ifdef _WIN32
-    LOGFONTA logfont;
+    LOGFONTW logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
-    logfont.lfFaceName[0] = '\0';
+    logfont.lfFaceName[0] = L'\0';
 
-    EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+    EnumFontFamiliesExW(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
 #endif
 
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
@@ -397,7 +399,6 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
-    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
@@ -649,6 +650,7 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Fake Item Player Name", m.fakeItemPlayerName);
     read<value_t::object>(j, "Fake Item Skin Name", m.fakeItemName);
     read(j, "Fast plant", m.fastPlant);
+    read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Bomb Damage Indicator", m.bombDamage);
     read(j, "Quick reload", m.quickReload);
@@ -1135,6 +1137,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Fake Item Player Name", fakeItemPlayerName);
     WRITE("Fake Item Skin Name", fakeItemName);
     WRITE("Fast plant", fastPlant);
+    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Bomb Damage Indicator", bombDamage);
     WRITE("Quick reload", quickReload);
