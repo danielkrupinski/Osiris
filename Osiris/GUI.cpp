@@ -3290,7 +3290,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::PopID();
     }
     ImGui::Checkbox("Fast plant", &config->misc.fastPlant);
-    ImGui::Checkbox("Fast Stop", &config->misc.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", config->misc.bombTimer);
     ImGui::Checkbox("Bomb Damage Indicator", &config->misc.bombDamage);
     ImGui::Checkbox("Quick reload", &config->misc.quickReload);

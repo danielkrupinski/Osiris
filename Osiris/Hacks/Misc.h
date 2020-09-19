@@ -56,7 +56,6 @@ namespace Misc
     void showVelocity() noexcept;
     void drawBombDamage() noexcept;
     void playerBlocker(UserCmd* cmd) noexcept;
-    void fastStop(UserCmd*) noexcept;
     void doorSpam(UserCmd* cmd) noexcept;
     void chatSpam() noexcept;
     void pure() noexcept;

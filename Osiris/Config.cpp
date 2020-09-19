@@ -649,7 +649,6 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Fake Item Player Name", m.fakeItemPlayerName);
     read<value_t::object>(j, "Fake Item Skin Name", m.fakeItemName);
     read(j, "Fast plant", m.fastPlant);
-    read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Bomb Damage Indicator", m.bombDamage);
     read(j, "Quick reload", m.quickReload);
@@ -1136,7 +1135,6 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Fake Item Player Name", fakeItemPlayerName);
     WRITE("Fake Item Skin Name", fakeItemName);
     WRITE("Fast plant", fastPlant);
-    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Bomb Damage Indicator", bombDamage);
     WRITE("Quick reload", quickReload);

@@ -327,7 +327,6 @@ public:
         std::string fakeItemPlayerName{ "" };
         std::string fakeItemName{ "" };
         bool fastPlant{ false };
-        bool fastStop{ false };
         bool bombDamage{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
