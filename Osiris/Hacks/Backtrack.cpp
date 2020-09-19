@@ -86,7 +86,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-        auto origin = entity->getAbsOrigin();
+        const auto& origin = entity->getAbsOrigin();
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
