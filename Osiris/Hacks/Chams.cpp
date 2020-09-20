@@ -117,11 +117,11 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Enemies"].materials, health);
 
         if (config->backtrack.enabled) {
-            auto record = &Backtrack::records[player->index()];
-            if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
+            const auto& record = Backtrack::getRecords(player->index());
+            if (record.size() && Backtrack::valid(record.front().simulationTime)) {
                 if (!appliedChams)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record->back().matrix);
+                applyChams(config->chams["Backtrack"].materials, health, record.back().matrix);
                 interfaces->studioRender->forcedMaterialOverride(nullptr);
             }
         }

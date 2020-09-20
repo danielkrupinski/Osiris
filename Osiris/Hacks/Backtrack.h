@@ -19,8 +19,7 @@ namespace Backtrack {
         matrix3x4 matrix[256];
     };
 
-    extern std::array<std::deque<Record>, 65> records;
-
+    const std::deque<Record>& getRecords(std::size_t index) noexcept;
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;

@@ -9,7 +9,7 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-std::array<std::deque<Backtrack::Record>, 65> Backtrack::records;
+static std::array<std::deque<Backtrack::Record>, 65> records;
 
 struct Cvars {
     ConVar* updateRate;
@@ -123,6 +123,11 @@ void Backtrack::run(UserCmd* cmd) noexcept
         memory->setAbsOrigin(bestTarget, record.origin);
         cmd->tickCount = timeToTicks(record.simulationTime + getLerp());
     }
+}
+
+const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
+{
+    return records[index];
 }
 
 float Backtrack::getLerp() noexcept
