@@ -330,6 +330,7 @@ static void from_json(const json& j, Config::Backtrack& b)
     read(j, "Ignore smoke", b.ignoreSmoke);
     read(j, "Recoil based fov", b.recoilBasedFov);
     read(j, "Time limit", b.timeLimit);
+    read(j, "Fake Latency", b.fakeLatency);
 }
 
 static void from_json(const json& j, Config::AntiAim& a)
@@ -386,6 +387,7 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Saturation", c.saturation);
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
+    read(j, "Yellow", c.yellow);
     read(j, "Yellow", c.yellow);
 }
 
@@ -796,6 +798,7 @@ static void to_json(json& j, const Config::Backtrack& o, const Config::Backtrack
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Recoil based fov", recoilBasedFov);
     WRITE("Time limit", timeLimit);
+    WRITE("Fake Latency", fakeLatency);
 }
 
 static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
