@@ -8,10 +8,10 @@
 
 //std::deque<Backtrack::Record> Backtrack::records[65];
   // static Backtrack::Cvars cvars; // From Master, but this breaks code in hooks.cpp line 132 max() function
-//std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 //Backtrack::Cvars Backtrack::cvars;
 
-static std::array<std::deque<Backtrack::Record>, 65> records;
+static std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
+static std::array<std::deque<Backtrack::Record>, 513> records;
 
 struct Cvars {
     ConVar* updateRate;
@@ -27,7 +27,8 @@ static Cvars cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-    if (stage == FrameStage::RENDER_START) {
+    if (stage == FrameStage::RENDER_START)
+    {
         if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
                 record.clear();
@@ -46,7 +47,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
             Record record{ };
             record.origin = entity->getAbsOrigin();
-            record.head = entity->getBonePosition(8);
+            //record.head = entity->getBonePosition(8);
             record.simulationTime = entity->simulationTime();
 
             entity->setupBones(record.matrix, 256, 0x7FF00, memory->globalVars->currenttime);
@@ -78,8 +79,8 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    //Vector bestTargetOrigin{ }; // [1] Not used because the other code contributors before me started using head not origin. It is used in a different form below tho.
-    Vector bestTargetHead{ };
+    Vector bestTargetOrigin{ }; // [1] Not used because the other code contributors before me started using head not origin. It is used in a different form below tho.
+    //Vector bestTargetHead{ };
     int bestRecord{ };
 
     const auto aimPunch = localPlayer->getAimPunch();
@@ -97,13 +98,13 @@ void Backtrack::run(UserCmd* cmd) noexcept
             bestFov = fov;
             bestTarget = entity;
             bestTargetIndex = i;
-            //bestTargetOrigin = origin; // [1]
-            bestTargetHead = head;
+            bestTargetOrigin = origin; // [1]
+            //bestTargetHead = head;
         }
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetHead, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;
@@ -113,7 +114,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
@@ -175,7 +176,10 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 {
     static float lastIncomingSequenceNumber = 0.f;
 
-    if (!config->backtrack.fakeLatency || config->backtrack.timeLimit == 0)
+    if (!config->backtrack.enabled)
+        return;
+
+    if (config->backtrack.timeLimit == 0)
         return;
 
     if (!localPlayer)
