@@ -40,8 +40,6 @@ void SkinChanger::initializeKits() noexcept
     const std::locale original;
     std::locale::global(std::locale{ "en_US.utf8" });
 
-    const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
-  
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
