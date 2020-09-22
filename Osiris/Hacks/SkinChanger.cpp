@@ -388,7 +388,7 @@ static void post_data_update_start(int localHandle) noexcept
 
 static bool hudUpdateRequired{ false };
 
-static constexpr void updateHud() noexcept
+static void updateHud() noexcept
 {
     if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - 0x28) {
         for (int i = 0; i < *(hud_weapons + 0x20); i++)
