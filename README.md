@@ -65,21 +65,20 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
-    * **Rainbow** - change color frequently
-    * **Thickness** - outline thickness
-    * **Alpha** - outline alpha
-    * **Style** - glow style [*0*-*3*]
+    * **Color** - glow color in rgba format
+    * **Style** - glow style { `Default`, `Rim3d`, `Edge`, `Edge Pulse` }
 
 * **Chams** - color player models to improve visibility
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
     * **Enabled** - on / off master switch
     * **Health based** - color is based on player's hp
-    * **Rainbow** - change color frequently
     * **Blinking** - change transparency frequently
-    * **Material** - material applied to model (*Normal, Flat, Animated, Platinum,Glass, Chrome, Crystal, Silver, Gold, Plastic, Glow*)
+    * **Material** - material applied to model { `Normal`, `Flat`, `Animated`, `Platinum`, `Glass`, `Chrome`, `Crystal`, `Silver`, `Gold`, `Plastic`, `Glow` }
     * **Wireframe** - render triangle mesh instead of solid material
-
+    * **Cover** - draw chams material on top of the original material instead of overriding it
+    * **Ignore-Z** - draw material through walls
+    
 * **Esp** - show additional information about players and game world
     
     1. *Allies, Enemies*
