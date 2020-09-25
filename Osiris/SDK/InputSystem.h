@@ -18,7 +18,7 @@ public:
         return VirtualMethod::call<int, 45>(this, virtualKey);
     }
 
-    constexpr auto virtualKeyToString(int virtualKey) noexcept
+    auto virtualKeyToString(int virtualKey) noexcept
     {
         return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
     }
