@@ -78,8 +78,8 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Wireframe** - render triangle mesh instead of solid material
     * **Cover** - draw chams material on top of the original material instead of overriding it
     * **Ignore-Z** - draw material through walls
-    
-* **Esp** - show additional information about players and game world
+
+* **ESP** - show additional information about players and game world
     
     1. *Allies, Enemies*
         * *All, Visible, Occluded*
@@ -133,7 +133,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Hit effect** - show screen effect on enemy hit
     * **Hit marker** - show a cross detail on enemy hit
 
-* **Skin changer** - change weapon skins, knives and stickers
+* **Skin changer** - change knives, gloves, weapon skins and stickers
 
 * **Sound** - modify volume of certain sound effects
     * **Chicken volume** - volume of chicken sounds
@@ -256,6 +256,8 @@ Currently implemented hooking methods are:
 - VmtHook - hook a function directly in a vtable
 - VmtSwap - create a copy of a vtable and swap the pointer on the class instance
 
+Hooking implementation files are located in [Hooks](https://github.com/danielkrupinski/Osiris/tree/master/Osiris/Hooks) directory.
+
 ## Acknowledgments
 
 * [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
@@ -265,7 +267,7 @@ Currently implemented hooking methods are:
 
 > Copyright (c) 2018-2020 Daniel Krupiński
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
 
 ## See also
 - [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
