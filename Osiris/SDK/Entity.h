@@ -87,6 +87,11 @@ public:
         return getWeaponType() == WeaponType::SniperRifle;
     }
 
+    auto isGrenade() noexcept
+    {
+        return getWeaponType() == WeaponType::Grenade;
+    }
+
     auto isFullAuto() noexcept
     {
         const auto weaponData = getWeaponData();
