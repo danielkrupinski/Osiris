@@ -154,6 +154,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
             for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
                 const auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
+                
+                const auto fov = std::hypotf(angle.x, angle.y);
+                if (fov > bestFov)
+                    continue;
 
                 if (!config->aimbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
@@ -161,8 +166,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage, config->aimbot[weaponIndex].friendlyFire)))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
-                auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = bonePosition;
