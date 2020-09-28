@@ -156,7 +156,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 const auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
                 const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 
-                const auto fov = std::hypotf(angle.x, angle.y);
+                const auto fov = std::hypot(angle.x, angle.y);
                 if (fov > bestFov)
                     continue;
 
