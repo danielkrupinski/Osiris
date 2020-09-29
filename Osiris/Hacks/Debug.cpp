@@ -263,35 +263,6 @@ void Debug::AnimStateMonitor() noexcept
                 std::wstring currEyeYaw{ L"Current Eye Yaw: " + std::to_wstring(entity->eyeAngles().y) };
                 std::wstring speed2D{ L"Speed 2D: " + std::to_wstring(AnimState->speed_2d) };
                 std::wstring currLBYFEETDelta{ L"LBY/Feet Delta: " + std::to_wstring(AnimState->m_flGoalFeetYaw - entity->eyeAngles().y) };
-                    
-
-
-
-                const auto record = &Backtrack::records[entity->index()];
-                    if(record && record->size() && Backtrack::valid(record->front().simulationTime)){
-                        int lastAct = record->back().PreviousAct;
-                        if (lastAct) {
-                            std::wstring PrevString;
-                            if (lastAct == -399 || lastAct == -400 || lastAct == -1 || lastAct > 1000) {
-                                PrevString = L"INVALID ";
-                            }
-                            else {
-                                PrevString = animact.getEnum_Array()[lastAct];
-                            }
-
-                            AnimStateStr = (PrevString + L" " + std::to_wstring(lastAct));
-                            std::wstring prevstate{ L"Previous AnimState: " + AnimStateStr };
-
-                            strings.push_back(prevstate);
-                        }
-
-                    }
-            
-                strings.push_back(currLBYFEETDelta);
-                strings.push_back(currPitch);
-                strings.push_back(currLBY);
-                strings.push_back(currEyeYaw);
-                strings.push_back(speed2D);
             }
 
             if (config->debug.ResolverRecords) {
@@ -395,45 +366,6 @@ void Debug::BacktrackMonitor() noexcept {
 
     if (!entity && !(config->debug.backtrack.findactive))
         return;
-
-    std::vector<std::vector<std::wstring>> strings_vecs;
-    auto record = &Backtrack::records[entity->index()];
-
-    if (!(record && record->size() && Backtrack::valid(record->front().simulationTime)) && !(config->debug.backtrack.findactive))
-        return;
-
-    if (config->debug.backtrack.newesttick) {
-        strings_vecs.push_back(formatRecord(record->front(), entity, 0));
-    }
-    else if (config->debug.backtrack.findactive) {
-        for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
-            record = &Backtrack::records[i];
-            if (!(record && record->size() && Backtrack::valid(record->at(1).simulationTime)))
-                continue;
-            if (record->at(1).wasTargeted)
-                strings_vecs.push_back(formatRecord(record->front(), interfaces->entityList->getEntity(i), 0));
-                break;
-            if (i == interfaces->engine->getMaxClients())
-                return;
-        }
-    }
-    else {
-        int i = 0;
-        for (auto rec : *record) {
-            strings_vecs.push_back(formatRecord(rec, entity, i));
-            i++;
-        }
-        
-    }
-
-    interfaces->surface->setTextColor(config->debug.backtrack.color.color);
-
-    for (auto string_vec : strings_vecs) {
-        Draw_Text(string_vec);
-    }
-
-
-
 }
 
 void Debug::DrawDesyncInfo() {

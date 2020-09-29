@@ -3,6 +3,8 @@
 
 #include "../SDK/Entity.h"
 #include "../SDK/UserCmd.h"
+#include "../SDK/GlobalVars.h"
+#include "../SDK/NetworkChannel.h"
 
 bool canShift(int ticks, bool shiftAnyways = false)
 {
@@ -26,7 +28,7 @@ bool canShift(int ticks, bool shiftAnyways = false)
     if (!activeWeapon || !activeWeapon->clip())// || activeWeapon->throwing()) commented this bc it needs UserCmd* and im too lazy 2 fix
         return false;
 
-    if (activeWeapon->isKnife() || activeWeapon->isNade() || activeWeapon->isShotgun()
+    if (activeWeapon->isKnife() || activeWeapon->isGrenade() || activeWeapon->isShotgun()
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Awp
         || activeWeapon->itemDefinitionIndex2() == WeaponId::Ssg08
@@ -53,6 +55,7 @@ void Tickbase::shiftTicks(int ticks, UserCmd* cmd, bool shiftAnyways) noexcept /
 {
     if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled)
         return;
+
     if (!canShift(ticks, shiftAnyways))
         return;
 
@@ -99,7 +102,7 @@ void Tickbase::run(UserCmd* cmd, bool& sendPacket) noexcept
     recalculateTicks();
 
     tick->ticks = cmd->tickCount;
-    if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled || (config->antiAim.general.fakeWalk.keyToggled && config->antiAim.general.fakeWalk.enabled))
+    if (!localPlayer || !localPlayer->isAlive() || !config->ragebotExtra.enabled)
         return;
 
     auto ticks = 0;
@@ -119,7 +122,7 @@ void Tickbase::run(UserCmd* cmd, bool& sendPacket) noexcept
     if (config->ragebotExtra.doubletap && cmd->buttons & (UserCmd::IN_ATTACK) && config->ragebotExtra.doubleTapToggled)
         shiftTicks(ticks, cmd);
 
-    if (tick->tickshift <= 0 && tick->ticksAllowedForProcessing < (tick->maxUsercmdProcessticks - tick->fakeLag) && !config->misc.fakeDucking && (cmd->commandNumber - lastShift) >= tick->maxUsercmdProcessticks && config->ragebotExtra.doubleTapToggled) //&& ((config->misc.fakeLagMode != 0 && config->misc.fakeLagTicks <= (tick->maxUsercmdProcessticks - ticks)) || !config->misc.fakeLagMode))
+    if (tick->tickshift <= 0 && tick->ticksAllowedForProcessing < (tick->maxUsercmdProcessticks - tick->fakeLag) && (cmd->commandNumber - lastShift) >= tick->maxUsercmdProcessticks && config->ragebotExtra.doubleTapToggled) //&& ((config->misc.fakeLagMode != 0 && config->misc.fakeLagTicks <= (tick->maxUsercmdProcessticks - ticks)) || !config->misc.fakeLagMode))
     {
         sendPacket = true;
         cmd->tickCount = INT_MAX; //recharge
@@ -127,4 +130,4 @@ void Tickbase::run(UserCmd* cmd, bool& sendPacket) noexcept
     }
 
     recalculateTicks();
-}
+} 

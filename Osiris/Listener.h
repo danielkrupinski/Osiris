@@ -18,4 +18,4 @@ public:
 	void remove();
 };
 
-extern HookListener hookListener; #pragma once
+extern HookListener hookListener;

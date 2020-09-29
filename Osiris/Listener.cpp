@@ -11,7 +11,7 @@ void __fastcall DoExtraBoneProcessing(Entity* player, uint32_t, StudioHdr* hdr, 
 	void* bone_list, void* context)
 {
 	const auto e = reinterpret_cast<Entity*> (player);;
-	auto state = e->getAnimstate2();
+	auto state = e->getAnimstate();
 	const auto val = reinterpret_cast<float*> (reinterpret_cast<uintptr_t> (state) + 292);
 	const auto backup = *val;
 	auto backup_onground = false;

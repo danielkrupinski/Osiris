@@ -66,6 +66,7 @@
     <ClCompile Include="SDK\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Beams.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />

@@ -250,21 +250,18 @@ public:
 	 VIRTUAL_METHOD(void, UpdateClientSideAnimation, 223, (), (this))
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
-    auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
-    auto isGrenade() noexcept { return getWeaponType() == WeaponType::Grenade; }
 
-
-    constexpr auto isSniperRifle() noexcept
+    auto isSniperRifle() noexcept
     {
         return getWeaponType() == WeaponType::SniperRifle;
     }
 
-    constexpr auto isShotgun() noexcept
+    auto isShotgun() noexcept
     {
         return getWeaponType() == WeaponType::Shotgun;
     }
 
-    constexpr auto isFullAuto() noexcept
+    auto isFullAuto() noexcept
     {
         const auto weaponData = getWeaponData();
         if (weaponData)
@@ -273,18 +270,17 @@ public:
     }
 
 
-	constexpr auto isKnife() noexcept
+	auto isKnife() noexcept
 	{
 		return getWeaponType() == WeaponType::Knife;
 	}
 
-	constexpr auto isNade() noexcept
+	auto isNade() noexcept
 	{
 		return getWeaponType() == WeaponType::Grenade;
 	}
 
-
-    constexpr auto isGrenade() noexcept
+    auto isGrenade() noexcept
     {
         return getWeaponType() == WeaponType::Grenade;
     }
@@ -299,7 +295,7 @@ public:
 	    return (uint32_t*)((uintptr_t)this + 0xF0);
 	}
 
-    constexpr auto requiresRecoilControl() noexcept
+    auto requiresRecoilControl() noexcept
     {
         const auto weaponData = getWeaponData();
         if (weaponData)

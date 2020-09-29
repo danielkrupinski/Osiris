@@ -508,31 +508,16 @@ public:
         bool prepareRevolver{ false };
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
-        char clanTag[16];
-        int edgejumpkey{ 0 };
-        int slowwalkKey{ 0 };
-        ColorToggleThickness noscopeCrosshair;
-        ColorToggleThickness recoilCrosshair;
-        ColorToggle spectatorList;
-        ColorToggle watermark;
-
         float aspectratio{ 0 };
-        bool killMessage{ false };
-        std::string killMessageString{ "Gotcha!" };
-        bool nameStealer{ false };
-        bool disablePanoramablur{ false };
+        std::string killMessageString{ "Osiris with PR#2074" };
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
-        bool fastPlant{ false };
         ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
-        bool quickReload{ false };
-        bool prepareRevolver{ false };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
          int fakeLagMode{ 0 };
         int fakeLagTicks{ 0 };
         int fakeLagKey{ 0 };
-    	bool oppositeHandKnife {false};
         const char* fakeLagFlags[4] = {
             "While Shooting",
             "While Standing",
@@ -546,10 +531,7 @@ public:
             false
         };
         int quickHealthshotKey{ 0 };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
-        bool fakePrime{ false };
     	 bool fakeDuck{ false };
         int fakeDuckKey{ 0 };
         bool fakeDucking{ false };

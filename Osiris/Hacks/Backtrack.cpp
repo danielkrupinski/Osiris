@@ -9,10 +9,9 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-static std::deque<Backtrack::Record> Backtrack::records[65];
-std::deque<Backtrack::Record> Backtrack::invalid_record[2];
 
-std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
+static std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
+static std::array<std::deque<Backtrack::Record>, 513> records;
 Backtrack::Cvars Backtrack::cvars;
 
 
@@ -30,15 +29,13 @@ static Cvars cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
-    if (stage == FrameStage::RENDER_START) {
+    if (stage == FrameStage::RENDER_START) 
+    {
 
         Record record_inv{};
         Record invalid{};
         invalid.invalid = true;
         invalid.wasTargeted = false;
-        invalid_record[0].push_front(invalid);
-        invalid_record[0].push_front(invalid);
-
 
         if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
@@ -110,10 +107,10 @@ void Backtrack::run(UserCmd* cmd) noexcept
     if (!config->backtrack.enabled)
         return;
 
-    if (!(cmd->buttons & UserCmd::IN_ATTACK))
+    if (!localPlayer)
 		return;
 
-    if (!localPlayer)
+    if (!(cmd->buttons & UserCmd::IN_ATTACK))
         return;
 
 	if (config->backtrack.onKey) {
@@ -140,11 +137,10 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
         auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
-            || !entity->isOtherEnemy(localPlayer.get()))
+		if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-      const auto origin = entity->getAbsOrigin();
+		const auto& origin = entity->getAbsOrigin();
     	auto head = entity->getBonePosition(8);
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
@@ -184,6 +180,20 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 }
 
+const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
+{
+    return records[index];
+}
+
+
+float Backtrack::getExtraTicks() noexcept
+{
+    auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return 0.f;
+    return std::clamp(network->getLatency(1) - network->getLatency(0), 0.f, cvars.maxUnlag->getFloat());
+}
+
 void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noexcept
 {
     for (auto& sequence : sequences)
@@ -200,10 +210,11 @@ void Backtrack::AddLatencyToNetwork(NetworkChannel* network, float latency) noex
 void Backtrack::UpdateIncomingSequences(bool reset) noexcept
 {
     static float lastIncomingSequenceNumber = 0.f;
-    int timeLimit = config->backtrack.timeLimit; if (timeLimit <= 200) { timeLimit = 0; }
-    else { timeLimit = 200; }
 
-    if (!config->backtrack.fakeLatency || config->backtrack.timeLimit == 0)
+    if (!config->backtrack.enabled)
+        return;
+
+    if (config->backtrack.timeLimit == 0)
         return;
 
     if (!localPlayer)
@@ -228,10 +239,7 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
         sequences.pop_back();
 }
 
-const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
-{
-    return records[index];
-}
+
 
 float Backtrack::getLerp() noexcept
 {
