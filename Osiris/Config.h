@@ -60,6 +60,15 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
 
+    struct {
+        bool enabled{ false };
+        bool doubletap{ false };
+        int doubletapSpeed{ 0 };
+        int doubleTapKey{ 0 };
+        bool doubleTapToggled{ false };
+        int doubleTapKeyMode{ 0 };
+    } ragebotExtra;
+
     struct Triggerbot {
         bool enabled = false;
         bool friendlyFire = false;

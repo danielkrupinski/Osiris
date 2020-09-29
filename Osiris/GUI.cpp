@@ -1322,6 +1322,22 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Extra", &config->ragebotExtra.enabled);
+    if (config->ragebotExtra.enabled)
+    {
+        ImGui::Text("Exploit");
+        ImGui::Checkbox("Doubletap", &config->ragebotExtra.doubletap);
+        if (config->ragebotExtra.doubletap)
+        {
+            ImGui::Combo("Doubletap Speed", &config->ragebotExtra.doubletapSpeed, "Instant\0Fast\0Accurate\0");
+            ImGui::SameLine();
+            hotkey(config->ragebotExtra.doubleTapKey);
+            ImGui::Combo("Doubletap Key Mode", &config->ragebotExtra.doubleTapKeyMode, "Hold\0Toggle\0");
+        }
+    }
+    if (!contentOnly)
+        ImGui::End();
+
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 

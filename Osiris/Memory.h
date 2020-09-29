@@ -19,6 +19,7 @@ class MoveData;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;
+class ClientState;
 
 struct ActiveChannels;
 struct Channel;
@@ -38,6 +39,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    ClientState* clientState;
 
     bool* disablePostProcessing;
 
@@ -77,6 +79,8 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    void* WriteUsercmdDeltaToBufferReturn;
+    uintptr_t WriteUsercmd;
 private:
     static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {
