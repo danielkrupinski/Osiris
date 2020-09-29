@@ -6,23 +6,33 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
-#include "Misc.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Surface.h"
-#include "../SDK/GlobalVars.h"
-#include "../SDK/NetworkChannel.h"
-#include "../SDK/WeaponData.h"
+
 #include "EnginePrediction.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/Entity.h"
-#include "../SDK/UserCmd.h"
-#include "../SDK/GameEvent.h"
-#include "../SDK/FrameStage.h"
+#include "Misc.h"
+
 #include "../SDK/Client.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Entity.h"
+#include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
-#include "../SDK/WeaponSystem.h"
+#include "../SDK/Localize.h"
+#include "../SDK/LocalPlayer.h"
+#include "../SDK/NetworkChannel.h"
+#include "../SDK/Panorama.h"
+#include "../SDK/Surface.h"
+#include "../SDK/UserCmd.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/WeaponSystem.h"
+
 #include "../GUI.h"
+#include "../Helpers.h"
+#include "../GameData.h"
+
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -76,32 +86,38 @@ void Misc::inverseRagdollGravity() noexcept
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
+    static std::string clanTag;
+
+    if (tagChanged) {
+        clanTag = config->misc.clanTag;
+        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
+            clanTag.push_back(' ');
+        return;
+    }
+    
+    static auto lastTime = 0.0f;
+
     if (config->misc.clocktag) {
+        if (memory->globalVars->realtime - lastTime < 1.0f)
+            return;
+
         const auto time = std::time(nullptr);
         const auto localTime = std::localtime(&time);
         char s[11];
         s[0] = '\0';
         sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+        lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
-    }
-
-    if (config->misc.customClanTag) {
-        static std::string clanTag;
-
-        if (tagChanged) {
-            clanTag = config->misc.clanTag;
-            if (!isblank(clanTag.front()) && !isblank(clanTag.back()))
-                clanTag.push_back(' ');
-        }
-
-        static auto lastTime = 0.0f;
+    } else if (config->misc.customClanTag) {
         if (memory->globalVars->realtime - lastTime < 0.6f)
             return;
+
+        if (config->misc.animatedClanTag && !clanTag.empty()) {
+            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
+            if (offset != -1)
+                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+        }
         lastTime = memory->globalVars->realtime;
-
-        if (config->misc.animatedClanTag && !clanTag.empty())
-            std::rotate(clanTag.begin(), clanTag.begin() + 1, clanTag.end());
-
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
     }
 }
@@ -117,7 +133,7 @@ void Misc::spectatorList() noexcept
     interfaces->surface->setTextFont(Surface::font);
 
     if (config->misc.spectatorList.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.spectatorList.rainbowSpeed));
+        interfaces->surface->setTextColor(rainbowColor(config->misc.spectatorList.rainbowSpeed));
     else
         interfaces->surface->setTextColor(config->misc.spectatorList.color);
 
@@ -144,16 +160,79 @@ void Misc::spectatorList() noexcept
     }
 }
 
-void Misc::sniperCrosshair() noexcept
+static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, float thickness) noexcept
 {
-    static auto showSpread = interfaces->cvar->findVar("weapon_debug_spread_show");
-    showSpread->setValue(config->misc.sniperCrosshair && localPlayer && !localPlayer->isScoped() ? 3 : 0);
+    drawList->Flags &= ~ImDrawListFlags_AntiAliasedLines;
+
+    // dot
+    drawList->AddRectFilled(pos - ImVec2{ 1, 1 }, pos + ImVec2{ 2, 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(pos, pos + ImVec2{ 1, 1 }, color);
+
+    // left
+    drawList->AddRectFilled(ImVec2{ pos.x - 11, pos.y - 1 }, ImVec2{ pos.x - 3, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x - 10, pos.y }, ImVec2{ pos.x - 4, pos.y + 1 }, color);
+
+    // right
+    drawList->AddRectFilled(ImVec2{ pos.x + 4, pos.y - 1 }, ImVec2{ pos.x + 12, pos.y + 2 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x + 5, pos.y }, ImVec2{ pos.x + 11, pos.y + 1 }, color);
+
+    // top (left with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y - 11 }, ImVec2{ pos.x + 2, pos.y - 3 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y - 10 }, ImVec2{ pos.x + 1, pos.y - 4 }, color);
+
+    // bottom (right with swapped x/y offsets)
+    drawList->AddRectFilled(ImVec2{ pos.x - 1, pos.y + 4 }, ImVec2{ pos.x + 2, pos.y + 12 }, color & IM_COL32_A_MASK);
+    drawList->AddRectFilled(ImVec2{ pos.x, pos.y + 5 }, ImVec2{ pos.x + 1, pos.y + 11 }, color);
+
+    drawList->Flags |= ImDrawListFlags_AntiAliasedLines;
 }
 
-void Misc::recoilCrosshair() noexcept
+void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
 {
-    static auto recoilCrosshair = interfaces->cvar->findVar("cl_crosshair_recoil");
-    recoilCrosshair->setValue(config->misc.recoilCrosshair ? 1 : 0);
+    if (!config->misc.noscopeCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& local = GameData::local();
+
+    if (!local.exists || !local.alive || !local.noScope)
+        return;
+
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
+}
+
+
+static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    out = ImFloor(out);
+    return true;
+}
+
+void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
+{
+    if (!config->misc.recoilCrosshair.enabled)
+        return;
+
+    GameData::Lock lock;
+    const auto& localPlayerData = GameData::local();
+
+    if (!localPlayerData.exists || !localPlayerData.alive)
+        return;
+
+    if (!localPlayerData.shooting)
+        return;
+
+    if (ImVec2 pos; worldToScreen(localPlayerData.aimPunch, pos))
+        drawCrosshair(drawList, pos, Helpers::calculateColor(config->misc.recoilCrosshair), config->misc.recoilCrosshair.thickness);
 }
 
 void Misc::watermark() noexcept
@@ -162,7 +241,7 @@ void Misc::watermark() noexcept
         interfaces->surface->setTextFont(Surface::font);
 
         if (config->misc.watermark.rainbow)
-            interfaces->surface->setTextColor(rainbowColor(memory->globalVars->realtime, config->misc.watermark.rainbowSpeed));
+            interfaces->surface->setTextColor(rainbowColor(config->misc.watermark.rainbowSpeed));
         else
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
@@ -172,7 +251,7 @@ void Misc::watermark() noexcept
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
-        std::wstring fps{ L"FPS: " + std::to_wstring(static_cast<int>(1 / frameRate)) };
+        std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
         const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
         interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
         interfaces->surface->printText(fps.c_str());
@@ -209,31 +288,59 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
 
 void Misc::fastPlant(UserCmd* cmd) noexcept
 {
-    if (config->misc.fastPlant) {
-        static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
+    if (!config->misc.fastPlant)
+        return;
 
-        if (plantAnywhere->getInt())
-            return;
+    static auto plantAnywhere = interfaces->cvar->findVar("mp_plant_c4_anywhere");
 
-        if (!localPlayer || !localPlayer->isAlive() || localPlayer->inBombZone())
-            return;
+    if (plantAnywhere->getInt())
+        return;
 
-        const auto activeWeapon = localPlayer->getActiveWeapon();
-        if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
-            return;
+    if (!localPlayer || !localPlayer->isAlive() || (localPlayer->inBombZone() && localPlayer->flags() & 1))
+        return;
 
-        cmd->buttons &= ~UserCmd::IN_ATTACK;
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon || activeWeapon->getClientClass()->classId != ClassId::C4)
+        return;
 
-        constexpr float doorRange{ 200.0f };
-        Vector viewAngles{ cos(degreesToRadians(cmd->viewangles.x)) * cos(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                           cos(degreesToRadians(cmd->viewangles.x)) * sin(degreesToRadians(cmd->viewangles.y)) * doorRange,
-                          -sin(degreesToRadians(cmd->viewangles.x)) * doorRange };
-        Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), localPlayer->getEyePosition() + viewAngles }, 0x46004009, localPlayer.get(), trace);
+    cmd->buttons &= ~UserCmd::IN_ATTACK;
 
-        if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
-            cmd->buttons &= ~UserCmd::IN_USE;
-    }
+    constexpr auto doorRange = 200.0f;
+
+    Trace trace;
+    const auto startPos = localPlayer->getEyePosition();
+    const auto endPos = startPos + Vector::fromAngle(cmd->viewangles) * doorRange;
+    interfaces->engineTrace->traceRay({ startPos, endPos }, 0x46004009, localPlayer.get(), trace);
+
+    if (!trace.entity || trace.entity->getClientClass()->classId != ClassId::PropDoorRotating)
+        cmd->buttons &= ~UserCmd::IN_USE;
+}
+
+void Misc::fastStop(UserCmd* cmd) noexcept
+{
+    if (!config->misc.fastStop)
+        return;
+
+    if (!localPlayer || !localPlayer->isAlive())
+        return;
+
+    if (localPlayer->moveType() == MoveType::NOCLIP || localPlayer->moveType() == MoveType::LADDER || !(localPlayer->flags() & 1) || cmd->buttons & UserCmd::IN_JUMP)
+        return;
+
+    if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT | UserCmd::IN_FORWARD | UserCmd::IN_BACK))
+        return;
+    
+    const auto velocity = localPlayer->velocity();
+    const auto speed = velocity.length2D();
+    if (speed < 15.0f)
+        return;
+    
+    Vector direction = velocity.toAngle();
+    direction.y = cmd->viewangles.y - direction.y;
+
+    const auto negatedDirection = Vector::fromAngle(direction) * -speed;
+    cmd->forwardmove = negatedDirection.x;
+    cmd->sidemove = negatedDirection.y;
 }
 
 void Misc::drawBombTimer() noexcept
@@ -261,7 +368,7 @@ void Misc::drawBombTimer() noexcept
             interfaces->surface->setDrawColor(50, 50, 50);
             interfaces->surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
             if (config->misc.bombTimer.rainbow)
-                interfaces->surface->setDrawColor(rainbowColor(memory->globalVars->realtime, config->misc.bombTimer.rainbowSpeed));
+                interfaces->surface->setDrawColor(rainbowColor(config->misc.bombTimer.rainbowSpeed));
             else
                 interfaces->surface->setDrawColor(config->misc.bombTimer.color);
 
@@ -447,7 +554,7 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
     static bool inProgress{ false };
 
-    if (GetAsyncKeyState(config->misc.quickHealthshotKey))
+    if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
         inProgress = true;
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
@@ -670,27 +777,15 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
+                    auto& purchase = purchaseDetails[player->getPlayerName()];
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
-                        purchaseDetails[player->getPlayerName(true)].second += weaponInfo->price;
+                        purchase.second += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
+                    const std::string weapon = interfaces->localize->findAsUTF8(definition->getItemBaseName());
+                    ++purchaseTotal[weapon];
+                    purchase.first.push_back(weapon);
                 }
-                std::string weapon = event->getString("weapon");
-
-                if (weapon.starts_with("weapon_"))
-                    weapon.erase(0, 7);
-                else if (weapon.starts_with("item_"))
-                    weapon.erase(0, 5);
-
-                if (weapon.starts_with("smoke"))
-                    weapon = "smoke";
-                else if (weapon.starts_with("m4a1_s"))
-                    weapon = "m4a1_s";
-                else if (weapon.starts_with("usp_s"))
-                    weapon = "usp_s";
-
-                purchaseDetails[player->getPlayerName(true)].first.push_back(weapon);
-                ++purchaseTotal[weapon];
             }
             break;
         }
@@ -720,7 +815,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
             windowFlags |= ImGuiWindowFlags_NoInputs;
         if (config->misc.purchaseList.noTitleBar)
             windowFlags |= ImGuiWindowFlags_NoTitleBar;
-        
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
         ImGui::Begin("Purchases", nullptr, windowFlags);
         ImGui::PopStyleVar();
@@ -746,5 +841,131 @@ void Misc::purchaseList(GameEvent* event) noexcept
             }
         }
         ImGui::End();
+    }
+}
+
+void Misc::oppositeHandKnife(FrameStage stage) noexcept
+{
+    if (!config->misc.oppositeHandKnife)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static const auto cl_righthand = interfaces->cvar->findVar("cl_righthand");
+    static bool original;
+
+    if (stage == FrameStage::RENDER_START) {
+        original = cl_righthand->getInt();
+
+        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
+            if (const auto classId = activeWeapon->getClientClass()->classId; classId == ClassId::Knife || classId == ClassId::KnifeGG)
+                cl_righthand->setValue(!original);
+        }
+    } else {
+        cl_righthand->setValue(original);
+    }
+}
+
+static std::vector<std::uint64_t> reportedPlayers;
+static int reportbotRound;
+
+void Misc::runReportbot() noexcept
+{
+    if (!config->misc.reportbot.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    static auto lastReportTime = 0.0f;
+
+    if (lastReportTime + config->misc.reportbot.delay > memory->globalVars->realtime)
+        return;
+
+    if (reportbotRound >= config->misc.reportbot.rounds)
+        return;
+
+    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
+        const auto entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || entity == localPlayer.get())
+            continue;
+
+        if (config->misc.reportbot.target != 2 && (entity->isOtherEnemy(localPlayer.get()) ? config->misc.reportbot.target != 0 : config->misc.reportbot.target != 1))
+            continue;
+
+        PlayerInfo playerInfo;
+        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
+            continue;
+
+        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+            continue;
+
+        std::string report;
+
+        if (config->misc.reportbot.textAbuse)
+            report += "textabuse,";
+        if (config->misc.reportbot.griefing)
+            report += "grief,";
+        if (config->misc.reportbot.wallhack)
+            report += "wallhack,";
+        if (config->misc.reportbot.aimbot)
+            report += "aimbot,";
+        if (config->misc.reportbot.other)
+            report += "speedhack,";
+
+        if (!report.empty()) {
+            memory->submitReport(std::to_string(playerInfo.xuid).c_str(), report.c_str());
+            lastReportTime = memory->globalVars->realtime;
+            reportedPlayers.push_back(playerInfo.xuid);
+        }
+        return;
+    }
+
+    reportedPlayers.clear();
+    ++reportbotRound;
+}
+
+void Misc::resetReportbot() noexcept
+{
+    reportbotRound = 0;
+    reportedPlayers.clear();
+}
+
+void Misc::preserveKillfeed(bool roundStart) noexcept
+{
+    if (!config->misc.preserveKillfeed.enabled)
+        return;
+
+    static auto nextUpdate = 0.0f;
+
+    if (roundStart) {
+        nextUpdate = memory->globalVars->realtime + 10.0f;
+        return;
+    }
+
+    if (nextUpdate > memory->globalVars->realtime)
+        return;
+
+    nextUpdate = memory->globalVars->realtime + 2.0f;
+
+    const auto deathNotice = memory->findHudElement(memory->hud, "CCSGO_HudDeathNotice");
+    if (!deathNotice)
+        return;
+
+    const auto deathNoticePanel = (*(UIPanel**)(*(deathNotice - 5 + 22) + 4));
+    const auto childPanelCount = deathNoticePanel->getChildCount();
+
+    for (int i = 0; i < childPanelCount; ++i) {
+        const auto child = deathNoticePanel->getChild(i);
+        if (!child)
+            continue;
+
+        if (child->hasClass("DeathNotice_Killer") && (!config->misc.preserveKillfeed.onlyHeadshots || child->hasClass("DeathNoticeHeadShot")))
+            child->setAttributeFloat("SpawnTime", memory->globalVars->currenttime);
     }
 }

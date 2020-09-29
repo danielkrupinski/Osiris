@@ -1,5 +1,6 @@
 #pragma once
 
+#include "UtlVector.h"
 #include "VirtualMethod.h"
 
 class GameEvent {
@@ -16,6 +17,16 @@ public:
     virtual ~GameEventListener() {}
     virtual void fireGameEvent(GameEvent* event) = 0;
     virtual int getEventDebugId() { return 42; }
+};
+
+class KeyValues;
+
+class GameEventDescriptor {
+public:
+    int	eventid;
+    int elementIndex;
+    KeyValues* keys;
+    UtlVector<void*> listeners;
 };
 
 class GameEventManager {

@@ -4,8 +4,22 @@
 #include <Windows.h>
 #include <d3d9types.h>
 
+#include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
+
+struct Matrix4x4 {
+    union {
+        struct {
+            float _11, _12, _13, _14;
+            float _21, _22, _23, _24;
+            float _31, _32, _33, _34;
+            float _41, _42, _43, _44;
+
+        };
+        float m[4][4];
+    };
+};
 
 struct PlayerInfo {
     std::uint64_t version;
@@ -24,8 +38,13 @@ struct PlayerInfo {
     bool fakeplayer;
     bool hltv;
     int customfiles[4];
-    unsigned char filesdownloaded;
-    int entityIndex;
+    unsigned char filesDownloaded;
+};
+
+struct DemoPlaybackParameters {
+    PAD(16)
+    bool anonymousPlayerIdentity;
+    PAD(23)
 };
 
 class NetworkChannel;
@@ -42,6 +61,13 @@ public:
     VIRTUAL_METHOD(void*, getBSPTreeQuery, 43, (), (this))
     VIRTUAL_METHOD(const char*, getLevelName, 53, (), (this))
     VIRTUAL_METHOD(NetworkChannel*, getNetworkChannel, 78, (), (this))
-    VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd), (this, cmd, false))
-    VIRTUAL_METHOD(const D3DMATRIX&, worldToScreenMatrix, 37, (), (this))
+    VIRTUAL_METHOD(void, clientCmdUnrestricted, 114, (const char* cmd, bool fromConsoleOrKeybind = false), (this, cmd, fromConsoleOrKeybind))
+    VIRTUAL_METHOD(const Matrix4x4&, worldToScreenMatrix, 37, (), (this))
+
+    auto getViewAngles() noexcept
+    {
+        Vector ang;
+        getViewAngles(ang);
+        return ang;
+    }
 };

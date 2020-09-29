@@ -12,7 +12,7 @@
 class Config {
 public:
     explicit Config(const char*) noexcept;
-    void load(size_t) noexcept;
+    void load(size_t, bool incremental) noexcept;
     void save(size_t) const noexcept;
     void add(const char*) noexcept;
     void remove(size_t) noexcept;
@@ -26,11 +26,11 @@ public:
     }
 
     struct Color {
-        float color[3]{ 1.0f, 1.0f, 1.0f };
+        std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
         bool rainbow{ false };
         float rainbowSpeed{ 0.6f };
     };
-    
+
     struct ColorToggle : public Color {
         bool enabled{ false };
     };
@@ -76,85 +76,61 @@ public:
     };
     std::array<Triggerbot, 40> triggerbot;
 
-    struct {
+    struct Backtrack {
         bool enabled{ false };
         bool ignoreSmoke{ false };
         bool recoilBasedFov{ false };
         int timeLimit{ 200 };
     } backtrack;
 
-    struct {
+    struct AntiAim {
         bool enabled{ false };
         bool pitch{ false };
         bool yaw{ false };
         float pitchAngle{ 0.0f };
     } antiAim;
 
-    struct Glow {
+    struct Glow : ColorA {
         bool enabled{ false };
         bool healthBased{ false };
-        float thickness{ 1.0f };
-        float alpha{ 1.0f };
         int style{ 0 };
-        Color color;
     };
     std::array<Glow, 21> glow;
 
     struct Chams {
-        struct Material {
+        struct Material : ColorA {
             bool enabled = false;
             bool healthBased = false;
             bool blinking = false;
             bool wireframe = false;
-            Color color;
+            bool cover = false;
+            bool ignorez = false;
             int material = 0;
-            float alpha = 1.0f;
         };
-        std::array<Material, 2> materials;
+        std::array<Material, 7> materials;
     };
 
-    std::array<Chams, 18> chams;
+    std::unordered_map<std::string, Chams> chams;
 
-    struct Esp {
-        struct Shared {
-            bool enabled{ false };
-            int font{ 0x1d };
-            ColorToggle snaplines;
-            ColorToggle box;
-            int boxType{ 0 };
-            ColorToggle name;
-            ColorToggle ammo;
-            ColorToggle outline{ 0.0f, 0.0f, 0.0f };
-            ColorToggle distance;
-            float maxDistance{ 0.0f };
-        };
-       
-        struct Player : public Shared {
-            ColorToggle eyeTraces;
-            ColorToggle health;
-            ColorToggle healthBar;
-            ColorToggle armor;
-            ColorToggle armorBar;
-            ColorToggle money;
-            ColorToggle headDot;
-            ColorToggle activeWeapon;
-            int hpside{ 0 };
-            int armorside{ 0 };
-            bool deadesp { false };
-        };
+    struct StreamProofESP {
+        std::unordered_map<std::string, Player> allies;
+        std::unordered_map<std::string, Player> enemies;
+        std::unordered_map<std::string, Weapon> weapons;
+        std::unordered_map<std::string, Projectile> projectiles;
+        std::unordered_map<std::string, Shared> lootCrates;
+        std::unordered_map<std::string, Shared> otherEntities;
+    } streamProofESP;
 
-        struct Weapon : public Shared { } weapon;
+    struct Font {
+        ImFont* tiny;
+        ImFont* medium;
+        ImFont* big;
+    };
 
-        struct Projectile : public Shared { };
-        std::array<Projectile, 9> projectiles;
+    std::vector<std::string> systemFonts{ "Default" };
+    std::unordered_map<std::string, Font> fonts;
 
-        struct DangerZone : public Shared { };
-        std::array<DangerZone, 18> dangerZone;
-
-        std::array<Player, 6> players;
-    } esp;
-
-    struct {
+    struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
         bool noFog{ false };
@@ -192,7 +168,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
 
-        struct {
+        struct ColorCorrection {
             bool enabled = false;
             float blue = 0.0f;
             float red = 0.0f;
@@ -206,7 +182,7 @@ public:
 
     std::array<item_setting, 36> skinChanger;
 
-    struct {
+    struct Sound {
         int chickenVolume{ 100 };
 
         struct Player {
@@ -219,28 +195,23 @@ public:
         std::array<Player, 3> players;
     } sound;
 
-    struct {
+    struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
 
-    struct {
+    struct Misc {
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };
         bool clocktag{ false };
-        std::string clanTag;
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };
-        int edgejumpkey{ 0 };
         bool slowwalk{ false };
-        int slowwalkKey{ 0 };
-        bool sniperCrosshair{ false };
-        bool recoilCrosshair{ false };
         bool autoPistol{ false };
         bool autoReload{ false };
         bool autoAccept{ false };
@@ -248,50 +219,62 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
-        ColorToggle spectatorList;
-        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
-        float aspectratio{ 0 };
-        bool killMessage{ false };
-        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
-        int banColor{ 6 };
-        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        bool killMessage{ false };
+        bool nadePredict{ false };
+        bool fixTabletSignal{ false };
+        bool fakePrime{ false };
         bool fastPlant{ false };
-        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
+        bool fastStop{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
+        bool oppositeHandKnife = false;
+        PreserveKillfeed preserveKillfeed;
+        char clanTag[16];
+        int edgejumpkey{ 0 };
+        int slowwalkKey{ 0 };
+        ColorToggleThickness noscopeCrosshair;
+        ColorToggleThickness recoilCrosshair;
+        ColorToggle spectatorList;
+        ColorToggle watermark;
+        float aspectratio{ 0 };
+        std::string killMessageString{ "Gotcha!" };
+        int banColor{ 6 };
+        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
         int quickHealthshotKey{ 0 };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
-        bool fakePrime{ false };
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+
+        struct Reportbot {
+            bool enabled = false;
+            bool textAbuse = false;
+            bool griefing = false;
+            bool wallhack = true;
+            bool aimbot = true;
+            bool other = true;
+            int target = 0;
+            int delay = 1;
+            int rounds = 1;
+        } reportbot;
     } misc;
 
-    struct {
-        bool enabled{ false };
-        bool textAbuse{ false };
-        bool griefing{ false };
-        bool wallhack{ true };
-        bool aimbot{ true };
-        bool other{ true };
-        int target{ 0 };
-        int delay{ 1 };
-        int rounds{ 1 };
-    } reportbot;
+    void scheduleFontLoad(const std::string& name) noexcept;
+    bool loadScheduledFonts() noexcept;
 private:
+    std::vector<std::string> scheduledFonts{ "Default" };
     std::filesystem::path path;
     std::vector<std::string> configs;
 };

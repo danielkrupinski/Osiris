@@ -1,4 +1,5 @@
 #include "../fnv.h"
+#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -9,6 +10,7 @@
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/NetworkStringTable.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
@@ -50,7 +52,26 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_leet_varianti.mdl",
         "models/player/custom_player/legacy/tm_phoenix_variantf.mdl",
         "models/player/custom_player/legacy/tm_phoenix_variantg.mdl",
-        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl"
+        "models/player/custom_player/legacy/tm_phoenix_varianth.mdl",
+        
+        "models/player/custom_player/legacy/tm_pirate.mdl",
+        "models/player/custom_player/legacy/tm_pirate_varianta.mdl",
+        "models/player/custom_player/legacy/tm_pirate_variantb.mdl",
+        "models/player/custom_player/legacy/tm_pirate_variantc.mdl",
+        "models/player/custom_player/legacy/tm_pirate_variantd.mdl",
+        "models/player/custom_player/legacy/tm_anarchist.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_varianta.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantb.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantc.mdl",
+        "models/player/custom_player/legacy/tm_anarchist_variantd.mdl",
+        "models/player/custom_player/legacy/tm_balkan_varianta.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantb.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantc.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantd.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variante.mdl",
+        "models/player/custom_player/legacy/tm_jumpsuit_varianta.mdl",
+        "models/player/custom_player/legacy/tm_jumpsuit_variantb.mdl",
+        "models/player/custom_player/legacy/tm_jumpsuit_variantc.mdl"
         };
 
         switch (team) {
@@ -61,8 +82,15 @@ void Visuals::playerModel(FrameStage stage) noexcept
     };
 
     if (const auto model = getModel(localPlayer->team())) {
-        if (stage == FrameStage::RENDER_START)
+        if (stage == FrameStage::RENDER_START) {
             originalIdx = localPlayer->modelIndex();
+            if (const auto modelprecache = interfaces->networkStringTableContainer->findTable("modelprecache")) {
+                modelprecache->addString(false, model);
+                const auto viewmodelArmConfig = memory->getPlayerViewmodelArmConfigForPlayerModel(model);
+                modelprecache->addString(false, viewmodelArmConfig[2]);
+                modelprecache->addString(false, viewmodelArmConfig[3]);
+            }
+        }
 
         const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces->modelInfo->getModelIndex(model);
 
@@ -78,42 +106,44 @@ void Visuals::colorWorld() noexcept
     if (!config->visuals.world.enabled && !config->visuals.sky.enabled)
         return;
 
-    if (config->visuals.world.enabled)
-        static auto _ = (interfaces->cvar->findVar("r_drawspecificstaticprop")->setValue(0), interfaces->cvar->findVar("cl_brushfastpath")->setValue(0), true);
-
     for (short h = interfaces->materialSystem->firstMaterial(); h != interfaces->materialSystem->invalidMaterial(); h = interfaces->materialSystem->nextMaterial(h)) {
         const auto mat = interfaces->materialSystem->getMaterial(h);
 
         if (!mat || !mat->isPrecached())
             continue;
 
-        if (config->visuals.world.enabled && (std::strstr(mat->getTextureGroupName(), "World") || std::strstr(mat->getTextureGroupName(), "StaticProp"))) {
+        const std::string_view textureGroup = mat->getTextureGroupName();
+
+        if (config->visuals.world.enabled && (textureGroup.starts_with("World") || textureGroup.starts_with("StaticProp"))) {
             if (config->visuals.world.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.world.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.world.color);
-        } else if (config->visuals.sky.enabled && std::strstr(mat->getTextureGroupName(), "SkyBox")) {
+        } else if (config->visuals.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (config->visuals.sky.rainbow)
-                mat->colorModulate(rainbowColor(memory->globalVars->realtime, config->visuals.sky.rainbowSpeed));
+                mat->colorModulate(rainbowColor(config->visuals.sky.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.sky.color);
         }
     }
 }
 
-void Visuals::modifySmoke() noexcept
+void Visuals::modifySmoke(FrameStage stage) noexcept
 {
-    static constexpr const char* smokeMaterials[]{
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr std::array smokeMaterials{
         "particle/vistasmokev1/vistasmokev1_emods",
         "particle/vistasmokev1/vistasmokev1_emods_impactdust",
         "particle/vistasmokev1/vistasmokev1_fire",
-        "particle/vistasmokev1/vistasmokev1_smokegrenade",
+        "particle/vistasmokev1/vistasmokev1_smokegrenade"
     };
 
     for (const auto mat : smokeMaterials) {
-        auto material = interfaces->materialSystem->findMaterial(mat);
-        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noSmoke);
-        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, config->visuals.wireframeSmoke);
+        const auto material = interfaces->materialSystem->findMaterial(mat);
+        material->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noSmoke);
+        material->setMaterialVarFlag(MaterialVarFlag::WIREFRAME, stage == FrameStage::RENDER_START && config->visuals.wireframeSmoke);
     }
 }
 
@@ -145,7 +175,7 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
         aimPunch = localPlayer->aimPunchAngle();
         viewPunch = localPlayer->viewPunchAngle();
 
-        if (config->visuals.noAimPunch && !config->misc.recoilCrosshair)
+        if (config->visuals.noAimPunch)
             localPlayer->aimPunchAngle() = Vector{ };
 
         if (config->visuals.noViewPunch)
@@ -157,10 +187,13 @@ void Visuals::removeVisualRecoil(FrameStage stage) noexcept
     }
 }
 
-void Visuals::removeBlur() noexcept
+void Visuals::removeBlur(FrameStage stage) noexcept
 {
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
     static auto blur = interfaces->materialSystem->findMaterial("dev/scope_bluroverlay");
-    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noBlur);
+    blur->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noBlur);
 }
 
 void Visuals::updateBrightness() noexcept
@@ -169,19 +202,23 @@ void Visuals::updateBrightness() noexcept
     brightness->setValue(config->visuals.brightness);
 }
 
-void Visuals::removeGrass() noexcept
+void Visuals::removeGrass(FrameStage stage) noexcept
 {
-    constexpr auto getGrassMaterialName = []() constexpr noexcept -> const char* {
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    constexpr auto getGrassMaterialName = []() noexcept -> const char* {
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
-        case fnv::hash("dz_junglety"): return "detail/tropical_grass";
+        // dz_junglety has been removed in 7/23/2020 patch
+        // case fnv::hash("dz_junglety"): return "detail/tropical_grass";
         default: return nullptr;
         }
     };
 
     if (const auto grassMaterialName = getGrassMaterialName())
-        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, config->visuals.noGrass);
+        interfaces->materialSystem->findMaterial(grassMaterialName)->setMaterialVarFlag(MaterialVarFlag::NO_DRAW, stage == FrameStage::RENDER_START && config->visuals.noGrass);
 }
 
 void Visuals::remove3dSky() noexcept
@@ -326,10 +363,12 @@ void Visuals::hitMarker(GameEvent* event) noexcept
     }
 }
 
-void Visuals::disablePostProcessing() noexcept
+void Visuals::disablePostProcessing(FrameStage stage) noexcept
 {
-    if (*memory->disablePostProcessing != config->visuals.disablePostProcessing)
-        *memory->disablePostProcessing = config->visuals.disablePostProcessing;
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    *memory->disablePostProcessing = stage == FrameStage::RENDER_START && config->visuals.disablePostProcessing;
 }
 
 void Visuals::reduceFlashEffect() noexcept
@@ -355,12 +394,13 @@ bool Visuals::removeWeapons(const char* modelName) noexcept
         && !std::strstr(modelName, "parachute") && !std::strstr(modelName, "fists");
 }
 
-void Visuals::skybox() noexcept
+void Visuals::skybox(FrameStage stage) noexcept
 {
-    constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
 
-    if (static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox - 1]);
+    if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
+        memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);

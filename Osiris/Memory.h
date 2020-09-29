@@ -9,18 +9,23 @@
 
 class ClientMode;
 class Entity;
+class GameEventDescriptor;
+class GameEventManager;
 class Input;
 class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PlayerResource;
 class ViewRender;
 class WeaponSystem;
 
+struct ActiveChannels;
+struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
-struct Vector;
 struct Trace;
+struct Vector;
 
 class Memory {
 public:
@@ -38,13 +43,10 @@ public:
 
     std::add_pointer_t<void __fastcall(const char*)> loadSky;
     std::add_pointer_t<void __fastcall(const char*, const char*)> setClanTag;
-    int* smokeCount;
     uintptr_t cameraThink;
     std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
     std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__thiscall* getSequenceActivity)(void*, int);
-    uintptr_t scopeArc;
-    uintptr_t scopeLens;
     bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
     int*(__thiscall* findHudElement)(uintptr_t, const char*);
@@ -57,8 +59,6 @@ public:
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
-    uintptr_t test;
-    uintptr_t test2;
     uint8_t* fakePrime;
     std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __cdecl(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
@@ -71,32 +71,39 @@ public:
     KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
-
+    std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
+    GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    ActiveChannels* activeChannels;
+    Channel* channels;
+    PlayerResource** playerResource;
+    const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
-    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern, size_t offset = 0) noexcept
+    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
     {
         static auto id = 0;
         ++id;
 
-        if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), GetModuleHandleW(module), &moduleInfo, sizeof(moduleInfo))) {
-            auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
-            const auto end = start + moduleInfo.SizeOfImage;
+        if (HMODULE moduleHandle = GetModuleHandleW(module)) {
+            if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), moduleHandle, &moduleInfo, sizeof(moduleInfo))) {
+                auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
+                const auto end = start + moduleInfo.SizeOfImage;
 
-            auto first = start;
-            auto second = pattern;
+                auto first = start;
+                auto second = pattern;
 
-            while (first < end && *second) {
-                if (*first == *second || *second == '?') {
-                    ++first;
-                    ++second;
-                } else {
-                    first = ++start;
-                    second = pattern;
+                while (first < end && *second) {
+                    if (*first == *second || *second == '?') {
+                        ++first;
+                        ++second;
+                    } else {
+                        first = ++start;
+                        second = pattern;
+                    }
                 }
-            }
 
-            if (!*second)
-                return reinterpret_cast<std::uintptr_t>(const_cast<char*>(start) + offset);
+                if (!*second)
+                    return reinterpret_cast<std::uintptr_t>(start);
+            }
         }
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
         return 0;

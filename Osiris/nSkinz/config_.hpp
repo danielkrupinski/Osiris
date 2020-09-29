@@ -36,7 +36,17 @@ struct sticker_setting
 {
 	void update()
 	{
-        kit = SkinChanger::stickerKits[kit_vector_index].id;
+        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+	}
+
+
+	auto operator==(const sticker_setting& o) const
+	{
+		return kit == o.kit
+			&& kit_vector_index == o.kit_vector_index
+			&& wear == o.wear
+			&& scale == o.scale
+			&& rotation == o.rotation;
 	}
 
 	int kit = 0;
@@ -58,12 +68,12 @@ struct item_setting
 
 		if (itemId == GLOVE_T_SIDE)
 		{
-			kit_names = &SkinChanger::gloveKits;
+			kit_names = &SkinChanger::getGloveKits();
 			defindex_names = game_data::glove_names;
 		}
 		else
 		{
-			kit_names = &SkinChanger::skinKits;
+			kit_names = &SkinChanger::getSkinKits();
 			defindex_names = game_data::knife_names;
 		}
 
