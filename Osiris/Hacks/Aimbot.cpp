@@ -20,11 +20,7 @@
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
-    Vector delta = destination - source;
-    Vector angles{ radiansToDegrees(atan2f(-delta.z, std::hypotf(delta.x, delta.y))) - viewAngles.x,
-                   radiansToDegrees(atan2f(delta.y, delta.x)) - viewAngles.y };
-    angles.normalize();
-    return angles;
+    return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
 static void setRandomSeed(int seed) noexcept
@@ -254,11 +250,11 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
         auto bestFov = config->aimbot[weaponIndex].fov;
         Vector bestTarget{ };
-        auto localPlayerEyePosition = localPlayer->getEyePosition();
+        const auto localPlayerEyePosition = localPlayer->getEyePosition();
 
         const auto aimPunch = activeWeapon->requiresRecoilControl() ? localPlayer->getAimPunch() : Vector{ };
          std::vector<Enemies> enemies;
-    	
+
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive()
@@ -280,7 +276,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
     	for (const auto& target : enemies)
         {
             const auto entity = interfaces->entityList->getEntity(target.id);
-    		
+
             for (auto bone : boneList) {
                 auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
                 if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? target.health : (std::min)(config->aimbot[weaponIndex].minDamage, target.health), config->aimbot[weaponIndex].friendlyFire)))
@@ -291,7 +287,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
                    if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                     cmd->buttons |= UserCmd::IN_ATTACK2;
-            	
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = bonePosition;
@@ -312,23 +307,22 @@ void Aimbot::run(UserCmd* cmd) noexcept
             }
         }
 
-        if (bestTarget.notNull() && (config->aimbot[weaponIndex].ignoreSmoke
-            || !memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTarget, 1))) {
+        if (bestTarget.notNull()) {
             static Vector lastAngles{ cmd->viewangles };
             static int lastCommand{ };
 
             if (lastCommand == cmd->commandNumber - 1 && lastAngles.notNull() && config->aimbot[weaponIndex].silent)
                 cmd->viewangles = lastAngles;
 
-            auto angle = calculateRelativeAngle(localPlayer->getEyePosition(), bestTarget, cmd->viewangles + aimPunch);
+            auto angle = calculateRelativeAngle(localPlayerEyePosition, bestTarget, cmd->viewangles + aimPunch);
             bool clamped{ false };
 
-            if (fabs(angle.x) > config->misc.maxAngleDelta || fabs(angle.y) > config->misc.maxAngleDelta) {
+            if (std::abs(angle.x) > config->misc.maxAngleDelta || std::abs(angle.y) > config->misc.maxAngleDelta) {
                     angle.x = std::clamp(angle.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
                     angle.y = std::clamp(angle.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
                     clamped = true;
             }
-            
+
             angle /= config->aimbot[weaponIndex].smooth;
             cmd->viewangles += angle;
             if (!config->aimbot[weaponIndex].silent)

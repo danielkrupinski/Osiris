@@ -249,10 +249,10 @@ public:
     VIRTUAL_METHOD(void, UpdateAccuracyPenalty, 483, (), (this))
 	 VIRTUAL_METHOD(void, UpdateClientSideAnimation, 223, (), (this))
 
-    constexpr auto isPistol() noexcept
-    {
-        return getWeaponType() == WeaponType::Pistol;
-    }
+    auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
+    auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
+    auto isGrenade() noexcept { return getWeaponType() == WeaponType::Grenade; }
+
 
     constexpr auto isSniperRifle() noexcept
     {
@@ -271,6 +271,7 @@ public:
             return weaponData->fullAuto;
         return false;
     }
+
 
 	constexpr auto isKnife() noexcept
 	{
@@ -297,7 +298,6 @@ public:
 	{
 	    return (uint32_t*)((uintptr_t)this + 0xF0);
 	}
-
 
     constexpr auto requiresRecoilControl() noexcept
     {
@@ -564,7 +564,7 @@ public:
     NETVAR(aimPunchAngle, "CBasePlayer", "m_aimPunchAngle", Vector)
     NETVAR(viewPunchAngle, "CBasePlayer", "m_viewPunchAngle", Vector)
     NETVAR(velocity, "CBasePlayer", "m_vecVelocity[0]", Vector)
-
+    NETVAR(lastPlaceName, "CBasePlayer", "m_szLastPlaceName", char[18])
     NETVAR(armor, "CCSPlayer", "m_ArmorValue", int)
     NETVAR(eyeAngles, "CCSPlayer", "m_angEyeAngles", Vector)
     NETVAR(isScoped, "CCSPlayer", "m_bIsScoped", bool)

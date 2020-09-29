@@ -96,6 +96,7 @@ public:
     UtlMap<int, StickerKit*> stickerKits;
 
     VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
     VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))

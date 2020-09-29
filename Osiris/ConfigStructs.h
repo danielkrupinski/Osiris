@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <string>
+
 #pragma pack(push, 1)
 struct ColorA {
     std::array<float, 4> color{ 1.0f, 1.0f, 1.0f, 1.0f };
@@ -132,6 +135,7 @@ struct PurchaseList {
     int mode = Details;
 };
 
+
 struct ImGuiStruct
 {
     bool enabled{ false };
@@ -145,5 +149,9 @@ struct StatusBar : ImGuiStruct
 	bool ShowPlayerRealViewAngles{ false };
 	bool ShowPlayerStatus{ false };
 	bool ShowGameGlobalVars{ false };
+};
 
+struct PreserveKillfeed {
+    bool enabled = false;
+    bool onlyHeadshots = false;
 };

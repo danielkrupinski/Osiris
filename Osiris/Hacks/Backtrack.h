@@ -1,17 +1,10 @@
 #pragma once
 
-#include <algorithm>
+#include <array>
 #include <deque>
 
-#include "../Memory.h"
-#include "../Interfaces.h"
-#include "../SDK/Engine.h"
-#include "../SDK/ConVar.h"
-#include "../SDK/Cvar.h"
-#include "../SDK/GlobalVars.h"
 #include "../SDK/matrix3x4.h"
-#include "../SDK/ModelRender.h"
-#include "../SDK/NetworkChannel.h"
+#include "../SDK/Vector.h"
 
 enum class FrameStage;
 struct UserCmd;
@@ -38,11 +31,11 @@ namespace Backtrack {
         bool invalid = false;
         bool wasUpdated = false;
         Vector mins;
-        Vector max; 
+        Vector max;
         float alpha = 100; //ONLY USED FOR extended_records
     };
-	
-    extern std::deque<Record> records[65];
+
+  extern std::deque<Record> records[65];
 	extern std::deque<Record> extended_records[65];
 	extern std::deque<Record> invalid_record[2];
 
@@ -94,7 +87,7 @@ namespace Backtrack {
     }
 
     int timeToTicks(float time) noexcept;
-    
+
 
     static void init() noexcept
     {

@@ -26,7 +26,7 @@ namespace SkinChanger
         }
     };
 
-    inline std::vector<PaintKit> skinKits{ { 0, "-", L"-" } };
-    inline std::vector<PaintKit> gloveKits;
-    inline std::vector<PaintKit> stickerKits{ { 0, "None", L"NONE" } };
+    const std::vector<PaintKit>& getSkinKits() noexcept;
+    const std::vector<PaintKit>& getGloveKits() noexcept;
+    const std::vector<PaintKit>& getStickerKits() noexcept;
 }

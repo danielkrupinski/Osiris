@@ -39,6 +39,7 @@
 #include "SDK/FrameStage.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
+#include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
@@ -189,6 +190,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     memory->globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
+    Misc::fastStop(cmd);
     Misc::prepareRevolver(cmd);
     Visuals::removeShadows();
     Misc::runReportbot();
@@ -362,6 +364,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         GameData::update();
 
     if (stage == FrameStage::RENDER_START) {
+        Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();

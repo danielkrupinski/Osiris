@@ -1,26 +1,35 @@
 #include "Backtrack.h"
 #include "Aimbot.h"
 #include "../Config.h"
+#include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
+#include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
-std::deque<Backtrack::Record> Backtrack::records[65];
+static std::deque<Backtrack::Record> Backtrack::records[65];
 std::deque<Backtrack::Record> Backtrack::invalid_record[2];
 
 std::deque<Backtrack::IncomingSequence>Backtrack::sequences;
 Backtrack::Cvars Backtrack::cvars;
 
+
+struct Cvars {
+    ConVar* updateRate;
+    ConVar* maxUpdateRate;
+    ConVar* interp;
+    ConVar* interpRatio;
+    ConVar* minInterpRatio;
+    ConVar* maxInterpRatio;
+    ConVar* maxUnlag;
+};
+
+static Cvars cvars;
+
 void Backtrack::update(FrameStage stage) noexcept
 {
-    if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
-        for (auto& record : records)
-            record.clear();
-
-        return;
-    }
-
     if (stage == FrameStage::RENDER_START) {
 
         Record record_inv{};
@@ -29,7 +38,15 @@ void Backtrack::update(FrameStage stage) noexcept
         invalid.wasTargeted = false;
         invalid_record[0].push_front(invalid);
         invalid_record[0].push_front(invalid);
-    	
+
+
+        if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
+            for (auto& record : records)
+                record.clear();
+            return;
+        }
+
+
         for (int i = 1; i <= interfaces->engine->getMaxClients(); i++) {
             auto entity = interfaces->entityList->getEntity(i);
             if (!entity || entity == localPlayer.get() || entity->isDormant() || !entity->isAlive() || !entity->isOtherEnemy(localPlayer.get())) {
@@ -95,7 +112,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
     if (!(cmd->buttons & UserCmd::IN_ATTACK))
 		return;
-	
+
     if (!localPlayer)
         return;
 
@@ -127,9 +144,8 @@ void Backtrack::run(UserCmd* cmd) noexcept
             || !entity->isOtherEnemy(localPlayer.get()))
             continue;
 
-        auto origin = entity->getAbsOrigin();
+      const auto origin = entity->getAbsOrigin();
     	auto head = entity->getBonePosition(8);
-    	
 
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, head, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
@@ -186,7 +202,7 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
     static float lastIncomingSequenceNumber = 0.f;
     int timeLimit = config->backtrack.timeLimit; if (timeLimit <= 200) { timeLimit = 0; }
     else { timeLimit = 200; }
-	
+
     if (!config->backtrack.fakeLatency || config->backtrack.timeLimit == 0)
         return;
 
@@ -212,7 +228,39 @@ void Backtrack::UpdateIncomingSequences(bool reset) noexcept
         sequences.pop_back();
 }
 
+const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
+{
+    return records[index];
+}
+
+float Backtrack::getLerp() noexcept
+{
+    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
+    return max(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+}
+
+bool Backtrack::valid(float simtime) noexcept
+{
+    const auto network = interfaces->engine->getNetworkChannel();
+    if (!network)
+        return false;
+
+    auto delta = std::clamp(network->getLatency(0) + network->getLatency(1) + getLerp(), 0.f, cvars.maxUnlag->getFloat()) - (memory->globalVars->serverTime() - simtime);
+    return std::abs(delta) <= 0.2f;
+}
+
 int Backtrack::timeToTicks(float time) noexcept
 {
     return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
+}
+
+void Backtrack::init() noexcept
+{
+    cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
+    cvars.maxUpdateRate = interfaces->cvar->findVar("sv_maxupdaterate");
+    cvars.interp = interfaces->cvar->findVar("cl_interp");
+    cvars.interpRatio = interfaces->cvar->findVar("cl_interp_ratio");
+    cvars.minInterpRatio = interfaces->cvar->findVar("sv_client_min_interp_ratio");
+    cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
+    cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
 }

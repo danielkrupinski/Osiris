@@ -44,11 +44,15 @@ void GameData::update() noexcept
     entityData.clear();
     lootCrateData.clear();
 
+    localPlayerData.update();
+
     if (!localPlayer)
         return;
 
+
     viewMatrix = interfaces->engine->worldToScreenMatrix2();
     localPlayerData.update();
+
 
     const auto observerTarget = localPlayer->getObserverMode() == ObsMode::InEye ? localPlayer->getObserverTarget() : nullptr;
 
@@ -203,7 +207,7 @@ void LocalPlayerData::update() noexcept
 BaseData::BaseData(Entity* entity) noexcept
 {
     distanceToLocal = entity->getAbsOrigin().distTo(localPlayerData.origin);
- 
+
     if (entity->isPlayer()) {
         const auto collideable = entity->getCollideable();
         obbMins = collideable->obbMins();

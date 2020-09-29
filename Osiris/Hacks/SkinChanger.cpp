@@ -31,13 +31,15 @@ static std::wstring toUpperWide(const std::string& s) noexcept
     return upperCase;
 }
 
+static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
+static std::vector<SkinChanger::PaintKit> gloveKits;
+static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
+
 void SkinChanger::initializeKits() noexcept
 {
     const std::locale original;
     std::locale::global(std::locale{ "en_US.utf8" });
 
-    const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
-  
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
@@ -386,7 +388,7 @@ static void post_data_update_start(int localHandle) noexcept
 
 static bool hudUpdateRequired{ false };
 
-static constexpr void updateHud() noexcept
+static void updateHud() noexcept
 {
     if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - 0x28) {
         for (int i = 0; i < *(hud_weapons + 0x20); i++)
@@ -443,4 +445,19 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
+{
+    return skinKits;
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
+{
+    return gloveKits;
+}
+
+const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
+{
+    return stickerKits;
 }

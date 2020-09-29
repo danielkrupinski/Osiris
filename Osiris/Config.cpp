@@ -7,14 +7,14 @@
 #include "Helpers.h"
 
 #ifdef _WIN32
-int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPARAM lParam)
+int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
-    const auto fontName = (const char*)reinterpret_cast<const ENUMLOGFONTEXA*>(lpelfe)->elfFullName;
+    const wchar_t* const fontName = reinterpret_cast<const ENUMLOGFONTEXW*>(lpelfe)->elfFullName;
 
-    if (fontName[0] == '@')
+    if (fontName[0] == L'@')
         return TRUE;
 
-    if (HFONT font = CreateFontA(0, 0, 0, 0,
+    if (HFONT font = CreateFontW(0, 0, 0, 0,
         FW_NORMAL, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -30,8 +30,10 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
         }
         DeleteObject(font);
 
-        if (fontData == GDI_ERROR)
-            reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(fontName);
+        if (fontData == GDI_ERROR) {
+            if (char buff[1024]; WideCharToMultiByte(CP_UTF8, 0, fontName, -1, buff, sizeof(buff), nullptr, nullptr))
+                reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(buff);
+        }
     }
     return TRUE;
 }
@@ -48,12 +50,12 @@ Config::Config(const char* name) noexcept
     listConfigs();
     misc.clanTag[0] = '\0';
 
-    LOGFONTA logfont;
+    LOGFONTW logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
-    logfont.lfFaceName[0] = '\0';
+    logfont.lfFaceName[0] = L'\0';
 
-    EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+    EnumFontFamiliesExW(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
@@ -482,7 +484,6 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
-    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
@@ -607,6 +608,12 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Mode", pl.mode);
 }
 
+static void from_json(const json& j, PreserveKillfeed& o)
+{
+    read(j, "Enabled", o.enabled);
+    read(j, "Only Headshots", o.onlyHeadshots);
+}
+
 static void from_json(const json& j, Config::Misc& m)
 {
     read(j, "Menu key", m.menuKey);
@@ -647,6 +654,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
     read(j, "Fast plant", m.fastPlant);
+    read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Quick reload", m.quickReload);
     read(j, "Prepare revolver", m.prepareRevolver);
@@ -668,6 +676,7 @@ static void from_json(const json& j, Config::Misc& m)
 	  read<value_t::object>(j, "ShotsCout", m.ShotsCout);
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
+    read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
 }
 
 static void from_json(const json& j, Config::Misc::Reportbot& r)
@@ -1079,6 +1088,12 @@ static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = 
     WRITE("Mode", mode);
 }
 
+static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Only Headshots", onlyHeadshots);
+}
+
 static void to_json(json& j, const Config::Misc& o)
 {
     const Config::Misc dummy;
@@ -1123,6 +1138,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
+    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
@@ -1144,6 +1160,7 @@ static void to_json(json& j, const Config::Misc& o)
 	  WRITE("ShotsCout", ShotsCout);
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
+    WRITE("Preserve Killfeed", preserveKillfeed);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)

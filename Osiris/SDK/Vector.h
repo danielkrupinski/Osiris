@@ -11,7 +11,7 @@ struct Vector {
     {
         return x || y || z;
     }
-    
+
     constexpr auto operator==(const Vector& v) const noexcept
     {
         return x == v.x && y == v.y && z == v.z;
@@ -71,7 +71,7 @@ struct Vector {
     {
         return Vector{ x + v.x, y + v.y, z + v.z };
     }
-    
+
     constexpr auto operator*(const Vector& v) const noexcept
     {
         return Vector{ x * v.x, y * v.y, z * v.z };
@@ -100,14 +100,14 @@ struct Vector {
         return Vector{ x + add, y + add, z + add };
     }
 
-    constexpr Vector& normalize() noexcept
+    Vector& normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainder(x, 360.0f) : 0.0f;
         y = std::isfinite(y) ? std::remainder(y, 360.0f) : 0.0f;
         z = 0.0f;
         return *this;
     }
-	
+
 
     auto length() const noexcept
     {
@@ -173,6 +173,7 @@ struct Vector {
     float x, y, z;
 };
 
+
 inline Vector CrossProduct(const Vector& a, const Vector& b)noexcept
 {
 	return Vector{ a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x };
@@ -184,7 +185,6 @@ inline Vector Vector::Cross(const Vector& vOther) const noexcept
 }
 
 #include "Matrix3x4.h"
-
 constexpr auto Vector::transform(const matrix3x4& mat) const noexcept
 {
     return Vector{ dotProduct({ mat[0][0], mat[0][1], mat[0][2] }) + mat[0][3],

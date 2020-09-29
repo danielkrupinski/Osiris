@@ -20,6 +20,7 @@ private:
     void renderHands() noexcept;
     void renderSleeves() noexcept;
 
+
     enum ChamsId {
         ALLIES = 0,
         ENEMIES,
@@ -73,6 +74,7 @@ private:
     const ModelRenderInfo* info;
     matrix3x4* customBoneToWorld;
 
-    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
+
+  void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
 	void applyChamsDesync(const std::array<Config::Chams::Material, 7>& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
 };

@@ -490,6 +490,7 @@
     <ClInclude Include="nlohmann\json.hpp">
       <Filter>nlohmann</Filter>
     </ClInclude>
+
     <ClInclude Include="Hacks\Ragebot.h">
       <Filter>Hacks</Filter>
     </ClInclude>
@@ -528,6 +529,9 @@
     </ClInclude>
     <ClInclude Include="Hacks\Tickbase.h">
       <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Panorama.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

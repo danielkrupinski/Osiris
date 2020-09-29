@@ -431,7 +431,7 @@ public:
             "Doubletap",
             "Resolver"
         };
-        
+
         bool selectedIndicators[6] = {
             false,
             false,
@@ -495,6 +495,27 @@ public:
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
+
+        bool nameStealer{ false };
+        bool disablePanoramablur{ false };
+        bool killMessage{ false };
+        bool nadePredict{ false };
+        bool fixTabletSignal{ false };
+        bool fakePrime{ false };
+        bool fastPlant{ false };
+        bool fastStop{ false };
+        bool quickReload{ false };
+        bool prepareRevolver{ false };
+        bool oppositeHandKnife = false;
+        PreserveKillfeed preserveKillfeed;
+        char clanTag[16];
+        int edgejumpkey{ 0 };
+        int slowwalkKey{ 0 };
+        ColorToggleThickness noscopeCrosshair;
+        ColorToggleThickness recoilCrosshair;
+        ColorToggle spectatorList;
+        ColorToggle watermark;
+
         float aspectratio{ 0 };
         bool killMessage{ false };
         std::string killMessageString{ "Gotcha!" };
