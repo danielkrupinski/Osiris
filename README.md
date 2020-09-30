@@ -28,14 +28,14 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
 * **Aimbot** - aim assistance
     * **Enabled** - on / off master switch
-    * **On key [ key ]** - aimbot works only when chosen key is being held
+    * **On key [ key ]** - aimbot works only when the chosen key is being held
     * **Aimlock** - brings your aim to the target (affected by Smooth).
     * **Silent** - aimbot is not visible on your screen (client-sided only)
     * **Friendly fire** - treat allies as enemies
     * **Visible only** - aim only on visible players
-    * **Scoped only** - aimbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
-    * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
+    * **Scoped only** - aimbot works only when using a scope (applies only to sniper rifles)
+    * **Ignore flash** - ignore flashbang i.e. aim when a local player is flashed
+    * **Ignore smoke** - ignore smoke i.e. aim when the target is in smoke
     * **Auto shot** - shoot automatically when target found
     * **Auto scope** - automatically scopes sniper rifle before shooting
     * **Bone** - bone which aimbot aims at
@@ -43,20 +43,20 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Smooth** - smooth aimbot movement in order to seem more human-like
     * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
-* **Triggerbot** - automatically fires when crosshair is on enemy
+* **Triggerbot** - automatically fires when the crosshair is on the enemy
     * **Enabled** - on / off master switch
-    * **On key [ key ]** - triggerbot works only when chosen key is being held
+    * **On key [ key ]** - triggerbot works only when the chosen key is being held
     * **Friendly fire** - treat allies as enemies
-    * **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** - ignore flashbang i.e. shoot when local player is flashed
-    * **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
-    * **Hitgroup** - body parts on which triggerbot works
+    * **Scoped only** - triggerbot works only when using a scope (applies only to sniper rifles)
+    * **Ignore flash** - ignore flashbang i.e. shoot when a local player is flashed
+    * **Ignore smoke** - ignore smoke i.e. shoot when the target is in smoke
+    * **Hit group** - body parts on which triggerbot works
     * **Shot delay** - delay time in ms (milliseconds)
     * **Min damage** - minimal damage to fire.
     
 * **Backtrack** - abuse lag compensation in order to move players back in time
     * **Enabled** - on / off master switch
-    * **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
+    * **Ignore smoke** - ignore smoke i.e. backtrack when the target is in smoke
     * **Time limit** - limit the backtracking window [*1*-*200*ms]
 
 * **Glow** - render glow effect on entities
@@ -70,9 +70,9 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
 * **Chams** - color player models to improve visibility
 
-    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
+    *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing a bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
     * **Enabled** - on / off master switch
-    * **Health based** - color is based on player's hp
+    * **Health based** - the color is based on player's hp
     * **Blinking** - change transparency frequently
     * **Material** - material applied to model { `Normal`, `Flat`, `Animated`, `Platinum`, `Glass`, `Chrome`, `Crystal`, `Silver`, `Gold`, `Plastic`, `Glow` }
     * **Wireframe** - render triangle mesh instead of solid material
@@ -101,7 +101,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Armor bar** - draw rectangle indicating player armor
     * **Money** - draw player money
     * **Head dot** - draw dot on player's head
-    * **Active Weapon** - draw player equipped weapon
+    * **Active Weapon** - draw a player equipped weapon
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
@@ -133,15 +133,15 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Hit effect** - show screen effect on enemy hit
     * **Hit marker** - show a cross detail on enemy hit
 
-* **Skin changer** - change knives, gloves, weapon skins and stickers
+* **Skin changer** - change knives, gloves, weapon skins, and stickers
 
-* **Sound** - modify volume of certain sound effects
-    * **Chicken volume** - volume of chicken sounds
+* **Sound** - modify the volume of certain sound effects
+    * **Chicken volume** - the volume of chicken sounds
 
     *Local player, Allies, Enemies*
     * **Master volume** - overall volume of sounds emitted by player
-    * **Headshot volume** - volume of headshot sound (when player gets headshoted)
-    * **Weapon volume** - volume of player weapon shots
+    * **Headshot volume** - the volume of headshot sound (when a player gets headshot)
+    * **Weapon volume** - the volume of player weapon shots
     * **Footstep volume** - volume of player footsteps
 
 * **Misc** - miscellaneous features
@@ -163,8 +163,8 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Reveal ranks** - show player ranks in scoreboard in competitive modes
     * **Reveal money** - show enemies' money in scoreboard
     * **Spectator list** - show nicknames of players spectating you
-    * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
-    * **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
+    * **Watermark** - show cheat name in the upper-left screen corner and fps & ping in the upper right corner.
+    * **Fix animation LOD** - fix aimbot inaccuracy for players behind a local player
     * **Fix bone matrix** - correct client bone matrix to be closer to server one
     * **Disable model occlusion** - draw player models even if they are behind thick walls
     * **Kill message** - print message to chat after killing an enemy
@@ -172,18 +172,18 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     * **Custom clantag** - set a custom clantag
     * **Fast plant** - plants bomb on bombsite border, when holding <kbd>LMB</kbd> or <kbd>E</kbd> key
     * **Fast Stop** - stops the player faster than normal
-    * **Quick reload** - perform quick weapon switch during reload for faster reload
+    * **Quick reload** - perform quick weapon switch during reloading for faster reload
     * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
     * **Fix tablet signal** - allow use tablet on underground (dangerzone)
-    * **Hit Sound** - sound emitted when hurting enemy
-    * **Chocked packets** - length of sequence of chocked ticks
-    * **Max angle delta** - maximum viewangles change per tick
-    * **Fake Prime** - set a fake prime (visible in lobby)
+    * **Hit Sound** - sound emitted when hurting the enemy
+    * **Chocked packets** - length of the sequence of chocked ticks
+    * **Max angle delta** - maximum view angles change per tick
+    * **Fake Prime** - set a fake prime (visible in the lobby)
     * **Purchase List** - show the purchased equipment by enemies.
-    * **Reportbot** - automatically report players on server for cheating or other abusive actions
+    * **Report bot** - automatically report players on the server for cheating or other abusive actions
         * **Enabled** - on / off master switch
         * **Target** - report target *Enemies/Allies/All*
-        * **Delay** - delay between reports, in seconds
+        * **Delay** - a delay between reports, in seconds
         * **Aimbot** - report for aim assistance
         * **Wallhack** - report for visual assistance
         * **Other** - report for other assistance
@@ -231,13 +231,13 @@ When you have equiped a copy of source code, next step is opening **Osiris.sln**
 
 Then change build configuration to `Release | x86` and simply press **Build solution**.
 
-If everything went right you should receive `Osiris.dll`  binary file.
+If everything went right you should receive the `Osiris.dll`  binary file.
 
 ### Loading / Injecting into game process
 
 Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
 
-When injected, menu is openable under `INSERT` key.
+When injected, menu is openable under the `INSERT` key.
 
 ### Further optimizations
 If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
@@ -248,7 +248,7 @@ If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in 
 Press <kbd>INSERT</kbd> while focused on CS:GO window.
 
 ### Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
+Configuration files are saved inside the `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
 
 ### What hooking methods Osiris uses?
 Currently implemented hooking methods are:
@@ -270,5 +270,5 @@ Hooking implementation files are located in [Hooks](https://github.com/danielkru
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
 
 ## See also
-- [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
+- [Anubis](https://github.com/danielkrupinski/Anubis) - free and open-source cheat for CS:GO with configuration compatible with Osiris
 - [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source cross-platform streamproof ESP hack for Counter-Strike: Global Offensive, written in modern C++
