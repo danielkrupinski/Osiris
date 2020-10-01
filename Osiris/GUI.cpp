@@ -775,12 +775,12 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         ImGui::Checkbox("Enabled", &sharedConfig.enabled);
         ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 260.0f);
         ImGui::SetNextItemWidth(220.0f);
-        if (ImGui::BeginCombo("Font", config->systemFonts[sharedConfig.font.index].c_str())) {
-            for (size_t i = 0; i < config->systemFonts.size(); i++) {
-                bool isSelected = config->systemFonts[i] == sharedConfig.font.name;
-                if (ImGui::Selectable(config->systemFonts[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
+        if (ImGui::BeginCombo("Font", config->getSystemFonts()[sharedConfig.font.index].c_str())) {
+            for (size_t i = 0; i < config->getSystemFonts().size(); i++) {
+                bool isSelected = config->getSystemFonts()[i] == sharedConfig.font.name;
+                if (ImGui::Selectable(config->getSystemFonts()[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
                     sharedConfig.font.index = i;
-                    sharedConfig.font.name = config->systemFonts[i];
+                    sharedConfig.font.name = config->getSystemFonts()[i];
                     config->scheduleFontLoad(sharedConfig.font.name);
                 }
                 if (isSelected)

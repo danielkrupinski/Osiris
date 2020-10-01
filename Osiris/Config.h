@@ -127,7 +127,6 @@ public:
         ImFont* big;
     };
 
-    std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
 
     struct Visuals {
@@ -273,8 +272,10 @@ public:
 
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
+    const auto& getSystemFonts() noexcept { return systemFonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
+    std::vector<std::string> systemFonts{ "Default" };
     std::filesystem::path path;
     std::vector<std::string> configs;
 };
