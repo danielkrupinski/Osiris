@@ -127,8 +127,6 @@ public:
         ImFont* big;
     };
 
-    std::unordered_map<std::string, Font> fonts;
-
     struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
@@ -273,9 +271,11 @@ public:
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
     const auto& getSystemFonts() noexcept { return systemFonts; }
+    const auto& getFonts() noexcept { return fonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::vector<std::string> systemFonts{ "Default" };
+    std::unordered_map<std::string, Font> fonts;
     std::filesystem::path path;
     std::vector<std::string> configs;
 };
