@@ -1,4 +1,4 @@
-﻿#include <mutex>
+#include <mutex>
 #include <numeric>
 #include <sstream>
 
@@ -33,6 +33,20 @@
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
+
+#ifndef RAD2DEG
+#define RAD2DEG( x  )  ( (float)(x) * (float)(180.f / 3.14159265358979323846) )
+#endif
+#define M_PI_F2		((float)(M_PI2))	
+
+#ifndef M_PI2
+#define M_PI2		3.14159265358979323846	
+#endif
+
+#ifndef DEG2RAD2
+#define DEG2RAD2( x  )  ( (float)(x) * (float)(M_PI_F2 / 180.f) )
+#endif                                                               // added both idk why
+
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
@@ -410,6 +424,24 @@ void Misc::drawBombTimer() noexcept
             break;
         }
     }
+}
+
+void Misc::drawFov() noexcept
+{
+    auto local = localPlayer.get();
+    if (config->misc.drawFov)
+    {
+        if (!local || !local->isAlive()) return;
+        int weaponId = getWeaponIndex(localPlayer->getActiveWeapon()->itemDefinitionIndex2());
+        if (!config->aimbot[weaponId].enabled) weaponId = 0;
+        if (!config->aimbot[weaponId].enabled) return;
+        auto screenSize = interfaces->surface->getScreenSize();
+        if (config->aimbot[weaponId].silent) interfaces->surface->setDrawColor(255, 10, 10, 255);
+        else interfaces->surface->setDrawColor(10, 255, 10, 255);
+        float radius = std::tan(degreesToRadians(config->aimbot[weaponId].fov) / 2.f) / std::tan(degreesToRadians(local->isScoped() ? local->fov() : (105 + config->visuals.fov)) / 2.f) * screenSize.first;
+        interfaces->surface->drawOutlinedCircle(screenSize.first / 2, screenSize.second / 2, radius, 100);
+    }
+
 }
 
 void Misc::stealNames() noexcept
