@@ -19,6 +19,7 @@ namespace Misc
     void fastPlant(UserCmd*) noexcept;
     void fastStop(UserCmd*) noexcept;
     void drawBombTimer() noexcept;
+    void drawFov() noexcept;
     void stealNames() noexcept;
     void disablePanoramablur() noexcept;
     void quickReload(UserCmd*) noexcept;
