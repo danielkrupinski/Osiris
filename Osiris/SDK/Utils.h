@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cmath>
+#include <numbers>
 #include <tuple>
 
-constexpr auto degreesToRadians = [](float degrees) constexpr noexcept { return degrees * static_cast<float>(M_PI) / 180.0f; };
-constexpr auto radiansToDegrees = [](float radians) constexpr noexcept { return radians * 180.0f / static_cast<float>(M_PI); };
+constexpr auto degreesToRadians = [](float degrees) constexpr noexcept { return degrees * std::numbers::pi_v<float> / 180.0f; };
+constexpr auto radiansToDegrees = [](float radians) constexpr noexcept { return radians * 180.0f / std::numbers::pi_v<float>; };
 
 std::tuple<float, float, float> rainbowColor(float speed) noexcept;
