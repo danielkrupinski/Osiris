@@ -235,7 +235,7 @@ If everything went right you should receive `Osiris.dll`  binary file.
 
 ### Loading / Injecting into game process
 
-Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
+Use [this injector](https://github.com/AMATEURZ1337/load-lib-injector) made specifically for Osiris(you need to compile it in x86 mode), rename the previously built `Osiris.dll` to `cheat.dll`, put it in the same directory as the injector, and run the injector as administrator mode.
 
 When injected, menu is openable under `INSERT` key.
 
