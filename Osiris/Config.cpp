@@ -406,7 +406,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "No grass", v.noGrass);
     read(j, "No shadows", v.noShadows);
     read(j, "Wireframe smoke", v.wireframeSmoke);
-    read(j, "Zoom", v.noScopeOverlay);
+    read(j, "Zoom", v.zoom);
     read(j, "Zoom key", v.zoomKey);
     read(j, "Thirdperson", v.thirdperson);
     read(j, "Thirdperson key", v.thirdpersonKey);
