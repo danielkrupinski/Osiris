@@ -162,17 +162,19 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     EnginePrediction::run(cmd);
 
     Aimbot::run(cmd);
-    Tickbase::run(cmd, sendPacket);
     Triggerbot::run(cmd);
     Backtrack::run(cmd);
     Misc::edgejump(cmd);
     Misc::moonwalk(cmd);
     Misc::fastPlant(cmd);
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2)))
         Misc::chokePackets(sendPacket);
+    
+    Tickbase::run(cmd, sendPacket);
+    
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) 
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
-    }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
