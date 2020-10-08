@@ -50,7 +50,7 @@
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    static const auto once = [](HWND window) noexcept {
+    [[maybe_unused]] static const auto once = [](HWND window) noexcept {
         netvars = std::make_unique<Netvars>();
         eventListener = std::make_unique<EventListener>();
         config = std::make_unique<Config>("Osiris");
@@ -86,7 +86,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
-    static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
     if (config->loadScheduledFonts())
         ImGui_ImplDX9_InvalidateDeviceObjects();
@@ -249,7 +249,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 
 static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
-    static auto backtrackInit = (Backtrack::init(), false);
+    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
