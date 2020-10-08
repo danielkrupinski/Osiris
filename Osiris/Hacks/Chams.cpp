@@ -174,6 +174,7 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Local player"].materials, health);
         applyChams(config->chams["DESYNC"].materials, health);
     } else if (localPlayer->isOtherEnemy(player)) {
+        applyChams(config->chams["Enemies"].materials, health);
         if (config->backtrack.enabled) {
             const auto& record = Backtrack::getRecords(player->index());
             if (record.size() && Backtrack::valid(record.front().simulationTime)) {
@@ -183,10 +184,6 @@ void Chams::renderPlayer(Entity* player) noexcept
                 interfaces->studioRender->forcedMaterialOverride(nullptr);
 
             }
-        }
-        else
-        {
-            applyChams(config->chams["Enemies"].materials, health);
         }
     } else {
         applyChams(config->chams["Allies"].materials, health);
