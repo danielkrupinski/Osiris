@@ -954,6 +954,11 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::PopItemWidth();
     ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::skyboxList.data(), Helpers::skyboxList.size());
+    if (config->visuals.skybox == 25) {
+        ImGui::InputText("Skybox filename", &config->visuals.customSkybox);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("skybox files must be put in csgo/materials/skybox/ directory");
+    }
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
