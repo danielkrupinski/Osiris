@@ -926,6 +926,15 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
+    ImGui::PushID(60);
+    ImGui::SliderFloat("World exposure", &config->visuals.worldExposure, 0.f, 100.f);
+    ImGui::PopID();
+    ImGui::PushID(61);
+    ImGui::SliderFloat("Model ambient", &config->visuals.modelAmbient, 0.f, 100.f);
+    ImGui::PopID();
+    ImGui::PushID(62);
+    ImGui::SliderFloat("Bloom scale", &config->visuals.bloomScale, 0.f, 100.f);
+    ImGui::PopID();
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();
@@ -1417,19 +1426,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         ImGui::NextColumn();
 
         ImGui::PushItemWidth(100.0f);
-
-        if (ImGui::Button("Import from Clipboard", { 100.0f, 25.0f })) {
-            if (config->fromClipboard()) {
-                currentConfig = -1;
-                updateColors();
-                SkinChanger::scheduleHudUpdate();
-                Misc::updateClanTag(true);
-            }
-        }
-
-        if (ImGui::Button("Export to Clipboard", { 100.0f, 25.0f })) {
-            config->toClipboard();
-        }
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config->add(buffer.c_str());

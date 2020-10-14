@@ -261,6 +261,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
+        Visuals::doBloomEffects();
         Misc::fakePrime();
     }
     if (interfaces->engine->isInGame()) {

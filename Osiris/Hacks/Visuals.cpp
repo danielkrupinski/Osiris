@@ -16,6 +16,7 @@
 #include "../SDK/ModelInfo.h"
 
 #include <array>
+#include <iostream>
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -404,5 +405,36 @@ void Visuals::skybox(FrameStage stage) noexcept
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
+    }
+}
+
+void Visuals::doBloomEffects() noexcept
+{
+    if (!localPlayer)
+        return;
+    
+    for (int i = 0; i < 2048; i++)
+    {
+        Entity* ent = interfaces->entityList->getEntity(i);
+
+        if (!ent)
+            continue;
+
+        if (!std::string(ent->getClientClass()->networkName).ends_with("TonemapController"))
+            continue;
+
+        ent->useCustomAutoExposureMax() = true;
+        ent->useCustomAutoExposureMin() = true;
+        ent->useCustomBloomScale() = true;
+
+        float exposureScale = config->visuals.worldExposure / 10;
+        ent->customAutoExposureMin() = exposureScale;
+        ent->customAutoExposureMax() = exposureScale;
+
+        float bloomScale = config->visuals.bloomScale / 10;
+        ent->customBloomScale() = bloomScale;
+
+        ConVar *modelAmbientMin = interfaces->cvar->findVar("r_modelAmbientMin");
+        modelAmbientMin->setValue(config->visuals.modelAmbient / 10);
     }
 }

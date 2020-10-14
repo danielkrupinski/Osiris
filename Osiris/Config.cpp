@@ -1,5 +1,4 @@
 #include <fstream>
-#include <sstream>
 
 #ifdef _WIN32
 #include <ShlObj.h>
@@ -429,6 +428,10 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
+    read(j, "World exposure", v.worldExposure);
+    read(j, "Model ambient", v.modelAmbient);
+    read(j, "Blooom scale", v.bloomScale);
+
 }
 
 static void from_json(const json& j, sticker_setting& s)
@@ -1105,45 +1108,6 @@ void Config::save(size_t id) const noexcept
     }
 }
 
-bool Config::toClipboard() const noexcept
-{
-    std::stringstream ss;
-
-    json j;
-
-    j["Aimbot"] = aimbot;
-    j["Triggerbot"] = triggerbot;
-    j["Backtrack"] = backtrack;
-    j["Anti aim"] = antiAim;
-    j["Glow"] = glow;
-    j["Chams"] = chams;
-    j["ESP"] = streamProofESP;
-    j["Sound"] = sound;
-    j["Visuals"] = visuals;
-    j["Misc"] = misc;
-    j["Style"] = style;
-    j["Skin changer"] = skinChanger;
-
-    removeEmptyObjects(j);
-    ss << std::setw(2) << j;
-
-    void* data = GlobalAlloc(GMEM_FIXED, sizeof(char) * ss.str().length() + 1);
-    if (data)
-        memcpy(data, ss.str().c_str(), sizeof(char) * ss.str().length() + 1);
-
-    if (OpenClipboard(NULL)) {
-        EmptyClipboard();
-        SetClipboardData(CF_TEXT, data);
-        CloseClipboard();
-    }
-    else {
-        return false;
-    }
-
-    return true;
-
-}
-
 void Config::add(const char* name) noexcept
 {
     if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
@@ -1179,42 +1143,6 @@ void Config::reset() noexcept
     sound = { };
     style = { };
     misc = { };
-}
-
-bool Config::fromClipboard() noexcept 
-{
-    char* clip;
-    if (OpenClipboard(NULL)){
-        clip = (char*)GetClipboardData(CF_TEXT);
-        CloseClipboard();
-    }
-    else
-        return false;
-
-    json j;
-
-    std::stringstream in(clip);
-    try {
-        in >> j;
-    }
-    catch (std::exception ex) {
-        return false;
-    }
-    reset();
-
-    read(j, "Aimbot", aimbot);
-    read(j, "Triggerbot", triggerbot);
-    read<value_t::object>(j, "Backtrack", backtrack);
-    read<value_t::object>(j, "Anti aim", antiAim);
-    read(j, "Glow", glow);
-    read(j, "Chams", chams);
-    read<value_t::object>(j, "ESP", streamProofESP);
-    read<value_t::object>(j, "Visuals", visuals);
-    read(j, "Skin changer", skinChanger);
-    read<value_t::object>(j, "Sound", sound);
-    read<value_t::object>(j, "Style", style);
-    read<value_t::object>(j, "Misc", misc);
-    return true;
 }
 
 void Config::listConfigs() noexcept

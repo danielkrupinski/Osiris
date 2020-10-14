@@ -20,9 +20,6 @@ public:
     void reset() noexcept;
     void listConfigs() noexcept;
 
-    bool toClipboard() const noexcept;
-    bool fromClipboard() noexcept;
-
     constexpr auto& getConfigs() noexcept
     {
         return configs;
@@ -178,6 +175,10 @@ public:
             float green = 0.0f;
             float yellow = 0.0f;
         } colorCorrection;
+
+        float worldExposure{ 0.6f };
+        float modelAmbient{ 0.6f };
+        float bloomScale{ 0.6f };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
