@@ -176,9 +176,9 @@ public:
             float yellow = 0.0f;
         } colorCorrection;
 
-        float worldExposure{ 0.6f };
-        float modelAmbient{ 0.6f };
-        float bloomScale{ 0.6f };
+        float worldExposure{ 0.0f };
+        float modelAmbient{ 0.0f };
+        float bloomScale{ 0.0f };
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
