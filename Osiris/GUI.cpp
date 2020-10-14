@@ -1418,6 +1418,19 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
         ImGui::PushItemWidth(100.0f);
 
+        if (ImGui::Button("Import from Clipboard", { 100.0f, 25.0f })) {
+            if (config->fromClipboard()) {
+                currentConfig = -1;
+                updateColors();
+                SkinChanger::scheduleHudUpdate();
+                Misc::updateClanTag(true);
+            }
+        }
+
+        if (ImGui::Button("Export to Clipboard", { 100.0f, 25.0f })) {
+            config->toClipboard();
+        }
+
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config->add(buffer.c_str());
 

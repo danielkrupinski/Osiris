@@ -20,6 +20,9 @@ public:
     void reset() noexcept;
     void listConfigs() noexcept;
 
+    bool toClipboard() const noexcept;
+    bool fromClipboard() noexcept;
+
     constexpr auto& getConfigs() noexcept
     {
         return configs;
