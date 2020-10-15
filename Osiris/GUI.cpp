@@ -926,15 +926,19 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("No grass", &config->visuals.noGrass);
     ImGui::Checkbox("No shadows", &config->visuals.noShadows);
     ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
-    ImGui::PushID(60);
-    ImGui::SliderFloat("World exposure", &config->visuals.worldExposure, 0.f, 100.f);
-    ImGui::PopID();
-    ImGui::PushID(61);
-    ImGui::SliderFloat("Model ambient", &config->visuals.modelAmbient, 0.f, 100.f);
-    ImGui::PopID();
-    ImGui::PushID(62);
-    ImGui::SliderFloat("Bloom scale", &config->visuals.bloomScale, 0.f, 100.f);
-    ImGui::PopID();
+    ImGui::Checkbox("Custom post-processing", &config->visuals.customPostProcessing.enabled);
+    ImGui::SameLine();
+    bool ppPopup = ImGui::Button("Edit");
+
+    if (ppPopup)
+        ImGui::OpenPopup("##pppopup");
+
+    if (ImGui::BeginPopup("##pppopup")) {
+        ImGui::SliderFloat("World exposure", &config->visuals.customPostProcessing.worldExposure, 0.0f, 100.f);
+        ImGui::SliderFloat("Model ambient", &config->visuals.customPostProcessing.modelAmbient, 0.0f, 100.f);
+        ImGui::SliderFloat("Bloom scale", &config->visuals.customPostProcessing.bloomScale, 0.0f, 100.f);
+        ImGui::EndPopup();
+    }
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();
@@ -976,9 +980,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     bool ccPopup = ImGui::Button("Edit");
 
     if (ccPopup)
-        ImGui::OpenPopup("##popup");
+        ImGui::OpenPopup("##ccpopup");
 
-    if (ImGui::BeginPopup("##popup")) {
+    if (ImGui::BeginPopup("##ccpopup")) {
         ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &config->visuals.colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
         ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &config->visuals.colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
         ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &config->visuals.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();

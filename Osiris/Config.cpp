@@ -389,6 +389,14 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Yellow", c.yellow);
 }
 
+static void from_json(const json& j, Config::Visuals::CustomPostProcessing& c)
+{
+    read(j, "Enabled", c.enabled);
+    read(j, "World exposure", c.worldExposure);
+    read(j, "Model ambient", c.modelAmbient);
+    read(j, "Bloom scale", c.bloomScale);
+}
+
 static void from_json(const json& j, Config::Visuals& v)
 {
     read(j, "Disable post-processing", v.disablePostProcessing);
@@ -428,9 +436,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
-    read(j, "World exposure", v.worldExposure);
-    read(j, "Model ambient", v.modelAmbient);
-    read(j, "Blooom scale", v.bloomScale);
+    read<value_t::object>(j, "Custom post-processing", v.customPostProcessing);
 
 }
 
@@ -972,6 +978,15 @@ static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Co
     WRITE("Yellow", yellow);
 }
 
+static void to_json(json& j, const Config::Visuals::CustomPostProcessing& o, const Config::Visuals::CustomPostProcessing& dummy)
+{
+    WRITE("Enabled", enabled);
+    WRITE("World exposure", worldExposure);
+    WRITE("Model ambient", modelAmbient);
+    WRITE("Bloom scale", bloomScale);
+}
+
+
 static void to_json(json& j, const Config::Visuals& o)
 {
     const Config::Visuals dummy;
@@ -1013,9 +1028,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
     WRITE("Color correction", colorCorrection);
-    WRITE("World exposure", worldExposure);
-    WRITE("Model ambient", modelAmbient);
-    WRITE("Bloom scale", bloomScale);
+    WRITE("Custom post-processing", customPostProcessing);
 }
 
 static void to_json(json& j, const ImVec4& o)

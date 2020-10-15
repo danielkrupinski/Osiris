@@ -423,18 +423,22 @@ void Visuals::doBloomEffects() noexcept
         if (!std::string(ent->getClientClass()->networkName).ends_with("TonemapController"))
             continue;
 
-        ent->useCustomAutoExposureMax() = true;
-        ent->useCustomAutoExposureMin() = true;
-        ent->useCustomBloomScale() = true;
+        bool enabled = config->visuals.customPostProcessing.enabled;
+        ent->useCustomAutoExposureMax() = enabled;
+        ent->useCustomAutoExposureMin() = enabled;
+        ent->useCustomBloomScale() = enabled;
 
-        float exposureScale = config->visuals.worldExposure / 10;
-        ent->customAutoExposureMin() = exposureScale;
-        ent->customAutoExposureMax() = exposureScale;
+        if (!enabled)
+            return;
 
-        float bloomScale = config->visuals.bloomScale / 10;
+        float worldExposure = config->visuals.customPostProcessing.worldExposure;
+        ent->customAutoExposureMin() = worldExposure;
+        ent->customAutoExposureMax() = worldExposure;
+
+        float bloomScale = config->visuals.customPostProcessing.bloomScale;
         ent->customBloomScale() = bloomScale;
 
         ConVar *modelAmbientMin = interfaces->cvar->findVar("r_modelAmbientMin");
-        modelAmbientMin->setValue(config->visuals.modelAmbient / 10);
+        modelAmbientMin->setValue(config->visuals.customPostProcessing.modelAmbient);
     }
 }

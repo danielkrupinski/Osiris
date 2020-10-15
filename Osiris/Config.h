@@ -176,9 +176,12 @@ public:
             float yellow = 0.0f;
         } colorCorrection;
 
-        float worldExposure{ 0.0f };
-        float modelAmbient{ 0.0f };
-        float bloomScale{ 0.0f };
+        struct CustomPostProcessing {
+            bool enabled = false;
+            float worldExposure = 0.0f;
+            float modelAmbient = 0.0f;
+            float bloomScale = 0.0f;
+        } customPostProcessing;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
