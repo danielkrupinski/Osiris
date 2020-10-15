@@ -977,7 +977,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
+    ImGui::PushID(6);
     bool ccPopup = ImGui::Button("Edit");
+    ImGui::PopID();
 
     if (ccPopup)
         ImGui::OpenPopup("##ccpopup");
