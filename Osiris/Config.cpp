@@ -1013,6 +1013,9 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
     WRITE("Color correction", colorCorrection);
+    WRITE("World exposure", worldExposure);
+    WRITE("Model ambient", modelAmbient);
+    WRITE("Bloom scale", bloomScale);
 }
 
 static void to_json(json& j, const ImVec4& o)
