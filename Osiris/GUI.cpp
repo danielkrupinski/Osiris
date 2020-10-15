@@ -934,9 +934,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
         ImGui::OpenPopup("##pppopup");
 
     if (ImGui::BeginPopup("##pppopup")) {
-        ImGui::SliderFloat("World exposure", &config->visuals.customPostProcessing.worldExposure, 0.0f, 100.f);
-        ImGui::SliderFloat("Model ambient", &config->visuals.customPostProcessing.modelAmbient, 0.0f, 100.f);
-        ImGui::SliderFloat("Bloom scale", &config->visuals.customPostProcessing.bloomScale, 0.0f, 100.f);
+        ImGui::SliderFloat("World exposure", &config->visuals.customPostProcessing.worldExposure, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderFloat("Model ambient", &config->visuals.customPostProcessing.modelAmbient, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderFloat("Bloom scale", &config->visuals.customPostProcessing.bloomScale, 0.0f, 100.f, "%.3f", ImGuiSliderFlags_Logarithmic);
         ImGui::EndPopup();
     }
     ImGui::NextColumn();
