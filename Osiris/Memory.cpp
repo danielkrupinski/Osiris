@@ -33,7 +33,7 @@ Memory::Memory() noexcept
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern(L"client", "\xE8????\xEB\x19\x8B\x07") + 1);
     listLeaves = findPattern(L"client", "\x56\x52\xFF\x50\x18") + 5;
     dispatchSound = reinterpret_cast<int*>(findPattern(L"engine", "\x74\x0B\xE8????\x8B\x3D") + 3);
-    traceToExit = reinterpret_cast<decltype(traceToExit)>(findPattern(L"client", "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75"));
+    traceToExit = findPattern(L"client", "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
     viewRender = **reinterpret_cast<ViewRender***>(findPattern(L"client", "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08") + 2);
     drawScreenEffectMaterial = relativeToAbsolute<uintptr_t>(findPattern(L"client", "\xE8????\x83\xC4\x0C\x8D\x4D\xF8") + 1);
     submitReport = reinterpret_cast<decltype(submitReport)>(findPattern(L"client", "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x28\x8B\x4D\x08"));

@@ -55,7 +55,7 @@ public:
     void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
     uintptr_t listLeaves;
     int* dispatchSound;
-    std::add_pointer_t<bool __cdecl(float, float, float, float, float, float, Trace&)> traceToExit;
+    uintptr_t traceToExit;
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
     std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
