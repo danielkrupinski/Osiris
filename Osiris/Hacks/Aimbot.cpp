@@ -15,15 +15,35 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
+static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+{
+    const auto traceToExitFn = memory->traceToExit;
+    bool result;
+    __asm {
+        push exitTrace
+        mov eax, direction
+        push [eax]Vector.z
+        push [eax]Vector.y
+        push [eax]Vector.x
+        mov eax, start
+        push [eax]Vector.z
+        push [eax]Vector.y
+        push [eax]Vector.x
+        mov edx, enterTrace
+        mov ecx, end
+        call traceToExitFn
+        add esp, 28
+        mov result, al
+    }
+    return result;
+}
+
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
-    __asm {
-        mov ecx, end
-        mov edx, enterTrace
-    }
-    if (!memory->traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
+
+    if (!traceToExit(enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
     SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
