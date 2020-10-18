@@ -406,3 +406,39 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+void Visuals::rainbowHud() noexcept
+{
+    const auto cvar = interfaces->cvar->findVar("cl_hud_color");
+
+    constexpr float interval = 0.5f;
+
+    static bool enabled = false;
+    static int backup = 0;
+    static float lastTime = 0.f;
+    float curtime = memory->globalVars->currenttime;
+
+    if (config->visuals.rainbowHud) {
+        static int currentColor = 0;
+
+        if (curtime - lastTime > interval) {
+            cvar->setValue(currentColor);
+
+            currentColor++;
+
+            if (currentColor > 10)
+                currentColor = 0;
+
+            lastTime = curtime;
+        }
+
+        enabled = true;
+    }
+    else {
+        if (enabled) {
+            cvar->setValue(backup);
+        }
+        backup = cvar->getInt();
+        enabled = false;
+	}
+}
