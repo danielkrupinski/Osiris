@@ -4,8 +4,11 @@
 #include <memory>
 #include <string>
 #include <type_traits>
+
+#ifdef _WIN32
 #include <Windows.h>
 #include <Psapi.h>
+#endif
 
 class ClientMode;
 class Entity;
