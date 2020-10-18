@@ -1,8 +1,11 @@
 #include <fstream>
 #include <functional>
 #include <string>
+
+#ifdef _WIN32
 #include <ShlObj.h>
 #include <Windows.h>
+#endif
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"

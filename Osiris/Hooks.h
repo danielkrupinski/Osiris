@@ -1,9 +1,12 @@
 #pragma once
 
-#include <d3d9.h>
 #include <memory>
 #include <type_traits>
+
+#ifdef _WIN32
+#include <d3d9.h>
 #include <Windows.h>
+#endif
 
 #include "Hooks/MinHook.h"
 #include "Hooks/VmtHook.h"

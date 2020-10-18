@@ -3,7 +3,10 @@
 #include <memory>
 #include <string>
 #include <type_traits>
+
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 class Client;
 class Cvar;
