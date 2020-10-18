@@ -416,12 +416,12 @@ void Visuals::rainbowHud() noexcept
     static bool enabled = false;
     static int backup = 0;
     static float lastTime = 0.f;
-    float curtime = memory->globalVars->currenttime;
+    float realtime = memory->globalVars->realtime;
 
     if (config->visuals.rainbowHud) {
         static int currentColor = 0;
 
-        if (curtime - lastTime > interval) {
+        if (realtime - lastTime > interval) {
             cvar->setValue(currentColor);
 
             currentColor++;
@@ -429,16 +429,15 @@ void Visuals::rainbowHud() noexcept
             if (currentColor > 10)
                 currentColor = 0;
 
-            lastTime = curtime;
+            lastTime = realtime;
         }
-
         enabled = true;
     }
     else {
-        if (enabled) {
+        if (enabled)
             cvar->setValue(backup);
-        }
+	    
         backup = cvar->getInt();
         enabled = false;
-	}
+   }
 }
