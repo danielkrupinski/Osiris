@@ -34,7 +34,7 @@ class StudioRender;
 class Interfaces {
 public:
 #define GAME_INTERFACE(type, name, module, version) \
-type* name = reinterpret_cast<type*>(find(L##module, version));
+type* name = reinterpret_cast<type*>(find(module, version));
 
     GAME_INTERFACE(Client, client, "client", "VClient018")
     GAME_INTERFACE(Cvar, cvar, "vstdlib", "VEngineCvar007")
@@ -61,9 +61,9 @@ type* name = reinterpret_cast<type*>(find(L##module, version));
 
 #undef GAME_INTERFACE
 private:
-    static void* find(const wchar_t* module, const char* name) noexcept
+    static void* find(const char* module, const char* name) noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface")))
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleA(module), "CreateInterface")))
             if (void* foundInterface = createInterface(name, nullptr))
                 return foundInterface;
 
