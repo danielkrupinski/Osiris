@@ -14,6 +14,7 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/Utils.h"
 
 #include <array>
 
