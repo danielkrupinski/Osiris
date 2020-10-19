@@ -406,3 +406,43 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+void Visuals::rainbowCrosshair() noexcept 
+{
+    const auto red = interfaces->cvar->findVar("cl_crosshaircolor_r");
+    const auto green = interfaces->cvar->findVar("cl_crosshaircolor_g");
+    const auto blue = interfaces->cvar->findVar("cl_crosshaircolor_b");
+    const auto color = interfaces->cvar->findVar("cl_crosshaircolor");
+
+    auto [r, g, b] = rainbowColor(config->visuals.rainbowCrosshairSpeed);
+    r *= 255;
+    g *= 255;
+    b *= 255;
+
+    static bool enabled = false;
+    static float backupR;
+    static float backupG;
+    static float backupB;
+    static int backupColor;
+
+    if (config->visuals.rainbowCrosshair) {
+        red->setValue(r);
+        green->setValue(g);
+        blue->setValue(b);
+        color->setValue(5);
+        enabled = true;
+    }
+    else {
+        if (enabled) {
+            red->setValue(backupR);
+            green->setValue(backupG);
+            blue->setValue(backupB);
+            color->setValue(backupColor);
+        }
+        backupR = red->getFloat();
+        backupG = green->getFloat();
+        backupB = blue->getFloat();
+        backupColor = color->getInt();
+        enabled = false;
+    }
+}
