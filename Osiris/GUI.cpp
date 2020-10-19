@@ -962,6 +962,12 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit effect time", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+    ImGui::Checkbox("Rainbow crosshair", &config->visuals.rainbowCrosshair);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(100.0f);
+    config->visuals.rainbowCrosshairSpeed = std::clamp(config->visuals.rainbowCrosshairSpeed, 0.0f, 25.0f);
+    ImGui::InputFloat("Speed", &config->visuals.rainbowCrosshairSpeed, 0.1f, 0.15f, "%.2f");
+    ImGui::PopItemWidth();
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
