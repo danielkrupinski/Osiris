@@ -164,6 +164,8 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        bool rainbowCrosshair{ false };
+        float rainbowCrosshairSpeed{ 1.0f };
 
         struct ColorCorrection {
             bool enabled = false;
