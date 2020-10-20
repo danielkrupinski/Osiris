@@ -218,8 +218,8 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     // Build texture atlas
     ImGuiIO& io = ImGui::GetIO();
     unsigned char* pixels;
-    int width, height, bytes_per_pixel;
-    io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height, &bytes_per_pixel);
+    int width, height;
+    io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
 
     // Upload texture to graphics system
     g_FontTexture = NULL;
@@ -229,7 +229,7 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, 0) != D3D_OK)
         return false;
     for (int y = 0; y < height; y++)
-        memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + (width * bytes_per_pixel) * y, (width * bytes_per_pixel));
+        memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + width * y, width);
     g_FontTexture->UnlockRect(0);
 
     // Store our identifier
