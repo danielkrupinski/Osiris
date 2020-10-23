@@ -12,6 +12,8 @@
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 
+#include "SDK/Platform.h"
+
 struct SoundInfo;
 
 // Easily switch hooking method for all hooks, choose between MinHook/VmtHook/VmtSwap
@@ -19,15 +21,18 @@ using HookType = MinHook;
 
 class Hooks {
 public:
+#ifdef _WIN32
     Hooks(HMODULE module) noexcept;
-
-    void install() noexcept;
-    void uninstall() noexcept;
 
     WNDPROC originalWndProc;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
-    std::add_pointer_t<int __fastcall(SoundInfo&)> originalDispatchSound;
+#endif
+
+    void install() noexcept;
+    void uninstall() noexcept;
+
+    std::add_pointer_t<int __FASTCALL(SoundInfo&)> originalDispatchSound;
 
     HookType bspQuery;
     HookType client;
@@ -40,8 +45,10 @@ public:
     HookType viewRender;
     HookType svCheats;
 private:
+#ifdef _WIN32
     HMODULE module;
     HWND window;
+#endif
 };
 
 inline std::unique_ptr<Hooks> hooks;
