@@ -17,8 +17,9 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
+    bool result = false;
+#ifdef _WIN32
     const auto traceToExitFn = memory->traceToExit;
-    bool result;
     __asm {
         push exitTrace
         mov eax, direction
@@ -35,6 +36,7 @@ static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vect
         add esp, 28
         mov result, al
     }
+#endif
     return result;
 }
 
@@ -144,12 +146,16 @@ void Aimbot::run(UserCmd* cmd) noexcept
 
     if (config->aimbot[weaponIndex].onKey) {
         if (!config->aimbot[weaponIndex].keyMode) {
+#ifdef _WIN32
             if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
                 return;
+#endif
         } else {
             static bool toggle = true;
+#ifdef _WIN32
             if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
                 toggle = !toggle;
+#endif
             if (!toggle)
                 return;
         }

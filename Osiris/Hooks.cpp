@@ -1,8 +1,11 @@
 #include <functional>
-#include <intrin.h>
 #include <string>
+
+#ifdef _WIN32
+#include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
+#endif
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
