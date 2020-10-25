@@ -296,6 +296,7 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Scoped only", a.scopedOnly);
     read(j, "Ignore flash", a.ignoreFlash);
     read(j, "Ignore smoke", a.ignoreSmoke);
+    read(j, "Aimbot jump Check", a.aimbotJumpCheck);
     read(j, "Auto shot", a.autoShot);
     read(j, "Auto scope", a.autoScope);
     read(j, "Fov", a.fov);
@@ -317,6 +318,7 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read(j, "Scoped only", t.scopedOnly);
     read(j, "Ignore flash", t.ignoreFlash);
     read(j, "Ignore smoke", t.ignoreSmoke);
+    read(j, "Trigger jump Check", t.triggerJumpCheck);
     read(j, "Hitgroup", t.hitgroup);
     read(j, "Shot delay", t.shotDelay);
     read(j, "Min damage", t.minDamage);
@@ -762,6 +764,7 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Scoped only", scopedOnly);
     WRITE("Ignore flash", ignoreFlash);
     WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Aimbot Jump Check", aimbotJumpCheck);
     WRITE("Auto shot", autoShot);
     WRITE("Auto scope", autoScope);
     WRITE("Fov", fov);
@@ -783,6 +786,7 @@ static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerb
     WRITE("Scoped only", scopedOnly);
     WRITE("Ignore flash", ignoreFlash);
     WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Trigger Jump Check", triggerJumpCheck);
     WRITE("Hitgroup", hitgroup);
     WRITE("Shot delay", shotDelay);
     WRITE("Min damage", minDamage);
