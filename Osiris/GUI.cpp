@@ -241,6 +241,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
     ImGui::Checkbox("Ignore flash", &config->aimbot[currentWeapon].ignoreFlash);
     ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("Jump Check", &config->aimbot[currentWeapon].aimbotJumpCheck);
     ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
     ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
     ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
@@ -386,6 +387,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Scoped only", &config->triggerbot[currentWeapon].scopedOnly);
     ImGui::Checkbox("Ignore flash", &config->triggerbot[currentWeapon].ignoreFlash);
     ImGui::Checkbox("Ignore smoke", &config->triggerbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("Jump Check", &config->triggerbot[currentWeapon].triggerJumpCheck);
     ImGui::SetNextItemWidth(85.0f);
     ImGui::Combo("Hitgroup", &config->triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
     ImGui::PushItemWidth(220.0f);
