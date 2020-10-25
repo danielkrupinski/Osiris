@@ -47,6 +47,7 @@ public:
         bool scopedOnly{ true };
         bool ignoreFlash{ false };
         bool ignoreSmoke{ false };
+        bool aimbotJumpCheck{ false };
         bool autoShot{ false };
         bool autoScope{ false };
         float fov{ 0.0f };
@@ -66,6 +67,7 @@ public:
         bool scopedOnly = true;
         bool ignoreFlash = false;
         bool ignoreSmoke = false;
+        bool triggerJumpCheck = false;
         bool killshot = false;
         bool onKey = false;
         int key = 0;
