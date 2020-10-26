@@ -156,6 +156,7 @@ public:
         int skybox{ 0 };
         ColorToggle world;
         ColorToggle sky;
+        ColorToggle xCrosshair;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitEffect{ 0 };
