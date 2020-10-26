@@ -406,3 +406,32 @@ void Visuals::skybox(FrameStage stage) noexcept
         memory->loadSky(sv_skyname->string);
     }
 }
+
+void Visuals::xCrosshair() noexcept
+{
+    static auto crosshairalpha = interfaces->cvar->findVar("cl_crosshairalpha");
+    crosshairalpha->setValue(255);
+
+    if (!config->visuals.xCrosshair.enabled)
+        return;
+
+    crosshairalpha->setValue(0);
+
+    if (!interfaces->engine->isInGame() || !localPlayer.get()->isAlive())
+        return;
+    
+        const auto [width, height] = interfaces->surface->getScreenSize();
+
+        const auto width_mid = width / 2;
+        const auto height_mid = height / 2;
+ 
+        if (config->visuals.xCrosshair.rainbow)
+            interfaces->surface->setDrawColor(rainbowColor(config->visuals.xCrosshair.rainbowSpeed));
+        else
+            interfaces->surface->setDrawColor(config->visuals.xCrosshair.color);
+            interfaces->surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
+            interfaces->surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
+            interfaces->surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
+            interfaces->surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+
+}
