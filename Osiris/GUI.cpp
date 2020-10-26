@@ -956,6 +956,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::skyboxList.data(), Helpers::skyboxList.size());
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
+    ImGuiCustom::colorPicker("X Crosshair", config->visuals.xCrosshair);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
     ImGui::Combo("Screen effect", &config->visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
     ImGui::Combo("Hit effect", &config->visuals.hitEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
