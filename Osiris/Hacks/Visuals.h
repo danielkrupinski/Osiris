@@ -19,7 +19,7 @@ namespace Visuals
     void applyScreenEffects() noexcept;
     void hitEffect(GameEvent* event = nullptr) noexcept;
     void hitMarker(GameEvent* event = nullptr) noexcept;
-    void xcrosshair() noexcept;
+    void xCrosshair() noexcept;
     void disablePostProcessing(FrameStage stage) noexcept;
     void reduceFlashEffect() noexcept;
     bool removeHands(const char* modelName) noexcept;
