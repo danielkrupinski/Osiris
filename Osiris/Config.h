@@ -254,6 +254,8 @@ public:
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
+        bool ragdollForce{ false };
+        int ragdollForceStrength{ 1 };
 
         struct Reportbot {
             bool enabled = false;
