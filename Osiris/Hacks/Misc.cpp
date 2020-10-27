@@ -985,7 +985,7 @@ void Misc::ragdollForce() noexcept
         if (!entity || !(entity->getClientClass()->classId == ClassId::CSRagdoll))
             continue;
 
-        entity->ragdollForce() *= config->misc.ragdollForceStrength;
-        entity->ragdollVelocity() *= config->misc.ragdollForceStrength;
+        entity->ragdollForce() *= (float) config->misc.ragdollForceStrength;
+        entity->ragdollVelocity() *= (float) config->misc.ragdollForceStrength;
     }
 }
