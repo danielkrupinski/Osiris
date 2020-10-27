@@ -184,6 +184,9 @@ public:
 
     NETVAR(body, "CBaseAnimating", "m_nBody", int)
     NETVAR(hitboxSet, "CBaseAnimating", "m_nHitboxSet", int)
+        
+    NETVAR(ragdollForce, "CCSRagdoll", "m_vecForce", Vector);
+    NETVAR(ragdollVelocity, "CCSRagdoll", "m_vecRagdollVelocity", Vector);
 
     NETVAR(modelIndex, "CBaseEntity", "m_nModelIndex", unsigned)
     NETVAR(origin, "CBaseEntity", "m_vecOrigin", Vector)
