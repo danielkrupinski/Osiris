@@ -84,6 +84,14 @@ struct Vector {
         z /= div;
         return *this;
     }
+    
+    constexpr Vector& operator*=(float mul) noexcept
+    {
+        x *= mul;
+        y *= mul;
+        z *= mul;
+        return *this;
+    }
 
     constexpr auto operator*(float mul) const noexcept
     {
