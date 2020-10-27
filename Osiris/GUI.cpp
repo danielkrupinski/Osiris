@@ -1364,6 +1364,10 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::EndPopup();
     }
     ImGui::PopID();
+    ImGui::Checkbox("Ragdoll force", &config->misc.ragdollForce);
+    ImGui::SetNextItemWidth(90.0f);
+    ImGui::InputInt("Ragdoll force strength", &config->misc.ragdollForceStrength, 1, 3);
+    config->misc.ragdollForceStrength = std::clamp(config->misc.ragdollForceStrength, 1, 100);
 
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
