@@ -973,3 +973,19 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
             child->setAttributeFloat("SpawnTime", memory->globalVars->currenttime);
     }
 }
+
+void Misc::ragdollForce() noexcept
+{
+    if (!config->misc.ragdollForce)
+        return;
+
+    for (int i = 1; i <= interfaces->entityList->getHighestEntityIndex(); i++) {
+        Entity* entity = interfaces->entityList->getEntity(i);
+
+        if (!entity || !(entity->getClientClass()->classId == ClassId::CSRagdoll))
+            continue;
+
+        entity->ragdollForce() *= config->misc.ragdollForceStrength;
+        entity->ragdollVelocity() *= config->misc.ragdollForceStrength;
+    }
+}
