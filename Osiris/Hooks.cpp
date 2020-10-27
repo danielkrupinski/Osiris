@@ -262,6 +262,7 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Misc::ragdollForce();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
