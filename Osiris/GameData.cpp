@@ -277,7 +277,7 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
-        visible = entity->visibleTo(localPlayer.get());
+        visible = !interfaces->engine->cullBox(obbMins + entity->getAbsOrigin(), obbMaxs + entity->getAbsOrigin()) && entity->visibleTo(localPlayer.get());
     }
 
     constexpr auto isEntityAudible = [](int entityIndex) noexcept {
