@@ -42,6 +42,8 @@ bool Entity::canSee(Entity* other, const Vector& pos) noexcept
 
 bool Entity::visibleTo(Entity* other) noexcept
 {
+    assert(isAlive());
+
     if (other->canSee(this, getAbsOrigin() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 
