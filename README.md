@@ -11,73 +11,73 @@
 Free open-source cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game.
 
 ## Features
-* **Aimbot** - aim assistance
-* **Triggerbot** - automatically fires when crosshair is on enemy
-* **Backtrack** - abuse lag compensation to move players back in time
-* **Glow** - render glow effect on entities
-* **Chams** - color player models to improve visibility
-* **Stream Proof ESP** - show information about players, dropped weapons and projectiles
-* **Visuals** - miscellaneous visual options
-* **Skin changer** - change weapon skins, knives and stickers
-* **Sound** - modify volume of certain sound effects
-* **Style** - select menu window layout and colors
-* **Misc** - miscellaneous features
-* **Config** - JSON-based configuration system
+*   **Aimbot** - aim assistance
+*   **Triggerbot** - automatically fires when crosshair is on enemy
+*   **Backtrack** - abuse lag compensation to move players back in time
+*   **Glow** - render glow effect on entities
+*   **Chams** - color player models to improve visibility
+*   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
+*   **Visuals** - miscellaneous visual options
+*   **Skin changer** - change weapon skins, knives and stickers
+*   **Sound** - modify volume of certain sound effects
+*   **Style** - select menu window layout and colors
+*   **Misc** - miscellaneous features
+*   **Config** - JSON-based configuration system
 
 <details>
 
-* **Aimbot** - aim assistance
-    * **Enabled** - on / off master switch
-    * **On key [ key ]** - aimbot works only when chosen key is being held
-    * **Aimlock** - brings your aim to the target (affected by Smooth).
-    * **Silent** - aimbot is not visible on your screen (client-sided only)
-    * **Friendly fire** - treat allies as enemies
-    * **Visible only** - aim only on visible players
-    * **Scoped only** - aimbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
-    * **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
-    * **Auto shot** - shoot automatically when target found
-    * **Auto scope** - automatically scopes sniper rifle before shooting
-    * **Bone** - bone which aimbot aims at
-    * **Fov** - field-of-view which aimbot operates [*0*-*255*]
-    * **Smooth** - smooth aimbot movement in order to seem more human-like
-    * **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
+*   **Aimbot** - aim assistance
+    *   **Enabled** - on / off master switch
+    *   **On key [ key ]** - aimbot works only when chosen key is being held
+    *   **Aimlock** - brings your aim to the target (affected by Smooth).
+    *   **Silent** - aimbot is not visible on your screen (client-sided only)
+    *   **Friendly fire** - treat allies as enemies
+    *   **Visible only** - aim only on visible players
+    *   **Scoped only** - aimbot works only when using scope (applies only to sniper rifles)
+    *   **Ignore flash** - ignore flashbang i.e. aim when local player is flashed
+    *   **Ignore smoke** - ignore smoke i.e. aim when target is in smoke
+    *   **Auto shot** - shoot automatically when target found
+    *   **Auto scope** - automatically scopes sniper rifle before shooting
+    *   **Bone** - bone which aimbot aims at
+    *   **Fov** - field-of-view which aimbot operates [*0*-*255*]
+    *   **Smooth** - smooth aimbot movement in order to seem more human-like
+    *   **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
-* **Triggerbot** - automatically fires when crosshair is on enemy
-    * **Enabled** - on / off master switch
-    * **On key [ key ]** - triggerbot works only when chosen key is being held
-    * **Friendly fire** - treat allies as enemies
-    * **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
-    * **Ignore flash** - ignore flashbang i.e. shoot when local player is flashed
-    * **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
-    * **Hitgroup** - body parts on which triggerbot works
-    * **Shot delay** - delay time in ms (milliseconds)
-    * **Min damage** - minimal damage to fire.
+*   **Triggerbot** - automatically fires when crosshair is on enemy
+    *   **Enabled** - on / off master switch
+    *   **On key [ key ]** - triggerbot works only when chosen key is being held
+    *   **Friendly fire** - treat allies as enemies
+    *   **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
+    *   **Ignore flash** - ignore flashbang i.e. shoot when local player is flashed
+    *   **Ignore smoke** - ignore smoke i.e. shoot when target is in smoke
+    *   **Hitgroup** - body parts on which triggerbot works
+    *   **Shot delay** - delay time in ms (milliseconds)
+    *   **Min damage** - minimal damage to fire.
     
-* **Backtrack** - abuse lag compensation in order to move players back in time
-    * **Enabled** - on / off master switch
-    * **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
-    * **Time limit** - limit the backtracking window [*1*-*200*ms]
+*   **Backtrack** - abuse lag compensation in order to move players back in time
+    *   **Enabled** - on / off master switch
+    *   **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
+    *   **Time limit** - limit the backtracking window [*1*-*200*ms]
 
-* **Glow** - render glow effect on entities
+*   **Glow** - render glow effect on entities
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), C4, Planted C4, Chickens, Defuse kits, Projectiles, Hostages, Ragdolls* **/** *All, Visible, Occluded*
 
-    * **Enabled** - on / off master switch
-    * **Health based** - color is based on player's hp
-    * **Color** - glow color in rgba format
-    * **Style** - glow style { `Default`, `Rim3d`, `Edge`, `Edge Pulse` }
+    *   **Enabled** - on / off master switch
+    *   **Health based** - color is based on player's hp
+    *   **Color** - glow color in rgba format
+    *   **Style** - glow style { `Default`, `Rim3d`, `Edge`, `Edge Pulse` }
 
-* **Chams** - color player models to improve visibility
+*   **Chams** - color player models to improve visibility
 
     *Allies, Enemies, Planting (player planting bomb), Defusing (player defusing bomb), Local player, Weapons (dropped weapons), Hands (view model hands), Backtrack (requires backtrack to be enabled), Sleeves (view model)* **/** *All, Visible, Occluded*
-    * **Enabled** - on / off master switch
-    * **Health based** - color is based on player's hp
-    * **Blinking** - change transparency frequently
-    * **Material** - material applied to model { `Normal`, `Flat`, `Animated`, `Platinum`, `Glass`, `Chrome`, `Crystal`, `Silver`, `Gold`, `Plastic`, `Glow` }
-    * **Wireframe** - render triangle mesh instead of solid material
-    * **Cover** - draw chams material on top of the original material instead of overriding it
-    * **Ignore-Z** - draw material through walls
+    *   **Enabled** - on / off master switch
+    *   **Health based** - color is based on player's hp
+    *   **Blinking** - change transparency frequently
+    *   **Material** - material applied to model { `Normal`, `Flat`, `Animated`, `Platinum`, `Glass`, `Chrome`, `Crystal`, `Silver`, `Gold`, `Plastic`, `Glow` }
+    *   **Wireframe** - render triangle mesh instead of solid material
+    *   **Cover** - draw chams material on top of the original material instead of overriding it
+    *   **Ignore-Z** - draw material through walls
 
 * **ESP** - show additional information about players and game world
     
@@ -89,19 +89,19 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     1. *Danger Zone*
         * *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
     <br><br>
-    * **Enabled** - on / off master switch
-    * **Font** - esp text font
-    * **Snaplines** - draw snapline to player
-    * **Eye traces** - draw player eye traces (shows where player looks)
-    * **Box** - draw 2D box over player model
-    * **Name** - draw player name
-    * **Health** - draw player health
-    * **Health bar** - draw rectangle indicating player health
-    * **Armor** - draw player armor
-    * **Armor bar** - draw rectangle indicating player armor
-    * **Money** - draw player money
-    * **Head dot** - draw dot on player's head
-    * **Active Weapon** - draw player equipped weapon
+    *   **Enabled** - on / off master switch
+    *   **Font** - esp text font
+    *   **Snaplines** - draw snapline to player
+    *   **Eye traces** - draw player eye traces (shows where player looks)
+    *   **Box** - draw 2D box over player model
+    *   **Name** - draw player name
+    *   **Health** - draw player health
+    *   **Health bar** - draw rectangle indicating player health
+    *   **Armor** - draw player armor
+    *   **Armor bar** - draw rectangle indicating player armor
+    *   **Money** - draw player money
+    *   **Head dot** - draw dot on player's head
+    *   **Active Weapon** - draw player equipped weapon
 
 * **Visuals** - miscellaneous visual options
     * **Disable post-processing** - disable post-processing effects in order to increase FPS
