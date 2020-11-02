@@ -99,6 +99,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+    Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
 
     if (gui->open)
         gui->render();
