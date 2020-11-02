@@ -87,8 +87,10 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
     3.  *Projectiles*
         *   *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
+
     4.  *Danger Zone*
         *   *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
+
     <br><br>
     *   **Enabled** - on / off master switch
     *   **Font** - esp text font
