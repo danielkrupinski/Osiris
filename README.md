@@ -225,11 +225,11 @@ Open git command prompt and enter following command:
 
     git clone --depth=1 https://github.com/danielkrupinski/Osiris.git
 
-`Osiris` folder should have been succesfully created, containing all the source files.
+`Osiris` folder should have been successfully created, containing all the source files.
 
 ### Compiling from source
 
-When you have equiped a copy of source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
+When you have equipped a copy of the source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
 
 Then change build configuration to `Release | x86` and simply press **Build solution**.
 
