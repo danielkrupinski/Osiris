@@ -53,7 +53,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Hitgroup** - body parts on which triggerbot works
     *   **Shot delay** - delay time in ms (milliseconds)
     *   **Min damage** - minimal damage to fire.
-    
+
 *   **Backtrack** - abuse lag compensation in order to move players back in time
     *   **Enabled** - on / off master switch
     *   **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
