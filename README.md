@@ -80,7 +80,6 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Ignore-Z** - draw material through walls
 
 *   **ESP** - show additional information about players and game world
-
     1.  *Allies, Enemies*
         *   *All, Visible, Occluded*
     2.  *Weapons*
@@ -220,9 +219,9 @@ To download source code this way [click here](https://github.com/danielkrupinski
 Choose this option if you're going to contribute to the repo or you want to use version control system. Download size ~4 MB. Git is required to step further, if not installed download it [here](https://git-scm.com).
 
 Open git command prompt and enter following command:
-```
-git clone --depth=1 https://github.com/danielkrupinski/Osiris.git
-```
+
+    git clone --depth=1 https://github.com/danielkrupinski/Osiris.git
+
 `Osiris` folder should have been succesfully created, containing all the source files.
 
 ### Compiling from source
