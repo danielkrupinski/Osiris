@@ -28,7 +28,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
 *   **Aimbot** - aim assistance
     *   **Enabled** - on / off master switch
-    *   **On key [ key ]** - aimbot works only when chosen key is being held
+    *   **On key \[ key \]** - aimbot works only when chosen key is being held
     *   **Aimlock** - brings your aim to the target (affected by Smooth).
     *   **Silent** - aimbot is not visible on your screen (client-sided only)
     *   **Friendly fire** - treat allies as enemies
@@ -39,13 +39,13 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Auto shot** - shoot automatically when target found
     *   **Auto scope** - automatically scopes sniper rifle before shooting
     *   **Bone** - bone which aimbot aims at
-    *   **Fov** - field-of-view which aimbot operates [*0*-*255*]
+    *   **Fov** - field-of-view which aimbot operates \[*0*-*255*\]
     *   **Smooth** - smooth aimbot movement in order to seem more human-like
     *   **Max aim inaccuracy** - maximum weapon inaccuracy allowing aimbot to run, lowering this value will e.g. disable aimbot while jumping or running
 
 *   **Triggerbot** - automatically fires when crosshair is on enemy
     *   **Enabled** - on / off master switch
-    *   **On key [ key ]** - triggerbot works only when chosen key is being held
+    *   **On key \[ key \]** - triggerbot works only when chosen key is being held
     *   **Friendly fire** - treat allies as enemies
     *   **Scoped only** - triggerbot works only when using scope (applies only to sniper rifles)
     *   **Ignore flash** - ignore flashbang i.e. shoot when local player is flashed
@@ -57,7 +57,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 *   **Backtrack** - abuse lag compensation in order to move players back in time
     *   **Enabled** - on / off master switch
     *   **Ignore smoke** - ignore smoke i.e. backtrack when target is in smoke
-    *   **Time limit** - limit the backtracking window [*1*-*200*ms]
+    *   **Time limit** - limit the backtracking window \[*1*-*200*ms\]
 
 *   **Glow** - render glow effect on entities
 
@@ -79,15 +79,15 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Cover** - draw chams material on top of the original material instead of overriding it
     *   **Ignore-Z** - draw material through walls
 
-* **ESP** - show additional information about players and game world
+*   **ESP** - show additional information about players and game world
     
-    1. *Allies, Enemies*
-        * *All, Visible, Occluded*
-    1. *Weapons*
-    1. *Projectiles*
-        * *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
-    1. *Danger Zone*
-        * *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
+    1.  *Allies, Enemies*
+        *   *All, Visible, Occluded*
+    2.  *Weapons*
+    3.  *Projectiles*
+        *   *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
+    4.  *Danger Zone*
+        *   *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
     <br><br>
     *   **Enabled** - on / off master switch
     *   **Font** - esp text font
@@ -104,34 +104,34 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Active Weapon** - draw player equipped weapon
 
 * **Visuals** - miscellaneous visual options
-    * **Disable post-processing** - disable post-processing effects in order to increase FPS
-    * **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
-    * **No fog** - remove fog from map for better visibility
-    * **No 3d sky** - remove 3d skybox from map - increases FPS
-    * **No visual recoil** - remove visual recoil punch effect
-    * **No hands** - remove arms / hands model from first-person view
-    * **No sleeves** - remove sleeves model from first-person view
-    * **No weapons** - remove weapons model from first-person view
-    * **No smoke** - remove smoke grenade effect
-    * **No blur** - remove blur
-    * **No scope overlay** - remove black overlay while scoping
-    * **No grass** - remove grass from map in Danger Zone mode (`dz_blacksite` and `dz_sirocco` maps)
-    * **No shadows** - disable dynamic shadows
-    * **Wireframe smoke** - render smoke skeleton instead of particle effect
-    * **Zoom [ key ]** - enable zoom on unzoomable weapons
-    * **Thirdperson** - thirdperson view
-    * **Thirdperson distance** - camera distance in thirdperson view
-    * **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
-    * **FOV** - change view FOV [*-60*-*0*-*60*] (0 - actual view fov, negative values - decreased, positive values - increased)
-    * **Far Z** - far clipping range, useful after disabling fog on large maps (e.g `dz_sirocco`) to render distant buildings
-    * **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
-    * **Brightness** - control game brightness [*0.0*-*1.0*]
-    * **Skybox** - change sky(box)
-    * **World color** - set world material ambient light color
-    * **Deagle spinner** - play "spinning" inspect animation when holding Deagle
-    * **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
-    * **Hit effect** - show screen effect on enemy hit
-    * **Hit marker** - show a cross detail on enemy hit
+    *   **Disable post-processing** - disable post-processing effects in order to increase FPS
+    *   **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
+    *   **No fog** - remove fog from map for better visibility
+    *   **No 3d sky** - remove 3d skybox from map - increases FPS
+    *   **No visual recoil** - remove visual recoil punch effect
+    *   **No hands** - remove arms / hands model from first-person view
+    *   **No sleeves** - remove sleeves model from first-person view
+    *   **No weapons** - remove weapons model from first-person view
+    *   **No smoke** - remove smoke grenade effect
+    *   **No blur** - remove blur
+    *   **No scope overlay** - remove black overlay while scoping
+    *   **No grass** - remove grass from map in Danger Zone mode (`dz_blacksite` and `dz_sirocco` maps)
+    *   **No shadows** - disable dynamic shadows
+    *   **Wireframe smoke** - render smoke skeleton instead of particle effect
+    *   **Zoom [ key ]** - enable zoom on unzoomable weapons
+    *   **Thirdperson** - thirdperson view
+    *   **Thirdperson distance** - camera distance in thirdperson view
+    *   **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
+    *   **FOV** - change view FOV [*-60*-*0*-*60*] (0 - actual view fov, negative values - decreased, positive values - increased)
+    *   **Far Z** - far clipping range, useful after disabling fog on large maps (e.g `dz_sirocco`) to render distant buildings
+    *   **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
+    *   **Brightness** - control game brightness [*0.0*-*1.0*]
+    *   **Skybox** - change sky(box)
+    *   **World color** - set world material ambient light color
+    *   **Deagle spinner** - play "spinning" inspect animation when holding Deagle
+    *   **Screen effect** - screenspace effect - *Drone cam, Drone cam with noise, Underwater, Healthboost, Dangerzone*
+    *   **Hit effect** - show screen effect on enemy hit
+    *   **Hit marker** - show a cross detail on enemy hit
 
 * **Skin changer** - change knives, gloves, weapon skins and stickers
 
