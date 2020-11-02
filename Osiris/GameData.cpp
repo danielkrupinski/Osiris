@@ -275,9 +275,11 @@ void ProjectileData::update(Entity* projectile) noexcept
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
+    inViewFrustum = !interfaces->engine->cullBox(obbMins + entity->getAbsOrigin(), obbMaxs + entity->getAbsOrigin());
+
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
-        visible = !interfaces->engine->cullBox(obbMins + entity->getAbsOrigin(), obbMaxs + entity->getAbsOrigin()) && entity->visibleTo(localPlayer.get());
+        visible = inViewFrustum && entity->visibleTo(localPlayer.get());
     }
 
     constexpr auto isEntityAudible = [](int entityIndex) noexcept {
