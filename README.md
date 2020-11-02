@@ -91,7 +91,6 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     4.  *Danger Zone*
         *   *Sentries, Drones, Cash, Cash Dufflebag, Pistol Case, Light Case, Heavy Case, Explosive Case, Tools Case, Full Armor, Armor, Helmet, Parachute, Briefcase, Tablet Upgrade, ExoJump, Ammobox, Radar Jammer*
 
-    <br><br>
     *   **Enabled** - on / off master switch
     *   **Font** - esp text font
     *   **Snaplines** - draw snapline to player
