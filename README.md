@@ -147,41 +147,76 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Footstep volume** - volume of player footsteps
 
 *   **Misc** - miscellaneous features
-    *   **Menu key \[ key \]** - menu toggle key 
+    *   **Menu key \[ key \]** - menu toggle key
+
     *   **Menu style** - menu style toggle (*Classic* **/** *One window*)
+
     *   **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
+
     *   **Anti AFK kick** - avoid auto-kick by server for inactivity
+
     *   **Auto strafe** - automatically strafe in air following mouse movement
+
     *   **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
+
     *   **Clan tag** - set custom clan tag
+
     *   **Animated clan tag** - animate clan tag
+
     *   **Fast duck** - remove crouch delay
+
     *   **Sniper crosshair** - draw crosshair while holding sniper rifle
+
     *   **Recoil crosshair** - crosshair follows recoil pattern
+
     *   **Auto pistol** - fire pistols like automatic rifles
+
     *   **Auto reload** - automatically reload if weapon has empty clip
+
     *   **Auto accept** - automatically accept competitive match
+
     *   **Radar hack** - show enemies positions on radar
+
     *   **Reveal ranks** - show player ranks in scoreboard in competitive modes
+
     *   **Reveal money** - show enemies' money in scoreboard
+
     *   **Spectator list** - show nicknames of players spectating you
+
     *   **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
+
     *   **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
+
     *   **Fix bone matrix** - correct client bone matrix to be closer to server one
+
     *   **Disable model occlusion** - draw player models even if they are behind thick walls
+
     *   **Kill message** - print message to chat after killing an enemy
+
     *   **Name stealer** - mimic other players names
+
     *   **Custom clantag** - set a custom clantag
+
     *   **Fast plant** - plants bomb on bombsite border, when holding <kbd>LMB</kbd> or <kbd>E</kbd> key
+
     *   **Fast Stop** - stops the player faster than normal
+
     *   **Quick reload** - perform quick weapon switch during reload for faster reload
+
     *   **Prepare revolver \[ key \]** - keep revolver cocked, optionally on key
+
     *   **Fix tablet signal** - allow use tablet on underground (dangerzone)
+
     *   **Hit Sound** - sound emitted when hurting enemy
+
     *   **Chocked packets** - length of sequence of chocked ticks
+
     *   **Max angle delta** - maximum viewangles change per tick
+
     *   **Fake Prime** - set a fake prime (visible in lobby)
+
     *   **Purchase List** - show the purchased equipment by enemies.
+
     *   **Reportbot** - automatically report players on server for cheating or other abusive actions
         *   **Enabled** - on / off master switch
         *   **Target** - report target *Enemies/Allies/All*
@@ -191,6 +226,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
         *   **Other** - report for other assistance
         *   **Griefing** - report for griefing
         *   **Abusive Communications** - report for abusive communications
+
     *   **Unhook** - unload cheat
 
 *   **Config** - JSON-based configuration system
