@@ -275,7 +275,8 @@ void ProjectileData::update(Entity* projectile) noexcept
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
-    inViewFrustum = !interfaces->engine->cullBox(obbMins + entity->getAbsOrigin(), obbMaxs + entity->getAbsOrigin());
+    origin = entity->getAbsOrigin();
+    inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
 
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
