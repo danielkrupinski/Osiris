@@ -82,7 +82,9 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 *   **ESP** - show additional information about players and game world
     1.  *Allies, Enemies*
         *   *All, Visible, Occluded*
+
     2.  *Weapons*
+
     3.  *Projectiles*
         *   *Flashbang, HE Grenade, Breach Charge, Bump Mine, Decoy Grenade, Molotov, TA Grenade, Smoke Grenade, Snowball*
     4.  *Danger Zone*
