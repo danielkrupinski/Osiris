@@ -266,6 +266,8 @@ public:
             int delay = 1;
             int rounds = 1;
         } reportbot;
+
+        OffscreenEnemies offscreenEnemies;
     } misc;
 
     void scheduleFontLoad(const std::string& name) noexcept;
