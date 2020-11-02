@@ -121,11 +121,11 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Zoom [ key ]** - enable zoom on unzoomable weapons
     *   **Thirdperson** - thirdperson view
     *   **Thirdperson distance** - camera distance in thirdperson view
-    *   **View model FOV** - change view model FOV [*-60*-*0*-*60*] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
-    *   **FOV** - change view FOV [*-60*-*0*-*60*] (0 - actual view fov, negative values - decreased, positive values - increased)
+    *   **View model FOV** - change view model FOV \[*-60*-*0*-*60*\] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
+    *   **FOV** - change view FOV \[*-60*-*0*-*60*\] (0 - actual view fov, negative values - decreased, positive values - increased)
     *   **Far Z** - far clipping range, useful after disabling fog on large maps (e.g `dz_sirocco`) to render distant buildings
-    *   **Flash reduction** - reduces flashbang grenade effect [*0*-*100*%] (0 - full flash, 100 - no flash)
-    *   **Brightness** - control game brightness [*0.0*-*1.0*]
+    *   **Flash reduction** - reduces flashbang grenade effect \[*0*-*100*%\] (0 - full flash, 100 - no flash)
+    *   **Brightness** - control game brightness \[*0.0*-*1.0*\]
     *   **Skybox** - change sky(box)
     *   **World color** - set world material ambient light color
     *   **Deagle spinner** - play "spinning" inspect animation when holding Deagle
@@ -133,71 +133,71 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Hit effect** - show screen effect on enemy hit
     *   **Hit marker** - show a cross detail on enemy hit
 
-* **Skin changer** - change knives, gloves, weapon skins and stickers
+*   **Skin changer** - change knives, gloves, weapon skins and stickers
 
-* **Sound** - modify volume of certain sound effects
-    * **Chicken volume** - volume of chicken sounds
+*   **Sound** - modify volume of certain sound effects
+    *   **Chicken volume** - volume of chicken sounds
 
     *Local player, Allies, Enemies*
-    * **Master volume** - overall volume of sounds emitted by player
-    * **Headshot volume** - volume of headshot sound (when player gets headshoted)
-    * **Weapon volume** - volume of player weapon shots
-    * **Footstep volume** - volume of player footsteps
+    *   **Master volume** - overall volume of sounds emitted by player
+    *   **Headshot volume** - volume of headshot sound (when player gets headshoted)
+    *   **Weapon volume** - volume of player weapon shots
+    *   **Footstep volume** - volume of player footsteps
 
-* **Misc** - miscellaneous features
-    * **Menu key [ key ]** - menu toggle key 
-    * **Menu style** - menu style toggle (*Classic* **/** *One window*)
-    * **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
-    * **Anti AFK kick** - avoid auto-kick by server for inactivity
-    * **Auto strafe** - automatically strafe in air following mouse movement
-    * **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
-    * **Clan tag** - set custom clan tag
-    * **Animated clan tag** - animate clan tag
-    * **Fast duck** - remove crouch delay
-    * **Sniper crosshair** - draw crosshair while holding sniper rifle
-    * **Recoil crosshair** - crosshair follows recoil pattern
-    * **Auto pistol** - fire pistols like automatic rifles
-    * **Auto reload** - automatically reload if weapon has empty clip
-    * **Auto accept** - automatically accept competitive match
-    * **Radar hack** - show enemies positions on radar
-    * **Reveal ranks** - show player ranks in scoreboard in competitive modes
-    * **Reveal money** - show enemies' money in scoreboard
-    * **Spectator list** - show nicknames of players spectating you
-    * **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
-    * **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
-    * **Fix bone matrix** - correct client bone matrix to be closer to server one
-    * **Disable model occlusion** - draw player models even if they are behind thick walls
-    * **Kill message** - print message to chat after killing an enemy
-    * **Name stealer** - mimic other players names
-    * **Custom clantag** - set a custom clantag
-    * **Fast plant** - plants bomb on bombsite border, when holding <kbd>LMB</kbd> or <kbd>E</kbd> key
-    * **Fast Stop** - stops the player faster than normal
-    * **Quick reload** - perform quick weapon switch during reload for faster reload
-    * **Prepare revolver [ key ]** - keep revolver cocked, optionally on key
-    * **Fix tablet signal** - allow use tablet on underground (dangerzone)
-    * **Hit Sound** - sound emitted when hurting enemy
-    * **Chocked packets** - length of sequence of chocked ticks
-    * **Max angle delta** - maximum viewangles change per tick
-    * **Fake Prime** - set a fake prime (visible in lobby)
-    * **Purchase List** - show the purchased equipment by enemies.
-    * **Reportbot** - automatically report players on server for cheating or other abusive actions
-        * **Enabled** - on / off master switch
-        * **Target** - report target *Enemies/Allies/All*
-        * **Delay** - delay between reports, in seconds
-        * **Aimbot** - report for aim assistance
-        * **Wallhack** - report for visual assistance
-        * **Other** - report for other assistance
-        * **Griefing** - report for griefing
-        * **Abusive Communications** - report for abusive communications
-    * **Unhook** - unload cheat
+*   **Misc** - miscellaneous features
+    *   **Menu key [ key ]** - menu toggle key 
+    *   **Menu style** - menu style toggle (*Classic* **/** *One window*)
+    *   **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
+    *   **Anti AFK kick** - avoid auto-kick by server for inactivity
+    *   **Auto strafe** - automatically strafe in air following mouse movement
+    *   **Bunny hop** - automatically simulate space bar press / release while jump button is being held; increases movement speed
+    *   **Clan tag** - set custom clan tag
+    *   **Animated clan tag** - animate clan tag
+    *   **Fast duck** - remove crouch delay
+    *   **Sniper crosshair** - draw crosshair while holding sniper rifle
+    *   **Recoil crosshair** - crosshair follows recoil pattern
+    *   **Auto pistol** - fire pistols like automatic rifles
+    *   **Auto reload** - automatically reload if weapon has empty clip
+    *   **Auto accept** - automatically accept competitive match
+    *   **Radar hack** - show enemies positions on radar
+    *   **Reveal ranks** - show player ranks in scoreboard in competitive modes
+    *   **Reveal money** - show enemies' money in scoreboard
+    *   **Spectator list** - show nicknames of players spectating you
+    *   **Watermark** - show cheat name in upper-left screen corner and fps & ping in upper right corner.
+    *   **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
+    *   **Fix bone matrix** - correct client bone matrix to be closer to server one
+    *   **Disable model occlusion** - draw player models even if they are behind thick walls
+    *   **Kill message** - print message to chat after killing an enemy
+    *   **Name stealer** - mimic other players names
+    *   **Custom clantag** - set a custom clantag
+    *   **Fast plant** - plants bomb on bombsite border, when holding <kbd>LMB</kbd> or <kbd>E</kbd> key
+    *   **Fast Stop** - stops the player faster than normal
+    *   **Quick reload** - perform quick weapon switch during reload for faster reload
+    *   **Prepare revolver \[ key \]** - keep revolver cocked, optionally on key
+    *   **Fix tablet signal** - allow use tablet on underground (dangerzone)
+    *   **Hit Sound** - sound emitted when hurting enemy
+    *   **Chocked packets** - length of sequence of chocked ticks
+    *   **Max angle delta** - maximum viewangles change per tick
+    *   **Fake Prime** - set a fake prime (visible in lobby)
+    *   **Purchase List** - show the purchased equipment by enemies.
+    *   **Reportbot** - automatically report players on server for cheating or other abusive actions
+        *   **Enabled** - on / off master switch
+        *   **Target** - report target *Enemies/Allies/All*
+        *   **Delay** - delay between reports, in seconds
+        *   **Aimbot** - report for aim assistance
+        *   **Wallhack** - report for visual assistance
+        *   **Other** - report for other assistance
+        *   **Griefing** - report for griefing
+        *   **Abusive Communications** - report for abusive communications
+    *   **Unhook** - unload cheat
 
-* **Config** - JSON-based configuration system
-    * **Create config** - create new configuration file
-    * **Reset config** - restore default configuration settings (does not touch saved configuration)
-    * **Load selected** - load selected configuration file
-    * **Save selected** - save selected configuration file
-    * **Delete selected** - delete selected configuration file
-    * **Reload configs** - reload configs list
+*   **Config** - JSON-based configuration system
+    *   **Create config** - create new configuration file
+    *   **Reset config** - restore default configuration settings (does not touch saved configuration)
+    *   **Load selected** - load selected configuration file
+    *   **Save selected** - save selected configuration file
+    *   **Delete selected** - delete selected configuration file
+    *   **Reload configs** - reload configs list
 </details>
 
 ## Getting started
