@@ -135,3 +135,8 @@ struct PreserveKillfeed {
     bool enabled = false;
     bool onlyHeadshots = false;
 };
+
+struct OffscreenEnemies {
+    bool enabled = false;
+    ColorA color{ 1.0f, 0.26f, 0.21f, 1.0f };
+};

@@ -277,6 +277,12 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Head Box", p.headBox);
 }
 
+static void from_json(const json& j, OffscreenEnemies& o)
+{
+    read(j, "Enabled", o.enabled);
+    read<value_t::object>(j, "Color", o.color);
+}
+
 static void from_json(const json& j, ImVec2& v)
 {
     read(j, "X", v.x);
@@ -543,6 +549,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Reveal suspect", m.revealSuspect);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
     read<value_t::object>(j, "Watermark", m.watermark);
+    read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
     read(j, "Fix animation LOD", m.fixAnimationLOD);
     read(j, "Fix bone matrix", m.fixBoneMatrix);
     read(j, "Fix movement", m.fixMovement);
@@ -736,6 +743,12 @@ static void to_json(json& j, const Trails& o, const Trails& dummy = {})
     WRITE("Enemies", enemies);
 }
 
+static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Color", color);
+}
+
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
 {
     j = static_cast<const Shared&>(o);
@@ -921,6 +934,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reveal suspect", revealSuspect);
     WRITE("Spectator list", spectatorList);
     WRITE("Watermark", watermark);
+    WRITE("Offscreen Enemies", offscreenEnemies);
     WRITE("Fix animation LOD", fixAnimationLOD);
     WRITE("Fix bone matrix", fixBoneMatrix);
     WRITE("Fix movement", fixMovement);

@@ -105,12 +105,14 @@ struct PlayerData : BaseData {
     bool visible = false;
     bool audible;
     bool spotted;
+    bool inViewFrustum;
     float flashDuration;
     int health;
     char name[128];
+    Vector headMins, headMaxs;
+    Vector origin;
     std::string activeWeapon;
     std::vector<std::pair<Vector, Vector>> bones;
-    Vector headMins, headMaxs;
 };
 
 struct WeaponData : BaseData {

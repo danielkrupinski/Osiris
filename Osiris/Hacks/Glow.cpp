@@ -80,6 +80,8 @@ void Glow::render() noexcept
 
         switch (entity->getClientClass()->classId) {
         case ClassId::CSPlayer:
+            if (!entity->isAlive())
+                break;
             if (auto activeWeapon{ entity->getActiveWeapon() }; activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming())
                 applyPlayerGlow(glow[6], glow[7], glow[8], entity);
             else if (entity->isDefusing())
