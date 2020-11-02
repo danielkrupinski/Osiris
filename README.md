@@ -103,7 +103,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Head dot** - draw dot on player's head
     *   **Active Weapon** - draw player equipped weapon
 
-* **Visuals** - miscellaneous visual options
+*   **Visuals** - miscellaneous visual options
     *   **Disable post-processing** - disable post-processing effects in order to increase FPS
     *   **Inverse ragdoll gravity** - inverse gravitational acceleration on falling player ragdoll corpse (during death sequence)
     *   **No fog** - remove fog from map for better visibility
@@ -118,7 +118,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **No grass** - remove grass from map in Danger Zone mode (`dz_blacksite` and `dz_sirocco` maps)
     *   **No shadows** - disable dynamic shadows
     *   **Wireframe smoke** - render smoke skeleton instead of particle effect
-    *   **Zoom [ key ]** - enable zoom on unzoomable weapons
+    *   **Zoom \[ key \]** - enable zoom on unzoomable weapons
     *   **Thirdperson** - thirdperson view
     *   **Thirdperson distance** - camera distance in thirdperson view
     *   **View model FOV** - change view model FOV \[*-60*-*0*-*60*\] (0 - actual view model, negative values - decreased view model, positive values - increased view model)
@@ -145,7 +145,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
     *   **Footstep volume** - volume of player footsteps
 
 *   **Misc** - miscellaneous features
-    *   **Menu key [ key ]** - menu toggle key 
+    *   **Menu key \[ key \]** - menu toggle key 
     *   **Menu style** - menu style toggle (*Classic* **/** *One window*)
     *   **Menu colors** - menu color theme (*Dark **/** Light **/** Classic*)
     *   **Anti AFK kick** - avoid auto-kick by server for inactivity
@@ -252,9 +252,9 @@ Configuration files are saved inside `Osiris` folder in your `Documents` folder 
 
 ### What hooking methods Osiris uses?
 Currently implemented hooking methods are:
-- MinHook - trampoline hook
-- VmtHook - hook a function directly in a vtable
-- VmtSwap - create a copy of a vtable and swap the pointer on the class instance
+*   MinHook - trampoline hook
+*   VmtHook - hook a function directly in a vtable
+*   VmtSwap - create a copy of a vtable and swap the pointer on the class instance
 
 Hooking implementation files are located in [Hooks](https://github.com/danielkrupinski/Osiris/tree/master/Osiris/Hooks) directory.
 
