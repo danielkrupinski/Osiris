@@ -185,7 +185,7 @@ Free open-source cheat software for **Counter-Strike: Global Offensive** game. D
 
     *   **Watermark** - show cheat name in the upper-left screen corner and fps & ping in the upper-right corner
 
-    *   **Offscreen Enemies** - draw crircles on the screen indicating that there are enemies behind us
+    *   **Offscreen Enemies** - draw circles on the screen indicating that there are enemies behind us
 
     *   **Fix animation LOD** - fix aimbot inaccuracy for players behind local player
 
