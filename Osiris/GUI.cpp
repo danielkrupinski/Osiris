@@ -1371,7 +1371,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::InputText("Cvar value", &cvarvar);
     if (ImGui::Button("Spoof"))
     {
-        auto customcvar{ interfaces->cvar->findVar(cvar.c_str()) };
+        auto customcvar = interfaces->cvar->findVar(cvar.c_str());
         customcvar->onChangeCallbacks.size = 0;
         customcvar->setValue(cvarvar.c_str());
     }//on my way to contribute nothing to society
