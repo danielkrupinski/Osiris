@@ -175,6 +175,7 @@ public:
             float green = 0.0f;
             float yellow = 0.0f;
         } colorCorrection;
+        bool randomizetextures;
     } visuals;
 
     std::array<item_setting, 36> skinChanger;
