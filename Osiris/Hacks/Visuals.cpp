@@ -119,6 +119,9 @@ void Visuals::colorWorld() noexcept
                 mat->colorModulate(rainbowColor(config->visuals.world.rainbowSpeed));
             else
                 mat->colorModulate(config->visuals.world.color);
+            if (config->visuals.Anime){
+                mat->findVar("$basetexture")->setStringValue("black");//can be any texture
+            //on my way to contribute nothing to society
         } else if (config->visuals.sky.enabled && textureGroup.starts_with("SkyBox")) {
             if (config->visuals.sky.rainbow)
                 mat->colorModulate(rainbowColor(config->visuals.sky.rainbowSpeed));
