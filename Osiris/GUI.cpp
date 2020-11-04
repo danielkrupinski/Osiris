@@ -1203,6 +1203,9 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
+std::string cvar;
+std::string cvarvar;
+
 void GUI::renderMiscWindow(bool contentOnly) noexcept
 {
     if (!contentOnly) {
