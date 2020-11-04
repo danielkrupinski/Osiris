@@ -18,6 +18,7 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
+#include "SDK/ConVar.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
