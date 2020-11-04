@@ -1203,7 +1203,6 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
-
 void GUI::renderMiscWindow(bool contentOnly) noexcept
 {
     if (!contentOnly) {
