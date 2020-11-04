@@ -1203,8 +1203,6 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
-std::string cvar;
-std::string cvarvar;
 
 void GUI::renderMiscWindow(bool contentOnly) noexcept
 {
@@ -1368,6 +1366,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
         ImGui::EndPopup();
     }
     ImGui::PopID();
+    std::string cvar;
+    std::string cvarvar;
     ImGui::InputText("Cvar name", &cvar);
     ImGui::InputText("Cvar value", &cvarvar);
     if (ImGui::Button("Spoof"))
