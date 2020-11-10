@@ -1,3 +1,4 @@
+#include <cwctype>
 #include <fstream>
 #include <functional>
 #include <string>
@@ -1027,12 +1028,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             const std::locale original;
             std::locale::global(std::locale{ "en_US.utf8" });
 
-            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
-            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             std::locale::global(original);
 
@@ -1110,12 +1110,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             const std::locale original;
             std::locale::global(std::locale{ "en_US.utf8" });
 
-            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
-            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             std::locale::global(original);
 
