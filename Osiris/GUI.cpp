@@ -1025,16 +1025,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Paint Kit")) {
             const auto& kits = itemIndex == 1 ? SkinChanger::getGloveKits() : SkinChanger::getSkinKits();
 
-            const std::locale original;
-            std::locale::global(std::locale{ "en_US.utf8" });
-
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
-
-            std::locale::global(original);
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
@@ -1107,16 +1102,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         if (ImGui::ListBoxHeader("Sticker")) {
             const auto& kits = SkinChanger::getStickerKits();
 
-            const std::locale original;
-            std::locale::global(std::locale{ "en_US.utf8" });
-
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
-
-            std::locale::global(original);
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {

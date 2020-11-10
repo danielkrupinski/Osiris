@@ -37,9 +37,6 @@ static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 
 void SkinChanger::initializeKits() noexcept
 {
-    const std::locale original;
-    std::locale::global(std::locale{ "en_US.utf8" });
-
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
@@ -98,7 +95,6 @@ void SkinChanger::initializeKits() noexcept
     }
 
     std::sort(std::next(stickerKits.begin()), stickerKits.end());
-    std::locale::global(original);
 }
 
 static std::unordered_map<std::string, const char*> iconOverrides;
