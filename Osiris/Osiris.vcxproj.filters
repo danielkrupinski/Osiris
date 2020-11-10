@@ -322,9 +322,6 @@
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\config_.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Localize.h">
       <Filter>SDK</Filter>
     </ClInclude>

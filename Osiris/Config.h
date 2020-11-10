@@ -4,9 +4,10 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "imgui/imgui.h"
-#include "nSkinz/config_.hpp"
+#include "Hacks/SkinChanger.h"
 #include "ConfigStructs.h"
 
 class Config {

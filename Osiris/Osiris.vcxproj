@@ -88,7 +88,6 @@
     <ClInclude Include="MinHook\trampoline.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nlohmann\json.hpp" />
-    <ClInclude Include="nSkinz\config_.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
     <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />

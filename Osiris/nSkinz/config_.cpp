@@ -22,7 +22,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#include "config_.hpp"
+#include "../Hacks/SkinChanger.h"
 #include "../Config.h"
 
 item_setting* get_by_definition_index(const int definition_index)
