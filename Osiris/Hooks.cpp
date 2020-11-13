@@ -89,7 +89,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
     if (config->loadScheduledFonts())
-        ImGui_ImplDX9_InvalidateDeviceObjects();
+        ImGui_ImplDX9_DestroyFontsTexture();
 
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();

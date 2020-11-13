@@ -238,6 +238,11 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     return true;
 }
 
+void ImGui_ImplDX9_DestroyFontsTexture()
+{
+    if (g_FontTexture) { g_FontTexture->Release(); g_FontTexture = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
+}
+
 bool ImGui_ImplDX9_CreateDeviceObjects()
 {
     if (!g_pd3dDevice)
@@ -253,7 +258,7 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
         return;
     if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
     if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-    if (g_FontTexture) { g_FontTexture->Release(); g_FontTexture = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
+    ImGui_ImplDX9_DestroyFontsTexture();
 }
 
 void ImGui_ImplDX9_NewFrame()
