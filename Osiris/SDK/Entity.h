@@ -262,6 +262,8 @@ public:
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
 
+    NETVAR(zoomLevel, "CWeaponCSBaseGun", "m_zoomLevel", int)
+
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
