@@ -213,7 +213,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 interfaces->engine->setViewAngles(cmd->viewangles);
 
             if (config->aimbot[weaponIndex].autoScope && activeWeapon->isSniperRifle() && !localPlayer->isScoped() && !activeWeapon->zoomLevel())
-                cmd->buttons |= UserCmd::IN_ATTACK2;
+                cmd->buttons |= UserCmd::IN_ZOOM;
 
             if (config->aimbot[weaponIndex].scopedOnly && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 return;
