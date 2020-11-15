@@ -1215,6 +1215,7 @@ bool Config::loadScheduledFonts() noexcept
                 ImFontConfig cfg;
                 cfg.OversampleH = cfg.OversampleV = 1;
                 cfg.PixelSnapH = true;
+                cfg.RasterizerMultiply = 1.7f;
 
                 Font newFont;
 
@@ -1242,6 +1243,7 @@ bool Config::loadScheduledFonts() noexcept
             const auto ranges = Helpers::getFontGlyphRanges();
             ImFontConfig cfg;
             cfg.FontDataOwnedByAtlas = false;
+            cfg.RasterizerMultiply = 1.7f;
 
             Font newFont;
             newFont.tiny = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 8.0f, &cfg, ranges);
