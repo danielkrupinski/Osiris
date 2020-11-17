@@ -110,6 +110,7 @@ struct PlayerData : BaseData {
     bool inViewFrustum;
     float flashDuration;
     int health;
+    int handle;
     char name[128];
     Vector headMins, headMaxs;
     Vector origin;

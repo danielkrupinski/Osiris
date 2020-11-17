@@ -277,6 +277,7 @@ void ProjectileData::update(Entity* projectile) noexcept
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
+    handle = entity->handle();
     update(entity);
 }
 
