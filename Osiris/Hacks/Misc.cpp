@@ -826,6 +826,8 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::PopStyleVar();
 
         if (config->misc.purchaseList.mode == PurchaseList::Details) {
+            GameData::Lock lock;
+
             for (const auto& [handle, purchases] : playerPurchases) {
                 std::string s;
                 s.reserve(std::accumulate(purchases.items.begin(), purchases.items.end(), 0, [](int length, const auto& p) { return length + p.first.length() + 2; }));
