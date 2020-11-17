@@ -313,7 +313,7 @@ void PlayerData::update(Entity* entity) noexcept
 
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
-        visible = inViewFrustum && entity->visibleTo(localPlayer.get());
+        visible = inViewFrustum && alive && entity->visibleTo(localPlayer.get());
     }
 
     constexpr auto isEntityAudible = [](int entityIndex) noexcept {
