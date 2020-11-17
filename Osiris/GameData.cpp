@@ -302,6 +302,8 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 
 void PlayerData::update(Entity* entity) noexcept
 {
+    entity->getPlayerName(name);
+
     dormant = entity->isDormant();
     if (dormant)
         return;
@@ -327,7 +329,6 @@ void PlayerData::update(Entity* entity) noexcept
     spotted = entity->spotted();
     health = entity->health();
     flashDuration = entity->flashDuration();
-    entity->getPlayerName(name);
 
     if (const auto weapon = entity->getActiveWeapon()) {
         audible = audible || isEntityAudible(weapon->index());
