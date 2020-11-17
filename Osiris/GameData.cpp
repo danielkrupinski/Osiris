@@ -58,7 +58,7 @@ void GameData::update() noexcept
 
     for (int i = 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity->isDormant())
+        if (!entity)
             continue;
 
         if (entity->isPlayer()) {
@@ -77,6 +77,9 @@ void GameData::update() noexcept
                     observerData.emplace_back(entity, obs, obs == localPlayer.get());
             }
         } else {
+            if (entity->isDormant())
+                continue;
+
             if (entity->isWeapon()) {
                 if (entity->ownerEntity() == -1)
                     weaponData.emplace_back(entity);
@@ -299,8 +302,11 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 
 void PlayerData::update(Entity* entity) noexcept
 {
-    static_cast<BaseData&>(*this) = { entity };
+    dormant = entity->isDormant();
+    if (dormant)
+        return;
 
+    static_cast<BaseData&>(*this) = { entity };
     origin = entity->getAbsOrigin();
     inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
 
