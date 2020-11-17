@@ -984,7 +984,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     const auto yaw = degreesToRadians(interfaces->engine->getViewAngles().y);
 
     for (auto& player : GameData::players()) {
-        if (player.dormant || !player.enemy || player.inViewFrustum)
+        if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;

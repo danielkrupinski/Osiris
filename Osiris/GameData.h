@@ -103,12 +103,13 @@ struct PlayerData : BaseData {
 
     void update(Entity* entity) noexcept;
 
+    bool dormant;
     bool enemy = false;
     bool visible = false;
     bool audible;
     bool spotted;
     bool inViewFrustum;
-    bool dormant;
+    bool alive;
     float flashDuration;
     int health;
     int handle;
