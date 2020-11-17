@@ -47,6 +47,7 @@ void GameData::update() noexcept
     localPlayerData.update();
 
     if (!localPlayer) {
+        playerData.clear();
         projectileData.clear();
         return;
     }
@@ -64,10 +65,17 @@ void GameData::update() noexcept
             if (entity == localPlayer.get() || entity == observerTarget)
                 continue;
 
-            if (entity->isAlive())
+            if (const auto it = std::find_if(playerData.begin(), playerData.end(), [handle = entity->handle()](const auto& playerData) { return playerData.handle == handle; }); it != playerData.end()) {
+                it->update(entity);
+            } else {
                 playerData.emplace_back(entity);
-            else if (const auto obs = entity->getObserverTarget())
-                observerData.emplace_back(entity, obs, obs == localPlayer.get());
+            }
+
+            if (!entity->isDormant() && !entity->isAlive()) {
+                const auto obs = entity->getObserverTarget();
+                if (obs)
+                    observerData.emplace_back(entity, obs, obs == localPlayer.get());
+            }
         } else {
             if (entity->isWeapon()) {
                 if (entity->ownerEntity() == -1)
@@ -124,6 +132,14 @@ void GameData::update() noexcept
                 it = projectileData.erase(it);
                 continue;
             }
+        }
+        ++it;
+    }
+
+    for (auto it = playerData.begin(); it != playerData.end();) {
+        if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
+            it = playerData.erase(it);
+            continue;
         }
         ++it;
     }
