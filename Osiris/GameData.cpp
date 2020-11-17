@@ -277,6 +277,13 @@ void ProjectileData::update(Entity* projectile) noexcept
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
+    update(entity);
+}
+
+void PlayerData::update(Entity* entity) noexcept
+{
+    static_cast<BaseData&>(*this) = { entity };
+
     origin = entity->getAbsOrigin();
     inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
 
