@@ -16,7 +16,7 @@ using HookType = MinHook;
 
 class Hooks {
 public:
-    Hooks(HMODULE module) noexcept;
+    Hooks(HMODULE moduleHandle) noexcept;
 
     void install() noexcept;
     void uninstall() noexcept;
@@ -37,7 +37,7 @@ public:
     HookType viewRender;
     HookType svCheats;
 private:
-    HMODULE module;
+    HMODULE moduleHandle;
     HWND window;
 };
 

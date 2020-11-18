@@ -78,12 +78,12 @@ public:
     PlayerResource** playerResource;
     const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
-    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
+    static std::uintptr_t findPattern(const wchar_t* moduleName, const char* pattern) noexcept
     {
         static auto id = 0;
         ++id;
 
-        if (HMODULE moduleHandle = GetModuleHandleW(module)) {
+        if (HMODULE moduleHandle = GetModuleHandleW(moduleName)) {
             if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), moduleHandle, &moduleInfo, sizeof(moduleInfo))) {
                 auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
                 const auto end = start + moduleInfo.SizeOfImage;

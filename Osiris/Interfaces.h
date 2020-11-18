@@ -58,9 +58,9 @@ type* name = reinterpret_cast<type*>(find(L##module, version));
 
 #undef GAME_INTERFACE
 private:
-    static void* find(const wchar_t* module, const char* name) noexcept
+    static void* find(const wchar_t* moduleName, const char* name) noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(module), "CreateInterface")))
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(moduleName), "CreateInterface")))
             if (void* foundInterface = createInterface(name, nullptr))
                 return foundInterface;
 
