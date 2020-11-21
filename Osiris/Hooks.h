@@ -22,7 +22,7 @@ using HookType = MinHook;
 class Hooks {
 public:
 #ifdef _WIN32
-    Hooks(HMODULE module) noexcept;
+    Hooks(HMODULE moduleHandle) noexcept;
 
     WNDPROC originalWndProc;
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*)> originalPresent;
@@ -46,7 +46,7 @@ public:
     HookType svCheats;
 private:
 #ifdef _WIN32
-    HMODULE module;
+    HMODULE moduleHandle;
     HWND window;
 #endif
 };

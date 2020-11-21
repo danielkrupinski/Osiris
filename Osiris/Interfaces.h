@@ -65,13 +65,13 @@ type* name = reinterpret_cast<type*>(find(module, version));
 
 #undef GAME_INTERFACE
 private:
-    static void* find(const char* module, const char* name) noexcept
+    static void* find(const char* moduleName, const char* name) noexcept
     {
         if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __CDECL(const char* name, int* returnCode)>>(
 #ifdef _WIN32
-            GetProcAddress(GetModuleHandleA(module), "CreateInterface")
+            GetProcAddress(GetModuleHandleA(moduleName), "CreateInterface")
 #else
-            dlsym(dlopen(module, RTLD_NOLOAD | RTLD_LAZY), "CreateInterface")
+            dlsym(dlopen(moduleName, RTLD_NOLOAD | RTLD_LAZY), "CreateInterface")
 #endif
             )) {
             if (void* foundInterface = createInterface(name, nullptr))

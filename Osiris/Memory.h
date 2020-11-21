@@ -86,7 +86,7 @@ public:
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
- static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
+    static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
     {
 #ifdef _WIN32
         if (HMODULE handle = GetModuleHandleA(name)) {
@@ -117,12 +117,12 @@ private:
 #endif
     }
 
-    static std::uintptr_t findPattern(const char* module, const char* pattern) noexcept
+    static std::uintptr_t findPattern(const wchar_t* moduleName, const char* pattern) noexcept
     {
         static auto id = 0;
         ++id;
 
-        const auto [moduleBase, moduleSize] = getModuleInformation(module);
+        const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
 
         if (moduleBase && moduleSize) {
             auto start = static_cast<const char*>(moduleBase);

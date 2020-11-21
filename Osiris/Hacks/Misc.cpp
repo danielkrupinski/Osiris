@@ -764,7 +764,12 @@ void Misc::purchaseList(GameEvent* event) noexcept
     static std::mutex mtx;
     std::scoped_lock _{ mtx };
 
-    static std::unordered_map<std::string, std::pair<std::vector<std::string>, int>> purchaseDetails;
+    struct PlayerPurchases {
+        int totalCost;
+        std::unordered_map<std::string, int> items;
+    };
+
+    static std::unordered_map<int, PlayerPurchases> playerPurchases;
     static std::unordered_map<std::string, int> purchaseTotal;
     static int totalCost;
 
@@ -777,21 +782,21 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
             if (player && localPlayer && memory->isOtherEnemy(player, localPlayer.get())) {
                 if (const auto definition = memory->itemSystem()->getItemSchema()->getItemDefinitionByName(event->getString("weapon"))) {
-                    auto& purchase = purchaseDetails[player->getPlayerName()];
+                    auto& purchase = playerPurchases[player->handle()];
                     if (const auto weaponInfo = memory->weaponSystem->getWeaponInfo(definition->getWeaponId())) {
-                        purchase.second += weaponInfo->price;
+                        purchase.totalCost += weaponInfo->price;
                         totalCost += weaponInfo->price;
                     }
                     const std::string weapon = interfaces->localize->findAsUTF8(definition->getItemBaseName());
                     ++purchaseTotal[weapon];
-                    purchase.first.push_back(weapon);
+                    ++purchase.items[weapon];
                 }
             }
             break;
         }
         case fnv::hash("round_start"):
             freezeEnd = 0.0f;
-            purchaseDetails.clear();
+            playerPurchases.clear();
             purchaseTotal.clear();
             totalCost = 0;
             break;
@@ -805,7 +810,7 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
         static const auto mp_buytime = interfaces->cvar->findVar("mp_buytime");
 
-        if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || purchaseDetails.empty() || purchaseTotal.empty()) && !gui->open)
+        if ((!interfaces->engine->isInGame() || freezeEnd != 0.0f && memory->globalVars->realtime > freezeEnd + (!config->misc.purchaseList.onlyDuringFreezeTime ? mp_buytime->getFloat() : 0.0f) || playerPurchases.empty() || purchaseTotal.empty()) && !gui->open)
             return;
 
         ImGui::SetNextWindowSize({ 200.0f, 200.0f }, ImGuiCond_Once);
@@ -821,19 +826,26 @@ void Misc::purchaseList(GameEvent* event) noexcept
         ImGui::PopStyleVar();
 
         if (config->misc.purchaseList.mode == PurchaseList::Details) {
-            for (const auto& [playerName, purchases] : purchaseDetails) {
+            GameData::Lock lock;
+
+            for (const auto& [handle, purchases] : playerPurchases) {
                 std::string s;
-                s.reserve(std::accumulate(purchases.first.begin(), purchases.first.end(), 0, [](int length, const auto& s) { return length + s.length() + 2; }));
-                for (const auto& purchasedItem : purchases.first)
-                    s += purchasedItem + ", ";
+                s.reserve(std::accumulate(purchases.items.begin(), purchases.items.end(), 0, [](int length, const auto& p) { return length + p.first.length() + 2; }));
+                for (const auto& purchasedItem : purchases.items) {
+                    if (purchasedItem.second > 1)
+                        s += std::to_string(purchasedItem.second) + "x ";
+                    s += purchasedItem.first + ", ";
+                }
 
                 if (s.length() >= 2)
                     s.erase(s.length() - 2);
 
-                if (config->misc.purchaseList.showPrices)
-                    ImGui::TextWrapped("%s $%d: %s", playerName.c_str(), purchases.second, s.c_str());
-                else
-                    ImGui::TextWrapped("%s: %s", playerName.c_str(), s.c_str());
+                if (const auto it = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = handle](const auto& playerData) { return playerData.handle == handle; }); it != GameData::players().cend()) {
+                    if (config->misc.purchaseList.showPrices)
+                        ImGui::TextWrapped("%s $%d: %s", it->name, purchases.totalCost, s.c_str());
+                    else
+                        ImGui::TextWrapped("%s: %s", it->name, s.c_str());
+                }
             }
         } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
             for (const auto& purchase : purchaseTotal)
@@ -984,7 +996,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     const auto yaw = degreesToRadians(interfaces->engine->getViewAngles().y);
 
     for (auto& player : GameData::players()) {
-        if (!player.enemy || player.inViewFrustum)
+        if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;
