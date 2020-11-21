@@ -261,6 +261,30 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
     ImGui_ImplDX9_DestroyFontsTexture();
 }
 
+void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
+{
+    IDirect3DTexture9* texture;
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK)
+        return nullptr;
+
+    D3DLOCKED_RECT lockedRect;
+    if (texture->LockRect(0, &lockedRect, nullptr, 0) != D3D_OK) {
+        texture->Release();
+        return nullptr;
+    }
+
+    for (int y = 0; y < height; ++y) {
+        memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, data + width * 4 * y, width * 4);
+        for (int x = 0; x < width; ++x) {
+            auto color = reinterpret_cast<int*>((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y + x * 4);
+            *color = (*color & 0xFF00FF00) | ((*color & 0xFF0000) >> 16) | ((*color & 0xFF) << 16); // RGBA --> ARGB
+        }
+    }
+
+    texture->UnlockRect(0);
+    return texture;
+}
+
 void ImGui_ImplDX9_NewFrame()
 {
     if (!g_FontTexture)
