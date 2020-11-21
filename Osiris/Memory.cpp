@@ -64,5 +64,7 @@ Memory::Memory() noexcept
     debugMsg = decltype(debugMsg)(dlsym(tier0, "Msg"));
     conColorMsg = decltype(conColorMsg)(dlsym(tier0, "_Z11ConColorMsgRK5ColorPKcz"));
     dlclose(tier0);
+
+    localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
 }
