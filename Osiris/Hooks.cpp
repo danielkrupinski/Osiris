@@ -46,12 +46,15 @@
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Panel.h"
+#include "SDK/Platform.h"
 #include "SDK/RenderContext.h"
 #include "SDK/SoundInfo.h"
 #include "SDK/SoundEmitter.h"
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+
+#ifdef _WIN32
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -126,16 +129,23 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
     return hooks->originalReset(device, params);
 }
 
-static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
+#endif
+
+static bool __STDCALL createMove(float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
 
+#ifdef _WIN32
     uintptr_t* framePointer;
     __asm mov framePointer, ebp;
     bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
+#else
+    bool dummy;
+    bool& sendPacket = dummy;
+#endif
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };

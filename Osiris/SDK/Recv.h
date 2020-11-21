@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <type_traits>
+
+#include "Platform.h"
 #include "Vector.h"
 
 struct recvProxyData {
@@ -16,7 +18,7 @@ struct recvProxyData {
     } value;
 };
 
-using recvProxy = std::add_pointer_t<void __cdecl(recvProxyData&, void*, void*)>;
+using recvProxy = std::add_pointer_t<void __CDECL(recvProxyData&, void*, void*)>;
 
 struct RecvProp {
     char* name;

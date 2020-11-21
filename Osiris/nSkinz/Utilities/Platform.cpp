@@ -28,21 +28,28 @@
 
 // Platform tools for windows. Maybe I'll make linux ones too
 
+#ifdef _WIN32
 #include <Windows.h>
 #include <psapi.h>
+#endif
 
 std::pair<std::uintptr_t, std::size_t> platform::get_module_info(const char* module_name)
 {
+#ifdef _WIN32
 	const auto module = GetModuleHandleA(module_name);
 	if (!module)
 		return std::make_pair(0, 0);
 	MODULEINFO module_info;
 	K32GetModuleInformation(GetCurrentProcess(), module, &module_info, sizeof(MODULEINFO));
 	return std::make_pair(std::uintptr_t(module_info.lpBaseOfDll), module_info.SizeOfImage);
+#else
+	return {};
+#endif
 }
 
 auto platform::is_code_ptr(void* ptr) -> bool
 {
+#ifdef _WIN32
 	constexpr const DWORD protect_flags = PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY;
 
 	MEMORY_BASIC_INFORMATION out;
@@ -51,4 +58,7 @@ auto platform::is_code_ptr(void* ptr) -> bool
 	return out.Type
 		&& !(out.Protect & (PAGE_GUARD | PAGE_NOACCESS))
 		&& out.Protect & protect_flags;
+#else
+	return true;
+#endif
 }
