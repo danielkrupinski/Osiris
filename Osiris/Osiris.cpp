@@ -22,4 +22,11 @@ BOOL APIENTRY DllEntryPoint(HMODULE moduleHandle, DWORD reason, LPVOID reserved)
     return TRUE;
 }
 
+#else
+
+void __attribute__((constructor)) DllEntryPoint()
+{
+    hooks = std::make_unique<Hooks>();
+}
+
 #endif
