@@ -117,7 +117,7 @@ private:
 #endif
     }
 
-    static std::uintptr_t findPattern(const wchar_t* moduleName, const char* pattern) noexcept
+    static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
     {
         static auto id = 0;
         ++id;
