@@ -11,7 +11,9 @@
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
+#ifdef _WIN32
 #include "MinHook/MinHook.h"
+#endif
 
 #include "Config.h"
 #include "EventListener.h"

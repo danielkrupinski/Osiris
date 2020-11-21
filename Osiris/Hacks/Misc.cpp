@@ -115,7 +115,9 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         const auto localTime = std::localtime(&time);
         char s[11];
         s[0] = '\0';
+#ifdef _WIN32
         sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+#endif
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
     } else if (config->misc.customClanTag) {
@@ -161,12 +163,14 @@ void Misc::spectatorList() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
+#ifdef _WIN32
         if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
             const auto [textWidth, textHeight] = interfaces->surface->getTextSize(Surface::font, name);
             interfaces->surface->setTextPosition(width - textWidth - 5, textPositionY);
             textPositionY -= textHeight;
             interfaces->surface->printText(name);
         }
+#endif
     }
 }
 
