@@ -36,8 +36,13 @@
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
+#ifdef _WIN32
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
         return;
+#else
+    if (!config->misc.edgejump)
+        return;
+#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -51,8 +56,13 @@ void Misc::edgejump(UserCmd* cmd) noexcept
 
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
+#ifdef _WIN32
     if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
         return;
+#else
+    if (!config->misc.slowwalk)
+        return;
+#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
