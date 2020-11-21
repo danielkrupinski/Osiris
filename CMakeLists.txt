@@ -9,6 +9,7 @@ file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/Osiris/*.cpp")
 #list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/GL/gl3w.c")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
+list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
