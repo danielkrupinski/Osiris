@@ -457,5 +457,8 @@
     <ClInclude Include="SDK\Panorama.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Platform.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

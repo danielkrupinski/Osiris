@@ -3,7 +3,14 @@
 #include <memory>
 #include <string>
 #include <type_traits>
+
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
+#include "SDK/Platform.h"
 
 class Client;
 class Cvar;
@@ -31,7 +38,7 @@ class StudioRender;
 class Interfaces {
 public:
 #define GAME_INTERFACE(type, name, module, version) \
-type* name = reinterpret_cast<type*>(find(L##module, version));
+type* name = reinterpret_cast<type*>(find(module, version));
 
     GAME_INTERFACE(Client, client, "client", "VClient018")
     GAME_INTERFACE(Cvar, cvar, "vstdlib", "VEngineCvar007")
@@ -58,13 +65,22 @@ type* name = reinterpret_cast<type*>(find(L##module, version));
 
 #undef GAME_INTERFACE
 private:
-    static void* find(const wchar_t* moduleName, const char* name) noexcept
+    static void* find(const char* moduleName, const char* name) noexcept
     {
-        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __cdecl (const char* name, int* returnCode)>>(GetProcAddress(GetModuleHandleW(moduleName), "CreateInterface")))
+        if (const auto createInterface = reinterpret_cast<std::add_pointer_t<void* __CDECL(const char* name, int* returnCode)>>(
+#ifdef _WIN32
+            GetProcAddress(GetModuleHandleA(moduleName), "CreateInterface")
+#else
+            dlsym(dlopen(moduleName, RTLD_NOLOAD | RTLD_LAZY), "CreateInterface")
+#endif
+            )) {
             if (void* foundInterface = createInterface(name, nullptr))
                 return foundInterface;
+        }
 
+#ifdef _WIN32
         MessageBoxA(nullptr, ("Failed to find " + std::string{ name } + " interface!").c_str(), "Osiris", MB_OK | MB_ICONERROR);
+#endif
         std::exit(EXIT_FAILURE);
     }
 };

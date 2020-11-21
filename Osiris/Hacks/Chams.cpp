@@ -1,3 +1,4 @@
+#include <cstring>
 #include <functional>
 
 #include "Chams.h"

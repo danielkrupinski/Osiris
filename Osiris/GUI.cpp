@@ -2,8 +2,11 @@
 #include <fstream>
 #include <functional>
 #include <string>
+
+#ifdef _WIN32
 #include <ShlObj.h>
 #include <Windows.h>
+#endif
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -35,6 +38,7 @@ GUI::GUI() noexcept
     io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
+#ifdef _WIN32
     if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
@@ -45,6 +49,7 @@ GUI::GUI() noexcept
         fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
+#endif
 }
 
 void GUI::render() noexcept
@@ -89,7 +94,11 @@ void GUI::hotkey(int& key) noexcept
     ImGuiIO& io = ImGui::GetIO();
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
         if (ImGui::IsKeyPressed(i) && i != config->misc.menuKey)
+#ifdef _WIN32
             key = i != VK_ESCAPE ? i : 0;
+#else
+            key = i;
+#endif
 
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
         if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config->misc.menuKey)
