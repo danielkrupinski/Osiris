@@ -100,6 +100,10 @@ struct ProjectileData : BaseData {
 
 struct PlayerData : BaseData {
     PlayerData(Entity* entity) noexcept;
+    PlayerData(const PlayerData&) = delete;
+    PlayerData& operator=(const PlayerData&) = delete;
+    PlayerData(PlayerData&&) = default;
+    PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
 
