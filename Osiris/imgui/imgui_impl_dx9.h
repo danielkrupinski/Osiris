@@ -25,3 +25,4 @@ IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
 IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
 
 IMGUI_IMPL_API void*    ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data);
+IMGUI_IMPL_API void     ImGui_DestroyTexture(void* texture);

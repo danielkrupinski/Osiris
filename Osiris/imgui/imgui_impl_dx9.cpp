@@ -285,6 +285,11 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
     return texture;
 }
 
+void ImGui_DestroyTexture(void* texture)
+{
+    reinterpret_cast<IDirect3DTexture9*>(texture)->Release();
+}
+
 void ImGui_ImplDX9_NewFrame()
 {
     if (!g_FontTexture)
