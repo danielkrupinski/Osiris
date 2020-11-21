@@ -676,4 +676,15 @@ void Hooks::uninstall() noexcept
         CloseHandle(thread);
 }
 
+#else
+
+Hooks::Hooks() noexcept
+{
+    interfaces = std::make_unique<const Interfaces>();
+    memory = std::make_unique<const Memory>();
+
+    memory->debugMsg("Hello\n");
+    memory->conColorMsg({ 255, 255, 0, 255 }, "Osiris on linux!\n");
+}
+
 #endif
