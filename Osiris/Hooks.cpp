@@ -572,7 +572,7 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept
 void Hooks::install() noexcept
 {
     SkinChanger::initializeKits();
-    
+
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
@@ -680,7 +680,20 @@ void Hooks::uninstall() noexcept
 
 static int pollEvent(SDL_Event* event) noexcept
 {
-    memory->debugMsg("poll event hook\n");
+    [[maybe_unused]] static const auto once = []() noexcept {
+        netvars = std::make_unique<Netvars>();
+        eventListener = std::make_unique<EventListener>();
+        config = std::make_unique<Config>("Osiris");
+
+        ImGui::CreateContext();
+
+        gui = std::make_unique<GUI>();
+
+        //hooks->install();
+
+        return true;
+    }();
+
     return hooks->pollEvent(event);
 }
 
