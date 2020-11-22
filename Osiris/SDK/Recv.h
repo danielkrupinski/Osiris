@@ -6,8 +6,10 @@
 #include "Platform.h"
 #include "Vector.h"
 
+struct RecvProp;
+
 struct recvProxyData {
-    int pad;
+    const RecvProp* recvProp;
     union {
         float _float;
         long _int;
