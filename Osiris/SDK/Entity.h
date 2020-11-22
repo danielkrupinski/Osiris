@@ -59,8 +59,10 @@ public:
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
 
-    VIRTUAL_METHOD(int&, handle, 2, (), (this))
-    VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
+    VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
+    VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
+
+#ifdef _WIN32
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
@@ -76,6 +78,25 @@ public:
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+#else
+    VIRTUAL_METHOD(Vector&, getAbsOrigin, 12, (), (this))
+    VIRTUAL_METHOD(int, health, 166, (), (this))
+    VIRTUAL_METHOD(bool, isAlive, 207, (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, 209, (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, 217, (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, 330, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, 356, (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, 357, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, 522, (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 528, (), (this))
+
+    // not verified indexes below!!!
+    VIRTUAL_METHOD(int, getWeaponSubType, 344, (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
+    void setModelIndex(int index){} // dummy
+#endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
     auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
