@@ -44,6 +44,7 @@ public:
     uintptr_t reset;
 #else
     uintptr_t pollEvent;
+    uintptr_t swapWindow;
 #endif
 
     ClientMode* clientMode;
