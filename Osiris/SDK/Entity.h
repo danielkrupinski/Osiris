@@ -48,16 +48,16 @@ public:
 
 class Entity {
 public:
-    VIRTUAL_METHOD(void, release, 1, (), (this + 8))
-    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
-    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
-    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + 8, updateType))
-    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
-    VIRTUAL_METHOD(int, index, 10, (), (this + 8))
-    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+    VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
 
-    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
-    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
 
     VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
     VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
