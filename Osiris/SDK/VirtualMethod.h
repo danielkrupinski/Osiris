@@ -18,3 +18,21 @@ returnType name args noexcept \
 { \
     return VirtualMethod::call<returnType, idx>argsRaw; \
 }
+
+#ifdef _WIN32
+
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) \
+returnType name args noexcept \
+{ \
+    return VirtualMethod::call<returnType, idx>argsRaw; \
+}
+
+#else
+
+#define VIRTUAL_METHOD_V(returnType, name, idx, args, argsRaw) \
+returnType name args noexcept \
+{ \
+    return VirtualMethod::call<returnType, idx + 1>argsRaw; \
+}
+
+#endif
