@@ -20,10 +20,12 @@ EventListener::EventListener() noexcept
 
     interfaces->gameEventManager->addListener(this, "player_death");
 
+#ifdef _WIN32
     if (const auto desc = memory->getEventDescriptor(interfaces->gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);
+#endif
 }
 
 void EventListener::remove() noexcept
