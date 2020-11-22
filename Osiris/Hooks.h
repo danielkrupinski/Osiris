@@ -6,6 +6,8 @@
 #ifdef _WIN32
 #include <d3d9.h>
 #include <Windows.h>
+#elif __linux__
+union SDL_Event;
 #endif
 
 #include "Hooks/MinHook.h"
@@ -29,6 +31,8 @@ public:
     std::add_pointer_t<HRESULT __stdcall(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*)> originalReset;
 #else
     Hooks() noexcept;
+
+    std::add_pointer_t<int(SDL_Event*)> pollEvent;
 #endif
 
     void install() noexcept;
