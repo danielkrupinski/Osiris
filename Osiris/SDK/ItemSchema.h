@@ -54,7 +54,8 @@ struct PaintKit {
 
 struct StickerKit {
     int id;
-    std::byte pad[36];
+    String name;
+    String description;
     String itemName;
 };
 
