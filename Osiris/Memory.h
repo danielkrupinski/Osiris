@@ -39,8 +39,12 @@ class Memory {
 public:
     Memory() noexcept;
 
+#ifdef _WIN32
     uintptr_t present;
     uintptr_t reset;
+#else
+    uintptr_t pollEvent;
+#endif
 
     ClientMode* clientMode;
     Input* input;
