@@ -270,8 +270,14 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
-static void __STDCALL frameStageNotify(FrameStage stage) noexcept
+static void __STDCALL frameStageNotify(LINUX_THIS FrameStage stage) noexcept
 {
+#ifndef _WIN32
+    Visuals::removeVisualRecoil(stage);
+    hooks->client.callOriginal<void, 37>(stage);
+    return;
+#endif
+
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
@@ -731,12 +737,15 @@ static void swapWindow(SDL_Window* window) noexcept
 void Hooks::install() noexcept
 {
     SkinChanger::initializeKits();
-    
+
     gl3wInit();
     ImGui_ImplOpenGL3_Init();
 
     swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
     *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
+
+    client.init(interfaces->client);
+    client.hookAt(37, frameStageNotify);
 }
 
 void Hooks::uninstall() noexcept
