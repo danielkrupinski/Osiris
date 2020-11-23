@@ -49,7 +49,9 @@
 #endif
 
 #ifdef _WIN32
+#define LINUX_COMMA
 #define LINUX_THIS
 #else
-#define LINUX_THIS void* thisptr,
+#define LINUX_COMMA ,
+#define LINUX_THIS void* thisptr
 #endif
