@@ -15,3 +15,5 @@ include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 
 add_library(Osiris SHARED ${SOURCES})
+
+target_link_libraries(Osiris SDL2 GL)
