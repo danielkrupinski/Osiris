@@ -730,6 +730,8 @@ static void swapWindow(SDL_Window* window) noexcept
 
 void Hooks::install() noexcept
 {
+    SkinChanger::initializeKits();
+    
     gl3wInit();
     ImGui_ImplOpenGL3_Init();
 
