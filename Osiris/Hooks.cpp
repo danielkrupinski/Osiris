@@ -270,7 +270,7 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
-static void __STDCALL frameStageNotify(LINUX_THIS FrameStage stage) noexcept
+static void __STDCALL frameStageNotify(LINUX_THIS LINUX_COMMA FrameStage stage) noexcept
 {
 #ifndef _WIN32
     Visuals::removeVisualRecoil(stage);
