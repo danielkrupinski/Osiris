@@ -48,7 +48,9 @@
 //#define IMGUI_INCLUDE_IMGUI_USER_H
 
 //---- Pack colors to BGRA8 instead of RGBA8 (to avoid converting from one to another)
+#ifdef _WIN32
 #define IMGUI_USE_BGRA_PACKED_COLOR
+#endif
 
 //---- Use 32-bit for ImWchar (default is 16-bit) to support full unicode code points.
 //#define IMGUI_USE_WCHAR32
