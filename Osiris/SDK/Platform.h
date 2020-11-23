@@ -47,3 +47,9 @@
 #define VSTDLIB_DLL "libvstdlib_client.so"
 
 #endif
+
+#ifdef _WIN32
+#define LINUX_THIS
+#else
+#define LINUX_THIS void* thisptr,
+#endif
