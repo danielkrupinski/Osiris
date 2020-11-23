@@ -725,6 +725,12 @@ static void swapWindow(SDL_Window* window) noexcept
     if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
         if (gui->open)
             gui->render();
+
+        if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
+            gui->open = !gui->open;
+            if (!gui->open)
+                interfaces->inputSystem->resetInputState();
+        }
     }
 
     ImGui::EndFrame();
