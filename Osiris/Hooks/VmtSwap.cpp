@@ -11,6 +11,8 @@ static auto calculateVmtLength(uintptr_t* vmt) noexcept
     MEMORY_BASIC_INFORMATION memoryInfo;
     while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
         length++;
+#else
+    length = 4096; // hardcoded for now
 #endif
     return length;
 }
