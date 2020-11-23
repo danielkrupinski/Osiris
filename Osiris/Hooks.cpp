@@ -1,18 +1,23 @@
 #include <functional>
 #include <string>
 
+#include "imgui/imgui.h"
+
 #ifdef _WIN32
 #include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
-#endif
 
-#include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
-#ifdef _WIN32
 #include "MinHook/MinHook.h"
+#elif __linux__
+#include <SDL2/SDL.h>
+
+#include "imgui/GL/gl3w.h"
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_opengl3.h"
 #endif
 
 #include "Config.h"
@@ -689,12 +694,47 @@ static int pollEvent(SDL_Event* event) noexcept
 
         gui = std::make_unique<GUI>();
 
-        //hooks->install();
+        hooks->install();
 
         return true;
     }();
 
-    return hooks->pollEvent(event);
+    const auto result = hooks->pollEvent(event);
+
+    if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->open)
+        event->type = 0;
+
+    return result;
+}
+
+static void swapWindow(SDL_Window* window) noexcept
+{
+    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+    
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        if (gui->open)
+            gui->render();
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    hooks->swapWindow(window);
+}
+
+void Hooks::install() noexcept
+{
+    gl3wInit();
+    ImGui_ImplOpenGL3_Init();
+
+    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
+    *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
 }
 
 Hooks::Hooks() noexcept
