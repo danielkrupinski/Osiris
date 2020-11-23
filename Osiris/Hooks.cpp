@@ -737,6 +737,12 @@ void Hooks::install() noexcept
     *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
 }
 
+void Hooks::uninstall() noexcept
+{
+    *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
+    *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
+}
+
 Hooks::Hooks() noexcept
 {
     interfaces = std::make_unique<const Interfaces>();
