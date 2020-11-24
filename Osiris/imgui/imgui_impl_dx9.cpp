@@ -62,9 +62,8 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
     g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, true);
     g_pd3dDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
     g_pd3dDevice->SetRenderState(D3DRS_FOGENABLE, false);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
     g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
     g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
@@ -219,24 +218,29 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     // Build texture atlas
     ImGuiIO& io = ImGui::GetIO();
     unsigned char* pixels;
-    int width, height, bytes_per_pixel;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
+    int width, height;
+    io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
 
     // Upload texture to graphics system
     g_FontTexture = NULL;
-    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_FontTexture, NULL) < 0)
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8, D3DPOOL_DEFAULT, &g_FontTexture, NULL) < 0)
         return false;
     D3DLOCKED_RECT tex_locked_rect;
     if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, 0) != D3D_OK)
         return false;
     for (int y = 0; y < height; y++)
-        memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + (width * bytes_per_pixel) * y, (width * bytes_per_pixel));
+        memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + width * y, width);
     g_FontTexture->UnlockRect(0);
 
     // Store our identifier
     io.Fonts->TexID = (ImTextureID)g_FontTexture;
 
     return true;
+}
+
+void ImGui_ImplDX9_DestroyFontsTexture()
+{
+    if (g_FontTexture) { g_FontTexture->Release(); g_FontTexture = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
 }
 
 bool ImGui_ImplDX9_CreateDeviceObjects()
@@ -254,7 +258,36 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
         return;
     if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
     if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-    if (g_FontTexture) { g_FontTexture->Release(); g_FontTexture = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
+    ImGui_ImplDX9_DestroyFontsTexture();
+}
+
+void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
+{
+    IDirect3DTexture9* texture;
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK)
+        return nullptr;
+
+    D3DLOCKED_RECT lockedRect;
+    if (texture->LockRect(0, &lockedRect, nullptr, 0) != D3D_OK) {
+        texture->Release();
+        return nullptr;
+    }
+
+    for (int y = 0; y < height; ++y) {
+        memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, data + width * 4 * y, width * 4);
+        for (int x = 0; x < width; ++x) {
+            auto color = reinterpret_cast<int*>((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y + x * 4);
+            *color = (*color & 0xFF00FF00) | ((*color & 0xFF0000) >> 16) | ((*color & 0xFF) << 16); // RGBA --> ARGB
+        }
+    }
+
+    texture->UnlockRect(0);
+    return texture;
+}
+
+void ImGui_DestroyTexture(void* texture)
+{
+    reinterpret_cast<IDirect3DTexture9*>(texture)->Release();
 }
 
 void ImGui_ImplDX9_NewFrame()

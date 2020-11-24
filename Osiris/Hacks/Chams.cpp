@@ -1,3 +1,4 @@
+#include <cstring>
 #include <functional>
 
 #include "Chams.h"
@@ -7,6 +8,7 @@
 #include "Backtrack.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
@@ -116,11 +118,11 @@ void Chams::renderPlayer(Entity* player) noexcept
         applyChams(config->chams["Enemies"].materials, health);
 
         if (config->backtrack.enabled) {
-            auto record = &Backtrack::records[player->index()];
-            if (record && record->size() && Backtrack::valid(record->front().simulationTime)) {
+            const auto& record = Backtrack::getRecords(player->index());
+            if (record.size() && Backtrack::valid(record.front().simulationTime)) {
                 if (!appliedChams)
                     hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record->back().matrix);
+                applyChams(config->chams["Backtrack"].materials, health, record.back().matrix);
                 interfaces->studioRender->forcedMaterialOverride(nullptr);
             }
         }
@@ -153,7 +155,7 @@ void Chams::renderSleeves() noexcept
     applyChams(config->chams["Sleeves"].materials, localPlayer->health());
 }
 
-void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, matrix3x4* customMatrix) noexcept
+void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int health, const matrix3x4* customMatrix) noexcept
 {
     for (const auto& cham : chams) {
         if (!cham.enabled || !cham.ignorez)

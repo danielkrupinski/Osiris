@@ -1,4 +1,4 @@
-// [DEAR IMGUI] 
+// [DEAR IMGUI]
 // This is a slightly modified version of stb_textedit.h 1.13. 
 // Those changes would need to be pushed into nothings/stb:
 // - Fix in stb_textedit_discard_redo (see https://github.com/nothings/stb/issues/321)
@@ -148,6 +148,8 @@
 //    STB_TEXTEDIT_K_RIGHT       keyboard input to move cursor right
 //    STB_TEXTEDIT_K_UP          keyboard input to move cursor up
 //    STB_TEXTEDIT_K_DOWN        keyboard input to move cursor down
+//    STB_TEXTEDIT_K_PGUP        keyboard input to move cursor up a page
+//    STB_TEXTEDIT_K_PGDOWN      keyboard input to move cursor down a page
 //    STB_TEXTEDIT_K_LINESTART   keyboard input to move cursor to start of line  // e.g. HOME
 //    STB_TEXTEDIT_K_LINEEND     keyboard input to move cursor to end of line    // e.g. END
 //    STB_TEXTEDIT_K_TEXTSTART   keyboard input to move cursor to start of text  // e.g. ctrl-HOME
@@ -170,14 +172,10 @@
 //    STB_TEXTEDIT_K_TEXTSTART2          secondary keyboard input to move cursor to start of text
 //    STB_TEXTEDIT_K_TEXTEND2            secondary keyboard input to move cursor to end of text
 //
-// Todo:
-//    STB_TEXTEDIT_K_PGUP        keyboard input to move cursor up a page
-//    STB_TEXTEDIT_K_PGDOWN      keyboard input to move cursor down a page
-//
 // Keyboard input must be encoded as a single integer value; e.g. a character code
 // and some bitflags that represent shift states. to simplify the interface, SHIFT must
 // be a bitflag, so we can test the shifted state of cursor movements to allow selection,
-// i.e. (STB_TEXTED_K_RIGHT|STB_TEXTEDIT_K_SHIFT) should be shifted right-arrow.
+// i.e. (STB_TEXTEDIT_K_RIGHT|STB_TEXTEDIT_K_SHIFT) should be shifted right-arrow.
 //
 // You can encode other things, such as CONTROL or ALT, in additional bits, and
 // then test for their presence in e.g. STB_TEXTEDIT_K_WORDLEFT. For example,
@@ -337,6 +335,10 @@ typedef struct
     // each textfield keeps its own insert mode state. to keep an app-wide
     // insert mode, copy this value in/out of the app state
 
+    int row_count_per_page;
+    // page size in number of row.
+    // this value MUST be set to >0 for pageup or pagedown in multilines documents.
+
     /////////////////////
     //
     // private data
@@ -471,7 +473,7 @@ static void stb_textedit_click(STB_TEXTEDIT_STRING* str, STB_TexteditState* stat
 }
 
 // API drag: on mouse drag, move the cursor and selection endpoint to the clicked location
-static void stb_textedit_drag(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, float x, float y)
+static void stb_textedit_drag(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, float x, float y)
 {
     int p = 0;
 
@@ -497,11 +499,11 @@ static void stb_textedit_drag(STB_TEXTEDIT_STRING * str, STB_TexteditState * sta
 //
 
 // forward declarations
-static void stb_text_undo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state);
-static void stb_text_redo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state);
-static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, int where, int length);
-static void stb_text_makeundo_insert(STB_TexteditState * state, int where, int length);
-static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, int where, int old_length, int new_length);
+static void stb_text_undo(STB_TEXTEDIT_STRING* str, STB_TexteditState* state);
+static void stb_text_redo(STB_TEXTEDIT_STRING* str, STB_TexteditState* state);
+static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, int where, int length);
+static void stb_text_makeundo_insert(STB_TexteditState* state, int where, int length);
+static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, int where, int old_length, int new_length);
 
 typedef struct
 {
@@ -513,7 +515,7 @@ typedef struct
 
 // find the x/y location of a character, and remember info about the previous row in
 // case we get a move-up event (for page up, we'll have to rescan)
-static void stb_textedit_find_charpos(StbFindState * find, STB_TEXTEDIT_STRING * str, int n, int single_line)
+static void stb_textedit_find_charpos(StbFindState* find, STB_TEXTEDIT_STRING* str, int n, int single_line)
 {
     StbTexteditRow r;
     int prev_start = 0;
@@ -530,8 +532,7 @@ static void stb_textedit_find_charpos(StbFindState * find, STB_TEXTEDIT_STRING *
             find->length = z;
             find->height = r.ymax - r.ymin;
             find->x = r.x1;
-        }
-        else {
+        } else {
             find->y = 0;
             find->x = 0;
             find->height = 1;
@@ -573,7 +574,7 @@ static void stb_textedit_find_charpos(StbFindState * find, STB_TEXTEDIT_STRING *
 #define STB_TEXT_HAS_SELECTION(s)   ((s)->select_start != (s)->select_end)
 
 // make the selection/cursor state valid if client altered the string
-static void stb_textedit_clamp(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static void stb_textedit_clamp(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     int n = STB_TEXTEDIT_STRINGLEN(str);
     if (STB_TEXT_HAS_SELECTION(state)) {
@@ -587,7 +588,7 @@ static void stb_textedit_clamp(STB_TEXTEDIT_STRING * str, STB_TexteditState * st
 }
 
 // delete characters while updating undo
-static void stb_textedit_delete(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, int where, int len)
+static void stb_textedit_delete(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, int where, int len)
 {
     stb_text_makeundo_delete(str, state, where, len);
     STB_TEXTEDIT_DELETECHARS(str, where, len);
@@ -595,15 +596,14 @@ static void stb_textedit_delete(STB_TEXTEDIT_STRING * str, STB_TexteditState * s
 }
 
 // delete the section
-static void stb_textedit_delete_selection(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static void stb_textedit_delete_selection(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     stb_textedit_clamp(str, state);
     if (STB_TEXT_HAS_SELECTION(state)) {
         if (state->select_start < state->select_end) {
             stb_textedit_delete(str, state, state->select_start, state->select_end - state->select_start);
             state->select_end = state->cursor = state->select_start;
-        }
-        else {
+        } else {
             stb_textedit_delete(str, state, state->select_end, state->select_start - state->select_end);
             state->select_start = state->cursor = state->select_end;
         }
@@ -612,7 +612,7 @@ static void stb_textedit_delete_selection(STB_TEXTEDIT_STRING * str, STB_Textedi
 }
 
 // canoncialize the selection so start <= end
-static void stb_textedit_sortselection(STB_TexteditState * state)
+static void stb_textedit_sortselection(STB_TexteditState* state)
 {
     if (state->select_end < state->select_start) {
         int temp = state->select_end;
@@ -622,7 +622,7 @@ static void stb_textedit_sortselection(STB_TexteditState * state)
 }
 
 // move cursor to first character of selection
-static void stb_textedit_move_to_first(STB_TexteditState * state)
+static void stb_textedit_move_to_first(STB_TexteditState* state)
 {
     if (STB_TEXT_HAS_SELECTION(state)) {
         stb_textedit_sortselection(state);
@@ -633,7 +633,7 @@ static void stb_textedit_move_to_first(STB_TexteditState * state)
 }
 
 // move cursor to last character of selection
-static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     if (STB_TEXT_HAS_SELECTION(state)) {
         stb_textedit_sortselection(state);
@@ -645,13 +645,13 @@ static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING * str, STB_TexteditSta
 }
 
 #ifdef STB_TEXTEDIT_IS_SPACE
-static int is_word_boundary(STB_TEXTEDIT_STRING * str, int idx)
+static int is_word_boundary(STB_TEXTEDIT_STRING* str, int idx)
 {
     return idx > 0 ? (STB_TEXTEDIT_IS_SPACE(STB_TEXTEDIT_GETCHAR(str, idx - 1)) && !STB_TEXTEDIT_IS_SPACE(STB_TEXTEDIT_GETCHAR(str, idx))) : 1;
 }
 
 #ifndef STB_TEXTEDIT_MOVEWORDLEFT
-static int stb_textedit_move_to_word_previous(STB_TEXTEDIT_STRING * str, int c)
+static int stb_textedit_move_to_word_previous(STB_TEXTEDIT_STRING* str, int c)
 {
     --c; // always move at least one character
     while (c >= 0 && !is_word_boundary(str, c))
@@ -666,7 +666,7 @@ static int stb_textedit_move_to_word_previous(STB_TEXTEDIT_STRING * str, int c)
 #endif
 
 #ifndef STB_TEXTEDIT_MOVEWORDRIGHT
-static int stb_textedit_move_to_word_next(STB_TEXTEDIT_STRING * str, int c)
+static int stb_textedit_move_to_word_next(STB_TEXTEDIT_STRING* str, int c)
 {
     const int len = STB_TEXTEDIT_STRINGLEN(str);
     ++c; // always move at least one character
@@ -684,7 +684,7 @@ static int stb_textedit_move_to_word_next(STB_TEXTEDIT_STRING * str, int c)
 #endif
 
 // update selection and cursor to match each other
-static void stb_textedit_prep_selection_at_cursor(STB_TexteditState * state)
+static void stb_textedit_prep_selection_at_cursor(STB_TexteditState* state)
 {
     if (!STB_TEXT_HAS_SELECTION(state))
         state->select_start = state->select_end = state->cursor;
@@ -693,7 +693,7 @@ static void stb_textedit_prep_selection_at_cursor(STB_TexteditState * state)
 }
 
 // API cut: delete selection
-static int stb_textedit_cut(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static int stb_textedit_cut(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     if (STB_TEXT_HAS_SELECTION(state)) {
         stb_textedit_delete_selection(str, state); // implicitly clamps
@@ -704,7 +704,7 @@ static int stb_textedit_cut(STB_TEXTEDIT_STRING * str, STB_TexteditState * state
 }
 
 // API paste: replace existing selection with passed-in text
-static int stb_textedit_paste_internal(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, STB_TEXTEDIT_CHARTYPE * text, int len)
+static int stb_textedit_paste_internal(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, STB_TEXTEDIT_CHARTYPE* text, int len)
 {
     // if there's a selection, the paste should delete it
     stb_textedit_clamp(str, state);
@@ -727,7 +727,7 @@ static int stb_textedit_paste_internal(STB_TEXTEDIT_STRING * str, STB_TexteditSt
 #endif
 
 // API key: process a keyboard input
-static void stb_textedit_key(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, STB_TEXTEDIT_KEYTYPE key)
+static void stb_textedit_key(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, STB_TEXTEDIT_KEYTYPE key)
 {
 retry:
     switch (key) {
@@ -747,8 +747,7 @@ retry:
                     ++state->cursor;
                     state->has_preferred_x = 0;
                 }
-            }
-            else {
+            } else {
                 stb_textedit_delete_selection(str, state); // implicitly clamps
                 if (STB_TEXTEDIT_INSERTCHARS(str, state->cursor, &ch, 1)) {
                     stb_text_makeundo_insert(state, state->cursor, 1);
@@ -858,12 +857,16 @@ retry:
         break;
 
     case STB_TEXTEDIT_K_DOWN:
-    case STB_TEXTEDIT_K_DOWN | STB_TEXTEDIT_K_SHIFT: {
+    case STB_TEXTEDIT_K_DOWN | STB_TEXTEDIT_K_SHIFT:
+    case STB_TEXTEDIT_K_PGDOWN:
+    case STB_TEXTEDIT_K_PGDOWN | STB_TEXTEDIT_K_SHIFT: {
         StbFindState find;
         StbTexteditRow row;
-        int i, sel = (key & STB_TEXTEDIT_K_SHIFT) != 0;
+        int i, j, sel = (key & STB_TEXTEDIT_K_SHIFT) != 0;
+        int is_page = (key & ~STB_TEXTEDIT_K_SHIFT) == STB_TEXTEDIT_K_PGDOWN;
+        int row_count = is_page ? state->row_count_per_page : 1;
 
-        if (state->single_line) {
+        if (!is_page && state->single_line) {
             // on windows, up&down in single-line behave like left&right
             key = STB_TEXTEDIT_K_RIGHT | (key & STB_TEXTEDIT_K_SHIFT);
             goto retry;
@@ -878,11 +881,19 @@ retry:
         stb_textedit_clamp(str, state);
         stb_textedit_find_charpos(&find, str, state->cursor, state->single_line);
 
-        // now find character position down a row
-        if (find.length) {
-            float goal_x = state->has_preferred_x ? state->preferred_x : find.x;
-            float x;
+        for (j = 0; j < row_count; ++j) {
+            float x, goal_x = state->has_preferred_x ? state->preferred_x : find.x;
             int start = find.first_char + find.length;
+
+            if (find.length == 0)
+                break;
+
+            // [DEAR IMGUI]
+            // going down while being on the last line shouldn't bring us to that line end
+            if (STB_TEXTEDIT_GETCHAR(str, find.first_char + find.length - 1) != STB_TEXTEDIT_NEWLINE)
+                break;
+
+            // now find character position down a row
             state->cursor = start;
             STB_TEXTEDIT_LAYOUTROW(&row, str, state->cursor);
             x = row.x0;
@@ -904,17 +915,25 @@ retry:
 
             if (sel)
                 state->select_end = state->cursor;
+
+            // go to next line
+            find.first_char = find.first_char + find.length;
+            find.length = row.num_chars;
         }
         break;
     }
 
     case STB_TEXTEDIT_K_UP:
-    case STB_TEXTEDIT_K_UP | STB_TEXTEDIT_K_SHIFT: {
+    case STB_TEXTEDIT_K_UP | STB_TEXTEDIT_K_SHIFT:
+    case STB_TEXTEDIT_K_PGUP:
+    case STB_TEXTEDIT_K_PGUP | STB_TEXTEDIT_K_SHIFT: {
         StbFindState find;
         StbTexteditRow row;
-        int i, sel = (key & STB_TEXTEDIT_K_SHIFT) != 0;
+        int i, j, prev_scan, sel = (key & STB_TEXTEDIT_K_SHIFT) != 0;
+        int is_page = (key & ~STB_TEXTEDIT_K_SHIFT) == STB_TEXTEDIT_K_PGUP;
+        int row_count = is_page ? state->row_count_per_page : 1;
 
-        if (state->single_line) {
+        if (!is_page && state->single_line) {
             // on windows, up&down become left&right
             key = STB_TEXTEDIT_K_LEFT | (key & STB_TEXTEDIT_K_SHIFT);
             goto retry;
@@ -929,11 +948,14 @@ retry:
         stb_textedit_clamp(str, state);
         stb_textedit_find_charpos(&find, str, state->cursor, state->single_line);
 
-        // can only go up if there's a previous row
-        if (find.prev_first != find.first_char) {
+        for (j = 0; j < row_count; ++j) {
+            float  x, goal_x = state->has_preferred_x ? state->preferred_x : find.x;
+
+            // can only go up if there's a previous row
+            if (find.prev_first == find.first_char)
+                break;
+
             // now find character position up a row
-            float goal_x = state->has_preferred_x ? state->preferred_x : find.x;
-            float x;
             state->cursor = find.prev_first;
             STB_TEXTEDIT_LAYOUTROW(&row, str, state->cursor);
             x = row.x0;
@@ -955,6 +977,14 @@ retry:
 
             if (sel)
                 state->select_end = state->cursor;
+
+            // go to previous line
+            // (we need to scan previous line the hard way. maybe we could expose this as a new API function?)
+            prev_scan = find.prev_first > 0 ? find.prev_first - 1 : 0;
+            while (prev_scan > 0 && STB_TEXTEDIT_GETCHAR(str, prev_scan - 1) != STB_TEXTEDIT_NEWLINE)
+                --prev_scan;
+            find.first_char = find.prev_first;
+            find.prev_first = prev_scan;
         }
         break;
     }
@@ -1078,10 +1108,6 @@ retry:
         state->has_preferred_x = 0;
         break;
     }
-
-                                                        // @TODO:
-                                                        //    STB_TEXTEDIT_K_PGUP      - move cursor up a page
-                                                        //    STB_TEXTEDIT_K_PGDOWN    - move cursor down a page
     }
 }
 
@@ -1091,14 +1117,14 @@ retry:
 //
 // @OPTIMIZE: the undo/redo buffer should be circular
 
-static void stb_textedit_flush_redo(StbUndoState * state)
+static void stb_textedit_flush_redo(StbUndoState* state)
 {
     state->redo_point = STB_TEXTEDIT_UNDOSTATECOUNT;
     state->redo_char_point = STB_TEXTEDIT_UNDOCHARCOUNT;
 }
 
 // discard the oldest entry in the undo list
-static void stb_textedit_discard_undo(StbUndoState * state)
+static void stb_textedit_discard_undo(StbUndoState* state)
 {
     if (state->undo_point > 0) {
         // if the 0th undo state has characters, clean those up
@@ -1120,7 +1146,7 @@ static void stb_textedit_discard_undo(StbUndoState * state)
 // ever happens, but because undo & redo have to store the actual
 // characters in different cases, the redo character buffer can
 // fill up even though the undo buffer didn't
-static void stb_textedit_discard_redo(StbUndoState * state)
+static void stb_textedit_discard_redo(StbUndoState* state)
 {
     int k = STB_TEXTEDIT_UNDOSTATECOUNT - 1;
 
@@ -1137,7 +1163,7 @@ static void stb_textedit_discard_redo(StbUndoState * state)
                     state->undo_rec[i].char_storage += n;
         }
         // now move all the redo records towards the end of the buffer; the first one is at 'redo_point'
-        // {DEAR IMGUI]
+        // [DEAR IMGUI]
         size_t move_size = (size_t)((STB_TEXTEDIT_UNDOSTATECOUNT - state->redo_point - 1) * sizeof(state->undo_rec[0]));
         const char* buf_begin = (char*)state->undo_rec; (void)buf_begin;
         const char* buf_end = (char*)state->undo_rec + sizeof(state->undo_rec); (void)buf_end;
@@ -1150,7 +1176,7 @@ static void stb_textedit_discard_redo(StbUndoState * state)
     }
 }
 
-static StbUndoRecord * stb_text_create_undo_record(StbUndoState * state, int numchars)
+static StbUndoRecord* stb_text_create_undo_record(StbUndoState* state, int numchars)
 {
     // any time we create a new undo record, we discard redo
     stb_textedit_flush_redo(state);
@@ -1174,7 +1200,7 @@ static StbUndoRecord * stb_text_create_undo_record(StbUndoState * state, int num
     return &state->undo_rec[state->undo_point++];
 }
 
-static STB_TEXTEDIT_CHARTYPE* stb_text_createundo(StbUndoState * state, int pos, int insert_len, int delete_len)
+static STB_TEXTEDIT_CHARTYPE* stb_text_createundo(StbUndoState* state, int pos, int insert_len, int delete_len)
 {
     StbUndoRecord* r = stb_text_create_undo_record(state, insert_len);
     if (r == NULL)
@@ -1187,15 +1213,14 @@ static STB_TEXTEDIT_CHARTYPE* stb_text_createundo(StbUndoState * state, int pos,
     if (insert_len == 0) {
         r->char_storage = -1;
         return NULL;
-    }
-    else {
+    } else {
         r->char_storage = state->undo_char_point;
         state->undo_char_point += insert_len;
         return &state->undo_char[r->char_storage];
     }
 }
 
-static void stb_text_undo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static void stb_text_undo(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     StbUndoState* s = &state->undostate;
     StbUndoRecord u, * r;
@@ -1225,8 +1250,7 @@ static void stb_text_undo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
         if (s->undo_char_point + u.delete_length >= STB_TEXTEDIT_UNDOCHARCOUNT) {
             // the undo records take up too much character space; there's no space to store the redo characters
             r->insert_length = 0;
-        }
-        else {
+        } else {
             int i;
 
             // there's definitely room to store the characters eventually
@@ -1264,7 +1288,7 @@ static void stb_text_undo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
     s->redo_point--;
 }
 
-static void stb_text_redo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
+static void stb_text_redo(STB_TEXTEDIT_STRING* str, STB_TexteditState* state)
 {
     StbUndoState* s = &state->undostate;
     StbUndoRecord* u, r;
@@ -1290,8 +1314,7 @@ static void stb_text_redo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
         if (s->undo_char_point + u->insert_length > s->redo_char_point) {
             u->insert_length = 0;
             u->delete_length = 0;
-        }
-        else {
+        } else {
             int i;
             u->char_storage = s->undo_char_point;
             s->undo_char_point = s->undo_char_point + u->insert_length;
@@ -1316,12 +1339,12 @@ static void stb_text_redo(STB_TEXTEDIT_STRING * str, STB_TexteditState * state)
     s->redo_point++;
 }
 
-static void stb_text_makeundo_insert(STB_TexteditState * state, int where, int length)
+static void stb_text_makeundo_insert(STB_TexteditState* state, int where, int length)
 {
     stb_text_createundo(&state->undostate, where, 0, length);
 }
 
-static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, int where, int length)
+static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, int where, int length)
 {
     int i;
     STB_TEXTEDIT_CHARTYPE* p = stb_text_createundo(&state->undostate, where, length, 0);
@@ -1331,7 +1354,7 @@ static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING * str, STB_TexteditStat
     }
 }
 
-static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, int where, int old_length, int new_length)
+static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, int where, int old_length, int new_length)
 {
     int i;
     STB_TEXTEDIT_CHARTYPE* p = stb_text_createundo(&state->undostate, where, old_length, new_length);
@@ -1342,7 +1365,7 @@ static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING * str, STB_TexteditSta
 }
 
 // reset the state to default
-static void stb_textedit_clear_state(STB_TexteditState * state, int is_single_line)
+static void stb_textedit_clear_state(STB_TexteditState* state, int is_single_line)
 {
     state->undostate.undo_point = 0;
     state->undostate.undo_char_point = 0;
@@ -1356,10 +1379,11 @@ static void stb_textedit_clear_state(STB_TexteditState * state, int is_single_li
     state->initialized = 1;
     state->single_line = (unsigned char)is_single_line;
     state->insert_mode = 0;
+    state->row_count_per_page = 0;
 }
 
 // API initialize
-static void stb_textedit_initialize_state(STB_TexteditState * state, int is_single_line)
+static void stb_textedit_initialize_state(STB_TexteditState* state, int is_single_line)
 {
     stb_textedit_clear_state(state, is_single_line);
 }
@@ -1369,7 +1393,7 @@ static void stb_textedit_initialize_state(STB_TexteditState * state, int is_sing
 #pragma GCC diagnostic ignored "-Wcast-qual"
 #endif
 
-static int stb_textedit_paste(STB_TEXTEDIT_STRING * str, STB_TexteditState * state, STB_TEXTEDIT_CHARTYPE const* ctext, int len)
+static int stb_textedit_paste(STB_TEXTEDIT_STRING* str, STB_TexteditState* state, STB_TEXTEDIT_CHARTYPE const* ctext, int len)
 {
     return stb_textedit_paste_internal(str, state, (STB_TEXTEDIT_CHARTYPE*)ctext, len);
 }

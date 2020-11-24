@@ -211,7 +211,8 @@ void Visuals::removeGrass(FrameStage stage) noexcept
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
-        case fnv::hash("dz_junglety"): return "detail/tropical_grass";
+        // dz_junglety has been removed in 7/23/2020 patch
+        // case fnv::hash("dz_junglety"): return "detail/tropical_grass";
         default: return nullptr;
         }
     };
@@ -398,7 +399,7 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    if (const auto& skyboxes = Helpers::getSkyboxes(); stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
+    if (const auto& skyboxes = Helpers::skyboxList; stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
         memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");

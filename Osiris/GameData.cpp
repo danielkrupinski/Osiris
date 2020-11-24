@@ -46,8 +46,11 @@ void GameData::update() noexcept
 
     localPlayerData.update();
 
-    if (!localPlayer)
+    if (!localPlayer) {
+        playerData.clear();
+        projectileData.clear();
         return;
+    }
 
     viewMatrix = interfaces->engine->worldToScreenMatrix();
 
@@ -55,18 +58,28 @@ void GameData::update() noexcept
 
     for (int i = 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity->isDormant())
+        if (!entity)
             continue;
 
         if (entity->isPlayer()) {
             if (entity == localPlayer.get() || entity == observerTarget)
                 continue;
 
-            if (entity->isAlive())
+            if (const auto it = std::find_if(playerData.begin(), playerData.end(), [handle = entity->handle()](const auto& playerData) { return playerData.handle == handle; }); it != playerData.end()) {
+                it->update(entity);
+            } else {
                 playerData.emplace_back(entity);
-            else if (const auto obs = entity->getObserverTarget())
-                observerData.emplace_back(entity, obs, obs == localPlayer.get());
+            }
+
+            if (!entity->isDormant() && !entity->isAlive()) {
+                const auto obs = entity->getObserverTarget();
+                if (obs)
+                    observerData.emplace_back(entity, obs, obs == localPlayer.get());
+            }
         } else {
+            if (entity->isDormant())
+                continue;
+
             if (entity->isWeapon()) {
                 if (entity->ownerEntity() == -1)
                     weaponData.emplace_back(entity);
@@ -122,6 +135,14 @@ void GameData::update() noexcept
                 it = projectileData.erase(it);
                 continue;
             }
+        }
+        ++it;
+    }
+
+    for (auto it = playerData.begin(); it != playerData.end();) {
+        if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
+            it = playerData.erase(it);
+            continue;
         }
         ++it;
     }
@@ -269,15 +290,32 @@ void ProjectileData::update(Entity* projectile) noexcept
 {
     static_cast<BaseData&>(*this) = { projectile };
 
-    if (const auto pos = projectile->getAbsOrigin(); trajectory.size() < 1 || trajectory[trajectory.size() - 1].second != pos)
+    if (const auto& pos = projectile->getAbsOrigin(); trajectory.size() < 1 || trajectory[trajectory.size() - 1].second != pos)
         trajectory.emplace_back(memory->globalVars->realtime, pos);
 }
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
+    handle = entity->handle();
+    update(entity);
+}
+
+void PlayerData::update(Entity* entity) noexcept
+{
+    entity->getPlayerName(name);
+
+    dormant = entity->isDormant();
+    if (dormant)
+        return;
+
+    static_cast<BaseData&>(*this) = { entity };
+    origin = entity->getAbsOrigin();
+    inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
+    alive = entity->isAlive();
+
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
-        visible = entity->visibleTo(localPlayer.get());
+        visible = inViewFrustum && alive && entity->visibleTo(localPlayer.get());
     }
 
     constexpr auto isEntityAudible = [](int entityIndex) noexcept {
@@ -291,7 +329,6 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
     spotted = entity->spotted();
     health = entity->health();
     flashDuration = entity->flashDuration();
-    entity->getPlayerName(name);
 
     if (const auto weapon = entity->getActiveWeapon()) {
         audible = audible || isEntityAudible(weapon->index());

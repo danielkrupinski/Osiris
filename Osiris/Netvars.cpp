@@ -23,7 +23,7 @@ static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noe
     proxies[hash].first(data, arg2, arg3);
 }
 
-#include "nSkinz/config_.hpp"
+#include "Hacks/SkinChanger.h"
 
 static int get_new_animation(const uint32_t model, const int sequence) noexcept
 {

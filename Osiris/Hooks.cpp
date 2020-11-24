@@ -1,8 +1,11 @@
 #include <functional>
-#include <intrin.h>
 #include <string>
+
+#ifdef _WIN32
+#include <intrin.h>
 #include <Windows.h>
 #include <Psapi.h>
+#endif
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx9.h"
@@ -36,6 +39,7 @@
 #include "SDK/FrameStage.h"
 #include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
+#include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
@@ -49,7 +53,7 @@
 
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
-    static const auto once = [](HWND window) noexcept {
+    [[maybe_unused]] static const auto once = [](HWND window) noexcept {
         netvars = std::make_unique<Netvars>();
         eventListener = std::make_unique<EventListener>();
         config = std::make_unique<Config>("Osiris");
@@ -85,10 +89,10 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 
 static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, const RECT* dest, HWND windowOverride, const RGNDATA* dirtyRegion) noexcept
 {
-    static bool imguiInit{ ImGui_ImplDX9_Init(device) };
+    [[maybe_unused]] static bool imguiInit{ ImGui_ImplDX9_Init(device) };
 
     if (config->loadScheduledFonts())
-        ImGui_ImplDX9_InvalidateDeviceObjects();
+        ImGui_ImplDX9_DestroyFontsTexture();
 
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -98,6 +102,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::purchaseList();
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+    Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
 
     if (gui->open)
         gui->render();
@@ -136,6 +141,7 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     memory->globalVars->serverTime(cmd);
     Misc::nadePredict();
     Misc::antiAfkKick(cmd);
+    Misc::fastStop(cmd);
     Misc::prepareRevolver(cmd);
     Visuals::removeShadows();
     Misc::runReportbot();
@@ -248,7 +254,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
 
 static void __stdcall frameStageNotify(FrameStage stage) noexcept
 {
-    static auto backtrackInit = (Backtrack::init(), false);
+    [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
@@ -520,12 +526,12 @@ static void __stdcall renderSmokeOverlay(bool update) noexcept
         hooks->viewRender.callOriginal<void, 41>(update);
 }
 
-Hooks::Hooks(HMODULE module) noexcept
+Hooks::Hooks(HMODULE moduleHandle) noexcept
 {
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
-    this->module = module;
+    this->moduleHandle = moduleHandle;
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
     interfaces = std::make_unique<const Interfaces>();
@@ -589,9 +595,9 @@ void Hooks::install() noexcept
         MH_EnableHook(MH_ALL_HOOKS);
 }
 
-extern "C" BOOL WINAPI _CRT_INIT(HMODULE module, DWORD reason, LPVOID reserved);
+extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
 
-static DWORD WINAPI unload(HMODULE module) noexcept
+static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 {
     Sleep(100);
 
@@ -602,9 +608,9 @@ static DWORD WINAPI unload(HMODULE module) noexcept
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
-    _CRT_INIT(module, DLL_PROCESS_DETACH, nullptr);
+    _CRT_INIT(moduleHandle, DLL_PROCESS_DETACH, nullptr);
 
-    FreeLibraryAndExitThread(module, 0);
+    FreeLibraryAndExitThread(moduleHandle, 0);
 }
 
 void Hooks::uninstall() noexcept
@@ -638,6 +644,6 @@ void Hooks::uninstall() noexcept
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
     }
 
-    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), module, 0, nullptr))
+    if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
         CloseHandle(thread);
 }
