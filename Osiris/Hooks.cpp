@@ -211,7 +211,7 @@ static bool __STDCALL createMove(float inputSampleTime, UserCmd* cmd) noexcept
     return false;
 }
 
-static int __STDCALL doPostScreenEffects(void* param) noexcept
+static int __STDCALL doPostScreenEffects(LINUX_THIS LINUX_COMMA void* param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
@@ -221,7 +221,11 @@ static int __STDCALL doPostScreenEffects(void* param) noexcept
         Visuals::remove3dSky();
         Glow::render();
     }
+#ifdef _WIN32
     return hooks->clientMode.callOriginal<int, 44>(param);
+#else
+    return hooks->clientMode.callOriginal<int, 45>(param);
+#endif
 }
 
 static float __STDCALL getViewModelFov() noexcept
@@ -752,10 +756,16 @@ void Hooks::install() noexcept
 
     client.init(interfaces->client);
     client.hookAt(37, frameStageNotify);
+
+    clientMode.init(memory->clientMode);
+    clientMode.hookAt(45, doPostScreenEffects);
 }
 
 void Hooks::uninstall() noexcept
 {
+    client.restore();
+    clientMode.restore();
+    
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
 }
