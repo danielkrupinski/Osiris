@@ -8,6 +8,7 @@
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "Config.h"
 #include "SDK/Engine.h"
 
 EventListener::EventListener() noexcept
@@ -59,7 +60,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         break;
     case fnv::hash("cs_win_panel_match"):
         if (config->misc.autoDisconnect)
-            interfaces->engine->cliendCmdUnrestricted("disconnect");
+            interfaces->engine->clientCmdUnrestricted("disconnect");
         break;
     }
 }
