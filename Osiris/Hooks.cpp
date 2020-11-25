@@ -211,7 +211,7 @@ static bool __STDCALL createMove(float inputSampleTime, UserCmd* cmd) noexcept
     return false;
 }
 
-static int __STDCALL doPostScreenEffects(int param) noexcept
+static int __STDCALL doPostScreenEffects(void* param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
