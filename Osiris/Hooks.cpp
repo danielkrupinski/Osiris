@@ -734,6 +734,7 @@ static void swapWindow(SDL_Window* window) noexcept
             gui->open = !gui->open;
             if (!gui->open)
                 interfaces->inputSystem->resetInputState();
+            ImGui::GetIO().MouseDrawCursor = gui->open;
         }
     }
 
@@ -765,7 +766,7 @@ void Hooks::uninstall() noexcept
 {
     client.restore();
     clientMode.restore();
-    
+
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
 }
