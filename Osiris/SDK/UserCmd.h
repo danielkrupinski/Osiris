@@ -16,7 +16,7 @@ struct UserCmd {
         IN_SCORE = 1 << 16,
         IN_BULLRUSH = 1 << 22
     };
-    int pad;
+    void* vmt;
     int commandNumber;
     int tickCount;
     Vector viewangles;
