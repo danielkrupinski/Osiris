@@ -136,9 +136,13 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 #endif
 
-static bool __STDCALL createMove(float inputSampleTime, UserCmd* cmd) noexcept
+static bool __STDCALL createMove(LINUX_THIS LINUX_COMMA float inputSampleTime, UserCmd* cmd) noexcept
 {
+#ifdef _WIN32
     auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
+#else
+    auto result = hooks->clientMode.callOriginal<bool, 25>(inputSampleTime, cmd);
+#endif
 
     if (!cmd->commandNumber)
         return result;
@@ -176,7 +180,9 @@ static bool __STDCALL createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
+#ifdef _WIN32
     EnginePrediction::run(cmd);
+#endif
 
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
@@ -759,6 +765,7 @@ void Hooks::install() noexcept
     client.hookAt(37, frameStageNotify);
 
     clientMode.init(memory->clientMode);
+    clientMode.hookAt(25, createMove);
     clientMode.hookAt(45, doPostScreenEffects);
 }
 
