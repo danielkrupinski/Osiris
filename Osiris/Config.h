@@ -269,6 +269,7 @@ public:
         } reportbot;
 
         OffscreenEnemies offscreenEnemies;
+        bool autoDisconnect{ false };
     } misc;
 
     void scheduleFontLoad(const std::string& name) noexcept;
