@@ -54,6 +54,7 @@ struct PaintKit {
 
 struct StickerKit {
     int id;
+    int rarity;
     String name;
     String description;
     String itemName;
