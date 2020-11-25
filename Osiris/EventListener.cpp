@@ -8,6 +8,7 @@
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/Engine.h"
 
 EventListener::EventListener() noexcept
 {
@@ -16,6 +17,7 @@ EventListener::EventListener() noexcept
     interfaces->gameEventManager->addListener(this, "item_purchase");
     interfaces->gameEventManager->addListener(this, "round_start");
     interfaces->gameEventManager->addListener(this, "round_freeze_end");
+    interfaces->gameEventManager->addListener(this, "cs_win_panel_match");
     interfaces->gameEventManager->addListener(this, "player_hurt");
 
     interfaces->gameEventManager->addListener(this, "player_death");
@@ -54,6 +56,10 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::playHitSound(*event);
         Visuals::hitEffect(event);
         Visuals::hitMarker(event);
+        break;
+    case fnv::hash("cs_win_panel_match"):
+        if (config->misc.autoDisconnect)
+            interfaces->engine->cliendCmdUnrestricted("disconnect");
         break;
     }
 }
