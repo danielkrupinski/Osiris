@@ -84,6 +84,7 @@ Memory::Memory() noexcept
     disablePostProcessing = relativeToAbsolute<decltype(disablePostProcessing)>(findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") + 2);
     submitReport = reinterpret_cast<decltype(submitReport)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58"));
     loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") + 1);
+    clientMode = relativeToAbsolute<decltype(clientMode)>(relativeToAbsolute<uintptr_t>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 12) + 4);
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
