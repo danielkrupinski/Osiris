@@ -11,10 +11,12 @@ public:
 
     constexpr auto virtualKeyToButtonCode(int virtualKey) noexcept
     {
+#ifdef _WIN32
         if (virtualKey <= VK_XBUTTON2) {
             if (virtualKey > VK_CANCEL) virtualKey--;
             return virtualKey + 106;
         }
+#endif
         return VirtualMethod::call<int, 45>(this, virtualKey);
     }
 

@@ -127,6 +127,6 @@ void ImGuiCustom::arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept
 {
     float sz = ImGui::GetFrameHeight();
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-    ImGui::ArrowButtonEx(id, dir, { sz, sz }, ImGuiButtonFlags_Disabled);
+    ImGui::ArrowButtonEx(id, dir, ImVec2{ sz, sz }, ImGuiButtonFlags_Disabled);
     ImGui::PopStyleVar();
 }

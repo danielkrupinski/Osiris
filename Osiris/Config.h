@@ -4,9 +4,10 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "imgui/imgui.h"
-#include "nSkinz/config_.hpp"
+#include "Hacks/SkinChanger.h"
 #include "ConfigStructs.h"
 
 class Config {
@@ -266,6 +267,8 @@ public:
             int delay = 1;
             int rounds = 1;
         } reportbot;
+
+        OffscreenEnemies offscreenEnemies;
     } misc;
 
     void scheduleFontLoad(const std::string& name) noexcept;

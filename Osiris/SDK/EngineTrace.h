@@ -91,8 +91,31 @@ struct Trace {
     int hitbox;
 };
 
+// #define TRACE_STATS // - enable to see how many rays are cast per frame
+
+#ifdef TRACE_STATS
+#include "../Memory.h"
+#include "GlobalVars.h"
+#endif
+
 class EngineTrace {
 public:
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (this, std::cref(absPosition), contentsMask, nullptr))
-    VIRTUAL_METHOD(void, traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (this, std::cref(ray), mask, std::cref(filter), std::ref(trace)))
+    VIRTUAL_METHOD(void, _traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (this, std::cref(ray), mask, std::cref(filter), std::ref(trace)))
+
+    void traceRay(const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace) noexcept
+    {
+#ifdef TRACE_STATS
+        static int tracesThisFrame, lastFrame;
+
+        if (lastFrame != memory->globalVars->framecount) {
+            memory->debugMsg("traces: frame - %d | count - %d\n", lastFrame, tracesThisFrame);
+            tracesThisFrame = 0;
+            lastFrame = memory->globalVars->framecount;
+        }
+
+        ++tracesThisFrame;
+#endif
+        _traceRay(ray, mask, filter, trace);
+    }
 };

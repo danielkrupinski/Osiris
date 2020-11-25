@@ -47,4 +47,5 @@ namespace Misc
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
+    void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
 }

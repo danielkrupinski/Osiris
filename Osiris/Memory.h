@@ -3,9 +3,17 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <type_traits>
+
+#ifdef _WIN32
 #include <Windows.h>
 #include <Psapi.h>
+#elif __linux__
+#include <link.h>
+#endif
+
+#include "SDK/Platform.h"
 
 class ClientMode;
 class Entity;
@@ -41,71 +49,104 @@ public:
 
     bool* disablePostProcessing;
 
-    std::add_pointer_t<void __fastcall(const char*)> loadSky;
-    std::add_pointer_t<void __fastcall(const char*, const char*)> setClanTag;
+    std::add_pointer_t<void __FASTCALL(const char*)> loadSky;
+    std::add_pointer_t<void __FASTCALL(const char*, const char*)> setClanTag;
     uintptr_t cameraThink;
-    std::add_pointer_t<bool __stdcall(const char*)> acceptMatch;
-    std::add_pointer_t<bool __cdecl(Vector, Vector, short)> lineGoesThroughSmoke;
-    int(__thiscall* getSequenceActivity)(void*, int);
-    bool(__thiscall* isOtherEnemy)(Entity*, Entity*);
+    std::add_pointer_t<bool __STDCALL(const char*)> acceptMatch;
+    std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
+    int(__THISCALL* getSequenceActivity)(void*, int);
+    bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
     uintptr_t hud;
-    int*(__thiscall* findHudElement)(uintptr_t, const char*);
-    int(__thiscall* clearHudWeapon)(int*, int);
-    std::add_pointer_t<ItemSystem* __cdecl()> itemSystem;
-    void(__thiscall* setAbsOrigin)(Entity*, const Vector&);
+    int*(__THISCALL* findHudElement)(uintptr_t, const char*);
+    int(__THISCALL* clearHudWeapon)(int*, int);
+    std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
+    void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
     uintptr_t listLeaves;
     int* dispatchSound;
     uintptr_t traceToExit;
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
-    std::add_pointer_t<bool __stdcall(const char*, const char*)> submitReport;
+    std::add_pointer_t<bool __STDCALL(const char*, const char*)> submitReport;
     uint8_t* fakePrime;
-    std::add_pointer_t<void __cdecl(const char* msg, ...)> debugMsg;
-    std::add_pointer_t<void __cdecl(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
+    std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
+    std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
-    int(__thiscall* equipWearable)(void* wearable, void* player);
+    int(__THISCALL* equipWearable)(void* wearable, void* player);
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
     std::uintptr_t keyValuesFromString;
-    KeyValues*(__thiscall* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
-    void(__thiscall* keyValuesSetString)(KeyValues* keyValues, const char* value);
+    KeyValues*(__THISCALL* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
+    void(__THISCALL* keyValuesSetString)(KeyValues* keyValues, const char* value);
     WeaponSystem* weaponSystem;
-    std::add_pointer_t<const char** __fastcall(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
-    GameEventDescriptor* (__thiscall* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
+    std::add_pointer_t<const char** __FASTCALL(const char* playerModelName)> getPlayerViewmodelArmConfigForPlayerModel;
+    GameEventDescriptor* (__THISCALL* getEventDescriptor)(GameEventManager* _this, const char* name, int* cookie);
     ActiveChannels* activeChannels;
     Channel* channels;
     PlayerResource** playerResource;
-    const wchar_t*(__thiscall* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
 private:
-    static std::uintptr_t findPattern(const wchar_t* module, const char* pattern) noexcept
+    static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
+    {
+#ifdef _WIN32
+        if (HMODULE handle = GetModuleHandleA(name)) {
+            if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
+                return std::make_pair(moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage);
+        }
+        return {};
+#elif __linux__
+        struct ModuleInfo {
+            const char* name;
+            void* base = nullptr;
+            std::size_t size = 0;
+        } moduleInfo;
+
+        moduleInfo.name = name;
+
+        dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
+            const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
+       	    if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
+                moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
+                moduleInfo->size = info->dlpi_phdr[0].p_memsz;
+                return 1;
+       	    }
+            return 0;
+        }, &moduleInfo);
+            
+        return std::make_pair(moduleInfo.base, moduleInfo.size);
+#endif
+    }
+
+    static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
     {
         static auto id = 0;
         ++id;
 
-        if (HMODULE moduleHandle = GetModuleHandleW(module)) {
-            if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), moduleHandle, &moduleInfo, sizeof(moduleInfo))) {
-                auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
-                const auto end = start + moduleInfo.SizeOfImage;
+        const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
 
-                auto first = start;
-                auto second = pattern;
+        if (moduleBase && moduleSize) {
+            auto start = static_cast<const char*>(moduleBase);
+            const auto end = start + moduleSize;
 
-                while (first < end && *second) {
-                    if (*first == *second || *second == '?') {
-                        ++first;
-                        ++second;
-                    } else {
-                        first = ++start;
-                        second = pattern;
-                    }
+            auto first = start;
+            auto second = pattern;
+
+            while (first < end && *second) {
+                if (*first == *second || *second == '?') {
+                    ++first;
+                    ++second;
+                } else {
+                    first = ++start;
+                    second = pattern;
                 }
-
-                if (!*second)
-                    return reinterpret_cast<std::uintptr_t>(start);
             }
+
+            if (!*second)
+                return reinterpret_cast<std::uintptr_t>(start);
         }
+#ifdef _WIN32
         MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+#endif
         return 0;
     }
 };
