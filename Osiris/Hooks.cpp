@@ -136,7 +136,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 #endif
 
-static bool __STDCALL createMove(LINUX_THIS LINUX_COMMA float inputSampleTime, UserCmd* cmd) noexcept
+static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
 #ifdef _WIN32
     auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
@@ -217,7 +217,7 @@ static bool __STDCALL createMove(LINUX_THIS LINUX_COMMA float inputSampleTime, U
     return false;
 }
 
-static void __STDCALL doPostScreenEffects(LINUX_THIS LINUX_COMMA void* param) noexcept
+static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
@@ -280,7 +280,7 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
-static void __STDCALL frameStageNotify(LINUX_THIS LINUX_COMMA FrameStage stage) noexcept
+static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
 {
 #ifndef _WIN32
     Visuals::removeVisualRecoil(stage);

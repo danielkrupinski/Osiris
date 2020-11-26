@@ -49,9 +49,7 @@
 #endif
 
 #ifdef _WIN32
-#define LINUX_COMMA
-#define LINUX_THIS
+#define LINUX_ARGS(...)
 #else
-#define LINUX_COMMA ,
-#define LINUX_THIS void* thisptr
+#define LINUX_ARGS(...) __VA_ARGS__
 #endif
