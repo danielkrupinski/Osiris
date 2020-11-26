@@ -50,6 +50,8 @@
 
 #ifdef _WIN32
 #define LINUX_ARGS(...)
+#define RETURN_ADDRESS(level) _ReturnAddress()
 #else
 #define LINUX_ARGS(...) __VA_ARGS__
+#define RETURN_ADDRESS(level) __builtin_return_address(level)
 #endif
