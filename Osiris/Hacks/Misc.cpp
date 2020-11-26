@@ -115,9 +115,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         const auto localTime = std::localtime(&time);
         char s[11];
         s[0] = '\0';
-#ifdef _WIN32
-        sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-#endif
+        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
     } else if (config->misc.customClanTag) {
