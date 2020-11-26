@@ -282,22 +282,20 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
 
 static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
 {
-#ifndef _WIN32
-    Visuals::removeVisualRecoil(stage);
-    hooks->client.callOriginal<void, 37>(stage);
-    return;
-#endif
-
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
+#ifdef _WIN32
     if (stage == FrameStage::START)
         GameData::update();
+#endif
 
     if (stage == FrameStage::RENDER_START) {
+#ifdef _WIN32
         Misc::preserveKillfeed();
+#endif
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
@@ -308,13 +306,17 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::oppositeHandKnife(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
+#ifdef _WIN32
         Visuals::playerModel(stage);
+#endif
         Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
+#ifdef _WIN32
         SkinChanger::run(stage);
+#endif
     }
     hooks->client.callOriginal<void, 37>(stage);
 }
