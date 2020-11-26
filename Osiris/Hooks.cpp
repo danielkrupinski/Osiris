@@ -261,12 +261,14 @@ static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
-#ifdef _WIN32
-    if (uintptr_t(_ReturnAddress()) == memory->cameraThink && config->visuals.thirdperson)
+    if (uintptr_t(RETURN_ADDRESS(0)) == memory->cameraThink && config->visuals.thirdperson)
         return true;
-    else
+
+#ifdef _WIN32
+    return hooks->svCheats.getOriginal<bool, 13>()(_this);
+#else
+    return hooks->svCheats.getOriginal<bool, 16>()(_this);
 #endif
-        return hooks->svCheats.getOriginal<bool, 13>()(_this);
 }
 
 static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -769,12 +771,16 @@ void Hooks::install() noexcept
     clientMode.init(memory->clientMode);
     clientMode.hookAt(25, createMove);
     clientMode.hookAt(45, doPostScreenEffects);
+
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    svCheats.hookAt(16, svCheatsGetBool);
 }
 
 void Hooks::uninstall() noexcept
 {
     client.restore();
     clientMode.restore();
+    svCheats.restore();
 
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
