@@ -47,11 +47,14 @@ Config::Config(const char* name) noexcept
 #ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
-        path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#else
+    if (const char* homeDir = getenv("HOME"))
+        path = homeDir;
 #endif
 
+    path /= name;
     listConfigs();
     misc.clanTag[0] = '\0';
 
