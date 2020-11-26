@@ -1,15 +1,24 @@
 #pragma once
 
+#include "Pad.h"
 #include "Vector.h"
 
 class Input {
 public:
-    std::byte pad[12];
+#ifdef _WIN32
+    PAD(12)
+#else
+    PAD(16)
+#endif
     bool isTrackIRAvailable;
     bool isMouseInitialized;
     bool isMouseActive;
-    std::byte pad1[158];
+#ifdef _WIN32
+    PAD(158)
+#else
+    PAD(162)
+#endif
     bool isCameraInThirdPerson;
-    std::byte pad2;
+    bool cameraMovingWithMouse;
     Vector cameraOffset;
 };
