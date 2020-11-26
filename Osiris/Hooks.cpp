@@ -217,7 +217,7 @@ static bool __STDCALL createMove(LINUX_THIS LINUX_COMMA float inputSampleTime, U
     return false;
 }
 
-static int __STDCALL doPostScreenEffects(LINUX_THIS LINUX_COMMA void* param) noexcept
+static void __STDCALL doPostScreenEffects(LINUX_THIS LINUX_COMMA void* param) noexcept
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
@@ -228,9 +228,9 @@ static int __STDCALL doPostScreenEffects(LINUX_THIS LINUX_COMMA void* param) noe
         Glow::render();
     }
 #ifdef _WIN32
-    return hooks->clientMode.callOriginal<int, 44>(param);
+    hooks->clientMode.callOriginal<void, 44>(param);
 #else
-    return hooks->clientMode.callOriginal<int, 45>(param);
+    hooks->clientMode.callOriginal<void, 45>(param);
 #endif
 }
 
