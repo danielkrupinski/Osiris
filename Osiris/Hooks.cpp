@@ -524,20 +524,16 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexc
 
 static bool __STDCALL isPlayingDemo() noexcept
 {
+#ifdef _WIN32
+    if (*static_cast<std::uintptr_t*>(_ReturnAddress()) == 0x0975C084 // client.dll : 84 C0 75 09 38 05
+        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
 #ifdef _DEBUG
-    // Check if we always get the same return address
-    if (*static_cast<std::uintptr_t*>(_ReturnAddress()) == 0x0975C084
-        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) {
+        // Check if we always get the same return address
         static const auto returnAddress = std::uintptr_t(_ReturnAddress());
         assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
 #endif
-
-#ifdef _WIN32
-    if (config->misc.revealMoney
-        && *static_cast<uintptr_t*>(_ReturnAddress()) == 0x0975C084 // client.dll : 84 C0 75 09 38 05
-        && **reinterpret_cast<uintptr_t**>(uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
-        return true;
+        if (config->misc.revealMoney)
+            return true;
     }
 #endif
 
