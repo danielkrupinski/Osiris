@@ -308,9 +308,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::oppositeHandKnife(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
-#ifdef _WIN32
         Visuals::playerModel(stage);
-#endif
         Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
