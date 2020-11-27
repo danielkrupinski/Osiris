@@ -775,12 +775,16 @@ void Hooks::install() noexcept
 
     svCheats.init(interfaces->cvar->findVar("sv_cheats"));
     svCheats.hookAt(16, svCheatsGetBool);
+
+    engine.init(interfaces->engine);
+    engine.hookAt(82, isPlayingDemo);
 }
 
 void Hooks::uninstall() noexcept
 {
     client.restore();
     clientMode.restore();
+    engine.restore();
     svCheats.restore();
 
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
