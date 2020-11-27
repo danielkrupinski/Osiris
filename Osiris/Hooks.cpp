@@ -563,7 +563,7 @@ static void __STDCALL updateColorCorrectionWeights() noexcept
         *memory->vignette = 0.0f;
 }
 
-static float __STDCALL getScreenAspectRatio(int width, int height) noexcept
+static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
 {
     if (config->misc.aspectratio)
         return config->misc.aspectratio;
@@ -778,6 +778,7 @@ void Hooks::install() noexcept
 
     engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
+    engine.hookAt(101, getScreenAspectRatio);
 }
 
 void Hooks::uninstall() noexcept
