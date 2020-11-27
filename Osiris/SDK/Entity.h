@@ -80,6 +80,7 @@ public:
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
 #else
     VIRTUAL_METHOD(Vector&, getAbsOrigin, 12, (), (this))
+    VIRTUAL_METHOD(void, setModelIndex, 111, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 166, (), (this))
     VIRTUAL_METHOD(bool, isAlive, 207, (), (this))
     VIRTUAL_METHOD(bool, isPlayer, 209, (), (this))
@@ -95,7 +96,6 @@ public:
     // not verified indexes below!!!
     VIRTUAL_METHOD(int, getWeaponSubType, 344, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
-    void setModelIndex(int index){} // dummy
 #endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
