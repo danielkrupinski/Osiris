@@ -4,7 +4,7 @@
 
 class NetworkStringTable {
 public:
-    VIRTUAL_METHOD(int, addString, 8, (bool isServer, const char* value, int length = -1, const void* userdata = nullptr), (this, isServer, value, length, userdata))
+    VIRTUAL_METHOD_V(int, addString, 8, (bool isServer, const char* value, int length = -1, const void* userdata = nullptr), (this, isServer, value, length, userdata))
 };
 
 class NetworkStringTableContainer {
