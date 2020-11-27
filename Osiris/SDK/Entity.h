@@ -87,6 +87,7 @@ public:
     VIRTUAL_METHOD(bool, isWeapon, 217, (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, 330, (), (this))
     VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, 349, (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, 356, (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, 357, (), (this))
     VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
@@ -94,7 +95,6 @@ public:
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 528, (), (this))
 
     // not verified indexes below!!!
-    VIRTUAL_METHOD(int, getWeaponSubType, 344, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
 #endif
 
