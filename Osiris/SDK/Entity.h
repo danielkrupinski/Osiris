@@ -93,8 +93,6 @@ public:
     VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, 522, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 528, (), (this))
-
-    // not verified indexes below!!!
     VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
 #endif
 
