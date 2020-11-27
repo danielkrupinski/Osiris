@@ -9,5 +9,5 @@ public:
 
 class NetworkStringTableContainer {
 public:
-    VIRTUAL_METHOD(NetworkStringTable*, findTable, 3, (const char* name), (this, name))
+    VIRTUAL_METHOD_V(NetworkStringTable*, findTable, 3, (const char* name), (this, name))
 };
