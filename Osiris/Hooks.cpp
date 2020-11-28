@@ -759,6 +759,7 @@ void Hooks::install() noexcept
 
     clientMode.init(memory->clientMode);
     clientMode.hookAt(25, createMove);
+    clientMode.hookAt(36, getViewModelFov);
     clientMode.hookAt(45, doPostScreenEffects);
 
     engine.init(interfaces->engine);
