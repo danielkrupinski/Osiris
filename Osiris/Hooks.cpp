@@ -349,8 +349,9 @@ static void __STDCALL emitSound(SoundData data) noexcept
     hooks->sound.callOriginal<void, 5>(data);
 }
 
-static bool __STDCALL shouldDrawFog() noexcept
+static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
+#ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
 #ifdef _DEBUG
     // Check if we always get the same return address
@@ -360,12 +361,11 @@ static bool __STDCALL shouldDrawFog() noexcept
     }
 #endif
 
-#ifdef _WIN32
     if (*static_cast<std::uint32_t*>(_ReturnAddress()) != 0x6274C084)
         return hooks->clientMode.callOriginal<bool, 17>();
-#endif
     }
-
+#endif
+    
     return !config->visuals.noFog;
 }
 
