@@ -570,12 +570,21 @@ static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width
     return hooks->engine.callOriginal<float, 101>(width, height);
 }
 
-static void __STDCALL renderSmokeOverlay(bool update) noexcept
+static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
+    if (config->visuals.noSmoke || config->visuals.wireframeSmoke) {
+#ifdef _WIN32
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x588) = 0.0f;
-    else
+#else
+        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x648) = 0.0f;
+#endif
+    } else {
+#ifdef _WIN32
         hooks->viewRender.callOriginal<void, 41>(update);
+#else
+        hooks->viewRender.callOriginal<void, 42>(update);
+#endif
+    }
 }
 
 #ifdef _WIN32
@@ -773,12 +782,15 @@ void Hooks::install() noexcept
     clientMode.hookAt(25, createMove);
     clientMode.hookAt(45, doPostScreenEffects);
 
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    svCheats.hookAt(16, svCheatsGetBool);
-
     engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
+
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    svCheats.hookAt(16, svCheatsGetBool);
+
+    viewRender.init(memory->viewRender);
+    viewRender.hookAt(42, renderSmokeOverlay);
 }
 
 void Hooks::uninstall() noexcept
@@ -787,6 +799,7 @@ void Hooks::uninstall() noexcept
     clientMode.restore();
     engine.restore();
     svCheats.restore();
+    viewRender.restore();
 
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
