@@ -583,10 +583,43 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
 
+#else
+
+static void swapWindow(SDL_Window* window) noexcept
+{
+    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+    
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        if (gui->open)
+            gui->render();
+
+        if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
+            gui->open = !gui->open;
+            if (!gui->open)
+                interfaces->inputSystem->resetInputState();
+            ImGui::GetIO().MouseDrawCursor = gui->open;
+        }
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    hooks->swapWindow(window);
+}
+
+#endif
+
 void Hooks::install() noexcept
 {
     SkinChanger::initializeKits();
 
+#ifdef _WIN32
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
@@ -594,38 +627,54 @@ void Hooks::install() noexcept
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
+#else
+    gl3wInit();
+    ImGui_ImplOpenGL3_Init();
 
-    bspQuery.init(interfaces->engine->getBSPTreeQuery());
-    client.init(interfaces->client);
-    clientMode.init(memory->clientMode);
-    engine.init(interfaces->engine);
+    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
+    *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
+
+#endif
+    
+#ifdef _WIN32
     modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
     sound.init(interfaces->sound);
     surface.init(interfaces->surface);
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    viewRender.init(memory->viewRender);
+    bspQuery.init(interfaces->engine->getBSPTreeQuery());
+#endif
 
-    bspQuery.hookAt(6, listLeavesInBox);
+    client.init(interfaces->client);
     client.hookAt(37, frameStageNotify);
-    clientMode.hookAt(17, shouldDrawFog);
-    clientMode.hookAt(18, overrideView);
-    clientMode.hookAt(24, createMove);
-    clientMode.hookAt(27, shouldDrawViewModel);
-    clientMode.hookAt(35, getViewModelFov);
-    clientMode.hookAt(44, doPostScreenEffects);
-    clientMode.hookAt(58, updateColorCorrectionWeights);
+
+    clientMode.init(memory->clientMode);
+    clientMode.hookAt(IS_WIN32() ? 24 : 25, createMove);
+    clientMode.hookAt(IS_WIN32() ? 35 : 36, getViewModelFov);
+    clientMode.hookAt(IS_WIN32() ? 44 : 45, doPostScreenEffects);
+
+    engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
+
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    svCheats.hookAt(IS_WIN32() ? 13 : 16, svCheatsGetBool);
+
+    viewRender.init(memory->viewRender);
+    viewRender.hookAt(IS_WIN32() ? 39 : 40, render2dEffectsPreHud);
+    viewRender.hookAt(IS_WIN32() ? 41 : 42, renderSmokeOverlay);
+
+#ifdef _WIN32
+    bspQuery.hookAt(6, listLeavesInBox);
+    clientMode.hookAt(17, shouldDrawFog);
+    clientMode.hookAt(18, overrideView);
+    clientMode.hookAt(27, shouldDrawViewModel);
+    clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(218, getDemoPlaybackParameters);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
     surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
-    svCheats.hookAt(13, svCheatsGetBool);
-    viewRender.hookAt(39, render2dEffectsPreHud);
-    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory->dispatchSound + 1) + *memory->dispatchSound);
@@ -635,7 +684,10 @@ void Hooks::install() noexcept
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
+#endif
 }
+
+#ifdef _WIN32
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
 
@@ -714,64 +766,6 @@ static int pollEvent(SDL_Event* event) noexcept
         event->type = 0;
 
     return result;
-}
-
-static void swapWindow(SDL_Window* window) noexcept
-{
-    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
-    
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-
-    ImGui::NewFrame();
-
-    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        if (gui->open)
-            gui->render();
-
-        if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
-            gui->open = !gui->open;
-            if (!gui->open)
-                interfaces->inputSystem->resetInputState();
-            ImGui::GetIO().MouseDrawCursor = gui->open;
-        }
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    hooks->swapWindow(window);
-}
-
-void Hooks::install() noexcept
-{
-    SkinChanger::initializeKits();
-
-    gl3wInit();
-    ImGui_ImplOpenGL3_Init();
-
-    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
-    *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
-
-    client.init(interfaces->client);
-    client.hookAt(37, frameStageNotify);
-
-    clientMode.init(memory->clientMode);
-    clientMode.hookAt(25, createMove);
-    clientMode.hookAt(36, getViewModelFov);
-    clientMode.hookAt(45, doPostScreenEffects);
-
-    engine.init(interfaces->engine);
-    engine.hookAt(82, isPlayingDemo);
-    engine.hookAt(101, getScreenAspectRatio);
-
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    svCheats.hookAt(16, svCheatsGetBool);
-
-    viewRender.init(memory->viewRender);
-    viewRender.hookAt(40, render2dEffectsPreHud);
-    viewRender.hookAt(42, renderSmokeOverlay);
 }
 
 void Hooks::uninstall() noexcept
