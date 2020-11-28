@@ -411,12 +411,12 @@ struct ViewSetup {
     float farZ;
 };
 
-static void __STDCALL overrideView(ViewSetup* setup) noexcept
+static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer->isScoped())
         setup->fov += config->visuals.fov;
     setup->farZ += config->visuals.farZ * 10;
-    hooks->clientMode.callOriginal<void, 18>(setup);
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 18 : 19>(setup);
 }
 
 struct RenderableInfo {
