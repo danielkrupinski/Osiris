@@ -794,6 +794,7 @@ void Hooks::install() noexcept
     svCheats.hookAt(16, svCheatsGetBool);
 
     viewRender.init(memory->viewRender);
+    viewRender.hookAt(40, render2dEffectsPreHud);
     viewRender.hookAt(42, renderSmokeOverlay);
 }
 
