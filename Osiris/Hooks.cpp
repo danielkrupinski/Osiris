@@ -226,7 +226,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
     hooks->clientMode.callOriginal<void, IS_WIN32() ? 44 : 45>(param);
 }
 
-static float __STDCALL getViewModelFov() noexcept
+static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
     float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
     if (localPlayer) {
@@ -234,7 +234,7 @@ static float __STDCALL getViewModelFov() noexcept
             additionalFov = 0.0f;
     }
 
-    return hooks->clientMode.callOriginal<float, 35>() + additionalFov;
+    return hooks->clientMode.callOriginal<float, IS_WIN32() ? 35 : 36>() + additionalFov;
 }
 
 static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
