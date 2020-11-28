@@ -489,11 +489,15 @@ static int __FASTCALL dispatchSound(SoundInfo& soundInfo) noexcept
     return hooks->originalDispatchSound(soundInfo);
 }
 
-static void __STDCALL render2dEffectsPreHud(int param) noexcept
+static void __STDCALL render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
 {
     Visuals::applyScreenEffects();
     Visuals::hitEffect();
-    hooks->viewRender.callOriginal<void, 39>(param);
+#ifdef _WIN32
+    hooks->viewRender.callOriginal<void, 39>(viewSetup);
+#else
+    hooks->viewRender.callOriginal<void, 40>(viewSetup);
+#endif
 }
 
 static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexcept
