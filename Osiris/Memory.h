@@ -39,8 +39,13 @@ class Memory {
 public:
     Memory() noexcept;
 
+#ifdef _WIN32
     uintptr_t present;
     uintptr_t reset;
+#else
+    uintptr_t pollEvent;
+    uintptr_t swapWindow;
+#endif
 
     ClientMode* clientMode;
     Input* input;
@@ -66,7 +71,6 @@ public:
     uintptr_t traceToExit;
     ViewRender* viewRender;
     uintptr_t drawScreenEffectMaterial;
-    std::add_pointer_t<bool __STDCALL(const char*, const char*)> submitReport;
     uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
@@ -85,7 +89,18 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+
+    bool submitReport(const char* xuid, const char* report) const noexcept
+    {
+#ifdef _WIN32
+        return reinterpret_cast<bool(__stdcall*)(const char*, const char*)>(submitReportFunction)(xuid, report);
+#else
+        return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
+#endif
+    }
 private:
+    std::uintptr_t submitReportFunction;
+
     static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
     {
 #ifdef _WIN32

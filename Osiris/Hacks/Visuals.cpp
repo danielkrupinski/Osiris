@@ -1,3 +1,6 @@
+#include <array>
+#include <cstring>
+
 #include "../fnv.h"
 #include "../Helpers.h"
 #include "Visuals.h"
@@ -14,8 +17,6 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
-
-#include <array>
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -152,10 +153,12 @@ void Visuals::thirdperson() noexcept
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
 
+#ifdef _WIN33
     if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
         lastTime = memory->globalVars->realtime;
     }
+#endif
 
     if (config->visuals.thirdperson)
         if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
@@ -239,8 +242,10 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             static bool scoped{ false };
 
+#ifdef _WIN32
             if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
                 scoped = !scoped;
+#endif
 
             if (scoped) {
                 localPlayer->fov() = 40;
@@ -249,6 +254,8 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         }
     }
 }
+
+#ifdef _WIN32
 
 #define DRAW_SCREEN_EFFECT(material) \
 { \
@@ -265,6 +272,10 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         __asm add esp, 12 \
     } \
 }
+
+#else
+#define DRAW_SCREEN_EFFECT(material) 
+#endif
 
 void Visuals::applyScreenEffects() noexcept
 {

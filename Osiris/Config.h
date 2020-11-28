@@ -199,6 +199,8 @@ public:
     } style;
 
     struct Misc {
+        Misc() { }
+
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };

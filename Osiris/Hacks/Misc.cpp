@@ -36,8 +36,13 @@
 
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
+#ifdef _WIN32
     if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
         return;
+#else
+    if (!config->misc.edgejump)
+        return;
+#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -51,8 +56,13 @@ void Misc::edgejump(UserCmd* cmd) noexcept
 
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
+#ifdef _WIN32
     if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
         return;
+#else
+    if (!config->misc.slowwalk)
+        return;
+#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -105,7 +115,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         const auto localTime = std::localtime(&time);
         char s[11];
         s[0] = '\0';
-        sprintf_s(s, "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(s, s);
     } else if (config->misc.customClanTag) {
@@ -151,12 +161,14 @@ void Misc::spectatorList() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
+#ifdef _WIN32
         if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
             const auto [textWidth, textHeight] = interfaces->surface->getTextSize(Surface::font, name);
             interfaces->surface->setTextPosition(width - textWidth - 5, textPositionY);
             textPositionY -= textHeight;
             interfaces->surface->printText(name);
         }
+#endif
     }
 }
 
@@ -273,7 +285,12 @@ void Misc::prepareRevolver(UserCmd* cmd) noexcept
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
-    if (config->misc.prepareRevolver && localPlayer && (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
+    if (config->misc.prepareRevolver && localPlayer &&
+#ifdef _WIN32
+    (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
+#else
+    true){
+#endif
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
@@ -355,7 +372,8 @@ void Misc::drawBombTimer() noexcept
             interfaces->surface->setTextFont(font);
             interfaces->surface->setTextColor(255, 255, 255);
             auto drawPositionY{ interfaces->surface->getScreenSize().second / 8 };
-            auto bombText{ (std::wstringstream{ } << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
+            std::wostringstream ss; ss << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s";
+            auto bombText{ ss.str() };
             const auto bombTextX{ interfaces->surface->getScreenSize().first / 2 - static_cast<int>((interfaces->surface->getTextSize(font, bombText.c_str())).first / 2) };
             interfaces->surface->setTextPosition(bombTextX, drawPositionY);
             drawPositionY += interfaces->surface->getTextSize(font, bombText.c_str()).second;
@@ -378,9 +396,14 @@ void Misc::drawBombTimer() noexcept
 
             if (entity->c4Defuser() != -1) {
                 if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(interfaces->entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
-                    if (wchar_t name[128];  MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+#ifdef _WIN32
+                    if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
+#else
+                    if (wchar_t name[128]; true) {
+#endif
                         drawPositionY += interfaces->surface->getTextSize(font, L" ").second;
-                        const auto defusingText{ (std::wstringstream{ } << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s").str() };
+                        std::wostringstream ss; ss << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s";
+                        const auto defusingText{ ss.str() };
 
                         interfaces->surface->setTextPosition((interfaces->surface->getScreenSize().first - interfaces->surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
                         interfaces->surface->printText(defusingText.c_str());
@@ -554,8 +577,10 @@ void Misc::quickHealthshot(UserCmd* cmd) noexcept
 
     static bool inProgress{ false };
 
+#ifdef _WIN32
     if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
         inProgress = true;
+#endif
 
     if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
         if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory->globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
@@ -591,11 +616,13 @@ void Misc::fakePrime() noexcept
     if (config->misc.fakePrime != lastState) {
         lastState = config->misc.fakePrime;
 
+#ifdef _WIN32
         if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
             constexpr uint8_t patch[]{ 0x74, 0xEB };
             *memory->fakePrime = patch[config->misc.fakePrime];
             VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
         }
+#endif
     }
 }
 
@@ -667,7 +694,9 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
 
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
+#ifdef _WIN32
     if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
+#endif
         sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
 }
 

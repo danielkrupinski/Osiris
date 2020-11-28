@@ -46,8 +46,10 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     }
     lastContact = 0.0f;
 
+#ifdef _WIN32
     if (cfg.onKey && !GetAsyncKeyState(cfg.key))
         return;
+#endif
 
     if (now - lastTime < cfg.shotDelay / 1000.0f)
         return;

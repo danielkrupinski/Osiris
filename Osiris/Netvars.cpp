@@ -4,8 +4,9 @@
 #include "SDK/Client.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Entity.h"
-#include "SDK/Recv.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/Platform.h"
+#include "SDK/Recv.h"
 
 static int random(int min, int max) noexcept
 {
@@ -14,7 +15,7 @@ static int random(int min, int max) noexcept
 
 static std::unordered_map<uint32_t, std::pair<recvProxy, recvProxy*>> proxies;
 
-static void __cdecl spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (config->misc.radarHack)
         data.value._int = 1;
@@ -162,7 +163,7 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-static void __cdecl viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void __CDECL viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
     if (localPlayer) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
