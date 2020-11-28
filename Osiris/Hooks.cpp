@@ -138,11 +138,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
-#ifdef _WIN32
-    auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
-#else
-    auto result = hooks->clientMode.callOriginal<bool, 25>(inputSampleTime, cmd);
-#endif
+    auto result = hooks->clientMode.callOriginal<bool, IS_WIN32() ? 24 : 25>(inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
@@ -227,11 +223,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
         Visuals::remove3dSky();
         Glow::render();
     }
-#ifdef _WIN32
-    hooks->clientMode.callOriginal<void, 44>(param);
-#else
-    hooks->clientMode.callOriginal<void, 45>(param);
-#endif
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 44 : 45>(param);
 }
 
 static float __STDCALL getViewModelFov() noexcept
@@ -264,11 +256,7 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
     if (uintptr_t(RETURN_ADDRESS(0)) == memory->cameraThink && config->visuals.thirdperson)
         return true;
 
-#ifdef _WIN32
-    return hooks->svCheats.getOriginal<bool, 13>()(_this);
-#else
-    return hooks->svCheats.getOriginal<bool, 16>()(_this);
-#endif
+    return hooks->svCheats.getOriginal<bool, IS_WIN32() ? 13 : 16>()(_this);
 }
 
 static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -493,11 +481,7 @@ static void __STDCALL render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* vie
 {
     Visuals::applyScreenEffects();
     Visuals::hitEffect();
-#ifdef _WIN32
-    hooks->viewRender.callOriginal<void, 39>(viewSetup);
-#else
-    hooks->viewRender.callOriginal<void, 40>(viewSetup);
-#endif
+    hooks->viewRender.callOriginal<void, IS_WIN32() ? 39 : 40>(viewSetup);
 }
 
 static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexcept
@@ -576,19 +560,10 @@ static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width
 
 static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (config->visuals.noSmoke || config->visuals.wireframeSmoke) {
-#ifdef _WIN32
-        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x588) = 0.0f;
-#else
-        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x648) = 0.0f;
-#endif
-    } else {
-#ifdef _WIN32
-        hooks->viewRender.callOriginal<void, 41>(update);
-#else
-        hooks->viewRender.callOriginal<void, 42>(update);
-#endif
-    }
+    if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
+        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + (IS_WIN32() ? 0x588 : 0x648)) = 0.0f;
+    else
+        hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
 }
 
 #ifdef _WIN32
