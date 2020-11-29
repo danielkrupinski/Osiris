@@ -90,6 +90,7 @@ public:
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
     uintptr_t scopeDust;
+    uintptr_t scopeArc;
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
