@@ -535,7 +535,7 @@ static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 
 static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
 {
-    hooks->clientMode.callOriginal<void, IS_WIN32() ? 58 : 59>();
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 58 : 61>();
 
     if (const auto& cfg = config->visuals.colorCorrection; cfg.enabled) {
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x498 : 0x900)) = cfg.blue;
@@ -653,6 +653,7 @@ void Hooks::install() noexcept
     clientMode.hookAt(IS_WIN32() ? 24 : 25, createMove);
     clientMode.hookAt(IS_WIN32() ? 35 : 36, getViewModelFov);
     clientMode.hookAt(IS_WIN32() ? 44 : 45, doPostScreenEffects);
+    clientMode.hookAt(IS_WIN32() ? 58 : 61, updateColorCorrectionWeights);
 
     engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
@@ -668,7 +669,6 @@ void Hooks::install() noexcept
 #ifdef _WIN32
     bspQuery.hookAt(6, listLeavesInBox);
     clientMode.hookAt(27, shouldDrawViewModel);
-    clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(218, getDemoPlaybackParameters);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
