@@ -385,7 +385,7 @@ static void __STDCALL lockCursor() noexcept
 
 static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-    if (config->visuals.noScopeOverlay && (std::uintptr_t(RETURN_ADDRESS()) == memory->scopeDust || std::uintptr_t(RETURN_ADDRESS()) == memory->scopeArc))
+    if (config->visuals.noScopeOverlay && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
         a = 0;
     hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
@@ -497,7 +497,7 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexc
 
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (config->misc.revealMoney && std::uintptr_t(RETURN_ADDRESS()) == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(std::uintptr_t(FRAME_ADDRESS()) + (IS_WIN32() ? 8 : 24)) == memory->money)
+    if (config->misc.revealMoney && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + (IS_WIN32() ? 8 : 24)) == memory->money)
         return true;
 
     return hooks->engine.callOriginal<bool, 82>();
