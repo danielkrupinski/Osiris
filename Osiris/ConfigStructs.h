@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <string>
+
 #pragma pack(push, 1)
 struct ColorA {
     std::array<float, 4> color{ 1.0f, 1.0f, 1.0f, 1.0f };
@@ -41,7 +44,7 @@ struct Snapline : ColorToggleThickness {
     int type = Bottom;
 };
 
-struct Box : ColorToggleThicknessRounding {
+struct Box : ColorToggleRounding {
     enum Type {
         _2d = 0,
         _2dCorners,
@@ -77,6 +80,7 @@ struct Player : Shared {
     ColorToggle flashDuration;
     bool audibleOnly = false;
     bool spottedOnly = false;
+    bool healthBar = false;
     ColorToggleThickness skeleton;
     Box headBox;
 
@@ -125,4 +129,14 @@ struct PurchaseList {
         Summary
     };
     int mode = Details;
+};
+
+struct PreserveKillfeed {
+    bool enabled = false;
+    bool onlyHeadshots = false;
+};
+
+struct OffscreenEnemies {
+    bool enabled = false;
+    ColorA color{ 1.0f, 0.26f, 0.21f, 1.0f };
 };

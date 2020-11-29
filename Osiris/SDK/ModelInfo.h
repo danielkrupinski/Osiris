@@ -17,6 +17,29 @@ struct StudioBbox {
     int	unused[4];
 };
 
+enum class Hitbox {
+    Head,
+    Neck,
+    Pelvis,
+    Belly,
+    Thorax,
+    LowerChest,
+    UpperChest,
+    RightThigh,
+    LeftThigh,
+    RightCalf,
+    LeftCalf,
+    RightFoot,
+    LeftFoot,
+    RightHand,
+    LeftHand,
+    RightUpperArm,
+    RightForearm,
+    LeftUpperArm,
+    LeftForearm,
+    Max
+};
+
 struct StudioHitboxSet {
     int nameIndex;
     int numHitboxes;
@@ -30,6 +53,11 @@ struct StudioHitboxSet {
     StudioBbox* getHitbox(int i) noexcept
     {
         return i >= 0 && i < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + i : nullptr;
+    }
+
+    StudioBbox* getHitbox(Hitbox i) noexcept
+    {
+        return static_cast<int>(i) < numHitboxes ? reinterpret_cast<StudioBbox*>(std::uintptr_t(this) + hitboxIndex) + static_cast<int>(i) : nullptr;
     }
 };
 
@@ -84,6 +112,11 @@ struct Model;
 
 class ModelInfo {
 public:
+#ifdef _WIN32
     VIRTUAL_METHOD(int, getModelIndex, 2, (const char* name), (this, name))
     VIRTUAL_METHOD(StudioHdr*, getStudioModel, 32, (const Model* model), (this, model))
+#else
+    VIRTUAL_METHOD(int, getModelIndex, 3, (const char* name), (this, name))
+    VIRTUAL_METHOD(StudioHdr*, getStudioModel, 31, (const Model* model), (this, model))
+#endif
 };

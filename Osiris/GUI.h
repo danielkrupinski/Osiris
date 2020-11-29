@@ -26,7 +26,6 @@ private:
     void renderSoundWindow(bool contentOnly = false) noexcept;
     void renderStyleWindow(bool contentOnly = false) noexcept;
     void renderMiscWindow(bool contentOnly = false) noexcept;
-    void renderReportbotWindow(bool contentOnly = false) noexcept;
     void renderConfigWindow(bool contentOnly = false) noexcept;
     void renderGuiStyle2() noexcept;
 
@@ -37,14 +36,12 @@ private:
         bool backtrack = false;
         bool glow = false;
         bool chams = false;
-        bool esp = false;
         bool streamProofESP = false;
         bool visuals = false;
         bool skinChanger = false;
         bool sound = false;
         bool style = false;
         bool misc = false;
-        bool reportbot = false;
         bool config = false;
     } window;
 

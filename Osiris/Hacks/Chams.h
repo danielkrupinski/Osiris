@@ -19,18 +19,6 @@ private:
     void renderHands() noexcept;
     void renderSleeves() noexcept;
 
-    enum ChamsId {
-        ALLIES = 0,
-        ENEMIES,
-        PLANTING,
-        DEFUSING,
-        LOCALPLAYER,
-        WEAPONS,
-        HANDS,
-        BACKTRACK,
-        SLEEVES
-    };
-
     Material* normal;
     Material* flat;
     Material* animated;
@@ -71,5 +59,5 @@ private:
     const ModelRenderInfo* info;
     matrix3x4* customBoneToWorld;
 
-    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, matrix3x4* customMatrix = nullptr) noexcept;
+    void applyChams(const std::array<Config::Chams::Material, 7>& chams, int health = 0, const matrix3x4* customMatrix = nullptr) noexcept;
 };

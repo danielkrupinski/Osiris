@@ -1,8 +1,12 @@
+#include <cwctype>
 #include <fstream>
 #include <functional>
 #include <string>
+
+#ifdef _WIN32
 #include <ShlObj.h>
 #include <Windows.h>
+#endif
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -13,7 +17,6 @@
 #include "GUI.h"
 #include "Config.h"
 #include "Hacks/Misc.h"
-#include "Hacks/Reportbot.h"
 #include "Hacks/SkinChanger.h"
 #include "Helpers.h"
 #include "Hooks.h"
@@ -35,6 +38,7 @@ GUI::GUI() noexcept
     io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
+#ifdef _WIN32
     if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
@@ -45,6 +49,7 @@ GUI::GUI() noexcept
         fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
+#endif
 }
 
 void GUI::render() noexcept
@@ -63,7 +68,6 @@ void GUI::render() noexcept
         renderSoundWindow();
         renderStyleWindow();
         renderMiscWindow();
-        renderReportbotWindow();
         renderConfigWindow();
     } else {
         renderGuiStyle2();
@@ -90,7 +94,11 @@ void GUI::hotkey(int& key) noexcept
     ImGuiIO& io = ImGui::GetIO();
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
         if (ImGui::IsKeyPressed(i) && i != config->misc.menuKey)
+#ifdef _WIN32
             key = i != VK_ESCAPE ? i : 0;
+#else
+            key = i;
+#endif
 
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
         if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config->misc.menuKey)
@@ -121,7 +129,6 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Sound", window.sound);
         menuBarItem("Style", window.style);
         menuBarItem("Misc", window.misc);
-        menuBarItem("Reportbot", window.reportbot);
         menuBarItem("Config", window.config);
         ImGui::EndMainMenuBar();   
     }
@@ -249,10 +256,10 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", 2.5f);
+    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
     ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", 2.0f);
+    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
@@ -778,12 +785,12 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         ImGui::Checkbox("Enabled", &sharedConfig.enabled);
         ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 260.0f);
         ImGui::SetNextItemWidth(220.0f);
-        if (ImGui::BeginCombo("Font", config->systemFonts[sharedConfig.font.index].c_str())) {
-            for (size_t i = 0; i < config->systemFonts.size(); i++) {
-                bool isSelected = config->systemFonts[i] == sharedConfig.font.name;
-                if (ImGui::Selectable(config->systemFonts[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
+        if (ImGui::BeginCombo("Font", config->getSystemFonts()[sharedConfig.font.index].c_str())) {
+            for (size_t i = 0; i < config->getSystemFonts().size(); i++) {
+                bool isSelected = config->getSystemFonts()[i] == sharedConfig.font.name;
+                if (ImGui::Selectable(config->getSystemFonts()[i].c_str(), isSelected, 0, { 250.0f, 0.0f })) {
                     sharedConfig.font.index = i;
-                    sharedConfig.font.name = config->systemFonts[i];
+                    sharedConfig.font.name = config->getSystemFonts()[i];
                     config->scheduleFontLoad(sharedConfig.font.name);
                 }
                 if (isSelected)
@@ -851,6 +858,9 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             }
 
             ImGui::PopID();
+        
+            ImGui::SameLine(spacing);
+            ImGui::Checkbox("Health Bar", &playerConfig.healthBar);
         } else if (currentCategory == 2) {
             auto& weaponConfig = config->streamProofESP.weapons[currentItem];
             ImGuiCustom::colorPicker("Ammo", weaponConfig.ammo);
@@ -953,7 +963,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
-    ImGui::Combo("Skybox", &config->visuals.skybox, "Default\0cs_baggage_skybox_\0cs_tibet\0embassy\0italy\0jungle\0nukeblank\0office\0sky_cs15_daylight01_hdr\0sky_cs15_daylight02_hdr\0sky_cs15_daylight03_hdr\0sky_cs15_daylight04_hdr\0sky_csgo_cloudy01\0sky_csgo_night_flat\0sky_csgo_night02\0sky_day02_05_hdr\0sky_day02_05\0sky_dust\0sky_l4d_rural02_ldr\0sky_venice\0vertigo_hdr\0vertigo\0vertigoblue_hdr\0vietnam\0");
+    ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::skyboxList.data(), Helpers::skyboxList.size());
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
@@ -1014,7 +1024,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::InputInt("Seed", &selected_entry.seed);
         ImGui::InputInt("StatTrak\u2122", &selected_entry.stat_trak);
         selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
-        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", 5);
+        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", ImGuiSliderFlags_Logarithmic);
 
         static std::string filter;
         ImGui::PushID("Search");
@@ -1022,19 +1032,13 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::PopID();
 
         if (ImGui::ListBoxHeader("Paint Kit")) {
-            const auto& kits = itemIndex == 1 ? SkinChanger::gloveKits : SkinChanger::skinKits;
+            const auto& kits = itemIndex == 1 ? SkinChanger::getGloveKits() : SkinChanger::getSkinKits();
 
-            const std::locale original;
-            std::locale::global(std::locale{ "en_US.utf8" });
-
-            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
-            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
-
-            std::locale::global(original);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
@@ -1085,7 +1089,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 ImGui::PushID(i);
 
                 const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
-                const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::stickerKits[kit_vector_index].name;
+                const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::getStickerKits()[kit_vector_index].name;
 
                 if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
                     selectedStickerSlot = i;
@@ -1105,19 +1109,13 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::PopID();
 
         if (ImGui::ListBoxHeader("Sticker")) {
-            const auto& kits = SkinChanger::stickerKits;
+            const auto& kits = SkinChanger::getStickerKits();
 
-            const std::locale original;
-            std::locale::global(std::locale{ "en_US.utf8" });
-
-            const auto& facet = std::use_facet<std::ctype<wchar_t>>(std::locale{});
             std::wstring filterWide(filter.length(), L'\0');
             const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
             if (newLen != static_cast<std::size_t>(-1))
                 filterWide.resize(newLen);
-            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [&facet](wchar_t w) { return facet.toupper(w); });
-
-            std::locale::global(original);
+            std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             for (std::size_t i = 0; i < kits.size(); ++i) {
                 if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
@@ -1130,7 +1128,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::ListBoxFooter();
         }
 
-        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", 5.0f);
+        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", ImGuiSliderFlags_Logarithmic);
         ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
         ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.0f, 360.0f);
 
@@ -1240,6 +1238,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
     ImGuiCustom::colorPicker("Spectator list", config->misc.spectatorList);
     ImGuiCustom::colorPicker("Watermark", config->misc.watermark);
+    ImGuiCustom::colorPicker("Offscreen Enemies", config->misc.offscreenEnemies.color, &config->misc.offscreenEnemies.enabled);
     ImGui::Checkbox("Fix animation LOD", &config->misc.fixAnimationLOD);
     ImGui::Checkbox("Fix bone matrix", &config->misc.fixBoneMatrix);
     ImGui::Checkbox("Fix movement", &config->misc.fixMovement);
@@ -1276,6 +1275,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (ImGui::Button("Setup fake ban"))
         Misc::fakeBan(true);
     ImGui::Checkbox("Fast plant", &config->misc.fastPlant);
+    ImGui::Checkbox("Fast Stop", &config->misc.fastStop);
     ImGuiCustom::colorPicker("Bomb timer", config->misc.bombTimer);
     ImGui::Checkbox("Quick reload", &config->misc.quickReload);
     ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
@@ -1308,6 +1308,20 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetNextItemWidth(120.0f);
     ImGui::SliderFloat("Max angle delta", &config->misc.maxAngleDelta, 0.0f, 255.0f, "%.2f");
     ImGui::Checkbox("Fake prime", &config->misc.fakePrime);
+    ImGui::Checkbox("Opposite Hand Knife", &config->misc.oppositeHandKnife);
+    ImGui::Checkbox("Preserve Killfeed", &config->misc.preserveKillfeed.enabled);
+    ImGui::SameLine();
+
+    ImGui::PushID("Preserve Killfeed");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::Checkbox("Only Headshots", &config->misc.preserveKillfeed.onlyHeadshots);
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     ImGui::Checkbox("Purchase List", &config->misc.purchaseList.enabled);
     ImGui::SameLine();
 
@@ -1325,40 +1339,36 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::Checkbox("Reportbot", &config->misc.reportbot.enabled);
+    ImGui::SameLine();
+    ImGui::PushID("Reportbot");
+
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::PushItemWidth(80.0f);
+        ImGui::Combo("Target", &config->misc.reportbot.target, "Enemies\0Allies\0All\0");
+        ImGui::InputInt("Delay (s)", &config->misc.reportbot.delay);
+        config->misc.reportbot.delay = (std::max)(config->misc.reportbot.delay, 1);
+        ImGui::InputInt("Rounds", &config->misc.reportbot.rounds);
+        config->misc.reportbot.rounds = (std::max)(config->misc.reportbot.rounds, 1);
+        ImGui::PopItemWidth();
+        ImGui::Checkbox("Abusive Communications", &config->misc.reportbot.textAbuse);
+        ImGui::Checkbox("Griefing", &config->misc.reportbot.griefing);
+        ImGui::Checkbox("Wall Hacking", &config->misc.reportbot.wallhack);
+        ImGui::Checkbox("Aim Hacking", &config->misc.reportbot.aimbot);
+        ImGui::Checkbox("Other Hacking", &config->misc.reportbot.other);
+        if (ImGui::Button("Reset"))
+            Misc::resetReportbot();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 
     ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderReportbotWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.reportbot)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Reportbot", &window.reportbot, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->reportbot.enabled);
-    ImGui::SameLine(0.0f, 50.0f);
-    if (ImGui::Button("Reset"))
-        Reportbot::reset();
-    ImGui::Separator();
-    ImGui::PushItemWidth(80.0f);
-    ImGui::Combo("Target", &config->reportbot.target, "Enemies\0Allies\0All\0");
-    ImGui::InputInt("Delay (s)", &config->reportbot.delay);
-    config->reportbot.delay = (std::max)(config->reportbot.delay, 1);
-    ImGui::InputInt("Rounds", &config->reportbot.rounds);
-    config->reportbot.rounds = (std::max)(config->reportbot.rounds, 1);
-    ImGui::PopItemWidth();
-    ImGui::Checkbox("Abusive Communications", &config->reportbot.textAbuse);
-    ImGui::Checkbox("Griefing", &config->reportbot.griefing);
-    ImGui::Checkbox("Wall Hacking", &config->reportbot.wallhack);
-    ImGui::Checkbox("Aim Hacking", &config->reportbot.aimbot);
-    ImGui::Checkbox("Other Hacking", &config->reportbot.other);
-
     if (!contentOnly)
         ImGui::End();
 }
@@ -1415,7 +1425,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::OpenPopup("Config to reset");
 
         if (ImGui::BeginPopup("Config to reset")) {
-            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc", "Reportbot" };
+            static constexpr const char* names[]{ "Whole", "Aimbot", "Triggerbot", "Backtrack", "Anti aim", "Glow", "Chams", "ESP", "Visuals", "Skin changer", "Sound", "Style", "Misc" };
             for (int i = 0; i < IM_ARRAYSIZE(names); i++) {
                 if (i == 1) ImGui::Separator();
 
@@ -1434,7 +1444,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 10: config->sound = { }; break;
                     case 11: config->style = { }; updateColors(); break;
                     case 12: config->misc = { };  Misc::updateClanTag(true); break;
-                    case 13: config->reportbot = { }; break;
                     }
                 }
             }
@@ -1511,10 +1520,6 @@ void GUI::renderGuiStyle2() noexcept
         }
         if (ImGui::BeginTabItem("Misc")) {
             renderMiscWindow(true);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Reportbot")) {
-            renderReportbotWindow(true);
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Config")) {

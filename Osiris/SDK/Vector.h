@@ -100,7 +100,7 @@ struct Vector {
         return Vector{ x + add, y + add, z + add };
     }
 
-    constexpr Vector& normalize() noexcept
+    Vector& normalize() noexcept
     {
         x = std::isfinite(x) ? std::remainder(x, 360.0f) : 0.0f;
         y = std::isfinite(y) ? std::remainder(y, 360.0f) : 0.0f;
@@ -152,7 +152,7 @@ struct Vector {
     float x, y, z;
 };
 
-#include "Matrix3x4.h"
+#include "matrix3x4.h"
 
 constexpr auto Vector::transform(const matrix3x4& mat) const noexcept
 {

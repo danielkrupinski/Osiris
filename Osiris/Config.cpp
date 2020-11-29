@@ -1,5 +1,8 @@
 #include <fstream>
+
+#ifdef _WIN32
 #include <ShlObj.h>
+#endif
 
 #include "nlohmann/json.hpp"
 
@@ -7,14 +10,14 @@
 #include "Helpers.h"
 
 #ifdef _WIN32
-int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPARAM lParam)
+int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
 {
-    const auto fontName = (const char*)reinterpret_cast<const ENUMLOGFONTEXA*>(lpelfe)->elfFullName;
+    const wchar_t* const fontName = reinterpret_cast<const ENUMLOGFONTEXW*>(lpelfe)->elfFullName;
 
-    if (fontName[0] == '@')
+    if (fontName[0] == L'@')
         return TRUE;
 
-    if (HFONT font = CreateFontA(0, 0, 0, 0,
+    if (HFONT font = CreateFontW(0, 0, 0, 0,
         FW_NORMAL, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -30,8 +33,10 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
         }
         DeleteObject(font);
 
-        if (fontData == GDI_ERROR)
-            reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(fontName);
+        if (fontData == GDI_ERROR) {
+            if (char buff[1024]; WideCharToMultiByte(CP_UTF8, 0, fontName, -1, buff, sizeof(buff), nullptr, nullptr))
+                reinterpret_cast<std::vector<std::string>*>(lParam)->emplace_back(buff);
+        }
     }
     return TRUE;
 }
@@ -39,21 +44,29 @@ int CALLBACK fontCallback(const LOGFONTA* lpelfe, const TEXTMETRICA*, DWORD, LPA
 
 Config::Config(const char* name) noexcept
 {
+#ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
-        path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#else
+    if (const char* homeDir = getenv("HOME"))
+        path = homeDir;
+#endif
 
+    path /= name;
     listConfigs();
     misc.clanTag[0] = '\0';
 
-    LOGFONTA logfont;
+#ifdef _WIN32
+    LOGFONTW logfont;
     logfont.lfCharSet = ANSI_CHARSET;
     logfont.lfPitchAndFamily = DEFAULT_PITCH;
-    logfont.lfFaceName[0] = '\0';
+    logfont.lfFaceName[0] = L'\0';
 
-    EnumFontFamiliesExA(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+    EnumFontFamiliesExW(GetDC(nullptr), &logfont, fontCallback, (LPARAM)&systemFonts, 0);
+#endif
+
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
@@ -192,8 +205,8 @@ static void from_json(const json& j, Font& f)
     if (!f.name.empty())
         config->scheduleFontLoad(f.name);
 
-    if (const auto it = std::find_if(std::cbegin(config->systemFonts), std::cend(config->systemFonts), [&f](const auto& e) { return e == f.name; }); it != std::cend(config->systemFonts))
-        f.index = std::distance(std::cbegin(config->systemFonts), it);
+    if (const auto it = std::find_if(config->getSystemFonts().begin(), config->getSystemFonts().end(), [&f](const auto& e) { return e == f.name; }); it != config->getSystemFonts().end())
+        f.index = std::distance(config->getSystemFonts().begin(), it);
     else
         f.index = 0;
 }
@@ -207,7 +220,7 @@ static void from_json(const json& j, Snapline& s)
 
 static void from_json(const json& j, Box& b)
 {
-    from_json(j, static_cast<ColorToggleThicknessRounding&>(b));
+    from_json(j, static_cast<ColorToggleRounding&>(b));
 
     read(j, "Type", b.type);
     read(j, "Scale", b.scale);
@@ -262,8 +275,15 @@ static void from_json(const json& j, Player& p)
     read<value_t::object>(j, "Flash Duration", p.flashDuration);
     read(j, "Audible Only", p.audibleOnly);
     read(j, "Spotted Only", p.spottedOnly);
+    read(j, "Health Bar", p.healthBar);
     read<value_t::object>(j, "Skeleton", p.skeleton);
     read<value_t::object>(j, "Head Box", p.headBox);
+}
+
+static void from_json(const json& j, OffscreenEnemies& o)
+{
+    read(j, "Enabled", o.enabled);
+    read<value_t::object>(j, "Color", o.color);
 }
 
 static void from_json(const json& j, ImVec2& v)
@@ -377,7 +397,6 @@ static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
     read(j, "Ghost", c.ghost);
     read(j, "Green", c.green);
     read(j, "Yellow", c.yellow);
-    read(j, "Yellow", c.yellow);
 }
 
 static void from_json(const json& j, Config::Visuals& v)
@@ -397,7 +416,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "No grass", v.noGrass);
     read(j, "No shadows", v.noShadows);
     read(j, "Wireframe smoke", v.wireframeSmoke);
-    read(j, "Zoom", v.noScopeOverlay);
+    read(j, "Zoom", v.zoom);
     read(j, "Zoom key", v.zoomKey);
     read(j, "Thirdperson", v.thirdperson);
     read(j, "Thirdperson key", v.thirdpersonKey);
@@ -448,8 +467,10 @@ static void from_json(const json& j, item_setting& i)
     read(j, "StatTrak", i.stat_trak);
     read(j, "Wear", i.wear);
 
+#ifdef _WIN32
     if (j.contains("Custom name"))
         strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
+#endif
 
     read(j, "Stickers", i.stickers);
 }
@@ -500,6 +521,12 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Mode", pl.mode);
 }
 
+static void from_json(const json& j, PreserveKillfeed& o)
+{
+    read(j, "Enabled", o.enabled);
+    read(j, "Only Headshots", o.onlyHeadshots);
+}
+
 static void from_json(const json& j, Config::Misc& m)
 {
     read(j, "Menu key", m.menuKey);
@@ -509,8 +536,10 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Bunny hop Chance", m.bunnyHopChance);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
+#ifdef _WIN32
     if (j.contains("Clan tag"))
         strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
+#endif
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
@@ -529,6 +558,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Reveal suspect", m.revealSuspect);
     read<value_t::object>(j, "Spectator list", m.spectatorList);
     read<value_t::object>(j, "Watermark", m.watermark);
+    read<value_t::object>(j, "Offscreen Enemies", m.offscreenEnemies);
     read(j, "Fix animation LOD", m.fixAnimationLOD);
     read(j, "Fix bone matrix", m.fixBoneMatrix);
     read(j, "Fix movement", m.fixMovement);
@@ -541,6 +571,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Ban color", m.banColor);
     read<value_t::object>(j, "Ban text", m.banText);
     read(j, "Fast plant", m.fastPlant);
+    read(j, "Fast Stop", m.fastStop);
     read<value_t::object>(j, "Bomb timer", m.bombTimer);
     read(j, "Quick reload", m.quickReload);
     read(j, "Prepare revolver", m.prepareRevolver);
@@ -558,9 +589,12 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Kill sound", m.killSound);
     read<value_t::object>(j, "Custom Kill Sound", m.customKillSound);
     read<value_t::object>(j, "Purchase List", m.purchaseList);
+    read<value_t::object>(j, "Reportbot", m.reportbot);
+    read(j, "Opposite Hand Knife", m.oppositeHandKnife);
+    read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
 }
 
-static void from_json(const json& j, Config::Reportbot& r)
+static void from_json(const json& j, Config::Misc::Reportbot& r)
 {
     read(j, "Enabled", r.enabled);
     read(j, "Target", r.target);
@@ -597,7 +631,6 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Sound", sound);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
-    read<value_t::object>(j, "Reportbot", reportbot);
 }
 
 // WRITE macro requires:
@@ -670,7 +703,7 @@ static void to_json(json& j, const Snapline& o, const Snapline& dummy = {})
 
 static void to_json(json& j, const Box& o, const Box& dummy = {})
 {
-    to_json(j, static_cast<const ColorToggleThicknessRounding&>(o), dummy);
+    to_json(j, static_cast<const ColorToggleRounding&>(o), dummy);
     WRITE("Type", type);
     WRITE("Scale", scale);
     WRITE("Fill", fill);
@@ -693,6 +726,7 @@ static void to_json(json& j, const Player& o, const Player& dummy = {})
     WRITE("Flash Duration", flashDuration);
     WRITE("Audible Only", audibleOnly);
     WRITE("Spotted Only", spottedOnly);
+    WRITE("Health Bar", healthBar);
     WRITE("Skeleton", skeleton);
     WRITE("Head Box", headBox);
 }
@@ -716,6 +750,12 @@ static void to_json(json& j, const Trails& o, const Trails& dummy = {})
     WRITE("Local Player", localPlayer);
     WRITE("Allies", allies);
     WRITE("Enemies", enemies);
+}
+
+static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Color", color);
 }
 
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
@@ -825,10 +865,8 @@ static void to_json(json& j, const Config::StreamProofESP& o)
     j["Other Entities"] = o.otherEntities;
 }
 
-static void to_json(json& j, const Config::Reportbot& o)
+static void to_json(json& j, const Config::Misc::Reportbot& o, const Config::Misc::Reportbot& dummy = {})
 {
-    const Config::Reportbot dummy;
-
     WRITE("Enabled", enabled);
     WRITE("Target", target);
     WRITE("Delay", delay);
@@ -867,6 +905,12 @@ static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = 
     WRITE("Mode", mode);
 }
 
+static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Only Headshots", onlyHeadshots);
+}
+
 static void to_json(json& j, const Config::Misc& o)
 {
     const Config::Misc dummy;
@@ -900,6 +944,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reveal suspect", revealSuspect);
     WRITE("Spectator list", spectatorList);
     WRITE("Watermark", watermark);
+    WRITE("Offscreen Enemies", offscreenEnemies);
     WRITE("Fix animation LOD", fixAnimationLOD);
     WRITE("Fix bone matrix", fixBoneMatrix);
     WRITE("Fix movement", fixMovement);
@@ -912,6 +957,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Ban color", banColor);
     WRITE("Ban text", banText);
     WRITE("Fast plant", fastPlant);
+    WRITE("Fast Stop", fastStop);
     WRITE("Bomb timer", bombTimer);
     WRITE("Quick reload", quickReload);
     WRITE("Prepare revolver", prepareRevolver);
@@ -929,6 +975,9 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Kill sound", killSound);
     WRITE("Custom Kill Sound", customKillSound);
     WRITE("Purchase List", purchaseList);
+    WRITE("Reportbot", reportbot);
+    WRITE("Opposite Hand Knife", oppositeHandKnife);
+    WRITE("Preserve Killfeed", preserveKillfeed);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
@@ -962,7 +1011,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("No grass", noGrass);
     WRITE("No shadows", noShadows);
     WRITE("Wireframe smoke", wireframeSmoke);
-    WRITE("Zoom", noScopeOverlay);
+    WRITE("Zoom", zoom);
     WRITE("Zoom key", zoomKey);
     WRITE("Thirdperson", thirdperson);
     WRITE("Thirdperson key", thirdpersonKey);
@@ -1068,7 +1117,6 @@ void Config::save(size_t id) const noexcept
         j["Glow"] = glow;
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
-        j["Reportbot"] = reportbot;
         j["Sound"] = sound;
         j["Visuals"] = visuals;
         j["Misc"] = misc;
@@ -1115,7 +1163,6 @@ void Config::reset() noexcept
     sound = { };
     style = { };
     misc = { };
-    reportbot = { };
 }
 
 void Config::listConfigs() noexcept
@@ -1178,6 +1225,7 @@ bool Config::loadScheduledFonts() noexcept
                 ImFontConfig cfg;
                 cfg.OversampleH = cfg.OversampleV = 1;
                 cfg.PixelSnapH = true;
+                cfg.RasterizerMultiply = 1.7f;
 
                 Font newFont;
 
@@ -1205,6 +1253,7 @@ bool Config::loadScheduledFonts() noexcept
             const auto ranges = Helpers::getFontGlyphRanges();
             ImFontConfig cfg;
             cfg.FontDataOwnedByAtlas = false;
+            cfg.RasterizerMultiply = 1.7f;
 
             Font newFont;
             newFont.tiny = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(fontData.get(), fontDataSize, 8.0f, &cfg, ranges);

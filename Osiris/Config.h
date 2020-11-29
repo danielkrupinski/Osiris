@@ -4,9 +4,10 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "imgui/imgui.h"
-#include "nSkinz/config_.hpp"
+#include "Hacks/SkinChanger.h"
 #include "ConfigStructs.h"
 
 class Config {
@@ -128,9 +129,6 @@ public:
         ImFont* big;
     };
 
-    std::vector<std::string> systemFonts{ "Default" };
-    std::unordered_map<std::string, Font> fonts;
-
     struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
@@ -202,6 +200,8 @@ public:
     } style;
 
     struct Misc {
+        Misc() { }
+
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
@@ -209,16 +209,11 @@ public:
         int bunnyHopChance{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
-        char clanTag[16];
         bool animatedClanTag{ false };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };
-        int edgejumpkey{ 0 };
         bool slowwalk{ false };
-        int slowwalkKey{ 0 };
-        ColorToggleThickness noscopeCrosshair;
-        ColorToggleThickness recoilCrosshair;
         bool autoPistol{ false };
         bool autoReload{ false };
         bool autoAccept{ false };
@@ -226,54 +221,68 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
-        ColorToggle spectatorList;
-        ColorToggle watermark;
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
         bool disableModelOcclusion{ false };
-        float aspectratio{ 0 };
-        bool killMessage{ false };
-        std::string killMessageString{ "Gotcha!" };
         bool nameStealer{ false };
         bool disablePanoramablur{ false };
-        int banColor{ 6 };
-        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        bool killMessage{ false };
+        bool nadePredict{ false };
+        bool fixTabletSignal{ false };
+        bool fakePrime{ false };
         bool fastPlant{ false };
-        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
+        bool fastStop{ false };
         bool quickReload{ false };
         bool prepareRevolver{ false };
+        bool oppositeHandKnife = false;
+        PreserveKillfeed preserveKillfeed;
+        char clanTag[16];
+        int edgejumpkey{ 0 };
+        int slowwalkKey{ 0 };
+        ColorToggleThickness noscopeCrosshair;
+        ColorToggleThickness recoilCrosshair;
+        ColorToggle spectatorList;
+        ColorToggle watermark;
+        float aspectratio{ 0 };
+        std::string killMessageString{ "Gotcha!" };
+        int banColor{ 6 };
+        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
+        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
         int prepareRevolverKey{ 0 };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
         int chokedPacketsKey{ 0 };
         int quickHealthshotKey{ 0 };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
         float maxAngleDelta{ 255.0f };
-        bool fakePrime{ false };
         int killSound{ 0 };
         std::string customKillSound;
         std::string customHitSound;
         PurchaseList purchaseList;
-    } misc;
 
-    struct Reportbot {
-        bool enabled{ false };
-        bool textAbuse{ false };
-        bool griefing{ false };
-        bool wallhack{ true };
-        bool aimbot{ true };
-        bool other{ true };
-        int target{ 0 };
-        int delay{ 1 };
-        int rounds{ 1 };
-    } reportbot;
+        struct Reportbot {
+            bool enabled = false;
+            bool textAbuse = false;
+            bool griefing = false;
+            bool wallhack = true;
+            bool aimbot = true;
+            bool other = true;
+            int target = 0;
+            int delay = 1;
+            int rounds = 1;
+        } reportbot;
+
+        OffscreenEnemies offscreenEnemies;
+    } misc;
 
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
+    const auto& getSystemFonts() noexcept { return systemFonts; }
+    const auto& getFonts() noexcept { return fonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
+    std::vector<std::string> systemFonts{ "Default" };
+    std::unordered_map<std::string, Font> fonts;
     std::filesystem::path path;
     std::vector<std::string> configs;
 };

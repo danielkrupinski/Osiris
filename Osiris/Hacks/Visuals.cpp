@@ -1,4 +1,8 @@
+#include <array>
+#include <cstring>
+
 #include "../fnv.h"
+#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -13,8 +17,6 @@
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
-
-#include <array>
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -151,10 +153,12 @@ void Visuals::thirdperson() noexcept
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
 
+#ifdef _WIN33
     if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
         lastTime = memory->globalVars->realtime;
     }
+#endif
 
     if (config->visuals.thirdperson)
         if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
@@ -210,7 +214,8 @@ void Visuals::removeGrass(FrameStage stage) noexcept
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
-        case fnv::hash("dz_junglety"): return "detail/tropical_grass";
+        // dz_junglety has been removed in 7/23/2020 patch
+        // case fnv::hash("dz_junglety"): return "detail/tropical_grass";
         default: return nullptr;
         }
     };
@@ -237,8 +242,10 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
             static bool scoped{ false };
 
+#ifdef _WIN32
             if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
                 scoped = !scoped;
+#endif
 
             if (scoped) {
                 localPlayer->fov() = 40;
@@ -247,6 +254,8 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         }
     }
 }
+
+#ifdef _WIN32
 
 #define DRAW_SCREEN_EFFECT(material) \
 { \
@@ -263,6 +272,10 @@ void Visuals::applyZoom(FrameStage stage) noexcept
         __asm add esp, 12 \
     } \
 }
+
+#else
+#define DRAW_SCREEN_EFFECT(material) 
+#endif
 
 void Visuals::applyScreenEffects() noexcept
 {
@@ -397,10 +410,8 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    constexpr std::array skyboxes{ "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam" };
-
-    if (stage == FrameStage::RENDER_START && static_cast<std::size_t>(config->visuals.skybox - 1) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox - 1]);
+    if (const auto& skyboxes = Helpers::skyboxList; stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
+        memory->loadSky(skyboxes[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);

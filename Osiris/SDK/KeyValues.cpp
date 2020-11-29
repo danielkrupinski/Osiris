@@ -5,6 +5,7 @@ KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
 {
     const auto keyValuesFromString = memory->keyValuesFromString;
     KeyValues* keyValues;
+#ifdef _WIN32
     __asm {
         push 0
         mov edx, value
@@ -13,6 +14,7 @@ KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
         add esp, 4
         mov keyValues, eax
     }
+#endif
     return keyValues;
 }
 
