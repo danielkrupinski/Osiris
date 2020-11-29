@@ -649,6 +649,7 @@ void Hooks::install() noexcept
 
     clientMode.init(memory->clientMode);
     clientMode.hookAt(IS_WIN32() ? 17 : 18, shouldDrawFog);
+    clientMode.hookAt(IS_WIN32() ? 18 : 19, overrideView);
     clientMode.hookAt(IS_WIN32() ? 24 : 25, createMove);
     clientMode.hookAt(IS_WIN32() ? 35 : 36, getViewModelFov);
     clientMode.hookAt(IS_WIN32() ? 44 : 45, doPostScreenEffects);
@@ -666,7 +667,6 @@ void Hooks::install() noexcept
 
 #ifdef _WIN32
     bspQuery.hookAt(6, listLeavesInBox);
-    clientMode.hookAt(18, overrideView);
     clientMode.hookAt(27, shouldDrawViewModel);
     clientMode.hookAt(58, updateColorCorrectionWeights);
     engine.hookAt(218, getDemoPlaybackParameters);
