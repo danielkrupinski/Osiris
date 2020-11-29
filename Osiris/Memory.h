@@ -92,6 +92,7 @@ public:
     uintptr_t scopeDust;
     uintptr_t scopeArc;
     uintptr_t demoOrHLTV;
+    uintptr_t money;
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
