@@ -383,7 +383,7 @@ static void __STDCALL lockCursor() noexcept
     return hooks->surface.callOriginal<void, 67>();
 }
 
-static void __STDCALL setDrawColor(int r, int g, int b, int a) noexcept
+static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
 #ifdef _DEBUG
     // Check if we always get the same return address
@@ -400,8 +400,11 @@ static void __STDCALL setDrawColor(int r, int g, int b, int a) noexcept
 #ifdef _WIN32
     if (config->visuals.noScopeOverlay && (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B || *reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF))
         a = 0;
+#else
+    if (config->visuals.noScopeOverlay && (*static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x8D43FFFFFF5C858B || *static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x0290B38B243C8B49))
+        a = 0;
 #endif
-    hooks->surface.callOriginal<void, 15>(r, g, b, a);
+    hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
 
 struct ViewSetup {
