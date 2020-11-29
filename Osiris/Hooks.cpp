@@ -497,25 +497,8 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexc
 
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-#ifdef _WIN32
-    if (*static_cast<std::uintptr_t*>(_ReturnAddress()) == 0x0975C084 // client.dll : 84 C0 75 09 38 05
-        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
-#ifdef _DEBUG
-        // Check if we always get the same return address
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-#endif
-        if (config->misc.revealMoney)
-            return true;
-    }
-#elif __linux__
-    if (*reinterpret_cast<std::uintptr_t*>(std::uintptr_t(__builtin_return_address(0)) + 4) == 0x058B480A75C08400  // client_client.so : 00 84 C0 75 0A 48 8B 05
-        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(__builtin_frame_address(0)) + 24) == 0xFFFFFBB89E75C084) { // client_client.so : 84 C0 75 9E B8 FB FF FF
-
-        if (config->misc.revealMoney)
-            return true;
-    }
-#endif
+    if (config->misc.revealMoney && std::uintptr_t(RETURN_ADDRESS()) == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(std::uintptr_t(FRAME_ADDRESS()) + (IS_WIN32() ? 8 : 24)) == memory->money)
+        return true;
 
     return hooks->engine.callOriginal<bool, 82>();
 }
