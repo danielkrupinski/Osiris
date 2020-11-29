@@ -401,6 +401,7 @@ static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int 
     if (config->visuals.noScopeOverlay && (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B || *reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF))
         a = 0;
 #else
+    // FIXME: reading 8 bytes at return address crashes somewhere
     if (config->visuals.noScopeOverlay && (*static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x8D43FFFFFF5C858B || *static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x0290B38B243C8B49))
         a = 0;
 #endif
@@ -408,9 +409,10 @@ static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int 
 }
 
 struct ViewSetup {
-    std::byte pad[176];
+    PAD(174);
+    void* csm;
     float fov;
-    std::byte pad1[32];
+    PAD(32);
     float farZ;
 };
 
