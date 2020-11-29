@@ -385,26 +385,8 @@ static void __STDCALL lockCursor() noexcept
 
 static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-#ifdef _DEBUG
-    // Check if we always get the same return address
-    if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-    if (*reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-#endif
-
-#ifdef _WIN32
-    if (config->visuals.noScopeOverlay && (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B || *reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF))
+    if (config->visuals.noScopeOverlay && (std::uintptr_t(RETURN_ADDRESS()) == memory->scopeDust || std::uintptr_t(RETURN_ADDRESS()) == memory->scopeArc))
         a = 0;
-#else
-    // FIXME: reading 8 bytes at return address crashes somewhere
-    if (config->visuals.noScopeOverlay && (*static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x8D43FFFFFF5C858B || *static_cast<std::uintptr_t*>(RETURN_ADDRESS()) == 0x0290B38B243C8B49))
-        a = 0;
-#endif
     hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
 
