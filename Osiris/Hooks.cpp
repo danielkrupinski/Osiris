@@ -471,9 +471,9 @@ static void __STDCALL render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* vie
     hooks->viewRender.callOriginal<void, IS_WIN32() ? 39 : 40>(viewSetup);
 }
 
-static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexcept
+static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
-    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, 218>();
+    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, IS_WIN32() ? 218 : 219>();
 
 #ifdef _DEBUG
     // Check if we always get the same return address
