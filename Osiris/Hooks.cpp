@@ -593,8 +593,6 @@ static void swapWindow(SDL_Window* window) noexcept
 
 void Hooks::install() noexcept
 {
-    SkinChanger::initializeKits();
-
 #ifdef _WIN32
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
     **reinterpret_cast<decltype(present)***>(memory->present) = present;

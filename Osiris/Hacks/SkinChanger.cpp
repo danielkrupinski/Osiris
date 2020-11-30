@@ -73,6 +73,11 @@ static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 
 void SkinChanger::initializeKits() noexcept
 {
+    static bool initalized = false;
+    if (initalized)
+        return;
+    initalized = true;
+
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
