@@ -621,6 +621,7 @@ void Hooks::install() noexcept
     engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
+    engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
 
     surface.init(interfaces->surface);
     surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
@@ -635,7 +636,6 @@ void Hooks::install() noexcept
 #ifdef _WIN32
     bspQuery.hookAt(6, listLeavesInBox);
     clientMode.hookAt(27, shouldDrawViewModel);
-    engine.hookAt(218, getDemoPlaybackParameters);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
