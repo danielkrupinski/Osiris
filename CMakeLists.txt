@@ -16,5 +16,5 @@ link_directories(/usr/local/lib)
 
 add_library(Osiris SHARED ${SOURCES})
 
-target_link_libraries(Osiris SDL2 GL)
+target_link_libraries(Osiris SDL2 GL dl)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
