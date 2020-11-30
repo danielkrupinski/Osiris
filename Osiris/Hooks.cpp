@@ -616,7 +616,6 @@ void Hooks::install() noexcept
     modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
     sound.init(interfaces->sound);
-    surface.init(interfaces->surface);
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
 #endif
 
@@ -635,6 +634,9 @@ void Hooks::install() noexcept
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
 
+    surface.init(interfaces->surface);
+    surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
+
     svCheats.init(interfaces->cvar->findVar("sv_cheats"));
     svCheats.hookAt(IS_WIN32() ? 13 : 16, svCheatsGetBool);
 
@@ -649,7 +651,6 @@ void Hooks::install() noexcept
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
-    surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
 
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -749,6 +750,7 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
+    surface.restore();
     svCheats.restore();
     viewRender.restore();
 
