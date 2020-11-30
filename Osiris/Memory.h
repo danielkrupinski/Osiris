@@ -93,6 +93,7 @@ public:
     uintptr_t scopeArc;
     uintptr_t demoOrHLTV;
     uintptr_t money;
+    uintptr_t demoFileEndReached;
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
