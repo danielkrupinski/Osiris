@@ -460,5 +460,8 @@
     <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="InputUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
