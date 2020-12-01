@@ -47,11 +47,14 @@ Config::Config(const char* name) noexcept
 #ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
         path = pathToDocuments;
-        path /= name;
         CoTaskMemFree(pathToDocuments);
     }
+#else
+    if (const char* homeDir = getenv("HOME"))
+        path = homeDir;
 #endif
 
+    path /= name;
     listConfigs();
     misc.clanTag[0] = '\0';
 
@@ -463,8 +466,10 @@ static void from_json(const json& j, item_setting& i)
     read(j, "StatTrak", i.stat_trak);
     read(j, "Wear", i.wear);
 
+#ifdef _WIN32
     if (j.contains("Custom name"))
         strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
+#endif
 
     read(j, "Stickers", i.stickers);
 }
@@ -529,8 +534,10 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Bunny hop", m.bunnyHop);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
+#ifdef _WIN32
     if (j.contains("Clan tag"))
         strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
+#endif
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);

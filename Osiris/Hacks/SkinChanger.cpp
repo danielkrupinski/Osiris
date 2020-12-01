@@ -20,6 +20,7 @@
 #include "../SDK/Entity.h"
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
+#include "../SDK/Platform.h"
 
 /* This file is part of nSkinz by namazso, licensed under the MIT license:
 *
@@ -144,7 +145,7 @@ enum class StickerAttribute {
 static auto s_econ_item_interface_wrapper_offset = std::uint16_t(0);
 
 struct GetStickerAttributeBySlotIndexFloat {
-    static auto __fastcall hooked(void* thisptr, void*, const int slot,
+    static auto __FASTCALL hooked(void* thisptr, void*, const int slot,
         const StickerAttribute attribute, const float unknown) -> float
     {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
@@ -172,7 +173,7 @@ struct GetStickerAttributeBySlotIndexFloat {
 };
 
 struct GetStickerAttributeBySlotIndexInt {
-    static int __fastcall hooked(void* thisptr, void*, const int slot,
+    static int __FASTCALL hooked(void* thisptr, void*, const int slot,
         const StickerAttribute attribute, const int unknown)
     {
         auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
@@ -232,8 +233,10 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (is_knife(item->itemDefinitionIndex2()))
         item->entityQuality() = 3; // make a star appear on knife
 
+#ifdef _WIN32
     if (config->custom_name[0])
         strcpy_s(item->customName(), config->custom_name);
+#endif
 
     if (config->paintKit)
         item->fallbackPaintKit() = config->paintKit;
@@ -274,7 +277,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
 static Entity* make_glove(int entry, int serial) noexcept
 {
-    static std::add_pointer_t<Entity* __cdecl(int, int)> createWearable = nullptr;
+    static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
 
     if (!createWearable) {
         createWearable = []() -> decltype(createWearable) {

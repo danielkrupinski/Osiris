@@ -54,7 +54,9 @@ struct PaintKit {
 
 struct StickerKit {
     int id;
-    std::byte pad[36];
+    int rarity;
+    String name;
+    String description;
     String itemName;
 };
 
@@ -91,7 +93,12 @@ public:
 
 class ItemSchema {
 public:
+#ifdef _WIN32
     PAD(0x288)
+#else
+    PAD(0x370)
+#endif
+
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 

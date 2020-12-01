@@ -48,19 +48,21 @@ public:
 
 class Entity {
 public:
-    VIRTUAL_METHOD(void, release, 1, (), (this + 8))
-    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + 8))
-    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + 8, updateType))
-    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + 8, updateType))
-    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + 8))
-    VIRTUAL_METHOD(int, index, 10, (), (this + 8))
-    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + 8))
+    VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+    VIRTUAL_METHOD(void, postDataUpdate, 7, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
+    VIRTUAL_METHOD(bool, isDormant, 9, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
+    VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
 
-    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + 4))
-    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + 4))
+    VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
+    VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
 
-    VIRTUAL_METHOD(int&, handle, 2, (), (this))
-    VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
+    VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
+    VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
+
+#ifdef _WIN32
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
     VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
     VIRTUAL_METHOD(int, health, 121, (), (this))
@@ -76,6 +78,23 @@ public:
     VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
+#else
+    VIRTUAL_METHOD(Vector&, getAbsOrigin, 12, (), (this))
+    VIRTUAL_METHOD(void, setModelIndex, 111, (int index), (this, index))
+    VIRTUAL_METHOD(int, health, 166, (), (this))
+    VIRTUAL_METHOD(bool, isAlive, 207, (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, 209, (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, 217, (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, 330, (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, 349, (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, 356, (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, 357, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, 522, (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 528, (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
+#endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
     auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
