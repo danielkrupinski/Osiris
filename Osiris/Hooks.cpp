@@ -417,16 +417,31 @@ static void __STDCALL setDrawColor(int r, int g, int b, int a) noexcept
 }
 
 struct ViewSetup {
-    std::byte pad[176];
-    float fov;
-    std::byte pad1[32];
-    float farZ;
+	std::byte pad[176];
+	float fov;
+	float fovViewmodel;
+	Vector origin;
+	Vector angles;
+	std::byte pad1[4];
+	float farZ;
 };
 
 static void __STDCALL overrideView(ViewSetup* setup) noexcept
 {
-    if (localPlayer && !localPlayer->isScoped())
-        setup->fov += config->visuals.fov;
+    if (localPlayer) 
+    {
+        if (config->visuals.viewmodelRoll) {
+            Entity* target = localPlayer->isAlive() ? localPlayer.get() : localPlayer->getObserverTarget();
+
+            if (target && target->isAlive()) {
+                const auto viewModel = interfaces->entityList->getEntityFromHandle(target->viewModel());
+                if (viewModel)
+                    memory->setAbsAngle(viewModel, setup->angles + Vector{ 0.f, 0.f, (float)config->visuals.viewmodelRoll });
+            }
+        }
+        if (!localPlayer->isScoped())
+            setup->fov += config->visuals.fov;
+    }
     setup->farZ += config->visuals.farZ * 10;
     hooks->clientMode.callOriginal<void, 18>(setup);
 }
