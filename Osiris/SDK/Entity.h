@@ -124,12 +124,12 @@ public:
             Vector absOrigin = getAbsOrigin();
             *render = 0;
             memory->setAbsOrigin(this, origin());
-            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            auto result = VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
             memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
-        return VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+        return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone) noexcept
