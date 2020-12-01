@@ -150,6 +150,7 @@ public:
         int thirdpersonKey{ 0 };
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
+        int viewmodelRoll{ 0 };
         int fov{ 0 };
         int farZ{ 0 };
         int flashReduction{ 0 };
