@@ -45,7 +45,7 @@ struct WeaponInfo {
     float rangeModifier;
     PAD(16)
     bool silencer;
-    PAD(15)
+    PAD(IS_WIN32() ? 15 : 23)
     float maxSpeed;
     float maxSpeedAlt;
     PAD(100)
