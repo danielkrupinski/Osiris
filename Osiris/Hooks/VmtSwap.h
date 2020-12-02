@@ -16,7 +16,7 @@ public:
     template<typename T>
     void hookAt(std::size_t index, T fun) const noexcept
     {
-        newVmt[index + 1] = reinterpret_cast<uintptr_t>(fun);
+        newVmt[index + dynamicCastInfoLength] = reinterpret_cast<uintptr_t>(fun);
     }
 
     template<typename T, std::size_t Idx, typename ...Args>
@@ -32,6 +32,8 @@ public:
     }
 
 private:
+    static constexpr auto dynamicCastInfoLength = IS_WIN32() ? 1 : 2;
+
     void* base = nullptr;
     uintptr_t* oldVmt = nullptr;
     std::unique_ptr<uintptr_t[]> newVmt;

@@ -21,9 +21,8 @@ void VmtSwap::init(void* base) noexcept
 {
     this->base = base;
     oldVmt = *reinterpret_cast<uintptr_t**>(base);
-
-    std::size_t length = calculateVmtLength(oldVmt) + 1;
+    std::size_t length = calculateVmtLength(oldVmt) + dynamicCastInfoLength;
     newVmt = std::make_unique<uintptr_t[]>(length);
-    std::copy(oldVmt - 1, oldVmt - 1 + length, newVmt.get());
-    *reinterpret_cast<uintptr_t**>(base) = newVmt.get() + 1;
+    std::copy(oldVmt - dynamicCastInfoLength, oldVmt - dynamicCastInfoLength + length, newVmt.get());
+    *reinterpret_cast<uintptr_t**>(base) = newVmt.get() + dynamicCastInfoLength;
 }
