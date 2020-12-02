@@ -391,7 +391,7 @@ static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int 
 }
 
 struct ViewSetup {
-    PAD(174);
+    PAD(172);
     void* csm;
     float fov;
     PAD(32);
