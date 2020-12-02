@@ -138,11 +138,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
-#ifdef _WIN32
-    auto result = hooks->clientMode.callOriginal<bool, 24>(inputSampleTime, cmd);
-#else
-    auto result = hooks->clientMode.callOriginal<bool, 25>(inputSampleTime, cmd);
-#endif
+    auto result = hooks->clientMode.callOriginal<bool, IS_WIN32() ? 24 : 25>(inputSampleTime, cmd);
 
     if (!cmd->commandNumber)
         return result;
@@ -227,14 +223,10 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
         Visuals::remove3dSky();
         Glow::render();
     }
-#ifdef _WIN32
-    hooks->clientMode.callOriginal<void, 44>(param);
-#else
-    hooks->clientMode.callOriginal<void, 45>(param);
-#endif
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 44 : 45>(param);
 }
 
-static float __STDCALL getViewModelFov() noexcept
+static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
     float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
     if (localPlayer) {
@@ -242,7 +234,7 @@ static float __STDCALL getViewModelFov() noexcept
             additionalFov = 0.0f;
     }
 
-    return hooks->clientMode.callOriginal<float, 35>() + additionalFov;
+    return hooks->clientMode.callOriginal<float, IS_WIN32() ? 35 : 36>() + additionalFov;
 }
 
 static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
@@ -261,14 +253,10 @@ static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRender
 
 static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
-    if (uintptr_t(RETURN_ADDRESS(0)) == memory->cameraThink && config->visuals.thirdperson)
+    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && config->visuals.thirdperson)
         return true;
 
-#ifdef _WIN32
-    return hooks->svCheats.getOriginal<bool, 13>()(_this);
-#else
-    return hooks->svCheats.getOriginal<bool, 16>()(_this);
-#endif
+    return hooks->svCheats.getOriginal<bool, IS_WIN32() ? 13 : 16>()(_this);
 }
 
 static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
@@ -361,8 +349,9 @@ static void __STDCALL emitSound(SoundData data) noexcept
     hooks->sound.callOriginal<void, 5>(data);
 }
 
-static bool __STDCALL shouldDrawFog() noexcept
+static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
 {
+#ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
 #ifdef _DEBUG
     // Check if we always get the same return address
@@ -372,12 +361,11 @@ static bool __STDCALL shouldDrawFog() noexcept
     }
 #endif
 
-#ifdef _WIN32
     if (*static_cast<std::uint32_t*>(_ReturnAddress()) != 0x6274C084)
         return hooks->clientMode.callOriginal<bool, 17>();
-#endif
     }
-
+#endif
+    
     return !config->visuals.noFog;
 }
 
@@ -395,40 +383,27 @@ static void __STDCALL lockCursor() noexcept
     return hooks->surface.callOriginal<void, 67>();
 }
 
-static void __STDCALL setDrawColor(int r, int g, int b, int a) noexcept
+static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-#ifdef _DEBUG
-    // Check if we always get the same return address
-    if (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-    if (*reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-#endif
-
-#ifdef _WIN32
-    if (config->visuals.noScopeOverlay && (*static_cast<std::uint32_t*>(_ReturnAddress()) == 0x20244C8B || *reinterpret_cast<std::uint32_t*>(std::uintptr_t(_ReturnAddress()) + 6) == 0x01ACB7FF))
+    if (config->visuals.noScopeOverlay && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
         a = 0;
-#endif
-    hooks->surface.callOriginal<void, 15>(r, g, b, a);
+    hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
 
 struct ViewSetup {
-    std::byte pad[176];
+    PAD(174);
+    void* csm;
     float fov;
-    std::byte pad1[32];
+    PAD(32);
     float farZ;
 };
 
-static void __STDCALL overrideView(ViewSetup* setup) noexcept
+static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer->isScoped())
         setup->fov += config->visuals.fov;
     setup->farZ += config->visuals.farZ * 10;
-    hooks->clientMode.callOriginal<void, 18>(setup);
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 18 : 19>(setup);
 }
 
 struct RenderableInfo {
@@ -489,74 +464,47 @@ static int __FASTCALL dispatchSound(SoundInfo& soundInfo) noexcept
     return hooks->originalDispatchSound(soundInfo);
 }
 
-static int __STDCALL render2dEffectsPreHud(int param) noexcept
+static void __STDCALL render2dEffectsPreHud(LINUX_ARGS(void* thisptr,) void* viewSetup) noexcept
 {
     Visuals::applyScreenEffects();
     Visuals::hitEffect();
-    return hooks->viewRender.callOriginal<int, 39>(param);
+    hooks->viewRender.callOriginal<void, IS_WIN32() ? 39 : 40>(viewSetup);
 }
 
-static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters() noexcept
+static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_ARGS(void* thisptr)) noexcept
 {
-    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, 218>();
+    const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, IS_WIN32() ? 218 : 219>();
 
-#ifdef _DEBUG
-    // Check if we always get the same return address
-    if (*static_cast<std::uint64_t*>(_ReturnAddress()) == 0x79801F74C985C88B) {
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-    }
-#endif
-
-#ifdef _WIN32
-    if (params && config->misc.revealSuspect && *static_cast<std::uint64_t*>(_ReturnAddress()) != 0x79801F74C985C88B) { // client.dll : 8B C8 85 C9 74 1F 80 79 10 00 , there game decides whether to show overwatch panel
+    if (params && config->misc.revealSuspect && RETURN_ADDRESS() != memory->demoFileEndReached) {
         static DemoPlaybackParameters customParams;
         customParams = *params;
         customParams.anonymousPlayerIdentity = false;
         return &customParams;
     }
-#endif
 
     return params;
 }
 
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-#ifdef _WIN32
-    if (*static_cast<std::uintptr_t*>(_ReturnAddress()) == 0x0975C084 // client.dll : 84 C0 75 09 38 05
-        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(_AddressOfReturnAddress()) + 4) == 0x0C75C084) { // client.dll : 84 C0 75 0C 5B
-#ifdef _DEBUG
-        // Check if we always get the same return address
-        static const auto returnAddress = std::uintptr_t(_ReturnAddress());
-        assert(returnAddress == std::uintptr_t(_ReturnAddress()));
-#endif
-        if (config->misc.revealMoney)
-            return true;
-    }
-#elif __linux__
-    if (*reinterpret_cast<std::uintptr_t*>(std::uintptr_t(__builtin_return_address(0)) + 4) == 0x058B480A75C08400  // client_client.so : 00 84 C0 75 0A 48 8B 05
-        && **reinterpret_cast<std::uintptr_t**>(std::uintptr_t(__builtin_frame_address(0)) + 24) == 0xFFFFFBB89E75C084) { // client_client.so : 84 C0 75 9E B8 FB FF FF
-
-        if (config->misc.revealMoney)
-            return true;
-    }
-#endif
+    if (config->misc.revealMoney && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + (IS_WIN32() ? 8 : 24)) == memory->money)
+        return true;
 
     return hooks->engine.callOriginal<bool, 82>();
 }
 
-static void __STDCALL updateColorCorrectionWeights() noexcept
+static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) noexcept
 {
-    hooks->clientMode.callOriginal<void, 58>();
+    hooks->clientMode.callOriginal<void, IS_WIN32() ? 58 : 61>();
 
     if (const auto& cfg = config->visuals.colorCorrection; cfg.enabled) {
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x498) = cfg.blue;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A0) = cfg.red;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4A8) = cfg.mono;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4B0) = cfg.saturation;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4C0) = cfg.ghost;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4C8) = cfg.green;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + 0x4D0) = cfg.yellow;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x498 : 0x900)) = cfg.blue;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4A0 : 0x910)) = cfg.red;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4A8 : 0x920)) = cfg.mono;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4B0 : 0x930)) = cfg.saturation;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4C0 : 0x950)) = cfg.ghost;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4C8 : 0x960)) = cfg.green;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4D0 : 0x970)) = cfg.yellow;
     }
 
     if (config->visuals.noScopeOverlay)
@@ -570,12 +518,12 @@ static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width
     return hooks->engine.callOriginal<float, 101>(width, height);
 }
 
-static void __STDCALL renderSmokeOverlay(bool update) noexcept
+static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
     if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
-        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + 0x588) = 0.0f;
+        *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + (IS_WIN32() ? 0x588 : 0x648)) = 0.0f;
     else
-        hooks->viewRender.callOriginal<void, 41>(update);
+        hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
 }
 
 #ifdef _WIN32
@@ -595,10 +543,47 @@ Hooks::Hooks(HMODULE moduleHandle) noexcept
     originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
 }
 
+#else
+
+static void swapWindow(SDL_Window* window) noexcept
+{
+    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+    
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+
+    ImGui::NewFrame();
+
+    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
+        StreamProofESP::render();
+        Misc::purchaseList();
+        Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
+        Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
+        Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
+
+        if (gui->open)
+            gui->render();
+
+        if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
+            gui->open = !gui->open;
+            if (!gui->open)
+                interfaces->inputSystem->resetInputState();
+            ImGui::GetIO().MouseDrawCursor = gui->open;
+        }
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    hooks->swapWindow(window);
+}
+
+#endif
+
 void Hooks::install() noexcept
 {
-    SkinChanger::initializeKits();
-
+#ifdef _WIN32
     originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory->present);
     **reinterpret_cast<decltype(present)***>(memory->present) = present;
     originalReset = **reinterpret_cast<decltype(originalReset)**>(memory->reset);
@@ -606,38 +591,55 @@ void Hooks::install() noexcept
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
+#else
+    gl3wInit();
+    ImGui_ImplOpenGL3_Init();
 
-    bspQuery.init(interfaces->engine->getBSPTreeQuery());
-    client.init(interfaces->client);
-    clientMode.init(memory->clientMode);
-    engine.init(interfaces->engine);
+    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
+    *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
+
+#endif
+    
+#ifdef _WIN32
     modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
     sound.init(interfaces->sound);
-    surface.init(interfaces->surface);
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    viewRender.init(memory->viewRender);
+    bspQuery.init(interfaces->engine->getBSPTreeQuery());
+#endif
 
-    bspQuery.hookAt(6, listLeavesInBox);
+    client.init(interfaces->client);
     client.hookAt(37, frameStageNotify);
-    clientMode.hookAt(17, shouldDrawFog);
-    clientMode.hookAt(18, overrideView);
-    clientMode.hookAt(24, createMove);
-    clientMode.hookAt(27, shouldDrawViewModel);
-    clientMode.hookAt(35, getViewModelFov);
-    clientMode.hookAt(44, doPostScreenEffects);
-    clientMode.hookAt(58, updateColorCorrectionWeights);
+
+    clientMode.init(memory->clientMode);
+    clientMode.hookAt(IS_WIN32() ? 17 : 18, shouldDrawFog);
+    clientMode.hookAt(IS_WIN32() ? 18 : 19, overrideView);
+    clientMode.hookAt(IS_WIN32() ? 24 : 25, createMove);
+    clientMode.hookAt(IS_WIN32() ? 35 : 36, getViewModelFov);
+    clientMode.hookAt(IS_WIN32() ? 44 : 45, doPostScreenEffects);
+    clientMode.hookAt(IS_WIN32() ? 58 : 61, updateColorCorrectionWeights);
+
+    engine.init(interfaces->engine);
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
-    engine.hookAt(218, getDemoPlaybackParameters);
+    engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
+
+    surface.init(interfaces->surface);
+    surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
+
+    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
+    svCheats.hookAt(IS_WIN32() ? 13 : 16, svCheatsGetBool);
+
+    viewRender.init(memory->viewRender);
+    viewRender.hookAt(IS_WIN32() ? 39 : 40, render2dEffectsPreHud);
+    viewRender.hookAt(IS_WIN32() ? 41 : 42, renderSmokeOverlay);
+
+#ifdef _WIN32
+    bspQuery.hookAt(6, listLeavesInBox);
+    clientMode.hookAt(27, shouldDrawViewModel);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     sound.hookAt(5, emitSound);
-    surface.hookAt(15, setDrawColor);
     surface.hookAt(67, lockCursor);
-    svCheats.hookAt(13, svCheatsGetBool);
-    viewRender.hookAt(39, render2dEffectsPreHud);
-    viewRender.hookAt(41, renderSmokeOverlay);
 
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory->dispatchSound + 1) + *memory->dispatchSound);
@@ -647,7 +649,10 @@ void Hooks::install() noexcept
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
+#endif
 }
+
+#ifdef _WIN32
 
 extern "C" BOOL WINAPI _CRT_INIT(HMODULE moduleHandle, DWORD reason, LPVOID reserved);
 
@@ -728,65 +733,14 @@ static int pollEvent(SDL_Event* event) noexcept
     return result;
 }
 
-static void swapWindow(SDL_Window* window) noexcept
-{
-    static const auto _ = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
-    
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-
-    ImGui::NewFrame();
-
-    if (const auto& displaySize = ImGui::GetIO().DisplaySize; displaySize.x > 0.0f && displaySize.y > 0.0f) {
-        if (gui->open)
-            gui->render();
-
-        if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
-            gui->open = !gui->open;
-            if (!gui->open)
-                interfaces->inputSystem->resetInputState();
-            ImGui::GetIO().MouseDrawCursor = gui->open;
-        }
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    hooks->swapWindow(window);
-}
-
-void Hooks::install() noexcept
-{
-    SkinChanger::initializeKits();
-
-    gl3wInit();
-    ImGui_ImplOpenGL3_Init();
-
-    swapWindow = *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow);
-    *reinterpret_cast<decltype(::swapWindow)**>(memory->swapWindow) = ::swapWindow;
-
-    client.init(interfaces->client);
-    client.hookAt(37, frameStageNotify);
-
-    clientMode.init(memory->clientMode);
-    clientMode.hookAt(25, createMove);
-    clientMode.hookAt(45, doPostScreenEffects);
-
-    svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    svCheats.hookAt(16, svCheatsGetBool);
-
-    engine.init(interfaces->engine);
-    engine.hookAt(82, isPlayingDemo);
-    engine.hookAt(101, getScreenAspectRatio);
-}
-
 void Hooks::uninstall() noexcept
 {
     client.restore();
     clientMode.restore();
     engine.restore();
+    surface.restore();
     svCheats.restore();
+    viewRender.restore();
 
     *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
     *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;

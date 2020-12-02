@@ -274,7 +274,12 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #else
-#define DRAW_SCREEN_EFFECT(material) 
+#define DRAW_SCREEN_EFFECT(material) \
+{ \
+    int w, h; \
+    interfaces->surface->getScreenSize(w, h); \
+    reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
+}
 #endif
 
 void Visuals::applyScreenEffects() noexcept

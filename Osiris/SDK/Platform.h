@@ -50,8 +50,14 @@
 
 #ifdef _WIN32
 #define LINUX_ARGS(...)
-#define RETURN_ADDRESS(level) _ReturnAddress()
+#define RETURN_ADDRESS() std::uintptr_t(_ReturnAddress())
+#define FRAME_ADDRESS() (std::uintptr_t(_AddressOfReturnAddress()) - sizeof(std::uintptr_t))
+#define IS_WIN32() true
+#define WIN32_LINUX(win32, linux) win32
 #else
 #define LINUX_ARGS(...) __VA_ARGS__
-#define RETURN_ADDRESS(level) __builtin_return_address(level)
+#define RETURN_ADDRESS() std::uintptr_t(__builtin_return_address(0))
+#define FRAME_ADDRESS() std::uintptr_t(__builtin_frame_address(0))
+#define IS_WIN32() false
+#define WIN32_LINUX(win32, linux) linux
 #endif
