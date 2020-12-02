@@ -277,10 +277,8 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
 
-#ifdef _WIN32
     if (stage == FrameStage::START)
         GameData::update();
-#endif
 
     if (stage == FrameStage::RENDER_START) {
 #ifdef _WIN32
