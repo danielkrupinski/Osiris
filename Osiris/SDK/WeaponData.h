@@ -51,6 +51,6 @@ struct WeaponInfo {
     PAD(100)
     float recoilMagnitude;
     float recoilMagnitudeAlt;
-    PAD(0x14)
+    PAD(16)
     float recoveryTimeStand;
 };
