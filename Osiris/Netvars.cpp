@@ -170,8 +170,10 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* arg2, void* arg
             if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex()))
-                data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
+            if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex())) {
+                if (const auto active_conf = get_by_definition_index(WEAPON_KNIFE); active_conf && active_conf->definition_override_index)
+                    data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
+            }
         }
     }
     constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
