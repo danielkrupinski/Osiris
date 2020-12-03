@@ -307,34 +307,24 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
     hooks->client.callOriginal<void, 37>(stage);
 }
 
-struct SoundData {
-    std::byte pad[4];
-    int entityIndex;
-    int channel;
-    const char* soundEntry;
-    std::byte pad1[8];
-    float volume;
-    std::byte pad2[44];
-};
-
-static void __STDCALL emitSound(SoundData data) noexcept
+static void __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    auto modulateVolume = [&data](int(*get)(int)) {
-        if (const auto entity = interfaces->entityList->getEntity(data.entityIndex); localPlayer && entity && entity->isPlayer()) {
-            if (data.entityIndex == localPlayer->index())
-                data.volume *= get(0) / 100.0f;
+    auto modulateVolume = [&](int(*get)(int)) {
+        if (const auto entity = interfaces->entityList->getEntity(entityIndex); localPlayer && entity && entity->isPlayer()) {
+            if (entityIndex == localPlayer->index())
+                volume *= get(0) / 100.0f;
             else if (!entity->isOtherEnemy(localPlayer.get()))
-                data.volume *= get(1) / 100.0f;
+                volume *= get(1) / 100.0f;
             else
-                data.volume *= get(2) / 100.0f;
+                volume *= get(2) / 100.0f;
         }
     };
 
     modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
 
-    if (strstr(data.soundEntry, "Weapon") && strstr(data.soundEntry, "Single")) {
+    if (strstr(soundEntry, "Weapon") && strstr(soundEntry, "Single")) {
         modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
-    } else if (config->misc.autoAccept && !strcmp(data.soundEntry, "UIPanorama.popup_accept_match_beep")) {
+    } else if (config->misc.autoAccept && !strcmp(soundEntry, "UIPanorama.popup_accept_match_beep")) {
         memory->acceptMatch("");
 #ifdef _WIN32
         auto window = FindWindowW(L"Valve001", NULL);
@@ -343,8 +333,8 @@ static void __STDCALL emitSound(SoundData data) noexcept
         ShowWindow(window, SW_RESTORE);
 #endif
     }
-    data.volume = std::clamp(data.volume, 0.0f, 1.0f);
-    hooks->sound.callOriginal<void, 5>(data);
+    volume = std::clamp(volume, 0.0f, 1.0f);
+    hooks->sound.callOriginal<void, IS_WIN32() ? 5 : 6>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
 static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
@@ -623,7 +613,7 @@ void Hooks::install() noexcept
 
     surface.init(interfaces->surface);
     surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
-
+    
     svCheats.init(interfaces->cvar->findVar("sv_cheats"));
     svCheats.hookAt(IS_WIN32() ? 13 : 16, svCheatsGetBool);
 
