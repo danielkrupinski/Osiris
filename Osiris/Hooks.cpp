@@ -660,20 +660,28 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
     FreeLibraryAndExitThread(moduleHandle, 0);
 }
 
+#endif
+
 void Hooks::uninstall() noexcept
 {
+#ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
         MH_DisableHook(MH_ALL_HOOKS);
         MH_Uninitialize();
     }
+#endif
 
+#ifdef _WIN32
     bspQuery.restore();
+#endif
     client.restore();
     clientMode.restore();
     engine.restore();
+#ifdef _WIN32
     modelRender.restore();
     panel.restore();
     sound.restore();
+#endif
     surface.restore();
     svCheats.restore();
     viewRender.restore();
@@ -682,6 +690,7 @@ void Hooks::uninstall() noexcept
 
     Glow::clearCustomObjects();
 
+#ifdef _WIN32
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
     **reinterpret_cast<void***>(memory->present) = originalPresent;
     **reinterpret_cast<void***>(memory->reset) = originalReset;
@@ -693,9 +702,13 @@ void Hooks::uninstall() noexcept
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), moduleHandle, 0, nullptr))
         CloseHandle(thread);
+#else
+    *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
+    *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
+#endif
 }
 
-#else
+#ifndef _WIN32
 
 static int pollEvent(SDL_Event* event) noexcept
 {
@@ -719,19 +732,6 @@ static int pollEvent(SDL_Event* event) noexcept
         event->type = 0;
 
     return result;
-}
-
-void Hooks::uninstall() noexcept
-{
-    client.restore();
-    clientMode.restore();
-    engine.restore();
-    surface.restore();
-    svCheats.restore();
-    viewRender.restore();
-
-    *reinterpret_cast<decltype(pollEvent)*>(memory->pollEvent) = pollEvent;
-    *reinterpret_cast<decltype(swapWindow)*>(memory->swapWindow) = swapWindow;
 }
 
 Hooks::Hooks() noexcept
