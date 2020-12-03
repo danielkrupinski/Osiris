@@ -357,11 +357,11 @@ static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
     return !config->visuals.noFog;
 }
 
-static bool __STDCALL shouldDrawViewModel() noexcept
+static bool __STDCALL shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 {
     if (config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
-    return hooks->clientMode.callOriginal<bool, 27>();
+    return hooks->clientMode.callOriginal<bool, IS_WIN32() ? 27 : 28>();
 }
 
 static void __STDCALL lockCursor() noexcept
