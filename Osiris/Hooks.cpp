@@ -237,7 +237,7 @@ static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
     return hooks->clientMode.callOriginal<float, IS_WIN32() ? 35 : 36>() + additionalFov;
 }
 
-static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
     if (interfaces->studioRender->isForcedMaterialOverride())
         return hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
@@ -245,9 +245,11 @@ static void __STDCALL drawModelExecute(void* ctx, void* state, const ModelRender
     if (Visuals::removeHands(info.model->name) || Visuals::removeSleeves(info.model->name) || Visuals::removeWeapons(info.model->name))
         return;
 
+#ifdef _WIN32
     static Chams chams;
     if (!chams.render(ctx, state, info, customBoneToWorld))
         hooks->modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+#endif
     interfaces->studioRender->forcedMaterialOverride(nullptr);
 }
 
