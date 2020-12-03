@@ -591,7 +591,6 @@ void Hooks::install() noexcept
 #ifdef _WIN32
     modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
-    sound.init(interfaces->sound);
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
 #endif
 
@@ -612,6 +611,9 @@ void Hooks::install() noexcept
     engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
 
+    sound.init(interfaces->sound);
+    sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
+
     surface.init(interfaces->surface);
     surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
     
@@ -626,7 +628,6 @@ void Hooks::install() noexcept
     bspQuery.hookAt(6, listLeavesInBox);
     modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
-    sound.hookAt(5, emitSound);
     surface.hookAt(67, lockCursor);
 
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -680,8 +681,8 @@ void Hooks::uninstall() noexcept
 #ifdef _WIN32
     modelRender.restore();
     panel.restore();
-    sound.restore();
 #endif
+    sound.restore();
     surface.restore();
     svCheats.restore();
     viewRender.restore();
