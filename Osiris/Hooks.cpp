@@ -591,7 +591,6 @@ void Hooks::install() noexcept
 #endif
     
 #ifdef _WIN32
-    modelRender.init(interfaces->modelRender);
     panel.init(interfaces->panel);
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
 #endif
@@ -613,6 +612,9 @@ void Hooks::install() noexcept
     engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
 
+    modelRender.init(interfaces->modelRender);
+    modelRender.hookAt(21, drawModelExecute);
+
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
 
@@ -628,7 +630,6 @@ void Hooks::install() noexcept
 
 #ifdef _WIN32
     bspQuery.hookAt(6, listLeavesInBox);
-    modelRender.hookAt(21, drawModelExecute);
     panel.hookAt(41, paintTraverse);
     surface.hookAt(67, lockCursor);
 
@@ -676,14 +677,12 @@ void Hooks::uninstall() noexcept
 
 #ifdef _WIN32
     bspQuery.restore();
+    panel.restore();
 #endif
     client.restore();
     clientMode.restore();
     engine.restore();
-#ifdef _WIN32
     modelRender.restore();
-    panel.restore();
-#endif
     sound.restore();
     surface.restore();
     svCheats.restore();
