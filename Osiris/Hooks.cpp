@@ -301,9 +301,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
-#ifdef _WIN32
         SkinChanger::run(stage);
-#endif
     }
     hooks->client.callOriginal<void, 37>(stage);
 }
