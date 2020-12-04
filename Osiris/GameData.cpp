@@ -104,6 +104,10 @@ void GameData::update() noexcept
                     else
                         projectileData.emplace_back(entity);
                     break;
+                case ClassId::DynamicProp:
+                    if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
+                        break;
+                    [[fallthrough]];
                 case ClassId::EconEntity:
                 case ClassId::Chicken:
                 case ClassId::PlantedC4:
@@ -240,8 +244,8 @@ BaseData::BaseData(Entity* entity) noexcept
 
 EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
 {
-    name = [](ClassId classId) {
-        switch (classId) {
+    name = [](Entity* entity) {
+        switch (entity->getClientClass()->classId) {
         case ClassId::EconEntity: return "Defuse Kit";
         case ClassId::Chicken: return "Chicken";
         case ClassId::PlantedC4: return "Planted C4";
@@ -251,9 +255,10 @@ EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
         case ClassId::AmmoBox: return "Ammo Box";
         case ClassId::RadarJammer: return "Radar Jammer";
         case ClassId::SnowballPile: return "Snowball Pile";
+        case ClassId::DynamicProp: return "Collectable Coin";
         default: assert(false); return "unknown";
         }
-    }(entity->getClientClass()->classId);
+    }(entity);
 }
 
 ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData { projectile }
