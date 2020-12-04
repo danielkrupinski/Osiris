@@ -194,6 +194,7 @@ struct GetStickerAttributeBySlotIndexInt {
 
 void apply_sticker_changer(Entity* item) noexcept
 {
+#ifdef _WIN32
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
         s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
@@ -205,6 +206,7 @@ void apply_sticker_changer(Entity* item) noexcept
         hook.apply_hook<GetStickerAttributeBySlotIndexFloat>(4);
         hook.apply_hook<GetStickerAttributeBySlotIndexInt>(5);
     }
+#endif
 }
 
 static void erase_override_if_exists_by_index(const int definition_index) noexcept
@@ -429,8 +431,8 @@ static bool hudUpdateRequired{ false };
 
 static void updateHud() noexcept
 {
-    if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - 0x28) {
-        for (int i = 0; i < *(hud_weapons + 0x20); i++)
+    if (auto hud_weapons = memory->findHudElement(memory->hud, "CCSGO_HudWeaponSelection") - WIN32_LINUX(0x28, 62)) {
+        for (int i = 0; i < *(hud_weapons + WIN32_LINUX(32, 52)); i++)
             i = memory->clearHudWeapon(hud_weapons, i);
     }
     hudUpdateRequired = false;
