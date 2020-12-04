@@ -214,6 +214,7 @@ void Visuals::removeGrass(FrameStage stage) noexcept
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
+        case fnv::hash("coop_autumn"): return "detail/autumn_detail_sprites";
         // dz_junglety has been removed in 7/23/2020 patch
         // case fnv::hash("dz_junglety"): return "detail/tropical_grass";
         default: return nullptr;
