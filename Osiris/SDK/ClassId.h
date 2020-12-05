@@ -13,6 +13,7 @@ enum class ClassId {
     DecoyProjectile = 48,
     Drone,
     Dronegun,
+    DynamicProp = 52,
     EconEntity = 53,
     EconWearable,
     Hostage = 97,
