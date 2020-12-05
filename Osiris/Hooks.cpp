@@ -735,7 +735,7 @@ static int pollEvent(SDL_Event* event) noexcept
 
     const auto result = hooks->pollEvent(event);
 
-    if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->open)
+    if (result && ImGui_ImplSDL2_ProcessEvent(event) && gui->isOpen())
         event->type = 0;
 
     return result;
