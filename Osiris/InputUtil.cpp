@@ -21,12 +21,32 @@ struct Key {
     int code;
 };
 
-// must match order of KeyBind::KeyCode enum, and has to be sorted alphabetically
+// indices must match KeyBind::KeyCode enum, and has to be sorted alphabetically
 constexpr auto keyMap = std::to_array<Key>({
+    { "0", WIN32_LINUX('0', SDL_SCANCODE_0) },
+    { "1", WIN32_LINUX('1', SDL_SCANCODE_1) },
+    { "2", WIN32_LINUX('2', SDL_SCANCODE_2) },
+    { "3", WIN32_LINUX('3', SDL_SCANCODE_3) },
+    { "4", WIN32_LINUX('4', SDL_SCANCODE_4) },
+    { "5", WIN32_LINUX('5', SDL_SCANCODE_5) },
+    { "6", WIN32_LINUX('6', SDL_SCANCODE_6) },
+    { "7", WIN32_LINUX('7', SDL_SCANCODE_7) },
+    { "8", WIN32_LINUX('8', SDL_SCANCODE_8) },
+    { "9", WIN32_LINUX('9', SDL_SCANCODE_9) },
     { "A", WIN32_LINUX('A', SDL_SCANCODE_A) },
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
+    { "D", WIN32_LINUX('D', SDL_SCANCODE_D) },
+    { "E", WIN32_LINUX('E', SDL_SCANCODE_E) },
+    { "F", WIN32_LINUX('F', SDL_SCANCODE_F) },
+    { "G", WIN32_LINUX('G', SDL_SCANCODE_G) },
+    { "H", WIN32_LINUX('H', SDL_SCANCODE_H) },
+    { "I", WIN32_LINUX('I', SDL_SCANCODE_I) },
     { "INSERT", WIN32_LINUX(VK_INSERT, SDL_SCANCODE_INSERT) },
+    { "J", WIN32_LINUX('J', SDL_SCANCODE_J) },
+    { "K", WIN32_LINUX('K', SDL_SCANCODE_K) },
+    { "L", WIN32_LINUX('L', SDL_SCANCODE_L) },
+    { "M", WIN32_LINUX('M', SDL_SCANCODE_M) },
     { "MOUSE1", 0 },
     { "MOUSE2", 1 },
     { "MOUSE3", 2 },
@@ -34,7 +54,20 @@ constexpr auto keyMap = std::to_array<Key>({
     { "MOUSE5", 4 },
     { "MOUSEWHEEL_DOWN", 0 },
     { "MOUSEWHEEL_UP", 0 },
-    { "NONE", 0 }
+    { "N", WIN32_LINUX('N', SDL_SCANCODE_N) },
+    { "NONE", 0 },
+    { "O", WIN32_LINUX('O', SDL_SCANCODE_O) },
+    { "P", WIN32_LINUX('P', SDL_SCANCODE_P) },
+    { "Q", WIN32_LINUX('Q', SDL_SCANCODE_Q) },
+    { "R", WIN32_LINUX('R', SDL_SCANCODE_R) },
+    { "S", WIN32_LINUX('S', SDL_SCANCODE_S) },
+    { "T", WIN32_LINUX('T', SDL_SCANCODE_T) },
+    { "U", WIN32_LINUX('U', SDL_SCANCODE_U) },
+    { "V", WIN32_LINUX('V', SDL_SCANCODE_V) },
+    { "W", WIN32_LINUX('W', SDL_SCANCODE_W) },
+    { "X", WIN32_LINUX('X', SDL_SCANCODE_X) },
+    { "Y", WIN32_LINUX('Y', SDL_SCANCODE_Y) },
+    { "Z", WIN32_LINUX('Z', SDL_SCANCODE_X) },
 });
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
