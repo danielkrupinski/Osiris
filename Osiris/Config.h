@@ -200,7 +200,7 @@ public:
     } style;
 
     struct Misc {
-        Misc() { }
+        Misc() { clanTag[0] = '\0'; }
 
         KeyBind menuKey = KeyBind::INSERT;
         bool antiAfkKick{ false };
