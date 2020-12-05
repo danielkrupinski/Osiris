@@ -9,6 +9,7 @@ class GUI {
 public:
     GUI() noexcept;
     void render() noexcept;
+    void handleToggle() noexcept;
     bool open = true;
 private:
     static void hotkey(int&) noexcept;

@@ -83,6 +83,31 @@ void GUI::updateColors() const noexcept
     }
 }
 
+#include "InputUtil.h"
+
+static void hotkey2(KeyBind& key) noexcept
+{
+    ImGui::Text("[ %s ]", key.toString());
+
+    if (!ImGui::IsItemHovered())
+        return;
+
+    ImGui::SetTooltip("Press any key to change keybind");
+    key.setToPressedKey();
+}
+
+void GUI::handleToggle() noexcept
+{
+    if (config->misc.menuKey.isPressed()) {
+        open = !open;
+        if (!open)
+            interfaces->inputSystem->resetInputState();
+#ifndef _WIN32
+        ImGui::GetIO().MouseDrawCursor = gui->open;
+#endif
+    }
+}
+
 void GUI::hotkey(int& key) noexcept
 {
     key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
@@ -93,7 +118,7 @@ void GUI::hotkey(int& key) noexcept
     ImGui::SetTooltip("Press any key to change keybind");
     ImGuiIO& io = ImGui::GetIO();
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
-        if (ImGui::IsKeyPressed(i) && i != config->misc.menuKey)
+        if (ImGui::IsKeyPressed(i))// && i != config->misc.menuKey)
 #ifdef _WIN32
             key = i != VK_ESCAPE ? i : 0;
 #else
@@ -101,7 +126,7 @@ void GUI::hotkey(int& key) noexcept
 #endif
 
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-        if (ImGui::IsMouseDown(i) && i + (i > 1 ? 2 : 1) != config->misc.menuKey)
+        if (ImGui::IsMouseDown(i))// && i + (i > 1 ? 2 : 1) != config->misc.menuKey)
             key = i + (i > 1 ? 2 : 1);
 }
 
@@ -1218,8 +1243,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 230.0f);
     ImGui::TextUnformatted("Menu key");
     ImGui::SameLine();
-    hotkey(config->misc.menuKey);
-
+    hotkey2(config->misc.menuKey);
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);

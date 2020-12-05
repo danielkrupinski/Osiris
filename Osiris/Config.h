@@ -9,6 +9,7 @@
 #include "imgui/imgui.h"
 #include "Hacks/SkinChanger.h"
 #include "ConfigStructs.h"
+#include "InputUtil.h"
 
 class Config {
 public:
@@ -201,7 +202,7 @@ public:
     struct Misc {
         Misc() { }
 
-        int menuKey{ 0x2D }; // VK_INSERT
+        KeyBind menuKey = KeyBind::INSERT;
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };

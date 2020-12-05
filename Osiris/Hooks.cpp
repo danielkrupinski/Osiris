@@ -77,6 +77,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         return true;
     }(window);
 
+#if 0
     if (msg == WM_KEYDOWN && LOWORD(wParam) == config->misc.menuKey
         || ((msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) && config->misc.menuKey == VK_LBUTTON)
         || ((msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) && config->misc.menuKey == VK_RBUTTON)
@@ -89,6 +90,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         }
     }
 
+#endif
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
@@ -113,6 +115,8 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
     Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
+
+    gui->handleToggle();
 
     if (gui->open)
         gui->render();
@@ -548,14 +552,18 @@ static void swapWindow(SDL_Window* window) noexcept
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
 
+        gui->handleToggle();
+
         if (gui->open)
             gui->render();
 
+#if 0
         if (ImGui::IsKeyPressed(SDL_SCANCODE_INSERT, false)) {
             gui->open = !gui->open;
             if (!gui->open)
                 interfaces->inputSystem->resetInputState();
             ImGui::GetIO().MouseDrawCursor = gui->open;
+#endif
         }
     }
 

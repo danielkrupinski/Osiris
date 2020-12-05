@@ -110,6 +110,15 @@ static void read(const json& j, const char* key, int& o) noexcept
         val.get_to(o);
 }
 
+static void read(const json& j, const char* key, KeyBind& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_string())
+        o = val.get<std::string>().c_str();
+}
+
 template <typename T, size_t Size>
 static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
@@ -907,6 +916,12 @@ static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& 
 {
     WRITE("Enabled", enabled);
     WRITE("Only Headshots", onlyHeadshots);
+}
+
+static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
+{
+    if (o != dummy)
+        j = o.toString();
 }
 
 static void to_json(json& j, const Config::Misc& o)
