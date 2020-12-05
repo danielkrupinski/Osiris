@@ -26,6 +26,7 @@ constexpr auto keyMap = std::to_array<Key>({
     { "A", WIN32_LINUX('A', SDL_SCANCODE_A) },
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
+    { "INSERT", WIN32_LINUX(VK_INSERT, SDL_SCANCODE_INSERT) },
     { "MOUSE1", 0 },
     { "MOUSE2", 1 },
     { "MOUSE3", 2 },
@@ -91,7 +92,9 @@ bool KeyBind::isDown() const noexcept
 
 void KeyBind::setToPressedKey() noexcept
 {
-    if (ImGui::GetIO().MouseWheel < 0.0f) {
+    if (ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_Escape])) {
+        keyCode = KeyCode::NONE;
+    } else if (ImGui::GetIO().MouseWheel < 0.0f) {
         keyCode = KeyCode::MOUSEWHEEL_DOWN;
     } else if (ImGui::GetIO().MouseWheel > 0.0f) {
         keyCode = KeyCode::MOUSEWHEEL_UP;

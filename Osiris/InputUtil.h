@@ -6,6 +6,7 @@ public:
         A = 0,
         B,
         C,
+        INSERT,
         MOUSE1,
         MOUSE2,
         MOUSE3,
@@ -20,6 +21,7 @@ public:
     KeyBind(const char* keyName) noexcept;
 
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
+    bool operator==(const KeyBind& other) const noexcept { return this->keyCode == other.keyCode; }
 
     const char* toString() const noexcept;
     bool isPressed() const noexcept;
