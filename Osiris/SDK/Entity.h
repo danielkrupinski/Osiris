@@ -62,39 +62,21 @@ public:
     VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
     VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
 
-#ifdef _WIN32
-    VIRTUAL_METHOD(const Vector&, getAbsOrigin, 10, (), (this))
-    VIRTUAL_METHOD(void, setModelIndex, 75, (int index), (this, index))
-    VIRTUAL_METHOD(int, health, 121, (), (this))
-    VIRTUAL_METHOD(bool, isAlive, 155, (), (this))
-    VIRTUAL_METHOD(bool, isPlayer, 157, (), (this))
-    VIRTUAL_METHOD(bool, isWeapon, 165, (), (this))
-    VIRTUAL_METHOD(Entity*, getActiveWeapon, 267, (), (this))
-    VIRTUAL_METHOD(int, getWeaponSubType, 281, (), (this))
-    VIRTUAL_METHOD(Vector, getEyePosition, 284, (), (this))
-    VIRTUAL_METHOD(ObsMode, getObserverMode, 293, (), (this))
-    VIRTUAL_METHOD(Entity*, getObserverTarget, 294, (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, 345, (), (this))
-    VIRTUAL_METHOD(WeaponType, getWeaponType, 454, (), (this))
-    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 460, (), (this))
-    VIRTUAL_METHOD(float, getInaccuracy, 482, (), (this))
-#else
-    VIRTUAL_METHOD(Vector&, getAbsOrigin, 12, (), (this))
-    VIRTUAL_METHOD(void, setModelIndex, 111, (int index), (this, index))
-    VIRTUAL_METHOD(int, health, 166, (), (this))
-    VIRTUAL_METHOD(bool, isAlive, 207, (), (this))
-    VIRTUAL_METHOD(bool, isPlayer, 209, (), (this))
-    VIRTUAL_METHOD(bool, isWeapon, 217, (), (this))
-    VIRTUAL_METHOD(Entity*, getActiveWeapon, 330, (), (this))
-    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
-    VIRTUAL_METHOD(int, getWeaponSubType, 349, (), (this))
-    VIRTUAL_METHOD(ObsMode, getObserverMode, 356, (), (this))
-    VIRTUAL_METHOD(Entity*, getObserverTarget, 357, (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
-    VIRTUAL_METHOD(WeaponType, getWeaponType, 522, (), (this))
-    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, 528, (), (this))
-    VIRTUAL_METHOD(float, getInaccuracy, 550, (), (this))
-#endif
+    VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
+    VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
+    VIRTUAL_METHOD(int, health, WIN32_LINUX(121, 166), (), (this))
+    VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
+    VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
+    VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(165, 217), (), (this))
+    VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(267, 330), (), (this))
+    VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(281, 349), (), (this))
+    VIRTUAL_METHOD(Vector, getEyePosition, WIN32_LINUX(284, 347), (), (this))
+    VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(293, 356), (), (this))
+    VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(294, 357), (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, WIN32_LINUX(345, 408), (), (this))
+    VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(454, 522), (), (this))
+    VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(460, 528), (), (this))
+    VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(482, 550), (), (this))
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
     auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
@@ -124,12 +106,12 @@ public:
             Vector absOrigin = getAbsOrigin();
             *render = 0;
             memory->setAbsOrigin(this, origin());
-            auto result = VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+            auto result = VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
             memory->setAbsOrigin(this, absOrigin);
             *render = backup;
             return result;
         }
-        return VirtualMethod::call<bool, 13>(this + 4, out, maxBones, boneMask, currentTime);
+        return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
     Vector getBonePosition(int bone) noexcept

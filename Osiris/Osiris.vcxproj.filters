@@ -158,6 +158,9 @@
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InputUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -459,6 +462,9 @@
     </ClInclude>
     <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="InputUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
