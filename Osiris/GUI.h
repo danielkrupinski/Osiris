@@ -10,8 +10,9 @@ public:
     GUI() noexcept;
     void render() noexcept;
     void handleToggle() noexcept;
-    bool open = true;
+    bool isOpen() noexcept { return open; }
 private:
+    bool open = true;
     static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;

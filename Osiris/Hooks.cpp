@@ -94,7 +94,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
-    interfaces->inputSystem->enableInput(!gui->open);
+    interfaces->inputSystem->enableInput(!gui->isOpen());
 
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
 }
@@ -118,7 +118,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 
     gui->handleToggle();
 
-    if (gui->open)
+    if (gui->isOpen())
         gui->render();
 
     ImGui::EndFrame();
@@ -369,7 +369,7 @@ static bool __STDCALL shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 
 static void __STDCALL lockCursor() noexcept
 {
-    if (gui->open)
+    if (gui->isOpen())
         return interfaces->surface->unlockCursor();
     return hooks->surface.callOriginal<void, 67>();
 }
@@ -554,7 +554,7 @@ static void swapWindow(SDL_Window* window) noexcept
 
         gui->handleToggle();
 
-        if (gui->open)
+        if (gui->isOpen())
             gui->render();
 
 #if 0
