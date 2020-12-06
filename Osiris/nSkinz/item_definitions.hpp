@@ -91,6 +91,7 @@ enum ItemDefinitionIndex : int
     WEAPON_KNIFE_STILETTO = 522,
     WEAPON_KNIFE_WIDOWMAKER = 523,
     WEAPON_KNIFE_SKELETON = 525,
+    GLOVE_STUDDED_BROKENFANG = 4725,
     GLOVE_STUDDED_BLOODHOUND = 5027,
     GLOVE_T_SIDE = 5028,
     GLOVE_CT_SIDE = 5029,
@@ -174,6 +175,7 @@ namespace game_data
 
     constexpr weapon_name glove_names[]{
         {0, "Default"},
+        {GLOVE_STUDDED_BROKENFANG, "Brokenfang"},
         {GLOVE_STUDDED_BLOODHOUND, "Bloodhound"},
         {GLOVE_T_SIDE, "Default (Terrorists)"},
         {GLOVE_CT_SIDE, "Default (Counter-Terrorists)"},

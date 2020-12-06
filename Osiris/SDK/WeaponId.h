@@ -78,6 +78,7 @@ enum class WeaponId : short {
     Stiletto = 522,
     Talon,
     SkeletonKnife = 525,
+    GloveStuddedBrokenfang = 4725,
     GloveStuddedBloodhound = 5027,
     GloveT,
     GloveCT,
