@@ -54,7 +54,7 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
         { WEAPON_KNIFE_STILETTO,{"models/weapons/v_knife_stiletto.mdl", "knife_stiletto"} },
         { WEAPON_KNIFE_WIDOWMAKER,{"models/weapons/v_knife_widowmaker.mdl", "knife_widowmaker"} },
 
-        { GLOVE_STUDDED_BROKENFANG, {"models/weapons/w_models/arms/w_glove_bloodhound_brokenfang.mdl"} },
+        { GLOVE_STUDDED_BROKENFANG,{"models/weapons/w_models/arms/w_glove_bloodhound_brokenfang.mdl"} },
         { GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"} },
         { GLOVE_T_SIDE,{"models/weapons/w_models/arms/w_glove_fingerless.mdl"} },
         { GLOVE_CT_SIDE,{"models/weapons/w_models/arms/w_glove_hardknuckle.mdl"} },
