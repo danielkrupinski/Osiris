@@ -174,7 +174,7 @@ void Visuals::thirdperson() noexcept
     static bool isInThirdperson{ true };
     static float lastTime{ 0.0f };
 
-#ifdef _WIN33
+#ifdef _WIN32
     if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
         isInThirdperson = !isInThirdperson;
         lastTime = memory->globalVars->realtime;
