@@ -1407,7 +1407,16 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         if (!window.config)
             return;
         ImGui::SetNextWindowSize({ 290.0f, 0.0f });
-        ImGui::Begin("Config", &window.config, windowFlags);
+        if (!ImGui::Begin("Config", &window.config, windowFlags)) {
+            ImGui::End();
+            return;
+        }
+    }
+
+    timeToNextConfigRefresh -= ImGui::GetIO().DeltaTime;
+    if (timeToNextConfigRefresh <= 0.0f) {
+        config->listConfigs();
+        timeToNextConfigRefresh = 0.1f;
     }
 
     ImGui::Columns(2, nullptr, false);
