@@ -1499,8 +1499,11 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                 config->save(currentConfig);
             if (ImGui::Button("Delete selected", { 100.0f, 25.0f })) {
                 config->remove(currentConfig);
-                currentConfig = -1;
-                buffer.clear();
+
+                if (static_cast<std::size_t>(currentConfig) < configItems.size())
+                    buffer = configItems[currentConfig];
+                else
+                    buffer.clear();
             }
         }
         ImGui::Columns(1);
