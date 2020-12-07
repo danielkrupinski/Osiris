@@ -1413,12 +1413,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         }
     }
 
-    timeToNextConfigRefresh -= ImGui::GetIO().DeltaTime;
-    if (timeToNextConfigRefresh <= 0.0f) {
-        config->listConfigs();
-        timeToNextConfigRefresh = 0.1f;
-    }
-
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 170.0f);
 
@@ -1433,10 +1427,18 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;
 
+    static std::string buffer;
+
+    timeToNextConfigRefresh -= ImGui::GetIO().DeltaTime;
+    if (timeToNextConfigRefresh <= 0.0f) {
+        config->listConfigs();
+        if (const auto it = std::find(configItems.begin(), configItems.end(), buffer); it != configItems.end())
+            currentConfig = std::distance(configItems.begin(), it);
+        timeToNextConfigRefresh = 0.1f;
+    }
+
     if (static_cast<std::size_t>(currentConfig) >= configItems.size())
         currentConfig = -1;
-
-    static std::string buffer;
 
     if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
         auto& vector = *static_cast<std::vector<std::string>*>(data);
