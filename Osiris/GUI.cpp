@@ -1406,7 +1406,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     if (!contentOnly) {
         if (!window.config)
             return;
-        ImGui::SetNextWindowSize({ 290.0f, 0.0f });
+        ImGui::SetNextWindowSize({ 320.0f, 0.0f });
         if (!ImGui::Begin("Config", &window.config, windowFlags)) {
             ImGui::End();
             return;
@@ -1453,6 +1453,9 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         ImGui::NextColumn();
 
         ImGui::PushItemWidth(100.0f);
+
+        if (ImGui::Button("Open config directory"))
+            config->openConfigDir();
 
         if (ImGui::Button("Create config", { 100.0f, 25.0f }))
             config->add(buffer.c_str());
