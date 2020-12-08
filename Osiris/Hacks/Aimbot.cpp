@@ -144,16 +144,16 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
         return;
 
-    if (config->aimbot[weaponIndex].onKey) {
-        if (!config->aimbot[weaponIndex].keyMode) {
+    if (config->aimbotOnKey) {
+        if (!config->aimbotKeyMode) {
 #ifdef _WIN32
-            if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
+            if (!GetAsyncKeyState(config->aimbotKey))
                 return;
 #endif
         } else {
             static bool toggle = true;
 #ifdef _WIN32
-            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
+            if (GetAsyncKeyState(config->aimbotKey) & 1)
                 toggle = !toggle;
 #endif
             if (!toggle)

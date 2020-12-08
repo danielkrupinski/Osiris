@@ -260,13 +260,13 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("On key", &config->aimbot[currentWeapon].onKey);
+    ImGui::Checkbox("On key", &config->aimbotOnKey);
     ImGui::SameLine();
-    hotkey(config->aimbot[currentWeapon].key);
+    hotkey(config->aimbotKey);
     ImGui::SameLine();
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config->aimbot[currentWeapon].keyMode, "Hold\0Toggle\0");
+    ImGui::Combo("", &config->aimbotKeyMode, "Hold\0Toggle\0");
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
