@@ -22,6 +22,7 @@ public:
     void reset() noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;
+    void openConfigDir() const noexcept;
 
     constexpr auto& getConfigs() noexcept
     {

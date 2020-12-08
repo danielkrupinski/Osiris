@@ -8,6 +8,7 @@
 
 #include "Config.h"
 #include "Helpers.h"
+#include "SDK/Platform.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -1192,6 +1193,12 @@ void Config::listConfigs() noexcept
 void Config::createConfigDir() const noexcept
 {
     std::error_code ec; std::filesystem::create_directory(path, ec);
+}
+
+void Config::openConfigDir() const noexcept
+{
+    createConfigDir();
+    int ret = std::system((WIN32_LINUX("start ", "xdg-open ") + path.string()).c_str());
 }
 
 void Config::scheduleFontLoad(const std::string& name) noexcept
