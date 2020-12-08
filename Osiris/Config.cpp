@@ -1114,8 +1114,7 @@ void removeEmptyObjects(json& j) noexcept
 
 void Config::save(size_t id) const noexcept
 {
-    std::error_code ec;
-    std::filesystem::create_directory(path, ec);
+    createConfigDir();
 
     if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good()) {
         json j;
@@ -1188,6 +1187,11 @@ void Config::listConfigs() noexcept
         std::filesystem::directory_iterator{ },
         std::back_inserter(configs),
         [](const auto& entry) { return std::string{ (const char*)entry.path().filename().u8string().c_str() }; });
+}
+
+void Config::createConfigDir() const noexcept
+{
+    std::error_code ec; std::filesystem::create_directory(path, ec);
 }
 
 void Config::scheduleFontLoad(const std::string& name) noexcept

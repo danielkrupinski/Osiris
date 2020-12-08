@@ -21,6 +21,7 @@ public:
     void rename(size_t, const char*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
+    void createConfigDir() const noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
