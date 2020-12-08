@@ -1421,9 +1421,6 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
     ImGui::PushItemWidth(160.0f);
 
-    if (ImGui::Button("Reload configs", { 160.0f, 25.0f }))
-        config->listConfigs();
-
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;
 
