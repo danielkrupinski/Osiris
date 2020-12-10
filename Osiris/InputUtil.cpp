@@ -22,7 +22,7 @@ struct Key {
 };
 
 // indices must match KeyBind::KeyCode enum, and has to be sorted alphabetically
-constexpr auto keyMap = std::to_array<Key>({
+static constexpr auto keyMap = std::to_array<Key>({
     { "0", WIN32_LINUX('0', SDL_SCANCODE_0) },
     { "1", WIN32_LINUX('1', SDL_SCANCODE_1) },
     { "2", WIN32_LINUX('2', SDL_SCANCODE_2) },
