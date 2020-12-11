@@ -19,7 +19,7 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
     }
 
     wchar_t wide[128];
-    memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 28);
+    memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 4);
 
     auto end = std::remove(wide, wide + wcslen(wide), L'\n');
     *end = L'\0';
