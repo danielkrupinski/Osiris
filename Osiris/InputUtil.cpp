@@ -119,8 +119,10 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "[", WIN32_LINUX(VK_OEM_4, SDL_SCANCODE_LEFTBRACKET) },
     { "\\", WIN32_LINUX(VK_OEM_5, SDL_SCANCODE_BACKSLASH) },
     { "]", WIN32_LINUX(VK_OEM_6, SDL_SCANCODE_RIGHTBRACKET) },
-    { "`", WIN32_LINUX(VK_OEM_3, SDL_SCANCODE_GRAVE) },
+    { "`", WIN32_LINUX(VK_OEM_3, SDL_SCANCODE_GRAVE) }
 });
+
+static_assert(keyMap.size() == KeyBind::MAX);
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
 {

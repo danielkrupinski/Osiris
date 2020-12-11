@@ -99,7 +99,9 @@ public:
         LEFTBRACKET,
         BACKSLASH,
         RIGHTBRACKET,
-        BACKTICK
+        BACKTICK,
+
+        MAX
     };
 
     KeyBind(KeyCode keyCode) noexcept;
