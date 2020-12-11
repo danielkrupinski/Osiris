@@ -25,7 +25,9 @@ struct Key {
 static constexpr auto keyMap = std::to_array<Key>({
     { "'", WIN32_LINUX(VK_OEM_7, SDL_SCANCODE_APOSTROPHE) },
     { ",", WIN32_LINUX(VK_OEM_COMMA, SDL_SCANCODE_COMMA) },
+    { "-", WIN32_LINUX(VK_OEM_MINUS, SDL_SCANCODE_MINUS) },
     { ".", WIN32_LINUX(VK_OEM_PERIOD, SDL_SCANCODE_PERIOD) },
+    { "/", WIN32_LINUX(VK_OEM_2, SDL_SCANCODE_SLASH) },
     { "0", WIN32_LINUX('0', SDL_SCANCODE_0) },
     { "1", WIN32_LINUX('1', SDL_SCANCODE_1) },
     { "2", WIN32_LINUX('2', SDL_SCANCODE_2) },
@@ -37,6 +39,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "8", WIN32_LINUX('8', SDL_SCANCODE_8) },
     { "9", WIN32_LINUX('9', SDL_SCANCODE_9) },
     { ";", WIN32_LINUX(VK_OEM_1, SDL_SCANCODE_SEMICOLON) },
+    { "=", WIN32_LINUX(VK_OEM_PLUS, SDL_SCANCODE_EQUALS) },
     { "A", WIN32_LINUX('A', SDL_SCANCODE_A) },
     { "ADD", WIN32_LINUX(VK_ADD, SDL_SCANCODE_KP_PLUS) },
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
@@ -113,7 +116,9 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "X", WIN32_LINUX('X', SDL_SCANCODE_X) },
     { "Y", WIN32_LINUX('Y', SDL_SCANCODE_Y) },
     { "Z", WIN32_LINUX('Z', SDL_SCANCODE_X) },
+    { "[", WIN32_LINUX(VK_OEM_4, SDL_SCANCODE_LEFTBRACKET) },
     { "\\", WIN32_LINUX(VK_OEM_5, SDL_SCANCODE_BACKSLASH) },
+    { "]", WIN32_LINUX(VK_OEM_6, SDL_SCANCODE_RIGHTBRACKET) },
     { "`", WIN32_LINUX(VK_OEM_3, SDL_SCANCODE_GRAVE) },
 });
 

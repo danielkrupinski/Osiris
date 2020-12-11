@@ -5,7 +5,9 @@ public:
     enum KeyCode {
         APOSTROPHE = 0,
         COMMA,
+        MINUS,
         PERIOD,
+        SLASH,
         KEY_0,
         KEY_1,
         KEY_2,
@@ -17,6 +19,7 @@ public:
         KEY_8,
         KEY_9,
         SEMICOLON,
+        EQUALS,
         A,
         ADD,
         B,
@@ -93,7 +96,9 @@ public:
         X,
         Y,
         Z,
+        LEFTBRACKET,
         BACKSLASH,
+        RIGHTBRACKET,
         BACKTICK
     };
 
