@@ -3,7 +3,10 @@
 class KeyBind {
 public:
     enum KeyCode {
-        KEY_0 = 0,
+        APOSTROPHE = 0,
+        COMMA,
+        PERIOD,
+        KEY_0,
         KEY_1,
         KEY_2,
         KEY_3,
@@ -13,12 +16,11 @@ public:
         KEY_7,
         KEY_8,
         KEY_9,
+        SEMICOLON,
         A,
         ADD,
-        ALT,
         B,
         C,
-        CTRL,
         D,
         DECIMAL,
         DEL,
@@ -26,6 +28,7 @@ public:
         DOWN,
         E,
         END,
+        ENTER,
         F,
         F1,
         F10,
@@ -47,6 +50,8 @@ public:
         J,
         K,
         L,
+        LALT,
+        LCTRL,
         LEFT,
         M,
         MOUSE1,
@@ -88,6 +93,7 @@ public:
         X,
         Y,
         Z,
+        BACKSLASH,
         BACKTICK
     };
 

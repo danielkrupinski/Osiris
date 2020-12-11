@@ -23,6 +23,9 @@ struct Key {
 
 // indices must match KeyBind::KeyCode enum, and has to be sorted alphabetically
 static constexpr auto keyMap = std::to_array<Key>({
+    { "'", WIN32_LINUX(VK_OEM_7, SDL_SCANCODE_APOSTROPHE) },
+    { ",", WIN32_LINUX(VK_OEM_COMMA, SDL_SCANCODE_COMMA) },
+    { ".", WIN32_LINUX(VK_OEM_PERIOD, SDL_SCANCODE_PERIOD) },
     { "0", WIN32_LINUX('0', SDL_SCANCODE_0) },
     { "1", WIN32_LINUX('1', SDL_SCANCODE_1) },
     { "2", WIN32_LINUX('2', SDL_SCANCODE_2) },
@@ -33,12 +36,11 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "7", WIN32_LINUX('7', SDL_SCANCODE_7) },
     { "8", WIN32_LINUX('8', SDL_SCANCODE_8) },
     { "9", WIN32_LINUX('9', SDL_SCANCODE_9) },
+    { ";", WIN32_LINUX(VK_OEM_1, SDL_SCANCODE_SEMICOLON) },
     { "A", WIN32_LINUX('A', SDL_SCANCODE_A) },
     { "ADD", WIN32_LINUX(VK_ADD, SDL_SCANCODE_KP_PLUS) },
-    { "ALT", WIN32_LINUX(VK_MENU, SDL_SCANCODE_LALT) },
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
-    { "CTRL", WIN32_LINUX(VK_CONTROL, SDL_SCANCODE_LCTRL) },
     { "D", WIN32_LINUX('D', SDL_SCANCODE_D) },
     { "DECIMAL", WIN32_LINUX(VK_DECIMAL, SDL_SCANCODE_KP_DECIMAL) },
     { "DELETE", WIN32_LINUX(VK_DELETE, SDL_SCANCODE_DELETE) },
@@ -46,6 +48,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "DOWN", WIN32_LINUX(VK_DOWN, SDL_SCANCODE_DOWN) },
     { "E", WIN32_LINUX('E', SDL_SCANCODE_E) },
     { "END", WIN32_LINUX(VK_END, SDL_SCANCODE_END) },
+    { "ENTER", WIN32_LINUX(VK_RETURN, SDL_SCANCODE_RETURN) },
     { "F", WIN32_LINUX('F', SDL_SCANCODE_F) },
     { "F1", WIN32_LINUX(VK_F1, SDL_SCANCODE_F1) },
     { "F10", WIN32_LINUX(VK_F10, SDL_SCANCODE_F10) },
@@ -67,6 +70,8 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "J", WIN32_LINUX('J', SDL_SCANCODE_J) },
     { "K", WIN32_LINUX('K', SDL_SCANCODE_K) },
     { "L", WIN32_LINUX('L', SDL_SCANCODE_L) },
+    { "LALT", WIN32_LINUX(VK_MENU, SDL_SCANCODE_LALT) },
+    { "LCTRL", WIN32_LINUX(VK_CONTROL, SDL_SCANCODE_LCTRL) },
     { "LEFT", WIN32_LINUX(VK_LEFT, SDL_SCANCODE_LEFT) },
     { "M", WIN32_LINUX('M', SDL_SCANCODE_M) },
     { "MOUSE1", 0 },
@@ -108,6 +113,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "X", WIN32_LINUX('X', SDL_SCANCODE_X) },
     { "Y", WIN32_LINUX('Y', SDL_SCANCODE_Y) },
     { "Z", WIN32_LINUX('Z', SDL_SCANCODE_X) },
+    { "\\", WIN32_LINUX(VK_OEM_5, SDL_SCANCODE_BACKSLASH) },
     { "`", WIN32_LINUX(VK_OEM_3, SDL_SCANCODE_GRAVE) },
 });
 
