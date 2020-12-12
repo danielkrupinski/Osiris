@@ -386,9 +386,10 @@ void Misc::drawBombTimer() noexcept
 
     static const auto mp_c4timer = interfaces->cvar->findVar("mp_c4timer");
 
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(config->misc.bombTimer));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, { 0.2f, 0.2f, 0.2f, 1.0f });
     ImGui::ProgressBar(std::clamp(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f, mp_c4timer->getFloat()) / mp_c4timer->getFloat(), { -1, 0 }, "");
-    ImGui::PopStyleColor();
+    ImGui::PopStyleColor(2);
 
     ImGui::End();
 
