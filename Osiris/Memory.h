@@ -27,6 +27,8 @@ class MoveData;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;
+template <typename T>
+class UtlVector;
 
 struct ActiveChannels;
 struct Channel;
@@ -51,6 +53,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    UtlVector<Entity*>* plantedC4s;
 
     bool* disablePostProcessing;
 
