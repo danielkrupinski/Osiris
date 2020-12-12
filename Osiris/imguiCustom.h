@@ -21,3 +21,8 @@ namespace ImGuiCustom
     void colorPicker(const char* name, ColorToggleThicknessRounding& colorConfig) noexcept;
     void arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept;
 }
+
+namespace ImGui
+{
+    void progressBarFullWidth(float fraction, float height) noexcept;
+}
