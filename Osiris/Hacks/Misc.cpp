@@ -362,6 +362,28 @@ void Misc::fastStop(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
+    if (!config->misc.bombTimer.enabled)
+        return;
+
+    GameData::Lock lock;
+    
+    const auto& plantedC4 = GameData::plantedC4();
+    if (plantedC4.blowTime == 0.0f && !gui->isOpen())
+        return;
+
+    if (!gui->isOpen()) {
+        ImGui::SetNextWindowBgAlpha(0.3f);
+    }
+
+    ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+
+    std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
+
+    ImGui::TextUnformatted(ss.str().c_str());
+
+    ImGui::End();
+
+    /*
     if (config->misc.bombTimer.enabled) {
         for (int i = interfaces->engine->getMaxClients(); i <= interfaces->entityList->getHighestEntityIndex(); i++) {
             Entity* entity = interfaces->entityList->getEntity(i);
@@ -433,6 +455,7 @@ void Misc::drawBombTimer() noexcept
             break;
         }
     }
+    */
 }
 
 void Misc::stealNames() noexcept
