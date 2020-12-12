@@ -201,6 +201,11 @@ const std::list<ProjectileData>& GameData::projectiles() noexcept
     return projectileData;
 }
 
+const BombData& GameData::plantedC4() noexcept
+{
+    return bombData;
+}
+
 void LocalPlayerData::update() noexcept
 {
     if (!localPlayer) {
