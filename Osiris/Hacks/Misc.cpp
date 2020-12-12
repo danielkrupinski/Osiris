@@ -375,11 +375,17 @@ void Misc::drawBombTimer() noexcept
         ImGui::SetNextWindowBgAlpha(0.3f);
     }
 
-    ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar);
 
     std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
 
     ImGui::TextUnformatted(ss.str().c_str());
+
+    static const auto mp_c4timer = interfaces->cvar->findVar("mp_c4timer");
+
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, { 0.2f, 0.2f, 0.2f, 1.0f });
+    ImGui::ProgressBar(std::clamp(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f, mp_c4timer->getFloat()) / mp_c4timer->getFloat(), { -1, 0 }, "");
+    ImGui::PopStyleColor();
 
     ImGui::End();
 
