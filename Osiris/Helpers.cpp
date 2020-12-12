@@ -26,6 +26,11 @@ unsigned int Helpers::calculateColor(ColorA color) noexcept
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, color.color[3]) : color.color);
 }
 
+unsigned int Helpers::calculateColor(Config::Color color) noexcept
+{
+    return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, 1.0f) : ImVec4{ color.color[0], color.color[1], color.color[2], 1.0f});
+}
+
 unsigned int Helpers::calculateColor(int r, int g, int b, int a) noexcept
 {
     a -= static_cast<int>(a * GameData::local().flashDuration / 255.0f);
