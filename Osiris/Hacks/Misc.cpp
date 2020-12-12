@@ -34,6 +34,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
 
+#include "../imguiCustom.h"
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
 #ifdef _WIN32
@@ -391,7 +393,7 @@ void Misc::drawBombTimer() noexcept
 
     ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(config->misc.bombTimer));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, { 0.2f, 0.2f, 0.2f, 1.0f });
-    ImGui::ProgressBar(std::clamp(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f, mp_c4timer->getFloat()) / mp_c4timer->getFloat(), { -1, 0 }, "");
+    ImGui::progressBarFullWidth(std::clamp(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f, mp_c4timer->getFloat()) / mp_c4timer->getFloat(), 5.0f);
 
     windowWidth = ImGui::GetCurrentWindow()->SizeFull.x;
 
