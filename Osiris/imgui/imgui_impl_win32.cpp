@@ -231,6 +231,10 @@ void    ImGui_ImplWin32_NewFrame()
     io.KeyShift = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
     io.KeyAlt = (::GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
+
+    io.KeysDown[VK_LSHIFT] = (GetKeyState(VK_LSHIFT) & 0x8000) != 0;
+    io.KeysDown[VK_RSHIFT] = (GetKeyState(VK_RSHIFT) & 0x8000) != 0;
+
     // io.KeysDown[], io.MousePos, io.MouseDown[], io.MouseWheel: filled by the WndProc handler below.
 
     // Update OS mouse position
