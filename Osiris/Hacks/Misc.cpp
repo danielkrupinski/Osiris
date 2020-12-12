@@ -379,6 +379,8 @@ void Misc::drawBombTimer() noexcept
 
     std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
 
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(ss.str().c_str()).x) / 2.0f);
+
     ImGui::TextUnformatted(ss.str().c_str());
 
     static const auto mp_c4timer = interfaces->cvar->findVar("mp_c4timer");
