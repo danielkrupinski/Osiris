@@ -317,6 +317,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         if (wParam < 256) {
             switch (wParam) {
             case VK_CONTROL: io.KeysDown[lParam & (1 << 24) ? VK_RCONTROL : VK_LCONTROL] = 1; break;
+            case VK_MENU: io.KeysDown[lParam & (1 << 24) ? VK_RMENU : VK_LMENU] = 1; break;
             default: io.KeysDown[wParam] = 1;
             }
         }
@@ -326,6 +327,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         if (wParam < 256) {
             switch (wParam) {
             case VK_CONTROL: io.KeysDown[lParam & (1 << 24) ? VK_RCONTROL : VK_LCONTROL] = 0; break;
+            case VK_MENU: io.KeysDown[lParam & (1 << 24) ? VK_RMENU : VK_LMENU] = 0; break;
             default: io.KeysDown[wParam] = 0;
             }
         }

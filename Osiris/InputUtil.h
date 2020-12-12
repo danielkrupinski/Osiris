@@ -83,6 +83,7 @@ public:
         PAGE_UP,
         Q,
         R,
+        RALT,
         RCTRL,
         RIGHT,
         S,

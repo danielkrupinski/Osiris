@@ -73,7 +73,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "J", WIN32_LINUX('J', SDL_SCANCODE_J) },
     { "K", WIN32_LINUX('K', SDL_SCANCODE_K) },
     { "L", WIN32_LINUX('L', SDL_SCANCODE_L) },
-    { "LALT", WIN32_LINUX(VK_MENU, SDL_SCANCODE_LALT) },
+    { "LALT", WIN32_LINUX(VK_LMENU, SDL_SCANCODE_LALT) },
     { "LCTRL", WIN32_LINUX(VK_LCONTROL, SDL_SCANCODE_LCTRL) },
     { "LEFT", WIN32_LINUX(VK_LEFT, SDL_SCANCODE_LEFT) },
     { "M", WIN32_LINUX('M', SDL_SCANCODE_M) },
@@ -103,6 +103,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "PAGE_UP", WIN32_LINUX(VK_PRIOR, SDL_SCANCODE_PAGEUP) },
     { "Q", WIN32_LINUX('Q', SDL_SCANCODE_Q) },
     { "R", WIN32_LINUX('R', SDL_SCANCODE_R) },
+    { "RALT", WIN32_LINUX(VK_RMENU, SDL_SCANCODE_RALT) },
     { "RCTRL", WIN32_LINUX(VK_RCONTROL, SDL_SCANCODE_RCTRL) },
     { "RIGHT", WIN32_LINUX(VK_RIGHT, SDL_SCANCODE_RIGHT) },
     { "S", WIN32_LINUX('S', SDL_SCANCODE_S) },
@@ -199,6 +200,9 @@ void KeyBind::setToPressedKey() noexcept
                 auto it = std::find_if(keyMap.begin(), keyMap.end(), [i](const Key& key) { return key.code == i; });
                 if (it != keyMap.end()) {
                     keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
+                    // Treat AltGr as RALT
+                    if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
+                        keyCode = KeyCode::RALT;
                     return;
                 }
             }
