@@ -28,6 +28,7 @@ static std::vector<WeaponData> weaponData;
 static std::vector<EntityData> entityData;
 static std::vector<LootCrateData> lootCrateData;
 static std::list<ProjectileData> projectileData;
+static BombData bombData;
 
 void GameData::update() noexcept
 {
@@ -46,6 +47,7 @@ void GameData::update() noexcept
     lootCrateData.clear();
 
     localPlayerData.update();
+    bombData.update();
 
     if (!localPlayer) {
         playerData.clear();
@@ -504,4 +506,19 @@ ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer
     entity->getPlayerName(name);
     obs->getPlayerName(target);
     this->targetIsLocalPlayer = targetIsLocalPlayer;
+}
+
+void BombData::update() noexcept
+{
+    if (memory->plantedC4s->size > 0) {
+        if (Entity* bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
+            blowTime = bomb->c4BlowTime();
+            defuserHandle = bomb->c4Defuser();
+            if (defuserHandle != -1)
+                defuseCountDown = bomb->c4DefuseCountDown();
+            bombsite = bomb->c4BombSite();
+            return;
+        }
+    }
+    blowTime = 0.0f;
 }
