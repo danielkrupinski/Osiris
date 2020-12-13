@@ -223,6 +223,7 @@ void LocalPlayerData::update() noexcept
         nextWeaponAttack = activeWeapon->nextPrimaryAttack();
     }
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
+    handle = localPlayer->handle();
     flashDuration = localPlayer->flashDuration();
 
     aimPunch = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
