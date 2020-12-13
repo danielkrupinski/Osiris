@@ -154,3 +154,9 @@ void ImGui::progressBarFullWidth(float fraction, float height) noexcept
     bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
     RenderRectFilledRangeH(window->DrawList, bb, GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
 }
+
+void ImGui::textUnformattedCentered(const char* text) noexcept
+{
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(text).x) / 2.0f);
+    ImGui::TextUnformatted(text);
+}

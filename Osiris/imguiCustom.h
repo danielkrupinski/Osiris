@@ -25,4 +25,5 @@ namespace ImGuiCustom
 namespace ImGui
 {
     void progressBarFullWidth(float fraction, float height) noexcept;
+    void textUnformattedCentered(const char* text) noexcept;
 }
