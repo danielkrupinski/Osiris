@@ -386,8 +386,7 @@ void Misc::drawBombTimer() noexcept
 
     std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
 
-    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(ss.str().c_str()).x) / 2.0f);
-    ImGui::TextUnformatted(ss.str().c_str());
+    ImGui::textUnformattedCentered(ss.str().c_str());
 
     static const auto mp_c4timer = interfaces->cvar->findVar("mp_c4timer");
 
@@ -398,11 +397,19 @@ void Misc::drawBombTimer() noexcept
     if (plantedC4.defuserHandle != -1) {
         const bool canDefuse = plantedC4.blowTime >= plantedC4.defuseCountDown;
 
-        if (const auto defusingPlayer = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = plantedC4.defuserHandle](const auto& playerData) { return playerData.handle == handle; }); defusingPlayer != GameData::players().cend()) {
+        if (plantedC4.defuserHandle == GameData::local().handle) {
+            if (canDefuse) {
+                ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+                ImGui::textUnformattedCentered("You can defuse!");
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+                ImGui::textUnformattedCentered("You can not defuse!");
+            }
+            ImGui::PopStyleColor();
+        } else if (const auto defusingPlayer = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = plantedC4.defuserHandle](const auto& playerData) { return playerData.handle == handle; }); defusingPlayer != GameData::players().cend()) {
             std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
 
-            ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(ss.str().c_str()).x) / 2.0f);
-            ImGui::TextUnformatted(ss.str().c_str());
+            ImGui::textUnformattedCentered(ss.str().c_str());
 
             ImGui::PushStyleColor(ImGuiCol_PlotHistogram, canDefuse ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 0, 0, 255));
             ImGui::progressBarFullWidth((plantedC4.defuseCountDown - memory->globalVars->currenttime) / plantedC4.defuseLength, 5.0f);
