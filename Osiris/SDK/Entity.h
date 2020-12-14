@@ -264,6 +264,8 @@ public:
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+        
+    NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
     bool isFlashed() noexcept
     {
