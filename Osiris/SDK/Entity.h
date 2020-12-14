@@ -267,6 +267,8 @@ public:
         
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
+    NETVAR(bombsiteCenterA, "CCSPlayerResource", "m_bombsiteCenterA", Vector)
+
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
