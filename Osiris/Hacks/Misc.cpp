@@ -377,7 +377,8 @@ void Misc::drawBombTimer() noexcept
         ImGui::SetNextWindowBgAlpha(0.3f);
     }
 
-    static float windowWidth = 0.0f;
+    static float windowWidth = 200.0f;
+    ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
     if (!gui->isOpen())
         ImGui::SetNextWindowSize({ windowWidth, 0 });
 
