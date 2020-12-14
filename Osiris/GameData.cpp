@@ -519,6 +519,7 @@ void BombData::update() noexcept
     if (memory->plantedC4s->size > 0) {
         if (Entity* bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
+            timerLength = bomb->c4TimerLength();
             defuserHandle = bomb->c4Defuser();
             if (defuserHandle != -1) {
                 defuseCountDown = bomb->c4DefuseCountDown();
