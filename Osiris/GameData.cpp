@@ -16,6 +16,7 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
@@ -525,7 +526,11 @@ void BombData::update() noexcept
                 defuseCountDown = bomb->c4DefuseCountDown();
                 defuseLength = bomb->c4DefuseLength();
             }
-            bombsite = bomb->c4BombSite();
+
+            if (*memory->playerResource) {
+                const auto& bombOrigin = bomb->origin();
+                bombsite = bombOrigin.distTo((*memory->playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory->playerResource)->bombsiteCenterB());
+            }
             return;
         }
     }
