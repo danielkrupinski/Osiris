@@ -537,6 +537,7 @@ static void swapWindow(SDL_Window* window) noexcept
         Misc::noscopeCrosshair(ImGui::GetBackgroundDrawList());
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
+        Misc::drawBombTimer();
 
         gui->handleToggle();
 
