@@ -378,7 +378,9 @@ void Misc::drawBombTimer() noexcept
     }
 
     static float windowWidth = 200.0f;
+    ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - 200.0f) / 2.0f, 60.0f }, ImGuiCond_Once);
     ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
+
     if (!gui->isOpen())
         ImGui::SetNextWindowSize({ windowWidth, 0 });
 
