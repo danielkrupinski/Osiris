@@ -388,11 +388,9 @@ void Misc::drawBombTimer() noexcept
 
     ImGui::textUnformattedCentered(ss.str().c_str());
 
-    static const auto mp_c4timer = interfaces->cvar->findVar("mp_c4timer");
-
     ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(config->misc.bombTimer));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0.2f, 0.2f, 0.2f, 1.0f });
-    ImGui::progressBarFullWidth(std::clamp(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f, mp_c4timer->getFloat()) / mp_c4timer->getFloat(), 5.0f);
+    ImGui::progressBarFullWidth((plantedC4.blowTime - memory->globalVars->currenttime) / plantedC4.timerLength, 5.0f);
 
     if (plantedC4.defuserHandle != -1) {
         const bool canDefuse = plantedC4.blowTime >= plantedC4.defuseCountDown;
