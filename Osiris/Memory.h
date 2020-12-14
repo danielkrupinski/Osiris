@@ -97,6 +97,7 @@ public:
     uintptr_t demoOrHLTV;
     uintptr_t money;
     uintptr_t demoFileEndReached;
+    Entity** gameRules;
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
