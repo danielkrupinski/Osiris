@@ -1,6 +1,9 @@
 #pragma once
 
+#include "../Netvars.h"
 #include "VirtualMethod.h"
+
+struct Vector;
 
 class IPlayerResource {
 public:
@@ -15,4 +18,7 @@ public:
     {
         return reinterpret_cast<IPlayerResource*>(uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68));
     }
+
+    NETVAR(bombsiteCenterA, "CCSPlayerResource", "m_bombsiteCenterA", Vector)
+    NETVAR(bombsiteCenterB, "CCSPlayerResource", "m_bombsiteCenterB", Vector)
 };
