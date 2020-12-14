@@ -469,5 +469,8 @@
     <ClInclude Include="InputUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\PlayerResource.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
