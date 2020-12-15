@@ -38,6 +38,7 @@ namespace GameData
     const Matrix4x4& toScreenMatrix() noexcept;
     const LocalPlayerData& local() noexcept;
     const std::vector<PlayerData>& players() noexcept;
+    const PlayerData* playerByHandle(int handle) noexcept;
     const std::vector<ObserverData>& observers() noexcept;
     const std::vector<WeaponData>& weapons() noexcept;
     const std::vector<EntityData>& entities() noexcept;

@@ -31,6 +31,12 @@ static std::vector<LootCrateData> lootCrateData;
 static std::list<ProjectileData> projectileData;
 static BombData bombData;
 
+static auto playerByHandleWritable(int handle) noexcept
+{
+    const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
+    return it != playerData.end() ? &(*it) : nullptr;
+}
+
 void GameData::update() noexcept
 {
     static int lastFrame;
@@ -69,8 +75,8 @@ void GameData::update() noexcept
             if (entity == localPlayer.get() || entity == observerTarget)
                 continue;
 
-            if (const auto it = std::find_if(playerData.begin(), playerData.end(), [handle = entity->handle()](const auto& playerData) { return playerData.handle == handle; }); it != playerData.end()) {
-                it->update(entity);
+            if (const auto player = playerByHandleWritable(entity->handle())) {
+                player->update(entity);
             } else {
                 playerData.emplace_back(entity);
             }
@@ -175,6 +181,11 @@ const LocalPlayerData& GameData::local() noexcept
 const std::vector<PlayerData>& GameData::players() noexcept
 {
     return playerData;
+}
+
+const PlayerData* GameData::playerByHandle(int handle) noexcept
+{
+    return playerByHandleWritable(handle);
 }
 
 const std::vector<ObserverData>& GameData::observers() noexcept

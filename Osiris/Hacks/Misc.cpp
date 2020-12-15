@@ -407,7 +407,7 @@ void Misc::drawBombTimer() noexcept
                 ImGui::textUnformattedCentered("You can not defuse!");
             }
             ImGui::PopStyleColor();
-        } else if (const auto defusingPlayer = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = plantedC4.defuserHandle](const auto& playerData) { return playerData.handle == handle; }); defusingPlayer != GameData::players().cend()) {
+        } else if (const auto defusingPlayer = GameData::playerByHandle(plantedC4.defuserHandle)) {
             std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
 
             ImGui::textUnformattedCentered(ss.str().c_str());
@@ -858,11 +858,11 @@ void Misc::purchaseList(GameEvent* event) noexcept
                 if (s.length() >= 2)
                     s.erase(s.length() - 2);
 
-                if (const auto it = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = handle](const auto& playerData) { return playerData.handle == handle; }); it != GameData::players().cend()) {
+                if (const auto player = GameData::playerByHandle(handle)) {
                     if (config->misc.purchaseList.showPrices)
-                        ImGui::TextWrapped("%s $%d: %s", it->name, purchases.totalCost, s.c_str());
+                        ImGui::TextWrapped("%s $%d: %s", player->name, purchases.totalCost, s.c_str());
                     else
-                        ImGui::TextWrapped("%s: %s", it->name, s.c_str());
+                        ImGui::TextWrapped("%s: %s", player->name, s.c_str());
                 }
             }
         } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
