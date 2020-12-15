@@ -3,12 +3,14 @@
 #include <array>
 
 #include "imgui/imgui.h"
+#include "Config.h"
 
 struct ColorA;
 
 namespace Helpers
 {
     unsigned int calculateColor(ColorA color) noexcept;
+    unsigned int calculateColor(Config::Color color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
 
     constexpr auto units2meters(float units) noexcept

@@ -34,6 +34,8 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
 
+#include "../imguiCustom.h"
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
 #ifdef _WIN32
@@ -362,77 +364,64 @@ void Misc::fastStop(UserCmd* cmd) noexcept
 
 void Misc::drawBombTimer() noexcept
 {
-    if (config->misc.bombTimer.enabled) {
-        for (int i = interfaces->engine->getMaxClients(); i <= interfaces->entityList->getHighestEntityIndex(); i++) {
-            Entity* entity = interfaces->entityList->getEntity(i);
-            if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4 || !entity->c4Ticking())
-                continue;
+    if (!config->misc.bombTimer.enabled)
+        return;
 
-            constexpr unsigned font{ 0xc1 };
-            interfaces->surface->setTextFont(font);
-            interfaces->surface->setTextColor(255, 255, 255);
-            auto drawPositionY{ interfaces->surface->getScreenSize().second / 8 };
-            std::wostringstream ss; ss << L"Bomb on " << (!entity->c4BombSite() ? 'A' : 'B') << L" : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f) << L" s";
-            auto bombText{ ss.str() };
-            const auto bombTextX{ interfaces->surface->getScreenSize().first / 2 - static_cast<int>((interfaces->surface->getTextSize(font, bombText.c_str())).first / 2) };
-            interfaces->surface->setTextPosition(bombTextX, drawPositionY);
-            drawPositionY += interfaces->surface->getTextSize(font, bombText.c_str()).second;
-            interfaces->surface->printText(bombText.c_str());
+    GameData::Lock lock;
+    
+    const auto& plantedC4 = GameData::plantedC4();
+    if (plantedC4.blowTime == 0.0f && !gui->isOpen())
+        return;
 
-            const auto progressBarX{ interfaces->surface->getScreenSize().first / 3 };
-            const auto progressBarLength{ interfaces->surface->getScreenSize().first / 3 };
-            constexpr auto progressBarHeight{ 5 };
+    if (!gui->isOpen()) {
+        ImGui::SetNextWindowBgAlpha(0.3f);
+    }
 
-            interfaces->surface->setDrawColor(50, 50, 50);
-            interfaces->surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-            if (config->misc.bombTimer.rainbow)
-                interfaces->surface->setDrawColor(rainbowColor(config->misc.bombTimer.rainbowSpeed));
-            else
-                interfaces->surface->setDrawColor(config->misc.bombTimer.color);
+    static float windowWidth = 200.0f;
+    ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - 200.0f) / 2.0f, 60.0f }, ImGuiCond_Once);
+    ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
 
-            static auto c4Timer = interfaces->cvar->findVar("mp_c4timer");
+    if (!gui->isOpen())
+        ImGui::SetNextWindowSize({ windowWidth, 0 });
 
-            interfaces->surface->drawFilledRect(progressBarX, drawPositionY + 5, static_cast<int>(progressBarX + progressBarLength * std::clamp(entity->c4BlowTime() - memory->globalVars->currenttime, 0.0f, c4Timer->getFloat()) / c4Timer->getFloat()), drawPositionY + progressBarHeight + 5);
+    ImGui::SetNextWindowSizeConstraints({ 0, -1 }, { FLT_MAX, -1 });
+    ImGui::Begin("Bomb Timer", nullptr, ImGuiWindowFlags_NoTitleBar | (gui->isOpen() ? 0 : ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration));
 
-            if (entity->c4Defuser() != -1) {
-                if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(interfaces->entityList->getEntityFromHandle(entity->c4Defuser())->index(), playerInfo)) {
-#ifdef _WIN32
-                    if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-#else
-                    if (wchar_t name[128]; true) {
-#endif
-                        drawPositionY += interfaces->surface->getTextSize(font, L" ").second;
-                        std::wostringstream ss; ss << name << L" is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) << L" s";
-                        const auto defusingText{ ss.str() };
+    std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
 
-                        interfaces->surface->setTextPosition((interfaces->surface->getScreenSize().first - interfaces->surface->getTextSize(font, defusingText.c_str()).first) / 2, drawPositionY);
-                        interfaces->surface->printText(defusingText.c_str());
-                        drawPositionY += interfaces->surface->getTextSize(font, L" ").second;
+    ImGui::textUnformattedCentered(ss.str().c_str());
 
-                        interfaces->surface->setDrawColor(50, 50, 50);
-                        interfaces->surface->drawFilledRect(progressBarX - 3, drawPositionY + 2, progressBarX + progressBarLength + 3, drawPositionY + progressBarHeight + 8);
-                        interfaces->surface->setDrawColor(0, 255, 0);
-                        interfaces->surface->drawFilledRect(progressBarX, drawPositionY + 5, progressBarX + static_cast<int>(progressBarLength * (std::max)(entity->c4DefuseCountDown() - memory->globalVars->currenttime, 0.0f) / (interfaces->entityList->getEntityFromHandle(entity->c4Defuser())->hasDefuser() ? 5.0f : 10.0f)), drawPositionY + progressBarHeight + 5);
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(config->misc.bombTimer));
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0.2f, 0.2f, 0.2f, 1.0f });
+    ImGui::progressBarFullWidth((plantedC4.blowTime - memory->globalVars->currenttime) / plantedC4.timerLength, 5.0f);
 
-                        drawPositionY += interfaces->surface->getTextSize(font, L" ").second;
-                        const wchar_t* canDefuseText;
+    if (plantedC4.defuserHandle != -1) {
+        const bool canDefuse = plantedC4.blowTime >= plantedC4.defuseCountDown;
 
-                        if (entity->c4BlowTime() >= entity->c4DefuseCountDown()) {
-                            canDefuseText = L"Can Defuse";
-                            interfaces->surface->setTextColor(0, 255, 0);
-                        } else {
-                            canDefuseText = L"Cannot Defuse";
-                            interfaces->surface->setTextColor(255, 0, 0);
-                        }
-
-                        interfaces->surface->setTextPosition((interfaces->surface->getScreenSize().first - interfaces->surface->getTextSize(font, canDefuseText).first) / 2, drawPositionY);
-                        interfaces->surface->printText(canDefuseText);
-                    }
-                }
+        if (plantedC4.defuserHandle == GameData::local().handle) {
+            if (canDefuse) {
+                ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+                ImGui::textUnformattedCentered("You can defuse!");
+            } else {
+                ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+                ImGui::textUnformattedCentered("You can not defuse!");
             }
-            break;
+            ImGui::PopStyleColor();
+        } else if (const auto defusingPlayer = std::find_if(GameData::players().cbegin(), GameData::players().cend(), [handle = plantedC4.defuserHandle](const auto& playerData) { return playerData.handle == handle; }); defusingPlayer != GameData::players().cend()) {
+            std::ostringstream ss; ss << defusingPlayer->name << " is defusing: " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.defuseCountDown - memory->globalVars->currenttime, 0.0f) << " s";
+
+            ImGui::textUnformattedCentered(ss.str().c_str());
+
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, canDefuse ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 0, 0, 255));
+            ImGui::progressBarFullWidth((plantedC4.defuseCountDown - memory->globalVars->currenttime) / plantedC4.defuseLength, 5.0f);
+            ImGui::PopStyleColor();
         }
     }
+
+    windowWidth = ImGui::GetCurrentWindow()->SizeFull.x;
+
+    ImGui::PopStyleColor(2);
+    ImGui::End();
 }
 
 void Misc::stealNames() noexcept

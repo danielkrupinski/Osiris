@@ -27,6 +27,8 @@ class MoveData;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;
+template <typename T>
+class UtlVector;
 
 struct ActiveChannels;
 struct Channel;
@@ -51,6 +53,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    UtlVector<Entity*>* plantedC4s;
 
     bool* disablePostProcessing;
 
@@ -94,6 +97,7 @@ public:
     uintptr_t demoOrHLTV;
     uintptr_t money;
     uintptr_t demoFileEndReached;
+    Entity** gameRules;
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {

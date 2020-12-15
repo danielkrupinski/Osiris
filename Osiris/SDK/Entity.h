@@ -252,9 +252,11 @@ public:
     NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
+    NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
     NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
     NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
+    NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
     NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
@@ -262,6 +264,8 @@ public:
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
 
     NETVAR(thrower, "CBaseGrenade", "m_hThrower", int)
+        
+    NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
     bool isFlashed() noexcept
     {

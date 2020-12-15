@@ -17,6 +17,7 @@ struct WeaponData;
 struct EntityData;
 struct LootCrateData;
 struct ProjectileData;
+struct BombData;
 
 struct Matrix4x4;
 
@@ -42,6 +43,7 @@ namespace GameData
     const std::vector<EntityData>& entities() noexcept;
     const std::vector<LootCrateData>& lootCrates() noexcept;
     const std::list<ProjectileData>& projectiles() noexcept;
+    const BombData& plantedC4() noexcept;
 }
 
 struct LocalPlayerData {
@@ -54,6 +56,7 @@ struct LocalPlayerData {
     bool noScope = false;
     float nextWeaponAttack = 0.0f;
     int fov;
+    int handle;
     float flashDuration;
     Vector aimPunch;
     Vector origin;
@@ -146,4 +149,15 @@ struct ObserverData {
     char name[128];
     char target[128];
     bool targetIsLocalPlayer;
+};
+
+struct BombData {
+    void update() noexcept;
+
+    float blowTime;
+    float timerLength;
+    int defuserHandle;
+    float defuseCountDown;
+    float defuseLength;
+    int bombsite;
 };
