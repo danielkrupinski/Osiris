@@ -373,12 +373,12 @@ void Visuals::hitEffect(GameEvent* event) noexcept
 
 void Visuals::hitMarker(GameEvent* event) noexcept
 {
-    if (config->visuals.hitMarker == 0 || !localPlayer)
+    if (config->visuals.hitMarker == 0)
         return;
 
     static float lastHitTime = 0.0f;
 
-    if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
+    if (event && localPlayer && event->getInt("attacker") == localPlayer->getUserId()) {
         lastHitTime = memory->globalVars->realtime;
         return;
     }
