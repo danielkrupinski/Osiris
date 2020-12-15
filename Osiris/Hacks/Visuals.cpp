@@ -1,6 +1,10 @@
 #include <array>
 #include <cstring>
 
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
+
 #include "../fnv.h"
 #include "../Helpers.h"
 #include "Visuals.h"
@@ -378,8 +382,9 @@ void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 
     static float lastHitTime = 0.0f;
 
-    if (event && localPlayer && event->getInt("attacker") == localPlayer->getUserId()) {
-        lastHitTime = memory->globalVars->realtime;
+    if (event) {
+        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId())
+            lastHitTime = memory->globalVars->realtime;
         return;
     }
 
@@ -388,16 +393,11 @@ void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 
     switch (config->visuals.hitMarker) {
     case 1:
-        const auto [width, height] = interfaces->surface->getScreenSize();
-
-        const auto width_mid = width / 2;
-        const auto height_mid = height / 2;
-
-        interfaces->surface->setDrawColor(255, 255, 255, 255);
-        interfaces->surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
-        interfaces->surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
-        interfaces->surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
-        interfaces->surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        const auto& mid = ImGui::GetIO().DisplaySize / 2.0f;
+        drawList->AddLine({ mid.x - 10, mid.y - 10 }, { mid.x - 4, mid.y - 4 }, IM_COL32(255, 255, 255, 255));
+        drawList->AddLine({ mid.x + 10.5f, mid.y - 10.5f }, { mid.x + 4.5f, mid.y - 4.5f }, IM_COL32(255, 255, 255, 255));
+        drawList->AddLine({ mid.x + 10.5f, mid.y + 10.5f }, { mid.x + 4.5f, mid.y + 4.5f }, IM_COL32(255, 255, 255, 255));
+        drawList->AddLine({ mid.x - 10, mid.y + 10 }, { mid.x - 4, mid.y + 4 }, IM_COL32(255, 255, 255, 255));
         break;
     }
 }
