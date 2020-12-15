@@ -256,7 +256,7 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
         Misc::spectatorList();
         Misc::watermark();
-        Visuals::hitMarker();
+        Visuals::hitMarker(nullptr);
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }

@@ -371,7 +371,7 @@ void Visuals::hitEffect(GameEvent* event) noexcept
     }
 }
 
-void Visuals::hitMarker(GameEvent* event) noexcept
+void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (config->visuals.hitMarker == 0)
         return;
