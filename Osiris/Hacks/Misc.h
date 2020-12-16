@@ -48,6 +48,5 @@ namespace Misc
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
-
     void stopPlayer(UserCmd *cmd);
 }
