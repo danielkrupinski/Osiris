@@ -793,6 +793,7 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Auto shot", autoShot);
     WRITE("Auto scope", autoScope);
+    WRITE("Auto stop", autoStop);
     WRITE("Fov", fov);
     WRITE("Smooth", smooth);
     WRITE("Bone", bone);
