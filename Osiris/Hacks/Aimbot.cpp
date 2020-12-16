@@ -9,6 +9,7 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
+#include "../Hacks/Misc.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
@@ -221,6 +222,9 @@ void Aimbot::run(UserCmd* cmd) noexcept
             cmd->viewangles += angle;
             if (!config->aimbot[weaponIndex].silent)
                 interfaces->engine->setViewAngles(cmd->viewangles);
+
+            if(config->aimbot[weaponIndex].autoStop)
+                Misc::stopPlayer(cmd);
 
             if (config->aimbot[weaponIndex].autoScope && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime() && activeWeapon->isSniperRifle() && !localPlayer->isScoped())
                 cmd->buttons |= UserCmd::IN_ATTACK2;

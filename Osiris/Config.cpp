@@ -314,6 +314,7 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Ignore smoke", a.ignoreSmoke);
     read(j, "Auto shot", a.autoShot);
     read(j, "Auto scope", a.autoScope);
+    read(j, "Auto stop", a.autoStop);
     read(j, "Fov", a.fov);
     read(j, "Smooth", a.smooth);
     read(j, "Bone", a.bone);

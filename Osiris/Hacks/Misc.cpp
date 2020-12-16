@@ -348,12 +348,16 @@ void Misc::fastStop(UserCmd* cmd) noexcept
 
     if (cmd->buttons & (UserCmd::IN_MOVELEFT | UserCmd::IN_MOVERIGHT | UserCmd::IN_FORWARD | UserCmd::IN_BACK))
         return;
-    
+
+    stopPlayer(cmd);
+}
+
+void Misc::stopPlayer(UserCmd *cmd) {
     const auto velocity = localPlayer->velocity();
     const auto speed = velocity.length2D();
     if (speed < 15.0f)
         return;
-    
+
     Vector direction = velocity.toAngle();
     direction.y = cmd->viewangles.y - direction.y;
 
@@ -361,6 +365,7 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     cmd->forwardmove = negatedDirection.x;
     cmd->sidemove = negatedDirection.y;
 }
+
 
 void Misc::drawBombTimer() noexcept
 {
