@@ -102,6 +102,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
     Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
     Misc::drawBombTimer();
+    Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
 
     gui->handleToggle();
 
@@ -256,7 +257,6 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
         Misc::spectatorList();
         Misc::watermark();
-        Visuals::hitMarker();
     }
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
@@ -538,6 +538,7 @@ static void swapWindow(SDL_Window* window) noexcept
         Misc::recoilCrosshair(ImGui::GetBackgroundDrawList());
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer();
+        Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
 
         gui->handleToggle();
 
