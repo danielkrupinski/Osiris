@@ -26,8 +26,18 @@
 struct AnimState;
 
 enum class MoveType {
-    NOCLIP = 8,
-    LADDER = 9
+    NONE = 0,          /**< never moves */
+    ISOMETRIC,         /**< For players */
+    WALK,              /**< Player only - moving on the ground */
+    STEP,              /**< gravity, special edge handling -- monsters use this */
+    FLY,               /**< No gravity, but still collides with stuff */
+    FLYGRAVITY,        /**< flies through the air + is affected by gravity */
+    VPHYSICS,          /**< uses VPHYSICS for simulation */
+    PUSH,              /**< no clip to world, push and crush */
+    NOCLIP,            /**< No gravity, no collisions, still do velocity/avelocity */
+    LADDER,            /**< Used by players only when going onto a ladder */
+    OBSERVER,          /**< Observer movement, depends on player's observer mode */
+    CUSTOM             /**< Allows the entity to describe its own physics */
 };
 
 enum class ObsMode {
