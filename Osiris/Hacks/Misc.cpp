@@ -987,11 +987,12 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
 
     nextUpdate = memory->globalVars->realtime + 2.0f;
 
-    const auto deathNotice = memory->findHudElement(memory->hud, "CCSGO_HudDeathNotice");
+    const auto deathNotice = std::uintptr_t(memory->findHudElement(memory->hud, "CCSGO_HudDeathNotice"));
     if (!deathNotice)
         return;
 
-    const auto deathNoticePanel = (*(UIPanel**)(*(deathNotice - 5 + 22) + 4));
+    const auto deathNoticePanel = (*(UIPanel**)(*reinterpret_cast<std::uintptr_t*>(deathNotice WIN32_LINUX(-20 + 88, -32 + 128)) + sizeof(std::uintptr_t)));
+
     const auto childPanelCount = deathNoticePanel->getChildCount();
 
     for (int i = 0; i < childPanelCount; ++i) {
