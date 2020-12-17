@@ -50,6 +50,7 @@ public:
         bool ignoreSmoke{ false };
         bool autoShot{ false };
         bool autoScope{ false };
+        bool autoStop{ false };
         float fov{ 0.0f };
         float smooth{ 1.0f };
         int bone{ 0 };
