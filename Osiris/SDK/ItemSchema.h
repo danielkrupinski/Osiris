@@ -92,6 +92,15 @@ public:
     VIRTUAL_METHOD(int, getItemPaintKit, 6, (int index), (this, index))
 };
 
+struct EconItemQualityDefinition {
+    int value;
+    const char* name;
+    unsigned weight;
+    bool explicitMatchesOnly;
+    bool canSupportSet;
+    const char* hexColor;
+};
+
 class ItemSchema {
 public:
 #ifdef _WIN32
