@@ -23,8 +23,8 @@
 * SOFTWARE.
 */
 #include "item_definitions.hpp"
-// These are std::vectors because else I'd have to write their size in the header or write my own container
 
+#include <algorithm>
 #include <array>
 #include <tuple>
 
