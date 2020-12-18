@@ -64,6 +64,7 @@ class EconItemDefinition {
 public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
+    VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), (this))
 };
 
 struct ItemListEntry {
