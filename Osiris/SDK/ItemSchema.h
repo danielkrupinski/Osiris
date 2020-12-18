@@ -60,7 +60,7 @@ struct StickerKit {
     String itemName;
 };
 
-class EconItemDefintion {
+class EconItemDefinition {
 public:
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
@@ -102,13 +102,13 @@ public:
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 
-    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
     VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
     VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
-    VIRTUAL_METHOD(EconItemDefintion*, getItemDefinitionByName, 42, (const char* name), (this, name))
+    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
 
 class ItemSystem {
