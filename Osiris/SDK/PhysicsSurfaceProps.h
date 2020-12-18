@@ -15,5 +15,5 @@ struct SurfaceData {
 
 class PhysicsSurfaceProps {
 public:
-    VIRTUAL_METHOD(SurfaceData*, getSurfaceData, 5, (int index), (this, index))
+    VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (this, index))
 };
