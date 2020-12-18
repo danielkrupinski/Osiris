@@ -69,6 +69,13 @@ struct sticker_setting
         kit = SkinChanger::getStickerKits()[kit_vector_index].id;
     }
 
+    void onLoad()
+    {
+        const auto& kits = SkinChanger::getStickerKits();
+        const auto it = std::find_if(kits.begin(), kits.end(), [this](const auto& k) { return k.id == kit; });
+        kit_vector_index = it != SkinChanger::getStickerKits().end() ? std::distance(kits.begin(), it) : 0;
+        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+    }
 
     auto operator==(const sticker_setting& o) const
     {
@@ -102,6 +109,44 @@ struct item_setting {
 
         for (auto& sticker : stickers)
             sticker.update();
+    }
+
+    void onLoad()
+    {
+        {
+            const auto it = std::find_if(std::begin(game_data::weapon_names), std::end(game_data::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
+            itemIdIndex = it != std::end(game_data::weapon_names) ? std::distance(std::begin(game_data::weapon_names), it) : 0;
+        }
+
+        {
+            const auto it = std::find_if(std::begin(game_data::quality_names), std::end(game_data::quality_names), [this](const auto& k) { return k.index == quality; });
+            entity_quality_vector_index = it != std::end(game_data::quality_names) ? std::distance(std::begin(game_data::quality_names), it) : 0;
+        }
+
+        if (itemId == GLOVE_T_SIDE) {
+            {
+                const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
+            }
+
+            {
+                const auto it = std::find_if(game_data::glove_names.begin(), game_data::glove_names.end(), [this](const auto& k) { return k.definition_index == definition_override_index; });
+                definition_override_vector_index = it != game_data::glove_names.end() ? std::distance(game_data::glove_names.begin(), it) : 0;
+            }
+        } else {
+            {
+                const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
+            }
+
+            {
+                const auto it = std::find_if(game_data::knife_names.begin(), game_data::knife_names.end(), [this](const auto& k) { return k.definition_index == definition_override_index; });
+                definition_override_vector_index = it != game_data::knife_names.end() ? std::distance(game_data::knife_names.begin(), it) : 0;
+            }
+        }
+
+        for (auto& sticker : stickers)
+            sticker.onLoad();
     }
 
     bool enabled = false;
