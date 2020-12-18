@@ -264,6 +264,7 @@ static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool 
 static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage stage) noexcept
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
+    [[maybe_unused]] static auto aimbotInit = (Aimbot::init(), false);
 
     if (interfaces->engine->isConnected() && !interfaces->engine->isInGame())
         Misc::changeName(true, nullptr, 0.0f);
