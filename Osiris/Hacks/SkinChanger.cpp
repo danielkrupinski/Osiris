@@ -524,13 +524,13 @@ const std::vector<game_data::quality_name>& SkinChanger::getQualities() noexcept
 {
     static std::vector<game_data::quality_name> qualities;
     if (qualities.empty()) {
-        qualities.emplace_back(0, "Default");
+        qualities.emplace_back((game_data::quality_name({0, "Default" })));
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         for (int i = 0; i <= itemSchema->qualities.lastAlloc; ++i) {
             const auto quality = itemSchema->qualities.memory[i].value;
             if (const auto localizedName = interfaces->localize->findAsUTF8(quality.name); localizedName != quality.name)
-                qualities.emplace_back(quality.value, localizedName);
+                qualities.emplace_back(game_data::quality_name({ quality.value, localizedName }));
         }
     }
 
