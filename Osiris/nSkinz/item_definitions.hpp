@@ -25,6 +25,7 @@
 #pragma once
 
 #include <array>
+#include <string>
 
 enum ItemDefinitionIndex : int
 {
@@ -136,15 +137,9 @@ namespace game_data
         const char* name = nullptr;
     };
 
-    struct quality_name
-    {
-        constexpr quality_name(const int index, const char* name) :
-            index(index),
-            name(name)
-        {}
-
+    struct quality_name {
         int index = 0;
-        const char* name = nullptr;
+        std::string name;
     };
 
     const weapon_info* get_weapon_info(int defindex);
@@ -223,19 +218,5 @@ namespace game_data
         {24, "UMP-45"},
         {61, "USP-S"},
         {25, "XM1014"},
-    });
-
-    constexpr auto quality_names = std::to_array<quality_name>({
-        {0, "Default"},
-        {1, "Genuine"},
-        {2, "Vintage"},
-        {3, "Unusual"},
-        {5, "Community"},
-        {6, "Developer"},
-        {7, "Self-Made"},
-        {8, "Customized"},
-        {9, "Strange"},
-        {10, "Completed"},
-        {12, "Tournament"}
     });
 }

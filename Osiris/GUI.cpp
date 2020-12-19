@@ -1,3 +1,4 @@
+﻿#include <array>
 #include <cwctype>
 #include <fstream>
 #include <functional>
@@ -1082,9 +1083,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         }
 
         ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
-            *out_text = game_data::quality_names[idx].name;
+            *out_text = SkinChanger::getQualities()[idx].name.c_str(); // safe within this lamba
             return true;
-            }, nullptr, game_data::quality_names.size(), 5);
+            }, nullptr, SkinChanger::getQualities().size(), 5);
 
         if (itemIndex == 0) {
             ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {

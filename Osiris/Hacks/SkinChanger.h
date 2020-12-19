@@ -32,6 +32,7 @@ namespace SkinChanger
     const std::vector<PaintKit>& getSkinKits() noexcept;
     const std::vector<PaintKit>& getGloveKits() noexcept;
     const std::vector<PaintKit>& getStickerKits() noexcept;
+    const std::vector<game_data::quality_name>& getQualities() noexcept;
 }
 
 
@@ -97,7 +98,7 @@ struct item_setting {
     void update()
     {
         itemId = game_data::weapon_names[itemIdIndex].definition_index;
-        quality = game_data::quality_names[entity_quality_vector_index].index;
+        quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
 
         if (itemId == GLOVE_T_SIDE) {
             paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
@@ -119,8 +120,9 @@ struct item_setting {
         }
 
         {
-            const auto it = std::find_if(std::begin(game_data::quality_names), std::end(game_data::quality_names), [this](const auto& k) { return k.index == quality; });
-            entity_quality_vector_index = it != std::end(game_data::quality_names) ? std::distance(std::begin(game_data::quality_names), it) : 0;
+            const auto& qualities = SkinChanger::getQualities();
+            const auto it = std::find_if(qualities.begin(), qualities.end(), [this](const auto& k) { return k.index == quality; });
+            entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
         }
 
         if (itemId == GLOVE_T_SIDE) {
