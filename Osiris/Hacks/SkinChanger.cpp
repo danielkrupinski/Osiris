@@ -146,6 +146,8 @@ void SkinChanger::initializeKits() noexcept
 
     for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
         const auto stickerKit = itemSchema->stickerKits.memory[i].value;
+        if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
+            continue;
         std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
     }
