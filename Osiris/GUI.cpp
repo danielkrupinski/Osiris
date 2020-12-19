@@ -48,6 +48,15 @@ GUI::GUI() noexcept
         cfg.OversampleV = 3;
 
         fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+
+        cfg.MergeMode = true;
+        static constexpr ImWchar symbol[]{
+            0x2605, 0x2605, // ★
+            0
+        };
+        io.Fonts->AddFontFromFileTTF((path / "seguisym.ttf").string().c_str(), 15.0f, &cfg, symbol);
+        cfg.MergeMode = false;
+
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
 #endif
