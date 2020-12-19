@@ -138,6 +138,7 @@ namespace game_data
     };
 
     struct quality_name {
+        quality_name(int index, const char* name) : index{ index }, name{ name } {}
         int index = 0;
         std::string name;
     };
