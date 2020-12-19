@@ -10,11 +10,11 @@ enum class WeaponId : short;
 
 template <typename T>
 struct UtlMemory {
-	T& operator[](int i) noexcept { return memory[i]; };
+    T& operator[](int i) noexcept { return memory[i]; };
 
-	T* memory;
-	int allocationCount;
-	int growSize;
+    T* memory;
+    int allocationCount;
+    int growSize;
 };
 
 template <typename Key, typename Value>
@@ -29,13 +29,13 @@ struct Node {
 
 template <typename Key, typename Value>
 struct UtlMap {
-	void* lessFunc;
-	UtlMemory<Node<Key, Value>> memory;
+    void* lessFunc;
+    UtlMemory<Node<Key, Value>> memory;
     int root;
-	int numElements;
+    int numElements;
     int firstFree;
     int lastAlloc;
-	Node<Key, Value>* elements;
+    Node<Key, Value>* elements;
 };
 
 struct String {
@@ -103,12 +103,9 @@ struct EconItemQualityDefinition {
 
 class ItemSchema {
 public:
-#ifdef _WIN32
-    PAD(0x288)
-#else
-    PAD(0x370)
-#endif
-
+    PAD(WIN32_LINUX(0x88, 0xB8))
+    UtlMap<int, EconItemQualityDefinition> qualities;
+    PAD(WIN32_LINUX(0x1DC, 0x288))
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 
