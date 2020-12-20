@@ -513,16 +513,19 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
 {
+    initializeKits();
     return skinKits;
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 {
+    initializeKits();
     return gloveKits;
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
+    initializeKits();
     return stickerKits;
 }
 
