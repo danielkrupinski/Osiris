@@ -81,6 +81,7 @@ void SkinChanger::initializeKits() noexcept
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
+    kitsWeapons.reserve(2000);
 
     for (int i = 0; i < itemSchema->getLootListCount(); ++i) {
         const auto& contents = itemSchema->getLootList(i)->getLootListContents();
@@ -101,6 +102,8 @@ void SkinChanger::initializeKits() noexcept
         }
     }
 
+    skinKits.reserve(itemSchema->paintKits.lastAlloc);
+    gloveKits.reserve(itemSchema->paintKits.lastAlloc);
     for (int i = 0; i <= itemSchema->paintKits.lastAlloc; i++) {
         const auto paintKit = itemSchema->paintKits.memory[i].value;
 
@@ -133,7 +136,6 @@ void SkinChanger::initializeKits() noexcept
                 assert(false);
 
             name += " | ";
-
         }
 
         name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
@@ -142,8 +144,11 @@ void SkinChanger::initializeKits() noexcept
     }
 
     std::sort(skinKits.begin() + 1, skinKits.end());
+    skinKits.shrink_to_fit();
     std::sort(gloveKits.begin(), gloveKits.end());
+    gloveKits.shrink_to_fit();
 
+    stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
     for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
         const auto stickerKit = itemSchema->stickerKits.memory[i].value;
         if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
@@ -152,7 +157,8 @@ void SkinChanger::initializeKits() noexcept
         stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
     }
 
-    std::sort(std::next(stickerKits.begin()), stickerKits.end());
+    std::sort(stickerKits.begin() + 1, stickerKits.end());
+    stickerKits.shrink_to_fit();
 }
 
 static std::unordered_map<std::string, const char*> iconOverrides;
