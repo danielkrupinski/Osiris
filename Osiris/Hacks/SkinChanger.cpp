@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cwctype>
 #include <fstream>
+#include <unordered_set>
 
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
@@ -112,10 +113,9 @@ static void initializeKits() noexcept
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
 
-        std::string name;
-
         if (paintKit->id >= 10000) {
             const std::string_view gloveName{ paintKit->name.data() };
+            std::string name;
 
             if (gloveName.starts_with("bloodhound"))
                 name = interfaces->localize->findAsUTF8("CSGO_Wearable_t_studdedgloves");
@@ -135,14 +135,27 @@ static void initializeKits() noexcept
                 assert(false);
 
             name += " | ";
-        } else if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id) {
-            name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(it->second)->getItemBaseName());
-            name += " | ";
+            name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name));
+        } else {
+            std::unordered_set<WeaponId> weapons;
+
+            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id; ++it) {
+                weapons.insert(it->second);
+            }
+
+            for (auto weapon : weapons) {
+                std::string name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
+                name += " | ";
+                name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+                skinKits.emplace_back(paintKit->id, name, toUpperWide(name));
+            }
+
+            if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
+                std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+                skinKits.emplace_back(paintKit->id, name, toUpperWide(name));
+            }
         }
-
-        name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-
-        (paintKit->id < 10000 ? skinKits : gloveKits).emplace_back(paintKit->id, name, toUpperWide(name));
     }
 
     std::sort(skinKits.begin() + 1, skinKits.end());
