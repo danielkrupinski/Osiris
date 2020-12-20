@@ -102,6 +102,8 @@ static void initializeKits() noexcept
         }
     }
 
+    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
     for (int i = 0; i <= itemSchema->paintKits.lastAlloc; i++) {
@@ -133,10 +135,10 @@ static void initializeKits() noexcept
                 assert(false);
 
             name += " | ";
-        } else if (const auto it = std::find_if(kitsWeapons.begin(), kitsWeapons.end(), [&paintKit](const auto& p) { return p.first == paintKit->id; }); it != kitsWeapons.end()) {
+        } else if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id) {
             name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(it->second)->getItemBaseName());
             name += " | ";
-        } 
+        }
 
         name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
 
