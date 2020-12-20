@@ -112,10 +112,7 @@ static void initializeKits() noexcept
 
         std::string name;
 
-        if (const auto it = std::find_if(kitsWeapons.begin(), kitsWeapons.end(), [&paintKit](const auto& p) { return p.first == paintKit->id; }); it != kitsWeapons.end()) {
-            name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(it->second)->getItemBaseName());
-            name += " | ";
-        } else if (paintKit->id >= 10000) {
+        if (paintKit->id >= 10000) {
             const std::string_view gloveName{ paintKit->name.data() };
 
             if (gloveName.starts_with("bloodhound"))
@@ -136,7 +133,10 @@ static void initializeKits() noexcept
                 assert(false);
 
             name += " | ";
-        }
+        } else if (const auto it = std::find_if(kitsWeapons.begin(), kitsWeapons.end(), [&paintKit](const auto& p) { return p.first == paintKit->id; }); it != kitsWeapons.end()) {
+            name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(it->second)->getItemBaseName());
+            name += " | ";
+        } 
 
         name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
 
