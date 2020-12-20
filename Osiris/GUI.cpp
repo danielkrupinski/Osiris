@@ -1042,8 +1042,6 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         }
     }
 
-    SkinChanger::initializeKits();
-
     static auto itemIndex = 0;
 
     ImGui::PushItemWidth(110.0f);

@@ -11,7 +11,6 @@ class GameEvent;
 
 namespace SkinChanger
 {
-    void initializeKits() noexcept;
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
     void overrideHudIcon(GameEvent& event) noexcept;

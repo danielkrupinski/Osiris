@@ -71,7 +71,7 @@ static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
 static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 
-void SkinChanger::initializeKits() noexcept
+static void initializeKits() noexcept
 {
     static bool initalized = false;
     if (initalized)
