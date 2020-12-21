@@ -1067,6 +1067,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         const auto& kits = itemIndex == 1 ? SkinChanger::getGloveKits() : SkinChanger::getSkinKits();
 
         if (ImGui::BeginCombo("Paint Kit", kits[selected_entry.paint_kit_vector_index].name.c_str())) {
+            ImGui::PushID("Paint Kit");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
             static std::array<std::string, game_data::weapon_names.size()> filters;
@@ -1096,6 +1097,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 }
                 ImGui::EndChild();
             }
+            ImGui::PopID();
             ImGui::EndCombo();
         }
 
@@ -1153,6 +1155,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         const auto& kits = SkinChanger::getStickerKits();
         if (ImGui::BeginCombo("Sticker", kits[selected_sticker.kit_vector_index].name.c_str())) {
+            ImGui::PushID("Sticker");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
             static std::array<std::string, game_data::weapon_names.size()> filters;
@@ -1182,6 +1185,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 }
                 ImGui::EndChild();
             }
+            ImGui::PopID();
             ImGui::EndCombo();
         }
 
