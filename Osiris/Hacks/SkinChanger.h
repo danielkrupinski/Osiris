@@ -19,6 +19,7 @@ namespace SkinChanger
     struct PaintKit {
         [[deprecated]] PaintKit(int id, const std::string& name, const std::wstring& nameUpperCase) noexcept : id(id), name(name), nameUpperCase(nameUpperCase) { }
         PaintKit(int id, const std::string& name) noexcept;
+        PaintKit(int id, std::string&& name) noexcept;
 
         int id;
         std::string name;
