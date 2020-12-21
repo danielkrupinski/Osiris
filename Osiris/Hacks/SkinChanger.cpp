@@ -529,7 +529,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
             if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
                 continue;
             std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            stickerKits.emplace_back(stickerKit->id, name);
+            stickerKits.emplace_back(stickerKit->id, std::move(name));
         }
 
         std::sort(stickerKits.begin() + 1, stickerKits.end());
