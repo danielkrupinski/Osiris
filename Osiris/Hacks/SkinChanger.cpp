@@ -59,13 +59,6 @@ item_setting* get_by_definition_index(const int definition_index)
     return it == std::end(config->skinChanger) ? nullptr : &*it;
 }
 
-static std::wstring toUpperWide(const std::string& s) noexcept
-{
-    std::wstring upperCase = Helpers::toWideString(s);
-    std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [](wchar_t w) { return std::towupper(w); });
-    return upperCase;
-}
-
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
 
@@ -133,7 +126,7 @@ static void initializeKits() noexcept
 
             name += " | ";
             name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-            gloveKits.emplace_back(paintKit->id, name, toUpperWide(name));
+            gloveKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
         } else {
             std::unordered_set<WeaponId> weapons;
 
@@ -145,12 +138,12 @@ static void initializeKits() noexcept
                 std::string name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
                 name += " | ";
                 name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, name, toUpperWide(name));
+                skinKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
             }
 
             if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
                 std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, name, toUpperWide(name));
+                skinKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
             }
         }
     }
@@ -536,7 +529,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
             if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
                 continue;
             std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
+            stickerKits.emplace_back(stickerKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
         }
 
         std::sort(stickerKits.begin() + 1, stickerKits.end());
