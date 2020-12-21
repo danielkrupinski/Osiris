@@ -59,7 +59,7 @@ item_setting* get_by_definition_index(const int definition_index)
     return it == std::end(config->skinChanger) ? nullptr : &*it;
 }
 
-static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
+static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
 
 static void initializeKits() noexcept
@@ -126,7 +126,7 @@ static void initializeKits() noexcept
 
             name += " | ";
             name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-            gloveKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
+            gloveKits.emplace_back(paintKit->id, name);
         } else {
             std::unordered_set<WeaponId> weapons;
 
@@ -138,12 +138,12 @@ static void initializeKits() noexcept
                 std::string name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
                 name += " | ";
                 name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
+                skinKits.emplace_back(paintKit->id, name);
             }
 
             if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
                 std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
+                skinKits.emplace_back(paintKit->id, name);
             }
         }
     }
@@ -520,7 +520,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
     static std::vector<SkinChanger::PaintKit> stickerKits;
     if (stickerKits.empty()) {
-        stickerKits.emplace_back(0, "None", L"NONE");
+        stickerKits.emplace_back(0, "None");
 
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
@@ -529,7 +529,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
             if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
                 continue;
             std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            stickerKits.emplace_back(stickerKit->id, name, Helpers::toUpper(Helpers::toWideString(name)));
+            stickerKits.emplace_back(stickerKit->id, name);
         }
 
         std::sort(stickerKits.begin() + 1, stickerKits.end());
