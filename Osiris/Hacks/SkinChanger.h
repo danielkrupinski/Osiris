@@ -28,8 +28,8 @@ namespace SkinChanger
         }
     };
 
-    struct quality_name {
-        quality_name(int index, const char* name) : index{ index }, name{ name } {}
+    struct Quality {
+        Quality(int index, const char* name) : index{ index }, name{ name } {}
         int index = 0;
         std::string name;
     };
@@ -37,7 +37,7 @@ namespace SkinChanger
     const std::vector<PaintKit>& getSkinKits() noexcept;
     const std::vector<PaintKit>& getGloveKits() noexcept;
     const std::vector<PaintKit>& getStickerKits() noexcept;
-    const std::vector<quality_name>& getQualities() noexcept;
+    const std::vector<Quality>& getQualities() noexcept;
 }
 
 
