@@ -563,5 +563,5 @@ SkinChanger::PaintKit::PaintKit(int id, const std::string& name) noexcept : id(i
 
 SkinChanger::PaintKit::PaintKit(int id, std::string&& name) noexcept : id(id), name(std::move(name))
 {
-    nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
+    nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
