@@ -70,7 +70,6 @@ static std::wstring toUpperWide(const std::string& s) noexcept
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-", L"-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
-static std::vector<SkinChanger::PaintKit> stickerKits{ { 0, "None", L"NONE" } };
 
 static void initializeKits() noexcept
 {
@@ -162,18 +161,6 @@ static void initializeKits() noexcept
     skinKits.shrink_to_fit();
     std::sort(gloveKits.begin(), gloveKits.end());
     gloveKits.shrink_to_fit();
-
-    stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
-    for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
-        const auto stickerKit = itemSchema->stickerKits.memory[i].value;
-        if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
-            continue;
-        std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-        stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
-    }
-
-    std::sort(stickerKits.begin() + 1, stickerKits.end());
-    stickerKits.shrink_to_fit();
 }
 
 static std::unordered_map<std::string, const char*> iconOverrides;
@@ -540,7 +527,23 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
-    initializeKits();
+    static std::vector<SkinChanger::PaintKit> stickerKits;
+    if (stickerKits.empty()) {
+        stickerKits.emplace_back(0, "None", L"NONE");
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
+        for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
+            const auto stickerKit = itemSchema->stickerKits.memory[i].value;
+            if (std::string_view{ stickerKit->name.data() }.starts_with("spray"))
+                continue;
+            std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
+            stickerKits.emplace_back(stickerKit->id, name, toUpperWide(name));
+        }
+
+        std::sort(stickerKits.begin() + 1, stickerKits.end());
+        stickerKits.shrink_to_fit();
+    }
     return stickerKits;
 }
 
