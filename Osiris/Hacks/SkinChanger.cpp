@@ -555,3 +555,8 @@ const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
 
     return qualities;
 }
+
+SkinChanger::PaintKit::PaintKit(int id, const std::string& name) noexcept : id(id), name(name)
+{
+    nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
+}
