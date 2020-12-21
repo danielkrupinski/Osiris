@@ -538,9 +538,9 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
     return stickerKits;
 }
 
-const std::vector<game_data::quality_name>& SkinChanger::getQualities() noexcept
+const std::vector<SkinChanger::quality_name>& SkinChanger::getQualities() noexcept
 {
-    static std::vector<game_data::quality_name> qualities;
+    static std::vector<quality_name> qualities;
     if (qualities.empty()) {
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         for (int i = 0; i <= itemSchema->qualities.lastAlloc; ++i) {

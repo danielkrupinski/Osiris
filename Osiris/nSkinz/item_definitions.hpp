@@ -137,12 +137,6 @@ namespace game_data
         const char* name = nullptr;
     };
 
-    struct quality_name {
-        quality_name(int index, const char* name) : index{ index }, name{ name } {}
-        int index = 0;
-        std::string name;
-    };
-
     const weapon_info* get_weapon_info(int defindex);
 
     constexpr auto knife_names = std::to_array<weapon_name>({
