@@ -57,3 +57,11 @@ ImWchar* Helpers::getFontGlyphRanges() noexcept
     }
     return ranges.Data;
 }
+
+std::wstring Helpers::toWideString(const std::string& str) noexcept
+{
+    std::wstring upperCase(str.length(), L'\0');
+    if (const auto newLen = std::mbstowcs(upperCase.data(), str.c_str(), upperCase.length()); newLen != static_cast<std::size_t>(-1))
+        upperCase.resize(newLen);
+    return upperCase;
+}
