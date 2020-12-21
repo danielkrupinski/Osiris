@@ -22,6 +22,7 @@
 #include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 #include "../SDK/Platform.h"
+#include "../Helpers.h"
 
 /* This file is part of nSkinz by namazso, licensed under the MIT license:
 *
@@ -60,10 +61,7 @@ item_setting* get_by_definition_index(const int definition_index)
 
 static std::wstring toUpperWide(const std::string& s) noexcept
 {
-    std::wstring upperCase(s.length(), L'\0');
-    const auto newLen = mbstowcs(upperCase.data(), s.c_str(), s.length());
-    if (newLen != static_cast<std::size_t>(-1))
-        upperCase.resize(newLen);
+    std::wstring upperCase = Helpers::toWideString(s);
     std::transform(upperCase.begin(), upperCase.end(), upperCase.begin(), [](wchar_t w) { return std::towupper(w); });
     return upperCase;
 }

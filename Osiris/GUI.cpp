@@ -1075,10 +1075,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::InputTextWithHint("", "Search", &filter);
             ImGui::PopID();
 
-            std::wstring filterWide(filter.length(), L'\0');
-            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
-            if (newLen != static_cast<std::size_t>(-1))
-                filterWide.resize(newLen);
+            std::wstring filterWide = Helpers::toWideString(filter);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
@@ -1163,10 +1160,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::InputTextWithHint("", "Search", &filter);
             ImGui::PopID();
 
-            std::wstring filterWide(filter.length(), L'\0');
-            const auto newLen = mbstowcs(filterWide.data(), filter.c_str(), filter.length());
-            if (newLen != static_cast<std::size_t>(-1))
-                filterWide.resize(newLen);
+            std::wstring filterWide = Helpers::toWideString(filter);
             std::transform(filterWide.begin(), filterWide.end(), filterWide.begin(), [](wchar_t w) { return std::towupper(w); });
 
             if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
