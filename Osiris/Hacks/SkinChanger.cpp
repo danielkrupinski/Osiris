@@ -105,27 +105,27 @@ static void initializeKits() noexcept
 
         if (paintKit->id >= 10000) {
             const std::string_view gloveName{ paintKit->name.data() };
-            std::string name;
+            std::wstring name;
 
             if (gloveName.starts_with("bloodhound"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_t_studdedgloves");
+                name = interfaces->localize->findSafe("CSGO_Wearable_t_studdedgloves");
             else if (gloveName.starts_with("motorcycle"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_v_motorcycle_glove");
+                name = interfaces->localize->findSafe("CSGO_Wearable_v_motorcycle_glove");
             else if (gloveName.starts_with("slick"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_v_slick_glove");
+                name = interfaces->localize->findSafe("CSGO_Wearable_v_slick_glove");
             else if (gloveName.starts_with("sporty"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_v_sporty_glove");
+                name = interfaces->localize->findSafe("CSGO_Wearable_v_sporty_glove");
             else if (gloveName.starts_with("specialist"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_v_specialist_glove");
+                name = interfaces->localize->findSafe("CSGO_Wearable_v_specialist_glove");
             else if (gloveName.starts_with("operation10"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_t_studded_brokenfang_gloves");
+                name = interfaces->localize->findSafe("CSGO_Wearable_t_studded_brokenfang_gloves");
             else if (gloveName.starts_with("handwrap"))
-                name = interfaces->localize->findAsUTF8("CSGO_Wearable_v_leather_handwrap");
+                name = interfaces->localize->findSafe("CSGO_Wearable_v_leather_handwrap");
             else
                 assert(false);
 
-            name += " | ";
-            name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+            name += L" | ";
+            name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
             gloveKits.emplace_back(paintKit->id, std::move(name));
         } else {
             std::unordered_set<WeaponId> weapons;
@@ -135,14 +135,14 @@ static void initializeKits() noexcept
             }
 
             for (auto weapon : weapons) {
-                std::string name = interfaces->localize->findAsUTF8(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
-                name += " | ";
-                name += interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+                std::wstring name = interfaces->localize->findSafe(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
+                name += L" | ";
+                name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 skinKits.emplace_back(paintKit->id, std::move(name));
             }
 
             if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
-                std::string name = interfaces->localize->findAsUTF8(paintKit->itemName.data() + 1);
+                std::wstring name = interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 skinKits.emplace_back(paintKit->id, std::move(name));
             }
         }
@@ -528,7 +528,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
             const auto stickerKit = itemSchema->stickerKits.memory[i].value;
             if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch"))
                 continue;
-            std::string name = interfaces->localize->findAsUTF8(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
+            std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
             stickerKits.emplace_back(stickerKit->id, std::move(name));
         }
 
