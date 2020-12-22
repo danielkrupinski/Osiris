@@ -1087,8 +1087,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                             selected_entry.paint_kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
                         }
-                        if (selected)
-                            ImGui::SetItemDefaultFocus();
+                        if (selected && ImGui::IsWindowAppearing())
+                            ImGui::SetScrollHereY();
                         ImGui::PopID();
                     }
                 }
@@ -1172,8 +1172,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                             selected_sticker.kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
                         }
-                        if (selected)
-                            ImGui::SetItemDefaultFocus();
+                        if (selected && ImGui::IsWindowAppearing())
+                            ImGui::SetScrollHereY();
                         ImGui::PopID();
                     }
                 }
