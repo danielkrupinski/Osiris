@@ -1073,6 +1073,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             static std::array<std::string, game_data::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
+            if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+                ImGui::SetKeyboardFocusHere(-1);
             ImGui::PopID();
 
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
@@ -1156,6 +1158,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             static std::array<std::string, game_data::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
+            if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+                ImGui::SetKeyboardFocusHere(-1);
             ImGui::PopID();
 
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
