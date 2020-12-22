@@ -19,6 +19,7 @@ namespace SkinChanger
     struct PaintKit {
         PaintKit(int id, const std::string& name) noexcept;
         PaintKit(int id, std::string&& name) noexcept;
+        PaintKit(int id, std::wstring&& name) noexcept;
 
         int id;
         std::string name;

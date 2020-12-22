@@ -565,3 +565,9 @@ SkinChanger::PaintKit::PaintKit(int id, std::string&& name) noexcept : id(id), n
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
+
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id(id), nameUpperCase(std::move(name))
+{
+    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
+    nameUpperCase = Helpers::toUpper(nameUpperCase);
+}
