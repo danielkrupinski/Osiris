@@ -105,7 +105,9 @@ class ItemSchema {
 public:
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
-    PAD(WIN32_LINUX(0x1DC, 0x288))
+    PAD(WIN32_LINUX(0x48, 0x60))
+    UtlMap<int, EconItemDefinition*> itemsSorted;
+    PAD(WIN32_LINUX(0x170, 0x1F8))
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 
