@@ -1110,9 +1110,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                 }, nullptr, game_data::knife_names.size(), 5);
         } else if (itemIndex == 1) {
             ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
-                *out_text = game_data::glove_names[idx].name;
+                *out_text = SkinChanger::getGloveTypes()[idx].name.c_str();
                 return true;
-                }, nullptr, game_data::glove_names.size(), 5);
+                }, nullptr, SkinChanger::getGloveTypes().size(), 5);
         } else {
             static auto unused_value = 0;
             selected_entry.definition_override_vector_index = 0;

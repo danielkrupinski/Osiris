@@ -118,7 +118,7 @@ struct item_setting {
 
         if (itemId == GLOVE_T_SIDE) {
             paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
-            definition_override_index = game_data::glove_names[definition_override_vector_index].definition_index;
+            definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
             paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
             definition_override_index = game_data::knife_names[definition_override_vector_index].definition_index;
@@ -148,8 +148,8 @@ struct item_setting {
             }
 
             {
-                const auto it = std::find_if(game_data::glove_names.begin(), game_data::glove_names.end(), [this](const auto& k) { return k.definition_index == definition_override_index; });
-                definition_override_vector_index = it != game_data::glove_names.end() ? std::distance(game_data::glove_names.begin(), it) : 0;
+                const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
             }
         } else {
             {
