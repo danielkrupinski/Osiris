@@ -50,6 +50,12 @@ struct PaintKit {
     String name;
     String description;
     String itemName;
+    String sameNameFamilyAggregate;
+    String pattern;
+    String normal;
+    String logoMaterial;
+    bool baseDiffuseOverride;
+    int rarity;
 };
 
 struct StickerKit {
