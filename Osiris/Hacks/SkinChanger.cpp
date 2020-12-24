@@ -556,6 +556,23 @@ const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
     return qualities;
 }
 
+const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
+{
+    static std::vector<SkinChanger::Item> gloveTypes;
+    if (gloveTypes.empty()) {
+        gloveTypes.emplace_back(WeaponId{}, "Default");
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        for (int i = 0; i <= itemSchema->itemsSorted.lastAlloc; i++) {
+            const auto item = itemSchema->itemsSorted.memory[i].value;
+            if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0)
+                gloveTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
+        }
+    }
+
+    return gloveTypes;
+}
+
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name) noexcept : id(id), name(name)
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
