@@ -37,6 +37,13 @@ namespace SkinChanger
         std::string name;
     };
 
+    struct Item {
+        Item(WeaponId id, const char* name) : id(id), name(name) {}
+
+        WeaponId id;
+        std::string name;
+    };
+
     const std::vector<PaintKit>& getSkinKits() noexcept;
     const std::vector<PaintKit>& getGloveKits() noexcept;
     const std::vector<PaintKit>& getStickerKits() noexcept;
