@@ -66,10 +66,10 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
     [[maybe_unused]] static const auto once = [](HWND window) noexcept {
         netvars = std::make_unique<Netvars>();
         eventListener = std::make_unique<EventListener>();
-        config = std::make_unique<Config>("Osiris");
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
+        config = std::make_unique<Config>("Osiris");
         gui = std::make_unique<GUI>();
 
         hooks->install();
@@ -699,9 +699,9 @@ static int pollEvent(SDL_Event* event) noexcept
     [[maybe_unused]] static const auto once = []() noexcept {
         netvars = std::make_unique<Netvars>();
         eventListener = std::make_unique<EventListener>();
-        config = std::make_unique<Config>("Osiris");
 
         ImGui::CreateContext();
+        config = std::make_unique<Config>("Osiris");
 
         gui = std::make_unique<GUI>();
 
