@@ -638,6 +638,36 @@ void Config::load(size_t id, bool incremental) noexcept
     read<value_t::object>(j, "Misc", misc);
 }
 
+void Config::load(const char8_t* name, bool incremental) noexcept
+{
+    json j;
+
+    if (std::ifstream in{ path / name }; in.good())
+        in >> j;
+    else
+        return;
+
+    if (!incremental)
+        reset();
+
+    read(j, "Aimbot", aimbot);
+    read(j, "Aimbot On key", aimbotOnKey);
+    read(j, "Aimbot Key", aimbotKey);
+    read(j, "Aimbot Key mode", aimbotKeyMode);
+
+    read(j, "Triggerbot", triggerbot);
+    read<value_t::object>(j, "Backtrack", backtrack);
+    read<value_t::object>(j, "Anti aim", antiAim);
+    read(j, "Glow", glow);
+    read(j, "Chams", chams);
+    read<value_t::object>(j, "ESP", streamProofESP);
+    read<value_t::object>(j, "Visuals", visuals);
+    read(j, "Skin changer", skinChanger);
+    read<value_t::object>(j, "Sound", sound);
+    read<value_t::object>(j, "Style", style);
+    read<value_t::object>(j, "Misc", misc);
+}
+
 // WRITE macro requires:
 // - json object named 'j'
 // - object holding default values named 'dummy'
