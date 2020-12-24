@@ -162,20 +162,6 @@ namespace game_data
         {WEAPON_KNIFE_WIDOWMAKER, "Talon Knife"}
     });
 
-    constexpr auto glove_names = std::to_array<weapon_name>({
-        {0, "Default"},
-        {GLOVE_STUDDED_BROKENFANG, "Brokenfang"},
-        {GLOVE_STUDDED_BLOODHOUND, "Bloodhound"},
-        {GLOVE_T_SIDE, "Default (Terrorists)"},
-        {GLOVE_CT_SIDE, "Default (Counter-Terrorists)"},
-        {GLOVE_SPORTY, "Sporty"},
-        {GLOVE_SLICK, "Slick"},
-        {GLOVE_LEATHER_WRAP, "Handwrap"},
-        {GLOVE_MOTORCYCLE, "Motorcycle"},
-        {GLOVE_SPECIALIST, "Specialist"},
-        {GLOVE_HYDRA, "Hydra"}
-    });
-
     constexpr auto weapon_names = std::to_array<weapon_name>({
         {WEAPON_KNIFE, "Knife"},
         {GLOVE_T_SIDE, "Glove"},
