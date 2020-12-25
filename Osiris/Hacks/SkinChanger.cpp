@@ -573,17 +573,17 @@ const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
     return gloveTypes;
 }
 
-SkinChanger::PaintKit::PaintKit(int id, const std::string& name) noexcept : id(id), name(name)
+SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::string&& name) noexcept : id(id), name(std::move(name))
+SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id(id), nameUpperCase(std::move(name))
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, rarity{ rarity }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
