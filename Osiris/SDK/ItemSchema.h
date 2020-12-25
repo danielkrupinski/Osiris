@@ -72,6 +72,11 @@ public:
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
     VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
+
+    int getCapabilities() noexcept
+    {
+        return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
+    }
 };
 
 struct ItemListEntry {
