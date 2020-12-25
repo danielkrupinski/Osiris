@@ -77,6 +77,11 @@ public:
     {
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
     }
+
+    bool isPaintable() noexcept
+    {
+        return getCapabilities() & 1; // ITEM_CAP_PAINTABLE
+    }
 };
 
 struct ItemListEntry {
