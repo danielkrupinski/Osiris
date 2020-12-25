@@ -121,17 +121,19 @@ public:
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
     UtlMap<int, EconItemDefinition*> itemsSorted;
-    PAD(WIN32_LINUX(0x170, 0x1F8))
+    PAD(WIN32_LINUX(0x104, 0x168))
+    UtlMap<std::uint64_t, AlternateIconData> alternateIcons;
+    PAD(WIN32_LINUX(0x48, 0x60))
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
 
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
-    VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
-    VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
-    VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
-    VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
-    VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
-    VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
+        VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
+        VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
+        VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
+        VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
+        VIRTUAL_METHOD(int, getLootListCount, 34, (), (this))
+        VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionByName, 42, (const char* name), (this, name))
 };
 
 class ItemSystem {
