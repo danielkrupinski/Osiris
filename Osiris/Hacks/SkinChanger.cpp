@@ -565,7 +565,7 @@ const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         for (int i = 0; i <= itemSchema->itemsSorted.lastAlloc; i++) {
             const auto item = itemSchema->itemsSorted.memory[i].value;
-            if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0)
+            if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0 && item->isPaintable())
                 gloveTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
         }
     }
