@@ -111,27 +111,15 @@ static void initializeKits() noexcept
             continue;
 
         if (paintKit->id >= 10000) {
-            const std::string_view gloveName{ paintKit->name.data() };
             std::wstring name;
 
-            if (gloveName.starts_with("bloodhound"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_t_studdedgloves");
-            else if (gloveName.starts_with("motorcycle"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_v_motorcycle_glove");
-            else if (gloveName.starts_with("slick"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_v_slick_glove");
-            else if (gloveName.starts_with("sporty"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_v_sporty_glove");
-            else if (gloveName.starts_with("specialist"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_v_specialist_glove");
-            else if (gloveName.starts_with("operation10"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_t_studded_brokenfang_gloves");
-            else if (gloveName.starts_with("handwrap"))
-                name = interfaces->localize->findSafe("CSGO_Wearable_v_leather_handwrap");
-            else
-                assert(false);
+            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id) {
+                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->second)) {
+                    name = interfaces->localize->findSafe(itemDef->getItemBaseName());
+                    name += L" | ";
+                }
+            }
 
-            name += L" | ";
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
             gloveKits.emplace_back(paintKit->id, std::move(name), paintKit->rarity);
         } else {
