@@ -1097,7 +1097,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                     if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
                         ImGui::PushID(i);
                         const auto selected = i == selected_entry.paint_kit_vector_index;
-                        if (ImGui::Selectable(kits[i].name.c_str(), selected)) {
+                        if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
                             selected_entry.paint_kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
                         }
