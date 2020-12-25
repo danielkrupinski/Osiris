@@ -73,7 +73,6 @@ static void initializeKits() noexcept
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
     kitsWeapons.reserve(2000);
-
     for (int i = 0; i < itemSchema->getLootListCount(); ++i) {
         const auto& contents = itemSchema->getLootList(i)->getLootListContents();
 
@@ -91,6 +90,10 @@ static void initializeKits() noexcept
             if (paintKit != 0)
                 kitsWeapons.emplace_back(paintKit, set->getItemDef(j));
         }
+    }
+    for (int i = 0; i <= itemSchema->alternateIcons.lastAlloc; ++i) {
+        const auto encoded = itemSchema->alternateIcons.memory[i].key;
+        kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16)); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
     }
 
     std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
@@ -145,7 +148,8 @@ static void initializeKits() noexcept
                 skinKits.emplace_back(paintKit->id, std::move(name), std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
             }
 
-            if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
+            if (weapons.empty()) {
+                assert(false);
                 std::wstring name = interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 skinKits.emplace_back(paintKit->id, std::move(name));
             }
