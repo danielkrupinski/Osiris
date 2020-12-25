@@ -26,4 +26,5 @@ namespace ImGui
 {
     void progressBarFullWidth(float fraction, float height) noexcept;
     void textUnformattedCentered(const char* text) noexcept;
+    bool SelectableWithBullet(const char* label, ImU32 bulletColor, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));
 }
