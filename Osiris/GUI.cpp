@@ -1054,6 +1054,19 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
     auto& selected_entry = config->skinChanger[itemIndex];
     selected_entry.itemIdIndex = itemIndex;
 
+    constexpr auto rarityColor = [](int rarity) {
+        constexpr auto rarityColors = std::to_array<ImU32>({
+            IM_COL32(0,     0,   0,   0),
+            IM_COL32(176, 195, 217, 255),
+            IM_COL32(94,  152, 217, 255),
+            IM_COL32(75,  105, 255, 255),
+            IM_COL32(136,  71, 255, 255),
+            IM_COL32(211,  44, 230, 255),
+            IM_COL32(235,  75,  75, 255)
+        });
+        return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
+    };
+
     {
         ImGui::SameLine();
         ImGui::Checkbox("Enabled", &selected_entry.enabled);
