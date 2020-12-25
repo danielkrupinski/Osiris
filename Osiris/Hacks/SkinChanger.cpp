@@ -126,7 +126,7 @@ static void initializeKits() noexcept
 
             name += L" | ";
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-            gloveKits.emplace_back(paintKit->id, std::move(name));
+            gloveKits.emplace_back(paintKit->id, std::move(name), paintKit->rarity);
         } else {
             std::unordered_set<WeaponId> weapons;
 
@@ -135,10 +135,14 @@ static void initializeKits() noexcept
             }
 
             for (auto weapon : weapons) {
-                std::wstring name = interfaces->localize->findSafe(itemSchema->getItemDefinitionInterface(weapon)->getItemBaseName());
+                const auto itemDef = itemSchema->getItemDefinitionInterface(weapon);
+                if (!itemDef)
+                    continue;
+
+                std::wstring name = interfaces->localize->findSafe(itemDef->getItemBaseName());
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, std::move(name));
+                skinKits.emplace_back(paintKit->id, std::move(name), std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
             }
 
             if (weapons.empty() || weapons.size() > 1) { // this paint kit fits more than one weapon
@@ -578,7 +582,7 @@ SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noe
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }
+SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
