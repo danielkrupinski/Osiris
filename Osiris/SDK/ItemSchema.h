@@ -108,6 +108,13 @@ struct EconItemQualityDefinition {
     const char* hexColor;
 };
 
+struct AlternateIconData {
+    String simpleName;
+    String largeSimpleName;
+    String iconURLSmall;
+    String iconURLLarge;
+};
+
 class ItemSchema {
 public:
     PAD(WIN32_LINUX(0x88, 0xB8))
