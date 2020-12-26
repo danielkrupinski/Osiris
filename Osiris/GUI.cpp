@@ -1119,9 +1119,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
         if (itemIndex == 0) {
             ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
-                *out_text = game_data::knife_names[idx].name;
+                *out_text = SkinChanger::getKnifeTypes()[idx].name.c_str();
                 return true;
-                }, nullptr, game_data::knife_names.size(), 5);
+                }, nullptr, SkinChanger::getKnifeTypes().size(), 5);
         } else if (itemIndex == 1) {
             ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
                 *out_text = SkinChanger::getGloveTypes()[idx].name.c_str();

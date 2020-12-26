@@ -573,6 +573,23 @@ const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
     return gloveTypes;
 }
 
+const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
+{
+    static std::vector<SkinChanger::Item> knifeTypes;
+    if (knifeTypes.empty()) {
+        knifeTypes.emplace_back(WeaponId{}, "Default");
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        for (int i = 0; i <= itemSchema->itemsSorted.lastAlloc; i++) {
+            const auto item = itemSchema->itemsSorted.memory[i].value;
+            if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6)
+                knifeTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
+        }
+    }
+
+    return knifeTypes;
+}
+
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));

@@ -50,6 +50,7 @@ namespace SkinChanger
     const std::vector<PaintKit>& getStickerKits() noexcept;
     const std::vector<Quality>& getQualities() noexcept;
     const std::vector<Item>& getGloveTypes() noexcept;
+    const std::vector<Item>& getKnifeTypes() noexcept;
 }
 
 
@@ -122,7 +123,7 @@ struct item_setting {
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
             paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
-            definition_override_index = game_data::knife_names[definition_override_vector_index].definition_index;
+            definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
         }
 
         for (auto& sticker : stickers)
@@ -159,8 +160,8 @@ struct item_setting {
             }
 
             {
-                const auto it = std::find_if(game_data::knife_names.begin(), game_data::knife_names.end(), [this](const auto& k) { return k.definition_index == definition_override_index; });
-                definition_override_vector_index = it != game_data::knife_names.end() ? std::distance(game_data::knife_names.begin(), it) : 0;
+                const auto it = std::find_if(SkinChanger::getKnifeTypes().begin(), SkinChanger::getKnifeTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                definition_override_vector_index = it != SkinChanger::getKnifeTypes().end() ? std::distance(SkinChanger::getKnifeTypes().begin(), it) : 0;
             }
         }
 
