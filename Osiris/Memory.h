@@ -107,7 +107,24 @@ public:
         return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
 #endif
     }
+
+    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, float value) const noexcept
+    {
+#ifdef _WIN32
+        __asm movd xmm2, value
+        setOrAddAttributeValueByNameFunction(attributeList, attribute);
+#else
+
+#endif
+    }
+
+    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, int value) const noexcept
+    {
+        setOrAddAttributeValueByName(attributeList, attribute, *reinterpret_cast<float*>(&value) /* hack, but CSGO does that */);
+    }
 private:
+    void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
+
     std::uintptr_t submitReportFunction;
 
     static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
