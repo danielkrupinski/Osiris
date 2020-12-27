@@ -211,6 +211,7 @@ struct GetStickerAttributeBySlotIndexInt {
 void apply_sticker_changer(Entity* item) noexcept
 {
 #ifdef _WIN32
+    /*
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
         s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
 
@@ -221,6 +222,22 @@ void apply_sticker_changer(Entity* item) noexcept
     if (hook.initialize_and_hook_instance(reinterpret_cast<void*>(econ_item_interface_wrapper))) {
         hook.apply_hook<GetStickerAttributeBySlotIndexFloat>(4);
         hook.apply_hook<GetStickerAttributeBySlotIndexInt>(5);
+    }
+    */
+
+    if (auto config = get_by_definition_index(item->itemDefinitionIndex())) {
+        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
+        const auto attributeList = std::uintptr_t(item) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+
+        for (std::size_t i = 0; i < config->stickers.size(); ++i) {
+            const auto& sticker = config->stickers[i];
+            const auto attributeString = "sticker slot " + std::to_string(i) + ' ';
+
+            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "id").c_str(), sticker.kit);
+            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "wear").c_str(), sticker.wear);
+            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "scale").c_str(), sticker.scale);
+            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "rotation").c_str(), sticker.rotation);
+        }
     }
 #endif
 }
