@@ -189,7 +189,6 @@ struct GetStickerAttributeBySlotIndexInt {
 
 void apply_sticker_changer(Entity* item) noexcept
 {
-#ifdef _WIN32
     /*
     if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
         s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
@@ -218,7 +217,6 @@ void apply_sticker_changer(Entity* item) noexcept
             memory->setOrAddAttributeValueByName(attributeList, (attributeString + "rotation").c_str(), sticker.rotation);
         }
     }
-#endif
 }
 
 static void erase_override_if_exists_by_index(const int definition_index) noexcept
