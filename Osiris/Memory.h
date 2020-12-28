@@ -112,10 +112,10 @@ public:
     {
 #ifdef _WIN32
         __asm movd xmm2, value
-        setOrAddAttributeValueByNameFunction(attributeList, attribute);
 #else
-
+        asm("movss %0, %%xmm0" : : "m"(value) : "xmm0");
 #endif
+        setOrAddAttributeValueByNameFunction(attributeList, attribute);
     }
 
     void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, int value) const noexcept
@@ -146,11 +146,11 @@ private:
 
         dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
             const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
-       	    if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
+            if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
                 moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
                 moduleInfo->size = info->dlpi_phdr[0].p_memsz;
                 return 1;
-       	    }
+            }
             return 0;
         }, &moduleInfo);
             
