@@ -98,9 +98,6 @@
     <ClCompile Include="nSkinz\item_definitions.cpp">
       <Filter>nSkinz</Filter>
     </ClCompile>
-    <ClCompile Include="nSkinz\Utilities\Platform.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>

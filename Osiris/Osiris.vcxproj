@@ -39,7 +39,6 @@
     <ClCompile Include="MinHook\trampoline.c" />
     <ClCompile Include="Netvars.cpp" />
     <ClCompile Include="nSkinz\item_definitions.cpp" />
-    <ClCompile Include="nSkinz\Utilities\Platform.cpp" />
     <ClCompile Include="Osiris.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Hacks\Misc.cpp" />
