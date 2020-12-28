@@ -19,7 +19,6 @@
 #include "../SDK/ModelInfo.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/Entity.h"
-#include "../nSkinz/Utilities/vmt_smart_hook.hpp"
 #include "../SDK/GameEvent.h"
 #include "../SDK/Platform.h"
 #include "../Helpers.h"

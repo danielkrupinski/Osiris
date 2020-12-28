@@ -92,7 +92,6 @@
     <ClInclude Include="nlohmann\json.hpp" />
     <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="nSkinz\Utilities\Platform.hpp" />
-    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ConVar.h" />

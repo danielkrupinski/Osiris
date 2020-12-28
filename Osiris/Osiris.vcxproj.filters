@@ -328,9 +328,6 @@
     <ClInclude Include="SDK\Localize.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\GameEvent.h">
       <Filter>SDK</Filter>
     </ClInclude>
