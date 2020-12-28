@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstring>
 #include <cwctype>
 #include <fstream>
 #include <unordered_set>
