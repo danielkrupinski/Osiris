@@ -188,7 +188,7 @@ static void erase_override_if_exists_by_index(const int definition_index) noexce
     }
 }
 
-static void apply_config_on_attributable_item(Entity* item, const item_setting* config,
+static void apply_config_on_attributable_item(Entity* item, const item_setting& config,
     const unsigned xuid_low) noexcept
 {
     // Force fallback values to be used.
@@ -196,10 +196,10 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
 
     // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
     item->accountID() = xuid_low;
-    item->entityQuality() = config->quality;
+    item->entityQuality() = config.quality;
 
-    if (config->stat_trak > -1) {
-        item->fallbackStatTrak() = config->stat_trak;
+    if (config.stat_trak > -1) {
+        item->fallbackStatTrak() = config.stat_trak;
         item->entityQuality() = 9;
     }
 
@@ -207,34 +207,34 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
         item->entityQuality() = 3; // make a star appear on knife
 
 #ifdef _WIN32
-    if (config->custom_name[0])
-        strcpy_s(item->customName(), config->custom_name);
+    if (config.custom_name[0])
+        strcpy_s(item->customName(), config.custom_name);
 #endif
 
-    if (config->paintKit)
-        item->fallbackPaintKit() = config->paintKit;
+    if (config.paintKit)
+        item->fallbackPaintKit() = config.paintKit;
 
-    if (config->seed)
-        item->fallbackSeed() = config->seed;
+    if (config.seed)
+        item->fallbackSeed() = config.seed;
 
-    item->fallbackWear() = config->wear;
+    item->fallbackWear() = config.wear;
 
     auto& definition_index = item->itemDefinitionIndex();
 
-    if (config->definition_override_index // We need to override defindex
-        && config->definition_override_index != definition_index) // It is not yet overridden
+    if (config.definition_override_index // We need to override defindex
+        && config.definition_override_index != definition_index) // It is not yet overridden
     {
-        if (config->itemId == GLOVE_T_SIDE) {
-            definition_index = config->definition_override_index;
+        if (config.itemId == GLOVE_T_SIDE) {
+            definition_index = config.definition_override_index;
             const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index });
             if (def) {
                 item->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
                 item->preDataUpdate(0);
             }
-        } else if (const auto replacement_item = game_data::get_weapon_info(config->definition_override_index)) {
+        } else if (const auto replacement_item = game_data::get_weapon_info(config.definition_override_index)) {
             const auto old_definition_index = definition_index;
 
-            definition_index = config->definition_override_index;
+            definition_index = config.definition_override_index;
 
             // Set the weapon model index -- required for paint kits to work on replacement items after the 29/11/2016 update.
             //item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
@@ -345,7 +345,7 @@ static void post_data_update_start(int localHandle) noexcept
                 memory->equipWearable(glove, local);
                 local->body() = 1;
 
-                apply_config_on_attributable_item(glove, glove_config, player_info.xuidLow);
+                apply_config_on_attributable_item(glove, *glove_config, player_info.xuidLow);
             }
         }
     }
@@ -367,7 +367,7 @@ static void post_data_update_start(int localHandle) noexcept
 
             // All knives are terrorist knives.
             if (const auto active_conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WEAPON_KNIFE : definition_index))
-                apply_config_on_attributable_item(weapon, active_conf, player_info.xuidLow);
+                apply_config_on_attributable_item(weapon, *active_conf, player_info.xuidLow);
             else
                 erase_override_if_exists_by_index(definition_index);
         }
