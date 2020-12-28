@@ -31,7 +31,7 @@
 // We need these for overriding viewmodels and icons
 const game_data::weapon_info* game_data::get_weapon_info(int defindex)
 {
-    static constexpr std::array<std::pair<int, weapon_info>, 31> info{ {
+    static constexpr auto info = std::to_array<std::pair<int, weapon_info>>({
         { WEAPON_KNIFE, { "models/weapons/v_knife_default_ct.mdl", "knife" } },
         { WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"} },
         { WEAPON_KNIFE_BAYONET,{"models/weapons/v_knife_bayonet.mdl", "bayonet"} },
@@ -54,6 +54,7 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
         { WEAPON_KNIFE_STILETTO,{"models/weapons/v_knife_stiletto.mdl", "knife_stiletto"} },
         { WEAPON_KNIFE_WIDOWMAKER,{"models/weapons/v_knife_widowmaker.mdl", "knife_widowmaker"} },
 
+        /*
         { GLOVE_STUDDED_BROKENFANG,{"models/weapons/w_models/arms/w_glove_bloodhound_brokenfang.mdl"} },
         { GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"} },
         { GLOVE_T_SIDE,{"models/weapons/w_models/arms/w_glove_fingerless.mdl"} },
@@ -64,7 +65,8 @@ const game_data::weapon_info* game_data::get_weapon_info(int defindex)
         { GLOVE_MOTORCYCLE,{"models/weapons/w_models/arms/w_glove_motorcycle.mdl"} },
         { GLOVE_SPECIALIST,{"models/weapons/w_models/arms/w_glove_specialist.mdl"} },
         { GLOVE_HYDRA,{"models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl"} }
-    } };
+        */
+    });
 
     const auto entry = std::find_if(info.cbegin(), info.cend(), [defindex](const auto& p) { return p.first == defindex; });
     return entry == info.cend() ? nullptr : &entry->second;

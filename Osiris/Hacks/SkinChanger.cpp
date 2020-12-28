@@ -268,8 +268,14 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting* 
     if (config->definition_override_index // We need to override defindex
         && config->definition_override_index != definition_index) // It is not yet overridden
     {
-        // We have info about what we gonna override it to
-        if (const auto replacement_item = game_data::get_weapon_info(config->definition_override_index)) {
+        if (config->itemId == GLOVE_T_SIDE) {
+            definition_index = config->definition_override_index;
+            const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index });
+            if (def) {
+                item->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
+                item->preDataUpdate(0);
+            }
+        } else if (const auto replacement_item = game_data::get_weapon_info(config->definition_override_index)) {
             const auto old_definition_index = definition_index;
 
             definition_index = config->definition_override_index;
