@@ -1348,6 +1348,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
     ImGui::SameLine();
     hotkey(config->misc.prepareRevolverKey);
+    ImGui::SliderFloat("Hit Volume", &config->misc.hitSoundVolume, 0.0f, 1.0f, "%.2f");
     ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (config->misc.hitSound == 5) {
         ImGui::InputText("Hit Sound filename", &config->misc.customHitSound);
