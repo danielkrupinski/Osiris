@@ -143,34 +143,6 @@ enum class StickerAttribute {
 
 static auto s_econ_item_interface_wrapper_offset = std::uint16_t(0);
 
-struct GetStickerAttributeBySlotIndexFloat {
-    static auto __FASTCALL hooked(void* thisptr, void*, const int slot,
-        const StickerAttribute attribute, const float unknown) -> float
-    {
-        auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
-
-        const auto defindex = item->itemDefinitionIndex();
-
-        auto config = get_by_definition_index(defindex);
-
-        if (config) {
-            switch (attribute) {
-            case StickerAttribute::Wear:
-                return config->stickers[slot].wear;
-            case StickerAttribute::Scale:
-                return config->stickers[slot].scale;
-            case StickerAttribute::Rotation:
-                return config->stickers[slot].rotation;
-            default:
-                break;
-            }
-        }
-        return m_original(thisptr, nullptr, slot, attribute, unknown);
-    }
-
-    inline static decltype(&hooked) m_original;
-};
-
 void apply_sticker_changer(Entity* item) noexcept
 {
     /*
