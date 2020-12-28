@@ -29,7 +29,7 @@
 
 #include "Platform.hpp"
 
-class table_hook
+class [[deprecated]] table_hook
 {
 public:
 	constexpr table_hook()
@@ -112,7 +112,7 @@ private:
 	void** m_old_vmt = nullptr;
 };
 
-class vmt_smart_hook : table_hook
+class [[deprecated]] vmt_smart_hook : table_hook
 {
 public:
 	vmt_smart_hook(void* class_base)
@@ -144,7 +144,7 @@ private:
 	void* m_class = nullptr;
 };
 
-class vmt_multi_hook : table_hook
+class [[deprecated]] vmt_multi_hook : table_hook
 {
 public:
 	constexpr vmt_multi_hook() {}
