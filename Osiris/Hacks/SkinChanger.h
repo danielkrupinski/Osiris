@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../nSkinz/item_definitions.hpp"
+#include "../SDK/WeaponId.h"
 
 enum class FrameStage;
 class GameEvent;

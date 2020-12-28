@@ -5,23 +5,25 @@
 #include <unordered_set>
 
 #include "../Interfaces.h"
-#include "../SDK/Entity.h"
+
 #include "SkinChanger.h"
 #include "../Config.h"
-#include "../SDK/Cvar.h"
-#include "../SDK/ConVar.h"
 
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
+#include "../SDK/ConVar.h"
+#include "../SDK/Cvar.h"
 #include "../SDK/Engine.h"
+#include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
+#include "../SDK/GameEvent.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
 #include "../SDK/ModelInfo.h"
-#include "../SDK/EntityList.h"
-#include "../SDK/Entity.h"
-#include "../SDK/GameEvent.h"
 #include "../SDK/Platform.h"
+#include "../SDK/WeaponId.h"
+
 #include "../Helpers.h"
 
 /* This file is part of nSkinz by namazso, licensed under the MIT license:
@@ -48,6 +50,11 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+
+static constexpr auto is_knife(WeaponId id)
+{
+    return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
+}
 
 item_setting* get_by_definition_index(const int definition_index)
 {
