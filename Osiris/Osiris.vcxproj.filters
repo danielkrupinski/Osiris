@@ -316,9 +316,6 @@
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\Platform.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="nSkinz\item_definitions.hpp">
       <Filter>nSkinz</Filter>
     </ClInclude>
