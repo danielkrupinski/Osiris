@@ -171,21 +171,6 @@ struct GetStickerAttributeBySlotIndexFloat {
     inline static decltype(&hooked) m_original;
 };
 
-struct GetStickerAttributeBySlotIndexInt {
-    static int __FASTCALL hooked(void* thisptr, void*, const int slot,
-        const StickerAttribute attribute, const int unknown)
-    {
-        auto item = reinterpret_cast<Entity*>(std::uintptr_t(thisptr) - s_econ_item_interface_wrapper_offset);
-
-        if (attribute == StickerAttribute::Index)
-            if (auto config = get_by_definition_index(item->itemDefinitionIndex()))
-                return config->stickers[slot].kit;
-        return m_original(thisptr, nullptr, slot, attribute, unknown);
-    }
-
-    inline static decltype(&hooked) m_original;
-};
-
 void apply_sticker_changer(Entity* item) noexcept
 {
     /*
