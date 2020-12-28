@@ -750,10 +750,13 @@ void Misc::playHitSound(GameEvent& event) noexcept
     };
     
     if (static_cast<std::size_t>(config->misc.hitSound - 1) < hitSounds.size())
-        snprintf(sndbuffer, "playvol \"%s.wav\" \"%.2f\"", hitSounds[config->misc.hitSound - 1], config->misc.hitSoundVolume);
+        
+        snprintf(sndbuffer, sizeof(sndbuffer), "playvol \"%s.wav\" \"%.2f\"", hitSounds[config->misc.hitSound - 1], config->misc.hitSoundVolume);
+        //sprintf_s(sndbuffer, "playvol \"%s.wav\" \"%.2f\"", hitSounds[config->misc.hitSound - 1], config->misc.hitSoundVolume);
 
     else if (config->misc.hitSound == 5)
-        snprintf(sndbuffer, "playvol \"%s.wav\" \"%.2f\"", config->misc.customHitSound.c_str(), config->misc.hitSoundVolume);
+        snprintf(sndbuffer, sizeof(sndbuffer), "playvol \"%s.wav\" \"%.2f\"", config->misc.customHitSound.c_str(), config->misc.hitSoundVolume);
+        //sprintf_s(sndbuffer, "playvol \"%s.wav\" \"%.2f\"", config->misc.customHitSound.c_str(), config->misc.hitSoundVolume);
 
     interfaces->engine->clientCmdUnrestricted(sndbuffer);
 }
