@@ -4,6 +4,7 @@
 #include "SDK/Client.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Entity.h"
+#include "SDK/ItemSchema.h"
 #include "SDK/ModelInfo.h"
 #include "SDK/Platform.h"
 #include "SDK/Recv.h"
@@ -170,9 +171,13 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* arg2, void* arg
             if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            if (const auto weapon_info = game_data::get_weapon_info(activeWeapon->itemDefinitionIndex())) {
-                if (const auto active_conf = get_by_definition_index(WEAPON_KNIFE); active_conf && active_conf->definition_override_index)
-                    data.value._int = get_new_animation(fnv::hashRuntime(weapon_info->model), data.value._int);
+            if (const auto id = activeWeapon->itemDefinitionIndex2(); (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife) {
+                if (const auto active_conf = get_by_definition_index(WEAPON_KNIFE); active_conf && active_conf->definition_override_index) {
+                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId(active_conf->definition_override_index))) {
+                        if (const auto model = def->getPlayerDisplayModel())
+                            data.value._int = get_new_animation(fnv::hashRuntime(model), data.value._int);
+                    }
+                }
             }
         }
     }

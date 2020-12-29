@@ -130,7 +130,7 @@ namespace game_data
         const char* name = nullptr;
     };
 
-    const weapon_info* get_weapon_info(int defindex);
+    [[deprecated]] const weapon_info* get_weapon_info(int defindex);
 
     constexpr auto weapon_names = std::to_array<weapon_name>({
         {WEAPON_KNIFE, "Knife"},
