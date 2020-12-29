@@ -140,8 +140,6 @@ static void initializeKits() noexcept
     gloveKits.shrink_to_fit();
 }
 
-static auto s_econ_item_interface_wrapper_offset = std::uint16_t(0);
-
 void apply_sticker_changer(Entity* item) noexcept
 {
     /*
