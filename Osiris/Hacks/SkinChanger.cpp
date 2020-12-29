@@ -203,26 +203,10 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting& 
 
     item->fallbackWear() = config.wear;
 
-    auto& definition_index = item->itemDefinitionIndex();
-
-    if (config.definition_override_index // We need to override defindex
-        && config.definition_override_index != definition_index) // It is not yet overridden
-    {
-        if (config.itemId == GLOVE_T_SIDE) {
-            definition_index = config.definition_override_index;
-            const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index });
-            if (def) {
-                item->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
-                item->preDataUpdate(0);
-            }
-        } else if (const auto replacement_item = game_data::get_weapon_info(config.definition_override_index)) {
-            const auto old_definition_index = definition_index;
-
-            definition_index = config.definition_override_index;
-
-            // Set the weapon model index -- required for paint kits to work on replacement items after the 29/11/2016 update.
-            //item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
-            item->setModelIndex(interfaces->modelInfo->getModelIndex(replacement_item->model));
+    if (auto& definition_index = item->itemDefinitionIndex(); config.definition_override_index && config.definition_override_index != definition_index) {
+        definition_index = config.definition_override_index;
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index })) {
+            item->setModelIndex(interfaces->modelInfo->getModelIndex(config.itemId == GLOVE_T_SIDE ? def->getWorldDisplayModel() : def->getPlayerDisplayModel()));
             item->preDataUpdate(0);
         }
     }
@@ -356,12 +340,11 @@ static void post_data_update_start(int localHandle) noexcept
     if (!view_model_weapon)
         return;
 
-    const auto override_info = game_data::get_weapon_info(view_model_weapon->itemDefinitionIndex());
-
-    if (!override_info)
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(view_model_weapon->itemDefinitionIndex2());
+    if (!def)
         return;
 
-    const auto override_model_index = interfaces->modelInfo->getModelIndex(override_info->model);
+    const auto override_model_index = interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel());
     view_model->modelIndex() = override_model_index;
 
     const auto world_model = interfaces->entityList->getEntityFromHandle(view_model_weapon->weaponWorldModel());
