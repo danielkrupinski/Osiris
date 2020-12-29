@@ -183,19 +183,6 @@ void apply_sticker_changer(Entity* item) noexcept
     }
 }
 
-static void erase_override_if_exists_by_index(const int definition_index) noexcept
-{
-    // We have info about the item not needed to be overridden
-    if (const auto original_item = game_data::get_weapon_info(definition_index)) {
-        if (!original_item->icon)
-            return;
-
-        // We are overriding its icon when not needed
-        if (const auto override_entry = iconOverrides.find(original_item->icon); override_entry != end(iconOverrides))
-            iconOverrides.erase(override_entry); // Remove the leftover override
-    }
-}
-
 static void apply_config_on_attributable_item(Entity* item, const item_setting& config,
     const unsigned xuid_low) noexcept
 {
@@ -254,11 +241,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting& 
                 if (const auto original_item = game_data::get_weapon_info(old_definition_index); original_item && original_item->icon && replacement_item->icon)
                     iconOverrides[original_item->icon] = replacement_item->icon;
         }
-    } else
-    {
-        erase_override_if_exists_by_index(definition_index);
     }
-
     apply_sticker_changer(item);
 }
 
@@ -376,8 +359,6 @@ static void post_data_update_start(int localHandle) noexcept
             // All knives are terrorist knives.
             if (const auto active_conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WEAPON_KNIFE : definition_index))
                 apply_config_on_attributable_item(weapon, *active_conf, player_info.xuidLow);
-            else
-                erase_override_if_exists_by_index(definition_index);
         }
     }
 
