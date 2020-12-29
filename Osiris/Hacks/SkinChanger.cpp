@@ -140,8 +140,6 @@ static void initializeKits() noexcept
     gloveKits.shrink_to_fit();
 }
 
-static std::unordered_map<std::string, const char*> iconOverrides;
-
 enum class StickerAttribute {
     Index,
     Wear,
@@ -235,11 +233,6 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting& 
             //item->GetModelIndex() = g_model_info->GetModelIndex(k_weapon_info.at(config->definition_override_index).model);
             item->setModelIndex(interfaces->modelInfo->getModelIndex(replacement_item->model));
             item->preDataUpdate(0);
-
-            // We didn't override 0, but some actual weapon, that we have data for
-            if (old_definition_index)
-                if (const auto original_item = game_data::get_weapon_info(old_definition_index); original_item && original_item->icon && replacement_item->icon)
-                    iconOverrides[original_item->icon] = replacement_item->icon;
         }
     }
     apply_sticker_changer(item);
