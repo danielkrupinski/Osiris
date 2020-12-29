@@ -79,9 +79,9 @@ static void initializeKits() noexcept
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
-    kitsWeapons.reserve(2000);
+    kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
-    for (int i = 0; i <= itemSchema->alternateIcons.lastAlloc; ++i) {
+    for (int i = 0; i < itemSchema->alternateIcons.numElements; ++i) {
         const auto encoded = itemSchema->alternateIcons.memory[i].key;
         kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16)); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
     }
