@@ -8,6 +8,70 @@ static constexpr auto relativeToAbsolute(uintptr_t address) noexcept
     return (T)(address + 4 + *reinterpret_cast<std::int32_t*>(address));
 }
 
+static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
+{
+#ifdef _WIN32
+    if (HMODULE handle = GetModuleHandleA(name)) {
+        if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
+            return std::make_pair(moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage);
+    }
+    return {};
+#elif __linux__
+    struct ModuleInfo {
+        const char* name;
+        void* base = nullptr;
+        std::size_t size = 0;
+    } moduleInfo;
+
+    moduleInfo.name = name;
+
+    dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
+        const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
+        if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
+            moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
+            moduleInfo->size = info->dlpi_phdr[0].p_memsz;
+            return 1;
+        }
+        return 0;
+        }, &moduleInfo);
+
+    return std::make_pair(moduleInfo.base, moduleInfo.size);
+#endif
+}
+
+static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
+{
+    static auto id = 0;
+    ++id;
+
+    const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
+
+    if (moduleBase && moduleSize) {
+        auto start = static_cast<const char*>(moduleBase);
+        const auto end = start + moduleSize;
+
+        auto first = start;
+        auto second = pattern;
+
+        while (first < end && *second) {
+            if (*first == *second || *second == '?') {
+                ++first;
+                ++second;
+            } else {
+                first = ++start;
+                second = pattern;
+            }
+        }
+
+        if (!*second)
+            return reinterpret_cast<std::uintptr_t>(start);
+    }
+#ifdef _WIN32
+    MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+#endif
+    return 0;
+}
+
 Memory::Memory() noexcept
 {
 #ifdef _WIN32
