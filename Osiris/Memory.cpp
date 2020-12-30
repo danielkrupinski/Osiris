@@ -58,7 +58,7 @@ static auto generateBadCharTable(std::string_view pattern) noexcept
     return table;
 }
 
-static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
+static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
 {
     static auto id = 0;
     ++id;
@@ -66,24 +66,22 @@ static std::uintptr_t findPattern(const char* moduleName, const char* pattern) n
     const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
 
     if (moduleBase && moduleSize) {
+        const auto lastIdx = pattern.length() - 1;
+        const auto badCharTable = generateBadCharTable(pattern);
+
         auto start = static_cast<const char*>(moduleBase);
-        const auto end = start + moduleSize;
+        const auto end = start + moduleSize - pattern.length();
 
-        auto first = start;
-        auto second = pattern;
+        while (start <= end) {
+            int i = lastIdx;
+            while (i >= 0 && (pattern[i] == '?' || start[i] == pattern[i]))
+                --i;
 
-        while (first < end && *second) {
-            if (*first == *second || *second == '?') {
-                ++first;
-                ++second;
-            } else {
-                first = ++start;
-                second = pattern;
-            }
+            if (i < 0)
+                return reinterpret_cast<std::uintptr_t>(start);
+
+            start += badCharTable[static_cast<std::uint8_t>(start[lastIdx])];
         }
-
-        if (!*second)
-            return reinterpret_cast<std::uintptr_t>(start);
     }
 #ifdef _WIN32
     MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
