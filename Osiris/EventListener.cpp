@@ -54,6 +54,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::playHitSound(*event);
         Visuals::hitEffect(event);
         Visuals::hitMarker(event);
+		Visuals::damageIndicator(event);
         break;
     }
 }

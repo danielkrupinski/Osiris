@@ -375,6 +375,49 @@ void Visuals::hitEffect(GameEvent* event) noexcept
     }
 }
 
+void Visuals::damageIndicator(GameEvent* event) noexcept
+{
+    if (!config->visuals.damageIndicator.enabled) return;
+
+    static std::vector<HitMarkerInfo> hitMarkerInfo;
+
+    if (event) {
+        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId()) {
+            hitMarkerInfo.push_back({memory->globalVars->realtime + 0.6f , event->getInt("dmg_health")});
+        }
+        return;
+    }
+
+    if (hitMarkerInfo.empty() || event) return;
+
+    const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
+
+    for (size_t i = 0; i < hitMarkerInfo.size(); i++)
+    {
+        const auto diff = hitMarkerInfo.at(i).hitMarkerExpTime - memory->globalVars->realtime;
+
+        if (diff < 0.f)
+        {
+            hitMarkerInfo.erase(hitMarkerInfo.begin() + i);
+            continue;
+        }
+
+        interfaces->surface->setTextFont(17);
+        interfaces->surface->setTextPosition(screenWidth / 2 + 6 + (1.f - diff / 0.8f) * 24 / 2, screenHeight / 2 + 6 + (1.f - diff / 0.8f) * 24);
+        std::wstring dmg{ std::to_wstring(hitMarkerInfo.at(i).hitMarkerDmg) };
+
+        if (config->visuals.damageIndicator.rainbow) {
+            interfaces->surface->setTextColor(rainbowColor(config->visuals.damageIndicator.rainbowSpeed), (diff * 255));
+        }
+
+        if (!config->visuals.damageIndicator.rainbow) {
+            interfaces->surface->setTextColor(config->visuals.damageIndicator.color, (diff * 255));
+        }
+
+        interfaces->surface->printText(dmg.c_str());
+    }
+}
+
 void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 {
     if (config->visuals.hitMarker == 0)
