@@ -394,7 +394,7 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
     if (event.getInt("attacker") != localPlayer->getUserId())
         return;
 
-    if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon == "knife" || weapon == "knife_t")
+    if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
         return;
 
     if (const auto active_conf = get_by_definition_index(WEAPON_KNIFE)) {
