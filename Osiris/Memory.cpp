@@ -39,6 +39,25 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
 #endif
 }
 
+static auto generateBadCharTable(std::string_view pattern) noexcept
+{
+    assert(!pattern.empty());
+
+    std::array<std::size_t, (std::numeric_limits<std::uint8_t>::max)() + 1> table;
+
+    auto lastWildcard = pattern.rfind('?');
+    if (lastWildcard == std::string_view::npos)
+        lastWildcard = 0;
+
+    const auto defaultShift = (std::max)(1u /* so that we keep moving */, pattern.length() - 1 - lastWildcard);
+    table.fill(defaultShift);
+
+    for (auto i = lastWildcard; i < pattern.length() - 1; ++i)
+        table[static_cast<std::uint8_t>(pattern[i])] = pattern.length() - 1 - i;
+
+    return table;
+}
+
 static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
 {
     static auto id = 0;
