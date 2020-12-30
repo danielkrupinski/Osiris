@@ -255,7 +255,7 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
-		Visuals::damageIndicator();
+	Visuals::damageIndicator();
         Misc::spectatorList();
         Misc::watermark();
     }
