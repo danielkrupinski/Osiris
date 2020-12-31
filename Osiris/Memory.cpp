@@ -49,7 +49,7 @@ static auto generateBadCharTable(std::string_view pattern) noexcept
     if (lastWildcard == std::string_view::npos)
         lastWildcard = 0;
 
-    const auto defaultShift = (std::max)(1u /* so that we keep moving */, pattern.length() - 1 - lastWildcard);
+    const auto defaultShift = (std::max)(std::size_t(1), pattern.length() - 1 - lastWildcard);
     table.fill(defaultShift);
 
     for (auto i = lastWildcard; i < pattern.length() - 1; ++i)
