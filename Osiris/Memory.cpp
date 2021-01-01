@@ -1,3 +1,5 @@
+#include <cstring>
+
 #ifdef __linux__
 #include <fcntl.h>
 #include <sys/mman.h>
