@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 #include "Interfaces.h"
