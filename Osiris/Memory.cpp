@@ -1,5 +1,6 @@
 #ifdef __linux__
 #include <fcntl.h>
+#include <sys/mman.h>
 #include <sys/stat.h>
 #endif
 
