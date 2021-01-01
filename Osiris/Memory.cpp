@@ -1,3 +1,7 @@
+#ifdef __linux__
+#include <fcntl.h>
+#endif
+
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/LocalPlayer.h"
