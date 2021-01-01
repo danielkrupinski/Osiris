@@ -122,6 +122,17 @@ static void read(const json& j, const char* key, KeyBind& o) noexcept
         o = val.get<std::string>().c_str();
 }
 
+static void read(const json& j, const char* key, char* o, std::size_t size) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_string()) {
+        std::strncpy(o, val.get<std::string>().c_str(), size);
+        o[size - 1] = '\0';
+    }
+}
+
 template <typename T, size_t Size>
 static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
 {
@@ -468,12 +479,7 @@ static void from_json(const json& j, item_setting& i)
     read(j, "Seed", i.seed);
     read(j, "StatTrak", i.stat_trak);
     read(j, "Wear", i.wear);
-
-#ifdef _WIN32
-    if (j.contains("Custom name"))
-        strncpy_s(i.custom_name, j["Custom name"].get<std::string>().c_str(), _TRUNCATE);
-#endif
-
+    read(j, "Custom name", i.custom_name, sizeof(i.custom_name));
     read(j, "Stickers", i.stickers);
 
     i.onLoad();
@@ -539,10 +545,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Bunny hop", m.bunnyHop);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
-#ifdef _WIN32
-    if (j.contains("Clan tag"))
-        strncpy_s(m.clanTag, j["Clan tag"].get<std::string>().c_str(), _TRUNCATE);
-#endif
+    read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
     read(j, "Animated clan tag", m.animatedClanTag);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
