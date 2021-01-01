@@ -1,7 +1,11 @@
 #include <cstring>
 
-#ifdef __linux__
+#ifdef _WIN32
+#include <Windows.h>
+#include <Psapi.h>
+#elif __linux__
 #include <fcntl.h>
+#include <link.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>

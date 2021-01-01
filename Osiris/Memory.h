@@ -6,13 +6,6 @@
 #include <string_view>
 #include <type_traits>
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <Psapi.h>
-#elif __linux__
-#include <link.h>
-#endif
-
 #include "SDK/Platform.h"
 
 class ClientMode;
