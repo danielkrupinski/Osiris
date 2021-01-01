@@ -39,7 +39,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
 #endif
 }
 
-static auto generateBadCharTable(std::string_view pattern) noexcept
+[[nodiscard]] static auto generateBadCharTable(std::string_view pattern) noexcept
 {
     assert(!pattern.empty());
 
