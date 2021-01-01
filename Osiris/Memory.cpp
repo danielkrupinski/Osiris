@@ -1,4 +1,6 @@
+#include <array>
 #include <cstring>
+#include <string_view>
 
 #ifdef _WIN32
 #include <Windows.h>
