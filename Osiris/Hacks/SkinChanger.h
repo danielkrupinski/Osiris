@@ -52,6 +52,8 @@ namespace SkinChanger
     const std::vector<Quality>& getQualities() noexcept;
     const std::vector<Item>& getGloveTypes() noexcept;
     const std::vector<Item>& getKnifeTypes() noexcept;
+
+    void fixKnifeAnimation(long& sequence) noexcept;
 }
 
 
