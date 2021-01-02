@@ -22,18 +22,20 @@ static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noe
     proxies[hash].first(data, arg2, arg3);
 }
 
-static void __CDECL viewModelSequence(recvProxyData& data, void* arg2, void* arg3) noexcept
+static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void* arg3) noexcept
 {
-    if (localPlayer) {
-        if (const auto activeWeapon = localPlayer->getActiveWeapon()) {
-            if (config->visuals.deagleSpinner && activeWeapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+    const auto viewModel = reinterpret_cast<Entity*>(outStruct);
+
+    if (localPlayer && interfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
+        if (const auto weapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
+            if (config->visuals.deagleSpinner && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            SkinChanger::fixKnifeAnimation(data.value._int);
+            SkinChanger::fixKnifeAnimation(viewModel, data.value._int);
         }
     }
     constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
-    proxies[hash].first(data, arg2, arg3);
+    proxies[hash].first(data, outStruct, arg3);
 }
 
 Netvars::Netvars() noexcept

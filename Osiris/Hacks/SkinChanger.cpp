@@ -665,16 +665,9 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-void SkinChanger::fixKnifeAnimation(long& sequence) noexcept
+void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
 {
-    if (!localPlayer)
-        return;
-
-    const auto activeWeapon = localPlayer->getActiveWeapon();
-    if (!activeWeapon)
-        return;
-
-    if (!is_knife(activeWeapon->itemDefinitionIndex2()))
+    if (!is_knife(viewModelWeapon->itemDefinitionIndex2()))
         return;
 
     const auto active_conf = get_by_definition_index(WEAPON_KNIFE);
