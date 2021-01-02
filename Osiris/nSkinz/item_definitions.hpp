@@ -107,18 +107,6 @@ enum ItemDefinitionIndex : int
 //extern const std::map<size_t, weapon_info> k_weapon_info;
 namespace game_data
 {
-    // Stupid MSVC requires separate constexpr constructors for any initialization
-    struct weapon_info
-    {
-        constexpr weapon_info(const char* model, const char* icon = nullptr) :
-            model(model),
-            icon(icon)
-        {}
-
-        const char* model;
-        const char* icon;
-    };
-
     struct weapon_name
     {
         constexpr weapon_name(const int definition_index, const char* name) :
