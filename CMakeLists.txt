@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13.0)
 project(Osiris)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_FLAGS_RELEASE "-O3 -s -fvisibility=hidden -flto -fwhole-program -DNDEBUG -Wfatal-errors")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -s -fvisibility=hidden -flto -fno-exceptions -DNDEBUG -Wfatal-errors")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} --no-gnu-unique -fno-rtti")
 
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/Osiris/*.cpp")

@@ -190,10 +190,8 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting& 
     if (is_knife(item->itemDefinitionIndex2()))
         item->entityQuality() = 3; // make a star appear on knife
 
-#ifdef _WIN32
     if (config.custom_name[0])
-        strcpy_s(item->customName(), config.custom_name);
-#endif
+        std::strncpy(item->customName(), config.custom_name, 32);
 
     if (config.paintKit)
         item->fallbackPaintKit() = config.paintKit;
