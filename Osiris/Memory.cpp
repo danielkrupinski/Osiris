@@ -1,3 +1,18 @@
+#include <array>
+#include <cstring>
+#include <string_view>
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <Psapi.h>
+#elif __linux__
+#include <fcntl.h>
+#include <link.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
 #include "Interfaces.h"
 #include "Memory.h"
 #include "SDK/LocalPlayer.h"
@@ -27,13 +42,38 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
 
     dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
         const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
-        if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
-            moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
-            moduleInfo->size = info->dlpi_phdr[0].p_memsz;
-            return 1;
+        if (!std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name))
+            return 0;
+
+        if (const auto fd = open(info->dlpi_name, O_RDONLY); fd >= 0) {
+            if (struct stat st; fstat(fd, &st) == 0) {
+                if (const auto map = mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0); map != MAP_FAILED) {
+                    const auto ehdr = (ElfW(Ehdr)*)map;
+                    const auto shdrs = (ElfW(Shdr)*)(std::uintptr_t(ehdr) + ehdr->e_shoff);
+                    const auto strTab = (const char*)(std::uintptr_t(ehdr) + shdrs[ehdr->e_shstrndx].sh_offset);
+
+                    for (auto i = 0; i < ehdr->e_shnum; ++i) {
+                        const auto shdr = (ElfW(Shdr)*)(std::uintptr_t(shdrs) + i * ehdr->e_shentsize);
+
+                        if (std::strcmp(strTab + shdr->sh_name, ".text") != 0)
+                            continue;
+
+                        moduleInfo->base = (void*)(info->dlpi_addr + shdr->sh_offset);
+                        moduleInfo->size = shdr->sh_size;
+                        munmap(map, st.st_size);
+                        close(fd);
+                        return 1;
+                    }
+                    munmap(map, st.st_size);
+                }
+            }
+            close(fd);
         }
-        return 0;
-        }, &moduleInfo);
+
+        moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
+        moduleInfo->size = info->dlpi_phdr[0].p_memsz;
+        return 1;
+    }, &moduleInfo);
 
     return std::make_pair(moduleInfo.base, moduleInfo.size);
 #endif
@@ -166,10 +206,10 @@ Memory::Memory() noexcept
     isOtherEnemy = relativeToAbsolute<decltype(isOtherEnemy)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x44\x89\xE2") + 1);
     lineGoesThroughSmoke = reinterpret_cast<decltype(lineGoesThroughSmoke)>(findPattern(CLIENT_DLL, "\x40\x0F\xB6\xFF\x55"));
     getDecoratedPlayerName = relativeToAbsolute<decltype(getDecoratedPlayerName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x4C\x89\xF7") + 1);
-    
+
     hud = relativeToAbsolute<decltype(hud)>(findPattern(CLIENT_DLL, "\x53\x48\x8D\x3D????\x48\x83\xEC\x10\xE8") + 4);
     findHudElement = relativeToAbsolute<decltype(findHudElement)>(findPattern(CLIENT_DLL, "\xE8????\x48\x8D\x50\xE0") + 1);
-    
+
     disablePostProcessing = relativeToAbsolute<decltype(disablePostProcessing)>(findPattern(CLIENT_DLL, "\x80\x3D?????\x89\xB5") + 2);
     submitReportFunction = findPattern(CLIENT_DLL, "\x55\x48\x89\xF7\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x89\xD3\x48\x83\xEC\x58");
     loadSky = relativeToAbsolute<decltype(loadSky)>(findPattern(ENGINE_DLL, "\xE8????\x84\xC0\x74\xAB") + 1);
