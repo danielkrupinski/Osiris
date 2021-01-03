@@ -1126,7 +1126,7 @@ void Config::save(size_t id) const noexcept
 
         j["Aimbot"] = aimbot;
         j["Aimbot On key"] = aimbotOnKey;
-        j["Aimbot Key"] = aimbotKey;
+        to_json(j["Aimbot Key"], aimbotKey, KeyBind::NONE);
         j["Aimbot Key mode"] = aimbotKeyMode;
 
         j["Triggerbot"] = triggerbot;

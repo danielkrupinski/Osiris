@@ -62,7 +62,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
     bool aimbotOnKey{ false };
-    int aimbotKey{ 0 };
+    KeyBind aimbotKey = KeyBind::NONE;
     int aimbotKeyMode{ 0 };
 
     struct Triggerbot {

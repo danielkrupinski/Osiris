@@ -272,7 +272,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 220.0f);
     ImGui::Checkbox("On key", &config->aimbotOnKey);
     ImGui::SameLine();
-    hotkey(config->aimbotKey);
+    hotkey2(config->aimbotKey);
     ImGui::SameLine();
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
