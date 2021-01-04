@@ -151,7 +151,7 @@ public:
         bool zoom{ false };
         int zoomKey{ 0 };
         bool thirdperson{ false };
-        int thirdpersonKey{ 0 };
+        KeyBind thirdpersonKey = KeyBind::NONE;
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
         int fov{ 0 };

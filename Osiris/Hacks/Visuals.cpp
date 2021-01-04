@@ -173,22 +173,15 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
     }
 }
 
+static bool isInThirdperson = true;
+
 void Visuals::thirdperson() noexcept
 {
-    static bool isInThirdperson{ true };
-    static float lastTime{ 0.0f };
+    if (!config->visuals.thirdperson)
+        return;
 
-#ifdef _WIN32
-    if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
-        isInThirdperson = !isInThirdperson;
-        lastTime = memory->globalVars->realtime;
-    }
-#endif
-
-    if (config->visuals.thirdperson)
-        if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
-            && localPlayer && localPlayer->isAlive())
-            memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
+    memory->input->isCameraInThirdPerson = isInThirdperson && localPlayer && localPlayer->isAlive();
+    memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance); 
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -445,4 +438,12 @@ void Visuals::skybox(FrameStage stage) noexcept
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
     }
+}
+
+void Visuals::updateInput() noexcept
+{
+    if (config->visuals.thirdpersonKey.isPressed())
+        isInThirdperson = !isInThirdperson;
+    else if (config->visuals.thirdpersonKey == KeyBind::NONE)
+        isInThirdperson = true;
 }
