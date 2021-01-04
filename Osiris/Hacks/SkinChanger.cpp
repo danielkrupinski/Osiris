@@ -443,7 +443,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
         stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
         for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
             const auto stickerKit = itemSchema->stickerKits.memory[i].value;
-            if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch"))
+            if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
                 continue;
             std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
             stickerKits.emplace_back(stickerKit->id, std::move(name), stickerKit->rarity);
