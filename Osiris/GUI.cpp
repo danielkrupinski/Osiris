@@ -189,7 +189,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     ImGui::Checkbox("On key", &config->aimbotOnKey);
     ImGui::SameLine();
-    ImGui::PushID("On key");
+    ImGui::PushID("Aimbot Key");
     hotkey2("", config->aimbotKey);
     ImGui::PopID();
     ImGui::SameLine();
@@ -992,7 +992,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     hotkey(config->visuals.zoomKey);
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
     ImGui::SameLine();
-    ImGui::PushID("Thirdperson");
+    ImGui::PushID("Thirdperson Key");
     hotkey2("", config->visuals.thirdpersonKey);
     ImGui::PopID();
     ImGui::PushItemWidth(290.0f);
