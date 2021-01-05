@@ -23,6 +23,7 @@ public:
         A,
         ADD,
         B,
+        BACKSPACE,
         C,
         D,
         DECIMAL,
