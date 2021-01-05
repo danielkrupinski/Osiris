@@ -10,6 +10,7 @@
 #endif
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_stdlib.h"
 
@@ -95,15 +96,24 @@ void GUI::updateColors() const noexcept
 
 #include "InputUtil.h"
 
-static void hotkey2(KeyBind& key) noexcept
+static void hotkey2(const char* label, KeyBind& key, const ImVec2& size = { 100.0f, 0.0f }) noexcept
 {
-    ImGui::Text("[ %s ]", key.toString());
+    ImGui::TextUnformatted(label);
+    ImGui::SameLine();
 
-    if (!ImGui::IsItemHovered())
-        return;
+    auto id = ImGui::GetID(label);
 
-    ImGui::SetTooltip("Press any key to change keybind");
-    key.setToPressedKey();
+    if (ImGui::GetActiveID() == id) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
+        ImGui::Button("...", size);
+        ImGui::PopStyleColor();
+
+        ImGui::GetCurrentContext()->ActiveIdAllowOverlap = true;
+        if ((!ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0]) || key.setToPressedKey())
+            ImGui::ClearActiveID();
+    } else if (ImGui::Button(key.toString(), size)) {
+        ImGui::SetActiveID(id, ImGui::GetCurrentWindow());
+    }
 }
 
 void GUI::handleToggle() noexcept
@@ -177,6 +187,18 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
         ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
     }
+    ImGui::Checkbox("On key", &config->aimbotOnKey);
+    ImGui::SameLine();
+    ImGui::PushID("On key");
+    hotkey2("", config->aimbotKey);
+    ImGui::PopID();
+    ImGui::SameLine();
+    ImGui::PushID(2);
+    ImGui::PushItemWidth(70.0f);
+    ImGui::Combo("", &config->aimbotKeyMode, "Hold\0Toggle\0");
+    ImGui::PopItemWidth();
+    ImGui::PopID();
+    ImGui::Separator();
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
@@ -267,18 +289,8 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
-    ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("On key", &config->aimbotOnKey);
-    ImGui::SameLine();
-    hotkey2(config->aimbotKey);
-    ImGui::SameLine();
-    ImGui::PushID(2);
-    ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config->aimbotKeyMode, "Hold\0Toggle\0");
-    ImGui::PopItemWidth();
-    ImGui::PopID();
     ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
     ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
     ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
@@ -977,7 +989,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     hotkey(config->visuals.zoomKey);
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
     ImGui::SameLine();
-    hotkey2(config->visuals.thirdpersonKey);
+    ImGui::PushID("Thirdperson");
+    hotkey2("", config->visuals.thirdpersonKey);
+    ImGui::PopID();
     ImGui::PushItemWidth(290.0f);
     ImGui::PushID(0);
     ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
@@ -1280,9 +1294,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 230.0f);
-    ImGui::TextUnformatted("Menu key");
-    ImGui::SameLine();
-    hotkey2(config->misc.menuKey);
+    hotkey2("Menu Key", config->misc.menuKey);
     ImGui::Checkbox("Anti AFK kick", &config->misc.antiAfkKick);
     ImGui::Checkbox("Auto strafe", &config->misc.autoStrafe);
     ImGui::Checkbox("Bunny hop", &config->misc.bunnyHop);
