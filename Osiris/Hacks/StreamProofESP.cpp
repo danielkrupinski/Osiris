@@ -494,8 +494,13 @@ static void renderProjectileEsp(const ProjectileData& projectileData, const Proj
     }
 }
 
+static bool shouldDraw = true;
+
 void StreamProofESP::render() noexcept
 {
+    if (!shouldDraw)
+        return;
+
     drawList = ImGui::GetBackgroundDrawList();
 
     GameData::Lock lock;
@@ -523,4 +528,10 @@ void StreamProofESP::render() noexcept
         if (!renderPlayerEsp(player, playerConfig["All"]))
             renderPlayerEsp(player, playerConfig[player.visible ? "Visible" : "Occluded"]);
     }
+}
+
+void StreamProofESP::updateInput() noexcept
+{
+    if (config->streamProofESP.toggleKey.isPressed())
+        shouldDraw = !shouldDraw;
 }

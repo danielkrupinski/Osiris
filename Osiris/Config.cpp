@@ -398,6 +398,7 @@ static void from_json(const json& j, Config::Chams& c)
 
 static void from_json(const json& j, Config::StreamProofESP& e)
 {
+    read(j, "Toggle Key", e.toggleKey);
     read(j, "Allies", e.allies);
     read(j, "Enemies", e.enemies);
     read(j, "Weapons", e.weapons);
@@ -872,6 +873,8 @@ static void to_json(json& j, const Config::Chams& o)
 
 static void to_json(json& j, const Config::StreamProofESP& o)
 {
+    if (o.toggleKey != KeyBind::NONE)
+        j["Toggle Key"] = o.toggleKey.toString();
     j["Allies"] = o.allies;
     j["Enemies"] = o.enemies;
     j["Weapons"] = o.weapons;

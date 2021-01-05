@@ -583,6 +583,9 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         ImGui::Begin("ESP", &window.streamProofESP, windowFlags);
     }
 
+    hotkey2("Toggle Key", config->streamProofESP.toggleKey);
+    ImGui::Separator();
+
     static std::size_t currentCategory;
     static auto currentItem = "All";
 
