@@ -131,7 +131,7 @@ void GUI::handleToggle() noexcept
     }
 }
 
-void GUI::hotkey(int& key) noexcept
+[[deprecated]] void GUI::hotkey(int& key) noexcept
 {
     key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
 

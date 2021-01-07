@@ -13,7 +13,7 @@ public:
     bool isOpen() noexcept { return open; }
 private:
     bool open = true;
-    static void hotkey(int&) noexcept;
+    [[deprecated]] static void hotkey(int&) noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow(bool contentOnly = false) noexcept;
