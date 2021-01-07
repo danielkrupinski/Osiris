@@ -534,4 +534,6 @@ void StreamProofESP::updateInput() noexcept
 {
     if (config->streamProofESP.toggleKey.isPressed())
         shouldDraw = !shouldDraw;
+    if (config->streamProofESP.toggleKey == KeyBind::NONE)
+        shouldDraw = true;
 }
