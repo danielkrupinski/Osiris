@@ -79,7 +79,7 @@ public:
     };
     std::array<Triggerbot, 40> triggerbot;
     bool triggerbotOnKey = false;
-    int triggerbotKey = 0;
+    KeyBind triggerbotKey = KeyBind::NONE;
 
     struct Backtrack {
         bool enabled{ false };

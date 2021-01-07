@@ -1136,7 +1136,7 @@ void Config::save(size_t id) const noexcept
 
         j["Triggerbot"] = triggerbot;
         j["Triggerbot On key"] = triggerbotOnKey;
-        j["Triggerbot Key"] = triggerbotKey;
+        to_json(j["Triggerbot Key"], triggerbotKey, KeyBind::NONE);
 
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
