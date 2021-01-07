@@ -439,9 +439,9 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Checkbox("Enabled", &config->triggerbot[currentWeapon].enabled);
     ImGui::Separator();
-    ImGui::Checkbox("On key", &config->triggerbot[currentWeapon].onKey);
+    ImGui::Checkbox("On key", &config->triggerbotOnKey);
     ImGui::SameLine();
-    hotkey(config->triggerbot[currentWeapon].key);
+    hotkey(config->triggerbotKey);
     ImGui::Checkbox("Friendly fire", &config->triggerbot[currentWeapon].friendlyFire);
     ImGui::Checkbox("Scoped only", &config->triggerbot[currentWeapon].scopedOnly);
     ImGui::Checkbox("Ignore flash", &config->triggerbot[currentWeapon].ignoreFlash);

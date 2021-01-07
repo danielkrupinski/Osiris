@@ -340,8 +340,6 @@ static void from_json(const json& j, Config::Aimbot& a)
 static void from_json(const json& j, Config::Triggerbot& t)
 {
     read(j, "Enabled", t.enabled);
-    read(j, "On key", t.onKey);
-    read(j, "Key", t.key);
     read(j, "Friendly fire", t.friendlyFire);
     read(j, "Scoped only", t.scopedOnly);
     read(j, "Ignore flash", t.ignoreFlash);
@@ -641,6 +639,9 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Aimbot Key mode", aimbotKeyMode);
 
     read(j, "Triggerbot", triggerbot);
+    read(j, "Triggerbot On key", triggerbotOnKey);
+    read(j, "Triggerbot Key", triggerbotKey);
+
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
     read(j, "Glow", glow);
@@ -816,8 +817,6 @@ static void to_json(json& j, const Config::Aimbot& o, const Config::Aimbot& dumm
 static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerbot& dummy = {})
 {
     WRITE("Enabled", enabled);
-    WRITE("On key", onKey);
-    WRITE("Key", key);
     WRITE("Friendly fire", friendlyFire);
     WRITE("Scoped only", scopedOnly);
     WRITE("Ignore flash", ignoreFlash);
@@ -1136,6 +1135,9 @@ void Config::save(size_t id) const noexcept
         j["Aimbot Key mode"] = aimbotKeyMode;
 
         j["Triggerbot"] = triggerbot;
+        j["Triggerbot On key"] = triggerbotOnKey;
+        j["Triggerbot Key"] = triggerbotKey;
+
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
         j["Glow"] = glow;

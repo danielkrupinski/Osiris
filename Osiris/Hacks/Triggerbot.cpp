@@ -47,7 +47,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     lastContact = 0.0f;
 
 #ifdef _WIN32
-    if (cfg.onKey && !GetAsyncKeyState(cfg.key))
+    if (config->triggerbotOnKey && !GetAsyncKeyState(config->triggerbotKey))
         return;
 #endif
 

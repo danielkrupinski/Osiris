@@ -72,14 +72,14 @@ public:
         bool ignoreFlash = false;
         bool ignoreSmoke = false;
         bool killshot = false;
-        bool onKey = false;
-        int key = 0;
         int hitgroup = 0;
         int shotDelay = 0;
         int minDamage = 1;
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
+    bool triggerbotOnKey = false;
+    int triggerbotKey = 0;
 
     struct Backtrack {
         bool enabled{ false };
