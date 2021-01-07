@@ -1396,9 +1396,11 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PushID("Choked packets Key");
     hotkey2("", config->misc.chokedPacketsKey);
     ImGui::PopID();
+    /*
     ImGui::Text("Quick healthshot");
     ImGui::SameLine();
     hotkey(config->misc.quickHealthshotKey);
+    */
     ImGui::Checkbox("Grenade Prediction", &config->misc.nadePredict);
     ImGui::Checkbox("Fix tablet signal", &config->misc.fixTabletSignal);
     ImGui::SetNextItemWidth(120.0f);
