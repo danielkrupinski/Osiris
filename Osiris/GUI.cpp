@@ -96,12 +96,13 @@ void GUI::updateColors() const noexcept
 
 #include "InputUtil.h"
 
-static void hotkey2(const char* label, KeyBind& key, const ImVec2& size = { 100.0f, 0.0f }) noexcept
+static void hotkey2(const char* label, KeyBind& key, float samelineOffset = 0.0f, const ImVec2& size = { 100.0f, 0.0f }) noexcept
 {
-    ImGui::TextUnformatted(label);
-    ImGui::SameLine();
+    const auto id = ImGui::GetID(label);
+    ImGui::PushID(id);
 
-    auto id = ImGui::GetID(label);
+    ImGui::TextUnformatted(label);
+    ImGui::SameLine(samelineOffset);
 
     if (ImGui::GetActiveID() == id) {
         ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
@@ -114,6 +115,8 @@ static void hotkey2(const char* label, KeyBind& key, const ImVec2& size = { 100.
     } else if (ImGui::Button(key.toString(), size)) {
         ImGui::SetActiveID(id, ImGui::GetCurrentWindow());
     }
+
+    ImGui::PopID();
 }
 
 void GUI::handleToggle() noexcept
@@ -583,7 +586,8 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         ImGui::Begin("ESP", &window.streamProofESP, windowFlags);
     }
 
-    hotkey2("Toggle Key", config->streamProofESP.toggleKey);
+    hotkey2("Toggle Key", config->streamProofESP.toggleKey, 80.0f);
+    hotkey2("Hold Key", config->streamProofESP.holdKey, 80.0f);
     ImGui::Separator();
 
     static std::size_t currentCategory;

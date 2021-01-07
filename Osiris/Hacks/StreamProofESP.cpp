@@ -532,8 +532,16 @@ void StreamProofESP::render() noexcept
 
 void StreamProofESP::updateInput() noexcept
 {
-    if (config->streamProofESP.toggleKey.isPressed())
-        shouldDraw = !shouldDraw;
-    if (config->streamProofESP.toggleKey == KeyBind::NONE)
+    if (config->streamProofESP.toggleKey != KeyBind::NONE) {
+        static bool toggledOn = true;
+
+        if (config->streamProofESP.toggleKey.isPressed())
+            toggledOn = !toggledOn;
+
+        shouldDraw = toggledOn || config->streamProofESP.holdKey.isDown();
+    } else if (config->streamProofESP.holdKey != KeyBind::NONE) {
+        shouldDraw = config->streamProofESP.holdKey.isDown();
+    } else {
         shouldDraw = true;
+    }
 }
