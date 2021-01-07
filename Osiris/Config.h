@@ -257,7 +257,7 @@ public:
         KeyBind prepareRevolverKey = KeyBind::NONE;
         int hitSound{ 0 };
         int chokedPackets{ 0 };
-        int chokedPacketsKey{ 0 };
+        KeyBind chokedPacketsKey = KeyBind::NONE;
         int quickHealthshotKey{ 0 };
         float maxAngleDelta{ 255.0f };
         int killSound{ 0 };

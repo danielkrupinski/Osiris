@@ -672,11 +672,11 @@ void Misc::autoPistol(UserCmd* cmd) noexcept
     }
 }
 
+static bool chokePacketsActive;
+
 void Misc::chokePackets(bool& sendPacket) noexcept
 {
-#ifdef _WIN32
-    if (!config->misc.chokedPacketsKey || GetAsyncKeyState(config->misc.chokedPacketsKey))
-#endif
+    if (chokePacketsActive)
         sendPacket = interfaces->engine->getNetworkChannel()->chokedPackets >= config->misc.chokedPackets;
 }
 
@@ -1029,4 +1029,5 @@ void Misc::updateInput() noexcept
     edgejumpActive = config->misc.edgejumpkey.isDown();
     slowwalkActive = config->misc.slowwalkKey.isDown();
     prepareRevolverActive = config->misc.prepareRevolverKey == KeyBind::NONE || config->misc.prepareRevolverKey.isDown();
+    chokePacketsActive = config->misc.chokedPacketsKey == KeyBind::NONE || config->misc.chokedPacketsKey.isDown();
 }
