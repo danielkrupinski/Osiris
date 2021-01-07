@@ -20,7 +20,7 @@ public:
         return VirtualMethod::call<int, 45>(this, virtualKey);
     }
 
-    auto virtualKeyToString(int virtualKey) noexcept
+    [[deprecated]] auto virtualKeyToString(int virtualKey) noexcept
     {
         return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
     }
