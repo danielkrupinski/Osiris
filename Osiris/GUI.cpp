@@ -1372,7 +1372,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Quick reload", &config->misc.quickReload);
     ImGui::Checkbox("Prepare revolver", &config->misc.prepareRevolver);
     ImGui::SameLine();
-    hotkey(config->misc.prepareRevolverKey);
+    ImGui::PushID("Prepare revolver Key");
+    hotkey2("", config->misc.prepareRevolverKey);
+    ImGui::PopID();
     ImGui::Combo("Hit Sound", &config->misc.hitSound, "None\0Metal\0Gamesense\0Bell\0Glass\0Custom\0");
     if (config->misc.hitSound == 5) {
         ImGui::InputText("Hit Sound filename", &config->misc.customHitSound);

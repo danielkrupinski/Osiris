@@ -275,18 +275,15 @@ void Misc::watermark() noexcept
     }
 }
 
+static bool prepareRevolverActive;
+
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
 {
     constexpr auto timeToTicks = [](float time) {  return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick); };
     constexpr float revolverPrepareTime{ 0.234375f };
 
     static float readyTime;
-    if (config->misc.prepareRevolver && localPlayer &&
-#ifdef _WIN32
-    (!config->misc.prepareRevolverKey || GetAsyncKeyState(config->misc.prepareRevolverKey))) {
-#else
-    true){
-#endif
+    if (config->misc.prepareRevolver && localPlayer && prepareRevolverActive) {
         const auto activeWeapon = localPlayer->getActiveWeapon();
         if (activeWeapon && activeWeapon->itemDefinitionIndex2() == WeaponId::Revolver) {
             if (!readyTime) readyTime = memory->globalVars->serverTime() + revolverPrepareTime;
@@ -1031,4 +1028,5 @@ void Misc::updateInput() noexcept
 {
     edgejumpActive = config->misc.edgejumpkey.isDown();
     slowwalkActive = config->misc.slowwalkKey.isDown();
+    prepareRevolverActive = config->misc.prepareRevolverKey == KeyBind::NONE || config->misc.prepareRevolverKey.isDown();
 }
