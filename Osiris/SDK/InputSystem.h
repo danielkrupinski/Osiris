@@ -9,7 +9,7 @@ public:
     VIRTUAL_METHOD(void, resetInputState, 39, (), (this))
     VIRTUAL_METHOD(const char*, buttonCodeToString, 40, (int buttonCode), (this, buttonCode))
 
-    constexpr auto virtualKeyToButtonCode(int virtualKey) noexcept
+    [[deprecated]] constexpr auto virtualKeyToButtonCode(int virtualKey) noexcept
     {
 #ifdef _WIN32
         if (virtualKey <= VK_XBUTTON2) {
