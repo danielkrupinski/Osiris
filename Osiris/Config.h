@@ -243,7 +243,7 @@ public:
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
         char clanTag[16];
-        int edgejumpkey{ 0 };
+        KeyBind edgejumpkey = KeyBind::NONE;
         int slowwalkKey{ 0 };
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;

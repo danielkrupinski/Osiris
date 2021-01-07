@@ -36,15 +36,12 @@
 
 #include "../imguiCustom.h"
 
+static bool edgejumpActive;
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
-#ifdef _WIN32
-    if (!config->misc.edgejump || !GetAsyncKeyState(config->misc.edgejumpkey))
+    if (!config->misc.edgejump || !edgejumpActive)
         return;
-#else
-    if (!config->misc.edgejump)
-        return;
-#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -1031,4 +1028,9 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         drawList->AddCircleFilled(pos, 11.0f, color & IM_COL32_A_MASK, 40);
         drawList->AddCircleFilled(pos, 10.0f, color, 40);
     }
+}
+
+void Misc::updateInput() noexcept
+{
+    edgejumpActive = config->misc.edgejumpkey.isDown();
 }

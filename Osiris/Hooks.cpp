@@ -107,6 +107,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     Aimbot::updateInput();
     Visuals::updateInput();
     StreamProofESP::updateInput();
+    Misc::updateInput();
 
     gui->handleToggle();
 
@@ -541,9 +542,11 @@ static void swapWindow(SDL_Window* window) noexcept
         Misc::drawOffscreenEnemies(ImGui::GetBackgroundDrawList());
         Misc::drawBombTimer();
         Visuals::hitMarker(nullptr, ImGui::GetBackgroundDrawList());
+
         Aimbot::updateInput();
         Visuals::updateInput();
         StreamProofESP::updateInput();
+        Misc::updateInput();
 
         gui->handleToggle();
 
