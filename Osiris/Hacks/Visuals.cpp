@@ -256,18 +256,13 @@ void Visuals::removeShadows() noexcept
     shadows->setValue(!config->visuals.noShadows);
 }
 
+static bool zoomToggled = false;
+
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
     if (config->visuals.zoom && localPlayer) {
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
-            static bool scoped{ false };
-
-#ifdef _WIN32
-            if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
-                scoped = !scoped;
-#endif
-
-            if (scoped) {
+            if (zoomToggled) {
                 localPlayer->fov() = 40;
                 localPlayer->fovStart() = 40;
             }
@@ -446,4 +441,7 @@ void Visuals::updateInput() noexcept
         isInThirdperson = !isInThirdperson;
     else if (config->visuals.thirdpersonKey == KeyBind::NONE)
         isInThirdperson = true;
+
+    if (config->visuals.zoomKey.isPressed())
+        zoomToggled = !zoomToggled;
 }

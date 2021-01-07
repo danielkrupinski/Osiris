@@ -993,7 +993,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::NextColumn();
     ImGui::Checkbox("Zoom", &config->visuals.zoom);
     ImGui::SameLine();
-    hotkey(config->visuals.zoomKey);
+    ImGui::PushID("Zoom Key");
+    hotkey2("", config->visuals.zoomKey);
+    ImGui::PopID();
     ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
     ImGui::SameLine();
     ImGui::PushID("Thirdperson Key");
