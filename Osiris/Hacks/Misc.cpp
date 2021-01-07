@@ -53,15 +53,12 @@ void Misc::edgejump(UserCmd* cmd) noexcept
         cmd->buttons |= UserCmd::IN_JUMP;
 }
 
+static bool slowwalkActive;
+
 void Misc::slowwalk(UserCmd* cmd) noexcept
 {
-#ifdef _WIN32
-    if (!config->misc.slowwalk || !GetAsyncKeyState(config->misc.slowwalkKey))
+    if (!config->misc.slowwalk || !slowwalkActive)
         return;
-#else
-    if (!config->misc.slowwalk)
-        return;
-#endif
 
     if (!localPlayer || !localPlayer->isAlive())
         return;
@@ -1033,4 +1030,5 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 void Misc::updateInput() noexcept
 {
     edgejumpActive = config->misc.edgejumpkey.isDown();
+    slowwalkActive = config->misc.slowwalkKey.isDown();
 }

@@ -99,7 +99,7 @@ void GUI::updateColors() const noexcept
 static void hotkey2(const char* label, KeyBind& key, float samelineOffset = 0.0f, const ImVec2& size = { 100.0f, 0.0f }) noexcept
 {
     const auto id = ImGui::GetID(label);
-    ImGui::PushID(id);
+    ImGui::PushID(label);
 
     ImGui::TextUnformatted(label);
     ImGui::SameLine(samelineOffset);
@@ -1314,7 +1314,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
     ImGui::SameLine();
-    hotkey(config->misc.slowwalkKey);
+    ImGui::PushID("Edge Jump Key");
+    hotkey2("", config->misc.slowwalkKey);
+    ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", config->misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);

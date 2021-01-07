@@ -244,7 +244,7 @@ public:
         PreserveKillfeed preserveKillfeed;
         char clanTag[16];
         KeyBind edgejumpkey = KeyBind::NONE;
-        int slowwalkKey{ 0 };
+        KeyBind slowwalkKey = KeyBind::NONE;
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
         ColorToggle spectatorList;
