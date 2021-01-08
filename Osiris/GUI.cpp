@@ -1314,7 +1314,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::PopID();
     ImGui::Checkbox("Slowwalk", &config->misc.slowwalk);
     ImGui::SameLine();
-    ImGui::PushID("Edge Jump Key");
+    ImGui::PushID("Slowwalk Key");
     hotkey2("", config->misc.slowwalkKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
