@@ -78,8 +78,7 @@ public:
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
-    bool triggerbotOnKey = false;
-    KeyBind triggerbotKey = KeyBind::NONE;
+    KeyBind triggerbotHoldKey = KeyBind::NONE;
 
     struct Backtrack {
         bool enabled{ false };

@@ -48,7 +48,7 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     }
     lastContact = 0.0f;
 
-    if (config->triggerbotOnKey && !keyPressed)
+    if (!keyPressed)
         return;
 
     if (now - lastTime < cfg.shotDelay / 1000.0f)
@@ -101,5 +101,5 @@ void Triggerbot::run(UserCmd* cmd) noexcept
 
 void Triggerbot::updateInput() noexcept
 {
-    keyPressed = config->triggerbotKey.isDown();
+    keyPressed = config->triggerbotHoldKey == KeyBind::NONE || config->triggerbotHoldKey.isDown();
 }

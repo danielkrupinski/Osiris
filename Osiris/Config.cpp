@@ -639,8 +639,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Aimbot Key mode", aimbotKeyMode);
 
     read(j, "Triggerbot", triggerbot);
-    read(j, "Triggerbot On key", triggerbotOnKey);
-    read(j, "Triggerbot Key", triggerbotKey);
+    read(j, "Triggerbot Key", triggerbotHoldKey);
 
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
@@ -1135,8 +1134,7 @@ void Config::save(size_t id) const noexcept
         j["Aimbot Key mode"] = aimbotKeyMode;
 
         j["Triggerbot"] = triggerbot;
-        j["Triggerbot On key"] = triggerbotOnKey;
-        to_json(j["Triggerbot Key"], triggerbotKey, KeyBind::NONE);
+        to_json(j["Triggerbot Key"], triggerbotHoldKey, KeyBind::NONE);
 
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
