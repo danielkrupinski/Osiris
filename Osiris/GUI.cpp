@@ -1089,6 +1089,18 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
     };
 
+    constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+        constexpr auto delimiter = L" ";
+        wchar_t* _;
+        wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
+        while (token) {
+            if (!std::wcsstr(str.c_str(), token))
+                return false;
+            token = std::wcstok(nullptr, delimiter, &_);
+        }
+        return true;
+    };
+
     {
         ImGui::SameLine();
         ImGui::Checkbox("Enabled", &selected_entry.enabled);
