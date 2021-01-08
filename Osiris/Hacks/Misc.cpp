@@ -550,37 +550,6 @@ void Misc::nadePredict() noexcept
     nadeVar->setValue(config->misc.nadePredict);
 }
 
-void Misc::quickHealthshot(UserCmd* cmd) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    static bool inProgress{ false };
-
-#ifdef _WIN32
-    if (GetAsyncKeyState(config->misc.quickHealthshotKey) & 1)
-        inProgress = true;
-#endif
-
-    if (auto activeWeapon{ localPlayer->getActiveWeapon() }; activeWeapon && inProgress) {
-        if (activeWeapon->getClientClass()->classId == ClassId::Healthshot && localPlayer->nextAttack() <= memory->globalVars->serverTime() && activeWeapon->nextPrimaryAttack() <= memory->globalVars->serverTime())
-            cmd->buttons |= UserCmd::IN_ATTACK;
-        else {
-            for (auto weaponHandle : localPlayer->weapons()) {
-                if (weaponHandle == -1)
-                    break;
-
-                if (const auto weapon{ interfaces->entityList->getEntityFromHandle(weaponHandle) }; weapon && weapon->getClientClass()->classId == ClassId::Healthshot) {
-                    cmd->weaponselect = weapon->index();
-                    cmd->weaponsubtype = weapon->getWeaponSubType();
-                    return;
-                }
-            }
-        }
-        inProgress = false;
-    }
-}
-
 void Misc::fixTabletSignal() noexcept
 {
     if (config->misc.fixTabletSignal && localPlayer) {
