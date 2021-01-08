@@ -142,20 +142,6 @@ static void initializeKits() noexcept
 
 void apply_sticker_changer(Entity* item) noexcept
 {
-    /*
-    if (constexpr auto hash{ fnv::hash("CBaseAttributableItem->m_Item") }; !s_econ_item_interface_wrapper_offset)
-        s_econ_item_interface_wrapper_offset = netvars->operator[](hash) + 0xC;
-
-    static vmt_multi_hook hook;
-
-    const auto econ_item_interface_wrapper = std::uintptr_t(item) + s_econ_item_interface_wrapper_offset;
-
-    if (hook.initialize_and_hook_instance(reinterpret_cast<void*>(econ_item_interface_wrapper))) {
-        hook.apply_hook<GetStickerAttributeBySlotIndexFloat>(4);
-        hook.apply_hook<GetStickerAttributeBySlotIndexInt>(5);
-    }
-    */
-
     if (auto config = get_by_definition_index(item->itemDefinitionIndex())) {
         constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
         const auto attributeList = std::uintptr_t(item) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
