@@ -1127,7 +1127,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
                 for (std::size_t i = 0; i < kits.size(); ++i) {
-                    if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
+                    if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
                         ImGui::PushID(i);
                         const auto selected = i == selected_entry.paint_kit_vector_index;
                         if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
@@ -1212,7 +1212,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
                 for (std::size_t i = 0; i < kits.size(); ++i) {
-                    if (filter.empty() || wcsstr(kits[i].nameUpperCase.c_str(), filterWide.c_str())) {
+                    if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
                         ImGui::PushID(i);
                         const auto selected = i == selected_sticker.kit_vector_index;
                         if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
