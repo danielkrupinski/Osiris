@@ -141,10 +141,13 @@ void GameData::update() noexcept
     std::sort(entityData.begin(), entityData.end());
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
+    std::for_each(projectileData.begin(), projectileData.end(), [](auto& projectile) {
+        if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
+            projectile.exploded = true;
+    });
+
     for (auto it = projectileData.begin(); it != projectileData.end();) {
         if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
-            it->exploded = true;
-
             if (it->trajectory.size() < 1 || it->trajectory[it->trajectory.size() - 1].first + 60.0f < memory->globalVars->realtime) {
                 it = projectileData.erase(it);
                 continue;
