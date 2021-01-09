@@ -242,6 +242,7 @@ Memory::Memory() noexcept
     gameRules = *relativeToAbsolute<Entity***>(findPattern(CLIENT_DLL, "\x48\x8B\x1D????\x48\x8B\x3B\x48\x85\xFF\x74\x06") + 3);
     setOrAddAttributeValueByNameFunction = reinterpret_cast<decltype(setOrAddAttributeValueByNameFunction)>(findPattern(CLIENT_DLL, "\x55\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x49\x89\xFD\x41\x54\x53\x48\x89\xF3\x48\x83\xEC\x38"));
     dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x10\xE8????\x48\x8B\x35") + 3);
+    fakePrime = reinterpret_cast<std::uint8_t*>(findPattern(CLIENT_DLL, "\x74\x06\xF6\x40\x20\x10"));
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
