@@ -28,7 +28,7 @@ static std::vector<ObserverData> observerData;
 static std::vector<WeaponData> weaponData;
 static std::vector<EntityData> entityData;
 static std::vector<LootCrateData> lootCrateData;
-static std::list<ProjectileData> projectileData;
+static std::forward_list<ProjectileData> projectileData;
 static BombData bombData;
 
 static auto playerByHandleWritable(int handle) noexcept
@@ -112,7 +112,7 @@ void GameData::update() noexcept
                     if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
                         it->update(entity);
                     else
-                        projectileData.emplace_back(entity);
+                        projectileData.emplace_front(entity);
                     break;
                 case ClassId::DynamicProp:
                     if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
@@ -198,7 +198,7 @@ const std::vector<LootCrateData>& GameData::lootCrates() noexcept
     return lootCrateData;
 }
 
-const std::list<ProjectileData>& GameData::projectiles() noexcept
+const std::forward_list<ProjectileData>& GameData::projectiles() noexcept
 {
     return projectileData;
 }

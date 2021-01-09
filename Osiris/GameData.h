@@ -1,5 +1,6 @@
 #pragma once
 
+#include <forward_list>
 #include <list>
 #include <mutex>
 #include <string>
@@ -43,7 +44,7 @@ namespace GameData
     const std::vector<WeaponData>& weapons() noexcept;
     const std::vector<EntityData>& entities() noexcept;
     const std::vector<LootCrateData>& lootCrates() noexcept;
-    const std::list<ProjectileData>& projectiles() noexcept;
+    const std::forward_list<ProjectileData>& projectiles() noexcept;
     const BombData& plantedC4() noexcept;
 }
 
