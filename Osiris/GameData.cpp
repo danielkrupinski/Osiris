@@ -153,13 +153,7 @@ void GameData::update() noexcept
         ++it;
     }
 
-    for (auto it = playerData.begin(); it != playerData.end();) {
-        if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
-            it = playerData.erase(it);
-            continue;
-        }
-        ++it;
-    }
+    std::erase_if(playerData, [](const auto& player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
 }
 
 void GameData::clearProjectileList() noexcept
