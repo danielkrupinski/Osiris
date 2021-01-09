@@ -18,33 +18,33 @@
 
 #ifdef _WIN32
 
-#define CLIENT_DLL "client"
-#define ENGINE_DLL "engine"
-#define INPUTSYSTEM_DLL "inputsystem"
-#define LOCALIZE_DLL "localize"
-#define MATERIALSYSTEM_DLL "materialsystem"
-#define SOUNDEMITTERSYSTEM_DLL "soundemittersystem"
-#define STUDIORENDER_DLL "studiorender"
-#define TIER0_DLL "tier0"
-#define VGUI2_DLL "vgui2"
-#define VGUIMATSURFACE_DLL "vguimatsurface"
-#define VPHYSICS_DLL "vphysics"
-#define VSTDLIB_DLL "vstdlib"
+constexpr auto CLIENT_DLL = "client";
+constexpr auto ENGINE_DLL = "engine";
+constexpr auto INPUTSYSTEM_DLL = "inputsystem";
+constexpr auto LOCALIZE_DLL = "localize";
+constexpr auto MATERIALSYSTEM_DLL = "materialsystem";
+constexpr auto SOUNDEMITTERSYSTEM_DLL = "soundemittersystem";
+constexpr auto STUDIORENDER_DLL = "studiorender";
+constexpr auto TIER0_DLL = "tier0";
+constexpr auto VGUI2_DLL = "vgui2";
+constexpr auto VGUIMATSURFACE_DLL = "vguimatsurface";
+constexpr auto VPHYSICS_DLL = "vphysics";
+constexpr auto VSTDLIB_DLL = "vstdlib";
 
 #elif __linux__
 
-#define CLIENT_DLL "csgo/bin/linux64/client_client.so"
-#define ENGINE_DLL "engine_client.so"
-#define INPUTSYSTEM_DLL "inputsystem_client.so"
-#define LOCALIZE_DLL "localize_client.so"
-#define MATERIALSYSTEM_DLL "materialsystem_client.so"
-#define SOUNDEMITTERSYSTEM_DLL "soundemittersystem_client.so"
-#define STUDIORENDER_DLL "studiorender_client.so"
-#define TIER0_DLL "libtier0_client.so"
-#define VGUI2_DLL "vgui2_client.so"
-#define VGUIMATSURFACE_DLL "vguimatsurface_client.so"
-#define VPHYSICS_DLL "vphysics_client.so"
-#define VSTDLIB_DLL "libvstdlib_client.so"
+constexpr auto CLIENT_DLL = "csgo/bin/linux64/client_client.so";
+constexpr auto ENGINE_DLL = "engine_client.so";
+constexpr auto INPUTSYSTEM_DLL = "inputsystem_client.so";
+constexpr auto LOCALIZE_DLL = "localize_client.so";
+constexpr auto MATERIALSYSTEM_DLL = "materialsystem_client.so";
+constexpr auto SOUNDEMITTERSYSTEM_DLL = "soundemittersystem_client.so";
+constexpr auto STUDIORENDER_DLL = "studiorender_client.so";
+constexpr auto TIER0_DLL = "libtier0_client.so";
+constexpr auto VGUI2_DLL = "vgui2_client.so";
+constexpr auto VGUIMATSURFACE_DLL = "vguimatsurface_client.so";
+constexpr auto VPHYSICS_DLL = "vphysics_client.so";
+constexpr auto VSTDLIB_DLL = "libvstdlib_client.so";
 
 #endif
 
