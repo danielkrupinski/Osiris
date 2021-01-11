@@ -19,9 +19,4 @@ public:
 #endif
         return VirtualMethod::call<int, 45>(this, virtualKey);
     }
-
-    [[deprecated]] auto virtualKeyToString(int virtualKey) noexcept
-    {
-        return buttonCodeToString(virtualKeyToButtonCode(virtualKey));
-    }
 };
