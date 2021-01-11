@@ -27,6 +27,8 @@
 #include <array>
 #include <string>
 
+#include "../SDK/WeaponId.h"
+
 enum ItemDefinitionIndex : int {
     WEAPON_KNIFE = 42,
     GLOVE_T_SIDE = 5028
@@ -37,51 +39,51 @@ namespace game_data
 {
     struct weapon_name
     {
-        constexpr weapon_name(const int definition_index, const char* name) :
+        constexpr weapon_name(WeaponId definition_index, const char* name) :
             definition_index(definition_index),
             name(name)
         {}
 
-        int definition_index = 0;
-        const char* name = nullptr;
+        WeaponId definition_index;
+        const char* name;
     };
 
     constexpr auto weapon_names = std::to_array<weapon_name>({
-        {WEAPON_KNIFE, "Knife"},
-        {GLOVE_T_SIDE, "Glove"},
-        {7, "AK-47"},
-        {8, "AUG"},
-        {9, "AWP"},
-        {63, "CZ75 Auto"},
-        {1, "Desert Eagle"},
-        {2, "Dual Berettas"},
-        {10, "FAMAS"},
-        {3, "Five-SeveN"},
-        {11, "G3SG1"},
-        {13, "Galil AR"},
-        {4, "Glock-18"},
-        {14, "M249"},
-        {60, "M4A1-S"},
-        {16, "M4A4"},
-        {17, "MAC-10"},
-        {27, "MAG-7"},
-        {23, "MP5-SD"},
-        {33, "MP7"},
-        {34, "MP9"},
-        {28, "Negev"},
-        {35, "Nova"},
-        {32, "P2000"},
-        {36, "P250"},
-        {19, "P90"},
-        {26, "PP-Bizon"},
-        {64, "R8 Revolver"},
-        {29, "Sawed-Off"},
-        {38, "SCAR-20"},
-        {40, "SSG 08"},
-        {39, "SG 553"},
-        {30, "Tec-9"},
-        {24, "UMP-45"},
-        {61, "USP-S"},
-        {25, "XM1014"},
+        {WeaponId::Knife, "Knife"},
+        {WeaponId::GloveT, "Glove"},
+        {WeaponId::Ak47, "AK-47"},
+        {WeaponId::Aug, "AUG"},
+        {WeaponId::Awp, "AWP"},
+        {WeaponId::Cz75a, "CZ75 Auto"},
+        {WeaponId::Deagle, "Desert Eagle"},
+        {WeaponId::Elite, "Dual Berettas"},
+        {WeaponId::Famas, "FAMAS"},
+        {WeaponId::Fiveseven, "Five-SeveN"},
+        {WeaponId::G3SG1, "G3SG1"},
+        {WeaponId::GalilAr, "Galil AR"},
+        {WeaponId::Glock, "Glock-18"},
+        {WeaponId::M249, "M249"},
+        {WeaponId::M4a1_s, "M4A1-S"},
+        {WeaponId::M4A1, "M4A4"},
+        {WeaponId::Mac10, "MAC-10"},
+        {WeaponId::Mag7, "MAG-7"},
+        {WeaponId::Mp5sd, "MP5-SD"},
+        {WeaponId::Mp7, "MP7"},
+        {WeaponId::Mp9, "MP9"},
+        {WeaponId::Negev, "Negev"},
+        {WeaponId::Nova, "Nova"},
+        {WeaponId::Hkp2000, "P2000"},
+        {WeaponId::P250, "P250"},
+        {WeaponId::P90, "P90"},
+        {WeaponId::Bizon, "PP-Bizon"},
+        {WeaponId::Revolver, "R8 Revolver"},
+        {WeaponId::Sawedoff, "Sawed-Off"},
+        {WeaponId::Scar20, "SCAR-20"},
+        {WeaponId::Ssg08, "SSG 08"},
+        {WeaponId::Sg553, "SG 553"},
+        {WeaponId::Tec9, "Tec-9"},
+        {WeaponId::Ump45, "UMP-45"},
+        {WeaponId::Usp_s, "USP-S"},
+        {WeaponId::Xm1014, "XM1014"}
     });
 }
