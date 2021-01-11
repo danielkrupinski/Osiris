@@ -190,3 +190,4 @@ struct item_setting {
 };
 
 item_setting* get_by_definition_index(int definition_index);
+item_setting* get_by_definition_index(WeaponId weaponId);

@@ -66,6 +66,12 @@ item_setting* get_by_definition_index(const int definition_index)
     return it == std::end(config->skinChanger) ? nullptr : &*it;
 }
 
+item_setting* get_by_definition_index(WeaponId weaponId)
+{
+    const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == static_cast<int>(weaponId); });
+    return it == config->skinChanger.end() ? nullptr : &*it;
+}
+
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
 static std::vector<SkinChanger::PaintKit> gloveKits;
 
