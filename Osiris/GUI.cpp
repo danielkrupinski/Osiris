@@ -131,28 +131,6 @@ void GUI::handleToggle() noexcept
     }
 }
 
-[[deprecated]] void GUI::hotkey(int& key) noexcept
-{
-    key ? ImGui::Text("[ %s ]", interfaces->inputSystem->virtualKeyToString(key)) : ImGui::TextUnformatted("[ key ]");
-
-    if (!ImGui::IsItemHovered())
-        return;
-
-    ImGui::SetTooltip("Press any key to change keybind");
-    ImGuiIO& io = ImGui::GetIO();
-    for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
-        if (ImGui::IsKeyPressed(i))// && i != config->misc.menuKey)
-#ifdef _WIN32
-            key = i != VK_ESCAPE ? i : 0;
-#else
-            key = i;
-#endif
-
-    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-        if (ImGui::IsMouseDown(i))// && i + (i > 1 ? 2 : 1) != config->misc.menuKey)
-            key = i + (i > 1 ? 2 : 1);
-}
-
 static void menuBarItem(const char* name, bool& enabled) noexcept
 {
     if (ImGui::MenuItem(name)) {
