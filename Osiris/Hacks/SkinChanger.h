@@ -189,5 +189,4 @@ struct item_setting {
     std::array<sticker_setting, 5> stickers;
 };
 
-[[deprecated]] item_setting* get_by_definition_index(int definition_index);
 item_setting* get_by_definition_index(WeaponId weaponId);
