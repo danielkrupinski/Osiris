@@ -1045,9 +1045,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
     ImGui::PushItemWidth(110.0f);
     ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
-        *out_text = game_data::weapon_names[idx].name;
+        *out_text = SkinChanger::weapon_names[idx].name;
         return true;
-        }, nullptr, game_data::weapon_names.size(), 5);
+        }, nullptr, SkinChanger::weapon_names.size(), 5);
     ImGui::PopItemWidth();
 
     auto& selected_entry = config->skinChanger[itemIndex];
@@ -1095,7 +1095,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::PushID("Paint Kit");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
-            static std::array<std::string, game_data::weapon_names.size()> filters;
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
             if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
@@ -1180,7 +1180,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::PushID("Sticker");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
-            static std::array<std::string, game_data::weapon_names.size()> filters;
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
             if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
