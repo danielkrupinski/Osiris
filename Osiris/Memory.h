@@ -63,6 +63,7 @@ public:
     int* dispatchSound;
     uintptr_t traceToExit;
     ViewRender* viewRender;
+    void* viewRenderBeams;
     uintptr_t drawScreenEffectMaterial;
     uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
