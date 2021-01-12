@@ -113,6 +113,15 @@ static void read(const json& j, const char* key, int& o) noexcept
         val.get_to(o);
 }
 
+static void read(const json& j, const char* key, WeaponId& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number_integer())
+        val.get_to(o);
+}
+
 static void read(const json& j, const char* key, KeyBind& o) noexcept
 {
     if (!j.contains(key))

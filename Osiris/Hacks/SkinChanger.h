@@ -119,10 +119,10 @@ struct sticker_setting
 struct item_setting {
     void update()
     {
-        itemId = static_cast<int>(game_data::weapon_names[itemIdIndex].definition_index);
+        itemId = game_data::weapon_names[itemIdIndex].definition_index;
         quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
 
-        if (itemId == GLOVE_T_SIDE) {
+        if (itemId == WeaponId::GloveT) {
             paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
@@ -137,7 +137,7 @@ struct item_setting {
     void onLoad()
     {
         {
-            const auto it = std::find_if(std::begin(game_data::weapon_names), std::end(game_data::weapon_names), [this](const auto& k) { return static_cast<int>(k.definition_index) == itemId; });
+            const auto it = std::find_if(std::begin(game_data::weapon_names), std::end(game_data::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
             itemIdIndex = it != std::end(game_data::weapon_names) ? std::distance(std::begin(game_data::weapon_names), it) : 0;
         }
 
@@ -147,7 +147,7 @@ struct item_setting {
             entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
         }
 
-        if (itemId == GLOVE_T_SIDE) {
+        if (itemId == WeaponId::GloveT) {
             {
                 const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
                 paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
@@ -175,7 +175,7 @@ struct item_setting {
 
     bool enabled = false;
     int itemIdIndex = 0;
-    int itemId = 1;
+    WeaponId itemId{};
     int entity_quality_vector_index = 0;
     int quality = 0;
     int paint_kit_vector_index = 0;

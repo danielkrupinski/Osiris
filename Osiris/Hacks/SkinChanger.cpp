@@ -58,7 +58,7 @@ static constexpr auto is_knife(WeaponId id)
 
 item_setting* get_by_definition_index(WeaponId weaponId)
 {
-    const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == static_cast<int>(weaponId); });
+    const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == weaponId; });
     return it == config->skinChanger.end() ? nullptr : &*it;
 }
 
@@ -186,7 +186,7 @@ static void apply_config_on_attributable_item(Entity* item, const item_setting& 
     if (auto& definition_index = item->itemDefinitionIndex(); config.definition_override_index && config.definition_override_index != definition_index) {
         definition_index = config.definition_override_index;
         if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index })) {
-            item->setModelIndex(interfaces->modelInfo->getModelIndex(config.itemId == GLOVE_T_SIDE ? def->getWorldDisplayModel() : def->getPlayerDisplayModel()));
+            item->setModelIndex(interfaces->modelInfo->getModelIndex(config.itemId == WeaponId::GloveT ? def->getWorldDisplayModel() : def->getPlayerDisplayModel()));
             item->preDataUpdate(0);
         }
     }
