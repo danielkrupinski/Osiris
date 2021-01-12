@@ -32,14 +32,5 @@
 //extern const std::map<size_t, weapon_info> k_weapon_info;
 namespace game_data
 {
-    struct weapon_name
-    {
-        constexpr weapon_name(WeaponId definition_index, const char* name) :
-            definition_index(definition_index),
-            name(name)
-        {}
 
-        WeaponId definition_index;
-        const char* name;
-    };
 }

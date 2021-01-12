@@ -56,7 +56,14 @@ namespace SkinChanger
 
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
-    constexpr auto weapon_names = std::to_array<game_data::weapon_name>({
+    struct weapon_name {
+        constexpr weapon_name(WeaponId definition_index, const char* name) : definition_index(definition_index), name(name) {}
+
+        WeaponId definition_index;
+        const char* name;
+    };
+
+    constexpr auto weapon_names = std::to_array<weapon_name>({
         {WeaponId::Knife, "Knife"},
         {WeaponId::GloveT, "Glove"},
         {WeaponId::Ak47, "AK-47"},
