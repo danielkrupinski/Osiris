@@ -150,6 +150,7 @@
     <ClInclude Include="SDK\VarMapping.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Utils.h" />
+    <ClInclude Include="SDK\ViewRenderBeams.h" />
     <ClInclude Include="SDK\VirtualMethod.h" />
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />

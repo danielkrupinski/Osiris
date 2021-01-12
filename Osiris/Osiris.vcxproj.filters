@@ -454,5 +454,8 @@
     <ClInclude Include="SDK\PlayerResource.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ViewRenderBeams.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
