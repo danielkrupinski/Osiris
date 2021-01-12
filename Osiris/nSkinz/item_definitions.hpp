@@ -29,11 +29,6 @@
 
 #include "../SDK/WeaponId.h"
 
-enum ItemDefinitionIndex : int {
-    WEAPON_KNIFE = 42,
-    GLOVE_T_SIDE = 5028
-};
-
 //extern const std::map<size_t, weapon_info> k_weapon_info;
 namespace game_data
 {
