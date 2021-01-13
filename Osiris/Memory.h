@@ -14,6 +14,7 @@ class ItemSystem;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PlantedC4;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;
@@ -43,7 +44,7 @@ public:
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
-    UtlVector<Entity*>* plantedC4s;
+    UtlVector<PlantedC4*>* plantedC4s;
 
     bool* disablePostProcessing;
 
