@@ -519,7 +519,7 @@ ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer
 void BombData::update() noexcept
 {
     if (memory->plantedC4s->size > 0 && (!*memory->gameRules || (*memory->gameRules)->mapHasBombTarget())) {
-        if (Entity* bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
+        if (const auto bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
             blowTime = bomb->c4BlowTime();
             timerLength = bomb->c4TimerLength();
             defuserHandle = bomb->c4Defuser();
