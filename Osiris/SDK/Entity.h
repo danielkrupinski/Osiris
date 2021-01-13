@@ -78,6 +78,7 @@ public:
     VIRTUAL_METHOD(Vector, getAimPunch, WIN32_LINUX(345, 408), (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(454, 522), (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(460, 528), (), (this))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(467, 535), (Entity* viewModel), (this, viewModel))
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(482, 550), (), (this))
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
