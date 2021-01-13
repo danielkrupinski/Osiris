@@ -324,15 +324,14 @@ static void post_data_update_start(int localHandle) noexcept
     if (!def)
         return;
 
-    const auto override_model_index = interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel());
-    view_model->modelIndex() = override_model_index;
+    view_model->modelIndex() = interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel());
 
     const auto world_model = interfaces->entityList->getEntityFromHandle(view_model_weapon->weaponWorldModel());
 
     if (!world_model)
         return;
 
-    world_model->modelIndex() = override_model_index + 1;
+    world_model->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
 static bool hudUpdateRequired{ false };
