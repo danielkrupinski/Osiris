@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "VirtualMethod.h"
 
 class Entity;
 
@@ -35,4 +36,11 @@ struct BeamInfo {
     Vector ringCenter;
     float ringStartRadius;
     float ringEndRadius;
+};
+
+class Beam;
+
+class ViewRenderBeams {
+public:
+    VIRTUAL_METHOD(Beam*, createBeamPoints, 12, (BeamInfo& beamInfo), (this, std::ref(beamInfo)))
 };
