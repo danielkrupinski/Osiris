@@ -171,6 +171,7 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        BulletTracers bulletTracers;
 
         struct ColorCorrection {
             bool enabled = false;

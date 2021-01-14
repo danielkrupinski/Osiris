@@ -318,6 +318,12 @@ static void from_json(const json& j, OffscreenEnemies& o)
     read<value_t::object>(j, "Color", o.color);
 }
 
+static void from_json(const json& j, BulletTracers& o)
+{
+    read(j, "Enabled", o.enabled);
+    read<value_t::object>(j, "Color", o.color);
+}
+
 static void from_json(const json& j, ImVec2& v)
 {
     read(j, "X", v.x);
@@ -466,6 +472,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
+    read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
 }
 
 static void from_json(const json& j, sticker_setting& s)
@@ -787,6 +794,12 @@ static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& 
     WRITE("Color", color);
 }
 
+static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Color", color);
+}
+
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
 {
     j = static_cast<const Shared&>(o);
@@ -1066,6 +1079,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
     WRITE("Color correction", colorCorrection);
+    WRITE("Bullet Tracers", bulletTracers);
 }
 
 static void to_json(json& j, const ImVec4& o)
