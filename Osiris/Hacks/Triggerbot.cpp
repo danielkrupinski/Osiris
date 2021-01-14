@@ -32,6 +32,9 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     if (!config->triggerbot[weaponIndex].enabled)
         weaponIndex = 0;
 
+    if (!(localPlayer->flags() & 1) && config->triggerbot[weaponIndex].triggerJumpCheck)
+        return;
+
     const auto& cfg = config->triggerbot[weaponIndex];
 
     if (!cfg.enabled)
