@@ -27,6 +27,9 @@
     <Filter Include="nlohmann">
       <UniqueIdentifier>{44d5d3e3-0072-4a5a-b725-1b9807c24a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProfileChanger">
+      <UniqueIdentifier>{11711799-1f5a-49b0-8412-da93f4f7930d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -154,6 +157,18 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\ProfileChanger.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\vfunc_hook.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileChanger\valve_parser.cpp">
+      <Filter>ProfileChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileChanger\Protobuffs.cpp">
+      <Filter>ProfileChanger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -456,6 +471,36 @@
     </ClInclude>
     <ClInclude Include="SDK\ViewRenderBeams.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\ProfileChanger.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\vfunc_hook.hpp">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\SteamAPI.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\Protobuffs.h">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\ProtoField.h">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\ProtoWriter.h">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\valve_parser.h">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\Enums.hpp">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileChanger\Messages.h">
+      <Filter>ProfileChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="MemAlloc.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

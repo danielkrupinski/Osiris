@@ -10,10 +10,6 @@ public:
 	bool PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData);
 	bool SendClientHello();
 	bool SendMatchmakingClient2GCHello();
-	bool EquipWeapon(int weaponid, int classid, int slotid);
-	void EquipAll();
-	static int GetSlotID(int definition_index);
-	static void ParseSkins();
 };
 
 inline Protobuffs write;

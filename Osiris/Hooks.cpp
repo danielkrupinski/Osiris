@@ -42,6 +42,7 @@
 #include "Hacks/SkinChanger.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
+#include "Hacks/ProfileChanger.h"
 
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -61,6 +62,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/SteamAPI.h"
 
 #ifdef _WIN32
 
@@ -466,6 +468,27 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_A
     }
 
     return params;
+}
+
+using GCRetrieveMessage = EGCResult(__thiscall*)(void*, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
+using GCSendMessage = EGCResult(__thiscall*)(void*, uint32_t unMsgType, const void* pubData, uint32_t cubData);
+EGCResult __fastcall hkGCRetrieveMessage(void* ecx, void*, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+{
+
+    static auto oGCRetrieveMessage = hooks->gameCoordinator.get_original<GCRetrieveMessage>(2);
+    auto status = oGCRetrieveMessage(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
+
+    if (status == k_EGCResultOK)
+    {
+
+        void* thisPtr = nullptr;
+        __asm mov thisPtr, ebx;
+        auto oldEBP = *reinterpret_cast<void**>((uint32_t)_AddressOfReturnAddress() - 4);
+
+        uint32_t messageType = *punMsgType & 0x7FFFFFFF;
+        write.ReceiveMessage(thisPtr, oldEBP, messageType, pubDest, cubDest, pcubMsgSize);
+    }
+    return status;
 }
 
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept

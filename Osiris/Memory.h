@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "SDK/Platform.h"
+#include "SDK/SteamAPI.h"
 
 class ClientMode;
 class Entity;
@@ -11,6 +12,8 @@ class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class ItemSystem;
+class MemAlloc;
+class ISteamClient;
 class KeyValues;
 class MoveHelper;
 class MoveData;
@@ -43,6 +46,7 @@ public:
     ClientMode* clientMode;
     Input* input;
     GlobalVars* globalVars;
+    ClientState* clientState;
     GlowObjectManager* glowObjectManager;
     UtlVector<PlantedC4*>* plantedC4s;
 
@@ -74,6 +78,8 @@ public:
     int* predictionRandomSeed;
     MoveData* moveData;
     MoveHelper* moveHelper;
+    MemAlloc* memalloc;
+    ISteamGameCoordinator* SteamGameCoordinator;
     std::uintptr_t keyValuesFromString;
     KeyValues*(__THISCALL* keyValuesFindKey)(KeyValues* keyValues, const char* keyName, bool create);
     void(__THISCALL* keyValuesSetString)(KeyValues* keyValues, const char* value);
