@@ -457,5 +457,8 @@
     <ClInclude Include="SDK\ViewRenderBeams.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="pstring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

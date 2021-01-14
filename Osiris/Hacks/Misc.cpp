@@ -29,6 +29,7 @@
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
+#include "../pstring.h"
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -999,4 +1000,90 @@ void Misc::updateInput() noexcept
     slowwalkActive = config->misc.slowwalkKey.isDown();
     prepareRevolverActive = config->misc.prepareRevolverKey == KeyBind::NONE || config->misc.prepareRevolverKey.isDown();
     chokePacketsActive = config->misc.chokedPacketsKey == KeyBind::NONE || config->misc.chokedPacketsKey.isDown();
+}
+
+void Misc::ChatSpammer() noexcept
+{
+    static DWORD lastspammed = 0;
+    static int lastId = 1;
+
+    if (GetTickCount64() - lastspammed > 800)
+    {
+
+        if (config->misc.spam.spam_picker == 1) {
+                static int lastId = 1;
+                lastspammed = GetTickCount64();
+                for (int i = lastId; i < interfaces->engine->getMaxClients(); i++)
+                {
+                    const auto Player = interfaces->entityList->getEntity(i);
+
+                    lastId++;
+                    if (lastId == interfaces->engine->getMaxClients())
+                        lastId = 1;
+                    if (!Player || !Player->isAlive())
+                        continue;
+
+                    if (config->misc.spam.team == 0 && Player->team() != localPlayer->team())
+                        continue;
+
+                    if (config->misc.spam.team == 1 && Player->team() == localPlayer->team())
+                        continue;
+
+                    PlayerInfo entityInformation;
+                    interfaces->engine->getPlayerInfo(i, entityInformation);
+                    std::string playerName = std::string(entityInformation.name);
+                    playerName.erase(std::remove(playerName.begin(), playerName.end(), ';'), playerName.end());
+                    playerName.erase(std::remove(playerName.begin(), playerName.end(), '"'), playerName.end());
+                    // Remove end line character
+                    playerName.erase(std::remove(playerName.begin(), playerName.end(), '\n'), playerName.end());
+                    // Construct a command with our message
+                    pstring str;
+                    str = config->misc.spam.say ? "say_team" : "say";
+                    str << " \"";
+
+                    if (config->misc.spam.showName) {
+                        str << playerName;
+                        str << " | ";
+                    }
+                    if (config->misc.spam.showHealth) {
+                        str << Player->health() << "HP | ";
+                    }
+                    if (config->misc.spam.showLastplace) {
+                        str << Player->lastPlaceName() << " | ";
+                    }
+                    if (config->misc.spam.showMoney) {
+                        str << Player->account() << " | ";
+                    }
+                    str << "\"";
+
+                    interfaces->engine->clientCmdUnrestricted(str.c_str());
+                    break;
+                }
+        }
+        else if (config->misc.spam.spam_picker == 2) {
+            lastspammed = GetTickCount64();
+            if (!config->misc.spam.DidNotAsk || !config->misc.spam.DidNotAskKey.isDown())
+                return;
+
+            std::vector<std::string> prefix = { "yo buddy", "yo pal", "listen here,", "basically", "hahaha", "yeah well", "yeah ok however", "k", "lol", "dude", "ok but", "ok", "lmaooo ok", "lol ok", "funny uh", "uh ok", "tahts funny", "that is funny", "that's funny", "uh welp ok", "ok but like", "k but", "kk", ":)" };
+            std::vector<std::string> middle = { "ask i did not", "name one person who asked", "didnt ask", "dont recall asking", "i didnt ask", "i really dont remember asking", "xd who ask", "did not ask", "times i asked = 0", "when i asked = never", "me asking didnt happen", "never asked ", "i never asked", "did i ask" };
+            std::vector<std::string> suffix = { "so yeah", "do you understand", "so shut up", " bro", " nn", " nn boi", " dude", " lmao", " lol", " lmfao", " haha", " tho", " though lol", " tho lmao", " jajajja", "xaxaxa", "xddd", ", lol", "lmao", "XDD", "ezzzzz", "mi amigo", "xd jajaja", "hahaha", ":/", "so plz be quiet", "so stfu", "so shush" };
+
+            auto say = "say ";
+            std::string reply = say + prefix[rand() % prefix.size()] + " ";
+            if (rand() > 0.8)
+                reply += middle[rand() % middle.size()] + " ";
+            if (rand() > 0.5)
+                reply += suffix[rand() % suffix.size()];
+
+
+            interfaces->engine->clientCmdUnrestricted(reply.c_str());
+        }
+        else if (config->misc.spam.spam_picker == 3) {
+            {
+                lastspammed = GetTickCount64();
+                interfaces->engine->clientCmdUnrestricted("say ﷽﷽ ﷽﷽﷽ ﷽﷽﷽ ﷽ ﷽﷽ ﷽﷽﷽ ﷽﷽﷽ ﷽ ﷽﷽ ﷽﷽ ﷽﷽﷽ ﷽﷽﷽ ﷽ ﷽﷽ ﷽﷽﷽ ﷽﷽");
+            }
+        }
+    }
 }

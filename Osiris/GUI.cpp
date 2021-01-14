@@ -1451,6 +1451,38 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
+    ImGui::PushID("Chat spam");
+    ImGui::Combo("Chat spam", &config->misc.spam.spam_picker, "-\0Location spam\0Did i ask?\0Clear Chat\0", IM_ARRAYSIZE("-\0Location spam\0Did i ask?\0Clear Chat\0"));
+    ImGui::SameLine();
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+    if (ImGui::BeginPopup("")) {
+        if (config->misc.spam.spam_picker == 1)
+        {
+
+
+                ImGui::Checkbox("Team Chat (?)###SAY_TEAM2", &config->misc.spam.say);
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("Only spam messages in team chat");
+
+                ImGui::PushItemWidth(185);
+                ImGui::Combo("###POSITIONSTEAM", &config->misc.spam.team, "Allies\0Enemies\0Both\0", IM_ARRAYSIZE("Allies\0Enemies\0Both\0"));
+                ImGui::PopItemWidth();
+                ImGui::Separator();
+                ImGui::Checkbox("Show Name", &config->misc.spam.showName);
+                ImGui::Checkbox("Show Health", &config->misc.spam.showHealth);
+                ImGui::Checkbox("Show Money", &config->misc.spam.showMoney);
+                ImGui::Checkbox("Show Last Place", &config->misc.spam.showLastplace);
+        }
+        if (config->misc.spam.spam_picker == 2)
+        {
+            ImGui::Checkbox("Did I ask?", &config->misc.spam.DidNotAsk);
+            hotkey2("Did i ask?", config->misc.spam.DidNotAskKey);
+        }
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+
     if (ImGui::Button("Unhook"))
         hooks->uninstall();
 

@@ -607,6 +607,7 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
+    read<value_t::object>(j, "Chat spammer", m.spam);
 }
 
 static void from_json(const json& j, Config::Misc::Reportbot& r)
@@ -620,6 +621,19 @@ static void from_json(const json& j, Config::Misc::Reportbot& r)
     read(j, "Wall Hacking", r.wallhack);
     read(j, "Aim Hacking", r.aimbot);
     read(j, "Other Hacking", r.other);
+}
+
+static void from_json(const json& j, Config::Misc::Spam& r)
+{
+    read(j, "Did not ask", r.DidNotAsk);
+    read(j, "Did not ask key", r.DidNotAskKey);
+    read(j, "Chat Picker", r.say);
+    read(j, "Show Health", r.showHealth);
+    read(j, "Show LastPlace", r.showLastplace);
+    read(j, "Show Money", r.showMoney);
+    read(j, "Show Name", r.showName);
+    read(j, "Spam Picker", r.spam_picker);
+    read(j, "Team Picker", r.team);
 }
 
 void Config::load(size_t id, bool incremental) noexcept
@@ -945,6 +959,19 @@ static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
         j = o.toString();
 }
 
+static void to_json(json& j, const Config::Misc::Spam& o, const Config::Misc::Spam& dummy = {})
+{
+    WRITE("Did not ask", DidNotAsk);
+    WRITE("Did not ask key", DidNotAskKey);
+    WRITE("Chat Picker", say);
+    WRITE("Show Health", showHealth);
+    WRITE("Show LastPlace", showLastplace);
+    WRITE("Show Money", showMoney);
+    WRITE("Show Name", showName);
+    WRITE("Spam Picker", spam_picker);
+    WRITE("Team Picker", team);
+}
+
 static void to_json(json& j, const Config::Misc& o)
 {
     const Config::Misc dummy;
@@ -1011,6 +1038,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
+    WRITE("Chat spammer", spam);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
