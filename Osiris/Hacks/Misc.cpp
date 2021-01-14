@@ -1004,7 +1004,7 @@ void Misc::updateInput() noexcept
 
 void Misc::ChatSpammer() noexcept
 {
-    static DWORD lastspammed = 0;
+    static uint32_t lastspammed = 0;
     static int lastId = 1;
 
     if (GetTickCount64() - lastspammed > 800)
