@@ -140,3 +140,8 @@ struct OffscreenEnemies {
     bool enabled = false;
     ColorA color{ 1.0f, 0.26f, 0.21f, 1.0f };
 };
+
+struct BulletTracers {
+    bool enabled = false;
+    ColorA color{ 0.0f, 0.75f, 1.0f, 1.0f };
+};
