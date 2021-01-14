@@ -17,6 +17,7 @@ class MoveData;
 class PlantedC4;
 class PlayerResource;
 class ViewRender;
+class ViewRenderBeams;
 class WeaponSystem;
 template <typename T>
 class UtlVector;
@@ -64,7 +65,7 @@ public:
     int* dispatchSound;
     uintptr_t traceToExit;
     ViewRender* viewRender;
-    void* viewRenderBeams;
+    ViewRenderBeams* viewRenderBeams;
     uintptr_t drawScreenEffectMaterial;
     uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
