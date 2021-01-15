@@ -26,6 +26,7 @@ namespace Visuals
     bool removeSleeves(const char* modelName) noexcept;
     bool removeWeapons(const char* modelName) noexcept;
     void skybox(FrameStage stage) noexcept;
+    void bulletTracer(GameEvent& event) noexcept;
 
     void updateInput() noexcept;
 }

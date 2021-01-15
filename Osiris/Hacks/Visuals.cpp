@@ -17,10 +17,11 @@
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/ModelInfo.h"
 #include "../SDK/NetworkStringTable.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
-#include "../SDK/ModelInfo.h"
+#include "../SDK/ViewRenderBeams.h"
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -432,6 +433,67 @@ void Visuals::skybox(FrameStage stage) noexcept
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
+    }
+}
+
+void Visuals::bulletTracer(GameEvent& event) noexcept
+{
+    if (!config->visuals.bulletTracers.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
+    if (!viewModel)
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    Vector start, _;
+    if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), start, _))
+        return;
+
+    BeamInfo beamInfo;
+
+    beamInfo.start = start;
+    beamInfo.end.x = event.getFloat("x");
+    beamInfo.end.y = event.getFloat("y");
+    beamInfo.end.z = event.getFloat("z");
+
+    beamInfo.modelName = "sprites/physbeam.vmt";
+    beamInfo.modelIndex = -1;
+    beamInfo.haloName = nullptr;
+    beamInfo.haloIndex = -1;
+
+    beamInfo.red = 255.0f * config->visuals.bulletTracers.color.color[0];
+    beamInfo.green = 255.0f * config->visuals.bulletTracers.color.color[1];
+    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color.color[2];
+    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color.color[3];
+
+    beamInfo.type = 0;
+    beamInfo.life = 0.0f;
+    beamInfo.fadeLength = 0.1f;
+    beamInfo.amplitude = 0.0f;
+    beamInfo.segments = -1;
+    beamInfo.renderable = true;
+    beamInfo.speed = 0.2f;
+    beamInfo.startFrame = 0;
+    beamInfo.frameRate = 0.0f;
+    beamInfo.width = 2.0f;
+    beamInfo.endWidth = 2.0f;
+    beamInfo.flags = 0x40;
+    beamInfo.fadeLength = 20.0f;
+
+    if (const auto beam = memory->viewRenderBeams->createBeamPoints(beamInfo)) {
+        constexpr auto FBEAM_FOREVER = 0x4000;
+        beam->flags &= ~FBEAM_FOREVER;
+        beam->die = memory->globalVars->currenttime + 2.0f;
     }
 }
 
