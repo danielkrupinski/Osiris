@@ -56,5 +56,8 @@ void EventListener::fireGameEvent(GameEvent* event)
         Visuals::hitEffect(event);
         Visuals::hitMarker(event);
         break;
+    case fnv::hash("bullet_impact"):
+        Visuals::bulletTracer(*event);
+        break;
     }
 }
