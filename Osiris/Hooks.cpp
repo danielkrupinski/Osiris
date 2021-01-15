@@ -491,6 +491,17 @@ EGCResult __fastcall hkGCRetrieveMessage(void* ecx, void*, uint32_t* punMsgType,
     return status;
 }
 
+EGCResult __fastcall hkGCSendMessage(void* ecx, void*, uint32_t unMsgType, const void* pubData, uint32_t cubData)
+{
+    static auto oGCSendMessage = hooks->gameCoordinator.get_original<GCSendMessage>(0);
+    bool sendMessage = write.PreSendMessage(unMsgType, const_cast<void*>(pubData), cubData);
+
+    if (!sendMessage)
+        return EGCResult::k_EGCResultOK;
+
+    return oGCSendMessage(ecx, unMsgType, const_cast<void*>(pubData), cubData);
+}
+
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
     if (config->misc.revealMoney && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + (IS_WIN32() ? 8 : 24)) == memory->money)
@@ -646,6 +657,8 @@ void Hooks::install() noexcept
     viewRender.init(memory->viewRender);
     viewRender.hookAt(IS_WIN32() ? 39 : 40, render2dEffectsPreHud);
     viewRender.hookAt(IS_WIN32() ? 41 : 42, renderSmokeOverlay);
+    gameCoordinator.hook_index(2, hkGCRetrieveMessage);
+    gameCoordinator.hook_index(0, hkGCSendMessage);
 
 #ifdef _WIN32
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -713,6 +726,7 @@ void Hooks::uninstall() noexcept
     surface.restore();
     svCheats.restore();
     viewRender.restore();
+    gameCoordinator.unhook_all();
 
     netvars->restore();
 

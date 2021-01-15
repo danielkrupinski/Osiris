@@ -18,6 +18,7 @@ class KeyValues;
 class MoveHelper;
 class MoveData;
 class PlantedC4;
+class ClientState;
 class PlayerResource;
 class ViewRender;
 class WeaponSystem;

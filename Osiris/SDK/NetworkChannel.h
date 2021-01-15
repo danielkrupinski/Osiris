@@ -2,12 +2,45 @@
 
 #include "VirtualMethod.h"
 
+struct ClientClass;
+
 class NetworkChannel {
 public:
-    VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
+	VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
 
-    std::byte pad[44];
-    int chokedPackets;
+		std::byte pad[24];
+	int OutSequenceNr;
+	int InSequenceNr;
+	int OutSequenceNrAck;
+	int OutReliableState;
+	int InReliableState;
+	int chokedPackets;
+};
+
+class NetworkMessage
+{
+public:
+	VIRTUAL_METHOD(int, getType, 7, (), (this))
+};
+
+class EventInfo {
+public:
+
+	enum {
+		EVENT_INDEX_BITS = 8,
+		EVENT_DATA_LEN_BITS = 11,
+		MAX_EVENT_DATA = 192,  // ( 1<<8 bits == 256, but only using 192 below )
+	};
+	short class_id;
+	float fire_delay;
+	const void* m_send_table;
+	const ClientClass* m_client_class;
+	int bits;
+	uint8_t* data;
+	int flags;
+	PAD(0x1C);
+	EventInfo* m_next;
+
 };
 
 class ClientState

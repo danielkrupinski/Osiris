@@ -15,6 +15,7 @@ union SDL_Event;
 #include "Hooks/VmtHook.h"
 #include "Hooks/VmtSwap.h"
 #include "Hooks/vfunc_hook.hpp"
+#include "SDK/SteamAPI.h"
 
 #include "SDK/Platform.h"
 
