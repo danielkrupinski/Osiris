@@ -320,7 +320,7 @@ static void __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int ent
     if (strstr(soundEntry, "Weapon") && strstr(soundEntry, "Single")) {
         modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
     } else if (config->misc.autoAccept && !strcmp(soundEntry, "UIPanorama.popup_accept_match_beep")) {
-        memory->acceptMatch("");
+        memory->acceptMatch();
 #ifdef _WIN32
         auto window = FindWindowW(L"Valve001", NULL);
         FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
