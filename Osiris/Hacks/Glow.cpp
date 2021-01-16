@@ -204,3 +204,22 @@ json Glow::toJson() noexcept
 {
     return json{ config->glow };
 }
+
+static void from_json(const json& j, Config::Glow& g)
+{
+    from_json(j, static_cast<ColorA&>(g));
+
+    read(j, "Enabled", g.enabled);
+    read(j, "Health based", g.healthBased);
+    read(j, "Style", g.style);
+}
+
+void Glow::fromJson(const json& j) noexcept
+{
+    if (j.type() == value_t::array && j.size() == config->glow.size()) {
+        for (std::size_t i = 0; i < j.size(); ++i) {
+            if (!j[i].empty())
+                j[i].get_to(config->glow[i]);
+        }
+    }
+}

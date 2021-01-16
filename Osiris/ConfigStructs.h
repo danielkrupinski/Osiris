@@ -4,8 +4,7 @@
 #include <string>
 
 #include "nlohmann/json.hpp"
-
-using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
+#include "InputUtil.h"
 
 #pragma pack(push, 1)
 struct ColorA {
@@ -150,6 +149,9 @@ struct BulletTracers {
     ColorA color{ 0.0f, 0.75f, 1.0f, 1.0f };
 };
 
+using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
+using value_t = json::value_t;
+
 // WRITE macro requires:
 // - json object named 'j'
 // - object holding default values named 'dummy'
@@ -168,4 +170,118 @@ static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
     WRITE("Color", color);
     WRITE("Rainbow", rainbow);
     WRITE("Rainbow Speed", rainbowSpeed);
+}
+
+template <value_t Type, typename T>
+static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == Type)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, bool& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::boolean)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, float& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::number_float)
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, int& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number_integer())
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, WeaponId& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_number_integer())
+        val.get_to(o);
+}
+
+static void read(const json& j, const char* key, KeyBind& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_string())
+        o = val.get<std::string>().c_str();
+}
+
+static void read(const json& j, const char* key, char* o, std::size_t size) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_string()) {
+        std::strncpy(o, val.get<std::string>().c_str(), size);
+        o[size - 1] = '\0';
+    }
+}
+
+template <typename T, size_t Size>
+static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
+{
+    if (j.contains(key) && j[key].type() == value_t::array) {
+        std::size_t i = 0;
+        for (const auto& e : j[key]) {
+            if (i >= o.size())
+                break;
+
+            if (e.is_null())
+                continue;
+
+            e.get_to(o[i]);
+            ++i;
+        }
+    }
+}
+
+template <typename T, size_t Size>
+static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size()) {
+        for (std::size_t i = 0; i < val.size(); ++i) {
+            if (!val[i].empty())
+                val[i].get_to(o[i]);
+        }
+    }
+}
+
+template <typename T>
+static void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
+{
+    if (j.contains(key) && j[key].is_object()) {
+        for (auto& element : j[key].items())
+            element.value().get_to(o[element.key()]);
+    }
+}
+
+static void from_json(const json& j, ColorA& c)
+{
+    read(j, "Color", c.color);
+    read(j, "Rainbow", c.rainbow);
+    read(j, "Rainbow Speed", c.rainbowSpeed);
 }

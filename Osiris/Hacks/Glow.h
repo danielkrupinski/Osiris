@@ -14,4 +14,5 @@ namespace Glow
 
     // Config
     json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
 }
