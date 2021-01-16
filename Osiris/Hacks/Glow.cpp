@@ -1,3 +1,5 @@
+#include "../nlohmann/json.hpp"
+
 #include "../Config.h"
 #include "Glow.h"
 #include "../Interfaces.h"
@@ -188,4 +190,17 @@ void Glow::drawGUI(bool contentOnly) noexcept
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
+}
+
+static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
+{
+    to_json(j, static_cast<const ColorA&>(o), dummy);
+    WRITE("Enabled", enabled);
+    WRITE("Health based", healthBased);
+    WRITE("Style", style);
+}
+
+json Glow::toJson() noexcept
+{
+    return json{ config->glow };
 }

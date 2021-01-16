@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "Helpers.h"
 #include "SDK/Platform.h"
+#include "Hacks/Glow.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -669,26 +670,6 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read<value_t::object>(j, "Misc", misc);
 }
 
-// WRITE macro requires:
-// - json object named 'j'
-// - object holding default values named 'dummy'
-// - object to write to json named 'o'
-#define WRITE(name, valueName) to_json(j[name], o.valueName, dummy.valueName)
-
-template <typename T>
-static void to_json(json& j, const T& o, const T& dummy)
-{
-    if (o != dummy)
-        j = o;
-}
-
-static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
-{
-    WRITE("Color", color);
-    WRITE("Rainbow", rainbow);
-    WRITE("Rainbow Speed", rainbowSpeed);
-}
-
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
     to_json(j, static_cast<const ColorA&>(o), dummy);
@@ -863,14 +844,6 @@ static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& du
     WRITE("Pitch", pitch);
     WRITE("Pitch angle", pitchAngle);
     WRITE("Yaw", yaw);
-}
-
-static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
-{
-    to_json(j, static_cast<const ColorA&>(o), dummy);
-    WRITE("Enabled", enabled);
-    WRITE("Health based", healthBased);
-    WRITE("Style", style);
 }
 
 static void to_json(json& j, const Config::Chams::Material& o)
@@ -1161,7 +1134,7 @@ void Config::save(size_t id) const noexcept
 
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
-        j["Glow"] = glow;
+        j["Glow"] = ::Glow::toJson();
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
         j["Sound"] = sound;

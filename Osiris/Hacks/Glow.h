@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../ConfigStructs.h"
+
 namespace Glow
 {
     void render() noexcept;
@@ -9,4 +11,7 @@ namespace Glow
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
+
+    // Config
+    json toJson() noexcept;
 }

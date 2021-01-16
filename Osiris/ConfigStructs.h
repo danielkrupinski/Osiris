@@ -3,6 +3,10 @@
 #include <array>
 #include <string>
 
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
+
 #pragma pack(push, 1)
 struct ColorA {
     std::array<float, 4> color{ 1.0f, 1.0f, 1.0f, 1.0f };
@@ -145,3 +149,23 @@ struct BulletTracers {
     bool enabled = false;
     ColorA color{ 0.0f, 0.75f, 1.0f, 1.0f };
 };
+
+// WRITE macro requires:
+// - json object named 'j'
+// - object holding default values named 'dummy'
+// - object to write to json named 'o'
+#define WRITE(name, valueName) to_json(j[name], o.valueName, dummy.valueName)
+
+template <typename T>
+static void to_json(json& j, const T& o, const T& dummy)
+{
+    if (o != dummy)
+        j = o;
+}
+
+static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
+{
+    WRITE("Color", color);
+    WRITE("Rainbow", rainbow);
+    WRITE("Rainbow Speed", rainbowSpeed);
+}
