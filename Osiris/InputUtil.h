@@ -123,3 +123,13 @@ public:
 private:
     KeyCode keyCode;
 };
+
+class KeyBindToggle : public KeyBind {
+public:
+    using KeyBind::KeyBind;
+
+    void handleToggle() noexcept;
+    bool isToggled() const noexcept { return toggledOn; }
+private:
+    bool toggledOn = true;
+};

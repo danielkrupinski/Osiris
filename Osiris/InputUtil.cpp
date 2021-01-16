@@ -216,3 +216,9 @@ bool KeyBind::setToPressedKey() noexcept
     }
     return false;
 }
+
+void KeyBindToggle::handleToggle() noexcept
+{
+    if (isPressed())
+        toggledOn = !toggledOn;
+}
