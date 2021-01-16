@@ -1049,7 +1049,7 @@ void Config::reset() noexcept
     aimbot = { };
     triggerbot = { };
     backtrack = { };
-    glow = { };
+    Glow::resetConfig();
     chams = { };
     streamProofESP = { };
     visuals = { };

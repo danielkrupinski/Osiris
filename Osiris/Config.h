@@ -94,13 +94,6 @@ public:
         float pitchAngle{ 0.0f };
     } antiAim;
 
-    struct Glow : ColorA {
-        bool enabled{ false };
-        bool healthBased{ false };
-        int style{ 0 };
-    };
-    std::array<Glow, 21> glow;
-
     struct Chams {
         struct Material : ColorA {
             bool enabled = false;

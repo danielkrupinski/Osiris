@@ -1,3 +1,5 @@
+#include <array>
+
 #include "../nlohmann/json.hpp"
 
 #include "../Config.h"
@@ -11,6 +13,13 @@
 #include "../SDK/Utils.h"
 #include "../imguiCustom.h"
 
+struct GlowItem : ColorA {
+    bool enabled = false;
+    bool healthBased = false;
+    int style = 0;
+};
+static std::array<GlowItem, 21> glowConfig;
+
 static std::vector<std::pair<int, int>> customGlowEntities;
 
 void Glow::render() noexcept
@@ -18,7 +27,7 @@ void Glow::render() noexcept
     if (!localPlayer)
         return;
 
-    const auto& glow = config->glow;
+    const auto& glow = glowConfig;
 
     Glow::clearCustomObjects();
 
@@ -175,24 +184,24 @@ void Glow::drawGUI(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->glow[currentItem].enabled);
+    ImGui::Checkbox("Enabled", &glowConfig[currentItem].enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
+    ImGui::Checkbox("Health based", &glowConfig[currentItem].healthBased);
 
-    ImGuiCustom::colorPopup("Color", config->glow[currentItem].color, &config->glow[currentItem].rainbow, &config->glow[currentItem].rainbowSpeed);
+    ImGuiCustom::colorPopup("Color", glowConfig[currentItem].color, &glowConfig[currentItem].rainbow, &glowConfig[currentItem].rainbowSpeed);
 
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
+    ImGui::Combo("Style", &glowConfig[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
 
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
 }
 
-static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
+static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
 {
     to_json(j, static_cast<const ColorA&>(o), dummy);
     WRITE("Enabled", enabled);
@@ -202,10 +211,10 @@ static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = 
 
 json Glow::toJson() noexcept
 {
-    return json{ config->glow };
+    return json{ glowConfig };
 }
 
-static void from_json(const json& j, Config::Glow& g)
+static void from_json(const json& j, GlowItem& g)
 {
     from_json(j, static_cast<ColorA&>(g));
 
@@ -216,10 +225,15 @@ static void from_json(const json& j, Config::Glow& g)
 
 void Glow::fromJson(const json& j) noexcept
 {
-    if (j.type() == value_t::array && j.size() == config->glow.size()) {
+    if (j.type() == value_t::array && j.size() == glowConfig.size()) {
         for (std::size_t i = 0; i < j.size(); ++i) {
             if (!j[i].empty())
-                j[i].get_to(config->glow[i]);
+                j[i].get_to(glowConfig[i]);
         }
     }
+}
+
+void Glow::resetConfig() noexcept
+{
+    glowConfig = {};
 }
