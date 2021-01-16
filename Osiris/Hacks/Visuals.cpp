@@ -272,7 +272,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #ifdef _WIN32
-
+#undef xor
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
