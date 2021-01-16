@@ -117,7 +117,7 @@ public:
     std::unordered_map<std::string, Chams> chams;
 
     struct StreamProofESP {
-        KeyBind toggleKey = KeyBind::NONE;
+        KeyBindToggle toggleKey = KeyBind::NONE;
         KeyBind holdKey = KeyBind::NONE;
 
         std::unordered_map<std::string, Player> allies;

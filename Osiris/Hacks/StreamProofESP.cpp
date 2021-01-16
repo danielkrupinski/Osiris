@@ -494,12 +494,14 @@ static void renderProjectileEsp(const ProjectileData& projectileData, const Proj
     }
 }
 
-static bool shouldDraw = true;
-
 void StreamProofESP::render() noexcept
 {
-    if (!shouldDraw)
+    if (config->streamProofESP.toggleKey != KeyBind::NONE) {
+        if (!config->streamProofESP.toggleKey.isToggled() && !config->streamProofESP.holdKey.isDown())
+            return;
+    } else if (config->streamProofESP.holdKey != KeyBind::NONE && !config->streamProofESP.holdKey.isDown()) {
         return;
+    }
 
     drawList = ImGui::GetBackgroundDrawList();
 
@@ -532,16 +534,5 @@ void StreamProofESP::render() noexcept
 
 void StreamProofESP::updateInput() noexcept
 {
-    if (config->streamProofESP.toggleKey != KeyBind::NONE) {
-        static bool toggledOn = true;
-
-        if (config->streamProofESP.toggleKey.isPressed())
-            toggledOn = !toggledOn;
-
-        shouldDraw = toggledOn || config->streamProofESP.holdKey.isDown();
-    } else if (config->streamProofESP.holdKey != KeyBind::NONE) {
-        shouldDraw = config->streamProofESP.holdKey.isDown();
-    } else {
-        shouldDraw = true;
-    }
+    config->streamProofESP.toggleKey.handleToggle();
 }
