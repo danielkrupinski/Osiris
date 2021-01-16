@@ -211,7 +211,10 @@ static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
 
 json Glow::toJson() noexcept
 {
-    return json{ glowConfig };
+    json j;
+    for (const auto& glowItem : glowConfig)
+        j.push_back(glowItem);
+    return j;
 }
 
 static void from_json(const json& j, GlowItem& g)
