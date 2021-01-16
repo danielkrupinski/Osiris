@@ -478,7 +478,6 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
 
     beamInfo.type = 0;
     beamInfo.life = 0.0f;
-    beamInfo.fadeLength = 0.1f;
     beamInfo.amplitude = 0.0f;
     beamInfo.segments = -1;
     beamInfo.renderable = true;
