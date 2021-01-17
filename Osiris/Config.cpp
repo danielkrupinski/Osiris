@@ -76,7 +76,7 @@ Config::Config(const char* name) noexcept
 
 static void from_json(const json& j, ColorToggle& ct)
 {
-    from_json(j, static_cast<ColorA&>(ct));
+    from_json(j, static_cast<Color4&>(ct));
     read(j, "Enabled", ct.enabled);
 }
 
@@ -268,7 +268,7 @@ static void from_json(const json& j, Config::AntiAim& a)
 
 static void from_json(const json& j, Config::Chams::Material& m)
 {
-    from_json(j, static_cast<ColorA&>(m));
+    from_json(j, static_cast<Color4&>(m));
 
     read(j, "Enabled", m.enabled);
     read(j, "Health based", m.healthBased);
@@ -546,7 +546,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
 
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
-    to_json(j, static_cast<const ColorA&>(o), dummy);
+    to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
 }
 
@@ -724,7 +724,7 @@ static void to_json(json& j, const Config::Chams::Material& o)
 {
     const Config::Chams::Material dummy;
 
-    to_json(j, static_cast<const ColorA&>(o), dummy);
+    to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
     WRITE("Health based", healthBased);
     WRITE("Blinking", blinking);

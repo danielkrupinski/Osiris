@@ -95,7 +95,7 @@ public:
     } antiAim;
 
     struct Chams {
-        struct Material : ColorA {
+        struct Material : Color4 {
             bool enabled = false;
             bool healthBased = false;
             bool blinking = false;

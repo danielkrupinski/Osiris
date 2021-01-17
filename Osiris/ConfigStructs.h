@@ -7,14 +7,14 @@
 #include "InputUtil.h"
 
 #pragma pack(push, 1)
-struct ColorA {
+struct Color4 {
     std::array<float, 4> color{ 1.0f, 1.0f, 1.0f, 1.0f };
     float rainbowSpeed = 0.6f;
     bool rainbow = false;
 };
 #pragma pack(pop)
 
-struct ColorToggle : ColorA {
+struct ColorToggle : Color4 {
     bool enabled = false;
 };
 
@@ -141,12 +141,12 @@ struct PreserveKillfeed {
 
 struct OffscreenEnemies {
     bool enabled = false;
-    ColorA color{ 1.0f, 0.26f, 0.21f, 1.0f };
+    Color4 color{ 1.0f, 0.26f, 0.21f, 1.0f };
 };
 
 struct BulletTracers {
     bool enabled = false;
-    ColorA color{ 0.0f, 0.75f, 1.0f, 1.0f };
+    Color4 color{ 0.0f, 0.75f, 1.0f, 1.0f };
 };
 
 using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
@@ -165,7 +165,7 @@ static void to_json(json& j, const T& o, const T& dummy)
         j = o;
 }
 
-static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
+static void to_json(json& j, const Color4& o, const Color4& dummy = {})
 {
     WRITE("Color", color);
     WRITE("Rainbow", rainbow);
@@ -279,7 +279,7 @@ static void read(const json& j, const char* key, std::unordered_map<std::string,
     }
 }
 
-static void from_json(const json& j, ColorA& c)
+static void from_json(const json& j, Color4& c)
 {
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);

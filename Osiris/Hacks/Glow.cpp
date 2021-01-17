@@ -13,7 +13,7 @@
 #include "../SDK/Utils.h"
 #include "../imguiCustom.h"
 
-struct GlowItem : ColorA {
+struct GlowItem : Color4 {
     bool enabled = false;
     bool healthBased = false;
     int style = 0;
@@ -216,7 +216,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
 
 static void to_json(json& j, const GlowItem& o, const GlowItem& dummy = {})
 {
-    to_json(j, static_cast<const ColorA&>(o), dummy);
+    to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
     WRITE("Health based", healthBased);
     WRITE("Style", style);
@@ -239,7 +239,7 @@ json Glow::toJson() noexcept
 
 static void from_json(const json& j, GlowItem& g)
 {
-    from_json(j, static_cast<ColorA&>(g));
+    from_json(j, static_cast<Color4&>(g));
 
     read(j, "Enabled", g.enabled);
     read(j, "Health based", g.healthBased);

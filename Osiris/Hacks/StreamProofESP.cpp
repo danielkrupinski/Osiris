@@ -204,7 +204,7 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
     }
 }
 
-static ImVec2 renderText(float distance, float cullDistance, const ColorA& textCfg, const char* text, const ImVec2& pos, bool centered = true, bool adjustHeight = true) noexcept
+static ImVec2 renderText(float distance, float cullDistance, const Color4& textCfg, const char* text, const ImVec2& pos, bool centered = true, bool adjustHeight = true) noexcept
 {
     if (cullDistance && Helpers::units2meters(distance) > cullDistance)
         return { };

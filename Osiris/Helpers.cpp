@@ -20,7 +20,7 @@ static auto rainbowColor(float time, float speed, float alpha) noexcept
                        alpha };
 }
 
-unsigned int Helpers::calculateColor(ColorA color) noexcept
+unsigned int Helpers::calculateColor(Color4 color) noexcept
 {
    // if (!config->ignoreFlashbang)
         color.color[3] *= (255.0f - GameData::local().flashDuration) / 255.0f;

@@ -5,11 +5,11 @@
 #include "imgui/imgui.h"
 #include "Config.h"
 
-struct ColorA;
+struct Color4;
 
 namespace Helpers
 {
-    unsigned int calculateColor(ColorA color) noexcept;
+    unsigned int calculateColor(Color4 color) noexcept;
     unsigned int calculateColor(Config::Color color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
 
