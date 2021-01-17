@@ -11,8 +11,7 @@ struct ColorToggleThicknessRounding;
 
 namespace ImGuiCustom
 {
-    void colorPopup(const char* name, std::array<float, 4>& color, bool* rainbow = nullptr, float* rainbowSpeed = nullptr, bool* enable = nullptr, float* thickness = nullptr, float* rounding = nullptr) noexcept;
-    void colorPicker(const char* name, float color[3], bool* enable = nullptr, bool* rainbow = nullptr, float* rainbowSpeed = nullptr) noexcept;
+    void colorPicker(const char* name, float color[3], float* alpha = nullptr, bool* rainbow = nullptr, float* rainbowSpeed = nullptr, bool* enable = nullptr, float* thickness = nullptr, float* rounding = nullptr) noexcept;
     void colorPicker(const char* name, ColorToggle3& colorConfig) noexcept;
     void colorPicker(const char* name, Color4& colorConfig, bool* enable = nullptr, float* thickness = nullptr) noexcept;
     void colorPicker(const char* name, ColorToggle& colorConfig) noexcept;

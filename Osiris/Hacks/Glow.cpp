@@ -203,7 +203,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
     ImGui::SetColumnOffset(1, 150.0f);
     ImGui::Checkbox("Health based", &currentItem->healthBased);
 
-    ImGuiCustom::colorPopup("Color", currentItem->color, &currentItem->rainbow, &currentItem->rainbowSpeed);
+    ImGuiCustom::colorPicker("Color", *currentItem);
 
     ImGui::NextColumn();
     ImGui::SetNextItemWidth(100.0f);
