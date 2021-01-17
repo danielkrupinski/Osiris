@@ -80,16 +80,16 @@ static void from_json(const json& j, ColorToggle& ct)
     read(j, "Enabled", ct.enabled);
 }
 
-static void from_json(const json& j, Config::Color3& c)
+static void from_json(const json& j, Color3& c)
 {
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);
     read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
-static void from_json(const json& j, Config::ColorToggle3& ct)
+static void from_json(const json& j, ColorToggle3& ct)
 {
-    from_json(j, static_cast<Config::Color3&>(ct));
+    from_json(j, static_cast<Color3&>(ct));
     read(j, "Enabled", ct.enabled);
 }
 
@@ -550,16 +550,16 @@ static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {}
     WRITE("Enabled", enabled);
 }
 
-static void to_json(json& j, const Config::Color3& o, const Config::Color3& dummy = {})
+static void to_json(json& j, const Color3& o, const Color3& dummy = {})
 {
     WRITE("Color", color);
     WRITE("Rainbow", rainbow);
     WRITE("Rainbow Speed", rainbowSpeed);
 }
 
-static void to_json(json& j, const Config::ColorToggle3& o, const Config::ColorToggle3& dummy = {})
+static void to_json(json& j, const ColorToggle3& o, const ColorToggle3& dummy = {})
 {
-    to_json(j, static_cast<const Config::Color3&>(o), dummy);
+    to_json(j, static_cast<const Color3&>(o), dummy);
     WRITE("Enabled", enabled);
 }
 

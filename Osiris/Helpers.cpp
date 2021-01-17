@@ -27,7 +27,7 @@ unsigned int Helpers::calculateColor(Color4 color) noexcept
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, color.color[3]) : color.color);
 }
 
-unsigned int Helpers::calculateColor(Config::Color3 color) noexcept
+unsigned int Helpers::calculateColor(Color3 color) noexcept
 {
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, 1.0f) : ImVec4{ color.color[0], color.color[1], color.color[2], 1.0f});
 }

@@ -13,7 +13,17 @@ struct Color4 {
     float rainbowSpeed = 0.6f;
     bool rainbow = false;
 };
+
+struct Color3 {
+    std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
+    float rainbowSpeed = 0.6f;
+    bool rainbow = false;
+};
 #pragma pack(pop)
+
+struct ColorToggle3 : public Color3 {
+    bool enabled = false;
+};
 
 struct ColorToggle : Color4 {
     bool enabled = false;

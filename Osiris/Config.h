@@ -30,16 +30,6 @@ public:
         return configs;
     }
 
-    struct Color3 {
-        std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
-        bool rainbow{ false };
-        float rainbowSpeed{ 0.6f };
-    };
-
-    struct ColorToggle3 : public Color3 {
-        bool enabled{ false };
-    };
-
     struct Aimbot {
         bool enabled{ false };
         bool aimlock{ false };
