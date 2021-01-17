@@ -36,7 +36,7 @@ public:
         float rainbowSpeed{ 0.6f };
     };
 
-    struct ColorToggle : public Color3 {
+    struct ColorToggle3 : public Color3 {
         bool enabled{ false };
     };
 
@@ -154,8 +154,8 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        ColorToggle world;
-        ColorToggle sky;
+        ColorToggle3 world;
+        ColorToggle3 sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitEffect{ 0 };
@@ -240,13 +240,13 @@ public:
         KeyBind slowwalkKey = KeyBind::NONE;
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
-        ColorToggle spectatorList;
-        ColorToggle watermark;
+        ColorToggle3 spectatorList;
+        ColorToggle3 watermark;
         float aspectratio{ 0 };
         std::string killMessageString{ "Gotcha!" };
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
-        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
+        ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
         KeyBind prepareRevolverKey = KeyBind::NONE;
         int hitSound{ 0 };
         int chokedPackets{ 0 };
