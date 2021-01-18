@@ -455,13 +455,11 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     if (!activeWeapon)
         return;
 
-    Vector start, _;
-    if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), start, _))
-        return;
-
     BeamInfo beamInfo;
 
-    beamInfo.start = start;
+    if (Vector _; !viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start, _))
+        return;
+
     beamInfo.end.x = event.getFloat("x");
     beamInfo.end.y = event.getFloat("y");
     beamInfo.end.z = event.getFloat("z");
