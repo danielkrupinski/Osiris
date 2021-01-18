@@ -118,6 +118,7 @@ public:
     const char* toString() const noexcept;
     bool isPressed() const noexcept;
     bool isDown() const noexcept;
+    bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
 private:

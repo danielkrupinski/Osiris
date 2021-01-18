@@ -447,21 +447,28 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     if (event.getInt("userid") != localPlayer->getUserId())
         return;
 
-    const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
-    if (!viewModel)
-        return;
-
     const auto activeWeapon = localPlayer->getActiveWeapon();
     if (!activeWeapon)
         return;
 
-    Vector start, _;
-    if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), start, _))
-        return;
-
     BeamInfo beamInfo;
 
-    beamInfo.start = start;
+    if (!localPlayer->shouldDraw()) {
+        const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
+        if (!viewModel)
+            return;
+
+        if (Vector _; !viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start, _))
+            return;
+    } else {
+        const auto worldModel = interfaces->entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        if (!worldModel)
+            return;
+
+        if (Vector _; !worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start, _))
+            return;
+    }
+
     beamInfo.end.x = event.getFloat("x");
     beamInfo.end.y = event.getFloat("y");
     beamInfo.end.z = event.getFloat("z");
