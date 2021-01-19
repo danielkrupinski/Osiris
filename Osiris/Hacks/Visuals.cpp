@@ -458,14 +458,14 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
         if (!viewModel)
             return;
 
-        if (Vector _; !viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start, _))
+        if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
             return;
     } else {
         const auto worldModel = interfaces->entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
         if (!worldModel)
             return;
 
-        if (Vector _; !worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start, _))
+        if (!worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
             return;
     }
 
