@@ -59,13 +59,13 @@ public:
     VIRTUAL_METHOD(bool, shouldDraw, WIN32_LINUX(3, 149), (), (this + WIN32_LINUX(sizeof(uintptr_t), 0)))
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
-    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(35, 122), (int index, Vector& origin, Vector& angles), (this + WIN32_LINUX(sizeof(uintptr_t), 0), index, std::ref(origin), std::ref(angles)))
 
     VIRTUAL_METHOD_V(int&, handle, 2, (), (this))
     VIRTUAL_METHOD_V(Collideable*, getCollideable, 3, (), (this))
 
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
+    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(83, 121), (int index, Vector& origin), (this, index, std::ref(origin)))
     VIRTUAL_METHOD(int, health, WIN32_LINUX(121, 166), (), (this))
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
