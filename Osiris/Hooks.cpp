@@ -319,15 +319,10 @@ static void __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int ent
 
     if (strstr(soundEntry, "Weapon") && strstr(soundEntry, "Single")) {
         modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
-    } else if (config->misc.autoAccept && !strcmp(soundEntry, "UIPanorama.popup_accept_match_beep")) {
-        memory->acceptMatch();
-#ifdef _WIN32
-        auto window = FindWindowW(L"Valve001", NULL);
-        FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
-        FlashWindowEx(&flash);
-        ShowWindow(window, SW_RESTORE);
-#endif
     }
+    
+    Misc::autoAccept(soundEntry);
+
     volume = std::clamp(volume, 0.0f, 1.0f);
     hooks->sound.callOriginal<void, IS_WIN32() ? 5 : 6>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
