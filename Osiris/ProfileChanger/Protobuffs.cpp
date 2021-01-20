@@ -76,6 +76,18 @@ void Protobuffs::ReceiveMessage(void* thisPtr, void* oldEBP, uint32_t messageTyp
 	}
 }
 
+bool Protobuffs::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData)
+{
+	g_Inventory->Presend(unMsgType, pubData, cubData);
+
+	if (unMsgType == k_EMsgGCAdjustItemEquippedState)
+	{
+		return g_Inventory->Presend(unMsgType, pubData, cubData);
+	}
+
+	return true;
+}
+
 bool Protobuffs::SendClientHello()
 {
 	ProtoWriter msg(7);
