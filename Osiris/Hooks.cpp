@@ -627,7 +627,6 @@ void Hooks::install() noexcept
 
     client.init(interfaces->client);
     client.hookAt(37, frameStageNotify);
-
     clientMode.init(memory->clientMode);
     clientMode.hookAt(IS_WIN32() ? 17 : 18, shouldDrawFog);
     clientMode.hookAt(IS_WIN32() ? 18 : 19, overrideView);
@@ -657,6 +656,7 @@ void Hooks::install() noexcept
     viewRender.init(memory->viewRender);
     viewRender.hookAt(IS_WIN32() ? 39 : 40, render2dEffectsPreHud);
     viewRender.hookAt(IS_WIN32() ? 41 : 42, renderSmokeOverlay);
+    gameCoordinator.setup(memory->SteamGameCoordinator);
     gameCoordinator.hook_index(2, hkGCRetrieveMessage);
     gameCoordinator.hook_index(0, hkGCSendMessage);
 

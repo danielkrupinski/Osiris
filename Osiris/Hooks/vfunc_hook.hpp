@@ -14,7 +14,7 @@ namespace detail
         {
             _base = base;
             _length = len;
-            if(!VirtualProtect(base, len, flags, (PDWORD)&_old))
+            if (!VirtualProtect(base, len, flags, (PDWORD)&_old))
                 throw std::runtime_error("Failed to protect region.");
         }
         ~protect_guard()
@@ -23,7 +23,7 @@ namespace detail
         }
 
     private:
-        void*         _base;
+        void* _base;
         size_t        _length;
         std::uint32_t _old;
     };
@@ -50,12 +50,13 @@ public:
     void unhook_all()
     {
         try {
-            if(old_vftbl != nullptr) {
+            if (old_vftbl != nullptr) {
                 auto guard = detail::protect_guard{ class_base, sizeof(std::uintptr_t), PAGE_READWRITE };
                 *(std::uintptr_t**)class_base = old_vftbl;
                 old_vftbl = nullptr;
             }
-        } catch(...) {
+        }
+        catch (...) {
         }
     }
 
@@ -68,7 +69,7 @@ public:
 private:
     static inline std::size_t estimate_vftbl_length(std::uintptr_t* vftbl_start);
 
-    void*           class_base;
+    void* class_base;
     std::size_t     vftbl_len;
     std::uintptr_t* new_vftbl;
     std::uintptr_t* old_vftbl;
