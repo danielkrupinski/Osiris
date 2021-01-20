@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "Helpers.h"
 #include "SDK/Platform.h"
+#include "Hacks/Glow.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -73,139 +74,22 @@ Config::Config(const char* name) noexcept
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
 }
 
-using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
-using value_t = json::value_t;
-
-template <value_t Type, typename T>
-static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.type() == Type)
-        val.get_to(o);
-}
-
-static void read(const json& j, const char* key, bool& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.type() == value_t::boolean)
-        val.get_to(o);
-}
-
-static void read(const json& j, const char* key, float& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.type() == value_t::number_float)
-        val.get_to(o);
-}
-
-static void read(const json& j, const char* key, int& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_number_integer())
-        val.get_to(o);
-}
-
-static void read(const json& j, const char* key, WeaponId& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_number_integer())
-        val.get_to(o);
-}
-
-static void read(const json& j, const char* key, KeyBind& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_string())
-        o = val.get<std::string>().c_str();
-}
-
-static void read(const json& j, const char* key, char* o, std::size_t size) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.is_string()) {
-        std::strncpy(o, val.get<std::string>().c_str(), size);
-        o[size - 1] = '\0';
-    }
-}
-
-template <typename T, size_t Size>
-static void read_array_opt(const json& j, const char* key, std::array<T, Size>& o) noexcept
-{
-    if (j.contains(key) && j[key].type() == value_t::array) {
-        std::size_t i = 0;
-        for (const auto& e : j[key]) {
-            if (i >= o.size())
-                break;
-
-            if (e.is_null())
-                continue;
-
-            e.get_to(o[i]);
-            ++i;
-        }
-    }
-}
-
-template <typename T, size_t Size>
-static void read(const json& j, const char* key, std::array<T, Size>& o) noexcept
-{
-    if (!j.contains(key))
-        return;
-
-    if (const auto& val = j[key]; val.type() == value_t::array && val.size() == o.size()) {
-        for (std::size_t i = 0; i < val.size(); ++i) {
-            if (!val[i].empty())
-                val[i].get_to(o[i]);
-        }
-    }
-}
-
-template <typename T>
-static void read(const json& j, const char* key, std::unordered_map<std::string, T>& o) noexcept
-{
-    if (j.contains(key) && j[key].is_object()) {
-        for (auto& element : j[key].items())
-            element.value().get_to(o[element.key()]);
-    }
-}
-
-static void from_json(const json& j, ColorA& c)
-{
-    read(j, "Color", c.color);
-    read(j, "Rainbow", c.rainbow);
-    read(j, "Rainbow Speed", c.rainbowSpeed);
-}
-
 static void from_json(const json& j, ColorToggle& ct)
 {
-    from_json(j, static_cast<ColorA&>(ct));
+    from_json(j, static_cast<Color4&>(ct));
     read(j, "Enabled", ct.enabled);
 }
 
-static void from_json(const json& j, Config::Color& c)
+static void from_json(const json& j, Color3& c)
 {
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);
     read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
-static void from_json(const json& j, Config::ColorToggle& ct)
+static void from_json(const json& j, ColorToggle3& ct)
 {
-    from_json(j, static_cast<Config::Color&>(ct));
+    from_json(j, static_cast<Color3&>(ct));
     read(j, "Enabled", ct.enabled);
 }
 
@@ -318,6 +202,12 @@ static void from_json(const json& j, OffscreenEnemies& o)
     read<value_t::object>(j, "Color", o.color);
 }
 
+static void from_json(const json& j, BulletTracers& o)
+{
+    read(j, "Enabled", o.enabled);
+    read<value_t::object>(j, "Color", o.color);
+}
+
 static void from_json(const json& j, ImVec2& v)
 {
     read(j, "X", v.x);
@@ -376,18 +266,9 @@ static void from_json(const json& j, Config::AntiAim& a)
     read(j, "Pitch angle", a.pitchAngle);
 }
 
-static void from_json(const json& j, Config::Glow& g)
-{
-    from_json(j, static_cast<ColorA&>(g));
-
-    read(j, "Enabled", g.enabled);
-    read(j, "Health based", g.healthBased);
-    read(j, "Style", g.style);
-}
-
 static void from_json(const json& j, Config::Chams::Material& m)
 {
-    from_json(j, static_cast<ColorA&>(m));
+    from_json(j, static_cast<Color4&>(m));
 
     read(j, "Enabled", m.enabled);
     read(j, "Health based", m.healthBased);
@@ -466,6 +347,7 @@ static void from_json(const json& j, Config::Visuals& v)
     read(j, "Playermodel T", v.playerModelT);
     read(j, "Playermodel CT", v.playerModelCT);
     read<value_t::object>(j, "Color correction", v.colorCorrection);
+    read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
 }
 
 static void from_json(const json& j, sticker_setting& s)
@@ -652,7 +534,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
 
     read<value_t::object>(j, "Backtrack", backtrack);
     read<value_t::object>(j, "Anti aim", antiAim);
-    read(j, "Glow", glow);
+    ::Glow::fromJson(j["Glow"]);
     read(j, "Chams", chams);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
@@ -662,42 +544,22 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read<value_t::object>(j, "Misc", misc);
 }
 
-// WRITE macro requires:
-// - json object named 'j'
-// - object holding default values named 'dummy'
-// - object to write to json named 'o'
-#define WRITE(name, valueName) to_json(j[name], o.valueName, dummy.valueName)
-
-template <typename T>
-static void to_json(json& j, const T& o, const T& dummy)
-{
-    if (o != dummy)
-        j = o;
-}
-
-static void to_json(json& j, const ColorA& o, const ColorA& dummy = {})
-{
-    WRITE("Color", color);
-    WRITE("Rainbow", rainbow);
-    WRITE("Rainbow Speed", rainbowSpeed);
-}
-
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
 {
-    to_json(j, static_cast<const ColorA&>(o), dummy);
+    to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
 }
 
-static void to_json(json& j, const Config::Color& o, const Config::Color& dummy = {})
+static void to_json(json& j, const Color3& o, const Color3& dummy = {})
 {
     WRITE("Color", color);
     WRITE("Rainbow", rainbow);
     WRITE("Rainbow Speed", rainbowSpeed);
 }
 
-static void to_json(json& j, const Config::ColorToggle& o, const Config::ColorToggle& dummy = {})
+static void to_json(json& j, const ColorToggle3& o, const ColorToggle3& dummy = {})
 {
-    to_json(j, static_cast<const Config::Color&>(o), dummy);
+    to_json(j, static_cast<const Color3&>(o), dummy);
     WRITE("Enabled", enabled);
 }
 
@@ -787,6 +649,12 @@ static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& 
     WRITE("Color", color);
 }
 
+static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Color", color);
+}
+
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
 {
     j = static_cast<const Shared&>(o);
@@ -852,19 +720,11 @@ static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& du
     WRITE("Yaw", yaw);
 }
 
-static void to_json(json& j, const Config::Glow& o, const Config::Glow& dummy = {})
-{
-    to_json(j, static_cast<const ColorA&>(o), dummy);
-    WRITE("Enabled", enabled);
-    WRITE("Health based", healthBased);
-    WRITE("Style", style);
-}
-
 static void to_json(json& j, const Config::Chams::Material& o)
 {
     const Config::Chams::Material dummy;
 
-    to_json(j, static_cast<const ColorA&>(o), dummy);
+    to_json(j, static_cast<const Color4&>(o), dummy);
     WRITE("Enabled", enabled);
     WRITE("Health based", healthBased);
     WRITE("Blinking", blinking);
@@ -1066,6 +926,7 @@ static void to_json(json& j, const Config::Visuals& o)
     WRITE("Playermodel T", playerModelT);
     WRITE("Playermodel CT", playerModelCT);
     WRITE("Color correction", colorCorrection);
+    WRITE("Bullet Tracers", bulletTracers);
 }
 
 static void to_json(json& j, const ImVec4& o)
@@ -1147,7 +1008,7 @@ void Config::save(size_t id) const noexcept
 
         j["Backtrack"] = backtrack;
         j["Anti aim"] = antiAim;
-        j["Glow"] = glow;
+        j["Glow"] = ::Glow::toJson();
         j["Chams"] = chams;
         j["ESP"] = streamProofESP;
         j["Sound"] = sound;
@@ -1188,7 +1049,7 @@ void Config::reset() noexcept
     aimbot = { };
     triggerbot = { };
     backtrack = { };
-    glow = { };
+    Glow::resetConfig();
     chams = { };
     streamProofESP = { };
     visuals = { };

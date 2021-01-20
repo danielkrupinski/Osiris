@@ -38,9 +38,14 @@ struct BeamInfo {
     float ringEndRadius;
 };
 
-class Beam;
+struct Beam {
+    PAD(WIN32_LINUX(52, 76))
+    int flags;
+    PAD(144)
+    float die;
+};
 
 class ViewRenderBeams {
 public:
-    VIRTUAL_METHOD(Beam*, createBeamPoints, 12, (BeamInfo& beamInfo), (this, std::ref(beamInfo)))
+    VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (this, std::ref(beamInfo)))
 };

@@ -112,11 +112,6 @@ struct Model;
 
 class ModelInfo {
 public:
-#ifdef _WIN32
-    VIRTUAL_METHOD(int, getModelIndex, 2, (const char* name), (this, name))
-    VIRTUAL_METHOD(StudioHdr*, getStudioModel, 32, (const Model* model), (this, model))
-#else
-    VIRTUAL_METHOD(int, getModelIndex, 3, (const char* name), (this, name))
-    VIRTUAL_METHOD(StudioHdr*, getStudioModel, 31, (const Model* model), (this, model))
-#endif
+    VIRTUAL_METHOD(int, getModelIndex, WIN32_LINUX(2, 3), (const char* name), (this, name))
+    VIRTUAL_METHOD(StudioHdr*, getStudioModel, WIN32_LINUX(32, 31), (const Model* model), (this, model))
 };

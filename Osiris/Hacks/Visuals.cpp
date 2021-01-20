@@ -17,10 +17,11 @@
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/ModelInfo.h"
 #include "../SDK/NetworkStringTable.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
-#include "../SDK/ModelInfo.h"
+#include "../SDK/ViewRenderBeams.h"
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -271,7 +272,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #ifdef _WIN32
-
+#undef xor
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
@@ -427,11 +428,78 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    if (const auto& skyboxes = Helpers::skyboxList; stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox]);
+    if (stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxList.size()) {
+        memory->loadSky(skyboxList[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
+    }
+}
+
+void Visuals::bulletTracer(GameEvent& event) noexcept
+{
+    if (!config->visuals.bulletTracers.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    BeamInfo beamInfo;
+
+    if (!localPlayer->shouldDraw()) {
+        const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
+        if (!viewModel)
+            return;
+
+        if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
+            return;
+    } else {
+        const auto worldModel = interfaces->entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        if (!worldModel)
+            return;
+
+        if (!worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
+            return;
+    }
+
+    beamInfo.end.x = event.getFloat("x");
+    beamInfo.end.y = event.getFloat("y");
+    beamInfo.end.z = event.getFloat("z");
+
+    beamInfo.modelName = "sprites/physbeam.vmt";
+    beamInfo.modelIndex = -1;
+    beamInfo.haloName = nullptr;
+    beamInfo.haloIndex = -1;
+
+    beamInfo.red = 255.0f * config->visuals.bulletTracers.color.color[0];
+    beamInfo.green = 255.0f * config->visuals.bulletTracers.color.color[1];
+    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color.color[2];
+    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color.color[3];
+
+    beamInfo.type = 0;
+    beamInfo.life = 0.0f;
+    beamInfo.amplitude = 0.0f;
+    beamInfo.segments = -1;
+    beamInfo.renderable = true;
+    beamInfo.speed = 0.2f;
+    beamInfo.startFrame = 0;
+    beamInfo.frameRate = 0.0f;
+    beamInfo.width = 2.0f;
+    beamInfo.endWidth = 2.0f;
+    beamInfo.flags = 0x40;
+    beamInfo.fadeLength = 20.0f;
+
+    if (const auto beam = memory->viewRenderBeams->createBeamPoints(beamInfo)) {
+        constexpr auto FBEAM_FOREVER = 0x4000;
+        beam->flags &= ~FBEAM_FOREVER;
+        beam->die = memory->globalVars->currenttime + 2.0f;
     }
 }
 
