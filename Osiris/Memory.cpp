@@ -246,6 +246,7 @@ Memory::Memory() noexcept
     dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x10\xE8????\x48\x8B\x35") + 3);
     fakePrime = reinterpret_cast<std::uint8_t*>(findPattern(CLIENT_DLL, "\x74\x06\xF6\x40\x20\x10"));
     acceptMatchFunction = findPattern(CLIENT_DLL, "\x66\x66\x66\x66\x66\x2E\x0F\x1F\x84?????\x55\x48\x89\xF7\x48\x8D\x35") + 14;
+    predictionRandomSeed = *relativeToAbsolute<int**>(findPattern(CLIENT_DLL, "\x41\x8D\x56\xFF\x31\xC9") - 14);
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
