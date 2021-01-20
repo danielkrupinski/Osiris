@@ -136,7 +136,7 @@ public:
         bool zoom{ false };
         KeyBind zoomKey = KeyBind::NONE;
         bool thirdperson{ false };
-        KeyBind thirdpersonKey = KeyBind::NONE;
+        KeyBindToggle thirdpersonKey = KeyBind::NONE;
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
         int fov{ 0 };

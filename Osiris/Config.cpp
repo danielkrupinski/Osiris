@@ -739,12 +739,22 @@ static void to_json(json& j, const Config::Chams& o)
     j["Materials"] = o.materials;
 }
 
-static void to_json(json& j, const Config::StreamProofESP& o)
+static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
 {
-    if (o.toggleKey != KeyBind::NONE)
-        j["Toggle Key"] = o.toggleKey.toString();
-    if (o.holdKey != KeyBind::NONE)
-        j["Hold Key"] = o.holdKey.toString();
+    if (o != dummy)
+        j = o.toString();
+}
+
+static void to_json(json& j, const KeyBindToggle& o, const KeyBindToggle& dummy)
+{
+    if (o != dummy)
+        j = o.toString();
+}
+
+static void to_json(json& j, const Config::StreamProofESP& o, const Config::StreamProofESP& dummy = {})
+{
+    WRITE("Toggle Key", toggleKey);
+    WRITE("Hold Key", holdKey);
     j["Allies"] = o.allies;
     j["Enemies"] = o.enemies;
     j["Weapons"] = o.weapons;
@@ -797,12 +807,6 @@ static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& 
 {
     WRITE("Enabled", enabled);
     WRITE("Only Headshots", onlyHeadshots);
-}
-
-static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
-{
-    if (o != dummy)
-        j = o.toString();
 }
 
 static void to_json(json& j, const Config::Misc& o)
