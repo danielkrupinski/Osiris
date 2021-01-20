@@ -255,13 +255,11 @@ void Visuals::removeShadows() noexcept
     shadows->setValue(!config->visuals.noShadows);
 }
 
-static bool zoomToggled = false;
-
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
     if (config->visuals.zoom && localPlayer) {
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
-            if (zoomToggled) {
+            if (config->visuals.zoomKey.isToggled()) {
                 localPlayer->fov() = 40;
                 localPlayer->fovStart() = 40;
             }
@@ -504,7 +502,5 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
 void Visuals::updateInput() noexcept
 {
     config->visuals.thirdpersonKey.handleToggle();
-
-    if (config->visuals.zoomKey.isPressed())
-        zoomToggled = !zoomToggled;
+    config->visuals.zoomKey.handleToggle();
 }
