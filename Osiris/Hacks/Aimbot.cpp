@@ -10,6 +10,8 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 
+int aimTarget = -1;
+
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     return ((destination - source).toAngle() - viewAngles).normalize();
@@ -17,27 +19,57 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
 
 static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
 {
-    bool result = false;
-#ifdef _WIN32
-    const auto traceToExitFn = memory->traceToExit;
-    __asm {
-        push exitTrace
-        mov eax, direction
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov eax, start
-        push [eax]Vector.z
-        push [eax]Vector.y
-        push [eax]Vector.x
-        mov edx, enterTrace
-        mov ecx, end
-        call traceToExitFn
-        add esp, 28
-        mov result, al
-    }
-#endif
-    return result;
+	float distance = 0.0f;
+
+	while (distance <= 90.0f) {
+		distance += 4.0f;
+		end = start + direction * distance;
+
+		auto point_contents = interfaces->engineTrace->getPointContents(end, MASK_SHOT_HULL | CONTENTS_HITBOX);
+
+		if (point_contents & MASK_SHOT_HULL && !(point_contents & CONTENTS_HITBOX)) {
+			continue;
+		}
+
+		auto new_end = end - (direction * 4.0f);
+
+		interfaces->engineTrace->traceRay({ end, new_end }, MASK_SHOT, 0, exitTrace);
+
+		if (exitTrace.startSolid && exitTrace.surface.flags & SURF_HITBOX) {
+			interfaces->engineTrace->traceRay({ end, start }, 0x600400B, TraceFilter(exitTrace.entity), exitTrace);
+
+			if ((exitTrace.fraction < 1.0f || exitTrace.allSolid) && !exitTrace.startSolid) {
+				end = exitTrace.endpos;
+				return true;
+			}
+
+			continue;
+		}
+
+		if (!(exitTrace.fraction < 1.0 || exitTrace.allSolid || exitTrace.startSolid) || exitTrace.startSolid) {
+			if (exitTrace.entity) {
+				if (enterTrace.entity &&
+				    enterTrace.entity == interfaces->entityList->getEntity(aimTarget)) {
+					return true;
+				}
+			}
+
+			continue;
+		}
+
+		if (exitTrace.surface.flags >> 7 & 1 && !(enterTrace.surface.flags >> 7 & 1)) {
+			continue;
+		}
+
+		if (exitTrace.plane.normal.dotProduct(direction) <= 1.0f) {
+			auto fraction = exitTrace.fraction * 4.0f;
+			end = end - (direction * fraction);
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
@@ -191,6 +223,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = bonePosition;
+	                aimTarget = i;
                 }
                 if (config->aimbot[weaponIndex].bone)
                     break;
