@@ -175,6 +175,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::quickReload(cmd);
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
+    Misc::playerBlocker(cmd);
 
 #ifdef _WIN32
     EnginePrediction::run(cmd);
