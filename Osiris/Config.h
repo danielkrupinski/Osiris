@@ -192,6 +192,8 @@ public:
         Misc() { clanTag[0] = '\0'; }
 
         KeyBind menuKey = KeyBind::INSERT;
+        bool playerBlocker{ false };
+        int playerBlockerKey{ 0 };
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
