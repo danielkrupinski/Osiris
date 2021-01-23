@@ -1,4 +1,5 @@
 #pragma once
+#include ../SDK/Vector.h
 
 enum class FrameStage;
 class GameEvent;
@@ -7,6 +8,9 @@ struct UserCmd;
 
 namespace Misc
 {
+    Vector calculateRelativeAngle(const Vector& source, const Vector& destination) noexcept;
+    int distance(Vector a, Vector b) noexcept;
+    void playerBlocker(UserCmd* cmd) noexcept;
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void inverseRagdollGravity() noexcept;
