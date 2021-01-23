@@ -1267,6 +1267,9 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::PushID("Slowwalk Key");
     hotkey2("", config->misc.slowwalkKey);
+    ImGui::Checkbox("Blockbot", &config->misc.playerBlocker);
+    ImGui::SameLine();
+    hotkey(config->misc.playerBlockerKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", config->misc.recoilCrosshair);
