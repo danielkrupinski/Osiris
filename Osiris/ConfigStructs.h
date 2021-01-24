@@ -180,7 +180,7 @@ static void to_json(json& j, const Color4& o, const Color4& dummy = {})
 {
     if (o.color != dummy.color) {
         std::ostringstream s;
-        s << '#' << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(o.color[0] * 255) << static_cast<int>(o.color[1] * 255) << static_cast<int>(o.color[2] * 255);
+        s << '#' << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(o.color[0] * 255) << std::setw(2) << static_cast<int>(o.color[1] * 255) << std::setw(2) << static_cast<int>(o.color[2] * 255);
         j["Color"] = s.str();
         j["Alpha"] = o.color[3];
     }
