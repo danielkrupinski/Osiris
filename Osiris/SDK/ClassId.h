@@ -17,6 +17,7 @@ enum class ClassId {
     EconEntity = 53,
     EconWearable,
     Hostage = 97,
+    Inferno = 100,
     Healthshot = 104,
     Cash,
     Knife = 107,
