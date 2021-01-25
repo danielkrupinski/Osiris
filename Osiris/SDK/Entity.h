@@ -264,6 +264,7 @@ public:
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
     NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
+    NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
 
     bool isFlashed() noexcept
     {
