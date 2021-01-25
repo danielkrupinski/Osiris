@@ -263,6 +263,12 @@ public:
         
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
+    NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
+    NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
+    NETVAR(fireZDelta, "CInferno", "m_fireZDelta", int[100])
+    NETVAR(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
+    NETVAR(fireCount, "CInferno", "m_fireCount", int)
+        
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
