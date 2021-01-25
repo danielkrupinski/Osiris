@@ -163,3 +163,9 @@ struct BombData {
     float defuseLength;
     int bombsite;
 };
+
+struct InfernoData {
+    InfernoData(Entity* inferno) noexcept;
+
+    std::vector<Vector> points;
+};
