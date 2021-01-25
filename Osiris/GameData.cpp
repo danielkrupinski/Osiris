@@ -214,6 +214,11 @@ const BombData& GameData::plantedC4() noexcept
     return bombData;
 }
 
+const std::vector<InfernoData>& GameData::infernos() noexcept
+{
+    return infernoData;
+}
+
 void LocalPlayerData::update() noexcept
 {
     if (!localPlayer) {
