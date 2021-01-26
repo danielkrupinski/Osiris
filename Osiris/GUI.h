@@ -12,6 +12,7 @@ public:
     void handleToggle() noexcept;
     bool isOpen() noexcept { return open; }
 private:
+    static void hotkey(int&) noexcept;
     bool open = true;
 
     void updateColors() const noexcept;
