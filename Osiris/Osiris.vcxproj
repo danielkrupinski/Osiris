@@ -110,6 +110,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="SDK\FileSystem.h" />
     <ClInclude Include="SDK\FrameStage.h" />
     <ClInclude Include="SDK\GameEvent.h" />
     <ClInclude Include="SDK\GameMovement.h" />
