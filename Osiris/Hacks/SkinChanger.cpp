@@ -77,17 +77,17 @@ static void initializeKits() noexcept
     std::vector<std::pair<int, WeaponId>> kitsWeapons;
     kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
-    for (int i = 0; i < itemSchema->alternateIcons.numElements; ++i) {
-        const auto encoded = itemSchema->alternateIcons.memory[i].key;
+    for (const auto& node : itemSchema->alternateIcons) {
+        const auto encoded = node.key;
         kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16)); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
     }
 
     std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
-
+ 
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
-    for (int i = 0; i <= itemSchema->paintKits.lastAlloc; i++) {
-        const auto paintKit = itemSchema->paintKits.memory[i].value;
+    for (const auto& node : itemSchema->paintKits) {
+        const auto paintKit = node.value;
 
         if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
             continue;
@@ -418,12 +418,13 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
     static std::vector<SkinChanger::PaintKit> stickerKits;
     if (stickerKits.empty()) {
+        const auto& stickerMap = memory->itemSystem()->getItemSchema()->stickerKits;
+
+        stickerKits.reserve(stickerMap.numElements + 1);
         stickerKits.emplace_back(0, "None");
 
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        stickerKits.reserve(itemSchema->stickerKits.lastAlloc);
-        for (int i = 0; i <= itemSchema->stickerKits.lastAlloc; i++) {
-            const auto stickerKit = itemSchema->stickerKits.memory[i].value;
+        for (const auto& node : stickerMap) {
+            const auto stickerKit = node.value;
             if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
                 continue;
             std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
@@ -440,9 +441,8 @@ const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
 {
     static std::vector<Quality> qualities;
     if (qualities.empty()) {
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        for (int i = 0; i <= itemSchema->qualities.lastAlloc; ++i) {
-            const auto quality = itemSchema->qualities.memory[i].value;
+        for (const auto& node : memory->itemSystem()->getItemSchema()->qualities) {
+            const auto quality = node.value;
             if (const auto localizedName = interfaces->localize->findAsUTF8(quality.name); localizedName != quality.name)
                 qualities.emplace_back(quality.value, localizedName);
         }
@@ -460,9 +460,8 @@ const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
     if (gloveTypes.empty()) {
         gloveTypes.emplace_back(WeaponId{}, "Default");
 
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        for (int i = 0; i <= itemSchema->itemsSorted.lastAlloc; i++) {
-            const auto item = itemSchema->itemsSorted.memory[i].value;
+        for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
+            const auto item = node.value;
             if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0 && item->isPaintable())
                 gloveTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
         }
@@ -477,9 +476,8 @@ const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
     if (knifeTypes.empty()) {
         knifeTypes.emplace_back(WeaponId{}, "Default");
 
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        for (int i = 0; i <= itemSchema->itemsSorted.lastAlloc; i++) {
-            const auto item = itemSchema->itemsSorted.memory[i].value;
+        for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
+            const auto item = node.value;
             if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6)
                 knifeTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
         }
