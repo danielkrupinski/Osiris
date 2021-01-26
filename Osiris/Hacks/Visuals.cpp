@@ -6,6 +6,7 @@
 #include "../imgui/imgui_internal.h"
 
 #include "../fnv.h"
+#include "../GameData.h"
 #include "../Helpers.h"
 #include "Visuals.h"
 
@@ -496,6 +497,57 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
         constexpr auto FBEAM_FOREVER = 0x4000;
         beam->flags &= ~FBEAM_FOREVER;
         beam->die = memory->globalVars->currenttime + 2.0f;
+    }
+}
+
+static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = false) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    if (floor)
+        out = ImFloor(out);
+    return true;
+}
+
+void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
+{
+    if (!config->visuals.molotovHull.enabled)
+        return;
+
+    const auto color = Helpers::calculateColor(config->visuals.molotovHull);
+
+    GameData::Lock lock;
+
+    static const auto flameCircumference = [] {
+        std::array<Vector, 72> points;
+        for (std::size_t i = 0; i < points.size(); ++i) {
+            constexpr auto flameRadius = 60.0f; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/server/cstrike15/Effects/inferno.cpp#L889
+            points[i] = Vector{ flameRadius * std::cos(degreesToRadians(i * (360.0f / points.size()))),
+                                flameRadius * std::sin(degreesToRadians(i * (360.0f / points.size()))),
+                                0.0f };
+        }
+        return points;
+    }();
+
+    for (const auto& molotov : GameData::infernos()) {
+        for (const auto& pos : molotov.points) {
+            std::array<ImVec2, flameCircumference.size()> screenPoints;
+            std::size_t count = 0;
+
+            for (const auto& point : flameCircumference) {
+                if (worldToScreen(pos + point, screenPoints[count]))
+                    ++count;
+            }
+
+            drawList->AddConvexPolyFilled(screenPoints.data(), count, color);
+        }
     }
 }
 

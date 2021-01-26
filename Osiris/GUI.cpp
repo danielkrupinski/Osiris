@@ -966,6 +966,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
     ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers.color.color.data(), &config->visuals.bulletTracers.color.color[3], nullptr, nullptr, &config->visuals.bulletTracers.enabled);
+    ImGuiCustom::colorPicker("Molotov Hull", config->visuals.molotovHull);
 
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();

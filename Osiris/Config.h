@@ -155,6 +155,7 @@ public:
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
         BulletTracers bulletTracers;
+        ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
 
         struct ColorCorrection {
             bool enabled = false;
