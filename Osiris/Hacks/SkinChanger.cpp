@@ -74,15 +74,22 @@ static void initializeKits() noexcept
 
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
-    std::vector<std::pair<int, WeaponId>> kitsWeapons;
+    struct KitWeapon {
+        KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
+        int paintKit;
+        WeaponId weaponId;
+        const char* iconPath;
+    };
+
+    std::vector<KitWeapon> kitsWeapons;
     kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
     for (const auto& node : itemSchema->alternateIcons) {
         const auto encoded = node.key;
-        kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16)); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
+        kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.buffer.memory); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
     }
 
-    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
  
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
@@ -95,8 +102,8 @@ static void initializeKits() noexcept
         if (paintKit->id >= 10000) {
             std::wstring name;
 
-            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id) {
-                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->second)) {
+            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
+                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId)) {
                     name = interfaces->localize->findSafe(itemDef->getItemBaseName());
                     name += L" | ";
                 }
@@ -107,8 +114,8 @@ static void initializeKits() noexcept
         } else {
             std::unordered_set<WeaponId> weapons;
 
-            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id; ++it) {
-                weapons.insert(it->second);
+            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
+                weapons.insert(it->weaponId);
             }
 
             for (auto weapon : weapons) {
