@@ -29,6 +29,9 @@ struct Node {
 
 template <typename Key, typename Value>
 struct UtlMap {
+    auto begin() const noexcept { return memory.memory; }
+    auto end() const noexcept { return memory.memory + numElements; }
+
     void* lessFunc;
     UtlMemory<Node<Key, Value>> memory;
     int root;
