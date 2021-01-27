@@ -22,6 +22,8 @@
 //  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
 //  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 
+#include <memory>
+
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 
@@ -274,13 +276,13 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
         return nullptr;
     }
 
-    for (int y = 0; y < height; ++y) {
-        memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, data + width * 4 * y, width * 4);
-        for (int x = 0; x < width; ++x) {
-            auto color = reinterpret_cast<int*>((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y + x * 4);
-            *color = (*color & 0xFF00FF00) | ((*color & 0xFF0000) >> 16) | ((*color & 0xFF) << 16); // RGBA --> ARGB
-        }
-    }
+    const auto buffer = std::make_unique<std::uint32_t[]>(width * height);
+    std::memcpy(buffer.get(), data, width * height * 4);
+    for (int i = 0; i < width * height; ++i)
+        buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16); // RGBA --> ARGB
+
+    for (int y = 0; y < height; ++y)
+        std::memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, buffer.get() + width * y, width * 4);
 
     texture->UnlockRect(0);
     return texture;
