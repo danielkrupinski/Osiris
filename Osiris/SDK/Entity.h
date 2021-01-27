@@ -72,15 +72,32 @@ public:
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(165, 217), (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(267, 330), (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(281, 349), (), (this))
-    VIRTUAL_METHOD(Vector, getEyePosition, WIN32_LINUX(284, 347), (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(293, 356), (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(294, 357), (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, WIN32_LINUX(345, 408), (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(454, 522), (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(460, 528), (), (this))
     VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(467, 535), (Entity* viewModel), (this, viewModel))
     VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(468, 536), (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(482, 550), (), (this))
+
+#if IS_WIN32()
+    auto getEyePosition() noexcept
+    {
+        Vector v;
+        VirtualMethod::call<void, 284>(this, std::ref(v));
+        return v;
+    }
+
+    auto getAimPunch() noexcept
+    {
+        Vector v;
+        VirtualMethod::call<void, 345>(this, std::ref(v));
+        return v;
+    }
+#else
+    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
+#endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
     auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
