@@ -67,6 +67,8 @@ struct StickerKit {
     String name;
     String description;
     String itemName;
+    PAD(2 * sizeof(String))
+    String inventoryImage;
 };
 
 class EconItemDefinition {
