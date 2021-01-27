@@ -2,8 +2,18 @@ cmake_minimum_required(VERSION 3.13.0)
 project(Osiris)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_FLAGS_RELEASE "-O3 -s -fvisibility=hidden -flto -fno-exceptions -DNDEBUG -Wfatal-errors")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} --no-gnu-unique -fno-rtti")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -fvisibility=hidden -flto -fno-exceptions -DNDEBUG -Wfatal-errors")
+
+if (CMAKE_C_FLAGS_RELEASE STREQUAL "GNU")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-rtti")
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} --no-gnu-unique")
+endif()
 
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/Osiris/*.cpp")
 list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/GL/gl3w.c")
