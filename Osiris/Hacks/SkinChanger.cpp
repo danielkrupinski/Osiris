@@ -536,6 +536,9 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
     if (iconTextures[iconpath].get())
         return iconTextures[iconpath].get();
 
+    if (iconTextures.size() >= 50)
+        iconTextures.erase(iconTextures.begin());
+
     if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
         if (const auto size = interfaces->baseFileSystem->size(handle); size >= 0) {
             const auto buffer = std::make_unique<std::uint8_t[]>(size);
