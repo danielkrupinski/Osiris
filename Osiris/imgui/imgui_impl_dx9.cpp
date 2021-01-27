@@ -229,7 +229,7 @@ static bool ImGui_ImplDX9_CreateFontsTexture()
     if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8, D3DPOOL_DEFAULT, &g_FontTexture, NULL) < 0)
         return false;
     D3DLOCKED_RECT tex_locked_rect;
-    if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, 0) != D3D_OK)
+    if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, D3DLOCK_DISCARD) != D3D_OK)
         return false;
     for (int y = 0; y < height; y++)
         memcpy((unsigned char*)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + width * y, width);
@@ -271,7 +271,7 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
         return nullptr;
 
     D3DLOCKED_RECT lockedRect;
-    if (texture->LockRect(0, &lockedRect, nullptr, 0) != D3D_OK) {
+    if (texture->LockRect(0, &lockedRect, nullptr, D3DLOCK_DISCARD) != D3D_OK) {
         texture->Release();
         return nullptr;
     }
