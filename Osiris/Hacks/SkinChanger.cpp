@@ -4,6 +4,19 @@
 #include <fstream>
 #include <unordered_set>
 
+#define STBI_ONLY_PNG
+#define STBI_NO_STDIO
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+#include "../imgui/imgui.h"
+
+#ifdef _WIN32
+#include "../imgui/imgui_impl_dx9.h"
+#else
+#include "../imgui/imgui_impl_opengl3.h"
+#endif
+
 #include "../Interfaces.h"
 
 #include "SkinChanger.h"
@@ -16,6 +29,7 @@
 #include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
+#include "../SDK/FileSystem.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/ItemSchema.h"
@@ -74,15 +88,23 @@ static void initializeKits() noexcept
 
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
-    std::vector<std::pair<int, WeaponId>> kitsWeapons;
+    struct KitWeapon {
+        KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
+        int paintKit;
+        WeaponId weaponId;
+        const char* iconPath;
+    };
+
+    std::vector<KitWeapon> kitsWeapons;
     kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
     for (const auto& node : itemSchema->alternateIcons) {
-        const auto encoded = node.key;
-        kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16)); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
+        // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
+        if (const auto encoded = node.key; (encoded & 3) == 0)
+            kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
 
-    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
  
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
@@ -94,38 +116,29 @@ static void initializeKits() noexcept
 
         if (paintKit->id >= 10000) {
             std::wstring name;
+            std::string iconPath;
 
-            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id) {
-                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->second)) {
+            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
+                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId)) {
                     name = interfaces->localize->findSafe(itemDef->getItemBaseName());
                     name += L" | ";
                 }
+                iconPath = it->iconPath;
             }
 
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-            gloveKits.emplace_back(paintKit->id, std::move(name), paintKit->rarity);
+            gloveKits.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
         } else {
-            std::unordered_set<WeaponId> weapons;
+            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
 
-            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.first < id; }); it != kitsWeapons.end() && it->first == paintKit->id; ++it) {
-                weapons.insert(it->second);
-            }
-
-            for (auto weapon : weapons) {
-                const auto itemDef = itemSchema->getItemDefinitionInterface(weapon);
+                const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
                 if (!itemDef)
                     continue;
 
                 std::wstring name = interfaces->localize->findSafe(itemDef->getItemBaseName());
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, std::move(name), std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
-            }
-
-            if (weapons.empty()) {
-                assert(false);
-                std::wstring name = interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, std::move(name));
+                skinKits.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
             }
         }
     }
@@ -428,7 +441,7 @@ const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
             if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
                 continue;
             std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            stickerKits.emplace_back(stickerKit->id, std::move(name), stickerKit->rarity);
+            stickerKits.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), stickerKit->rarity);
         }
 
         std::sort(stickerKits.begin() + 1, stickerKits.end());
@@ -486,6 +499,74 @@ const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
     return knifeTypes;
 }
 
+class Texture {
+    ImTextureID texture = nullptr;
+public:
+    Texture() = default;
+    ~Texture() { clear(); }
+    Texture(const Texture&) = delete;
+    Texture& operator=(const Texture&) = delete;
+    Texture(Texture&& other) noexcept : texture{ other.texture } { other.texture = nullptr; }
+    Texture& operator=(Texture&& other) noexcept { clear(); texture = other.texture; other.texture = nullptr; return *this; }
+
+    void init(int width, int height, const std::uint8_t* data) noexcept;
+    void clear() noexcept;
+    ImTextureID get() noexcept { return texture; }
+};
+
+void Texture::init(int width, int height, const std::uint8_t* data) noexcept
+{
+    texture = ImGui_CreateTextureRGBA(width, height, data);
+}
+
+void Texture::clear() noexcept
+{
+    if (texture)
+        ImGui_DestroyTexture(texture);
+    texture = nullptr;
+}
+
+static std::unordered_map<std::string, Texture> iconTextures;
+
+ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcept
+{
+    if (iconpath.empty())
+        return 0;
+
+    if (iconTextures[iconpath].get())
+        return iconTextures[iconpath].get();
+
+    if (iconTextures.size() >= 50)
+        iconTextures.erase(iconTextures.begin());
+
+    if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
+        if (const auto size = interfaces->baseFileSystem->size(handle); size >= 0) {
+            const auto buffer = std::make_unique<std::uint8_t[]>(size);
+            if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
+                int width, height;
+                stbi_set_flip_vertically_on_load_thread(false);
+
+                if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
+                    iconTextures[iconpath].init(width, height, data);
+                    stbi_image_free(data);
+                } else {
+                    assert(false);
+                }
+            }
+        }
+        interfaces->baseFileSystem->close(handle);
+    } else {
+        assert(false);
+    }
+
+    return iconTextures[iconpath].get();
+}
+
+void SkinChanger::clearItemIconTextures() noexcept
+{
+    iconTextures.clear();
+}
+
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
@@ -494,6 +575,12 @@ SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noe
 SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
+}
+
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, rarity{ rarity }
+{
+    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
+    nameUpperCase = Helpers::toUpper(nameUpperCase);
 }
 
 SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, rarity{ rarity }

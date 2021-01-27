@@ -45,7 +45,7 @@ struct String {
     UtlMemory<char> buffer;
     int length;
 
-    char* data() noexcept { return buffer.memory; }
+    const char* data() const noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
@@ -67,6 +67,8 @@ struct StickerKit {
     String name;
     String description;
     String itemName;
+    PAD(2 * sizeof(String))
+    String inventoryImage;
 };
 
 class EconItemDefinition {

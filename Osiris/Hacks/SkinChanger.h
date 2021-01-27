@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "../imgui/imgui.h"
+
 #include "../SDK/WeaponId.h"
 
 enum class FrameStage;
@@ -20,12 +22,14 @@ namespace SkinChanger
     struct PaintKit {
         PaintKit(int id, const std::string& name, int rarity = 0) noexcept;
         PaintKit(int id, std::string&& name, int rarity = 0) noexcept;
+        PaintKit(int id, std::wstring&& name, std::string&& iconPath, int rarity = 0) noexcept;
         PaintKit(int id, std::wstring&& name, int rarity = 0) noexcept;
 
         int id;
         int rarity;
         std::string name;
         std::wstring nameUpperCase;
+        std::string iconPath;
 
         auto operator<(const PaintKit& other) const noexcept
         {
@@ -52,6 +56,9 @@ namespace SkinChanger
     const std::vector<Quality>& getQualities() noexcept;
     const std::vector<Item>& getGloveTypes() noexcept;
     const std::vector<Item>& getKnifeTypes() noexcept;
+
+    ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
+    void clearItemIconTextures() noexcept;
 
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
