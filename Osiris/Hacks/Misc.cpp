@@ -70,7 +70,7 @@ void Misc::playerBlocker(UserCmd* cmd) noexcept
             if (!entity)
                 continue;
 
-            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get() || GetAsyncKeyState(config->misc.playerBlockerKey))
+            if (!entity->isAlive() || entity->isDormant() || entity == localPlayer.get() || !GetAsyncKeyState(config->misc.playerBlockerKey))
                 continue;
 
             float dist = distance(localPlayer->origin(), entity->origin());            
