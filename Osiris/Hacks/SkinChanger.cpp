@@ -529,10 +529,8 @@ static std::unordered_map<std::string, Texture> iconTextures;
 
 ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcept
 {
-    if (iconpath.empty()) {
-        assert(false);
+    if (iconpath.empty())
         return 0;
-    }
 
     if (iconTextures[iconpath].get())
         return iconTextures[iconpath].get();
@@ -547,8 +545,7 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
                 if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
                     iconTextures[iconpath].init(width, height, data);
                     stbi_image_free(data);
-                }
-                else {
+                } else {
                     assert(false);
                 }
             }
