@@ -99,8 +99,9 @@ static void initializeKits() noexcept
     kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
 
     for (const auto& node : itemSchema->alternateIcons) {
+        // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
         if (const auto encoded = node.key; (encoded & 3) == 0)
-            kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.buffer.memory); // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
+            kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
 
     std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
@@ -556,6 +557,11 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
     }
 
     return iconTextures[iconpath].get();
+}
+
+void SkinChanger::clearItemIconTextures() noexcept
+{
+    iconTextures.clear();
 }
 
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
