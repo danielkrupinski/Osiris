@@ -45,7 +45,7 @@ struct String {
     UtlMemory<char> buffer;
     int length;
 
-    char* data() noexcept { return buffer.memory; }
+    const char* data() const noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
