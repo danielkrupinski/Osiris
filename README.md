@@ -1,4 +1,4 @@
-# Osiris 
+# eOsiris - Osiris en Español by CheatersUnidos.com
 [![C++](https://img.shields.io/badge/language-C%2B%2B-%23f34b7d.svg?style=plastic)](https://en.wikipedia.org/wiki/C%2B%2B) 
 [![CS:GO](https://img.shields.io/badge/game-CS%3AGO-yellow.svg?style=plastic)](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/) 
 [![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg?style=plastic)](https://en.wikipedia.org/wiki/Microsoft_Windows) 
@@ -9,21 +9,21 @@
 <br>![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-Free open-source cross-platform cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game. Available for Windows and Linux systems.
+Cheat/Hack Gratuito y de Código Abierto (Open Source) para el juego **Counter-Strike: Global Offensive**. Multi plataforma y Diseñado como cheat interno - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (.DLL) inyectable en el proceso del juego. Compatible con la versión de Steam del juego. Disponible para Windows y Linux.
 
-## Features
-*   **Aimbot** - aim assistance
-*   **Triggerbot** - automatically fires when crosshair is on enemy
-*   **Backtrack** - abuse lag compensation to move players back in time
-*   **Glow** - render glow effect on entities
-*   **Chams** - color player models to improve visibility
-*   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
-*   **Visuals** - miscellaneous visual options
-*   **Skin changer** - change weapon skins, knives and stickers
-*   **Sound** - modify volume of certain sound effects
-*   **Style** - select menu window layout and colors
-*   **Misc** - miscellaneous features
-*   **Config** - JSON-based configuration system
+## Características:
+*   **Aimbot** - Asistencia para apuntar a los enemigos.
+*   **Triggerbot** - Disparo automático cuando la mirilla (crosshair) está sobre el enemigo.
+*   **Backtrack** - Compensación de Abuso de Lag por retraso para hacer retroceder a los jugadores en el tiempo.
+*   **Glow** - Renderiza efectos de brillo en entidades.
+*   **Chams** - Modelos de color para mejorar la visibilidad de jugadores.
+*   **Stream Proof ESP** - Muestra información sobre jugadores, armas y proyectiles.
+*   **Visuals** - Multitud de opciones para cambios visuales.
+*   **Skin changer** - Cambia Skins de armas, cuchillos y pegatinas.
+*   **Sound** - Modifica el volumen de ciertos efectos de sonido.
+*   **Style** - Selección de colores y estilos para las ventanas y menús.
+*   **Misc** - Varios, Spam, Fake Prime ... etc.
+*   **Config** - Grabar, cargar, borrar y cargar configuraciones para eOsiris basado en JSON.
 
 <details>
 
