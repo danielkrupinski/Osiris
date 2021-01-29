@@ -2,6 +2,8 @@
 
 #include "../ConfigStructs.h"
 
+#define OSIRIS_GLOW() true
+
 namespace Glow
 {
     void render() noexcept;

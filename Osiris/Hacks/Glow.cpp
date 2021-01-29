@@ -13,6 +13,8 @@
 #include "../SDK/Utils.h"
 #include "../imguiCustom.h"
 
+#if OSIRIS_GLOW()
+
 struct GlowItem : Color4 {
     bool enabled = false;
     bool healthBased = false;
@@ -264,3 +266,20 @@ void Glow::resetConfig() noexcept
     glowConfig = {};
     playerGlowConfig = {};
 }
+
+#else
+
+void Glow::render() noexcept {}
+void Glow::clearCustomObjects() noexcept {}
+
+// GUI
+void Glow::menuBarItem() noexcept {}
+void Glow::tabItem() noexcept {}
+void Glow::drawGUI(bool contentOnly) noexcept {}
+
+// Config
+json Glow::toJson() noexcept { return {}; }
+void Glow::fromJson(const json& j) noexcept {}
+void Glow::resetConfig() noexcept {}
+
+#endif
