@@ -145,7 +145,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        ImGui("PERRRRO");
+        ImGui::Text("### eOsiris v1 ### by www.CheatersUnidos.com ###");
         menuBarItem("Auto Apuntar", window.aimbot);
         menuBarItem("Antibalas", window.antiAim);
         menuBarItem("Auto Disparo", window.triggerbot);
