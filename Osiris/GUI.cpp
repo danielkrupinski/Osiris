@@ -145,18 +145,19 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
+        ImGui("PERRRRO");
         menuBarItem("Auto Apuntar", window.aimbot);
-        menuBarItem("Anti aim", window.antiAim);
-        menuBarItem("Triggerbot", window.triggerbot);
+        menuBarItem("Antibalas", window.antiAim);
+        menuBarItem("Auto Disparo", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
-        Glow::menuBarItem();
-        menuBarItem("Chams", window.chams);
+        Brillos::menuBarItem();
+        menuBarItem("Colores", window.chams);
         menuBarItem("ESP", window.streamProofESP);
-        menuBarItem("Visuals", window.visuals);
-        menuBarItem("Skin changer", window.skinChanger);
-        menuBarItem("Sound", window.sound);
-        menuBarItem("Style", window.style);
-        menuBarItem("Misc", window.misc);
+        menuBarItem("Visuales", window.visuals);
+        menuBarItem("Skins", window.skinChanger);
+        menuBarItem("Sonidos", window.sound);
+        menuBarItem("Estilo", window.style);
+        menuBarItem("Varios", window.misc);
         menuBarItem("Config", window.config);
         ImGui::EndMainMenuBar();   
     }
