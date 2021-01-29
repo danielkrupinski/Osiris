@@ -8,7 +8,7 @@
 
 - **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source) para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
 
-- Cheat / Hack **Multiplataforma Windows / Linux**.
+- Cheat / Hack **Multiplataforma Windows / Linux** escrito en **C++ Moderno**
 
 - Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
 
