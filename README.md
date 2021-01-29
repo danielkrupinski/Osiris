@@ -6,13 +6,23 @@
 ![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-Basado en https://github.com/danielkrupinski/Osiris Agradecimientos especiales a 
+- **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source) para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
 
-Free open-source cross-platform cheat software for **Counter-Strike: Global Offensive** game. Designed as an internal cheat - [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) (DLL) loadable into game process. Compatible with the Steam version of the game. Available for Windows and Linux systems.
+- Cheat / Hack **Multiplataforma Windows / Linux**.
 
-## Features
-*   **Aimbot** - aim assistance
-*   **Triggerbot** - automatically fires when crosshair is on enemy
+- Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
+
+- Compatible con la verisón STEAM del juego (**Counter-Strike: Global Offensive** está disponible para sistemas operativos Windows y Linux).
+
+- Basado en https://github.com/danielkrupinski/Osiris >> Special Thanks to **Daniel Krupiński** https://github.com/danielkrupinski
+
+- **Traducido a Español** [En progreso]
+
+- **Añadiendo funciones de otros proyectos / cheats / hacks** [En progreso]
+
+## Características:
+*   **Auto Apuntar** - aim assistance
+*   **Auto Disparo** - automatically fires when crosshair is on enemy
 *   **Backtrack** - abuse lag compensation to move players back in time
 *   **Glow** - render glow effect on entities
 *   **Chams** - color player models to improve visibility
