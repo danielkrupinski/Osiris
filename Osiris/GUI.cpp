@@ -150,7 +150,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Antibalas", window.antiAim);
         menuBarItem("Auto Disparo", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
-        Brillos::menuBarItem();
+        Glow::menuBarItem();
         menuBarItem("Colores", window.chams);
         menuBarItem("ESP", window.streamProofESP);
         menuBarItem("Visuales", window.visuals);
