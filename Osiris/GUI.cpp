@@ -186,7 +186,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+    ImGui::Combo("", &currentCategory, "Todo\0Pistolas\0Pesadas\0SMG\0Rifles\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -199,7 +199,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         break;
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "Todo", "Glock-18", "P2000", "USP-S", "Berettas-Dobles", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx : 35].enabled) {
@@ -217,7 +217,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "Todo", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 10 : 36].enabled) {
@@ -235,7 +235,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "Todo", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 16 : 37].enabled) {
@@ -253,7 +253,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "Todo", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 23 : 38].enabled) {
@@ -272,23 +272,23 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
+    ImGui::Checkbox("ACTIVAR", &config->aimbot[currentWeapon].enabled);
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
-    ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
-    ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Visible only", &config->aimbot[currentWeapon].visibleOnly);
-    ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->aimbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
-    ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
-    ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
-    ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+    ImGui::Checkbox("Bloqueo de Puntería", &config->aimbot[currentWeapon].aimlock);
+    ImGui::Checkbox("Silencio", &config->aimbot[currentWeapon].silent);
+    ImGui::Checkbox("Disparar a Compañeros", &config->aimbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("Sólo Visible", &config->aimbot[currentWeapon].visibleOnly);
+    ImGui::Checkbox("Sólo Fijado en Mirilla de Rifle", &config->aimbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("Ignorar Granadas FLASH", &config->aimbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("Ignorar Granadas de HUMO", &config->aimbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("AUTO DISPARO ;-) ", &config->aimbot[currentWeapon].autoShot);
+    ImGui::Checkbox("Auto Mirilla de Rifle", &config->aimbot[currentWeapon].autoScope);
+    ImGui::Combo("Zona de Disparo", &config->aimbot[currentWeapon].bone, "Más cercano\0Mejor Daño\0HEADSHOT\0Cuello\0Esternón\0Pecho\0Estómago\0Cadera\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+    ImGui::SliderFloat("Ángulo de Disparo", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Suavidad de Disparo", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
     ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
     ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
