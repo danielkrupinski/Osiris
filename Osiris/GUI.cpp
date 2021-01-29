@@ -145,7 +145,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        menuBarItem("Aimbot", window.aimbot);
+        menuBarItem("Auto Apuntar", window.aimbot);
         menuBarItem("Anti aim", window.antiAim);
         menuBarItem("Triggerbot", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
