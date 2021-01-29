@@ -6,7 +6,9 @@
 ![Windows](https://github.com/danielkrupinski/Osiris/workflows/Windows/badge.svg?branch=master&event=push)
 ![Linux](https://github.com/danielkrupinski/Osiris/workflows/Linux/badge.svg?branch=master&event=push)
 
-- **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source) para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
+- **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source)
+
+- Para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
 
 - Cheat / Hack **Multiplataforma Windows / Linux** escrito en **C++ Moderno**
 
