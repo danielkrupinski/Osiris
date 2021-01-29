@@ -8,7 +8,9 @@
 
 - Para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
 
-- Cheat / Hack **Multiplataforma Windows / Linux** escrito en **C++ Moderno**
+- Escrito en **C++ Moderno** y con GUI Dear ImGui
+
+- Cheat / Hack **Multiplataforma Windows / Linux** 
 
 - Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
 
