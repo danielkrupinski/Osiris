@@ -3,7 +3,7 @@ name: Linux
 on: [push, pull_request]
 
 jobs:
-  ubuntu-build:
+  gcc:
 
     runs-on: ubuntu-latest
 
