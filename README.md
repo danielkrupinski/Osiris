@@ -6,7 +6,7 @@
 
 - **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source).
 
-- Para el juego de Steam **Counter-Strike: Global Offensive** (csgo, cs:go).
+- Para **Counter-Strike: Global Offensive** (csgo, cs:go).
 
 - Escrito en **C++ Moderno** y con GUI Dear ImGui.
 
