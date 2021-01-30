@@ -8,7 +8,7 @@
 
 - Para **Counter-Strike: Global Offensive** (csgo, cs:go).
 
-- Escrito en **C++ Moderno** y con GUI Dear ImGui. [Dynamic-link library](https://github.com/ocornut/imgui)
+- Escrito en **C++ Moderno** y con GUI .[Dear ImGui](https://github.com/ocornut/imgui)
 
 - Cheat / Hack **Multiplataforma Windows / Linux** .
 
