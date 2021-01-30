@@ -101,7 +101,7 @@ namespace Multipoints
 
         static matrix3x4 bones[256];
 
-        if (!entity->setupBones(bones, ARRAYSIZE(bones), 256, 0.0f))
+        if (!entity->setupBones(bones, IM_ARRAYSIZE(bones), 256, 0.0f))
             return false;
 
         const Model* model = entity->getModel();
