@@ -62,3 +62,36 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
     if (!contentOnly)
         ImGui::End();
 }
+
+static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Pitch", pitch);
+    WRITE("Pitch angle", pitchAngle);
+    WRITE("Yaw", yaw);
+}
+
+json AntiAim::toJson() noexcept
+{
+    json j;
+    to_json(j, config->antiAim);
+    return j;
+}
+
+static void from_json(const json& j, Config::AntiAim& a)
+{
+    read(j, "Enabled", a.enabled);
+    read(j, "Pitch", a.pitch);
+    read(j, "Yaw", a.yaw);
+    read(j, "Pitch angle", a.pitchAngle);
+}
+
+void AntiAim::fromJson(const json& j) noexcept
+{
+    from_json(j, config->antiAim);
+}
+
+void AntiAim::resetConfig() noexcept
+{
+
+}
