@@ -9,7 +9,7 @@
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
     if (config->antiAim.enabled) {
-        if (!localPlayer)
+        if (!localPlayer || !localPlayer->isAlive())
             return;
 
         if (config->antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)

@@ -46,6 +46,8 @@ public:
 
     std::add_pointer_t<int __FASTCALL(SoundInfo&)> originalDispatchSound;
 
+    unsigned long segoe;
+
     HookType bspQuery;
     HookType client;
     HookType clientMode;

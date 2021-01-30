@@ -264,6 +264,14 @@ static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 
 static void __STDCALL paintTraverse(unsigned int panel, bool forceRepaint, bool allowForce) noexcept
 {
+    static bool alreadyCalled = false;
+    if (!alreadyCalled)
+    {
+        hooks->segoe = interfaces->surface->createFont(); interfaces->surface->setFontGlyphSet(hooks->segoe, "Verdana", 18, 100, 0, 0, 0x010, 0, 0);
+
+        alreadyCalled = true;
+    }
+
     if (interfaces->panel->getName(panel) == "MatSystemTopPanel") {
         Misc::spectatorList();
         Misc::watermark();

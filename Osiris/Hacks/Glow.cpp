@@ -173,12 +173,12 @@ void Glow::drawGUI(bool contentOnly) noexcept
         if (!glowWindowOpen)
             return;
         ImGui::SetNextWindowSize({ 450.0f, 0.0f });
-        ImGui::Begin("Glow", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Brillo", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local Player", "Weapons", "C4", "Planted C4", "Chickens", "Defuse Kits", "Projectiles", "Hostages", "Ragdolls" };
+    constexpr std::array categories{ "Aliados", "Enemigos", "Plantando", "Defuseando", "Jugador local", "Armas", "C4", "C4 plantado", "Gallinas", "Kits de desactivacion", "Proyectiles", "Rehenes", "Cadaveres" };
     ImGui::Combo("", &currentCategory, categories.data(), categories.size());
     ImGui::PopID();
     GlowItem* currentItem;
@@ -186,7 +186,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
+        ImGui::Combo("", &currentType, "Todos\0Visible\0Invisible\0");
         ImGui::PopID();
         auto& cfg = playerGlowConfig[categories[currentCategory]];
         switch (currentType) {
@@ -199,17 +199,17 @@ void Glow::drawGUI(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &currentItem->enabled);
+    ImGui::Checkbox("Activado", &currentItem->enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &currentItem->healthBased);
+    ImGui::Checkbox("Basado en vida", &currentItem->healthBased);
 
     ImGuiCustom::colorPicker("Color", *currentItem);
 
     ImGui::NextColumn();
-    ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("Style", &currentItem->style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
+    ImGui::SetNextItemWidth(130.0f);
+    ImGui::Combo("Estilo", &currentItem->style, "Predeterminado\0Borde 3D\0Borde\0Borde parpadeante\0");
 
     ImGui::Columns(1);
     if (!contentOnly)

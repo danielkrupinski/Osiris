@@ -29,6 +29,7 @@
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
+#include "../Hooks.h"
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -253,25 +254,26 @@ void Misc::watermark() noexcept
         else
             interfaces->surface->setTextColor(config->misc.watermark.color);
 
-        interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Osiris");
-
+        
+        
         static auto frameRate = 1.0f;
         frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
         const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
         std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
-        const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
-        interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
-        interfaces->surface->printText(fps.c_str());
+        const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(hooks->segoe, fps.c_str());
+        
 
         float latency = 0.0f;
         if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
             latency = networkChannel->getLatency(0);
 
-        std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
-        const auto pingWidth = interfaces->surface->getTextSize(Surface::font, ping.c_str()).first;
-        interfaces->surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
+        //std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
+        std::wstring ping{ L"eOsiris | CheatersUnidos.com | " + std::to_wstring(static_cast<int>(1 / frameRate)) + L" FPS | " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
+        const auto pingWidth = interfaces->surface->getTextSize(hooks->segoe, ping.c_str()).first;
+        interfaces->surface->setTextFont(hooks->segoe);
+        interfaces->surface->setTextPosition(10, 5);
         interfaces->surface->printText(ping.c_str());
+
     }
 }
 
