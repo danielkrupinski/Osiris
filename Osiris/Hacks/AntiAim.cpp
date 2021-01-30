@@ -40,10 +40,10 @@ static bool antiAimOpen = false;
 
 void AntiAim::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Glow")) {
+    if (ImGui::MenuItem("Anti aim")) {
         antiAimOpen = true;
-        ImGui::SetWindowFocus("Glow");
-        ImGui::SetWindowPos("Glow", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("Anti aim");
+        ImGui::SetWindowPos("Anti aim", { 100.0f, 100.0f });
     }
 }
 
