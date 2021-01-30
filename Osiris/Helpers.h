@@ -5,12 +5,12 @@
 #include "imgui/imgui.h"
 #include "Config.h"
 
-struct ColorA;
+struct Color4;
 
 namespace Helpers
 {
-    unsigned int calculateColor(ColorA color) noexcept;
-    unsigned int calculateColor(Config::Color color) noexcept;
+    unsigned int calculateColor(Color4 color) noexcept;
+    unsigned int calculateColor(Color3 color) noexcept;
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
 
     constexpr auto units2meters(float units) noexcept
@@ -35,8 +35,6 @@ namespace Helpers
             start += utf8SeqLen(*start);
         return start;
     }
-
-    inline constexpr std::array skyboxList{ "Default", "cs_baggage_skybox_", "cs_tibet", "embassy", "italy", "jungle", "nukeblank", "office", "sky_cs15_daylight01_hdr", "sky_cs15_daylight02_hdr", "sky_cs15_daylight03_hdr", "sky_cs15_daylight04_hdr", "sky_csgo_cloudy01", "sky_csgo_night_flat", "sky_csgo_night02", "sky_day02_05_hdr", "sky_day02_05", "sky_dust", "sky_l4d_rural02_ldr", "sky_venice", "vertigo_hdr", "vertigo", "vertigoblue_hdr", "vietnam", "sky_lunacy", "sky_hr_aztec" };
 
     std::wstring toWideString(const std::string& str) noexcept;
     std::wstring toUpper(std::wstring str) noexcept;

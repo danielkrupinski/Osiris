@@ -118,8 +118,19 @@ public:
     const char* toString() const noexcept;
     bool isPressed() const noexcept;
     bool isDown() const noexcept;
+    bool isSet() const noexcept { return keyCode != KeyCode::NONE; }
 
     bool setToPressedKey() noexcept;
 private:
     KeyCode keyCode;
+};
+
+class KeyBindToggle : public KeyBind {
+public:
+    using KeyBind::KeyBind;
+
+    void handleToggle() noexcept;
+    bool isToggled() const noexcept { return toggledOn; }
+private:
+    bool toggledOn = true;
 };

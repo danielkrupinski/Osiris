@@ -6,6 +6,7 @@
 #include "../imgui/imgui_internal.h"
 
 #include "../fnv.h"
+#include "../GameData.h"
 #include "../Helpers.h"
 #include "Visuals.h"
 
@@ -17,10 +18,11 @@
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/ModelInfo.h"
 #include "../SDK/NetworkStringTable.h"
 #include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
-#include "../SDK/ModelInfo.h"
+#include "../SDK/ViewRenderBeams.h"
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -173,14 +175,12 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
     }
 }
 
-static bool isInThirdperson = true;
-
 void Visuals::thirdperson() noexcept
 {
     if (!config->visuals.thirdperson)
         return;
 
-    memory->input->isCameraInThirdPerson = isInThirdperson && localPlayer && localPlayer->isAlive();
+    memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey.isSet() || config->visuals.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
     memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance); 
 }
 
@@ -256,13 +256,11 @@ void Visuals::removeShadows() noexcept
     shadows->setValue(!config->visuals.noShadows);
 }
 
-static bool zoomToggled = false;
-
 void Visuals::applyZoom(FrameStage stage) noexcept
 {
     if (config->visuals.zoom && localPlayer) {
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
-            if (zoomToggled) {
+            if (config->visuals.zoomKey.isToggled()) {
                 localPlayer->fov() = 40;
                 localPlayer->fovStart() = 40;
             }
@@ -271,7 +269,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #ifdef _WIN32
-
+#undef xor
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
@@ -427,21 +425,134 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    if (const auto& skyboxes = Helpers::skyboxList; stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox]);
+    if (stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxList.size()) {
+        memory->loadSky(skyboxList[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
     }
 }
 
+void Visuals::bulletTracer(GameEvent& event) noexcept
+{
+    if (!config->visuals.bulletTracers.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    BeamInfo beamInfo;
+
+    if (!localPlayer->shouldDraw()) {
+        const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
+        if (!viewModel)
+            return;
+
+        if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
+            return;
+    } else {
+        const auto worldModel = interfaces->entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        if (!worldModel)
+            return;
+
+        if (!worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
+            return;
+    }
+
+    beamInfo.end.x = event.getFloat("x");
+    beamInfo.end.y = event.getFloat("y");
+    beamInfo.end.z = event.getFloat("z");
+
+    beamInfo.modelName = "sprites/physbeam.vmt";
+    beamInfo.modelIndex = -1;
+    beamInfo.haloName = nullptr;
+    beamInfo.haloIndex = -1;
+
+    beamInfo.red = 255.0f * config->visuals.bulletTracers.color.color[0];
+    beamInfo.green = 255.0f * config->visuals.bulletTracers.color.color[1];
+    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color.color[2];
+    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color.color[3];
+
+    beamInfo.type = 0;
+    beamInfo.life = 0.0f;
+    beamInfo.amplitude = 0.0f;
+    beamInfo.segments = -1;
+    beamInfo.renderable = true;
+    beamInfo.speed = 0.2f;
+    beamInfo.startFrame = 0;
+    beamInfo.frameRate = 0.0f;
+    beamInfo.width = 2.0f;
+    beamInfo.endWidth = 2.0f;
+    beamInfo.flags = 0x40;
+    beamInfo.fadeLength = 20.0f;
+
+    if (const auto beam = memory->viewRenderBeams->createBeamPoints(beamInfo)) {
+        constexpr auto FBEAM_FOREVER = 0x4000;
+        beam->flags &= ~FBEAM_FOREVER;
+        beam->die = memory->globalVars->currenttime + 2.0f;
+    }
+}
+
+static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = false) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    if (floor)
+        out = ImFloor(out);
+    return true;
+}
+
+void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
+{
+    if (!config->visuals.molotovHull.enabled)
+        return;
+
+    const auto color = Helpers::calculateColor(config->visuals.molotovHull);
+
+    GameData::Lock lock;
+
+    static const auto flameCircumference = [] {
+        std::array<Vector, 72> points;
+        for (std::size_t i = 0; i < points.size(); ++i) {
+            constexpr auto flameRadius = 60.0f; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/server/cstrike15/Effects/inferno.cpp#L889
+            points[i] = Vector{ flameRadius * std::cos(degreesToRadians(i * (360.0f / points.size()))),
+                                flameRadius * std::sin(degreesToRadians(i * (360.0f / points.size()))),
+                                0.0f };
+        }
+        return points;
+    }();
+
+    for (const auto& molotov : GameData::infernos()) {
+        for (const auto& pos : molotov.points) {
+            std::array<ImVec2, flameCircumference.size()> screenPoints;
+            std::size_t count = 0;
+
+            for (const auto& point : flameCircumference) {
+                if (worldToScreen(pos + point, screenPoints[count]))
+                    ++count;
+            }
+
+            drawList->AddConvexPolyFilled(screenPoints.data(), count, color);
+        }
+    }
+}
+
 void Visuals::updateInput() noexcept
 {
-    if (config->visuals.thirdpersonKey.isPressed())
-        isInThirdperson = !isInThirdperson;
-    else if (config->visuals.thirdpersonKey == KeyBind::NONE)
-        isInThirdperson = true;
-
-    if (config->visuals.zoomKey.isPressed())
-        zoomToggled = !zoomToggled;
+    config->visuals.thirdpersonKey.handleToggle();
+    config->visuals.zoomKey.handleToggle();
 }

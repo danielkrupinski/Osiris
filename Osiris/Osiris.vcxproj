@@ -88,7 +88,6 @@
     <ClInclude Include="MinHook\trampoline.h" />
     <ClInclude Include="Netvars.h" />
     <ClInclude Include="nlohmann\json.hpp" />
-    <ClInclude Include="nSkinz\item_definitions.hpp" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
     <ClInclude Include="SDK\ConVar.h" />
@@ -111,6 +110,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="SDK\FileSystem.h" />
     <ClInclude Include="SDK\FrameStage.h" />
     <ClInclude Include="SDK\GameEvent.h" />
     <ClInclude Include="SDK\GameMovement.h" />
@@ -151,10 +151,12 @@
     <ClInclude Include="SDK\VarMapping.h" />
     <ClInclude Include="SDK\Vector.h" />
     <ClInclude Include="SDK\Utils.h" />
+    <ClInclude Include="SDK\ViewRenderBeams.h" />
     <ClInclude Include="SDK\VirtualMethod.h" />
     <ClInclude Include="SDK\WeaponId.h" />
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

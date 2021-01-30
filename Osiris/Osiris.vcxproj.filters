@@ -18,9 +18,6 @@
     <Filter Include="Hacks">
       <UniqueIdentifier>{f60a2d6f-e07f-4f71-8db1-6ec82cf1f6d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="nSkinz">
-      <UniqueIdentifier>{6f9a1532-1c54-4497-8809-a84d6dfcb206}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MinHook">
       <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
     </Filter>
@@ -313,9 +310,6 @@
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\item_definitions.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Localize.h">
       <Filter>SDK</Filter>
     </ClInclude>
@@ -458,6 +452,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\PlayerResource.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ViewRenderBeams.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\FileSystem.h">
       <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>

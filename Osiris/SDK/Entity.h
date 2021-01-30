@@ -56,6 +56,7 @@ public:
     VIRTUAL_METHOD(int, index, 10, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(void, setDestroyedOnRecreateEntities, 13, (), (this + sizeof(uintptr_t) * 2))
 
+    VIRTUAL_METHOD(bool, shouldDraw, WIN32_LINUX(3, 149), (), (this + WIN32_LINUX(sizeof(uintptr_t), 0)))
     VIRTUAL_METHOD(const Model*, getModel, 8, (), (this + sizeof(uintptr_t)))
     VIRTUAL_METHOD(const matrix3x4&, toWorldTransform, 32, (), (this + sizeof(uintptr_t)))
 
@@ -64,19 +65,39 @@ public:
 
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
+    VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(83, 121), (int index, Vector& origin), (this, index, std::ref(origin)))
     VIRTUAL_METHOD(int, health, WIN32_LINUX(121, 166), (), (this))
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
     VIRTUAL_METHOD(bool, isWeapon, WIN32_LINUX(165, 217), (), (this))
     VIRTUAL_METHOD(Entity*, getActiveWeapon, WIN32_LINUX(267, 330), (), (this))
     VIRTUAL_METHOD(int, getWeaponSubType, WIN32_LINUX(281, 349), (), (this))
-    VIRTUAL_METHOD(Vector, getEyePosition, WIN32_LINUX(284, 347), (), (this))
     VIRTUAL_METHOD(ObsMode, getObserverMode, WIN32_LINUX(293, 356), (), (this))
     VIRTUAL_METHOD(Entity*, getObserverTarget, WIN32_LINUX(294, 357), (), (this))
-    VIRTUAL_METHOD(Vector, getAimPunch, WIN32_LINUX(345, 408), (), (this))
     VIRTUAL_METHOD(WeaponType, getWeaponType, WIN32_LINUX(454, 522), (), (this))
     VIRTUAL_METHOD(WeaponInfo*, getWeaponData, WIN32_LINUX(460, 528), (), (this))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex1stPerson, WIN32_LINUX(467, 535), (Entity* viewModel), (this, viewModel))
+    VIRTUAL_METHOD(int, getMuzzleAttachmentIndex3rdPerson, WIN32_LINUX(468, 536), (), (this))
     VIRTUAL_METHOD(float, getInaccuracy, WIN32_LINUX(482, 550), (), (this))
+
+#if IS_WIN32()
+    auto getEyePosition() noexcept
+    {
+        Vector v;
+        VirtualMethod::call<void, 284>(this, std::ref(v));
+        return v;
+    }
+
+    auto getAimPunch() noexcept
+    {
+        Vector v;
+        VirtualMethod::call<void, 345>(this, std::ref(v));
+        return v;
+    }
+#else
+    VIRTUAL_METHOD(Vector, getEyePosition, 347, (), (this))
+    VIRTUAL_METHOD(Vector, getAimPunch, 408, (), (this))
+#endif
 
     auto isPistol() noexcept { return getWeaponType() == WeaponType::Pistol; }
     auto isSniperRifle() noexcept { return getWeaponType() == WeaponType::SniperRifle; }
@@ -251,14 +272,6 @@ public:
 
     NETVAR(c4StartedArming, "CC4", "m_bStartedArming", bool)
 
-    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
-    NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
-    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
-    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
-    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
-    NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
-    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
-
     NETVAR(tabletReceptionIsBlocked, "CTablet", "m_bTabletReceptionIsBlocked", bool)
     
     NETVAR(droneTarget, "CDrone", "m_hMoveToThisEntity", int)
@@ -267,6 +280,12 @@ public:
         
     NETVAR(mapHasBombTarget, "CCSGameRulesProxy", "m_bMapHasBombTarget", bool)
 
+    NETVAR(fireXDelta, "CInferno", "m_fireXDelta", int[100])
+    NETVAR(fireYDelta, "CInferno", "m_fireYDelta", int[100])
+    NETVAR(fireZDelta, "CInferno", "m_fireZDelta", int[100])
+    NETVAR(fireIsBurning, "CInferno", "m_bFireIsBurning", bool[100])
+    NETVAR(fireCount, "CInferno", "m_fireCount", int)
+        
     bool isFlashed() noexcept
     {
         return flashDuration() > 75.0f;
@@ -276,4 +295,15 @@ public:
     {
         return *reinterpret_cast<bool*>(this + 0x29E8);
     }
+};
+
+class PlantedC4 : public Entity {
+public:
+    NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
+    NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
+    NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)
+    NETVAR(c4Ticking, "CPlantedC4", "m_bBombTicking", bool)
+    NETVAR(c4DefuseCountDown, "CPlantedC4", "m_flDefuseCountDown", float)
+    NETVAR(c4DefuseLength, "CPlantedC4", "m_flDefuseLength", float)
+    NETVAR(c4Defuser, "CPlantedC4", "m_hBombDefuser", int)
 };

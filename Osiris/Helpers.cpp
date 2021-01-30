@@ -20,14 +20,14 @@ static auto rainbowColor(float time, float speed, float alpha) noexcept
                        alpha };
 }
 
-unsigned int Helpers::calculateColor(ColorA color) noexcept
+unsigned int Helpers::calculateColor(Color4 color) noexcept
 {
    // if (!config->ignoreFlashbang)
         color.color[3] *= (255.0f - GameData::local().flashDuration) / 255.0f;
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, color.color[3]) : color.color);
 }
 
-unsigned int Helpers::calculateColor(Config::Color color) noexcept
+unsigned int Helpers::calculateColor(Color3 color) noexcept
 {
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, 1.0f) : ImVec4{ color.color[0], color.color[1], color.color[2], 1.0f});
 }

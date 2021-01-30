@@ -29,6 +29,9 @@ struct Node {
 
 template <typename Key, typename Value>
 struct UtlMap {
+    auto begin() const noexcept { return memory.memory; }
+    auto end() const noexcept { return memory.memory + numElements; }
+
     void* lessFunc;
     UtlMemory<Node<Key, Value>> memory;
     int root;
@@ -42,7 +45,7 @@ struct String {
     UtlMemory<char> buffer;
     int length;
 
-    char* data() noexcept { return buffer.memory; }
+    const char* data() const noexcept { return buffer.memory; }
 };
 
 struct PaintKit {
@@ -64,6 +67,8 @@ struct StickerKit {
     String name;
     String description;
     String itemName;
+    PAD(2 * sizeof(String))
+    String inventoryImage;
 };
 
 class EconItemDefinition {

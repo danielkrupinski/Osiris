@@ -1,4 +1,4 @@
-﻿#include <mutex>
+#include <mutex>
 #include <numeric>
 #include <sstream>
 
@@ -120,7 +120,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
 
         if (config->misc.animatedClanTag && !clanTag.empty()) {
             const auto offset = Helpers::utf8SeqLen(clanTag[0]);
-            if (offset != -1)
+            if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
                 std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
         }
         lastTime = memory->globalVars->realtime;
@@ -982,15 +982,33 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 
         auto x = std::cos(yaw) * positionDiff.y - std::sin(yaw) * positionDiff.x;
         auto y = std::cos(yaw) * positionDiff.x + std::sin(yaw) * positionDiff.y;
-        const auto len = std::sqrt(x * x + y * y);
-        x /= len;
-        y /= len;
-
+        if (const auto len = std::sqrt(x * x + y * y); len != 0.0f) {
+            x /= len;
+            y /= len;
+        }
         const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
         const auto color = Helpers::calculateColor(config->misc.offscreenEnemies.color);
         drawList->AddCircleFilled(pos, 11.0f, color & IM_COL32_A_MASK, 40);
         drawList->AddCircleFilled(pos, 10.0f, color, 40);
     }
+}
+
+void Misc::autoAccept(const char* soundEntry) noexcept
+{
+    if (!config->misc.autoAccept)
+        return;
+
+    if (std::strcmp(soundEntry, "UIPanorama.popup_accept_match_beep"))
+        return;
+
+    memory->acceptMatch();
+
+#ifdef _WIN32
+    auto window = FindWindowW(L"Valve001", NULL);
+    FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
+    FlashWindowEx(&flash);
+    ShowWindow(window, SW_RESTORE);
+#endif
 }
 
 void Misc::updateInput() noexcept

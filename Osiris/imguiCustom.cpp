@@ -4,17 +4,28 @@
 
 #include "imguiCustom.h"
 
-void ImGuiCustom::colorPopup(const char* name, std::array<float, 4>& color, bool* rainbow, float* rainbowSpeed, bool* enable, float* thickness, float* rounding) noexcept
+void ImGuiCustom::colorPicker(const char* name, float color[3], float* alpha, bool* rainbow, float* rainbowSpeed, bool* enable, float* thickness, float* rounding) noexcept
 {
     ImGui::PushID(name);
     if (enable) {
         ImGui::Checkbox("##check", enable);
         ImGui::SameLine(0.0f, 5.0f);
     }
-    bool openPopup = ImGui::ColorButton("##btn", color, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_AlphaPreview);
+    bool openPopup = ImGui::ColorButton("##btn", ImVec4{ color[0], color[1], color[2], alpha ? *alpha : 1.0f }, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_AlphaPreview);
     if (ImGui::BeginDragDropTarget()) {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
-            color = *(std::array<float, 4>*)payload->Data;
+        if (alpha) {
+            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F)) {
+                std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
+                *alpha = 1.0f;
+            }
+            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+                std::copy((float*)payload->Data, (float*)payload->Data + 4, color);
+        } else {
+            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
+                std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
+            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+                std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
+        }
         ImGui::EndDragDropTarget();
     }
     ImGui::SameLine(0.0f, 5.0f);
@@ -24,7 +35,16 @@ void ImGuiCustom::colorPopup(const char* name, std::array<float, 4>& color, bool
         ImGui::OpenPopup("##popup");
 
     if (ImGui::BeginPopup("##popup")) {
-        ImGui::ColorPicker4("##picker", color.data(), ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_AlphaBar);
+        if (alpha) {
+            float col[]{ color[0], color[1], color[2], *alpha }; 
+            ImGui::ColorPicker4("##picker", col, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_AlphaBar);
+            color[0] = col[0];
+            color[1] = col[1];
+            color[2] = col[2];
+            *alpha = col[3];
+        } else {
+            ImGui::ColorPicker3("##picker", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+        }
 
         if (rainbow || rainbowSpeed || thickness || rounding) {
             ImGui::SameLine();
@@ -57,71 +77,34 @@ void ImGuiCustom::colorPopup(const char* name, std::array<float, 4>& color, bool
     ImGui::PopID();
 }
 
-void ImGuiCustom::colorPicker(const char* name, float color[3], bool* enable, bool* rainbow, float* rainbowSpeed) noexcept
+void ImGuiCustom::colorPicker(const char* name, ColorToggle3& colorConfig) noexcept
 {
-    ImGui::PushID(name);
-    if (enable) {
-        ImGui::Checkbox("##check", enable);
-        ImGui::SameLine(0.0f, 5.0f);
-    }
-    bool openPopup = ImGui::ColorButton("##btn", color, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoAlpha);
-    if (ImGui::BeginDragDropTarget()) {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
-            std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
-        ImGui::EndDragDropTarget();
-    }
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::TextUnformatted(name);
-
-    if (openPopup)
-        ImGui::OpenPopup("##popup");
-
-    if (ImGui::BeginPopup("##popup")) {
-        ImGui::ColorPicker3("##picker", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
-
-        if (rainbow && rainbowSpeed) {
-            ImGui::SameLine();
-
-            if (ImGui::BeginChild("##child", { 100.0f, 0.0f })) {
-                ImGui::Checkbox("Rainbow", rainbow);
-                ImGui::SetNextItemWidth(50.0f);
-                ImGui::InputFloat("Speed", rainbowSpeed, 0.0f, 0.0f, "%.1f");
-                ImGui::EndChild();
-            }
-        }
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
+    colorPicker(name, colorConfig.color.data(), nullptr, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled);
 }
 
-void ImGuiCustom::colorPicker(const char* name, Config::ColorToggle& colorConfig) noexcept
+void ImGuiCustom::colorPicker(const char* name, Color4& colorConfig, bool* enable, float* thickness) noexcept
 {
-    colorPicker(name, colorConfig.color.data(), &colorConfig.enabled, &colorConfig.rainbow, &colorConfig.rainbowSpeed);
-}
-
-void ImGuiCustom::colorPicker(const char* name, ColorA& colorConfig, bool* enable, float* thickness) noexcept
-{
-    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, enable, thickness);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.color[3], &colorConfig.rainbow, &colorConfig.rainbowSpeed, enable, thickness);
 }
 
 void ImGuiCustom::colorPicker(const char* name, ColorToggle& colorConfig) noexcept
 {
-    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.color[3], &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled);
 }
 
 void ImGuiCustom::colorPicker(const char* name, ColorToggleRounding& colorConfig) noexcept
 {
-    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, nullptr, &colorConfig.rounding);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.color[3], &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, nullptr, &colorConfig.rounding);
 }
 
 void ImGuiCustom::colorPicker(const char* name, ColorToggleThickness& colorConfig) noexcept
 {
-    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.color[3], &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness);
 }
 
 void ImGuiCustom::colorPicker(const char* name, ColorToggleThicknessRounding& colorConfig) noexcept
 {
-    colorPopup(name, colorConfig.color, &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness, &colorConfig.rounding);
+    colorPicker(name, colorConfig.color.data(), &colorConfig.color[3], &colorConfig.rainbow, &colorConfig.rainbowSpeed, &colorConfig.enabled, &colorConfig.thickness, &colorConfig.rounding);
 }
 
 void ImGuiCustom::arrowButtonDisabled(const char* id, ImGuiDir dir) noexcept

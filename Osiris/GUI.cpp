@@ -24,6 +24,8 @@
 #include "Hooks.h"
 #include "Interfaces.h"
 #include "SDK/InputSystem.h"
+#include "Hacks/Visuals.h"
+#include "Hacks/Glow.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -71,7 +73,7 @@ void GUI::render() noexcept
         renderAntiAimWindow();
         renderTriggerbotWindow();
         renderBacktrackWindow();
-        renderGlowWindow();
+        Glow::drawGUI(false);
         renderChamsWindow();
         renderStreamProofESPWindow();
         renderVisualsWindow();
@@ -147,7 +149,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Anti aim", window.antiAim);
         menuBarItem("Triggerbot", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
-        menuBarItem("Glow", window.glow);
+        Glow::menuBarItem();
         menuBarItem("Chams", window.chams);
         menuBarItem("ESP", window.streamProofESP);
         menuBarItem("Visuals", window.visuals);
@@ -453,49 +455,6 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderGlowWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.glow)
-            return;
-        ImGui::SetNextWindowSize({ 450.0f, 0.0f });
-        ImGui::Begin("Glow", &window.glow, windowFlags);
-    }
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0C4\0Planted C4\0Chickens\0Defuse kits\0Projectiles\0Hostages\0Ragdolls\0");
-    ImGui::PopID();
-    static int currentItem{ 0 };
-    if (currentCategory <= 3) {
-        ImGui::SameLine();
-        static int currentType{ 0 };
-        ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
-        ImGui::PopID();
-        currentItem = currentCategory * 3 + currentType;
-    } else {
-        currentItem = currentCategory + 8;
-    }
-
-    ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->glow[currentItem].enabled);
-    ImGui::Separator();
-    ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Health based", &config->glow[currentItem].healthBased);
-
-    ImGuiCustom::colorPopup("Color", config->glow[currentItem].color, &config->glow[currentItem].rainbow, &config->glow[currentItem].rainbowSpeed);
-
-    ImGui::NextColumn();
-    ImGui::SetNextItemWidth(100.0f);
-    ImGui::Combo("Style", &config->glow[currentItem].style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
-   
-    ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
 void GUI::renderChamsWindow(bool contentOnly) noexcept
 {
     if (!contentOnly) {
@@ -546,7 +505,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Wireframe", &chams.wireframe);
     ImGui::Checkbox("Cover", &chams.cover);
     ImGui::Checkbox("Ignore-Z", &chams.ignorez);
-    ImGuiCustom::colorPopup("Color", chams.color, &chams.rainbow, &chams.rainbowSpeed);
+    ImGuiCustom::colorPicker("Color", chams);
 
     if (!contentOnly) {
         ImGui::End();
@@ -997,7 +956,7 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
     ImGui::PopID();
     ImGui::PopItemWidth();
-    ImGui::Combo("Skybox", &config->visuals.skybox, Helpers::skyboxList.data(), Helpers::skyboxList.size());
+    ImGui::Combo("Skybox", &config->visuals.skybox, Visuals::skyboxList.data(), Visuals::skyboxList.size());
     ImGuiCustom::colorPicker("World color", config->visuals.world);
     ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
     ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
@@ -1006,6 +965,9 @@ void GUI::renderVisualsWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Hit effect time", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
     ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
     ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+    ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers.color.color.data(), &config->visuals.bulletTracers.color.color[3], nullptr, nullptr, &config->visuals.bulletTracers.enabled);
+    ImGuiCustom::colorPicker("Molotov Hull", config->visuals.molotovHull);
+
     ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
     ImGui::SameLine();
     bool ccPopup = ImGui::Button("Edit");
@@ -1045,9 +1007,9 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
     ImGui::PushItemWidth(110.0f);
     ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
-        *out_text = game_data::weapon_names[idx].name;
+        *out_text = SkinChanger::weapon_names[idx].name;
         return true;
-        }, nullptr, game_data::weapon_names.size(), 5);
+        }, nullptr, SkinChanger::weapon_names.size(), 5);
     ImGui::PopItemWidth();
 
     auto& selected_entry = config->skinChanger[itemIndex];
@@ -1095,7 +1057,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::PushID("Paint Kit");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
-            static std::array<std::string, game_data::weapon_names.size()> filters;
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
             if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
@@ -1111,6 +1073,14 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                         if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
                             selected_entry.paint_kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
+                        }
+
+                        if (ImGui::IsItemHovered()) {
+                            if (const auto icon = SkinChanger::getItemIconTexture(kits[i].iconPath)) {
+                                ImGui::BeginTooltip();
+                                ImGui::Image(icon, { 200.0f, 150.0f });
+                                ImGui::EndTooltip();
+                            }
                         }
                         if (selected && ImGui::IsWindowAppearing())
                             ImGui::SetScrollHereY();
@@ -1180,7 +1150,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
             ImGui::PushID("Sticker");
             ImGui::PushID("Search");
             ImGui::SetNextItemWidth(-1.0f);
-            static std::array<std::string, game_data::weapon_names.size()> filters;
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
             auto& filter = filters[itemIndex];
             ImGui::InputTextWithHint("", "Search", &filter);
             if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
@@ -1196,6 +1166,13 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                         if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
                             selected_sticker.kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
+                        }
+                        if (ImGui::IsItemHovered()) {
+                            if (const auto icon = SkinChanger::getItemIconTexture(kits[i].iconPath)) {
+                                ImGui::BeginTooltip();
+                                ImGui::Image(icon, { 200.0f, 150.0f });
+                                ImGui::EndTooltip();
+                            }
                         }
                         if (selected && ImGui::IsWindowAppearing())
                             ImGui::SetScrollHereY();
@@ -1273,7 +1250,7 @@ void GUI::renderStyleWindow(bool contentOnly) noexcept
         for (int i = 0; i < ImGuiCol_COUNT; i++) {
             if (i && i & 3) ImGui::SameLine(220.0f * (i & 3));
 
-            ImGuiCustom::colorPopup(ImGui::GetStyleColorName(i), (std::array<float, 4>&)style.Colors[i]);
+            ImGuiCustom::colorPicker(ImGui::GetStyleColorName(i), (float*)&style.Colors[i], &style.Colors[i].w);
         }
     }
 
@@ -1533,7 +1510,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 2: config->triggerbot = { }; break;
                     case 3: config->backtrack = { }; break;
                     case 4: config->antiAim = { }; break;
-                    case 5: config->glow = { }; break;
+                    case 5: Glow::resetConfig(); break;
                     case 6: config->chams = { }; break;
                     case 7: config->streamProofESP = { }; break;
                     case 8: config->visuals = { }; break;
@@ -1590,10 +1567,7 @@ void GUI::renderGuiStyle2() noexcept
             renderBacktrackWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Glow")) {
-            renderGlowWindow(true);
-            ImGui::EndTabItem();
-        }
+        Glow::tabItem();
         if (ImGui::BeginTabItem("Chams")) {
             renderChamsWindow(true);
             ImGui::EndTabItem();
