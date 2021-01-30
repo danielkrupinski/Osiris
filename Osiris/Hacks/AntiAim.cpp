@@ -6,16 +6,23 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
+struct AntiAimConfig {
+    bool enabled = false;
+    bool pitch = false;
+    bool yaw = false;
+    float pitchAngle = 0.0f;
+} antiAimConfig;
+
 void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& currentViewAngles, bool& sendPacket) noexcept
 {
-    if (config->antiAim.enabled) {
+    if (antiAimConfig.enabled) {
         if (!localPlayer)
             return;
 
-        if (config->antiAim.pitch && cmd->viewangles.x == currentViewAngles.x)
-            cmd->viewangles.x = config->antiAim.pitchAngle;
+        if (antiAimConfig.pitch && cmd->viewangles.x == currentViewAngles.x)
+            cmd->viewangles.x = antiAimConfig.pitchAngle;
 
-        if (config->antiAim.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
+        if (antiAimConfig.yaw && !sendPacket && cmd->viewangles.y == currentViewAngles.y) {
             cmd->viewangles.y += localPlayer->getMaxDesyncAngle();
             if (fabsf(cmd->sidemove) < 5.0f) {
                 if (cmd->buttons & UserCmd::IN_DUCK)
@@ -54,16 +61,16 @@ void AntiAim::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Anti aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
-    ImGui::Checkbox("Enabled", &config->antiAim.enabled);
-    ImGui::Checkbox("##pitch", &config->antiAim.pitch);
+    ImGui::Checkbox("Enabled", &antiAimConfig.enabled);
+    ImGui::Checkbox("##pitch", &antiAimConfig.pitch);
     ImGui::SameLine();
-    ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-    ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+    ImGui::SliderFloat("Pitch", &antiAimConfig.pitchAngle, -89.0f, 89.0f, "%.2f");
+    ImGui::Checkbox("Yaw", &antiAimConfig.yaw);
     if (!contentOnly)
         ImGui::End();
 }
 
-static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& dummy = {})
+static void to_json(json& j, const AntiAimConfig& o, const AntiAimConfig& dummy = {})
 {
     WRITE("Enabled", enabled);
     WRITE("Pitch", pitch);
@@ -74,11 +81,11 @@ static void to_json(json& j, const Config::AntiAim& o, const Config::AntiAim& du
 json AntiAim::toJson() noexcept
 {
     json j;
-    to_json(j, config->antiAim);
+    to_json(j, antiAimConfig);
     return j;
 }
 
-static void from_json(const json& j, Config::AntiAim& a)
+static void from_json(const json& j, AntiAimConfig& a)
 {
     read(j, "Enabled", a.enabled);
     read(j, "Pitch", a.pitch);
@@ -88,10 +95,10 @@ static void from_json(const json& j, Config::AntiAim& a)
 
 void AntiAim::fromJson(const json& j) noexcept
 {
-    from_json(j, config->antiAim);
+    from_json(j, antiAimConfig);
 }
 
 void AntiAim::resetConfig() noexcept
 {
-
+    antiAimConfig = { };
 }

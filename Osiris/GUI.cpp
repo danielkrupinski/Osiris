@@ -1493,7 +1493,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 1: config->aimbot = { }; break;
                     case 2: config->triggerbot = { }; break;
                     case 3: config->backtrack = { }; break;
-                    case 4: config->antiAim = { }; break;
+                    case 4: AntiAim::resetConfig(); break;
                     case 5: Glow::resetConfig(); break;
                     case 6: config->chams = { }; break;
                     case 7: config->streamProofESP = { }; break;
