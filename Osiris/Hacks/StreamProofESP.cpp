@@ -15,7 +15,6 @@
 
 #include <limits>
 #include <tuple>
-#include "Multipoints.h"
 
 static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept
 {

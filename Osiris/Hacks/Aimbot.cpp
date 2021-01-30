@@ -9,20 +9,6 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
-
-#define NOMINMAX
-#include "../imgui/imgui.h"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "../imgui/imgui_internal.h"
-
-#include "../fnv.h"
-#include "../GameData.h"
-#include "../Helpers.h"
-#include "../SDK/Engine.h"
-#include "../SDK/GlobalVars.h"
-
-#include <limits>
-#include <tuple>
 #include "Multipoints.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
@@ -190,7 +176,7 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 continue;
 
             for (auto bone : { 0, 1, 5, 6, 3, 2 }) {
-                //const auto bonePosition = entity->getBonePosition(entity, config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                //ignore this mess lmao
                 auto switchedBone = 0;
                 switch (config->aimbot[weaponIndex].bone) {
                 case 2:
