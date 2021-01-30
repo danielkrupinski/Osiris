@@ -3,6 +3,7 @@
 
 KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
 {
+#ifdef _WIN32
     const auto keyValuesFromString = memory->keyValuesFromString;
     KeyValues* keyValues;
     __asm {
@@ -14,6 +15,9 @@ KeyValues* KeyValues::fromString(const char* name, const char* value) noexcept
         mov keyValues, eax
     }
     return keyValues;
+#else
+    return reinterpret_cast<KeyValues*(*)(const char*, const char*, const char**)>(memory->keyValuesFromString)(name, value, nullptr);
+#endif
 }
 
 KeyValues* KeyValues::findKey(const char* keyName, bool create) noexcept

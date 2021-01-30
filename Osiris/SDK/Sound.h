@@ -9,7 +9,11 @@ struct ActiveChannels {
 };
 
 struct Channel {
+#ifdef _WIN32
     PAD(244)
+#else
+    PAD(260)
+#endif
     int soundSource;
     PAD(56)
     Vector origin;

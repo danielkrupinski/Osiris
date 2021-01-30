@@ -23,15 +23,15 @@ enum class WeaponType {
 };
 
 struct WeaponInfo {
-    PAD(20)
+    PAD(IS_WIN32() ? 20 : 32)
     int maxClip;
-    PAD(112)
-    char* name;
-    PAD(60)
+    PAD(IS_WIN32() ? 112 : 204)
+    const char* name;
+    PAD(IS_WIN32() ? 60 : 72)
     WeaponType type;
     PAD(4)
     int price;
-    PAD(0x8)
+    PAD(IS_WIN32() ? 8 : 12)
     float cycletime;
     PAD(12)
     bool fullAuto;
@@ -43,14 +43,14 @@ struct WeaponInfo {
     PAD(8)
     float range;
     float rangeModifier;
-    PAD(0x10)
+    PAD(16)
     bool silencer;
-    PAD(15)
+    PAD(IS_WIN32() ? 15 : 23)
     float maxSpeed;
     float maxSpeedAlt;
     PAD(100)
     float recoilMagnitude;
     float recoilMagnitudeAlt;
-    PAD(0x14)
+    PAD(16)
     float recoveryTimeStand;
 };

@@ -10,9 +10,9 @@ class Surface {
 public:
     static constexpr unsigned font{ 0x1d }; // builtin font from vgui_spew_fonts
 
-    VIRTUAL_METHOD(void, setDrawColor, 15, (int r, int g, int b, int a = 255), (this, r, g, b, a))
-    VIRTUAL_METHOD(void, setDrawColor, 15, (const std::array<float, 3>& color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
-    VIRTUAL_METHOD(void, setDrawColor, 15, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
+    VIRTUAL_METHOD(void, setDrawColor, IS_WIN32() ? 15 : 14, (int r, int g, int b, int a = 255), (this, r, g, b, a))
+    VIRTUAL_METHOD(void, setDrawColor, IS_WIN32() ? 15 : 14, (const std::array<float, 3>& color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setDrawColor, IS_WIN32() ? 15 : 14, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
     VIRTUAL_METHOD(void, drawFilledRect, 16, (T x0, T y0, T x1, T y1), (this, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1)))
@@ -25,9 +25,9 @@ public:
 
     VIRTUAL_METHOD(void, drawPolyLine, 20, (int* xs, int* ys, int pointCount), (this, xs, ys, pointCount))
     VIRTUAL_METHOD(void, setTextFont, 23, (unsigned font), (this, font))
-    VIRTUAL_METHOD(void, setTextColor, 25, (int r, int g, int b, int a = 255), (this, r, g, b, a))
-    VIRTUAL_METHOD(void, setTextColor, 25, (const std::array<float, 3> color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
-    VIRTUAL_METHOD(void, setTextColor, 25, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
+    VIRTUAL_METHOD(void, setTextColor, IS_WIN32() ? 25 : 24, (int r, int g, int b, int a = 255), (this, r, g, b, a))
+    VIRTUAL_METHOD(void, setTextColor, IS_WIN32() ? 25 : 24, (const std::array<float, 3> color, int a = 255), (this, static_cast<int>(color[0] * 255), static_cast<int>(color[1] * 255), static_cast<int>(color[2] * 255), a))
+    VIRTUAL_METHOD(void, setTextColor, IS_WIN32() ? 25 : 24, (std::tuple<float, float, float> color, int a = 255), (this, static_cast<int>(std::get<0>(color) * 255), static_cast<int>(std::get<1>(color) * 255), static_cast<int>(std::get<2>(color) * 255), a))
 
     template <typename T>
     VIRTUAL_METHOD(void, setTextPosition, 26, (T x, T y), (this, static_cast<int>(x), static_cast<int>(y)))

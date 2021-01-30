@@ -19,7 +19,7 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
     }
 
     wchar_t wide[128];
-    memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 28);
+    memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 4);
 
     auto end = std::remove(wide, wide + wcslen(wide), L'\n');
     *end = L'\0';
@@ -42,6 +42,8 @@ bool Entity::canSee(Entity* other, const Vector& pos) noexcept
 
 bool Entity::visibleTo(Entity* other) noexcept
 {
+    assert(isAlive());
+
     if (other->canSee(this, getAbsOrigin() + Vector{ 0.0f, 0.0f, 5.0f }))
         return true;
 

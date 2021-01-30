@@ -2,10 +2,14 @@
 
 #include <cstdint>
 #include <type_traits>
+
+#include "Platform.h"
 #include "Vector.h"
 
+struct RecvProp;
+
 struct recvProxyData {
-    int pad;
+    const RecvProp* recvProp;
     union {
         float _float;
         long _int;
@@ -16,7 +20,7 @@ struct recvProxyData {
     } value;
 };
 
-using recvProxy = std::add_pointer_t<void __cdecl(recvProxyData&, void*, void*)>;
+using recvProxy = std::add_pointer_t<void __CDECL(recvProxyData&, void*, void*)>;
 
 struct RecvProp {
     char* name;

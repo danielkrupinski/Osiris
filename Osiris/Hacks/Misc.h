@@ -26,7 +26,6 @@ namespace Misc
     void bunnyHop(UserCmd*) noexcept;
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
-    void quickHealthshot(UserCmd*) noexcept;
     void fixTabletSignal() noexcept;
     void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
@@ -47,4 +46,8 @@ namespace Misc
     void runReportbot() noexcept;
     void resetReportbot() noexcept;
     void preserveKillfeed(bool roundStart = false) noexcept;
+    void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
+    void autoAccept(const char* soundEntry) noexcept;
+
+    void updateInput() noexcept;
 }

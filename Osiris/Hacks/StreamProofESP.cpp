@@ -204,7 +204,7 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
     }
 }
 
-static ImVec2 renderText(float distance, float cullDistance, const ColorA& textCfg, const char* text, const ImVec2& pos, bool centered = true, bool adjustHeight = true) noexcept
+static ImVec2 renderText(float distance, float cullDistance, const Color4& textCfg, const char* text, const ImVec2& pos, bool centered = true, bool adjustHeight = true) noexcept
 {
     if (cullDistance && Helpers::units2meters(distance) > cullDistance)
         return { };
@@ -255,15 +255,20 @@ static void drawSnapline(const Snapline& config, const ImVec2& min, const ImVec2
 struct FontPush {
     FontPush(const std::string& name, float distance)
     {
-        distance *= GameData::local().fov / 90.0f;
+        if (const auto it = config->getFonts().find(name); it != config->getFonts().end()) {
+            distance *= GameData::local().fov / 90.0f;
 
-        ImGui::PushFont([](const Config::Font& font, float dist) {
-            if (dist <= 400.0f)
-                return font.big;
-            if (dist <= 1000.0f)
-                return font.medium;
-            return font.tiny;
-            }(config->fonts[name], distance));
+            ImGui::PushFont([](const Config::Font& font, float dist) {
+                if (dist <= 400.0f)
+                    return font.big;
+                if (dist <= 1000.0f)
+                    return font.medium;
+                return font.tiny;
+            }(it->second, distance));
+        }
+        else {
+            ImGui::PushFont(nullptr);
+        }
     }
 
     ~FontPush()
@@ -321,10 +326,11 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
         ImVec2 flashDurationPos{ (bbox.min.x + bbox.max.x) / 2, bbox.min.y + offsetMins.y - radius * 1.5f };
 
         const auto color = Helpers::calculateColor(config.flashDuration);
-        drawList->PathArcTo(flashDurationPos + ImVec2{ 1.0f, 1.0f }, radius, IM_PI / 2 - (playerData.flashDuration / 255.0f * IM_PI), IM_PI / 2 + (playerData.flashDuration / 255.0f * IM_PI), 40);
+        constexpr float pi = std::numbers::pi_v<float>;
+        drawList->PathArcTo(flashDurationPos + ImVec2{ 1.0f, 1.0f }, radius, pi / 2 - (playerData.flashDuration / 255.0f * pi), pi / 2 + (playerData.flashDuration / 255.0f * pi), 40);
         drawList->PathStroke(color & IM_COL32_A_MASK, false, 0.9f + radius * 0.1f);
 
-        drawList->PathArcTo(flashDurationPos, radius, IM_PI / 2 - (playerData.flashDuration / 255.0f * IM_PI), IM_PI / 2 + (playerData.flashDuration / 255.0f * IM_PI), 40);
+        drawList->PathArcTo(flashDurationPos, radius, pi / 2 - (playerData.flashDuration / 255.0f * pi), pi / 2 + (playerData.flashDuration / 255.0f * pi), 40);
         drawList->PathStroke(color, false, 0.9f + radius * 0.1f);
 
         offsetMins.y -= radius * 2.5f;
@@ -490,6 +496,13 @@ static void renderProjectileEsp(const ProjectileData& projectileData, const Proj
 
 void StreamProofESP::render() noexcept
 {
+    if (config->streamProofESP.toggleKey != KeyBind::NONE) {
+        if (!config->streamProofESP.toggleKey.isToggled() && !config->streamProofESP.holdKey.isDown())
+            return;
+    } else if (config->streamProofESP.holdKey != KeyBind::NONE && !config->streamProofESP.holdKey.isDown()) {
+        return;
+    }
+
     drawList = ImGui::GetBackgroundDrawList();
 
     GameData::Lock lock;
@@ -509,9 +522,17 @@ void StreamProofESP::render() noexcept
         renderProjectileEsp(projectile, config->streamProofESP.projectiles["All"], config->streamProofESP.projectiles[projectile.name], projectile.name);
 
     for (const auto& player : GameData::players()) {
+        if (player.dormant || !player.alive || !player.inViewFrustum)
+            continue;
+
         auto& playerConfig = player.enemy ? config->streamProofESP.enemies : config->streamProofESP.allies;
 
         if (!renderPlayerEsp(player, playerConfig["All"]))
             renderPlayerEsp(player, playerConfig[player.visible ? "Visible" : "Occluded"]);
     }
+}
+
+void StreamProofESP::updateInput() noexcept
+{
+    config->streamProofESP.toggleKey.handleToggle();
 }

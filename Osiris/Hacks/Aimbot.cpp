@@ -15,15 +15,37 @@ Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destin
     return ((destination - source).toAngle() - viewAngles).normalize();
 }
 
+static bool traceToExit(const Trace& enterTrace, const Vector& start, const Vector& direction, Vector& end, Trace& exitTrace)
+{
+    bool result = false;
+#ifdef _WIN32
+    const auto traceToExitFn = memory->traceToExit;
+    __asm {
+        push exitTrace
+        mov eax, direction
+        push [eax]Vector.z
+        push [eax]Vector.y
+        push [eax]Vector.x
+        mov eax, start
+        push [eax]Vector.z
+        push [eax]Vector.y
+        push [eax]Vector.x
+        mov edx, enterTrace
+        mov ecx, end
+        call traceToExitFn
+        add esp, 28
+        mov result, al
+    }
+#endif
+    return result;
+}
+
 static float handleBulletPenetration(SurfaceData* enterSurfaceData, const Trace& enterTrace, const Vector& direction, Vector& result, float penetration, float damage) noexcept
 {
     Vector end;
     Trace exitTrace;
-    __asm {
-        mov ecx, end
-        mov edx, enterTrace
-    }
-    if (!memory->traceToExit(enterTrace.endpos.x, enterTrace.endpos.y, enterTrace.endpos.z, direction.x, direction.y, direction.z, exitTrace))
+
+    if (!traceToExit(enterTrace, enterTrace.endpos, direction, end, exitTrace))
         return -1.0f;
 
     SurfaceData* exitSurfaceData = interfaces->physicsSurfaceProps->getSurfaceData(exitTrace.surface.surfaceProps);
@@ -93,6 +115,16 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
     return false;
 }
 
+static bool keyPressed = false;
+
+void Aimbot::updateInput() noexcept
+{
+    if (config->aimbotKeyMode == 0)
+        keyPressed = config->aimbotKey.isDown();
+    if (config->aimbotKeyMode == 1 && config->aimbotKey.isPressed())
+        keyPressed = !keyPressed;
+}
+
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -122,18 +154,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
         return;
 
-    if (config->aimbot[weaponIndex].onKey) {
-        if (!config->aimbot[weaponIndex].keyMode) {
-            if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
-                return;
-        } else {
-            static bool toggle = true;
-            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
-                toggle = !toggle;
-            if (!toggle)
-                return;
-        }
-    }
+    if (config->aimbotOnKey && !keyPressed)
+        return;
 
     if (config->aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config->aimbot[weaponIndex].autoShot || config->aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxAimInaccuracy) {
 
@@ -152,10 +174,13 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 || !entity->isOtherEnemy(localPlayer.get()) && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
-            auto boneList = config->aimbot[weaponIndex].bone == 1 ? std::initializer_list{ 8, 4, 3, 7, 6, 5 } : std::initializer_list{ 8, 7, 6, 5, 4, 3 };
-
-            for (auto bone : boneList) {
+            for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
                 const auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
+                
+                const auto fov = std::hypot(angle.x, angle.y);
+                if (fov > bestFov)
+                    continue;
 
                 if (!config->aimbot[weaponIndex].ignoreSmoke && memory->lineGoesThroughSmoke(localPlayerEyePosition, bonePosition, 1))
                     continue;
@@ -163,8 +188,6 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 if (!entity->isVisible(bonePosition) && (config->aimbot[weaponIndex].visibleOnly || !canScan(entity, bonePosition, activeWeapon->getWeaponData(), config->aimbot[weaponIndex].killshot ? entity->health() : config->aimbot[weaponIndex].minDamage, config->aimbot[weaponIndex].friendlyFire)))
                     continue;
 
-                auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
-                auto fov = std::hypotf(angle.x, angle.y);
                 if (fov < bestFov) {
                     bestFov = fov;
                     bestTarget = bonePosition;
