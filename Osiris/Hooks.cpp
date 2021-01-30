@@ -158,11 +158,11 @@ static int __fastcall SendDatagram(NetworkChannel* network, void* edx, void* dat
     return result;
 }
 
-static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
-
 #endif
 
-//static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
+//static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
+
+static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 
 {
     auto result = hooks->clientMode.callOriginal<bool, IS_WIN32() ? 24 : 25>(inputSampleTime, cmd);
