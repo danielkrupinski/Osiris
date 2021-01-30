@@ -26,3 +26,39 @@ void AntiAim::run(UserCmd* cmd, const Vector& previousViewAngles, const Vector& 
         }
     }
 }
+
+static bool antiAimOpen = false;
+
+void AntiAim::menuBarItem() noexcept
+{
+    if (ImGui::MenuItem("Glow")) {
+        antiAimOpen = true;
+        ImGui::SetWindowFocus("Glow");
+        ImGui::SetWindowPos("Glow", { 100.0f, 100.0f });
+    }
+}
+
+void AntiAim::tabItem() noexcept
+{
+    if (ImGui::BeginTabItem("Anti aim")) {
+        drawGUI(true);
+        ImGui::EndTabItem();
+    }
+}
+
+void AntiAim::drawGUI(bool contentOnly) noexcept
+{
+    if (!contentOnly) {
+        if (!antiAimOpen)
+            return;
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+        ImGui::Begin("Anti aim", &antiAimOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    }
+    ImGui::Checkbox("Enabled", &config->antiAim.enabled);
+    ImGui::Checkbox("##pitch", &config->antiAim.pitch);
+    ImGui::SameLine();
+    ImGui::SliderFloat("Pitch", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
+    ImGui::Checkbox("Yaw", &config->antiAim.yaw);
+    if (!contentOnly)
+        ImGui::End();
+}
