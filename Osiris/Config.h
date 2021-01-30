@@ -82,6 +82,7 @@ public:
         bool recoilBasedFov{ false };
         int timeLimit{ 0 };
         bool fakeLatency{ false };
+        bool drawAllChams{ false };
     } backtrack;
 
     struct AntiAim {
