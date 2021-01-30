@@ -6,6 +6,8 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
+#if OSIRIS_ANTIAIM()
+
 struct AntiAimConfig {
     bool enabled = false;
     bool pitch = false;
@@ -102,3 +104,22 @@ void AntiAim::resetConfig() noexcept
 {
     antiAimConfig = { };
 }
+
+#else
+
+namespace AntiAim
+{
+    void run(UserCmd*, const Vector&, const Vector&, bool&) noexcept {}
+
+    // GUI
+    void menuBarItem() noexcept {}
+    void tabItem() noexcept {}
+    void drawGUI(bool contentOnly) noexcept {}
+
+    // Config
+    json toJson() noexcept { return {}; }
+    void fromJson(const json& j) noexcept {}
+    void resetConfig() noexcept {}
+}
+
+#endif
