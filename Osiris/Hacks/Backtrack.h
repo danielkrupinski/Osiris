@@ -23,7 +23,7 @@ namespace Backtrack {
     void UpdateIncomingSequences(bool reset = false) noexcept;
 
     struct Record {
-        //Vector head;
+        Vector head;
         Vector origin;
         float simulationTime;
         matrix3x4 matrix[256];
@@ -39,9 +39,11 @@ namespace Backtrack {
         int sequencenr;
         float servertime;
     };
-    extern std::deque<IncomingSequence>sequences;
 
+    extern std::deque<IncomingSequence>sequences;
+    extern
     float getExtraTicks() noexcept;
+
     int timeToTicks(float time) noexcept;
     void init() noexcept;
 }
