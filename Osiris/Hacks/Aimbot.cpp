@@ -10,6 +10,21 @@
 #include "../SDK/PhysicsSurfaceProps.h"
 #include "../SDK/WeaponData.h"
 
+#define NOMINMAX
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
+
+#include "../fnv.h"
+#include "../GameData.h"
+#include "../Helpers.h"
+#include "../SDK/Engine.h"
+#include "../SDK/GlobalVars.h"
+
+#include <limits>
+#include <tuple>
+#include "Multipoints.h"
+
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {
     return ((destination - source).toAngle() - viewAngles).normalize();
@@ -174,8 +189,32 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 || !entity->isOtherEnemy(localPlayer.get()) && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
-            for (auto bone : { 8, 4, 3, 7, 6, 5 }) {
-                const auto bonePosition = entity->getBonePosition(config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+            for (auto bone : { 0, 1, 5, 6, 3, 2 }) {
+                //const auto bonePosition = entity->getBonePosition(entity, config->aimbot[weaponIndex].bone > 1 ? 10 - config->aimbot[weaponIndex].bone : bone);
+                auto switchedBone = 0;
+                switch (config->aimbot[weaponIndex].bone) {
+                case 2:
+                    switchedBone = 0;
+                    break;
+                case 3:
+                    switchedBone = 1;
+                    break;
+                case 4:
+                    switchedBone = 5;
+                    break;
+                case 5:
+                    switchedBone = 6;
+                    break;
+                case 6:
+                    switchedBone = 3;
+                    break;
+                case 7:
+                    switchedBone = 2;
+                    break;
+                default:
+                    const auto switchedBone = bone;
+                }
+                const auto bonePosition = entity->getBonePosition(entity, switchedBone, cmd->viewangles, localPlayerEyePosition);
                 const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 
                 const auto fov = std::hypot(angle.x, angle.y);

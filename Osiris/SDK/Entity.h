@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimState.h"
+#include "../Hacks/Aimbot.h"
 #include "ClientClass.h"
 #include "Cvar.h"
 #include "Engine.h"
@@ -20,6 +21,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../Netvars.h"
+#include "../Hacks/Multipoints.h"
 
 #include <functional>
 
@@ -135,21 +137,53 @@ public:
         return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
-    Vector getBonePosition(int bone) noexcept
+    Vector getBonePosition(Entity* entity, int bone, Vector viewAngles, Vector eyePos) noexcept
+    {
+        static Vector multiPoints[Multipoints::MULTIPOINTS_MAX];
+        auto bestFov = 255.f;
+        Vector bestPoint;
+        if (Multipoints::retrieveOne(entity, 1.f, multiPoints, bone)) {
+            for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
+
+                if (multiPoints[multiPoint].notNull()) {
+                    const auto angle = Aimbot::calculateRelativeAngle(eyePos, multiPoints[multiPoint], viewAngles);
+                    const auto fov = std::hypot(angle.x, angle.y);
+                    if (fov > bestFov)
+                        continue;
+                    if (fov < bestFov) {
+                        bestFov = fov;
+                        bestPoint = multiPoints[multiPoint];
+                    }
+                }
+            }
+        }
+        else  
+            return Vector{ };
+        return bestPoint;
+
+
+            
+
+        /*if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
+            return boneMatrices[bone].origin();
+        else
+            return Vector{ };*/
+    }
+
+    Vector localBonePos(int bone) noexcept
     {
         if (matrix3x4 boneMatrices[256]; setupBones(boneMatrices, 256, 256, 0.0f))
             return boneMatrices[bone].origin();
         else
             return Vector{ };
     }
-
     bool isVisible(const Vector& position = { }) noexcept
     {
         if (!localPlayer)
             return false;
 
         Trace trace;
-        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : getBonePosition(8) }, 0x46004009, { localPlayer.get() }, trace);
+        interfaces->engineTrace->traceRay({ localPlayer->getEyePosition(), position.notNull() ? position : localBonePos(8) }, 0x46004009, { localPlayer.get() }, trace);
         return trace.entity == this || trace.fraction > 0.97f;
     }
     

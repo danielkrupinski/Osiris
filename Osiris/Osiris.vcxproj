@@ -20,6 +20,7 @@
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
+    <ClCompile Include="Hacks\Multipoints.cpp" />
     <ClCompile Include="Hacks\SkinChanger.cpp" />
     <ClCompile Include="Hacks\StreamProofESP.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Glow.h" />
     <ClInclude Include="Hacks\Misc.h" />
+    <ClInclude Include="Hacks\Multipoints.h" />
     <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
@@ -226,7 +228,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;WIN32_LEAN_AND_MEAN;WINVER=0x0601;_WIN32_WINNT=0x0601;WIN32;NDEBUG;OSIRIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -242,11 +244,11 @@
       <CreateHotpatchableImage>false</CreateHotpatchableImage>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <AdditionalOptions>/Gw /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <ControlFlowGuard>false</ControlFlowGuard>
       <ExceptionHandling>false</ExceptionHandling>
       <CallingConvention>VectorCall</CallingConvention>

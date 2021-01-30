@@ -155,6 +155,9 @@
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Multipoints.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -462,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="SDK\FileSystem.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Multipoints.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

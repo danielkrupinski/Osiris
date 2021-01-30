@@ -15,6 +15,7 @@
 
 #include <limits>
 #include <tuple>
+#include "Multipoints.h"
 
 static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept
 {
@@ -340,10 +341,9 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
         const auto weaponTextSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.weapon, playerData.activeWeapon.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.max.y + 5 }, true, false);
         offsetMaxs.y += weaponTextSize.y + 5.0f;
     }
-
     drawSnapline(config.snapline, bbox.min + offsetMins, bbox.max + offsetMaxs);
-
 }
+
 
 static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) noexcept
 {
