@@ -44,7 +44,7 @@ struct UtlMap {
             else if (el.key > key)
                 curr = el.left;
             else
-                return key;
+                break;
         }
         return curr;
     }
