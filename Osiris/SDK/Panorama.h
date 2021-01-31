@@ -22,3 +22,8 @@ class UIEngine {
 public:
     VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (this, eventPtr))
 };
+
+class PanoramaUIEngine {
+public:
+    VIRTUAL_METHOD(UIEngine*, accessUIEngine, 11, (), (this))
+};
