@@ -94,6 +94,7 @@ public:
     uintptr_t money;
     uintptr_t demoFileEndReached;
     Entity** gameRules;
+    void(__THISCALL* makePanoramaSymbol)(short* symbol, const char* name);
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
