@@ -19,6 +19,8 @@ class PlayerResource;
 class ViewRender;
 class ViewRenderBeams;
 class WeaponSystem;
+template <typename Key, typename Value>
+struct UtlMap;
 template <typename T>
 class UtlVector;
 
@@ -26,6 +28,7 @@ struct ActiveChannels;
 struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
+struct PanoramaEventRegistration;
 struct Trace;
 struct Vector;
 
@@ -46,6 +49,7 @@ public:
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
     UtlVector<PlantedC4*>* plantedC4s;
+    UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
     bool* disablePostProcessing;
 
