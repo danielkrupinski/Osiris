@@ -26,6 +26,7 @@
 #include "SDK/InputSystem.h"
 #include "Hacks/Visuals.h"
 #include "Hacks/Glow.h"
+#include "Hacks/AntiAim.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -70,6 +71,7 @@ void GUI::render() noexcept
     if (!config->style.menuStyle) {
         renderMenuBar();
         renderAimbotWindow();
+        AntiAim::drawGUI(false);
         renderAntiAimWindow();
         renderTriggerbotWindow();
         renderBacktrackWindow();
@@ -147,7 +149,7 @@ void GUI::renderMenuBar() noexcept
     if (ImGui::BeginMainMenuBar()) {
         ImGui::Text("### eOsiris v1 ### by www.CheatersUnidos.com ###");
         menuBarItem("Auto apuntado", window.aimbot);
-        menuBarItem("Antibalas", window.antiAim);
+        AntiAim::menuBarItem();
         menuBarItem("Auto disparo", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
         Glow::menuBarItem();
@@ -296,23 +298,6 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
     ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderAntiAimWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.antiAim)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Antibalas", &window.antiAim, windowFlags);
-    }
-    ImGui::Checkbox("Activado", &config->antiAim.enabled);
-    ImGui::Checkbox("##pitch", &config->antiAim.pitch);
-    ImGui::SameLine();
-    ImGui::SliderFloat("Arriba/Abajo", &config->antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
-    ImGui::Checkbox("", &config->antiAim.yaw);
     if (!contentOnly)
         ImGui::End();
 }
@@ -1510,7 +1495,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 1: config->aimbot = { }; break;
                     case 2: config->triggerbot = { }; break;
                     case 3: config->backtrack = { }; break;
-                    case 4: config->antiAim = { }; break;
+                    case 4: AntiAim::resetConfig(); break;
                     case 5: Glow::resetConfig(); break;
                     case 6: config->chams = { }; break;
                     case 7: config->streamProofESP = { }; break;
@@ -1556,10 +1541,7 @@ void GUI::renderGuiStyle2() noexcept
             renderAimbotWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Antibalas")) {
-            renderAntiAimWindow(true);
-            ImGui::EndTabItem();
-        }
+        AntiAim::tabItem();
         if (ImGui::BeginTabItem("Auto disparo")) {
             renderTriggerbotWindow(true);
             ImGui::EndTabItem();
