@@ -17,3 +17,8 @@ struct PanoramaEventRegistration {
     void* (__CDECL* makeEvent)(void*);
     PAD(WIN32_LINUX(28, 56))
 };
+
+class UIEngine {
+public:
+    VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (this, eventPtr))
+};
