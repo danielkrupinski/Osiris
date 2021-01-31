@@ -1,11 +1,14 @@
 #pragma once
 
 #include <array>
+#include <iomanip>
 #include <sstream>
 #include <string>
 
 #include "nlohmann/json.hpp"
 #include "InputUtil.h"
+
+enum class WeaponId : short;
 
 #pragma pack(push, 1)
 struct Color4 {
