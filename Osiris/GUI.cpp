@@ -435,15 +435,12 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
     ImGui::SameLine();
     ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
-    if (!config->backtrack.fakeLatency) { if (config->backtrack.timeLimit >= 201) { config->backtrack.timeLimit = 200; } }
     ImGui::PushItemWidth(220.0f);
     ImGui::PushID(0);
-    ImGui::SliderInt("", &config->backtrack.timeLimit, 1, config->backtrack.fakeLatency ? 400 : 200, "Time limit %d ms");
+    ImGui::SliderInt("", &config->backtrack.timeLimit, 0, config->backtrack.fakeLatency ? 400 : 200, "Time limit %d ms");
     ImGui::PopID();
     ImGui::PopItemWidth();
-
-    ImGui::Checkbox("Cham Last/All Tick", &config->backtrack.drawAllChams);
-
+    ImGui::Checkbox("Chams Last/All Tick", &config->backtrack.drawAllChams);
     if (!contentOnly)
         ImGui::End();
 }

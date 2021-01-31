@@ -29,6 +29,9 @@ void Backtrack::update(FrameStage stage) noexcept
 {
     if (stage == FrameStage::RENDER_START)
     {
+		if (!config->backtrack.fakeLatency) { if (config->backtrack.timeLimit >= 201) { config->backtrack.timeLimit = 200; } }
+		if (config->backtrack.timeLimit <= 0 || config->backtrack.timeLimit > 400) { config->backtrack.enabled = false; } else { config->backtrack.enabled = true; }
+
         if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
                 record.clear();
@@ -79,7 +82,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     auto bestFov{ 255.f };
     Entity * bestTarget{ };
     int bestTargetIndex{ };
-    Vector bestTargetOrigin{ }; // [1] Not used because the other code contributors before me started using head not origin. It is used in a different form below tho.
+    Vector bestTargetOrigin{ };
     //Vector bestTargetHead{ };
     int bestRecord{ };
 
@@ -91,7 +94,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             continue;
 
         const auto& origin = entity->getAbsOrigin();
-        // auto head = entity->getBonePosition(8); //                       OR HEAD ?
+        // auto head = entity->getBonePosition(8);
         auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
