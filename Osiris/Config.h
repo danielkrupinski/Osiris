@@ -77,6 +77,13 @@ public:
         int timeLimit{ 200 };
     } backtrack;
 
+    struct AntiAim {
+        bool enabled{ false };
+        bool pitch{ false };
+        bool yaw{ false };
+        float pitchAngle{ 0.0f };
+    } antiAim;
+
     struct Chams {
         struct Material : Color4 {
             bool enabled = false;

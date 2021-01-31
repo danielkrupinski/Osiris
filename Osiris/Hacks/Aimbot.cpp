@@ -175,10 +175,18 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 || !entity->isOtherEnemy(localPlayer.get()) && !config->aimbot[weaponIndex].friendlyFire || entity->gunGameImmunity())
                 continue;
 
-            for (auto bone : { 0, 1, 5, 6, 3, 2 }) {
+            for (auto bone : { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }) {
                 //ignore this mess lmao
                 auto switchedBone = 0;
+                auto mode = 0;
                 switch (config->aimbot[weaponIndex].bone) {
+                case 0:
+                    switchedBone = bone;
+                    mode = 1;
+                    break;
+                case 1:
+                    switchedBone = bone;
+                    break;
                 case 2:
                     switchedBone = 0;
                     break;
@@ -197,10 +205,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
                 case 7:
                     switchedBone = 2;
                     break;
-                default:
-                    const auto switchedBone = bone;
                 }
-                const auto bonePosition = entity->getBonePosition(entity, switchedBone, cmd->viewangles, localPlayerEyePosition);
+                const auto bonePosition = entity->getBonePosition(entity, switchedBone, cmd->viewangles, localPlayerEyePosition, mode);
                 const auto angle = calculateRelativeAngle(localPlayerEyePosition, bonePosition, cmd->viewangles + aimPunch);
                 
                 const auto fov = std::hypot(angle.x, angle.y);

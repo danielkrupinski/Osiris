@@ -1001,14 +1001,7 @@ void Misc::autoAccept(const char* soundEntry) noexcept
     if (std::strcmp(soundEntry, "UIPanorama.popup_accept_match_beep"))
         return;
 
-#ifdef _WIN32 // until we test this on linux
-    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("MatchAssistedAccept")); idx != -1) {
-        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
-            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
-    }
-#else
     memory->acceptMatch();
-#endif
 
 #ifdef _WIN32
     auto window = FindWindowW(L"Valve001", NULL);

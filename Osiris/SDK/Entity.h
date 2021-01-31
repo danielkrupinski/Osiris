@@ -137,30 +137,73 @@ public:
         return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
-    Vector getBonePosition(Entity* entity, int bone, Vector viewAngles, Vector eyePos) noexcept
+    Vector getBonePosition(Entity* entity, int bone, Vector viewAngles, Vector eyePos, int mode = 0) noexcept
     {
-        static Vector multiPoints[Multipoints::MULTIPOINTS_MAX];
         auto bestFov = 255.f;
         Vector bestPoint;
-        if (Multipoints::retrieveOne(entity, 1.f, multiPoints, bone)) {
-            for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
+        if (mode == 1) {
+            static Vector multiPoints[Multipoints::HITBOX_MAX][Multipoints::MULTIPOINTS_MAX];
+            if (Multipoints::retrieveAll(entity, 2.f, multiPoints)) {
+                for (int hitBox = Multipoints::HITBOX_START; hitBox < Multipoints::HITBOX_MAX; hitBox++) {
+                    for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
 
-                if (multiPoints[multiPoint].notNull()) {
-                    const auto angle = Aimbot::calculateRelativeAngle(eyePos, multiPoints[multiPoint], viewAngles);
-                    const auto fov = std::hypot(angle.x, angle.y);
-                    if (fov > bestFov)
-                        continue;
-                    if (fov < bestFov) {
-                        bestFov = fov;
-                        bestPoint = multiPoints[multiPoint];
+                        if (multiPoints[hitBox][multiPoint].notNull()) {
+                            const auto angle = Aimbot::calculateRelativeAngle(eyePos, multiPoints[hitBox][multiPoint], viewAngles);
+                            const auto fov = std::hypot(angle.x, angle.y);
+                            if (fov > bestFov)
+                                continue;
+                            if (fov < bestFov) {
+                                bestFov = fov;
+                                bestPoint = multiPoints[hitBox][multiPoint];
+                            }
+                        }
                     }
                 }
             }
+            else
+                return Vector{ };
         }
-        else  
-            return Vector{ };
-        return bestPoint;
+        else if(mode == 0) {
+            Vector multiPoints[Multipoints::MULTIPOINTS_MAX];
+            if (Multipoints::retrieveOne(entity, 2.f, multiPoints, bone)) {
+                for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
 
+                    if (multiPoints[multiPoint].notNull()) {
+                        const auto angle = Aimbot::calculateRelativeAngle(eyePos, multiPoints[multiPoint], viewAngles);
+                        const auto fov = std::hypot(angle.x, angle.y);
+                        if (fov > bestFov)
+                            continue;
+                        if (fov < bestFov) {
+                            bestFov = fov;
+                            bestPoint = multiPoints[multiPoint];
+                        }
+                    }
+                }
+            }
+            else
+                return Vector{ };
+        }
+        else {
+            Vector multiPoints[Multipoints::MULTIPOINTS_MAX];
+            if (Multipoints::retrieveOne(entity, 2.f, multiPoints, bone)) {
+                for (int multiPoint = Multipoints::MULTIPOINTS_START; multiPoint < Multipoints::MULTIPOINTS_MAX; multiPoint++) {
+
+                    if (multiPoints[multiPoint].notNull()) {
+                        const auto angle = Aimbot::calculateRelativeAngle(eyePos, multiPoints[multiPoint], viewAngles);
+                        const auto fov = std::hypot(angle.x, angle.y);
+                        if (fov > bestFov)
+                            continue;
+                        if (fov < bestFov) {
+                            bestFov = fov;
+                            bestPoint = multiPoints[multiPoint];
+                        }
+                    }
+                }
+            }
+            else
+                return Vector{ };
+        }
+        return bestPoint;
 
             
 
