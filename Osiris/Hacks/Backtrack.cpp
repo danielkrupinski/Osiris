@@ -27,11 +27,12 @@ static Cvars cvars;
 
 void Backtrack::update(FrameStage stage) noexcept
 {
+	int timeLimit = config->backtrack.timeLimit;
+	if (timeLimit <= 0  || timeLimit >= 201) { config->backtrack.fakeLatency = true; } else { config->backtrack.fakeLatency = false; }
+	if (timeLimit <= 0 || timeLimit > 400) { config->backtrack.enabled = false; } else { config->backtrack.enabled = true; }
+
     if (stage == FrameStage::RENDER_START)
     {
-		if (!config->backtrack.fakeLatency) { if (config->backtrack.timeLimit >= 201) { config->backtrack.timeLimit = 200; } }
-		if (config->backtrack.timeLimit <= 0 || config->backtrack.timeLimit > 400) { config->backtrack.enabled = false; } else { config->backtrack.enabled = true; }
-
         if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
                 record.clear();

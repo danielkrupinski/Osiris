@@ -429,18 +429,15 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
     }
-    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
-    ImGui::SameLine();
-    ImGui::Checkbox("Extend with fake ping", &config->backtrack.fakeLatency);
-    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
-    ImGui::SameLine();
-    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
-    ImGui::PushItemWidth(220.0f);
-    ImGui::PushID(0);
-    ImGui::SliderInt("", &config->backtrack.timeLimit, 0, config->backtrack.fakeLatency ? 400 : 200, "Time limit %d ms");
-    ImGui::PopID();
-    ImGui::PopItemWidth();
-    ImGui::Checkbox("Chams Last/All Tick", &config->backtrack.drawAllChams);
+	ImGui::PushID(0);
+	ImGui::PushItemWidth(220.0f);
+	ImGui::SliderInt("", &config->backtrack.timeLimit, 0, 400, "Time limit %d ms");
+	ImGui::PopItemWidth();
+	ImGui::PopID();
+	ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
+	ImGui::SameLine();
+	ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
+	ImGui::Checkbox("Chams Last/All Tick", &config->backtrack.drawAllChams);
     if (!contentOnly)
         ImGui::End();
 }
