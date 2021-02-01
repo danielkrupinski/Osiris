@@ -14,7 +14,7 @@
 
 - Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)
 
-- Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and [contributors](https://github.com/danielkrupinski/Osiris/graphs/contributors), [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for **[Dear imgui](https://github.com/ocornut/imgui)** and **[Zer0Mem0ry](https://github.com/Zer0Mem0ry)** . Respect! ;-)
+- Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris) and [contributors](https://github.com/danielkrupinski/Osiris/graphs/contributors)**, [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for [Dear imgui](https://github.com/ocornut/imgui) and [Zer0Mem0ry](https://github.com/Zer0Mem0ry) . Respect! ;-)
 
 - Escrito en **C++ Moderno** y con GUI [Dear ImGui](https://github.com/ocornut/imgui)
 
@@ -29,7 +29,7 @@
 ## Características:
 *   **Auto Apuntar** - aim assistance
 *   **Auto Disparo** - automatically fires when crosshair is on enemy
-*   **Backtrack** - abuse lag compensation to move players back in time
+*   **Abuso de Lag** - abuse lag compensation to move players back in time
 *   **Glow** - render glow effect on entities
 *   **Chams** - color player models to improve visibility
 *   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
