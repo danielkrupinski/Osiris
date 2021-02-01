@@ -8,7 +8,7 @@
 
 - Para **Counter-Strike: Global Offensive** (csgo, cs:go).
 
-- Basado en [Dear ImGui](https://github.com/danielkrupinski/Osiris)  >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)**.
+- Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)  >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)**.
 
 - Escrito en **C++ Moderno** y con GUI [Dear ImGui](https://github.com/ocornut/imgui)
 
