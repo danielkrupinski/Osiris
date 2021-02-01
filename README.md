@@ -8,7 +8,7 @@
 
 - Diseñado para hacer ByPass al sistema [VAC (Valve Anti-Cheat System)](https://https://support.steampowered.com/kb/7849-RADZ-6869/) de la compañía [© 2021 Valve Corporation](https://www.valvesoftware.com/)
 
-- **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)** está disponible de forma totalmente gratuita para Windows y Linux en la plataforma **[STEAM](https://store.steampowered.com)** en su juego  (a.k.a: csgo, cs:go). 
+- Compatible con **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)**, disponible de forma totalmente gratuita para Windows y Linux en la plataforma **[STEAM](https://store.steampowered.com)** en su juego  (a.k.a: csgo, cs:go). 
 
 - Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)  >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and Collaborators. Respect! ;-)
 
@@ -17,8 +17,6 @@
 - Cheat / Hack **Multiplataforma Windows / Linux** .
 
 - Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
-
-- Compatible con la versión STEAM de **Counter-Strike: Global Offensive** (disponible para sistemas operativos Windows y Linux).
 
 - **Traducido a Español**. [En progreso]
 
