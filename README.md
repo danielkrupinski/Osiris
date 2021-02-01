@@ -18,9 +18,9 @@
 
 - Diseñado como cheat interno **[Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library)** (.DLL) inyectable en el proceso del juego.
 
-- **Traducido a Español por BaiAlbert y SuperK2**. [En progreso]
+- Traducido a Español por **BaiAlbert y SuperK2**. [En progreso]
 
-- **Añadiendo funciones de otros proyectos / cheats / hacks**. [En progreso]
+- Añadiendo funciones de otros proyectos / cheats / hacks. [En progreso]
 
 ## Características:
 *   **Auto Apuntar** - aim assistance
