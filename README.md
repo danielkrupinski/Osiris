@@ -6,7 +6,7 @@
 
 - **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source).
 
-- Diseñado para hacer ByPass al sistema [VAC (Valve Anti-Cheat System)](https://https://support.steampowered.com/kb/7849-RADZ-6869/) de la compañía [© 2021 Valve Corporation](https://www.valvesoftware.com/)
+- Diseñado para hacer ByPass al sistema [**VAC** (Valve Anti-Cheat System)](https://https://support.steampowered.com/kb/7849-RADZ-6869/) de la compañía [© 2021 Valve Corporation](https://www.valvesoftware.com/)
 
 - Compatible con **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)**, disponible de forma totalmente gratuita para Windows y Linux en la plataforma **[STEAM](https://store.steampowered.com)** en su juego  (a.k.a: csgo, cs:go). 
 
@@ -16,9 +16,9 @@
 
 - Cheat / Hack **Multiplataforma Windows / Linux** .
 
-- Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
+- Diseñado como cheat interno **[Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library)** (.DLL) inyectable en el proceso del juego.
 
-- **Traducido a Español**. [En progreso]
+- **Traducido a Español por BaiAlbert y SuperK2 **. [En progreso]
 
 - **Añadiendo funciones de otros proyectos / cheats / hacks**. [En progreso]
 
