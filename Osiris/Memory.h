@@ -131,7 +131,6 @@ private:
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
-    std::uintptr_t acceptMatchFunction;
 };
 
 inline std::unique_ptr<const Memory> memory;
