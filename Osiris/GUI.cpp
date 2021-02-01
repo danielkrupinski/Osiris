@@ -1,4 +1,4 @@
-﻿#include <array>
+#include <array>
 #include <cwctype>
 #include <fstream>
 #include <functional>
@@ -146,19 +146,20 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        menuBarItem("Aimbot", window.aimbot);
+        ImGui::Text(" ·eOsiris™·Beta · Fork en Español de Osiris™ · by: BaiAlbert & SuperK2 · CheatersUnidos.com · ");
+        menuBarItem("Auto Apuntar", window.aimbot);
         AntiAim::menuBarItem();
-        menuBarItem("Triggerbot", window.triggerbot);
+        menuBarItem("Auto disparo", window.triggerbot);
         menuBarItem("Backtrack", window.backtrack);
         Glow::menuBarItem();
-        menuBarItem("Chams", window.chams);
-        menuBarItem("ESP", window.streamProofESP);
-        menuBarItem("Visuals", window.visuals);
-        menuBarItem("Skin changer", window.skinChanger);
-        menuBarItem("Sound", window.sound);
-        menuBarItem("Style", window.style);
-        menuBarItem("Misc", window.misc);
-        menuBarItem("Config", window.config);
+        menuBarItem("Colores", window.chams);
+        menuBarItem("Wallhack", window.streamProofESP);
+        menuBarItem("Visuales", window.visuals);
+        menuBarItem("Skins", window.skinChanger);
+        menuBarItem("Sonidos", window.sound);
+        menuBarItem("Estilo", window.style);
+        menuBarItem("Varios", window.misc);
+        menuBarItem("Configuración", window.config);
         ImGui::EndMainMenuBar();   
     }
 }
@@ -169,24 +170,24 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         if (!window.aimbot)
             return;
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
+        ImGui::Begin("AUTO APUNTAR (AutoAim) ::: ·eOsiris™·Beta · :::", &window.aimbot, windowFlags);
     }
-    ImGui::Checkbox("On key", &config->aimbotOnKey);
+    ImGui::Checkbox("USAR TECLA", &config->aimbotOnKey);
     ImGui::SameLine();
-    ImGui::PushID("Aimbot Key");
+    ImGui::PushID("Tecla de Activación");
     hotkey2("", config->aimbotKey);
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config->aimbotKeyMode, "Hold\0Toggle\0");
+    ImGui::Combo("", &config->aimbotKeyMode, "Mantener\0Modo Interruptor\0");
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Separator();
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
+    ImGui::Combo("", &currentCategory, "Todo\0Pistolas\0Pesadas\0Subfusiles\0Rifles\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -199,7 +200,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         break;
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "Todo", "Glock-18", "P2000", "USP-S", "Berettas-Dobles", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx : 35].enabled) {
@@ -217,7 +218,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "Todo", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 10 : 36].enabled) {
@@ -235,7 +236,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "Todo", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 16 : 37].enabled) {
@@ -253,7 +254,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "Todo", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 23 : 38].enabled) {
@@ -272,29 +273,29 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
+    ImGui::Checkbox("ACTIVADO", &config->aimbot[currentWeapon].enabled);
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
-    ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
-    ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Visible only", &config->aimbot[currentWeapon].visibleOnly);
-    ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->aimbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
-    ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
-    ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
-    ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+    ImGui::Checkbox("Bloqueo de Puntería", &config->aimbot[currentWeapon].aimlock);
+    ImGui::Checkbox("Silencio", &config->aimbot[currentWeapon].silent);
+    ImGui::Checkbox("Disparar a Compañeros", &config->aimbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("Sólo Visible", &config->aimbot[currentWeapon].visibleOnly);
+    ImGui::Checkbox("Sólo Fijado en Mirilla de Rifle", &config->aimbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("Ignorar Granadas FLASH", &config->aimbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("Ignorar Granadas de HUMO", &config->aimbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("AUTO DISPARO ;-) ", &config->aimbot[currentWeapon].autoShot);
+    ImGui::Checkbox("Auto Mirilla de Rifle", &config->aimbot[currentWeapon].autoScope);
+    ImGui::Combo("Zona de Disparo", &config->aimbot[currentWeapon].bone, "Más cercano\0Maximo daño\0HEADSHOT\0Cuello\0Esternón\0Pecho\0Estómago\0Cadera\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
+    ImGui::SliderFloat("Ángulo de Disparo", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Suavizado de Disparo", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+    ImGui::SliderFloat("Precisión Máxima de Puntería", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Precisión Máxima de Disparo", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::InputInt("Daño minimo", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
-    ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
+    ImGui::Checkbox("KillShot", &config->aimbot[currentWeapon].killshot);
+    ImGui::Checkbox("Entre Disparos", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
@@ -306,12 +307,12 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
         if (!window.triggerbot)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Triggerbot", &window.triggerbot, windowFlags);
+        ImGui::Begin("AUTO DISPARO (Triggerbot) ::: ·eOsiris™·Beta · :::", &window.triggerbot, windowFlags);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0Zeus x27\0");
+    ImGui::Combo("", &currentCategory, "Todo\0Pistolas\0Pesadas\0Subfusiles\0Rifles\0Taser\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -328,7 +329,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
 
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "Todo", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config->triggerbot[idx ? idx : 35].enabled) {
@@ -346,7 +347,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "Todo", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config->triggerbot[idx ? idx + 10 : 36].enabled) {
@@ -364,7 +365,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "Todo", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config->triggerbot[idx ? idx + 16 : 37].enabled) {
@@ -382,7 +383,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "Todo", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config->triggerbot[idx ? idx + 23 : 38].enabled) {
@@ -401,21 +402,21 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->triggerbot[currentWeapon].enabled);
+    ImGui::Checkbox("ACTIVADO", &config->triggerbot[currentWeapon].enabled);
     ImGui::Separator();
-    hotkey2("Hold Key", config->triggerbotHoldKey);
-    ImGui::Checkbox("Friendly fire", &config->triggerbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Scoped only", &config->triggerbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->triggerbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->triggerbot[currentWeapon].ignoreSmoke);
+    hotkey2("Tecla de Activación", config->triggerbotHoldKey);
+    ImGui::Checkbox("Fuego Amigo", &config->triggerbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("Solo Apuntar", &config->triggerbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("Ignorar Granadas Flash", &config->triggerbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("Ignorar Granadas de Humo", &config->triggerbot[currentWeapon].ignoreSmoke);
     ImGui::SetNextItemWidth(85.0f);
-    ImGui::Combo("Hitgroup", &config->triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
+    ImGui::Combo("Zona de Disparo", &config->triggerbot[currentWeapon].hitgroup, "Todo\0HEADSHOT\0Pecho\0Éstomago\0Brazo izq.\0Brazo drch.\0Pierna izq.\0Pierna drch.\0");
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Shot delay", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
-    ImGui::InputInt("Min damage", &config->triggerbot[currentWeapon].minDamage);
+    ImGui::SliderInt("Retraso de Disparo", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+    ImGui::InputInt("Daño Mínimo", &config->triggerbot[currentWeapon].minDamage);
     config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
-    ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
+    ImGui::SliderFloat("Tiempo de Ráfaga", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
     if (!contentOnly)
         ImGui::End();
@@ -427,13 +428,13 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         if (!window.backtrack)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
+        ImGui::Begin("Abuso de Lag (Backtrack) ::: ·eOsiris™·Beta · :::", &window.backtrack, windowFlags);
     }
-    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
-    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
+    ImGui::Checkbox("ACTIVADO", &config->backtrack.enabled);
+    ImGui::Checkbox("Ignorar Humo", &config->backtrack.ignoreSmoke);
+    ImGui::Checkbox("Retroceso Basado en Ángulo de Visión", &config->backtrack.recoilBasedFov);
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
+    ImGui::SliderInt("Tiempo", &config->backtrack.timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
@@ -445,7 +446,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         if (!window.chams)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Chams", &window.chams, windowFlags);
+        ImGui::Begin("COLORES (Chams) ::: ·eOsiris™·Beta · :::", &window.chams, windowFlags);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
@@ -453,7 +454,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
 
     static int material = 1;
 
-    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+    if (ImGui::Combo("", &currentCategory, "Aliados\0Enemigos\0Plantando\0Defuseando\0Jugador local\0Armas\0Manos\0Backtrack\0Mangas\0"))
         material = 1;
 
     ImGui::PopID();
@@ -468,7 +469,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "Aliados", "Enemigos", "Plantando", "Defuseando", "Jugador local", "Armas", "Manos", "Backtrack", "Mangas" };
 
     ImGui::SameLine();
 
@@ -481,14 +482,14 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
 
     auto& chams{ config->chams[categories[currentCategory]].materials[material - 1] };
 
-    ImGui::Checkbox("Enabled", &chams.enabled);
+    ImGui::Checkbox("ACTIVADO", &chams.enabled);
     ImGui::Separator();
-    ImGui::Checkbox("Health based", &chams.healthBased);
-    ImGui::Checkbox("Blinking", &chams.blinking);
-    ImGui::Combo("Material", &chams.material, "Normal\0Flat\0Animated\0Platinum\0Glass\0Chrome\0Crystal\0Silver\0Gold\0Plastic\0Glow\0Pearlescent\0Metallic\0");
+    ImGui::Checkbox("Basado en Vida", &chams.healthBased);
+    ImGui::Checkbox("Parpadeo", &chams.blinking);
+    ImGui::Combo("Material", &chams.material, "Normal\0Plano\0Animado\0Platino\0Cristal 1\0Cromado\0Cristal 2\0Plata\0Oro\0Plástico\0Brillo\0Perlado\0Metálico\0");
     ImGui::Checkbox("Wireframe", &chams.wireframe);
-    ImGui::Checkbox("Cover", &chams.cover);
-    ImGui::Checkbox("Ignore-Z", &chams.ignorez);
+    ImGui::Checkbox("Cubrir", &chams.cover);
+    ImGui::Checkbox("No visible", &chams.ignorez);
     ImGuiCustom::colorPicker("Color", chams);
 
     if (!contentOnly) {
@@ -502,7 +503,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         if (!window.streamProofESP)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("ESP", &window.streamProofESP, windowFlags);
+        ImGui::Begin("WALLHACK (ESP o Percepción ExtraSensorial) ::: ·eOsiris™·Beta · :::", &window.streamProofESP, windowFlags);
     }
 
     hotkey2("Toggle Key", config->streamProofESP.toggleKey, 80.0f);
