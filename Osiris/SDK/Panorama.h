@@ -11,3 +11,19 @@ public:
     VIRTUAL_METHOD(float, getAttributeFloat, 278, (const char* name, float defaultValue), (this, name, defaultValue))
     VIRTUAL_METHOD(void, setAttributeFloat, WIN32_LINUX(288, 283), (const char* name, float value), (this, name, value))
 };
+
+struct PanoramaEventRegistration {
+    PAD(8)
+    void* (__CDECL* makeEvent)(void*);
+    PAD(WIN32_LINUX(28, 56))
+};
+
+class UIEngine {
+public:
+    VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (this, eventPtr))
+};
+
+class PanoramaUIEngine {
+public:
+    VIRTUAL_METHOD(UIEngine*, accessUIEngine, 11, (), (this))
+};
