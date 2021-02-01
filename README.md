@@ -261,6 +261,6 @@
 Pulsa la tecla <kbd>INSERT</kbd> mientras estás dentro del juego CS:GO, en el menú principal o incluso en una partida.
 
 ### ¿Dónde están mis ficheros de configuración grabados?
-Los archivos de configuración se graban en la Carpeta **`Osiris`** en TU CARPETA **`Documentos`** (`%_TU_NOMBRE_DE_USUARIO_%\Documentos\Osiris`).
+Los archivos de configuración se graban en la Carpeta **`Osiris`** dentro de **`Documentos`** (`%_TU_NOMBRE_DE_USUARIO_%\Documentos\Osiris`).
 
 Los ficheros están en formato humano, se pueden leer y editar fácilmente con tu editor de textos favorito (por ejemplo: notepad). ATENCIÓN: En algunos casos, después de algunas actualizaciones tendrás que borrar y rehacer los ficheros de configuración.
