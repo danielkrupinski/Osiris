@@ -8,6 +8,8 @@
 
 - Para **Counter-Strike: Global Offensive** (csgo, cs:go).
 
+- Basado en https://github.com/danielkrupinski/Osiris >> Special Thanks to **Daniel Krupiński** https://github.com/danielkrupinski.
+
 - Escrito en **C++ Moderno** y con GUI [Dear ImGui](https://github.com/ocornut/imgui)
 
 - Cheat / Hack **Multiplataforma Windows / Linux** .
@@ -15,8 +17,6 @@
 - Diseñado como cheat interno [Dynamic-link library](https://en.wikipedia.org/wiki/Dynamic-link_library) **(.DLL) inyectable en el proceso del juego**.
 
 - Compatible con la versión STEAM de **Counter-Strike: Global Offensive** (disponible para sistemas operativos Windows y Linux).
-
-- Basado en https://github.com/danielkrupinski/Osiris >> Special Thanks to **Daniel Krupiński** https://github.com/danielkrupinski.
 
 - **Traducido a Español**. [En progreso]
 
