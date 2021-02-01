@@ -6,7 +6,9 @@
 
 - **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source).
 
-- Diseñado para hacer ByPass al sistema [VAC (Valve Anti-Cheat System)](https://https://support.steampowered.com/kb/7849-RADZ-6869/) de la compañía [© 2021 Valve Corporation](https://www.valvesoftware.com/)  Steam en su juego **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)** (a.k.a: csgo, cs:go). 
+- Diseñado para hacer ByPass al sistema [VAC (Valve Anti-Cheat System)](https://https://support.steampowered.com/kb/7849-RADZ-6869/) de la compañía [© 2021 Valve Corporation](https://www.valvesoftware.com/)
+
+- **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)** está disponible de forma totalmente gratuita para plataformas Windows y Linux en la plataforma **[STEAM](https://store.steampowered.com)** en su juego  (a.k.a: csgo, cs:go). 
 
 - Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)  >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and Collaborators. Respect! ;-)
 
