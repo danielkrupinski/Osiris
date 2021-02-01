@@ -12,7 +12,7 @@
 
 - Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)
 
-   >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and  [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui) and [Zer0Mem0ry](https://github.com/Zer0Mem0ry) Collaborators. Respect! ;-)
+- Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)**, [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for **[Dear imgui](https://github.com/ocornut/imgui)** and **[Zer0Mem0ry](https://github.com/Zer0Mem0ry)** . Respect! ;-)
 
 - Escrito en **C++ Moderno** y con GUI [Dear ImGui](https://github.com/ocornut/imgui)
 
@@ -262,11 +262,6 @@ Press <kbd>INSERT</kbd> while focused on CS:GO window.
 
 ### Where is my config file saved?
 Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
-
-## Acknowledgments
-
-*   [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
-*   [Zer0Mem0ry](https://github.com/Zer0Mem0ry) - for great tutorials on reverse engineering and game hacking
 
 ## License
 
