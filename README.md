@@ -3,6 +3,7 @@
 [![CS:GO](https://img.shields.io/badge/game-CS%3AGO-yellow.svg?style=plastic)](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/) 
 [![Windows](https://img.shields.io/badge/platform-Windows-0078d7.svg?style=plastic)](https://en.wikipedia.org/wiki/Microsoft_Windows)
 [![x86](https://img.shields.io/badge/arch-x86-red.svg?style=plastic)](https://en.wikipedia.org/wiki/X86)
+
 [![xs86](https://img.shields.io/badge/Espa%C3%B1ol%20%2F%20Spanish-%20-red)]
 
 - **Cheat/ Hack Libre y Gratuito 100%**, de Código Abierto (Free open-source).
