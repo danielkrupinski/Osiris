@@ -257,8 +257,8 @@
 
 ## FAQ
 
-### ¿Cómo abro el Menú? / How do I open menu?
-Press <kbd>INSERT</kbd> while focused on CS:GO window.
+### ¿Cómo abro el Menú?
+Pulsa la tecla <kbd>INSERT</kbd> mientras estás dentro del juego CS:GO, en el menú principal o incluso en una partida.
 
-### ¿Dónde están mis ficheros de configuración grabados ? / Where is my config file saved?
-Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
+### ¿Dónde están mis ficheros de configuración grabados?
+Los archivos de configuración se graban en la Carpeta **`Osiris`** en TU CARPETA **`Documentos`** folder (`%_TU_NOMBRE_DE_USUARIO_%\Documentos\Osiris`). Los ficheros están en formato humano, se pueden leer y editar fácilmente con tu editor de textos favorito (por ejemplo: notepad). ATENCIÓN: En algunos casos, después de algunas actualizaciones tendrás que borrar y rehacer los ficheros de configuración.
