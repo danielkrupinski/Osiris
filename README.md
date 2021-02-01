@@ -10,7 +10,9 @@
 
 - Compatible con **[Counter-Strike: Global Offensive](https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/?l=spanish)**, disponible de forma totalmente gratuita para Windows y Linux en la plataforma **[STEAM](https://store.steampowered.com)** en su juego  (a.k.a: csgo, cs:go). 
 
-- Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)  >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and Collaborators. Respect! ;-)
+- Basado en [OSIRIS](https://github.com/danielkrupinski/Osiris)
+
+   >> Special Thanks to **[Daniel Krupiński](https://github.com/danielkrupinski/Osiris)** and  [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui) and [Zer0Mem0ry](https://github.com/Zer0Mem0ry) Collaborators. Respect! ;-)
 
 - Escrito en **C++ Moderno** y con GUI [Dear ImGui](https://github.com/ocornut/imgui)
 
