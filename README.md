@@ -257,14 +257,8 @@
 
 ## FAQ
 
-### How do I open menu?
+### ¿Cómo abro el Menú? / How do I open menu?
 Press <kbd>INSERT</kbd> while focused on CS:GO window.
 
-### Where is my config file saved?
+### ¿Dónde están mis ficheros de configuración grabados ? / Where is my config file saved?
 Configuration files are saved inside `Osiris` folder in your `Documents` folder (`%USERPROFILE%\Documents\Osiris`). The config is in human readable format and can be edited (e.g, using notepad). Sometimes after updates configuration file needs to be deleted and recreated.
-
-## License
-
-> Copyright (c) 2018-2021 Daniel Krupiński
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
