@@ -170,7 +170,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         if (!window.aimbot)
             return;
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("AUTO APUNTAR (AutoAim) ::: ·eOsiris™·Beta · :::", &window.aimbot, windowFlags);
+        ImGui::Begin("AUTO APUNTAR (AutoAim)", &window.aimbot, windowFlags);
     }
     ImGui::Checkbox("USAR TECLA", &config->aimbotOnKey);
     ImGui::SameLine();
@@ -307,7 +307,7 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
         if (!window.triggerbot)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("AUTO DISPARO (Triggerbot) ::: ·eOsiris™·Beta · :::", &window.triggerbot, windowFlags);
+        ImGui::Begin("AUTO DISPARO (Triggerbot)", &window.triggerbot, windowFlags);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
@@ -428,7 +428,7 @@ void GUI::renderBacktrackWindow(bool contentOnly) noexcept
         if (!window.backtrack)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("ABUSO DE LAG (Backtrack) ::: ·eOsiris™·Beta · :::", &window.backtrack, windowFlags);
+        ImGui::Begin("ABUSO DE LAG (Backtrack)", &window.backtrack, windowFlags);
     }
     ImGui::Checkbox("ACTIVADO", &config->backtrack.enabled);
     ImGui::Checkbox("Ignorar Humo", &config->backtrack.ignoreSmoke);
@@ -446,7 +446,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         if (!window.chams)
             return;
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("COLORES (Chams) ::: ·eOsiris™·Beta · :::", &window.chams, windowFlags);
+        ImGui::Begin("COLORES (Chams)", &window.chams, windowFlags);
     }
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
