@@ -95,7 +95,7 @@ void Glow::render() noexcept
                 applyGlow(cfg.all, entity->health());
             else if (cfg.visible.enabled && entity->visibleTo(localPlayer.get()))
                 applyGlow(cfg.visible, entity->health());
-            else if (cfg.occluded.enabled)
+            else if (cfg.occluded.enabled && !entity->visibleTo(localPlayer.get()))
                 applyGlow(cfg.occluded, entity->health());
         };
 
