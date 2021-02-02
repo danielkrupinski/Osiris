@@ -1038,6 +1038,7 @@ void Config::rename(size_t item, const char* newName) noexcept
 void Config::reset() noexcept
 {
     aimbot = { };
+    AntiAim::resetConfig();
     triggerbot = { };
     backtrack = { };
     Glow::resetConfig();
