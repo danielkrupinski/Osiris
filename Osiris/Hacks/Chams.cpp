@@ -117,14 +117,12 @@ void Chams::renderPlayer(Entity* player) noexcept
     } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams["Enemies"].materials, health);
 
-        if (config->backtrack.enabled) {
-            const auto& record = Backtrack::getRecords(player->index());
-            if (record.size() && Backtrack::valid(record.front().simulationTime)) {
-                if (!appliedChams)
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record.back().matrix);
-                interfaces->studioRender->forcedMaterialOverride(nullptr);
-            }
+        const auto& records = Backtrack::getRecords(player->index());
+        if (!records.empty() && Backtrack::valid(records.front().simulationTime)) {
+            if (!appliedChams)
+                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+            applyChams(config->chams["Backtrack"].materials, health, records.back().matrix);
+            interfaces->studioRender->forcedMaterialOverride(nullptr);
         }
     } else {
         applyChams(config->chams["Allies"].materials, health);

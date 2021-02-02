@@ -127,6 +127,10 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
 const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
 {
+    if (!config->backtrack.enabled) {
+        static const std::deque<Backtrack::Record> dummy;
+        return dummy;
+    }
     return records[index];
 }
 
