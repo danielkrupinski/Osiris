@@ -9,6 +9,8 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
+#if OSIRIS_BACKTRACK()
+
 struct BacktrackConfig {
     bool enabled = false;
     bool ignoreSmoke = false;
@@ -242,3 +244,29 @@ void Backtrack::resetConfig() noexcept
 {
     backtrackConfig = {};
 }
+
+#else
+
+namespace Backtrack
+{
+    void update(FrameStage) noexcept {}
+    void run(UserCmd*) noexcept {}
+
+    const std::deque<Record>& getRecords(std::size_t index) noexcept { static const std::deque<Record> dummy; return dummy; }
+    float getLerp() noexcept;
+    bool valid(float simtime) noexcept { return false; }
+    int timeToTicks(float time) noexcept { return 0; }
+    void init() noexcept {}
+
+    // GUI
+    void menuBarItem() noexcept {}
+    void tabItem() noexcept {}
+    void drawGUI(bool contentOnly) noexcept {}
+
+    // Config
+    json toJson() noexcept { return {}; }
+    void fromJson(const json& j) noexcept {}
+    void resetConfig() noexcept {}
+}
+
+#endif

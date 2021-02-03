@@ -11,6 +11,8 @@
 enum class FrameStage;
 struct UserCmd;
 
+#define OSIRIS_BACKTRACK() true
+
 namespace Backtrack
 {
     void update(FrameStage) noexcept;
