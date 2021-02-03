@@ -9,7 +9,8 @@
 enum class FrameStage;
 struct UserCmd;
 
-namespace Backtrack {
+namespace Backtrack
+{
     void update(FrameStage) noexcept;
     void run(UserCmd*) noexcept;
 
@@ -24,4 +25,9 @@ namespace Backtrack {
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;
     void init() noexcept;
+
+    // GUI
+    void menuBarItem() noexcept;
+    void tabItem() noexcept;
+    void drawGUI(bool contentOnly) noexcept;
 }

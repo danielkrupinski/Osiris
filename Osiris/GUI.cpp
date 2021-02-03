@@ -27,6 +27,7 @@
 #include "Hacks/Visuals.h"
 #include "Hacks/Glow.h"
 #include "Hacks/AntiAim.h"
+#include "Hacks/Backtrack.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -73,7 +74,7 @@ void GUI::render() noexcept
         renderAimbotWindow();
         AntiAim::drawGUI(false);
         renderTriggerbotWindow();
-        renderBacktrackWindow();
+        Backtrack::drawGUI(false);
         Glow::drawGUI(false);
         renderChamsWindow();
         renderStreamProofESPWindow();
@@ -149,7 +150,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("Aimbot", window.aimbot);
         AntiAim::menuBarItem();
         menuBarItem("Triggerbot", window.triggerbot);
-        menuBarItem("Backtrack", window.backtrack);
+        Backtrack::menuBarItem();
         Glow::menuBarItem();
         menuBarItem("Chams", window.chams);
         menuBarItem("ESP", window.streamProofESP);
@@ -417,24 +418,6 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);
     ImGui::SliderFloat("Burst Time", &config->triggerbot[currentWeapon].burstTime, 0.0f, 0.5f, "%.3f s");
 
-    if (!contentOnly)
-        ImGui::End();
-}
-
-void GUI::renderBacktrackWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.backtrack)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Backtrack", &window.backtrack, windowFlags);
-    }
-    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
-    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
-    ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
-    ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
 }
@@ -1544,10 +1527,7 @@ void GUI::renderGuiStyle2() noexcept
             renderTriggerbotWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Backtrack")) {
-            renderBacktrackWindow(true);
-            ImGui::EndTabItem();
-        }
+        Backtrack::tabItem();
         Glow::tabItem();
         if (ImGui::BeginTabItem("Chams")) {
             renderChamsWindow(true);

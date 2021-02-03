@@ -165,3 +165,40 @@ void Backtrack::init() noexcept
     cvars.maxInterpRatio = interfaces->cvar->findVar("sv_client_max_interp_ratio");
     cvars.maxUnlag = interfaces->cvar->findVar("sv_maxunlag");
 }
+
+static bool backtrackWindowOpen = false;
+
+void Backtrack::menuBarItem() noexcept
+{
+    if (ImGui::MenuItem("Backtrack")) {
+        backtrackWindowOpen = true;
+        ImGui::SetWindowFocus("Backtrack");
+        ImGui::SetWindowPos("Backtrack", { 100.0f, 100.0f });
+    }
+}
+
+void Backtrack::tabItem() noexcept
+{
+    if (ImGui::BeginTabItem("Backtrack")) {
+        drawGUI(true);
+        ImGui::EndTabItem();
+    }
+}
+
+void Backtrack::drawGUI(bool contentOnly) noexcept
+{
+    if (!contentOnly) {
+        if (!backtrackWindowOpen)
+            return;
+        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
+        ImGui::Begin("Backtrack", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    }
+    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
+    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
+    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
+    ImGui::PushItemWidth(220.0f);
+    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
+    ImGui::PopItemWidth();
+    if (!contentOnly)
+        ImGui::End();
+}
