@@ -68,6 +68,12 @@ void Backtrack::update(FrameStage stage) noexcept
     }
 }
 
+static float getLerp() noexcept
+{
+    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
+    return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
+}
+
 void Backtrack::run(UserCmd* cmd) noexcept
 {
     if (!backtrackConfig.enabled)
@@ -139,12 +145,6 @@ const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) no
     if (!backtrackConfig.enabled)
         return nullptr;
     return &records[index];
-}
-
-float Backtrack::getLerp() noexcept
-{
-    auto ratio = std::clamp(cvars.interpRatio->getFloat(), cvars.minInterpRatio->getFloat(), cvars.maxInterpRatio->getFloat());
-    return (std::max)(cvars.interp->getFloat(), (ratio / ((cvars.maxUpdateRate) ? cvars.maxUpdateRate->getFloat() : cvars.updateRate->getFloat())));
 }
 
 bool Backtrack::valid(float simtime) noexcept
@@ -251,7 +251,6 @@ namespace Backtrack
     void run(UserCmd*) noexcept {}
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept { return nullptr; }
-    float getLerp() noexcept;
     bool valid(float simtime) noexcept { return false; }
     int timeToTicks(float time) noexcept { return 0; }
     void init() noexcept {}
