@@ -9,6 +9,13 @@
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/UserCmd.h"
 
+struct BacktrackConfig {
+    bool enabled = false;
+    bool ignoreSmoke = false;
+    bool recoilBasedFov = false;
+    int timeLimit = 200;
+} backtrackConfig;
+
 static std::array<std::deque<Backtrack::Record>, 65> records;
 
 struct Cvars {
@@ -26,7 +33,7 @@ static Cvars cvars;
 void Backtrack::update(FrameStage stage) noexcept
 {
     if (stage == FrameStage::RENDER_START) {
-        if (!config->backtrack.enabled || !localPlayer || !localPlayer->isAlive()) {
+        if (!backtrackConfig.enabled || !localPlayer || !localPlayer->isAlive()) {
             for (auto& record : records)
                 record.clear();
             return;
@@ -50,7 +57,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
             records[i].push_front(record);
 
-            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(config->backtrack.timeLimit) / 1000.f)))
+            while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(timeToTicks(static_cast<float>(backtrackConfig.timeLimit) / 1000.f)))
                 records[i].pop_back();
 
             if (auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const Record & rec) { return !valid(rec.simulationTime); }); invalid != std::cend(records[i]))
@@ -61,7 +68,7 @@ void Backtrack::update(FrameStage stage) noexcept
 
 void Backtrack::run(UserCmd* cmd) noexcept
 {
-    if (!config->backtrack.enabled)
+    if (!backtrackConfig.enabled)
         return;
 
     if (!(cmd->buttons & UserCmd::IN_ATTACK))
@@ -88,7 +95,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
         const auto& origin = entity->getAbsOrigin();
 
-        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+        auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
         auto fov = std::hypotf(angle.x, angle.y);
         if (fov < bestFov) {
             bestFov = fov;
@@ -99,7 +106,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 
     if (bestTarget) {
-        if (records[bestTargetIndex].size() <= 3 || (!config->backtrack.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
+        if (records[bestTargetIndex].size() <= 3 || (!backtrackConfig.ignoreSmoke && memory->lineGoesThroughSmoke(localPlayer->getEyePosition(), bestTargetOrigin, 1)))
             return;
 
         bestFov = 255.f;
@@ -109,7 +116,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
             if (!valid(record.simulationTime))
                 continue;
 
-            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (config->backtrack.recoilBasedFov ? aimPunch : Vector{ }));
+            auto angle = Aimbot::calculateRelativeAngle(localPlayerEyePosition, record.origin, cmd->viewangles + (backtrackConfig.recoilBasedFov ? aimPunch : Vector{ }));
             auto fov = std::hypotf(angle.x, angle.y);
             if (fov < bestFov) {
                 bestFov = fov;
@@ -127,7 +134,7 @@ void Backtrack::run(UserCmd* cmd) noexcept
 
 const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
 {
-    if (!config->backtrack.enabled) {
+    if (!backtrackConfig.enabled) {
         static const std::deque<Backtrack::Record> dummy;
         return dummy;
     }
@@ -193,12 +200,45 @@ void Backtrack::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Backtrack", &backtrackWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
-    ImGui::Checkbox("Enabled", &config->backtrack.enabled);
-    ImGui::Checkbox("Ignore smoke", &config->backtrack.ignoreSmoke);
-    ImGui::Checkbox("Recoil based fov", &config->backtrack.recoilBasedFov);
+    ImGui::Checkbox("Enabled", &backtrackConfig.enabled);
+    ImGui::Checkbox("Ignore smoke", &backtrackConfig.ignoreSmoke);
+    ImGui::Checkbox("Recoil based fov", &backtrackConfig.recoilBasedFov);
     ImGui::PushItemWidth(220.0f);
-    ImGui::SliderInt("Time limit", &config->backtrack.timeLimit, 1, 200, "%d ms");
+    ImGui::SliderInt("Time limit", &backtrackConfig.timeLimit, 1, 200, "%d ms");
     ImGui::PopItemWidth();
     if (!contentOnly)
         ImGui::End();
+}
+
+static void to_json(json& j, const BacktrackConfig& o, const BacktrackConfig& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("Ignore smoke", ignoreSmoke);
+    WRITE("Recoil based fov", recoilBasedFov);
+    WRITE("Time limit", timeLimit);
+}
+
+json Backtrack::toJson() noexcept
+{
+    json j;
+    to_json(j, backtrackConfig);
+    return j;
+}
+
+static void from_json(const json& j, BacktrackConfig& b)
+{
+    read(j, "Enabled", b.enabled);
+    read(j, "Ignore smoke", b.ignoreSmoke);
+    read(j, "Recoil based fov", b.recoilBasedFov);
+    read(j, "Time limit", b.timeLimit);
+}
+
+void Backtrack::fromJson(const json& j) noexcept
+{
+    from_json(j, backtrackConfig);
+}
+
+void Backtrack::resetConfig() noexcept
+{
+    backtrackConfig = {};
 }

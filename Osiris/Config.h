@@ -70,13 +70,6 @@ public:
     std::array<Triggerbot, 40> triggerbot;
     KeyBind triggerbotHoldKey = KeyBind::NONE;
 
-    struct Backtrack {
-        bool enabled{ false };
-        bool ignoreSmoke{ false };
-        bool recoilBasedFov{ false };
-        int timeLimit{ 200 };
-    } backtrack;
-
     struct Chams {
         struct Material : Color4 {
             bool enabled = false;

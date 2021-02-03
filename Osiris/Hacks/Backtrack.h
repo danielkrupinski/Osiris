@@ -3,6 +3,8 @@
 #include <array>
 #include <deque>
 
+#include "../ConfigStructs.h"
+
 #include "../SDK/matrix3x4.h"
 #include "../SDK/Vector.h"
 
@@ -30,4 +32,9 @@ namespace Backtrack
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
+
+    // Config
+    json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
+    void resetConfig() noexcept;
 }
