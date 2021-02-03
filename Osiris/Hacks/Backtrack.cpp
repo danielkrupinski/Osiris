@@ -134,13 +134,11 @@ void Backtrack::run(UserCmd* cmd) noexcept
     }
 }
 
-const std::deque<Backtrack::Record>& Backtrack::getRecords(std::size_t index) noexcept
+const std::deque<Backtrack::Record>* Backtrack::getRecords(std::size_t index) noexcept
 {
-    if (!backtrackConfig.enabled) {
-        static const std::deque<Backtrack::Record> dummy;
-        return dummy;
-    }
-    return records[index];
+    if (!backtrackConfig.enabled)
+        return nullptr;
+    return &records[index];
 }
 
 float Backtrack::getLerp() noexcept
@@ -252,7 +250,7 @@ namespace Backtrack
     void update(FrameStage) noexcept {}
     void run(UserCmd*) noexcept {}
 
-    const std::deque<Record>& getRecords(std::size_t index) noexcept { static const std::deque<Record> dummy; return dummy; }
+    const std::deque<Record>* getRecords(std::size_t index) noexcept { return nullptr; }
     float getLerp() noexcept;
     bool valid(float simtime) noexcept { return false; }
     int timeToTicks(float time) noexcept { return 0; }

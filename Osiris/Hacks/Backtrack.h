@@ -24,7 +24,7 @@ namespace Backtrack
         matrix3x4 matrix[256];
     };
 
-    const std::deque<Record>& getRecords(std::size_t index) noexcept;
+    const std::deque<Record>* getRecords(std::size_t index) noexcept;
     float getLerp() noexcept;
     bool valid(float simtime) noexcept;
     int timeToTicks(float time) noexcept;
