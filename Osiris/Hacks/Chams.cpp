@@ -15,6 +15,40 @@
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
 
+static Material* normal;
+static Material* flat;
+static Material* animated;
+static Material* platinum;
+static Material* glass;
+static Material* crystal;
+static Material* chrome;
+static Material* silver;
+static Material* gold;
+static Material* plastic;
+static Material* glow;
+static Material* pearlescent;
+static Material* metallic;
+
+static constexpr auto dispatchMaterial(int id) noexcept
+{
+    switch (id) {
+    default:
+    case 0: return normal;
+    case 1: return flat;
+    case 2: return animated;
+    case 3: return platinum;
+    case 4: return glass;
+    case 5: return chrome;
+    case 6: return crystal;
+    case 7: return silver;
+    case 8: return gold;
+    case 9: return plastic;
+    case 10: return glow;
+    case 11: return pearlescent;
+    case 12: return metallic;
+    }
+}
+
 Chams::Chams() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
