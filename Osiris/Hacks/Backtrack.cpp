@@ -32,6 +32,11 @@ struct Cvars {
 
 static Cvars cvars;
 
+static auto timeToTicks(float time) noexcept
+{
+    return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
+}
+
 void Backtrack::update(FrameStage stage) noexcept
 {
     if (stage == FrameStage::RENDER_START) {
@@ -157,11 +162,6 @@ bool Backtrack::valid(float simtime) noexcept
     return std::abs(delta) <= 0.2f;
 }
 
-int Backtrack::timeToTicks(float time) noexcept
-{
-    return static_cast<int>(0.5f + time / memory->globalVars->intervalPerTick);
-}
-
 void Backtrack::init() noexcept
 {
     cvars.updateRate = interfaces->cvar->findVar("cl_updaterate");
@@ -252,7 +252,6 @@ namespace Backtrack
 
     const std::deque<Record>* getRecords(std::size_t index) noexcept { return nullptr; }
     bool valid(float simtime) noexcept { return false; }
-    int timeToTicks(float time) noexcept { return 0; }
     void init() noexcept {}
 
     // GUI
