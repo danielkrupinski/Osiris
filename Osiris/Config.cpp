@@ -523,6 +523,8 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
     read(j, "Chams", chams);
+    read(j["Chams"], "Toggle Key", chamsToggleKey);
+    read(j["Chams"], "Hold Key", chamsHoldKey);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
     read(j, "Skin changer", skinChanger);
@@ -986,6 +988,8 @@ void Config::save(size_t id) const noexcept
         j["Anti aim"] = AntiAim::toJson();
         j["Glow"] = Glow::toJson();
         j["Chams"] = chams;
+        to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind::NONE);
+        to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind::NONE);
         j["ESP"] = streamProofESP;
         j["Sound"] = sound;
         j["Visuals"] = visuals;

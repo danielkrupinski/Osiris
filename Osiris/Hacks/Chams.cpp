@@ -108,8 +108,20 @@ static void initializeMaterials() noexcept
     }
 }
 
+void Chams::updateInput() noexcept
+{
+    config->chamsToggleKey.handleToggle();
+}
+
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
+    if (config->chamsToggleKey != KeyBind::NONE) {
+        if (!config->chamsToggleKey.isToggled() && !config->chamsHoldKey.isDown())
+            return false;
+    } else if (config->chamsHoldKey != KeyBind::NONE && !config->chamsHoldKey.isDown()) {
+        return false;
+    }
+
     static bool materialsInitialized = false;
     if (!materialsInitialized) {
         initializeMaterials();

@@ -430,6 +430,11 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
         ImGui::SetNextWindowSize({ 0.0f, 0.0f });
         ImGui::Begin("Chams", &window.chams, windowFlags);
     }
+
+    hotkey2("Toggle Key", config->chamsToggleKey, 80.0f);
+    hotkey2("Hold Key", config->chamsHoldKey, 80.0f);
+    ImGui::Separator();
+
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
