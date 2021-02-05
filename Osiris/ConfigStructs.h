@@ -191,6 +191,18 @@ static void to_json(json& j, const Color4& o, const Color4& dummy = {})
     WRITE("Rainbow Speed", rainbowSpeed);
 }
 
+static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
+{
+    if (o != dummy)
+        j = o.toString();
+}
+
+static void to_json(json& j, const KeyBindToggle& o, const KeyBindToggle& dummy)
+{
+    if (o != dummy)
+        j = o.toString();
+}
+
 template <value_t Type, typename T>
 static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
 {

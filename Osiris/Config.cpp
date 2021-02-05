@@ -712,18 +712,6 @@ static void to_json(json& j, const Config::Chams& o)
     j["Materials"] = o.materials;
 }
 
-static void to_json(json& j, const KeyBind& o, const KeyBind& dummy)
-{
-    if (o != dummy)
-        j = o.toString();
-}
-
-static void to_json(json& j, const KeyBindToggle& o, const KeyBindToggle& dummy)
-{
-    if (o != dummy)
-        j = o.toString();
-}
-
 static void to_json(json& j, const Config::StreamProofESP& o, const Config::StreamProofESP& dummy = {})
 {
     WRITE("Toggle Key", toggleKey);
