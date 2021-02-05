@@ -290,3 +290,26 @@ bool ImGui::SelectableWithBullet(const char* label, ImU32 bulletColor, bool sele
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags);
     return pressed;
 }
+
+void ImGui::hotkey(const char* label, KeyBind& key, float samelineOffset, const ImVec2& size) noexcept
+{
+    const auto id = GetID(label);
+    PushID(label);
+
+    TextUnformatted(label);
+    SameLine(samelineOffset);
+
+    if (GetActiveID() == id) {
+        PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
+        Button("...", size);
+        PopStyleColor();
+
+        GetCurrentContext()->ActiveIdAllowOverlap = true;
+        if ((!IsItemHovered() && GetIO().MouseClicked[0]) || key.setToPressedKey())
+            ClearActiveID();
+    } else if (Button(key.toString(), size)) {
+        SetActiveID(id, GetCurrentWindow());
+    }
+
+    PopID();
+}
