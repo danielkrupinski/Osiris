@@ -11,7 +11,6 @@ class Material;
 
 class Chams {
 public:
-    Chams() noexcept;
     bool render(void*, void*, const ModelRenderInfo&, matrix3x4*) noexcept;
 private:
     void renderPlayer(Entity* player) noexcept;

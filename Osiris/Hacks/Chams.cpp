@@ -49,7 +49,7 @@ static constexpr auto dispatchMaterial(int id) noexcept
     }
 }
 
-Chams::Chams() noexcept
+static void initializeMaterials() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
@@ -110,6 +110,12 @@ Chams::Chams() noexcept
 
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
+    static bool materialsInitialized = false;
+    if (!materialsInitialized) {
+        initializeMaterials();
+        materialsInitialized = true;
+    }
+
     appliedChams = false;
     this->ctx = ctx;
     this->state = state;
