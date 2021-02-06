@@ -53,7 +53,7 @@ ImWchar* Helpers::getFontGlyphRanges() noexcept
         builder.AddRanges(baseRanges);
         builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
         builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesChineseSimplifiedCommon());
-        builder.AddText("\u9F8D\u738B\u2122");
+        builder.AddText("\u9F8D\u738B\u58F1\u5F10\u2122");
         builder.BuildRanges(&ranges);
     }
     return ranges.Data;
