@@ -17,8 +17,7 @@ private:
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow(bool contentOnly = false) noexcept;
-    void renderTriggerbotWindow(bool contentOnly = false) noexcept;
-    void renderBacktrackWindow(bool contentOnly = false) noexcept;
+    void renderTriggerbotWindow(bool contentOnly = false) noexcept;    
     void renderChamsWindow(bool contentOnly = false) noexcept;
     void renderStreamProofESPWindow(bool contentOnly = false) noexcept;
     void renderVisualsWindow(bool contentOnly = false) noexcept;
@@ -32,7 +31,6 @@ private:
     struct {
         bool aimbot = false;
         bool triggerbot = false;
-        bool backtrack = false;
         bool chams = false;
         bool streamProofESP = false;
         bool visuals = false;
