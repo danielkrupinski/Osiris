@@ -28,7 +28,6 @@
 #include "Hacks/Glow.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
-
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
