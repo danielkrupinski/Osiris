@@ -196,11 +196,11 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     if (!config->misc.noscopeCrosshair.enabled)
         return;
 
-    GameData::Lock lock;
-    const auto& local = GameData::local();
-
-    if (!local.exists || !local.alive || !local.noScope)
-        return;
+    {
+        GameData::Lock lock;
+        if (const auto& local = GameData::local(); !local.exists || !local.alive || !local.noScope)
+            return;
+    }
 
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair), config->misc.noscopeCrosshair.thickness);
 }
