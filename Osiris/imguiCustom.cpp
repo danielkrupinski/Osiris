@@ -135,7 +135,21 @@ void ImGui::progressBarFullWidth(float fraction, float height) noexcept
     fraction = ImSaturate(fraction);
     RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
     bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
-    RenderRectFilledRangeH(window->DrawList, bb, GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
+
+    if (fraction == 0.0f)
+        return;
+
+    const ImVec2 p0{ ImLerp(bb.Min.x, bb.Max.x, 0.0f), bb.Min.y };
+    const ImVec2 p1{ ImLerp(bb.Min.x, bb.Max.x, fraction), bb.Max.y };
+
+    const float x0 = ImMax(p0.x, bb.Min.x);
+    const float x1 = ImMin(p1.x, bb.Max.x);
+
+    window->DrawList->PathLineTo({ x0, p1.y });
+    window->DrawList->PathLineTo({ x0, p0.y });
+    window->DrawList->PathLineTo({ x1, p0.y });
+    window->DrawList->PathLineTo({ x1, p1.y });
+    window->DrawList->PathFillConvex(GetColorU32(ImGuiCol_PlotHistogram));
 }
 
 void ImGui::textUnformattedCentered(const char* text) noexcept
