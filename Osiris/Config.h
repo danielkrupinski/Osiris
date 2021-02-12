@@ -70,13 +70,6 @@ public:
     std::array<Triggerbot, 40> triggerbot;
     KeyBind triggerbotHoldKey = KeyBind::NONE;
 
-    struct Backtrack {
-        bool enabled{ false };
-        bool ignoreSmoke{ false };
-        bool recoilBasedFov{ false };
-        int timeLimit{ 200 };
-    } backtrack;
-
     struct Chams {
         struct Material : Color4 {
             bool enabled = false;
@@ -91,6 +84,8 @@ public:
     };
 
     std::unordered_map<std::string, Chams> chams;
+    KeyBindToggle chamsToggleKey = KeyBind::NONE;
+    KeyBind chamsHoldKey = KeyBind::NONE;
 
     struct StreamProofESP {
         KeyBindToggle toggleKey = KeyBind::NONE;
