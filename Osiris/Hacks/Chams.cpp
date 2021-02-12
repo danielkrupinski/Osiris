@@ -15,7 +15,41 @@
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
 
-Chams::Chams() noexcept
+static Material* normal;
+static Material* flat;
+static Material* animated;
+static Material* platinum;
+static Material* glass;
+static Material* crystal;
+static Material* chrome;
+static Material* silver;
+static Material* gold;
+static Material* plastic;
+static Material* glow;
+static Material* pearlescent;
+static Material* metallic;
+
+static constexpr auto dispatchMaterial(int id) noexcept
+{
+    switch (id) {
+    default:
+    case 0: return normal;
+    case 1: return flat;
+    case 2: return animated;
+    case 3: return platinum;
+    case 4: return glass;
+    case 5: return chrome;
+    case 6: return crystal;
+    case 7: return silver;
+    case 8: return gold;
+    case 9: return plastic;
+    case 10: return glow;
+    case 11: return pearlescent;
+    case 12: return metallic;
+    }
+}
+
+static void initializeMaterials() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
@@ -74,8 +108,26 @@ Chams::Chams() noexcept
     }
 }
 
+void Chams::updateInput() noexcept
+{
+    config->chamsToggleKey.handleToggle();
+}
+
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
+    if (config->chamsToggleKey != KeyBind::NONE) {
+        if (!config->chamsToggleKey.isToggled() && !config->chamsHoldKey.isDown())
+            return false;
+    } else if (config->chamsHoldKey != KeyBind::NONE && !config->chamsHoldKey.isDown()) {
+        return false;
+    }
+
+    static bool materialsInitialized = false;
+    if (!materialsInitialized) {
+        initializeMaterials();
+        materialsInitialized = true;
+    }
+
     appliedChams = false;
     this->ctx = ctx;
     this->state = state;
@@ -117,14 +169,12 @@ void Chams::renderPlayer(Entity* player) noexcept
     } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams["Enemies"].materials, health);
 
-        if (config->backtrack.enabled) {
-            const auto& record = Backtrack::getRecords(player->index());
-            if (record.size() && Backtrack::valid(record.front().simulationTime)) {
-                if (!appliedChams)
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record.back().matrix);
-                interfaces->studioRender->forcedMaterialOverride(nullptr);
-            }
+        const auto records = Backtrack::getRecords(player->index());
+        if (records && !records->empty() && Backtrack::valid(records->front().simulationTime)) {
+            if (!appliedChams)
+                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+            applyChams(config->chams["Backtrack"].materials, health, records->back().matrix);
+            interfaces->studioRender->forcedMaterialOverride(nullptr);
         }
     } else {
         applyChams(config->chams["Allies"].materials, health);
