@@ -147,20 +147,19 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        ImGui::Text(" · eOsiris™ · Beta 2 · Fork en Español de Osiris™ · by: BaiAlbert & SuperK2 · CheatersUnidos.com · ");
-        menuBarItem("Auto Apuntar", window.aimbot);
+        menuBarItem("Aimbot", window.aimbot);
         AntiAim::menuBarItem();
-        menuBarItem("Auto disparo", window.triggerbot);
+        menuBarItem("Triggerbot", window.triggerbot);
         Backtrack::menuBarItem();
         Glow::menuBarItem();
-        menuBarItem("Colores", window.chams);
-        menuBarItem("Wallhack", window.streamProofESP);
-        menuBarItem("Visuales", window.visuals);
-        menuBarItem("Skins", window.skinChanger);
-        menuBarItem("Sonidos", window.sound);
-        menuBarItem("Estilo", window.style);
-        menuBarItem("Varios", window.misc);
-        menuBarItem("Configuración", window.config);
+        menuBarItem("Chams", window.chams);
+        menuBarItem("ESP", window.streamProofESP);
+        menuBarItem("Visuals", window.visuals);
+        menuBarItem("Skin changer", window.skinChanger);
+        menuBarItem("Sound", window.sound);
+        menuBarItem("Style", window.style);
+        menuBarItem("Misc", window.misc);
+        menuBarItem("Config", window.config);
         ImGui::EndMainMenuBar();   
     }
 }
@@ -171,24 +170,24 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         if (!window.aimbot)
             return;
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("AUTO APUNTAR (AutoAim)", &window.aimbot, windowFlags);
+        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
     }
-    ImGui::Checkbox("USAR TECLA", &config->aimbotOnKey);
+    ImGui::Checkbox("On key", &config->aimbotOnKey);
     ImGui::SameLine();
-    ImGui::PushID("Tecla de Activación");
+    ImGui::PushID("Aimbot Key");
     hotkey2("", config->aimbotKey);
     ImGui::PopID();
     ImGui::SameLine();
     ImGui::PushID(2);
     ImGui::PushItemWidth(70.0f);
-    ImGui::Combo("", &config->aimbotKeyMode, "Mantener\0Modo Interruptor\0");
+    ImGui::Combo("", &config->aimbotKeyMode, "Hold\0Toggle\0");
     ImGui::PopItemWidth();
     ImGui::PopID();
     ImGui::Separator();
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    ImGui::Combo("", &currentCategory, "Todo\0Pistolas\0Pesadas\0Subfusiles\0Rifles\0");
+    ImGui::Combo("", &currentCategory, "All\0Pistols\0Heavy\0SMG\0Rifles\0");
     ImGui::PopID();
     ImGui::SameLine();
     static int currentWeapon{ 0 };
@@ -201,7 +200,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         break;
     case 1: {
         static int currentPistol{ 0 };
-        static constexpr const char* pistols[]{ "Todo", "Glock-18", "P2000", "USP-S", "Berettas-Dobles", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
+        static constexpr const char* pistols[]{ "All", "Glock-18", "P2000", "USP-S", "Dual Berettas", "P250", "Tec-9", "Five-Seven", "CZ-75", "Desert Eagle", "Revolver" };
 
         ImGui::Combo("", &currentPistol, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx : 35].enabled) {
@@ -219,7 +218,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 2: {
         static int currentHeavy{ 0 };
-        static constexpr const char* heavies[]{ "Todo", "Nova", "XM1014", "Escopeta Recortada", "MAG-7", "M249", "Negev" };
+        static constexpr const char* heavies[]{ "All", "Nova", "XM1014", "Sawed-off", "MAG-7", "M249", "Negev" };
 
         ImGui::Combo("", &currentHeavy, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 10 : 36].enabled) {
@@ -237,7 +236,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 3: {
         static int currentSmg{ 0 };
-        static constexpr const char* smgs[]{ "Todo", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
+        static constexpr const char* smgs[]{ "All", "Mac-10", "MP9", "MP7", "MP5-SD", "UMP-45", "P90", "PP-Bizon" };
 
         ImGui::Combo("", &currentSmg, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 16 : 37].enabled) {
@@ -255,7 +254,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     case 4: {
         static int currentRifle{ 0 };
-        static constexpr const char* rifles[]{ "Todo", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
+        static constexpr const char* rifles[]{ "All", "Galil AR", "Famas", "AK-47", "M4A4", "M4A1-S", "SSG-08", "SG-553", "AUG", "AWP", "G3SG1", "SCAR-20" };
 
         ImGui::Combo("", &currentRifle, [](void* data, int idx, const char** out_text) {
             if (config->aimbot[idx ? idx + 23 : 38].enabled) {
