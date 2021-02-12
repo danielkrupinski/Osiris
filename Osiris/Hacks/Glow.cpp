@@ -27,6 +27,8 @@ struct PlayerGlow {
 
 static std::unordered_map<std::string, PlayerGlow> playerGlowConfig;
 static std::unordered_map<std::string, GlowItem> glowConfig;
+static KeyBindToggle glowToggleKey = KeyBind::NONE;
+static KeyBind glowHoldKey = KeyBind::NONE;
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
@@ -38,6 +40,13 @@ void Glow::render() noexcept
     auto& glow = glowConfig;
 
     Glow::clearCustomObjects();
+
+    if (glowToggleKey != KeyBind::NONE) {
+        if (!glowToggleKey.isToggled() && !glowHoldKey.isDown())
+            return;
+    } else if (glowHoldKey != KeyBind::NONE && !glowHoldKey.isDown()) {
+        return;
+    }
 
     for (int i = interfaces->engine->getMaxClients() + 1; i <= interfaces->entityList->getHighestEntityIndex(); ++i) {
         const auto entity = interfaces->entityList->getEntity(i);
@@ -95,7 +104,7 @@ void Glow::render() noexcept
                 applyGlow(cfg.all, entity->health());
             else if (cfg.visible.enabled && entity->visibleTo(localPlayer.get()))
                 applyGlow(cfg.visible, entity->health());
-            else if (cfg.occluded.enabled)
+            else if (cfg.occluded.enabled && !entity->visibleTo(localPlayer.get()))
                 applyGlow(cfg.occluded, entity->health());
         };
 
@@ -148,6 +157,11 @@ void Glow::clearCustomObjects() noexcept
     customGlowEntities.clear();
 }
 
+void Glow::updateInput() noexcept
+{
+    glowToggleKey.handleToggle();
+}
+
 static bool glowWindowOpen = false;
 
 void Glow::menuBarItem() noexcept
@@ -173,12 +187,17 @@ void Glow::drawGUI(bool contentOnly) noexcept
         if (!glowWindowOpen)
             return;
         ImGui::SetNextWindowSize({ 450.0f, 0.0f });
-        ImGui::Begin("Brillo", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Glow", &glowWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     }
+
+    ImGui::hotkey("Toggle Key", glowToggleKey, 80.0f);
+    ImGui::hotkey("Hold Key", glowHoldKey, 80.0f);
+    ImGui::Separator();
+
     static int currentCategory{ 0 };
     ImGui::PushItemWidth(110.0f);
     ImGui::PushID(0);
-    constexpr std::array categories{ "Aliados", "Enemigos", "Plantando", "Defuseando", "Jugador local", "Armas", "C4", "C4 plantado", "Gallinas", "Kits de desactivacion", "Proyectiles", "Rehenes", "Cadaveres" };
+    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local Player", "Weapons", "C4", "Planted C4", "Chickens", "Defuse Kits", "Projectiles", "Hostages", "Ragdolls" };
     ImGui::Combo("", &currentCategory, categories.data(), categories.size());
     ImGui::PopID();
     GlowItem* currentItem;
@@ -186,7 +205,7 @@ void Glow::drawGUI(bool contentOnly) noexcept
         ImGui::SameLine();
         static int currentType{ 0 };
         ImGui::PushID(1);
-        ImGui::Combo("", &currentType, "Todos\0Visible\0Invisible\0");
+        ImGui::Combo("", &currentType, "All\0Visible\0Occluded\0");
         ImGui::PopID();
         auto& cfg = playerGlowConfig[categories[currentCategory]];
         switch (currentType) {
@@ -199,17 +218,17 @@ void Glow::drawGUI(bool contentOnly) noexcept
     }
 
     ImGui::SameLine();
-    ImGui::Checkbox("Activado", &currentItem->enabled);
+    ImGui::Checkbox("Enabled", &currentItem->enabled);
     ImGui::Separator();
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 150.0f);
-    ImGui::Checkbox("Basado en vida", &currentItem->healthBased);
+    ImGui::Checkbox("Health based", &currentItem->healthBased);
 
     ImGuiCustom::colorPicker("Color", *currentItem);
 
     ImGui::NextColumn();
-    ImGui::SetNextItemWidth(130.0f);
-    ImGui::Combo("Estilo", &currentItem->style, "Predeterminado\0Borde 3D\0Borde\0Borde parpadeante\0");
+    ImGui::SetNextItemWidth(100.0f);
+    ImGui::Combo("Style", &currentItem->style, "Default\0Rim3d\0Edge\0Edge Pulse\0");
 
     ImGui::Columns(1);
     if (!contentOnly)
@@ -236,6 +255,8 @@ json Glow::toJson() noexcept
     json j;
     j["Items"] = glowConfig;
     j["Players"] = playerGlowConfig;
+    to_json(j["Toggle Key"], glowToggleKey, KeyBind::NONE);
+    to_json(j["Hold Key"], glowHoldKey, KeyBind::NONE);
     return j;
 }
 
@@ -259,12 +280,16 @@ void Glow::fromJson(const json& j) noexcept
 {
     read(j, "Items", glowConfig);
     read(j, "Players", playerGlowConfig);
+    read(j, "Toggle Key", glowToggleKey);
+    read(j, "Hold Key", glowHoldKey);
 }
 
 void Glow::resetConfig() noexcept
 {
     glowConfig = {};
     playerGlowConfig = {};
+    glowToggleKey = KeyBind::NONE;
+    glowHoldKey = KeyBind::NONE;
 }
 
 #else
