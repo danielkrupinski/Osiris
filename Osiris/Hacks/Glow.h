@@ -8,6 +8,7 @@ namespace Glow
 {
     void render() noexcept;
     void clearCustomObjects() noexcept;
+    void updateInput() noexcept;
 
     // GUI
     void menuBarItem() noexcept;
