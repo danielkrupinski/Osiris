@@ -123,7 +123,7 @@ static void from_json(const json& j, Font& f)
     if (!f.name.empty())
         config->scheduleFontLoad(f.name);
 
-    if (const auto it = std::find_if(config->getSystemFonts().begin(), config->getSystemFonts().end(), [&f](const auto& e) { return e == f.name; }); it != config->getSystemFonts().end())
+    if (const auto it = std::ranges::find(config->getSystemFonts(), f.name); it != config->getSystemFonts().end())
         f.index = std::distance(config->getSystemFonts().begin(), it);
     else
         f.index = 0;
@@ -992,7 +992,7 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
-    if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
+    if (*name && std::ranges::find(std::as_const(configs), name) == configs.cend()) {
         configs.emplace_back(name);
         save(configs.size() - 1);
     }

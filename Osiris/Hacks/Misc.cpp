@@ -425,7 +425,7 @@ void Misc::stealNames() noexcept
         if (!interfaces->engine->getPlayerInfo(entity->index(), playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(std::as_const(stolenIds), playerInfo.userId) != stolenIds.cend())
             continue;
 
         if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
@@ -884,7 +884,7 @@ void Misc::runReportbot() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(std::as_const(reportedPlayers), playerInfo.xuid) != reportedPlayers.cend())
             continue;
 
         std::string report;

@@ -34,7 +34,7 @@ static std::vector<InfernoData> infernoData;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
-    const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
+    const auto it = std::ranges::find(playerData, handle, &PlayerData::handle);
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
@@ -99,7 +99,7 @@ void GameData::update() noexcept
                 switch (entity->getClientClass()->classId) {
                 case ClassId::BaseCSGrenadeProjectile:
                     if (entity->grenadeExploded()) {
-                        if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
+                        if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                             it->exploded = true;
                         break;
                     }
@@ -111,7 +111,7 @@ void GameData::update() noexcept
                 case ClassId::SensorGrenadeProjectile:
                 case ClassId::SmokeGrenadeProjectile:
                 case ClassId::SnowballProjectile:
-                    if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
+                    if (const auto it = std::ranges::find(projectileData, entity->handle(), &ProjectileData::handle); it != projectileData.end())
                         it->update(entity);
                     else
                         projectileData.emplace_front(entity);
@@ -147,7 +147,7 @@ void GameData::update() noexcept
     std::sort(entityData.begin(), entityData.end());
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
-    std::for_each(projectileData.begin(), projectileData.end(), [](auto& projectile) {
+    std::ranges::for_each(projectileData, [](auto& projectile) {
         if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
             projectile.exploded = true;
     });

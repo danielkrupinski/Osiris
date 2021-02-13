@@ -1436,8 +1436,8 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     timeToNextConfigRefresh -= ImGui::GetIO().DeltaTime;
     if (timeToNextConfigRefresh <= 0.0f) {
         config->listConfigs();
-        if (const auto it = std::find(configItems.begin(), configItems.end(), buffer); it != configItems.end())
-            currentConfig = std::distance(configItems.begin(), it);
+        if (const auto it = std::ranges::find(std::as_const(configItems), buffer); it != configItems.cend())
+            currentConfig = std::distance(configItems.cbegin(), it);
         timeToNextConfigRefresh = 0.1f;
     }
 

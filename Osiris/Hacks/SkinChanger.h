@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <string>
 #include <vector>
@@ -147,7 +148,7 @@ struct sticker_setting
     void onLoad()
     {
         const auto& kits = SkinChanger::getStickerKits();
-        const auto it = std::find_if(kits.begin(), kits.end(), [this](const auto& k) { return k.id == kit; });
+        const auto it = std::ranges::find(kits, kit, &SkinChanger::PaintKit::id);
         kit_vector_index = it != SkinChanger::getStickerKits().end() ? std::distance(kits.begin(), it) : 0;
         kit = SkinChanger::getStickerKits()[kit_vector_index].id;
     }
@@ -189,34 +190,34 @@ struct item_setting {
     void onLoad()
     {
         {
-            const auto it = std::find_if(std::begin(SkinChanger::weapon_names), std::end(SkinChanger::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
-            itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
+            const auto it = std::ranges::find(SkinChanger::weapon_names, itemId, &SkinChanger::weapon_name::definition_index);
+            itemIdIndex = it != SkinChanger::weapon_names.end() ? std::distance(SkinChanger::weapon_names.begin(), it) : 0;
         }
 
         {
             const auto& qualities = SkinChanger::getQualities();
-            const auto it = std::find_if(qualities.begin(), qualities.end(), [this](const auto& k) { return k.index == quality; });
+            const auto it = std::ranges::find(qualities, quality, &SkinChanger::Quality::index);
             entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
         }
 
         if (itemId == WeaponId::GloveT) {
             {
-                const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                const auto it = std::ranges::find(SkinChanger::getGloveKits(), paintKit, &SkinChanger::PaintKit::id);
                 paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
             }
 
             {
-                const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                const auto it = std::ranges::find(SkinChanger::getGloveTypes(), static_cast<WeaponId>(definition_override_index), &SkinChanger::Item::id);
                 definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
             }
         } else {
             {
-                const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                const auto it = std::ranges::find(SkinChanger::getSkinKits(), paintKit, &SkinChanger::PaintKit::id);
                 paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
             }
 
             {
-                const auto it = std::find_if(SkinChanger::getKnifeTypes().begin(), SkinChanger::getKnifeTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                const auto it = std::ranges::find(SkinChanger::getKnifeTypes(), static_cast<WeaponId>(definition_override_index), &SkinChanger::Item::id);
                 definition_override_vector_index = it != SkinChanger::getKnifeTypes().end() ? std::distance(SkinChanger::getKnifeTypes().begin(), it) : 0;
             }
         }
