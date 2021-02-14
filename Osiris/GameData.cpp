@@ -519,7 +519,7 @@ LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
     }(model->name);
 }
 
-ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept : playerUserId{ entity->getUserId() }, targetUserId{ obs->getUserId() }, targetIsLocalPlayer{ targetIsLocalPlayer } {}
+ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept : playerHandle{ entity->handle() }, targetHandle{ obs->handle() }, targetIsLocalPlayer{ targetIsLocalPlayer } {}
 
 void BombData::update() noexcept
 {
