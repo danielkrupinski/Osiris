@@ -2,6 +2,10 @@
 #include <numeric>
 #include <sstream>
 
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
+
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -29,10 +33,6 @@
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
-
-#include "../imgui/imgui.h"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "../imgui/imgui_internal.h"
 
 #include "../imguiCustom.h"
 
@@ -136,11 +136,31 @@ void Misc::spectatorList() noexcept
     if (std::ranges::none_of(observers, [](const auto& obs) { return obs.targetIsLocalPlayer; }) && !gui->isOpen())
         return;
 
+    if (config->misc.spectatorList.pos != ImVec2{}) {
+        ImGui::SetNextWindowPos(config->misc.spectatorList.pos);
+        config->misc.spectatorList.pos = {};
+    }
+
+    if (config->misc.spectatorList.size != ImVec2{}) {
+        ImGui::SetNextWindowSize(ImClamp(config->misc.spectatorList.size, {}, ImGui::GetIO().DisplaySize));
+        config->misc.spectatorList.size = {};
+    }
+
     ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
     if (!gui->isOpen())
         windowFlags |= ImGuiWindowFlags_NoInputs;
+    if (config->misc.spectatorList.noTitleBar)
+        windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
+    if (!gui->isOpen())
+        ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
     ImGui::Begin("Spectator list", nullptr, windowFlags);
+    ImGui::PopStyleVar();
+
+    if (!gui->isOpen())
+        ImGui::PopStyleColor();
 
     for (const auto& observer : observers) {
         if (!observer.targetIsLocalPlayer)
