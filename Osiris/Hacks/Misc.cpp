@@ -2,6 +2,10 @@
 #include <numeric>
 #include <sstream>
 
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
+
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
@@ -29,10 +33,6 @@
 #include "../GUI.h"
 #include "../Helpers.h"
 #include "../GameData.h"
-
-#include "../imgui/imgui.h"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "../imgui/imgui_internal.h"
 
 #include "../imguiCustom.h"
 
@@ -129,39 +129,49 @@ void Misc::spectatorList() noexcept
     if (!config->misc.spectatorList.enabled)
         return;
 
-    if (!localPlayer || !localPlayer->isAlive())
+    GameData::Lock lock;
+
+    const auto& observers = GameData::observers();
+
+    if (std::ranges::none_of(observers, [](const auto& obs) { return obs.targetIsLocalPlayer; }) && !gui->isOpen())
         return;
 
-    interfaces->surface->setTextFont(Surface::font);
-
-    if (config->misc.spectatorList.rainbow)
-        interfaces->surface->setTextColor(rainbowColor(config->misc.spectatorList.rainbowSpeed));
-    else
-        interfaces->surface->setTextColor(config->misc.spectatorList.color);
-
-    const auto [width, height] = interfaces->surface->getScreenSize();
-
-    auto textPositionY = static_cast<int>(0.5f * height);
-
-    for (int i = 1; i <= interfaces->engine->getMaxClients(); ++i) {
-        const auto entity = interfaces->entityList->getEntity(i);
-        if (!entity || entity->isDormant() || entity->isAlive() || entity->getObserverTarget() != localPlayer.get())
-            continue;
-
-        PlayerInfo playerInfo;
-
-        if (!interfaces->engine->getPlayerInfo(i, playerInfo))
-            continue;
-
-#ifdef _WIN32
-        if (wchar_t name[128]; MultiByteToWideChar(CP_UTF8, 0, playerInfo.name, -1, name, 128)) {
-            const auto [textWidth, textHeight] = interfaces->surface->getTextSize(Surface::font, name);
-            interfaces->surface->setTextPosition(width - textWidth - 5, textPositionY);
-            textPositionY -= textHeight;
-            interfaces->surface->printText(name);
-        }
-#endif
+    if (config->misc.spectatorList.pos != ImVec2{}) {
+        ImGui::SetNextWindowPos(config->misc.spectatorList.pos);
+        config->misc.spectatorList.pos = {};
     }
+
+    if (config->misc.spectatorList.size != ImVec2{}) {
+        ImGui::SetNextWindowSize(ImClamp(config->misc.spectatorList.size, {}, ImGui::GetIO().DisplaySize));
+        config->misc.spectatorList.size = {};
+    }
+
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse;
+    if (!gui->isOpen())
+        windowFlags |= ImGuiWindowFlags_NoInputs;
+    if (config->misc.spectatorList.noTitleBar)
+        windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+    if (!gui->isOpen())
+        ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetColorU32(ImGuiCol_TitleBgActive));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, { 0.5f, 0.5f });
+    ImGui::Begin("Spectator list", nullptr, windowFlags);
+    ImGui::PopStyleVar();
+
+    if (!gui->isOpen())
+        ImGui::PopStyleColor();
+
+    for (const auto& observer : observers) {
+        if (!observer.targetIsLocalPlayer)
+            continue;
+
+        if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
+            ImGui::TextWrapped("%s", it->name);
+        }
+    }
+
+    ImGui::End();
 }
 
 static void drawCrosshair(ImDrawList* drawList, const ImVec2& pos, ImU32 color, float thickness) noexcept
