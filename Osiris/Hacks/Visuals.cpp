@@ -546,6 +546,16 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
                     ++count;
             }
 
+            if (count < 1)
+                continue;
+
+            std::swap(screenPoints[0], *std::min_element(screenPoints.begin(), screenPoints.begin() + count, [](const auto& a, const auto& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); }));
+
+            constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
+                return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+            };
+
+            std::sort(screenPoints.begin() + 1, screenPoints.begin() + count, [&](const auto& a, const auto& b) { return orientation(screenPoints[0], a, b) > 0.0f; });
             drawList->AddConvexPolyFilled(screenPoints.data(), count, color);
         }
     }
