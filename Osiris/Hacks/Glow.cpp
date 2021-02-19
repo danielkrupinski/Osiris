@@ -271,9 +271,9 @@ static void from_json(const json& j, GlowItem& g)
 
 static void from_json(const json& j, PlayerGlow& g)
 {
-    from_json(j["All"], g.all);
-    from_json(j["Visible"], g.visible);
-    from_json(j["Occluded"], g.occluded);
+    read<value_t::object>(j, "All", g.all);
+    read<value_t::object>(j, "Visible", g.visible);
+    read<value_t::object>(j, "Occluded", g.occluded);
 }
 
 void Glow::fromJson(const json& j) noexcept
