@@ -1,3 +1,4 @@
+#include <atomic>
 #include <cstring>
 #include <list>
 #include <mutex>
@@ -16,6 +17,7 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/NetworkChannel.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/WeaponId.h"
@@ -31,6 +33,7 @@ static std::vector<LootCrateData> lootCrateData;
 static std::forward_list<ProjectileData> projectileData;
 static BombData bombData;
 static std::vector<InfernoData> infernoData;
+static std::atomic_int netOutgoingLatency;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
@@ -38,13 +41,23 @@ static auto playerByHandleWritable(int handle) noexcept
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
+static void updateNetLatency() noexcept
+{
+    float latency = 0.0f;
+    if (const auto networkChannel = interfaces->engine->getNetworkChannel())
+        latency = networkChannel->getLatency(0);
+    latency = (std::max)(latency, 0.0f);
+    netOutgoingLatency = static_cast<int>(latency * 1000);
+}
+
 void GameData::update() noexcept
 {
     static int lastFrame;
     if (lastFrame == memory->globalVars->framecount)
         return;
-
     lastFrame = memory->globalVars->framecount;
+
+    updateNetLatency();
 
     Lock lock;
 
@@ -161,6 +174,11 @@ void GameData::clearProjectileList() noexcept
 {
     Lock lock;
     projectileData.clear();
+}
+
+int GameData::getNetOutgoingLatency() noexcept
+{
+    return netOutgoingLatency;
 }
 
 const Matrix4x4& GameData::toScreenMatrix() noexcept

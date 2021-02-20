@@ -228,7 +228,10 @@ public:
         };
 
         SpectatorList spectatorList;
-        ColorToggle3 watermark;
+        struct Watermark {
+            bool enabled = false;
+        };
+        Watermark watermark;
         float aspectratio{ 0 };
         std::string killMessageString{ "Gotcha!" };
         int banColor{ 6 };
