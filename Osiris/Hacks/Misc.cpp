@@ -247,34 +247,21 @@ void Misc::recoilCrosshair(ImDrawList* drawList) noexcept
 
 void Misc::watermark() noexcept
 {
-    if (config->misc.watermark.enabled) {
-        interfaces->surface->setTextFont(Surface::font);
+    if (!config->misc.watermark.enabled)
+        return;
 
-        if (config->misc.watermark.rainbow)
-            interfaces->surface->setTextColor(rainbowColor(config->misc.watermark.rainbowSpeed));
-        else
-            interfaces->surface->setTextColor(config->misc.watermark.color);
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
+    if (!gui->isOpen())
+        windowFlags |= ImGuiWindowFlags_NoInputs;
 
-        interfaces->surface->setTextPosition(5, 0);
-        interfaces->surface->printText(L"Osiris");
+    ImGui::SetNextWindowBgAlpha(0.3f);
+    ImGui::Begin("Watermark", nullptr, windowFlags);
 
-        static auto frameRate = 1.0f;
-        frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
-        const auto [screenWidth, screenHeight] = interfaces->surface->getScreenSize();
-        std::wstring fps{ std::to_wstring(static_cast<int>(1 / frameRate)) + L" fps" };
-        const auto [fpsWidth, fpsHeight] = interfaces->surface->getTextSize(Surface::font, fps.c_str());
-        interfaces->surface->setTextPosition(screenWidth - fpsWidth - 5, 0);
-        interfaces->surface->printText(fps.c_str());
+    static auto frameRate = 1.0f;
+    frameRate = 0.9f * frameRate + 0.1f * memory->globalVars->absoluteFrameTime;
 
-        float latency = 0.0f;
-        if (auto networkChannel = interfaces->engine->getNetworkChannel(); networkChannel && networkChannel->getLatency(0) > 0.0f)
-            latency = networkChannel->getLatency(0);
-
-        std::wstring ping{ L"PING: " + std::to_wstring(static_cast<int>(latency * 1000)) + L" ms" };
-        const auto pingWidth = interfaces->surface->getTextSize(Surface::font, ping.c_str()).first;
-        interfaces->surface->setTextPosition(screenWidth - pingWidth - 5, fpsHeight);
-        interfaces->surface->printText(ping.c_str());
-    }
+    ImGui::Text("Osiris | %d fps | %d ms", frameRate != 0.0f ? static_cast<int>(1 / frameRate) : 0, GameData::getNetOutgoingLatency());
+    ImGui::End();
 }
 
 void Misc::prepareRevolver(UserCmd* cmd) noexcept
