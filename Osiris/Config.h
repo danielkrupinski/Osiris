@@ -219,7 +219,15 @@ public:
         KeyBind slowwalkKey = KeyBind::NONE;
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
-        ColorToggle3 spectatorList;
+
+        struct SpectatorList {
+            bool enabled = false;
+            bool noTitleBar = false;
+            ImVec2 pos;
+            ImVec2 size{ 200.0f, 200.0f };
+        };
+
+        SpectatorList spectatorList;
         ColorToggle3 watermark;
         float aspectratio{ 0 };
         std::string killMessageString{ "Gotcha!" };

@@ -150,8 +150,8 @@ struct LootCrateData : BaseData {
 struct ObserverData {
     ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept;
 
-    char name[128];
-    char target[128];
+    int playerHandle;
+    int targetHandle;
     bool targetIsLocalPlayer;
 };
 
