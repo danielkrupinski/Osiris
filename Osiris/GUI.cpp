@@ -143,23 +143,23 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
         ImGui::SetWindowPos(name, { 100.0f, 100.0f });
     }
 }
-
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        menuBarItem("Aimbot", window.aimbot);
+        ImGui::Text(" · eOsiris™ · Beta · Fork en Español de Osiris™ · by: BaiAlbert & SuperK2 · CheatersUnidos.com · ");
+		menuBarItem("Auto Apuntar", window.aimbot);
         AntiAim::menuBarItem();
-        menuBarItem("Triggerbot", window.triggerbot);
+        menuBarItem("Auto disparo", window.triggerbot);
         Backtrack::menuBarItem();
         Glow::menuBarItem();
-        menuBarItem("Chams", window.chams);
-        menuBarItem("ESP", window.streamProofESP);
-        menuBarItem("Visuals", window.visuals);
-        menuBarItem("Skin changer", window.skinChanger);
-        menuBarItem("Sound", window.sound);
-        menuBarItem("Style", window.style);
-        menuBarItem("Misc", window.misc);
-        menuBarItem("Config", window.config);
+        menuBarItem("Colores", window.chams);
+        menuBarItem("Wallhack", window.streamProofESP);
+        menuBarItem("Visuales", window.visuals);
+        menuBarItem("Skins", window.skinChanger);
+        menuBarItem("Sonidos", window.sound);
+        menuBarItem("Estilo", window.style);
+        menuBarItem("Varios", window.misc);
+        menuBarItem("Configuración", window.config);
         ImGui::EndMainMenuBar();   
     }
 }
@@ -170,7 +170,7 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
         if (!window.aimbot)
             return;
         ImGui::SetNextWindowSize({ 600.0f, 0.0f });
-        ImGui::Begin("Aimbot", &window.aimbot, windowFlags);
+        ImGui::Begin("AUTO APUNTAR (AutoAim)", &window.aimbot, windowFlags);
     }
     ImGui::Checkbox("On key", &config->aimbotOnKey);
     ImGui::SameLine();
@@ -273,29 +273,29 @@ void GUI::renderAimbotWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
     ImGui::SameLine();
-    ImGui::Checkbox("Enabled", &config->aimbot[currentWeapon].enabled);
+    ImGui::Checkbox("ACTIVADO", &config->aimbot[currentWeapon].enabled);
     ImGui::Columns(2, nullptr, false);
     ImGui::SetColumnOffset(1, 220.0f);
-    ImGui::Checkbox("Aimlock", &config->aimbot[currentWeapon].aimlock);
-    ImGui::Checkbox("Silent", &config->aimbot[currentWeapon].silent);
-    ImGui::Checkbox("Friendly fire", &config->aimbot[currentWeapon].friendlyFire);
-    ImGui::Checkbox("Visible only", &config->aimbot[currentWeapon].visibleOnly);
-    ImGui::Checkbox("Scoped only", &config->aimbot[currentWeapon].scopedOnly);
-    ImGui::Checkbox("Ignore flash", &config->aimbot[currentWeapon].ignoreFlash);
-    ImGui::Checkbox("Ignore smoke", &config->aimbot[currentWeapon].ignoreSmoke);
-    ImGui::Checkbox("Auto shot", &config->aimbot[currentWeapon].autoShot);
-    ImGui::Checkbox("Auto scope", &config->aimbot[currentWeapon].autoScope);
-    ImGui::Combo("Bone", &config->aimbot[currentWeapon].bone, "Nearest\0Best damage\0Head\0Neck\0Sternum\0Chest\0Stomach\0Pelvis\0");
+    ImGui::Checkbox("Bloqueo de Puntería", &config->aimbot[currentWeapon].aimlock);
+    ImGui::Checkbox("Silencio", &config->aimbot[currentWeapon].silent);
+    ImGui::Checkbox("Disparar a Compañeros", &config->aimbot[currentWeapon].friendlyFire);
+    ImGui::Checkbox("Sólo Visible", &config->aimbot[currentWeapon].visibleOnly);
+    ImGui::Checkbox("Sólo Fijado en Mirilla de Rifle", &config->aimbot[currentWeapon].scopedOnly);
+    ImGui::Checkbox("Ignorar Granadas FLASH", &config->aimbot[currentWeapon].ignoreFlash);
+    ImGui::Checkbox("Ignorar Granadas de HUMO", &config->aimbot[currentWeapon].ignoreSmoke);
+    ImGui::Checkbox("AUTO DISPARO ;-) ", &config->aimbot[currentWeapon].autoShot);
+    ImGui::Checkbox("Auto Mirilla de Rifle", &config->aimbot[currentWeapon].autoScope);
+    ImGui::Combo("Zona Disparo", &config->aimbot[currentWeapon].bone, "Más cercano\0Maximo daño\0HEADSHOT(cabeza)\0Cuello\0Esternón\0Pecho\0Estómago\0Cadera\0");
     ImGui::NextColumn();
     ImGui::PushItemWidth(240.0f);
-    ImGui::SliderFloat("Fov", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Smooth", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
-    ImGui::SliderFloat("Max aim inaccuracy", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::SliderFloat("Max shot inaccuracy", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
-    ImGui::InputInt("Min damage", &config->aimbot[currentWeapon].minDamage);
+    ImGui::SliderFloat("Ángulo de Disparo", &config->aimbot[currentWeapon].fov, 0.0f, 255.0f, "%.2f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Suavizado de Disparo", &config->aimbot[currentWeapon].smooth, 1.0f, 100.0f, "%.2f");
+    ImGui::SliderFloat("Precisión Máxima de Puntería", &config->aimbot[currentWeapon].maxAimInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::SliderFloat("Precisión Máxima de Disparo", &config->aimbot[currentWeapon].maxShotInaccuracy, 0.0f, 1.0f, "%.5f", ImGuiSliderFlags_Logarithmic);
+    ImGui::InputInt("Daño minimo", &config->aimbot[currentWeapon].minDamage);
     config->aimbot[currentWeapon].minDamage = std::clamp(config->aimbot[currentWeapon].minDamage, 0, 250);
-    ImGui::Checkbox("Killshot", &config->aimbot[currentWeapon].killshot);
-    ImGui::Checkbox("Between shots", &config->aimbot[currentWeapon].betweenShots);
+    ImGui::Checkbox("KillShot", &config->aimbot[currentWeapon].killshot);
+    ImGui::Checkbox("Entre Disparos", &config->aimbot[currentWeapon].betweenShots);
     ImGui::Columns(1);
     if (!contentOnly)
         ImGui::End();
