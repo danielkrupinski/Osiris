@@ -644,7 +644,7 @@ void Hooks::install() noexcept
 
 #ifdef _WIN32
     bspQuery.hookAt(6, listLeavesInBox);
-    panel.hookAt(41, paintTraverse);
+    // panel.hookAt(41, paintTraverse);
     surface.hookAt(67, lockCursor);
 
     if constexpr (std::is_same_v<HookType, MinHook>)
