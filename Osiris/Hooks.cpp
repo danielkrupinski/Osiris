@@ -584,7 +584,6 @@ void Hooks::install() noexcept
 #endif
     
 #ifdef _WIN32
-    panel.init(interfaces->panel);
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
 #endif
 
@@ -676,7 +675,6 @@ void Hooks::uninstall() noexcept
 
 #ifdef _WIN32
     bspQuery.restore();
-    panel.restore();
 #endif
     client.restore();
     clientMode.restore();
