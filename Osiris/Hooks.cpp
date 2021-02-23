@@ -61,6 +61,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "SDK/NetworkChannel.h"
 
 #ifdef _WIN32
 
@@ -143,6 +144,16 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 
 #endif
 
+static bool __fastcall sendNetMsg(void* networkchannel, void* edx, NetworkMessage& msg, bool bForceReliable, bool bVoice)
+{
+    auto original = hooks->networkChannel.getOriginal<bool, NetworkMessage&, bool, bool>(40, msg, bForceReliable, bVoice);
+
+    if (msg.getType() == 14 && config->misc.svpurebypass) // Return and don't send messsage if its FileCRCCheck
+        return false;
+
+    return original(networkchannel, msg, bForceReliable, bVoice);
+}
+
 static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTime, UserCmd* cmd) noexcept
 {
     auto result = hooks->clientMode.callOriginal<bool, IS_WIN32() ? 24 : 25>(inputSampleTime, cmd);
@@ -183,6 +194,15 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::slowwalk(cmd);
 
 #ifdef _WIN32
+    static void* oldPointer = nullptr;
+
+    auto network = interfaces->engine->getNetworkChannel();
+    if (oldPointer != network && network && interfaces->engine->isInGame())
+    {
+        oldPointer = network;
+        hooks->networkChannel.init(network);
+        hooks->networkChannel.hookAt(40, sendNetMsg);
+    }
     EnginePrediction::run(cmd);
 #endif
 
