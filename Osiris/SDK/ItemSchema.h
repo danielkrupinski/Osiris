@@ -152,6 +152,9 @@ struct AlternateIconData {
     String largeSimpleName;
     String iconURLSmall;
     String iconURLLarge;
+#ifdef _WIN32 // TODO: Linux
+    PAD(28);
+#endif
 };
 
 class ItemSchema {
