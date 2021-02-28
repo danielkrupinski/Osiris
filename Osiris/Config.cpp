@@ -791,6 +791,11 @@ static void to_json(json& j, const Config::Misc::SpectatorList& o, const Config:
     }
 }
 
+static void to_json(json& j, const Config::Misc::Watermark& o, const Config::Misc::Watermark& dummy = {})
+{
+    WRITE("Enabled", enabled);
+}
+
 static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})
 {
     WRITE("Enabled", enabled);
