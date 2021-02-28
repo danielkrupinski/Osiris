@@ -36,6 +36,9 @@ namespace GameData
         static inline std::mutex mutex;
     };
 
+    // Lock-free
+    int getNetOutgoingLatency() noexcept;
+
     // You have to acquire lock before using these getters
     const Matrix4x4& toScreenMatrix() noexcept;
     const LocalPlayerData& local() noexcept;
