@@ -55,10 +55,10 @@ void GameData::update() noexcept
     static int lastFrame;
     if (lastFrame == memory->globalVars->framecount)
         return;
-
     lastFrame = memory->globalVars->framecount;
+
     updateNetLatency();
-    
+
     Lock lock;
 
     playerData.clear();
