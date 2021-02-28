@@ -422,7 +422,7 @@ static void from_json(const json& j, Config::Misc::SpectatorList& sl)
 
 static void from_json(const json& j, Config::Misc::Watermark& o)
 {
-    read(j, "Enabled", o.enabled);
+    read(j, "ACTIVADO", o.enabled);
 }
 
 static void from_json(const json& j, PreserveKillfeed& o)
