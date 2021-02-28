@@ -1279,7 +1279,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     }
     ImGui::PopID();
 
-    ImGuiCustom::colorPicker("Marca al Agua", config->misc.watermark);
+    ImGui::Checkbox("Marca al Agua", &config->misc.watermark.enabled);
     ImGuiCustom::colorPicker("Enemigos fuera de camara", config->misc.offscreenEnemies.color, &config->misc.offscreenEnemies.enabled);
     ImGui::Checkbox("Arreglar animación LOD", &config->misc.fixAnimationLOD);
     ImGui::Checkbox("Arreglar Matriz de Huesos", &config->misc.fixBoneMatrix);
