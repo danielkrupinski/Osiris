@@ -146,7 +146,7 @@ static void menuBarItem(const char* name, bool& enabled) noexcept
 void GUI::renderMenuBar() noexcept
 {
     if (ImGui::BeginMainMenuBar()) {
-        ImGui::Text(" · eOsiris™ · Beta III · Fork en Español de Osiris™ · by: BaiAlbert & SuperK2 · CheatersUnidos.com · ");
+        ImGui::Text(" ·eOsiris™·Beta 4· by www.CheatersUnidos.com · ");
 		menuBarItem("Auto Apuntar", window.aimbot);
         AntiAim::menuBarItem();
         menuBarItem("Auto disparo", window.triggerbot);
@@ -1427,7 +1427,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         if (!window.config)
             return;
         ImGui::SetNextWindowSize({ 320.0f, 0.0f });
-        if (!ImGui::Begin("Configuración", &window.config, windowFlags)) {
+        if (!ImGui::Begin("Configuración ::: ·eOsiris™·Beta · :::", &window.config, windowFlags)) {
             ImGui::End();
             return;
         }
