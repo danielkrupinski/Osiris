@@ -1474,13 +1474,13 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
 
         ImGui::PushItemWidth(100.0f);
 
-        if (ImGui::Button("Abrir Carpeta de Configuraciones"))
+        if (ImGui::Button("Abrir Carpeta Config"))
             config->openConfigDir();
 
-        if (ImGui::Button("CREAR Configuración", { 100.0f, 25.0f }))
+        if (ImGui::Button("CREAR NUEVA", { 100.0f, 25.0f }))
             config->add(buffer.c_str());
 
-        if (ImGui::Button("Resetear Configuración", { 100.0f, 25.0f }))
+        if (ImGui::Button("RESETEAR", { 100.0f, 25.0f }))
             ImGui::OpenPopup("Seleccionar Config a Resetear");
 
         if (ImGui::BeginPopup("Seleccionar Config a Resetear")) {
@@ -1509,15 +1509,15 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
             ImGui::EndPopup();
         }
         if (currentConfig != -1) {
-            if (ImGui::Button("CArgar seleccionada", { 100.0f, 25.0f })) {
+            if (ImGui::Button("CARGAR", { 100.0f, 25.0f })) {
                 config->load(currentConfig, incrementalLoad);
                 updateColors();
                 SkinChanger::scheduleHudUpdate();
                 Misc::updateClanTag(true);
             }
-            if (ImGui::Button("GRABAR seleccionada", { 100.0f, 25.0f }))
+            if (ImGui::Button("GRABAR", { 100.0f, 25.0f }))
                 config->save(currentConfig);
-            if (ImGui::Button("BORRAR seleccionada", { 100.0f, 25.0f })) {
+            if (ImGui::Button("BORRAR", { 100.0f, 25.0f })) {
                 config->remove(currentConfig);
 
                 if (static_cast<std::size_t>(currentConfig) < configItems.size())
