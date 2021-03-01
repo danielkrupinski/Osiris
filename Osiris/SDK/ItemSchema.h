@@ -109,7 +109,7 @@ public:
 
     const char* getDefinitionName() noexcept
     {
-        return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2B0)); // TODO: update linux
+        return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2E0));
     }
 };
 
@@ -152,9 +152,7 @@ struct AlternateIconData {
     String largeSimpleName;
     String iconURLSmall;
     String iconURLLarge;
-#ifdef _WIN32 // TODO: Linux
-    PAD(28);
-#endif
+    PAD(WIN32_LINUX(28, 48))
 };
 
 class ItemSchema {
