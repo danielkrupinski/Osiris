@@ -278,7 +278,7 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
 void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
 {
     IDirect3DTexture9* texture;
-    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK)
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC | D3DUSAGE_AUTOGENMIPMAP, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK)
         return nullptr;
 
     D3DLOCKED_RECT lockedRect;
