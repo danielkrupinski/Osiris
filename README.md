@@ -299,6 +299,9 @@ Currently implemented hooking methods are:
 
 Hooking implementation files are located in [Hooks](https://github.com/danielkrupinski/Osiris/tree/master/Osiris/Hooks) directory.
 
+### Why after injecting the DLL into the game, pressing INSERT has no effect at all?
+You need to patch CS:GO default trusted mode. Alternatively, if you want to disable trusted mode, add -insecure to CS:GO's launch parameters. Note that during using this parameter you will be prohibited from playing on VAC-secure servers.
+
 ## Acknowledgments
 
 *   [ocornut](https://github.com/ocornut) and [contributors](https://github.com/ocornut/imgui/graphs/contributors) for creating and maintaining an amazing GUI library - [Dear imgui](https://github.com/ocornut/imgui).
