@@ -276,26 +276,36 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
 }
 
 void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
-{
-    IDirect3DTexture9* texture;
-    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC | D3DUSAGE_AUTOGENMIPMAP, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK)
+{ 
+    IDirect3DTexture9* tempTexture;
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &tempTexture, nullptr) != D3D_OK)
         return nullptr;
 
     D3DLOCKED_RECT lockedRect;
-    if (texture->LockRect(0, &lockedRect, nullptr, D3DLOCK_DISCARD) != D3D_OK) {
-        texture->Release();
+    if (tempTexture->LockRect(0, &lockedRect, nullptr, D3DLOCK_DISCARD) != D3D_OK) {
+        tempTexture->Release();
         return nullptr;
     }
 
     const auto buffer = std::make_unique<std::uint32_t[]>(width * height);
     std::memcpy(buffer.get(), data, width * height * 4);
     for (int i = 0; i < width * height; ++i)
-        buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16); // RGBA --> ARGB
+        buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16); // RGBA --> BGRA
 
     for (int y = 0; y < height; ++y)
         std::memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, buffer.get() + width * y, width * 4);
 
-    texture->UnlockRect(0);
+    tempTexture->UnlockRect(0);
+
+    IDirect3DTexture9* texture;
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_AUTOGENMIPMAP, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture, nullptr) != D3D_OK) {
+        tempTexture->Release();
+        return nullptr;
+    }
+
+    g_pd3dDevice->UpdateTexture(tempTexture, texture);
+    tempTexture->Release();
+
     return texture;
 }
 
