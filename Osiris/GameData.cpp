@@ -43,11 +43,10 @@ static auto playerByHandleWritable(int handle) noexcept
 
 static void updateNetLatency() noexcept
 {
-    float latency = 0.0f;
     if (const auto networkChannel = interfaces->engine->getNetworkChannel())
-        latency = networkChannel->getLatency(0);
-    latency = (std::max)(latency, 0.0f);
-    netOutgoingLatency = static_cast<int>(latency * 1000);
+        netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
+    else
+        netOutgoingLatency = 0;
 }
 
 void GameData::update() noexcept
