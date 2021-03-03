@@ -119,7 +119,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     {
         if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
         g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
-        if (g_pd3dDevice->CreateVertexBuffer(g_VertexBufferSize * sizeof(ImDrawVert), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY, 0, D3DPOOL_DEFAULT, &g_pVB, NULL) < 0)
+        if (g_pd3dDevice->CreateVertexBuffer(g_VertexBufferSize * sizeof(CUSTOMVERTEX), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY, 0, D3DPOOL_DEFAULT, &g_pVB, NULL) < 0)
             return;
     }
     if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
