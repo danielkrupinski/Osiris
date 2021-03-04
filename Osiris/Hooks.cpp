@@ -182,9 +182,7 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     Misc::fixTabletSignal();
     Misc::slowwalk(cmd);
 
-#ifdef _WIN32
     EnginePrediction::run(cmd);
-#endif
 
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
