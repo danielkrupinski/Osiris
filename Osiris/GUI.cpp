@@ -441,7 +441,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
 
     static int material = 1;
 
-    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
+    if (ImGui::Combo("", &currentCategory, "Allies\0Enemies\0Ragdolls\0Planting\0Defusing\0Local player\0Weapons\0Hands\0Backtrack\0Sleeves\0"))
         material = 1;
 
     ImGui::PopID();
@@ -456,7 +456,7 @@ void GUI::renderChamsWindow(bool contentOnly) noexcept
     ImGui::SameLine();
     ImGui::Text("%d", material);
 
-    constexpr std::array categories{ "Allies", "Enemies", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
+    constexpr std::array categories{ "Allies", "Enemies", "Ragdolls", "Planting", "Defusing", "Local player", "Weapons", "Hands", "Backtrack", "Sleeves" };
 
     ImGui::SameLine();
 
