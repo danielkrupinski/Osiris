@@ -12,6 +12,7 @@
 #pragma once
 
 struct IDirect3DDevice9;
+struct ImDrawData;
 
 bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
 void     ImGui_ImplDX9_Shutdown();
