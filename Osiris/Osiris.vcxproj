@@ -145,6 +145,7 @@
     <ClInclude Include="SDK\Sound.h" />
     <ClInclude Include="SDK\SoundEmitter.h" />
     <ClInclude Include="SDK\SoundInfo.h" />
+    <ClInclude Include="SDK\Steam.h" />
     <ClInclude Include="SDK\StudioRender.h" />
     <ClInclude Include="SDK\Surface.h" />
     <ClInclude Include="SDK\UserCmd.h" />

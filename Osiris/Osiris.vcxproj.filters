@@ -469,5 +469,8 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Steam.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
