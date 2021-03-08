@@ -40,6 +40,13 @@ enum class ObsMode {
     Roaming
 };
 
+enum class Team {
+    None = 0,
+    Spectators,
+    TT,
+    CT
+};
+
 class Collideable {
 public:
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
