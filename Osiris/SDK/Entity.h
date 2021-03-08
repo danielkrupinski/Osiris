@@ -193,6 +193,13 @@ public:
         return -1;
     }
 
+    std::uint64_t getSteamId() noexcept
+    {
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerInfo.xuid;
+        return 0;
+    }
+
     void getPlayerName(char(&out)[128]) noexcept;
     [[nodiscard]] std::string getPlayerName() noexcept
     {
