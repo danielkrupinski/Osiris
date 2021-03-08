@@ -6,6 +6,9 @@
 
 #include "nlohmann/json.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+
 #include "Config.h"
 #include "Helpers.h"
 #include "SDK/Platform.h"
@@ -409,6 +412,19 @@ static void from_json(const json& j, PurchaseList& pl)
     read(j, "Mode", pl.mode);
 }
 
+static void from_json(const json& j, Config::Misc::SpectatorList& sl)
+{
+    read(j, "Enabled", sl.enabled);
+    read(j, "No Title Bar", sl.noTitleBar);
+    read<value_t::object>(j, "Pos", sl.pos);
+    read<value_t::object>(j, "Size", sl.size);
+}
+
+static void from_json(const json& j, Config::Misc::Watermark& o)
+{
+    read(j, "Enabled", o.enabled);
+}
+
 static void from_json(const json& j, PreserveKillfeed& o)
 {
     read(j, "Enabled", o.enabled);
@@ -762,6 +778,22 @@ static void to_json(json& j, const PurchaseList& o, const PurchaseList& dummy = 
     WRITE("Show Prices", showPrices);
     WRITE("No Title Bar", noTitleBar);
     WRITE("Mode", mode);
+}
+
+static void to_json(json& j, const Config::Misc::SpectatorList& o, const Config::Misc::SpectatorList& dummy = {})
+{
+    WRITE("Enabled", enabled);
+    WRITE("No Title Bar", noTitleBar);
+
+    if (const auto window = ImGui::FindWindowByName("Spectator list")) {
+        j["Pos"] = window->Pos;
+        j["Size"] = window->SizeFull;
+    }
+}
+
+static void to_json(json& j, const Config::Misc::Watermark& o, const Config::Misc::Watermark& dummy = {})
+{
+    WRITE("Enabled", enabled);
 }
 
 static void to_json(json& j, const PreserveKillfeed& o, const PreserveKillfeed& dummy = {})

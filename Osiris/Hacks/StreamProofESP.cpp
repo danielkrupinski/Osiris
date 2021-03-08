@@ -88,28 +88,29 @@ static void addLineWithShadow(const ImVec2& p1, const ImVec2& p2, ImU32 col) noe
 }
 
 // convex hull using Graham's scan
-static std::vector<ImVec2> convexHull(std::vector<ImVec2> points) noexcept
+static std::pair<std::array<ImVec2, 8>, std::size_t> convexHull(std::array<ImVec2, 8> points) noexcept
 {
-    if (points.size() < 3)
-        return {};
-
-    std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto& a, const auto& b) { return (a.x < b.x || (a.x == b.x && a.y < b.y)); }));
+    std::swap(points[0], *std::min_element(points.begin(), points.end(), [](const auto& a, const auto& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); }));
 
     constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
-        return (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+        return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
     };
 
-    std::sort(points.begin() + 1, points.end(), [&](const auto& a, const auto& b) { return orientation(points[0], a, b) > 0.0f; });
+    std::sort(points.begin() + 1, points.end(), [&](const auto& a, const auto& b) {
+        const auto o = orientation(points[0], a, b);
+        return o == 0.0f ? ImLengthSqr(points[0] - a) < ImLengthSqr(points[0] - b) : o < 0.0f;
+    });
 
-    std::vector<ImVec2> hull;
+    std::array<ImVec2, 8> hull;
+    std::size_t count = 0;
 
     for (const auto& p : points) {
-        while (hull.size() >= 2 && orientation(hull[hull.size() - 2], hull[hull.size() - 1], p) < 0.0f)
-            hull.pop_back();
-        hull.push_back(p);
+        while (count >= 2 && orientation(hull[count - 2], hull[count - 1], p) >= 0.0f)
+            --count;
+        hull[count++] = p;
     }
 
-    return hull;
+    return std::make_pair(hull, count);
 }
 
 static void addRectFilled(const ImVec2& p1, const ImVec2& p2, ImU32 col, bool shadow) noexcept
@@ -160,8 +161,9 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
     }
     case Box::_3d:
         if (config.fill.enabled) {
-            const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
-            drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
+            auto [hull, count] = convexHull(bbox.vertices);
+            std::reverse(hull.begin(), hull.begin() + count); // make them clockwise for antialiasing
+            drawList->AddConvexPolyFilled(hull.data(), count, fillColor);
         } else {
             for (int i = 0; i < 8; ++i) {
                 for (int j = 1; j <= 4; j <<= 1) {
@@ -180,8 +182,9 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
         break;
     case Box::_3dCorners:
         if (config.fill.enabled) {
-            const auto hull = convexHull({ std::begin(bbox.vertices), std::end(bbox.vertices) });
-            drawList->AddConvexPolyFilled(hull.data(), hull.size(), fillColor);
+            auto [hull, count] = convexHull(bbox.vertices);
+            std::reverse(hull.begin(), hull.begin() + count); // make them clockwise for antialiasing
+            drawList->AddConvexPolyFilled(hull.data(), count, fillColor);
         } else {
             for (int i = 0; i < 8; ++i) {
                 for (int j = 1; j <= 4; j <<= 1) {

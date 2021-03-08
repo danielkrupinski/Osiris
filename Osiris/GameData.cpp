@@ -1,3 +1,4 @@
+#include <atomic>
 #include <cstring>
 #include <list>
 #include <mutex>
@@ -16,6 +17,7 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/NetworkChannel.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/WeaponId.h"
@@ -31,6 +33,7 @@ static std::vector<LootCrateData> lootCrateData;
 static std::forward_list<ProjectileData> projectileData;
 static BombData bombData;
 static std::vector<InfernoData> infernoData;
+static std::atomic_int netOutgoingLatency;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
@@ -38,13 +41,22 @@ static auto playerByHandleWritable(int handle) noexcept
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
+static void updateNetLatency() noexcept
+{
+    if (const auto networkChannel = interfaces->engine->getNetworkChannel())
+        netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
+    else
+        netOutgoingLatency = 0;
+}
+
 void GameData::update() noexcept
 {
     static int lastFrame;
     if (lastFrame == memory->globalVars->framecount)
         return;
-
     lastFrame = memory->globalVars->framecount;
+
+    updateNetLatency();
 
     Lock lock;
 
@@ -84,8 +96,7 @@ void GameData::update() noexcept
             }
 
             if (!entity->isDormant() && !entity->isAlive()) {
-                const auto obs = entity->getObserverTarget();
-                if (obs)
+                if (const auto obs = entity->getObserverTarget())
                     observerData.emplace_back(entity, obs, obs == localPlayer.get());
             }
         } else {
@@ -162,6 +173,11 @@ void GameData::clearProjectileList() noexcept
 {
     Lock lock;
     projectileData.clear();
+}
+
+int GameData::getNetOutgoingLatency() noexcept
+{
+    return netOutgoingLatency;
 }
 
 const Matrix4x4& GameData::toScreenMatrix() noexcept
@@ -520,12 +536,7 @@ LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
     }(model->name);
 }
 
-ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept
-{
-    entity->getPlayerName(name);
-    obs->getPlayerName(target);
-    this->targetIsLocalPlayer = targetIsLocalPlayer;
-}
+ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept : playerHandle{ entity->handle() }, targetHandle{ obs->handle() }, targetIsLocalPlayer{ targetIsLocalPlayer } {}
 
 void BombData::update() noexcept
 {

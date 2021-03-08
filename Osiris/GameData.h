@@ -35,8 +35,11 @@ namespace GameData
         std::scoped_lock<std::mutex> lock;
         static inline std::mutex mutex;
     };
+    
+    // Lock-free
+    int getNetOutgoingLatency() noexcept;
 
-    // You have to acquire lock before using these getters
+    // You have to acquire Lock before using these getters
     const Matrix4x4& toScreenMatrix() noexcept;
     const LocalPlayerData& local() noexcept;
     const std::vector<PlayerData>& players() noexcept;
@@ -150,8 +153,8 @@ struct LootCrateData : BaseData {
 struct ObserverData {
     ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept;
 
-    char name[128];
-    char target[128];
+    int playerHandle;
+    int targetHandle;
     bool targetIsLocalPlayer;
 };
 

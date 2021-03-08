@@ -82,10 +82,10 @@ static std::vector<SkinChanger::PaintKit> gloveKits;
 
 static void initializeKits() noexcept
 {
-    static bool initalized = false;
-    if (initalized)
+    if (static bool initialized = false; !initialized)
+        initialized = true;
+    else
         return;
-    initalized = true;
 
     const auto itemSchema = memory->itemSystem()->getItemSchema();
 
