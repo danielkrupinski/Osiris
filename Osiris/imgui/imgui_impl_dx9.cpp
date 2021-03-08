@@ -289,8 +289,13 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
 
     const auto buffer = std::make_unique<std::uint32_t[]>(width * height);
     std::memcpy(buffer.get(), data, width * height * 4);
-    for (int i = 0; i < width * height; ++i)
-        buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16); // RGBA --> BGRA
+
+    for (int i = 0; i < width * height; ++i) {
+        // RGBA --> BGRA
+        auto color = buffer[i];
+        color = (color & 0xFF00FF00) | ((color & 0xFF0000) >> 16) | ((color & 0xFF) << 16);
+        buffer[i] = color;
+    }
 
     for (int y = 0; y < height; ++y)
         std::memcpy((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y, buffer.get() + width * y, width * 4);
