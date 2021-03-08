@@ -10,6 +10,8 @@
 #include "SDK/matrix3x4.h"
 #include "SDK/Vector.h"
 
+#include "Texture.h"
+
 struct LocalPlayerData;
 
 struct PlayerData;
@@ -116,6 +118,7 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
+    void clearAvatarTexture() noexcept { avatarTexture.clear(); }
 
     bool dormant;
     bool enemy = false;
@@ -124,6 +127,7 @@ struct PlayerData : BaseData {
     bool spotted;
     bool inViewFrustum;
     bool alive;
+    bool hasAvatar = false;
     float flashDuration;
     int health;
     int handle;
@@ -132,6 +136,10 @@ struct PlayerData : BaseData {
     Vector origin;
     std::string activeWeapon;
     std::vector<std::pair<Vector, Vector>> bones;
+
+private:
+    mutable Texture avatarTexture;
+    std::unique_ptr<std::uint8_t[]> avatarRGBA;
 };
 
 struct WeaponData : BaseData {

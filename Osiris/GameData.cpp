@@ -20,6 +20,7 @@
 #include "SDK/NetworkChannel.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
+#include "SDK/Steam.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
 
@@ -339,6 +340,14 @@ void ProjectileData::update(Entity* projectile) noexcept
 
 PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
 {
+    if (const auto steamID = entity->getSteamId()) {
+        const auto ctx = interfaces->engine->getSteamAPIContext();
+        const auto avatar = ctx->steamFriends->getSmallFriendAvatar(steamID);
+        constexpr auto rgbaDataSize = 4 * 32 * 32;
+        avatarRGBA = std::make_unique<std::uint8_t[]>(rgbaDataSize);
+        hasAvatar = ctx->steamUtils->getImageRGBA(avatar, avatarRGBA.get(), rgbaDataSize);
+    }
+
     handle = entity->handle();
     update(entity);
 }
