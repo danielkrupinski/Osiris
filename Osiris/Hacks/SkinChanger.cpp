@@ -12,16 +12,11 @@
 
 #include "../imgui/imgui.h"
 
-#ifdef _WIN32
-#include "../imgui/imgui_impl_dx9.h"
-#else
-#include "../imgui/imgui_impl_opengl3.h"
-#endif
-
 #include "../Interfaces.h"
 
 #include "SkinChanger.h"
 #include "../Config.h"
+#include "../Texture.h"
 
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
@@ -498,33 +493,6 @@ const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
     }
 
     return knifeTypes;
-}
-
-class Texture {
-    ImTextureID texture = nullptr;
-public:
-    Texture() = default;
-    ~Texture() { clear(); }
-    Texture(const Texture&) = delete;
-    Texture& operator=(const Texture&) = delete;
-    Texture(Texture&& other) noexcept : texture{ other.texture } { other.texture = nullptr; }
-    Texture& operator=(Texture&& other) noexcept { clear(); texture = other.texture; other.texture = nullptr; return *this; }
-
-    void init(int width, int height, const std::uint8_t* data) noexcept;
-    void clear() noexcept;
-    ImTextureID get() noexcept { return texture; }
-};
-
-void Texture::init(int width, int height, const std::uint8_t* data) noexcept
-{
-    texture = ImGui_CreateTextureRGBA(width, height, data);
-}
-
-void Texture::clear() noexcept
-{
-    if (texture)
-        ImGui_DestroyTexture(texture);
-    texture = nullptr;
 }
 
 static std::unordered_map<std::string, Texture> iconTextures;
