@@ -157,6 +157,7 @@
     <ClInclude Include="SDK\WeaponData.h" />
     <ClInclude Include="SDK\WeaponSystem.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
