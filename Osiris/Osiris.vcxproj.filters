@@ -481,5 +481,8 @@
     <ClInclude Include="Resources\avatar_ct.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\avatar_tt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
