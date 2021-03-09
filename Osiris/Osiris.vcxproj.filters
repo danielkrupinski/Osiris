@@ -482,7 +482,7 @@
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Resources\avatar_tt.h">
-      <Filter>Header Files</Filter>
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
