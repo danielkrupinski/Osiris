@@ -430,6 +430,7 @@ void PlayerData::update(Entity* entity) noexcept
     if (!entity->setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
         return;
 
+    bones.clear();
     bones.reserve(20);
 
     for (int i = 0; i < studioModel->numBones; ++i) {
