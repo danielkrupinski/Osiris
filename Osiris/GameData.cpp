@@ -365,7 +365,7 @@ void ProjectileData::update(Entity* projectile) noexcept
         trajectory.emplace_back(memory->globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
+PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
 {
     if (const auto steamID = entity->getSteamId()) {
         const auto ctx = interfaces->engine->getSteamAPIContext();
@@ -378,7 +378,6 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
             playerAvatars[handle] = std::move(playerAvatar);
     }
 
-    handle = entity->handle();
     update(entity);
 }
 
