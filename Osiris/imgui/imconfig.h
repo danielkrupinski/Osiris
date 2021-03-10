@@ -48,7 +48,9 @@
 //#define IMGUI_INCLUDE_IMGUI_USER_H
 
 //---- Pack colors to BGRA8 instead of RGBA8 (to avoid converting from one to another)
+#ifdef _WIN32
 #define IMGUI_USE_BGRA_PACKED_COLOR
+#endif
 
 //---- Use 32-bit for ImWchar (default is 16-bit) to support full unicode code points.
 //#define IMGUI_USE_WCHAR32
@@ -78,6 +80,10 @@
 #define IM_VEC4_CLASS_EXTRA \
         ImVec4(float f[3]) noexcept { x = f[0]; y = f[1]; z = f[2]; w = 1.0f; } \
         ImVec4(const std::array<float, 4>& color) noexcept { x = color[0]; y = color[1]; z = color[2]; w = color[3]; }     
+
+#define IM_VEC2_CLASS_EXTRA \
+        auto operator==(const ImVec2& other) const { return x == other.x && y == other.y; } \
+        auto operator!=(const ImVec2& other) const { return !(*this == other); }
 
 //---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
 // Your renderer back-end will need to support it (most example renderer back-ends support both 16/32-bit indices).

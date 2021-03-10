@@ -231,6 +231,10 @@ void    ImGui_ImplWin32_NewFrame()
     io.KeyShift = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
     io.KeyAlt = (::GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
+
+    io.KeysDown[VK_LSHIFT] = (GetKeyState(VK_LSHIFT) & 0x8000) != 0;
+    io.KeysDown[VK_RSHIFT] = (GetKeyState(VK_RSHIFT) & 0x8000) != 0;
+
     // io.KeysDown[], io.MousePos, io.MouseDown[], io.MouseWheel: filled by the WndProc handler below.
 
     // Update OS mouse position
@@ -314,13 +318,23 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
         return 0;
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 1;
+        if (wParam < 256) {
+            switch (wParam) {
+            case VK_CONTROL: io.KeysDown[lParam & (1 << 24) ? VK_RCONTROL : VK_LCONTROL] = 1; break;
+            case VK_MENU: io.KeysDown[lParam & (1 << 24) ? VK_RMENU : VK_LMENU] = 1; break;
+            default: io.KeysDown[wParam] = 1;
+            }
+        }
         return 0;
     case WM_KEYUP:
     case WM_SYSKEYUP:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 0;
+        if (wParam < 256) {
+            switch (wParam) {
+            case VK_CONTROL: io.KeysDown[lParam & (1 << 24) ? VK_RCONTROL : VK_LCONTROL] = 0; break;
+            case VK_MENU: io.KeysDown[lParam & (1 << 24) ? VK_RMENU : VK_LMENU] = 0; break;
+            default: io.KeysDown[wParam] = 0;
+            }
+        }
         return 0;
     case WM_CHAR:
         // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
