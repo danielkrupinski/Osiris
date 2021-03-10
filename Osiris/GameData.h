@@ -30,6 +30,7 @@ namespace GameData
     void update() noexcept;
     void clearProjectileList() noexcept;
     void clearTextures() noexcept;
+    void clearUnusedAvatars() noexcept;
 
     class Lock {
     public:
@@ -122,7 +123,6 @@ struct PlayerData : BaseData {
 
     void update(Entity* entity) noexcept;
     ImTextureID getAvatarTexture() const noexcept;
-    void clearAvatarTexture() noexcept { avatarTexture.clear(); }
 
     bool dormant;
     bool enemy = false;
@@ -131,7 +131,6 @@ struct PlayerData : BaseData {
     bool spotted;
     bool inViewFrustum;
     bool alive;
-    bool hasAvatar = false;
     float flashDuration;
     int health;
     int handle;
@@ -141,10 +140,6 @@ struct PlayerData : BaseData {
     Vector origin;
     std::string activeWeapon;
     std::vector<std::pair<Vector, Vector>> bones;
-
-private:
-    mutable Texture avatarTexture;
-    std::unique_ptr<std::uint8_t[]> avatarRGBA;
 };
 
 struct WeaponData : BaseData {

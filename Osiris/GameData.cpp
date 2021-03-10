@@ -181,13 +181,26 @@ void GameData::clearProjectileList() noexcept
 
 static void clearAvatarTextures() noexcept;
 
+struct PlayerAvatar {
+    mutable Texture texture;
+    std::unique_ptr<std::uint8_t[]> rgba;
+};
+
+static std::unordered_map<int, PlayerAvatar> playerAvatars;
+
 void GameData::clearTextures() noexcept
 {
     Lock lock;
 
     clearAvatarTextures();
-    for (auto& player : playerData)
-        player.clearAvatarTexture();
+    for (const auto& [handle, avatar] : playerAvatars)
+        avatar.texture.clear();
+}
+
+void GameData::clearUnusedAvatars() noexcept
+{
+    Lock lock;
+    std::erase_if(playerAvatars, [](const auto& pair) { return std::ranges::find(std::as_const(playerData), pair.first, &PlayerData::handle) == playerData.cend(); });
 }
 
 int GameData::getNetOutgoingLatency() noexcept
@@ -358,8 +371,11 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
         const auto ctx = interfaces->engine->getSteamAPIContext();
         const auto avatar = ctx->steamFriends->getSmallFriendAvatar(steamID);
         constexpr auto rgbaDataSize = 4 * 32 * 32;
-        avatarRGBA = std::make_unique<std::uint8_t[]>(rgbaDataSize);
-        hasAvatar = ctx->steamUtils->getImageRGBA(avatar, avatarRGBA.get(), rgbaDataSize);
+
+        PlayerAvatar playerAvatar;
+        playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
+        if (ctx->steamUtils->getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
+            playerAvatars[handle] = std::move(playerAvatar);
     }
 
     handle = entity->handle();
@@ -482,13 +498,14 @@ static void clearAvatarTextures() noexcept
 
 ImTextureID PlayerData::getAvatarTexture() const noexcept
 {
-    if (!hasAvatar)
+    const auto it = std::as_const(playerAvatars).find(handle);
+    if (it == playerAvatars.cend())
         return team == Team::TT ? avatarTT.getTexture() : avatarCT.getTexture();
 
-    if (!avatarTexture.get())
-        avatarTexture.init(32, 32, avatarRGBA.get());
-
-    return avatarTexture.get();
+    const auto& avatar = it->second;
+    if (!avatar.texture.get())
+        avatar.texture.init(32, 32, avatar.rgba.get());
+    return avatar.texture.get();
 }
 
 WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
