@@ -955,10 +955,9 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     if (!config->misc.offscreenEnemies.enabled)
         return;
 
-    GameData::Lock lock;
-
     const auto yaw = degreesToRadians(interfaces->engine->getViewAngles().y);
 
+    GameData::Lock lock;
     for (auto& player : GameData::players()) {
         if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
@@ -972,9 +971,13 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
             y /= len;
         }
 
-        const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
-        const auto trianglePos = pos + ImVec2{ x, y } * (10 + 3);
+        constexpr auto avatarRadius = 13.0f;
         constexpr auto triangleSize = 10.0f;
+
+        const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
+        const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + 3);
+
+        const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto color = Helpers::calculateColor(config->misc.offscreenEnemies.color);
 
         const ImVec2 trianglePoints[]{
@@ -984,8 +987,21 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         };
         drawList->AddConvexPolyFilled(trianglePoints, 3, color);
 
-        drawList->AddCircleFilled(pos, 11.0f, color & IM_COL32_A_MASK, 40);
-        drawList->AddCircleFilled(pos, 10.0f, color, 40);
+        drawList->AddCircleFilled(pos, avatarRadius + 1, white & IM_COL32_A_MASK, 40);
+
+        const auto texture = player.getAvatarTexture();
+
+        const bool pushTextureId = drawList->_TextureIdStack.empty() || texture != drawList->_TextureIdStack.back();
+        if (pushTextureId)
+            drawList->PushTextureID(texture);
+
+        const int vertStartIdx = drawList->VtxBuffer.Size;
+        drawList->AddCircleFilled(pos, avatarRadius, white, 40);
+        const int vertEndIdx = drawList->VtxBuffer.Size;
+        ImGui::ShadeVertsLinearUV(drawList, vertStartIdx, vertEndIdx, pos - ImVec2{ avatarRadius, avatarRadius }, pos + ImVec2{ avatarRadius, avatarRadius }, { 0, 0 }, { 1, 1 }, true);
+
+        if (pushTextureId)
+            drawList->PopTextureID();
     }
 }
 

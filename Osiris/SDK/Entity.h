@@ -40,6 +40,13 @@ enum class ObsMode {
     Roaming
 };
 
+enum class Team {
+    None = 0,
+    Spectators,
+    TT,
+    CT
+};
+
 class Collideable {
 public:
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
@@ -66,6 +73,7 @@ public:
     VIRTUAL_METHOD(const Vector&, getAbsOrigin, WIN32_LINUX(10, 12), (), (this))
     VIRTUAL_METHOD(void, setModelIndex, WIN32_LINUX(75, 111), (int index), (this, index))
     VIRTUAL_METHOD(bool, getAttachment, WIN32_LINUX(83, 121), (int index, Vector& origin), (this, index, std::ref(origin)))
+    VIRTUAL_METHOD(Team, getTeamNumber, WIN32_LINUX(87, 127), (), (this))
     VIRTUAL_METHOD(int, health, WIN32_LINUX(121, 166), (), (this))
     VIRTUAL_METHOD(bool, isAlive, WIN32_LINUX(155, 207), (), (this))
     VIRTUAL_METHOD(bool, isPlayer, WIN32_LINUX(157, 209), (), (this))
@@ -191,6 +199,13 @@ public:
             return playerInfo.userId;
 
         return -1;
+    }
+
+    std::uint64_t getSteamId() noexcept
+    {
+        if (PlayerInfo playerInfo; interfaces->engine->getPlayerInfo(index(), playerInfo))
+            return playerInfo.xuid;
+        return 0;
     }
 
     void getPlayerName(char(&out)[128]) noexcept;

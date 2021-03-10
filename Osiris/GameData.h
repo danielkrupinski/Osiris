@@ -10,6 +10,8 @@
 #include "SDK/matrix3x4.h"
 #include "SDK/Vector.h"
 
+#include "Texture.h"
+
 struct LocalPlayerData;
 
 struct PlayerData;
@@ -27,6 +29,8 @@ namespace GameData
 {
     void update() noexcept;
     void clearProjectileList() noexcept;
+    void clearTextures() noexcept;
+    void clearUnusedAvatars() noexcept;
 
     class Lock {
     public:
@@ -108,6 +112,8 @@ struct ProjectileData : BaseData {
     std::vector<std::pair<float, Vector>> trajectory;
 };
 
+enum class Team;
+
 struct PlayerData : BaseData {
     PlayerData(Entity* entity) noexcept;
     PlayerData(const PlayerData&) = delete;
@@ -116,6 +122,7 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
+    ImTextureID getAvatarTexture() const noexcept;
 
     bool dormant;
     bool enemy = false;
@@ -127,6 +134,7 @@ struct PlayerData : BaseData {
     float flashDuration;
     int health;
     int handle;
+    Team team;
     char name[128];
     Vector headMins, headMaxs;
     Vector origin;
