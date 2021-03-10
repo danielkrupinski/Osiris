@@ -130,7 +130,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
         device->EndScene();
     }
-
+   
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
 
@@ -138,6 +138,7 @@ static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* 
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
     SkinChanger::clearItemIconTextures();
+    GameData::clearTextures();
     return hooks->originalReset(device, params);
 }
 

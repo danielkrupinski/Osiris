@@ -29,6 +29,7 @@ namespace GameData
 {
     void update() noexcept;
     void clearProjectileList() noexcept;
+    void clearTextures() noexcept;
 
     class Lock {
     public:
@@ -110,6 +111,8 @@ struct ProjectileData : BaseData {
     std::vector<std::pair<float, Vector>> trajectory;
 };
 
+enum class Team;
+
 struct PlayerData : BaseData {
     PlayerData(Entity* entity) noexcept;
     PlayerData(const PlayerData&) = delete;
@@ -118,6 +121,7 @@ struct PlayerData : BaseData {
     PlayerData& operator=(PlayerData&&) = default;
 
     void update(Entity* entity) noexcept;
+    ImTextureID getAvatarTexture() const noexcept;
     void clearAvatarTexture() noexcept { avatarTexture.clear(); }
 
     bool dormant;
@@ -131,6 +135,7 @@ struct PlayerData : BaseData {
     float flashDuration;
     int health;
     int handle;
+    Team team;
     char name[128];
     Vector headMins, headMaxs;
     Vector origin;
