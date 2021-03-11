@@ -129,6 +129,12 @@ void Visuals::playerModel(FrameStage stage) noexcept
     }
 }
 
+void Visuals::rdrawothermodels() noexcept
+{
+    static auto rdrawothermodels = interfaces->cvar->findVar("r_drawothermodels");
+    rdrawothermodels->setValue(config->visuals.rdrawothermodels ? 100 : 0);
+}
+
 void Visuals::colorWorld() noexcept
 {
     if (!config->visuals.world.enabled && !config->visuals.sky.enabled)
