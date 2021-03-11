@@ -225,6 +225,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
         Misc::inverseRagdollGravity();
+        Visuals::rdrawothermodels();
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness();
         Visuals::remove3dSky();
