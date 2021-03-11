@@ -108,6 +108,7 @@ public:
     struct Visuals {
         bool disablePostProcessing{ false };
         bool inverseRagdollGravity{ false };
+        bool rdrawothermodels{ true };
         bool noFog{ false };
         bool no3dSky{ false };
         bool noAimPunch{ false };
