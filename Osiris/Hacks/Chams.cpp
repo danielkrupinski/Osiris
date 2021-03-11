@@ -148,6 +148,12 @@ bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x
         const auto entity = interfaces->entityList->getEntity(info.entityIndex);
         if (entity && !entity->isDormant() && entity->isPlayer())
             renderPlayer(entity);
+        
+        if (!localPlayer)
+            return appliedChams;
+
+        if (entity && !entity->isDormant() && entity->getClientClass()->classId == ClassId::CSRagdoll)
+            applyChams(config->chams["Ragdolls"].materials);
     }
 
     return appliedChams;
