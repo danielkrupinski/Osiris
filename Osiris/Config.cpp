@@ -301,6 +301,7 @@ static void from_json(const json& j, Config::Visuals& v)
 {
     read(j, "Disable post-processing", v.disablePostProcessing);
     read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
+    read(j, "rdrawothermodels", v.rdrawothermodels);
     read(j, "No fog", v.noFog);
     read(j, "No 3d sky", v.no3dSky);
     read(j, "No aim punch", v.noAimPunch);
@@ -888,6 +889,7 @@ static void to_json(json& j, const Config::Visuals& o)
 
     WRITE("Disable post-processing", disablePostProcessing);
     WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
+    WRITE("rdrawothermodels", rdrawothermodels);
     WRITE("No fog", noFog);
     WRITE("No 3d sky", no3dSky);
     WRITE("No aim punch", noAimPunch);
