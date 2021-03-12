@@ -46,6 +46,7 @@ public:
         int bone{ 0 };
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
+        bool forceAccuracy{ false };
         int minDamage{ 1 };
         bool killshot{ false };
         bool betweenShots{ true };
