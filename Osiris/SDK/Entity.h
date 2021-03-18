@@ -227,7 +227,7 @@ public:
     NETVAR_OFFSET(moveType, "CBaseEntity", "m_nRenderMode", 1, MoveType)
     NETVAR(simulationTime, "CBaseEntity", "m_flSimulationTime", float)
     NETVAR(ownerEntity, "CBaseEntity", "m_hOwnerEntity", int)
-    NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
+    [[deprecated]] NETVAR(team, "CBaseEntity", "m_iTeamNum", int)
     NETVAR(spotted, "CBaseEntity", "m_bSpotted", bool)
 
     NETVAR(weapons, "CBaseCombatCharacter", "m_hMyWeapons", int[64])
