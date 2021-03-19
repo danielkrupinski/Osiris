@@ -27,6 +27,9 @@
     <Filter Include="nlohmann">
       <UniqueIdentifier>{44d5d3e3-0072-4a5a-b725-1b9807c24a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{ad9f0ad1-ce71-4bc4-b5eb-dd6a018f4fae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,6 +468,21 @@
     </ClInclude>
     <ClInclude Include="SDK\FileSystem.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Steam.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\avatar_ct.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\avatar_tt.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
