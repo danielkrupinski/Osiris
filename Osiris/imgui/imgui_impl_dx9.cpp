@@ -216,6 +216,8 @@ bool ImGui_ImplDX9_Init(IDirect3DDevice9* device)
     io.BackendRendererName = "imgui_impl_dx9";
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
 
+    LoadLibraryW(L"d3d9"); // increment d3d9.dll reference count
+
     g_pd3dDevice = device;
     g_pd3dDevice->AddRef();
     return true;
