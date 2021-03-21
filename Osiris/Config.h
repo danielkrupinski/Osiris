@@ -216,6 +216,7 @@ public:
         bool prepareRevolver{ false };
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
+        bool svpurebypass{ true };
         char clanTag[16];
         KeyBind edgejumpkey = KeyBind::NONE;
         KeyBind slowwalkKey = KeyBind::NONE;
