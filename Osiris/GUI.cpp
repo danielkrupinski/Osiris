@@ -413,6 +413,8 @@ void GUI::renderTriggerbotWindow(bool contentOnly) noexcept
     ImGui::Combo("Hitgroup", &config->triggerbot[currentWeapon].hitgroup, "All\0Head\0Chest\0Stomach\0Left arm\0Right arm\0Left leg\0Right leg\0");
     ImGui::PushItemWidth(220.0f);
     ImGui::SliderInt("Shot delay", &config->triggerbot[currentWeapon].shotDelay, 0, 250, "%d ms");
+    ImGui::Checkbox("Hitchance", &config->triggerbot[currentWeapon].hitChance);
+    ImGui::SliderInt("Ammount", &config->triggerbot[currentWeapon].hitChanceAmmount, 0, 100, "%d %");
     ImGui::InputInt("Min damage", &config->triggerbot[currentWeapon].minDamage);
     config->triggerbot[currentWeapon].minDamage = std::clamp(config->triggerbot[currentWeapon].minDamage, 0, 250);
     ImGui::Checkbox("Killshot", &config->triggerbot[currentWeapon].killshot);

@@ -64,6 +64,8 @@ public:
         bool killshot = false;
         int hitgroup = 0;
         int shotDelay = 0;
+        bool hitChance{ true };
+        int hitChanceAmmount{ 0 };
         int minDamage = 1;
         float burstTime = 0.0f;
     };
@@ -214,7 +216,6 @@ public:
         bool prepareRevolver{ false };
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
-        bool svpurebypass{ true };
         char clanTag[16];
         KeyBind edgejumpkey = KeyBind::NONE;
         KeyBind slowwalkKey = KeyBind::NONE;

@@ -250,6 +250,8 @@ static void from_json(const json& j, Config::Triggerbot& t)
     read(j, "Ignore smoke", t.ignoreSmoke);
     read(j, "Hitgroup", t.hitgroup);
     read(j, "Shot delay", t.shotDelay);
+    read(j, "HitChance enable", t.hitChanceAmmount);
+    read(j, "HitChance", t.hitChance);
     read(j, "Min damage", t.minDamage);
     read(j, "Killshot", t.killshot);
     read(j, "Burst Time", t.burstTime);
@@ -492,7 +494,6 @@ static void from_json(const json& j, Config::Misc& m)
     read<value_t::object>(j, "Reportbot", m.reportbot);
     read(j, "Opposite Hand Knife", m.oppositeHandKnife);
     read<value_t::object>(j, "Preserve Killfeed", m.preserveKillfeed);
-    read(j, "sv pure bypass", m.svpurebypass);
 }
 
 static void from_json(const json& j, Config::Misc::Reportbot& r)
@@ -705,6 +706,8 @@ static void to_json(json& j, const Config::Triggerbot& o, const Config::Triggerb
     WRITE("Ignore smoke", ignoreSmoke);
     WRITE("Hitgroup", hitgroup);
     WRITE("Shot delay", shotDelay);
+    WRITE("HitChance enable", hitChanceAmmount);
+    WRITE("HitChance", hitChance);
     WRITE("Min damage", minDamage);
     WRITE("Killshot", killshot);
     WRITE("Burst Time", burstTime);
@@ -869,7 +872,6 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Reportbot", reportbot);
     WRITE("Opposite Hand Knife", oppositeHandKnife);
     WRITE("Preserve Killfeed", preserveKillfeed);
-    WRITE("sv pure bypass", svpurebypass);
 }
 
 static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
