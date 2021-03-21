@@ -1,6 +1,8 @@
 #include <fstream>
 
 #ifdef _WIN32
+#include <Windows.h>
+#include <shellapi.h>
 #include <ShlObj.h>
 #endif
 
@@ -1079,7 +1081,11 @@ void Config::createConfigDir() const noexcept
 void Config::openConfigDir() const noexcept
 {
     createConfigDir();
-    int ret = std::system((WIN32_LINUX("start ", "xdg-open ") + path.string()).c_str());
+#ifdef _WIN32
+    ShellExecuteW(nullptr, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+#else
+    int ret = std::system(("xdg-open " + path.string()).c_str());
+#endif
 }
 
 void Config::scheduleFontLoad(const std::string& name) noexcept
