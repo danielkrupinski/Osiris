@@ -951,24 +951,23 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
 }
 
 void Misc::voteRevealer(GameEvent* event = nullptr) {
-    if (!config->misc.revealVotes)
+    if (!config->misc.revealVotes || !event)
         return;
 
-    if (event) {
-        switch (fnv::hashRuntime(event->getName())) {
-        case fnv::hash("vote_cast"):
-            //dont ask me why this is here
-            std::ostringstream str;
-            str << interfaces->entityList->getEntity(event->getInt("entityid"))->getPlayerName() << " : ";
-            memory->conColorMsg({ 0, 102, 255, 255}, "[Osiris]: ");
-            memory->debugMsg(str.str().c_str());
-            if (event->getInt("vote_option") == 0)
-                memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
-            else
-                memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
+    auto entity = interfaces->entityList->getEntity(event->getInt("entityid"));
+    if (!entity)
+        return;
 
-            break;
-        }
+    switch (fnv::hashRuntime(event->getName())) {
+    case fnv::hash("vote_cast"):
+        memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
+        memory->debugMsg("%s : ", entity->getPlayerName());
+        if (event->getInt("vote_option") == 0)
+            memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
+        else
+            memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
+
+        break;
     }
 }
 
