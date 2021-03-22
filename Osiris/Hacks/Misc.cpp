@@ -957,18 +957,13 @@ void Misc::voteRevealer(GameEvent* event = nullptr) {
     auto entity = interfaces->entityList->getEntity(event->getInt("entityid"));
     if (!entity)
         return;
-
-    switch (fnv::hashRuntime(event->getName())) {
-    case fnv::hash("vote_cast"):
-        memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
-        memory->debugMsg("%s : ", entity->getPlayerName().c_str());
-        if (event->getInt("vote_option") == 0)
-            memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
-        else
-            memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
-
-        break;
-    }
+    
+    memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
+    memory->debugMsg("%s : ", entity->getPlayerName().c_str());
+    if (event->getInt("vote_option") == 0)
+        memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
+    else
+        memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
 }
 
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
