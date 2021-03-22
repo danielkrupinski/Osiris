@@ -961,7 +961,7 @@ void Misc::voteRevealer(GameEvent* event = nullptr) {
     switch (fnv::hashRuntime(event->getName())) {
     case fnv::hash("vote_cast"):
         memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
-        memory->debugMsg("%s : ", entity->getPlayerName());
+        memory->debugMsg("%s : ", entity->getPlayerName().c_str());
         if (event->getInt("vote_option") == 0)
             memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
         else
