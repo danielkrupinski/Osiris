@@ -1265,6 +1265,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::Checkbox("Reveal ranks", &config->misc.revealRanks);
     ImGui::Checkbox("Reveal money", &config->misc.revealMoney);
     ImGui::Checkbox("Reveal suspect", &config->misc.revealSuspect);
+    ImGui::Checkbox("Reveal votes", &config->misc.revealVotes);
 
     ImGui::Checkbox("Spectator list", &config->misc.spectatorList.enabled);
     ImGui::SameLine();
