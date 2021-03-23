@@ -61,7 +61,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         Visuals::bulletTracer(*event);
         break;
     case fnv::hash("vote_cast"):
-        Misc::voteRevealer(event);
+        Misc::voteRevealer(*event);
         break;
     }
 }
