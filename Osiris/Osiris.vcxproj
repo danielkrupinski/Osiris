@@ -94,6 +94,7 @@
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="SDK\AnimState.h" />
     <ClInclude Include="SDK\Client.h" />
+    <ClInclude Include="SDK\ClientMode.h" />
     <ClInclude Include="SDK\ConVar.h" />
     <ClInclude Include="SDK\EngineTrace.h" />
     <ClInclude Include="SDK\Entity.h" />

@@ -484,5 +484,8 @@
     <ClInclude Include="Resources\avatar_tt.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\ClientMode.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
