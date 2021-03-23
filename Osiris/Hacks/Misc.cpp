@@ -950,6 +950,23 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
     }
 }
 
+void Misc::voteRevealer(GameEvent& event) noexcept
+{
+    if (!config->misc.revealVotes)
+        return;
+
+    const auto entity = interfaces->entityList->getEntity(event.getInt("entityid"));
+    if (!entity || !entity->isPlayer())
+        return;
+    
+    memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
+    memory->debugMsg("%s : ", entity->getPlayerName().c_str());
+    if (event.getInt("vote_option") == 0)
+        memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
+    else
+        memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
+}
+
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 {
     if (!config->misc.offscreenEnemies.enabled)
