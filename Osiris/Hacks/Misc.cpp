@@ -954,8 +954,8 @@ void Misc::voteRevealer(GameEvent& event) {
     if (!config->misc.revealVotes)
         return;
 
-    auto entity = interfaces->entityList->getEntity(event.getInt("entityid"));
-    if (!entity)
+    const auto entity = interfaces->entityList->getEntity(event.getInt("entityid"));
+    if (!entity || !entity->isPlayer())
         return;
     
     memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
