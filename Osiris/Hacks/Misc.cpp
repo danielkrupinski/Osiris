@@ -950,7 +950,8 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
     }
 }
 
-void Misc::voteRevealer(GameEvent& event) {
+void Misc::voteRevealer(GameEvent& event) noexcept
+{
     if (!config->misc.revealVotes)
         return;
 
