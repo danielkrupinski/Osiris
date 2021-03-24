@@ -15,6 +15,7 @@
 #include "Misc.h"
 
 #include "../SDK/Client.h"
+#include "../SDK/ClientMode.h"
 #include "../SDK/ConVar.h"
 #include "../SDK/Entity.h"
 #include "../SDK/FrameStage.h"
@@ -959,12 +960,10 @@ void Misc::voteRevealer(GameEvent& event) noexcept
     if (!entity || !entity->isPlayer())
         return;
     
-    memory->conColorMsg({ 0, 102, 255, 255 }, "[Osiris]: ");
-    memory->debugMsg("%s : ", entity->getPlayerName().c_str());
-    if (event.getInt("vote_option") == 0)
-        memory->conColorMsg({ 0, 255, 0, 255 }, "Yes\n");
-    else
-        memory->conColorMsg({ 255, 0, 0, 255 }, "No\n");
+    const auto votedYes = event.getInt("vote_option") == 0;
+    const char color = votedYes ? '\x06' : '\x07';
+    
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", color, entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
