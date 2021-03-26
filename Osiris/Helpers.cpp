@@ -20,8 +20,12 @@ static auto rainbowColor(float time, float speed, float alpha) noexcept
                        alpha };
 }
 
+static float alphaFactor = 1.0f;
+
 unsigned int Helpers::calculateColor(Color4 color) noexcept
 {
+    color.color[3] *= alphaFactor;
+
    // if (!config->ignoreFlashbang)
         color.color[3] *= (255.0f - GameData::local().flashDuration) / 255.0f;
     return ImGui::ColorConvertFloat4ToU32(color.rainbow ? rainbowColor(memory->globalVars->realtime, color.rainbowSpeed, color.color[3]) : color.color);
@@ -35,7 +39,17 @@ unsigned int Helpers::calculateColor(Color3 color) noexcept
 unsigned int Helpers::calculateColor(int r, int g, int b, int a) noexcept
 {
     a -= static_cast<int>(a * GameData::local().flashDuration / 255.0f);
-    return IM_COL32(r, g, b, a);
+    return IM_COL32(r, g, b, a * alphaFactor);
+}
+
+void Helpers::setAlphaFactor(float newAlphaFactor) noexcept
+{
+    alphaFactor = newAlphaFactor;
+}
+
+float Helpers::getAlphaFactor() noexcept
+{
+    return alphaFactor;
 }
 
 ImWchar* Helpers::getFontGlyphRanges() noexcept
