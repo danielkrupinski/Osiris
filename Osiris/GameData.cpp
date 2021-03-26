@@ -410,6 +410,7 @@ void PlayerData::update(Entity* entity) noexcept
     audible = isEntityAudible(entity->index());
     spotted = entity->spotted();
     health = entity->health();
+    immune = entity->gunGameImmunity();
     flashDuration = entity->flashDuration();
 
     if (const auto weapon = entity->getActiveWeapon()) {

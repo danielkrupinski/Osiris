@@ -131,6 +131,7 @@ struct PlayerData : BaseData {
     bool spotted;
     bool inViewFrustum;
     bool alive;
+    bool immune = false;
     float flashDuration;
     int health;
     int handle;
