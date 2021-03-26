@@ -168,7 +168,7 @@ void Misc::spectatorList() noexcept
             continue;
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
-            ImGui::TextWrapped("%s", it->name);
+            ImGui::TextWrapped("%s", it->name.c_str());
         }
     }
 
