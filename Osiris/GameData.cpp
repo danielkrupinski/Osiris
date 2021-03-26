@@ -383,7 +383,7 @@ PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ en
 
 void PlayerData::update(Entity* entity) noexcept
 {
-    entity->getPlayerName(name);
+    name = entity->getPlayerName();
 
     dormant = entity->isDormant();
     if (dormant)

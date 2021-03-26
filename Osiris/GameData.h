@@ -135,7 +135,7 @@ struct PlayerData : BaseData {
     int health;
     int handle;
     Team team;
-    char name[128];
+    std::string name;
     Vector headMins, headMaxs;
     Vector origin;
     std::string activeWeapon;
