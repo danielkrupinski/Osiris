@@ -32,6 +32,23 @@
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
+static ImFont* addFontFromVFONT(const std::string& path, float size, const ImWchar* glyphRanges, bool merge) noexcept
+{
+    auto file = Helpers::loadBinaryFile(path);
+    if (!Helpers::decodeVFONT(file))
+        return nullptr;
+
+    ImFontConfig cfg;
+    cfg.FontData = file.data();
+    cfg.FontDataSize = file.size();
+    cfg.FontDataOwnedByAtlas = false;
+    cfg.MergeMode = merge;
+    cfg.GlyphRanges = glyphRanges;
+    cfg.SizePixels = size;
+
+    return ImGui::GetIO().Fonts->AddFont(&cfg);
+}
+
 GUI::GUI() noexcept
 {
     ImGui::StyleColorsDark();
@@ -64,6 +81,8 @@ GUI::GUI() noexcept
 
         fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
+#else
+    addFontFromVFONT("csgo/panorama/fonts/notosans-regular.vfont", 15.0f, Helpers::getFontGlyphRanges(), false);
 #endif
 }
 
