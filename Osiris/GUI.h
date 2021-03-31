@@ -43,7 +43,6 @@ private:
 
     struct {
         ImFont* tahoma = nullptr;
-        ImFont* segoeui = nullptr;
     } fonts;
 
     float timeToNextConfigRefresh = 0.1f;
