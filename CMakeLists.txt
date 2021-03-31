@@ -20,6 +20,8 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
+add_compile_definitions(FT2_BUILD_LIBRARY)
+
 include_directories(/usr/local/include /usr/include/SDL2/ "${CMAKE_SOURCE_DIR}/Osiris/freetype/")
 link_directories(/usr/local/lib)
 
