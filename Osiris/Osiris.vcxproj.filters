@@ -212,6 +212,9 @@
     <ClCompile Include="freetype\src\truetype\truetype.c">
       <Filter>freetype</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\imgui_freetype.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
@@ -543,6 +546,9 @@
     </ClInclude>
     <ClInclude Include="freetype\freetype\config\ftoption.h">
       <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_freetype.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
