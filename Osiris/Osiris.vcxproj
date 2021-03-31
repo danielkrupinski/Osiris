@@ -13,6 +13,22 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="EventListener.cpp" />
+    <ClCompile Include="freetype\src\autofit\autofit.c" />
+    <ClCompile Include="freetype\src\base\ftbase.c" />
+    <ClCompile Include="freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="freetype\src\base\ftdebug.c" />
+    <ClCompile Include="freetype\src\base\ftglyph.c" />
+    <ClCompile Include="freetype\src\base\ftinit.c" />
+    <ClCompile Include="freetype\src\base\ftsynth.c" />
+    <ClCompile Include="freetype\src\base\ftsystem.c" />
+    <ClCompile Include="freetype\src\cff\cff.c" />
+    <ClCompile Include="freetype\src\psaux\psaux.c" />
+    <ClCompile Include="freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="freetype\src\psnames\psnames.c" />
+    <ClCompile Include="freetype\src\raster\raster.c" />
+    <ClCompile Include="freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="freetype\src\smooth\smooth.c" />
+    <ClCompile Include="freetype\src\truetype\truetype.c" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="Hacks\Aimbot.cpp" />
     <ClCompile Include="Hacks\AntiAim.cpp" />
@@ -60,6 +76,8 @@
     <ClInclude Include="ConfigStructs.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="fnv.h" />
+    <ClInclude Include="freetype\freetype\config\ftmodule.h" />
+    <ClInclude Include="freetype\freetype\config\ftoption.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="Hacks\Aimbot.h" />
     <ClInclude Include="Hacks\AntiAim.h" />
