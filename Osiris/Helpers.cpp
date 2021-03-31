@@ -1,5 +1,6 @@
 #include <cmath>
 #include <cwctype>
+#include <fstream>
 #include <tuple>
 
 #include "imgui/imgui.h"
@@ -93,4 +94,17 @@ std::wstring Helpers::toUpper(std::wstring str) noexcept
         return std::towupper(w);
     });
     return str;
+}
+
+std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
+{
+    std::vector<char> result;
+    std::ifstream in{ path, std::ios::binary };
+    if (!in)
+        return result;
+    in.seekg(0, std::ios_base::end);
+    result.resize(static_cast<std::size_t>(in.tellg()));
+    in.seekg(0, std::ios_base::beg);
+    in.read(result.data(), result.size());
+    return result;
 }
