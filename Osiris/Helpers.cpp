@@ -96,6 +96,35 @@ std::wstring Helpers::toUpper(std::wstring str) noexcept
     return str;
 }
 
+bool Helpers::decodeVFONT(std::vector<char>& buffer) noexcept
+{
+    constexpr std::string_view tag = "VFONT1";
+    unsigned char magic = 0xA7;
+
+    if (buffer.size() <= tag.length())
+        return false;
+
+    const auto tagIndex = buffer.size() - tag.length();
+    if (std::memcmp(tag.data(), &buffer[tagIndex], tag.length()))
+        return false;
+
+    unsigned char saltBytes = buffer[tagIndex - 1];
+    const auto saltIndex = tagIndex - saltBytes;
+    --saltBytes;
+
+    for (std::size_t i = 0; i < saltBytes; ++i)
+        magic ^= (buffer[saltIndex + i] + 0xA7) % 0x100;
+
+    for (std::size_t i = 0; i < saltIndex; ++i) {
+        unsigned char xored = buffer[i] ^ magic;
+        magic = (buffer[i] + 0xA7) % 0x100;
+        buffer[i] = xored;
+    }
+
+    buffer.resize(saltIndex);
+    return true;
+}
+
 std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
 {
     std::vector<char> result;
