@@ -537,7 +537,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         }
     };
 
-    if (ImGui::ListBoxHeader("##list", { 170.0f, 300.0f })) {
+    if (ImGui::BeginListBox("##list", { 170.0f, 300.0f })) {
         constexpr std::array categories{ "Enemies", "Allies", "Weapons", "Projectiles", "Loot Crates", "Other Entities" };
 
         for (std::size_t i = 0; i < categories.size(); ++i) {
@@ -754,7 +754,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             ImGui::Unindent();
             ImGui::PopID();
         }
-        ImGui::ListBoxFooter();
+        ImGui::EndListBox();
     }
 
     ImGui::SameLine();
@@ -1116,8 +1116,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         static std::size_t selectedStickerSlot = 0;
 
         ImGui::PushItemWidth(-1);
+        ImVec2 size;
+        size.x = 0.0f;
+        size.y = ImGui::GetTextLineHeightWithSpacing() * 5.25f + ImGui::GetStyle().FramePadding.y * 2.0f;
 
-        if (ImGui::ListBoxHeader("", 5)) {
+        if (ImGui::BeginListBox("", size)) {
             for (int i = 0; i < 5; ++i) {
                 ImGui::PushID(i);
 
@@ -1129,7 +1132,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
                 ImGui::PopID();
             }
-            ImGui::ListBoxFooter();
+            ImGui::EndListBox();
         }
 
         ImGui::PopItemWidth();
