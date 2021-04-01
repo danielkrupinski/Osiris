@@ -42,7 +42,7 @@ private:
     } window;
 
     struct {
-        ImFont* tahoma = nullptr;
+        ImFont* normal15px = nullptr;
     } fonts;
 
     float timeToNextConfigRefresh = 0.1f;

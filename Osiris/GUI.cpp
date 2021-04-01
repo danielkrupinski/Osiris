@@ -69,7 +69,7 @@ GUI::GUI() noexcept
         ImFontConfig cfg;
         cfg.OversampleV = 3;
 
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+        fonts.normal15px = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
 
         cfg.MergeMode = true;
         static constexpr ImWchar symbol[]{
@@ -80,7 +80,7 @@ GUI::GUI() noexcept
         cfg.MergeMode = false;
     }
 #else
-    addFontFromVFONT("csgo/panorama/fonts/notosans-regular.vfont", 15.0f, Helpers::getFontGlyphRanges(), false);
+    fonts.normal15px = addFontFromVFONT("csgo/panorama/fonts/notosans-regular.vfont", 15.0f, Helpers::getFontGlyphRanges(), false);
 #endif
 }
 
