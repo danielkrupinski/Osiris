@@ -86,6 +86,7 @@ GUI::GUI() noexcept
 #endif
     if (!fonts.normal15px)
         io.Fonts->AddFontDefault(&cfg);
+    addFontFromVFONT("csgo/panorama/fonts/notosanskr-regular.vfont", 15.0f, io.Fonts->GetGlyphRangesKorean(), true);
     addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 15.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
