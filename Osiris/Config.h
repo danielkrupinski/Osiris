@@ -185,8 +185,8 @@ public:
         bool autoStrafe{ false };
         bool bunnyHop{ false };
         bool customClanTag{ false };
-        bool clocktag{ false };
-        bool animatedClanTag{ false };
+        int tagType{ 0 };
+        float tagUpdateInterval{ 0.5f };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };

@@ -440,9 +440,9 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Auto strafe", m.autoStrafe);
     read(j, "Bunny hop", m.bunnyHop);
     read(j, "Custom clan tag", m.customClanTag);
-    read(j, "Clock tag", m.clocktag);
     read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
-    read(j, "Animated clan tag", m.animatedClanTag);
+    read(j, "Clan tag type", m.tagType);
+    read(j, "Clan tag update interval", m.tagUpdateInterval);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
@@ -814,12 +814,12 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Auto strafe", autoStrafe);
     WRITE("Bunny hop", bunnyHop);
     WRITE("Custom clan tag", customClanTag);
-    WRITE("Clock tag", clocktag);
 
     if (o.clanTag[0])
         j["Clan tag"] = o.clanTag;
 
-    WRITE("Animated clan tag", animatedClanTag);
+    WRITE("Clan tag type", tagType);
+    WRITE("Clan tag update interval", tagUpdateInterval);
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);

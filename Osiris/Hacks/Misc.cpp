@@ -90,9 +90,12 @@ void Misc::inverseRagdollGravity() noexcept
 void Misc::updateClanTag(bool tagChanged) noexcept
 {
     static std::string clanTag;
+    static std::string origTag;
+    static bool flip = false;
 
     if (tagChanged) {
         clanTag = config->misc.clanTag;
+        origTag = config->misc.clanTag;
         if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
             clanTag.push_back(' ');
         return;
@@ -100,28 +103,55 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     
     static auto lastTime = 0.0f;
 
-    if (config->misc.clocktag) {
-        if (memory->globalVars->realtime - lastTime < 1.0f)
+    if (config->misc.customClanTag && !origTag.empty()) {
+        if (memory->globalVars->realtime - lastTime < config->misc.tagUpdateInterval)
             return;
 
         const auto time = std::time(nullptr);
         const auto localTime = std::localtime(&time);
-        char s[11];
-        s[0] = '\0';
-        snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(s, s);
-    } else if (config->misc.customClanTag) {
-        if (memory->globalVars->realtime - lastTime < 0.6f)
-            return;
+        auto offset = 0;
 
-        if (config->misc.animatedClanTag && !clanTag.empty()) {
-            const auto offset = Helpers::utf8SeqLen(clanTag[0]);
-            if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
-                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+        switch (config->misc.tagType) {
+            case 1: //normal anim
+                offset = Helpers::utf8SeqLen(clanTag[0]);
+                if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
+                    std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+                break;
+
+            case 2: //reverse anim
+                offset = Helpers::utf8SeqLen(clanTag[0]);
+                if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
+                    std::rotate(clanTag.begin(), clanTag.begin() - offset, clanTag.end());
+                break;
+
+            case 3: //auto reverse
+                offset = Helpers::utf8SeqLen(origTag[0]);
+                if (origTag.length() > clanTag.length() && !flip)
+                    clanTag = origTag.substr(0, clanTag.length() + offset);
+                else if (clanTag.length() == 0)
+                    flip = false;
+                else if (origTag.length() <= clanTag.length() || flip) {
+                    flip = true;
+                    clanTag = origTag.substr(0, clanTag.length() - offset);
+                }
+                break;
+
+            case 4: //clock
+                if (memory->globalVars->realtime - lastTime < 1.0f)
+                    return;
+
+                char s[11];
+                s[0] = '\0';
+                snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+                lastTime = memory->globalVars->realtime;
+                memory->setClanTag(s, s);
+                break;
         }
-        lastTime = memory->globalVars->realtime;
-        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+
+        if (config->misc.tagType != 2) {
+            lastTime = memory->globalVars->realtime;
+            memory->setClanTag(clanTag.c_str(), clanTag.c_str());
+        }
     }
 }
 

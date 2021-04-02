@@ -1315,8 +1315,6 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     ImGui::SliderFloat("Aspect Ratio", &config->misc.aspectratio, 0.0f, 5.0f, "%.2f");
     ImGui::NextColumn();
     ImGui::Checkbox("Disable HUD blur", &config->misc.disablePanoramablur);
-    ImGui::Checkbox("Animated clan tag", &config->misc.animatedClanTag);
-    ImGui::Checkbox("Clock tag", &config->misc.clocktag);
     ImGui::Checkbox("Custom clantag", &config->misc.customClanTag);
     ImGui::SameLine();
     ImGui::PushItemWidth(120.0f);
@@ -1324,6 +1322,20 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
 
     if (ImGui::InputText("", config->misc.clanTag, sizeof(config->misc.clanTag)))
         Misc::updateClanTag(true);
+    ImGui::PopID();
+    ImGui::SameLine();
+    ImGui::PushID("Clantag options");
+    if (ImGui::Button("..."))
+        ImGui::OpenPopup("");
+
+    if (ImGui::BeginPopup("")) {
+        ImGui::SameLine();
+        ImGui::PushItemWidth(120.0f);
+        ImGui::Combo("Animation", &config->misc.tagType, "Static\0Animated\0Reverse animated\0Auto reverse\0Clock\0");
+        ImGui::SliderFloat("Update rate", &config->misc.tagUpdateInterval, 0.5f, 3.f, "%.1f");
+        ImGui::PopItemWidth();
+        ImGui::EndPopup();
+    }
     ImGui::PopID();
     ImGui::Checkbox("Kill message", &config->misc.killMessage);
     ImGui::SameLine();
