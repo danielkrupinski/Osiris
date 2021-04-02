@@ -1331,7 +1331,8 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (ImGui::BeginPopup("")) {
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        ImGui::Combo("Animation", &config->misc.tagType, "Static\0Animated\0Reverse animated\0Auto reverse\0Clock\0");
+        if (ImGui::Combo("Animation", &config->misc.tagType, "Static\0Animated\0Auto reverse\0Clock\0"))
+            Misc::updateClanTag(true);
         ImGui::SliderFloat("Update rate", &config->misc.tagUpdateInterval, 0.5f, 3.f, "%.1f");
         ImGui::PopItemWidth();
         ImGui::EndPopup();
