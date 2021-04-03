@@ -1331,9 +1331,29 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     if (ImGui::BeginPopup("")) {
         ImGui::SameLine();
         ImGui::PushItemWidth(120.0f);
-        if (ImGui::Combo("Animation", &config->misc.tagType, "Static\0Animated\0Auto reverse\0Reverse auto reverse\0Clock\0"))
+        if (ImGui::Combo("Animation", &config->misc.tagType, "Static\0Animated\0Auto reverse\0Reverse auto reverse\0Custom\0Clock\0"))
             Misc::updateClanTag(true);
-        ImGui::SliderFloat("Update rate", &config->misc.tagUpdateInterval, 0.5f, 3.f, "%.1f");
+        if (config->misc.tagType != 0 && config->misc.tagType != 5) //dont ask for update rate if it is static or clock
+            ImGui::SliderFloat("Update rate", &config->misc.tagUpdateInterval, 0.5f, 3.f, "%.1f");
+        if (config->misc.tagType == 4) {
+            for (auto i = 0; i < config->misc.tagAnimationSteps.size(); i++) {
+                ImGui::PushID(i+100);
+                ImGui::InputText("", &config->misc.tagAnimationSteps[i]);
+                ImGui::PopID();
+            }
+
+            if (ImGui::Button("+")) {
+                config->misc.tagAnimationSteps.push_back("");
+                Misc::updateClanTag(true);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("-") && config->misc.tagAnimationSteps.size() > 2) {
+                config->misc.tagAnimationSteps.pop_back();
+                Misc::updateClanTag(true);
+            }
+        }
         ImGui::PopItemWidth();
         ImGui::EndPopup();
     }

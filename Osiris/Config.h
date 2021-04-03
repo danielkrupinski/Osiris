@@ -187,6 +187,7 @@ public:
         bool customClanTag{ false };
         int tagType{ 0 };
         float tagUpdateInterval{ 0.5f };
+        std::vector<std::string> tagAnimationSteps{ "","" };
         bool fastDuck{ false };
         bool moonwalk{ false };
         bool edgejump{ false };

@@ -98,6 +98,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         clanTag = config->misc.clanTag;
         origTag = config->misc.clanTag;
         count = 0;
+        flip = false;
         if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ') {
             clanTag.push_back(' ');
             origTag.push_back(' ');
@@ -108,7 +109,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     static auto lastTime = 0.0f;
 
     if (config->misc.customClanTag) {
-        if ((memory->globalVars->realtime - lastTime < config->misc.tagUpdateInterval) && (!tagChanged || origTag.empty()) && config->misc.tagType != 4)
+        if ((memory->globalVars->realtime - lastTime < config->misc.tagUpdateInterval) && (!tagChanged || origTag.empty()) && config->misc.tagType != 5)
             return;
 
         const auto time = std::time(nullptr);
@@ -134,7 +135,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 }
                 break;
 
-            case 3: //reverse auto reverse? idk what is this
+            case 3: //reverse auto reverse?
                 offset = Helpers::utf8SeqLen(origTag[0]);
                 if (origTag.length() > clanTag.length() && !flip)
                     clanTag = origTag.substr(0, clanTag.length() + offset);
@@ -147,8 +148,16 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                     clanTag = origTag.substr(0 + (offset * ++count), origTag.length());
                 }
                 break;
+            
+            case 4: //custom animation
+                clanTag = config->misc.tagAnimationSteps[count];
+                if (count < config->misc.tagAnimationSteps.size() - 1)
+                    count++;
+                else
+                    count = 0;
+                break;
 
-            case 4: //clock
+            case 5: //clock
                 if (memory->globalVars->realtime - lastTime < 1.0f)
                     return;
 

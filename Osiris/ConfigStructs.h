@@ -258,6 +258,15 @@ static void read(const json& j, const char* key, KeyBind& o) noexcept
         o = val.get<std::string>().c_str();
 }
 
+static void read(const json& j, const char* key, std::vector<std::string>& o) noexcept
+{
+    if (!j.contains(key))
+        return;
+
+    if (const auto& val = j[key]; val.is_array())
+        o = val.get<std::vector<std::string>>();
+}
+
 static void read(const json& j, const char* key, char* o, std::size_t size) noexcept
 {
     if (!j.contains(key))

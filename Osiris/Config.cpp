@@ -443,6 +443,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
     read(j, "Clan tag type", m.tagType);
     read(j, "Clan tag update interval", m.tagUpdateInterval);
+    read(j, "Clan tag animation steps", m.tagAnimationSteps);
     read(j, "Fast duck", m.fastDuck);
     read(j, "Moonwalk", m.moonwalk);
     read(j, "Edge Jump", m.edgejump);
@@ -820,6 +821,7 @@ static void to_json(json& j, const Config::Misc& o)
 
     WRITE("Clan tag type", tagType);
     WRITE("Clan tag update interval", tagUpdateInterval);
+    WRITE("Clan tag animation steps", tagAnimationSteps);
     WRITE("Fast duck", fastDuck);
     WRITE("Moonwalk", moonwalk);
     WRITE("Edge Jump", edgejump);
