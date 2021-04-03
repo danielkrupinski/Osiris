@@ -92,19 +92,23 @@ void Misc::updateClanTag(bool tagChanged) noexcept
     static std::string clanTag;
     static std::string origTag;
     static bool flip = false;
+    static int count = 0;
 
     if (tagChanged) {
         clanTag = config->misc.clanTag;
         origTag = config->misc.clanTag;
-        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ')
+        count = 0;
+        if (!clanTag.empty() && clanTag.front() != ' ' && clanTag.back() != ' ') {
             clanTag.push_back(' ');
+            origTag.push_back(' ');
+        }
         return;
     }
     
     static auto lastTime = 0.0f;
 
-    if (config->misc.customClanTag && !origTag.empty()) {
-        if ((memory->globalVars->realtime - lastTime < config->misc.tagUpdateInterval) && !tagChanged)
+    if (config->misc.customClanTag) {
+        if ((memory->globalVars->realtime - lastTime < config->misc.tagUpdateInterval) && (!tagChanged || origTag.empty()) && config->misc.tagType != 4)
             return;
 
         const auto time = std::time(nullptr);
@@ -130,7 +134,21 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 }
                 break;
 
-            case 3: //clock
+            case 3: //reverse auto reverse? idk what is this
+                offset = Helpers::utf8SeqLen(origTag[0]);
+                if (origTag.length() > clanTag.length() && !flip)
+                    clanTag = origTag.substr(0, clanTag.length() + offset);
+                else if (clanTag.length() == 0) {
+                    flip = false;
+                    count = 0;
+                }
+                else if (origTag.length() <= clanTag.length() || flip) {
+                    flip = true;
+                    clanTag = origTag.substr(0 + (offset * ++count), origTag.length());
+                }
+                break;
+
+            case 4: //clock
                 if (memory->globalVars->realtime - lastTime < 1.0f)
                     return;
 
@@ -139,13 +157,11 @@ void Misc::updateClanTag(bool tagChanged) noexcept
                 snprintf(s, sizeof(s), "[%02d:%02d:%02d]", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
                 lastTime = memory->globalVars->realtime;
                 memory->setClanTag(s, s);
-                break;
+                return;
         }
 
-        if (config->misc.tagType != 3) {
-            lastTime = memory->globalVars->realtime;
-            memory->setClanTag(clanTag.c_str(), clanTag.c_str());
-        }
+        lastTime = memory->globalVars->realtime;
+        memory->setClanTag(clanTag.c_str(), clanTag.c_str());
     }
 }
 
