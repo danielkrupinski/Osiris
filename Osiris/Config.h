@@ -214,6 +214,7 @@ public:
         bool quickReload{ false };
         bool prepareRevolver{ false };
         bool oppositeHandKnife = false;
+        bool deathmatchGod = false;
         PreserveKillfeed preserveKillfeed;
         char clanTag[16];
         KeyBind edgejumpkey = KeyBind::NONE;
