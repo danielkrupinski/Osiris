@@ -1043,6 +1043,25 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
+void Misc::updateEventListeners(bool forceRemove) noexcept
+{
+    class PurchaseEventListener : public GameEventListener {
+    public:
+        void fireGameEvent(GameEvent* event) { purchaseList(event); }
+    };
+
+    static PurchaseEventListener listener;
+    static bool listenerRegistered = false;
+
+    if (config->misc.purchaseList.enabled && !listenerRegistered) {
+        interfaces->gameEventManager->addListener(&listener, "item_purchase");
+        listenerRegistered = true;
+    } else if ((!config->misc.purchaseList.enabled || forceRemove) && listenerRegistered) {
+        interfaces->gameEventManager->removeListener(&listener);
+        listenerRegistered = false;
+    }
+}
+
 void Misc::updateInput() noexcept
 {
 

@@ -282,6 +282,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::disablePanoramablur();
         Visuals::colorWorld();
         Misc::fakePrime();
+        Misc::updateEventListeners();
     }
     if (interfaces->engine->isInGame()) {
         Visuals::skybox(stage);
@@ -670,6 +671,8 @@ static DWORD WINAPI unload(HMODULE moduleHandle) noexcept
 
 void Hooks::uninstall() noexcept
 {
+    Misc::updateEventListeners(true);
+
 #ifdef _WIN32
     if constexpr (std::is_same_v<HookType, MinHook>) {
         MH_DisableHook(MH_ALL_HOOKS);
