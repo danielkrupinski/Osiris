@@ -51,5 +51,6 @@ namespace Misc
     void autoAccept(const char* soundEntry) noexcept;
     void deathmatchGod() noexcept;
 
+    void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
 }

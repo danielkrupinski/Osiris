@@ -131,14 +131,14 @@ static void renderBox(const BoundingBox& bbox, const Box& config) noexcept
     switch (config.type) {
     case Box::_2d:
         if (config.fill.enabled)
-            drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawCornerFlags_All);
+            drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawFlags_RoundCornersAll);
         else
-            drawList->AddRect(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.rounding, ImDrawCornerFlags_All);
-        drawList->AddRect(bbox.min, bbox.max, color, config.rounding, ImDrawCornerFlags_All);
+            drawList->AddRect(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max + ImVec2{ 1.0f, 1.0f }, color & IM_COL32_A_MASK, config.rounding, ImDrawFlags_RoundCornersAll);
+        drawList->AddRect(bbox.min, bbox.max, color, config.rounding, ImDrawFlags_RoundCornersAll);
         break;
     case Box::_2dCorners: {
         if (config.fill.enabled) {
-            drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawCornerFlags_All);
+            drawList->AddRectFilled(bbox.min + ImVec2{ 1.0f, 1.0f }, bbox.max - ImVec2{ 1.0f, 1.0f }, fillColor, config.rounding, ImDrawFlags_RoundCornersAll);
         }
 
         const bool wantsShadow = !config.fill.enabled;
@@ -321,7 +321,7 @@ static void renderPlayerBox(const PlayerData& playerData, const Player& config) 
     FontPush font{ config.font.name, playerData.distanceToLocal };
 
     if (config.name.enabled) {
-        const auto nameSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.name, playerData.name, { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
+        const auto nameSize = renderText(playerData.distanceToLocal, config.textCullDistance, config.name, playerData.name.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
         offsetMins.y -= nameSize.y + 5;
     }
 
@@ -453,11 +453,16 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
         || playerConfig.spottedOnly && !playerData.spotted && !(playerConfig.audibleOnly && playerData.audible)) // if both "Audible Only" and "Spotted Only" are on treat them as audible OR spotted
         return true;
 
+    if (playerData.immune)
+        Helpers::setAlphaFactor(0.5f);
+
     renderPlayerBox(playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
 
     if (const BoundingBox headBbox{ playerData.headMins, playerData.headMaxs, playerConfig.headBox.scale })
         renderBox(headBbox, playerConfig.headBox);
+
+    Helpers::setAlphaFactor(1.0f);
 
     return true;
 }

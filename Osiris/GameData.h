@@ -131,11 +131,12 @@ struct PlayerData : BaseData {
     bool spotted;
     bool inViewFrustum;
     bool alive;
+    bool immune = false;
     float flashDuration;
     int health;
     int handle;
     Team team;
-    char name[128];
+    std::string name;
     Vector headMins, headMaxs;
     Vector origin;
     std::string activeWeapon;

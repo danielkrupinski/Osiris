@@ -168,7 +168,7 @@ void Misc::spectatorList() noexcept
             continue;
 
         if (const auto it = std::ranges::find(GameData::players(), observer.playerHandle, &PlayerData::handle); it != GameData::players().cend()) {
-            ImGui::TextWrapped("%s", it->name);
+            ImGui::TextWrapped("%s", it->name.c_str());
         }
     }
 
@@ -806,9 +806,9 @@ void Misc::purchaseList(GameEvent* event) noexcept
 
                 if (const auto player = GameData::playerByHandle(handle)) {
                     if (config->misc.purchaseList.showPrices)
-                        ImGui::TextWrapped("%s $%d: %s", player->name, purchases.totalCost, s.c_str());
+                        ImGui::TextWrapped("%s $%d: %s", player->name.c_str(), purchases.totalCost, s.c_str());
                     else
-                        ImGui::TextWrapped("%s: %s", player->name, s.c_str());
+                        ImGui::TextWrapped("%s: %s", player->name.c_str(), s.c_str());
                 }
             }
         } else if (config->misc.purchaseList.mode == PurchaseList::Summary) {
@@ -961,9 +961,10 @@ void Misc::voteRevealer(GameEvent& event) noexcept
         return;
     
     const auto votedYes = event.getInt("vote_option") == 0;
+    const auto isLocal = localPlayer && entity == localPlayer.get();
     const char color = votedYes ? '\x06' : '\x07';
-    
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", color, entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+
+    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
 void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
@@ -1056,6 +1057,25 @@ void Misc::deathmatchGod() noexcept
     if (nextTime <= memory->globalVars->realtime) {
         interfaces->engine->clientCmdUnrestricted("open_buymenu");
         nextTime = memory->globalVars->realtime + 0.25f;
+    }
+}
+
+void Misc::updateEventListeners(bool forceRemove) noexcept
+{
+    class PurchaseEventListener : public GameEventListener {
+    public:
+        void fireGameEvent(GameEvent* event) { purchaseList(event); }
+    };
+
+    static PurchaseEventListener listener;
+    static bool listenerRegistered = false;
+
+    if (config->misc.purchaseList.enabled && !listenerRegistered) {
+        interfaces->gameEventManager->addListener(&listener, "item_purchase");
+        listenerRegistered = true;
+    } else if ((!config->misc.purchaseList.enabled || forceRemove) && listenerRegistered) {
+        interfaces->gameEventManager->removeListener(&listener);
+        listenerRegistered = false;
     }
 }
 

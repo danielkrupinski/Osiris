@@ -30,6 +30,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{ad9f0ad1-ce71-4bc4-b5eb-dd6a018f4fae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="freetype">
+      <UniqueIdentifier>{15481d2e-5516-4ece-9b00-79e32710804c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -160,6 +163,57 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\autofit\autofit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\cff\cff.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftbase.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftbitmap.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftdebug.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftglyph.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftinit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftsynth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftsystem.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\psaux\psaux.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\pshinter\pshinter.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\psnames\psnames.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\raster\raster.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\sfnt\sfnt.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\smooth\smooth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\truetype\truetype.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_freetype.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -486,6 +540,15 @@
     </ClInclude>
     <ClInclude Include="SDK\ClientMode.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="freetype\freetype\config\ftmodule.h">
+      <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="freetype\freetype\config\ftoption.h">
+      <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_freetype.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

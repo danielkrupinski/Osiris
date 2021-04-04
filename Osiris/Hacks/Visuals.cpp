@@ -561,6 +561,25 @@ void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
     }
 }
 
+void Visuals::updateEventListeners(bool forceRemove) noexcept
+{
+    class ImpactEventListener : public GameEventListener {
+    public:
+        void fireGameEvent(GameEvent* event) { bulletTracer(*event); }
+    };
+
+    static ImpactEventListener listener;
+    static bool listenerRegistered = false;
+
+    if (config->visuals.bulletTracers.enabled && !listenerRegistered) {
+        interfaces->gameEventManager->addListener(&listener, "bullet_impact");
+        listenerRegistered = true;
+    } else if ((!config->visuals.bulletTracers.enabled || forceRemove) && listenerRegistered) {
+        interfaces->gameEventManager->removeListener(&listener);
+        listenerRegistered = false;
+    }
+}
+
 void Visuals::updateInput() noexcept
 {
     config->visuals.thirdpersonKey.handleToggle();

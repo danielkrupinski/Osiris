@@ -13,11 +13,11 @@ EventListener::EventListener() noexcept
 {
     assert(interfaces);
 
-    interfaces->gameEventManager->addListener(this, "item_purchase");
+    //interfaces->gameEventManager->addListener(this, "item_purchase");
+    //interfaces->gameEventManager->addListener(this, "bullet_impact");
     interfaces->gameEventManager->addListener(this, "round_start");
     interfaces->gameEventManager->addListener(this, "round_freeze_end");
     interfaces->gameEventManager->addListener(this, "player_hurt");
-    interfaces->gameEventManager->addListener(this, "bullet_impact");
 
     interfaces->gameEventManager->addListener(this, "player_death");
     interfaces->gameEventManager->addListener(this, "vote_cast");
@@ -42,7 +42,7 @@ void EventListener::fireGameEvent(GameEvent* event)
         GameData::clearProjectileList();
         Misc::preserveKillfeed(true);
         [[fallthrough]];
-    case fnv::hash("item_purchase"):
+   // case fnv::hash("item_purchase"):
     case fnv::hash("round_freeze_end"):
         Misc::purchaseList(event);
         break;
@@ -57,9 +57,9 @@ void EventListener::fireGameEvent(GameEvent* event)
         Visuals::hitEffect(event);
         Visuals::hitMarker(event);
         break;
-    case fnv::hash("bullet_impact"):
-        Visuals::bulletTracer(*event);
-        break;
+   // case fnv::hash("bullet_impact"):
+   //     Visuals::bulletTracer(*event);
+   //     break;
     case fnv::hash("vote_cast"):
         Misc::voteRevealer(*event);
         break;

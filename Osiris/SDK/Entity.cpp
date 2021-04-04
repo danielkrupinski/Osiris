@@ -22,7 +22,7 @@ void Entity::getPlayerName(char(&out)[128]) noexcept
     memory->getDecoratedPlayerName(*memory->playerResource, index(), wide, sizeof(wide), 4);
 
     auto end = std::remove(wide, wide + wcslen(wide), L'\n');
-    *end = L'\0';
+    end = std::remove_if(wide, end, [](wchar_t c) { return c > 0 && c < 17; }); // remove color markup
     end = std::unique(wide, end, [](wchar_t a, wchar_t b) { return a == L' ' && a == b; });
     *end = L'\0';
 

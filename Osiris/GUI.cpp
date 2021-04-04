@@ -32,6 +32,23 @@
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
+static ImFont* addFontFromVFONT(const std::string& path, float size, const ImWchar* glyphRanges, bool merge) noexcept
+{
+    auto file = Helpers::loadBinaryFile(path);
+    if (!Helpers::decodeVFONT(file))
+        return nullptr;
+
+    ImFontConfig cfg;
+    cfg.FontData = file.data();
+    cfg.FontDataSize = file.size();
+    cfg.FontDataOwnedByAtlas = false;
+    cfg.MergeMode = merge;
+    cfg.GlyphRanges = glyphRanges;
+    cfg.SizePixels = size;
+
+    return ImGui::GetIO().Fonts->AddFont(&cfg);
+}
+
 GUI::GUI() noexcept
 {
     ImGui::StyleColorsDark();
@@ -44,15 +61,17 @@ GUI::GUI() noexcept
     io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
+    ImFontConfig cfg;
+    cfg.SizePixels = 15.0f;
+
 #ifdef _WIN32
     if (PWSTR pathToFonts; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr, &pathToFonts))) {
         const std::filesystem::path path{ pathToFonts };
         CoTaskMemFree(pathToFonts);
 
-        ImFontConfig cfg;
-        cfg.OversampleV = 3;
-
-        fonts.tahoma = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+        fonts.normal15px = io.Fonts->AddFontFromFileTTF((path / "tahoma.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
+        if (!fonts.normal15px)
+            io.Fonts->AddFontDefault(&cfg);
 
         cfg.MergeMode = true;
         static constexpr ImWchar symbol[]{
@@ -61,10 +80,14 @@ GUI::GUI() noexcept
         };
         io.Fonts->AddFontFromFileTTF((path / "seguisym.ttf").string().c_str(), 15.0f, &cfg, symbol);
         cfg.MergeMode = false;
-
-        fonts.segoeui = io.Fonts->AddFontFromFileTTF((path / "segoeui.ttf").string().c_str(), 15.0f, &cfg, Helpers::getFontGlyphRanges());
     }
+#else
+    fonts.normal15px = addFontFromVFONT("csgo/panorama/fonts/notosans-regular.vfont", 15.0f, Helpers::getFontGlyphRanges(), false);
 #endif
+    if (!fonts.normal15px)
+        io.Fonts->AddFontDefault(&cfg);
+    addFontFromVFONT("csgo/panorama/fonts/notosanskr-regular.vfont", 15.0f, io.Fonts->GetGlyphRangesKorean(), true);
+    addFontFromVFONT("csgo/panorama/fonts/notosanssc-regular.vfont", 15.0f, io.Fonts->GetGlyphRangesChineseFull(), true);
 }
 
 void GUI::render() noexcept
@@ -518,7 +541,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
         }
     };
 
-    if (ImGui::ListBoxHeader("##list", { 170.0f, 300.0f })) {
+    if (ImGui::BeginListBox("##list", { 170.0f, 300.0f })) {
         constexpr std::array categories{ "Enemies", "Allies", "Weapons", "Projectiles", "Loot Crates", "Other Entities" };
 
         for (std::size_t i = 0; i < categories.size(); ++i) {
@@ -735,7 +758,7 @@ void GUI::renderStreamProofESPWindow(bool contentOnly) noexcept
             ImGui::Unindent();
             ImGui::PopID();
         }
-        ImGui::ListBoxFooter();
+        ImGui::EndListBox();
     }
 
     ImGui::SameLine();
@@ -1097,8 +1120,11 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         static std::size_t selectedStickerSlot = 0;
 
         ImGui::PushItemWidth(-1);
+        ImVec2 size;
+        size.x = 0.0f;
+        size.y = ImGui::GetTextLineHeightWithSpacing() * 5.25f + ImGui::GetStyle().FramePadding.y * 2.0f;
 
-        if (ImGui::ListBoxHeader("", 5)) {
+        if (ImGui::BeginListBox("", size)) {
             for (int i = 0; i < 5; ++i) {
                 ImGui::PushID(i);
 
@@ -1110,7 +1136,7 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
 
                 ImGui::PopID();
             }
-            ImGui::ListBoxFooter();
+            ImGui::EndListBox();
         }
 
         ImGui::PopItemWidth();
