@@ -550,5 +550,8 @@
     <ClInclude Include="imgui\imgui_freetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Hacks\Sound.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
