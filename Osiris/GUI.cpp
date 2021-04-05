@@ -1592,10 +1592,7 @@ void GUI::renderGuiStyle2() noexcept
             renderSkinChangerWindow(true);
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Sound")) {
-            renderSoundWindow(true);
-            ImGui::EndTabItem();
-        }
+        Sound::tabItem();
         if (ImGui::BeginTabItem("Style")) {
             renderStyleWindow(true);
             ImGui::EndTabItem();

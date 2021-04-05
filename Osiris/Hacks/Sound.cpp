@@ -12,3 +12,16 @@ void Sound::menuBarItem() noexcept
         ImGui::SetWindowPos("Sound", { 100.0f, 100.0f });
     }
 }
+
+void Sound::tabItem() noexcept
+{
+    if (ImGui::BeginTabItem("Sound")) {
+        drawGUI(true);
+        ImGui::EndTabItem();
+    }
+}
+
+void Sound::drawGUI(bool contentOnly) noexcept
+{
+
+}
