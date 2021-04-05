@@ -215,6 +215,9 @@
     <ClCompile Include="imgui\imgui_freetype.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Hacks\Sound.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI.h">
