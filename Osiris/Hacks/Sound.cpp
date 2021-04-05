@@ -29,8 +29,6 @@ void Sound::modulateSound(const char* name, int entityIndex, float& volume) noex
         modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
     }
 
-    modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
-
     if (!std::strcmp(name, "Player.DamageHelmetFeedback"))
         modulateVolume([](int index) { return config->sound.players[index].headshotVolume; });
     else if (std::strstr(name, "Step"))
