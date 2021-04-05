@@ -40,6 +40,7 @@
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
 #include "Hacks/SkinChanger.h"
+#include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
 
@@ -305,23 +306,7 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
 
 static void __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
-    auto modulateVolume = [&](int(*get)(int)) {
-        if (const auto entity = interfaces->entityList->getEntity(entityIndex); localPlayer && entity && entity->isPlayer()) {
-            if (entityIndex == localPlayer->index())
-                volume *= get(0) / 100.0f;
-            else if (!entity->isOtherEnemy(localPlayer.get()))
-                volume *= get(1) / 100.0f;
-            else
-                volume *= get(2) / 100.0f;
-        }
-    };
-
-    modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
-
-    if (strstr(soundEntry, "Weapon") && strstr(soundEntry, "Single")) {
-        modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
-    }
-    
+    Sound::modulateSound(soundEntry, entityIndex, volume);
     Misc::autoAccept(soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
@@ -419,27 +404,9 @@ static int __STDCALL listLeavesInBox(const Vector& mins, const Vector& maxs, uns
 static int __FASTCALL dispatchSound(SoundInfo& soundInfo) noexcept
 {
     if (const char* soundName = interfaces->soundEmitter->getSoundName(soundInfo.soundIndex)) {
-        auto modulateVolume = [&soundInfo](int(*get)(int)) {
-            if (auto entity{ interfaces->entityList->getEntity(soundInfo.entityIndex) }; entity && entity->isPlayer()) {
-                if (localPlayer && soundInfo.entityIndex == localPlayer->index())
-                    soundInfo.volume *= get(0) / 100.0f;
-                else if (!entity->isOtherEnemy(localPlayer.get()))
-                    soundInfo.volume *= get(1) / 100.0f;
-                else
-                    soundInfo.volume *= get(2) / 100.0f;
-            }
-        };
-
-        modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
-
-        if (!strcmp(soundName, "Player.DamageHelmetFeedback"))
-            modulateVolume([](int index) { return config->sound.players[index].headshotVolume; });
-        else if (strstr(soundName, "Step"))
-            modulateVolume([](int index) { return config->sound.players[index].footstepVolume; });
-        else if (strstr(soundName, "Chicken"))
-            soundInfo.volume *= config->sound.chickenVolume / 100.0f;
+        Sound::modulateSound(soundName, soundInfo.entityIndex, soundInfo.volume);
+        soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     }
-    soundInfo.volume = std::clamp(soundInfo.volume, 0.0f, 1.0f);
     return hooks->originalDispatchSound(soundInfo);
 }
 

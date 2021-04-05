@@ -1,9 +1,43 @@
 #include "../imgui/imgui.h"
 
 #include "../Config.h"
+#include "../Interfaces.h"
+#include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
+#include "../SDK/LocalPlayer.h"
+
 #include "Sound.h"
 
-static bool soundWindowOpen = true;
+static bool soundWindowOpen = false;
+
+void Sound::modulateSound(const char* name, int entityIndex, float& volume) noexcept
+{
+    auto modulateVolume = [&](int(*get)(int)) {
+        if (const auto entity = interfaces->entityList->getEntity(entityIndex); localPlayer && entity && entity->isPlayer()) {
+            if (entityIndex == localPlayer->index())
+                volume *= get(0) / 100.0f;
+            else if (!entity->isOtherEnemy(localPlayer.get()))
+                volume *= get(1) / 100.0f;
+            else
+                volume *= get(2) / 100.0f;
+        }
+    };
+
+    modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
+
+    if (std::strstr(name, "Weapon") && std::strstr(name, "Single")) {
+        modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
+    }
+
+    modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
+
+    if (!std::strcmp(name, "Player.DamageHelmetFeedback"))
+        modulateVolume([](int index) { return config->sound.players[index].headshotVolume; });
+    else if (std::strstr(name, "Step"))
+        modulateVolume([](int index) { return config->sound.players[index].footstepVolume; });
+    else if (std::strstr(name, "Chicken"))
+       volume *= config->sound.chickenVolume / 100.0f;
+}
 
 void Sound::menuBarItem() noexcept
 {
