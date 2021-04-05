@@ -28,6 +28,7 @@
 #include "Hacks/Glow.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
+#include "Hacks/Sound.h"
 
 constexpr auto windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
 | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -179,7 +180,7 @@ void GUI::renderMenuBar() noexcept
         menuBarItem("ESP", window.streamProofESP);
         menuBarItem("Visuals", window.visuals);
         menuBarItem("Skin changer", window.skinChanger);
-        menuBarItem("Sound", window.sound);
+        Sound::menuBarItem();
         menuBarItem("Style", window.style);
         menuBarItem("Misc", window.misc);
         menuBarItem("Config", window.config);
