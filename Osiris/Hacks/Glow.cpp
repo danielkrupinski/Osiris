@@ -296,6 +296,7 @@ void Glow::resetConfig() noexcept
 
 void Glow::render() noexcept {}
 void Glow::clearCustomObjects() noexcept {}
+void Glow::updateInput() noexcept {}
 
 // GUI
 void Glow::menuBarItem() noexcept {}
