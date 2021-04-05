@@ -104,7 +104,7 @@ void GUI::render() noexcept
         renderStreamProofESPWindow();
         renderVisualsWindow();
         renderSkinChangerWindow();
-        renderSoundWindow();
+        Sound::drawGUI(false);
         renderStyleWindow();
         renderMiscWindow();
         renderConfigWindow();
