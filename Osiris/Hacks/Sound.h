@@ -1,8 +1,10 @@
 #pragma once
 
+#include <string_view>
+
 namespace Sound
 {
-    void modulateSound(const char* name, int entityIndex, float& volume) noexcept;
+    void modulateSound(std::string_view name, int entityIndex, float& volume) noexcept;
 
     // GUI
     void menuBarItem() noexcept;

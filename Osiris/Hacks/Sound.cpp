@@ -10,7 +10,7 @@
 
 static bool soundWindowOpen = false;
 
-void Sound::modulateSound(const char* name, int entityIndex, float& volume) noexcept
+void Sound::modulateSound(std::string_view name, int entityIndex, float& volume) noexcept
 {
     auto modulateVolume = [&](int(*get)(int)) {
         if (const auto entity = interfaces->entityList->getEntity(entityIndex); localPlayer && entity && entity->isPlayer()) {
@@ -25,15 +25,13 @@ void Sound::modulateSound(const char* name, int entityIndex, float& volume) noex
 
     modulateVolume([](int index) { return config->sound.players[index].masterVolume; });
 
-    if (std::strstr(name, "Weapon") && std::strstr(name, "Single")) {
-        modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
-    }
-
-    if (!std::strcmp(name, "Player.DamageHelmetFeedback"))
+    if (name == "Player.DamageHelmetFeedback")
         modulateVolume([](int index) { return config->sound.players[index].headshotVolume; });
-    else if (std::strstr(name, "Step"))
+    else if (name.find("Weapon") != std::string_view::npos && name.find("Single") != std::string_view::npos)
+        modulateVolume([](int index) { return config->sound.players[index].weaponVolume; });
+    else if (name.find("Step") != std::string_view::npos)
         modulateVolume([](int index) { return config->sound.players[index].footstepVolume; });
-    else if (std::strstr(name, "Chicken"))
+    else if (name.find("Chicken") != std::string_view::npos)
        volume *= config->sound.chickenVolume / 100.0f;
 }
 
