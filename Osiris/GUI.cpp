@@ -1101,8 +1101,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                         ImGui::PopID();
                     }
                 }
-                ImGui::EndChild();
             }
+            ImGui::EndChild();
             ImGui::PopID();
             ImGui::EndCombo();
         }
@@ -1196,8 +1196,8 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
                         ImGui::PopID();
                     }
                 }
-                ImGui::EndChild();
             }
+            ImGui::EndChild();
             ImGui::PopID();
             ImGui::EndCombo();
         }
