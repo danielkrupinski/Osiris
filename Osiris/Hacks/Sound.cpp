@@ -76,3 +76,42 @@ void Sound::drawGUI(bool contentOnly) noexcept
     if (!contentOnly)
         ImGui::End();
 }
+
+void Sound::resetConfig() noexcept
+{
+    config->sound = {};
+}
+
+static void to_json(json& j, const Config::Sound::Player& o)
+{
+    const Config::Sound::Player dummy;
+
+    WRITE("Master volume", masterVolume);
+    WRITE("Headshot volume", headshotVolume);
+    WRITE("Weapon volume", weaponVolume);
+    WRITE("Footstep volume", footstepVolume);
+}
+
+json Sound::toJson() noexcept
+{
+    const Config::Sound dummy;
+
+    json j;
+    to_json(j["Chicken volume"], config->sound.chickenVolume, dummy.chickenVolume);
+    j["Players"] = config->sound.players;
+    return j;
+}
+
+static void from_json(const json& j, Config::Sound::Player& p)
+{
+    read(j, "Master volume", p.masterVolume);
+    read(j, "Headshot volume", p.headshotVolume);
+    read(j, "Weapon volume", p.weaponVolume);
+    read(j, "Footstep volume", p.footstepVolume);
+}
+
+void Sound::fromJson(const json& j) noexcept
+{
+    read(j, "Chicken volume", config->sound.chickenVolume);
+    read(j, "Players", config->sound.players);
+}
