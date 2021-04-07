@@ -52,7 +52,7 @@ int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPA
 }
 #endif
 
-Config::Config(const char* name) noexcept
+Config::Config() noexcept
 {
 #ifdef _WIN32
     if (PWSTR pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
@@ -64,7 +64,7 @@ Config::Config(const char* name) noexcept
         path = homeDir;
 #endif
 
-    path /= name;
+    path /= "Osiris";
     listConfigs();
     misc.clanTag[0] = '\0';
 

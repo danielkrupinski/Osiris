@@ -73,7 +73,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 
         ImGui::CreateContext();
         ImGui_ImplWin32_Init(window);
-        config = std::make_unique<Config>("Osiris");
+        config = std::make_unique<Config>();
         gui = std::make_unique<GUI>();
 
         hooks->install();
@@ -693,7 +693,7 @@ static int pollEvent(SDL_Event* event) noexcept
         eventListener = std::make_unique<EventListener>();
 
         ImGui::CreateContext();
-        config = std::make_unique<Config>("Osiris");
+        config = std::make_unique<Config>();
 
         gui = std::make_unique<GUI>();
 

@@ -13,7 +13,7 @@
 
 class Config {
 public:
-    explicit Config(const char*) noexcept;
+    Config() noexcept;
     void load(size_t, bool incremental) noexcept;
     void load(const char8_t* name, bool incremental) noexcept;
     void save(size_t) const noexcept;
