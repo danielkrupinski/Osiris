@@ -1030,7 +1030,7 @@ void Config::reset() noexcept
     streamProofESP = { };
     visuals = { };
     skinChanger = { };
-    sound = { };
+    Sound::resetConfig();
     style = { };
     misc = { };
 }

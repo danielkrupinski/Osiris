@@ -159,19 +159,6 @@ public:
 
     std::array<item_setting, 36> skinChanger;
 
-    struct Sound {
-        int chickenVolume = 100;
-
-        struct Player {
-            int masterVolume = 100;
-            int headshotVolume = 100;
-            int weaponVolume = 100;
-            int footstepVolume = 100;
-        };
-
-        std::array<Player, 3> players;
-    } sound;
-
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
