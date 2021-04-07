@@ -83,8 +83,13 @@ struct Shared {
     float textCullDistance = 0.0f;
 };
 
-struct Bar : ColorToggleRounding {
+struct HealthBar : ColorToggle {
+    enum Type {
+        Gradient = 0,
+        Solid
+    };
 
+    int type = Type::Gradient;
 };
 
 struct Player : Shared {
@@ -97,7 +102,7 @@ struct Player : Shared {
     ColorToggle flashDuration;
     bool audibleOnly = false;
     bool spottedOnly = false;
-    bool healthBar = false;
+    HealthBar healthBar;
     ColorToggleThickness skeleton;
     Box headBox;
 
