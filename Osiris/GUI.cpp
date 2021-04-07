@@ -1205,29 +1205,6 @@ void GUI::renderSkinChangerWindow(bool contentOnly) noexcept
         ImGui::End();
 }
 
-void GUI::renderSoundWindow(bool contentOnly) noexcept
-{
-    if (!contentOnly) {
-        if (!window.sound)
-            return;
-        ImGui::SetNextWindowSize({ 0.0f, 0.0f });
-        ImGui::Begin("Sound", &window.sound, windowFlags);
-    }
-    ImGui::SliderInt("Chicken volume", &config->sound.chickenVolume, 0, 200, "%d%%");
-
-    static int currentCategory{ 0 };
-    ImGui::PushItemWidth(110.0f);
-    ImGui::Combo("", &currentCategory, "Local player\0Allies\0Enemies\0");
-    ImGui::PopItemWidth();
-    ImGui::SliderInt("Master volume", &config->sound.players[currentCategory].masterVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Headshot volume", &config->sound.players[currentCategory].headshotVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Weapon volume", &config->sound.players[currentCategory].weaponVolume, 0, 200, "%d%%");
-    ImGui::SliderInt("Footstep volume", &config->sound.players[currentCategory].footstepVolume, 0, 200, "%d%%");
-
-    if (!contentOnly)
-        ImGui::End();
-}
-
 void GUI::renderStyleWindow(bool contentOnly) noexcept
 {
     if (!contentOnly) {
@@ -1529,7 +1506,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 7: config->streamProofESP = { }; break;
                     case 8: config->visuals = { }; break;
                     case 9: config->skinChanger = { }; SkinChanger::scheduleHudUpdate(); break;
-                    case 10: config->sound = { }; break;
+                    case 10: Sound::resetConfig(); break;
                     case 11: config->style = { }; updateColors(); break;
                     case 12: config->misc = { };  Misc::updateClanTag(true); break;
                     }
