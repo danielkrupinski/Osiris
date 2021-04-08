@@ -16,6 +16,7 @@ namespace Helpers
     unsigned int calculateColor(int r, int g, int b, int a) noexcept;
     void setAlphaFactor(float newAlphaFactor) noexcept;
     float getAlphaFactor() noexcept;
+    void convertHSVtoRGB(float h, float s, float v, float& outR, float& outG, float& outB) noexcept;
 
     constexpr auto units2meters(float units) noexcept
     {

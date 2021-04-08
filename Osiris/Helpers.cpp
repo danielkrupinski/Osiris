@@ -53,6 +53,11 @@ float Helpers::getAlphaFactor() noexcept
     return alphaFactor;
 }
 
+void Helpers::convertHSVtoRGB(float h, float s, float v, float& outR, float& outG, float& outB) noexcept
+{
+    ImGui::ColorConvertHSVtoRGB(h, s, v, outR, outG, outB);
+}
+
 ImWchar* Helpers::getFontGlyphRanges() noexcept
 {
     static ImVector<ImWchar> ranges;
