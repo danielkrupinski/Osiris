@@ -162,9 +162,8 @@ struct OffscreenEnemies : ColorToggle {
     OffscreenEnemies() : ColorToggle{ { 1.0f, 0.26f, 0.21f, 1.0f } } {}
 };
 
-struct BulletTracers {
-    bool enabled = false;
-    Color4 color{ 0.0f, 0.75f, 1.0f, 1.0f };
+struct BulletTracers : ColorToggle {
+    BulletTracers() : ColorToggle{ { 0.0f, 0.75f, 1.0f, 1.0f } } {}
 };
 
 using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;

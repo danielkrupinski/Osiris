@@ -475,10 +475,10 @@ void Visuals::bulletTracer(GameEvent& event) noexcept
     beamInfo.haloName = nullptr;
     beamInfo.haloIndex = -1;
 
-    beamInfo.red = 255.0f * config->visuals.bulletTracers.color.color[0];
-    beamInfo.green = 255.0f * config->visuals.bulletTracers.color.color[1];
-    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color.color[2];
-    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color.color[3];
+    beamInfo.red = 255.0f * config->visuals.bulletTracers.color[0];
+    beamInfo.green = 255.0f * config->visuals.bulletTracers.color[1];
+    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color[2];
+    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color[3];
 
     beamInfo.type = 0;
     beamInfo.life = 0.0f;

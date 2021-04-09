@@ -657,8 +657,7 @@ static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& 
 
 static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
 {
-    WRITE("Enabled", enabled);
-    WRITE("Color", color);
+    to_json(j, static_cast<const ColorToggle&>(o), dummy);
 }
 
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
