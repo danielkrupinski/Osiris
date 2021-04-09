@@ -995,7 +995,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + 3);
 
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
-        const auto color = Helpers::calculateColor(config->misc.offscreenEnemies.color);
+        const auto color = Helpers::calculateColor(config->misc.offscreenEnemies);
 
         const ImVec2 trianglePoints[]{
             trianglePos + ImVec2{  0.4f * y, -0.4f * x } * triangleSize,

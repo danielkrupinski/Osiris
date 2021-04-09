@@ -158,9 +158,8 @@ struct PreserveKillfeed {
     bool onlyHeadshots = false;
 };
 
-struct OffscreenEnemies {
-    bool enabled = false;
-    Color4 color{ 1.0f, 0.26f, 0.21f, 1.0f };
+struct OffscreenEnemies : ColorToggle {
+    OffscreenEnemies() : ColorToggle{ { 1.0f, 0.26f, 0.21f, 1.0f } } {}
 };
 
 struct BulletTracers {
