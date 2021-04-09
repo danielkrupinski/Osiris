@@ -221,7 +221,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             const auto healthFraction = std::clamp(health / 100.0f, 0.0f, 1.0f);
             constexpr auto greenHue = 1.0f / 3.0f;
             constexpr auto redHue = 0.0f;
-            ImGui::ColorConvertHSVtoRGB(std::lerp(redHue, greenHue, healthFraction), 1.0f, 1.0f, r, g, b);
+            Helpers::convertHSVtoRGB(std::lerp(redHue, greenHue, healthFraction), 1.0f, 1.0f, r, g, b);
         } else if (cham.rainbow) {
             std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
@@ -262,7 +262,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
             const auto healthFraction = std::clamp(health / 100.0f, 0.0f, 1.0f);
             constexpr auto greenHue = 1.0f / 3.0f;
             constexpr auto redHue = 0.0f;
-            ImGui::ColorConvertHSVtoRGB(std::lerp(redHue, greenHue, healthFraction), 1.0f, 1.0f, r, g, b);
+            Helpers::convertHSVtoRGB(std::lerp(redHue, greenHue, healthFraction), 1.0f, 1.0f, r, g, b);
         } else if (cham.rainbow) {
             std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
