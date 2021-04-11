@@ -47,4 +47,6 @@ namespace Helpers
 
     bool decodeVFONT(std::vector<char>& buffer) noexcept;
     std::vector<char> loadBinaryFile(const std::string& path) noexcept;
+
+    constexpr auto deg2rad(float degrees) noexcept { return degrees * (std::numbers::pi_v<float> / 180.0f); }
 }
