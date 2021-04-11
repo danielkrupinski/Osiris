@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+#include "../Helpers.h"
 #include "Utils.h"
 
 class matrix3x4;
@@ -147,9 +148,9 @@ struct Vector {
 
     static auto fromAngle(const Vector& angle) noexcept
     {
-        return Vector{ std::cos(degreesToRadians(angle.x)) * std::cos(degreesToRadians(angle.y)),
-                       std::cos(degreesToRadians(angle.x)) * std::sin(degreesToRadians(angle.y)),
-                      -std::sin(degreesToRadians(angle.x)) };
+        return Vector{ std::cos(Helpers::deg2rad(angle.x)) * std::cos(Helpers::deg2rad(angle.y)),
+                       std::cos(Helpers::deg2rad(angle.x)) * std::sin(Helpers::deg2rad(angle.y)),
+                      -std::sin(Helpers::deg2rad(angle.x)) };
     }
 
     float x, y, z;

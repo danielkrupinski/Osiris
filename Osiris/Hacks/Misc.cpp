@@ -590,8 +590,8 @@ void Misc::fixMovement(UserCmd* cmd, float yaw) noexcept
 
         const float forwardmove = cmd->forwardmove;
         const float sidemove = cmd->sidemove;
-        cmd->forwardmove = std::cos(degreesToRadians(yawDelta)) * forwardmove + std::cos(degreesToRadians(yawDelta + 90.0f)) * sidemove;
-        cmd->sidemove = std::sin(degreesToRadians(yawDelta)) * forwardmove + std::sin(degreesToRadians(yawDelta + 90.0f)) * sidemove;
+        cmd->forwardmove = std::cos(Helpers::deg2rad(yawDelta)) * forwardmove + std::cos(Helpers::deg2rad(yawDelta + 90.0f)) * sidemove;
+        cmd->sidemove = std::sin(Helpers::deg2rad(yawDelta)) * forwardmove + std::sin(Helpers::deg2rad(yawDelta + 90.0f)) * sidemove;
     }
 }
 
@@ -1001,7 +1001,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
     if (!config->misc.offscreenEnemies.enabled)
         return;
 
-    const auto yaw = degreesToRadians(interfaces->engine->getViewAngles().y);
+    const auto yaw = Helpers::deg2rad(interfaces->engine->getViewAngles().y);
 
     GameData::Lock lock;
     for (auto& player : GameData::players()) {
