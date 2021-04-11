@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <numbers>
 #include <string>
 #include <vector>
 
