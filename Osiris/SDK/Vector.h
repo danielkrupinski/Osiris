@@ -141,8 +141,8 @@ struct Vector {
 
     auto toAngle() const noexcept
     {
-        return Vector{ radiansToDegrees(std::atan2(-z, std::hypot(x, y))),
-                       radiansToDegrees(std::atan2(y, x)),
+        return Vector{ Helpers::rad2deg(std::atan2(-z, std::hypot(x, y))),
+                       Helpers::rad2deg(std::atan2(y, x)),
                        0.0f };
     }
 
