@@ -89,10 +89,7 @@ void Glow::render() noexcept
                 glowobject.glowStyle = glow.style;
                 glowobject.glowAlphaMax = 0.6f;
                 if (glow.healthBased && health) {
-                    const auto healthFraction = std::clamp(health / 100.0f, 0.0f, 1.0f);
-                    constexpr auto greenHue = 1.0f / 3.0f;
-                    constexpr auto redHue = 0.0f;
-                    Helpers::convertHSVtoRGB(std::lerp(redHue, greenHue, healthFraction), 1.0f, 1.0f, glowobject.glowColor.x, glowobject.glowColor.y, glowobject.glowColor.z);
+                    Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), glowobject.glowColor.x, glowobject.glowColor.y, glowobject.glowColor.z);
                 } else if (glow.rainbow) {
                     const auto [r, g, b] { rainbowColor(glow.rainbowSpeed) };
                     glowobject.glowColor = { r, g, b };
