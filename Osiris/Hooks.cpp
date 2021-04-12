@@ -157,11 +157,13 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
 #ifdef _WIN32
     uintptr_t* framePointer;
     __asm mov framePointer, ebp;
-    bool& sendPacket = *reinterpret_cast<bool*>(*framePointer - 0x1C);
+    bool *sendPacketPtr = *reinterpret_cast<bool*>(*framePointer - 0x1C);
 #else
-    bool dummy;
-    bool& sendPacket = dummy;
+    uintptr_t *rbp;
+    asm volatile("mov %%rbp, %0" : "=r" (rbp));bool *sendPacketPtr = ((*(bool **) rbp) - (int) 24);
 #endif
+
+    bool sendPacket{true};
 
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
@@ -218,6 +220,8 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
     cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
 
     previousViewAngles = cmd->viewangles;
+
+    *sendPacketPtr = sendPacket;
 
     return false;
 }
