@@ -17,6 +17,7 @@
 #include <unistd.h>
 
 #include <SDL2/SDL.h>
+#include <thread>
 
 #include "imgui/GL/gl3w.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -712,6 +713,12 @@ static int pollEvent(SDL_Event* event) noexcept
 
 Hooks::Hooks() noexcept
 {
+#ifdef _WIN32
+    while (!GetModuleHandleA("serverbrowser.dll")) std::this_thread::sleep_for(std::chrono::milliseconds(50));
+#else
+    while (!dlopen("./bin/linux64/serverbrowser_client.so",RTLD_NOLOAD | RTLD_NOW)) std::this_thread::sleep_for(std::chrono::milliseconds(50));
+#endif
+
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
 
