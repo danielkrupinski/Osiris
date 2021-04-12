@@ -86,7 +86,8 @@ struct Shared {
 struct HealthBar : ColorToggle {
     enum Type {
         Gradient = 0,
-        Solid
+        Solid,
+        HealthBased
     };
 
     int type = Type::Gradient;
