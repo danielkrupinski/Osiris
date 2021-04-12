@@ -19,6 +19,7 @@ namespace Helpers
     float getAlphaFactor() noexcept;
     void convertHSVtoRGB(float h, float s, float v, float& outR, float& outG, float& outB) noexcept;
     void healthColor(float fraction, float& outR, float& outG, float& outB) noexcept;
+    unsigned int healthColor(float fraction) noexcept;
 
     constexpr auto units2meters(float units) noexcept
     {
