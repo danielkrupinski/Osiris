@@ -369,7 +369,7 @@ static void renderWeaponBox(const WeaponData& weaponData, const Weapon& config) 
     FontPush font{ config.font.name, weaponData.distanceToLocal };
 
     if (config.name.enabled && !weaponData.displayName.empty()) {
-        renderText(weaponData.distanceToLocal, config.textCullDistance, config.name, weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 5 });
+        renderText(weaponData.distanceToLocal, config.textCullDistance, config.name, weaponData.displayName.c_str(), { (bbox.min.x + bbox.max.x) / 2, bbox.min.y - 2 });
     }
 
     if (config.ammo.enabled && weaponData.clip != -1) {
