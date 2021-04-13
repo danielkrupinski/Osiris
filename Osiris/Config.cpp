@@ -219,8 +219,7 @@ static void from_json(const json& j, OffscreenEnemies& o)
 
 static void from_json(const json& j, BulletTracers& o)
 {
-    read(j, "Enabled", o.enabled);
-    read<value_t::object>(j, "Color", o.color);
+    from_json(j, static_cast<ColorToggle&>(o));
 }
 
 static void from_json(const json& j, ImVec2& v)
