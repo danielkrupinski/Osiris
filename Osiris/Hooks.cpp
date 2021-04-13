@@ -155,13 +155,13 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
         return result;
 
 #ifdef _WIN32
-    uintptr_t* framePointer;
-    __asm mov framePointer, ebp;
-    bool* sendPacketPtr = ((*(bool **) framePointer) - (int) 28);
+    uintptr_t* framePtr;
+    __asm mov framePtr, ebp;
+    bool* sendPacketPtr = ((*(bool **) framePtr) - (int) 28);
 #else
-    uintptr_t* framePointer;
-    asm volatile("mov %%rbp, %0" : "=r" (framePointer));
-    bool* sendPacketPtr = ((*(bool **) framePointer) - (int) 24);
+    uintptr_t* framePtr;
+    asm volatile("mov %%rbp, %0" : "=r" (framePtr));
+    bool* sendPacketPtr = ((*(bool **) framePtr) - (int) 24);
 #endif
     bool sendPacket{true};
 
