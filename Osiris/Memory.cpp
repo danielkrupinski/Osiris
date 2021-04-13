@@ -1,6 +1,9 @@
+#include <algorithm>
 #include <array>
 #include <cstring>
+#include <limits>
 #include <string_view>
+#include <utility>
 
 #ifdef _WIN32
 #include <Windows.h>

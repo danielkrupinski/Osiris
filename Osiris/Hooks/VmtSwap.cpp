@@ -1,10 +1,12 @@
+#include <algorithm>
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
 #include "VmtSwap.h"
 
-static auto calculateVmtLength(uintptr_t* vmt) noexcept
+static auto calculateVmtLength(std::uintptr_t* vmt) noexcept
 {
     std::size_t length = 0;
 #ifdef _WIN32
@@ -20,9 +22,9 @@ static auto calculateVmtLength(uintptr_t* vmt) noexcept
 void VmtSwap::init(void* base) noexcept
 {
     this->base = base;
-    oldVmt = *reinterpret_cast<uintptr_t**>(base);
+    oldVmt = *reinterpret_cast<std::uintptr_t**>(base);
     std::size_t length = calculateVmtLength(oldVmt) + dynamicCastInfoLength;
-    newVmt = std::make_unique<uintptr_t[]>(length);
+    newVmt = std::make_unique<std::uintptr_t[]>(length);
     std::copy(oldVmt - dynamicCastInfoLength, oldVmt - dynamicCastInfoLength + length, newVmt.get());
-    *reinterpret_cast<uintptr_t**>(base) = newVmt.get() + dynamicCastInfoLength;
+    *reinterpret_cast<std::uintptr_t**>(base) = newVmt.get() + dynamicCastInfoLength;
 }

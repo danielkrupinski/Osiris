@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+#include <cstdint>
 #include <memory>
 #include <type_traits>
 
@@ -37,11 +39,11 @@ public:
     Memory() noexcept;
 
 #ifdef _WIN32
-    uintptr_t present;
-    uintptr_t reset;
+    std::uintptr_t present;
+    std::uintptr_t reset;
 #else
-    uintptr_t pollEvent;
-    uintptr_t swapWindow;
+    std::uintptr_t pollEvent;
+    std::uintptr_t swapWindow;
 #endif
 
     ClientMode* clientMode;
@@ -55,22 +57,22 @@ public:
 
     std::add_pointer_t<void __FASTCALL(const char*)> loadSky;
     std::add_pointer_t<void __FASTCALL(const char*, const char*)> setClanTag;
-    uintptr_t cameraThink;
+    std::uintptr_t cameraThink;
     std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__THISCALL* getSequenceActivity)(void*, int);
     bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
-    uintptr_t hud;
-    int*(__THISCALL* findHudElement)(uintptr_t, const char*);
+    std::uintptr_t hud;
+    int*(__THISCALL* findHudElement)(std::uintptr_t, const char*);
     int(__THISCALL* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
-    uintptr_t listLeaves;
+    std::uintptr_t listLeaves;
     int* dispatchSound;
-    uintptr_t traceToExit;
+    std::uintptr_t traceToExit;
     ViewRender* viewRender;
     ViewRenderBeams* viewRenderBeams;
-    uintptr_t drawScreenEffectMaterial;
-    uint8_t* fakePrime;
+    std::uintptr_t drawScreenEffectMaterial;
+    std::uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
@@ -88,11 +90,11 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    uintptr_t scopeDust;
-    uintptr_t scopeArc;
-    uintptr_t demoOrHLTV;
-    uintptr_t money;
-    uintptr_t demoFileEndReached;
+    std::uintptr_t scopeDust;
+    std::uintptr_t scopeArc;
+    std::uintptr_t demoOrHLTV;
+    std::uintptr_t money;
+    std::uintptr_t demoFileEndReached;
     Entity** gameRules;
 
     short makePanoramaSymbol(const char* name) const noexcept
