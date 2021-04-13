@@ -433,6 +433,9 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
     read(j, "Bunny hop", m.bunnyHop);
+    read(j, "Bhop Hitchance", m.bhopHitchance);
+    read(j, "Min Hits", m.bhopMinHits);
+    read(j, "Max Hits", m.bhopMaxHits);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
     read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
@@ -796,6 +799,9 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Anti AFK kick", antiAfkKick);
     WRITE("Auto strafe", autoStrafe);
     WRITE("Bunny hop", bunnyHop);
+    WRITE("Bhop Hitchance", bhopHitchance);
+    WRITE("MinHits", bhopMinHits);
+    WRITE("MaxHits", bhopMaxHits);
     WRITE("Custom clan tag", customClanTag);
     WRITE("Clock tag", clocktag);
 

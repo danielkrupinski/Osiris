@@ -171,6 +171,9 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        int bhopHitchance{ 100 };
+        int bhopMinHits{ 0 };
+        int bhopMaxHits{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         bool animatedClanTag{ false };
