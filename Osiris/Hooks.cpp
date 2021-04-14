@@ -477,6 +477,9 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept
 {
+    while (!GetModuleHandleA("serverbrowser.dll"))
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
@@ -713,11 +716,8 @@ static int pollEvent(SDL_Event* event) noexcept
 
 Hooks::Hooks() noexcept
 {
-#ifdef _WIN32
-    while (!GetModuleHandleA("serverbrowser.dll")) std::this_thread::sleep_for(std::chrono::milliseconds(50));
-#else
-    while (!dlopen("./bin/linux64/serverbrowser_client.so",RTLD_NOLOAD | RTLD_NOW)) std::this_thread::sleep_for(std::chrono::milliseconds(50));
-#endif
+    while (!dlopen("./bin/linux64/serverbrowser_client.so",RTLD_NOLOAD | RTLD_NOW))
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
