@@ -1,8 +1,10 @@
 ﻿#include <array>
-#include <cwctype>
+#include <cwchar>
 #include <fstream>
-#include <functional>
+#include <iterator>
 #include <string>
+#include <string_view>
+#include <vector>
 
 #ifdef _WIN32
 #include <ShlObj.h>
@@ -11,7 +13,6 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
-#include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_stdlib.h"
 
 #include "imguiCustom.h"

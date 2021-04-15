@@ -8,6 +8,7 @@
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"
+#include "SDK/UtlVector.h"
 
 EventListener::EventListener() noexcept
 {

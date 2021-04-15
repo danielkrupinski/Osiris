@@ -1,4 +1,9 @@
+#include <algorithm>
+#include <cstdlib>
 #include <fstream>
+#include <iomanip>
+#include <iterator>
+#include <system_error>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -12,8 +17,6 @@
 #include "imgui/imgui_internal.h"
 
 #include "Config.h"
-#include "Helpers.h"
-#include "SDK/Platform.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"

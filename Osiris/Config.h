@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "imgui/imgui.h"
 #include "Hacks/SkinChanger.h"
