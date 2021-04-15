@@ -30,7 +30,7 @@ jobs:
       run: cd Release && make -j $(nproc --all)
     
     - name: include what you use
-      uses: EmilGedda/include-what-you-use-action@v1.0
+      uses: danielkrupinski/include-what-you-use-action@master
       with:
         compilation-database-path: './Release/'
         no-error: 'true'
