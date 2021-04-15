@@ -31,7 +31,6 @@ struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
 struct PanoramaEventRegistration;
-struct Trace;
 struct Vector;
 
 class Memory {

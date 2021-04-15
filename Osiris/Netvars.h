@@ -1,12 +1,14 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <memory>
 #include <vector>
+#include <type_traits>
+#include <utility>
 
 #include "fnv.h"
 
-struct RecvProp;
 struct RecvTable;
 
 class Netvars {
