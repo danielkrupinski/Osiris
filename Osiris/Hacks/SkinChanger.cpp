@@ -1,8 +1,10 @@
 #include <algorithm>
+#include <cstdint>
 #include <cstring>
-#include <cwctype>
 #include <fstream>
-#include <unordered_set>
+#include <string_view>
+#include <type_traits>
+#include <utility>
 
 #define STBI_ONLY_PNG
 #define STBI_NO_FAILURE_STRINGS
@@ -10,14 +12,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../stb_image.h"
 
-#include "../imgui/imgui.h"
-
 #include "../Interfaces.h"
-
+#include "../Netvars.h"
 #include "SkinChanger.h"
 #include "../Config.h"
 #include "../Texture.h"
+#include "../fnv.h"
 
+#include "../SDK/ClassId.h"
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/ConVar.h"
@@ -30,6 +32,7 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"

@@ -1,5 +1,8 @@
 #include <array>
 #include <cstring>
+#include <string_view>
+#include <utility>
+#include <vector>
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS

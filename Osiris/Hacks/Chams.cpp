@@ -1,9 +1,11 @@
 #include <algorithm>
 #include <cstring>
+#include <deque>
+#include <memory>
+#include <string>
 #include <string_view>
 #include <tuple>
 #include <unordered_map>
-#include <vector>
 
 #include "Chams.h"
 #include "../Config.h"
@@ -12,6 +14,7 @@
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "Backtrack.h"
+#include "../InputUtil.h"
 #include "../SDK/ClassId.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/Entity.h"
