@@ -1124,6 +1124,83 @@ void Misc::deathmatchGod() noexcept
     }
 }
 
+void Misc::fixMouseDelta(UserCmd* cmd) noexcept
+{
+    if (!cmd)
+        return;
+
+    static Vector delta_viewangles{ };
+    Vector delta = cmd->viewangles - delta_viewangles;
+
+    delta.x = std::clamp(delta.x, -89.0f, 89.0f);
+    delta.y = std::clamp(delta.y, -180.0f, 180.0f);
+    delta.z = 0.0f;
+    static ConVar* sensitivity;
+    if (!sensitivity)
+        sensitivity = interfaces->cvar->findVar("sensitivity");;
+    if (delta.x != 0.f) {
+        static ConVar* m_pitch;
+
+        if (!m_pitch)
+            m_pitch = interfaces->cvar->findVar("m_pitch");
+
+        int final_dy = static_cast<int>((delta.x / m_pitch->getFloat()) / sensitivity->getFloat());
+        if (final_dy <= 32767) {
+            if (final_dy >= -32768) {
+                if (final_dy >= 1 || final_dy < 0) {
+                    if (final_dy <= -1 || final_dy > 0)
+                        final_dy = final_dy;
+                    else
+                        final_dy = -1;
+                }
+                else {
+                    final_dy = 1;
+                }
+            }
+            else {
+                final_dy = 32768;
+            }
+        }
+        else {
+            final_dy = 32767;
+        }
+
+        cmd->mousedy = static_cast<short>(final_dy);
+    }
+
+    if (delta.y != 0.f) {
+        static ConVar* m_yaw;
+
+        if (!m_yaw)
+            m_yaw = interfaces->cvar->findVar("m_yaw");
+
+        int final_dx = static_cast<int>((delta.y / m_yaw->getFloat()) / sensitivity->getFloat());
+        if (final_dx <= 32767) {
+            if (final_dx >= -32768) {
+                if (final_dx >= 1 || final_dx < 0) {
+                    if (final_dx <= -1 || final_dx > 0)
+                        final_dx = final_dx;
+                    else
+                        final_dx = -1;
+                }
+                else {
+                    final_dx = 1;
+                }
+            }
+            else {
+                final_dx = 32768;
+            }
+        }
+        else {
+            final_dx = 32767;
+        }
+
+        cmd->mousedx = static_cast<short>(final_dx);
+    }
+
+    delta_viewangles = cmd->viewangles;
+}
+
 void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
