@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstring>
 #include <memory>
+#include <unordered_map>
 
 #include "fnv.h"
 #include "GameData.h"
@@ -24,6 +25,7 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/ModelRender.h"
 #include "SDK/NetworkChannel.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"

@@ -1,6 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
+#include <iterator>
+#include <limits>
+#include <memory>
 #include <string>
 #include <vector>
 

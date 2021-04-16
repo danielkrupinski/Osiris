@@ -1,11 +1,12 @@
+#include <memory>
+
 #include "../Interfaces.h"
 #include "../Memory.h"
 
-#include "../SDK/Engine.h"
 #include "../SDK/Entity.h"
-#include "../SDK/EntityList.h"
 #include "../SDK/GameMovement.h"
 #include "../SDK/GlobalVars.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/MoveHelper.h"
 #include "../SDK/Prediction.h"
 

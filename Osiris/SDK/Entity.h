@@ -1,16 +1,15 @@
 #pragma once
 
+#include <algorithm>
+#include <functional>
+#include <string>
+
 #include "AnimState.h"
-#include "ClientClass.h"
-#include "Cvar.h"
 #include "Engine.h"
 #include "EngineTrace.h"
-#include "EntityList.h"
 #include "LocalPlayer.h"
 #include "matrix3x4.h"
-#include "ModelRender.h"
-#include "Utils.h"
-#include "VarMapping.h"
+#include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
@@ -21,9 +20,10 @@
 #include "../Memory.h"
 #include "../Netvars.h"
 
-#include <functional>
-
 struct AnimState;
+struct ClientClass;
+struct Model;
+struct VarMap;
 
 enum class MoveType {
     NOCLIP = 8,

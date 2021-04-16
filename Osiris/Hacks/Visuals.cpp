@@ -11,7 +11,9 @@
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
+#include "../SDK/Cvar.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -20,7 +22,6 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/NetworkStringTable.h"
-#include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ViewRenderBeams.h"
 
