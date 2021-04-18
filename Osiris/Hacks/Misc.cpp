@@ -354,23 +354,6 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     cmd->sidemove = negatedDirection.y;
 }
 
-float scaleDamageArmor(float damage, int armorValue) noexcept
-{
-    float armorRatio = 0.5f;
-    float armorBonus = 0.5f;
-    if (armorValue > 0) {
-        float newRatio = damage * armorRatio;
-        float armor = (damage - newRatio) * armorBonus;
-
-        if (armor > static_cast<float>(armorValue)) {
-            armor = static_cast<float>(armorValue) * (1.f / armorBonus);
-            newRatio = damage - armor;
-        }
-        damage = newRatio;
-    }
-    return damage;
-}
-
 void Misc::drawBombTimer() noexcept
 {
     if (!config->misc.bombTimer.enabled)
