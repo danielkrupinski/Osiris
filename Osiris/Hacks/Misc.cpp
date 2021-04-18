@@ -354,9 +354,29 @@ void Misc::fastStop(UserCmd* cmd) noexcept
     cmd->sidemove = negatedDirection.y;
 }
 
+float scaleDamageArmor(float damage, int armorValue) noexcept
+{
+    float armorRatio = 0.5f;
+    float armorBonus = 0.5f;
+    if (armorValue > 0) {
+        float newRatio = damage * armorRatio;
+        float armor = (damage - newRatio) * armorBonus;
+
+        if (armor > static_cast<float>(armorValue)) {
+            armor = static_cast<float>(armorValue) * (1.f / armorBonus);
+            newRatio = damage - armor;
+        }
+        damage = newRatio;
+    }
+    return damage;
+}
+
 void Misc::drawBombTimer() noexcept
 {
     if (!config->misc.bombTimer.enabled)
+        return;
+
+    if (!localPlayer)
         return;
 
     GameData::Lock lock;
@@ -382,6 +402,60 @@ void Misc::drawBombTimer() noexcept
     std::ostringstream ss; ss << "Bomb on " << (!plantedC4.bombsite ? 'A' : 'B') << " : " << std::fixed << std::showpoint << std::setprecision(3) << (std::max)(plantedC4.blowTime - memory->globalVars->currenttime, 0.0f) << " s";
 
     ImGui::textUnformattedCentered(ss.str().c_str());
+
+    //if (localPlayer) {
+    float finalBombDamage = 0.f;
+
+    for (auto i = interfaces->engine->getMaxClients(); i <= interfaces->entityList->getHighestEntityIndex(); i++)
+    {
+        auto entity = interfaces->entityList->getEntity(i);
+        if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4)
+            continue;
+
+        //ez pasta
+        constexpr float bombDamage = 500.f;
+        constexpr float bombRadius = bombDamage * 3.5f; //wont work with some maps because of this i guess
+        constexpr float sigma = bombRadius / 3.0f;
+
+        constexpr float armorRatio = 0.5f;
+        constexpr float armorBonus = 0.5f;
+        const int armorValue = localPlayer->armor();
+
+        float distanceToLocalPlayer = (entity->origin() - localPlayer->origin()).length();
+        float gaussianFalloff = exp(-distanceToLocalPlayer * distanceToLocalPlayer / (2.0f * sigma * sigma));
+
+        finalBombDamage = bombDamage * gaussianFalloff;
+
+        if (armorValue > 0) {
+            float newRatio = finalBombDamage * armorRatio;
+            float armor = (finalBombDamage - newRatio) * armorBonus;
+
+            if (armor > static_cast<float>(armorValue)) {
+                armor = static_cast<float>(armorValue) * (1.f / armorBonus);
+                newRatio = finalBombDamage - armor;
+            }
+            finalBombDamage = newRatio;
+        }
+    }
+
+    int displayBombDamage = static_cast<int>(ceil(finalBombDamage));
+
+    if (localPlayer->health() <= displayBombDamage) {
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+        ImGui::textUnformattedCentered("Lethal");
+        ImGui::PopStyleColor();
+    }
+    else {
+        std::ostringstream text; text << "Damage: " << displayBombDamage;
+        if (finalBombDamage > (localPlayer->health() / 2.f))
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 205, 0, 255));
+        else
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+
+        ImGui::textUnformattedCentered(text.str().c_str());
+        ImGui::PopStyleColor();
+    }
+    //}
 
     ImGui::PushStyleColor(ImGuiCol_PlotHistogram, Helpers::calculateColor(config->misc.bombTimer));
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4{ 0.2f, 0.2f, 0.2f, 1.0f });
