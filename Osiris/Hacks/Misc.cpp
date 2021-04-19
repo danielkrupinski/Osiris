@@ -390,6 +390,9 @@ void Misc::drawBombTimer() noexcept
 
     auto entity = interfaces->entityList->getEntityFromHandle(plantedC4.bombHandle);
 
+    if (!entity || entity->isDormant() || entity->getClientClass()->classId != ClassId::PlantedC4)
+        return;
+
     //ez pasta
     constexpr float bombDamage = 500.f;
     constexpr float bombRadius = bombDamage * 3.5f; //wont work with some maps because of this i guess
@@ -424,11 +427,8 @@ void Misc::drawBombTimer() noexcept
     }
     else {
         std::ostringstream text; text << "Damage: " << displayBombDamage;
-        if (finalBombDamage > (localPlayer->health() / 2.f))
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 205, 0, 255));
-        else
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
-
+        auto color = Helpers::healthColor(std::clamp(1.f - (finalBombDamage / 100.0f), 0.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text, color);
         ImGui::textUnformattedCentered(text.str().c_str());
         ImGui::PopStyleColor();
     }
