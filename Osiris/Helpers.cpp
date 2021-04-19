@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>

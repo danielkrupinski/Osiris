@@ -2,11 +2,8 @@
 
 #include "../imgui/imgui.h"
 
-#include "../ConfigStructs.h"
 #include "../SDK/Entity.h"
-#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
-#include "../SDK/Vector.h"
 
 #if OSIRIS_ANTIAIM()
 

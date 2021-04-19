@@ -17,7 +17,6 @@
 #include "SkinChanger.h"
 #include "../Config.h"
 #include "../Texture.h"
-#include "../fnv.h"
 
 #include "../SDK/ClassId.h"
 #include "../SDK/Client.h"
@@ -32,12 +31,7 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
-#include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
-#include "../SDK/Platform.h"
-#include "../SDK/WeaponId.h"
-
-#include "../Helpers.h"
 
 /* This file is part of nSkinz by namazso, licensed under the MIT license:
 *

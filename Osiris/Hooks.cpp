@@ -1,5 +1,4 @@
 #include <functional>
-#include <string>
 
 #include "imgui/imgui.h"
 
@@ -50,13 +49,11 @@
 #include "SDK/Entity.h"
 #include "SDK/EntityList.h"
 #include "SDK/FrameStage.h"
-#include "SDK/GameEvent.h"
 #include "SDK/GameUI.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
-#include "SDK/Panel.h"
 #include "SDK/Platform.h"
 #include "SDK/RenderContext.h"
 #include "SDK/SoundInfo.h"

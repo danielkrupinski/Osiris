@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
-#include <iterator>
 #include <system_error>
 
 #ifdef _WIN32

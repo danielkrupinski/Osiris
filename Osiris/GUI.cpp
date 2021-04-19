@@ -1,11 +1,8 @@
-﻿#include <algorithm>
-#include <array>
+﻿#include <array>
 #include <cwchar>
 #include <fstream>
-#include <iterator>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <vector>
 
 #ifdef _WIN32

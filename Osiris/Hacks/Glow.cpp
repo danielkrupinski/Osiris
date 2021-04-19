@@ -1,6 +1,4 @@
-#include <algorithm>
 #include <array>
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -10,7 +8,6 @@
 #include "../imgui/imgui.h"
 
 #include "../ConfigStructs.h"
-#include "../InputUtil.h"
 #include "Glow.h"
 #include "../Helpers.h"
 #include "../Interfaces.h"
@@ -21,10 +18,6 @@
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/GlowObjectManager.h"
-#include "../SDK/LocalPlayer.h"
-#include "../SDK/Utils.h"
-#include "../SDK/UtlVector.h"
-#include "../SDK/Vector.h"
 #include "../imguiCustom.h"
 
 #if OSIRIS_GLOW()

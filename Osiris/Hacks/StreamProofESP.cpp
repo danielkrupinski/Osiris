@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <array>
-#include <forward_list>
 #include <limits>
 #include <numbers>
 #include <unordered_map>
@@ -15,8 +14,6 @@
 
 #include "../Config.h"
 #include "../GameData.h"
-#include "../Helpers.h"
-#include "../InputUtil.h"
 #include "../SDK/Engine.h"
 #include "../SDK/GlobalVars.h"
 #include "../Memory.h"

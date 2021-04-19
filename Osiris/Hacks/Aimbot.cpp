@@ -1,24 +1,16 @@
 #include <algorithm>
-#include <array>
-#include <initializer_list>
-#include <memory>
 
 #include "Aimbot.h"
 #include "../Config.h"
-#include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 #include "../SDK/Engine.h"
 #include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
-#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
-#include "../SDK/Vector.h"
-#include "../SDK/WeaponId.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/PhysicsSurfaceProps.h"
-#include "../SDK/WeaponData.h"
 
 Vector Aimbot::calculateRelativeAngle(const Vector& source, const Vector& destination, const Vector& viewAngles) noexcept
 {

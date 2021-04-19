@@ -10,7 +10,6 @@
 
 #include "../fnv.h"
 #include "../GameData.h"
-#include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"

@@ -1,6 +1,5 @@
 #include <array>
 #include <functional>
-#include <memory>
 #include <string_view>
 
 #include "../imgui/imgui.h"
@@ -8,7 +7,6 @@
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
-#include "../SDK/LocalPlayer.h"
 
 #include "Sound.h"
 

@@ -11,7 +11,6 @@
 #include "../imgui/imgui_internal.h"
 
 #include "../Config.h"
-#include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
 
@@ -33,19 +32,12 @@
 #include "../SDK/GlobalVars.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
-#include "../SDK/LocalPlayer.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/Panorama.h"
-#include "../SDK/Platform.h"
 #include "../SDK/UserCmd.h"
-#include "../SDK/UtlVector.h"
-#include "../SDK/Vector.h"
-#include "../SDK/WeaponData.h"
-#include "../SDK/WeaponId.h"
 #include "../SDK/WeaponSystem.h"
 
 #include "../GUI.h"
-#include "../Helpers.h"
 #include "../GameData.h"
 
 #include "../imguiCustom.h"
