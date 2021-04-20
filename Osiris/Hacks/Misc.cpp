@@ -400,7 +400,8 @@ void Misc::drawBombTimer() noexcept
 
     constexpr float armorRatio = 0.5f;
     constexpr float armorBonus = 0.5f;
-    const int armorValue = localPlayer->armor();
+    const float armorValue = static_cast<float>(localPlayer->armor());
+    const int health = localPlayer->health();
 
     float distanceToLocalPlayer = (entity->origin() - localPlayer->origin()).length();
     float gaussianFalloff = exp(-distanceToLocalPlayer * distanceToLocalPlayer / (2.0f * sigma * sigma));
@@ -411,23 +412,23 @@ void Misc::drawBombTimer() noexcept
         float newRatio = finalBombDamage * armorRatio;
         float armor = (finalBombDamage - newRatio) * armorBonus;
 
-        if (armor > static_cast<float>(armorValue)) {
-            armor = static_cast<float>(armorValue) * (1.f / armorBonus);
+        if (armor > armorValue) {
+            armor = armorValue * (1.f / armorBonus);
             newRatio = finalBombDamage - armor;
         }
         finalBombDamage = newRatio;
     }
 
-    int displayBombDamage = static_cast<int>(ceil(finalBombDamage));
+    int displayBombDamage = static_cast<int>(floor(finalBombDamage));
 
-    if (localPlayer->health() <= displayBombDamage) {
+    if (health < (truncf(finalBombDamage * 10) / 10)) { //you only die if finalBombDamage is larger than player health by 0.1
         ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
         ImGui::textUnformattedCentered("Lethal");
         ImGui::PopStyleColor();
     }
     else {
-        std::ostringstream text; text << "Damage: " << displayBombDamage;
-        auto color = Helpers::healthColor(std::clamp(1.f - (finalBombDamage / 100.0f), 0.0f, 1.0f));
+        std::ostringstream text; text << "Damage: " << std::clamp(displayBombDamage, 1, health - 1); //so we wont display "Damage: x" in edge cases where displayBombDamage is rounded to x but above is not true
+        const auto color = Helpers::healthColor(std::clamp(1.f - (finalBombDamage / static_cast<float>(health)), 0.0f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_Text, color);
         ImGui::textUnformattedCentered(text.str().c_str());
         ImGui::PopStyleColor();
