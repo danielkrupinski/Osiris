@@ -34,9 +34,9 @@ public:
 
     VIRTUAL_METHOD(void, printText, 28, (const std::wstring_view text, int drawType = 0), (this, text.data(), text.length(), drawType))
     
-    VIRTUAL_METHOD(void, getScreenSize, 44, (int& w, int& h), (this, std::ref(w), std::ref(h)))
+    [[deprecated]] VIRTUAL_METHOD(void, getScreenSize, 44, (int& w, int& h), (this, std::ref(w), std::ref(h)))
 
-    auto getScreenSize() noexcept
+    [[deprecated]] auto getScreenSize() noexcept
     {
         int w, h;
         getScreenSize(w, h);
