@@ -225,6 +225,20 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
     drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.noscopeCrosshair));
 }
 
+void Misc::forceCrosshair(ImDrawList* drawList) noexcept
+{
+    if (!config->misc.forceCrosshair.enabled)
+        return;
+
+    {
+        GameData::Lock lock;
+        if (const auto& local = GameData::local(); !local.exists || !local.alive)
+            return;
+    }
+
+    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.forceCrosshair));
+}
+
 
 static bool worldToScreen(const Vector& in, ImVec2& out) noexcept
 {
