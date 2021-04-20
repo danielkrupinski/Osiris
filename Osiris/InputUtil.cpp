@@ -136,7 +136,7 @@ KeyBind::KeyBind(KeyCode keyCode) noexcept
 
 KeyBind::KeyBind(const char* keyName) noexcept
 {
-    auto it = std::lower_bound(keyMap.begin(), keyMap.end(), keyName, [](const Key& key, const char* keyName) { return key.name < keyName; });
+    auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name);
     if (it != keyMap.end() && it->name == keyName)
         keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
     else
@@ -203,7 +203,7 @@ bool KeyBind::setToPressedKey() noexcept
 
         for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
             if (ImGui::IsKeyPressed(i)) {
-                auto it = std::find_if(keyMap.begin(), keyMap.end(), [i](const Key& key) { return key.code == i; });
+                auto it = std::ranges::find(keyMap, i, &Key::code);
                 if (it != keyMap.end()) {
                     keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
                     // Treat AltGr as RALT

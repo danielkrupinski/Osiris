@@ -106,7 +106,7 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
 
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    std::transform(str.begin(), str.end(), str.begin(), [](wchar_t w) -> wchar_t {
+    std::ranges::transform(str, str.begin(), [](wchar_t w) -> wchar_t {
         if (w >= 0 && w <= 127) {
             if (w >= 'a' && w <= 'z')
                 return w - ('a' - 'A');

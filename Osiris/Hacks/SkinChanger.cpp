@@ -71,8 +71,8 @@ static constexpr auto is_knife(WeaponId id)
 
 item_setting* get_by_definition_index(WeaponId weaponId)
 {
-    const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == weaponId; });
-    return it == config->skinChanger.end() ? nullptr : &*it;
+    const auto it = std::ranges::find(config->skinChanger, weaponId, &item_setting::itemId);
+    return (it == config->skinChanger.end() || !it->enabled) ? nullptr : &*it;
 }
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
@@ -103,8 +103,8 @@ static void initializeKits() noexcept
             kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
 
-    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
- 
+    std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
+
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
     for (const auto& node : itemSchema->paintKits) {
@@ -117,7 +117,7 @@ static void initializeKits() noexcept
             std::wstring name;
             std::string iconPath;
 
-            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
+            if (const auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
                 if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId)) {
                     name = interfaces->localize->findSafe(itemDef->getItemBaseName());
                     name += L" | ";
@@ -128,8 +128,7 @@ static void initializeKits() noexcept
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
             gloveKits.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
         } else {
-            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
-
+            for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
                 if (!itemDef)
                     continue;
