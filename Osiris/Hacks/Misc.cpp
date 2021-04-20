@@ -427,7 +427,7 @@ void Misc::drawBombTimer() noexcept
         ImGui::PopStyleColor();
     }
     else {
-        std::ostringstream text; text << "Damage: " << std::clamp(displayBombDamage, 1, health - 1); //so we wont display "Damage: x" in edge cases where displayBombDamage is rounded to x but above is not true
+        std::ostringstream text; text << "Damage: " << std::clamp(displayBombDamage, 0, health - 1); //so we wont display "Damage: x" in edge cases where displayBombDamage is rounded to x but above is not true
         const auto color = Helpers::healthColor(std::clamp(1.f - (finalBombDamage / static_cast<float>(health)), 0.0f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_Text, color);
         ImGui::textUnformattedCentered(text.str().c_str());
