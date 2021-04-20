@@ -556,5 +556,8 @@
     <ClInclude Include="Hacks\Sound.h">
       <Filter>Hacks</Filter>
     </ClInclude>
+    <ClInclude Include="JsonForward.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
