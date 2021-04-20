@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <deque>
 
-#include "../ConfigStructs.h"
+#include "../JsonForward.h"
 
 #include "../SDK/matrix3x4.h"
 #include "../SDK/Vector.h"

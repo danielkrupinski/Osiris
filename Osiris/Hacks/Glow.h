@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ConfigStructs.h"
+#include "../JsonForward.h"
 
 #define OSIRIS_GLOW() true
 
