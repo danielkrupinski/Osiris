@@ -278,7 +278,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
     int w, h; \
-    interfaces->surface->getScreenSize(w, h); \
+    interfaces->engine->getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
@@ -294,7 +294,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     int w, h; \
-    interfaces->surface->getScreenSize(w, h); \
+    interfaces->engine->getScreenSize(w, h); \
     reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
 #endif
