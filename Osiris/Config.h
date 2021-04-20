@@ -209,6 +209,7 @@ public:
         KeyBind edgejumpkey = KeyBind::NONE;
         KeyBind slowwalkKey = KeyBind::NONE;
         ColorToggleThickness noscopeCrosshair;
+        ColorToggleThickness forceCrosshair;
         ColorToggleThickness recoilCrosshair;
 
         struct SpectatorList {

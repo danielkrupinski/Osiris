@@ -1283,6 +1283,7 @@ void GUI::renderMiscWindow(bool contentOnly) noexcept
     hotkey2("", config->misc.slowwalkKey);
     ImGui::PopID();
     ImGuiCustom::colorPicker("Noscope crosshair", config->misc.noscopeCrosshair);
+    ImGuiCustom::colorPicker("Force crosshair", config->misc.forceCrosshair);
     ImGuiCustom::colorPicker("Recoil crosshair", config->misc.recoilCrosshair);
     ImGui::Checkbox("Auto pistol", &config->misc.autoPistol);
     ImGui::Checkbox("Auto reload", &config->misc.autoReload);
