@@ -227,16 +227,22 @@ void Misc::noscopeCrosshair(ImDrawList* drawList) noexcept
 
 void Misc::forceCrosshair(ImDrawList* drawList) noexcept
 {
-    if (!config->misc.forceCrosshair.enabled)
-        return;
+    static auto disablecrosshair = interfaces->cvar->findVar("crosshair");
 
-    {
-        GameData::Lock lock;
-        if (const auto& local = GameData::local(); !local.exists || !local.alive)
-            return;
+    if (config->misc.forceCrosshair.enabled) {
+        disablecrosshair->setValue(0);
+
+        {
+            GameData::Lock lock;
+            if (const auto& local = GameData::local(); !local.exists || !local.alive)
+                return;
+        }
+
+        drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.forceCrosshair));
     }
-
-    drawCrosshair(drawList, ImGui::GetIO().DisplaySize / 2, Helpers::calculateColor(config->misc.forceCrosshair));
+    else {
+        disablecrosshair->setValue(1);
+    }
 }
 
 
