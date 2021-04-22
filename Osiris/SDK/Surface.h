@@ -36,13 +36,6 @@ public:
     
     [[deprecated]] VIRTUAL_METHOD(void, getScreenSize, 44, (int& w, int& h), (this, std::ref(w), std::ref(h)))
 
-    [[deprecated]] auto getScreenSize() noexcept
-    {
-        int w, h;
-        getScreenSize(w, h);
-        return std::make_pair(w, h);
-    }
-
     VIRTUAL_METHOD(void, unlockCursor, 66, (), (this))
     VIRTUAL_METHOD(unsigned, createFont, 71, (), (this))
     VIRTUAL_METHOD(bool, setFontGlyphSet, 72, (unsigned font, const char* fontName, int tall, int weight, int blur, int scanlines, int flags, int rangeMin = 0, int rangeMax = 0), (this, font, fontName, tall, weight, blur, scanlines, flags, rangeMin, rangeMax))
