@@ -16,14 +16,14 @@ struct Vector {
         return x || y || z;
     }
     
-    constexpr auto operator==(const Vector& v) const noexcept
+    friend constexpr auto operator==(const Vector& a, const Vector& b) noexcept
     {
-        return x == v.x && y == v.y && z == v.z;
+        return a.x == b.x && a.y == b.y && a.z == b.z;
     }
 
-    constexpr auto operator!=(const Vector& v) const noexcept
+    friend constexpr auto operator!=(const Vector& a, const Vector& b) noexcept
     {
-        return !(*this == v);
+        return !(a == b);
     }
 
     constexpr Vector& operator=(const float array[3]) noexcept
@@ -66,19 +66,19 @@ struct Vector {
         return *this;
     }
 
-    constexpr auto operator-(const Vector& v) const noexcept
+    friend constexpr auto operator-(const Vector& a, const Vector& b) noexcept
     {
-        return Vector{ x - v.x, y - v.y, z - v.z };
+        return Vector{ a.x - b.x, a.y - b.y, a.z - b.z };
     }
 
-    constexpr auto operator+(const Vector& v) const noexcept
+    friend constexpr auto operator+(const Vector& a, const Vector& b) noexcept
     {
-        return Vector{ x + v.x, y + v.y, z + v.z };
+        return Vector{ a.x + b.x, a.y + b.y, a.z + b.z };
     }
     
-    constexpr auto operator*(const Vector& v) const noexcept
+    friend constexpr auto operator*(const Vector& a, const Vector& b) noexcept
     {
-        return Vector{ x * v.x, y * v.y, z * v.z };
+        return Vector{ a.x * b.x, a.y * b.y, a.z * b.z };
     }
 
     constexpr Vector& operator/=(float div) noexcept
