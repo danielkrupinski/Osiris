@@ -1018,7 +1018,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 
     GameData::Lock lock;
     for (auto& player : GameData::players()) {
-        if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;
@@ -1036,10 +1036,12 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
         const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + (config->misc.offscreenEnemies.healthBar.enabled ? 5 : 3));
 
+        Helpers::setAlphaFactor(player.fadingAlpha());
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto background = Helpers::calculateColor(0, 0, 0, 80);
         const auto color = Helpers::calculateColor(config->misc.offscreenEnemies);
         const auto healthBarColor = config->misc.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config->misc.offscreenEnemies.healthBar);
+        Helpers::setAlphaFactor(1.0f);
 
         const ImVec2 trianglePoints[]{
             trianglePos + ImVec2{  0.4f * y, -0.4f * x } * triangleSize,
