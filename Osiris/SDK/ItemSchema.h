@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+#include "Inconstructible.h"
 #include "Pad.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
@@ -90,6 +91,8 @@ struct StickerKit {
 
 class EconItemDefinition {
 public:
+    INCONSTRUCTIBLE(EconItemDefinition)
+
     VIRTUAL_METHOD(WeaponId, getWeaponId, 0, (), (this))
     VIRTUAL_METHOD(const char*, getItemBaseName, 2, (), (this))
     VIRTUAL_METHOD(const char*, getItemTypeName, 3, (), (this))
@@ -126,12 +129,16 @@ struct ItemListEntry {
 
 class EconLootListDefinition {
 public:
+    INCONSTRUCTIBLE(EconLootListDefinition)
+
     VIRTUAL_METHOD(const char*, getName, 0, (), (this))
     VIRTUAL_METHOD(const UtlVector<ItemListEntry>&, getLootListContents, 1, (), (this))
 };
 
 class EconItemSetDefinition {
 public:
+    INCONSTRUCTIBLE(EconItemSetDefinition)
+
     VIRTUAL_METHOD(const char*, getLocKey, 1, (), (this))
     VIRTUAL_METHOD(int, getItemCount, 4, (), (this))
     VIRTUAL_METHOD(WeaponId, getItemDef, 5, (int index), (this, index))
@@ -157,6 +164,8 @@ struct AlternateIconData {
 
 class ItemSchema {
 public:
+    INCONSTRUCTIBLE(ItemSchema)
+
     PAD(WIN32_LINUX(0x88, 0xB8))
     UtlMap<int, EconItemQualityDefinition> qualities;
     PAD(WIN32_LINUX(0x48, 0x60))
@@ -178,5 +187,7 @@ public:
 
 class ItemSystem {
 public:
+    INCONSTRUCTIBLE(ItemSystem)
+
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };

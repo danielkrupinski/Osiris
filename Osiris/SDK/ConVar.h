@@ -2,11 +2,15 @@
 
 #include <type_traits>
 
+#include "Inconstructible.h"
 #include "Platform.h"
 #include "UtlVector.h"
 #include "VirtualMethod.h"
 
 struct ConVar {
+    INCONSTRUCTIBLE(ConVar)
+
+    // TODO: Use WIN32_LINUX() macro below
 #ifdef _WIN32
     VIRTUAL_METHOD(float, getFloat, 12, (), (this))
     VIRTUAL_METHOD(int, getInt, 13, (), (this))

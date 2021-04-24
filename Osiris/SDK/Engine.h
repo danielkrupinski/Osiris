@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <functional>
 
+#include "Inconstructible.h"
 #include "Pad.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
@@ -52,6 +53,8 @@ class NetworkChannel;
 
 class Engine {
 public:
+    INCONSTRUCTIBLE(Engine)
+
     VIRTUAL_METHOD(void, getScreenSize, 5, (int& w, int& h), (this, std::ref(w), std::ref(h)))
     VIRTUAL_METHOD(bool, getPlayerInfo, 8, (int entityIndex, PlayerInfo& playerInfo), (this, entityIndex, std::ref(playerInfo)))
     VIRTUAL_METHOD(int, getPlayerForUserID, 9, (int userId), (this, userId))

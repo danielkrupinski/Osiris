@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Inconstructible.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
@@ -47,5 +48,7 @@ struct Beam {
 
 class ViewRenderBeams {
 public:
+    INCONSTRUCTIBLE(ViewRenderBeams)
+
     VIRTUAL_METHOD(Beam*, createBeamPoints, WIN32_LINUX(12, 9), (BeamInfo& beamInfo), (this, std::ref(beamInfo)))
 };

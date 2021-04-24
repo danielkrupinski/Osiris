@@ -2,10 +2,13 @@
 
 #include <string>
 
+#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class Localize {
 public:
+    INCONSTRUCTIBLE(Localize)
+
     VIRTUAL_METHOD(const wchar_t*, find, 11, (const char* tokenName), (this, tokenName))
     VIRTUAL_METHOD(const wchar_t*, findSafe, 12, (const char* tokenName), (this, tokenName))
     VIRTUAL_METHOD(int, convertAnsiToUnicode, 15, (const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes), (this, ansi, unicode, unicodeBufferSizeInBytes))
