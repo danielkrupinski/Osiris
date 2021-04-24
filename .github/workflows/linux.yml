@@ -25,10 +25,18 @@ jobs:
     - name: install
       run: sudo apt-get update && sudo apt-get install -y libsdl2-dev clang-10
     - name: configure
-      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-10 -D CMAKE_CXX_COMPILER=clang++-10 -D CMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-10 -D CMAKE_CXX_COMPILER=clang++-10 ..
     - name: build
       run: cd Release && make -j $(nproc --all)
-    
+
+  iwyu:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 ..
     - name: include what you use
       uses: danielkrupinski/include-what-you-use-action@master
       with:
