@@ -469,6 +469,8 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
     if (playerData.immune)
         Helpers::setAlphaFactor(0.5f);
 
+    Helpers::setAlphaFactor(Helpers::getAlphaFactor() * playerData.fadingAlpha());
+
     renderPlayerBox(playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
 
@@ -544,7 +546,7 @@ void StreamProofESP::render() noexcept
         renderProjectileEsp(projectile, config->streamProofESP.projectiles["All"], config->streamProofESP.projectiles[projectile.name], projectile.name);
 
     for (const auto& player : GameData::players()) {
-        if (player.dormant || !player.alive || !player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.inViewFrustum)
             continue;
 
         auto& playerConfig = player.enemy ? config->streamProofESP.enemies : config->streamProofESP.allies;
