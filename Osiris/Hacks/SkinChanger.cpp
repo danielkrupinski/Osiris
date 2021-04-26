@@ -497,18 +497,22 @@ const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
     return knifeTypes;
 }
 
-static std::unordered_map<std::string, Texture> iconTextures;
+struct Icon {
+    Texture texture;
+    int lastReferencedFrame = 0;
+};
+
+static std::unordered_map<std::string, Icon> iconTextures;
 
 ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
 
-    if (iconTextures[iconpath].get())
-        return iconTextures[iconpath].get();
-
-    if (iconTextures.size() >= 50)
-        iconTextures.erase(iconTextures.begin());
+    if (iconTextures[iconpath].texture.get()) {
+        iconTextures[iconpath].lastReferencedFrame = ImGui::GetFrameCount();
+        return iconTextures[iconpath].texture.get();
+    }
 
     if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
         if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
@@ -518,7 +522,7 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
                 stbi_set_flip_vertically_on_load_thread(false);
 
                 if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
-                    iconTextures[iconpath].init(width, height, data);
+                    iconTextures[iconpath].texture.init(width, height, data);
                     stbi_image_free(data);
                 } else {
                     assert(false);
@@ -530,12 +534,26 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
         assert(false);
     }
 
-    return iconTextures[iconpath].get();
+    iconTextures[iconpath].lastReferencedFrame = ImGui::GetFrameCount();
+    return iconTextures[iconpath].texture.get();
 }
 
 void SkinChanger::clearItemIconTextures() noexcept
 {
     iconTextures.clear();
+}
+
+void SkinChanger::clearUnusedItemIconTextures() noexcept
+{
+    constexpr auto maxIcons = 30;
+    const auto frameCount = ImGui::GetFrameCount();
+    while (iconTextures.size() > maxIcons) {
+        const auto oldestIcon = std::ranges::min_element(iconTextures, [](const auto& a, const auto& b) { return a.second.lastReferencedFrame < b.second.lastReferencedFrame; });
+        if (oldestIcon->second.lastReferencedFrame == frameCount)
+            break;
+
+        iconTextures.erase(oldestIcon);
+    }
 }
 
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
