@@ -23,6 +23,11 @@ namespace SkinChanger
     void overrideHudIcon(GameEvent& event) noexcept;
     void updateStatTrak(GameEvent& event) noexcept;
 
+    // GUI
+    void menuBarItem() noexcept;
+    void tabItem() noexcept;
+    void drawGUI(bool contentOnly) noexcept;
+
     struct PaintKit {
         PaintKit(int id, const std::string& name, int rarity = 0) noexcept;
         PaintKit(int id, std::string&& name, int rarity = 0) noexcept;
