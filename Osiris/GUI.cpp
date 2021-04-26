@@ -107,7 +107,7 @@ void GUI::render() noexcept
         renderChamsWindow();
         renderStreamProofESPWindow();
         renderVisualsWindow();
-        renderSkinChangerWindow();
+        SkinChanger::drawGUI(false);
         Sound::drawGUI(false);
         renderStyleWindow();
         renderMiscWindow();
