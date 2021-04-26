@@ -250,5 +250,3 @@ struct item_setting {
     char custom_name[32] = "";
     std::array<sticker_setting, 5> stickers;
 };
-
-item_setting* get_by_definition_index(WeaponId weaponId);
