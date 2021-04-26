@@ -1,5 +1,9 @@
 #include <algorithm>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #include "VmtHook.h"
 #include "../Helpers.h"
 
