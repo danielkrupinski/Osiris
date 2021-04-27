@@ -12,6 +12,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../stb_image.h"
 
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 #include "../imguiCustom.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../Interfaces.h"
@@ -434,6 +437,100 @@ void SkinChanger::tabItem() noexcept
     }
 }
 
+namespace ImGui
+{
+    static bool SkinSelectable(const char* label, const std::string& iconPath, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
+    {
+        ImGuiWindow* window = GetCurrentWindow();
+        if (window->SkipItems)
+            return false;
+
+        ImGuiContext& g = *GImGui;
+        const ImGuiStyle& style = g.Style;
+
+        // Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
+        ImGuiID id = window->GetID(label);
+        ImVec2 label_size = CalcTextSize(label, NULL, true);
+        ImVec2 size(label_size.x + iconSizeSmall.x, ImMax(label_size.y, IM_FLOOR(iconSizeSmall.y + 0.99999f)));
+        ImVec2 pos = window->DC.CursorPos;
+        pos.y += window->DC.CurrLineTextBaseOffset;
+        ItemSize(size, 0.0f);
+
+        size.x = ImMax(label_size.x + iconSizeSmall.x, window->WorkRect.Max.x - pos.x);
+
+        // Text stays at the submission position, but bounding box may be extended on both sides
+        const ImVec2 text_min = pos + ImVec2{ iconSizeSmall.x, size.y * 0.25f };
+        const ImVec2 text_max(pos.x + size.x, pos.y + size.y);
+
+        // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
+        ImRect bb(pos.x, pos.y, text_max.x, text_max.y);
+
+        const float spacing_x = style.ItemSpacing.x;
+        const float spacing_y = style.ItemSpacing.y;
+        const float spacing_L = IM_FLOOR(spacing_x * 0.50f);
+        const float spacing_U = IM_FLOOR(spacing_y * 0.50f);
+        bb.Min.x -= spacing_L;
+        bb.Min.y -= spacing_U;
+        bb.Max.x += (spacing_x - spacing_L);
+        bb.Max.y += (spacing_y - spacing_U);
+
+        bool item_add = ItemAdd(bb, id);
+        if (!item_add)
+            return false;
+
+        // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
+        ImGuiButtonFlags button_flags = 0;
+
+        const bool was_selected = selected;
+        bool hovered, held;
+        bool pressed = ButtonBehavior(bb, id, &hovered, &held, button_flags);
+
+        // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
+        if (pressed)
+        {
+            if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
+            {
+                SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
+                g.NavDisableHighlight = true;
+            }
+        }
+        if (pressed)
+            MarkItemEdited(id);
+
+        // In this branch, Selectable() cannot toggle the selection so this will never trigger.
+        if (selected != was_selected) //-V547
+            window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
+
+        if (hovered || selected)
+        {
+            const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+            RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+            RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+        }
+
+        const auto bulletRadius = (bb.Max.y - bb.Min.y) * 0.15f;
+        const auto bulletPos = ImVec2{ bb.Min.x + iconSizeSmall.x + bulletRadius + 3.0f, (bb.Min.y + bb.Max.y) * 0.5f };
+        window->DrawList->AddCircleFilled(bulletPos, bulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
+        window->DrawList->AddCircleFilled(bulletPos, bulletRadius, rarityColor, 12);
+
+        RenderTextClipped(text_min + ImVec2{ bulletRadius * 2.0f + 4.0f, 0.0f }, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
+
+        if (const auto icon = SkinChanger::getItemIconTexture(iconPath)) {
+            window->DrawList->AddImage(icon, bb.Min, bb.Min + iconSizeSmall, { 0.0f, 0.0f }, { 1.0f, 1.0f }, GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
+            if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
+                BeginTooltip();
+                Image(icon, iconSizeLarge);
+                EndTooltip();
+            }
+        }
+
+        if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
+            CloseCurrentPopup();
+
+        return pressed;
+    }
+}
+
 void SkinChanger::drawGUI(bool contentOnly) noexcept
 {
     if (!contentOnly) {
@@ -496,6 +593,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
 
         const auto& kits = itemIndex == 1 ? SkinChanger::getGloveKits() : SkinChanger::getSkinKits();
 
+        ImGui::SetNextItemWidth(270.0f);
         if (ImGui::BeginCombo("Paint Kit", kits[selected_entry.paint_kit_vector_index].name.c_str())) {
             ImGui::PushID("Paint Kit");
             ImGui::PushID("Search");
@@ -513,17 +611,9 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
                     if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
                         ImGui::PushID(i);
                         const auto selected = i == selected_entry.paint_kit_vector_index;
-                        if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
+                        if (ImGui::SkinSelectable(kits[i].name.c_str(), kits[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(kits[i].rarity), selected)) {
                             selected_entry.paint_kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
-                        }
-
-                        if (ImGui::IsItemHovered()) {
-                            if (const auto icon = SkinChanger::getItemIconTexture(kits[i].iconPath)) {
-                                ImGui::BeginTooltip();
-                                ImGui::Image(icon, { 200.0f, 150.0f });
-                                ImGui::EndTooltip();
-                            }
                         }
                         if (selected && ImGui::IsWindowAppearing())
                             ImGui::SetScrollHereY();
@@ -592,6 +682,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
 
         const auto& kits = SkinChanger::getStickerKits();
+        ImGui::SetNextItemWidth(270.0f);
         if (ImGui::BeginCombo("Sticker", kits[selected_sticker.kit_vector_index].name.c_str())) {
             ImGui::PushID("Sticker");
             ImGui::PushID("Search");
@@ -609,17 +700,11 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
                     if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
                         ImGui::PushID(i);
                         const auto selected = i == selected_sticker.kit_vector_index;
-                        if (ImGui::SelectableWithBullet(kits[i].name.c_str(), rarityColor(kits[i].rarity), selected)) {
+                        if (ImGui::SkinSelectable(kits[i].name.c_str(), kits[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(kits[i].rarity), selected)) {
                             selected_sticker.kit_vector_index = i;
                             ImGui::CloseCurrentPopup();
                         }
-                        if (ImGui::IsItemHovered()) {
-                            if (const auto icon = SkinChanger::getItemIconTexture(kits[i].iconPath)) {
-                                ImGui::BeginTooltip();
-                                ImGui::Image(icon, { 200.0f, 150.0f });
-                                ImGui::EndTooltip();
-                            }
-                        }
+
                         if (selected && ImGui::IsWindowAppearing())
                             ImGui::SetScrollHereY();
                         ImGui::PopID();
