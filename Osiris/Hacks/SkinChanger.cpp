@@ -833,33 +833,30 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
     if (iconpath.empty())
         return 0;
 
-    if (iconTextures[iconpath].texture.get()) {
-        iconTextures[iconpath].lastReferencedFrame = ImGui::GetFrameCount();
-        return iconTextures[iconpath].texture.get();
-    }
+    auto& icon = iconTextures[iconpath];
+    if (!icon.texture.get()) {
+        if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
+            if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
+                const auto buffer = std::make_unique<std::uint8_t[]>(size);
+                if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
+                    int width, height;
+                    stbi_set_flip_vertically_on_load_thread(false);
 
-    if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
-        if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
-            const auto buffer = std::make_unique<std::uint8_t[]>(size);
-            if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
-                int width, height;
-                stbi_set_flip_vertically_on_load_thread(false);
-
-                if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
-                    iconTextures[iconpath].texture.init(width, height, data);
-                    stbi_image_free(data);
-                } else {
-                    assert(false);
+                    if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
+                        icon.texture.init(width, height, data);
+                        stbi_image_free(data);
+                    } else {
+                        assert(false);
+                    }
                 }
             }
+            interfaces->baseFileSystem->close(handle);
+        } else {
+            assert(false);
         }
-        interfaces->baseFileSystem->close(handle);
-    } else {
-        assert(false);
     }
-
-    iconTextures[iconpath].lastReferencedFrame = ImGui::GetFrameCount();
-    return iconTextures[iconpath].texture.get();
+    icon.lastReferencedFrame = ImGui::GetFrameCount();
+    return icon.texture.get();
 }
 
 void SkinChanger::clearItemIconTextures() noexcept
