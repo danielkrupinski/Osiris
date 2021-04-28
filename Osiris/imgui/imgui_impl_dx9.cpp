@@ -289,7 +289,7 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
         return nullptr;
     }
 
-    const auto buffer = std::make_unique<std::uint32_t[]>(width * height);
+    const auto buffer = std::make_unique_for_overwrite<std::uint32_t[]>(width * height);
     std::memcpy(buffer.get(), data, width * height * 4);
 
     for (int i = 0; i < width * height; ++i) {
