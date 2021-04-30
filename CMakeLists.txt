@@ -20,30 +20,12 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
-# FreeType sources
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/autofit/autofit.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/cff/cff.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftbase.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftbitmap.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftdebug.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftglyph.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftinit.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftsynth.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/base/ftsystem.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/psaux/psaux.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/pshinter/pshinter.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/psnames/psnames.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/raster/raster.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/sfnt/sfnt.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/smooth/smooth.c")
-list(APPEND SOURCES "${CMAKE_SOURCE_DIR}/Osiris/freetype/src/truetype/truetype.c")
+find_package(Freetype REQUIRED)
 
-add_compile_definitions(FT2_BUILD_LIBRARY)
-
-include_directories(/usr/local/include /usr/include/SDL2/ "${CMAKE_SOURCE_DIR}/Osiris/freetype/")
+include_directories(/usr/local/include /usr/include/SDL2/ ${FREETYPE_INCLUDE_DIRS})
 link_directories(/usr/local/lib)
 
 add_library(Osiris SHARED ${SOURCES})
 
-target_link_libraries(Osiris SDL2 GL dl)
+target_link_libraries(Osiris SDL2 GL dl ${FREETYPE_LIBRARIES})
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
