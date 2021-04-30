@@ -288,12 +288,12 @@ void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
     }
 
     for (int y = 0; y < height; ++y) {
+        const auto src = reinterpret_cast<const std::uint32_t*>(data + width * 4 * y);
         const auto dest = reinterpret_cast<std::uint32_t*>((unsigned char*)lockedRect.pBits + lockedRect.Pitch * y);
-        std::memcpy(dest, data + width * 4 * y, width * 4);
 
+        // RGBA --> BGRA
         for (int i = 0; i < width; ++i) {
-            // RGBA --> BGRA
-            auto color = dest[i];
+            auto color = src[i];
             color = (color & 0xFF00FF00) | ((color & 0xFF0000) >> 16) | ((color & 0xFF) << 16);
             dest[i] = color;
         }
