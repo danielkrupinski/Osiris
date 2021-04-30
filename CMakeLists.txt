@@ -21,11 +21,11 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_demo.cpp")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
 find_package(Freetype REQUIRED)
-
-include_directories(/usr/local/include /usr/include/SDL2/ ${FREETYPE_INCLUDE_DIRS})
-link_directories(/usr/local/lib)
+find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_library(Osiris SHARED ${SOURCES})
 
-target_link_libraries(Osiris SDL2 GL dl ${FREETYPE_LIBRARIES})
+target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(Osiris PRIVATE SDL2 OpenGL::OpenGL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
