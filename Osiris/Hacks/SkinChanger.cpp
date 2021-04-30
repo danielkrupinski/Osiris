@@ -107,9 +107,17 @@ static void initializeKits() noexcept
         if (const auto encoded = node.key; (encoded & 3) == 0)
             kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
-
     std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
+    
+    std::unordered_map<WeaponId, std::wstring> weaponNames;
+    for (const auto& kitWeapon : kitsWeapons) {
+        if (weaponNames.contains(kitWeapon.weaponId))
+            continue;
 
+        if (const auto itemDef = itemSchema->getItemDefinitionInterface(kitWeapon.weaponId))
+            weaponNames.emplace(kitWeapon.weaponId, interfaces->localize->findSafe(itemDef->getItemBaseName()));
+    }
+ 
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
     for (const auto& node : itemSchema->paintKits) {
@@ -123,10 +131,8 @@ static void initializeKits() noexcept
             std::string iconPath;
 
             if (const auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
-                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId)) {
-                    name = interfaces->localize->findSafe(itemDef->getItemBaseName());
-                    name += L" | ";
-                }
+                name = weaponNames[it->weaponId];
+                name += L" | ";
                 iconPath = it->iconPath;
             }
 
@@ -138,7 +144,7 @@ static void initializeKits() noexcept
                 if (!itemDef)
                     continue;
 
-                std::wstring name = interfaces->localize->findSafe(itemDef->getItemBaseName());
+                std::wstring name = weaponNames[it->weaponId];
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 skinKits.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
