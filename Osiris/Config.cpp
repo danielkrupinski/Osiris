@@ -517,7 +517,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     json j;
 
     if (std::ifstream in{ path / name }; in.good()) {
-        j = json::parse(in, nullptr, false);
+        j = json::parse(in, nullptr, false, true);
         if (j.is_discarded())
             return;
     } else {
