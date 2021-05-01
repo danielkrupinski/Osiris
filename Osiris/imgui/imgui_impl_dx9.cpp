@@ -134,14 +134,24 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
         return;
 
     if (d3d9_state_block->Capture() != D3D_OK)
+    {
+        d3d9_state_block->Release();
         return;
+    }
 
     CUSTOMVERTEX* vtx_dst;
-    ImDrawIdx* idx_dst;
     if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
+    {
+        d3d9_state_block->Release();
         return;
+    }
+
+    ImDrawIdx* idx_dst;
     if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
+    {
+        d3d9_state_block->Release();
         return;
+    }
 
     for (int n = 0; n < draw_data->CmdListsCount; ++n) {
         const ImDrawList* cmd_list = draw_data->CmdLists[n];
