@@ -266,7 +266,8 @@ Open git command prompt and enter following command:
 
 `Osiris` folder should have been successfully created, containing all the source files.
 
-### Compiling from source
+### Windows
+#### Compiling from source
 
 When you have equipped a copy of the source code, next step is opening **Osiris.sln** in Microsoft Visual Studio 2019.
 
@@ -274,15 +275,24 @@ Then change build configuration to `Release | x86` and simply press **Build solu
 
 If everything went right you should receive `Osiris.dll`  binary file.
 
-### Loading / Injecting into game process
+#### Loading / Injecting into game process
 
 Open your favorite [DLL injector](https://en.wikipedia.org/wiki/DLL_injection) and just inject `Osiris.dll` into `csgo.exe` process.
 
 When injected, menu is openable under `INSERT` key.
 
-### Further optimizations
+#### Further optimizations
 If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in project settings. This should result in more performant code, optimized for your CPU. Currently SSE2 instructions are selected in project settings.
 
+### Linux
+#### Compiling from source
+Open a terminal in the directory of this repository:
+    - Ubuntu: run `build-ubuntu`
+    - Arch: run `build-arch`
+The scripts ensure that you have the needed dependencies installed and will build the project with gcc.
+
+#### Injecting
+Either use an injector of your choice or use the `load_osiris` script. It uses gdb to inject the built shared object
 ## FAQ
 
 ### How do I open menu?
