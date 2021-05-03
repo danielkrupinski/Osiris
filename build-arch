@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-sudo pacman -S --needed lib32-sdl2 gcc cmake
-
-mkdir -p Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++ ..
-
-make -j $(nproc --all)
-
-mv libOsiris.so ..

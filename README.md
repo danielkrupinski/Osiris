@@ -286,9 +286,7 @@ If your CPU supports AVX / AVX2 / AVX-512 instruction set, you can enable it in 
 
 ### Linux
 #### Compiling from source
-Open a terminal in the directory of this repository:
-    - Ubuntu: run `build-ubuntu`
-    - Arch: run `build-arch`
+Open a terminal in the directory of this repository and run `build`.
 The scripts ensure that you have the needed dependencies installed and will build the project with gcc.
 
 #### Injecting

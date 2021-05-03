@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+if command -v pacman &> /dev/null
+then
+    sudo pacman -S --needed lib32-sdl2 gcc cmake
+
+    mkdir -p Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++ ..
+
+elif command -v apt &> /dev/null
+then
+
+    sudo apt-get update && sudo apt-get install -y libsdl2-dev gcc-10 g++-10
+
+    mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc-10 -D CMAKE_CXX_COMPILER=g++-10 ..
+else
+    echo "You are not using Ubuntu or Arch, please figure out how to build Osiris yourself"
+    exit
+fi
+
+
+make -j $(nproc --all)
+
+mv libOsiris.so ..
