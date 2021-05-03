@@ -6,4 +6,4 @@ mkdir -p Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_C
 
 make -j $(nproc --all)
 
-mv Release/libOsiris.so .
+mv libOsiris.so ..
