@@ -33,6 +33,9 @@
     <Filter Include="freetype">
       <UniqueIdentifier>{15481d2e-5516-4ece-9b00-79e32710804c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{6f1f2a48-d1e6-4e87-b967-4b7e41157a5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI.cpp">
@@ -559,5 +562,10 @@
     <ClInclude Include="SDK\Inconstructible.h">
       <Filter>SDK</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

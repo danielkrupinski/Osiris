@@ -188,6 +188,15 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>default_vs</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\default_vs.h</HeaderFileOutput>
+      <ObjectFileOutput></ObjectFileOutput>
+    </FxCompile>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{81D9D7BB-A927-4EB6-9743-F73E6A1DEE48}</ProjectGuid>
