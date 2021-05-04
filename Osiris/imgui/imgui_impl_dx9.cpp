@@ -28,6 +28,9 @@
 
 #include <cstdint>
 #include <d3d9.h>
+#include <wrl/client.h>
+
+using Microsoft::WRL::ComPtr;
 
 // DirectX data
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
@@ -127,29 +130,17 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     }
 
     // Backup the DX9 state
-    IDirect3DStateBlock9* d3d9_state_block = NULL;
-    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
+    ComPtr<IDirect3DStateBlock9> d3d9_state_block;
+    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, d3d9_state_block.GetAddressOf()) != D3D_OK || d3d9_state_block->Capture() != D3D_OK)
         return;
-
-    if (d3d9_state_block->Capture() != D3D_OK)
-    {
-        d3d9_state_block->Release();
-        return;
-    }
 
     CUSTOMVERTEX* vtx_dst;
     if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
-    {
-        d3d9_state_block->Release();
         return;
-    }
 
     ImDrawIdx* idx_dst;
     if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
-    {
-        d3d9_state_block->Release();
         return;
-    }
 
     for (int n = 0; n < draw_data->CmdListsCount; ++n) {
         const ImDrawList* cmd_list = draw_data->CmdLists[n];
@@ -212,7 +203,6 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 
     // Restore the DX9 state
     d3d9_state_block->Apply();
-    d3d9_state_block->Release();
 }
 
 bool ImGui_ImplDX9_Init(IDirect3DDevice9* device)
@@ -284,7 +274,7 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
 }
 
 void* ImGui_CreateTextureRGBA(int width, int height, const unsigned char* data)
-{ 
+{
     IDirect3DTexture9* tempTexture;
     if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &tempTexture, nullptr) != D3D_OK)
         return nullptr;
