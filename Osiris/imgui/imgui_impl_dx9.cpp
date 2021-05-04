@@ -30,6 +30,7 @@
 #include <d3d9.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include <cstdint>
 
 // DirectX data
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
