@@ -19,6 +19,8 @@ list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_dx9.cpp")
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/imgui/imgui_impl_win32.cpp") 
 list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/Osiris/Hooks/MinHook.cpp") 
 
+set(OpenGL_GL_PREFERENCE "LEGACY")
+
 find_package(Freetype REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -26,5 +28,5 @@ find_package(OpenGL REQUIRED)
 add_library(Osiris SHARED ${SOURCES})
 
 target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
-target_link_libraries(Osiris PRIVATE SDL2 OpenGL::OpenGL ${CMAKE_DL_LIBS} Freetype::Freetype)
+target_link_libraries(Osiris PRIVATE SDL2 OpenGL::GL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
