@@ -23,14 +23,16 @@
 //  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
 //  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 
-#include "imgui.h"
-#include "imgui_impl_dx9.h"
-
 #include <cstdint>
 #include <d3d9.h>
 #include <wrl/client.h>
 
 using Microsoft::WRL::ComPtr;
+
+#include "imgui.h"
+#include "imgui_impl_dx9.h"
+
+#include "../Resources/Shaders/Build/default_vs.h"
 
 // DirectX data
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
@@ -38,6 +40,8 @@ static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
 static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
 static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
 static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+
+static ComPtr<IDirect3DVertexShader9> vertexShader;
 
 struct CUSTOMVERTEX {
     float    pos[3];
@@ -57,9 +61,9 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
     vp.MaxZ = 1.0f;
     g_pd3dDevice->SetViewport(&vp);
 
-    // Setup render state: fixed-pipeline, alpha-blending, no face culling, no depth testing, shade mode (for gradient)
+    // Setup render state: alpha-blending, no face culling, no depth testing, shade mode (for gradient)
     g_pd3dDevice->SetPixelShader(NULL);
-    g_pd3dDevice->SetVertexShader(NULL);
+    g_pd3dDevice->SetVertexShader(vertexShader.Get());
     g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
     g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, false);
     g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
@@ -91,7 +95,6 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
         float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
         float T = draw_data->DisplayPos.y + 0.5f;
         float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
-        D3DMATRIX mat_identity = { { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } } };
         D3DMATRIX mat_projection =
         { { {
             2.0f / (R - L),   0.0f,         0.0f,  0.0f,
@@ -99,9 +102,7 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
             0.0f,         0.0f,         0.5f,  0.0f,
             (L + R) / (L - R),  (T + B) / (B - T),  0.5f,  1.0f
         } } };
-        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
+        g_pd3dDevice->SetVertexShaderConstantF(0, &mat_projection.m[0][0], 4);
     }
 }
 
@@ -261,6 +262,10 @@ bool ImGui_ImplDX9_CreateDeviceObjects()
         return false;
     if (!ImGui_ImplDX9_CreateFontsTexture())
         return false;
+
+    if (!vertexShader.Get())
+        g_pd3dDevice->CreateVertexShader(reinterpret_cast<const DWORD*>(default_vs), vertexShader.GetAddressOf());
+
     return true;
 }
 
@@ -270,6 +275,7 @@ void ImGui_ImplDX9_InvalidateDeviceObjects()
         return;
     if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
     if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
+    vertexShader.Reset();
     ImGui_ImplDX9_DestroyFontsTexture();
 }
 
