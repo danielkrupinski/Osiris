@@ -26,11 +26,8 @@
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 
-// DirectX
-#include <d3d9.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
 #include <cstdint>
+#include <d3d9.h>
 
 // DirectX data
 static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
