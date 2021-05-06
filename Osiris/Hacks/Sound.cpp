@@ -1,6 +1,10 @@
+#include <array>
+#include <functional>
+#include <memory>
+#include <string_view>
+
 #include "../imgui/imgui.h"
 
-#include "../Config.h"
 #include "../Interfaces.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"

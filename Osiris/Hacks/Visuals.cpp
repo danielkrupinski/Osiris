@@ -1,5 +1,8 @@
 #include <array>
 #include <cstring>
+#include <string_view>
+#include <utility>
+#include <vector>
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -11,7 +14,9 @@
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
+#include "../SDK/Cvar.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -20,7 +25,6 @@
 #include "../SDK/MaterialSystem.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/NetworkStringTable.h"
-#include "../SDK/RenderContext.h"
 #include "../SDK/Surface.h"
 #include "../SDK/ViewRenderBeams.h"
 
@@ -274,7 +278,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
     int w, h; \
-    interfaces->surface->getScreenSize(w, h); \
+    interfaces->engine->getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
@@ -290,7 +294,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     int w, h; \
-    interfaces->surface->getScreenSize(w, h); \
+    interfaces->engine->getScreenSize(w, h); \
     reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
 }
 #endif

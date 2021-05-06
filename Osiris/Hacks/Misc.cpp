@@ -1,23 +1,38 @@
+#include <algorithm>
+#include <array>
 #include <mutex>
+#include <numbers>
 #include <numeric>
 #include <sstream>
+#include <vector>
+
+#ifdef __linux__
+#include <sys/mman.h>
+#include <unistd.h>
+#endif
 
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
 
 #include "../Config.h"
+#include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
-#include "../Netvars.h"
 
 #include "EnginePrediction.h"
 #include "Misc.h"
 
+#include "../SDK/ClassId.h"
 #include "../SDK/Client.h"
+#include "../SDK/ClientClass.h"
 #include "../SDK/ClientMode.h"
 #include "../SDK/ConVar.h"
+#include "../SDK/Cvar.h"
+#include "../SDK/Engine.h"
+#include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
@@ -26,9 +41,12 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/NetworkChannel.h"
 #include "../SDK/Panorama.h"
-#include "../SDK/Surface.h"
+#include "../SDK/Platform.h"
 #include "../SDK/UserCmd.h"
+#include "../SDK/UtlVector.h"
+#include "../SDK/Vector.h"
 #include "../SDK/WeaponData.h"
+#include "../SDK/WeaponId.h"
 #include "../SDK/WeaponSystem.h"
 
 #include "../GUI.h"
@@ -555,11 +573,16 @@ void Misc::fakePrime() noexcept
 
 #ifdef _WIN32
         if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+#else
+	if (const auto addressPageAligned = std::uintptr_t(memory->fakePrime) - std::uintptr_t(memory->fakePrime) % sysconf(_SC_PAGESIZE);
+	    mprotect((void*)addressPageAligned, 1, PROT_READ | PROT_WRITE | PROT_EXEC) == 0) {
+#endif
             constexpr uint8_t patch[]{ 0x74, 0xEB };
             *memory->fakePrime = patch[config->misc.fakePrime];
+#ifdef _WIN32
             VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
-        }
 #endif
+        }
     }
 }
 
@@ -1005,7 +1028,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 
     GameData::Lock lock;
     for (auto& player : GameData::players()) {
-        if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;
@@ -1023,10 +1046,12 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
         const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + (config->misc.offscreenEnemies.healthBar.enabled ? 5 : 3));
 
+        Helpers::setAlphaFactor(player.fadingAlpha());
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto background = Helpers::calculateColor(0, 0, 0, 80);
         const auto color = Helpers::calculateColor(config->misc.offscreenEnemies);
         const auto healthBarColor = config->misc.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config->misc.offscreenEnemies.healthBar);
+        Helpers::setAlphaFactor(1.0f);
 
         const ImVec2 trianglePoints[]{
             trianglePos + ImVec2{  0.4f * y, -0.4f * x } * triangleSize,

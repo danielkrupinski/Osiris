@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class UIPanel {
 public:
+    INCONSTRUCTIBLE(UIPanel)
+
     VIRTUAL_METHOD_V(int, getChildCount, 48, (), (this))
     VIRTUAL_METHOD_V(UIPanel*, getChild, 49, (int n), (this, n))
     VIRTUAL_METHOD(bool, hasClass, 139, (const char* name), (this, name))
@@ -20,10 +23,14 @@ struct PanoramaEventRegistration {
 
 class UIEngine {
 public:
+    INCONSTRUCTIBLE(UIEngine)
+
     VIRTUAL_METHOD_V(void, dispatchEvent, 52, (void* eventPtr), (this, eventPtr))
 };
 
 class PanoramaUIEngine {
 public:
+    INCONSTRUCTIBLE(PanoramaUIEngine)
+
     VIRTUAL_METHOD(UIEngine*, accessUIEngine, 11, (), (this))
 };

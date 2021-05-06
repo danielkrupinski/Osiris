@@ -1,10 +1,12 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 #include <filesystem>
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "imgui/imgui.h"
 #include "Hacks/SkinChanger.h"
@@ -14,12 +16,12 @@
 class Config {
 public:
     Config() noexcept;
-    void load(size_t, bool incremental) noexcept;
+    void load(std::size_t, bool incremental) noexcept;
     void load(const char8_t* name, bool incremental) noexcept;
-    void save(size_t) const noexcept;
+    void save(std::size_t) const noexcept;
     void add(const char*) noexcept;
-    void remove(size_t) noexcept;
-    void rename(size_t, const char*) noexcept;
+    void remove(std::size_t) noexcept;
+    void rename(std::size_t, const char*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;

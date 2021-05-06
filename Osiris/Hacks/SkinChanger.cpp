@@ -1,8 +1,10 @@
 #include <algorithm>
+#include <cstdint>
 #include <cstring>
-#include <cwctype>
 #include <fstream>
-#include <unordered_set>
+#include <string_view>
+#include <type_traits>
+#include <utility>
 
 #define STBI_ONLY_PNG
 #define STBI_NO_FAILURE_STRINGS
@@ -11,13 +13,18 @@
 #include "../stb_image.h"
 
 #include "../imgui/imgui.h"
-
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
+#include "../imguiCustom.h"
+#include "../imgui/imgui_stdlib.h"
 #include "../Interfaces.h"
-
+#include "../Netvars.h"
 #include "SkinChanger.h"
 #include "../Config.h"
 #include "../Texture.h"
+#include "../fnv.h"
 
+#include "../SDK/ClassId.h"
 #include "../SDK/Client.h"
 #include "../SDK/ClientClass.h"
 #include "../SDK/ConVar.h"
@@ -30,6 +37,7 @@
 #include "../SDK/GameEvent.h"
 #include "../SDK/ItemSchema.h"
 #include "../SDK/Localize.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
@@ -66,10 +74,10 @@ static constexpr auto is_knife(WeaponId id)
     return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
 
-item_setting* get_by_definition_index(WeaponId weaponId)
+static item_setting* get_by_definition_index(WeaponId weaponId)
 {
-    const auto it = std::find_if(config->skinChanger.begin(), config->skinChanger.end(), [weaponId](const item_setting& e) { return e.enabled && e.itemId == weaponId; });
-    return it == config->skinChanger.end() ? nullptr : &*it;
+    const auto it = std::ranges::find(config->skinChanger, weaponId, &item_setting::itemId);
+    return (it == config->skinChanger.end() || !it->enabled) ? nullptr : &*it;
 }
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
@@ -99,8 +107,16 @@ static void initializeKits() noexcept
         if (const auto encoded = node.key; (encoded & 3) == 0)
             kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
+    std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
+    
+    std::unordered_map<WeaponId, std::wstring> weaponNames;
+    for (const auto& kitWeapon : kitsWeapons) {
+        if (weaponNames.contains(kitWeapon.weaponId))
+            continue;
 
-    std::sort(kitsWeapons.begin(), kitsWeapons.end(), [](const auto& a, const auto& b) { return a.paintKit < b.paintKit; });
+        if (const auto itemDef = itemSchema->getItemDefinitionInterface(kitWeapon.weaponId))
+            weaponNames.emplace(kitWeapon.weaponId, interfaces->localize->findSafe(itemDef->getItemBaseName()));
+    }
  
     skinKits.reserve(itemSchema->paintKits.lastAlloc);
     gloveKits.reserve(itemSchema->paintKits.lastAlloc);
@@ -114,24 +130,21 @@ static void initializeKits() noexcept
             std::wstring name;
             std::string iconPath;
 
-            if (const auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
-                if (const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId)) {
-                    name = interfaces->localize->findSafe(itemDef->getItemBaseName());
-                    name += L" | ";
-                }
+            if (const auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
+                name = weaponNames[it->weaponId];
+                name += L" | ";
                 iconPath = it->iconPath;
             }
 
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
             gloveKits.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
         } else {
-            for (auto it = std::lower_bound(kitsWeapons.begin(), kitsWeapons.end(), paintKit->id, [](const auto& p, auto id) { return p.paintKit < id; }); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
-
+            for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
                 if (!itemDef)
                     continue;
 
-                std::wstring name = interfaces->localize->findSafe(itemDef->getItemBaseName());
+                std::wstring name = weaponNames[it->weaponId];
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 skinKits.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
@@ -411,6 +424,325 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
     }
 }
 
+static bool windowOpen = false;
+
+void SkinChanger::menuBarItem() noexcept
+{
+    if (ImGui::MenuItem("Skin changer")) {
+        windowOpen = true;
+        ImGui::SetWindowFocus("Skin changer");
+        ImGui::SetWindowPos("Skin changer", { 100.0f, 100.0f });
+    }
+}
+
+void SkinChanger::tabItem() noexcept
+{
+    if (ImGui::BeginTabItem("Skin changer")) {
+        drawGUI(true);
+        ImGui::EndTabItem();
+    }
+}
+
+namespace ImGui
+{
+    static bool SkinSelectable(const char* label, const std::string& iconPath, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
+    {
+        ImGuiWindow* window = GetCurrentWindow();
+        if (window->SkipItems)
+            return false;
+
+        ImGuiContext& g = *GImGui;
+        const ImGuiStyle& style = g.Style;
+
+        // Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
+        ImGuiID id = window->GetID(label);
+        ImVec2 label_size = CalcTextSize(label, NULL, true);
+        ImVec2 size(label_size.x + iconSizeSmall.x, ImMax(label_size.y, IM_FLOOR(iconSizeSmall.y + 0.99999f)));
+        ImVec2 pos = window->DC.CursorPos;
+        pos.y += window->DC.CurrLineTextBaseOffset;
+        ItemSize(size, 0.0f);
+
+        size.x = ImMax(label_size.x + iconSizeSmall.x, window->WorkRect.Max.x - pos.x);
+
+        // Text stays at the submission position, but bounding box may be extended on both sides
+        const ImVec2 text_min = pos + ImVec2{ iconSizeSmall.x, size.y * 0.25f };
+        const ImVec2 text_max(pos.x + size.x, pos.y + size.y);
+
+        // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
+        ImRect bb(pos.x, pos.y, text_max.x, text_max.y);
+
+        const float spacing_x = style.ItemSpacing.x;
+        const float spacing_y = style.ItemSpacing.y;
+        const float spacing_L = IM_FLOOR(spacing_x * 0.50f);
+        const float spacing_U = IM_FLOOR(spacing_y * 0.50f);
+        bb.Min.x -= spacing_L;
+        bb.Min.y -= spacing_U;
+        bb.Max.x += (spacing_x - spacing_L);
+        bb.Max.y += (spacing_y - spacing_U);
+
+        bool item_add = ItemAdd(bb, id);
+        if (!item_add)
+            return false;
+
+        // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
+        ImGuiButtonFlags button_flags = 0;
+
+        const bool was_selected = selected;
+        bool hovered, held;
+        bool pressed = ButtonBehavior(bb, id, &hovered, &held, button_flags);
+
+        // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
+        if (pressed)
+        {
+            if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
+            {
+                SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
+                g.NavDisableHighlight = true;
+            }
+        }
+        if (pressed)
+            MarkItemEdited(id);
+
+        // In this branch, Selectable() cannot toggle the selection so this will never trigger.
+        if (selected != was_selected) //-V547
+            window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
+
+        if (hovered || selected)
+        {
+            const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+            RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+            RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+        }
+
+        const auto bulletRadius = (bb.Max.y - bb.Min.y) * 0.15f;
+        const auto bulletPos = ImVec2{ bb.Min.x + iconSizeSmall.x + bulletRadius + 3.0f, (bb.Min.y + bb.Max.y) * 0.5f };
+        window->DrawList->AddCircleFilled(bulletPos, bulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
+        window->DrawList->AddCircleFilled(bulletPos, bulletRadius, rarityColor, 12);
+
+        RenderTextClipped(text_min + ImVec2{ bulletRadius * 2.0f + 4.0f, 0.0f }, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
+
+        if (const auto icon = SkinChanger::getItemIconTexture(iconPath)) {
+            window->DrawList->AddImage(icon, bb.Min, bb.Min + iconSizeSmall, { 0.0f, 0.0f }, { 1.0f, 1.0f }, GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
+            if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
+                BeginTooltip();
+                Image(icon, iconSizeLarge);
+                EndTooltip();
+            }
+        }
+
+        if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
+            CloseCurrentPopup();
+
+        return pressed;
+    }
+}
+
+void SkinChanger::drawGUI(bool contentOnly) noexcept
+{
+    if (!contentOnly) {
+        if (!windowOpen)
+            return;
+        ImGui::SetNextWindowSize({ 700.0f, 0.0f });
+        if (!ImGui::Begin("Skin changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+            ImGui::End();
+            return;
+        }
+    }
+
+    static auto itemIndex = 0;
+
+    ImGui::PushItemWidth(110.0f);
+    ImGui::Combo("##1", &itemIndex, [](void* data, int idx, const char** out_text) {
+        *out_text = SkinChanger::weapon_names[idx].name;
+        return true;
+        }, nullptr, SkinChanger::weapon_names.size(), 5);
+    ImGui::PopItemWidth();
+
+    auto& selected_entry = config->skinChanger[itemIndex];
+    selected_entry.itemIdIndex = itemIndex;
+
+    constexpr auto rarityColor = [](int rarity) {
+        constexpr auto rarityColors = std::to_array<ImU32>({
+            IM_COL32(  0,   0,   0,   0),
+            IM_COL32(176, 195, 217, 255),
+            IM_COL32( 94, 152, 217, 255),
+            IM_COL32( 75, 105, 255, 255),
+            IM_COL32(136,  71, 255, 255),
+            IM_COL32(211,  44, 230, 255),
+            IM_COL32(235,  75,  75, 255),
+            IM_COL32(228, 174,  57, 255)
+        });
+        return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
+    };
+
+    constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+        constexpr auto delimiter = L" ";
+        wchar_t* _;
+        wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
+        while (token) {
+            if (!std::wcsstr(str.c_str(), token))
+                return false;
+            token = std::wcstok(nullptr, delimiter, &_);
+        }
+        return true;
+    };
+
+    {
+        ImGui::SameLine();
+        ImGui::Checkbox("Enabled", &selected_entry.enabled);
+        ImGui::Separator();
+        ImGui::Columns(2, nullptr, false);
+        ImGui::InputInt("Seed", &selected_entry.seed);
+        ImGui::InputInt("StatTrak\u2122", &selected_entry.stat_trak);
+        selected_entry.stat_trak = (std::max)(selected_entry.stat_trak, -1);
+        ImGui::SliderFloat("Wear", &selected_entry.wear, FLT_MIN, 1.f, "%.10f", ImGuiSliderFlags_Logarithmic);
+
+        const auto& kits = itemIndex == 1 ? SkinChanger::getGloveKits() : SkinChanger::getSkinKits();
+
+        ImGui::SetNextItemWidth(270.0f);
+        if (ImGui::BeginCombo("Paint Kit", kits[selected_entry.paint_kit_vector_index].name.c_str())) {
+            ImGui::PushID("Paint Kit");
+            ImGui::PushID("Search");
+            ImGui::SetNextItemWidth(-1.0f);
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
+            auto& filter = filters[itemIndex];
+            ImGui::InputTextWithHint("", "Search", &filter);
+            if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+                ImGui::SetKeyboardFocusHere(-1);
+            ImGui::PopID();
+
+            const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
+            if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
+                for (std::size_t i = 0; i < kits.size(); ++i) {
+                    if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
+                        ImGui::PushID(i);
+                        const auto selected = i == selected_entry.paint_kit_vector_index;
+                        if (ImGui::SkinSelectable(kits[i].name.c_str(), kits[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(kits[i].rarity), selected)) {
+                            selected_entry.paint_kit_vector_index = i;
+                            ImGui::CloseCurrentPopup();
+                        }
+                        if (selected && ImGui::IsWindowAppearing())
+                            ImGui::SetScrollHereY();
+                        ImGui::PopID();
+                    }
+                }
+            }
+            ImGui::EndChild();
+            ImGui::PopID();
+            ImGui::EndCombo();
+        }
+
+        ImGui::Combo("Quality", &selected_entry.entity_quality_vector_index, [](void* data, int idx, const char** out_text) {
+            *out_text = SkinChanger::getQualities()[idx].name.c_str(); // safe within this lamba
+            return true;
+            }, nullptr, SkinChanger::getQualities().size(), 5);
+
+        if (itemIndex == 0) {
+            ImGui::Combo("Knife", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                *out_text = SkinChanger::getKnifeTypes()[idx].name.c_str();
+                return true;
+                }, nullptr, SkinChanger::getKnifeTypes().size(), 5);
+        } else if (itemIndex == 1) {
+            ImGui::Combo("Glove", &selected_entry.definition_override_vector_index, [](void* data, int idx, const char** out_text) {
+                *out_text = SkinChanger::getGloveTypes()[idx].name.c_str();
+                return true;
+                }, nullptr, SkinChanger::getGloveTypes().size(), 5);
+        } else {
+            static auto unused_value = 0;
+            selected_entry.definition_override_vector_index = 0;
+            ImGui::Combo("Unavailable", &unused_value, "For knives or gloves\0");
+        }
+
+        ImGui::InputText("Name Tag", selected_entry.custom_name, 32);
+    }
+
+    ImGui::NextColumn();
+
+    {
+        ImGui::PushID("sticker");
+
+        static std::size_t selectedStickerSlot = 0;
+
+        ImGui::PushItemWidth(-1);
+        ImVec2 size;
+        size.x = 0.0f;
+        size.y = ImGui::GetTextLineHeightWithSpacing() * 5.25f + ImGui::GetStyle().FramePadding.y * 2.0f;
+
+        if (ImGui::BeginListBox("", size)) {
+            for (int i = 0; i < 5; ++i) {
+                ImGui::PushID(i);
+
+                const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
+                const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::getStickerKits()[kit_vector_index].name;
+
+                if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
+                    selectedStickerSlot = i;
+
+                ImGui::PopID();
+            }
+            ImGui::EndListBox();
+        }
+
+        ImGui::PopItemWidth();
+
+        auto& selected_sticker = selected_entry.stickers[selectedStickerSlot];
+
+        const auto& kits = SkinChanger::getStickerKits();
+        ImGui::SetNextItemWidth(270.0f);
+        if (ImGui::BeginCombo("Sticker", kits[selected_sticker.kit_vector_index].name.c_str())) {
+            ImGui::PushID("Sticker");
+            ImGui::PushID("Search");
+            ImGui::SetNextItemWidth(-1.0f);
+            static std::array<std::string, SkinChanger::weapon_names.size()> filters;
+            auto& filter = filters[itemIndex];
+            ImGui::InputTextWithHint("", "Search", &filter);
+            if (ImGui::IsItemHovered() || (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+                ImGui::SetKeyboardFocusHere(-1);
+            ImGui::PopID();
+
+            const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
+            if (ImGui::BeginChild("##scrollarea", { 0, 6 * ImGui::GetTextLineHeightWithSpacing() })) {
+                for (std::size_t i = 0; i < kits.size(); ++i) {
+                    if (filter.empty() || passesFilter(kits[i].nameUpperCase, filterWide)) {
+                        ImGui::PushID(i);
+                        const auto selected = i == selected_sticker.kit_vector_index;
+                        if (ImGui::SkinSelectable(kits[i].name.c_str(), kits[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(kits[i].rarity), selected)) {
+                            selected_sticker.kit_vector_index = i;
+                            ImGui::CloseCurrentPopup();
+                        }
+
+                        if (selected && ImGui::IsWindowAppearing())
+                            ImGui::SetScrollHereY();
+                        ImGui::PopID();
+                    }
+                }
+            }
+            ImGui::EndChild();
+            ImGui::PopID();
+            ImGui::EndCombo();
+        }
+
+        ImGui::SliderFloat("Wear", &selected_sticker.wear, FLT_MIN, 1.0f, "%.10f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderFloat("Scale", &selected_sticker.scale, 0.1f, 5.0f);
+        ImGui::SliderFloat("Rotation", &selected_sticker.rotation, 0.0f, 360.0f);
+
+        ImGui::PopID();
+    }
+    selected_entry.update();
+
+    ImGui::Columns(1);
+
+    ImGui::Separator();
+
+    if (ImGui::Button("Update", { 130.0f, 30.0f }))
+        SkinChanger::scheduleHudUpdate();
+
+    ImGui::TextUnformatted("nSkinz by namazso");
+
+    if (!contentOnly)
+        ImGui::End();
+}
+
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
 {
     initializeKits();
@@ -495,45 +827,60 @@ const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
     return knifeTypes;
 }
 
-static std::unordered_map<std::string, Texture> iconTextures;
+struct Icon {
+    Texture texture;
+    int lastReferencedFrame = 0;
+};
+
+static std::unordered_map<std::string, Icon> iconTextures;
 
 ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
 
-    if (iconTextures[iconpath].get())
-        return iconTextures[iconpath].get();
+    auto& icon = iconTextures[iconpath];
+    if (!icon.texture.get()) {
+        if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
+            if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
+                const auto buffer = std::make_unique<std::uint8_t[]>(size);
+                if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
+                    int width, height;
+                    stbi_set_flip_vertically_on_load_thread(false);
 
-    if (iconTextures.size() >= 50)
-        iconTextures.erase(iconTextures.begin());
-
-    if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
-        if (const auto size = interfaces->baseFileSystem->size(handle); size >= 0) {
-            const auto buffer = std::make_unique<std::uint8_t[]>(size);
-            if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
-                int width, height;
-                stbi_set_flip_vertically_on_load_thread(false);
-
-                if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
-                    iconTextures[iconpath].init(width, height, data);
-                    stbi_image_free(data);
-                } else {
-                    assert(false);
+                    if (const auto data = stbi_load_from_memory((const stbi_uc*)buffer.get(), size, &width, &height, nullptr, STBI_rgb_alpha)) {
+                        icon.texture.init(width, height, data);
+                        stbi_image_free(data);
+                    } else {
+                        assert(false);
+                    }
                 }
             }
+            interfaces->baseFileSystem->close(handle);
+        } else {
+            assert(false);
         }
-        interfaces->baseFileSystem->close(handle);
-    } else {
-        assert(false);
     }
-
-    return iconTextures[iconpath].get();
+    icon.lastReferencedFrame = ImGui::GetFrameCount();
+    return icon.texture.get();
 }
 
 void SkinChanger::clearItemIconTextures() noexcept
 {
     iconTextures.clear();
+}
+
+void SkinChanger::clearUnusedItemIconTextures() noexcept
+{
+    constexpr auto maxIcons = 30;
+    const auto frameCount = ImGui::GetFrameCount();
+    while (iconTextures.size() > maxIcons) {
+        const auto oldestIcon = std::ranges::min_element(iconTextures, [](const auto& a, const auto& b) { return a.second.lastReferencedFrame < b.second.lastReferencedFrame; });
+        if (oldestIcon->second.lastReferencedFrame == frameCount)
+            break;
+
+        iconTextures.erase(oldestIcon);
+    }
 }
 
 SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }

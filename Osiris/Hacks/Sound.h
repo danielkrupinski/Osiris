@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "../ConfigStructs.h"
+#include "../JsonForward.h"
 
 #define OSIRIS_SOUND() true
 

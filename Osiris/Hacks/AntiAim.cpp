@@ -1,10 +1,12 @@
 #include "AntiAim.h"
-#include "../Interfaces.h"
-#include "../SDK/Engine.h"
+
+#include "../imgui/imgui.h"
+
+#include "../ConfigStructs.h"
 #include "../SDK/Entity.h"
-#include "../SDK/EntityList.h"
-#include "../SDK/NetworkChannel.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
+#include "../SDK/Vector.h"
 
 #if OSIRIS_ANTIAIM()
 

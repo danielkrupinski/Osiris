@@ -1,9 +1,11 @@
+#include <algorithm>
+#include <array>
 #include <atomic>
+#include <cstdint>
 #include <cstring>
-#include <list>
-#include <mutex>
+#include <memory>
+#include <unordered_map>
 
-#include "Config.h"
 #include "fnv.h"
 #include "GameData.h"
 #include "Interfaces.h"
@@ -14,6 +16,7 @@
 
 #include "stb_image.h"
 
+#include "SDK/ClassId.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -22,10 +25,12 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/ModelRender.h"
 #include "SDK/NetworkChannel.h"
 #include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
 #include "SDK/Steam.h"
+#include "SDK/UtlVector.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
 
@@ -394,6 +399,7 @@ void PlayerData::update(Entity* entity) noexcept
     origin = entity->getAbsOrigin();
     inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
     alive = entity->isAlive();
+    lastContactTime = alive ? memory->globalVars->realtime : 0.0f;
 
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
@@ -507,6 +513,12 @@ ImTextureID PlayerData::getAvatarTexture() const noexcept
     if (!avatar.texture.get())
         avatar.texture.init(32, 32, avatar.rgba.get());
     return avatar.texture.get();
+}
+
+float PlayerData::fadingAlpha() const noexcept
+{
+    constexpr float fadeTime = 1.50f;
+    return std::clamp(1.0f - (memory->globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
 }
 
 WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }

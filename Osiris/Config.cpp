@@ -1,4 +1,9 @@
+#include <algorithm>
+#include <cstdlib>
 #include <fstream>
+#include <iomanip>
+#include <iterator>
+#include <system_error>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -12,8 +17,6 @@
 #include "imgui/imgui_internal.h"
 
 #include "Config.h"
-#include "Helpers.h"
-#include "SDK/Platform.h"
 #include "Hacks/AntiAim.h"
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
@@ -219,8 +222,7 @@ static void from_json(const json& j, OffscreenEnemies& o)
 
 static void from_json(const json& j, BulletTracers& o)
 {
-    read(j, "Enabled", o.enabled);
-    read<value_t::object>(j, "Color", o.color);
+    from_json(j, static_cast<ColorToggle&>(o));
 }
 
 static void from_json(const json& j, ImVec2& v)
@@ -515,7 +517,7 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     json j;
 
     if (std::ifstream in{ path / name }; in.good()) {
-        j = json::parse(in, nullptr, false);
+        j = json::parse(in, nullptr, false, true);
         if (j.is_discarded())
             return;
     } else {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 
 #include "../SDK/Platform.h"
@@ -10,13 +11,13 @@ public:
     void init(void* base) noexcept;
     void restore() noexcept
     {
-        *reinterpret_cast<uintptr_t**>(base) = oldVmt;
+        *reinterpret_cast<std::uintptr_t**>(base) = oldVmt;
     }
 
     template<typename T>
     void hookAt(std::size_t index, T fun) const noexcept
     {
-        newVmt[index + dynamicCastInfoLength] = reinterpret_cast<uintptr_t>(fun);
+        newVmt[index + dynamicCastInfoLength] = reinterpret_cast<std::uintptr_t>(fun);
     }
 
     template<typename T, std::size_t Idx, typename ...Args>
@@ -35,7 +36,7 @@ private:
     static constexpr auto dynamicCastInfoLength = IS_WIN32() ? 1 : 2;
 
     void* base = nullptr;
-    uintptr_t* oldVmt = nullptr;
-    std::unique_ptr<uintptr_t[]> newVmt;
+    std::uintptr_t* oldVmt = nullptr;
+    std::unique_ptr<std::uintptr_t[]> newVmt;
     std::size_t length = 0;
 };
