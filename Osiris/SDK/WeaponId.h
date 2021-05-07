@@ -1,6 +1,7 @@
 #pragma once
 
 enum class WeaponId : short {
+    None = 0,
     Deagle = 1,
     Elite,
     Fiveseven,
