@@ -159,8 +159,6 @@ public:
         } colorCorrection;
     } visuals;
 
-    std::array<item_setting, 36> skinChanger;
-
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };

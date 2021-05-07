@@ -69,6 +69,8 @@
 * SOFTWARE.
 */
 
+static std::array<item_setting, 36> skinChangerConfig;
+
 static constexpr auto is_knife(WeaponId id)
 {
     return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
@@ -76,8 +78,8 @@ static constexpr auto is_knife(WeaponId id)
 
 static item_setting* get_by_definition_index(WeaponId weaponId)
 {
-    const auto it = std::ranges::find(config->skinChanger, weaponId, &item_setting::itemId);
-    return (it == config->skinChanger.end() || !it->enabled) ? nullptr : &*it;
+    const auto it = std::ranges::find(skinChangerConfig, weaponId, &item_setting::itemId);
+    return (it == skinChangerConfig.end() || !it->enabled) ? nullptr : &*it;
 }
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
@@ -558,7 +560,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         }, nullptr, SkinChanger::weapon_names.size(), 5);
     ImGui::PopItemWidth();
 
-    auto& selected_entry = config->skinChanger[itemIndex];
+    auto& selected_entry = skinChangerConfig[itemIndex];
     selected_entry.itemIdIndex = itemIndex;
 
     constexpr auto rarityColor = [](int rarity) {
@@ -672,7 +674,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
             for (int i = 0; i < 5; ++i) {
                 ImGui::PushID(i);
 
-                const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
+                const auto kit_vector_index = skinChangerConfig[itemIndex].stickers[i].kit_vector_index;
                 const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::getStickerKits()[kit_vector_index].name;
 
                 if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
@@ -741,6 +743,79 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
 
     if (!contentOnly)
         ImGui::End();
+}
+
+static void to_json(json& j, const sticker_setting& o)
+{
+    const sticker_setting dummy;
+
+    WRITE("Kit", kit);
+    WRITE("Wear", wear);
+    WRITE("Scale", scale);
+    WRITE("Rotation", rotation);
+}
+
+static void to_json(json& j, const item_setting& o)
+{
+    const item_setting dummy;
+
+    WRITE("Enabled", enabled);
+    WRITE("Definition index", itemId);
+    WRITE("Quality", quality);
+    WRITE("Paint Kit", paintKit);
+    WRITE("Definition override", definition_override_index);
+    WRITE("Seed", seed);
+    WRITE("StatTrak", stat_trak);
+    WRITE("Wear", wear);
+    if (o.custom_name[0])
+        j["Custom name"] = o.custom_name;
+    WRITE("Stickers", stickers);
+}
+
+json SkinChanger::toJson() noexcept
+{
+    return skinChangerConfig;
+}
+
+static void from_json(const json& j, sticker_setting& s)
+{
+    read(j, "Kit", s.kit);
+    read(j, "Wear", s.wear);
+    read(j, "Scale", s.scale);
+    read(j, "Rotation", s.rotation);
+
+    s.onLoad();
+}
+
+static void from_json(const json& j, item_setting& i)
+{
+    read(j, "Enabled", i.enabled);
+    read(j, "Definition index", i.itemId);
+    read(j, "Quality", i.quality);
+    read(j, "Paint Kit", i.paintKit);
+    read(j, "Definition override", i.definition_override_index);
+    read(j, "Seed", i.seed);
+    read(j, "StatTrak", i.stat_trak);
+    read(j, "Wear", i.wear);
+    read(j, "Custom name", i.custom_name, sizeof(i.custom_name));
+    read(j, "Stickers", i.stickers);
+
+    i.onLoad();
+}
+
+void SkinChanger::fromJson(const json& j) noexcept
+{
+    if (j.type() == value_t::array && j.size() == skinChangerConfig.size()) {
+        for (std::size_t i = 0; i < j.size(); ++i) {
+            if (!j[i].empty())
+                j[i].get_to(skinChangerConfig[i]);
+        }
+    }
+}
+
+void SkinChanger::resetConfig() noexcept
+{
+    skinChangerConfig = {};
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept

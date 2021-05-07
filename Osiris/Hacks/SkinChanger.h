@@ -11,6 +11,7 @@
 #include "../imgui/imgui.h"
 
 #include "../SDK/WeaponId.h"
+#include "../JsonForward.h"
 
 enum class FrameStage;
 class Entity;
@@ -27,6 +28,11 @@ namespace SkinChanger
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
+
+    // Config
+    json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
+    void resetConfig() noexcept;
 
     struct PaintKit {
         PaintKit(int id, const std::string& name, int rarity = 0) noexcept;
