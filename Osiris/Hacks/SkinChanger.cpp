@@ -239,10 +239,9 @@ static void initializeKits() noexcept
                 name = weaponNames[it->weaponId];
                 name += L" | ";
                 iconPath = it->iconPath;
+                name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
+                gameItems.emplace_back(paintKit->id, std::move(name), std::move(iconPath), it->weaponId, paintKit->rarity);
             }
-
-            name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-            gameItems.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
         } else {
             for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
@@ -252,7 +251,7 @@ static void initializeKits() noexcept
                 std::wstring name = weaponNames[it->weaponId];
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-                gameItems.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
+                gameItems.emplace_back(paintKit->id, std::move(name), it->iconPath, it->weaponId, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
             }
         }
     }
@@ -266,7 +265,7 @@ static void initializeKits() noexcept
         if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
             continue;
         std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-        gameItems.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), stickerKit->rarity);
+        gameItems.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), WeaponId::None, stickerKit->rarity);
     }
 
     std::sort(gameItems.begin(), gameItems.end());
@@ -1114,23 +1113,23 @@ void SkinChanger::clearUnusedItemIconTextures() noexcept
     }
 }
 
-SkinChanger::PaintKit::PaintKit(int id, const std::string& name, int rarity) noexcept : id{ id }, name{ name }, rarity{ rarity }
+SkinChanger::PaintKit::PaintKit(int id, const std::string& name, WeaponId weaponId, int rarity) noexcept : id{ id }, name{ name }, weaponId{ weaponId }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::string&& name, int rarity) noexcept : id{ id }, name{ std::move(name) }, rarity{ rarity }
+SkinChanger::PaintKit::PaintKit(int id, std::string&& name, WeaponId weaponId, int rarity) noexcept : id{ id }, name{ std::move(name) }, weaponId{ weaponId }, rarity{ rarity }
 {
     nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, rarity{ rarity }
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, weaponId{ weaponId }, rarity{ rarity }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, rarity{ rarity }
+SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, WeaponId weaponId, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, weaponId{ weaponId }, rarity{ rarity }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
