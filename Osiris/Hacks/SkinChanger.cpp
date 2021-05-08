@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string_view>
 #include <type_traits>
+#include <unordered_set>
 #include <utility>
 
 #define STBI_ONLY_PNG
@@ -651,17 +652,77 @@ namespace ImGui
     }
 }
 
+#define SKINCHANGER_REWORK
+
 void SkinChanger::drawGUI(bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
             return;
-        ImGui::SetNextWindowSize({ 700.0f, 0.0f });
+        ImGui::SetNextWindowSize({ 700.0f, 400.0f });
         if (!ImGui::Begin("Skin changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
             ImGui::End();
             return;
         }
     }
+
+#ifdef SKINCHANGER_REWORK
+    static std::string filter;
+
+    static bool isInAddMode = false;
+
+    if (!isInAddMode && ImGui::Button("Add items.."))
+        isInAddMode = true;
+
+    constexpr auto rarityColor = [](int rarity) noexcept {
+        constexpr auto rarityColors = std::to_array<ImU32>({
+            IM_COL32(0,   0,   0,   0),
+            IM_COL32(176, 195, 217, 255),
+            IM_COL32(94, 152, 217, 255),
+            IM_COL32(75, 105, 255, 255),
+            IM_COL32(136,  71, 255, 255),
+            IM_COL32(211,  44, 230, 255),
+            IM_COL32(235,  75,  75, 255),
+            IM_COL32(228, 174,  57, 255)
+        });
+        return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
+    };
+
+    if (isInAddMode) {
+        static std::unordered_set<std::size_t> selectedToAdd;
+        if (ImGui::Button("Back")) {
+            isInAddMode = false;
+            selectedToAdd.clear();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
+            isInAddMode = false;
+
+            selectedToAdd.clear();
+        }
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(-1.0f);
+        ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves..", &filter);
+
+        if (ImGui::BeginChild("##scrollarea")) {
+            for (std::size_t i = 0; i < getSkinKits().size(); ++i) {
+                ImGui::PushID(i);
+                const auto selected = selectedToAdd.contains(i);
+                if (ImGui::SkinSelectable(getSkinKits()[i].name.c_str(), getSkinKits()[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(getSkinKits()[i].rarity), selected)) {
+                    if (selected)
+                        selectedToAdd.erase(i);
+                    else
+                        selectedToAdd.emplace(i);
+
+                }
+                ImGui::PopID();
+            }
+        }
+        ImGui::EndChild();
+    } else {
+
+    }
+#else
 
     static auto itemIndex = 0;
 
@@ -852,7 +913,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         SkinChanger::scheduleHudUpdate();
 
     ImGui::TextUnformatted("nSkinz by namazso");
-
+#endif
     if (!contentOnly)
         ImGui::End();
 }
