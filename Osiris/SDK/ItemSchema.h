@@ -197,3 +197,10 @@ public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
 };
+
+class InventoryManager {
+public:
+    INCONSTRUCTIBLE(InventoryManager)
+
+    VIRTUAL_METHOD(CSPlayerInventory*, getLocalInventory, 23, (), (this))
+};
