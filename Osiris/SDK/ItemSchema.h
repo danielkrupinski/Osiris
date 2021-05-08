@@ -191,3 +191,9 @@ public:
 
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
+
+class CSPlayerInventory {
+public:
+    INCONSTRUCTIBLE(CSPlayerInventory)
+
+};
