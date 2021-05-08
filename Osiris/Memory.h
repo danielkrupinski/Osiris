@@ -97,6 +97,7 @@ public:
     std::uintptr_t demoFileEndReached;
     Entity** gameRules;
     InventoryManager* inventoryManager;
+    void* gcClientSystem;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
