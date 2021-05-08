@@ -35,8 +35,6 @@ namespace SkinChanger
     void resetConfig() noexcept;
 
     struct PaintKit {
-        PaintKit(int id, const std::string& name, WeaponId weaponId, int rarity = 0) noexcept;
-        PaintKit(int id, std::string&& name, WeaponId weaponId, int rarity = 0) noexcept;
         PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, int rarity = 0) noexcept;
         PaintKit(int id, std::wstring&& name, WeaponId weaponId, int rarity = 0) noexcept;
 

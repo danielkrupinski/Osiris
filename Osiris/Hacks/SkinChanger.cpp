@@ -1113,16 +1113,6 @@ void SkinChanger::clearUnusedItemIconTextures() noexcept
     }
 }
 
-SkinChanger::PaintKit::PaintKit(int id, const std::string& name, WeaponId weaponId, int rarity) noexcept : id{ id }, name{ name }, weaponId{ weaponId }, rarity{ rarity }
-{
-    nameUpperCase = Helpers::toUpper(Helpers::toWideString(name));
-}
-
-SkinChanger::PaintKit::PaintKit(int id, std::string&& name, WeaponId weaponId, int rarity) noexcept : id{ id }, name{ std::move(name) }, weaponId{ weaponId }, rarity{ rarity }
-{
-    nameUpperCase = Helpers::toUpper(Helpers::toWideString(this->name));
-}
-
 SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, weaponId{ weaponId }, rarity{ rarity }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
