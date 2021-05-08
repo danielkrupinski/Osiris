@@ -186,8 +186,7 @@ static item_setting* get_by_definition_index(WeaponId weaponId)
     return (it == skinChangerConfig.end() || !it->enabled) ? nullptr : &*it;
 }
 
-static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
-static std::vector<SkinChanger::PaintKit> gloveKits;
+static std::vector<SkinChanger::PaintKit> gameItems;
 
 static void initializeKits() noexcept
 {
@@ -224,8 +223,7 @@ static void initializeKits() noexcept
             weaponNames.emplace(kitWeapon.weaponId, interfaces->localize->findSafe(itemDef->getItemBaseName()));
     }
  
-    skinKits.reserve(itemSchema->paintKits.lastAlloc);
-    gloveKits.reserve(itemSchema->paintKits.lastAlloc);
+    gameItems.reserve(itemSchema->paintKits.lastAlloc);
     for (const auto& node : itemSchema->paintKits) {
         const auto paintKit = node.value;
 
@@ -243,7 +241,7 @@ static void initializeKits() noexcept
             }
 
             name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-            gloveKits.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
+            gameItems.emplace_back(paintKit->id, std::move(name), std::move(iconPath), paintKit->rarity);
         } else {
             for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
@@ -253,15 +251,25 @@ static void initializeKits() noexcept
                 std::wstring name = weaponNames[it->weaponId];
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-                skinKits.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
+                gameItems.emplace_back(paintKit->id, std::move(name), it->iconPath, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6));
             }
         }
     }
 
-    std::sort(skinKits.begin() + 1, skinKits.end());
-    skinKits.shrink_to_fit();
-    std::sort(gloveKits.begin(), gloveKits.end());
-    gloveKits.shrink_to_fit();
+    const auto& stickerMap = itemSchema->stickerKits;
+
+    gameItems.reserve(gameItems.size() + stickerMap.numElements);
+
+    for (const auto& node : stickerMap) {
+        const auto stickerKit = node.value;
+        if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
+            continue;
+        std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
+        gameItems.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), stickerKit->rarity);
+    }
+
+    std::sort(gameItems.begin(), gameItems.end());
+    gameItems.shrink_to_fit();
 }
 
 void apply_sticker_changer(Entity* item) noexcept
@@ -925,36 +933,19 @@ void SkinChanger::resetConfig() noexcept
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
 {
     initializeKits();
-    return skinKits;
+    return gameItems;
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 {
     initializeKits();
-    return gloveKits;
+    return gameItems;
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
-    static std::vector<SkinChanger::PaintKit> stickerKits;
-    if (stickerKits.empty()) {
-        const auto& stickerMap = memory->itemSystem()->getItemSchema()->stickerKits;
-
-        stickerKits.reserve(stickerMap.numElements + 1);
-        stickerKits.emplace_back(0, "None");
-
-        for (const auto& node : stickerMap) {
-            const auto stickerKit = node.value;
-            if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
-                continue;
-            std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            stickerKits.emplace_back(stickerKit->id, std::move(name), stickerKit->inventoryImage.data(), stickerKit->rarity);
-        }
-
-        std::sort(stickerKits.begin() + 1, stickerKits.end());
-        stickerKits.shrink_to_fit();
-    }
-    return stickerKits;
+    initializeKits();
+    return gameItems;
 }
 
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
