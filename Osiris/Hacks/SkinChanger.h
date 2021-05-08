@@ -66,8 +66,8 @@ namespace SkinChanger
     };
 
     const std::vector<PaintKit>& getSkinKits() noexcept;
-    const std::vector<PaintKit>& getGloveKits() noexcept;
-    const std::vector<PaintKit>& getStickerKits() noexcept;
+    [[deprecated]] const std::vector<PaintKit>& getGloveKits() noexcept;
+    [[deprecated]] const std::vector<PaintKit>& getStickerKits() noexcept;
     const std::vector<Quality>& getQualities() noexcept;
     const std::vector<Item>& getGloveTypes() noexcept;
     const std::vector<Item>& getKnifeTypes() noexcept;
