@@ -34,12 +34,18 @@ namespace SkinChanger
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
+    enum class ItemType : short {
+        Skin,
+        Sticker
+    };
+
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, int rarity) noexcept;
-        PaintKit(int id, std::wstring&& name, WeaponId weaponId, int rarity) noexcept;
+        PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, ItemType type, int rarity) noexcept;
+        PaintKit(int id, std::wstring&& name, WeaponId weaponId, ItemType type, int rarity) noexcept;
 
         int id;
         WeaponId weaponId;
+        ItemType type;
         int rarity;
         std::string name;
         std::wstring nameUpperCase;
