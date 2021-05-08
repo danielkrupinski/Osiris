@@ -13,6 +13,7 @@ class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class ItemSystem;
+class InventoryManager;
 class KeyValues;
 class MoveHelper;
 class MoveData;
@@ -95,6 +96,7 @@ public:
     std::uintptr_t money;
     std::uintptr_t demoFileEndReached;
     Entity** gameRules;
+    InventoryManager* inventoryManager;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
