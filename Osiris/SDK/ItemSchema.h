@@ -192,10 +192,16 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+class ClientSharedObjectCache;
+
 class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
+    auto getSOC() noexcept
+    {
+        return *reinterpret_cast<ClientSharedObjectCache**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
+    }
 };
 
 class InventoryManager {
