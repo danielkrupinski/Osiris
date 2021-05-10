@@ -202,6 +202,11 @@ public:
     {
         return *reinterpret_cast<ClientSharedObjectCache**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
     }
+
+    auto getAccountID() noexcept
+    {
+        return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, ));
+    }
 };
 
 class InventoryManager {
