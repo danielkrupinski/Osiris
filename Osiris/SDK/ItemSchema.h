@@ -192,6 +192,17 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+class SharedObjectTypeCache {
+public:
+    INCONSTRUCTIBLE(SharedObjectTypeCache)
+
+    VIRTUAL_METHOD(void, addObject, 1, (void* object), (this, object))
+    VIRTUAL_METHOD(void, removeObject, 3, (void* object), (this, object))
+
+    PAD(WIN32_LINUX(32, 56))
+    int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
+};
+
 class ClientSharedObjectCache;
 
 class CSPlayerInventory {
