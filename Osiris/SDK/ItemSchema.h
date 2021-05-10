@@ -203,7 +203,21 @@ public:
     int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
 };
 
-class ClientSharedObjectCache;
+class ClientSharedObjectCache {
+public:
+    INCONSTRUCTIBLE(ClientSharedObjectCache)
+
+    PAD(16)
+    UtlVector<SharedObjectTypeCache*> sharedObjectTypeCaches;
+
+    SharedObjectTypeCache* findBaseTypeCache(int classID) noexcept
+    {
+        for (int i = 0; i < sharedObjectTypeCaches.size; ++i)
+            if (sharedObjectTypeCaches[i]->classID == classID)
+                return sharedObjectTypeCaches[i];
+        return nullptr;
+    }
+};
 
 class CSPlayerInventory {
 public:
