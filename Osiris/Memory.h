@@ -8,6 +8,7 @@
 #include "SDK/Platform.h"
 
 class ClientMode;
+class CSPlayerInventory;
 class EconItem;
 class Entity;
 class GameEventDescriptor;
@@ -100,6 +101,7 @@ public:
     InventoryManager* inventoryManager;
     void* gcClientSystem;
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
+    bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {

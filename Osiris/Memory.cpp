@@ -195,7 +195,8 @@ Memory::Memory() noexcept
     inventoryManager = *reinterpret_cast<InventoryManager**>(findPattern(CLIENT_DLL, "\x8D\x44\x24\x28\xB9") + 5);
     gcClientSystem = **reinterpret_cast<void***>(findPattern(CLIENT_DLL, "\x8B\x0D????\x6A?\x83\xEC\x10") + 2);
     createEconItemSharedObject = *reinterpret_cast<decltype(createEconItemSharedObject)*>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x1C\x8D\x45\xE4\xC7\x45") + 20);
- 
+    addEconItem = relativeToAbsolute<decltype(addEconItem)>(findPattern(CLIENT_DLL, "\xE8????\x84\xC0\x74\xE7") + 1);
+  
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 #else
     const auto tier0 = dlopen(TIER0_DLL, RTLD_NOLOAD | RTLD_NOW);
