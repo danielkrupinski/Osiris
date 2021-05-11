@@ -105,6 +105,7 @@ public:
     bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
+    std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
