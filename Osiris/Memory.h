@@ -19,6 +19,7 @@ class InventoryManager;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PanoramaMarshallHelper;
 class PlantedC4;
 class PlayerResource;
 class ViewRender;
@@ -103,6 +104,7 @@ public:
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
     bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
+    PanoramaMarshallHelper* panoramaMarshallHelper;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
