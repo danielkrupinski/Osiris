@@ -472,6 +472,13 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
         hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
 }
 
+static double __STDCALL getArgAsNumber(void* params, int index) noexcept
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
+
+    return result;
+}
+
 #ifdef _WIN32
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept
@@ -582,6 +589,9 @@ void Hooks::install() noexcept
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, drawModelExecute);
 
+    panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+    panoramaMarshallHelper.hookAt(5, getArgAsNumber);
+
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
 
@@ -658,6 +668,7 @@ void Hooks::uninstall() noexcept
     clientMode.restore();
     engine.restore();
     modelRender.restore();
+    panoramaMarshallHelper.restore();
     sound.restore();
     surface.restore();
     svCheats.restore();
