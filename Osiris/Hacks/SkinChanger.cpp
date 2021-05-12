@@ -1096,6 +1096,13 @@ const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcep
     return skinData[index];
 }
 
+static int slotToApplySticker;
+
+void SkinChanger::setStickerApplySlot(int slot) noexcept
+{
+    slotToApplySticker = slot;
+}
+
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
 {
     static std::vector<Quality> qualities;
