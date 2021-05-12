@@ -112,6 +112,7 @@ public:
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
     std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
+    EconItem*(__THISCALL* getSOCData)(void* itemView);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
