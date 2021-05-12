@@ -256,6 +256,29 @@ public:
         return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
     }
 
+    std::pair<std::uint64_t, std::uint32_t> getHighestIDs() noexcept
+    {
+        const auto soc = getSOC();
+        if (!soc)
+            return {};
+
+        const auto baseTypeCache = soc->findBaseTypeCache(1);
+        if (!baseTypeCache)
+            return {};
+
+        std::uint64_t maxItemID = 0;
+        std::uint32_t maxInventoryID = 0;
+        for (int i = 0; i < baseTypeCache->objectCount; ++i) {
+            const auto item = baseTypeCache->objects[i];
+            if (const auto isDefaultItem = (item->itemID & 0xF000000000000000) != 0)
+                continue;
+            maxItemID = (std::max)(maxItemID, item->itemID);
+            maxInventoryID = (std::max)(maxInventoryID, item->inventory);
+        }
+            
+        return std::make_pair(maxItemID, maxInventoryID);
+    }
+
     auto getAccountID() noexcept
     {
         return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, ));
