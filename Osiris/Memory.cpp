@@ -200,6 +200,7 @@ Memory::Memory() noexcept
     panoramaMarshallHelper = *reinterpret_cast<decltype(panoramaMarshallHelper)*>(findPattern(CLIENT_DLL, "\x68????\x8B\xC8\xE8????\x8D\x4D\xF4\xFF\x15????\x8B\xCF\xFF\x15????\x5F\x5E\x8B\xE5\x5D\xC3") + 1);
     setStickerToolSlotGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xFF\xD2\xDD\x5C\x24\x10\xF2\x0F\x2C\x7C\x24") + 2;
     setStickerToolSlotGetArgAsStringReturnAddress = setStickerToolSlotGetArgAsNumberReturnAddress - 49;
+    initItemCustomizationNotification = findPattern(CLIENT_DLL, "\x55\x8B\xEC\xA1????\x53\x56\x8B\xF1\x8B\xDA\x8B\x08\x57\x6A\x1C\x8B\x01\xFF\x50\x04\x8B\xF8\x85\xFF\x74\x48");
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 #else

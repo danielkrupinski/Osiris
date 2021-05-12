@@ -107,6 +107,7 @@ public:
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
     std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
+    std::uintptr_t initItemCustomizationNotification;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
