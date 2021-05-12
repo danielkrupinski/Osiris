@@ -203,6 +203,7 @@ Memory::Memory() noexcept
     initItemCustomizationNotification = findPattern(CLIENT_DLL, "\x55\x8B\xEC\xA1????\x53\x56\x8B\xF1\x8B\xDA\x8B\x08\x57\x6A\x1C\x8B\x01\xFF\x50\x04\x8B\xF8\x85\xFF\x74\x48");
     findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
     getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") + 1);
+    useToolStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37");
 
     localPlayer.init(*reinterpret_cast<Entity***>(findPattern(CLIENT_DLL, "\xA1????\x89\x45\xBC\x85\xC0") + 1));
 #else
