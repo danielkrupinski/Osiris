@@ -57,6 +57,50 @@ namespace SkinChanger
         }
     };
 
+    // 
+
+    struct GameItem {
+        enum class Type {
+            Sticker,
+            Glove,
+            Skin
+        };
+
+        GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
+
+        Type type;
+        int rarity;
+        std::size_t dataIndex;
+
+        std::string name;
+        std::wstring nameUpperCase;
+        std::string iconPath;
+    };
+
+    const std::vector<GameItem>& getGameItems() noexcept;
+
+    struct StickerData {
+        int stickerID;
+    };
+
+    const StickerData& getStickerData(std::size_t index) noexcept;
+
+    struct GloveData {
+        int paintKit;
+        WeaponId weaponId;
+    };
+
+    const GloveData& getGloveData(std::size_t index) noexcept;
+
+    struct SkinData {
+        int paintKit;
+        WeaponId weaponId;
+    };
+
+    const SkinData& getSkinData(std::size_t index) noexcept;
+
+    //
+
     struct Quality {
         Quality(int index, const char* name) : index{ index }, name{ name } {}
         int index = 0;
