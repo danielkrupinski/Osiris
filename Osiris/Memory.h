@@ -106,6 +106,7 @@ public:
     void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
     PanoramaMarshallHelper* panoramaMarshallHelper;
     std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
+    std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
