@@ -101,6 +101,7 @@ namespace SkinChanger
 
     void setStickerApplySlot(int slot) noexcept;
     void setToolToUse(std::uint64_t itemID) noexcept;
+    void setItemToApplyTool(std::uint64_t itemID) noexcept;
 
     //
 

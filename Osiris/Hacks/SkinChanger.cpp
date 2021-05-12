@@ -1102,10 +1102,16 @@ void SkinChanger::setStickerApplySlot(int slot) noexcept
     slotToApplySticker = slot;
 }
 
-static std::uint64_t toolToUse;
+static std::uint64_t toolToUse = 0;
 void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
 {
     toolToUse = itemID;
+}
+
+static std::uint64_t itemToApplyTool = 0;
+void SkinChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
+{
+    itemToApplyTool = itemID;
 }
 
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
