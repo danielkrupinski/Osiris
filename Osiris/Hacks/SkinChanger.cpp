@@ -113,7 +113,7 @@ struct item_setting {
             // paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
-            paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
+            // paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
         }
 
@@ -146,8 +146,8 @@ struct item_setting {
             }
         } else {
             {
-                const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
-                paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
+                // const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                // paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
             }
 
             {
@@ -1020,12 +1020,6 @@ const SkinChanger::GloveData& SkinChanger::getGloveData(std::size_t index) noexc
 const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcept
 {
     return skinData[index];
-}
-
-const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
-{
-    initializeKits();
-    return {};
 }
 
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
