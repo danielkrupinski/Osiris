@@ -111,6 +111,7 @@ public:
     std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
     std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
+    std::uintptr_t useToolGetArg2AsStringReturnAddress;
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
