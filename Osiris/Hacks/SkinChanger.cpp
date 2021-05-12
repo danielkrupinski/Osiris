@@ -108,7 +108,7 @@ struct item_setting {
         quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
 
         if (itemId == WeaponId::GloveT) {
-            paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
+            // paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
             paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
@@ -134,8 +134,8 @@ struct item_setting {
 
         if (itemId == WeaponId::GloveT) {
             {
-                const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
-                paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
+               // const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
+               // paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
             }
 
             {
@@ -1021,12 +1021,6 @@ const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcep
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
-{
-    initializeKits();
-    return {};
-}
-
-const std::vector<SkinChanger::PaintKit>& SkinChanger::getGloveKits() noexcept
 {
     initializeKits();
     return {};
