@@ -492,6 +492,10 @@ static const char* __STDCALL getArgAsString(void* params, int index) noexcept
             std::uint64_t itemID = 0;
             std::from_chars(result, result + strlen(result), itemID);
             SkinChanger::setToolToUse(itemID);
+        } else if (RETURN_ADDRESS() == memory->useToolGetArg2AsStringReturnAddress) {
+            std::uint64_t itemID = 0;
+            std::from_chars(result, result + strlen(result), itemID);
+            SkinChanger::setItemToApplyTool(itemID);
         }
     }
    
