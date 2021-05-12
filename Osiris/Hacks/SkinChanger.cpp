@@ -504,6 +504,24 @@ static void updateHud() noexcept
     hudUpdateRequired = false;
 }
 
+static int slotToApplySticker;
+void SkinChanger::setStickerApplySlot(int slot) noexcept
+{
+    slotToApplySticker = slot;
+}
+
+static std::uint64_t toolToUse = 0;
+void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
+{
+    toolToUse = itemID;
+}
+
+static std::uint64_t itemToApplyTool = 0;
+void SkinChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
+{
+    itemToApplyTool = itemID;
+}
+
 void SkinChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -533,6 +551,23 @@ void SkinChanger::run(FrameStage stage) noexcept
         return;
 
     static const auto [baseItemID, baseInvID] = localInventory->getHighestIDs();
+
+    if (toolToUse > baseItemID && itemToApplyTool > baseItemID) {
+        const auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
+        const auto& toolItem = gameItems[tool.itemIndex];
+        const auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
+        const auto& destItem = gameItems[dest.itemIndex];
+
+        if (toolItem.type == SkinChanger::GameItem::Type::Sticker) {
+            const auto& sticker = stickerData[toolItem.dataIndex];
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " wear").c_str(), 0.10f);
+                memory->clearInventoryImageRGBA(view);
+            }
+        }
+    }
+    toolToUse = itemToApplyTool = 0;
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
         if (memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
@@ -1094,24 +1129,6 @@ const SkinChanger::GloveData& SkinChanger::getGloveData(std::size_t index) noexc
 const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcept
 {
     return skinData[index];
-}
-
-static int slotToApplySticker;
-void SkinChanger::setStickerApplySlot(int slot) noexcept
-{
-    slotToApplySticker = slot;
-}
-
-static std::uint64_t toolToUse = 0;
-void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
-{
-    toolToUse = itemID;
-}
-
-static std::uint64_t itemToApplyTool = 0;
-void SkinChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
-{
-    itemToApplyTool = itemID;
 }
 
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
