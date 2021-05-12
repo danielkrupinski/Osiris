@@ -192,6 +192,28 @@ public:
     VIRTUAL_METHOD(ItemSchema*, getItemSchema, 0, (), (this))
 };
 
+class EconItem {
+public:
+    PAD(8)
+
+    std::uint64_t itemID;
+    std::uint64_t originalID;
+    void* customDataOptimizedObject;
+    std::uint32_t accountID;
+    std::uint32_t inventory;
+    WeaponId weaponId;
+
+    std::uint16_t origin : 5;
+    std::uint16_t quality : 4;
+    std::uint16_t level : 2;
+    std::uint16_t rarity : 4;
+    std::uint16_t dirtybitInUse : 1;
+
+    std::int16_t itemSet;
+    int soUpdateFrame;
+    std::uint8_t flags;
+};
+
 class SharedObjectTypeCache {
 public:
     INCONSTRUCTIBLE(SharedObjectTypeCache)
