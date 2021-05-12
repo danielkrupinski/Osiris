@@ -74,15 +74,17 @@ struct sticker_setting
 {
     void update()
     {
-        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+        // kit = SkinChanger::getStickerKits()[kit_vector_index].id;
     }
 
     void onLoad()
     {
+        /*
         const auto& kits = SkinChanger::getStickerKits();
         const auto it = std::find_if(kits.begin(), kits.end(), [this](const auto& k) { return k.id == kit; });
         kit_vector_index = it != SkinChanger::getStickerKits().end() ? std::distance(kits.begin(), it) : 0;
         kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+        */
     }
 
     auto operator==(const sticker_setting& o) const
@@ -1021,12 +1023,6 @@ const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcep
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
-{
-    initializeKits();
-    return {};
-}
-
-const std::vector<SkinChanger::PaintKit>& SkinChanger::getStickerKits() noexcept
 {
     initializeKits();
     return {};
