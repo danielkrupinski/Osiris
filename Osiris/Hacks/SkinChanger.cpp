@@ -194,6 +194,19 @@ static std::vector<SkinChanger::StickerData> stickerData;
 static std::vector<SkinChanger::GloveData> gloveData;
 static std::vector<SkinChanger::SkinData> skinData;
 
+struct InventoryItem {
+    std::size_t itemIndex;
+};
+
+static std::vector<InventoryItem> inventory;
+
+static void addToInventory(const std::unordered_set<std::size_t>& indicesToAdd) noexcept
+{
+    for (const auto idx : indicesToAdd) {
+        inventory.emplace_back(idx);
+    }
+}
+
 static void initializeKits() noexcept
 {
     if (static bool initialized = false; !initialized)
@@ -503,6 +516,63 @@ void SkinChanger::run(FrameStage stage) noexcept
         if (hudUpdateRequired && localPlayer && !localPlayer->isDormant())
             updateHud();
     }
+
+    if (stage != FrameStage::RENDER_START)
+        return;
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto soc = localInventory->getSOC();
+    if (!soc)
+        return;
+
+    const auto baseTypeCache = soc->findBaseTypeCache(1);
+    if (!baseTypeCache)
+        return;
+
+    static const auto [baseItemID, baseInvID] = localInventory->getHighestIDs();
+
+    for (std::size_t i = 0; i < inventory.size(); ++i) {
+        if (memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
+            continue;
+
+        const auto& item = gameItems[inventory[i].itemIndex];
+       
+        const auto econItem = memory->createEconItemSharedObject();
+        econItem->itemID = baseItemID + i + 1;
+        econItem->originalID = 0;
+        econItem->accountID = localInventory->getAccountID();
+        econItem->inventory = baseInvID + i + 1;
+        econItem->rarity = item.rarity;
+
+        switch (item.type) {
+        using enum SkinChanger::GameItem::Type;
+        case Sticker:
+            econItem->weaponId = WeaponId::Sticker;
+            break;
+        case Skin:
+            econItem->weaponId = skinData[item.dataIndex].weaponId;
+            break;
+        case Glove:
+            econItem->weaponId = gloveData[item.dataIndex].weaponId;
+            break;
+        }
+
+        baseTypeCache->addObject(econItem);
+        memory->addEconItem(localInventory, econItem, false, false, false);
+
+        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID)) {
+            if (item.type == SkinChanger::GameItem::Type::Sticker) {
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "sticker slot 0 id", stickerData[item.dataIndex].stickerID);
+            } else {
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.type == SkinChanger::GameItem::Type::Skin ? skinData[item.dataIndex].paintKit : gloveData[item.dataIndex].paintKit));
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
+            }
+            memory->clearInventoryImageRGBA(view);
+        }
+    }
 }
 
 void SkinChanger::scheduleHudUpdate() noexcept
@@ -706,7 +776,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SameLine();
         if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
             isInAddMode = false;
-
+            addToInventory(selectedToAdd);
             selectedToAdd.clear();
         }
         ImGui::SameLine();
@@ -730,7 +800,11 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::EndChild();
     } else {
-
+        for (std::size_t i = 0; i < inventory.size(); ++i) {
+            ImGui::PushID(i);
+            ImGui::Image(getItemIconTexture(gameItems[inventory[i].itemIndex].iconPath), { 100.0f, 75.0f });
+            ImGui::PopID();
+        }
     }
 #else
 
