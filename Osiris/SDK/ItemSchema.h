@@ -230,14 +230,15 @@ public:
     int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
 };
 
+template <typename T>
 class ClientSharedObjectCache {
 public:
     INCONSTRUCTIBLE(ClientSharedObjectCache)
 
     PAD(16)
-    UtlVector<SharedObjectTypeCache<EconItem>*> sharedObjectTypeCaches;
+    UtlVector<SharedObjectTypeCache<T>*> sharedObjectTypeCaches;
 
-    SharedObjectTypeCache<EconItem>* findBaseTypeCache(int classID) noexcept
+    SharedObjectTypeCache<T>* findBaseTypeCache(int classID) noexcept
     {
         for (int i = 0; i < sharedObjectTypeCaches.size; ++i)
             if (sharedObjectTypeCaches[i]->classID == classID)
@@ -252,7 +253,7 @@ public:
 
     auto getSOC() noexcept
     {
-        return *reinterpret_cast<ClientSharedObjectCache**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
+        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
     }
 
     auto getAccountID() noexcept
