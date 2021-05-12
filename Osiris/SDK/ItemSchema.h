@@ -214,15 +214,16 @@ public:
     std::uint8_t flags;
 };
 
+template <typename T>
 class SharedObjectTypeCache {
 public:
     INCONSTRUCTIBLE(SharedObjectTypeCache)
 
-    VIRTUAL_METHOD(void, addObject, 1, (void* object), (this, object))
-    VIRTUAL_METHOD(void, removeObject, 3, (void* object), (this, object))
+    VIRTUAL_METHOD(void, addObject, 1, (T* object), (this, object))
+    VIRTUAL_METHOD(void, removeObject, 3, (T* object), (this, object))
 
     PAD(4)
-    void** objects;
+    T** objects;
     PAD(16)
     int objectCount;
     PAD(4)
@@ -234,9 +235,9 @@ public:
     INCONSTRUCTIBLE(ClientSharedObjectCache)
 
     PAD(16)
-    UtlVector<SharedObjectTypeCache*> sharedObjectTypeCaches;
+    UtlVector<SharedObjectTypeCache<EconItem>*> sharedObjectTypeCaches;
 
-    SharedObjectTypeCache* findBaseTypeCache(int classID) noexcept
+    SharedObjectTypeCache<EconItem>* findBaseTypeCache(int classID) noexcept
     {
         for (int i = 0; i < sharedObjectTypeCaches.size; ++i)
             if (sharedObjectTypeCaches[i]->classID == classID)
