@@ -1,3 +1,4 @@
+#include <charconv>
 #include <functional>
 #include <string>
 
@@ -486,6 +487,14 @@ static const char* __STDCALL getArgAsString(void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
+    if (result) {
+        if (RETURN_ADDRESS() == memory->useToolStickerGetArgAsStringReturnAddress) {
+            std::uint64_t itemID = 0;
+            std::from_chars(result, result + strlen(result), itemID);
+            SkinChanger::setToolToUse(itemID);
+        }
+    }
+   
     return result;
 }
 
