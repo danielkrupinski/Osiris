@@ -476,6 +476,9 @@ static double __STDCALL getArgAsNumber(void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
 
+    if (RETURN_ADDRESS() == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
+        SkinChanger::setStickerApplySlot(static_cast<int>(result));
+
     return result;
 }
 
