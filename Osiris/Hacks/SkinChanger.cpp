@@ -197,7 +197,14 @@ static std::vector<SkinChanger::GloveData> gloveData;
 static std::vector<SkinChanger::SkinData> skinData;
 
 struct InventoryItem {
+private:
     std::size_t itemIndex;
+public:
+    InventoryItem(std::size_t itemIndex) : itemIndex{ itemIndex } {}
+    SkinChanger::GameItem& get() const noexcept
+    {
+        return gameItems[itemIndex];
+    }
 };
 
 static std::vector<InventoryItem> inventory;
@@ -580,9 +587,9 @@ void SkinChanger::run(FrameStage stage) noexcept
     if (useToolTime <= memory->globalVars->realtime) {
         if (toolToUse > baseItemID && itemToApplyTool > baseItemID) {
             const auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
-            const auto& toolItem = gameItems[tool.itemIndex];
+            const auto& toolItem = tool.get();
             const auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
-            const auto& destItem = gameItems[dest.itemIndex];
+            const auto& destItem = dest.get();
 
             if (toolItem.type == SkinChanger::GameItem::Type::Sticker) {
                 const auto& sticker = stickerData[toolItem.dataIndex];
@@ -603,7 +610,7 @@ void SkinChanger::run(FrameStage stage) noexcept
         if (memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
             continue;
 
-        const auto& item = gameItems[inventory[i].itemIndex];
+        const auto& item = inventory[i].get();
        
         const auto econItem = memory->createEconItemSharedObject();
         econItem->itemID = baseItemID + i + 1;
@@ -868,7 +875,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
     } else {
         for (std::size_t i = 0; i < inventory.size(); ++i) {
             ImGui::PushID(i);
-            ImGui::Image(getItemIconTexture(gameItems[inventory[i].itemIndex].iconPath), { 100.0f, 75.0f });
+            ImGui::Image(getItemIconTexture(inventory[i].get().iconPath), { 100.0f, 75.0f });
             ImGui::PopID();
         }
     }
