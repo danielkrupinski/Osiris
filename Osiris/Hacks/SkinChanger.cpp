@@ -201,6 +201,9 @@ private:
     std::size_t itemIndex;
 public:
     InventoryItem(std::size_t itemIndex) : itemIndex{ itemIndex } {}
+
+    void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
+
     SkinChanger::GameItem& get() const noexcept
     {
         return gameItems[itemIndex];
