@@ -629,6 +629,7 @@ void SkinChanger::run(FrameStage stage) noexcept
             } else {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.type == SkinChanger::GameItem::Type::Skin ? skinData[item.dataIndex].paintKit : gloveData[item.dataIndex].paintKit));
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(1));
             }
             memory->clearInventoryImageRGBA(view);
         }
