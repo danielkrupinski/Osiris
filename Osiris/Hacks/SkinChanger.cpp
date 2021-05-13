@@ -203,9 +203,11 @@ public:
     InventoryItem(std::size_t itemIndex) : itemIndex{ itemIndex } {}
 
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
+    bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
 
     SkinChanger::GameItem& get() const noexcept
     {
+        assert(!isDeleted());
         return gameItems[itemIndex];
     }
 };
@@ -589,7 +591,7 @@ void SkinChanger::run(FrameStage stage) noexcept
 
     if (useToolTime <= memory->globalVars->realtime) {
         if (toolToUse > baseItemID && itemToApplyTool > baseItemID) {
-            const auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
+            auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
             const auto& toolItem = tool.get();
             const auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
             const auto& destItem = dest.get();
@@ -610,7 +612,7 @@ void SkinChanger::run(FrameStage stage) noexcept
     }
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
-        if (memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
+        if (inventory[i].isDeleted() || memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
             continue;
 
         const auto& item = inventory[i].get();
@@ -877,6 +879,9 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         ImGui::EndChild();
     } else {
         for (std::size_t i = 0; i < inventory.size(); ++i) {
+            if (inventory[i].isDeleted())
+                continue;
+
             ImGui::PushID(i);
             ImGui::Image(getItemIconTexture(inventory[i].get().iconPath), { 100.0f, 75.0f });
             ImGui::PopID();
