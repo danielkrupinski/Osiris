@@ -251,6 +251,8 @@ class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
+    VIRTUAL_METHOD(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
+
     auto getSOC() noexcept
     {
         return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
