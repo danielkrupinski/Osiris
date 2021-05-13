@@ -196,9 +196,21 @@ static std::vector<SkinChanger::StickerData> stickerData;
 static std::vector<SkinChanger::GloveData> gloveData;
 static std::vector<SkinChanger::SkinData> skinData;
 
+struct StickerConfig {
+    int stickerID = 0;
+    float wear;
+};
+
+struct DynamicSkinData {
+    std::array<StickerConfig, 5> stickers;
+};
+
+static std::vector<DynamicSkinData> dynamicSkinData;
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
+    std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 public:
     InventoryItem(std::size_t itemIndex) : itemIndex{ itemIndex } {}
 
@@ -208,6 +220,10 @@ public:
     bool isSticker() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Sticker; }
     bool isSkin() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Skin; }
     bool isGlove() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Glove; }
+
+    bool hasDynamicData() const noexcept { return dynamicDataIndex != static_cast<std::size_t>(-1); }
+    std::size_t getDynamicDataIndex() const noexcept { assert(hasDynamicData()); return dynamicDataIndex; }
+    void setDynamicDataIndex(std::size_t newDynamicDataIndex) noexcept { dynamicDataIndex = newDynamicDataIndex; }
 
     SkinChanger::GameItem& get() const noexcept
     {
@@ -603,7 +619,7 @@ void SkinChanger::run(FrameStage stage) noexcept
         if (toolToUse > baseItemID && itemToApplyTool > baseItemID) {
             auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
             const auto& toolItem = tool.get();
-            const auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
+            auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
             const auto& destItem = dest.get();
 
             if (toolItem.type == SkinChanger::GameItem::Type::Sticker) {
@@ -612,6 +628,13 @@ void SkinChanger::run(FrameStage stage) noexcept
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " wear").c_str(), 0.10f);
                     memory->clearInventoryImageRGBA(view);
+
+                    if (!dest.hasDynamicData()) {
+                        dynamicSkinData.push_back({});
+                        dest.setDynamicDataIndex(dynamicSkinData.size() - 1);
+                    }
+                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.stickerID;
+                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
 
                     if (const auto stickerView = memory->findOrCreateEconItemViewForItemID(toolToUse))
                         if (const auto econItem = memory->getSOCData(stickerView))
@@ -1159,6 +1182,19 @@ json InventoryChanger::toJson() noexcept
             const auto& staticData = skinData[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.paintKit;
             itemConfig["Weapon ID"] = staticData.weaponId;
+
+            if (item.hasDynamicData()) {
+                const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+                for (const auto& sticker : dynamicData.stickers) {
+                    if (sticker.stickerID == 0)
+                        continue;
+
+                    json stickerConfig;
+                    stickerConfig["Sticker ID"] = sticker.stickerID;
+                    stickerConfig["Wear"] = sticker.wear;
+                    itemConfig["Stickers"].push_back(stickerConfig);
+                }
+            }
             break;
         }
         }
