@@ -1126,6 +1126,33 @@ json SkinChanger::toJson() noexcept
     return skinChangerConfig;
 }
 
+json InventoryChanger::toJson() noexcept
+{
+    json j;
+    for (const auto& item : inventory) {
+        if (item.isDeleted())
+            continue;
+
+        json itemConfig;
+
+        const auto& gameItem = item.get();
+        switch (gameItem.type) {
+        case SkinChanger::GameItem::Type::Sticker:
+            itemConfig["Type"] = "Sticker";
+            break;
+        case SkinChanger::GameItem::Type::Glove:
+            itemConfig["Type"] = "Glove";
+            break;
+        case SkinChanger::GameItem::Type::Skin:
+            itemConfig["Type"] = "Skin";
+            break;
+        }
+
+        j.push_back(itemConfig);
+    }
+    return j;
+}
+
 static void from_json(const json& j, sticker_setting& s)
 {
     read(j, "Kit", s.kit);

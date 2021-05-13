@@ -17,6 +17,14 @@ enum class FrameStage;
 class Entity;
 class GameEvent;
 
+namespace InventoryChanger
+{
+    // Config
+    json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
+    void resetConfig() noexcept;
+}
+
 namespace SkinChanger
 {
     void run(FrameStage) noexcept;
