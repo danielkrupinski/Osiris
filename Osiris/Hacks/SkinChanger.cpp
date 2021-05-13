@@ -1137,15 +1137,26 @@ json InventoryChanger::toJson() noexcept
 
         const auto& gameItem = item.get();
         switch (gameItem.type) {
-        case SkinChanger::GameItem::Type::Sticker:
+        case SkinChanger::GameItem::Type::Sticker: {
             itemConfig["Type"] = "Sticker";
+            const auto& staticData = stickerData[gameItem.dataIndex];
+            itemConfig["Sticker ID"] = staticData.stickerID;
             break;
-        case SkinChanger::GameItem::Type::Glove:
+        }
+        case SkinChanger::GameItem::Type::Glove: {
             itemConfig["Type"] = "Glove";
+            const auto& staticData = gloveData[gameItem.dataIndex];
+            itemConfig["Paint Kit"] = staticData.paintKit;
+            itemConfig["Weapon ID"] = staticData.weaponId;
             break;
-        case SkinChanger::GameItem::Type::Skin:
+        }
+        case SkinChanger::GameItem::Type::Skin: {
             itemConfig["Type"] = "Skin";
+            const auto& staticData = skinData[gameItem.dataIndex];
+            itemConfig["Paint Kit"] = staticData.paintKit;
+            itemConfig["Weapon ID"] = staticData.weaponId;
             break;
+        }
         }
 
         j.push_back(itemConfig);
