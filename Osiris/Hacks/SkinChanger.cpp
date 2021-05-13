@@ -559,6 +559,12 @@ static void* initItemCustomizationNotification(const char* typeStr, const char* 
     return result;
 }
 
+static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
+{
+    inventory->removeItem(econItem->itemID);
+    cache->removeObject(econItem);
+}
+
 void SkinChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -602,6 +608,11 @@ void SkinChanger::run(FrameStage stage) noexcept
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " wear").c_str(), 0.10f);
                     memory->clearInventoryImageRGBA(view);
+
+                    if (const auto stickerView = memory->findOrCreateEconItemViewForItemID(toolToUse))
+                        if (const auto econItem = memory->getSOCData(stickerView))
+                            removeItemFromInventory(localInventory, baseTypeCache, econItem);
+                    tool.markAsDeleted();
 
                     const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(itemToApplyTool).c_str());
                     interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
