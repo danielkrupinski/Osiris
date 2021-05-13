@@ -204,6 +204,10 @@ public:
 
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
+    
+    bool isSticker() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Sticker; }
+    bool isSkin() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Skin; }
+    bool isGlove() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Glove; }
 
     SkinChanger::GameItem& get() const noexcept
     {
