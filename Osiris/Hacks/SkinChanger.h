@@ -38,7 +38,7 @@ namespace SkinChanger
     void drawGUI(bool contentOnly) noexcept;
 
     // Config
-    json toJson() noexcept;
+    [[deprecated]] json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
