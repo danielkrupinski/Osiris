@@ -40,6 +40,7 @@
 #include "../SDK/Localize.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/Panorama.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
 
@@ -520,6 +521,27 @@ static std::uint64_t itemToApplyTool = 0;
 void SkinChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
 {
     itemToApplyTool = itemID;
+}
+
+static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
+{
+    void* result;
+
+#ifdef _WIN32
+    const auto function = memory->initItemCustomizationNotification;
+    __asm {
+        push itemID
+        push typeStr
+        xor edx, edx
+        xor ecx, ecx
+        call function
+        add esp, 8
+        mov result, eax
+    }
+#else
+
+#endif
+    return result;
 }
 
 void SkinChanger::run(FrameStage stage) noexcept
