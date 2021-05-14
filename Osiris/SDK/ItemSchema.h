@@ -258,6 +258,15 @@ public:
         return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
     }
 
+    SharedObjectTypeCache<EconItem>* getItemBaseTypeCache() noexcept
+    {
+        const auto soc = getSOC();
+        if (!soc)
+            return nullptr;
+
+        return soc->findBaseTypeCache(1);
+    }
+
     std::pair<std::uint64_t, std::uint32_t> getHighestIDs() noexcept
     {
         const auto soc = getSOC();
