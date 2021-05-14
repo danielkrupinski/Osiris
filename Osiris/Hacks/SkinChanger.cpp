@@ -1155,33 +1155,6 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         ImGui::End();
 }
 
-static void to_json(json& j, const sticker_setting& o)
-{
-    const sticker_setting dummy;
-
-    WRITE("Kit", kit);
-    WRITE("Wear", wear);
-    WRITE("Scale", scale);
-    WRITE("Rotation", rotation);
-}
-
-static void to_json(json& j, const item_setting& o)
-{
-    const item_setting dummy;
-
-    WRITE("Enabled", enabled);
-    WRITE("Definition index", itemId);
-    WRITE("Quality", quality);
-    WRITE("Paint Kit", paintKit);
-    WRITE("Definition override", definition_override_index);
-    WRITE("Seed", seed);
-    WRITE("StatTrak", stat_trak);
-    WRITE("Wear", wear);
-    if (o.custom_name[0])
-        j["Custom name"] = o.custom_name;
-    WRITE("Stickers", stickers);
-}
-
 json InventoryChanger::toJson() noexcept
 {
     json j;
