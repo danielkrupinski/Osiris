@@ -1161,11 +1161,6 @@ static void to_json(json& j, const item_setting& o)
     WRITE("Stickers", stickers);
 }
 
-json SkinChanger::toJson() noexcept
-{
-    return skinChangerConfig;
-}
-
 json InventoryChanger::toJson() noexcept
 {
     json j;
