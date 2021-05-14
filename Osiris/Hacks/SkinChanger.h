@@ -39,7 +39,7 @@ namespace SkinChanger
 
     // Config
     [[deprecated]] json toJson() noexcept;
-    void fromJson(const json& j) noexcept;
+    [[deprecated]] void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
     enum class ItemType : short {
