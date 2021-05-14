@@ -882,6 +882,12 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
     if (!isInAddMode && ImGui::Button("Add items.."))
         isInAddMode = true;
 
+    if (!isInAddMode) {
+        ImGui::SameLine();
+        if (ImGui::Button("Force Update"))
+            SkinChanger::scheduleHudUpdate();
+    }
+
     constexpr auto rarityColor = [](int rarity) noexcept {
         constexpr auto rarityColors = std::to_array<ImU32>({
             IM_COL32(0,   0,   0,   0),
