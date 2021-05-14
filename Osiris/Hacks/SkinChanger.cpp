@@ -1238,16 +1238,6 @@ static void from_json(const json& j, item_setting& i)
     i.onLoad();
 }
 
-void SkinChanger::fromJson(const json& j) noexcept
-{
-    if (j.type() == value_t::array && j.size() == skinChangerConfig.size()) {
-        for (std::size_t i = 0; i < j.size(); ++i) {
-            if (!j[i].empty())
-                j[i].get_to(skinChangerConfig[i]);
-        }
-    }
-}
-
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.is_array())

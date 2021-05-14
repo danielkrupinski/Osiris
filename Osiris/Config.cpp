@@ -520,7 +520,6 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
-    SkinChanger::fromJson(j["Skin changer"]);
     InventoryChanger::fromJson(j["Inventory Changer"]);
     Sound::fromJson(j["Sound"]);
 }

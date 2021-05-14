@@ -38,7 +38,6 @@ namespace SkinChanger
     void drawGUI(bool contentOnly) noexcept;
 
     // Config
-    [[deprecated]] void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
     enum class ItemType : short {
