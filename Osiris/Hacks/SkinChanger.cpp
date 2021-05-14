@@ -1206,32 +1206,6 @@ json InventoryChanger::toJson() noexcept
     return j;
 }
 
-static void from_json(const json& j, sticker_setting& s)
-{
-    read(j, "Kit", s.kit);
-    read(j, "Wear", s.wear);
-    read(j, "Scale", s.scale);
-    read(j, "Rotation", s.rotation);
-
-    s.onLoad();
-}
-
-static void from_json(const json& j, item_setting& i)
-{
-    read(j, "Enabled", i.enabled);
-    read(j, "Definition index", i.itemId);
-    read(j, "Quality", i.quality);
-    read(j, "Paint Kit", i.paintKit);
-    read(j, "Definition override", i.definition_override_index);
-    read(j, "Seed", i.seed);
-    read(j, "StatTrak", i.stat_trak);
-    read(j, "Wear", i.wear);
-    read(j, "Custom name", i.custom_name, sizeof(i.custom_name));
-    read(j, "Stickers", i.stickers);
-
-    i.onLoad();
-}
-
 void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.is_array())
