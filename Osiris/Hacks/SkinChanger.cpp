@@ -685,6 +685,19 @@ void SkinChanger::run(FrameStage stage) noexcept
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.type == SkinChanger::GameItem::Type::Skin ? skinData[item.dataIndex].paintKit : gloveData[item.dataIndex].paintKit));
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(1));
+
+                if (item.type == SkinChanger::GameItem::Type::Skin && inventory[i].hasDynamicData()) {
+                    const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
+
+                    for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
+                        const auto& sticker = dynamicData.stickers[j];
+                        if (sticker.stickerID == 0)
+                            continue;
+
+                        memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(j) + " id").c_str(), sticker.stickerID);
+                        memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(j) + " wear").c_str(), sticker.wear);
+                    }
+                }
             }
             memory->clearInventoryImageRGBA(view);
         }
