@@ -198,7 +198,7 @@ static std::vector<SkinChanger::SkinData> skinData;
 
 struct StickerConfig {
     int stickerID = 0;
-    float wear;
+    float wear = 0.0f;
 };
 
 struct DynamicSkinData {
@@ -1236,6 +1236,83 @@ void SkinChanger::fromJson(const json& j) noexcept
         for (std::size_t i = 0; i < j.size(); ++i) {
             if (!j[i].empty())
                 j[i].get_to(skinChangerConfig[i]);
+        }
+    }
+}
+
+void InventoryChanger::fromJson(const json& j) noexcept
+{
+    if (!j.is_array())
+        return;
+
+    initializeKits();
+
+    for (std::size_t i = 0; i < j.size(); ++i) {
+        const auto& jsonItem = j[i];
+        if (jsonItem.empty() || !jsonItem.is_object())
+            continue;
+
+        if (!jsonItem.contains("Type") || !jsonItem["Type"].is_string())
+            continue;
+
+        const std::string type = jsonItem["Type"];
+        if (type == "Sticker") {
+            if (!jsonItem.contains("Sticker ID") || !jsonItem["Sticker ID"].is_number_integer())
+                continue;
+
+            const int stickerID = jsonItem["Sticker ID"];
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [stickerID](const auto& gameItem) { return gameItem.type == SkinChanger::GameItem::Type::Sticker && stickerData[gameItem.dataIndex].stickerID == stickerID; });
+            if (staticData == gameItems.end())
+                continue;
+
+            // TODO: Add a mutex to guard inventory, lock it here
+            inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
+        } else if (type == "Skin") {
+            if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
+                continue;
+
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const int paintKit = jsonItem["Paint Kit"];
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [paintKit, weaponID](const auto& gameItem) { return gameItem.type == SkinChanger::GameItem::Type::Skin && skinData[gameItem.dataIndex].paintKit == paintKit && skinData[gameItem.dataIndex].weaponId == weaponID; });
+            if (staticData == gameItems.end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
+            
+            if (!jsonItem.contains("Stickers") || !jsonItem["Stickers"].is_array())
+                continue;
+
+            const auto& stickers = jsonItem["Stickers"];
+            for (std::size_t k = 0; k < stickers.size(); ++k) {
+                if (k >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
+                    break;
+
+                const auto& sticker = stickers[k];
+                if (!sticker.is_object())
+                    continue;
+
+                if (!sticker.contains("Sticker ID") || !sticker["Sticker ID"].is_number_integer())
+                    continue;
+
+                const int stickerID = sticker["Sticker ID"];
+                if (stickerID == 0)
+                    continue;
+
+                if (!inventory.back().hasDynamicData()) {
+                    dynamicSkinData.push_back({});
+                    inventory.back().setDynamicDataIndex(dynamicSkinData.size() - 1);
+                }
+
+                dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[k].stickerID = stickerID;
+                if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
+                    dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[k].wear = sticker["Wear"];
+            }
+        } else if (type == "Glove") {
+
         }
     }
 }
