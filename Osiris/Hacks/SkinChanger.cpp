@@ -1281,6 +1281,28 @@ void InventoryChanger::fromJson(const json& j) noexcept
     }
 }
 
+void InventoryChanger::resetConfig() noexcept
+{
+    if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
+        if (const auto baseTypeCache = localInventory->getItemBaseTypeCache()) {
+            for (std::size_t i = 0; i < inventory.size(); ++i) {
+                const auto view = memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i);
+                if (!view)
+                    continue;
+                const auto econItem = memory->getSOCData(view);
+                if (!econItem)
+                    continue;
+
+                removeItemFromInventory(localInventory, baseTypeCache, econItem);
+            }
+
+        }
+    }
+
+    inventory.clear();
+    dynamicSkinData.clear();
+}
+
 void SkinChanger::resetConfig() noexcept
 {
     skinChangerConfig = {};
