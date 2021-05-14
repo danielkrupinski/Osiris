@@ -912,9 +912,24 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         ImGui::SetNextItemWidth(-1.0f);
         ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves..", &filter);
 
+        constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
+            constexpr auto delimiter = L" ";
+            wchar_t* _;
+            wchar_t* token = std::wcstok(filter.data(), delimiter, &_);
+            while (token) {
+                if (!std::wcsstr(str.c_str(), token))
+                    return false;
+                token = std::wcstok(nullptr, delimiter, &_);
+            }
+            return true;
+        };
+
         if (ImGui::BeginChild("##scrollarea")) {
             const auto& gameItems = getGameItems();
+            const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < gameItems.size(); ++i) {
+                if (!filter.empty() && !passesFilter(gameItems[i].nameUpperCase, filterWide))
+                    continue;
                 ImGui::PushID(i);
                 const auto selected = selectedToAdd.contains(i);
                 if (ImGui::SkinSelectable(gameItems[i].name.c_str(), gameItems[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
