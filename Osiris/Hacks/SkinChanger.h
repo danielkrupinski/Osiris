@@ -38,7 +38,7 @@ namespace SkinChanger
     void drawGUI(bool contentOnly) noexcept;
 
     // Config
-    void resetConfig() noexcept;
+    [[deprecated]] void resetConfig() noexcept;
 
     enum class ItemType : short {
         Skin,
