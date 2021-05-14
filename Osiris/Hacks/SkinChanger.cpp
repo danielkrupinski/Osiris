@@ -207,6 +207,8 @@ struct DynamicSkinData {
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 
+constexpr auto BASE_ITEMID = 1152921504606746975;
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
@@ -613,13 +615,13 @@ void SkinChanger::run(FrameStage stage) noexcept
     if (!baseTypeCache)
         return;
 
-    static const auto [baseItemID, baseInvID] = localInventory->getHighestIDs();
+    static const auto baseInvID = localInventory->getHighestIDs().second;
 
     if (useToolTime <= memory->globalVars->realtime) {
-        if (toolToUse > baseItemID && itemToApplyTool > baseItemID) {
-            auto& tool = inventory[static_cast<std::size_t>(toolToUse - baseItemID - 1)];
+        if (toolToUse >= BASE_ITEMID && itemToApplyTool >= BASE_ITEMID) {
+            auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
             const auto& toolItem = tool.get();
-            auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - baseItemID - 1)];
+            auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
             const auto& destItem = dest.get();
 
             if (toolItem.type == SkinChanger::GameItem::Type::Sticker) {
@@ -650,13 +652,13 @@ void SkinChanger::run(FrameStage stage) noexcept
     }
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
-        if (inventory[i].isDeleted() || memory->getInventoryItemByItemID(localInventory, baseItemID + i + 1))
+        if (inventory[i].isDeleted() || memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i))
             continue;
 
         const auto& item = inventory[i].get();
        
         const auto econItem = memory->createEconItemSharedObject();
-        econItem->itemID = baseItemID + i + 1;
+        econItem->itemID = BASE_ITEMID + i;
         econItem->originalID = 0;
         econItem->accountID = localInventory->getAccountID();
         econItem->inventory = baseInvID + i + 1;
