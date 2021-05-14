@@ -607,11 +607,7 @@ void SkinChanger::run(FrameStage stage) noexcept
     if (!localInventory)
         return;
 
-    const auto soc = localInventory->getSOC();
-    if (!soc)
-        return;
-
-    const auto baseTypeCache = soc->findBaseTypeCache(1);
+    const auto baseTypeCache = localInventory->getItemBaseTypeCache();
     if (!baseTypeCache)
         return;
 
