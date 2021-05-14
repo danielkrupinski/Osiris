@@ -953,6 +953,7 @@ void Config::save(size_t id) const noexcept
         j["Misc"] = misc;
         j["Style"] = style;
         j["Skin changer"] = SkinChanger::toJson();
+        j["Inventory Changer"] = InventoryChanger::toJson();
 
         removeEmptyObjects(j);
         out << std::setw(2) << j;
