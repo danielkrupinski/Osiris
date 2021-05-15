@@ -780,11 +780,24 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
     if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
         return;
 
-    if (const auto active_conf = get_by_definition_index(WeaponId::Knife)) {
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId(active_conf->definition_override_index))) {
-            if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
-                event.setString("weapon", defName + 7);
-        }
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc)
+        return;
+
+    if (soc->itemID < BASE_ITEMID)
+        return;
+
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
+        if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
+            event.setString("weapon", defName + 7);
     }
 }
 
