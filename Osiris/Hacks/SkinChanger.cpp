@@ -1758,14 +1758,24 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
 
 void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
 {
+    if (!localPlayer)
+        return;
+
     if (!is_knife(viewModelWeapon->itemDefinitionIndex2()))
         return;
 
-    const auto active_conf = get_by_definition_index(WeaponId::Knife);
-    if (!active_conf || !active_conf->definition_override_index)
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId(active_conf->definition_override_index));
+    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
+    if (!itemView)
+        return;
+   
+    if (const auto soc = memory->getSOCData(itemView); !soc || soc->itemID < BASE_ITEMID)
+        return;
+
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
     if (!def)
         return;
 
