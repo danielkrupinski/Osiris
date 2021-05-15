@@ -470,6 +470,83 @@ static void applyGloves(Entity* local) noexcept
     }
 }
 
+static void applyKnife(Entity* local) noexcept
+{
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 0);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc)
+        return;
+
+    if (soc->itemID < BASE_ITEMID)
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isSkin())
+        return;
+
+    const auto& itemData = skinData[item.get().dataIndex];
+
+    auto& weapons = local->weapons();
+
+    for (auto weaponHandle : weapons) {
+        if (weaponHandle == -1)
+            break;
+
+        const auto weapon = interfaces->entityList->getEntityFromHandle(weaponHandle);
+        if (!weapon)
+            continue;
+
+        auto& definitionIndex = weapon->itemDefinitionIndex2();
+        if (!is_knife(definitionIndex))
+            continue;
+
+        weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
+        weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+
+        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
+        const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+
+        if (definitionIndex != itemData.weaponId) {
+            definitionIndex = itemData.weaponId;
+
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(itemData.weaponId)) {
+                weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
+                weapon->preDataUpdate(0);
+            }
+        }
+    }
+
+    const auto viewModel = interfaces->entityList->getEntityFromHandle(local->viewModel());
+    if (!viewModel)
+        return;
+
+    const auto viewModelWeapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon());
+    if (!viewModelWeapon)
+        return;
+
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
+    if (!def)
+        return;
+
+    viewModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel());
+
+    const auto worldModel = interfaces->entityList->getEntityFromHandle(viewModelWeapon->weaponWorldModel());
+    if (!worldModel)
+        return;
+
+    worldModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
+}
+
 static void post_data_update_start(int localHandle) noexcept
 {
     const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
