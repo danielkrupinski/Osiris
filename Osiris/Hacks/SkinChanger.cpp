@@ -408,6 +408,67 @@ static Entity* make_glove(int entry, int serial) noexcept
     return interfaces->entityList->getEntity(entry);
 }
 
+static void applyGloves(Entity* local) noexcept
+{
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 41);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc)
+        return;
+
+    if (soc->itemID < BASE_ITEMID)
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isGlove())
+        return;
+
+    const auto& itemData = gloveData[item.get().dataIndex];
+
+    const auto wearables = local->wearables();
+    static int gloveHandle = 0;
+
+    auto glove = interfaces->entityList->getEntityFromHandle(wearables[0]);
+    if (!glove)
+        glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
+    if (!glove) {
+        const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
+        const auto serial = rand() % 0x1000;
+        glove = make_glove(entry, serial);
+    }
+
+    if (!glove)
+        return;
+
+    wearables[0] = gloveHandle = glove->handle();
+    glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
+    glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+    glove->initialized() = true;
+    memory->equipWearable(glove, local);
+    local->body() = 1;
+
+    constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
+    const auto attributeList = std::uintptr_t(glove) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+
+    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != itemData.weaponId) {
+        definitionIndex = itemData.weaponId;
+
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(itemData.weaponId)) {
+            glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
+            glove->preDataUpdate(0);
+        }
+    }
+}
+
 static void post_data_update_start(int localHandle) noexcept
 {
     const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
