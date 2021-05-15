@@ -203,6 +203,7 @@ struct StickerConfig {
 
 struct DynamicSkinData {
     std::array<StickerConfig, 5> stickers;
+    std::string nameTag;
 };
 
 static std::vector<DynamicSkinData> dynamicSkinData;
@@ -748,6 +749,8 @@ void SkinChanger::run(FrameStage stage) noexcept
                 if (item.type == SkinChanger::GameItem::Type::Skin && inventory[i].hasDynamicData()) {
                     const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
 
+                    memory->setCustomName(econItem, dynamicData.nameTag.c_str());
+
                     for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
                         const auto& sticker = dynamicData.stickers[j];
                         if (sticker.stickerID == 0)
@@ -1259,6 +1262,8 @@ json InventoryChanger::toJson() noexcept
 
             if (item.hasDynamicData()) {
                 const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+                itemConfig["Name Tag"] = dynamicData.nameTag;
+
                 for (const auto& sticker : dynamicData.stickers) {
                     if (sticker.stickerID == 0)
                         continue;
@@ -1321,6 +1326,16 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
             inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
             
+            // Load dynamic data now
+
+            if (!inventory.back().hasDynamicData()) {
+                dynamicSkinData.push_back({});
+                inventory.back().setDynamicDataIndex(dynamicSkinData.size() - 1);
+            }
+
+            if (jsonItem.contains("Name Tag") && jsonItem["Name Tag"].is_string())
+                dynamicSkinData[inventory.back().getDynamicDataIndex()].nameTag = jsonItem["Name Tag"];
+
             if (!jsonItem.contains("Stickers") || !jsonItem["Stickers"].is_array())
                 continue;
 
@@ -1339,11 +1354,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 const int stickerID = sticker["Sticker ID"];
                 if (stickerID == 0)
                     continue;
-
-                if (!inventory.back().hasDynamicData()) {
-                    dynamicSkinData.push_back({});
-                    inventory.back().setDynamicDataIndex(dynamicSkinData.size() - 1);
-                }
 
                 dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[k].stickerID = stickerID;
                 if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
