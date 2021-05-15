@@ -45,7 +45,7 @@ namespace SkinChanger
         Sticker
     };
 
-    struct PaintKit {
+    struct [[deprecated]] PaintKit {
         PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, ItemType type, int rarity) noexcept;
         PaintKit(int id, std::wstring&& name, WeaponId weaponId, ItemType type, int rarity) noexcept;
 
