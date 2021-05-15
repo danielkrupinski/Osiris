@@ -985,17 +985,18 @@ void Config::rename(size_t item, const char* newName) noexcept
 void Config::reset() noexcept
 {
     aimbot = { };
-    AntiAim::resetConfig();
     triggerbot = { };
-    Backtrack::resetConfig();
-    Glow::resetConfig();
     chams = { };
     streamProofESP = { };
     visuals = { };
-    SkinChanger::resetConfig();
-    Sound::resetConfig();
     style = { };
     misc = { };
+
+    AntiAim::resetConfig();
+    Backtrack::resetConfig();
+    Glow::resetConfig();
+    InventoryChanger::resetConfig();
+    Sound::resetConfig();
 }
 
 void Config::listConfigs() noexcept

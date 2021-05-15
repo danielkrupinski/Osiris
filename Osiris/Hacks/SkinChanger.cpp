@@ -1471,11 +1471,6 @@ void InventoryChanger::resetConfig() noexcept
     dynamicSkinData.clear();
 }
 
-void SkinChanger::resetConfig() noexcept
-{
-    skinChangerConfig = {};
-}
-
 const std::vector<SkinChanger::GameItem>& SkinChanger::getGameItems() noexcept
 {
     initializeKits();

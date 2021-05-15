@@ -37,9 +37,6 @@ namespace SkinChanger
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
 
-    // Config
-    [[deprecated]] void resetConfig() noexcept;
-
     enum class ItemType : short {
         Skin,
         Sticker
