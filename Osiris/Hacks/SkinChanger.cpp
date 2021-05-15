@@ -516,6 +516,13 @@ static void applyKnife(Entity* local) noexcept
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
 
+        if (item.hasDynamicData()) {
+            const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+
+            // FIXME: std::strncpy IS UNSAFE!!!
+            std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
+        }
+
         if (definitionIndex != itemData.weaponId) {
             definitionIndex = itemData.weaponId;
 
