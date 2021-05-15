@@ -194,6 +194,8 @@ public:
 
 class EconItem {
 public:
+    VIRTUAL_METHOD(void, destructor, 0, (bool releaseMemory = true), (this, releaseMemory))
+
     PAD(8)
 
     std::uint64_t itemID;
