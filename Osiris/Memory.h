@@ -113,6 +113,7 @@ public:
     std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
+    void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
