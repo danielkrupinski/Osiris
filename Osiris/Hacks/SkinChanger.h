@@ -138,7 +138,7 @@ namespace SkinChanger
         const char* name;
     };
 
-    constexpr auto weapon_names = std::to_array<weapon_name>({
+    [[deprecated]] constexpr auto weapon_names = std::to_array<weapon_name>({
         {WeaponId::Knife, "Knife"},
         {WeaponId::GloveT, "Glove"},
         {WeaponId::Ak47, "AK-47"},
