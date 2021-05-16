@@ -771,7 +771,6 @@ void SkinChanger::run(FrameStage stage) noexcept
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " wear").c_str(), 0.10f);
-                    memory->clearInventoryImageRGBA(view);
 
                     if (!dest.hasDynamicData()) {
                         dynamicSkinData.push_back({});
