@@ -89,6 +89,8 @@ struct StickerKit {
     String inventoryImage;
 };
 
+enum class Team;
+
 class EconItemDefinition {
 public:
     INCONSTRUCTIBLE(EconItemDefinition)
@@ -114,6 +116,13 @@ public:
     const char* getDefinitionName() noexcept
     {
         return *reinterpret_cast<const char**>(this + WIN32_LINUX(0x1DC, 0x2E0));
+    }
+
+    int getLoadoutSlot(Team team) noexcept
+    {
+        if (team >= Team::None && team <= Team::CT)
+            return reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x28C,))[static_cast<int>(team)];
+        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x268, ));
     }
 };
 
@@ -259,8 +268,6 @@ public:
         return nullptr;
     }
 };
-
-enum class Team;
 
 class CSPlayerInventory {
 public:
