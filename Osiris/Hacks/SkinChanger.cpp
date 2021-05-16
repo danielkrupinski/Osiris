@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <random>
 #include <string_view>
 #include <type_traits>
 #include <unordered_set>
@@ -719,7 +720,10 @@ static float useToolTime = 0.0f;
 void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
 {
     toolToUse = itemID;
-    useToolTime = memory->globalVars->realtime + 1.0f; // TODO: randomize the delay
+
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_real_distribution dis{ 0.5f, 0.9f };
+    useToolTime = memory->globalVars->realtime + dis(gen);
 }
 
 static std::uint64_t itemToApplyTool = 0;
