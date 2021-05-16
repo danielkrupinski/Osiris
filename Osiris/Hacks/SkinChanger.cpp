@@ -1423,18 +1423,6 @@ void SkinChanger::clearUnusedItemIconTextures() noexcept
     }
 }
 
-SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, ItemType type, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }, weaponId{ weaponId }, type{ type }, rarity{ rarity }
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(nameUpperCase);
-}
-
-SkinChanger::PaintKit::PaintKit(int id, std::wstring&& name, WeaponId weaponId, ItemType type, int rarity) noexcept : id{ id }, nameUpperCase{ std::move(name) }, weaponId{ weaponId }, type{ type }, rarity{ rarity }
-{
-    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
-    nameUpperCase = Helpers::toUpper(nameUpperCase);
-}
-
 static int random(int min, int max) noexcept
 {
     return rand() % (max - min + 1) + min;

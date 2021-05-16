@@ -42,24 +42,6 @@ namespace SkinChanger
         Sticker
     };
 
-    struct [[deprecated]] PaintKit {
-        PaintKit(int id, std::wstring&& name, std::string&& iconPath, WeaponId weaponId, ItemType type, int rarity) noexcept;
-        PaintKit(int id, std::wstring&& name, WeaponId weaponId, ItemType type, int rarity) noexcept;
-
-        int id;
-        WeaponId weaponId;
-        ItemType type;
-        int rarity;
-        std::string name;
-        std::wstring nameUpperCase;
-        std::string iconPath;
-
-        auto operator<(const PaintKit& other) const noexcept
-        {
-            return nameUpperCase < other.nameUpperCase;
-        }
-    };
-
     // 
 
     struct GameItem {
