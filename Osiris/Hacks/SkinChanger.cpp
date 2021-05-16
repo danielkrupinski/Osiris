@@ -1084,7 +1084,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
-        ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves..", &filter);
+        ImGui::InputTextWithHint("##search", "Search weapon skins, stickers, knives, gloves, music kits..", &filter);
 
         constexpr auto passesFilter = [](const std::wstring& str, std::wstring filter) {
             constexpr auto delimiter = L" ";
