@@ -378,45 +378,6 @@ void apply_sticker_changer(Entity* item) noexcept
     }
 }
 
-static void apply_config_on_attributable_item(Entity* item, const item_setting& config,
-    const unsigned xuid_low) noexcept
-{
-    // Force fallback values to be used.
-    item->itemIDHigh() = -1;
-
-    // Set the owner of the weapon to our lower XUID. (fixes StatTrak)
-    item->accountID() = xuid_low;
-    item->entityQuality() = config.quality;
-
-    if (config.stat_trak > -1) {
-        item->fallbackStatTrak() = config.stat_trak;
-        item->entityQuality() = 9;
-    }
-
-    if (is_knife(item->itemDefinitionIndex2()))
-        item->entityQuality() = 3; // make a star appear on knife
-
-    if (config.custom_name[0])
-        std::strncpy(item->customName(), config.custom_name, 32);
-
-    if (config.paintKit)
-        item->fallbackPaintKit() = config.paintKit;
-
-    if (config.seed)
-        item->fallbackSeed() = config.seed;
-
-    item->fallbackWear() = config.wear;
-
-    if (auto& definition_index = item->itemDefinitionIndex(); config.definition_override_index && config.definition_override_index != definition_index) {
-        definition_index = config.definition_override_index;
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(WeaponId{ definition_index })) {
-            item->setModelIndex(interfaces->modelInfo->getModelIndex(config.itemId == WeaponId::GloveT ? def->getWorldDisplayModel() : def->getPlayerDisplayModel()));
-            item->preDataUpdate(0);
-        }
-    }
-    apply_sticker_changer(item);
-}
-
 static Entity* make_glove(int entry, int serial) noexcept
 {
     static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
