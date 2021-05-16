@@ -234,14 +234,15 @@ public:
 
     std::size_t getDynamicDataIndex() const noexcept { assert(isSkin()); return dynamicDataIndex; }
 
-    SkinChanger::GameItem& get() const noexcept
-    {
-        assert(!isDeleted());
-        return gameItems[itemIndex];
-    }
+    SkinChanger::GameItem& get() const noexcept { assert(!isDeleted()); return gameItems[itemIndex]; }
 };
 
 static std::vector<InventoryItem> inventory;
+
+static bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
+{
+    return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
+}
 
 static void addToInventory(const std::unordered_set<std::size_t>& indicesToAdd) noexcept
 {
@@ -447,10 +448,7 @@ static void applyGloves(Entity* local) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    if (soc->itemID < BASE_ITEMID)
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
     const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
@@ -508,10 +506,7 @@ static void applyKnife(Entity* local) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    if (soc->itemID < BASE_ITEMID)
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
     const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
@@ -610,7 +605,7 @@ static void applyWeapons(Entity* local) noexcept
             continue;
 
         const auto soc = memory->getSOCData(itemView);
-        if (!soc || soc->itemID < BASE_ITEMID)
+        if (!soc || !wasItemCreatedByOsiris(soc->itemID))
             continue;
 
         const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
@@ -743,7 +738,7 @@ void SkinChanger::run(FrameStage stage) noexcept
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
     if (useToolTime <= memory->globalVars->realtime) {
-        if (toolToUse >= BASE_ITEMID && itemToApplyTool >= BASE_ITEMID) {
+        if (wasItemCreatedByOsiris(toolToUse) && wasItemCreatedByOsiris(itemToApplyTool)) {
             auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
             const auto& toolItem = tool.get();
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
@@ -859,10 +854,7 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
         return;
 
     const auto soc = memory->getSOCData(itemView);
-    if (!soc)
-        return;
-
-    if (soc->itemID < BASE_ITEMID)
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
     if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
@@ -1547,7 +1539,7 @@ void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noe
     if (!itemView)
         return;
    
-    if (const auto soc = memory->getSOCData(itemView); !soc || soc->itemID < BASE_ITEMID)
+    if (const auto soc = memory->getSOCData(itemView); !soc || wasItemCreatedByOsiris(soc->itemID))
         return;
 
     const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
