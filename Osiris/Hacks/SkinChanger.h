@@ -23,6 +23,8 @@ namespace InventoryChanger
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
+
+    void clearInventory() noexcept;
 }
 
 namespace SkinChanger
