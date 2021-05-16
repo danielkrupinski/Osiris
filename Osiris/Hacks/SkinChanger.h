@@ -105,7 +105,7 @@ namespace SkinChanger
         std::string name;
     };
 
-    const std::vector<Quality>& getQualities() noexcept;
+    [[deprecated]] const std::vector<Quality>& getQualities() noexcept;
     [[deprecated]] const std::vector<Item>& getGloveTypes() noexcept;
     [[deprecated]] const std::vector<Item>& getKnifeTypes() noexcept;
 
