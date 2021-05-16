@@ -702,6 +702,7 @@ void Hooks::uninstall() noexcept
     netvars->restore();
 
     Glow::clearCustomObjects();
+    InventoryChanger::clearInventory();
 
 #ifdef _WIN32
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
