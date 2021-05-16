@@ -644,6 +644,17 @@ static void applyWeapons(Entity* local) noexcept
     }
 }
 
+static void onPostDataUpdateStart(int localHandle) noexcept
+{
+    const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
+    if (!local)
+        return;
+
+    applyGloves(local);
+    applyKnife(local);
+    applyWeapons(local);
+}
+
 static void post_data_update_start(int localHandle) noexcept
 {
     const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
