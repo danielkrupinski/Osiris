@@ -37,11 +37,6 @@ namespace SkinChanger
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
 
-    enum class ItemType : short {
-        Skin,
-        Sticker
-    };
-
     // 
 
     struct GameItem {
