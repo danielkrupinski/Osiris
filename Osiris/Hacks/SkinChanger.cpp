@@ -709,7 +709,7 @@ static float useToolTime = 0.0f;
 void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
 {
     toolToUse = itemID;
-    useToolTime = memory->globalVars->realtime + 1.1f; // TODO: randomize the delay
+    useToolTime = memory->globalVars->realtime + 1.0f; // TODO: randomize the delay
 }
 
 static std::uint64_t itemToApplyTool = 0;
