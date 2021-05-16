@@ -577,6 +577,73 @@ static void applyKnife(Entity* local) noexcept
     worldModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
+static void applyWeapons(Entity* local) noexcept
+{
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto localTeam = local->getTeamNumber();
+
+    auto& weapons = local->weapons();
+    for (auto weaponHandle : weapons) {
+        if (weaponHandle == -1)
+            break;
+
+        const auto weapon = interfaces->entityList->getEntityFromHandle(weaponHandle);
+        if (!weapon)
+            continue;
+
+        const auto& definitionIndex = weapon->itemDefinitionIndex2();
+        if (is_knife(definitionIndex))
+            continue;
+
+        const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(definitionIndex);
+        if (!def)
+            continue;
+
+        const auto loadoutSlot = def->getLoadoutSlot(localTeam);
+        const auto itemView = localInventory->getItemInLoadout(localTeam, loadoutSlot);
+        if (!itemView)
+            continue;
+
+        const auto soc = memory->getSOCData(itemView);
+        if (!soc || soc->itemID < BASE_ITEMID)
+            continue;
+
+        const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+        if (!item.isSkin())
+            return;
+
+        const auto& itemData = skinData[item.get().dataIndex];
+
+        weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
+        weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+
+        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
+        const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+
+        if (item.hasDynamicData()) {
+            const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+
+            // FIXME: std::strncpy IS UNSAFE!!!
+            std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
+
+            for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
+                const auto& sticker = dynamicData.stickers[j];
+                if (sticker.stickerID == 0)
+                    continue;
+
+                memory->setOrAddAttributeValueByName(attributeList, ("sticker slot " + std::to_string(j) + " id").c_str(), sticker.stickerID);
+                memory->setOrAddAttributeValueByName(attributeList, ("sticker slot " + std::to_string(j) + " wear").c_str(), sticker.wear);
+            }
+        }
+    }
+}
+
 static void post_data_update_start(int localHandle) noexcept
 {
     const auto local = interfaces->entityList->getEntityFromHandle(localHandle);
