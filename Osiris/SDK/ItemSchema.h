@@ -162,6 +162,14 @@ struct AlternateIconData {
     PAD(WIN32_LINUX(28, 48))
 };
 
+struct EconMusicDefinition {
+    int id;
+    const char* name;
+    const char* nameLocalized;
+    PAD(2 * sizeof(const char*))
+    const char* inventoryImage;
+};
+
 class ItemSchema {
 public:
     INCONSTRUCTIBLE(ItemSchema)
