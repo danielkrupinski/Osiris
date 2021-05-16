@@ -119,11 +119,4 @@ namespace SkinChanger
     void clearUnusedItemIconTextures() noexcept;
 
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
-
-    struct [[deprecated]] weapon_name {
-        constexpr weapon_name(WeaponId definition_index, const char* name) : definition_index(definition_index), name(name) {}
-
-        WeaponId definition_index;
-        const char* name;
-    };
 }
