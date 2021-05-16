@@ -26,5 +26,5 @@ find_package(OpenGL REQUIRED)
 add_library(Osiris SHARED ${SOURCES})
 
 target_include_directories(Osiris PRIVATE ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS})
-target_link_libraries(Osiris PRIVATE SDL2 OpenGL::OpenGL ${CMAKE_DL_LIBS} Freetype::Freetype)
+target_link_libraries(Osiris PRIVATE SDL2 GL ${CMAKE_DL_LIBS} Freetype::Freetype)
 target_link_options(Osiris PRIVATE LINKER:--no-undefined)
