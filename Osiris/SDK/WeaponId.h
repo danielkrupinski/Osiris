@@ -80,6 +80,7 @@ enum class WeaponId : short {
     Talon,
     SkeletonKnife = 525,
     Sticker = 1209,
+    MusicKit = 1314,
     GloveStuddedBrokenfang = 4725,
     GloveStuddedBloodhound = 5027,
     GloveT,
