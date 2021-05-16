@@ -333,6 +333,9 @@ static void initializeKits() noexcept
     const auto& musicMap = itemSchema->musicKits;
     for (const auto& node : musicMap) {
         const auto musicKit = node.value;
+        if (musicKit->id == 1 || musicKit->id == 2)
+            continue;
+
         musicData.emplace_back(musicKit->id);
         gameItems.emplace_back(SkinChanger::GameItem::Type::Music, 3, musicData.size() - 1, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
     }
