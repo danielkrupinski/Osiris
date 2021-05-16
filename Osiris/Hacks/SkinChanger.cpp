@@ -319,10 +319,13 @@ static void initializeKits() noexcept
     gameItems.reserve(gameItems.size() + stickerMap.numElements);
     for (const auto& node : stickerMap) {
         const auto stickerKit = node.value;
+        if (stickerKit->id == 0)
+            continue;
+
         if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
             continue;
-        std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
 
+        std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
         stickerData.emplace_back(stickerKit->id);
         gameItems.emplace_back(SkinChanger::GameItem::Type::Sticker, stickerKit->rarity, stickerData.size() - 1, std::move(name), stickerKit->inventoryImage.data());
     }
