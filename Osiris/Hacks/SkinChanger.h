@@ -66,7 +66,8 @@ namespace SkinChanger
         enum class Type {
             Sticker,
             Glove,
-            Skin
+            Skin,
+            Music
         };
 
         GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
