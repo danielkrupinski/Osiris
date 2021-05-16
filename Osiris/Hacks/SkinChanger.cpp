@@ -195,6 +195,7 @@ static std::vector<SkinChanger::GameItem> gameItems;
 static std::vector<SkinChanger::StickerData> stickerData;
 static std::vector<SkinChanger::GloveData> gloveData;
 static std::vector<SkinChanger::SkinData> skinData;
+static std::vector<SkinChanger::MusicData> musicData;
 
 struct StickerConfig {
     int stickerID = 0;
@@ -315,9 +316,7 @@ static void initializeKits() noexcept
     }
 
     const auto& stickerMap = itemSchema->stickerKits;
-
     gameItems.reserve(gameItems.size() + stickerMap.numElements);
-
     for (const auto& node : stickerMap) {
         const auto stickerKit = node.value;
         if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
@@ -326,6 +325,13 @@ static void initializeKits() noexcept
 
         stickerData.emplace_back(stickerKit->id);
         gameItems.emplace_back(SkinChanger::GameItem::Type::Sticker, stickerKit->rarity, stickerData.size() - 1, std::move(name), stickerKit->inventoryImage.data());
+    }
+
+    const auto& musicMap = itemSchema->musicKits;
+    for (const auto& node : musicMap) {
+        const auto musicKit = node.value;
+        musicData.emplace_back(musicKit->id);
+        gameItems.emplace_back(SkinChanger::GameItem::Type::Music, 3, musicData.size() - 1, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
     }
 
     std::ranges::sort(gameItems, {}, &SkinChanger::GameItem::nameUpperCase);
@@ -816,6 +822,9 @@ void SkinChanger::run(FrameStage stage) noexcept
         case Glove:
             econItem->weaponId = gloveData[item.dataIndex].weaponId;
             break;
+        case Music:
+            econItem->weaponId = WeaponId::MusicKit;
+            break;
         }
 
         baseTypeCache->addObject(econItem);
@@ -824,6 +833,8 @@ void SkinChanger::run(FrameStage stage) noexcept
         if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID)) {
             if (item.type == SkinChanger::GameItem::Type::Sticker) {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "sticker slot 0 id", stickerData[item.dataIndex].stickerID);
+            } else if (item.type == SkinChanger::GameItem::Type::Music) {
+                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "music id", musicData[item.dataIndex].musicID);
             } else {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.type == SkinChanger::GameItem::Type::Skin ? skinData[item.dataIndex].paintKit : gloveData[item.dataIndex].paintKit));
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
@@ -1299,6 +1310,11 @@ const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcep
     return skinData[index];
 }
 
+const SkinChanger::MusicData& SkinChanger::getMusicData(std::size_t index) noexcept
+{
+    return musicData[index];
+}
+
 const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
 {
     static std::vector<Quality> qualities;
@@ -1362,7 +1378,12 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
 
     auto& icon = iconTextures[iconpath];
     if (!icon.texture.get()) {
-        if (const auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME")) {
+        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME");
+        if (!handle)
+            handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + ".png").c_str(), "r", "GAME");
+
+        assert(handle);
+        if (handle) {
             if (const auto size = interfaces->baseFileSystem->size(handle); size > 0) {
                 const auto buffer = std::make_unique<std::uint8_t[]>(size);
                 if (interfaces->baseFileSystem->read(buffer.get(), size, handle) > 0) {
@@ -1378,8 +1399,6 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
                 }
             }
             interfaces->baseFileSystem->close(handle);
-        } else {
-            assert(false);
         }
     }
     icon.lastReferencedFrame = ImGui::GetFrameCount();
