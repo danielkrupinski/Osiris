@@ -108,7 +108,7 @@ struct sticker_setting
 struct item_setting {
     void update()
     {
-        itemId = SkinChanger::weapon_names[itemIdIndex].definition_index;
+       // itemId = SkinChanger::weapon_names[itemIdIndex].definition_index;
         quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
 
         if (itemId == WeaponId::GloveT) {
@@ -126,8 +126,8 @@ struct item_setting {
     void onLoad()
     {
         {
-            const auto it = std::find_if(std::begin(SkinChanger::weapon_names), std::end(SkinChanger::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
-            itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
+          //  const auto it = std::find_if(std::begin(SkinChanger::weapon_names), std::end(SkinChanger::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
+          //  itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
         }
 
         {
