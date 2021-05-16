@@ -340,6 +340,16 @@ static void initializeKits() noexcept
         gameItems.emplace_back(SkinChanger::GameItem::Type::Music, 3, musicData.size() - 1, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
     }
 
+    for (const auto& node : itemSchema->itemsSorted) {
+        const auto item = node.value;
+        if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6) {
+            if (const auto image = item->getInventoryImage()) {
+                skinData.emplace_back(0, item->getWeaponId());
+                gameItems.emplace_back(SkinChanger::GameItem::Type::Skin, 6, skinData.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
+            }
+        }
+    }
+
     std::ranges::sort(gameItems, {}, &SkinChanger::GameItem::nameUpperCase);
     gameItems.shrink_to_fit();
 }
