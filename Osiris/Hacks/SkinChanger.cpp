@@ -360,24 +360,6 @@ static void initializeKits() noexcept
     gameItems.shrink_to_fit();
 }
 
-void apply_sticker_changer(Entity* item) noexcept
-{
-    if (auto config = get_by_definition_index(item->itemDefinitionIndex2())) {
-        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
-        const auto attributeList = std::uintptr_t(item) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
-
-        for (std::size_t i = 0; i < config->stickers.size(); ++i) {
-            const auto& sticker = config->stickers[i];
-            const auto attributeString = "sticker slot " + std::to_string(i) + ' ';
-
-            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "id").c_str(), sticker.kit);
-            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "wear").c_str(), sticker.wear);
-            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "scale").c_str(), sticker.scale);
-            memory->setOrAddAttributeValueByName(attributeList, (attributeString + "rotation").c_str(), sticker.rotation);
-        }
-    }
-}
-
 static Entity* make_glove(int entry, int serial) noexcept
 {
     static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
