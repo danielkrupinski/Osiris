@@ -48,64 +48,6 @@
 
 #include "../Helpers.h"
 
-/* This file is part of nSkinz by namazso, licensed under the MIT license:
-*
-* MIT License
-*
-* Copyright (c) namazso 2018
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
-
-struct sticker_setting
-{
-    void update()
-    {
-        // kit = SkinChanger::getStickerKits()[kit_vector_index].id;
-    }
-
-    void onLoad()
-    {
-        /*
-        const auto& kits = SkinChanger::getStickerKits();
-        const auto it = std::find_if(kits.begin(), kits.end(), [this](const auto& k) { return k.id == kit; });
-        kit_vector_index = it != SkinChanger::getStickerKits().end() ? std::distance(kits.begin(), it) : 0;
-        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
-        */
-    }
-
-    auto operator==(const sticker_setting& o) const
-    {
-        return kit == o.kit
-            && kit_vector_index == o.kit_vector_index
-            && wear == o.wear
-            && scale == o.scale
-            && rotation == o.rotation;
-    }
-
-    int kit = 0;
-    int kit_vector_index = 0;
-    float wear = (std::numeric_limits<float>::min)();
-    float scale = 1.f;
-    float rotation = 0.f;
-};
-
 static constexpr auto is_knife(WeaponId id)
 {
     return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
