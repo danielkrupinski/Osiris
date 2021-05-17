@@ -67,6 +67,7 @@ struct StickerConfig {
 
 struct DynamicSkinData {
     float wear = 0.0f;
+    int seed = 1;
     std::array<StickerConfig, 5> stickers;
     std::string nameTag;
 };
@@ -82,6 +83,13 @@ static float randomFloat(float min, float max) noexcept
     return dis(gen);
 }
 
+static int randomInt(int min, int max) noexcept
+{
+    std::mt19937 gen{ std::random_device{}() };
+    std::uniform_int_distribution dis{ min, max };
+    return dis(gen);
+}
+
 struct InventoryItem {
 private:
     std::size_t itemIndex;
@@ -92,6 +100,7 @@ public:
         if (isSkin()) {
             DynamicSkinData dynamicData;
             dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
         }
@@ -377,7 +386,7 @@ static void applyKnife(Entity* local) noexcept
         const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
-        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
         // FIXME: std::strncpy IS UNSAFE!!!
         std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
@@ -462,7 +471,7 @@ static void applyWeapons(Entity* local) noexcept
         const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
-        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
         // FIXME: std::strncpy IS UNSAFE!!!
         std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
@@ -660,6 +669,7 @@ void SkinChanger::run(FrameStage stage) noexcept
                     const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
 
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", dynamicData.wear);
+                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(dynamicData.seed));
                     memory->setCustomName(econItem, dynamicData.nameTag.c_str());
 
                     for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
