@@ -183,7 +183,7 @@ static std::array<item_setting, 36> skinChangerConfig;
 
 static constexpr auto is_knife(WeaponId id)
 {
-    return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
+    return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
 
 static std::vector<SkinChanger::GameItem> gameItems;
