@@ -179,8 +179,6 @@ struct item_setting {
     std::array<sticker_setting, 5> stickers;
 };
 
-static std::array<item_setting, 36> skinChangerConfig;
-
 static constexpr auto is_knife(WeaponId id)
 {
     return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
