@@ -103,6 +103,11 @@ public:
     VIRTUAL_METHOD(const char*, getWorldDisplayModel, 7, (), (this))
     VIRTUAL_METHOD(std::uint8_t, getRarity, 12, (), (this))
 
+    std::uint8_t getQuality() noexcept
+    {
+        return *reinterpret_cast<std::uint8_t*>(std::uintptr_t(this) + WIN32_LINUX(0x2B, 0x4B));
+    }
+
     int getCapabilities() noexcept
     {
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
