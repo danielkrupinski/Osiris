@@ -227,8 +227,15 @@ static void initializeKits() noexcept
 
         if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Collectible") == 0) {
             if (const auto image = item->getInventoryImage()) {
-                collectibleData.emplace_back(item->getWeaponId());
-                gameItems.emplace_back(SkinChanger::GameItem::Type::Collectible, item->getRarity(), collectibleData.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
+                const auto isOriginal = (item->getQuality() == 1);
+                collectibleData.emplace_back(item->getWeaponId(), isOriginal);
+                std::wstring name = interfaces->localize->findSafe(item->getItemBaseName());
+                if (isOriginal) {
+                    name += L" (";
+                    name += interfaces->localize->findSafe("genuine");
+                    name += L") ";
+                }
+                gameItems.emplace_back(SkinChanger::GameItem::Type::Collectible, item->getRarity(), collectibleData.size() - 1, std::move(name), image);
             }
         }
     }
@@ -598,6 +605,7 @@ void SkinChanger::run(FrameStage stage) noexcept
         econItem->accountID = localInventory->getAccountID();
         econItem->inventory = baseInvID + i + 1;
         econItem->rarity = item.rarity;
+        econItem->quality = 0;
 
         switch (item.type) {
         using enum SkinChanger::GameItem::Type;
@@ -615,6 +623,8 @@ void SkinChanger::run(FrameStage stage) noexcept
             break;
         case Collectible:
             econItem->weaponId = collectibleData[item.dataIndex].weaponId;
+            if (collectibleData[item.dataIndex].isOriginal)
+                econItem->quality = 1;
             break;
         }
 

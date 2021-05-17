@@ -97,6 +97,7 @@ namespace SkinChanger
 
     struct CollectibleData {
         WeaponId weaponId;
+        bool isOriginal;
     };
 
     const CollectibleData& getCollectibleData(std::size_t index) noexcept;
