@@ -358,6 +358,7 @@ static void applyKnife(Entity* local) noexcept
 
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+        weapon->entityQuality() = 3;
 
         constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
         const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
@@ -614,6 +615,8 @@ void SkinChanger::run(FrameStage stage) noexcept
             break;
         case Skin:
             econItem->weaponId = skinData[item.dataIndex].weaponId;
+            if (is_knife(econItem->weaponId))
+                econItem->quality = 3;
             break;
         case Glove:
             econItem->weaponId = gloveData[item.dataIndex].weaponId;
