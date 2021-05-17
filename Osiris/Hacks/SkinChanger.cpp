@@ -1340,7 +1340,7 @@ void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noe
     if (!itemView)
         return;
    
-    if (const auto soc = memory->getSOCData(itemView); !soc || wasItemCreatedByOsiris(soc->itemID))
+    if (const auto soc = memory->getSOCData(itemView); !soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
     const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
