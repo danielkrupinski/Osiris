@@ -114,7 +114,7 @@ struct item_setting {
 
         if (itemId == WeaponId::GloveT) {
             // paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
-            definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
+           // definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
             // paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
            // definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
@@ -144,8 +144,8 @@ struct item_setting {
             }
 
             {
-                const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
-                definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
+              //  const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+              //  definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
             }
         } else {
             {
@@ -1244,22 +1244,6 @@ const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
     }
 
     return qualities;
-}
-
-const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
-{
-    static std::vector<SkinChanger::Item> gloveTypes;
-    if (gloveTypes.empty()) {
-        gloveTypes.emplace_back(WeaponId{}, "Default");
-
-        for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
-            const auto item = node.value;
-            if (std::strcmp(item->getItemTypeName(), "#Type_Hands") == 0 && item->isPaintable())
-                gloveTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
-        }
-    }
-
-    return gloveTypes;
 }
 
 struct Icon {
