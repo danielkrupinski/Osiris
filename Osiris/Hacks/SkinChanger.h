@@ -94,12 +94,6 @@ namespace SkinChanger
 
     //
 
-    struct Quality {
-        Quality(int index, const char* name) : index{ index }, name{ name } {}
-        int index = 0;
-        std::string name;
-    };
-
     ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
