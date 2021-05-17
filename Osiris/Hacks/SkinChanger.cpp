@@ -251,6 +251,14 @@ static void addToInventory(const std::unordered_set<std::size_t>& indicesToAdd) 
     }
 }
 
+static void sendInventoryUpdatedEvent() noexcept
+{
+    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_MyPersona_InventoryUpdated")); idx != -1) {
+        if (const auto eventPtr = memory->registeredPanoramaEvents->memory[idx].value.makeEvent(nullptr))
+            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(eventPtr);
+    }
+}
+
 static void initializeKits() noexcept
 {
     if (static bool initialized = false; !initialized)
