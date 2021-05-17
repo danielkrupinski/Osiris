@@ -971,12 +971,11 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Name Tag"] = dynamicData.nameTag;
 
             for (const auto& sticker : dynamicData.stickers) {
-                if (sticker.stickerID == 0)
-                    continue;
-
                 json stickerConfig;
-                stickerConfig["Sticker ID"] = sticker.stickerID;
-                stickerConfig["Wear"] = sticker.wear;
+                if(sticker.stickerID != 0) {
+                    stickerConfig["Sticker ID"] = sticker.stickerID;
+                    stickerConfig["Wear"] = sticker.wear;
+                }
                 itemConfig["Stickers"].push_back(stickerConfig);
             }
             break;
