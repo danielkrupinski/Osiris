@@ -968,7 +968,8 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Weapon ID"] = staticData.weaponId;
 
             const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
-            itemConfig["Name Tag"] = dynamicData.nameTag;
+            if (!dynamicData.nameTag.empty())
+                itemConfig["Name Tag"] = dynamicData.nameTag;
 
             for (const auto& sticker : dynamicData.stickers) {
                 json stickerConfig;
