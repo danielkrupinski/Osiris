@@ -51,6 +51,11 @@ namespace SkinChanger
 
         GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
 
+        bool isSticker() const noexcept { return type == Type::Sticker; }
+        bool isSkin() const noexcept { return type == Type::Skin; }
+        bool isGlove() const noexcept { return type == Type::Glove; }
+        bool isMusic() const noexcept { return type == Type::Music; }
+
         Type type;
         int rarity;
         std::size_t dataIndex;
