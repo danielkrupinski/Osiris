@@ -302,6 +302,7 @@ static void applyGloves(Entity* local) noexcept
     wearables[0] = gloveHandle = glove->handle();
     glove->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
     glove->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
+    glove->entityQuality() = 3;
     glove->initialized() = true;
     memory->equipWearable(glove, local);
     local->body() = 1;
@@ -620,6 +621,7 @@ void SkinChanger::run(FrameStage stage) noexcept
             break;
         case Glove:
             econItem->weaponId = gloveData[item.dataIndex].weaponId;
+            econItem->quality = 3;
             break;
         case Music:
             econItem->weaponId = WeaponId::MusicKit;
