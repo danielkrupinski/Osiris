@@ -110,7 +110,7 @@ struct item_setting {
     void update()
     {
        // itemId = SkinChanger::weapon_names[itemIdIndex].definition_index;
-        quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
+      //  quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
 
         if (itemId == WeaponId::GloveT) {
             // paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
@@ -132,9 +132,9 @@ struct item_setting {
         }
 
         {
-            const auto& qualities = SkinChanger::getQualities();
-            const auto it = std::find_if(qualities.begin(), qualities.end(), [this](const auto& k) { return k.index == quality; });
-            entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
+          //  const auto& qualities = SkinChanger::getQualities();
+           // const auto it = std::find_if(qualities.begin(), qualities.end(), [this](const auto& k) { return k.index == quality; });
+           // entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
         }
 
         if (itemId == WeaponId::GloveT) {
@@ -1227,23 +1227,6 @@ const SkinChanger::SkinData& SkinChanger::getSkinData(std::size_t index) noexcep
 const SkinChanger::MusicData& SkinChanger::getMusicData(std::size_t index) noexcept
 {
     return musicData[index];
-}
-
-const std::vector<SkinChanger::Quality>& SkinChanger::getQualities() noexcept
-{
-    static std::vector<Quality> qualities;
-    if (qualities.empty()) {
-        for (const auto& node : memory->itemSystem()->getItemSchema()->qualities) {
-            const auto quality = node.value;
-            if (const auto localizedName = interfaces->localize->findAsUTF8(quality.name); localizedName != quality.name)
-                qualities.emplace_back(quality.value, localizedName);
-        }
-
-        if (qualities.empty()) // fallback
-            qualities.emplace_back(0, "Default");
-    }
-
-    return qualities;
 }
 
 struct Icon {

@@ -107,8 +107,6 @@ namespace SkinChanger
         std::string name;
     };
 
-    [[deprecated]] const std::vector<Quality>& getQualities() noexcept;
-
     ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
