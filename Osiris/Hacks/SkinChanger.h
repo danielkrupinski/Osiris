@@ -100,13 +100,6 @@ namespace SkinChanger
         std::string name;
     };
 
-    struct Item {
-        Item(WeaponId id, const char* name) : id(id), name(name) {}
-
-        WeaponId id;
-        std::string name;
-    };
-
     ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
