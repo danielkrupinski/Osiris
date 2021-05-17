@@ -982,6 +982,9 @@ json InventoryChanger::toJson() noexcept
             if (!dynamicData.nameTag.empty())
                 itemConfig["Name Tag"] = dynamicData.nameTag;
 
+            if (std::ranges::none_of(dynamicData.stickers, [](const auto& id) { return id != 0; }, &StickerConfig::stickerID))
+                break;
+
             for (const auto& sticker : dynamicData.stickers) {
                 json stickerConfig;
                 if(sticker.stickerID != 0) {
