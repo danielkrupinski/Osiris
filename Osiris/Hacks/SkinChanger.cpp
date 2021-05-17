@@ -186,12 +186,6 @@ static constexpr auto is_knife(WeaponId id)
     return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
 
-static item_setting* get_by_definition_index(WeaponId weaponId)
-{
-    const auto it = std::ranges::find(skinChangerConfig, weaponId, &item_setting::itemId);
-    return (it == skinChangerConfig.end() || !it->enabled) ? nullptr : &*it;
-}
-
 static std::vector<SkinChanger::GameItem> gameItems;
 static std::vector<SkinChanger::StickerData> stickerData;
 static std::vector<SkinChanger::GloveData> gloveData;
@@ -826,10 +820,12 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
     if (!weapon)
         return;
 
+    /*
     if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WeaponId::Knife : weapon->itemDefinitionIndex2()); conf && conf->stat_trak > -1) {
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
+    */
 }
 
 static bool windowOpen = false;
