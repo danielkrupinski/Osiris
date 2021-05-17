@@ -1070,6 +1070,8 @@ void InventoryChanger::resetConfig() noexcept
 
     inventory.clear();
     dynamicSkinData.clear();
+
+    sendInventoryUpdatedEvent();
 }
 
 void InventoryChanger::clearInventory() noexcept
