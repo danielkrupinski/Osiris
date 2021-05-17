@@ -117,7 +117,7 @@ struct item_setting {
             definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
         } else {
             // paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
-            definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
+           // definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
         }
 
         for (auto& sticker : stickers)
@@ -154,8 +154,8 @@ struct item_setting {
             }
 
             {
-                const auto it = std::find_if(SkinChanger::getKnifeTypes().begin(), SkinChanger::getKnifeTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
-                definition_override_vector_index = it != SkinChanger::getKnifeTypes().end() ? std::distance(SkinChanger::getKnifeTypes().begin(), it) : 0;
+               // const auto it = std::find_if(SkinChanger::getKnifeTypes().begin(), SkinChanger::getKnifeTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+               // definition_override_vector_index = it != SkinChanger::getKnifeTypes().end() ? std::distance(SkinChanger::getKnifeTypes().begin(), it) : 0;
             }
         }
 
@@ -1260,22 +1260,6 @@ const std::vector<SkinChanger::Item>& SkinChanger::getGloveTypes() noexcept
     }
 
     return gloveTypes;
-}
-
-const std::vector<SkinChanger::Item>& SkinChanger::getKnifeTypes() noexcept
-{
-    static std::vector<SkinChanger::Item> knifeTypes;
-    if (knifeTypes.empty()) {
-        knifeTypes.emplace_back(WeaponId{}, "Default");
-
-        for (const auto& node : memory->itemSystem()->getItemSchema()->itemsSorted) {
-            const auto item = node.value;
-            if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6)
-                knifeTypes.emplace_back(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
-        }
-    }
-
-    return knifeTypes;
 }
 
 struct Icon {
