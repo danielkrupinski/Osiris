@@ -89,9 +89,9 @@ public:
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
     
-    bool isSticker() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Sticker; }
-    bool isSkin() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Skin; }
-    bool isGlove() const noexcept { return !isDeleted() && gameItems[itemIndex].type == SkinChanger::GameItem::Type::Glove; }
+    bool isSticker() const noexcept { return !isDeleted() && gameItems[itemIndex].isSticker(); }
+    bool isSkin() const noexcept { return !isDeleted() && gameItems[itemIndex].isSkin(); }
+    bool isGlove() const noexcept { return !isDeleted() && gameItems[itemIndex].isGlove(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(isSkin()); return dynamicDataIndex; }
 
@@ -611,16 +611,16 @@ void SkinChanger::run(FrameStage stage) noexcept
         memory->addEconItem(localInventory, econItem, false, false, false);
 
         if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID)) {
-            if (item.type == SkinChanger::GameItem::Type::Sticker) {
+            if (item.isSticker()) {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "sticker slot 0 id", stickerData[item.dataIndex].stickerID);
-            } else if (item.type == SkinChanger::GameItem::Type::Music) {
+            } else if (item.isMusic()) {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "music id", musicData[item.dataIndex].musicID);
-            } else {
+            } else if (item.isSkin() || item.isGlove()) {
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.type == SkinChanger::GameItem::Type::Skin ? skinData[item.dataIndex].paintKit : gloveData[item.dataIndex].paintKit));
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
                 memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(1));
 
-                if (inventory[i].isSkin()) {
+                if (item.isSkin()) {
                     const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
 
                     memory->setCustomName(econItem, dynamicData.nameTag.c_str());
