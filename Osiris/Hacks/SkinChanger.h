@@ -46,7 +46,8 @@ namespace SkinChanger
             Sticker,
             Glove,
             Skin,
-            Music
+            Music,
+            Collectible
         };
 
         GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
@@ -55,6 +56,7 @@ namespace SkinChanger
         bool isSkin() const noexcept { return type == Type::Skin; }
         bool isGlove() const noexcept { return type == Type::Glove; }
         bool isMusic() const noexcept { return type == Type::Music; }
+        bool isCollectible() const noexcept { return type == Type::Collectible; }
 
         Type type;
         int rarity;
@@ -92,6 +94,12 @@ namespace SkinChanger
     };
 
     const MusicData& getMusicData(std::size_t index) noexcept;
+
+    struct CollectibleData {
+        WeaponId weaponId;
+    };
+
+    const CollectibleData& getCollectibleData(std::size_t index) noexcept;
 
     void setStickerApplySlot(int slot) noexcept;
     void setToolToUse(std::uint64_t itemID) noexcept;

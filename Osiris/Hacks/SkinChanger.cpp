@@ -58,6 +58,7 @@ static std::vector<SkinChanger::StickerData> stickerData;
 static std::vector<SkinChanger::GloveData> gloveData;
 static std::vector<SkinChanger::SkinData> skinData;
 static std::vector<SkinChanger::MusicData> musicData;
+static std::vector<SkinChanger::CollectibleData> collectibleData;
 
 struct StickerConfig {
     int stickerID = 0;
@@ -221,6 +222,13 @@ static void initializeKits() noexcept
             if (const auto image = item->getInventoryImage()) {
                 skinData.emplace_back(0, item->getWeaponId());
                 gameItems.emplace_back(SkinChanger::GameItem::Type::Skin, 6, skinData.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
+            }
+        }
+
+        if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Collectible") == 0) {
+            if (const auto image = item->getInventoryImage()) {
+                collectibleData.emplace_back(item->getWeaponId());
+                gameItems.emplace_back(SkinChanger::GameItem::Type::Collectible, item->getRarity(), collectibleData.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
             }
         }
     }
@@ -556,7 +564,7 @@ void SkinChanger::run(FrameStage stage) noexcept
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
             const auto& destItem = dest.get();
 
-            if (toolItem.type == SkinChanger::GameItem::Type::Sticker) {
+            if (toolItem.isSticker()) {
                 const auto& sticker = stickerData[toolItem.dataIndex];
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
                     memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
@@ -604,6 +612,9 @@ void SkinChanger::run(FrameStage stage) noexcept
             break;
         case Music:
             econItem->weaponId = WeaponId::MusicKit;
+            break;
+        case Collectible:
+            econItem->weaponId = collectibleData[item.dataIndex].weaponId;
             break;
         }
 
@@ -1092,6 +1103,11 @@ const SkinChanger::MusicData& SkinChanger::getMusicData(std::size_t index) noexc
     return musicData[index];
 }
 
+const SkinChanger::CollectibleData& SkinChanger::getCollectibleData(std::size_t index) noexcept
+{
+    return collectibleData[index];
+}
+
 struct Icon {
     Texture texture;
     int lastReferencedFrame = 0;
@@ -1106,7 +1122,7 @@ ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcep
 
     auto& icon = iconTextures[iconpath];
     if (!icon.texture.get()) {
-        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + "_large.png").c_str(), "r", "GAME");
+        auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + (iconpath.find("status_icons") != std::string::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
             handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + ".png").c_str(), "r", "GAME");
 
