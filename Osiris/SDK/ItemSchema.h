@@ -221,7 +221,7 @@ class EconItem {
 public:
     VIRTUAL_METHOD(void, destructor, 0, (bool releaseMemory = true), (this, releaseMemory))
 
-    PAD(8)
+    PAD(2 * sizeof(std::uintptr_t))
 
     std::uint64_t itemID;
     std::uint64_t originalID;
