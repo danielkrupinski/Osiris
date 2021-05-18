@@ -629,23 +629,22 @@ void SkinChanger::run(FrameStage stage) noexcept
         econItem->quality = 0;
 
         switch (item.type) {
-        using enum SkinChanger::GameItem::Type;
-        case Sticker:
+        case SkinChanger::GameItem::Type::Sticker:
             econItem->weaponId = WeaponId::Sticker;
             break;
-        case Skin:
+        case SkinChanger::GameItem::Type::Skin:
             econItem->weaponId = skinData[item.dataIndex].weaponId;
             if (is_knife(econItem->weaponId))
                 econItem->quality = 3;
             break;
-        case Glove:
+        case SkinChanger::GameItem::Type::Glove:
             econItem->weaponId = gloveData[item.dataIndex].weaponId;
             econItem->quality = 3;
             break;
-        case Music:
+        case SkinChanger::GameItem::Type::Music:
             econItem->weaponId = WeaponId::MusicKit;
             break;
-        case Collectible:
+        case SkinChanger::GameItem::Type::Collectible:
             econItem->weaponId = collectibleData[item.dataIndex].weaponId;
             if (collectibleData[item.dataIndex].isOriginal)
                 econItem->quality = 1;
