@@ -198,8 +198,8 @@ public:
     PAD(WIN32_LINUX(0x48, 0x60))
     UtlMap<int, PaintKit*> paintKits;
     UtlMap<int, StickerKit*> stickerKits;
-    PAD(WIN32_LINUX(0x11C, ))
-    UtlMap<int, EconMusicDefinition*> musicKits; // linux offsetof = 0x570
+    PAD(WIN32_LINUX(0x11C, 0x1A0))
+    UtlMap<int, EconMusicDefinition*> musicKits;
 
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
