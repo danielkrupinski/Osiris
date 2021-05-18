@@ -278,12 +278,12 @@ class CSPlayerInventory {
 public:
     INCONSTRUCTIBLE(CSPlayerInventory)
 
-    VIRTUAL_METHOD(void*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
-    VIRTUAL_METHOD(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
+    VIRTUAL_METHOD_V(void*, getItemInLoadout, 8, (Team team, int slot), (this, team, slot))
+    VIRTUAL_METHOD_V(void, removeItem, 15, (std::uint64_t itemID), (this, itemID))
 
     auto getSOC() noexcept
     {
-        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, ));
+        return *reinterpret_cast<ClientSharedObjectCache<EconItem>**>(std::uintptr_t(this) + WIN32_LINUX(0x90, 0xC8));
     }
 
     SharedObjectTypeCache<EconItem>* getItemBaseTypeCache() noexcept
@@ -314,13 +314,13 @@ public:
             maxItemID = (std::max)(maxItemID, item->itemID);
             maxInventoryID = (std::max)(maxInventoryID, item->inventory);
         }
-            
+
         return std::make_pair(maxItemID, maxInventoryID);
     }
 
     auto getAccountID() noexcept
     {
-        return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, ));
+        return *reinterpret_cast<std::uint32_t*>(std::uintptr_t(this) + WIN32_LINUX(0x8, 0x10));
     }
 };
 
