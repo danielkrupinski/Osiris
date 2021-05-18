@@ -246,14 +246,14 @@ class SharedObjectTypeCache {
 public:
     INCONSTRUCTIBLE(SharedObjectTypeCache)
 
-    VIRTUAL_METHOD(void, addObject, 1, (T* object), (this, object))
-    VIRTUAL_METHOD(void, removeObject, 3, (T* object), (this, object))
+    VIRTUAL_METHOD_V(void, addObject, 1, (T* object), (this, object))
+    VIRTUAL_METHOD_V(void, removeObject, 3, (T* object), (this, object))
 
-    PAD(4)
+    PAD(sizeof(std::uintptr_t))
     T** objects;
-    PAD(16)
+    PAD(WIN32_LINUX(16, 24))
     int objectCount;
-    PAD(4)
+    PAD(WIN32_LINUX(4, 12))
     int classID; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_constants.h#L39
 };
 
