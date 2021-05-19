@@ -271,6 +271,8 @@ Memory::Memory() noexcept
     moveData = **relativeToAbsolute<MoveData***>(findPattern(CLIENT_DLL, "\x48\x8B\x05????\x4C\x8D\xA5????\x4C\x8D\xB5") + 3);
     moveHelper = **relativeToAbsolute<MoveHelper***>(findPattern(CLIENT_DLL, "\x48\x8B\x05????\x44\x89\x85????\x48\x8B\x38") + 3);
 
+    inventoryManager = relativeToAbsolute<decltype(inventoryManager)>(findPattern(CLIENT_DLL, "\x48\x8D\x35????\x48\x8D\x3D????\xE9????\x90\x90\x90\x55") + 3);
+
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
 }
