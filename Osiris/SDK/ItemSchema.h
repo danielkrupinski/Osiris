@@ -126,8 +126,8 @@ public:
     int getLoadoutSlot(Team team) noexcept
     {
         if (team >= Team::None && team <= Team::CT)
-            return reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x28C,))[static_cast<int>(team)];
-        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x268, ));
+            return reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x28C, 0x3F4))[static_cast<int>(team)];
+        return *reinterpret_cast<int*>(std::uintptr_t(this) + WIN32_LINUX(0x268, 0x3BC));
     }
 };
 
