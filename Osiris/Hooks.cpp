@@ -474,7 +474,7 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
         hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
 }
 
-static double __STDCALL getArgAsNumber(void* params, int index) noexcept
+static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
 
@@ -484,7 +484,7 @@ static double __STDCALL getArgAsNumber(void* params, int index) noexcept
     return result;
 }
 
-static const char* __STDCALL getArgAsString(void* params, int index) noexcept
+static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
@@ -613,9 +613,9 @@ void Hooks::install() noexcept
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, drawModelExecute);
 
-    panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
-    panoramaMarshallHelper.hookAt(5, getArgAsNumber);
-    panoramaMarshallHelper.hookAt(7, getArgAsString);
+	panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+	panoramaMarshallHelper.hookAt(5, getArgAsNumber);
+	panoramaMarshallHelper.hookAt(7, getArgAsString);
 
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
