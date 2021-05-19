@@ -1090,7 +1090,20 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[k].wear = sticker["Wear"];
             }
         } else if (type == "Glove") {
+            if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
+                continue;
 
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const int paintKit = jsonItem["Paint Kit"];
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [paintKit, weaponID](const auto& gameItem) { return gameItem.isGlove() && gloveData[gameItem.dataIndex].paintKit == paintKit && gloveData[gameItem.dataIndex].weaponId == weaponID; });
+            if (staticData == gameItems.end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
         } else if (type == "Music") {
             if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
                 continue;
