@@ -606,8 +606,10 @@ void SkinChanger::run(FrameStage stage) noexcept
                             removeItemFromInventory(localInventory, baseTypeCache, econItem);
                     tool.markAsDeleted();
 
+#ifdef _WIN32
                     const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(itemToApplyTool).c_str());
                     interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+#endif
                 }
             }
         }
@@ -996,13 +998,18 @@ json InventoryChanger::toJson() noexcept
 
             for (const auto& sticker : dynamicData.stickers) {
                 json stickerConfig;
-                if(sticker.stickerID != 0) {
+                if (sticker.stickerID != 0) {
                     stickerConfig["Sticker ID"] = sticker.stickerID;
                     stickerConfig["Wear"] = sticker.wear;
                 }
                 itemConfig["Stickers"].push_back(stickerConfig);
             }
             break;
+        }
+        case SkinChanger::GameItem::Type::Music: {
+            itemConfig["Type"] = "Music";
+            const auto& staticData = musicData[gameItem.dataIndex];
+            itemConfig["Music ID"] = staticData.musicID;
         }
         }
 
@@ -1084,6 +1091,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
             }
         } else if (type == "Glove") {
 
+        } else if (type == "Music") {
+            if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
+                continue;
+
+            const int musicID = jsonItem["Music ID"];
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [musicID](const auto& gameItem) { return gameItem.isMusic() && musicData[gameItem.dataIndex].musicID == musicID; });
+
+            if (staticData == gameItems.end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
         }
     }
 }
