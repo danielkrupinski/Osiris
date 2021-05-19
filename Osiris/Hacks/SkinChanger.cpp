@@ -1010,6 +1010,14 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Music";
             const auto& staticData = musicData[gameItem.dataIndex];
             itemConfig["Music ID"] = staticData.musicID;
+            break;
+        }
+        case SkinChanger::GameItem::Type::Collectible: {
+            itemConfig["Type"] = "Collectible";
+            const auto& staticData = collectibleData[gameItem.dataIndex];
+            itemConfig["Weapon ID"] = staticData.weaponId;
+            itemConfig["Is Original"] = staticData.isOriginal;
+            break;
         }
         }
 
@@ -1039,7 +1047,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 continue;
 
             const int stickerID = jsonItem["Sticker ID"];
-            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [stickerID](const auto& gameItem) { return gameItem.type == SkinChanger::GameItem::Type::Sticker && stickerData[gameItem.dataIndex].stickerID == stickerID; });
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [stickerID](const auto& gameItem) { return gameItem.isSticker() && stickerData[gameItem.dataIndex].stickerID == stickerID; });
             if (staticData == gameItems.end())
                 continue;
 
@@ -1055,7 +1063,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int paintKit = jsonItem["Paint Kit"];
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
-            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [paintKit, weaponID](const auto& gameItem) { return gameItem.type == SkinChanger::GameItem::Type::Skin && skinData[gameItem.dataIndex].paintKit == paintKit && skinData[gameItem.dataIndex].weaponId == weaponID; });
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [paintKit, weaponID](const auto& gameItem) { return gameItem.isSkin() && skinData[gameItem.dataIndex].paintKit == paintKit && skinData[gameItem.dataIndex].weaponId == weaponID; });
             if (staticData == gameItems.end())
                 continue;
 
@@ -1110,6 +1118,21 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
             const int musicID = jsonItem["Music ID"];
             const auto staticData = std::ranges::find_if(std::as_const(gameItems), [musicID](const auto& gameItem) { return gameItem.isMusic() && musicData[gameItem.dataIndex].musicID == musicID; });
+
+            if (staticData == gameItems.end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
+        } else if (type == "Collectible") {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+            if (!jsonItem.contains("Is Original") || !jsonItem["Is Original"].is_boolean())
+                continue;
+
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+            const bool isOriginal = jsonItem["Is Original"];
+
+            const auto staticData = std::ranges::find_if(std::as_const(gameItems), [weaponID, isOriginal](const auto& gameItem) { return gameItem.isCollectible() && collectibleData[gameItem.dataIndex].weaponId == weaponID && collectibleData[gameItem.dataIndex].isOriginal == isOriginal; });
 
             if (staticData == gameItems.end())
                 continue;
