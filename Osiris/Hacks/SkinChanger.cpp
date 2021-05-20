@@ -1022,6 +1022,7 @@ json InventoryChanger::toJson() noexcept
             if (!dynamicData.nameTag.empty())
                 itemConfig["Name Tag"] = dynamicData.nameTag;
 
+            auto& stickers = itemConfig["Stickers"];
             for (std::size_t i = 0; i < dynamicData.stickers.size(); ++i) {
                 const auto& sticker = dynamicData.stickers[i];
                 if (sticker.stickerID == 0)
@@ -1031,7 +1032,7 @@ json InventoryChanger::toJson() noexcept
                 stickerConfig["Sticker ID"] = sticker.stickerID;
                 stickerConfig["Wear"] = sticker.wear;
                 stickerConfig["Slot"] = i;
-                itemConfig["Stickers"].push_back(stickerConfig);
+                stickers.push_back(std::move(stickerConfig));
             }
             break;
         }
@@ -1050,7 +1051,7 @@ json InventoryChanger::toJson() noexcept
         }
         }
 
-        items.push_back(itemConfig);
+        items.push_back(std::move(itemConfig));
     }
 
     if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
@@ -1073,7 +1074,7 @@ json InventoryChanger::toJson() noexcept
                     slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
-            equipment.push_back(slot);
+            equipment.push_back(std::move(slot));
         }
     }
     
