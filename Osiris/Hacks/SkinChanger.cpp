@@ -593,31 +593,32 @@ void SkinChanger::run(FrameStage stage) noexcept
 
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
+    std::uint64_t appliedStickerToItemID = 0;
     if (useToolTime <= memory->globalVars->realtime) {
         if (wasItemCreatedByOsiris(toolToUse) && wasItemCreatedByOsiris(itemToApplyTool)) {
             auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
             const auto& toolItem = tool.get();
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
-            const auto& destItem = dest.get();
 
             if (toolItem.isSticker()) {
                 const auto& sticker = stickerData[toolItem.dataIndex];
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " id").c_str(), sticker.stickerID);
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToApplySticker) + " wear").c_str(), 0.10f);
-
                     dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.stickerID;
                     dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
 
                     if (const auto stickerView = memory->findOrCreateEconItemViewForItemID(toolToUse))
                         if (const auto econItem = memory->getSOCData(stickerView))
                             removeItemFromInventory(localInventory, baseTypeCache, econItem);
-                    tool.markAsDeleted();
 
-#ifdef _WIN32
-                    const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(itemToApplyTool).c_str());
-                    interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-#endif
+                    if (const auto econItem = memory->getSOCData(view))
+                        removeItemFromInventory(localInventory, baseTypeCache, econItem);
+
+                    tool.markAsDeleted();
+                    auto destCopy = dest;
+                    dest.markAsDeleted();
+                    inventory.push_back(std::move(destCopy));
+                    appliedStickerToItemID = BASE_ITEMID + inventory.size() - 1;
+
                 }
             }
         }
@@ -699,6 +700,13 @@ void SkinChanger::run(FrameStage stage) noexcept
         memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
 
     toEquip.clear();
+
+    if (appliedStickerToItemID) {
+#ifdef _WIN32
+        const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+#endif
+    }
 }
 
 void SkinChanger::scheduleHudUpdate() noexcept
@@ -1051,7 +1059,7 @@ json InventoryChanger::toJson() noexcept
 
             if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
                 if (const auto soc = memory->getSOCData(itemTT); soc && wasItemCreatedByOsiris(soc->itemID))
-                   slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
+                    slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
             }
 
             equipment.push_back(slot);
