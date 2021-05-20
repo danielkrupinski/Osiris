@@ -1082,7 +1082,7 @@ json InventoryChanger::toJson() noexcept
 
 void InventoryChanger::fromJson(const json& j) noexcept
 {
-    if (!j.contains("Items") || !j.is_object())
+    if (!j.contains("Items"))
         return;
 
     initializeKits();
@@ -1129,13 +1129,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
             
             // Load dynamic data now
 
-            if (jsonItem.contains("Name Tag") && jsonItem["Name Tag"].is_string())
-                dynamicSkinData[inventory.back().getDynamicDataIndex()].nameTag = jsonItem["Name Tag"];
+            if (jsonItem.contains("Name Tag")) {
+                if (const auto& nameTag = jsonItem["Name Tag"]; nameTag.is_string())
+                    dynamicSkinData[inventory.back().getDynamicDataIndex()].nameTag = nameTag;
+            }
 
-            if (!jsonItem.contains("Stickers") || !jsonItem["Stickers"].is_array())
+            if (!jsonItem.contains("Stickers"))
                 continue;
 
             const auto& stickers = jsonItem["Stickers"];
+            if (!stickers.is_array())
+                continue;
             for (std::size_t k = 0; k < stickers.size(); ++k) {
                 const auto& sticker = stickers[k];
                 if (!sticker.is_object())
@@ -1201,20 +1205,30 @@ void InventoryChanger::fromJson(const json& j) noexcept
         }
     }
 
-    if (!j.contains("Equipment") || !j["Equipment"].is_array())
+    if (!j.contains("Equipment"))
         return;
 
     const auto& equipment = j["Equipment"];
-    
+    if (!equipment.is_array())
+        return;
+
     for (std::size_t i = 0; i < equipment.size(); ++i) {
-        if (equipment[i].contains("CT") && equipment[i]["CT"].is_number_integer() && equipment[i]["CT"] < inventory.size())
-            toEquip.emplace_back(Team::CT, static_cast<int>(i), equipment[i]["CT"]);
+        const auto& equipped = equipment[i];
 
-        if (equipment[i].contains("TT") && equipment[i]["TT"].is_number_integer() && equipment[i]["TT"] < inventory.size())
-            toEquip.emplace_back(Team::TT, static_cast<int>(i), equipment[i]["TT"]);
+        if (equipped.contains("CT")) {
+            if (const auto& ct = equipped["CT"]; ct.is_number_integer() && ct < inventory.size())
+                toEquip.emplace_back(Team::CT, static_cast<int>(i), ct);
+        }
 
-        if (equipment[i].contains("NOTEAM") && equipment[i]["NOTEAM"].is_number_integer() && equipment[i]["NOTEAM"] < inventory.size())
-            toEquip.emplace_back(Team::None, static_cast<int>(i), equipment[i]["NOTEAM"]);
+        if (equipped.contains("TT")) {
+            if (const auto& tt = equipped["TT"]; tt.is_number_integer() && tt < inventory.size())
+                toEquip.emplace_back(Team::TT, static_cast<int>(i), tt);
+        }
+
+        if (equipped.contains("NOTEAM")) {
+            if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer() && noteam < inventory.size())
+                toEquip.emplace_back(Team::None, static_cast<int>(i), noteam);
+        }
     }
 }
 
