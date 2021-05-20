@@ -928,35 +928,34 @@ void removeEmptyObjects(json& j) noexcept
 
 void Config::save(size_t id) const noexcept
 {
+    json j;
+
+    j["Aimbot"] = aimbot;
+    j["Aimbot On key"] = aimbotOnKey;
+    to_json(j["Aimbot Key"], aimbotKey, KeyBind::NONE);
+    j["Aimbot Key mode"] = aimbotKeyMode;
+
+    j["Triggerbot"] = triggerbot;
+    to_json(j["Triggerbot Key"], triggerbotHoldKey, KeyBind::NONE);
+
+    j["Backtrack"] = Backtrack::toJson();
+    j["Anti aim"] = AntiAim::toJson();
+    j["Glow"] = Glow::toJson();
+    j["Chams"] = chams;
+    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind::NONE);
+    to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind::NONE);
+    j["ESP"] = streamProofESP;
+    j["Sound"] = ::Sound::toJson();
+    j["Visuals"] = visuals;
+    j["Misc"] = misc;
+    j["Style"] = style;
+    j["Skin changer"] = SkinChanger::toJson();
+
+    removeEmptyObjects(j);
+
     createConfigDir();
-
-    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good()) {
-        json j;
-
-        j["Aimbot"] = aimbot;
-        j["Aimbot On key"] = aimbotOnKey;
-        to_json(j["Aimbot Key"], aimbotKey, KeyBind::NONE);
-        j["Aimbot Key mode"] = aimbotKeyMode;
-
-        j["Triggerbot"] = triggerbot;
-        to_json(j["Triggerbot Key"], triggerbotHoldKey, KeyBind::NONE);
-
-        j["Backtrack"] = Backtrack::toJson();
-        j["Anti aim"] = AntiAim::toJson();
-        j["Glow"] = Glow::toJson();
-        j["Chams"] = chams;
-        to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind::NONE);
-        to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind::NONE);
-        j["ESP"] = streamProofESP;
-        j["Sound"] = ::Sound::toJson();
-        j["Visuals"] = visuals;
-        j["Misc"] = misc;
-        j["Style"] = style;
-        j["Skin changer"] = SkinChanger::toJson();
-
-        removeEmptyObjects(j);
+    if (std::ofstream out{ path / (const char8_t*)configs[id].c_str() }; out.good())
         out << std::setw(2) << j;
-    }
 }
 
 void Config::add(const char* name) noexcept
