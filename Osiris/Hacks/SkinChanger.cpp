@@ -1268,6 +1268,24 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
 
     auto& icon = iconTextures[iconpath];
     if (!icon.texture.get()) {
+        static int frameCount = 0;
+        static float timeSpentThisFrame = 0.0f;
+        static int loadedThisFrame = 0;
+
+        if (frameCount != ImGui::GetFrameCount()) {
+            frameCount = ImGui::GetFrameCount();
+            timeSpentThisFrame = 0.0f;
+            // memory->debugMsg("LOADED %d ICONS\n", loadedThisFrame);
+            loadedThisFrame = 0;
+        }
+
+        if (timeSpentThisFrame > 0.01f)
+            return 0;
+
+        ++loadedThisFrame;
+        
+        const auto start = std::chrono::high_resolution_clock::now();
+
         auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + (iconpath.find("status_icons") != std::string::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
         if (!handle)
             handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + ".png").c_str(), "r", "GAME");
@@ -1290,6 +1308,9 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
             }
             interfaces->baseFileSystem->close(handle);
         }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        timeSpentThisFrame += std::chrono::duration<float>(end - start).count();
     }
     icon.lastReferencedFrame = ImGui::GetFrameCount();
     return icon.texture.get();
