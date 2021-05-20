@@ -128,6 +128,7 @@ static constexpr auto keyMap = std::to_array<Key>({
 });
 
 static_assert(keyMap.size() == KeyBind::MAX);
+static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
 {
