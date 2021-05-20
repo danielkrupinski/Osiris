@@ -775,6 +775,8 @@ void SkinChanger::tabItem() noexcept
     }
 }
 
+static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
+
 namespace ImGui
 {
     static bool SkinSelectable(const char* label, const std::string& iconPath, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
@@ -853,7 +855,7 @@ namespace ImGui
 
         RenderTextClipped(text_min + ImVec2{ bulletRadius * 2.0f + 4.0f, 0.0f }, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
 
-        if (const auto icon = SkinChanger::getItemIconTexture(iconPath)) {
+        if (const auto icon = getItemIconTexture(iconPath)) {
             window->DrawList->AddImage(icon, bb.Min, bb.Min + iconSizeSmall, { 0.0f, 0.0f }, { 1.0f, 1.0f }, GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
             if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -868,8 +870,6 @@ namespace ImGui
         return pressed;
     }
 }
-
-#define SKINCHANGER_REWORK
 
 void SkinChanger::drawGUI(bool contentOnly) noexcept
 {
@@ -1261,7 +1261,7 @@ struct Icon {
 
 static std::unordered_map<std::string, Icon> iconTextures;
 
-ImTextureID SkinChanger::getItemIconTexture(const std::string& iconpath) noexcept
+static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
 {
     if (iconpath.empty())
         return 0;
