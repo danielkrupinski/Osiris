@@ -1062,6 +1062,11 @@ json InventoryChanger::toJson() noexcept
                     slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
             }
 
+            if (const auto itemNOTEAM = localInventory->getItemInLoadout(Team::None, static_cast<int>(i))) {
+                if (const auto soc = memory->getSOCData(itemNOTEAM); soc && wasItemCreatedByOsiris(soc->itemID))
+                    slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
+            }
+
             equipment.push_back(slot);
         }
     }
@@ -1199,6 +1204,9 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
         if (equipment[i].contains("TT") && equipment[i]["TT"].is_number_integer() && equipment[i]["TT"] < inventory.size())
             toEquip.emplace_back(Team::TT, static_cast<int>(i), equipment[i]["TT"]);
+
+        if (equipment[i].contains("NOTEAM") && equipment[i]["NOTEAM"].is_number_integer() && equipment[i]["NOTEAM"] < inventory.size())
+            toEquip.emplace_back(Team::None, static_cast<int>(i), equipment[i]["NOTEAM"]);
     }
 }
 
@@ -1216,7 +1224,6 @@ void InventoryChanger::resetConfig() noexcept
 
                 removeItemFromInventory(localInventory, baseTypeCache, econItem);
             }
-
         }
     }
 
