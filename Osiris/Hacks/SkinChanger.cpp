@@ -522,7 +522,7 @@ void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
     toolToUse = itemID;
 
     std::mt19937 gen{ std::random_device{}() };
-    std::uniform_real_distribution dis{ 0.5f, 0.9f };
+    std::uniform_real_distribution dis{ 0.3f, 0.7f };
     useToolTime = memory->globalVars->realtime + dis(gen);
 }
 
