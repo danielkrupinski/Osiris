@@ -559,6 +559,14 @@ static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTy
     cache->removeObject(econItem);
 }
 
+struct ToEquip {
+    Team team;
+    int slot;
+    std::size_t index;
+};
+
+static std::vector<ToEquip> toEquip;
+
 void SkinChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -686,6 +694,11 @@ void SkinChanger::run(FrameStage stage) noexcept
             memory->clearInventoryImageRGBA(view);
         }
     }
+
+    for (const auto& item : toEquip)
+        memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
+
+    toEquip.clear();
 }
 
 void SkinChanger::scheduleHudUpdate() noexcept
@@ -962,6 +975,8 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
 json InventoryChanger::toJson() noexcept
 {
     json j;
+
+    auto& items = j["Items"];
     for (const auto& item : inventory) {
         if (item.isDeleted())
             continue;
@@ -1021,20 +1036,44 @@ json InventoryChanger::toJson() noexcept
         }
         }
 
-        j.push_back(itemConfig);
+        items.push_back(itemConfig);
     }
+
+    if (const auto localInventory = memory->inventoryManager->getLocalInventory()) {
+        auto& equipment = j["Equipment"];
+        for (std::size_t i = 0; i < 57; ++i) {
+            json slot;
+
+            if (const auto itemCT = localInventory->getItemInLoadout(Team::CT, static_cast<int>(i))) {
+                if (const auto soc = memory->getSOCData(itemCT); soc && wasItemCreatedByOsiris(soc->itemID))
+                    slot["CT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
+            }
+
+            if (const auto itemTT = localInventory->getItemInLoadout(Team::TT, static_cast<int>(i))) {
+                if (const auto soc = memory->getSOCData(itemTT); soc && wasItemCreatedByOsiris(soc->itemID))
+                   slot["TT"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID);
+            }
+
+            equipment.push_back(slot);
+        }
+    }
+    
     return j;
 }
 
 void InventoryChanger::fromJson(const json& j) noexcept
 {
-    if (!j.is_array())
+    if (!j.contains("Items") || !j.is_object())
         return;
 
     initializeKits();
 
-    for (std::size_t i = 0; i < j.size(); ++i) {
-        const auto& jsonItem = j[i];
+    const auto& items = j["Items"];
+    if (!items.is_array())
+        return;
+
+    for (std::size_t i = 0; i < items.size(); ++i) {
+        const auto& jsonItem = items[i];
         if (jsonItem.empty() || !jsonItem.is_object())
             continue;
 
@@ -1139,6 +1178,19 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
             inventory.emplace_back(std::ranges::distance(gameItems.begin(), staticData));
         }
+    }
+
+    if (!j.contains("Equipment") || !j["Equipment"].is_array())
+        return;
+
+    const auto& equipment = j["Equipment"];
+    
+    for (std::size_t i = 0; i < equipment.size(); ++i) {
+        if (equipment[i].contains("CT") && equipment[i]["CT"].is_number_integer() && equipment[i]["CT"] < inventory.size())
+            toEquip.emplace_back(Team::CT, static_cast<int>(i), equipment[i]["CT"]);
+
+        if (equipment[i].contains("TT") && equipment[i]["TT"].is_number_integer() && equipment[i]["TT"] < inventory.size())
+            toEquip.emplace_back(Team::TT, static_cast<int>(i), equipment[i]["TT"]);
     }
 }
 
