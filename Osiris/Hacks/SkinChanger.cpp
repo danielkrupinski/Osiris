@@ -48,7 +48,7 @@
 
 #include "../Helpers.h"
 
-static constexpr auto is_knife(WeaponId id)
+constexpr auto isKnife(WeaponId id) noexcept
 {
     return (id >= WeaponId::Bayonet && id <= WeaponId::SkeletonKnife) || id == WeaponId::KnifeT || id == WeaponId::Knife;
 }
@@ -373,7 +373,7 @@ static void applyKnife(Entity* local) noexcept
             continue;
 
         auto& definitionIndex = weapon->itemDefinitionIndex2();
-        if (!is_knife(definitionIndex))
+        if (!isKnife(definitionIndex))
             continue;
 
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
@@ -440,7 +440,7 @@ static void applyWeapons(Entity* local) noexcept
             continue;
 
         const auto& definitionIndex = weapon->itemDefinitionIndex2();
-        if (is_knife(definitionIndex))
+        if (isKnife(definitionIndex))
             continue;
 
         const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(definitionIndex);
@@ -644,7 +644,7 @@ void SkinChanger::run(FrameStage stage) noexcept
             break;
         case SkinChanger::GameItem::Type::Skin:
             econItem->weaponId = skinData[item.dataIndex].weaponId;
-            if (is_knife(econItem->weaponId))
+            if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
             break;
         case SkinChanger::GameItem::Type::Glove:
@@ -749,7 +749,7 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
         return;
 
     /*
-    if (const auto conf = get_by_definition_index(is_knife(weapon->itemDefinitionIndex2()) ? WeaponId::Knife : weapon->itemDefinitionIndex2()); conf && conf->stat_trak > -1) {
+    if (const auto conf = get_by_definition_index(isKnife(weapon->itemDefinitionIndex2()) ? WeaponId::Knife : weapon->itemDefinitionIndex2()); conf && conf->stat_trak > -1) {
         weapon->fallbackStatTrak() = ++conf->stat_trak;
         weapon->postDataUpdate(0);
     }
@@ -1460,7 +1460,7 @@ void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noe
     if (!localPlayer)
         return;
 
-    if (!is_knife(viewModelWeapon->itemDefinitionIndex2()))
+    if (!isKnife(viewModelWeapon->itemDefinitionIndex2()))
         return;
 
     const auto localInventory = memory->inventoryManager->getLocalInventory();
