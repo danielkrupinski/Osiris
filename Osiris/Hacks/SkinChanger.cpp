@@ -707,11 +707,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker] = {};
 
             if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
-                if (shouldRemove) {
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " id").c_str(), 0);
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " wear").c_str(), 0.0f);
-                } else {
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " wear").c_str(), newWear);
+                if (const auto soc = memory->getSOCData(view)) {
+                    if (shouldRemove) {
+                        soc->setStickerID(slotToWearSticker, 0);
+                        soc->setStickerWear(slotToWearSticker, 0.0f);
+                    } else {
+                        soc->setStickerWear(slotToWearSticker, newWear);
+                    }
                 }
             }
 
@@ -741,61 +743,49 @@ void InventoryChanger::run(FrameStage stage) noexcept
         econItem->rarity = item.rarity;
         econItem->quality = 0;
 
-        switch (item.type) {
-        case StaticData::Type::Sticker:
+        if (item.isSticker()) {
             econItem->weaponId = WeaponId::Sticker;
-            break;
-        case StaticData::Type::Skin:
+            econItem->setStickerID(0, StaticData::stickers[item.dataIndex].stickerID);
+        } else if (item.isMusic()) {
+            econItem->weaponId = WeaponId::MusicKit;
+            econItem->setMusicID(StaticData::music[item.dataIndex].musicID);
+        } else if (item.isSkin()) {
             econItem->weaponId = StaticData::skins[item.dataIndex].weaponId;
             if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
-            break;
-        case StaticData::Type::Glove:
+            econItem->setPaintKit(static_cast<float>(StaticData::skins[item.dataIndex].paintKit));
+
+            const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
+            econItem->setWear(dynamicData.wear);
+            econItem->setSeed(static_cast<float>(dynamicData.seed));
+            memory->setCustomName(econItem, dynamicData.nameTag.c_str());
+
+            for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
+                const auto& sticker = dynamicData.stickers[j];
+                if (sticker.stickerID == 0)
+                    continue;
+
+                econItem->setStickerID(j, sticker.stickerID);
+                econItem->setStickerWear(j, sticker.wear);
+            }
+        } else if (item.isGlove()) {
             econItem->weaponId = StaticData::gloves[item.dataIndex].weaponId;
             econItem->quality = 3;
-            break;
-        case StaticData::Type::Music:
-            econItem->weaponId = WeaponId::MusicKit;
-            break;
-        case StaticData::Type::Collectible:
+
+            econItem->setPaintKit(static_cast<float>(StaticData::gloves[item.dataIndex].paintKit));
+            econItem->setWear(0.01f);
+            econItem->setSeed(static_cast<float>(1));
+        } else if (item.isCollectible()) {
             econItem->weaponId = StaticData::collectibles[item.dataIndex].weaponId;
             if (StaticData::collectibles[item.dataIndex].isOriginal)
                 econItem->quality = 1;
-            break;
         }
 
         baseTypeCache->addObject(econItem);
         memory->addEconItem(localInventory, econItem, false, false, false);
 
-        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID)) {
-            if (item.isSticker()) {
-                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "sticker slot 0 id", StaticData::stickers[item.dataIndex].stickerID);
-            } else if (item.isMusic()) {
-                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "music id", StaticData::music[item.dataIndex].musicID);
-            } else if (item.isSkin() || item.isGlove()) {
-                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture prefab", static_cast<float>(item.isSkin() ? StaticData::skins[item.dataIndex].paintKit : StaticData::gloves[item.dataIndex].paintKit));
-                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", 0.01f);
-                memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(1));
-
-                if (item.isSkin()) {
-                    const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
-
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture wear", dynamicData.wear);
-                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), "set item texture seed", static_cast<float>(dynamicData.seed));
-                    memory->setCustomName(econItem, dynamicData.nameTag.c_str());
-
-                    for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
-                        const auto& sticker = dynamicData.stickers[j];
-                        if (sticker.stickerID == 0)
-                            continue;
-
-                        memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(j) + " id").c_str(), sticker.stickerID);
-                        memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(j) + " wear").c_str(), sticker.wear);
-                    }
-                }
-            }
+        if (const auto view = memory->findOrCreateEconItemViewForItemID(econItem->itemID))
             memory->clearInventoryImageRGBA(view);
-        }
     }
 
     for (const auto& item : toEquip)
