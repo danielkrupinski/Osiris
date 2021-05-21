@@ -248,6 +248,11 @@ public:
         if (const auto attribute = memory->itemSystem()->getItemSchema()->getAttributeDefinitionInterface(index))
             memory->setDynamicAttributeValue(this, attribute, value);
     }
+
+    void setPaintKit(float paintKit) noexcept
+    {
+        setAttributeValue(6, &paintKit);
+    }
 };
 
 template <typename T>
