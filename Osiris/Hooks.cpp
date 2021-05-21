@@ -499,6 +499,10 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
             std::uint64_t itemID = 0;
             std::from_chars(result, result + strlen(result), itemID);
             InventoryChanger::setItemToApplyTool(itemID);
+        } else if (RETURN_ADDRESS() == memory->wearItemStickerGetArgAsStringReturnAddress) {
+            std::uint64_t itemID = 0;
+            std::from_chars(result, result + strlen(result), itemID);
+            InventoryChanger::setItemToWearSticker(itemID);
         }
     }
    
