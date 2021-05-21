@@ -1110,6 +1110,10 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Weapon ID"] = staticData.weaponId;
 
             const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
+
+            itemConfig["Wear"] = dynamicData.wear;
+            itemConfig["Seed"] = dynamicData.seed;
+
             if (!dynamicData.nameTag.empty())
                 itemConfig["Name Tag"] = dynamicData.nameTag;
 
@@ -1220,9 +1224,21 @@ void InventoryChanger::fromJson(const json& j) noexcept
             
             // Load dynamic data now
 
+            auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
+
+            if (jsonItem.contains("Wear")) {
+                if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
+                    dynamicData.wear = wear;
+            }
+
+            if (jsonItem.contains("Seed")) {
+                if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
+                    dynamicData.seed = seed;
+            }
+
             if (jsonItem.contains("Name Tag")) {
                 if (const auto& nameTag = jsonItem["Name Tag"]; nameTag.is_string())
-                    dynamicSkinData[inventory.back().getDynamicDataIndex()].nameTag = nameTag;
+                    dynamicData.nameTag = nameTag;
             }
 
             if (!jsonItem.contains("Stickers"))
@@ -1248,9 +1264,9 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 const std::size_t slot = sticker["Slot"];
                 if (slot >= std::tuple_size_v<decltype(DynamicSkinData::stickers)>)
                     continue;
-                dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[slot].stickerID = stickerID;
+                dynamicData.stickers[slot].stickerID = stickerID;
                 if (sticker.contains("Wear") && sticker["Wear"].is_number_float())
-                    dynamicSkinData[inventory.back().getDynamicDataIndex()].stickers[slot].wear = sticker["Wear"];
+                    dynamicData.stickers[slot].wear = sticker["Wear"];
             }
         } else if (type == "Glove") {
             if (!jsonItem.contains("Paint Kit") || !jsonItem["Paint Kit"].is_number_integer())
