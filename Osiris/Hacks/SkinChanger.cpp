@@ -1402,7 +1402,7 @@ static int random(int min, int max) noexcept
     return rand() % (max - min + 1) + min;
 }
 
-static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
+static int remapKnifeAnim(WeaponId weaponID, const int sequence) noexcept
 {
     enum Sequence
     {
@@ -1436,12 +1436,9 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         SEQUENCE_BOWIE_IDLE1 = 1,
     };
 
-    // Hashes for best performance.
-    switch (model) {
-    case fnv::hash("models/weapons/v_knife_butterfly.mdl"):
-    {
-        switch (sequence)
-        {
+    switch (weaponID) {
+    case WeaponId::Butterfly:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
             return random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
         case SEQUENCE_DEFAULT_LOOKAT01:
@@ -1449,11 +1446,8 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         default:
             return sequence + 1;
         }
-    }
-    case fnv::hash("models/weapons/v_knife_falchion_advanced.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Falchion:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_IDLE2:
             return SEQUENCE_FALCHION_IDLE1;
         case SEQUENCE_DEFAULT_HEAVY_MISS1:
@@ -1466,11 +1460,8 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         default:
             return sequence - 1;
         }
-    }
-    case fnv::hash("models/weapons/v_knife_push.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Daggers:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_IDLE2:
             return SEQUENCE_DAGGERS_IDLE1;
         case SEQUENCE_DEFAULT_LIGHT_MISS1:
@@ -1488,11 +1479,8 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         default:
             return sequence + 2;
         }
-    }
-    case fnv::hash("models/weapons/v_knife_survival_bowie.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Bowie:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
         case SEQUENCE_DEFAULT_IDLE1:
             return sequence;
@@ -1501,15 +1489,12 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         default:
             return sequence - 1;
         }
-    }
-    case fnv::hash("models/weapons/v_knife_ursus.mdl"):
-    case fnv::hash("models/weapons/v_knife_skeleton.mdl"):
-    case fnv::hash("models/weapons/v_knife_outdoor.mdl"):
-    case fnv::hash("models/weapons/v_knife_cord.mdl"):
-    case fnv::hash("models/weapons/v_knife_canis.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Ursus:
+    case WeaponId::SkeletonKnife:
+    case WeaponId::NomadKnife:
+    case WeaponId::Paracord:
+    case WeaponId::SurvivalKnife:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_DRAW:
             return random(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
         case SEQUENCE_DEFAULT_LOOKAT01:
@@ -1517,23 +1502,16 @@ static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
         default:
             return sequence + 1;
         }
-    }
-    case fnv::hash("models/weapons/v_knife_stiletto.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Stiletto:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
             return random(12, 13);
         }
-    }
-    case fnv::hash("models/weapons/v_knife_widowmaker.mdl"):
-    {
-        switch (sequence)
-        {
+    case WeaponId::Talon:
+        switch (sequence) {
         case SEQUENCE_DEFAULT_LOOKAT01:
             return random(14, 15);
         }
-    }
     default:
         return sequence;
     }
@@ -1558,12 +1536,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     if (const auto soc = memory->getSOCData(itemView); !soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
-    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(viewModelWeapon->itemDefinitionIndex2());
-    if (!def)
-        return;
-
-    if (const auto model = def->getPlayerDisplayModel())
-        sequence = remapKnifeAnim(fnv::hashRuntime(model), sequence);
+    sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
 }
 
 StaticData::GameItem::GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ rarity }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
