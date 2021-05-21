@@ -169,7 +169,7 @@ public:
 
     std::size_t getDynamicDataIndex() const noexcept { assert(isSkin()); return dynamicDataIndex; }
 
-    StaticData::GameItem& get() const noexcept { assert(!isDeleted()); return StaticData::gameItems[itemIndex]; }
+    const StaticData::GameItem& get() const noexcept { assert(!isDeleted()); return StaticData::gameItems[itemIndex]; }
 };
 
 static std::vector<InventoryItem> inventory;
