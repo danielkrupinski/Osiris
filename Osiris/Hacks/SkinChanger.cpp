@@ -696,8 +696,35 @@ void InventoryChanger::run(FrameStage stage) noexcept
                     inventory.push_back(std::move(destCopy));
                 }
             }
+        } else if (wasItemCreatedByOsiris(itemToWearSticker)) {
+            constexpr auto wearStep = 0.12f;
+
+            const auto& item = inventory[static_cast<std::size_t>(itemToWearSticker - BASE_ITEMID)];
+            const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += 0.12f);
+            const auto shouldRemove = (newWear >= 1.0f + wearStep);
+
+            if (shouldRemove)
+                dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker] = {};
+
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
+                if (shouldRemove) {
+                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " id").c_str(), 0);
+                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " wear").c_str(), 0.0f);
+                } else {
+                    memory->setOrAddAttributeValueByName(std::uintptr_t(view) + WIN32_LINUX(0x244, 0x2F8), ("sticker slot " + std::to_string(slotToWearSticker) + " wear").c_str(), newWear);
+                }
+            }
+
+            sendInventoryUpdatedEvent();
+
+            if (shouldRemove) {
+#ifdef _WIN32
+                const auto event = initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
+                interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+#endif
+            }
         }
-        toolToUse = itemToApplyTool = 0;
+        itemToWearSticker = toolToUse = itemToApplyTool = 0;
     }
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
