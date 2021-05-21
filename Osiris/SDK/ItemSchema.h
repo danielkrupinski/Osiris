@@ -271,12 +271,14 @@ public:
 
     void setStickerID(int slot, int stickerID) noexcept
     {
-        setAttributeValue(113 + 4 * slot, &stickerID);
+        if (slot >= 0 && slot <= 5)
+            setAttributeValue(113 + 4 * slot, &stickerID);
     }
 
     void setStickerWear(int slot, float wear) noexcept
     {
-        setAttributeValue(114 + 4 * slot, &wear);
+        if (slot >= 0 && slot <= 5)
+            setAttributeValue(114 + 4 * slot, &wear);
     }
 };
 
