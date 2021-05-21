@@ -594,6 +594,13 @@ void InventoryChanger::setStickerSlotToWear(int slot) noexcept
     slotToWearSticker = slot;
 }
 
+static std::uint64_t itemToWearSticker = 0;
+void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept
+{
+    itemToWearSticker = itemID;
+    useToolTime = memory->globalVars->realtime + randomFloat(0.18f, 0.48f);
+}
+
 static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     void* result;
