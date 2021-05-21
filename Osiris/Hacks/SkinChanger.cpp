@@ -588,6 +588,12 @@ void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
     itemToApplyTool = itemID;
 }
 
+static int slotToWearSticker;
+void InventoryChanger::setStickerSlotToWear(int slot) noexcept
+{
+    slotToWearSticker = slot;
+}
+
 static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     void* result;
