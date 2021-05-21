@@ -135,7 +135,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     }
     
     GameData::clearUnusedAvatars();
-    SkinChanger::clearUnusedItemIconTextures();
+    InventoryChanger::clearUnusedItemIconTextures();
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -143,7 +143,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    SkinChanger::clearItemIconTextures();
+    InventoryChanger::clearItemIconTextures();
     GameData::clearTextures();
     return hooks->originalReset(device, params);
 }
@@ -479,7 +479,7 @@ static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, 
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
 
     if (RETURN_ADDRESS() == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
-        SkinChanger::setStickerApplySlot(static_cast<int>(result));
+        InventoryChanger::setStickerApplySlot(static_cast<int>(result));
 
     return result;
 }
@@ -492,11 +492,11 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
         if (RETURN_ADDRESS() == memory->useToolStickerGetArgAsStringReturnAddress) {
             std::uint64_t itemID = 0;
             std::from_chars(result, result + strlen(result), itemID);
-            SkinChanger::setToolToUse(itemID);
+            InventoryChanger::setToolToUse(itemID);
         } else if (RETURN_ADDRESS() == memory->useToolGetArg2AsStringReturnAddress) {
             std::uint64_t itemID = 0;
             std::from_chars(result, result + strlen(result), itemID);
-            SkinChanger::setItemToApplyTool(itemID);
+            InventoryChanger::setItemToApplyTool(itemID);
         }
     }
    

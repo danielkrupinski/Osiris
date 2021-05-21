@@ -566,14 +566,14 @@ static void updateHud() noexcept
 }
 
 static int slotToApplySticker;
-void SkinChanger::setStickerApplySlot(int slot) noexcept
+void InventoryChanger::setStickerApplySlot(int slot) noexcept
 {
     slotToApplySticker = slot;
 }
 
 static std::uint64_t toolToUse = 0;
 static float useToolTime = 0.0f;
-void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
+void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept
 {
     toolToUse = itemID;
 
@@ -583,7 +583,7 @@ void SkinChanger::setToolToUse(std::uint64_t itemID) noexcept
 }
 
 static std::uint64_t itemToApplyTool = 0;
-void SkinChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
+void InventoryChanger::setItemToApplyTool(std::uint64_t itemID) noexcept
 {
     itemToApplyTool = itemID;
 }
@@ -1379,12 +1379,12 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
     return icon.texture.get();
 }
 
-void SkinChanger::clearItemIconTextures() noexcept
+void InventoryChanger::clearItemIconTextures() noexcept
 {
     iconTextures.clear();
 }
 
-void SkinChanger::clearUnusedItemIconTextures() noexcept
+void InventoryChanger::clearUnusedItemIconTextures() noexcept
 {
     constexpr auto maxIcons = 30;
     const auto frameCount = ImGui::GetFrameCount();
@@ -1539,7 +1539,7 @@ static int get_new_animation(const uint32_t model, const int sequence) noexcept
     }
 }
 
-void SkinChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
+void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept
 {
     if (!localPlayer)
         return;

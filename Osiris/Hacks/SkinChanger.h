@@ -24,6 +24,15 @@ namespace InventoryChanger
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
 
+    void setStickerApplySlot(int slot) noexcept;
+    void setToolToUse(std::uint64_t itemID) noexcept;
+    void setItemToApplyTool(std::uint64_t itemID) noexcept;
+
+    void clearItemIconTextures() noexcept;
+    void clearUnusedItemIconTextures() noexcept;
+
+    void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
+
     void clearInventory() noexcept;
 }
 
@@ -38,17 +47,4 @@ namespace SkinChanger
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
-
-    // 
-
-    void setStickerApplySlot(int slot) noexcept;
-    void setToolToUse(std::uint64_t itemID) noexcept;
-    void setItemToApplyTool(std::uint64_t itemID) noexcept;
-
-    //
-
-    void clearItemIconTextures() noexcept;
-    void clearUnusedItemIconTextures() noexcept;
-
-    void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 }
