@@ -242,6 +242,12 @@ public:
     std::int16_t itemSet;
     int soUpdateFrame;
     std::uint8_t flags;
+
+    void setAttributeValue(int index, void* value) noexcept
+    {
+        if (const auto attribute = memory->itemSystem()->getItemSchema()->getAttributeDefinitionInterface(index))
+            memory->setDynamicAttributeValue(this, attribute, value);
+    }
 };
 
 template <typename T>
