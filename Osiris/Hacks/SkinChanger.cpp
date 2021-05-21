@@ -126,7 +126,13 @@ struct DynamicSkinData {
     std::string nameTag;
 };
 
+struct DynamicGloveData {
+    float wear = 0.0f;
+    int seed = 1;
+};
+
 static std::vector<DynamicSkinData> dynamicSkinData;
+static std::vector<DynamicGloveData> dynamicGloveData;
 
 constexpr auto BASE_ITEMID = 1152921504606746975;
 
@@ -147,7 +153,7 @@ static int randomInt(int min, int max) noexcept
 struct InventoryItem {
 private:
     std::size_t itemIndex;
-    std::size_t dynamicDataIndex = static_cast<std::size_t>(dynamicDataIndex);
+    std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 public:
     InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
     {
@@ -157,6 +163,12 @@ public:
             dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
+        } else if (isGlove()) {
+            DynamicGloveData dynamicData;
+            dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.seed = randomInt(1, 1000);
+            dynamicGloveData.push_back(dynamicData);
+            dynamicDataIndex = dynamicGloveData.size() - 1;
         }
     }
 
@@ -167,7 +179,7 @@ public:
     bool isSkin() const noexcept { return !isDeleted() && StaticData::gameItems[itemIndex].isSkin(); }
     bool isGlove() const noexcept { return !isDeleted() && StaticData::gameItems[itemIndex].isGlove(); }
 
-    std::size_t getDynamicDataIndex() const noexcept { assert(isSkin()); return dynamicDataIndex; }
+    std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
     const StaticData::GameItem& get() const noexcept { assert(!isDeleted()); return StaticData::gameItems[itemIndex]; }
 };
@@ -773,8 +785,10 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->quality = 3;
 
             econItem->setPaintKit(static_cast<float>(StaticData::gloves[item.dataIndex].paintKit));
-            econItem->setWear(0.01f);
-            econItem->setSeed(static_cast<float>(1));
+
+            const auto& dynamicData = dynamicGloveData[inventory[i].getDynamicDataIndex()];
+            econItem->setWear(dynamicData.wear);
+            econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
             econItem->weaponId = StaticData::collectibles[item.dataIndex].weaponId;
             if (StaticData::collectibles[item.dataIndex].isOriginal)
@@ -1101,6 +1115,11 @@ json InventoryChanger::toJson() noexcept
             const auto& staticData = StaticData::gloves[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.paintKit;
             itemConfig["Weapon ID"] = staticData.weaponId;
+
+            const auto& dynamicData = dynamicGloveData[item.getDynamicDataIndex()];
+
+            itemConfig["Wear"] = dynamicData.wear;
+            itemConfig["Seed"] = dynamicData.seed;
             break;
         }
         case StaticData::Type::Skin: {
@@ -1221,8 +1240,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 continue;
 
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems.begin(), staticData));
-            
-            // Load dynamic data now
 
             auto& dynamicData = dynamicSkinData[inventory.back().getDynamicDataIndex()];
 
@@ -1283,6 +1300,18 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 continue;
 
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems.begin(), staticData));
+
+            auto& dynamicData = dynamicGloveData[inventory.back().getDynamicDataIndex()];
+
+            if (jsonItem.contains("Wear")) {
+                if (const auto& wear = jsonItem["Wear"]; wear.is_number_float())
+                    dynamicData.wear = wear;
+            }
+
+            if (jsonItem.contains("Seed")) {
+                if (const auto& seed = jsonItem["Seed"]; seed.is_number_integer())
+                    dynamicData.seed = seed;
+            }
         } else if (type == "Music") {
             if (!jsonItem.contains("Music ID") || !jsonItem["Music ID"].is_number_integer())
                 continue;
