@@ -273,6 +273,11 @@ public:
     {
         setAttributeValue(113 + 4 * slot, &stickerID);
     }
+
+    void setStickerWear(int slot, float wear) noexcept
+    {
+        setAttributeValue(114 + 4 * slot, &wear);
+    }
 };
 
 template <typename T>
