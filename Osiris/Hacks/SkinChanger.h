@@ -41,67 +41,6 @@ namespace SkinChanger
 
     // 
 
-    struct GameItem {
-        enum class Type {
-            Sticker,
-            Glove,
-            Skin,
-            Music,
-            Collectible
-        };
-
-        GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
-
-        bool isSticker() const noexcept { return type == Type::Sticker; }
-        bool isSkin() const noexcept { return type == Type::Skin; }
-        bool isGlove() const noexcept { return type == Type::Glove; }
-        bool isMusic() const noexcept { return type == Type::Music; }
-        bool isCollectible() const noexcept { return type == Type::Collectible; }
-
-        Type type;
-        int rarity;
-        std::size_t dataIndex;
-
-        std::string name;
-        std::wstring nameUpperCase;
-        std::string iconPath;
-    };
-
-    const std::vector<GameItem>& getGameItems() noexcept;
-
-    struct StickerData {
-        int stickerID;
-    };
-
-    const StickerData& getStickerData(std::size_t index) noexcept;
-
-    struct GloveData {
-        int paintKit;
-        WeaponId weaponId;
-    };
-
-    const GloveData& getGloveData(std::size_t index) noexcept;
-
-    struct SkinData {
-        int paintKit;
-        WeaponId weaponId;
-    };
-
-    const SkinData& getSkinData(std::size_t index) noexcept;
-
-    struct MusicData {
-        int musicID;
-    };
-
-    const MusicData& getMusicData(std::size_t index) noexcept;
-
-    struct CollectibleData {
-        WeaponId weaponId;
-        bool isOriginal;
-    };
-
-    const CollectibleData& getCollectibleData(std::size_t index) noexcept;
-
     void setStickerApplySlot(int slot) noexcept;
     void setToolToUse(std::uint64_t itemID) noexcept;
     void setItemToApplyTool(std::uint64_t itemID) noexcept;
