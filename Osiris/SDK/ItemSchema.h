@@ -268,6 +268,11 @@ public:
     {
         setAttributeValue(166, &musicID);
     }
+
+    void setStickerID(int slot, int stickerID) noexcept
+    {
+        setAttributeValue(113 + 4 * slot, &stickerID);
+    }
 };
 
 template <typename T>
