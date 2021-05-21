@@ -185,6 +185,8 @@ struct EconMusicDefinition {
     const char* inventoryImage;
 };
 
+class EconItemAttributeDefinition;
+
 class ItemSchema {
 public:
     INCONSTRUCTIBLE(ItemSchema)
@@ -203,6 +205,7 @@ public:
 
     VIRTUAL_METHOD(EconItemDefinition*, getItemDefinitionInterface, 4, (WeaponId id), (this, id))
     VIRTUAL_METHOD(const char*, getRarityName, 19, (uint8_t rarity), (this, rarity))
+    VIRTUAL_METHOD(EconItemAttributeDefinition*, getAttributeDefinitionInterface, 27, (int index), (this, index))
     VIRTUAL_METHOD(int, getItemSetCount, 28, (), (this))
     VIRTUAL_METHOD(EconItemSetDefinition*, getItemSet, 29, (int index), (this, index))
     VIRTUAL_METHOD(EconLootListDefinition*, getLootList, 32, (int index), (this, index))
