@@ -10,6 +10,7 @@
 class ClientMode;
 class CSPlayerInventory;
 class EconItem;
+class EconItemAttributeDefinition;
 class Entity;
 class GameEventDescriptor;
 class GameEventManager;
@@ -117,6 +118,7 @@ public:
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
     void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
+    void(__THISCALL* setDynamicAttributeValue)(EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
