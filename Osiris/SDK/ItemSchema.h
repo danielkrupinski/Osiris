@@ -258,6 +258,11 @@ public:
     {
         setAttributeValue(7, &seed);
     }
+
+    void setWear(float wear) noexcept
+    {
+        setAttributeValue(8, &wear);
+    }
 };
 
 template <typename T>
