@@ -1402,7 +1402,7 @@ static int random(int min, int max) noexcept
     return rand() % (max - min + 1) + min;
 }
 
-static int get_new_animation(const uint32_t model, const int sequence) noexcept
+static int remapKnifeAnim(const uint32_t model, const int sequence) noexcept
 {
     enum Sequence
     {
@@ -1563,7 +1563,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
         return;
 
     if (const auto model = def->getPlayerDisplayModel())
-        sequence = get_new_animation(fnv::hashRuntime(model), sequence);
+        sequence = remapKnifeAnim(fnv::hashRuntime(model), sequence);
 }
 
 StaticData::GameItem::GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ rarity }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
