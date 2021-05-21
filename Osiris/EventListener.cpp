@@ -49,8 +49,8 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::purchaseList(event);
         break;
     case fnv::hash("player_death"):
-        SkinChanger::updateStatTrak(*event);
-        SkinChanger::overrideHudIcon(*event);
+        InventoryChanger::updateStatTrak(*event);
+        InventoryChanger::overrideHudIcon(*event);
         Misc::killMessage(*event);
         Misc::killSound(*event);
         break;

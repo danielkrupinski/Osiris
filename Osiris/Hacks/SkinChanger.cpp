@@ -623,7 +623,7 @@ struct ToEquip {
 
 static std::vector<ToEquip> toEquip;
 
-void SkinChanger::run(FrameStage stage) noexcept
+void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
 
@@ -771,13 +771,13 @@ void SkinChanger::run(FrameStage stage) noexcept
     }
 }
 
-void SkinChanger::scheduleHudUpdate() noexcept
+void InventoryChanger::scheduleHudUpdate() noexcept
 {
     interfaces->cvar->findVar("cl_fullupdate")->changeCallback();
     hudUpdateRequired = true;
 }
 
-void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
+void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
 {
     if (!localPlayer)
         return;
@@ -806,8 +806,12 @@ void SkinChanger::overrideHudIcon(GameEvent& event) noexcept
     }
 }
 
-void SkinChanger::updateStatTrak(GameEvent& event) noexcept
+void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
 {
+    constexpr auto implemented = false;
+    if constexpr (!implemented)
+        return;
+
     if (!localPlayer)
         return;
 
@@ -828,7 +832,7 @@ void SkinChanger::updateStatTrak(GameEvent& event) noexcept
 
 static bool windowOpen = false;
 
-void SkinChanger::menuBarItem() noexcept
+void InventoryChanger::menuBarItem() noexcept
 {
     if (ImGui::MenuItem("Skin changer")) {
         windowOpen = true;
@@ -837,7 +841,7 @@ void SkinChanger::menuBarItem() noexcept
     }
 }
 
-void SkinChanger::tabItem() noexcept
+void InventoryChanger::tabItem() noexcept
 {
     if (ImGui::BeginTabItem("Skin changer")) {
         drawGUI(true);
@@ -941,7 +945,7 @@ namespace ImGui
     }
 }
 
-void SkinChanger::drawGUI(bool contentOnly) noexcept
+void InventoryChanger::drawGUI(bool contentOnly) noexcept
 {
     if (!contentOnly) {
         if (!windowOpen)
@@ -963,7 +967,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
     if (!isInAddMode) {
         ImGui::SameLine();
         if (ImGui::Button("Force Update"))
-            SkinChanger::scheduleHudUpdate();
+            InventoryChanger::scheduleHudUpdate();
     }
 
     constexpr auto rarityColor = [](int rarity) noexcept {

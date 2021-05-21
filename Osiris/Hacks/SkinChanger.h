@@ -19,10 +19,20 @@ class GameEvent;
 
 namespace InventoryChanger
 {
+    // GUI
+    void menuBarItem() noexcept;
+    void tabItem() noexcept;
+    void drawGUI(bool contentOnly) noexcept;
+
     // Config
     json toJson() noexcept;
     void fromJson(const json& j) noexcept;
     void resetConfig() noexcept;
+
+    void run(FrameStage) noexcept;
+    void scheduleHudUpdate() noexcept;
+    void overrideHudIcon(GameEvent& event) noexcept;
+    void updateStatTrak(GameEvent& event) noexcept;
 
     void setStickerApplySlot(int slot) noexcept;
     void setToolToUse(std::uint64_t itemID) noexcept;
@@ -34,17 +44,4 @@ namespace InventoryChanger
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
     void clearInventory() noexcept;
-}
-
-namespace SkinChanger
-{
-    void run(FrameStage) noexcept;
-    void scheduleHudUpdate() noexcept;
-    void overrideHudIcon(GameEvent& event) noexcept;
-    void updateStatTrak(GameEvent& event) noexcept;
-
-    // GUI
-    void menuBarItem() noexcept;
-    void tabItem() noexcept;
-    void drawGUI(bool contentOnly) noexcept;
 }
