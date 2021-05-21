@@ -253,6 +253,11 @@ public:
     {
         setAttributeValue(6, &paintKit);
     }
+
+    void setSeed(float seed) noexcept
+    {
+        setAttributeValue(7, &seed);
+    }
 };
 
 template <typename T>
