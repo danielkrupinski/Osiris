@@ -263,6 +263,11 @@ public:
     {
         setAttributeValue(8, &wear);
     }
+
+    void setMusicID(int musicID) noexcept
+    {
+        setAttributeValue(166, &musicID);
+    }
 };
 
 template <typename T>
