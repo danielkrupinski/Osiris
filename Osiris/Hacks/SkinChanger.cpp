@@ -105,7 +105,7 @@ namespace StaticData
         WeaponId weaponId;
         bool isOriginal;
     };
-    
+
     static std::vector<GameItem> gameItems;
     static std::vector<Sticker> stickers;
     static std::vector<Glove> gloves;
@@ -174,7 +174,7 @@ public:
 
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
-    
+
     bool isSticker() const noexcept { return !isDeleted() && get().isSticker(); }
     bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
     bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
@@ -233,7 +233,7 @@ static void initializeKits() noexcept
             kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
     }
     std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
-    
+
     std::unordered_map<WeaponId, std::wstring> weaponNames;
     for (const auto& kitWeapon : kitsWeapons) {
         if (weaponNames.contains(kitWeapon.weaponId))
@@ -242,7 +242,7 @@ static void initializeKits() noexcept
         if (const auto itemDef = itemSchema->getItemDefinitionInterface(kitWeapon.weaponId))
             weaponNames.emplace(kitWeapon.weaponId, interfaces->localize->findSafe(itemDef->getItemBaseName()));
     }
- 
+
     gameItems.reserve(itemSchema->paintKits.lastAlloc);
     for (const auto& node : itemSchema->paintKits) {
         const auto paintKit = node.value;
@@ -684,23 +684,28 @@ void InventoryChanger::run(FrameStage stage) noexcept
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
     std::uint64_t appliedStickerToItemID = 0;
+    std::uint64_t addedNameTagToItemID = 0;
     if (useToolTime <= memory->globalVars->realtime) {
         if (wasItemCreatedByOsiris(toolToUse) && wasItemCreatedByOsiris(itemToApplyTool)) {
             auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
             const auto& toolItem = tool.get();
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
 
-            if (toolItem.isSticker() && dest.isSkin()) {
-                const auto& sticker = StaticData::stickers[toolItem.dataIndex];
+            if (dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) {
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
-                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.stickerID;
-                    dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
+                    if (toolItem.isSticker()) {
+                        const auto& sticker = StaticData::stickers[toolItem.dataIndex];
+                        dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.stickerID;
+                        dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
+                        appliedStickerToItemID = BASE_ITEMID + inventory.size();
+                    } else if (toolItem.isNameTag()) {
+                        dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTagString;
+                        addedNameTagToItemID = BASE_ITEMID + inventory.size();
+                    }
 
-                    if (const auto stickerView = memory->findOrCreateEconItemViewForItemID(toolToUse))
-                        if (const auto econItem = memory->getSOCData(stickerView))
+                    if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolToUse))
+                        if (const auto econItem = memory->getSOCData(toolView))
                             removeItemFromInventory(localInventory, baseTypeCache, econItem);
-
-                    appliedStickerToItemID = BASE_ITEMID + inventory.size();
 
                     if (const auto econItem = memory->getSOCData(view)) {
                         if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
@@ -716,8 +721,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
                     dest.markAsDeleted();
                     inventory.push_back(std::move(destCopy));
                 }
-            } else if (toolItem.isNameTag() && dest.isSkin()) {
-                
             }
         } else if (wasItemCreatedByOsiris(itemToWearSticker)) {
             constexpr auto wearStep = 0.12f;
@@ -757,7 +760,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             continue;
 
         const auto& item = inventory[i].get();
-       
+
         const auto econItem = memory->createEconItemSharedObject();
         econItem->itemID = BASE_ITEMID + i;
         econItem->originalID = 0;
@@ -823,6 +826,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
     if (appliedStickerToItemID) {
 #ifdef _WIN32
         const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
+        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
+#endif
+    }
+
+    if (addedNameTagToItemID) {
+#ifdef _WIN32
+        const auto event = initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 #endif
     }
@@ -1037,7 +1047,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             IM_COL32(211,  44, 230, 255),
             IM_COL32(235,  75,  75, 255),
             IM_COL32(228, 174,  57, 255)
-        });
+            });
         return rarityColors[static_cast<std::size_t>(rarity) < rarityColors.size() ? rarity : 0];
     };
 
@@ -1206,7 +1216,7 @@ json InventoryChanger::toJson() noexcept
             equipment.push_back(std::move(slot));
         }
     }
-    
+
     return j;
 }
 
@@ -1440,7 +1450,7 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept
             return 0;
 
         ++loadedThisFrame;
-        
+
         const auto start = std::chrono::high_resolution_clock::now();
 
         auto handle = interfaces->baseFileSystem->open(("resource/flash/" + iconpath + (iconpath.find("status_icons") != std::string::npos ? "" : "_large") + ".png").c_str(), "r", "GAME");
@@ -1626,7 +1636,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
     if (!itemView)
         return;
-   
+
     if (const auto soc = memory->getSOCData(itemView); !soc || !wasItemCreatedByOsiris(soc->itemID))
         return;
 
