@@ -622,6 +622,12 @@ void InventoryChanger::setNameTagString(const char* str) noexcept
     nameTagString = str;
 }
 
+static std::uint64_t itemToRemoveNameTag = 0;
+void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
+{
+    itemToRemoveNameTag = itemID;
+}
+
 static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     void* result;

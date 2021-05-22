@@ -40,6 +40,7 @@ namespace InventoryChanger
     void setStickerSlotToWear(int slot) noexcept;
     void setItemToWearSticker(std::uint64_t itemID) noexcept;
     void setNameTagString(const char* str) noexcept;
+    void setItemToRemoveNameTag(std::uint64_t itemID) noexcept;
 
     void clearItemIconTextures() noexcept;
     void clearUnusedItemIconTextures() noexcept;
