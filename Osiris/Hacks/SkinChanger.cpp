@@ -753,7 +753,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         econItem->accountID = localInventory->getAccountID();
         econItem->inventory = baseInvID + i + 1;
         econItem->rarity = item.rarity;
-        econItem->quality = 0;
+        econItem->quality = 4;
 
         if (item.isSticker()) {
             econItem->weaponId = WeaponId::Sticker;
