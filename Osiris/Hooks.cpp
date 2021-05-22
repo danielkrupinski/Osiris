@@ -486,23 +486,25 @@ static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, 
     return result;
 }
 
+static std::uint64_t stringToUint64(const char* str) noexcept
+{
+    std::uint64_t result = 0;
+    std::from_chars(str, str + strlen(str), result);
+    return result;
+}
+
 static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
 
     if (result) {
-        if (RETURN_ADDRESS() == memory->useToolStickerGetArgAsStringReturnAddress) {
-            std::uint64_t itemID = 0;
-            std::from_chars(result, result + strlen(result), itemID);
-            InventoryChanger::setToolToUse(itemID);
-        } else if (RETURN_ADDRESS() == memory->useToolGetArg2AsStringReturnAddress) {
-            std::uint64_t itemID = 0;
-            std::from_chars(result, result + strlen(result), itemID);
-            InventoryChanger::setItemToApplyTool(itemID);
-        } else if (RETURN_ADDRESS() == memory->wearItemStickerGetArgAsStringReturnAddress) {
-            std::uint64_t itemID = 0;
-            std::from_chars(result, result + strlen(result), itemID);
-            InventoryChanger::setItemToWearSticker(itemID);
+        const auto ret = RETURN_ADDRESS();
+        if (ret == memory->useToolStickerGetArgAsStringReturnAddress) {
+            InventoryChanger::setToolToUse(stringToUint64(result));
+        } else if (ret == memory->useToolGetArg2AsStringReturnAddress) {
+            InventoryChanger::setItemToApplyTool(stringToUint64(result));
+        } else if (ret == memory->wearItemStickerGetArgAsStringReturnAddress) {
+            InventoryChanger::setItemToWearSticker(stringToUint64(result));
         }
     }
    
