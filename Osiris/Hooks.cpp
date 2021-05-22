@@ -505,6 +505,8 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
             InventoryChanger::setItemToApplyTool(stringToUint64(result));
         } else if (ret == memory->wearItemStickerGetArgAsStringReturnAddress) {
             InventoryChanger::setItemToWearSticker(stringToUint64(result));
+        } else if (ret == memory->setNameToolStringGetArgAsStringReturnAddress) {
+            InventoryChanger::setNameTagString(result);
         }
     }
    
