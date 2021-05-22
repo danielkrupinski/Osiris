@@ -203,6 +203,7 @@ Memory::Memory() noexcept
     wearItemStickerGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xDD\x5C\x24\x18\xF2\x0F\x2C\x7C\x24?\x85\xFF");
     wearItemStickerGetArgAsStringReturnAddress = wearItemStickerGetArgAsNumberReturnAddress - 80;
     setNameToolStringGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x8B\xF8\xC6\x45\x08?\x33\xC0");
+    clearCustomNameGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xFF\x50\x1C\x8B\xF0\x85\xF6\x74\x21") + 3;
 
     initItemCustomizationNotification = findPattern(CLIENT_DLL, "\x55\x8B\xEC\xA1????\x53\x56\x8B\xF1\x8B\xDA\x8B\x08\x57\x6A\x1C\x8B\x01\xFF\x50\x04\x8B\xF8\x85\xFF\x74\x48");
     findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
