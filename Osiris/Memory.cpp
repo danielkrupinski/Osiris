@@ -291,6 +291,7 @@ Memory::Memory() noexcept
     useToolStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B");
     useToolGetArg2AsStringReturnAddress = useToolStickerGetArgAsStringReturnAddress + 55;
     wearItemStickerGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE");
+    wearItemStickerGetArgAsStringReturnAddress = wearItemStickerGetArgAsNumberReturnAddress - 57;
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
