@@ -808,7 +808,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             if (StaticData::collectibles[item.dataIndex].isOriginal)
                 econItem->quality = 1;
         } else if (item.isNameTag()) {
-            econItem->weaponId = WeaponId{ 1200 };
+            econItem->weaponId = WeaponId::NameTag;
         }
 
         baseTypeCache->addObject(econItem);
