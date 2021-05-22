@@ -757,8 +757,27 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
 #endif
             }
+        } else if (wasItemCreatedByOsiris(itemToRemoveNameTag)) {
+            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToRemoveNameTag)) {
+                auto& item = inventory[static_cast<std::size_t>(itemToRemoveNameTag - BASE_ITEMID)];
+                dynamicSkinData[item.getDynamicDataIndex()].nameTag.clear();
+
+                if (const auto econItem = memory->getSOCData(view)) {
+                    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(econItem->weaponId)) {
+                        if (const auto slotCT = def->getLoadoutSlot(Team::CT); localInventory->getItemInLoadout(Team::CT, slotCT) == view)
+                            toEquip.emplace_back(Team::CT, slotCT, inventory.size());
+                        if (const auto slotTT = def->getLoadoutSlot(Team::TT); localInventory->getItemInLoadout(Team::TT, slotTT) == view)
+                            toEquip.emplace_back(Team::TT, slotTT, inventory.size());
+                    }
+                    removeItemFromInventory(localInventory, baseTypeCache, econItem);
+                }
+
+                auto itemCopy = item;
+                item.markAsDeleted();
+                inventory.push_back(std::move(itemCopy));
+            }
         }
-        itemToWearSticker = toolToUse = itemToApplyTool = 0;
+        itemToRemoveNameTag = itemToWearSticker = toolToUse = itemToApplyTool = 0;
     }
 
     for (std::size_t i = 0; i < inventory.size(); ++i) {
