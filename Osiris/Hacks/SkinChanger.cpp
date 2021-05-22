@@ -1095,6 +1095,8 @@ json InventoryChanger::toJson() noexcept
 {
     json j;
 
+    j["Version"] = 1;
+
     auto& items = j["Items"];
     for (const auto& item : inventory) {
         if (item.isDeleted())
