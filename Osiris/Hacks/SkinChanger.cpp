@@ -60,7 +60,8 @@ namespace StaticData
         Glove,
         Skin,
         Music,
-        Collectible
+        Collectible,
+        NameTag
     };
 
     struct GameItem {
@@ -71,6 +72,7 @@ namespace StaticData
         bool isGlove() const noexcept { return type == Type::Glove; }
         bool isMusic() const noexcept { return type == Type::Music; }
         bool isCollectible() const noexcept { return type == Type::Collectible; }
+        bool isNameTag() const noexcept { return type == Type::NameTag; }
 
         Type type;
         int rarity;
@@ -80,8 +82,6 @@ namespace StaticData
         std::wstring nameUpperCase;
         std::string iconPath;
     };
-
-    const std::vector<GameItem>& getGameItems() noexcept;
 
     struct Sticker {
         int stickerID;
@@ -175,9 +175,9 @@ public:
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
     
-    bool isSticker() const noexcept { return !isDeleted() && StaticData::gameItems[itemIndex].isSticker(); }
-    bool isSkin() const noexcept { return !isDeleted() && StaticData::gameItems[itemIndex].isSkin(); }
-    bool isGlove() const noexcept { return !isDeleted() && StaticData::gameItems[itemIndex].isGlove(); }
+    bool isSticker() const noexcept { return !isDeleted() && get().isSticker(); }
+    bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
+    bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
@@ -305,14 +305,14 @@ static void initializeKits() noexcept
 
     for (const auto& node : itemSchema->itemsSorted) {
         const auto item = node.value;
-        if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Knife") == 0 && item->getRarity() == 6) {
+        const auto itemTypeName = std::string_view{ item->getItemTypeName() };
+
+        if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
             if (const auto image = item->getInventoryImage()) {
                 skins.emplace_back(0, item->getWeaponId());
                 gameItems.emplace_back(Type::Skin, 6, skins.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
             }
-        }
-
-        if (std::strcmp(item->getItemTypeName(), "#CSGO_Type_Collectible") == 0) {
+        } else if (itemTypeName == "#CSGO_Type_Collectible") {
             if (const auto image = item->getInventoryImage()) {
                 const auto isOriginal = (item->getQuality() == 1);
                 collectibles.emplace_back(item->getWeaponId(), isOriginal);
@@ -324,6 +324,9 @@ static void initializeKits() noexcept
                 }
                 gameItems.emplace_back(Type::Collectible, item->getRarity(), collectibles.size() - 1, std::move(name), image);
             }
+        } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
+            if (const auto image = item->getInventoryImage())
+                gameItems.emplace_back(Type::NameTag, item->getRarity(), 0, interfaces->localize->findSafe(item->getItemBaseName()), image);
         }
     }
 
@@ -681,7 +684,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             const auto& toolItem = tool.get();
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
 
-            if (toolItem.isSticker()) {
+            if (toolItem.isSticker() && dest.isSkin()) {
                 const auto& sticker = StaticData::stickers[toolItem.dataIndex];
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
                     dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.stickerID;
@@ -707,6 +710,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
                     dest.markAsDeleted();
                     inventory.push_back(std::move(destCopy));
                 }
+            } else if (toolItem.isNameTag() && dest.isSkin()) {
+                
             }
         } else if (wasItemCreatedByOsiris(itemToWearSticker)) {
             constexpr auto wearStep = 0.12f;
@@ -793,6 +798,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->weaponId = StaticData::collectibles[item.dataIndex].weaponId;
             if (StaticData::collectibles[item.dataIndex].isOriginal)
                 econItem->quality = 1;
+        } else if (item.isNameTag()) {
+            econItem->weaponId = WeaponId{ 1200 };
         }
 
         baseTypeCache->addObject(econItem);
