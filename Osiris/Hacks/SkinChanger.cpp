@@ -945,7 +945,7 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
 
 namespace ImGui
 {
-    static bool SkinSelectable(const char* label, const std::string& iconPath, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
+    static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -954,6 +954,7 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
+        const char* label = item.name.c_str();
         // Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
         ImGuiID id = window->GetID(label);
         ImVec2 label_size = CalcTextSize(label, NULL, true);
@@ -1021,7 +1022,7 @@ namespace ImGui
 
         RenderTextClipped(text_min + ImVec2{ bulletRadius * 2.0f + 4.0f, 0.0f }, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
 
-        if (const auto icon = getItemIconTexture(iconPath)) {
+        if (const auto icon = getItemIconTexture(item.iconPath)) {
             window->DrawList->AddImage(icon, bb.Min, bb.Min + iconSizeSmall, { 0.0f, 0.0f }, { 1.0f, 1.0f }, GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
             if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
@@ -1113,7 +1114,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     continue;
                 ImGui::PushID(i);
                 const auto selected = selectedToAdd.contains(i);
-                if (ImGui::SkinSelectable(gameItems[i].name.c_str(), gameItems[i].iconPath, { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
+                if (ImGui::SkinSelectable(gameItems[i], { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
                     if (selected)
                         selectedToAdd.erase(i);
                     else
