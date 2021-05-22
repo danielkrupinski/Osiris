@@ -616,6 +616,12 @@ void InventoryChanger::setItemToWearSticker(std::uint64_t itemID) noexcept
     useToolTime = memory->globalVars->realtime + randomFloat(0.18f, 0.48f);
 }
 
+static std::string nameTagString;
+void InventoryChanger::setNameTagString(const char* str) noexcept
+{
+    nameTagString = str;
+}
+
 static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     void* result;
