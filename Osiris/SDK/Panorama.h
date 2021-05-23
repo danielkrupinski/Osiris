@@ -16,7 +16,8 @@ public:
 };
 
 struct PanoramaEventRegistration {
-    PAD(8)
+    int numberOfArgs;
+    PAD(4)
     void* (__CDECL* makeEvent)(void*);
     PAD(WIN32_LINUX(28, 56))
 };
