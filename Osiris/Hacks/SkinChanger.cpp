@@ -630,23 +630,12 @@ void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
 
 static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
-    void* result;
-
-#ifdef _WIN32
-    const auto function = memory->initItemCustomizationNotification;
-    __asm {
-        push itemID
-        push typeStr
-        xor edx, edx
-        xor ecx, ecx
-        call function
-        add esp, 8
-        mov result, eax
+    if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
+        std::string args; args += "0,'"; args += typeStr; args += "','"; args += itemID; args += '\'';
+        const char* dummy;
+        return memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy);
     }
-#else
-
-#endif
-    return result;
+    return nullptr;
 }
 
 static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
