@@ -741,10 +741,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
             sendInventoryUpdatedEvent();
 
             if (shouldRemove) {
-#ifdef _WIN32
                 const auto event = initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
                 interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-#endif
             }
         } else if (wasItemCreatedByOsiris(itemToRemoveNameTag)) {
             if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToRemoveNameTag)) {
@@ -838,17 +836,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
     toEquip.clear();
 
     if (appliedStickerToItemID) {
-#ifdef _WIN32
         const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-#endif
     }
 
     if (addedNameTagToItemID) {
-#ifdef _WIN32
         const auto event = initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
         interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-#endif
     }
 }
 
