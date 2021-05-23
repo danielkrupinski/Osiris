@@ -92,9 +92,6 @@
     <ClCompile Include="Hacks\Visuals.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\SkinChanger.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Backtrack.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
@@ -219,6 +216,9 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Sound.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\InventoryChanger.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
   </ItemGroup>
@@ -360,9 +360,6 @@
     </ClInclude>
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\SkinChanger.h">
-      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\FrameStage.h">
       <Filter>SDK</Filter>
@@ -561,6 +558,9 @@
     </ClInclude>
     <ClInclude Include="SDK\Inconstructible.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\InventoryChanger.h">
+      <Filter>Hacks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
