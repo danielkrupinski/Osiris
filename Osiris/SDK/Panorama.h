@@ -19,7 +19,8 @@ struct PanoramaEventRegistration {
     int numberOfArgs;
     PAD(4)
     void* (__CDECL* makeEvent)(void*);
-    PAD(WIN32_LINUX(28, 56))
+    void* (__CDECL* createEventFromString)(void*, const char* args, const char** result);
+    PAD(WIN32_LINUX(24, 48))
 };
 
 class UIEngine {
