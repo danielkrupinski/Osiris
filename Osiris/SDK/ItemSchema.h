@@ -246,7 +246,11 @@ public:
     void setAttributeValue(int index, void* value) noexcept
     {
         if (const auto attribute = memory->itemSystem()->getItemSchema()->getAttributeDefinitionInterface(index))
+#ifdef _WIN32
             memory->setDynamicAttributeValue(this, attribute, value);
+#else
+            memory->setDynamicAttributeValue(nullptr, this, attribute, value);
+#endif
     }
 
     void setPaintKit(float paintKit) noexcept

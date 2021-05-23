@@ -119,7 +119,11 @@ public:
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
     void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
+#ifdef _WIN32
     void(__THISCALL* setDynamicAttributeValue)(EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
+#else
+    void(*setDynamicAttributeValue)(void*, EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
+#endif
 
     short makePanoramaSymbol(const char* name) const noexcept
     {

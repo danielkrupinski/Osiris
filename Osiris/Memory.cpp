@@ -293,7 +293,8 @@ Memory::Memory() noexcept
     wearItemStickerGetArgAsStringReturnAddress = wearItemStickerGetArgAsNumberReturnAddress - 57;
     setNameToolStringGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4");
     clearCustomNameGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4");
-
+    setDynamicAttributeValue = reinterpret_cast<decltype(setDynamicAttributeValue)>(findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") - 95);
+    
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
 }
