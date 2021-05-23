@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "Config.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "Interfaces.h"
 #include "Netvars.h"
 

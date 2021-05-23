@@ -40,7 +40,7 @@
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
@@ -575,7 +575,7 @@ static void swapWindow(SDL_Window* window) noexcept
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     GameData::clearUnusedAvatars();
-    SkinChanger::clearUnusedItemIconTextures();
+    InventoryChanger::clearUnusedItemIconTextures();
 
     hooks->swapWindow(window);
 }
@@ -625,9 +625,9 @@ void Hooks::install() noexcept
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, drawModelExecute);
 
-	panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
-	panoramaMarshallHelper.hookAt(5, getArgAsNumber);
-	panoramaMarshallHelper.hookAt(7, getArgAsString);
+    panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+    panoramaMarshallHelper.hookAt(5, getArgAsNumber);
+    panoramaMarshallHelper.hookAt(7, getArgAsString);
 
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);

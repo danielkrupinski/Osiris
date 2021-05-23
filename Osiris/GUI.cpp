@@ -23,7 +23,7 @@
 #include "Config.h"
 #include "ConfigStructs.h"
 #include "Hacks/Misc.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "Helpers.h"
 #include "Hooks.h"
 #include "Interfaces.h"

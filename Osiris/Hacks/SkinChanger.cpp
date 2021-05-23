@@ -21,7 +21,7 @@
 #include "../imgui/imgui_stdlib.h"
 #include "../Interfaces.h"
 #include "../Netvars.h"
-#include "SkinChanger.h"
+#include "InventoryChanger.h"
 #include "../Config.h"
 #include "../Texture.h"
 #include "../fnv.h"
