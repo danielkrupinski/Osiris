@@ -101,7 +101,6 @@ public:
     std::uintptr_t demoFileEndReached;
     Entity** gameRules;
     InventoryManager* inventoryManager;
-    void* gcClientSystem;
     std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
     bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
     void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
