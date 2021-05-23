@@ -1222,7 +1222,10 @@ json InventoryChanger::toJson() noexcept
                     slot["NOTEAM"] = static_cast<std::size_t>(soc->itemID - BASE_ITEMID - std::count_if(inventory.begin(), inventory.begin() + static_cast<std::size_t>(soc->itemID - BASE_ITEMID), [](const auto& item) { return item.isDeleted(); }));
             }
 
-            equipment.push_back(std::move(slot));
+            if (!slot.empty()) {
+                slot["Slot"] = i;
+                equipment.push_back(std::move(slot));
+            }
         }
     }
 
@@ -1384,20 +1387,26 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
     for (std::size_t i = 0; i < equipment.size(); ++i) {
         const auto& equipped = equipment[i];
+        if (!equipped.contains("Slot"))
+            continue;
+
+        const auto& slot = equipped["Slot"];
+        if (!slot.is_number_integer())
+            continue;
 
         if (equipped.contains("CT")) {
             if (const auto& ct = equipped["CT"]; ct.is_number_integer() && ct < inventory.size())
-                toEquip.emplace_back(Team::CT, static_cast<int>(i), ct);
+                toEquip.emplace_back(Team::CT, slot, ct);
         }
 
         if (equipped.contains("TT")) {
             if (const auto& tt = equipped["TT"]; tt.is_number_integer() && tt < inventory.size())
-                toEquip.emplace_back(Team::TT, static_cast<int>(i), tt);
+                toEquip.emplace_back(Team::TT, slot, tt);
         }
 
         if (equipped.contains("NOTEAM")) {
             if (const auto& noteam = equipped["NOTEAM"]; noteam.is_number_integer() && noteam < inventory.size())
-                toEquip.emplace_back(Team::None, static_cast<int>(i), noteam);
+                toEquip.emplace_back(Team::None, slot, noteam);
         }
     }
 }
