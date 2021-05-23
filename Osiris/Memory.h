@@ -112,7 +112,6 @@ public:
     std::uintptr_t setNameToolStringGetArgAsStringReturnAddress;
     std::uintptr_t clearCustomNameGetArgAsStringReturnAddress;
 
-    std::uintptr_t initItemCustomizationNotification;
     std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
     void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
     std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
