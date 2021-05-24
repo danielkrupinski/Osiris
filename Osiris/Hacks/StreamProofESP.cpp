@@ -1,3 +1,11 @@
+#include <algorithm>
+#include <array>
+#include <forward_list>
+#include <limits>
+#include <numbers>
+#include <unordered_map>
+#include <vector>
+
 #define NOMINMAX
 #include "StreamProofESP.h"
 
@@ -6,15 +14,12 @@
 #include "../imgui/imgui_internal.h"
 
 #include "../Config.h"
-#include "../fnv.h"
 #include "../GameData.h"
 #include "../Helpers.h"
+#include "../InputUtil.h"
 #include "../SDK/Engine.h"
 #include "../SDK/GlobalVars.h"
 #include "../Memory.h"
-
-#include <limits>
-#include <tuple>
 
 static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = true) noexcept
 {
@@ -305,8 +310,9 @@ static void drawHealthBar(const HealthBar& config, const ImVec2& pos, float heig
         max.y += height / 2.0f;
         drawList->AddRectFilledMultiColor(ImFloor(min), ImFloor(max), yellow, yellow, red, red);
     } else {
-        drawList->AddRectFilled(pos + ImVec2{ 1.0f, 1.0f }, pos + ImVec2{ width + 1.0f, height + 1.0f }, Helpers::calculateColor(0, 0, 0, 255));
-        drawList->AddRectFilled(pos, pos + ImVec2{ width, height }, Helpers::calculateColor(config));
+        const auto color = config.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config);
+        drawList->AddRectFilled(pos + ImVec2{ 1.0f, 1.0f }, pos + ImVec2{ width + 1.0f, height + 1.0f }, color & IM_COL32_A_MASK);
+        drawList->AddRectFilled(pos, pos + ImVec2{ width, height }, color);
     }
 
     drawList->PopClipRect();
@@ -463,6 +469,8 @@ static bool renderPlayerEsp(const PlayerData& playerData, const Player& playerCo
     if (playerData.immune)
         Helpers::setAlphaFactor(0.5f);
 
+    Helpers::setAlphaFactor(Helpers::getAlphaFactor() * playerData.fadingAlpha());
+
     renderPlayerBox(playerData, playerConfig);
     drawPlayerSkeleton(playerConfig.skeleton, playerData.bones);
 
@@ -538,7 +546,7 @@ void StreamProofESP::render() noexcept
         renderProjectileEsp(projectile, config->streamProofESP.projectiles["All"], config->streamProofESP.projectiles[projectile.name], projectile.name);
 
     for (const auto& player : GameData::players()) {
-        if (player.dormant || !player.alive || !player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.inViewFrustum)
             continue;
 
         auto& playerConfig = player.enemy ? config->streamProofESP.enemies : config->streamProofESP.allies;

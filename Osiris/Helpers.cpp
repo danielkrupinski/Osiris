@@ -1,11 +1,14 @@
+#include <algorithm>
+#include <array>
 #include <cmath>
+#include <cstdlib>
+#include <cstring>
 #include <cwctype>
 #include <fstream>
-#include <tuple>
+#include <string_view>
 
 #include "imgui/imgui.h"
 
-#include "Config.h"
 #include "ConfigStructs.h"
 #include "GameData.h"
 #include "Helpers.h"
@@ -103,7 +106,7 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
 
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    std::transform(str.begin(), str.end(), str.begin(), [](wchar_t w) -> wchar_t {
+    std::ranges::transform(str, str.begin(), [](wchar_t w) -> wchar_t {
         if (w >= 0 && w <= 127) {
             if (w >= 'a' && w <= 'z')
                 return w - ('a' - 'A');

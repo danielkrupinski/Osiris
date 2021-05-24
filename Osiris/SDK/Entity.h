@@ -1,16 +1,16 @@
 #pragma once
 
+#include <algorithm>
+#include <functional>
+#include <string>
+
 #include "AnimState.h"
-#include "ClientClass.h"
-#include "Cvar.h"
 #include "Engine.h"
 #include "EngineTrace.h"
-#include "EntityList.h"
+#include "Inconstructible.h"
 #include "LocalPlayer.h"
 #include "matrix3x4.h"
-#include "ModelRender.h"
-#include "Utils.h"
-#include "VarMapping.h"
+#include "Platform.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 #include "WeaponData.h"
@@ -21,9 +21,10 @@
 #include "../Memory.h"
 #include "../Netvars.h"
 
-#include <functional>
-
 struct AnimState;
+struct ClientClass;
+struct Model;
+struct VarMap;
 
 enum class MoveType {
     NOCLIP = 8,
@@ -49,12 +50,16 @@ enum class Team {
 
 class Collideable {
 public:
+    INCONSTRUCTIBLE(Collideable)
+
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
 class Entity {
 public:
+    INCONSTRUCTIBLE(Entity)
+
     VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
@@ -313,6 +318,8 @@ public:
 
 class PlantedC4 : public Entity {
 public:
+    INCONSTRUCTIBLE(PlantedC4)
+
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
     NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)

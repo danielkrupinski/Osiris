@@ -1,13 +1,12 @@
 #pragma once
 
-#include <vector>
+#include <array>
 
 #include "../Config.h"
 
 class Entity;
 struct ModelRenderInfo;
 class matrix3x4;
-class Material;
 
 class Chams {
 public:

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Config.h"
 #include "imgui/imgui.h"
 
 struct Color4;
 struct ColorToggle;
+struct ColorToggle3;
 struct ColorToggleRounding;
 struct ColorToggleThickness;
 struct ColorToggleThicknessRounding;

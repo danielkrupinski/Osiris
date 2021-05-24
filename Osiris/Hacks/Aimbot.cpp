@@ -1,8 +1,18 @@
+#include <algorithm>
+#include <array>
+#include <initializer_list>
+#include <memory>
+
 #include "Aimbot.h"
 #include "../Config.h"
+#include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/Engine.h"
+#include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"

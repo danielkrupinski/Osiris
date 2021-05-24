@@ -2,10 +2,13 @@
 
 #include <tuple>
 
+#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class MaterialVar {
 public:
+    INCONSTRUCTIBLE(MaterialVar)
+
     VIRTUAL_METHOD(void, setValue, 4, (float value), (this, value))
     VIRTUAL_METHOD(void, setVectorValue, WIN32_LINUX(11, 12), (float x, float y, float z), (this, x, y, z))
     VIRTUAL_METHOD(void, setVecComponentValue, 26, (float value, int component), (this, value, component))
@@ -19,6 +22,8 @@ enum class MaterialVarFlag {
 
 class Material {
 public:
+    INCONSTRUCTIBLE(Material)
+
     VIRTUAL_METHOD(const char*, getName, 0, (), (this))
     VIRTUAL_METHOD(const char*, getTextureGroupName, 1, (), (this))
     VIRTUAL_METHOD(MaterialVar*, findVar, 11, (const char* name, bool* found = nullptr, bool complain = true), (this, name, found, complain))

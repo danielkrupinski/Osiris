@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 
 #include "../SDK/Platform.h"
@@ -26,5 +27,5 @@ public:
 private:
     void* base;
     std::size_t length;
-    std::unique_ptr<uintptr_t[]> oldVmt;
+    std::unique_ptr<std::uintptr_t[]> oldVmt;
 };

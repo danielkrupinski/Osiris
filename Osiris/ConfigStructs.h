@@ -6,6 +6,7 @@
 #include <string>
 
 #include "nlohmann/json.hpp"
+#include "JsonForward.h"
 #include "InputUtil.h"
 
 enum class WeaponId : short;
@@ -168,7 +169,6 @@ struct BulletTracers : ColorToggle {
     BulletTracers() : ColorToggle{ { 0.0f, 0.75f, 1.0f, 1.0f } } {}
 };
 
-using json = nlohmann::basic_json<std::map, std::vector, std::string, bool, std::int64_t, std::uint64_t, float>;
 using value_t = json::value_t;
 
 // WRITE macro requires:

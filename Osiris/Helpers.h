@@ -1,13 +1,12 @@
 #pragma once
 
-#include <array>
 #include <numbers>
 #include <string>
 #include <vector>
 
 #include "imgui/imgui.h"
-#include "Config.h"
 
+struct Color3;
 struct Color4;
 
 namespace Helpers

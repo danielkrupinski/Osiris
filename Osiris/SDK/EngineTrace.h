@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+#include "Inconstructible.h"
 #include "Vector.h"
 #include "VirtualMethod.h"
 
@@ -104,6 +105,8 @@ struct Trace {
 
 class EngineTrace {
 public:
+    INCONSTRUCTIBLE(EngineTrace)
+
     VIRTUAL_METHOD(int, getPointContents, 0, (const Vector& absPosition, int contentsMask), (this, std::cref(absPosition), contentsMask, nullptr))
     VIRTUAL_METHOD(void, _traceRay, 5, (const Ray& ray, unsigned int mask, const TraceFilter& filter, Trace& trace), (this, std::cref(ray), mask, std::cref(filter), std::ref(trace)))
 
