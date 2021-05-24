@@ -312,10 +312,7 @@ public:
 
     SharedObjectTypeCache<T>* findBaseTypeCache(int classID) noexcept
     {
-        for (int i = 0; i < sharedObjectTypeCaches.size; ++i)
-            if (sharedObjectTypeCaches[i]->classID == classID)
-                return sharedObjectTypeCaches[i];
-        return nullptr;
+        return memory->createBaseTypeCache(this, classID);
     }
 };
 
