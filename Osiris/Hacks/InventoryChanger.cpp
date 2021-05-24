@@ -459,8 +459,8 @@ static void applyKnife(Entity* local) noexcept
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
-        // FIXME: std::strncpy IS UNSAFE!!!
-        std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
+        if (dynamicData.nameTag.length() < 32)
+            std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
 
         if (definitionIndex != itemData.weaponId) {
             definitionIndex = itemData.weaponId;
@@ -544,8 +544,8 @@ static void applyWeapons(Entity* local) noexcept
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
-        // FIXME: std::strncpy IS UNSAFE!!!
-        std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
+        if (dynamicData.nameTag.length() < 32)
+            std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
 
         for (std::size_t j = 0; j < dynamicData.stickers.size(); ++j) {
             const auto& sticker = dynamicData.stickers[j];
@@ -1109,6 +1109,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::EndChild();
     } else {
+        /*
         for (std::size_t i = 0; i < inventory.size(); ++i) {
             if (inventory[i].isDeleted())
                 continue;
@@ -1117,6 +1118,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             ImGui::Image(getItemIconTexture(inventory[i].get().iconPath), { 100.0f, 75.0f });
             ImGui::PopID();
         }
+        */
     }
 
     if (!contentOnly)
