@@ -84,24 +84,34 @@ namespace StaticData
     };
 
     struct Sticker {
+        Sticker(int stickerID) : stickerID{ stickerID } {}
+
         int stickerID;
     };
 
     struct Glove {
+        Glove(int paintKit, WeaponId weaponId) : paintKit{ paintKit }, weaponId{ weaponId } {}
+
         int paintKit;
         WeaponId weaponId;
     };
 
     struct Skin {
+        Skin(int paintKit, WeaponId weaponId) : paintKit{ paintKit }, weaponId{ weaponId } {}
+
         int paintKit;
         WeaponId weaponId;
     };
 
     struct Music {
+        Music(int musicID) : musicID{ musicID } {}
+
         int musicID;
     };
 
     struct Collectible {
+        Collectible(WeaponId weaponId, bool isOriginal) : weaponId{ weaponId }, isOriginal{ isOriginal } {}
+
         WeaponId weaponId;
         bool isOriginal;
     };
