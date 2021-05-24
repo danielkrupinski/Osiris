@@ -45,6 +45,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "BACKSPACE", WIN32_LINUX(VK_BACK, SDL_SCANCODE_BACKSPACE) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
+    { "CAPSLOCK", WIN32_LINUX(VK_CAPITAL, SDL_SCANCODE_CAPSLOCK) },
     { "D", WIN32_LINUX('D', SDL_SCANCODE_D) },
     { "DECIMAL", WIN32_LINUX(VK_DECIMAL, SDL_SCANCODE_KP_DECIMAL) },
     { "DELETE", WIN32_LINUX(VK_DELETE, SDL_SCANCODE_DELETE) },
@@ -128,6 +129,7 @@ static constexpr auto keyMap = std::to_array<Key>({
 });
 
 static_assert(keyMap.size() == KeyBind::MAX);
+static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
 {

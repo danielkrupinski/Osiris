@@ -69,6 +69,112 @@
 * SOFTWARE.
 */
 
+struct sticker_setting
+{
+    void update()
+    {
+        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+    }
+
+    void onLoad()
+    {
+        const auto& kits = SkinChanger::getStickerKits();
+        const auto it = std::find_if(kits.begin(), kits.end(), [this](const auto& k) { return k.id == kit; });
+        kit_vector_index = it != SkinChanger::getStickerKits().end() ? std::distance(kits.begin(), it) : 0;
+        kit = SkinChanger::getStickerKits()[kit_vector_index].id;
+    }
+
+    auto operator==(const sticker_setting& o) const
+    {
+        return kit == o.kit
+            && kit_vector_index == o.kit_vector_index
+            && wear == o.wear
+            && scale == o.scale
+            && rotation == o.rotation;
+    }
+
+    int kit = 0;
+    int kit_vector_index = 0;
+    float wear = (std::numeric_limits<float>::min)();
+    float scale = 1.f;
+    float rotation = 0.f;
+};
+
+struct item_setting {
+    void update()
+    {
+        itemId = SkinChanger::weapon_names[itemIdIndex].definition_index;
+        quality = SkinChanger::getQualities()[entity_quality_vector_index].index;
+
+        if (itemId == WeaponId::GloveT) {
+            paintKit = SkinChanger::getGloveKits()[paint_kit_vector_index].id;
+            definition_override_index = (int)SkinChanger::getGloveTypes()[definition_override_vector_index].id;
+        } else {
+            paintKit = SkinChanger::getSkinKits()[paint_kit_vector_index].id;
+            definition_override_index = (int)SkinChanger::getKnifeTypes()[definition_override_vector_index].id;
+        }
+
+        for (auto& sticker : stickers)
+            sticker.update();
+    }
+
+    void onLoad()
+    {
+        {
+            const auto it = std::find_if(std::begin(SkinChanger::weapon_names), std::end(SkinChanger::weapon_names), [this](const auto& k) { return k.definition_index == itemId; });
+            itemIdIndex = it != std::end(SkinChanger::weapon_names) ? std::distance(std::begin(SkinChanger::weapon_names), it) : 0;
+        }
+
+        {
+            const auto& qualities = SkinChanger::getQualities();
+            const auto it = std::find_if(qualities.begin(), qualities.end(), [this](const auto& k) { return k.index == quality; });
+            entity_quality_vector_index = it != qualities.end() ? std::distance(qualities.begin(), it) : 0;
+        }
+
+        if (itemId == WeaponId::GloveT) {
+            {
+                const auto it = std::find_if(SkinChanger::getGloveKits().begin(), SkinChanger::getGloveKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                paint_kit_vector_index = it != SkinChanger::getGloveKits().end() ? std::distance(SkinChanger::getGloveKits().begin(), it) : 0;
+            }
+
+            {
+                const auto it = std::find_if(SkinChanger::getGloveTypes().begin(), SkinChanger::getGloveTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                definition_override_vector_index = it != SkinChanger::getGloveTypes().end() ? std::distance(SkinChanger::getGloveTypes().begin(), it) : 0;
+            }
+        } else {
+            {
+                const auto it = std::find_if(SkinChanger::getSkinKits().begin(), SkinChanger::getSkinKits().end(), [this](const auto& k) { return k.id == paintKit; });
+                paint_kit_vector_index = it != SkinChanger::getSkinKits().end() ? std::distance(SkinChanger::getSkinKits().begin(), it) : 0;
+            }
+
+            {
+                const auto it = std::find_if(SkinChanger::getKnifeTypes().begin(), SkinChanger::getKnifeTypes().end(), [this](const auto& k) { return (int)k.id == definition_override_index; });
+                definition_override_vector_index = it != SkinChanger::getKnifeTypes().end() ? std::distance(SkinChanger::getKnifeTypes().begin(), it) : 0;
+            }
+        }
+
+        for (auto& sticker : stickers)
+            sticker.onLoad();
+    }
+
+    bool enabled = false;
+    int itemIdIndex = 0;
+    WeaponId itemId{};
+    int entity_quality_vector_index = 0;
+    int quality = 0;
+    int paint_kit_vector_index = 0;
+    int paintKit = 0;
+    int definition_override_vector_index = 0;
+    int definition_override_index = 0;
+    int seed = 0;
+    int stat_trak = -1;
+    float wear = (std::numeric_limits<float>::min)();
+    char custom_name[32] = "";
+    std::array<sticker_setting, 5> stickers;
+};
+
+static std::array<item_setting, 36> skinChangerConfig;
+
 static constexpr auto is_knife(WeaponId id)
 {
     return (id >= WeaponId::Bayonet && id < WeaponId::GloveStuddedBloodhound) || id == WeaponId::KnifeT || id == WeaponId::Knife;
@@ -76,8 +182,8 @@ static constexpr auto is_knife(WeaponId id)
 
 static item_setting* get_by_definition_index(WeaponId weaponId)
 {
-    const auto it = std::ranges::find(config->skinChanger, weaponId, &item_setting::itemId);
-    return (it == config->skinChanger.end() || !it->enabled) ? nullptr : &*it;
+    const auto it = std::ranges::find(skinChangerConfig, weaponId, &item_setting::itemId);
+    return (it == skinChangerConfig.end() || !it->enabled) ? nullptr : &*it;
 }
 
 static std::vector<SkinChanger::PaintKit> skinKits{ { 0, "-" } };
@@ -558,7 +664,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
         }, nullptr, SkinChanger::weapon_names.size(), 5);
     ImGui::PopItemWidth();
 
-    auto& selected_entry = config->skinChanger[itemIndex];
+    auto& selected_entry = skinChangerConfig[itemIndex];
     selected_entry.itemIdIndex = itemIndex;
 
     constexpr auto rarityColor = [](int rarity) {
@@ -672,7 +778,7 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
             for (int i = 0; i < 5; ++i) {
                 ImGui::PushID(i);
 
-                const auto kit_vector_index = config->skinChanger[itemIndex].stickers[i].kit_vector_index;
+                const auto kit_vector_index = skinChangerConfig[itemIndex].stickers[i].kit_vector_index;
                 const std::string text = '#' + std::to_string(i + 1) + "  " + SkinChanger::getStickerKits()[kit_vector_index].name;
 
                 if (ImGui::Selectable(text.c_str(), i == selectedStickerSlot))
@@ -741,6 +847,79 @@ void SkinChanger::drawGUI(bool contentOnly) noexcept
 
     if (!contentOnly)
         ImGui::End();
+}
+
+static void to_json(json& j, const sticker_setting& o)
+{
+    const sticker_setting dummy;
+
+    WRITE("Kit", kit);
+    WRITE("Wear", wear);
+    WRITE("Scale", scale);
+    WRITE("Rotation", rotation);
+}
+
+static void to_json(json& j, const item_setting& o)
+{
+    const item_setting dummy;
+
+    WRITE("Enabled", enabled);
+    WRITE("Definition index", itemId);
+    WRITE("Quality", quality);
+    WRITE("Paint Kit", paintKit);
+    WRITE("Definition override", definition_override_index);
+    WRITE("Seed", seed);
+    WRITE("StatTrak", stat_trak);
+    WRITE("Wear", wear);
+    if (o.custom_name[0])
+        j["Custom name"] = o.custom_name;
+    WRITE("Stickers", stickers);
+}
+
+json SkinChanger::toJson() noexcept
+{
+    return skinChangerConfig;
+}
+
+static void from_json(const json& j, sticker_setting& s)
+{
+    read(j, "Kit", s.kit);
+    read(j, "Wear", s.wear);
+    read(j, "Scale", s.scale);
+    read(j, "Rotation", s.rotation);
+
+    s.onLoad();
+}
+
+static void from_json(const json& j, item_setting& i)
+{
+    read(j, "Enabled", i.enabled);
+    read(j, "Definition index", i.itemId);
+    read(j, "Quality", i.quality);
+    read(j, "Paint Kit", i.paintKit);
+    read(j, "Definition override", i.definition_override_index);
+    read(j, "Seed", i.seed);
+    read(j, "StatTrak", i.stat_trak);
+    read(j, "Wear", i.wear);
+    read(j, "Custom name", i.custom_name, sizeof(i.custom_name));
+    read(j, "Stickers", i.stickers);
+
+    i.onLoad();
+}
+
+void SkinChanger::fromJson(const json& j) noexcept
+{
+    if (j.type() == value_t::array && j.size() == skinChangerConfig.size()) {
+        for (std::size_t i = 0; i < j.size(); ++i) {
+            if (!j[i].empty())
+                j[i].get_to(skinChangerConfig[i]);
+        }
+    }
+}
+
+void SkinChanger::resetConfig() noexcept
+{
+    skinChangerConfig = {};
 }
 
 const std::vector<SkinChanger::PaintKit>& SkinChanger::getSkinKits() noexcept
