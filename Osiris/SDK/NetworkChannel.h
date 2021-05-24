@@ -7,8 +7,8 @@ class NetworkChannel {
 public:
     INCONSTRUCTIBLE(NetworkChannel)
 
-    VIRTUAL_METHOD(float, getLatency, IS_WIN32() ? 9 : 8, (int flow), (this, flow))
+    VIRTUAL_METHOD(float, getLatency, 9, (int flow), (this, flow))
 
-    std::byte pad[WIN32_LINUX(43, 63)];
+    PAD(IS_WIN32() ? 44 : 64)
     int chokedPackets;
 };
