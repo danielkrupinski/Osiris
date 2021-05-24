@@ -655,6 +655,8 @@ static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTy
 }
 
 struct ToEquip {
+    ToEquip(Team team, int slot, std::size_t index) : team{ team }, slot{ slot }, index{ index } {}
+
     Team team;
     int slot;
     std::size_t index;
