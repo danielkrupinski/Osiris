@@ -8,6 +8,7 @@
 #include "SDK/Platform.h"
 
 class ClientMode;
+template <typename T> class ClientSharedObjectCache;
 class CSPlayerInventory;
 class EconItem;
 class EconItemAttributeDefinition;
@@ -23,6 +24,7 @@ class MoveData;
 class PanoramaMarshallHelper;
 class PlantedC4;
 class PlayerResource;
+template <typename T> class SharedObjectTypeCache;
 class ViewRender;
 class ViewRenderBeams;
 class WeaponSystem;
@@ -123,6 +125,7 @@ public:
 #else
     void(*setDynamicAttributeValue)(void*, EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
 #endif
+    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
