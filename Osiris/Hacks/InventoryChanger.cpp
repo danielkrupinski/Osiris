@@ -43,6 +43,7 @@
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/ModelInfo.h"
 #include "../SDK/Panorama.h"
+#include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
 
@@ -188,6 +189,7 @@ public:
     bool isSticker() const noexcept { return !isDeleted() && get().isSticker(); }
     bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
     bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
+    bool isMusic() const noexcept { return !isDeleted() && get().isMusic(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
@@ -664,6 +666,28 @@ struct ToEquip {
 
 static std::vector<ToEquip> toEquip;
 
+static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
+{
+    const auto pr = *memory->playerResource;
+    if (pr == nullptr)
+        return;
+
+    const auto itemView = localInventory.getItemInLoadout(Team::None, 54);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isMusic())
+        return;
+
+    const auto& itemData = StaticData::music[item.get().dataIndex];
+    pr->musicID()[localPlayer->index()] = itemData.musicID;
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -687,6 +711,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
     const auto baseTypeCache = localInventory->getItemBaseTypeCache();
     if (!baseTypeCache)
         return;
+
+    applyMusicKit(*localInventory);
 
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
