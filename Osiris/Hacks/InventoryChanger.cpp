@@ -668,6 +668,9 @@ static std::vector<ToEquip> toEquip;
 
 static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
 {
+    if (!localPlayer)
+        return;
+
     const auto pr = *memory->playerResource;
     if (pr == nullptr)
         return;
