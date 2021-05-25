@@ -21,9 +21,10 @@ public:
 
     auto getIPlayerResource() noexcept
     {
-        return reinterpret_cast<IPlayerResource*>(uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68));
+        return reinterpret_cast<IPlayerResource*>(std::uintptr_t(this) + WIN32_LINUX(0x9D8, 0xF68));
     }
 
     NETVAR(bombsiteCenterA, "CCSPlayerResource", "m_bombsiteCenterA", Vector)
     NETVAR(bombsiteCenterB, "CCSPlayerResource", "m_bombsiteCenterB", Vector)
+    NETVAR(musicID, "CCSPlayerResource", "m_nMusicID", int[65])
 };
