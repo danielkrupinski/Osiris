@@ -1100,7 +1100,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             return true;
         };
 
-        if (ImGui::BeginChild("##scrollarea")) {
+        if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
             initializeKits();
             const auto& gameItems = StaticData::gameItems;
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
