@@ -1220,6 +1220,10 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Is Original"] = staticData.isOriginal;
             break;
         }
+        case StaticData::Type::NameTag: {
+            itemConfig["Type"] = "Name Tag";
+            break;
+        }
         }
 
         items.push_back(std::move(itemConfig));
@@ -1398,6 +1402,10 @@ void InventoryChanger::fromJson(const json& j) noexcept
                 continue;
 
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems.begin(), staticData));
+        } else if (type == "Name Tag") {
+            const auto staticData = std::ranges::find_if(std::as_const(StaticData::gameItems), [](const auto& gameItem) { return gameItem.isNameTag(); });
+            if (staticData != StaticData::gameItems.cend())
+                inventory.emplace_back(std::ranges::distance(StaticData::gameItems.cbegin(), staticData));
         }
     }
 
