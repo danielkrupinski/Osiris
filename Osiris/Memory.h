@@ -120,11 +120,6 @@ public:
     std::uintptr_t useToolGetArg2AsStringReturnAddress;
     EconItem*(__THISCALL* getSOCData)(void* itemView);
     void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
-#ifdef _WIN32
-    void(__THISCALL* setDynamicAttributeValue)(EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
-#else
-    void(*setDynamicAttributeValue)(void*, EconItem* _this, EconItemAttributeDefinition* attribute, void* value);
-#endif
     SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
 
     short makePanoramaSymbol(const char* name) const noexcept
@@ -158,11 +153,21 @@ public:
         setOrAddAttributeValueByName(attributeList, attribute, *reinterpret_cast<float*>(&value) /* hack, but CSGO does that */);
     }
 
+    void setDynamicAttributeValue(EconItem* _this, EconItemAttributeDefinition* attribute, void* value) const noexcept
+    {
+#ifdef _WIN32
+        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(_this, attribute, value);
+#else
+        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, _this, attribute, value);
+#endif
+    }
+
 private:
     void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
+    std::uintptr_t setDynamicAttributeValueFn;
 };
 
 inline std::unique_ptr<const Memory> memory;
