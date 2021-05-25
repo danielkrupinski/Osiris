@@ -921,16 +921,16 @@ static bool windowOpen = false;
 
 void InventoryChanger::menuBarItem() noexcept
 {
-    if (ImGui::MenuItem("Skin changer")) {
+    if (ImGui::MenuItem("Inventory Changer")) {
         windowOpen = true;
-        ImGui::SetWindowFocus("Skin changer");
-        ImGui::SetWindowPos("Skin changer", { 100.0f, 100.0f });
+        ImGui::SetWindowFocus("Inventory Changer");
+        ImGui::SetWindowPos("Inventory Changer", { 100.0f, 100.0f });
     }
 }
 
 void InventoryChanger::tabItem() noexcept
 {
-    if (ImGui::BeginTabItem("Skin changer")) {
+    if (ImGui::BeginTabItem("Inventory Changer")) {
         drawGUI(true);
         ImGui::EndTabItem();
     }
@@ -1039,7 +1039,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         if (!windowOpen)
             return;
         ImGui::SetNextWindowSize({ 700.0f, 400.0f });
-        if (!ImGui::Begin("Skin changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
+        if (!ImGui::Begin("Inventory Changer", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)) {
             ImGui::End();
             return;
         }
