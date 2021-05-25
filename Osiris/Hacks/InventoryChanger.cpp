@@ -1079,10 +1079,19 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
             selectedToAdd.clear();
         }
         ImGui::SameLine();
+        const auto canAdd = !selectedToAdd.empty();
+        if (!canAdd) {
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+        }
         if (ImGui::Button(("Add selected (" + std::to_string(selectedToAdd.size()) + ")").c_str())) {
             isInAddMode = false;
             addToInventory(selectedToAdd);
             selectedToAdd.clear();
+        }
+        if (!canAdd) {
+            ImGui::PopItemFlag();
+            ImGui::PopStyleVar();
         }
         ImGui::SameLine();
         ImGui::SetNextItemWidth(-1.0f);
