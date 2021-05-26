@@ -646,14 +646,14 @@ void InventoryChanger::setItemToRemoveNameTag(std::uint64_t itemID) noexcept
     itemToRemoveNameTag = itemID;
 }
 
-static void* initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
+static void initItemCustomizationNotification(const char* typeStr, const char* itemID) noexcept
 {
     if (const auto idx = memory->registeredPanoramaEvents->find(memory->makePanoramaSymbol("PanoramaComponent_Inventory_ItemCustomizationNotification")); idx != -1) {
         std::string args; args += "0,'"; args += typeStr; args += "','"; args += itemID; args += '\'';
         const char* dummy;
-        return memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy);
+        if (const auto event = memory->registeredPanoramaEvents->memory[idx].value.createEventFromString(nullptr, args.c_str(), &dummy))
+            interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
     }
-    return nullptr;
 }
 
 static void removeItemFromInventory(CSPlayerInventory* inventory, SharedObjectTypeCache<EconItem>* cache, EconItem* econItem) noexcept
@@ -787,10 +787,8 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
             sendInventoryUpdatedEvent();
 
-            if (shouldRemove) {
-                const auto event = initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
-                interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-            }
+            if (shouldRemove)
+                initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
         } else if (wasItemCreatedByOsiris(itemToRemoveNameTag)) {
             if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToRemoveNameTag)) {
                 auto& item = inventory[static_cast<std::size_t>(itemToRemoveNameTag - BASE_ITEMID)];
@@ -882,15 +880,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     toEquip.clear();
 
-    if (appliedStickerToItemID) {
-        const auto event = initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
-        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-    }
+    if (appliedStickerToItemID)
+        initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
 
-    if (addedNameTagToItemID) {
-        const auto event = initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
-        interfaces->panoramaUIEngine->accessUIEngine()->dispatchEvent(event);
-    }
+    if (addedNameTagToItemID)
+        initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
