@@ -125,28 +125,34 @@ public:
     static const auto& collectibles() noexcept { return instance()._collectibles; }
 private:
     StaticData(const StaticData&) = delete;
-    StaticData()
+
+    struct KitWeapon {
+        KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
+        int paintKit;
+        WeaponId weaponId;
+        const char* iconPath;
+    };
+
+    static std::vector<KitWeapon> getKitsWeapons(const UtlMap<std::uint64_t, AlternateIconData>& alternateIcons) noexcept
     {
-        assert(memory && interfaces);
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-
-        struct KitWeapon {
-            KitWeapon(int paintKit, WeaponId weaponId, const char* iconPath) noexcept : paintKit{ paintKit }, weaponId{ weaponId }, iconPath{ iconPath } {}
-            int paintKit;
-            WeaponId weaponId;
-            const char* iconPath;
-        };
-
         std::vector<KitWeapon> kitsWeapons;
-        kitsWeapons.reserve(itemSchema->alternateIcons.numElements);
+        kitsWeapons.reserve(alternateIcons.numElements);
 
-        for (const auto& node : itemSchema->alternateIcons) {
+        for (const auto& node : alternateIcons) {
             // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/shared/econ/econ_item_schema.cpp#L325-L329
             if (const auto encoded = node.key; (encoded & 3) == 0)
                 kitsWeapons.emplace_back(int((encoded & 0xFFFF) >> 2), WeaponId(encoded >> 16), node.value.simpleName.data());
         }
         std::ranges::sort(kitsWeapons, {}, &KitWeapon::paintKit);
+        return kitsWeapons;
+    }
+
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
         std::unordered_map<WeaponId, std::wstring> weaponNames;
         for (const auto& kitWeapon : kitsWeapons) {
@@ -165,7 +171,7 @@ private:
                 continue;
 
             const auto isGlove = (paintKit->id >= 10000);
-            for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
+            for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
                 if (!itemDef)
                     continue;
