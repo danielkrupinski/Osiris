@@ -355,16 +355,6 @@ static void sendInventoryUpdatedEvent() noexcept
     }
 }
 
-static void initializeKits() noexcept
-{
-    if (static bool initialized = false; !initialized)
-        initialized = true;
-    else
-        return;
-
-   
-}
-
 static Entity* make_glove(int entry, int serial) noexcept
 {
     static std::add_pointer_t<Entity* __CDECL(int, int)> createWearable = nullptr;
@@ -1158,7 +1148,6 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         };
 
         if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
-            initializeKits();
             const auto& gameItems = StaticData::gameItems();
             const std::wstring filterWide = Helpers::toUpper(Helpers::toWideString(filter));
             for (std::size_t i = 0; i < gameItems.size(); ++i) {
@@ -1311,8 +1300,6 @@ void InventoryChanger::fromJson(const json& j) noexcept
 {
     if (!j.contains("Items"))
         return;
-
-    initializeKits();
 
     const auto& items = j["Items"];
     if (!items.is_array())
