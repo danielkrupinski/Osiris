@@ -19,7 +19,7 @@ Free open-source cross-platform cheat software for **Counter-Strike: Global Offe
 *   **Chams** - color player models to improve visibility
 *   **Stream Proof ESP** - show information about players, dropped weapons and projectiles
 *   **Visuals** - miscellaneous visual options
-*   **Skin changer** - change weapon skins, knives and stickers
+*   **Inventory Changer** - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
 *   **Sound** - modify volume of certain sound effects
 *   **Style** - select menu window layout and colors
 *   **Misc** - miscellaneous features
@@ -136,7 +136,7 @@ Free open-source cross-platform cheat software for **Counter-Strike: Global Offe
     *   **Hit effect** - show screen effect on enemy hit
     *   **Hit marker** - show a cross detail on enemy hit
 
-*   **Skin changer** - change knives, gloves, weapon skins and stickers
+*   **Inventory Changer** - add weapon skins, stickers, knives, gloves, medals and more to your in-game inventory
 
 *   **Sound** - modify volume of certain sound effects
     *   **Chicken volume** - volume of chicken sounds
@@ -311,5 +311,5 @@ Hooking implementation files are located in [Hooks](https://github.com/danielkru
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
 
 ## See also
-*   [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO with configuration compatible with Osiris
+*   [Anubis](https://github.com/danielkrupinski/Anubis) - free and open source cheat for CS:GO
 *   [GOESP](https://github.com/danielkrupinski/GOESP) - free and open source cross-platform streamproof ESP hack for Counter-Strike: Global Offensive, written in modern C++

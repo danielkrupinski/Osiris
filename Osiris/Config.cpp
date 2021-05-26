@@ -509,18 +509,19 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j, "Triggerbot", triggerbot);
     read(j, "Triggerbot Key", triggerbotHoldKey);
 
-    AntiAim::fromJson(j["Anti aim"]);
-    Backtrack::fromJson(j["Backtrack"]);
-    Glow::fromJson(j["Glow"]);
     read(j, "Chams", chams);
     read(j["Chams"], "Toggle Key", chamsToggleKey);
     read(j["Chams"], "Hold Key", chamsHoldKey);
     read<value_t::object>(j, "ESP", streamProofESP);
     read<value_t::object>(j, "Visuals", visuals);
-    SkinChanger::fromJson(j["Skin changer"]);
-    ::Sound::fromJson(j["Sound"]);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
+
+    AntiAim::fromJson(j["Anti aim"]);
+    Backtrack::fromJson(j["Backtrack"]);
+    Glow::fromJson(j["Glow"]);
+    InventoryChanger::fromJson(j["Inventory Changer"]);
+    Sound::fromJson(j["Sound"]);
 }
 
 static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
@@ -949,7 +950,7 @@ void Config::save(size_t id) const noexcept
     j["Visuals"] = visuals;
     j["Misc"] = misc;
     j["Style"] = style;
-    j["Skin changer"] = SkinChanger::toJson();
+    j["Inventory Changer"] = InventoryChanger::toJson();
 
     removeEmptyObjects(j);
 
@@ -983,17 +984,18 @@ void Config::rename(size_t item, const char* newName) noexcept
 void Config::reset() noexcept
 {
     aimbot = { };
-    AntiAim::resetConfig();
     triggerbot = { };
-    Backtrack::resetConfig();
-    Glow::resetConfig();
     chams = { };
     streamProofESP = { };
     visuals = { };
-    SkinChanger::resetConfig();
-    Sound::resetConfig();
     style = { };
     misc = { };
+
+    AntiAim::resetConfig();
+    Backtrack::resetConfig();
+    Glow::resetConfig();
+    InventoryChanger::resetConfig();
+    Sound::resetConfig();
 }
 
 void Config::listConfigs() noexcept

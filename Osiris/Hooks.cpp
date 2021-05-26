@@ -1,3 +1,4 @@
+#include <charconv>
 #include <functional>
 #include <string>
 
@@ -39,7 +40,7 @@
 #include "Hacks/StreamProofESP.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Misc.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Sound.h"
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
@@ -134,7 +135,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
     }
     
     GameData::clearUnusedAvatars();
-    SkinChanger::clearUnusedItemIconTextures();
+    InventoryChanger::clearUnusedItemIconTextures();
 
     return hooks->originalPresent(device, src, dest, windowOverride, dirtyRegion);
 }
@@ -142,7 +143,7 @@ static HRESULT __stdcall present(IDirect3DDevice9* device, const RECT* src, cons
 static HRESULT __stdcall reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) noexcept
 {
     ImGui_ImplDX9_InvalidateDeviceObjects();
-    SkinChanger::clearItemIconTextures();
+    InventoryChanger::clearItemIconTextures();
     GameData::clearTextures();
     return hooks->originalReset(device, params);
 }
@@ -299,8 +300,9 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Visuals::applyZoom(stage);
         Misc::fixAnimationLOD(stage);
         Backtrack::update(stage);
-        SkinChanger::run(stage);
     }
+    InventoryChanger::run(stage);
+
     hooks->client.callOriginal<void, 37>(stage);
 }
 
@@ -472,6 +474,47 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
         hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
 }
 
+static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
+
+    if (RETURN_ADDRESS() == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
+        InventoryChanger::setStickerApplySlot(static_cast<int>(result));
+    else if (RETURN_ADDRESS() == memory->wearItemStickerGetArgAsNumberReturnAddress)
+        InventoryChanger::setStickerSlotToWear(static_cast<int>(result));
+
+    return result;
+}
+
+static std::uint64_t stringToUint64(const char* str) noexcept
+{
+    std::uint64_t result = 0;
+    std::from_chars(str, str + strlen(str), result);
+    return result;
+}
+
+static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
+{
+    const auto result = hooks->panoramaMarshallHelper.callOriginal<const char*, 7>(params, index);
+
+    if (result) {
+        const auto ret = RETURN_ADDRESS();
+        if (ret == memory->useToolStickerGetArgAsStringReturnAddress) {
+            InventoryChanger::setToolToUse(stringToUint64(result));
+        } else if (ret == memory->useToolGetArg2AsStringReturnAddress) {
+            InventoryChanger::setItemToApplyTool(stringToUint64(result));
+        } else if (ret == memory->wearItemStickerGetArgAsStringReturnAddress) {
+            InventoryChanger::setItemToWearSticker(stringToUint64(result));
+        } else if (ret == memory->setNameToolStringGetArgAsStringReturnAddress) {
+            InventoryChanger::setNameTagString(result);
+        } else if (ret == memory->clearCustomNameGetArgAsStringReturnAddress) {
+            InventoryChanger::setItemToRemoveNameTag(stringToUint64(result));
+        }
+    }
+   
+    return result;
+}
+
 #ifdef _WIN32
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept
@@ -532,7 +575,7 @@ static void swapWindow(SDL_Window* window) noexcept
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     GameData::clearUnusedAvatars();
-    SkinChanger::clearUnusedItemIconTextures();
+    InventoryChanger::clearUnusedItemIconTextures();
 
     hooks->swapWindow(window);
 }
@@ -581,6 +624,10 @@ void Hooks::install() noexcept
 
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, drawModelExecute);
+
+    panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
+    panoramaMarshallHelper.hookAt(5, getArgAsNumber);
+    panoramaMarshallHelper.hookAt(7, getArgAsString);
 
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
@@ -658,6 +705,7 @@ void Hooks::uninstall() noexcept
     clientMode.restore();
     engine.restore();
     modelRender.restore();
+    panoramaMarshallHelper.restore();
     sound.restore();
     surface.restore();
     svCheats.restore();
@@ -666,6 +714,7 @@ void Hooks::uninstall() noexcept
     netvars->restore();
 
     Glow::clearCustomObjects();
+    InventoryChanger::clearInventory();
 
 #ifdef _WIN32
     SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(originalWndProc));
