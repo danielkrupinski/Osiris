@@ -102,7 +102,7 @@ static std::pair<void*, std::size_t> getModuleInformation(const char* name) noex
     return table;
 }
 
-static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern) noexcept
+static std::uintptr_t findPattern(const char* moduleName, std::string_view pattern, bool reportNotFound = true) noexcept
 {
     static auto id = 0;
     ++id;
@@ -128,7 +128,8 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
         }
     }
 #ifdef _WIN32
-    MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
+    if (reportNotFound)
+        MessageBoxA(nullptr, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
 #endif
     return 0;
 }
