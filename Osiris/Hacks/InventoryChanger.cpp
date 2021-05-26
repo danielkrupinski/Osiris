@@ -164,28 +164,19 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            if (paintKit->id >= 10000) {
-                std::wstring name;
-                std::string iconPath;
+            const auto isGlove = (paintKit->id >= 10000);
+            for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
+                const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
+                if (!itemDef)
+                    continue;
 
-                if (const auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id) {
-                    name = weaponNames[it->weaponId];
-                    name += L" | ";
-                    iconPath = it->iconPath;
-                    name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
-
+                std::wstring name = weaponNames[it->weaponId];
+                name += L" | ";
+                name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
+                if (isGlove) {
                     _gloves.emplace_back(paintKit->id, it->weaponId);
-                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, _gloves.size() - 1, std::move(name), std::move(iconPath));
-                }
-            } else {
-                for (auto it = std::ranges::lower_bound(std::as_const(kitsWeapons), paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
-                    const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
-                    if (!itemDef)
-                        continue;
-
-                    std::wstring name = weaponNames[it->weaponId];
-                    name += L" | ";
-                    name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
+                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, _gloves.size() - 1, std::move(name), it->iconPath);
+                } else {
                     _skins.emplace_back(paintKit->id, it->weaponId);
                     _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), _skins.size() - 1, std::move(name), it->iconPath);
                 }
