@@ -136,8 +136,8 @@ static std::uintptr_t findPattern(const char* moduleName, std::string_view patte
 Memory::Memory() noexcept
 {
 #ifdef _WIN32
-    present = findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB") + 2;
-    reset = findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8") + 9;
+    present = findPattern("gameoverlayrenderer", "\xFF\x15????\x8B\xF8\x85\xDB") + 2; // "\xFF\x15????\x8B\xF0\x85\xFF" - for Steam Beta
+    reset = findPattern("gameoverlayrenderer", "\xC7\x45?????\xFF\x15????\x8B\xF8") + 9; // "\xC7\x45?????\xFF\x15????\x8B\xD8" - for Steam Beta
 
     clientMode = **reinterpret_cast<ClientMode***>((*reinterpret_cast<uintptr_t**>(interfaces->client))[10] + 5);
     input = *reinterpret_cast<Input**>((*reinterpret_cast<uintptr_t**>(interfaces->client))[16] + 1);
