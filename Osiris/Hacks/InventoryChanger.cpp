@@ -92,10 +92,9 @@ public:
     };
 
     struct Glove {
-        Glove(int paintKit, WeaponId weaponId) : paintKit{ paintKit }, weaponId{ weaponId } {}
+        Glove(int paintKit, WeaponId weaponId) : paintKit{ paintKit } {}
 
         int paintKit;
-        WeaponId weaponId;
     };
 
     struct Skin {
@@ -421,10 +420,10 @@ static void applyGloves(Entity* local) noexcept
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
 
-    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != itemData.weaponId) {
-        definitionIndex = itemData.weaponId;
+    if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item.get().weaponID) {
+        definitionIndex = item.get().weaponID;
 
-        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(itemData.weaponId)) {
+        if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID)) {
             glove->setModelIndex(interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel()));
             glove->preDataUpdate(0);
         }
@@ -850,7 +849,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 econItem->setStickerWear(j, sticker.wear);
             }
         } else if (item.isGlove()) {
-            econItem->weaponId = StaticData::gloves()[item.dataIndex].weaponId;
+            econItem->weaponId = item.weaponID;
             econItem->quality = 3;
 
             econItem->setPaintKit(static_cast<float>(StaticData::gloves()[item.dataIndex].paintKit));
@@ -1208,7 +1207,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Glove";
             const auto& staticData = StaticData::gloves()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.paintKit;
-            itemConfig["Weapon ID"] = staticData.weaponId;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = dynamicGloveData[item.getDynamicDataIndex()];
 
@@ -1220,7 +1219,7 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Skin";
             const auto& staticData = StaticData::skins()[gameItem.dataIndex];
             itemConfig["Paint Kit"] = staticData.paintKit;
-            itemConfig["Weapon ID"] = staticData.weaponId;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
@@ -1253,7 +1252,7 @@ json InventoryChanger::toJson() noexcept
         case StaticData::Type::Collectible: {
             itemConfig["Type"] = "Collectible";
             const auto& staticData = StaticData::collectibles()[gameItem.dataIndex];
-            itemConfig["Weapon ID"] = staticData.weaponId;
+            itemConfig["Weapon ID"] = gameItem.weaponID;
             itemConfig["Is Original"] = staticData.isOriginal;
             break;
         }
@@ -1394,7 +1393,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int paintKit = jsonItem["Paint Kit"];
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isGlove() && StaticData::gloves()[gameItem.dataIndex].paintKit == paintKit && StaticData::gloves()[gameItem.dataIndex].weaponId == weaponID; });
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isGlove() && StaticData::gloves()[gameItem.dataIndex].paintKit == paintKit && gameItem.weaponID == weaponID; });
             if (staticData == StaticData::gameItems().end())
                 continue;
 
