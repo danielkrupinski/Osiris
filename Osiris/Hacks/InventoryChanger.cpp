@@ -56,7 +56,7 @@ constexpr auto isKnife(WeaponId id) noexcept
 
 class StaticData {
 public:
-    enum class Type {
+    enum class Type : std::uint8_t {
         Sticker,
         Glove,
         Skin,
@@ -76,7 +76,7 @@ public:
         bool isNameTag() const noexcept { return type == Type::NameTag; }
 
         Type type;
-        int rarity;
+        std::uint8_t rarity;
         WeaponId weaponID;
         std::size_t dataIndex;
 
@@ -1727,7 +1727,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
 }
 
-StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
+StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
