@@ -92,13 +92,13 @@ public:
     };
 
     struct Glove {
-        Glove(int paintKit, WeaponId weaponId) : paintKit{ paintKit } {}
+        Glove(int paintKit) : paintKit{ paintKit } {}
 
         int paintKit;
     };
 
     struct Skin {
-        Skin(int paintKit, WeaponId weaponId) : paintKit{ paintKit } {}
+        Skin(int paintKit) : paintKit{ paintKit } {}
 
         int paintKit;
     };
@@ -113,6 +113,14 @@ public:
         Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
 
         bool isOriginal;
+    };
+
+    struct PaintKit {
+        PaintKit(int id, std::wstring&& name) noexcept;
+
+        int id;
+        std::string name;
+        std::wstring nameUpperCase;
     };
 
     static const auto& gameItems() noexcept { return instance()._gameItems; }
@@ -168,6 +176,8 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
+            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()));
+
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
                 const auto itemDef = itemSchema->getItemDefinitionInterface(it->weaponId);
@@ -178,10 +188,10 @@ private:
                 name += L" | ";
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 if (isGlove) {
-                    _gloves.emplace_back(paintKit->id, it->weaponId);
+                    _gloves.emplace_back(paintKit->id);
                     _gameItems.emplace_back(Type::Glove, paintKit->rarity, it->weaponId, _gloves.size() - 1, std::move(name), it->iconPath);
                 } else {
-                    _skins.emplace_back(paintKit->id, it->weaponId);
+                    _skins.emplace_back(paintKit->id);
                     _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _skins.size() - 1, std::move(name), it->iconPath);
                 }
             }
@@ -218,7 +228,7 @@ private:
 
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
                 if (const auto image = item->getInventoryImage()) {
-                    _skins.emplace_back(0, item->getWeaponId());
+                    _skins.emplace_back(0);
                     _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _skins.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
                 }
             } else if (itemTypeName == "#CSGO_Type_Collectible") {
@@ -255,6 +265,9 @@ private:
     std::vector<Skin> _skins;
     std::vector<Music> _music;
     std::vector<Collectible> _collectibles;
+
+    std::vector<PaintKit> _paintKits;
+
 };
 
 struct StickerConfig {
@@ -1725,6 +1738,12 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 }
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
+{
+    this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
+    nameUpperCase = Helpers::toUpper(nameUpperCase);
+}
+
+StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
