@@ -975,49 +975,61 @@ namespace ImGui
         ImGuiContext& g = *GImGui;
         const ImGuiStyle& style = g.Style;
 
-        const char* label = item.name.c_str();
-        // Submit label or explicit size to ItemSize(), whereas ItemAdd() will submit a larger/spanning rectangle.
-        ImGuiID id = window->GetID(label);
-        ImVec2 label_size = CalcTextSize(label, NULL, true);
-        ImVec2 size(label_size.x + iconSizeSmall.x, ImMax(label_size.y, IM_FLOOR(iconSizeSmall.y + 0.99999f)));
+        const auto itemName = item.name.c_str();
+        const auto itemNameSize = CalcTextSize(itemName, nullptr);
+
+        const auto extraInfo = "";
+        const auto extraInfoSize = CalcTextSize(extraInfo, nullptr);
+
+        PushID(itemName);
+        PushID(extraInfo);
+        const auto id = window->GetID(0);
+        PopID();
+        PopID();
+
+        const auto height = ImMax(extraInfoSize.y, ImMax(itemNameSize.y, iconSizeSmall.y));
+        const auto rarityBulletRadius = IM_FLOOR(height * 0.2f);
+        const auto size = ImVec2{ iconSizeSmall.x + extraInfoSize.x + rarityBulletRadius + itemNameSize.x, height };
+        
         ImVec2 pos = window->DC.CursorPos;
         pos.y += window->DC.CurrLineTextBaseOffset;
         ItemSize(size, 0.0f);
 
-        size.x = ImMax(label_size.x + iconSizeSmall.x, window->WorkRect.Max.x - pos.x);
+        const auto smallIconMin = pos;
+        const auto smallIconMax = smallIconMin + iconSizeSmall;
 
-        // Text stays at the submission position, but bounding box may be extended on both sides
-        const ImVec2 text_min = pos + ImVec2{ iconSizeSmall.x, size.y * 0.25f };
-        const ImVec2 text_max(pos.x + size.x, pos.y + size.y);
+        const auto extraInfoMin = ImVec2{ pos.x + iconSizeSmall.x + 3.0f, pos.y };
+        const auto extraInfoMax = extraInfoMin + ImVec2{ extraInfoSize.x, size.y };
+
+        const auto rarityBulletPos = ImVec2{ extraInfoMax.x + 5.0f + rarityBulletRadius, pos.y + IM_FLOOR(size.y * 0.5f) };
+        
+        const auto itemNameMin = ImVec2{ rarityBulletPos.x + rarityBulletRadius + 5.0f, pos.y };
+        const auto itemNameMax = itemNameMin + ImVec2{ itemNameSize.x, size.y };
 
         // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
-        ImRect bb(pos.x, pos.y, text_max.x, text_max.y);
+        ImRect bb(pos, pos + ImVec2{ ImMax(size.x, window->WorkRect.Max.x - pos.x), size.y });
+        const float spacingX = style.ItemSpacing.x;
+        const float spacingY = style.ItemSpacing.y;
+        const float spacingL = IM_FLOOR(spacingX * 0.50f);
+        const float spacingU = IM_FLOOR(spacingY * 0.50f);
+        bb.Min.x -= spacingL;
+        bb.Min.y -= spacingU;
+        bb.Max.x += (spacingX - spacingL);
+        bb.Max.y += (spacingY - spacingU);
 
-        const float spacing_x = style.ItemSpacing.x;
-        const float spacing_y = style.ItemSpacing.y;
-        const float spacing_L = IM_FLOOR(spacing_x * 0.50f);
-        const float spacing_U = IM_FLOOR(spacing_y * 0.50f);
-        bb.Min.x -= spacing_L;
-        bb.Min.y -= spacing_U;
-        bb.Max.x += (spacing_x - spacing_L);
-        bb.Max.y += (spacing_y - spacing_U);
-
-        bool item_add = ItemAdd(bb, id);
-        if (!item_add)
+        if (!ItemAdd(bb, id))
             return false;
 
         // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
-        ImGuiButtonFlags button_flags = 0;
+        ImGuiButtonFlags buttonFlags = 0;
 
-        const bool was_selected = selected;
+        const bool wasSelected = selected;
         bool hovered, held;
-        bool pressed = ButtonBehavior(bb, id, &hovered, &held, button_flags);
+        bool pressed = ButtonBehavior(bb, id, &hovered, &held, buttonFlags);
 
         // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
-        if (pressed)
-        {
-            if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent)
-            {
+        if (pressed) {
+            if (!g.NavDisableMouseHover && g.NavWindow == window && g.NavLayer == window->DC.NavLayerCurrent) {
                 SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
                 g.NavDisableHighlight = true;
             }
@@ -1026,31 +1038,30 @@ namespace ImGui
             MarkItemEdited(id);
 
         // In this branch, Selectable() cannot toggle the selection so this will never trigger.
-        if (selected != was_selected) //-V547
+        if (selected != wasSelected) //-V547
             window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
 
-        if (hovered || selected)
-        {
+        if (hovered || selected) {
             const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
             RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
             RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
         }
 
-        const auto bulletRadius = (bb.Max.y - bb.Min.y) * 0.15f;
-        const auto bulletPos = ImVec2{ bb.Min.x + iconSizeSmall.x + bulletRadius + 3.0f, (bb.Min.y + bb.Max.y) * 0.5f };
-        window->DrawList->AddCircleFilled(bulletPos, bulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
-        window->DrawList->AddCircleFilled(bulletPos, bulletRadius, rarityColor, 12);
-
-        RenderTextClipped(text_min + ImVec2{ bulletRadius * 2.0f + 4.0f, 0.0f }, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
-
         if (const auto icon = getItemIconTexture(item.iconPath)) {
-            window->DrawList->AddImage(icon, bb.Min, bb.Min + iconSizeSmall, { 0.0f, 0.0f }, { 1.0f, 1.0f }, GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
+            window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
             if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
                 Image(icon, iconSizeLarge);
                 EndTooltip();
             }
         }
+
+        RenderTextClipped(extraInfoMin, extraInfoMax, extraInfo, nullptr, &extraInfoSize, { 0.0f, 0.5f }, &bb);
+
+        window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
+        window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius, rarityColor, 12);
+
+        RenderTextClipped(itemNameMin, itemNameMax, itemName, nullptr, &itemNameSize, { 0.0f, 0.5f }, &bb);
 
         if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
             CloseCurrentPopup();
@@ -1143,7 +1154,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                     continue;
                 ImGui::PushID(i);
                 const auto selected = selectedToAdd.contains(i);
-                if (ImGui::SkinSelectable(gameItems[i], { 35.0f, 26.25f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
+                if (ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
                     if (selected)
                         selectedToAdd.erase(i);
                     else
