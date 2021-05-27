@@ -98,10 +98,9 @@ public:
     };
 
     struct Skin {
-        Skin(int paintKit, WeaponId weaponId) : paintKit{ paintKit }, weaponId{ weaponId } {}
+        Skin(int paintKit, WeaponId weaponId) : paintKit{ paintKit } {}
 
         int paintKit;
-        WeaponId weaponId;
     };
 
     struct Music {
@@ -478,10 +477,10 @@ static void applyKnife(Entity* local) noexcept
         if (dynamicData.nameTag.length() < 32)
             std::strncpy(weapon->customName(), dynamicData.nameTag.c_str(), 32);
 
-        if (definitionIndex != itemData.weaponId) {
-            definitionIndex = itemData.weaponId;
+        if (definitionIndex != item.get().weaponID) {
+            definitionIndex = item.get().weaponID;
 
-            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(itemData.weaponId)) {
+            if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID)) {
                 weapon->setModelIndex(interfaces->modelInfo->getModelIndex(def->getPlayerDisplayModel()));
                 weapon->preDataUpdate(0);
             }
@@ -830,7 +829,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->weaponId = WeaponId::MusicKit;
             econItem->setMusicID(StaticData::music()[item.dataIndex].musicID);
         } else if (item.isSkin()) {
-            econItem->weaponId = StaticData::skins()[item.dataIndex].weaponId;
+            econItem->weaponId = item.weaponID;
             if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::skins()[item.dataIndex].paintKit));
@@ -1333,7 +1332,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int paintKit = jsonItem["Paint Kit"];
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isSkin() && StaticData::skins()[gameItem.dataIndex].paintKit == paintKit && StaticData::skins()[gameItem.dataIndex].weaponId == weaponID; });
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isSkin() && StaticData::skins()[gameItem.dataIndex].paintKit == paintKit && gameItem.weaponID == weaponID; });
             if (staticData == StaticData::gameItems().end())
                 continue;
 
