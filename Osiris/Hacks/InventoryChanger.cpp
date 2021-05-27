@@ -66,7 +66,7 @@ public:
     };
 
     struct GameItem {
-        GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
+        GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept;
 
         bool isSticker() const noexcept { return type == Type::Sticker; }
         bool isSkin() const noexcept { return type == Type::Skin; }
@@ -77,6 +77,7 @@ public:
 
         Type type;
         int rarity;
+        WeaponId weaponID;
         std::size_t dataIndex;
 
         std::string name;
@@ -181,10 +182,10 @@ private:
                 name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 if (isGlove) {
                     _gloves.emplace_back(paintKit->id, it->weaponId);
-                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, _gloves.size() - 1, std::move(name), it->iconPath);
+                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, it->weaponId, _gloves.size() - 1, std::move(name), it->iconPath);
                 } else {
                     _skins.emplace_back(paintKit->id, it->weaponId);
-                    _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), _skins.size() - 1, std::move(name), it->iconPath);
+                    _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _skins.size() - 1, std::move(name), it->iconPath);
                 }
             }
         }
@@ -201,7 +202,7 @@ private:
 
             std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
             _stickers.emplace_back(stickerKit->id);
-            _gameItems.emplace_back(Type::Sticker, stickerKit->rarity, _stickers.size() - 1, std::move(name), stickerKit->inventoryImage.data());
+            _gameItems.emplace_back(Type::Sticker, stickerKit->rarity, WeaponId::Sticker, _stickers.size() - 1, std::move(name), stickerKit->inventoryImage.data());
         }
 
         const auto& musicMap = itemSchema->musicKits;
@@ -211,7 +212,7 @@ private:
                 continue;
 
             _music.emplace_back(musicKit->id);
-            _gameItems.emplace_back(Type::Music, 3, _music.size() - 1, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
+            _gameItems.emplace_back(Type::Music, 3, WeaponId::MusicKit, _music.size() - 1, interfaces->localize->findSafe(musicKit->nameLocalized), musicKit->inventoryImage);
         }
 
         for (const auto& node : itemSchema->itemsSorted) {
@@ -221,7 +222,7 @@ private:
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
                 if (const auto image = item->getInventoryImage()) {
                     _skins.emplace_back(0, item->getWeaponId());
-                    _gameItems.emplace_back(Type::Skin, 6, _skins.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
+                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _skins.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
                 }
             } else if (itemTypeName == "#CSGO_Type_Collectible") {
                 if (const auto image = item->getInventoryImage()) {
@@ -233,11 +234,11 @@ private:
                         name += interfaces->localize->findSafe("genuine");
                         name += L") ";
                     }
-                    _gameItems.emplace_back(Type::Collectible, item->getRarity(), _collectibles.size() - 1, std::move(name), image);
+                    _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, std::move(name), image);
                 }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 if (const auto image = item->getInventoryImage())
-                    _gameItems.emplace_back(Type::NameTag, item->getRarity(), 0, interfaces->localize->findSafe(item->getItemBaseName()), image);
+                    _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, interfaces->localize->findSafe(item->getItemBaseName()), image);
             }
         }
 
@@ -1726,7 +1727,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
     sequence = remapKnifeAnim(viewModelWeapon->itemDefinitionIndex2(), sequence);
 }
 
-StaticData::GameItem::GameItem(Type type, int rarity, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ rarity }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
+StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::wstring&& name, std::string&& iconPath) noexcept : type{ type }, rarity{ rarity }, weaponID{ weaponID }, dataIndex{ dataIndex }, nameUpperCase{ std::move(name) }, iconPath{ std::move(iconPath) }
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
