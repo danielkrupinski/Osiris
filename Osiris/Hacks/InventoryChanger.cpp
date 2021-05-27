@@ -91,18 +91,6 @@ public:
         int stickerID;
     };
 
-    struct Glove {
-        Glove(int paintKit) : paintKit{ paintKit } {}
-
-        int paintKit;
-    };
-
-    struct Skin {
-        Skin(int paintKit) : paintKit{ paintKit } {}
-
-        int paintKit;
-    };
-
     struct Music {
         Music(int musicID) : musicID{ musicID } {}
 
@@ -125,10 +113,9 @@ public:
 
     static const auto& gameItems() noexcept { return instance()._gameItems; }
     static const auto& stickers() noexcept { return instance()._stickers; }
-    static const auto& gloves() noexcept { return instance()._gloves; }
-    static const auto& skins() noexcept { return instance()._skins; }
     static const auto& music() noexcept { return instance()._music; }
     static const auto& collectibles() noexcept { return instance()._collectibles; }
+    static const auto& paintKits() noexcept { return instance()._paintKits; }
 private:
     StaticData(const StaticData&) = delete;
 
@@ -185,14 +172,12 @@ private:
                     continue;
 
                 std::wstring name = weaponNames[it->weaponId];
-                name += L" | ";
-                name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
+               // name += L" | ";
+               // name += interfaces->localize->findSafe(paintKit->itemName.data() + 1);
                 if (isGlove) {
-                    _gloves.emplace_back(paintKit->id);
-                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, it->weaponId, _gloves.size() - 1, std::move(name), it->iconPath);
+                    _gameItems.emplace_back(Type::Glove, paintKit->rarity, it->weaponId, _paintKits.size() - 1, std::move(name), it->iconPath);
                 } else {
-                    _skins.emplace_back(paintKit->id);
-                    _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _skins.size() - 1, std::move(name), it->iconPath);
+                    _gameItems.emplace_back(Type::Skin, std::clamp(itemDef->getRarity() + paintKit->rarity - 1, 0, (paintKit->rarity == 7) ? 7 : 6), it->weaponId, _paintKits.size() - 1, std::move(name), it->iconPath);
                 }
             }
         }
@@ -228,8 +213,8 @@ private:
 
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
                 if (const auto image = item->getInventoryImage()) {
-                    _skins.emplace_back(0);
-                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _skins.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
+                    _paintKits.emplace_back(0, L"");
+                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _paintKits.size() - 1, interfaces->localize->findSafe(item->getItemBaseName()), image);
                 }
             } else if (itemTypeName == "#CSGO_Type_Collectible") {
                 if (const auto image = item->getInventoryImage()) {
@@ -261,8 +246,6 @@ private:
 
     std::vector<GameItem> _gameItems;
     std::vector<Sticker> _stickers;
-    std::vector<Glove> _gloves;
-    std::vector<Skin> _skins;
     std::vector<Music> _music;
     std::vector<Collectible> _collectibles;
 
@@ -401,7 +384,7 @@ static void applyGloves(Entity* local) noexcept
     if (!item.isGlove())
         return;
 
-    const auto& itemData = StaticData::gloves()[item.get().dataIndex];
+    const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
 
     const auto wearables = local->wearables();
     static int gloveHandle = 0;
@@ -427,7 +410,7 @@ static void applyGloves(Entity* local) noexcept
     local->body() = 1;
 
     const auto attributeList = glove->econItemView().getAttributeList();
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
 
@@ -459,7 +442,7 @@ static void applyKnife(Entity* local) noexcept
     if (!item.isSkin())
         return;
 
-    const auto& itemData = StaticData::skins()[item.get().dataIndex];
+    const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
 
     auto& weapons = local->weapons();
 
@@ -482,7 +465,7 @@ static void applyKnife(Entity* local) noexcept
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
         const auto attributeList = weapon->econItemView().getAttributeList();
-        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
@@ -558,7 +541,7 @@ static void applyWeapons(Entity* local) noexcept
         if (!item.isSkin())
             return;
 
-        const auto& itemData = StaticData::skins()[item.get().dataIndex];
+        const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
 
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
         weapon->itemIDLow() = std::uint32_t(soc->itemID & 0xFFFFFFFF);
@@ -566,7 +549,7 @@ static void applyWeapons(Entity* local) noexcept
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
         const auto attributeList = weapon->econItemView().getAttributeList();
-        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
+        memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
@@ -844,7 +827,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->weaponId = item.weaponID;
             if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
-            econItem->setPaintKit(static_cast<float>(StaticData::skins()[item.dataIndex].paintKit));
+            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicSkinData[inventory[i].getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);
@@ -863,7 +846,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->weaponId = item.weaponID;
             econItem->quality = 3;
 
-            econItem->setPaintKit(static_cast<float>(StaticData::gloves()[item.dataIndex].paintKit));
+            econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicGloveData[inventory[i].getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);
@@ -1216,8 +1199,8 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Glove: {
             itemConfig["Type"] = "Glove";
-            const auto& staticData = StaticData::gloves()[gameItem.dataIndex];
-            itemConfig["Paint Kit"] = staticData.paintKit;
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = dynamicGloveData[item.getDynamicDataIndex()];
@@ -1228,8 +1211,8 @@ json InventoryChanger::toJson() noexcept
         }
         case StaticData::Type::Skin: {
             itemConfig["Type"] = "Skin";
-            const auto& staticData = StaticData::skins()[gameItem.dataIndex];
-            itemConfig["Paint Kit"] = staticData.paintKit;
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            itemConfig["Paint Kit"] = staticData.id;
             itemConfig["Weapon ID"] = gameItem.weaponID;
 
             const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
@@ -1344,7 +1327,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int paintKit = jsonItem["Paint Kit"];
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isSkin() && StaticData::skins()[gameItem.dataIndex].paintKit == paintKit && gameItem.weaponID == weaponID; });
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isSkin() && StaticData::paintKits()[gameItem.dataIndex].id == paintKit && gameItem.weaponID == weaponID; });
             if (staticData == StaticData::gameItems().end())
                 continue;
 
@@ -1404,7 +1387,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const int paintKit = jsonItem["Paint Kit"];
             const WeaponId weaponID = jsonItem["Weapon ID"];
 
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isGlove() && StaticData::gloves()[gameItem.dataIndex].paintKit == paintKit && gameItem.weaponID == weaponID; });
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [paintKit, weaponID](const auto& gameItem) { return gameItem.isGlove() && StaticData::paintKits()[gameItem.dataIndex].id == paintKit && gameItem.weaponID == weaponID; });
             if (staticData == StaticData::gameItems().end())
                 continue;
 
