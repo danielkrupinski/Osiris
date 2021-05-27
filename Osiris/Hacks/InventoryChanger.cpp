@@ -163,7 +163,7 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()));
+            _paintKits.emplace_back(paintKit->id, std::move(std::wstring{ L" | " }.append(interfaces->localize->findSafe(paintKit->itemName.data()))    ));
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -972,18 +972,21 @@ namespace ImGui
         const auto itemName = item.name.c_str();
         const auto itemNameSize = CalcTextSize(itemName, nullptr);
 
-        const auto extraInfo = "";
-        const auto extraInfoSize = CalcTextSize(extraInfo, nullptr);
+        auto paintKitName = "";
+        if (item.isSkin() || item.isGlove()) {
+            paintKitName = StaticData::paintKits()[item.dataIndex].name.c_str();
+        }
+        const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
 
         PushID(itemName);
-        PushID(extraInfo);
+        PushID(paintKitName);
         const auto id = window->GetID(0);
         PopID();
         PopID();
 
-        const auto height = ImMax(extraInfoSize.y, ImMax(itemNameSize.y, iconSizeSmall.y));
+        const auto height = ImMax(paintKitNameSize.y, ImMax(itemNameSize.y, iconSizeSmall.y));
         const auto rarityBulletRadius = IM_FLOOR(height * 0.2f);
-        const auto size = ImVec2{ iconSizeSmall.x + extraInfoSize.x + rarityBulletRadius + itemNameSize.x, height };
+        const auto size = ImVec2{ iconSizeSmall.x + paintKitNameSize.x + rarityBulletRadius + itemNameSize.x, height };
         
         ImVec2 pos = window->DC.CursorPos;
         pos.y += window->DC.CurrLineTextBaseOffset;
@@ -992,13 +995,13 @@ namespace ImGui
         const auto smallIconMin = pos;
         const auto smallIconMax = smallIconMin + iconSizeSmall;
 
-        const auto extraInfoMin = ImVec2{ pos.x + iconSizeSmall.x + 3.0f, pos.y };
-        const auto extraInfoMax = extraInfoMin + ImVec2{ extraInfoSize.x, size.y };
+        const auto rarityBulletPos = ImVec2{ pos.x + iconSizeSmall.x + 5.0f + rarityBulletRadius, pos.y + IM_FLOOR(size.y * 0.5f) };
 
-        const auto rarityBulletPos = ImVec2{ extraInfoMax.x + 5.0f + rarityBulletRadius, pos.y + IM_FLOOR(size.y * 0.5f) };
-        
         const auto itemNameMin = ImVec2{ rarityBulletPos.x + rarityBulletRadius + 5.0f, pos.y };
         const auto itemNameMax = itemNameMin + ImVec2{ itemNameSize.x, size.y };
+
+        const auto paintKitNameMin = ImVec2{ itemNameMax.x, pos.y };
+        const auto paintKitNameMax = paintKitNameMin + ImVec2{ paintKitNameSize.x, size.y };
 
         // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
         ImRect bb(pos, pos + ImVec2{ ImMax(size.x, window->WorkRect.Max.x - pos.x), size.y });
@@ -1050,12 +1053,11 @@ namespace ImGui
             }
         }
 
-        RenderTextClipped(extraInfoMin, extraInfoMax, extraInfo, nullptr, &extraInfoSize, { 0.0f, 0.5f }, &bb);
-
         window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
         window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius, rarityColor, 12);
 
         RenderTextClipped(itemNameMin, itemNameMax, itemName, nullptr, &itemNameSize, { 0.0f, 0.5f }, &bb);
+        RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
 
         if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
             CloseCurrentPopup();
