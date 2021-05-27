@@ -143,7 +143,7 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            _paintKits.emplace_back(paintKit->id, std::move(std::wstring{ L" | " }.append(interfaces->localize->findSafe(paintKit->itemName.data()))    ));
+            _paintKits.emplace_back(paintKit->id, std::move(std::wstring{ L" | " }.append(interfaces->localize->findSafe(paintKit->itemName.data()))));
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -188,10 +188,18 @@ private:
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
+            const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
+            const auto isOriginal = (item->getQuality() == 1);
 
             if (!_weaponNames.contains(item->getWeaponId())) {
-                _weaponNames.emplace(item->getWeaponId(), interfaces->localize->findAsUTF8(item->getItemBaseName()));
-                _weaponNamesUpper.emplace(item->getWeaponId(), Helpers::toUpper(interfaces->localize->findSafe(item->getItemBaseName())));
+                std::wstring nameWide = interfaces->localize->findSafe(item->getItemBaseName());
+                if (isCollectible && isOriginal) {
+                    nameWide += L" (";
+                    nameWide += interfaces->localize->findSafe("genuine");
+                    nameWide += L") ";
+                }
+                _weaponNames.emplace(item->getWeaponId(), interfaces->localize->convertUnicodeToAnsi(nameWide.c_str()));
+                _weaponNamesUpper.emplace(item->getWeaponId(), Helpers::toUpper(nameWide));
             }
 
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
@@ -199,16 +207,9 @@ private:
                     _paintKits.emplace_back(0, L"");
                     _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _paintKits.size() - 1, image);
                 }
-            } else if (itemTypeName == "#CSGO_Type_Collectible") {
+            } else if (isCollectible) {
                 if (const auto image = item->getInventoryImage()) {
-                    const auto isOriginal = (item->getQuality() == 1);
                     _collectibles.emplace_back(isOriginal);
-                    std::wstring name = interfaces->localize->findSafe(item->getItemBaseName());
-                    if (isOriginal) {
-                        name += L" (";
-                        name += interfaces->localize->findSafe("genuine");
-                        name += L") ";
-                    }
                     _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, image);
                 }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
