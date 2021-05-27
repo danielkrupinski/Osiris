@@ -110,9 +110,8 @@ public:
     };
 
     struct Collectible {
-        Collectible(WeaponId weaponId, bool isOriginal) : weaponId{ weaponId }, isOriginal{ isOriginal } {}
+        Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
 
-        WeaponId weaponId;
         bool isOriginal;
     };
 
@@ -225,7 +224,7 @@ private:
             } else if (itemTypeName == "#CSGO_Type_Collectible") {
                 if (const auto image = item->getInventoryImage()) {
                     const auto isOriginal = (item->getQuality() == 1);
-                    _collectibles.emplace_back(item->getWeaponId(), isOriginal);
+                    _collectibles.emplace_back(isOriginal);
                     std::wstring name = interfaces->localize->findSafe(item->getItemBaseName());
                     if (isOriginal) {
                         name += L" (";
@@ -857,7 +856,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            econItem->weaponId = StaticData::collectibles()[item.dataIndex].weaponId;
+            econItem->weaponId = item.weaponID;
             if (StaticData::collectibles()[item.dataIndex].isOriginal)
                 econItem->quality = 1;
         } else if (item.isNameTag()) {
@@ -1429,7 +1428,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const WeaponId weaponID = jsonItem["Weapon ID"];
             const bool isOriginal = jsonItem["Is Original"];
 
-            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID, isOriginal](const auto& gameItem) { return gameItem.isCollectible() && StaticData::collectibles()[gameItem.dataIndex].weaponId == weaponID && StaticData::collectibles()[gameItem.dataIndex].isOriginal == isOriginal; });
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID, isOriginal](const auto& gameItem) { return gameItem.isCollectible() && gameItem.weaponID == weaponID && StaticData::collectibles()[gameItem.dataIndex].isOriginal == isOriginal; });
 
             if (staticData == StaticData::gameItems().end())
                 continue;
