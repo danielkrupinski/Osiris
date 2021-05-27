@@ -415,8 +415,7 @@ static void applyGloves(Entity* local) noexcept
     memory->equipWearable(glove, local);
     local->body() = 1;
 
-    constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
-    const auto attributeList = std::uintptr_t(glove) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+    const auto attributeList = glove->econItemView().getAttributeList();
     memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
     memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
     memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
@@ -471,8 +470,7 @@ static void applyKnife(Entity* local) noexcept
 
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
-        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
-        const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+        const auto attributeList = weapon->econItemView().getAttributeList();
         memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
@@ -556,8 +554,7 @@ static void applyWeapons(Entity* local) noexcept
 
         const auto& dynamicData = dynamicSkinData[item.getDynamicDataIndex()];
 
-        constexpr auto m_Item = fnv::hash("CBaseAttributableItem->m_Item");
-        const auto attributeList = std::uintptr_t(weapon) + netvars->operator[](m_Item) + /* m_AttributeList = */ WIN32_LINUX(0x244, 0x2F8);
+        const auto attributeList = weapon->econItemView().getAttributeList();
         memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.paintKit));
         memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
         memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
@@ -768,7 +765,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
             constexpr auto wearStep = 0.12f;
 
             const auto& item = inventory[static_cast<std::size_t>(itemToWearSticker - BASE_ITEMID)];
-            const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += 0.12f);
+            const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += wearStep);
             const auto shouldRemove = (newWear >= 1.0f + wearStep);
 
             if (shouldRemove)
