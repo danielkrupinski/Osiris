@@ -1260,6 +1260,12 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Name Tag";
             break;
         }
+        case StaticData::Type::Patch: {
+            itemConfig["Type"] = "Patch";
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            itemConfig["Patch ID"] = staticData.id;
+            break;
+        }
         }
 
         items.push_back(std::move(itemConfig));
@@ -1438,6 +1444,14 @@ void InventoryChanger::fromJson(const json& j) noexcept
             inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         } else if (type == "Name Tag") {
             const auto staticData = std::ranges::find_if(StaticData::gameItems(), [](const auto& gameItem) { return gameItem.isNameTag(); });
+            if (staticData != StaticData::gameItems().end())
+                inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+        } else if (type == "Patch") {
+            if (!jsonItem.contains("Patch ID") || !jsonItem["Patch ID"].is_number_integer())
+                continue;
+
+            const int patchID = jsonItem["Patch ID"];
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [patchID](const auto& gameItem) { return gameItem.isPatch() && StaticData::paintKits()[gameItem.dataIndex].id == patchID; });
             if (staticData != StaticData::gameItems().end())
                 inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         }
