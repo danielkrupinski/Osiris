@@ -399,9 +399,10 @@ static void applyGloves(Entity* local) noexcept
     local->body() = 1;
 
     const auto attributeList = glove->econItemView().getAttributeList();
+    const auto& dynamicData = dynamicGloveData[item.getDynamicDataIndex()];
     memory->setOrAddAttributeValueByName(attributeList, "set item texture prefab", static_cast<float>(itemData.id));
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", 0.01f);
-    memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(1));
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture wear", dynamicData.wear);
+    memory->setOrAddAttributeValueByName(attributeList, "set item texture seed", static_cast<float>(dynamicData.seed));
 
     if (auto& definitionIndex = glove->itemDefinitionIndex2(); definitionIndex != item.get().weaponID) {
         definitionIndex = item.get().weaponID;
