@@ -62,7 +62,8 @@ public:
         Skin,
         Music,
         Collectible,
-        NameTag
+        NameTag,
+        Patch
     };
 
     struct GameItem {
@@ -74,9 +75,10 @@ public:
         bool isMusic() const noexcept { return type == Type::Music; }
         bool isCollectible() const noexcept { return type == Type::Collectible; }
         bool isNameTag() const noexcept { return type == Type::NameTag; }
+        bool isPatch() const noexcept { return type == Type::Patch; }
 
         // TODO: We need a better name for this
-        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic(); }
+        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch(); }
 
         Type type;
         std::uint8_t rarity;
@@ -166,12 +168,18 @@ private:
             if (stickerKit->id == 0)
                 continue;
 
-            if (std::string_view name{ stickerKit->name.data() }; name.starts_with("spray") || name.starts_with("patch") || name.ends_with("graffiti"))
-                continue;
+            const auto name = std::string_view{ stickerKit->name.data() };
+            const auto isPatch = name.starts_with("patch");
+            const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
+            const auto isSticker = !isPatch && !isGraffiti;
 
-            std::wstring name = interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() + 1 : "StickerKit_dhw2014_teamdignitas_gold");
-            _paintKits.emplace_back(stickerKit->id, std::move(name));
-            _gameItems.emplace_back(Type::Sticker, stickerKit->rarity, WeaponId::Sticker, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+            if (isSticker) {
+                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->id != 242 ? stickerKit->itemName.data() : "StickerKit_dhw2014_teamdignitas_gold"));
+                _gameItems.emplace_back(Type::Sticker, stickerKit->rarity, WeaponId::Sticker, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+            } else if (isPatch) {
+                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
+                _gameItems.emplace_back(Type::Patch, stickerKit->rarity, WeaponId::Patch, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+            }
         }
 
         const auto& musicMap = itemSchema->musicKits;
