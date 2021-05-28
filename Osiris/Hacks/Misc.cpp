@@ -1119,23 +1119,6 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
-void Misc::deathmatchGod() noexcept
-{
-    if (!config->misc.deathmatchGod || !localPlayer->isAlive() || !localPlayer->gunGameImmunity())
-        return;
-
-    static auto gameType{ interfaces->cvar->findVar("game_type") };
-    static auto gameMode{ interfaces->cvar->findVar("game_mode") };
-    if (gameType->getInt() != 1 || gameMode->getInt() != 2)
-        return;
-
-    static auto nextTime = 0.0f;
-    if (nextTime <= memory->globalVars->realtime) {
-        interfaces->engine->clientCmdUnrestricted("open_buymenu");
-        nextTime = memory->globalVars->realtime + 0.25f;
-    }
-}
-
 void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {

@@ -49,7 +49,6 @@ namespace Misc
     void voteRevealer(GameEvent& event) noexcept;
     void drawOffscreenEnemies(ImDrawList* drawList) noexcept;
     void autoAccept(const char* soundEntry) noexcept;
-    void deathmatchGod() noexcept;
 
     void updateEventListeners(bool forceRemove = false) noexcept;
     void updateInput() noexcept;
