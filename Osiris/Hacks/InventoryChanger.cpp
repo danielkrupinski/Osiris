@@ -855,6 +855,9 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 econItem->quality = 1;
         } else if (item.isNameTag()) {
             econItem->weaponId = WeaponId::NameTag;
+        } else if (item.isPatch()) {
+            econItem->weaponId = WeaponId::Patch;
+            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         }
 
         baseTypeCache->addObject(econItem);
