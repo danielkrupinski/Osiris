@@ -82,6 +82,7 @@ enum class WeaponId : short {
     NameTag = 1200,
     Sticker = 1209,
     MusicKit = 1314,
+    Patch = 4609,
     GloveStuddedBrokenfang = 4725,
     GloveStuddedBloodhound = 5027,
     GloveT,
