@@ -1047,7 +1047,7 @@ namespace ImGui
         window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius, rarityColor, 12);
 
         RenderTextClipped(itemNameMin, itemNameMax, itemName, nullptr, &itemNameSize, { 0.0f, 0.5f }, &bb);
-        if (item.hasPaintKit())
+        if (paintKitName[0] != '\0')
             window->DrawList->AddRectFilled(separatorMin, separatorMax, GetColorU32(ImGuiCol_Text));
         RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
 
