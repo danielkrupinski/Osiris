@@ -248,7 +248,7 @@ static void __stdcall paintTraverse(unsigned int panel, bool forceRepaint, bool 
     hooks->panel.callOriginal<void, 41>(panel, forceRepaint, allowForce);
 }
 
-static void __stdcall frameStageNotify(FrameStage stage) noexcept
+static void __stdcall frameStageNotify(FrameStage stage, UserCmd* cmd) noexcept
 {
     [[maybe_unused]] static auto backtrackInit = (Backtrack::init(), false);
 
@@ -259,6 +259,8 @@ static void __stdcall frameStageNotify(FrameStage stage) noexcept
         GameData::update();
 
     if (stage == FrameStage::RENDER_START) {
+        if (config->visuals.thirdperson)
+            localPlayer->thirdPersonViewAngles() = cmd->viewangles;
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
