@@ -822,15 +822,13 @@ void InventoryChanger::run(FrameStage stage) noexcept
         econItem->inventory = baseInvID + i + 1;
         econItem->rarity = item.rarity;
         econItem->quality = 4;
+        econItem->weaponId = item.weaponID;
 
         if (item.isSticker()) {
-            econItem->weaponId = WeaponId::Sticker;
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isMusic()) {
-            econItem->weaponId = WeaponId::MusicKit;
             econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isSkin()) {
-            econItem->weaponId = item.weaponID;
             if (isKnife(econItem->weaponId))
                 econItem->quality = 3;
             econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
@@ -849,28 +847,21 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 econItem->setStickerWear(j, sticker.wear);
             }
         } else if (item.isGlove()) {
-            econItem->weaponId = item.weaponID;
             econItem->quality = 3;
-
             econItem->setPaintKit(static_cast<float>(StaticData::paintKits()[item.dataIndex].id));
 
             const auto& dynamicData = dynamicGloveData[inventory[i].getDynamicDataIndex()];
             econItem->setWear(dynamicData.wear);
             econItem->setSeed(static_cast<float>(dynamicData.seed));
         } else if (item.isCollectible()) {
-            econItem->weaponId = item.weaponID;
             if (StaticData::collectibles()[item.dataIndex].isOriginal)
                 econItem->quality = 1;
         } else if (item.isNameTag()) {
-            econItem->weaponId = WeaponId::NameTag;
         } else if (item.isPatch()) {
-            econItem->weaponId = WeaponId::Patch;
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isGraffiti()) {
-            econItem->weaponId = WeaponId::Graffiti;
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isSealedGraffiti()) {
-            econItem->weaponId = WeaponId::SealedGraffiti;
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         }
 
