@@ -63,7 +63,8 @@ public:
         Music,
         Collectible,
         NameTag,
-        Patch
+        Patch,
+        Graffiti
     };
 
     struct GameItem {
@@ -76,9 +77,10 @@ public:
         bool isCollectible() const noexcept { return type == Type::Collectible; }
         bool isNameTag() const noexcept { return type == Type::NameTag; }
         bool isPatch() const noexcept { return type == Type::Patch; }
+        bool isGraffiti() const noexcept { return type == Type::Graffiti; }
 
         // TODO: We need a better name for this
-        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch(); }
+        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch() || isGraffiti(); }
 
         Type type;
         std::uint8_t rarity;
@@ -179,6 +181,9 @@ private:
             } else if (isPatch) {
                 _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
                 _gameItems.emplace_back(Type::Patch, stickerKit->rarity, WeaponId::Patch, _paintKits.size() - 1, stickerKit->inventoryImage.data());
+            } else if (isGraffiti) {
+                _paintKits.emplace_back(stickerKit->id, interfaces->localize->findSafe(stickerKit->itemName.data()));
+                _gameItems.emplace_back(Type::Graffiti, stickerKit->rarity, WeaponId::Graffiti, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             }
         }
 
@@ -857,6 +862,9 @@ void InventoryChanger::run(FrameStage stage) noexcept
             econItem->weaponId = WeaponId::NameTag;
         } else if (item.isPatch()) {
             econItem->weaponId = WeaponId::Patch;
+            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
+        } else if (item.isGraffiti()) {
+            econItem->weaponId = WeaponId::Graffiti;
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         }
 
