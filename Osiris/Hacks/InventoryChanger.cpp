@@ -1274,6 +1274,12 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Patch ID"] = staticData.id;
             break;
         }
+        case StaticData::Type::Graffiti: {
+            itemConfig["Type"] = "Graffiti";
+            const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
+            itemConfig["Graffiti ID"] = staticData.id;
+            break;
+        }
         }
 
         items.push_back(std::move(itemConfig));
@@ -1460,6 +1466,14 @@ void InventoryChanger::fromJson(const json& j) noexcept
 
             const int patchID = jsonItem["Patch ID"];
             const auto staticData = std::ranges::find_if(StaticData::gameItems(), [patchID](const auto& gameItem) { return gameItem.isPatch() && StaticData::paintKits()[gameItem.dataIndex].id == patchID; });
+            if (staticData != StaticData::gameItems().end())
+                inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+        } else if (type == "Graffiti") {
+            if (!jsonItem.contains("Graffiti ID") || !jsonItem["Graffiti ID"].is_number_integer())
+                continue;
+
+            const int graffitiID = jsonItem["Graffiti ID"];
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [graffitiID](const auto& gameItem) { return gameItem.isGraffiti() && StaticData::paintKits()[gameItem.dataIndex].id == graffitiID; });
             if (staticData != StaticData::gameItems().end())
                 inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         }
