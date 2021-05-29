@@ -513,6 +513,22 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
    
     return result;
 }
+#ifdef _WIN32
+int __stdcall getUnverifiedFileHashes(void* thisPointer, int maxFiles)
+{
+    if (config->misc.bypassSvPure)
+        return 0;
+    return hooks->fileSystem.callOriginal<int, 101>(thisPointer, maxFiles);
+}
+
+int __fastcall canLoadThirdPartyFiles(void* thisPointer, void* edx) noexcept
+{
+    if (config->misc.bypassSvPure)
+        return 1;
+    return hooks->fileSystem.callOriginal<int, 127>(thisPointer);
+}
+
+#endif
 
 #ifdef _WIN32
 
@@ -620,6 +636,11 @@ void Hooks::install() noexcept
     engine.hookAt(82, isPlayingDemo);
     engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
+#ifdef _WIN32
+    fileSystem.init(memory->fileSystem);
+    fileSystem.hookAt(101, getUnverifiedFileHashes);
+    fileSystem.hookAt(127, canLoadThirdPartyFiles);
+#endif
 
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, drawModelExecute);
@@ -703,6 +724,9 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
+#ifdef _WIN32
+    fileSystem.restore();
+#endif
     modelRender.restore();
     panoramaMarshallHelper.restore();
     sound.restore();

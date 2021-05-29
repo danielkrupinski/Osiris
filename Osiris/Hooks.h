@@ -50,6 +50,7 @@ public:
     HookType client;
     HookType clientMode;
     HookType engine;
+    HookType fileSystem;
     HookType modelRender;
     HookType panoramaMarshallHelper;
     HookType sound;

@@ -249,6 +249,7 @@ public:
         } reportbot;
 
         OffscreenEnemies offscreenEnemies;
+        bool bypassSvPure{ false };
     } misc;
 
     void scheduleFontLoad(const std::string& name) noexcept;
