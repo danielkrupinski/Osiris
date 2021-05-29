@@ -824,7 +824,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         econItem->quality = 4;
         econItem->weaponId = item.weaponID;
 
-        if (item.isSticker()) {
+        if (item.isSticker() || item.isPatch() || item.isGraffiti() || item.isSealedGraffiti()) {
             econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         } else if (item.isMusic()) {
             econItem->setMusicID(StaticData::paintKits()[item.dataIndex].id);
@@ -856,13 +856,6 @@ void InventoryChanger::run(FrameStage stage) noexcept
         } else if (item.isCollectible()) {
             if (StaticData::collectibles()[item.dataIndex].isOriginal)
                 econItem->quality = 1;
-        } else if (item.isNameTag()) {
-        } else if (item.isPatch()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
-        } else if (item.isGraffiti()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
-        } else if (item.isSealedGraffiti()) {
-            econItem->setStickerID(0, StaticData::paintKits()[item.dataIndex].id);
         }
 
         baseTypeCache->addObject(econItem);
