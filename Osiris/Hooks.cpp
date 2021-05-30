@@ -637,7 +637,7 @@ void Hooks::install() noexcept
     engine.hookAt(101, getScreenAspectRatio);
     engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
 #ifdef _WIN32
-    fileSystem.init(memory->fileSystem);
+    fileSystem.init(interfaces->fileSystem);
     fileSystem.hookAt(101, getUnverifiedFileHashes);
     fileSystem.hookAt(127, canLoadThirdPartyFiles);
 #endif

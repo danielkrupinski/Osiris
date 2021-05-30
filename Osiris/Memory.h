@@ -161,8 +161,6 @@ public:
         reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, _this, attribute, value);
 #endif
     }
-
-    void* fileSystem;
 private:
     void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);

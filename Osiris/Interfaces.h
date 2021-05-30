@@ -19,6 +19,7 @@ class Engine;
 class EngineSound;
 class EngineTrace;
 class EntityList;
+class FileSystem;
 class GameEventManager;
 class GameMovement;
 class GameUI;
@@ -47,6 +48,7 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
     GAME_INTERFACE(Engine, engine, ENGINE_DLL, "VEngineClient014")
     GAME_INTERFACE(EngineTrace, engineTrace, ENGINE_DLL, "EngineTraceClient004")
     GAME_INTERFACE(EntityList, entityList, CLIENT_DLL, "VClientEntityList003")
+    GAME_INTERFACE(FileSystem, fileSystem, FILESYSTEM_DLL, "VFileSystem017")
     GAME_INTERFACE(GameEventManager, gameEventManager, ENGINE_DLL, "GAMEEVENTSMANAGER002")
     GAME_INTERFACE(GameMovement, gameMovement, CLIENT_DLL, "GameMovement001")
     GAME_INTERFACE(GameUI, gameUI, CLIENT_DLL, "GameUI011")
