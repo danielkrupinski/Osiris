@@ -9,9 +9,6 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-#else
-#include <dlfcn.h>
-#include <sys/mman.h>
 #endif
 
 #include "imgui/imgui.h"
@@ -175,8 +172,7 @@ std::size_t Helpers::calculateVmtLength(std::uintptr_t* vmt) noexcept
     while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
         length++;
 #else
-    Dl_info memoryInfo;
-    while (dladdr((void*)vmt[length], &memoryInfo) && mprotect((void*)memoryInfo.dli_fbase, 1, PROT_READ | PROT_WRITE | PROT_EXEC) == 0)
+    while(vmt[length])
         length++;
 #endif
     return length;
