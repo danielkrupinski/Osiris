@@ -46,6 +46,7 @@
 #include "../SDK/PlayerResource.h"
 #include "../SDK/Platform.h"
 #include "../SDK/WeaponId.h"
+#include "../SDK/NetworkStringTable.h"
 
 #include "../Helpers.h"
 
@@ -63,6 +64,7 @@ public:
         Music,
         Collectible,
         NameTag,
+        Agent,
         Patch,
         Graffiti,
         SealedGraffiti
@@ -77,6 +79,7 @@ public:
         bool isMusic() const noexcept { return type == Type::Music; }
         bool isCollectible() const noexcept { return type == Type::Collectible; }
         bool isNameTag() const noexcept { return type == Type::NameTag; }
+        bool isAgent() const noexcept { return type == Type::Agent; }
         bool isPatch() const noexcept { return type == Type::Patch; }
         bool isGraffiti() const noexcept { return type == Type::Graffiti; }
         bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
@@ -228,6 +231,12 @@ private:
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, image);
                 }
+            else if (item->getCapabilities() & ITEM_CAP_CAN_PATCH) {
+                if (const auto image = item->getInventoryImage()) {
+                    _paintKits.emplace_back(0, L"");
+                    _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), _paintKits.size() - 1, image);
+                }
+            }
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, image);
@@ -323,6 +332,8 @@ public:
     bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
     bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
     bool isMusic() const noexcept { return !isDeleted() && get().isMusic(); }
+    bool isCollectible() const noexcept { return !isDeleted() && get().isCollectible(); }
+    bool isAgent() const noexcept { return !isDeleted() && get().isAgent(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
@@ -452,6 +463,10 @@ static void applyKnife(Entity* local) noexcept
 
     auto& weapons = local->weapons();
 
+    PlayerInfo player_info;
+    if (!interfaces->engine->getPlayerInfo(local->index(), player_info))
+        return;
+    
     for (auto weaponHandle : weapons) {
         if (weaponHandle == -1)
             break;
@@ -460,6 +475,9 @@ static void applyKnife(Entity* local) noexcept
         if (!weapon)
             continue;
 
+        if (player_info.xuidLow != weapon->xuidLow() || player_info.xuidHigh != weapon->xuidHigh())
+            continue;
+        
         auto& definitionIndex = weapon->itemDefinitionIndex2();
         if (!isKnife(definitionIndex))
             continue;
@@ -517,6 +535,10 @@ static void applyWeapons(Entity* local) noexcept
 
     const auto localTeam = local->getTeamNumber();
 
+    PlayerInfo player_info;
+    if (!interfaces->engine->getPlayerInfo(local->index(), player_info))
+        return;
+    
     auto& weapons = local->weapons();
     for (auto weaponHandle : weapons) {
         if (weaponHandle == -1)
@@ -524,6 +546,9 @@ static void applyWeapons(Entity* local) noexcept
 
         const auto weapon = interfaces->entityList->getEntityFromHandle(weaponHandle);
         if (!weapon)
+            continue;
+        
+        if (player_info.xuidLow != weapon->xuidLow() || player_info.xuidHigh != weapon->xuidHigh())
             continue;
 
         const auto& definitionIndex = weapon->itemDefinitionIndex2();
@@ -691,11 +716,88 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
         return;
 
     const auto& itemData = StaticData::paintKits()[item.get().dataIndex];
-    pr->musicID()[localPlayer->index()] = itemData.id;
+    pr->m_nMusicID()[localPlayer->index()] = itemData.id;
+}
+
+static void applyCollectibles(CSPlayerInventory& localInventory) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    const auto pr = *memory->playerResource;
+    if (pr == nullptr)
+        return;
+
+    const auto itemView = localInventory.getItemInLoadout(Team::None, 55);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isCollectible())
+        return;
+
+    pr->m_nActiveCoinRank()[localPlayer->index()] = (int)item.get().weaponID;
+}
+
+static void playerModel(FrameStage stage) noexcept
+{
+    if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
+        return;
+
+    static int originalIdx = 0;
+
+    if (!localPlayer) {
+        originalIdx = 0;
+        return;
+    }
+
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 38);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isAgent())
+        return;
+
+    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID))
+    {
+        if (const auto model = def->getPlayerDisplayModel()) {
+            if (stage == FrameStage::RENDER_START) {
+                originalIdx = localPlayer->modelIndex();
+                if (const auto modelprecache = interfaces->networkStringTableContainer->findTable("modelprecache")) {
+                    modelprecache->addString(false, model);
+                    const auto viewmodelArmConfig = memory->getPlayerViewmodelArmConfigForPlayerModel(model);
+                    modelprecache->addString(false, viewmodelArmConfig[2]);
+                    modelprecache->addString(false, viewmodelArmConfig[3]);
+                }
+            }
+
+            const auto idx = stage == FrameStage::RENDER_END && originalIdx ? originalIdx : interfaces->modelInfo->getModelIndex(model);
+
+            localPlayer->setModelIndex(idx);
+
+            if (const auto ragdoll = interfaces->entityList->getEntityFromHandle(localPlayer->ragdoll()))
+                ragdoll->setModelIndex(idx);
+        }
+    }
 }
 
 void InventoryChanger::run(FrameStage stage) noexcept
 {
+    playerModel(stage);
+    
     static int localPlayerHandle = -1;
 
     if (localPlayer)
@@ -719,6 +821,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         return;
 
     applyMusicKit(*localInventory);
+    applyCollectibles(*localInventory);
 
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
@@ -1258,6 +1361,11 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Type"] = "Name Tag";
             break;
         }
+        case StaticData::Type::Agent: {
+            itemConfig["Type"] = "Agent";
+            itemConfig["Index"] = gameItem.weaponID;
+            break;
+        }
         case StaticData::Type::Patch: {
             itemConfig["Type"] = "Patch";
             const auto& staticData = StaticData::paintKits()[gameItem.dataIndex];
@@ -1456,6 +1564,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const auto staticData = std::ranges::find_if(StaticData::gameItems(), [](const auto& gameItem) { return gameItem.isNameTag(); });
             if (staticData != StaticData::gameItems().end())
                 inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+        } else if (type == "Agent") {
+            if (!jsonItem.contains("Index") || !jsonItem["Index"].is_number_integer())
+                continue;
+
+            const WeaponId index = jsonItem["Index"];
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [index](const auto& gameItem) { return gameItem.isAgent() && gameItem.weaponID == index; });
+
+            if (staticData == StaticData::gameItems().end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData), (jsonItem.contains("Apply") && jsonItem["Apply"] == true) ? true : false);
         } else if (type == "Patch") {
             if (!jsonItem.contains("Patch ID") || !jsonItem["Patch ID"].is_number_integer())
                 continue;
