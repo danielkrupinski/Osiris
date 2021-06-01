@@ -91,6 +91,35 @@ struct StickerKit {
 
 enum class Team;
 
+enum item_capabilities_t
+{
+    ITEM_CAP_NONE = 0,
+    ITEM_CAP_PAINTABLE = 1 << 0,		// some items are tagged in CS:GO schema, but we don't use it
+    ITEM_CAP_NAMEABLE = 1 << 1,		// used in CS:GO on all weapons that can get a name tag
+    ITEM_CAP_DECODABLE = 1 << 2,		// used in CS:GO on supply crates containers
+    ITEM_CAP_CAN_DELETE = 1 << 3,		// used in CS:GO on supply crates containers
+    ITEM_CAP_CAN_CUSTOMIZE_TEXTURE = 1 << 4,
+    ITEM_CAP_USABLE = 1 << 5,
+    ITEM_CAP_USABLE_GC = 1 << 6,		// some items are tagged in CS:GO schema, but we don't use it
+    ITEM_CAP_CAN_GIFT_WRAP = 1 << 7,
+    ITEM_CAP_USABLE_OUT_OF_GAME = 1 << 8,		// some items are tagged in CS:GO schema, but we don't use it
+    ITEM_CAP_CAN_COLLECT = 1 << 9,
+    ITEM_CAP_CAN_CRAFT_COUNT = 1 << 10,
+    ITEM_CAP_CAN_CRAFT_MARK = 1 << 11,
+    ITEM_CAP_PAINTABLE_TEAM_COLORS = 1 << 12,
+    ITEM_CAP_CAN_BE_RESTORED = 1 << 13,
+    ITEM_CAP_CAN_USE_STRANGE_PARTS = 1 << 14,
+    ITEM_CAP_PAINTABLE_UNUSUAL = 1 << 15,
+    ITEM_CAP_CAN_INCREMENT = 1 << 16,
+    ITEM_CAP_USES_ESSENCE = 1 << 17,
+    ITEM_CAP_AUTOGRAPH = 1 << 18,
+    ITEM_CAP_RECIPE = 1 << 19,
+    ITEM_CAP_CAN_STICKER = 1 << 20,		// used in CS:GO on sticker tools, primary and secondary weapons
+    ITEM_CAP_STATTRACK_SWAP = 1 << 21,		// used in CS:GO on stattrack items
+    ITEM_CAP_CAN_PATCH = 1 << 22,
+    NUM_ITEM_CAPS = 23,
+};
+
 class EconItemDefinition {
 public:
     INCONSTRUCTIBLE(EconItemDefinition)
