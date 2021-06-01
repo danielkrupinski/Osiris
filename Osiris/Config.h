@@ -1,46 +1,39 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 #include <filesystem>
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "imgui/imgui.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "ConfigStructs.h"
+#include "InputUtil.h"
 
 class Config {
 public:
-    explicit Config(const char*) noexcept;
-    void load(size_t, bool incremental) noexcept;
-    void save(size_t) const noexcept;
+    Config() noexcept;
+    void load(std::size_t, bool incremental) noexcept;
+    void load(const char8_t* name, bool incremental) noexcept;
+    void save(std::size_t) const noexcept;
     void add(const char*) noexcept;
-    void remove(size_t) noexcept;
-    void rename(size_t, const char*) noexcept;
+    void remove(std::size_t) noexcept;
+    void rename(std::size_t, const char*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
+    void createConfigDir() const noexcept;
+    void openConfigDir() const noexcept;
 
     constexpr auto& getConfigs() noexcept
     {
         return configs;
     }
 
-    struct Color {
-        std::array<float, 3> color{ 1.0f, 1.0f, 1.0f };
-        bool rainbow{ false };
-        float rainbowSpeed{ 0.6f };
-    };
-
-    struct ColorToggle : public Color {
-        bool enabled{ false };
-    };
-
     struct Aimbot {
         bool enabled{ false };
-        bool onKey{ false };
-        int key{ 0 };
-        int keyMode{ 0 };
         bool aimlock{ false };
         bool silent{ false };
         bool friendlyFire{ false };
@@ -61,6 +54,9 @@ public:
         bool betweenShots{ true };
     };
     std::array<Aimbot, 40> aimbot;
+    bool aimbotOnKey{ false };
+    KeyBind aimbotKey = KeyBind::NONE;
+    int aimbotKeyMode{ 0 };
 
     struct Triggerbot {
         bool enabled = false;
@@ -69,38 +65,16 @@ public:
         bool ignoreFlash = false;
         bool ignoreSmoke = false;
         bool killshot = false;
-        bool onKey = false;
-        int key = 0;
         int hitgroup = 0;
         int shotDelay = 0;
         int minDamage = 1;
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
-
-    struct Backtrack {
-        bool enabled{ false };
-        bool ignoreSmoke{ false };
-        bool recoilBasedFov{ false };
-        int timeLimit{ 200 };
-    } backtrack;
-
-    struct AntiAim {
-        bool enabled{ false };
-        bool pitch{ false };
-        bool yaw{ false };
-        float pitchAngle{ 0.0f };
-    } antiAim;
-
-    struct Glow : ColorA {
-        bool enabled{ false };
-        bool healthBased{ false };
-        int style{ 0 };
-    };
-    std::array<Glow, 21> glow;
+    KeyBind triggerbotHoldKey = KeyBind::NONE;
 
     struct Chams {
-        struct Material : ColorA {
+        struct Material : Color4 {
             bool enabled = false;
             bool healthBased = false;
             bool blinking = false;
@@ -113,8 +87,13 @@ public:
     };
 
     std::unordered_map<std::string, Chams> chams;
+    KeyBindToggle chamsToggleKey = KeyBind::NONE;
+    KeyBind chamsHoldKey = KeyBind::NONE;
 
     struct StreamProofESP {
+        KeyBindToggle toggleKey = KeyBind::NONE;
+        KeyBind holdKey = KeyBind::NONE;
+
         std::unordered_map<std::string, Player> allies;
         std::unordered_map<std::string, Player> enemies;
         std::unordered_map<std::string, Weapon> weapons;
@@ -146,9 +125,9 @@ public:
         bool noShadows{ false };
         bool wireframeSmoke{ false };
         bool zoom{ false };
-        int zoomKey{ 0 };
+        KeyBindToggle zoomKey = KeyBind::NONE;
         bool thirdperson{ false };
-        int thirdpersonKey{ 0 };
+        KeyBindToggle thirdpersonKey = KeyBind::NONE;
         int thirdpersonDistance{ 0 };
         int viewmodelFov{ 0 };
         int fov{ 0 };
@@ -156,8 +135,8 @@ public:
         int flashReduction{ 0 };
         float brightness{ 0.0f };
         int skybox{ 0 };
-        ColorToggle world;
-        ColorToggle sky;
+        ColorToggle3 world;
+        ColorToggle3 sky;
         bool deagleSpinner{ false };
         int screenEffect{ 0 };
         int hitEffect{ 0 };
@@ -166,6 +145,8 @@ public:
         float hitMarkerTime{ 0.6f };
         int playerModelT{ 0 };
         int playerModelCT{ 0 };
+        BulletTracers bulletTracers;
+        ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
 
         struct ColorCorrection {
             bool enabled = false;
@@ -179,30 +160,15 @@ public:
         } colorCorrection;
     } visuals;
 
-    std::array<item_setting, 36> skinChanger;
-
-    struct Sound {
-        int chickenVolume{ 100 };
-
-        struct Player {
-            int masterVolume{ 100 };
-            int headshotVolume{ 100 };
-            int weaponVolume{ 100 };
-            int footstepVolume{ 100 };
-        };
-
-        std::array<Player, 3> players;
-    } sound;
-
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
 
     struct Misc {
-        Misc() { }
+        Misc() { clanTag[0] = '\0'; }
 
-        int menuKey{ 0x2D }; // VK_INSERT
+        KeyBind menuKey = KeyBind::INSERT;
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
@@ -221,6 +187,7 @@ public:
         bool revealRanks{ false };
         bool revealMoney{ false };
         bool revealSuspect{ false };
+        bool revealVotes{ false };
         bool fixAnimationLOD{ false };
         bool fixBoneMatrix{ false };
         bool fixMovement{ false };
@@ -238,21 +205,32 @@ public:
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
         char clanTag[16];
-        int edgejumpkey{ 0 };
-        int slowwalkKey{ 0 };
+        KeyBind edgejumpkey = KeyBind::NONE;
+        KeyBind slowwalkKey = KeyBind::NONE;
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
-        ColorToggle spectatorList;
-        ColorToggle watermark;
+
+        struct SpectatorList {
+            bool enabled = false;
+            bool noTitleBar = false;
+            ImVec2 pos;
+            ImVec2 size{ 200.0f, 200.0f };
+        };
+
+        SpectatorList spectatorList;
+        struct Watermark {
+            bool enabled = false;
+        };
+        Watermark watermark;
         float aspectratio{ 0 };
         std::string killMessageString{ "Gotcha!" };
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
-        ColorToggle bombTimer{ 1.0f, 0.55f, 0.0f };
-        int prepareRevolverKey{ 0 };
+        ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
+        KeyBind prepareRevolverKey = KeyBind::NONE;
         int hitSound{ 0 };
         int chokedPackets{ 0 };
-        int chokedPacketsKey{ 0 };
+        KeyBind chokedPacketsKey = KeyBind::NONE;
         int quickHealthshotKey{ 0 };
         float maxAngleDelta{ 255.0f };
         int killSound{ 0 };

@@ -12,9 +12,11 @@
 
 #include "SDK/Platform.h"
 
+class BaseFileSystem;
 class Client;
 class Cvar;
 class Engine;
+class EngineSound;
 class EngineTrace;
 class EntityList;
 class GameEventManager;
@@ -26,12 +28,11 @@ class MaterialSystem;
 class ModelInfo;
 class ModelRender;
 class NetworkStringTableContainer;
-class Panel;
+class PanoramaUIEngine;
 class PhysicsSurfaceProps;
 class Prediction;
 class RenderView;
 class Surface;
-class Sound;
 class SoundEmitter;
 class StudioRender;
 
@@ -40,6 +41,7 @@ public:
 #define GAME_INTERFACE(type, name, moduleName, version) \
 type* name = reinterpret_cast<type*>(find(moduleName, version));
 
+    GAME_INTERFACE(BaseFileSystem, baseFileSystem, FILESYSTEM_DLL, "VBaseFileSystem011")
     GAME_INTERFACE(Client, client, CLIENT_DLL, "VClient018")
     GAME_INTERFACE(Cvar, cvar, VSTDLIB_DLL, "VEngineCvar007")
     GAME_INTERFACE(Engine, engine, ENGINE_DLL, "VEngineClient014")
@@ -54,12 +56,12 @@ type* name = reinterpret_cast<type*>(find(moduleName, version));
     GAME_INTERFACE(ModelInfo, modelInfo, ENGINE_DLL, "VModelInfoClient004")
     GAME_INTERFACE(ModelRender, modelRender, ENGINE_DLL, "VEngineModel016")
     GAME_INTERFACE(NetworkStringTableContainer, networkStringTableContainer, ENGINE_DLL, "VEngineClientStringTable001")
-    GAME_INTERFACE(Panel, panel, VGUI2_DLL, "VGUI_Panel009")
+    GAME_INTERFACE(PanoramaUIEngine, panoramaUIEngine, PANORAMA_DLL, "PanoramaUIEngine001")
     GAME_INTERFACE(PhysicsSurfaceProps, physicsSurfaceProps, VPHYSICS_DLL, "VPhysicsSurfaceProps001")
     GAME_INTERFACE(Prediction, prediction, CLIENT_DLL, "VClientPrediction001")
     GAME_INTERFACE(RenderView, renderView, ENGINE_DLL, "VEngineRenderView014")
     GAME_INTERFACE(Surface, surface, VGUIMATSURFACE_DLL, "VGUI_Surface031")
-    GAME_INTERFACE(Sound, sound, ENGINE_DLL, "IEngineSoundClient003")
+    GAME_INTERFACE(EngineSound, sound, ENGINE_DLL, "IEngineSoundClient003")
     GAME_INTERFACE(SoundEmitter, soundEmitter, SOUNDEMITTERSYSTEM_DLL, "VSoundEmitter003")
     GAME_INTERFACE(StudioRender, studioRender, STUDIORENDER_DLL, "VStudioRender026")
 

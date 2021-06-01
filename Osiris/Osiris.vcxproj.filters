@@ -18,9 +18,6 @@
     <Filter Include="Hacks">
       <UniqueIdentifier>{f60a2d6f-e07f-4f71-8db1-6ec82cf1f6d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="nSkinz">
-      <UniqueIdentifier>{6f9a1532-1c54-4497-8809-a84d6dfcb206}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MinHook">
       <UniqueIdentifier>{d845b8dc-ce6b-48c5-b78d-1003a5a857e0}</UniqueIdentifier>
     </Filter>
@@ -29,6 +26,15 @@
     </Filter>
     <Filter Include="nlohmann">
       <UniqueIdentifier>{44d5d3e3-0072-4a5a-b725-1b9807c24a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{ad9f0ad1-ce71-4bc4-b5eb-dd6a018f4fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="freetype">
+      <UniqueIdentifier>{15481d2e-5516-4ece-9b00-79e32710804c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{6f1f2a48-d1e6-4e87-b967-4b7e41157a5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,20 +92,11 @@
     <ClCompile Include="Hacks\Visuals.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\SkinChanger.cpp">
-      <Filter>Hacks</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Backtrack.cpp">
       <Filter>Hacks</Filter>
     </ClCompile>
     <ClCompile Include="SDK\GlobalVars.cpp">
       <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\item_definitions.cpp">
-      <Filter>nSkinz</Filter>
-    </ClCompile>
-    <ClCompile Include="nSkinz\Utilities\Platform.cpp">
-      <Filter>nSkinz</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\AntiAim.cpp">
       <Filter>Hacks</Filter>
@@ -157,6 +154,72 @@
     </ClCompile>
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\autofit\autofit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\cff\cff.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftbase.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftbitmap.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftdebug.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftglyph.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftinit.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftsynth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\base\ftsystem.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\psaux\psaux.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\pshinter\pshinter.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\psnames\psnames.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\raster\raster.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\sfnt\sfnt.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\smooth\smooth.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="freetype\src\truetype\truetype.c">
+      <Filter>freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_freetype.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Sound.cpp">
+      <Filter>Hacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\InventoryChanger.cpp">
+      <Filter>Hacks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,17 +355,11 @@
     <ClInclude Include="SDK\ModelInfo.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Panel.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Surface.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="SDK\GameUI.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Hacks\SkinChanger.h">
-      <Filter>Hacks</Filter>
     </ClInclude>
     <ClInclude Include="SDK\FrameStage.h">
       <Filter>SDK</Filter>
@@ -313,17 +370,8 @@
     <ClInclude Include="SDK\VarMapping.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\Platform.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\item_definitions.hpp">
-      <Filter>nSkinz</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Localize.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="nSkinz\Utilities\vmt_smart_hook.hpp">
-      <Filter>nSkinz</Filter>
     </ClInclude>
     <ClInclude Include="SDK\GameEvent.h">
       <Filter>SDK</Filter>
@@ -460,5 +508,64 @@
     <ClInclude Include="SDK\Platform.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="InputUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\PlayerResource.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ViewRenderBeams.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\FileSystem.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Steam.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\avatar_ct.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\avatar_tt.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\ClientMode.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="freetype\freetype\config\ftmodule.h">
+      <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="freetype\freetype\config\ftoption.h">
+      <Filter>freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_freetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Sound.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonForward.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Inconstructible.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\InventoryChanger.h">
+      <Filter>Hacks</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

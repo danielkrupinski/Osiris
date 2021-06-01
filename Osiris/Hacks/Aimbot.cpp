@@ -1,8 +1,18 @@
+#include <algorithm>
+#include <array>
+#include <initializer_list>
+#include <memory>
+
 #include "Aimbot.h"
 #include "../Config.h"
+#include "../InputUtil.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../SDK/Engine.h"
+#include "../SDK/EngineTrace.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
+#include "../SDK/LocalPlayer.h"
 #include "../SDK/UserCmd.h"
 #include "../SDK/Vector.h"
 #include "../SDK/WeaponId.h"
@@ -115,6 +125,16 @@ static bool canScan(Entity* entity, const Vector& destination, const WeaponInfo*
     return false;
 }
 
+static bool keyPressed = false;
+
+void Aimbot::updateInput() noexcept
+{
+    if (config->aimbotKeyMode == 0)
+        keyPressed = config->aimbotKey.isDown();
+    if (config->aimbotKeyMode == 1 && config->aimbotKey.isPressed())
+        keyPressed = !keyPressed;
+}
+
 void Aimbot::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -144,22 +164,8 @@ void Aimbot::run(UserCmd* cmd) noexcept
     if (!config->aimbot[weaponIndex].ignoreFlash && localPlayer->isFlashed())
         return;
 
-    if (config->aimbot[weaponIndex].onKey) {
-        if (!config->aimbot[weaponIndex].keyMode) {
-#ifdef _WIN32
-            if (!GetAsyncKeyState(config->aimbot[weaponIndex].key))
-                return;
-#endif
-        } else {
-            static bool toggle = true;
-#ifdef _WIN32
-            if (GetAsyncKeyState(config->aimbot[weaponIndex].key) & 1)
-                toggle = !toggle;
-#endif
-            if (!toggle)
-                return;
-        }
-    }
+    if (config->aimbotOnKey && !keyPressed)
+        return;
 
     if (config->aimbot[weaponIndex].enabled && (cmd->buttons & UserCmd::IN_ATTACK || config->aimbot[weaponIndex].autoShot || config->aimbot[weaponIndex].aimlock) && activeWeapon->getInaccuracy() <= config->aimbot[weaponIndex].maxAimInaccuracy) {
 

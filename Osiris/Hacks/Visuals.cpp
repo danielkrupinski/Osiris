@@ -1,22 +1,32 @@
 #include <array>
 #include <cstring>
+#include <string_view>
+#include <utility>
+#include <vector>
+
+#include "../imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "../imgui/imgui_internal.h"
 
 #include "../fnv.h"
+#include "../GameData.h"
 #include "../Helpers.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
+#include "../SDK/Cvar.h"
 #include "../SDK/Entity.h"
+#include "../SDK/EntityList.h"
 #include "../SDK/FrameStage.h"
 #include "../SDK/GameEvent.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/Input.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
-#include "../SDK/NetworkStringTable.h"
-#include "../SDK/RenderContext.h"
-#include "../SDK/Surface.h"
 #include "../SDK/ModelInfo.h"
+#include "../SDK/NetworkStringTable.h"
+#include "../SDK/Surface.h"
+#include "../SDK/ViewRenderBeams.h"
 
 void Visuals::playerModel(FrameStage stage) noexcept
 {
@@ -30,7 +40,7 @@ void Visuals::playerModel(FrameStage stage) noexcept
         return;
     }
 
-    constexpr auto getModel = [](int team) constexpr noexcept -> const char* {
+    constexpr auto getModel = [](Team team) constexpr noexcept -> const char* {
         constexpr std::array models{
         "models/player/custom_player/legacy/ctm_fbi_variantb.mdl",
         "models/player/custom_player/legacy/ctm_fbi_variantf.mdl",
@@ -72,17 +82,38 @@ void Visuals::playerModel(FrameStage stage) noexcept
         "models/player/custom_player/legacy/tm_balkan_variante.mdl",
         "models/player/custom_player/legacy/tm_jumpsuit_varianta.mdl",
         "models/player/custom_player/legacy/tm_jumpsuit_variantb.mdl",
-        "models/player/custom_player/legacy/tm_jumpsuit_variantc.mdl"
+        "models/player/custom_player/legacy/tm_jumpsuit_variantc.mdl",
+
+        "models/player/custom_player/legacy/tm_phoenix_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantj.mdl",
+        "models/player/custom_player/legacy/ctm_st6_variantl.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantk.mdl",
+        "models/player/custom_player/legacy/tm_balkan_variantl.mdl",
+        "models/player/custom_player/legacy/ctm_swat_variante.mdl",
+        "models/player/custom_player/legacy/ctm_swat_variantf.mdl",
+        "models/player/custom_player/legacy/ctm_swat_variantg.mdl",
+        "models/player/custom_player/legacy/ctm_swat_varianth.mdl",
+        "models/player/custom_player/legacy/ctm_swat_varianti.mdl",
+        "models/player/custom_player/legacy/ctm_swat_variantj.mdl",
+        "models/player/custom_player/legacy/tm_professional_varf.mdl",
+        "models/player/custom_player/legacy/tm_professional_varf1.mdl",
+        "models/player/custom_player/legacy/tm_professional_varf2.mdl",
+        "models/player/custom_player/legacy/tm_professional_varf3.mdl",
+        "models/player/custom_player/legacy/tm_professional_varf4.mdl",
+        "models/player/custom_player/legacy/tm_professional_varg.mdl",
+        "models/player/custom_player/legacy/tm_professional_varh.mdl",
+        "models/player/custom_player/legacy/tm_professional_vari.mdl",
+        "models/player/custom_player/legacy/tm_professional_varj.mdl"
         };
 
         switch (team) {
-        case 2: return static_cast<std::size_t>(config->visuals.playerModelT - 1) < models.size() ? models[config->visuals.playerModelT - 1] : nullptr;
-        case 3: return static_cast<std::size_t>(config->visuals.playerModelCT - 1) < models.size() ? models[config->visuals.playerModelCT - 1] : nullptr;
+        case Team::TT: return static_cast<std::size_t>(config->visuals.playerModelT - 1) < models.size() ? models[config->visuals.playerModelT - 1] : nullptr;
+        case Team::CT: return static_cast<std::size_t>(config->visuals.playerModelCT - 1) < models.size() ? models[config->visuals.playerModelCT - 1] : nullptr;
         default: return nullptr;
         }
     };
 
-    if (const auto model = getModel(localPlayer->team())) {
+    if (const auto model = getModel(localPlayer->getTeamNumber())) {
         if (stage == FrameStage::RENDER_START) {
             originalIdx = localPlayer->modelIndex();
             if (const auto modelprecache = interfaces->networkStringTableContainer->findTable("modelprecache")) {
@@ -150,20 +181,11 @@ void Visuals::modifySmoke(FrameStage stage) noexcept
 
 void Visuals::thirdperson() noexcept
 {
-    static bool isInThirdperson{ true };
-    static float lastTime{ 0.0f };
+    if (!config->visuals.thirdperson)
+        return;
 
-#ifdef _WIN33
-    if (GetAsyncKeyState(config->visuals.thirdpersonKey) && memory->globalVars->realtime - lastTime > 0.5f) {
-        isInThirdperson = !isInThirdperson;
-        lastTime = memory->globalVars->realtime;
-    }
-#endif
-
-    if (config->visuals.thirdperson)
-        if (memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey || isInThirdperson)
-            && localPlayer && localPlayer->isAlive())
-            memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance);
+    memory->input->isCameraInThirdPerson = (!config->visuals.thirdpersonKey.isSet() || config->visuals.thirdpersonKey.isToggled()) && localPlayer && localPlayer->isAlive();
+    memory->input->cameraOffset.z = static_cast<float>(config->visuals.thirdpersonDistance); 
 }
 
 void Visuals::removeVisualRecoil(FrameStage stage) noexcept
@@ -214,6 +236,8 @@ void Visuals::removeGrass(FrameStage stage) noexcept
         switch (fnv::hashRuntime(interfaces->engine->getLevelName())) {
         case fnv::hash("dz_blacksite"): return "detail/detailsprites_survival";
         case fnv::hash("dz_sirocco"): return "detail/dust_massive_detail_sprites";
+        case fnv::hash("coop_autumn"): return "detail/autumn_detail_sprites";
+        case fnv::hash("dz_frostbite"): return "ski/detail/detailsprites_overgrown_ski";
         // dz_junglety has been removed in 7/23/2020 patch
         // case fnv::hash("dz_junglety"): return "detail/tropical_grass";
         default: return nullptr;
@@ -240,14 +264,7 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 {
     if (config->visuals.zoom && localPlayer) {
         if (stage == FrameStage::RENDER_START && (localPlayer->fov() == 90 || localPlayer->fovStart() == 90)) {
-            static bool scoped{ false };
-
-#ifdef _WIN32
-            if (GetAsyncKeyState(config->visuals.zoomKey) & 1)
-                scoped = !scoped;
-#endif
-
-            if (scoped) {
+            if (config->visuals.zoomKey.isToggled()) {
                 localPlayer->fov() = 40;
                 localPlayer->fovStart() = 40;
             }
@@ -256,12 +273,12 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #ifdef _WIN32
-
+#undef xor
 #define DRAW_SCREEN_EFFECT(material) \
 { \
     const auto drawFunction = memory->drawScreenEffectMaterial; \
     int w, h; \
-    interfaces->surface->getScreenSize(w, h); \
+    interfaces->engine->getScreenSize(w, h); \
     __asm { \
         __asm push h \
         __asm push w \
@@ -274,7 +291,12 @@ void Visuals::applyZoom(FrameStage stage) noexcept
 }
 
 #else
-#define DRAW_SCREEN_EFFECT(material) 
+#define DRAW_SCREEN_EFFECT(material) \
+{ \
+    int w, h; \
+    interfaces->engine->getScreenSize(w, h); \
+    reinterpret_cast<void(*)(Material*, int, int, int, int)>(memory->drawScreenEffectMaterial)(material, 0, 0, w, h); \
+}
 #endif
 
 void Visuals::applyScreenEffects() noexcept
@@ -343,15 +365,16 @@ void Visuals::hitEffect(GameEvent* event) noexcept
     }
 }
 
-void Visuals::hitMarker(GameEvent* event) noexcept
+void Visuals::hitMarker(GameEvent* event, ImDrawList* drawList) noexcept
 {
-    if (config->visuals.hitMarker == 0 || !localPlayer)
+    if (config->visuals.hitMarker == 0)
         return;
 
     static float lastHitTime = 0.0f;
 
-    if (event && interfaces->engine->getPlayerForUserID(event->getInt("attacker")) == localPlayer->index()) {
-        lastHitTime = memory->globalVars->realtime;
+    if (event) {
+        if (localPlayer && event->getInt("attacker") == localPlayer->getUserId())
+            lastHitTime = memory->globalVars->realtime;
         return;
     }
 
@@ -360,16 +383,12 @@ void Visuals::hitMarker(GameEvent* event) noexcept
 
     switch (config->visuals.hitMarker) {
     case 1:
-        const auto [width, height] = interfaces->surface->getScreenSize();
-
-        const auto width_mid = width / 2;
-        const auto height_mid = height / 2;
-
-        interfaces->surface->setDrawColor(255, 255, 255, 255);
-        interfaces->surface->drawLine(width_mid + 10, height_mid + 10, width_mid + 4, height_mid + 4);
-        interfaces->surface->drawLine(width_mid - 10, height_mid + 10, width_mid - 4, height_mid + 4);
-        interfaces->surface->drawLine(width_mid + 10, height_mid - 10, width_mid + 4, height_mid - 4);
-        interfaces->surface->drawLine(width_mid - 10, height_mid - 10, width_mid - 4, height_mid - 4);
+        const auto& mid = ImGui::GetIO().DisplaySize / 2.0f;
+        constexpr auto color = IM_COL32(255, 255, 255, 255);
+        drawList->AddLine({ mid.x - 10, mid.y - 10 }, { mid.x - 4, mid.y - 4 }, color);
+        drawList->AddLine({ mid.x + 10.5f, mid.y - 10.5f }, { mid.x + 4.5f, mid.y - 4.5f }, color);
+        drawList->AddLine({ mid.x + 10.5f, mid.y + 10.5f }, { mid.x + 4.5f, mid.y + 4.5f }, color);
+        drawList->AddLine({ mid.x - 10, mid.y + 10 }, { mid.x - 4, mid.y + 4 }, color);
         break;
     }
 }
@@ -410,10 +429,163 @@ void Visuals::skybox(FrameStage stage) noexcept
     if (stage != FrameStage::RENDER_START && stage != FrameStage::RENDER_END)
         return;
 
-    if (const auto& skyboxes = Helpers::skyboxList; stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxes.size()) {
-        memory->loadSky(skyboxes[config->visuals.skybox]);
+    if (stage == FrameStage::RENDER_START && config->visuals.skybox > 0 && static_cast<std::size_t>(config->visuals.skybox) < skyboxList.size()) {
+        memory->loadSky(skyboxList[config->visuals.skybox]);
     } else {
         static const auto sv_skyname = interfaces->cvar->findVar("sv_skyname");
         memory->loadSky(sv_skyname->string);
     }
+}
+
+void Visuals::bulletTracer(GameEvent& event) noexcept
+{
+    if (!config->visuals.bulletTracers.enabled)
+        return;
+
+    if (!localPlayer)
+        return;
+
+    if (event.getInt("userid") != localPlayer->getUserId())
+        return;
+
+    const auto activeWeapon = localPlayer->getActiveWeapon();
+    if (!activeWeapon)
+        return;
+
+    BeamInfo beamInfo;
+
+    if (!localPlayer->shouldDraw()) {
+        const auto viewModel = interfaces->entityList->getEntityFromHandle(localPlayer->viewModel());
+        if (!viewModel)
+            return;
+
+        if (!viewModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex1stPerson(viewModel), beamInfo.start))
+            return;
+    } else {
+        const auto worldModel = interfaces->entityList->getEntityFromHandle(activeWeapon->weaponWorldModel());
+        if (!worldModel)
+            return;
+
+        if (!worldModel->getAttachment(activeWeapon->getMuzzleAttachmentIndex3rdPerson(), beamInfo.start))
+            return;
+    }
+
+    beamInfo.end.x = event.getFloat("x");
+    beamInfo.end.y = event.getFloat("y");
+    beamInfo.end.z = event.getFloat("z");
+
+    beamInfo.modelName = "sprites/physbeam.vmt";
+    beamInfo.modelIndex = -1;
+    beamInfo.haloName = nullptr;
+    beamInfo.haloIndex = -1;
+
+    beamInfo.red = 255.0f * config->visuals.bulletTracers.color[0];
+    beamInfo.green = 255.0f * config->visuals.bulletTracers.color[1];
+    beamInfo.blue = 255.0f * config->visuals.bulletTracers.color[2];
+    beamInfo.brightness = 255.0f * config->visuals.bulletTracers.color[3];
+
+    beamInfo.type = 0;
+    beamInfo.life = 0.0f;
+    beamInfo.amplitude = 0.0f;
+    beamInfo.segments = -1;
+    beamInfo.renderable = true;
+    beamInfo.speed = 0.2f;
+    beamInfo.startFrame = 0;
+    beamInfo.frameRate = 0.0f;
+    beamInfo.width = 2.0f;
+    beamInfo.endWidth = 2.0f;
+    beamInfo.flags = 0x40;
+    beamInfo.fadeLength = 20.0f;
+
+    if (const auto beam = memory->viewRenderBeams->createBeamPoints(beamInfo)) {
+        constexpr auto FBEAM_FOREVER = 0x4000;
+        beam->flags &= ~FBEAM_FOREVER;
+        beam->die = memory->globalVars->currenttime + 2.0f;
+    }
+}
+
+static bool worldToScreen(const Vector& in, ImVec2& out, bool floor = false) noexcept
+{
+    const auto& matrix = GameData::toScreenMatrix();
+
+    const auto w = matrix._41 * in.x + matrix._42 * in.y + matrix._43 * in.z + matrix._44;
+    if (w < 0.001f)
+        return false;
+
+    out = ImGui::GetIO().DisplaySize / 2.0f;
+    out.x *= 1.0f + (matrix._11 * in.x + matrix._12 * in.y + matrix._13 * in.z + matrix._14) / w;
+    out.y *= 1.0f - (matrix._21 * in.x + matrix._22 * in.y + matrix._23 * in.z + matrix._24) / w;
+    if (floor)
+        out = ImFloor(out);
+    return true;
+}
+
+void Visuals::drawMolotovHull(ImDrawList* drawList) noexcept
+{
+    if (!config->visuals.molotovHull.enabled)
+        return;
+
+    const auto color = Helpers::calculateColor(config->visuals.molotovHull);
+
+    GameData::Lock lock;
+
+    static const auto flameCircumference = [] {
+        std::array<Vector, 72> points;
+        for (std::size_t i = 0; i < points.size(); ++i) {
+            constexpr auto flameRadius = 60.0f; // https://github.com/perilouswithadollarsign/cstrike15_src/blob/f82112a2388b841d72cb62ca48ab1846dfcc11c8/game/server/cstrike15/Effects/inferno.cpp#L889
+            points[i] = Vector{ flameRadius * std::cos(Helpers::deg2rad(i * (360.0f / points.size()))),
+                                flameRadius * std::sin(Helpers::deg2rad(i * (360.0f / points.size()))),
+                                0.0f };
+        }
+        return points;
+    }();
+
+    for (const auto& molotov : GameData::infernos()) {
+        for (const auto& pos : molotov.points) {
+            std::array<ImVec2, flameCircumference.size()> screenPoints;
+            std::size_t count = 0;
+
+            for (const auto& point : flameCircumference) {
+                if (worldToScreen(pos + point, screenPoints[count]))
+                    ++count;
+            }
+
+            if (count < 1)
+                continue;
+
+            std::swap(screenPoints[0], *std::min_element(screenPoints.begin(), screenPoints.begin() + count, [](const auto& a, const auto& b) { return a.y < b.y || (a.y == b.y && a.x < b.x); }));
+
+            constexpr auto orientation = [](const ImVec2& a, const ImVec2& b, const ImVec2& c) {
+                return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+            };
+
+            std::sort(screenPoints.begin() + 1, screenPoints.begin() + count, [&](const auto& a, const auto& b) { return orientation(screenPoints[0], a, b) > 0.0f; });
+            drawList->AddConvexPolyFilled(screenPoints.data(), count, color);
+        }
+    }
+}
+
+void Visuals::updateEventListeners(bool forceRemove) noexcept
+{
+    class ImpactEventListener : public GameEventListener {
+    public:
+        void fireGameEvent(GameEvent* event) { bulletTracer(*event); }
+    };
+
+    static ImpactEventListener listener;
+    static bool listenerRegistered = false;
+
+    if (config->visuals.bulletTracers.enabled && !listenerRegistered) {
+        interfaces->gameEventManager->addListener(&listener, "bullet_impact");
+        listenerRegistered = true;
+    } else if ((!config->visuals.bulletTracers.enabled || forceRemove) && listenerRegistered) {
+        interfaces->gameEventManager->removeListener(&listener);
+        listenerRegistered = false;
+    }
+}
+
+void Visuals::updateInput() noexcept
+{
+    config->visuals.thirdpersonKey.handleToggle();
+    config->visuals.zoomKey.handleToggle();
 }

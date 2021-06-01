@@ -8,6 +8,8 @@
 #include "../SDK/WeaponId.h"
 #include "Triggerbot.h"
 
+static bool keyPressed;
+
 void Triggerbot::run(UserCmd* cmd) noexcept
 {
     if (!localPlayer || !localPlayer->isAlive() || localPlayer->nextAttack() > memory->globalVars->serverTime() || localPlayer->isDefusing() || localPlayer->waitForNoAttack())
@@ -46,10 +48,8 @@ void Triggerbot::run(UserCmd* cmd) noexcept
     }
     lastContact = 0.0f;
 
-#ifdef _WIN32
-    if (cfg.onKey && !GetAsyncKeyState(cfg.key))
+    if (!keyPressed)
         return;
-#endif
 
     if (now - lastTime < cfg.shotDelay / 1000.0f)
         return;
@@ -97,4 +97,9 @@ void Triggerbot::run(UserCmd* cmd) noexcept
         lastTime = 0.0f;
         lastContact = now;
     }
+}
+
+void Triggerbot::updateInput() noexcept
+{
+    keyPressed = config->triggerbotHoldKey == KeyBind::NONE || config->triggerbotHoldKey.isDown();
 }

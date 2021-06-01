@@ -1,21 +1,68 @@
+#include <algorithm>
 #include <cstring>
-#include <functional>
+#include <deque>
+#include <memory>
+#include <string>
+#include <string_view>
+#include <tuple>
+#include <unordered_map>
 
 #include "Chams.h"
 #include "../Config.h"
+#include "../Helpers.h"
 #include "../Hooks.h"
 #include "../Interfaces.h"
+#include "../Memory.h"
 #include "Backtrack.h"
+#include "../InputUtil.h"
+#include "../SDK/ClassId.h"
+#include "../SDK/ClientClass.h"
 #include "../SDK/Entity.h"
 #include "../SDK/EntityList.h"
 #include "../SDK/GlobalVars.h"
 #include "../SDK/LocalPlayer.h"
 #include "../SDK/Material.h"
 #include "../SDK/MaterialSystem.h"
+#include "../SDK/ModelRender.h"
 #include "../SDK/StudioRender.h"
 #include "../SDK/KeyValues.h"
+#include "../SDK/Utils.h"
 
-Chams::Chams() noexcept
+static Material* normal;
+static Material* flat;
+static Material* animated;
+static Material* platinum;
+static Material* glass;
+static Material* crystal;
+static Material* chrome;
+static Material* silver;
+static Material* gold;
+static Material* plastic;
+static Material* glow;
+static Material* pearlescent;
+static Material* metallic;
+
+static constexpr auto dispatchMaterial(int id) noexcept
+{
+    switch (id) {
+    default:
+    case 0: return normal;
+    case 1: return flat;
+    case 2: return animated;
+    case 3: return platinum;
+    case 4: return glass;
+    case 5: return chrome;
+    case 6: return crystal;
+    case 7: return silver;
+    case 8: return gold;
+    case 9: return plastic;
+    case 10: return glow;
+    case 11: return pearlescent;
+    case 12: return metallic;
+    }
+}
+
+static void initializeMaterials() noexcept
 {
     normal = interfaces->materialSystem->createMaterial("normal", KeyValues::fromString("VertexLitGeneric", nullptr));
     flat = interfaces->materialSystem->createMaterial("flat", KeyValues::fromString("UnlitGeneric", nullptr));
@@ -74,8 +121,26 @@ Chams::Chams() noexcept
     }
 }
 
+void Chams::updateInput() noexcept
+{
+    config->chamsToggleKey.handleToggle();
+}
+
 bool Chams::render(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
 {
+    if (config->chamsToggleKey != KeyBind::NONE) {
+        if (!config->chamsToggleKey.isToggled() && !config->chamsHoldKey.isDown())
+            return false;
+    } else if (config->chamsHoldKey != KeyBind::NONE && !config->chamsHoldKey.isDown()) {
+        return false;
+    }
+
+    static bool materialsInitialized = false;
+    if (!materialsInitialized) {
+        initializeMaterials();
+        materialsInitialized = true;
+    }
+
     appliedChams = false;
     this->ctx = ctx;
     this->state = state;
@@ -117,14 +182,12 @@ void Chams::renderPlayer(Entity* player) noexcept
     } else if (localPlayer->isOtherEnemy(player)) {
         applyChams(config->chams["Enemies"].materials, health);
 
-        if (config->backtrack.enabled) {
-            const auto& record = Backtrack::getRecords(player->index());
-            if (record.size() && Backtrack::valid(record.front().simulationTime)) {
-                if (!appliedChams)
-                    hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
-                applyChams(config->chams["Backtrack"].materials, health, record.back().matrix);
-                interfaces->studioRender->forcedMaterialOverride(nullptr);
-            }
+        const auto records = Backtrack::getRecords(player->index());
+        if (records && !records->empty() && Backtrack::valid(records->front().simulationTime)) {
+            if (!appliedChams)
+                hooks->modelRender.callOriginal<void, 21>(ctx, state, info, customBoneToWorld);
+            applyChams(config->chams["Backtrack"].materials, health, records->back().matrix);
+            interfaces->studioRender->forcedMaterialOverride(nullptr);
         }
     } else {
         applyChams(config->chams["Allies"].materials, health);
@@ -167,9 +230,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
         
         float r, g, b;
         if (cham.healthBased && health) {
-            r = 1.0f - health / 100.0f;
-            g = health / 100.0f;
-            b = 0.0f;
+            Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), r, g, b);
         } else if (cham.rainbow) {
             std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {
@@ -207,9 +268,7 @@ void Chams::applyChams(const std::array<Config::Chams::Material, 7>& chams, int 
 
         float r, g, b;
         if (cham.healthBased && health) {
-            r = 1.0f - health / 100.0f;
-            g = health / 100.0f;
-            b = 0.0f;
+            Helpers::healthColor(std::clamp(health / 100.0f, 0.0f, 1.0f), r, g, b);
         } else if (cham.rainbow) {
             std::tie(r, g, b) = rainbowColor(cham.rainbowSpeed);
         } else {

@@ -1,12 +1,22 @@
-#include <list>
-#include <mutex>
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <cstdint>
+#include <cstring>
+#include <memory>
+#include <unordered_map>
 
-#include "Config.h"
 #include "fnv.h"
 #include "GameData.h"
 #include "Interfaces.h"
 #include "Memory.h"
 
+#include "Resources/avatar_ct.h"
+#include "Resources/avatar_tt.h"
+
+#include "stb_image.h"
+
+#include "SDK/ClassId.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Engine.h"
 #include "SDK/Entity.h"
@@ -15,7 +25,12 @@
 #include "SDK/Localize.h"
 #include "SDK/LocalPlayer.h"
 #include "SDK/ModelInfo.h"
+#include "SDK/ModelRender.h"
+#include "SDK/NetworkChannel.h"
+#include "SDK/PlayerResource.h"
 #include "SDK/Sound.h"
+#include "SDK/Steam.h"
+#include "SDK/UtlVector.h"
 #include "SDK/WeaponId.h"
 #include "SDK/WeaponData.h"
 
@@ -26,25 +41,43 @@ static std::vector<ObserverData> observerData;
 static std::vector<WeaponData> weaponData;
 static std::vector<EntityData> entityData;
 static std::vector<LootCrateData> lootCrateData;
-static std::list<ProjectileData> projectileData;
+static std::forward_list<ProjectileData> projectileData;
+static BombData bombData;
+static std::vector<InfernoData> infernoData;
+static std::atomic_int netOutgoingLatency;
+
+static auto playerByHandleWritable(int handle) noexcept
+{
+    const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
+    return it != playerData.end() ? &(*it) : nullptr;
+}
+
+static void updateNetLatency() noexcept
+{
+    if (const auto networkChannel = interfaces->engine->getNetworkChannel())
+        netOutgoingLatency = (std::max)(static_cast<int>(networkChannel->getLatency(0) * 1000.0f), 0);
+    else
+        netOutgoingLatency = 0;
+}
 
 void GameData::update() noexcept
 {
     static int lastFrame;
     if (lastFrame == memory->globalVars->framecount)
         return;
-
     lastFrame = memory->globalVars->framecount;
 
-    Lock lock;
+    updateNetLatency();
 
-    playerData.clear();
+    Lock lock;
     observerData.clear();
     weaponData.clear();
     entityData.clear();
     lootCrateData.clear();
+    infernoData.clear();
 
     localPlayerData.update();
+    bombData.update();
 
     if (!localPlayer) {
         playerData.clear();
@@ -65,15 +98,14 @@ void GameData::update() noexcept
             if (entity == localPlayer.get() || entity == observerTarget)
                 continue;
 
-            if (const auto it = std::find_if(playerData.begin(), playerData.end(), [handle = entity->handle()](const auto& playerData) { return playerData.handle == handle; }); it != playerData.end()) {
-                it->update(entity);
+            if (const auto player = playerByHandleWritable(entity->handle())) {
+                player->update(entity);
             } else {
                 playerData.emplace_back(entity);
             }
 
             if (!entity->isDormant() && !entity->isAlive()) {
-                const auto obs = entity->getObserverTarget();
-                if (obs)
+                if (const auto obs = entity->getObserverTarget())
                     observerData.emplace_back(entity, obs, obs == localPlayer.get());
             }
         } else {
@@ -102,8 +134,12 @@ void GameData::update() noexcept
                     if (const auto it = std::find(projectileData.begin(), projectileData.end(), entity->handle()); it != projectileData.end())
                         it->update(entity);
                     else
-                        projectileData.emplace_back(entity);
+                        projectileData.emplace_front(entity);
                     break;
+                case ClassId::DynamicProp:
+                    if (const auto model = entity->getModel(); !model || !std::strstr(model->name, "challenge_coin"))
+                        break;
+                    [[fallthrough]];
                 case ClassId::EconEntity:
                 case ClassId::Chicken:
                 case ClassId::PlantedC4:
@@ -117,6 +153,10 @@ void GameData::update() noexcept
                     break;
                 case ClassId::LootCrate:
                     lootCrateData.emplace_back(entity);
+                    break;
+                case ClassId::Inferno:
+                    infernoData.emplace_back(entity);
+                    break;
                 }
             }
         }
@@ -127,31 +167,50 @@ void GameData::update() noexcept
     std::sort(entityData.begin(), entityData.end());
     std::sort(lootCrateData.begin(), lootCrateData.end());
 
-    for (auto it = projectileData.begin(); it != projectileData.end();) {
-        if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
-            it->exploded = true;
+    std::for_each(projectileData.begin(), projectileData.end(), [](auto& projectile) {
+        if (interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr)
+            projectile.exploded = true;
+    });
 
-            if (it->trajectory.size() < 1 || it->trajectory[it->trajectory.size() - 1].first + 60.0f < memory->globalVars->realtime) {
-                it = projectileData.erase(it);
-                continue;
-            }
-        }
-        ++it;
-    }
+    std::erase_if(projectileData, [](const auto& projectile) { return interfaces->entityList->getEntityFromHandle(projectile.handle) == nullptr
+        && (projectile.trajectory.size() < 1 || projectile.trajectory[projectile.trajectory.size() - 1].first + 60.0f < memory->globalVars->realtime); });
 
-    for (auto it = playerData.begin(); it != playerData.end();) {
-        if (!interfaces->entityList->getEntityFromHandle(it->handle)) {
-            it = playerData.erase(it);
-            continue;
-        }
-        ++it;
-    }
+    std::erase_if(playerData, [](const auto& player) { return interfaces->entityList->getEntityFromHandle(player.handle) == nullptr; });
 }
 
 void GameData::clearProjectileList() noexcept
 {
     Lock lock;
     projectileData.clear();
+}
+
+static void clearAvatarTextures() noexcept;
+
+struct PlayerAvatar {
+    mutable Texture texture;
+    std::unique_ptr<std::uint8_t[]> rgba;
+};
+
+static std::unordered_map<int, PlayerAvatar> playerAvatars;
+
+void GameData::clearTextures() noexcept
+{
+    Lock lock;
+
+    clearAvatarTextures();
+    for (const auto& [handle, avatar] : playerAvatars)
+        avatar.texture.clear();
+}
+
+void GameData::clearUnusedAvatars() noexcept
+{
+    Lock lock;
+    std::erase_if(playerAvatars, [](const auto& pair) { return std::ranges::find(std::as_const(playerData), pair.first, &PlayerData::handle) == playerData.cend(); });
+}
+
+int GameData::getNetOutgoingLatency() noexcept
+{
+    return netOutgoingLatency;
 }
 
 const Matrix4x4& GameData::toScreenMatrix() noexcept
@@ -167,6 +226,11 @@ const LocalPlayerData& GameData::local() noexcept
 const std::vector<PlayerData>& GameData::players() noexcept
 {
     return playerData;
+}
+
+const PlayerData* GameData::playerByHandle(int handle) noexcept
+{
+    return playerByHandleWritable(handle);
 }
 
 const std::vector<ObserverData>& GameData::observers() noexcept
@@ -189,9 +253,19 @@ const std::vector<LootCrateData>& GameData::lootCrates() noexcept
     return lootCrateData;
 }
 
-const std::list<ProjectileData>& GameData::projectiles() noexcept
+const std::forward_list<ProjectileData>& GameData::projectiles() noexcept
 {
     return projectileData;
+}
+
+const BombData& GameData::plantedC4() noexcept
+{
+    return bombData;
+}
+
+const std::vector<InfernoData>& GameData::infernos() noexcept
+{
+    return infernoData;
 }
 
 void LocalPlayerData::update() noexcept
@@ -211,6 +285,7 @@ void LocalPlayerData::update() noexcept
         nextWeaponAttack = activeWeapon->nextPrimaryAttack();
     }
     fov = localPlayer->fov() ? localPlayer->fov() : localPlayer->defaultFov();
+    handle = localPlayer->handle();
     flashDuration = localPlayer->flashDuration();
 
     aimPunch = localPlayer->getEyePosition() + Vector::fromAngle(interfaces->engine->getViewAngles() + localPlayer->getAimPunch()) * 1000.0f;
@@ -240,8 +315,8 @@ BaseData::BaseData(Entity* entity) noexcept
 
 EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
 {
-    name = [](ClassId classId) {
-        switch (classId) {
+    name = [](Entity* entity) {
+        switch (entity->getClientClass()->classId) {
         case ClassId::EconEntity: return "Defuse Kit";
         case ClassId::Chicken: return "Chicken";
         case ClassId::PlantedC4: return "Planted C4";
@@ -251,9 +326,10 @@ EntityData::EntityData(Entity* entity) noexcept : BaseData{ entity }
         case ClassId::AmmoBox: return "Ammo Box";
         case ClassId::RadarJammer: return "Radar Jammer";
         case ClassId::SnowballPile: return "Snowball Pile";
+        case ClassId::DynamicProp: return "Collectable Coin";
         default: assert(false); return "unknown";
         }
-    }(entity->getClientClass()->classId);
+    }(entity);
 }
 
 ProjectileData::ProjectileData(Entity* projectile) noexcept : BaseData { projectile }
@@ -294,24 +370,36 @@ void ProjectileData::update(Entity* projectile) noexcept
         trajectory.emplace_back(memory->globalVars->realtime, pos);
 }
 
-PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }
+PlayerData::PlayerData(Entity* entity) noexcept : BaseData{ entity }, handle{ entity->handle() }
 {
-    handle = entity->handle();
+    if (const auto steamID = entity->getSteamId()) {
+        const auto ctx = interfaces->engine->getSteamAPIContext();
+        const auto avatar = ctx->steamFriends->getSmallFriendAvatar(steamID);
+        constexpr auto rgbaDataSize = 4 * 32 * 32;
+
+        PlayerAvatar playerAvatar;
+        playerAvatar.rgba = std::make_unique<std::uint8_t[]>(rgbaDataSize);
+        if (ctx->steamUtils->getImageRGBA(avatar, playerAvatar.rgba.get(), rgbaDataSize))
+            playerAvatars[handle] = std::move(playerAvatar);
+    }
+
     update(entity);
 }
 
 void PlayerData::update(Entity* entity) noexcept
 {
-    entity->getPlayerName(name);
+    name = entity->getPlayerName();
 
     dormant = entity->isDormant();
     if (dormant)
         return;
 
+    team = entity->getTeamNumber();
     static_cast<BaseData&>(*this) = { entity };
     origin = entity->getAbsOrigin();
     inViewFrustum = !interfaces->engine->cullBox(obbMins + origin, obbMaxs + origin);
     alive = entity->isAlive();
+    lastContactTime = alive ? memory->globalVars->realtime : 0.0f;
 
     if (localPlayer) {
         enemy = memory->isOtherEnemy(entity, localPlayer.get());
@@ -328,6 +416,7 @@ void PlayerData::update(Entity* entity) noexcept
     audible = isEntityAudible(entity->index());
     spotted = entity->spotted();
     health = entity->health();
+    immune = entity->gunGameImmunity();
     flashDuration = entity->flashDuration();
 
     if (const auto weapon = entity->getActiveWeapon()) {
@@ -348,6 +437,7 @@ void PlayerData::update(Entity* entity) noexcept
     if (!entity->setupBones(boneMatrices, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, memory->globalVars->currenttime))
         return;
 
+    bones.clear();
     bones.reserve(20);
 
     for (int i = 0; i < studioModel->numBones; ++i) {
@@ -372,6 +462,63 @@ void PlayerData::update(Entity* entity) noexcept
         headMins -= headBox->capsuleRadius;
         headMaxs += headBox->capsuleRadius;
     }
+}
+
+struct PNGTexture {
+    template <std::size_t N>
+    PNGTexture(const std::array<char, N>& png) noexcept : pngData{ png.data() }, pngDataSize{ png.size() } {}
+
+    ImTextureID getTexture() const noexcept
+    {
+        if (!texture.get()) {
+            int width, height;
+            stbi_set_flip_vertically_on_load_thread(false);
+
+            if (const auto data = stbi_load_from_memory((const stbi_uc*)pngData, pngDataSize, &width, &height, nullptr, STBI_rgb_alpha)) {
+                texture.init(width, height, data);
+                stbi_image_free(data);
+            } else {
+                assert(false);
+            }
+        }
+
+        return texture.get();
+    }
+
+    void clearTexture() const noexcept { texture.clear(); }
+
+private:
+    const char* pngData;
+    std::size_t pngDataSize;
+
+    mutable Texture texture;
+};
+
+static const PNGTexture avatarTT{ Resource::avatar_tt };
+static const PNGTexture avatarCT{ Resource::avatar_ct };
+
+static void clearAvatarTextures() noexcept
+{
+    avatarTT.clearTexture();
+    avatarCT.clearTexture();
+}
+
+ImTextureID PlayerData::getAvatarTexture() const noexcept
+{
+    const auto it = std::as_const(playerAvatars).find(handle);
+    if (it == playerAvatars.cend())
+        return team == Team::TT ? avatarTT.getTexture() : avatarCT.getTexture();
+
+    const auto& avatar = it->second;
+    if (!avatar.texture.get())
+        avatar.texture.init(32, 32, avatar.rgba.get());
+    return avatar.texture.get();
+}
+
+float PlayerData::fadingAlpha() const noexcept
+{
+    constexpr float fadeTime = 1.50f;
+    return std::clamp(1.0f - (memory->globalVars->realtime - lastContactTime - 0.25f) / fadeTime, 0.0f, 1.0f);
 }
 
 WeaponData::WeaponData(Entity* entity) noexcept : BaseData{ entity }
@@ -493,9 +640,37 @@ LootCrateData::LootCrateData(Entity* entity) noexcept : BaseData{ entity }
     }(model->name);
 }
 
-ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept
+ObserverData::ObserverData(Entity* entity, Entity* obs, bool targetIsLocalPlayer) noexcept : playerHandle{ entity->handle() }, targetHandle{ obs->handle() }, targetIsLocalPlayer{ targetIsLocalPlayer } {}
+
+void BombData::update() noexcept
 {
-    entity->getPlayerName(name);
-    obs->getPlayerName(target);
-    this->targetIsLocalPlayer = targetIsLocalPlayer;
+    if (memory->plantedC4s->size > 0 && (!*memory->gameRules || (*memory->gameRules)->mapHasBombTarget())) {
+        if (const auto bomb = (*memory->plantedC4s)[0]; bomb && bomb->c4Ticking()) {
+            blowTime = bomb->c4BlowTime();
+            timerLength = bomb->c4TimerLength();
+            defuserHandle = bomb->c4Defuser();
+            if (defuserHandle != -1) {
+                defuseCountDown = bomb->c4DefuseCountDown();
+                defuseLength = bomb->c4DefuseLength();
+            }
+
+            if (*memory->playerResource) {
+                const auto& bombOrigin = bomb->origin();
+                bombsite = bombOrigin.distTo((*memory->playerResource)->bombsiteCenterA()) > bombOrigin.distTo((*memory->playerResource)->bombsiteCenterB());
+            }
+            return;
+        }
+    }
+    blowTime = 0.0f;
+}
+
+InfernoData::InfernoData(Entity* inferno) noexcept
+{
+    const auto& origin = inferno->getAbsOrigin();
+
+    points.reserve(inferno->fireCount());
+    for (int i = 0; i < inferno->fireCount(); ++i) {
+        if (inferno->fireIsBurning()[i])
+            points.emplace_back(inferno->fireXDelta()[i] + origin.x, inferno->fireYDelta()[i] + origin.y, inferno->fireZDelta()[i] + origin.z);
+    }
 }

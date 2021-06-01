@@ -1,38 +1,43 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <memory>
-#include <string>
-#include <string_view>
 #include <type_traits>
-
-#ifdef _WIN32
-#include <Windows.h>
-#include <Psapi.h>
-#elif __linux__
-#include <link.h>
-#endif
 
 #include "SDK/Platform.h"
 
 class ClientMode;
+template <typename T> class ClientSharedObjectCache;
+class CSPlayerInventory;
+class EconItem;
+class EconItemAttributeDefinition;
 class Entity;
 class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class ItemSystem;
+class InventoryManager;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PanoramaMarshallHelper;
+class PlantedC4;
 class PlayerResource;
+template <typename T> class SharedObjectTypeCache;
 class ViewRender;
+class ViewRenderBeams;
 class WeaponSystem;
+template <typename Key, typename Value>
+struct UtlMap;
+template <typename T>
+class UtlVector;
 
 struct ActiveChannels;
 struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
-struct Trace;
+struct PanoramaEventRegistration;
 struct Vector;
 
 class Memory {
@@ -40,38 +45,40 @@ public:
     Memory() noexcept;
 
 #ifdef _WIN32
-    uintptr_t present;
-    uintptr_t reset;
+    std::uintptr_t present;
+    std::uintptr_t reset;
 #else
-    uintptr_t pollEvent;
-    uintptr_t swapWindow;
+    std::uintptr_t pollEvent;
+    std::uintptr_t swapWindow;
 #endif
 
     ClientMode* clientMode;
     Input* input;
     GlobalVars* globalVars;
     GlowObjectManager* glowObjectManager;
+    UtlVector<PlantedC4*>* plantedC4s;
+    UtlMap<short, PanoramaEventRegistration>* registeredPanoramaEvents;
 
     bool* disablePostProcessing;
 
     std::add_pointer_t<void __FASTCALL(const char*)> loadSky;
     std::add_pointer_t<void __FASTCALL(const char*, const char*)> setClanTag;
-    uintptr_t cameraThink;
-    std::add_pointer_t<bool __STDCALL(const char*)> acceptMatch;
+    std::uintptr_t cameraThink;
     std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__THISCALL* getSequenceActivity)(void*, int);
     bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
-    uintptr_t hud;
-    int*(__THISCALL* findHudElement)(uintptr_t, const char*);
+    std::uintptr_t hud;
+    int*(__THISCALL* findHudElement)(std::uintptr_t, const char*);
     int(__THISCALL* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
-    uintptr_t listLeaves;
+    std::uintptr_t listLeaves;
     int* dispatchSound;
-    uintptr_t traceToExit;
+    std::uintptr_t traceToExit;
     ViewRender* viewRender;
-    uintptr_t drawScreenEffectMaterial;
-    uint8_t* fakePrime;
+    ViewRenderBeams* viewRenderBeams;
+    std::uintptr_t drawScreenEffectMaterial;
+    std::uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
@@ -89,6 +96,38 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
+    std::uintptr_t scopeDust;
+    std::uintptr_t scopeArc;
+    std::uintptr_t demoOrHLTV;
+    std::uintptr_t money;
+    std::uintptr_t demoFileEndReached;
+    Entity** gameRules;
+    InventoryManager* inventoryManager;
+    std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
+    bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
+    PanoramaMarshallHelper* panoramaMarshallHelper;
+    std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
+    std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
+    std::uintptr_t wearItemStickerGetArgAsNumberReturnAddress;
+    std::uintptr_t wearItemStickerGetArgAsStringReturnAddress;
+    std::uintptr_t setNameToolStringGetArgAsStringReturnAddress;
+    std::uintptr_t clearCustomNameGetArgAsStringReturnAddress;
+
+    std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
+    std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
+    std::uintptr_t useToolGetArg2AsStringReturnAddress;
+    EconItem*(__THISCALL* getSOCData)(void* itemView);
+    void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
+    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
+
+    short makePanoramaSymbol(const char* name) const noexcept
+    {
+        short symbol;
+        makePanoramaSymbolFn(&symbol, name);
+        return symbol;
+    }
 
     bool submitReport(const char* xuid, const char* report) const noexcept
     {
@@ -98,72 +137,37 @@ public:
         return reinterpret_cast<bool(*)(void*, const char*, const char*)>(submitReportFunction)(nullptr, xuid, report);
 #endif
     }
+
+    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, float value) const noexcept
+    {
+#ifdef _WIN32
+        __asm movd xmm2, value
+#else
+        asm("movss %0, %%xmm0" : : "m"(value) : "xmm0");
+#endif
+        setOrAddAttributeValueByNameFunction(attributeList, attribute);
+    }
+
+    void setOrAddAttributeValueByName(std::uintptr_t attributeList, const char* attribute, int value) const noexcept
+    {
+        setOrAddAttributeValueByName(attributeList, attribute, *reinterpret_cast<float*>(&value) /* hack, but CSGO does that */);
+    }
+
+    void setDynamicAttributeValue(EconItem* _this, EconItemAttributeDefinition* attribute, void* value) const noexcept
+    {
+#ifdef _WIN32
+        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(_this, attribute, value);
+#else
+        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, _this, attribute, value);
+#endif
+    }
+
 private:
+    void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
+    void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
+
     std::uintptr_t submitReportFunction;
-
-    static std::pair<void*, std::size_t> getModuleInformation(const char* name) noexcept
-    {
-#ifdef _WIN32
-        if (HMODULE handle = GetModuleHandleA(name)) {
-            if (MODULEINFO moduleInfo; GetModuleInformation(GetCurrentProcess(), handle, &moduleInfo, sizeof(moduleInfo)))
-                return std::make_pair(moduleInfo.lpBaseOfDll, moduleInfo.SizeOfImage);
-        }
-        return {};
-#elif __linux__
-        struct ModuleInfo {
-            const char* name;
-            void* base = nullptr;
-            std::size_t size = 0;
-        } moduleInfo;
-
-        moduleInfo.name = name;
-
-        dl_iterate_phdr([](struct dl_phdr_info* info, std::size_t, void* data) {
-            const auto moduleInfo = reinterpret_cast<ModuleInfo*>(data);
-       	    if (std::string_view{ info->dlpi_name }.ends_with(moduleInfo->name)) {
-                moduleInfo->base = (void*)(info->dlpi_addr + info->dlpi_phdr[0].p_vaddr);
-                moduleInfo->size = info->dlpi_phdr[0].p_memsz;
-                return 1;
-       	    }
-            return 0;
-        }, &moduleInfo);
-            
-        return std::make_pair(moduleInfo.base, moduleInfo.size);
-#endif
-    }
-
-    static std::uintptr_t findPattern(const char* moduleName, const char* pattern) noexcept
-    {
-        static auto id = 0;
-        ++id;
-
-        const auto [moduleBase, moduleSize] = getModuleInformation(moduleName);
-
-        if (moduleBase && moduleSize) {
-            auto start = static_cast<const char*>(moduleBase);
-            const auto end = start + moduleSize;
-
-            auto first = start;
-            auto second = pattern;
-
-            while (first < end && *second) {
-                if (*first == *second || *second == '?') {
-                    ++first;
-                    ++second;
-                } else {
-                    first = ++start;
-                    second = pattern;
-                }
-            }
-
-            if (!*second)
-                return reinterpret_cast<std::uintptr_t>(start);
-        }
-#ifdef _WIN32
-        MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "Osiris", MB_OK | MB_ICONWARNING);
-#endif
-        return 0;
-    }
+    std::uintptr_t setDynamicAttributeValueFn;
 };
 
 inline std::unique_ptr<const Memory> memory;
