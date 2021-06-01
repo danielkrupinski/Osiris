@@ -285,6 +285,8 @@ public:
     NETVAR(nextAttack, "CBaseCombatCharacter", "m_flNextAttack", float)
 
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
+    NETVAR(xuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", int)
+    NETVAR(xuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", int)
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
     NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
     NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
