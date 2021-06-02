@@ -1574,7 +1574,7 @@ void InventoryChanger::fromJson(const json& j) noexcept
             if (staticData == StaticData::gameItems().end())
                 continue;
 
-            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData), (jsonItem.contains("Apply") && jsonItem["Apply"] == true) ? true : false);
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         } else if (type == "Patch") {
             if (!jsonItem.contains("Patch ID") || !jsonItem["Patch ID"].is_number_integer())
                 continue;
