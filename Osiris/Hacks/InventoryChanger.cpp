@@ -226,19 +226,15 @@ private:
                     _paintKits.emplace_back(0, L"");
                     _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _paintKits.size() - 1, image);
                 }
-            } 
-            else if (isCollectible) {
+            } else if (isCollectible) {
                 if (const auto image = item->getInventoryImage()) {
                     _collectibles.emplace_back(isOriginal);
                     _gameItems.emplace_back(Type::Collectible, item->getRarity(), item->getWeaponId(), _collectibles.size() - 1, image);
                 }
-            }
-            else if (item->getCapabilities() & ITEM_CAP_CAN_PATCH) {
-                if (const auto image = item->getInventoryImage()) {
+            } else if (item->getCapabilities() & ITEM_CAP_CAN_PATCH) {
+                if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
-                }
-            } 
-            else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
+            } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, image);
             }
