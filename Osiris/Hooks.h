@@ -51,6 +51,7 @@ public:
     HookType clientMode;
     HookType engine;
     HookType modelRender;
+    HookType panoramaMarshallHelper;
     HookType sound;
     HookType surface;
     HookType viewRender;

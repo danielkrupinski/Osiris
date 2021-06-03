@@ -25,6 +25,7 @@ public:
         B,
         BACKSPACE,
         C,
+        CAPSLOCK,
         D,
         DECIMAL,
         DEL,

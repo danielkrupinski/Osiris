@@ -1,10 +1,9 @@
 #pragma once
 
 #include <forward_list>
-#include <list>
 #include <mutex>
 #include <string>
-#include <tuple>
+#include <utility>
 #include <vector>
 
 #include "SDK/matrix3x4.h"
@@ -123,6 +122,7 @@ struct PlayerData : BaseData {
 
     void update(Entity* entity) noexcept;
     ImTextureID getAvatarTexture() const noexcept;
+    float fadingAlpha() const noexcept;
 
     bool dormant;
     bool enemy = false;
@@ -133,6 +133,7 @@ struct PlayerData : BaseData {
     bool alive;
     bool immune = false;
     float flashDuration;
+    float lastContactTime = 0.0f;
     int health;
     int handle;
     Team team;

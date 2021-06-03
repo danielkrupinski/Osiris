@@ -45,6 +45,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "BACKSPACE", WIN32_LINUX(VK_BACK, SDL_SCANCODE_BACKSPACE) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
+    { "CAPSLOCK", WIN32_LINUX(VK_CAPITAL, SDL_SCANCODE_CAPSLOCK) },
     { "D", WIN32_LINUX('D', SDL_SCANCODE_D) },
     { "DECIMAL", WIN32_LINUX(VK_DECIMAL, SDL_SCANCODE_KP_DECIMAL) },
     { "DELETE", WIN32_LINUX(VK_DELETE, SDL_SCANCODE_DELETE) },
@@ -128,6 +129,7 @@ static constexpr auto keyMap = std::to_array<Key>({
 });
 
 static_assert(keyMap.size() == KeyBind::MAX);
+static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
 {
@@ -136,7 +138,7 @@ KeyBind::KeyBind(KeyCode keyCode) noexcept
 
 KeyBind::KeyBind(const char* keyName) noexcept
 {
-    auto it = std::lower_bound(keyMap.begin(), keyMap.end(), keyName, [](const Key& key, const char* keyName) { return key.name < keyName; });
+    auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name);
     if (it != keyMap.end() && it->name == keyName)
         keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
     else
@@ -203,7 +205,7 @@ bool KeyBind::setToPressedKey() noexcept
 
         for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
             if (ImGui::IsKeyPressed(i)) {
-                auto it = std::find_if(keyMap.begin(), keyMap.end(), [i](const Key& key) { return key.code == i; });
+                auto it = std::ranges::find(keyMap, i, &Key::code);
                 if (it != keyMap.end()) {
                     keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
                     // Treat AltGr as RALT

@@ -36,7 +36,7 @@
     <ClCompile Include="Hacks\Chams.cpp" />
     <ClCompile Include="Hacks\EnginePrediction.cpp" />
     <ClCompile Include="Hacks\Glow.cpp" />
-    <ClCompile Include="Hacks\SkinChanger.cpp" />
+    <ClCompile Include="Hacks\InventoryChanger.cpp" />
     <ClCompile Include="Hacks\Sound.cpp" />
     <ClCompile Include="Hacks\StreamProofESP.cpp" />
     <ClCompile Include="Hacks\Triggerbot.cpp" />
@@ -87,8 +87,8 @@
     <ClInclude Include="Hacks\Chams.h" />
     <ClInclude Include="Hacks\EnginePrediction.h" />
     <ClInclude Include="Hacks\Glow.h" />
+    <ClInclude Include="Hacks\InventoryChanger.h" />
     <ClInclude Include="Hacks\Misc.h" />
-    <ClInclude Include="Hacks\SkinChanger.h" />
     <ClInclude Include="Hacks\Sound.h" />
     <ClInclude Include="Hacks\StreamProofESP.h" />
     <ClInclude Include="Hacks\Triggerbot.h" />
@@ -101,6 +101,7 @@
     <ClInclude Include="imgui\imgui_freetype.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="InputUtil.h" />
+    <ClInclude Include="JsonForward.h" />
     <ClInclude Include="MinHook\buffer.h" />
     <ClInclude Include="MinHook\hde\hde32.h" />
     <ClInclude Include="MinHook\hde\hde64.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="SDK\GameUI.h" />
     <ClInclude Include="SDK\GlobalVars.h" />
     <ClInclude Include="SDK\GlowObjectManager.h" />
+    <ClInclude Include="SDK\Inconstructible.h" />
     <ClInclude Include="SDK\Input.h" />
     <ClInclude Include="SDK\InputSystem.h" />
     <ClInclude Include="SDK\ItemSchema.h" />
@@ -159,7 +161,6 @@
     <ClInclude Include="SDK\NetworkChannel.h" />
     <ClInclude Include="SDK\NetworkStringTable.h" />
     <ClInclude Include="SDK\Pad.h" />
-    <ClInclude Include="SDK\Panel.h" />
     <ClInclude Include="SDK\Panorama.h" />
     <ClInclude Include="SDK\PhysicsSurfaceProps.h" />
     <ClInclude Include="SDK\Platform.h" />
@@ -186,6 +187,16 @@
     <ClInclude Include="SDK\WeaponSystem.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\default_vs.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>2.0</ShaderModel>
+      <VariableName>default_vs</VariableName>
+      <HeaderFileOutput>$(ProjectDir)Resources\Shaders\Build\default_vs.h</HeaderFileOutput>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

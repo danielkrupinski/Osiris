@@ -1,6 +1,7 @@
-#include <clocale>
+#include <memory>
 
 #ifdef _WIN32
+#include <clocale>
 #include <Windows.h>
 #endif
 

@@ -1,21 +1,30 @@
 #pragma once
 
+#include <array>
+#include <cstdint>
 #include <memory>
 #include <type_traits>
 
 #include "SDK/Platform.h"
 
 class ClientMode;
+template <typename T> class ClientSharedObjectCache;
+class CSPlayerInventory;
+class EconItem;
+class EconItemAttributeDefinition;
 class Entity;
 class GameEventDescriptor;
 class GameEventManager;
 class Input;
 class ItemSystem;
+class InventoryManager;
 class KeyValues;
 class MoveHelper;
 class MoveData;
+class PanoramaMarshallHelper;
 class PlantedC4;
 class PlayerResource;
+template <typename T> class SharedObjectTypeCache;
 class ViewRender;
 class ViewRenderBeams;
 class WeaponSystem;
@@ -29,7 +38,6 @@ struct Channel;
 struct GlobalVars;
 struct GlowObjectManager;
 struct PanoramaEventRegistration;
-struct Trace;
 struct Vector;
 
 class Memory {
@@ -37,11 +45,11 @@ public:
     Memory() noexcept;
 
 #ifdef _WIN32
-    uintptr_t present;
-    uintptr_t reset;
+    std::uintptr_t present;
+    std::uintptr_t reset;
 #else
-    uintptr_t pollEvent;
-    uintptr_t swapWindow;
+    std::uintptr_t pollEvent;
+    std::uintptr_t swapWindow;
 #endif
 
     ClientMode* clientMode;
@@ -55,22 +63,22 @@ public:
 
     std::add_pointer_t<void __FASTCALL(const char*)> loadSky;
     std::add_pointer_t<void __FASTCALL(const char*, const char*)> setClanTag;
-    uintptr_t cameraThink;
+    std::uintptr_t cameraThink;
     std::add_pointer_t<bool __CDECL(Vector, Vector, short)> lineGoesThroughSmoke;
     int(__THISCALL* getSequenceActivity)(void*, int);
     bool(__THISCALL* isOtherEnemy)(Entity*, Entity*);
-    uintptr_t hud;
-    int*(__THISCALL* findHudElement)(uintptr_t, const char*);
+    std::uintptr_t hud;
+    int*(__THISCALL* findHudElement)(std::uintptr_t, const char*);
     int(__THISCALL* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
-    uintptr_t listLeaves;
+    std::uintptr_t listLeaves;
     int* dispatchSound;
-    uintptr_t traceToExit;
+    std::uintptr_t traceToExit;
     ViewRender* viewRender;
     ViewRenderBeams* viewRenderBeams;
-    uintptr_t drawScreenEffectMaterial;
-    uint8_t* fakePrime;
+    std::uintptr_t drawScreenEffectMaterial;
+    std::uint8_t* fakePrime;
     std::add_pointer_t<void __CDECL(const char* msg, ...)> debugMsg;
     std::add_pointer_t<void __CDECL(const std::array<std::uint8_t, 4>& color, const char* msg, ...)> conColorMsg;
     float* vignette;
@@ -88,12 +96,31 @@ public:
     Channel* channels;
     PlayerResource** playerResource;
     const wchar_t*(__THISCALL* getDecoratedPlayerName)(PlayerResource* pr, int index, wchar_t* buffer, int buffsize, int flags);
-    uintptr_t scopeDust;
-    uintptr_t scopeArc;
-    uintptr_t demoOrHLTV;
-    uintptr_t money;
-    uintptr_t demoFileEndReached;
+    std::uintptr_t scopeDust;
+    std::uintptr_t scopeArc;
+    std::uintptr_t demoOrHLTV;
+    std::uintptr_t money;
+    std::uintptr_t demoFileEndReached;
     Entity** gameRules;
+    InventoryManager* inventoryManager;
+    std::add_pointer_t<EconItem* __STDCALL()> createEconItemSharedObject;
+    bool(__THISCALL* addEconItem)(CSPlayerInventory* _this, EconItem* item, bool updateAckFile, bool writeAckFile, bool checkForNewItems);
+    void(__THISCALL* clearInventoryImageRGBA)(void* itemView);
+    PanoramaMarshallHelper* panoramaMarshallHelper;
+    std::uintptr_t setStickerToolSlotGetArgAsNumberReturnAddress;
+    std::uintptr_t setStickerToolSlotGetArgAsStringReturnAddress;
+    std::uintptr_t wearItemStickerGetArgAsNumberReturnAddress;
+    std::uintptr_t wearItemStickerGetArgAsStringReturnAddress;
+    std::uintptr_t setNameToolStringGetArgAsStringReturnAddress;
+    std::uintptr_t clearCustomNameGetArgAsStringReturnAddress;
+
+    std::add_pointer_t<void* __CDECL(std::uint64_t itemID)> findOrCreateEconItemViewForItemID;
+    void*(__THISCALL* getInventoryItemByItemID)(CSPlayerInventory* _this, std::uint64_t itemID);
+    std::uintptr_t useToolStickerGetArgAsStringReturnAddress;
+    std::uintptr_t useToolGetArg2AsStringReturnAddress;
+    EconItem*(__THISCALL* getSOCData)(void* itemView);
+    void(__THISCALL* setCustomName)(EconItem* _this, const char* name);
+    SharedObjectTypeCache<EconItem>*(__THISCALL* createBaseTypeCache)(ClientSharedObjectCache<EconItem>* _this, int classID);
 
     short makePanoramaSymbol(const char* name) const noexcept
     {
@@ -126,11 +153,21 @@ public:
         setOrAddAttributeValueByName(attributeList, attribute, *reinterpret_cast<float*>(&value) /* hack, but CSGO does that */);
     }
 
+    void setDynamicAttributeValue(EconItem* _this, EconItemAttributeDefinition* attribute, void* value) const noexcept
+    {
+#ifdef _WIN32
+        reinterpret_cast<void(__thiscall*)(EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(_this, attribute, value);
+#else
+        reinterpret_cast<void(*)(void*, EconItem*, EconItemAttributeDefinition*, void*)>(setDynamicAttributeValueFn)(nullptr, _this, attribute, value);
+#endif
+    }
+
 private:
     void(__THISCALL* setOrAddAttributeValueByNameFunction)(std::uintptr_t, const char* attribute);
     void(__THISCALL* makePanoramaSymbolFn)(short* symbol, const char* name);
 
     std::uintptr_t submitReportFunction;
+    std::uintptr_t setDynamicAttributeValueFn;
 };
 
 inline std::unique_ptr<const Memory> memory;

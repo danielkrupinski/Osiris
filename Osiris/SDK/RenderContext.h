@@ -2,10 +2,13 @@
 
 #include <functional>
 
+#include "Inconstructible.h"
 #include "VirtualMethod.h"
 
 class RenderContext {
 public:
+    INCONSTRUCTIBLE(RenderContext)
+
     VIRTUAL_METHOD(void, release, 1, (), (this))
     VIRTUAL_METHOD(void, beginRender, 2, (), (this))
     VIRTUAL_METHOD(void, endRender, 3, (), (this))
