@@ -235,8 +235,7 @@ private:
             }
             else if (item->getCapabilities() & ITEM_CAP_CAN_PATCH) {
                 if (const auto image = item->getInventoryImage()) {
-                    _paintKits.emplace_back(0, L"");
-                    _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), _paintKits.size() - 1, image);
+                    _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
                 }
             } 
             else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
