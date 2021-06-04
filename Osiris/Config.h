@@ -195,7 +195,6 @@ public:
         bool killMessage{ false };
         bool nadePredict{ false };
         bool fixTabletSignal{ false };
-        bool fakePrime{ false };
         bool fastPlant{ false };
         bool fastStop{ false };
         bool quickReload{ false };

@@ -114,7 +114,7 @@ public:
     KeyBind(const char* keyName) noexcept;
 
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
-    bool operator==(const KeyBind& other) const noexcept { return this->keyCode == other.keyCode; }
+    friend bool operator==(const KeyBind& a, const KeyBind& b) noexcept { return a.keyCode == b.keyCode; }
 
     const char* toString() const noexcept;
     bool isPressed() const noexcept;

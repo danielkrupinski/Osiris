@@ -27,7 +27,6 @@ namespace Misc
     void fakeBan(bool = false) noexcept;
     void nadePredict() noexcept;
     void fixTabletSignal() noexcept;
-    void fakePrime() noexcept;
     void killMessage(GameEvent& event) noexcept;
     void fixMovement(UserCmd* cmd, float yaw) noexcept;
     void antiAfkKick(UserCmd* cmd) noexcept;

@@ -283,7 +283,6 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
-        Misc::fakePrime();
         Misc::updateEventListeners();
         Visuals::updateEventListeners();
     }
@@ -305,13 +304,13 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
     hooks->client.callOriginal<void, 37>(stage);
 }
 
-static void __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
+static int __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
 {
     Sound::modulateSound(soundEntry, entityIndex, volume);
     Misc::autoAccept(soundEntry);
 
     volume = std::clamp(volume, 0.0f, 1.0f);
-    hooks->sound.callOriginal<void, IS_WIN32() ? 5 : 6>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
+    return hooks->sound.callOriginal<int, IS_WIN32() ? 5 : 6>(filter, entityIndex, channel, soundEntry, soundEntryHash, sample, volume, seed, soundLevel, flags, pitch, std::cref(origin), std::cref(direction), utlVecOrigins, updatePositions, soundtime, speakerentity, soundParams);
 }
 
 static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
