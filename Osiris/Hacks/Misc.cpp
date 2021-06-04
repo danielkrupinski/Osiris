@@ -976,18 +976,15 @@ void Misc::preserveKillfeed(bool roundStart) noexcept
 
 void Misc::voteRevealer(GameEvent& event) noexcept
 {
-    if (!config->misc.revealVotes)
-        return;
-
     const auto entity = interfaces->entityList->getEntity(event.getInt("entityid"));
     if (!entity || !entity->isPlayer())
         return;
-    
+
     const auto votedYes = event.getInt("vote_option") == 0;
     const auto isLocal = localPlayer && entity == localPlayer.get();
     const char color = votedYes ? '\x06' : '\x07';
 
-    memory->clientMode->getHudChat()->printf(0, " \x0C\u2022Osiris\u2022 %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
+    memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris] %c%s\x01 voted %c%s\x01", isLocal ? '\x01' : color, isLocal ? "You" : entity->getPlayerName().c_str(), color, votedYes ? "Yes" : "No");
 }
 
 // ImGui::ShadeVertsLinearColorGradientKeepAlpha() modified to do interpolation in HSV
