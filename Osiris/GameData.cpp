@@ -48,7 +48,7 @@ static std::atomic_int netOutgoingLatency;
 
 static auto playerByHandleWritable(int handle) noexcept
 {
-    const auto it = std::find_if(playerData.begin(), playerData.end(), [handle](const auto& playerData) { return playerData.handle == handle; });
+    const auto it = std::ranges::find(playerData, handle, &PlayerData::handle);
     return it != playerData.end() ? &(*it) : nullptr;
 }
 
