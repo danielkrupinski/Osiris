@@ -64,6 +64,7 @@
 #include "SDK/StudioRender.h"
 #include "SDK/Surface.h"
 #include "SDK/UserCmd.h"
+#include "Changer/ProtoWriter.h"
 
 #ifdef _WIN32
 
@@ -303,6 +304,52 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
     InventoryChanger::run(stage);
 
     hooks->client.callOriginal<void, 37>(stage);
+}
+
+static void __STDCALL dispatchUserMessage(int messageType, uint32_t arg, uint32_t length, void* data) noexcept
+{
+    /*message CCSUsrMsg_VoteStart {
+        int32 team = 1;
+        int32 ent_idx = 2;
+        int32 vote_type = 3;
+        string disp_str = 4;
+        string details_str = 5;
+        string other_team_str = 6;
+        bool is_yes_no_vote = 7;
+        int32 entidx_target = 8;
+    }*/
+
+    constexpr auto voteName = [](int index) {
+        switch (index)
+        {
+        case 0: return "Kick";
+        case 1: return "Change Level";
+        case 6: return "Surrender";
+        case 13: return "Start TimeOut";
+        default: return "ERROR";
+        }
+    };
+
+    if (messageType == 46)
+    {
+        ProtoWriter msg(data, length, 8);
+        if (msg.has(2) && msg.has(3))
+        {
+            const auto ent_idx = msg.get(2).UInt32();
+            const auto vote_type = msg.get(3).UInt32();
+
+            const auto entity = interfaces->entityList->getEntity(ent_idx);
+            const auto isLocal = localPlayer && entity == localPlayer.get();
+
+            memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris] %c%s\x01 call vote (\x06%s\x01)", isLocal ? '\x01' : '\x06', isLocal ? "You" : entity->getPlayerName().c_str(), voteName(vote_type));
+        }
+    }
+    else if (messageType == 47)
+        memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris]\x01 vote\x06 PASS");
+    else if (messageType == 48)
+        memory->clientMode->getHudChat()->printf(0, " \x0C[Osiris]\x01 vote\x07 FAILED");
+
+    hooks->client.callOriginal<void, 38>(messageType, arg, length, data);
 }
 
 static int __STDCALL emitSound(LINUX_ARGS(void* thisptr,) void* filter, int entityIndex, int channel, const char* soundEntry, unsigned int soundEntryHash, const char* sample, float volume, int seed, int soundLevel, int flags, int pitch, const Vector& origin, const Vector& direction, void* utlVecOrigins, bool updatePositions, float soundtime, int speakerentity, void* soundParams) noexcept
@@ -606,6 +653,7 @@ void Hooks::install() noexcept
 
     client.init(interfaces->client);
     client.hookAt(37, frameStageNotify);
+    client.hookAt(38, dispatchUserMessage);
 
     clientMode.init(memory->clientMode);
     clientMode.hookAt(IS_WIN32() ? 17 : 18, shouldDrawFog);
