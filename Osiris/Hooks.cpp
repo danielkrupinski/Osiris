@@ -45,6 +45,7 @@
 #include "Hacks/Triggerbot.h"
 #include "Hacks/Visuals.h"
 
+#include "SDK/ClientMode.h"
 #include "SDK/ClientClass.h"
 #include "SDK/Cvar.h"
 #include "SDK/Engine.h"
