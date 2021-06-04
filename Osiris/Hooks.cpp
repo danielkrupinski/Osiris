@@ -283,7 +283,6 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::preserveKillfeed();
         Misc::disablePanoramablur();
         Visuals::colorWorld();
-        Misc::fakePrime();
         Misc::updateEventListeners();
         Visuals::updateEventListeners();
     }
