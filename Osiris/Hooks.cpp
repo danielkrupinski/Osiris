@@ -561,6 +561,16 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
     return result;
 }
 
+static bool __STDCALL setItemBackPackPosition(void* item_view, uint32_t iPosition, bool bForceUnequip, bool bAllowOverflow) noexcept
+{
+    const auto result = hooks->inventoryManager.callOriginal<bool, 26>(item_view, iPosition, bForceUnequip, bAllowOverflow);
+
+    if (result)
+        InventoryChanger::setItemBackPackPosition(item_view);
+
+    return result;
+}
+
 #ifdef _WIN32
 
 Hooks::Hooks(HMODULE moduleHandle) noexcept
@@ -675,6 +685,9 @@ void Hooks::install() noexcept
     panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
     panoramaMarshallHelper.hookAt(5, getArgAsNumber);
     panoramaMarshallHelper.hookAt(7, getArgAsString);
+    
+    inventoryManager.init(memory->inventoryManager);
+    inventoryManager.hookAt(26, setItemBackPackPosition);
 
     sound.init(interfaces->sound);
     sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
@@ -753,6 +766,7 @@ void Hooks::uninstall() noexcept
     engine.restore();
     modelRender.restore();
     panoramaMarshallHelper.restore();
+    inventoryManager.restore();
     sound.restore();
     surface.restore();
     svCheats.restore();
