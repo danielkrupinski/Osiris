@@ -607,10 +607,7 @@ static float useToolTime = 0.0f;
 void InventoryChanger::setToolToUse(std::uint64_t itemID) noexcept
 {
     toolToUse = itemID;
-
-    std::mt19937 gen{ std::random_device{}() };
-    std::uniform_real_distribution dis{ 0.3f, 0.7f };
-    useToolTime = memory->globalVars->realtime + dis(gen);
+    useToolTime = memory->globalVars->realtime + randomFloat(0.3f, 0.7f);
 }
 
 static std::uint64_t itemToApplyTool = 0;
