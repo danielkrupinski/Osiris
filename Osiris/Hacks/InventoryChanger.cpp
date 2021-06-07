@@ -783,30 +783,41 @@ void InventoryChanger::run(FrameStage stage) noexcept
                 }
             }
         } else if (wasItemCreatedByOsiris(itemToWearSticker)) {
-            constexpr auto wearStep = 0.12f;
-
             const auto& item = inventory[static_cast<std::size_t>(itemToWearSticker - BASE_ITEMID)];
-            const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += wearStep);
-            const auto shouldRemove = (newWear >= 1.0f + wearStep);
+            if (item.isSkin()) {
+                constexpr auto wearStep = 0.12f;
+                const auto newWear = (dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker].wear += wearStep);
+                const auto shouldRemove = (newWear >= 1.0f + wearStep);
 
-            if (shouldRemove)
-                dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker] = {};
+                if (shouldRemove)
+                    dynamicSkinData[item.getDynamicDataIndex()].stickers[slotToWearSticker] = {};
 
-            if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
-                if (const auto soc = memory->getSOCData(view)) {
-                    if (shouldRemove) {
-                        soc->setStickerID(slotToWearSticker, 0);
-                        soc->setStickerWear(slotToWearSticker, 0.0f);
-                    } else {
-                        soc->setStickerWear(slotToWearSticker, newWear);
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
+                    if (const auto soc = memory->getSOCData(view)) {
+                        if (shouldRemove) {
+                            soc->setStickerID(slotToWearSticker, 0);
+                            soc->setStickerWear(slotToWearSticker, 0.0f);
+                        } else {
+                            soc->setStickerWear(slotToWearSticker, newWear);
+                        }
                     }
                 }
+
+                sendInventoryUpdatedEvent();
+
+                if (shouldRemove)
+                    initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
+            } else if (item.isAgent()) {
+                dynamicAgentData[item.getDynamicDataIndex()].patches[slotToWearSticker] = {};
+
+                if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToWearSticker)) {
+                    if (const auto soc = memory->getSOCData(view))
+                        soc->setStickerID(slotToWearSticker, 0);
+                }
+
+                sendInventoryUpdatedEvent();
+                initItemCustomizationNotification("patch_remove", std::to_string(itemToWearSticker).c_str());
             }
-
-            sendInventoryUpdatedEvent();
-
-            if (shouldRemove)
-                initItemCustomizationNotification("sticker_remove", std::to_string(itemToWearSticker).c_str());
         } else if (wasItemCreatedByOsiris(itemToRemoveNameTag)) {
             if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToRemoveNameTag)) {
                 auto& item = inventory[static_cast<std::size_t>(itemToRemoveNameTag - BASE_ITEMID)];
