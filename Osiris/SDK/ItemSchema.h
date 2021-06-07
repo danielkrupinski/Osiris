@@ -113,10 +113,8 @@ public:
         return *reinterpret_cast<int*>(this + WIN32_LINUX(0x148, 0x1F8));
     }
 
-    bool isPaintable() noexcept
-    {
-        return getCapabilities() & 1; // ITEM_CAP_PAINTABLE
-    }
+    bool isPaintable() noexcept { return getCapabilities() & 1; /* ITEM_CAP_PAINTABLE */ }
+    bool isPatchable() noexcept { return getCapabilities() & (1 << 22); /* ITEM_CAP_CAN_PATCH */ }
 
     const char* getDefinitionName() noexcept
     {
