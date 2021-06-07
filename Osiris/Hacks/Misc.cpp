@@ -564,28 +564,6 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
-void Misc::fakePrime() noexcept
-{
-    static bool lastState = false;
-
-    if (config->misc.fakePrime != lastState) {
-        lastState = config->misc.fakePrime;
-
-#ifdef _WIN32
-        if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
-#else
-	if (const auto addressPageAligned = std::uintptr_t(memory->fakePrime) - std::uintptr_t(memory->fakePrime) % sysconf(_SC_PAGESIZE);
-	    mprotect((void*)addressPageAligned, 1, PROT_READ | PROT_WRITE | PROT_EXEC) == 0) {
-#endif
-            constexpr uint8_t patch[]{ 0x74, 0xEB };
-            *memory->fakePrime = patch[config->misc.fakePrime];
-#ifdef _WIN32
-            VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
-#endif
-        }
-    }
-}
-
 void Misc::killMessage(GameEvent& event) noexcept
 {
     if (!config->misc.killMessage)
