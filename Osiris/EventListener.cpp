@@ -24,6 +24,8 @@ EventListener::EventListener() noexcept
     gameEventManager->addListener(this, "player_hurt");
     gameEventManager->addListener(this, "player_death");
     gameEventManager->addListener(this, "vote_cast");
+    gameEventManager->addListener(this, "player_team"); //used by client.dll???
+    gameEventManager->addListener(this, "player_spawn"); //used by client.dll???
 
     if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
@@ -41,6 +43,12 @@ void EventListener::remove() noexcept
 void EventListener::fireGameEvent(GameEvent* event)
 {
     switch (fnv::hashRuntime(event->getName())) {
+    case fnv::hash("player_spawn"):
+        InventoryChanger::playerSpawn(*event);
+        break;
+    case fnv::hash("player_team"):
+        InventoryChanger::swapTeam(*event);
+        break;
     case fnv::hash("round_start"):
         GameData::clearProjectileList();
         Misc::preserveKillfeed(true);
