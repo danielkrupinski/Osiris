@@ -276,8 +276,12 @@ struct DynamicSkinData {
     std::string nameTag;
 };
 
+struct PatchConfig {
+    int patchID = 0;
+};
+
 struct DynamicAgentData {
-    std::array<StickerConfig, 5> patches;
+    std::array<PatchConfig, 5> patches;
 };
 
 struct DynamicGloveData {
@@ -757,9 +761,9 @@ void InventoryChanger::run(FrameStage stage) noexcept
                             dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTagString;
                             addedNameTagToItemID = BASE_ITEMID + inventory.size();
                         }
-                    } else {
+                    } else if (dest.isAgent()) {
                         const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
-                        dynamicAgentData[dest.getDynamicDataIndex()].patches[slotToApplySticker].stickerID = patch.id;
+                        dynamicAgentData[dest.getDynamicDataIndex()].patches[slotToApplySticker].patchID = patch.id;
                         appliedPatchToItemID = BASE_ITEMID + inventory.size();
                     }
 
@@ -891,11 +895,11 @@ void InventoryChanger::run(FrameStage stage) noexcept
         } else if (item.isAgent()) {
             const auto& dynamicData = dynamicAgentData[inventory[i].getDynamicDataIndex()];
             for (std::size_t j = 0; j < dynamicData.patches.size(); ++j) {
-                const auto& sticker = dynamicData.patches[j];
-                if (sticker.stickerID == 0)
+                const auto& patch = dynamicData.patches[j];
+                if (patch.patchID == 0)
                     continue;
 
-                econItem->setStickerID(j, sticker.stickerID);
+                econItem->setStickerID(j, patch.patchID);
             }
         }
 
