@@ -65,7 +65,8 @@ public:
         NameTag,
         Patch,
         Graffiti,
-        SealedGraffiti
+        SealedGraffiti,
+        Agent
     };
 
     struct GameItem {
@@ -80,6 +81,7 @@ public:
         bool isPatch() const noexcept { return type == Type::Patch; }
         bool isGraffiti() const noexcept { return type == Type::Graffiti; }
         bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
+        bool isAgent() const noexcept { return type == Type::Agent; }
 
         // TODO: We need a better name for this
         bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch() || isGraffiti() || isSealedGraffiti(); }
@@ -209,7 +211,7 @@ private:
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
             const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
             const auto isOriginal = (item->getQuality() == 1);
-
+            
             if (!_weaponNames.contains(item->getWeaponId())) {
                 std::wstring nameWide = interfaces->localize->findSafe(item->getItemBaseName());
                 if (isCollectible && isOriginal) {
@@ -232,6 +234,9 @@ private:
             } else if (itemTypeName == "#CSGO_Tool_Name_TagTag") {
                 if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::NameTag, item->getRarity(), item->getWeaponId(), 0, image);
+            } else if (item->isPatchable()) {
+                if (const auto image = item->getInventoryImage())
+                    _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
             }
         }
 
