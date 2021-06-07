@@ -276,6 +276,10 @@ struct DynamicSkinData {
     std::string nameTag;
 };
 
+struct DynamicAgentData {
+    std::array<StickerConfig, 5> patches;
+};
+
 struct DynamicGloveData {
     float wear = 0.0f;
     int seed = 1;
@@ -283,6 +287,7 @@ struct DynamicGloveData {
 
 static std::vector<DynamicSkinData> dynamicSkinData;
 static std::vector<DynamicGloveData> dynamicGloveData;
+static std::vector<DynamicAgentData> dynamicAgentData;
 
 constexpr auto BASE_ITEMID = 1152921504606746975;
 
@@ -319,6 +324,10 @@ public:
             dynamicData.seed = randomInt(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             dynamicDataIndex = dynamicGloveData.size() - 1;
+        } else if (isAgent()) {
+            DynamicAgentData dynamicData;
+            dynamicAgentData.push_back(dynamicData);
+            dynamicDataIndex = dynamicAgentData.size() - 1;
         }
     }
 
@@ -329,6 +338,7 @@ public:
     bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
     bool isGlove() const noexcept { return !isDeleted() && get().isGlove(); }
     bool isMusic() const noexcept { return !isDeleted() && get().isMusic(); }
+    bool isAgent() const noexcept { return !isDeleted() && get().isAgent(); }
 
     std::size_t getDynamicDataIndex() const noexcept { assert(dynamicDataIndex != static_cast<std::size_t>(-1)); return dynamicDataIndex; }
 
@@ -728,22 +738,29 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     std::uint64_t appliedStickerToItemID = 0;
     std::uint64_t addedNameTagToItemID = 0;
+    std::uint64_t appliedPatchToItemID = 0;
     if (useToolTime <= memory->globalVars->realtime) {
         if (wasItemCreatedByOsiris(toolToUse) && wasItemCreatedByOsiris(itemToApplyTool)) {
             auto& tool = inventory[static_cast<std::size_t>(toolToUse - BASE_ITEMID)];
             const auto& toolItem = tool.get();
             auto& dest = inventory[static_cast<std::size_t>(itemToApplyTool - BASE_ITEMID)];
 
-            if (dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) {
+            if ((dest.isSkin() && (toolItem.isSticker() || toolItem.isNameTag())) || (dest.isAgent() && toolItem.isPatch())) {
                 if (const auto view = memory->findOrCreateEconItemViewForItemID(itemToApplyTool)) {
-                    if (toolItem.isSticker()) {
-                        const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
-                        dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.id;
-                        dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
-                        appliedStickerToItemID = BASE_ITEMID + inventory.size();
-                    } else if (toolItem.isNameTag()) {
-                        dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTagString;
-                        addedNameTagToItemID = BASE_ITEMID + inventory.size();
+                    if (dest.isSkin()) {
+                        if (toolItem.isSticker()) {
+                            const auto& sticker = StaticData::paintKits()[toolItem.dataIndex];
+                            dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].stickerID = sticker.id;
+                            dynamicSkinData[dest.getDynamicDataIndex()].stickers[slotToApplySticker].wear = 0.0f;
+                            appliedStickerToItemID = BASE_ITEMID + inventory.size();
+                        } else if (toolItem.isNameTag()) {
+                            dynamicSkinData[dest.getDynamicDataIndex()].nameTag = nameTagString;
+                            addedNameTagToItemID = BASE_ITEMID + inventory.size();
+                        }
+                    } else {
+                        const auto& patch = StaticData::paintKits()[toolItem.dataIndex];
+                        dynamicAgentData[dest.getDynamicDataIndex()].patches[slotToApplySticker].stickerID = patch.id;
+                        appliedPatchToItemID = BASE_ITEMID + inventory.size();
                     }
 
                     if (const auto toolView = memory->findOrCreateEconItemViewForItemID(toolToUse))
@@ -860,6 +877,15 @@ void InventoryChanger::run(FrameStage stage) noexcept
         } else if (item.isCollectible()) {
             if (StaticData::collectibles()[item.dataIndex].isOriginal)
                 econItem->quality = 1;
+        } else if (item.isAgent()) {
+            const auto& dynamicData = dynamicAgentData[inventory[i].getDynamicDataIndex()];
+            for (std::size_t j = 0; j < dynamicData.patches.size(); ++j) {
+                const auto& sticker = dynamicData.patches[j];
+                if (sticker.stickerID == 0)
+                    continue;
+
+                econItem->setStickerID(j, sticker.stickerID);
+            }
         }
 
         baseTypeCache->addObject(econItem);
@@ -876,9 +902,10 @@ void InventoryChanger::run(FrameStage stage) noexcept
 
     if (appliedStickerToItemID)
         initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
-
     if (addedNameTagToItemID)
         initItemCustomizationNotification("nametag_add", std::to_string(addedNameTagToItemID).c_str());
+    if (appliedPatchToItemID)
+        initItemCustomizationNotification("patch_apply", std::to_string(appliedPatchToItemID).c_str());
 }
 
 void InventoryChanger::scheduleHudUpdate() noexcept
