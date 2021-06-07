@@ -108,17 +108,19 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
     return upperCase;
 }
 
+static void toUpper(wchar_t* str, std::size_t len) noexcept
+{
+    for (std::size_t i = 0; i < len; ++i) {
+        if (str[i] >= 'a' && str[i] <= 'z')
+            str[i] -= ('a' - 'A');
+        else if (str[i] > 127)
+            str[i] = std::towupper(str[i]);
+    }
+}
+
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    std::ranges::transform(str, str.begin(), [](wchar_t w) -> wchar_t {
-        if (w >= 0 && w <= 127) {
-            if (w >= 'a' && w <= 'z')
-                return w - ('a' - 'A');
-            return w;
-        }
-
-        return std::towupper(w);
-    });
+    ::toUpper(str.data(), str.length());
     return str;
 }
 
