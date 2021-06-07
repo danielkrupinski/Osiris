@@ -110,11 +110,19 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
 
 static void toUpper(wchar_t* str, std::size_t len) noexcept
 {
+    static std::unordered_map<wchar_t, wchar_t> upperCache;
     for (std::size_t i = 0; i < len; ++i) {
-        if (str[i] >= 'a' && str[i] <= 'z')
+        if (str[i] >= 'a' && str[i] <= 'z') {
             str[i] -= ('a' - 'A');
-        else if (str[i] > 127)
-            str[i] = std::towupper(str[i]);
+        } else if (str[i] > 127) {
+            if (const auto it = upperCache.find(str[i]); it != upperCache.end()) {
+                str[i] = it->second;
+            } else {
+                const auto upper = std::towupper(str[i]);
+                upperCache.emplace(str[i], upper);
+                str[i] = upper;
+            }
+        }
     }
 }
 
