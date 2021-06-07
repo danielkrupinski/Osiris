@@ -336,10 +336,11 @@ static bool wasItemCreatedByOsiris(std::uint64_t itemID) noexcept
     return itemID >= BASE_ITEMID && static_cast<std::size_t>(itemID - BASE_ITEMID) < inventory.size();
 }
 
-static void addToInventory(const std::unordered_set<std::size_t>& indicesToAdd) noexcept
+static void addToInventory(const std::unordered_map<std::size_t, int>& toAdd) noexcept
 {
-    for (const auto idx : indicesToAdd) {
-        inventory.emplace_back(idx);
+    for (const auto [idx, count] : toAdd) {
+        for (int i = 0; i < count; ++i)
+            inventory.emplace_back(idx);
     }
 }
 
@@ -959,7 +960,7 @@ static ImTextureID getItemIconTexture(const std::string& iconpath) noexcept;
 
 namespace ImGui
 {
-    static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected = false) noexcept
+    static bool SkinSelectable(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool selected, int* toAddCount = nullptr) noexcept
     {
         ImGuiWindow* window = GetCurrentWindow();
         if (window->SkipItems)
@@ -1017,12 +1018,11 @@ namespace ImGui
         if (!ItemAdd(bb, id))
             return false;
 
+        const ImRect selectableBB{ bb.Min, ImVec2{ bb.Max.x - (selected ? 90.0f : 0.0f), bb.Max.y} };
         // We use NoHoldingActiveID on menus so user can click and _hold_ on a menu then drag to browse child entries
         ImGuiButtonFlags buttonFlags = 0;
-
-        const bool wasSelected = selected;
         bool hovered, held;
-        bool pressed = ButtonBehavior(bb, id, &hovered, &held, buttonFlags);
+        bool pressed = ButtonBehavior(selectableBB, id, &hovered, &held, buttonFlags);
 
         // Update NavId when clicking or when Hovering (this doesn't happen on most widgets), so navigation can be resumed with gamepad/keyboard
         if (pressed) {
@@ -1033,10 +1033,6 @@ namespace ImGui
         }
         if (pressed)
             MarkItemEdited(id);
-
-        // In this branch, Selectable() cannot toggle the selection so this will never trigger.
-        if (selected != wasSelected) //-V547
-            window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_ToggledSelection;
 
         if (hovered || selected) {
             const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
@@ -1060,6 +1056,20 @@ namespace ImGui
         if (paintKitName[0] != '\0')
             window->DrawList->AddRectFilled(separatorMin, separatorMax, GetColorU32(ImGuiCol_Text));
         RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
+
+        if (selected && toAddCount) {
+            const auto cursorPosNext = window->DC.CursorPos.y;
+            SameLine(window->WorkRect.Max.x - pos.x - 90.0f);
+            const auto cursorPosBackup = window->DC.CursorPos.y;
+
+            window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
+            SetNextItemWidth(80.0f);
+            InputInt("", toAddCount);
+            *toAddCount = (std::max)(*toAddCount, 1);
+
+            window->DC.CursorPosPrevLine.y = cursorPosBackup;
+            window->DC.CursorPos.y = cursorPosNext;
+        }
 
         if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
             CloseCurrentPopup();
@@ -1108,7 +1118,7 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
     };
 
     if (isInAddMode) {
-        static std::unordered_set<std::size_t> selectedToAdd;
+        static std::unordered_map<std::size_t, int> selectedToAdd;
         if (ImGui::Button("Back")) {
             isInAddMode = false;
             selectedToAdd.clear();
@@ -1151,13 +1161,15 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
                 if (!filter.empty() && !passesFilter(StaticData::getWeaponNameUpper(gameItems[i].weaponID), filterWide) && (!gameItems[i].hasPaintKit() || !passesFilter(StaticData::paintKits()[gameItems[i].dataIndex].nameUpperCase, filterWide)))
                     continue;
                 ImGui::PushID(i);
+
                 const auto selected = selectedToAdd.contains(i);
-                if (ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected)) {
+                const auto toAddCount = selected ? &selectedToAdd[i] : nullptr;
+
+                if (ImGui::SkinSelectable(gameItems[i], { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(gameItems[i].rarity), selected, toAddCount)) {
                     if (selected)
                         selectedToAdd.erase(i);
                     else
-                        selectedToAdd.emplace(i);
-
+                        selectedToAdd.emplace(i, 1);
                 }
                 ImGui::PopID();
             }
