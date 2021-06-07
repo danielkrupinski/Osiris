@@ -139,6 +139,9 @@ private:
     {
         assert(memory && interfaces);
 
+        _paintKits.emplace_back(0, L"");
+        constexpr auto vanillaPaintIndex = 0;
+
         const auto itemSchema = memory->itemSystem()->getItemSchema();
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
@@ -219,10 +222,8 @@ private:
             }
 
             if (itemTypeName == "#CSGO_Type_Knife" && item->getRarity() == 6) {
-                if (const auto image = item->getInventoryImage()) {
-                    _paintKits.emplace_back(0, L"");
-                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), _paintKits.size() - 1, image);
-                }
+                if (const auto image = item->getInventoryImage())
+                    _gameItems.emplace_back(Type::Skin, 6, item->getWeaponId(), vanillaPaintIndex, image);
             } else if (isCollectible) {
                 if (const auto image = item->getInventoryImage()) {
                     _collectibles.emplace_back(isOriginal);
