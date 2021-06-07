@@ -280,6 +280,12 @@ public:
 
     void setPaintKit(float paintKit) noexcept { setAttributeValue(6, &paintKit); }
     void setSeed(float seed) noexcept { setAttributeValue(7, &seed); }
+    void setStatTrak(int value) noexcept {
+        int32_t zero = 0;
+        setAttributeValue(81, &zero);
+        setAttributeValue(80, &value);
+    }
+    
     void setWear(float wear) noexcept { setAttributeValue(8, &wear); }
     void setMusicID(int musicID) noexcept { setAttributeValue(166, &musicID); }
 
