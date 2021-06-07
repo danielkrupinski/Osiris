@@ -52,6 +52,7 @@ public:
     HookType engine;
     HookType modelRender;
     HookType panoramaMarshallHelper;
+    HookType inventoryManager;
     HookType sound;
     HookType surface;
     HookType viewRender;
