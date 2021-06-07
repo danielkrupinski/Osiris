@@ -249,6 +249,7 @@ static void from_json(const json& j, Config::Aimbot& a)
     read(j, "Max aim inaccuracy", a.maxAimInaccuracy);
     read(j, "Max shot inaccuracy", a.maxShotInaccuracy);
     read(j, "Min damage", a.minDamage);
+    read(j, "Max Distance", a.maxDistance);
     read(j, "Killshot", a.killshot);
     read(j, "Between shots", a.betweenShots);
 }
@@ -409,6 +410,7 @@ static void from_json(const json& j, Config::Misc& m)
     read(j, "Anti AFK kick", m.antiAfkKick);
     read(j, "Auto strafe", m.autoStrafe);
     read(j, "Bunny hop", m.bunnyHop);
+    read(j, "Bunny hop Chance", m.bunnyHopChance);
     read(j, "Custom clan tag", m.customClanTag);
     read(j, "Clock tag", m.clocktag);
     read(j, "Clan tag", m.clanTag, sizeof(m.clanTag));
@@ -771,6 +773,7 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Anti AFK kick", antiAfkKick);
     WRITE("Auto strafe", autoStrafe);
     WRITE("Bunny hop", bunnyHop);
+    WRITE("Bunny hop Chance", bunnyHopChance);
     WRITE("Custom clan tag", customClanTag);
     WRITE("Clock tag", clocktag);
 

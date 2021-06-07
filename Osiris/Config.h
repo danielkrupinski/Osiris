@@ -49,6 +49,7 @@ public:
         float maxAimInaccuracy{ 1.0f };
         float maxShotInaccuracy{ 1.0f };
         int minDamage{ 1 };
+        int maxDistance{ 0 };
         bool killshot{ false };
         bool betweenShots{ true };
     };
@@ -171,6 +172,7 @@ public:
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
+        int bunnyHopChance{ 0 };
         bool customClanTag{ false };
         bool clocktag{ false };
         bool animatedClanTag{ false };
