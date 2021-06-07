@@ -48,4 +48,8 @@ namespace InventoryChanger
     void fixKnifeAnimation(Entity* viewModelWeapon, long& sequence) noexcept;
 
     void clearInventory() noexcept;
+    
+    void swapTeam(GameEvent& event) noexcept;
+    void playerSpawn(GameEvent& event) noexcept;
+    void setItemBackPackPosition(void* item_view) noexcept;
 }
