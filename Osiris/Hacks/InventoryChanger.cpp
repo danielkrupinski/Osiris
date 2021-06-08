@@ -1065,35 +1065,6 @@ void InventoryChanger::scheduleHudUpdate() noexcept
     hudUpdateRequired = true;
 }
 
-void InventoryChanger::overrideHudIcon(GameEvent& event) noexcept
-{
-    if (!localPlayer)
-        return;
-
-    if (event.getInt("attacker") != localPlayer->getUserId())
-        return;
-
-    if (const auto weapon = std::string_view{ event.getString("weapon") }; weapon != "knife" && weapon != "knife_t")
-        return;
-
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    const auto itemView = localInventory->getItemInLoadout(localPlayer->getTeamNumber(), 0);
-    if (!itemView)
-        return;
-
-    const auto soc = memory->getSOCData(itemView);
-    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
-        return;
-
-    if (const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId)) {
-        if (const auto defName = def->getDefinitionName(); defName && std::string_view{ defName }.starts_with("weapon_"))
-            event.setString("weapon", defName + 7);
-    }
-}
-
 void updateItem(std::uint64_t itemid)
 {
     const auto localInventory = memory->inventoryManager->getLocalInventory();
@@ -1167,12 +1138,13 @@ void InventoryChanger::updateStatTrak(GameEvent& event) noexcept
         const auto soc = memory->getSOCData(itemView);
         if (!soc || !wasItemCreatedByOsiris(soc->itemID))
             return;
-        
+
         const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(soc->weaponId);
         if (!def)
             return;
 
         weapon_name = def->getDefinitionName();
+        event.setString("weapon", weapon_name.c_str() + 7); //overrideHudIcon
     }
 
     const auto& definitionIndex = weapon->itemDefinitionIndex2();
