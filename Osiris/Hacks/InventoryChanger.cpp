@@ -1075,9 +1075,8 @@ namespace ImGui
                 SetNavID(id, window->DC.NavLayerCurrent, window->DC.NavFocusScopeIdCurrent, ImRect(bb.Min - window->Pos, bb.Max - window->Pos));
                 g.NavDisableHighlight = true;
             }
-        }
-        if (pressed)
             MarkItemEdited(id);
+        }
 
         if (hovered || selected) {
             const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
@@ -1333,6 +1332,24 @@ json InventoryChanger::toJson() noexcept
             itemConfig["Graffiti ID"] = staticData.id;
             break;
         }
+        case StaticData::Type::Agent: {
+            itemConfig["Type"] = "Agent";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
+            
+            const auto& dynamicData = dynamicAgentData[item.getDynamicDataIndex()];
+            auto& stickers = itemConfig["Patches"];
+            for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
+                const auto& patch = dynamicData.patches[i];
+                if (patch.patchID == 0)
+                    continue;
+
+                json patchConfig;
+                patchConfig["Patch ID"] = patch.patchID;
+                patchConfig["Slot"] = i;
+                stickers.push_back(std::move(patchConfig));
+            }
+            break;
+        }
         }
 
         items.push_back(std::move(itemConfig));
@@ -1537,6 +1554,45 @@ void InventoryChanger::fromJson(const json& j) noexcept
             const auto staticData = std::ranges::find_if(StaticData::gameItems(), [graffitiID](const auto& gameItem) { return gameItem.isSealedGraffiti() && StaticData::paintKits()[gameItem.dataIndex].id == graffitiID; });
             if (staticData != StaticData::gameItems().end())
                 inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+        } else if (type == "Agent") {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+            
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID](const auto& gameItem) { return gameItem.isAgent() && gameItem.weaponID == weaponID; });
+            if (staticData == StaticData::gameItems().end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
+
+            if (!jsonItem.contains("Patches"))
+                continue;
+
+            const auto& patches = jsonItem["Patches"];
+            if (!patches.is_array())
+                continue;
+
+            auto& dynamicData = dynamicAgentData[inventory.back().getDynamicDataIndex()];
+            for (std::size_t k = 0; k < patches.size(); ++k) {
+                const auto& patch = patches[k];
+                if (!patch.is_object())
+                    continue;
+
+                if (!patch.contains("Patch ID") || !patch["Patch ID"].is_number_integer())
+                    continue;
+
+                if (!patch.contains("Slot") || !patch["Slot"].is_number_integer())
+                    continue;
+
+                const int patchID = patch["Patch ID"];
+                if (patchID == 0)
+                    continue;
+                const std::size_t slot = patch["Slot"];
+                if (slot >= std::tuple_size_v<decltype(DynamicAgentData::patches)>)
+                    continue;
+                dynamicData.patches[slot].patchID = patchID;
+            }
         }
     }
 
