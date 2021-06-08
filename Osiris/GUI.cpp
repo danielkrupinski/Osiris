@@ -153,6 +153,14 @@ static void hotkey2(const char* label, KeyBind& key, float samelineOffset = 0.0f
 
 void GUI::handleToggle() noexcept
 {
+    auto esc = KeyBind::KeyCode::ESCAPE;
+    KeyBind closeMenuKeybind(esc);
+
+    if (closeMenuKeybind.isPressed()) {
+        open = false;
+        interfaces->inputSystem->resetInputState();
+    }
+
     if (config->misc.menuKey.isPressed()) {
         open = !open;
         if (!open)
