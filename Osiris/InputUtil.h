@@ -34,6 +34,7 @@ public:
         E,
         END,
         ENTER,
+        ESCAPE,
         F,
         F1,
         F10,
