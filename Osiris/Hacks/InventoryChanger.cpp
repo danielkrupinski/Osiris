@@ -712,6 +712,38 @@ static void applyMusicKit(CSPlayerInventory& localInventory) noexcept
     pr->musicID()[localPlayer->index()] = itemData.id;
 }
 
+static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
+{
+    if (!localPlayer)
+        return;
+
+    const auto itemView = localInventory.getItemInLoadout(localPlayer->getTeamNumber(), 38);
+    if (!itemView)
+        return;
+
+    const auto soc = memory->getSOCData(itemView);
+    if (!soc || !wasItemCreatedByOsiris(soc->itemID))
+        return;
+
+    const auto& item = inventory[static_cast<std::size_t>(soc->itemID - BASE_ITEMID)];
+    if (!item.isAgent())
+        return;
+
+    const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(item.get().weaponID);
+    if (!def)
+        return;
+
+    const auto model = def->getPlayerDisplayModel();
+    if (!model)
+        return;
+
+    const auto idx = interfaces->modelInfo->getModelIndex(model);
+    localPlayer->setModelIndex(idx);
+
+    if (const auto ragdoll = interfaces->entityList->getEntityFromHandle(localPlayer->ragdoll()))
+        ragdoll->setModelIndex(idx);
+}
+
 void InventoryChanger::run(FrameStage stage) noexcept
 {
     static int localPlayerHandle = -1;
@@ -737,6 +769,7 @@ void InventoryChanger::run(FrameStage stage) noexcept
         return;
 
     applyMusicKit(*localInventory);
+    applyPlayerAgent(*localInventory);
 
     static const auto baseInvID = localInventory->getHighestIDs().second;
 
