@@ -737,6 +737,12 @@ static void applyPlayerAgent(CSPlayerInventory& localInventory) noexcept
     if (!model)
         return;
 
+    const auto& dynamicData = dynamicAgentData[item.getDynamicDataIndex()];
+    for (std::size_t i = 0; i < dynamicData.patches.size(); ++i) {
+        if (const auto& patch = dynamicData.patches[i]; patch.patchID != 0)
+            localPlayer->playerPatchIndices()[i] = patch.patchID;
+    }
+
     const auto idx = interfaces->modelInfo->getModelIndex(model);
     localPlayer->setModelIndex(idx);
 
