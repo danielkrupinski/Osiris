@@ -137,14 +137,8 @@ private:
         return kitsWeapons;
     }
 
-    StaticData()
+    void initSkinData(ItemSchema* itemSchema) noexcept
     {
-        assert(memory && interfaces);
-
-        _paintKits.emplace_back(0, L"");
-        constexpr auto vanillaPaintIndex = 0;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
         _gameItems.reserve(itemSchema->paintKits.lastAlloc);
@@ -169,6 +163,17 @@ private:
                 }
             }
         }
+    }
+
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        _paintKits.emplace_back(0, L"");
+        constexpr auto vanillaPaintIndex = 0;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        initSkinData(itemSchema);
 
         const auto& stickerMap = itemSchema->stickerKits;
         _gameItems.reserve(_gameItems.size() + stickerMap.numElements);
