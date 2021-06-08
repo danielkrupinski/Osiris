@@ -58,7 +58,6 @@ void EventListener::fireGameEvent(GameEvent* event)
         break;
     case fnv::hash("player_death"):
         InventoryChanger::updateStatTrak(*event);
-        InventoryChanger::overrideHudIcon(*event);
         Misc::killMessage(*event);
         Misc::killSound(*event);
         break;
