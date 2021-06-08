@@ -1659,6 +1659,8 @@ json InventoryChanger::toJson() noexcept
 
         json itemConfig;
 
+        itemConfig["Apply"] = item.isApply();
+        
         const auto& gameItem = item.get();
         switch (gameItem.type) {
         case StaticData::Type::Sticker: {
