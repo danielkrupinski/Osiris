@@ -136,7 +136,7 @@ void Misc::updateClanTag(bool tagChanged) noexcept
         if (config->misc.animatedClanTag && !clanTag.empty()) {
             const auto offset = Helpers::utf8SeqLen(clanTag[0]);
             if (offset != -1 && static_cast<std::size_t>(offset) <= clanTag.length())
-                std::rotate(clanTag.begin(), clanTag.begin() + offset, clanTag.end());
+                std::ranges::rotate(clanTag, clanTag.begin() + offset);
         }
         lastTime = memory->globalVars->realtime;
         memory->setClanTag(clanTag.c_str(), clanTag.c_str());
@@ -441,7 +441,7 @@ void Misc::stealNames() noexcept
         if (!interfaces->engine->getPlayerInfo(entity->index(), playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
         if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
@@ -883,7 +883,7 @@ void Misc::runReportbot() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(reportedPlayers, playerInfo.xuid) != reportedPlayers.cend())
             continue;
 
         std::string report;
