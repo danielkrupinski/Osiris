@@ -31,7 +31,6 @@ namespace InventoryChanger
 
     void run(FrameStage) noexcept;
     void scheduleHudUpdate() noexcept;
-    void overrideHudIcon(GameEvent& event) noexcept;
     void updateStatTrak(GameEvent& event) noexcept;
 
     void setStickerApplySlot(int slot) noexcept;
