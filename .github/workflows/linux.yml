@@ -23,9 +23,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev clang-10
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev clang-11
     - name: configure
-      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-10 -D CMAKE_CXX_COMPILER=clang++-10 ..
+      run: mkdir Release && cd Release && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang-11 -D CMAKE_CXX_COMPILER=clang++-11 ..
     - name: build
       run: cd Release && make -j $(nproc --all)
 
