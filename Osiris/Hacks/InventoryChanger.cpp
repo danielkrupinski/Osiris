@@ -207,24 +207,14 @@ private:
         }
     }
 
-    StaticData()
+    void initItemData(ItemSchema* itemSchema) noexcept
     {
-        assert(memory && interfaces);
-
-        _paintKits.emplace_back(0, L"");
-        constexpr auto vanillaPaintIndex = 0;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        initSkinData(itemSchema);
-        initStickerData(itemSchema);
-        initMusicData(itemSchema);
-        
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
             const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
             const auto isOriginal = (item->getQuality() == 1);
-            
+
             if (!_weaponNames.contains(item->getWeaponId())) {
                 std::wstring nameWide = interfaces->localize->findSafe(item->getItemBaseName());
                 if (isCollectible && isOriginal) {
@@ -252,6 +242,17 @@ private:
                     _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
             }
         }
+    }
+
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        initSkinData(itemSchema);
+        initStickerData(itemSchema);
+        initMusicData(itemSchema);
+        initItemData(itemSchema);
 
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
             if (_weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID])
@@ -261,6 +262,7 @@ private:
 
             return false;
         });
+
         _gameItems.shrink_to_fit();
     }
 
@@ -272,7 +274,8 @@ private:
 
     std::vector<GameItem> _gameItems;
     std::vector<Collectible> _collectibles;
-    std::vector<PaintKit> _paintKits;
+    std::vector<PaintKit> _paintKits{ { 0, L"" } };
+    static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
 };
