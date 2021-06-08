@@ -193,17 +193,8 @@ private:
         }
     }
 
-    StaticData()
+    void initMusicData(ItemSchema* itemSchema) noexcept
     {
-        assert(memory && interfaces);
-
-        _paintKits.emplace_back(0, L"");
-        constexpr auto vanillaPaintIndex = 0;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        initSkinData(itemSchema);
-        initStickerData(itemSchema);
-
         const auto& musicMap = itemSchema->musicKits;
         for (const auto& node : musicMap) {
             const auto musicKit = node.value;
@@ -214,7 +205,20 @@ private:
             _paintKits.emplace_back(musicKit->id, std::move(name));
             _gameItems.emplace_back(Type::Music, 3, WeaponId::MusicKit, _paintKits.size() - 1, musicKit->inventoryImage);
         }
+    }
 
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        _paintKits.emplace_back(0, L"");
+        constexpr auto vanillaPaintIndex = 0;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        initSkinData(itemSchema);
+        initStickerData(itemSchema);
+        initMusicData(itemSchema);
+        
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
