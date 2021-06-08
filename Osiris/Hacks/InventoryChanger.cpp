@@ -165,16 +165,8 @@ private:
         }
     }
 
-    StaticData()
+    void initStickerData(ItemSchema* itemSchema) noexcept
     {
-        assert(memory && interfaces);
-
-        _paintKits.emplace_back(0, L"");
-        constexpr auto vanillaPaintIndex = 0;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
-        initSkinData(itemSchema);
-
         const auto& stickerMap = itemSchema->stickerKits;
         _gameItems.reserve(_gameItems.size() + stickerMap.numElements);
         for (const auto& node : stickerMap) {
@@ -199,6 +191,18 @@ private:
                 _gameItems.emplace_back(Type::SealedGraffiti, stickerKit->rarity, WeaponId::SealedGraffiti, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             }
         }
+    }
+
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        _paintKits.emplace_back(0, L"");
+        constexpr auto vanillaPaintIndex = 0;
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        initSkinData(itemSchema);
+        initStickerData(itemSchema);
 
         const auto& musicMap = itemSchema->musicKits;
         for (const auto& node : musicMap) {
