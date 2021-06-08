@@ -95,7 +95,7 @@ public:
     };
 
     struct Collectible {
-        Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
+        explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
 
         bool isOriginal;
     };
@@ -314,7 +314,7 @@ private:
     std::size_t itemIndex;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 public:
-    InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
+    explicit InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
             DynamicSkinData dynamicData;
