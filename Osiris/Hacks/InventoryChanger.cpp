@@ -337,14 +337,16 @@ public:
     explicit InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
+            const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicSkinData dynamicData;
-            dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
         } else if (isGlove()) {
+            const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicGloveData dynamicData;
-            dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             dynamicDataIndex = dynamicGloveData.size() - 1;
