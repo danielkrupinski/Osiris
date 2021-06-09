@@ -255,9 +255,11 @@ private:
         initItemData(itemSchema);
 
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
-            if (_weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID])
+            const auto compare = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
+            if (compare < 0)
                 return true;
-            if (a.hasPaintKit() && b.hasPaintKit() && _weaponNamesUpper[a.weaponID] == _weaponNamesUpper[b.weaponID])
+
+            if (a.hasPaintKit() && b.hasPaintKit() && compare == 0)
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
 
             return false;
