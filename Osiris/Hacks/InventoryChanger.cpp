@@ -95,15 +95,17 @@ public:
     };
 
     struct Collectible {
-        Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
+        explicit Collectible(bool isOriginal) : isOriginal{ isOriginal } {}
 
         bool isOriginal;
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name) noexcept;
+        PaintKit(int id, std::wstring&& name, float wearRemapMin = 0.0f, float wearRemapMax = 1.0f) noexcept;
 
         int id;
+        float wearRemapMin;
+        float wearRemapMax;
         std::string name;
         std::wstring nameUpperCase;
     };
@@ -137,14 +139,8 @@ private:
         return kitsWeapons;
     }
 
-    StaticData()
+    void initSkinData(ItemSchema* itemSchema) noexcept
     {
-        assert(memory && interfaces);
-
-        _paintKits.emplace_back(0, L"");
-        constexpr auto vanillaPaintIndex = 0;
-
-        const auto itemSchema = memory->itemSystem()->getItemSchema();
         const auto kitsWeapons = getKitsWeapons(itemSchema->alternateIcons);
 
         _gameItems.reserve(itemSchema->paintKits.lastAlloc);
@@ -154,7 +150,7 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()));
+            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()), paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -169,7 +165,10 @@ private:
                 }
             }
         }
+    }
 
+    void initStickerData(ItemSchema* itemSchema) noexcept
+    {
         const auto& stickerMap = itemSchema->stickerKits;
         _gameItems.reserve(_gameItems.size() + stickerMap.numElements);
         for (const auto& node : stickerMap) {
@@ -194,7 +193,10 @@ private:
                 _gameItems.emplace_back(Type::SealedGraffiti, stickerKit->rarity, WeaponId::SealedGraffiti, _paintKits.size() - 1, stickerKit->inventoryImage.data());
             }
         }
+    }
 
+    void initMusicData(ItemSchema* itemSchema) noexcept
+    {
         const auto& musicMap = itemSchema->musicKits;
         for (const auto& node : musicMap) {
             const auto musicKit = node.value;
@@ -205,13 +207,16 @@ private:
             _paintKits.emplace_back(musicKit->id, std::move(name));
             _gameItems.emplace_back(Type::Music, 3, WeaponId::MusicKit, _paintKits.size() - 1, musicKit->inventoryImage);
         }
+    }
 
+    void initItemData(ItemSchema* itemSchema) noexcept
+    {
         for (const auto& node : itemSchema->itemsSorted) {
             const auto item = node.value;
             const auto itemTypeName = std::string_view{ item->getItemTypeName() };
             const auto isCollectible = (itemTypeName == "#CSGO_Type_Collectible");
             const auto isOriginal = (item->getQuality() == 1);
-            
+
             if (!_weaponNames.contains(item->getWeaponId())) {
                 std::wstring nameWide = interfaces->localize->findSafe(item->getItemBaseName());
                 if (isCollectible && isOriginal) {
@@ -239,15 +244,29 @@ private:
                     _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
             }
         }
+    }
+
+    StaticData()
+    {
+        assert(memory && interfaces);
+
+        const auto itemSchema = memory->itemSystem()->getItemSchema();
+        initSkinData(itemSchema);
+        initStickerData(itemSchema);
+        initMusicData(itemSchema);
+        initItemData(itemSchema);
 
         std::ranges::sort(_gameItems, [this](const auto& a, const auto& b) {
-            if (_weaponNamesUpper[a.weaponID] < _weaponNamesUpper[b.weaponID])
+            const auto compare = _weaponNamesUpper[a.weaponID].compare(_weaponNamesUpper[b.weaponID]);
+            if (compare < 0)
                 return true;
-            if (a.hasPaintKit() && b.hasPaintKit() && _weaponNamesUpper[a.weaponID] == _weaponNamesUpper[b.weaponID])
+
+            if (a.hasPaintKit() && b.hasPaintKit() && compare == 0)
                 return _paintKits[a.dataIndex].nameUpperCase < _paintKits[b.dataIndex].nameUpperCase;
 
             return false;
         });
+
         _gameItems.shrink_to_fit();
     }
 
@@ -259,7 +278,8 @@ private:
 
     std::vector<GameItem> _gameItems;
     std::vector<Collectible> _collectibles;
-    std::vector<PaintKit> _paintKits;
+    std::vector<PaintKit> _paintKits{ { 0, L"" } };
+    static constexpr auto vanillaPaintIndex = 0;
     std::unordered_map<WeaponId, std::string> _weaponNames;
     std::unordered_map<WeaponId, std::wstring> _weaponNamesUpper;
 };
@@ -314,17 +334,19 @@ private:
     std::size_t itemIndex;
     std::size_t dynamicDataIndex = static_cast<std::size_t>(-1);
 public:
-    InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
+    explicit InventoryItem(std::size_t itemIndex)  noexcept : itemIndex{ itemIndex }
     {
         if (isSkin()) {
+            const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicSkinData dynamicData;
-            dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicSkinData.push_back(dynamicData);
             dynamicDataIndex = dynamicSkinData.size() - 1;
         } else if (isGlove()) {
+            const auto& staticData = StaticData::paintKits()[get().dataIndex];
             DynamicGloveData dynamicData;
-            dynamicData.wear = randomFloat(0.0f, 0.07f);
+            dynamicData.wear = std::lerp(staticData.wearRemapMin, staticData.wearRemapMax, randomFloat(0.0f, 0.07f));
             dynamicData.seed = randomInt(1, 1000);
             dynamicGloveData.push_back(dynamicData);
             dynamicDataIndex = dynamicGloveData.size() - 1;
@@ -337,6 +359,8 @@ public:
 
     void markAsDeleted() noexcept { itemIndex = static_cast<std::size_t>(-1); }
     bool isDeleted() const noexcept { return itemIndex == static_cast<std::size_t>(-1); }
+    void markToDelete() noexcept { itemIndex = static_cast<std::size_t>(-2); }
+    bool shouldDelete() const noexcept { return itemIndex == static_cast<std::size_t>(-2); }
 
     bool isSticker() const noexcept { return !isDeleted() && get().isSticker(); }
     bool isSkin() const noexcept { return !isDeleted() && get().isSkin(); }
@@ -884,7 +908,19 @@ void InventoryChanger::run(FrameStage stage) noexcept
         itemToRemoveNameTag = itemToWearSticker = toolToUse = itemToApplyTool = 0;
     }
 
+    bool inventoryUpdated = false;
     for (std::size_t i = 0; i < inventory.size(); ++i) {
+        if (inventory[i].shouldDelete()) {
+            if (const auto view = memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i)) {
+                if (const auto econItem = memory->getSOCData(view)) {
+                    removeItemFromInventory(localInventory, baseTypeCache, econItem);
+                    inventoryUpdated = true;
+                }
+            }
+            inventory[i].markAsDeleted();
+            continue;
+        }
+
         if (inventory[i].isDeleted() || memory->getInventoryItemByItemID(localInventory, BASE_ITEMID + i))
             continue;
 
@@ -953,6 +989,9 @@ void InventoryChanger::run(FrameStage stage) noexcept
         memory->inventoryManager->equipItemInSlot(item.team, item.slot, item.index + BASE_ITEMID);
 
     toEquip.clear();
+
+    if (inventoryUpdated)
+        sendInventoryUpdatedEvent();
 
     if (appliedStickerToItemID)
         initItemCustomizationNotification("sticker_apply", std::to_string(appliedStickerToItemID).c_str());
@@ -1125,7 +1164,7 @@ namespace ImGui
 
         if (const auto icon = getItemIconTexture(item.iconPath)) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
-            if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
+            if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
                 Image(icon, iconSizeLarge);
                 EndTooltip();
@@ -1158,6 +1197,100 @@ namespace ImGui
             CloseCurrentPopup();
 
         return pressed;
+    }
+
+    static void SkinItem(const StaticData::GameItem& item, const ImVec2& iconSizeSmall, const ImVec2& iconSizeLarge, ImU32 rarityColor, bool& shouldDelete) noexcept
+    {
+        ImGuiWindow* window = GetCurrentWindow();
+        if (window->SkipItems)
+            return;
+
+        const ImGuiContext& g = *GImGui;
+        const ImGuiStyle& style = g.Style;
+
+        const auto itemName = StaticData::getWeaponName(item.weaponID).c_str();
+        const auto itemNameSize = CalcTextSize(itemName, nullptr);
+
+        const auto paintKitName = item.hasPaintKit() ? StaticData::paintKits()[item.dataIndex].name.c_str() : "";
+        const auto paintKitNameSize = CalcTextSize(paintKitName, nullptr);
+
+        PushID(itemName);
+        PushID(paintKitName);
+        const auto id = window->GetID(0);
+        PopID();
+        PopID();
+
+        const auto height = ImMax(paintKitNameSize.y, ImMax(itemNameSize.y, iconSizeSmall.y));
+        const auto rarityBulletRadius = IM_FLOOR(height * 0.2f);
+        const auto size = ImVec2{ iconSizeSmall.x + rarityBulletRadius * 2.0f + itemNameSize.x + paintKitNameSize.x, height };
+
+        ImVec2 pos = window->DC.CursorPos;
+        pos.y += window->DC.CurrLineTextBaseOffset;
+        ItemSize(size, 0.0f);
+
+        const auto smallIconMin = pos;
+        const auto smallIconMax = smallIconMin + iconSizeSmall;
+
+        const auto rarityBulletPos = ImVec2{ pos.x + iconSizeSmall.x + 5.0f + rarityBulletRadius, pos.y + IM_FLOOR(size.y * 0.5f) };
+
+        const auto itemNameMin = ImVec2{ rarityBulletPos.x + rarityBulletRadius + 5.0f, pos.y };
+        const auto itemNameMax = itemNameMin + ImVec2{ itemNameSize.x, size.y };
+
+        const auto separatorHeightInv = IM_FLOOR(height * 0.2f);
+        const auto separatorMin = ImVec2{ itemNameMax.x + 5.0f, pos.y + separatorHeightInv };
+        const auto separatorMax = separatorMin + ImVec2{ 1.0f, height - 2.0f * separatorHeightInv };
+
+        const auto paintKitNameMin = ImVec2{ separatorMax.x + 5.0f, pos.y };
+        const auto paintKitNameMax = paintKitNameMin + ImVec2{ paintKitNameSize.x, size.y };
+
+        // Selectables are meant to be tightly packed together with no click-gap, so we extend their box to cover spacing between selectable.
+        ImRect bb(pos, pos + ImVec2{ ImMax(size.x, window->WorkRect.Max.x - pos.x), size.y });
+        const float spacingX = style.ItemSpacing.x;
+        const float spacingY = style.ItemSpacing.y;
+        const float spacingL = IM_FLOOR(spacingX * 0.50f);
+        const float spacingU = IM_FLOOR(spacingY * 0.50f);
+        bb.Min.x -= spacingL;
+        bb.Min.y -= spacingU;
+        bb.Max.x += (spacingX - spacingL);
+        bb.Max.y += (spacingY - spacingU);
+
+        if (!ItemAdd(bb, id))
+            return;
+
+        if (const bool hovered = (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, bb.Max))) {
+            const ImU32 col = GetColorU32(ImGuiCol_HeaderHovered);
+            RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+            RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+        }
+
+        if (const auto icon = getItemIconTexture(item.iconPath)) {
+            window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
+            if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
+                BeginTooltip();
+                Image(icon, iconSizeLarge);
+                EndTooltip();
+            }
+        }
+
+        window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius + 1.0f, IM_COL32(0, 0, 0, (std::min)(120u, (rarityColor & IM_COL32_A_MASK))), 12);
+        window->DrawList->AddCircleFilled(rarityBulletPos, rarityBulletRadius, rarityColor, 12);
+
+        RenderTextClipped(itemNameMin, itemNameMax, itemName, nullptr, &itemNameSize, { 0.0f, 0.5f }, &bb);
+        if (paintKitName[0] != '\0')
+            window->DrawList->AddRectFilled(separatorMin, separatorMax, GetColorU32(ImGuiCol_Text));
+        RenderTextClipped(paintKitNameMin, paintKitNameMax, paintKitName, nullptr, &paintKitNameSize, { 0.0f, 0.5f }, &bb);
+
+        const auto removeButtonSize = CalcTextSize("Delete", nullptr) + style.FramePadding * 2.0f;
+        const auto cursorPosNext = window->DC.CursorPos.y;
+        SameLine(window->WorkRect.Max.x - pos.x - removeButtonSize.x - 7.0f);
+        const auto cursorPosBackup = window->DC.CursorPos.y;
+
+        window->DC.CursorPos.y += (size.y - GetFrameHeight()) * 0.5f;
+        if (Button("Delete"))
+            shouldDelete = true;
+
+        window->DC.CursorPosPrevLine.y = cursorPosBackup;
+        window->DC.CursorPos.y = cursorPosNext;
     }
 }
 
@@ -1259,16 +1392,20 @@ void InventoryChanger::drawGUI(bool contentOnly) noexcept
         }
         ImGui::EndChild();
     } else {
-        /*
-        for (std::size_t i = 0; i < inventory.size(); ++i) {
-            if (inventory[i].isDeleted())
-                continue;
+        if (ImGui::BeginChild("##scrollarea", ImVec2{ 0.0f, contentOnly ? 400.0f : 0.0f })) {
+            for (std::size_t i = 0; i < inventory.size(); ++i) {
+                if (inventory[i].isDeleted())
+                    continue;
 
-            ImGui::PushID(i);
-            ImGui::Image(getItemIconTexture(inventory[i].get().iconPath), { 100.0f, 75.0f });
-            ImGui::PopID();
+                ImGui::PushID(i);
+                bool shouldDelete = false;
+                ImGui::SkinItem(inventory[i].get(), { 37.0f, 28.0f }, { 200.0f, 150.0f }, rarityColor(inventory[i].get().rarity), shouldDelete);
+                if (shouldDelete)
+                    inventory[i].markToDelete();
+                ImGui::PopID();
+            }
         }
-        */
+        ImGui::EndChild();
     }
 
     if (!contentOnly)
@@ -1915,7 +2052,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
+StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, nameUpperCase{std::move(name)}
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
