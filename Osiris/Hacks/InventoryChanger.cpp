@@ -1147,7 +1147,7 @@ namespace ImGui
 
         if (const auto icon = getItemIconTexture(item.iconPath)) {
             window->DrawList->AddImage(icon, smallIconMin, smallIconMax);
-            if (IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
+            if (g.HoveredWindow == window && IsMouseHoveringRect(bb.Min, ImVec2{ bb.Min.x + iconSizeSmall.x, bb.Max.y })) {
                 BeginTooltip();
                 Image(icon, iconSizeLarge);
                 EndTooltip();
