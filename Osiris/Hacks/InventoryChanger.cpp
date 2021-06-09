@@ -101,9 +101,11 @@ public:
     };
 
     struct PaintKit {
-        PaintKit(int id, std::wstring&& name) noexcept;
+        PaintKit(int id, std::wstring&& name, float wearRemapMin = 0.0f, float wearRemapMax = 1.0f) noexcept;
 
         int id;
+        float wearRemapMin;
+        float wearRemapMax;
         std::string name;
         std::wstring nameUpperCase;
     };
@@ -148,7 +150,7 @@ private:
             if (paintKit->id == 0 || paintKit->id == 9001) // ignore workshop_default
                 continue;
 
-            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()));
+            _paintKits.emplace_back(paintKit->id, interfaces->localize->findSafe(paintKit->itemName.data()), paintKit->wearRemapMin, paintKit->wearRemapMax);
 
             const auto isGlove = (paintKit->id >= 10000);
             for (auto it = std::ranges::lower_bound(kitsWeapons, paintKit->id, {}, &KitWeapon::paintKit); it != kitsWeapons.end() && it->paintKit == paintKit->id; ++it) {
@@ -1933,7 +1935,7 @@ void InventoryChanger::fixKnifeAnimation(Entity* viewModelWeapon, long& sequence
 
 StaticData::GameItem::GameItem(Type type, int rarity, WeaponId weaponID, std::size_t dataIndex, std::string&& iconPath) noexcept : type{ type }, rarity{ static_cast<std::uint8_t>(rarity) }, weaponID{ weaponID }, dataIndex{ dataIndex }, iconPath{ std::move(iconPath) } {}
 
-StaticData::PaintKit::PaintKit(int id, std::wstring&& name) noexcept : id{ id }, nameUpperCase{ std::move(name) }
+StaticData::PaintKit::PaintKit(int id, std::wstring&& name, float wearRemapMin, float wearRemapMax) noexcept : id{ id }, wearRemapMin{ wearRemapMin }, wearRemapMax{ wearRemapMax }, nameUpperCase{std::move(name)}
 {
     this->name = interfaces->localize->convertUnicodeToAnsi(nameUpperCase.c_str());
     nameUpperCase = Helpers::toUpper(nameUpperCase);
