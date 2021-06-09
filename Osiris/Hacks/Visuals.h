@@ -6,7 +6,6 @@ struct ImDrawList;
 
 namespace Visuals
 {
-    void playerModel(FrameStage stage) noexcept;
     void colorWorld() noexcept;
     void modifySmoke(FrameStage stage) noexcept;
     void thirdperson() noexcept;
