@@ -67,6 +67,8 @@
 
 #ifdef _WIN32
 
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     [[maybe_unused]] static const auto once = [](HWND window) noexcept {
@@ -83,9 +85,7 @@ static LRESULT __stdcall wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
         return true;
     }(window);
 
-    LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
-
     interfaces->inputSystem->enableInput(!gui->isOpen());
 
     return CallWindowProcW(hooks->originalWndProc, window, msg, wParam, lParam);
@@ -515,19 +515,17 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
 #ifdef _WIN32
 
-Hooks::Hooks(HMODULE moduleHandle) noexcept
+Hooks::Hooks(HMODULE moduleHandle) noexcept : moduleHandle{ moduleHandle }
 {
     _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
     _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
-
-    this->moduleHandle = moduleHandle;
 
     // interfaces and memory shouldn't be initialized in wndProc because they show MessageBox on error which would cause deadlock
     interfaces = std::make_unique<const Interfaces>();
     memory = std::make_unique<const Memory>();
 
     window = FindWindowW(L"Valve001", nullptr);
-    originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(wndProc)));
+    originalWndProc = WNDPROC(SetWindowLongPtrW(window, GWLP_WNDPROC, LONG_PTR(&wndProc)));
 }
 
 #else
@@ -604,41 +602,41 @@ void Hooks::install() noexcept
 #endif
 
     client.init(interfaces->client);
-    client.hookAt(37, frameStageNotify);
+    client.hookAt(37, &frameStageNotify);
 
     clientMode.init(memory->clientMode);
-    clientMode.hookAt(IS_WIN32() ? 17 : 18, shouldDrawFog);
-    clientMode.hookAt(IS_WIN32() ? 18 : 19, overrideView);
-    clientMode.hookAt(IS_WIN32() ? 24 : 25, createMove);
-    clientMode.hookAt(IS_WIN32() ? 27 : 28, shouldDrawViewModel);
-    clientMode.hookAt(IS_WIN32() ? 35 : 36, getViewModelFov);
-    clientMode.hookAt(IS_WIN32() ? 44 : 45, doPostScreenEffects);
-    clientMode.hookAt(IS_WIN32() ? 58 : 61, updateColorCorrectionWeights);
+    clientMode.hookAt(IS_WIN32() ? 17 : 18, &shouldDrawFog);
+    clientMode.hookAt(IS_WIN32() ? 18 : 19, &overrideView);
+    clientMode.hookAt(IS_WIN32() ? 24 : 25, &createMove);
+    clientMode.hookAt(IS_WIN32() ? 27 : 28, &shouldDrawViewModel);
+    clientMode.hookAt(IS_WIN32() ? 35 : 36, &getViewModelFov);
+    clientMode.hookAt(IS_WIN32() ? 44 : 45, &doPostScreenEffects);
+    clientMode.hookAt(IS_WIN32() ? 58 : 61, &updateColorCorrectionWeights);
 
     engine.init(interfaces->engine);
-    engine.hookAt(82, isPlayingDemo);
-    engine.hookAt(101, getScreenAspectRatio);
-    engine.hookAt(IS_WIN32() ? 218 : 219, getDemoPlaybackParameters);
+    engine.hookAt(82, &isPlayingDemo);
+    engine.hookAt(101, &getScreenAspectRatio);
+    engine.hookAt(IS_WIN32() ? 218 : 219, &getDemoPlaybackParameters);
 
     modelRender.init(interfaces->modelRender);
-    modelRender.hookAt(21, drawModelExecute);
+    modelRender.hookAt(21, &drawModelExecute);
 
     panoramaMarshallHelper.init(memory->panoramaMarshallHelper);
-    panoramaMarshallHelper.hookAt(5, getArgAsNumber);
-    panoramaMarshallHelper.hookAt(7, getArgAsString);
+    panoramaMarshallHelper.hookAt(5, &getArgAsNumber);
+    panoramaMarshallHelper.hookAt(7, &getArgAsString);
 
     sound.init(interfaces->sound);
-    sound.hookAt(IS_WIN32() ? 5 : 6, emitSound);
+    sound.hookAt(IS_WIN32() ? 5 : 6, &emitSound);
 
     surface.init(interfaces->surface);
-    surface.hookAt(IS_WIN32() ? 15 : 14, setDrawColor);
+    surface.hookAt(IS_WIN32() ? 15 : 14, &setDrawColor);
     
     svCheats.init(interfaces->cvar->findVar("sv_cheats"));
-    svCheats.hookAt(IS_WIN32() ? 13 : 16, svCheatsGetBool);
+    svCheats.hookAt(IS_WIN32() ? 13 : 16, &svCheatsGetBool);
 
     viewRender.init(memory->viewRender);
-    viewRender.hookAt(IS_WIN32() ? 39 : 40, render2dEffectsPreHud);
-    viewRender.hookAt(IS_WIN32() ? 41 : 42, renderSmokeOverlay);
+    viewRender.hookAt(IS_WIN32() ? 39 : 40, &render2dEffectsPreHud);
+    viewRender.hookAt(IS_WIN32() ? 41 : 42, &renderSmokeOverlay);
 
 #ifdef _WIN32
     if (DWORD oldProtection; VirtualProtect(memory->dispatchSound, 4, PAGE_EXECUTE_READWRITE, &oldProtection)) {
@@ -647,15 +645,15 @@ void Hooks::install() noexcept
         mprotect((void*)addressPageAligned, 4, PROT_READ | PROT_WRITE | PROT_EXEC) == 0) {
 #endif
         originalDispatchSound = decltype(originalDispatchSound)(uintptr_t(memory->dispatchSound + 1) + *memory->dispatchSound);
-        *memory->dispatchSound = uintptr_t(dispatchSound) - uintptr_t(memory->dispatchSound + 1);
+        *memory->dispatchSound = uintptr_t(&dispatchSound) - uintptr_t(memory->dispatchSound + 1);
 #ifdef _WIN32
         VirtualProtect(memory->dispatchSound, 4, oldProtection, nullptr);
 #endif
     }
 
 #ifdef _WIN32
-    bspQuery.hookAt(6, listLeavesInBox);
-    surface.hookAt(67, lockCursor);
+    bspQuery.hookAt(6, &listLeavesInBox);
+    surface.hookAt(67, &lockCursor);
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_EnableHook(MH_ALL_HOOKS);
