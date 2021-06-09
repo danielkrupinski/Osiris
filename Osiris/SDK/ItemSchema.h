@@ -77,6 +77,9 @@ struct PaintKit {
     String logoMaterial;
     bool baseDiffuseOverride;
     int rarity;
+    PAD(40)
+    float wearRemapMin;
+    float wearRemapMax;
 };
 
 struct StickerKit {
