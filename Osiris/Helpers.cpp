@@ -7,6 +7,10 @@
 #include <fstream>
 #include <string_view>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #include "imgui/imgui.h"
 
 #include "ConfigStructs.h"
@@ -104,17 +108,27 @@ std::wstring Helpers::toWideString(const std::string& str) noexcept
     return upperCase;
 }
 
+static void toUpper(wchar_t* str, std::size_t len) noexcept
+{
+    static std::unordered_map<wchar_t, wchar_t> upperCache;
+    for (std::size_t i = 0; i < len; ++i) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] -= ('a' - 'A');
+        } else if (str[i] > 127) {
+            if (const auto it = upperCache.find(str[i]); it != upperCache.end()) {
+                str[i] = it->second;
+            } else {
+                const auto upper = std::towupper(str[i]);
+                upperCache.emplace(str[i], upper);
+                str[i] = upper;
+            }
+        }
+    }
+}
+
 std::wstring Helpers::toUpper(std::wstring str) noexcept
 {
-    std::ranges::transform(str, str.begin(), [](wchar_t w) -> wchar_t {
-        if (w >= 0 && w <= 127) {
-            if (w >= 'a' && w <= 'z')
-                return w - ('a' - 'A');
-            return w;
-        }
-
-        return std::towupper(w);
-    });
+    ::toUpper(str.data(), str.length());
     return str;
 }
 
@@ -158,4 +172,18 @@ std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
     in.seekg(0, std::ios_base::beg);
     in.read(result.data(), result.size());
     return result;
+}
+
+std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
+{
+    std::size_t length = 0;
+#ifdef _WIN32
+    MEMORY_BASIC_INFORMATION memoryInfo;
+    while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
+        ++length;
+#else
+    while (vmt[length])
+        ++length;
+#endif
+    return length;
 }

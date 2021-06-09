@@ -173,9 +173,9 @@ void Chams::renderPlayer(Entity* player) noexcept
 
     const auto health = player->health();
 
-    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::any_of(config->chams["Planting"].materials.cbegin(), config->chams["Planting"].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    if (const auto activeWeapon = player->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::C4 && activeWeapon->c4StartedArming() && std::ranges::any_of(config->chams["Planting"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(config->chams["Planting"].materials, health);
-    } else if (player->isDefusing() && std::any_of(config->chams["Defusing"].materials.cbegin(), config->chams["Defusing"].materials.cend(), [](const Config::Chams::Material& mat) { return mat.enabled; })) {
+    } else if (player->isDefusing() && std::ranges::any_of(config->chams["Defusing"].materials, [](const Config::Chams::Material& mat) { return mat.enabled; })) {
         applyChams(config->chams["Defusing"].materials, health);
     } else if (player == localPlayer.get()) {
         applyChams(config->chams["Local player"].materials, health);
