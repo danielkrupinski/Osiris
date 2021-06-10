@@ -329,6 +329,11 @@ public:
     {
         return *reinterpret_cast<bool*>(this + 0x29E8);
     }
+
+    std::uint64_t originalOwnerXuid() noexcept
+    {
+        return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
+    }
 };
 
 class PlantedC4 : public Entity {
