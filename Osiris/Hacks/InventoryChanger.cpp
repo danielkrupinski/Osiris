@@ -416,13 +416,9 @@ static Entity* make_glove(int entry, int serial) noexcept
     return interfaces->entityList->getEntity(entry);
 }
 
-static void applyGloves(Entity* local) noexcept
+static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
-    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 41);
+    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 41);
     if (!itemView)
         return;
 
@@ -475,15 +471,11 @@ static void applyGloves(Entity* local) noexcept
     }
 }
 
-static void applyKnife(Entity* local) noexcept
+static void applyKnife(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
     const auto localXuid = local->getSteamId();
 
-    const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 0);
+    const auto itemView = localInventory.getItemInLoadout(local->getTeamNumber(), 0);
     if (!itemView)
         return;
 
@@ -559,12 +551,8 @@ static void applyKnife(Entity* local) noexcept
     worldModel->modelIndex() = interfaces->modelInfo->getModelIndex(def->getWorldDisplayModel());
 }
 
-static void applyWeapons(Entity* local) noexcept
+static void applyWeapons(CSPlayerInventory& localInventory, Entity* local) noexcept
 {
-    const auto localInventory = memory->inventoryManager->getLocalInventory();
-    if (!localInventory)
-        return;
-
     const auto localTeam = local->getTeamNumber();
     const auto localXuid = local->getSteamId();
 
@@ -589,7 +577,7 @@ static void applyWeapons(Entity* local) noexcept
             continue;
 
         const auto loadoutSlot = def->getLoadoutSlot(localTeam);
-        const auto itemView = localInventory->getItemInLoadout(localTeam, loadoutSlot);
+        const auto itemView = localInventory.getItemInLoadout(localTeam, loadoutSlot);
         if (!itemView)
             continue;
 
@@ -633,9 +621,13 @@ static void onPostDataUpdateStart(int localHandle) noexcept
     if (!local)
         return;
 
-    applyGloves(local);
-    applyKnife(local);
-    applyWeapons(local);
+    const auto localInventory = memory->inventoryManager->getLocalInventory();
+    if (!localInventory)
+        return;
+
+    applyGloves(*localInventory, local);
+    applyKnife(*localInventory, local);
+    applyWeapons(*localInventory, local);
 }
 
 static bool hudUpdateRequired{ false };
