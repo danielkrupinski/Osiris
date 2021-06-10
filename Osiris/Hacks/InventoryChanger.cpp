@@ -481,6 +481,8 @@ static void applyKnife(Entity* local) noexcept
     if (!localInventory)
         return;
 
+    const auto localXuid = local->getSteamId();
+
     const auto itemView = localInventory->getItemInLoadout(local->getTeamNumber(), 0);
     if (!itemView)
         return;
@@ -507,6 +509,9 @@ static void applyKnife(Entity* local) noexcept
 
         auto& definitionIndex = weapon->itemDefinitionIndex2();
         if (!isKnife(definitionIndex))
+            continue;
+
+        if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
         weapon->itemIDHigh() = std::uint32_t(soc->itemID >> 32);
@@ -561,6 +566,7 @@ static void applyWeapons(Entity* local) noexcept
         return;
 
     const auto localTeam = local->getTeamNumber();
+    const auto localXuid = local->getSteamId();
 
     auto& weapons = local->weapons();
     for (auto weaponHandle : weapons) {
@@ -573,6 +579,9 @@ static void applyWeapons(Entity* local) noexcept
 
         const auto& definitionIndex = weapon->itemDefinitionIndex2();
         if (isKnife(definitionIndex))
+            continue;
+
+        if (weapon->originalOwnerXuid() != localXuid)
             continue;
 
         const auto def = memory->itemSystem()->getItemSchema()->getItemDefinitionInterface(definitionIndex);
