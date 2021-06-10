@@ -195,25 +195,25 @@ bool KeyBind::setToPressedKey() noexcept
     } else if (ImGui::GetIO().MouseWheel > 0.0f) {
         keyCode = KeyCode::MOUSEWHEEL_UP;
         return true;
-    } else {
-        for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().MouseDown); ++i) {
-            if (ImGui::IsMouseClicked(i)) {
-                keyCode = KeyCode(KeyCode::MOUSE1 + i);
-                return true;
-            }
+    } 
+    
+    for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().MouseDown); ++i) {
+        if (ImGui::IsMouseClicked(i)) {
+            keyCode = KeyCode(KeyCode::MOUSE1 + i);
+            return true;
         }
+    }
 
-        for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
-            if (ImGui::IsKeyPressed(i)) {
-                auto it = std::ranges::find(keyMap, i, &Key::code);
-                if (it != keyMap.end()) {
-                    keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
-                    // Treat AltGr as RALT
-                    if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
-                        keyCode = KeyCode::RALT;
-                    return true;
-                }
-            }
+    for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
+        if (!ImGui::IsKeyPressed(i))
+            continue;
+
+        if (auto it = std::ranges::find(keyMap, i, &Key::code); it != keyMap.end()) {
+            keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
+            // Treat AltGr as RALT
+            if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
+                keyCode = KeyCode::RALT;
+            return true;
         }
     }
     return false;
