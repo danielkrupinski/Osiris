@@ -299,6 +299,7 @@ public:
     NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
     NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
     NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
+    NETVAR(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
