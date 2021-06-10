@@ -14,14 +14,13 @@
 #include "SDK/Platform.h"
 
 struct Key {
-    template <std::size_t N>
-    constexpr Key(const char(&name)[N], int code) : name{ name }, code{ code } {  }
+    constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }
 
     std::string_view name;
     int code;
 };
 
-// indices must match KeyBind::KeyCode enum, and has to be sorted alphabetically
+// indices must match KeyBind::KeyCode enum
 static constexpr auto keyMap = std::to_array<Key>({
     { "'", WIN32_LINUX(VK_OEM_7, SDL_SCANCODE_APOSTROPHE) },
     { ",", WIN32_LINUX(VK_OEM_COMMA, SDL_SCANCODE_COMMA) },
@@ -208,7 +207,7 @@ bool KeyBind::setToPressedKey() noexcept
         if (!ImGui::IsKeyPressed(i))
             continue;
 
-        if (auto it = std::ranges::find(keyMap, i, &Key::code); it != keyMap.end()) {
+        if (const auto it = std::ranges::find(keyMap, i, &Key::code); it != keyMap.end()) {
             keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
             // Treat AltGr as RALT
             if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
