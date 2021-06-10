@@ -440,7 +440,7 @@ static void applyGloves(CSPlayerInventory& localInventory, Entity* local) noexce
         glove = interfaces->entityList->getEntityFromHandle(gloveHandle);
     if (!glove) {
         const auto entry = interfaces->entityList->getHighestEntityIndex() + 1;
-        const auto serial = rand() % 0x1000;
+        const auto serial = randomInt(0, 0x1000);
         glove = make_glove(entry, serial);
     }
 
