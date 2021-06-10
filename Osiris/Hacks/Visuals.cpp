@@ -464,7 +464,7 @@ void Visuals::updateEventListeners(bool forceRemove) noexcept
 {
     class ImpactEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) { bulletTracer(*event); }
+        void fireGameEvent(GameEvent* event) override { bulletTracer(*event); }
     };
 
     static ImpactEventListener listener;
