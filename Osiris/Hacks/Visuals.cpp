@@ -233,11 +233,6 @@ bool Visuals::shouldRemoveSmoke() noexcept
     return visualsConfig.noSmoke;
 }
 
-bool Visuals::shouldInverseRagdollGravity() noexcept
-{
-    return visualsConfig.inverseRagdollGravity;
-}
-
 float Visuals::viewModelFov() noexcept
 {
     return static_cast<float>(visualsConfig.viewmodelFov);

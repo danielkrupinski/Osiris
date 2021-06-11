@@ -15,7 +15,6 @@ namespace Visuals
     bool shouldRemoveFog() noexcept;
     bool shouldRemoveScopeOverlay() noexcept;
     bool shouldRemoveSmoke() noexcept;
-    bool shouldInverseRagdollGravity() noexcept;
     float viewModelFov() noexcept;
     float fov() noexcept;
     float farZ() noexcept;
