@@ -11,6 +11,7 @@
 #include "../fnv.h"
 #include "../GameData.h"
 #include "../Helpers.h"
+#include "../imguiCustom.h"
 #include "Visuals.h"
 
 #include "../SDK/ConVar.h"
@@ -483,4 +484,114 @@ void Visuals::updateInput() noexcept
 {
     config->visuals.thirdpersonKey.handleToggle();
     config->visuals.zoomKey.handleToggle();
+}
+
+static bool windowOpen = false;
+
+void Visuals::menuBarItem() noexcept
+{
+    if (ImGui::MenuItem("Visuals")) {
+        windowOpen = true;
+        ImGui::SetWindowFocus("Visuals");
+        ImGui::SetWindowPos("Visuals", { 100.0f, 100.0f });
+    }
+}
+
+void Visuals::tabItem() noexcept
+{
+    if (ImGui::BeginTabItem("Visuals")) {
+        drawGUI(true);
+        ImGui::EndTabItem();
+    }
+}
+
+void Visuals::drawGUI(bool contentOnly) noexcept
+{
+    if (!contentOnly) {
+        if (!windowOpen)
+            return;
+        ImGui::SetNextWindowSize({ 680.0f, 0.0f });
+        ImGui::Begin("Visuals", &windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    }
+    ImGui::Columns(2, nullptr, false);
+    ImGui::SetColumnOffset(1, 280.0f);
+    ImGui::Checkbox("Disable post-processing", &config->visuals.disablePostProcessing);
+    ImGui::Checkbox("Inverse ragdoll gravity", &config->visuals.inverseRagdollGravity);
+    ImGui::Checkbox("No fog", &config->visuals.noFog);
+    ImGui::Checkbox("No 3d sky", &config->visuals.no3dSky);
+    ImGui::Checkbox("No aim punch", &config->visuals.noAimPunch);
+    ImGui::Checkbox("No view punch", &config->visuals.noViewPunch);
+    ImGui::Checkbox("No hands", &config->visuals.noHands);
+    ImGui::Checkbox("No sleeves", &config->visuals.noSleeves);
+    ImGui::Checkbox("No weapons", &config->visuals.noWeapons);
+    ImGui::Checkbox("No smoke", &config->visuals.noSmoke);
+    ImGui::Checkbox("No blur", &config->visuals.noBlur);
+    ImGui::Checkbox("No scope overlay", &config->visuals.noScopeOverlay);
+    ImGui::Checkbox("No grass", &config->visuals.noGrass);
+    ImGui::Checkbox("No shadows", &config->visuals.noShadows);
+    ImGui::Checkbox("Wireframe smoke", &config->visuals.wireframeSmoke);
+    ImGui::NextColumn();
+    ImGui::Checkbox("Zoom", &config->visuals.zoom);
+    ImGui::SameLine();
+    ImGui::PushID("Zoom Key");
+    ImGui::hotkey("", config->visuals.zoomKey);
+    ImGui::PopID();
+    ImGui::Checkbox("Thirdperson", &config->visuals.thirdperson);
+    ImGui::SameLine();
+    ImGui::PushID("Thirdperson Key");
+    ImGui::hotkey("", config->visuals.thirdpersonKey);
+    ImGui::PopID();
+    ImGui::PushItemWidth(290.0f);
+    ImGui::PushID(0);
+    ImGui::SliderInt("", &config->visuals.thirdpersonDistance, 0, 1000, "Thirdperson distance: %d");
+    ImGui::PopID();
+    ImGui::PushID(1);
+    ImGui::SliderInt("", &config->visuals.viewmodelFov, -60, 60, "Viewmodel FOV: %d");
+    ImGui::PopID();
+    ImGui::PushID(2);
+    ImGui::SliderInt("", &config->visuals.fov, -60, 60, "FOV: %d");
+    ImGui::PopID();
+    ImGui::PushID(3);
+    ImGui::SliderInt("", &config->visuals.farZ, 0, 2000, "Far Z: %d");
+    ImGui::PopID();
+    ImGui::PushID(4);
+    ImGui::SliderInt("", &config->visuals.flashReduction, 0, 100, "Flash reduction: %d%%");
+    ImGui::PopID();
+    ImGui::PushID(5);
+    ImGui::SliderFloat("", &config->visuals.brightness, 0.0f, 1.0f, "Brightness: %.2f");
+    ImGui::PopID();
+    ImGui::PopItemWidth();
+    ImGui::Combo("Skybox", &config->visuals.skybox, Visuals::skyboxList.data(), Visuals::skyboxList.size());
+    ImGuiCustom::colorPicker("World color", config->visuals.world);
+    ImGuiCustom::colorPicker("Sky color", config->visuals.sky);
+    ImGui::Checkbox("Deagle spinner", &config->visuals.deagleSpinner);
+    ImGui::Combo("Screen effect", &config->visuals.screenEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+    ImGui::Combo("Hit effect", &config->visuals.hitEffect, "None\0Drone cam\0Drone cam with noise\0Underwater\0Healthboost\0Dangerzone\0");
+    ImGui::SliderFloat("Hit effect time", &config->visuals.hitEffectTime, 0.1f, 1.5f, "%.2fs");
+    ImGui::Combo("Hit marker", &config->visuals.hitMarker, "None\0Default (Cross)\0");
+    ImGui::SliderFloat("Hit marker time", &config->visuals.hitMarkerTime, 0.1f, 1.5f, "%.2fs");
+    ImGuiCustom::colorPicker("Bullet Tracers", config->visuals.bulletTracers.color.data(), &config->visuals.bulletTracers.color[3], nullptr, nullptr, &config->visuals.bulletTracers.enabled);
+    ImGuiCustom::colorPicker("Molotov Hull", config->visuals.molotovHull);
+
+    ImGui::Checkbox("Color correction", &config->visuals.colorCorrection.enabled);
+    ImGui::SameLine();
+
+    if (bool ccPopup = ImGui::Button("Edit"))
+        ImGui::OpenPopup("##popup");
+
+    if (ImGui::BeginPopup("##popup")) {
+        ImGui::VSliderFloat("##1", { 40.0f, 160.0f }, &config->visuals.colorCorrection.blue, 0.0f, 1.0f, "Blue\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##2", { 40.0f, 160.0f }, &config->visuals.colorCorrection.red, 0.0f, 1.0f, "Red\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##3", { 40.0f, 160.0f }, &config->visuals.colorCorrection.mono, 0.0f, 1.0f, "Mono\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##4", { 40.0f, 160.0f }, &config->visuals.colorCorrection.saturation, 0.0f, 1.0f, "Sat\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##5", { 40.0f, 160.0f }, &config->visuals.colorCorrection.ghost, 0.0f, 1.0f, "Ghost\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##6", { 40.0f, 160.0f }, &config->visuals.colorCorrection.green, 0.0f, 1.0f, "Green\n%.3f"); ImGui::SameLine();
+        ImGui::VSliderFloat("##7", { 40.0f, 160.0f }, &config->visuals.colorCorrection.yellow, 0.0f, 1.0f, "Yellow\n%.3f"); ImGui::SameLine();
+        ImGui::EndPopup();
+    }
+    ImGui::Columns(1);
+
+    if (!contentOnly)
+        ImGui::End();
 }
