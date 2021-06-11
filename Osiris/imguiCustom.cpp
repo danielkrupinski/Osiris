@@ -9,69 +9,85 @@
 void ImGuiCustom::colorPicker(const char* name, float color[3], float* alpha, bool* rainbow, float* rainbowSpeed, bool* enable, float* thickness, float* rounding) noexcept
 {
     ImGui::PushID(name);
-    if (enable) {
+    if (enable)
+    {
         ImGui::Checkbox("##check", enable);
         ImGui::SameLine(0.0f, 5.0f);
     }
-    bool openPopup = ImGui::ColorButton("##btn", ImVec4{ color[0], color[1], color[2], alpha ? *alpha : 1.0f }, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_AlphaPreview);
-    if (ImGui::BeginDragDropTarget()) {
-        if (alpha) {
-            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F)) {
+    bool openPopup = ImGui::ColorButton("##btn", { color[0], color[1], color[2], alpha ? *alpha : 1.0f }, ImGuiColorEditFlags_AlphaPreviewHalf);
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (alpha)
+        {
+            if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
+            {
                 std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
                 *alpha = 1.0f;
             }
             if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
                 std::copy((float*)payload->Data, (float*)payload->Data + 4, color);
-        } else {
+        }
+        else
+        {
             if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
                 std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
             if (const auto payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
                 std::copy((float*)payload->Data, (float*)payload->Data + 3, color);
         }
+
         ImGui::EndDragDropTarget();
     }
-    ImGui::SameLine(0.0f, 5.0f);
-    ImGui::TextUnformatted(name);
+    ImGui::SameLine();
+
+    if (std::strncmp(name, "##", 2))
+        ImGui::TextUnformatted(name, std::strstr(name, "##"));
 
     if (openPopup)
         ImGui::OpenPopup("##popup");
 
-    if (ImGui::BeginPopup("##popup")) {
-        if (alpha) {
-            float col[]{ color[0], color[1], color[2], *alpha }; 
-            ImGui::ColorPicker4("##picker", col, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_AlphaBar);
+    if (ImGui::BeginPopup("##popup"))
+    {
+        if (alpha)
+        {
+            float col[] = { color[0], color[1], color[2], *alpha };
+            ImGui::ColorPicker4("##picker", col, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_Float);
             color[0] = col[0];
             color[1] = col[1];
             color[2] = col[2];
             *alpha = col[3];
-        } else {
-            ImGui::ColorPicker3("##picker", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoSidePreview);
+        }
+        else
+        {
+            ImGui::ColorPicker3("##picker", color, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_Float);
         }
 
-        if (rainbow || rainbowSpeed || thickness || rounding) {
+        if (rainbow || rainbowSpeed || thickness || rounding)
+        {
             ImGui::SameLine();
-            if (ImGui::BeginChild("##child", { 150.0f, 0.0f })) {
+            if (ImGui::BeginChild("##child", { 86.0f, 0.0f }))
+            {
                 if (rainbow)
+                {
                     ImGui::Checkbox("Rainbow", rainbow);
-                ImGui::PushItemWidth(85.0f);
-                if (rainbowSpeed)
-                    ImGui::InputFloat("Speed", rainbowSpeed, 0.01f, 0.15f, "%.2f");
-
-                if (rounding || thickness)
-                    ImGui::Separator();
-
-                if (rounding) {
-                    ImGui::InputFloat("Rounding", rounding, 0.1f, 0.0f, "%.1f");
-                    *rounding = std::max(*rounding, 0.0f);
+                    ImGui::PushItemWidth(85.0f);
+                    if (rainbowSpeed)
+                        ImGui::InputFloat("Speed", rainbowSpeed, 0.01f, 0.15f, "%.2f");
                 }
 
-                if (thickness) {
-                    ImGui::InputFloat("Thickness", thickness, 0.1f, 0.0f, "%.1f");
+                if (rounding)
+                {
+                    ImGui::DragFloat("##rounding", rounding, 0.1f, 0.0f, 100.0f, "Corner %.1f");
+                    *rounding = std::max(*rounding, 0.0f);
+                }
+                if (thickness)
+                {
+                    ImGui::DragFloat("##thickness", thickness, 0.1f, 1.0f, 10.0f, "Thick %.2f");
                     *thickness = std::max(*thickness, 1.0f);
                 }
 
                 ImGui::PopItemWidth();
             }
+
             ImGui::EndChild();
         }
         ImGui::EndPopup();
