@@ -169,7 +169,7 @@ void ImGui::hotkey(const char* label, KeyBind& key, float samelineOffset, const 
     SameLine(samelineOffset);
 
     if (GetActiveID() == id) {
-        PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
+        PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
         Button("...", size);
         PopStyleColor();
 
