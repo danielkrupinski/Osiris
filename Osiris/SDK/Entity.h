@@ -144,6 +144,7 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+#ifdef _WIN32
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -155,6 +156,7 @@ public:
             *render = backup;
             return result;
         }
+#endif
         return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
@@ -180,12 +182,20 @@ public:
 
     VarMap* getVarMap() noexcept
     {
+#ifdef _WIN32
         return reinterpret_cast<VarMap*>(this + 0x24);
+#else
+        return nullptr;
+#endif
     }
    
     AnimState* getAnimstate() noexcept
     {
+#ifdef _WIN32
         return *reinterpret_cast<AnimState**>(this + 0x3914);
+#else
+        return nullptr;
+#endif
     }
 
     float getMaxDesyncAngle() noexcept
@@ -327,7 +337,11 @@ public:
 
     bool grenadeExploded() noexcept
     {
+#ifdef _WIN32
         return *reinterpret_cast<bool*>(this + 0x29E8);
+#else
+        return false;
+#endif
     }
 
     std::uint64_t originalOwnerXuid() noexcept

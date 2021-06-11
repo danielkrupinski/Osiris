@@ -598,6 +598,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
 
 void Misc::fixAnimationLOD(FrameStage stage) noexcept
 {
+#ifdef _WIN32
     if (config->misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
         if (!localPlayer)
             return;
@@ -609,6 +610,7 @@ void Misc::fixAnimationLOD(FrameStage stage) noexcept
             *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
         }
     }
+#endif
 }
 
 void Misc::autoPistol(UserCmd* cmd) noexcept
