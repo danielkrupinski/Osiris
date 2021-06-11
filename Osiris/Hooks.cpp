@@ -237,7 +237,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
 
 static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
-    float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
+    float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
@@ -263,7 +263,7 @@ static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, voi
 
 static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
-    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && config->visuals.thirdperson)
+    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
 
     return hooks->svCheats.getOriginal<bool, IS_WIN32() ? 13 : 16>()(_this);
@@ -329,12 +329,12 @@ static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
     }
 #endif
     
-    return !config->visuals.noFog;
+    return !Visuals::shouldRemoveFog();
 }
 
 static bool __STDCALL shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, IS_WIN32() ? 27 : 28>();
 }
@@ -348,7 +348,7 @@ static void __STDCALL lockCursor() noexcept
 
 static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-    if (config->visuals.noScopeOverlay && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
+    if (Visuals::shouldRemoveScopeOverlay() && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
         a = 0;
     hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
@@ -364,8 +364,8 @@ struct ViewSetup {
 static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer->isScoped())
-        setup->fov += config->visuals.fov;
-    setup->farZ += config->visuals.farZ * 10;
+        setup->fov += Visuals::fov();
+    setup->farZ += Visuals::farZ() * 10;
     hooks->clientMode.callOriginal<void, IS_WIN32() ? 18 : 19>(setup);
 }
 
@@ -442,6 +442,7 @@ static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) no
 {
     hooks->clientMode.callOriginal<void, IS_WIN32() ? 58 : 61>();
 
+    /* move to visuals.cpp!
     if (const auto& cfg = config->visuals.colorCorrection; cfg.enabled) {
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x498 : 0x900)) = cfg.blue;
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4A0 : 0x910)) = cfg.red;
@@ -451,8 +452,8 @@ static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) no
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4C8 : 0x960)) = cfg.green;
         *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4D0 : 0x970)) = cfg.yellow;
     }
-
-    if (config->visuals.noScopeOverlay)
+    */
+    if (Visuals::shouldRemoveScopeOverlay())
         *memory->vignette = 0.0f;
 }
 
@@ -465,7 +466,7 @@ static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width
 
 static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
+    if (Visuals::shouldRemoveSmoke() || Visuals::isSmokeWireframe())
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + (IS_WIN32() ? 0x588 : 0x648)) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);

@@ -1204,7 +1204,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 5: Glow::resetConfig(); break;
                     case 6: config->chams = { }; break;
                     case 7: config->streamProofESP = { }; break;
-                    case 8: config->visuals = { }; break;
+                    case 8: Visuals::resetConfig(); break;
                     case 9: InventoryChanger::resetConfig(); InventoryChanger::scheduleHudUpdate(); break;
                     case 10: Sound::resetConfig(); break;
                     case 11: config->style = { }; updateColors(); break;

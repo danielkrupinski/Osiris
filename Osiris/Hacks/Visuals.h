@@ -1,11 +1,25 @@
 #pragma once
 
+#include "../JsonForward.h"
+
 enum class FrameStage;
 class GameEvent;
 struct ImDrawList;
 
 namespace Visuals
 {
+    bool isThirdpersonOn() noexcept;
+    bool isZoomOn() noexcept;
+    bool isSmokeWireframe() noexcept;
+    bool isDeagleSpinnerOn() noexcept;
+    bool shouldRemoveFog() noexcept;
+    bool shouldRemoveScopeOverlay() noexcept;
+    bool shouldRemoveSmoke() noexcept;
+    bool shouldInverseRagdollGravity() noexcept;
+    float viewModelFov() noexcept;
+    float fov() noexcept;
+    float farZ() noexcept;
+
     void colorWorld() noexcept;
     void modifySmoke(FrameStage stage) noexcept;
     void thirdperson() noexcept;
@@ -37,4 +51,9 @@ namespace Visuals
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
+    
+    // Config
+    json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
+    void resetConfig() noexcept;
 }
