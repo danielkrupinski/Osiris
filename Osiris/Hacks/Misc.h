@@ -7,6 +7,12 @@ struct UserCmd;
 
 namespace Misc
 {
+    bool shouldRevealMoney() noexcept;
+    bool shouldRevealSuspect() noexcept;
+    bool shouldDisableModelOcclusion() noexcept;
+    float maxAngleDelta() noexcept;
+    float aspectRatio() noexcept;
+
     void edgejump(UserCmd* cmd) noexcept;
     void slowwalk(UserCmd* cmd) noexcept;
     void updateClanTag(bool = false) noexcept;

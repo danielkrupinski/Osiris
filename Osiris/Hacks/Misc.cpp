@@ -55,6 +55,31 @@
 
 #include "../imguiCustom.h"
 
+bool Misc::shouldRevealMoney() noexcept
+{
+    return config->misc.revealMoney;
+}
+
+bool Misc::shouldRevealSuspect() noexcept
+{
+    return config->misc.revealSuspect;
+}
+
+bool Misc::shouldDisableModelOcclusion() noexcept
+{
+    return config->misc.disableModelOcclusion;
+}
+
+float Misc::maxAngleDelta() noexcept
+{
+    return config->misc.maxAngleDelta;
+}
+
+float Misc::aspectRatio() noexcept
+{
+    return config->misc.aspectratio;
+}
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !config->misc.edgejumpkey.isDown())
