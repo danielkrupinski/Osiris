@@ -383,9 +383,10 @@ static int __STDCALL listLeavesInBox(const Vector& mins, const Vector& maxs, uns
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
             if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
                 if (Misc::shouldDisableModelOcclusion()) {
-                    // FIXME: sometimes players are rendered above smoke, maybe sort render list?
+                    /* 
                     info->flags &= ~0x100;
                     info->flags2 |= 0x40;
+                    */
 
                     constexpr float maxCoord = 16384.0f;
                     constexpr float minCoord = -maxCoord;
