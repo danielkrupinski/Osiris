@@ -20,6 +20,7 @@ namespace Visuals
     float fov() noexcept;
     float farZ() noexcept;
 
+    void inverseRagdollGravity() noexcept;
     void colorWorld() noexcept;
     void modifySmoke(FrameStage stage) noexcept;
     void thirdperson() noexcept;

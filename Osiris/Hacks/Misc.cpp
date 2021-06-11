@@ -98,13 +98,6 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
         cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
     }
 }
-#include "Visuals.h"
-void Misc::inverseRagdollGravity() noexcept
-{
-    // move this to visuals!
-    static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(Visuals::shouldInverseRagdollGravity() ? -600 : 600);
-}
 
 void Misc::updateClanTag(bool tagChanged) noexcept
 {

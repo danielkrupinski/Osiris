@@ -253,6 +253,12 @@ float Visuals::farZ() noexcept
     return static_cast<float>(visualsConfig.farZ);
 }
 
+void Visuals::inverseRagdollGravity() noexcept
+{
+    static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
+    ragdollGravity->setValue(visualsConfig.inverseRagdollGravity ? -600 : 600);
+}
+
 void Visuals::colorWorld() noexcept
 {
     if (!visualsConfig.world.enabled && !visualsConfig.sky.enabled)
