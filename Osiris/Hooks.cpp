@@ -588,9 +588,7 @@ void Hooks::install() noexcept
 
 #endif
     
-#ifdef _WIN32
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
-#endif
 
     client.init(interfaces->client);
     client.hookAt(37, &frameStageNotify);
