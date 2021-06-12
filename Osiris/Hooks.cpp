@@ -683,9 +683,7 @@ void Hooks::uninstall() noexcept
     }
 #endif
 
-#ifdef _WIN32
     bspQuery.restore();
-#endif
     client.restore();
     clientMode.restore();
     engine.restore();
