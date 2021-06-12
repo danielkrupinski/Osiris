@@ -263,7 +263,7 @@ static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, voi
 
 static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
-    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && Visuals::isThirdpersonOn())
+    if (RETURN_ADDRESS() == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
 
     return hooks->svCheats.getOriginal<bool, IS_WIN32() ? 13 : 16>()(_this);
@@ -379,8 +379,8 @@ struct RenderableInfo {
 static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
 #ifdef _WIN32
-    if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
-        if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
+    if (RETURN_ADDRESS() == memory->listLeaves) {
+        if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + 0x18); info && info->renderable) {
             if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
                 if (Misc::shouldDisableModelOcclusion()) {
                     /* 
