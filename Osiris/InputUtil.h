@@ -110,8 +110,8 @@ public:
         MAX
     };
 
-    KeyBind(KeyCode keyCode) noexcept;
-    KeyBind(const char* keyName) noexcept;
+    explicit KeyBind(KeyCode keyCode) noexcept;
+    explicit KeyBind(const char* keyName) noexcept;
 
     bool operator==(KeyCode keyCode) const noexcept { return this->keyCode == keyCode; }
     friend bool operator==(const KeyBind& a, const KeyBind& b) noexcept { return a.keyCode == b.keyCode; }
