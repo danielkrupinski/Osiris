@@ -106,59 +106,7 @@ public:
         ImFont* medium;
         ImFont* big;
     };
-
-    struct Visuals {
-        bool disablePostProcessing{ false };
-        bool inverseRagdollGravity{ false };
-        bool noFog{ false };
-        bool no3dSky{ false };
-        bool noAimPunch{ false };
-        bool noViewPunch{ false };
-        bool noHands{ false };
-        bool noSleeves{ false };
-        bool noWeapons{ false };
-        bool noSmoke{ false };
-        bool noBlur{ false };
-        bool noScopeOverlay{ false };
-        bool noGrass{ false };
-        bool noShadows{ false };
-        bool wireframeSmoke{ false };
-        bool zoom{ false };
-        KeyBindToggle zoomKey = KeyBind::NONE;
-        bool thirdperson{ false };
-        KeyBindToggle thirdpersonKey = KeyBind::NONE;
-        int thirdpersonDistance{ 0 };
-        int viewmodelFov{ 0 };
-        int fov{ 0 };
-        int farZ{ 0 };
-        int flashReduction{ 0 };
-        float brightness{ 0.0f };
-        int skybox{ 0 };
-        ColorToggle3 world;
-        ColorToggle3 sky;
-        bool deagleSpinner{ false };
-        int screenEffect{ 0 };
-        int hitEffect{ 0 };
-        float hitEffectTime{ 0.6f };
-        int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
-        int playerModelT{ 0 };
-        int playerModelCT{ 0 };
-        BulletTracers bulletTracers;
-        ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-
-        struct ColorCorrection {
-            bool enabled = false;
-            float blue = 0.0f;
-            float red = 0.0f;
-            float mono = 0.0f;
-            float saturation = 0.0f;
-            float ghost = 0.0f;
-            float green = 0.0f;
-            float yellow = 0.0f;
-        } colorCorrection;
-    } visuals;
-
+   
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };

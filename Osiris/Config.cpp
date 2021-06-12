@@ -21,6 +21,7 @@
 #include "Hacks/Backtrack.h"
 #include "Hacks/Glow.h"
 #include "Hacks/Sound.h"
+#include "Hacks/Visuals.h"
 
 #ifdef _WIN32
 int CALLBACK fontCallback(const LOGFONTW* lpelfe, const TEXTMETRICW*, DWORD, LPARAM lParam)
@@ -83,19 +84,6 @@ Config::Config() noexcept
 #endif
 
     std::sort(std::next(systemFonts.begin()), systemFonts.end());
-}
-
-static void from_json(const json& j, ColorToggle& ct)
-{
-    from_json(j, static_cast<Color4&>(ct));
-    read(j, "Enabled", ct.enabled);
-}
-
-static void from_json(const json& j, Color3& c)
-{
-    read(j, "Color", c.color);
-    read(j, "Rainbow", c.rainbow);
-    read(j, "Rainbow Speed", c.rainbowSpeed);
 }
 
 static void from_json(const json& j, ColorToggle3& ct)
@@ -220,11 +208,6 @@ static void from_json(const json& j, OffscreenEnemies& o)
     read<value_t::object>(j, "Health Bar", o.healthBar);
 }
 
-static void from_json(const json& j, BulletTracers& o)
-{
-    from_json(j, static_cast<ColorToggle&>(o));
-}
-
 static void from_json(const json& j, ImVec2& v)
 {
     read(j, "X", v.x);
@@ -295,61 +278,6 @@ static void from_json(const json& j, Config::StreamProofESP& e)
     read(j, "Projectiles", e.projectiles);
     read(j, "Loot Crates", e.lootCrates);
     read(j, "Other Entities", e.otherEntities);
-}
-
-static void from_json(const json& j, Config::Visuals::ColorCorrection& c)
-{
-    read(j, "Enabled", c.enabled);
-    read(j, "Blue", c.blue);
-    read(j, "Red", c.red);
-    read(j, "Mono", c.mono);
-    read(j, "Saturation", c.saturation);
-    read(j, "Ghost", c.ghost);
-    read(j, "Green", c.green);
-    read(j, "Yellow", c.yellow);
-}
-
-static void from_json(const json& j, Config::Visuals& v)
-{
-    read(j, "Disable post-processing", v.disablePostProcessing);
-    read(j, "Inverse ragdoll gravity", v.inverseRagdollGravity);
-    read(j, "No fog", v.noFog);
-    read(j, "No 3d sky", v.no3dSky);
-    read(j, "No aim punch", v.noAimPunch);
-    read(j, "No view punch", v.noViewPunch);
-    read(j, "No hands", v.noHands);
-    read(j, "No sleeves", v.noSleeves);
-    read(j, "No weapons", v.noWeapons);
-    read(j, "No smoke", v.noSmoke);
-    read(j, "No blur", v.noBlur);
-    read(j, "No scope overlay", v.noScopeOverlay);
-    read(j, "No grass", v.noGrass);
-    read(j, "No shadows", v.noShadows);
-    read(j, "Wireframe smoke", v.wireframeSmoke);
-    read(j, "Zoom", v.zoom);
-    read(j, "Zoom key", v.zoomKey);
-    read(j, "Thirdperson", v.thirdperson);
-    read(j, "Thirdperson key", v.thirdpersonKey);
-    read(j, "Thirdperson distance", v.thirdpersonDistance);
-    read(j, "Viewmodel FOV", v.viewmodelFov);
-    read(j, "FOV", v.fov);
-    read(j, "Far Z", v.farZ);
-    read(j, "Flash reduction", v.flashReduction);
-    read(j, "Brightness", v.brightness);
-    read(j, "Skybox", v.skybox);
-    read<value_t::object>(j, "World", v.world);
-    read<value_t::object>(j, "Sky", v.sky);
-    read(j, "Deagle spinner", v.deagleSpinner);
-    read(j, "Screen effect", v.screenEffect);
-    read(j, "Hit effect", v.hitEffect);
-    read(j, "Hit effect time", v.hitEffectTime);
-    read(j, "Hit marker", v.hitMarker);
-    read(j, "Hit marker time", v.hitMarkerTime);
-    read(j, "Playermodel T", v.playerModelT);
-    read(j, "Playermodel CT", v.playerModelCT);
-    read<value_t::object>(j, "Color correction", v.colorCorrection);
-    read<value_t::object>(j, "Bullet Tracers", v.bulletTracers);
-    read<value_t::object>(j, "Molotov Hull", v.molotovHull);
 }
 
 static void from_json(const json& j, Config::Style& s)
@@ -511,34 +439,15 @@ void Config::load(const char8_t* name, bool incremental) noexcept
     read(j["Chams"], "Toggle Key", chamsToggleKey);
     read(j["Chams"], "Hold Key", chamsHoldKey);
     read<value_t::object>(j, "ESP", streamProofESP);
-    read<value_t::object>(j, "Visuals", visuals);
     read<value_t::object>(j, "Style", style);
     read<value_t::object>(j, "Misc", misc);
 
     AntiAim::fromJson(j["Anti aim"]);
     Backtrack::fromJson(j["Backtrack"]);
     Glow::fromJson(j["Glow"]);
+    Visuals::fromJson(j["Visuals"]);
     InventoryChanger::fromJson(j["Inventory Changer"]);
     Sound::fromJson(j["Sound"]);
-}
-
-static void to_json(json& j, const ColorToggle& o, const ColorToggle& dummy = {})
-{
-    to_json(j, static_cast<const Color4&>(o), dummy);
-    WRITE("Enabled", enabled);
-}
-
-static void to_json(json& j, const Color3& o, const Color3& dummy = {})
-{
-    WRITE("Color", color);
-    WRITE("Rainbow", rainbow);
-    WRITE("Rainbow Speed", rainbowSpeed);
-}
-
-static void to_json(json& j, const ColorToggle3& o, const ColorToggle3& dummy = {})
-{
-    to_json(j, static_cast<const Color3&>(o), dummy);
-    WRITE("Enabled", enabled);
 }
 
 static void to_json(json& j, const ColorToggleRounding& o, const ColorToggleRounding& dummy = {})
@@ -632,11 +541,6 @@ static void to_json(json& j, const OffscreenEnemies& o, const OffscreenEnemies& 
     to_json(j, static_cast<const ColorToggle&>(o), dummy);
 
     WRITE("Health Bar", healthBar);
-}
-
-static void to_json(json& j, const BulletTracers& o, const BulletTracers& dummy = {})
-{
-    to_json(j, static_cast<const ColorToggle&>(o), dummy);
 }
 
 static void to_json(json& j, const Projectile& o, const Projectile& dummy = {})
@@ -831,63 +735,6 @@ static void to_json(json& j, const Config::Misc& o)
     WRITE("Preserve Killfeed", preserveKillfeed);
 }
 
-static void to_json(json& j, const Config::Visuals::ColorCorrection& o, const Config::Visuals::ColorCorrection& dummy)
-{
-    WRITE("Enabled", enabled);
-    WRITE("Blue", blue);
-    WRITE("Red", red);
-    WRITE("Mono", mono);
-    WRITE("Saturation", saturation);
-    WRITE("Ghost", ghost);
-    WRITE("Green", green);
-    WRITE("Yellow", yellow);
-}
-
-static void to_json(json& j, const Config::Visuals& o)
-{
-    const Config::Visuals dummy;
-
-    WRITE("Disable post-processing", disablePostProcessing);
-    WRITE("Inverse ragdoll gravity", inverseRagdollGravity);
-    WRITE("No fog", noFog);
-    WRITE("No 3d sky", no3dSky);
-    WRITE("No aim punch", noAimPunch);
-    WRITE("No view punch", noViewPunch);
-    WRITE("No hands", noHands);
-    WRITE("No sleeves", noSleeves);
-    WRITE("No weapons", noWeapons);
-    WRITE("No smoke", noSmoke);
-    WRITE("No blur", noBlur);
-    WRITE("No scope overlay", noScopeOverlay);
-    WRITE("No grass", noGrass);
-    WRITE("No shadows", noShadows);
-    WRITE("Wireframe smoke", wireframeSmoke);
-    WRITE("Zoom", zoom);
-    WRITE("Zoom key", zoomKey);
-    WRITE("Thirdperson", thirdperson);
-    WRITE("Thirdperson key", thirdpersonKey);
-    WRITE("Thirdperson distance", thirdpersonDistance);
-    WRITE("Viewmodel FOV", viewmodelFov);
-    WRITE("FOV", fov);
-    WRITE("Far Z", farZ);
-    WRITE("Flash reduction", flashReduction);
-    WRITE("Brightness", brightness);
-    WRITE("Skybox", skybox);
-    WRITE("World", world);
-    WRITE("Sky", sky);
-    WRITE("Deagle spinner", deagleSpinner);
-    WRITE("Screen effect", screenEffect);
-    WRITE("Hit effect", hitEffect);
-    WRITE("Hit effect time", hitEffectTime);
-    WRITE("Hit marker", hitMarker);
-    WRITE("Hit marker time", hitMarkerTime);
-    WRITE("Playermodel T", playerModelT);
-    WRITE("Playermodel CT", playerModelCT);
-    WRITE("Color correction", colorCorrection);
-    WRITE("Bullet Tracers", bulletTracers);
-    WRITE("Molotov Hull", molotovHull);
-}
-
 static void to_json(json& j, const ImVec4& o)
 {
     j[0] = o.x;
@@ -942,8 +789,8 @@ void Config::save(size_t id) const noexcept
     to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind::NONE);
     to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind::NONE);
     j["ESP"] = streamProofESP;
-    j["Sound"] = ::Sound::toJson();
-    j["Visuals"] = visuals;
+    j["Sound"] = Sound::toJson();
+    j["Visuals"] = Visuals::toJson();
     j["Misc"] = misc;
     j["Style"] = style;
     j["Inventory Changer"] = InventoryChanger::toJson();
@@ -983,13 +830,13 @@ void Config::reset() noexcept
     triggerbot = { };
     chams = { };
     streamProofESP = { };
-    visuals = { };
     style = { };
     misc = { };
 
     AntiAim::resetConfig();
     Backtrack::resetConfig();
     Glow::resetConfig();
+    Visuals::resetConfig();
     InventoryChanger::resetConfig();
     Sound::resetConfig();
 }

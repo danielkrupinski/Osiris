@@ -55,6 +55,31 @@
 
 #include "../imguiCustom.h"
 
+bool Misc::shouldRevealMoney() noexcept
+{
+    return config->misc.revealMoney;
+}
+
+bool Misc::shouldRevealSuspect() noexcept
+{
+    return config->misc.revealSuspect;
+}
+
+bool Misc::shouldDisableModelOcclusion() noexcept
+{
+    return config->misc.disableModelOcclusion;
+}
+
+float Misc::maxAngleDelta() noexcept
+{
+    return config->misc.maxAngleDelta;
+}
+
+float Misc::aspectRatio() noexcept
+{
+    return config->misc.aspectratio;
+}
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !config->misc.edgejumpkey.isDown())
@@ -97,12 +122,6 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     } else if (cmd->sidemove) {
         cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
     }
-}
-
-void Misc::inverseRagdollGravity() noexcept
-{
-    static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config->visuals.inverseRagdollGravity ? -600 : 600);
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
@@ -441,7 +460,7 @@ void Misc::stealNames() noexcept
         if (!interfaces->engine->getPlayerInfo(entity->index(), playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
         if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
@@ -604,6 +623,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
 
 void Misc::fixAnimationLOD(FrameStage stage) noexcept
 {
+#ifdef _WIN32
     if (config->misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
         if (!localPlayer)
             return;
@@ -615,6 +635,7 @@ void Misc::fixAnimationLOD(FrameStage stage) noexcept
             *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
         }
     }
+#endif
 }
 
 void Misc::autoPistol(UserCmd* cmd) noexcept
@@ -883,7 +904,7 @@ void Misc::runReportbot() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(reportedPlayers, playerInfo.xuid) != reportedPlayers.cend())
             continue;
 
         std::string report;
@@ -1101,7 +1122,7 @@ void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) { purchaseList(event); }
+        void fireGameEvent(GameEvent* event) override { purchaseList(event); }
     };
 
     static PurchaseEventListener listener;

@@ -8,7 +8,7 @@ class EventListener : public GameEventListener {
 public:
     EventListener() noexcept;
     void remove() noexcept;
-    void fireGameEvent(GameEvent* event);
+    void fireGameEvent(GameEvent* event) override;
 };
 
 inline std::unique_ptr<EventListener> eventListener;

@@ -203,8 +203,8 @@ static bool __STDCALL createMove(LINUX_ARGS(void* thisptr,) float inputSampleTim
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
     viewAnglesDelta.normalize();
-    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
-    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -config->misc.maxAngleDelta, config->misc.maxAngleDelta);
+    viewAnglesDelta.x = std::clamp(viewAnglesDelta.x, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
+    viewAnglesDelta.y = std::clamp(viewAnglesDelta.y, -Misc::maxAngleDelta(), Misc::maxAngleDelta());
 
     cmd->viewangles = previousViewAngles + viewAnglesDelta;
 
@@ -226,7 +226,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
 {
     if (interfaces->engine->isInGame()) {
         Visuals::thirdperson();
-        Misc::inverseRagdollGravity();
+        Visuals::inverseRagdollGravity();
         Visuals::reduceFlashEffect();
         Visuals::updateBrightness();
         Visuals::remove3dSky();
@@ -237,7 +237,7 @@ static void __STDCALL doPostScreenEffects(LINUX_ARGS(void* thisptr,) void* param
 
 static float __STDCALL getViewModelFov(LINUX_ARGS(void* thisptr)) noexcept
 {
-    float additionalFov = static_cast<float>(config->visuals.viewmodelFov);
+    float additionalFov = Visuals::viewModelFov();
     if (localPlayer) {
         if (const auto activeWeapon = localPlayer->getActiveWeapon(); activeWeapon && activeWeapon->getClientClass()->classId == ClassId::Tablet)
             additionalFov = 0.0f;
@@ -263,7 +263,7 @@ static void __STDCALL drawModelExecute(LINUX_ARGS(void* thisptr,) void* ctx, voi
 
 static bool __FASTCALL svCheatsGetBool(void* _this) noexcept
 {
-    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && config->visuals.thirdperson)
+    if (uintptr_t(RETURN_ADDRESS()) == memory->cameraThink && Visuals::isThirdpersonOn())
         return true;
 
     return hooks->svCheats.getOriginal<bool, IS_WIN32() ? 13 : 16>()(_this);
@@ -292,7 +292,6 @@ static void __STDCALL frameStageNotify(LINUX_ARGS(void* thisptr,) FrameStage sta
         Misc::oppositeHandKnife(stage);
         Visuals::removeGrass(stage);
         Visuals::modifySmoke(stage);
-        Visuals::playerModel(stage);
         Visuals::disablePostProcessing(stage);
         Visuals::removeVisualRecoil(stage);
         Visuals::applyZoom(stage);
@@ -330,12 +329,12 @@ static bool __STDCALL shouldDrawFog(LINUX_ARGS(void* thisptr)) noexcept
     }
 #endif
     
-    return !config->visuals.noFog;
+    return !Visuals::shouldRemoveFog();
 }
 
 static bool __STDCALL shouldDrawViewModel(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (config->visuals.zoom && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
+    if (Visuals::isZoomOn() && localPlayer && localPlayer->fov() < 45 && localPlayer->fovStart() < 45)
         return false;
     return hooks->clientMode.callOriginal<bool, IS_WIN32() ? 27 : 28>();
 }
@@ -349,7 +348,7 @@ static void __STDCALL lockCursor() noexcept
 
 static void __STDCALL setDrawColor(LINUX_ARGS(void* thisptr,) int r, int g, int b, int a) noexcept
 {
-    if (config->visuals.noScopeOverlay && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
+    if (Visuals::shouldRemoveScopeOverlay() && (RETURN_ADDRESS() == memory->scopeDust || RETURN_ADDRESS() == memory->scopeArc))
         a = 0;
     hooks->surface.callOriginal<void, IS_WIN32() ? 15 : 14>(r, g, b, a);
 }
@@ -365,8 +364,8 @@ struct ViewSetup {
 static void __STDCALL overrideView(LINUX_ARGS(void* thisptr,) ViewSetup* setup) noexcept
 {
     if (localPlayer && !localPlayer->isScoped())
-        setup->fov += config->visuals.fov;
-    setup->farZ += config->visuals.farZ * 10;
+        setup->fov += Visuals::fov();
+    setup->farZ += Visuals::farZ() * 10;
     hooks->clientMode.callOriginal<void, IS_WIN32() ? 18 : 19>(setup);
 }
 
@@ -383,10 +382,11 @@ static int __STDCALL listLeavesInBox(const Vector& mins, const Vector& maxs, uns
     if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(std::uintptr_t(_AddressOfReturnAddress()) + 0x14); info && info->renderable) {
             if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
-                if (config->misc.disableModelOcclusion) {
-                    // FIXME: sometimes players are rendered above smoke, maybe sort render list?
+                if (Misc::shouldDisableModelOcclusion()) {
+                    /* 
                     info->flags &= ~0x100;
                     info->flags2 |= 0x40;
+                    */
 
                     constexpr float maxCoord = 16384.0f;
                     constexpr float minCoord = -maxCoord;
@@ -421,7 +421,7 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_A
 {
     const auto params = hooks->engine.callOriginal<const DemoPlaybackParameters*, IS_WIN32() ? 218 : 219>();
 
-    if (params && config->misc.revealSuspect && RETURN_ADDRESS() != memory->demoFileEndReached) {
+    if (params && Misc::shouldRevealSuspect() && RETURN_ADDRESS() != memory->demoFileEndReached) {
         static DemoPlaybackParameters customParams;
         customParams = *params;
         customParams.anonymousPlayerIdentity = false;
@@ -433,7 +433,7 @@ static const DemoPlaybackParameters* __STDCALL getDemoPlaybackParameters(LINUX_A
 
 static bool __STDCALL isPlayingDemo(LINUX_ARGS(void* thisptr)) noexcept
 {
-    if (config->misc.revealMoney && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + (IS_WIN32() ? 8 : 24)) == memory->money)
+    if (Misc::shouldRevealMoney() && RETURN_ADDRESS() == memory->demoOrHLTV && *reinterpret_cast<std::uintptr_t*>(FRAME_ADDRESS() + (IS_WIN32() ? 8 : 24)) == memory->money)
         return true;
 
     return hooks->engine.callOriginal<bool, 82>();
@@ -443,30 +443,21 @@ static void __STDCALL updateColorCorrectionWeights(LINUX_ARGS(void* thisptr)) no
 {
     hooks->clientMode.callOriginal<void, IS_WIN32() ? 58 : 61>();
 
-    if (const auto& cfg = config->visuals.colorCorrection; cfg.enabled) {
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x498 : 0x900)) = cfg.blue;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4A0 : 0x910)) = cfg.red;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4A8 : 0x920)) = cfg.mono;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4B0 : 0x930)) = cfg.saturation;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4C0 : 0x950)) = cfg.ghost;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4C8 : 0x960)) = cfg.green;
-        *reinterpret_cast<float*>(std::uintptr_t(memory->clientMode) + (IS_WIN32() ? 0x4D0 : 0x970)) = cfg.yellow;
-    }
-
-    if (config->visuals.noScopeOverlay)
+    Visuals::performColorCorrection();
+    if (Visuals::shouldRemoveScopeOverlay())
         *memory->vignette = 0.0f;
 }
 
 static float __STDCALL getScreenAspectRatio(LINUX_ARGS(void* thisptr,) int width, int height) noexcept
 {
-    if (config->misc.aspectratio)
-        return config->misc.aspectratio;
+    if (Misc::aspectRatio() != 0.0f)
+        return Misc::aspectRatio();
     return hooks->engine.callOriginal<float, 101>(width, height);
 }
 
 static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update) noexcept
 {
-    if (config->visuals.noSmoke || config->visuals.wireframeSmoke)
+    if (Visuals::shouldRemoveSmoke() || Visuals::isSmokeWireframe())
         *reinterpret_cast<float*>(std::uintptr_t(memory->viewRender) + (IS_WIN32() ? 0x588 : 0x648)) = 0.0f;
     else
         hooks->viewRender.callOriginal<void, IS_WIN32() ? 41 : 42>(update);
