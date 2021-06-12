@@ -376,7 +376,7 @@ struct RenderableInfo {
     uint16_t flags2;
 };
 
-static int __STDCALL listLeavesInBox(const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
+static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
 #ifdef _WIN32
     if (std::uintptr_t(_ReturnAddress()) == memory->listLeaves) {
