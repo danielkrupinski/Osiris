@@ -379,7 +379,7 @@ struct RenderableInfo {
 static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& mins, const Vector& maxs, unsigned short* list, int listMax) noexcept
 {
 #ifdef _WIN32
-    if (RETURN_ADDRESS() == memory->listLeaves) {
+    if (RETURN_ADDRESS() == memory->insertIntoTree) {
         if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + 0x18); info && info->renderable) {
             if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
                 if (Misc::shouldDisableModelOcclusion()) {

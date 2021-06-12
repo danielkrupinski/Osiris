@@ -72,7 +72,7 @@ public:
     int(__THISCALL* clearHudWeapon)(int*, int);
     std::add_pointer_t<ItemSystem* __CDECL()> itemSystem;
     void(__THISCALL* setAbsOrigin)(Entity*, const Vector&);
-    std::uintptr_t listLeaves;
+    std::uintptr_t insertIntoTree;
     int* dispatchSound;
     std::uintptr_t traceToExit;
     ViewRender* viewRender;

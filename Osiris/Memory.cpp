@@ -163,7 +163,7 @@ Memory::Memory() noexcept
     clearHudWeapon = reinterpret_cast<decltype(clearHudWeapon)>(findPattern(CLIENT_DLL, "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x8B\xD9\x57\x6B\xFE\x2C"));
     itemSystem = relativeToAbsolute<decltype(itemSystem)>(findPattern(CLIENT_DLL, "\xE8????\x0F\xB7\x0F") + 1);
     setAbsOrigin = relativeToAbsolute<decltype(setAbsOrigin)>(findPattern(CLIENT_DLL, "\xE8????\xEB\x19\x8B\x07") + 1);
-    listLeaves = findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") + 5;
+    insertIntoTree = findPattern(CLIENT_DLL, "\x56\x52\xFF\x50\x18") + 5;
     dispatchSound = reinterpret_cast<int*>(findPattern(ENGINE_DLL, "\x74\x0B\xE8????\x8B\x3D") + 3);
     traceToExit = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xEC\x30\xF3\x0F\x10\x75");
     viewRender = **reinterpret_cast<ViewRender***>(findPattern(CLIENT_DLL, "\x8B\x0D????\xFF\x75\x0C\x8B\x45\x08") + 2);
@@ -300,7 +300,7 @@ Memory::Memory() noexcept
     clearCustomNameGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xE5\x48\x89\xC7\xE8????\x49\x89\xC4");
     setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x41\x8B\x06\x49\x8D\x7D\x08") - 95;
     createBaseTypeCache = relativeToAbsolute<decltype(createBaseTypeCache)>(findPattern(CLIENT_DLL, "\xE8????\x48\x89\xDE\x5B\x48\x8B\x10") + 1);
-    listLeaves = findPattern(CLIENT_DLL, "\x74\x2A\x4C\x8B\x10") + 31;
+    insertIntoTree = findPattern(CLIENT_DLL, "\x74\x2A\x4C\x8B\x10") + 31;
 
     localPlayer.init(relativeToAbsolute<Entity**>(findPattern(CLIENT_DLL, "\x83\xFF\xFF\x48\x8B\x05") + 6));
 #endif
