@@ -2,7 +2,7 @@
 
 class KeyBind {
 public:
-    enum KeyCode {
+    enum KeyCode : unsigned char {
         APOSTROPHE = 0,
         COMMA,
         MINUS,
