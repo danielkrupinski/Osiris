@@ -1,4 +1,5 @@
 #include <cmath>
+#include <numbers>
 
 #include "GlobalVars.h"
 #include "../Memory.h"

@@ -19,7 +19,7 @@ public:
 
     uint16_t operator[](const uint32_t hash) const noexcept
     {
-        const auto it = std::lower_bound(offsets.begin(), offsets.end(), hash, [](const auto& p, auto hash) { return p.first < hash; });
+        const auto it = std::ranges::lower_bound(offsets, hash, {}, &std::pair<uint32_t, uint16_t>::first);
         if (it != offsets.end() && it->first == hash)
             return it->second;
         assert(false);

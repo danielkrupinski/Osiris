@@ -14,14 +14,13 @@
 #include "SDK/Platform.h"
 
 struct Key {
-    template <std::size_t N>
-    constexpr Key(const char(&name)[N], int code) : name{ name }, code{ code } {  }
+    constexpr Key(std::string_view name, int code) : name{ name }, code{ code } {  }
 
     std::string_view name;
     int code;
 };
 
-// indices must match KeyBind::KeyCode enum, and has to be sorted alphabetically
+// indices must match KeyBind::KeyCode enum
 static constexpr auto keyMap = std::to_array<Key>({
     { "'", WIN32_LINUX(VK_OEM_7, SDL_SCANCODE_APOSTROPHE) },
     { ",", WIN32_LINUX(VK_OEM_COMMA, SDL_SCANCODE_COMMA) },
@@ -45,6 +44,7 @@ static constexpr auto keyMap = std::to_array<Key>({
     { "B", WIN32_LINUX('B', SDL_SCANCODE_B) },
     { "BACKSPACE", WIN32_LINUX(VK_BACK, SDL_SCANCODE_BACKSPACE) },
     { "C", WIN32_LINUX('C', SDL_SCANCODE_C) },
+    { "CAPSLOCK", WIN32_LINUX(VK_CAPITAL, SDL_SCANCODE_CAPSLOCK) },
     { "D", WIN32_LINUX('D', SDL_SCANCODE_D) },
     { "DECIMAL", WIN32_LINUX(VK_DECIMAL, SDL_SCANCODE_KP_DECIMAL) },
     { "DELETE", WIN32_LINUX(VK_DELETE, SDL_SCANCODE_DELETE) },
@@ -128,6 +128,7 @@ static constexpr auto keyMap = std::to_array<Key>({
 });
 
 static_assert(keyMap.size() == KeyBind::MAX);
+static_assert(std::ranges::is_sorted(keyMap, {}, &Key::name));
 
 KeyBind::KeyBind(KeyCode keyCode) noexcept
 {
@@ -136,7 +137,7 @@ KeyBind::KeyBind(KeyCode keyCode) noexcept
 
 KeyBind::KeyBind(const char* keyName) noexcept
 {
-    auto it = std::lower_bound(keyMap.begin(), keyMap.end(), keyName, [](const Key& key, const char* keyName) { return key.name < keyName; });
+    auto it = std::ranges::lower_bound(keyMap, keyName, {}, &Key::name);
     if (it != keyMap.end() && it->name == keyName)
         keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
     else
@@ -193,25 +194,25 @@ bool KeyBind::setToPressedKey() noexcept
     } else if (ImGui::GetIO().MouseWheel > 0.0f) {
         keyCode = KeyCode::MOUSEWHEEL_UP;
         return true;
-    } else {
-        for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().MouseDown); ++i) {
-            if (ImGui::IsMouseClicked(i)) {
-                keyCode = KeyCode(KeyCode::MOUSE1 + i);
-                return true;
-            }
+    } 
+    
+    for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().MouseDown); ++i) {
+        if (ImGui::IsMouseClicked(i)) {
+            keyCode = KeyCode(KeyCode::MOUSE1 + i);
+            return true;
         }
+    }
 
-        for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
-            if (ImGui::IsKeyPressed(i)) {
-                auto it = std::find_if(keyMap.begin(), keyMap.end(), [i](const Key& key) { return key.code == i; });
-                if (it != keyMap.end()) {
-                    keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
-                    // Treat AltGr as RALT
-                    if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
-                        keyCode = KeyCode::RALT;
-                    return true;
-                }
-            }
+    for (int i = 0; i < IM_ARRAYSIZE(ImGui::GetIO().KeysDown); ++i) {
+        if (!ImGui::IsKeyPressed(i))
+            continue;
+
+        if (const auto it = std::ranges::find(keyMap, i, &Key::code); it != keyMap.end()) {
+            keyCode = static_cast<KeyCode>(std::distance(keyMap.begin(), it));
+            // Treat AltGr as RALT
+            if (keyCode == KeyCode::LCTRL && ImGui::IsKeyPressed(keyMap[KeyCode::RALT].code))
+                keyCode = KeyCode::RALT;
+            return true;
         }
     }
     return false;

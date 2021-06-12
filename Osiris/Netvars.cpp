@@ -4,7 +4,8 @@
 #include <unordered_map>
 
 #include "Config.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
+#include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Netvars.h"
 
@@ -34,10 +35,10 @@ static void __CDECL viewModelSequence(recvProxyData& data, void* outStruct, void
 
     if (localPlayer && interfaces->entityList->getEntityFromHandle(viewModel->owner()) == localPlayer.get()) {
         if (const auto weapon = interfaces->entityList->getEntityFromHandle(viewModel->weapon())) {
-            if (config->visuals.deagleSpinner && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
+            if (Visuals::isDeagleSpinnerOn() && weapon->getClientClass()->classId == ClassId::Deagle && data.value._int == 7)
                 data.value._int = 8;
 
-            SkinChanger::fixKnifeAnimation(weapon, data.value._int);
+            InventoryChanger::fixKnifeAnimation(weapon, data.value._int);
         }
     }
     constexpr auto hash{ fnv::hash("CBaseViewModel->m_nSequence") };
@@ -49,7 +50,8 @@ Netvars::Netvars() noexcept
     for (auto clientClass = interfaces->client->getAllClasses(); clientClass; clientClass = clientClass->next)
         walkTable(clientClass->networkName, clientClass->recvTable);
 
-    std::sort(offsets.begin(), offsets.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::ranges::sort(offsets, {}, &std::pair<uint32_t, uint16_t>::first);
+    offsets.shrink_to_fit();
 }
 
 void Netvars::restore() noexcept

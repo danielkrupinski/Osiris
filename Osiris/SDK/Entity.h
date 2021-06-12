@@ -7,6 +7,7 @@
 #include "AnimState.h"
 #include "Engine.h"
 #include "EngineTrace.h"
+#include "Inconstructible.h"
 #include "LocalPlayer.h"
 #include "matrix3x4.h"
 #include "Platform.h"
@@ -49,12 +50,26 @@ enum class Team {
 
 class Collideable {
 public:
+    INCONSTRUCTIBLE(Collideable)
+
     VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
     VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
 };
 
+class EconItemView {
+public:
+    INCONSTRUCTIBLE(EconItemView)
+
+    std::uintptr_t getAttributeList() noexcept
+    {
+        return std::uintptr_t(this) + WIN32_LINUX(0x244, 0x2F8);
+    }
+};
+
 class Entity {
 public:
+    INCONSTRUCTIBLE(Entity)
+
     VIRTUAL_METHOD(void, release, 1, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(ClientClass*, getClientClass, 2, (), (this + sizeof(uintptr_t) * 2))
     VIRTUAL_METHOD(void, preDataUpdate, 6, (int updateType), (this + sizeof(uintptr_t) * 2, updateType))
@@ -129,6 +144,7 @@ public:
 
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
+#ifdef _WIN32
         if (config->misc.fixBoneMatrix) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
@@ -140,6 +156,7 @@ public:
             *render = backup;
             return result;
         }
+#endif
         return VirtualMethod::call<bool, 13>(this + sizeof(uintptr_t), out, maxBones, boneMask, currentTime);
     }
 
@@ -165,12 +182,20 @@ public:
 
     VarMap* getVarMap() noexcept
     {
+#ifdef _WIN32
         return reinterpret_cast<VarMap*>(this + 0x24);
+#else
+        return nullptr;
+#endif
     }
    
     AnimState* getAnimstate() noexcept
     {
+#ifdef _WIN32
         return *reinterpret_cast<AnimState**>(this + 0x3914);
+#else
+        return nullptr;
+#endif
     }
 
     float getMaxDesyncAngle() noexcept
@@ -258,6 +283,7 @@ public:
     NETVAR(ragdoll, "CCSPlayer", "m_hRagdoll", int)
     NETVAR(shotsFired, "CCSPlayer", "m_iShotsFired", int)
     NETVAR(waitForNoAttack, "CCSPlayer", "m_bWaitForNoAttack", bool)
+    NETVAR(playerPatchIndices, "CCSPlayer", "m_vecPlayerPatchEconIndices", int[5])
 
     NETVAR(viewModelIndex, "CBaseCombatWeapon", "m_iViewModelIndex", int)
     NETVAR(worldModelIndex, "CBaseCombatWeapon", "m_iWorldModelIndex", int)
@@ -272,7 +298,8 @@ public:
     NETVAR(accountID, "CBaseAttributableItem", "m_iAccountID", int)
     NETVAR(itemDefinitionIndex, "CBaseAttributableItem", "m_iItemDefinitionIndex", short)
     NETVAR(itemDefinitionIndex2, "CBaseAttributableItem", "m_iItemDefinitionIndex", WeaponId)
-    NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", int)
+    NETVAR(itemIDHigh, "CBaseAttributableItem", "m_iItemIDHigh", std::uint32_t)
+    NETVAR(itemIDLow, "CBaseAttributableItem", "m_iItemIDLow", std::uint32_t)
     NETVAR(entityQuality, "CBaseAttributableItem", "m_iEntityQuality", int)
     NETVAR(customName, "CBaseAttributableItem", "m_szCustomName", char[32])
     NETVAR(fallbackPaintKit, "CBaseAttributableItem", "m_nFallbackPaintKit", unsigned)
@@ -280,6 +307,9 @@ public:
     NETVAR(fallbackWear, "CBaseAttributableItem", "m_flFallbackWear", float)
     NETVAR(fallbackStatTrak, "CBaseAttributableItem", "m_nFallbackStatTrak", unsigned)
     NETVAR(initialized, "CBaseAttributableItem", "m_bInitialized", bool)
+    NETVAR(econItemView, "CBaseAttributableItem", "m_Item", EconItemView)
+    NETVAR(originalOwnerXuidLow, "CBaseAttributableItem", "m_OriginalOwnerXuidLow", std::uint32_t)
+    NETVAR(originalOwnerXuidHigh, "CBaseAttributableItem", "m_OriginalOwnerXuidHigh", std::uint32_t)
 
     NETVAR(owner, "CBaseViewModel", "m_hOwner", int)
     NETVAR(weapon, "CBaseViewModel", "m_hWeapon", int)
@@ -307,12 +337,23 @@ public:
 
     bool grenadeExploded() noexcept
     {
+#ifdef _WIN32
         return *reinterpret_cast<bool*>(this + 0x29E8);
+#else
+        return false;
+#endif
+    }
+
+    std::uint64_t originalOwnerXuid() noexcept
+    {
+        return (std::uint64_t(originalOwnerXuidHigh()) << 32) | originalOwnerXuidLow();
     }
 };
 
 class PlantedC4 : public Entity {
 public:
+    INCONSTRUCTIBLE(PlantedC4)
+
     NETVAR(c4BlowTime, "CPlantedC4", "m_flC4Blow", float)
     NETVAR(c4TimerLength, "CPlantedC4", "m_flTimerLength", float)
     NETVAR(c4BombSite, "CPlantedC4", "m_nBombSite", int)

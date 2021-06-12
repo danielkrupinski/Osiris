@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Inconstructible.h"
 #include "Pad.h"
 #include "VirtualMethod.h"
 
@@ -15,5 +16,7 @@ struct SurfaceData {
 
 class PhysicsSurfaceProps {
 public:
+    INCONSTRUCTIBLE(PhysicsSurfaceProps)
+
     VIRTUAL_METHOD_V(SurfaceData*, getSurfaceData, 5, (int index), (this, index))
 };

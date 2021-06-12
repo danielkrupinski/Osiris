@@ -6,6 +6,11 @@
 #include <sstream>
 #include <vector>
 
+#ifdef __linux__
+#include <sys/mman.h>
+#include <unistd.h>
+#endif
+
 #include "../imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../imgui/imgui_internal.h"
@@ -50,6 +55,31 @@
 
 #include "../imguiCustom.h"
 
+bool Misc::shouldRevealMoney() noexcept
+{
+    return config->misc.revealMoney;
+}
+
+bool Misc::shouldRevealSuspect() noexcept
+{
+    return config->misc.revealSuspect;
+}
+
+bool Misc::shouldDisableModelOcclusion() noexcept
+{
+    return config->misc.disableModelOcclusion;
+}
+
+float Misc::maxAngleDelta() noexcept
+{
+    return config->misc.maxAngleDelta;
+}
+
+float Misc::aspectRatio() noexcept
+{
+    return config->misc.aspectratio;
+}
+
 void Misc::edgejump(UserCmd* cmd) noexcept
 {
     if (!config->misc.edgejump || !config->misc.edgejumpkey.isDown())
@@ -92,12 +122,6 @@ void Misc::slowwalk(UserCmd* cmd) noexcept
     } else if (cmd->sidemove) {
         cmd->sidemove = cmd->sidemove < 0.0f ? -maxSpeed : maxSpeed;
     }
-}
-
-void Misc::inverseRagdollGravity() noexcept
-{
-    static auto ragdollGravity = interfaces->cvar->findVar("cl_ragdoll_gravity");
-    ragdollGravity->setValue(config->visuals.inverseRagdollGravity ? -600 : 600);
 }
 
 void Misc::updateClanTag(bool tagChanged) noexcept
@@ -490,7 +514,7 @@ void Misc::stealNames() noexcept
         if (!interfaces->engine->getPlayerInfo(entity->index(), playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(stolenIds, playerInfo.userId) != stolenIds.cend())
             continue;
 
         if (changeName(false, (std::string{ playerInfo.name } +'\x1').c_str(), 1.0f))
@@ -613,23 +637,6 @@ void Misc::fixTabletSignal() noexcept
     }
 }
 
-void Misc::fakePrime() noexcept
-{
-    static bool lastState = false;
-
-    if (config->misc.fakePrime != lastState) {
-        lastState = config->misc.fakePrime;
-
-#ifdef _WIN32
-        if (DWORD oldProtect; VirtualProtect(memory->fakePrime, 1, PAGE_EXECUTE_READWRITE, &oldProtect)) {
-            constexpr uint8_t patch[]{ 0x74, 0xEB };
-            *memory->fakePrime = patch[config->misc.fakePrime];
-            VirtualProtect(memory->fakePrime, 1, oldProtect, nullptr);
-        }
-#endif
-    }
-}
-
 void Misc::killMessage(GameEvent& event) noexcept
 {
     if (!config->misc.killMessage)
@@ -670,6 +677,7 @@ void Misc::antiAfkKick(UserCmd* cmd) noexcept
 
 void Misc::fixAnimationLOD(FrameStage stage) noexcept
 {
+#ifdef _WIN32
     if (config->misc.fixAnimationLOD && stage == FrameStage::RENDER_START) {
         if (!localPlayer)
             return;
@@ -681,6 +689,7 @@ void Misc::fixAnimationLOD(FrameStage stage) noexcept
             *reinterpret_cast<int*>(entity + 0xA30) = memory->globalVars->framecount;
         }
     }
+#endif
 }
 
 void Misc::autoPistol(UserCmd* cmd) noexcept
@@ -949,7 +958,7 @@ void Misc::runReportbot() noexcept
         if (!interfaces->engine->getPlayerInfo(i, playerInfo))
             continue;
 
-        if (playerInfo.fakeplayer || std::find(reportedPlayers.cbegin(), reportedPlayers.cend(), playerInfo.xuid) != reportedPlayers.cend())
+        if (playerInfo.fakeplayer || std::ranges::find(reportedPlayers, playerInfo.xuid) != reportedPlayers.cend())
             continue;
 
         std::string report;
@@ -1072,7 +1081,7 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
 
     GameData::Lock lock;
     for (auto& player : GameData::players()) {
-        if (player.dormant || !player.alive || !player.enemy || player.inViewFrustum)
+        if ((player.dormant && player.fadingAlpha() == 0.0f) || !player.alive || !player.enemy || player.inViewFrustum)
             continue;
 
         const auto positionDiff = GameData::local().origin - player.origin;
@@ -1090,10 +1099,12 @@ void Misc::drawOffscreenEnemies(ImDrawList* drawList) noexcept
         const auto pos = ImGui::GetIO().DisplaySize / 2 + ImVec2{ x, y } * 200;
         const auto trianglePos = pos + ImVec2{ x, y } * (avatarRadius + (config->misc.offscreenEnemies.healthBar.enabled ? 5 : 3));
 
+        Helpers::setAlphaFactor(player.fadingAlpha());
         const auto white = Helpers::calculateColor(255, 255, 255, 255);
         const auto background = Helpers::calculateColor(0, 0, 0, 80);
         const auto color = Helpers::calculateColor(config->misc.offscreenEnemies);
         const auto healthBarColor = config->misc.offscreenEnemies.healthBar.type == HealthBar::HealthBased ? Helpers::healthColor(std::clamp(player.health / 100.0f, 0.0f, 1.0f)) : Helpers::calculateColor(config->misc.offscreenEnemies.healthBar);
+        Helpers::setAlphaFactor(1.0f);
 
         const ImVec2 trianglePoints[]{
             trianglePos + ImVec2{  0.4f * y, -0.4f * x } * triangleSize,
@@ -1161,28 +1172,11 @@ void Misc::autoAccept(const char* soundEntry) noexcept
 #endif
 }
 
-void Misc::deathmatchGod() noexcept
-{
-    if (!config->misc.deathmatchGod || !localPlayer->isAlive() || !localPlayer->gunGameImmunity())
-        return;
-
-    static auto gameType{ interfaces->cvar->findVar("game_type") };
-    static auto gameMode{ interfaces->cvar->findVar("game_mode") };
-    if (gameType->getInt() != 1 || gameMode->getInt() != 2)
-        return;
-
-    static auto nextTime = 0.0f;
-    if (nextTime <= memory->globalVars->realtime) {
-        interfaces->engine->clientCmdUnrestricted("open_buymenu");
-        nextTime = memory->globalVars->realtime + 0.25f;
-    }
-}
-
 void Misc::updateEventListeners(bool forceRemove) noexcept
 {
     class PurchaseEventListener : public GameEventListener {
     public:
-        void fireGameEvent(GameEvent* event) { purchaseList(event); }
+        void fireGameEvent(GameEvent* event) override { purchaseList(event); }
     };
 
     static PurchaseEventListener listener;

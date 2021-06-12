@@ -1,6 +1,7 @@
 #pragma once
 
 enum class WeaponId : short {
+    None = 0,
     Deagle = 1,
     Elite,
     Fiveseven,
@@ -78,6 +79,12 @@ enum class WeaponId : short {
     Stiletto = 522,
     Talon,
     SkeletonKnife = 525,
+    NameTag = 1200,
+    Sticker = 1209,
+    MusicKit = 1314,
+    SealedGraffiti = 1348,
+    Graffiti = 1349,
+    Patch = 4609,
     GloveStuddedBrokenfang = 4725,
     GloveStuddedBloodhound = 5027,
     GloveT,

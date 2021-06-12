@@ -5,7 +5,7 @@
 #include "fnv.h"
 #include "GameData.h"
 #include "Hacks/Misc.h"
-#include "Hacks/SkinChanger.h"
+#include "Hacks/InventoryChanger.h"
 #include "Hacks/Visuals.h"
 #include "Interfaces.h"
 #include "Memory.h"
@@ -18,14 +18,14 @@ EventListener::EventListener() noexcept
     // If you add here listeners which aren't used by client.dll (e.g., item_purchase, bullet_impact), the cheat will be detected by AntiDLL (community anticheat).
     // Instead, register listeners dynamically and only when certain functions are enabled - see Misc::updateEventListeners(), Visuals::updateEventListeners()
 
-    interfaces->gameEventManager->addListener(this, "round_start");
-    interfaces->gameEventManager->addListener(this, "round_freeze_end");
-    interfaces->gameEventManager->addListener(this, "player_hurt");
+    const auto gameEventManager = interfaces->gameEventManager;
+    gameEventManager->addListener(this, "round_start");
+    gameEventManager->addListener(this, "round_freeze_end");
+    gameEventManager->addListener(this, "player_hurt");
+    gameEventManager->addListener(this, "player_death");
+    gameEventManager->addListener(this, "vote_cast");
 
-    interfaces->gameEventManager->addListener(this, "player_death");
-    interfaces->gameEventManager->addListener(this, "vote_cast");
-
-    if (const auto desc = memory->getEventDescriptor(interfaces->gameEventManager, "player_death", nullptr))
+    if (const auto desc = memory->getEventDescriptor(gameEventManager, "player_death", nullptr))
         std::swap(desc->listeners[0], desc->listeners[desc->listeners.size - 1]);
     else
         assert(false);
@@ -49,8 +49,8 @@ void EventListener::fireGameEvent(GameEvent* event)
         Misc::purchaseList(event);
         break;
     case fnv::hash("player_death"):
-        SkinChanger::updateStatTrak(*event);
-        SkinChanger::overrideHudIcon(*event);
+        InventoryChanger::updateStatTrak(*event);
+        InventoryChanger::overrideHudIcon(*event);
         Misc::killMessage(*event);
         Misc::killSound(*event);
         break;
