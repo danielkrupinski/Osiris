@@ -589,6 +589,7 @@ void Hooks::install() noexcept
 #endif
     
     bspQuery.init(interfaces->engine->getBSPTreeQuery());
+    bspQuery.hookAt(6, &listLeavesInBox);
 
     client.init(interfaces->client);
     client.hookAt(37, &frameStageNotify);
@@ -641,7 +642,6 @@ void Hooks::install() noexcept
     }
 
 #ifdef _WIN32
-    bspQuery.hookAt(6, &listLeavesInBox);
     surface.hookAt(67, &lockCursor);
 
     if constexpr (std::is_same_v<HookType, MinHook>)
