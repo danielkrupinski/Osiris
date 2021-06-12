@@ -212,8 +212,8 @@ Memory::Memory() noexcept
 
     findOrCreateEconItemViewForItemID = relativeToAbsolute<decltype(findOrCreateEconItemViewForItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\xCE\x83\xC4\x08") + 1);
     getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x33\x8B\xD0") + 1);
-    useToolStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37");
-    useToolGetArg2AsStringReturnAddress = useToolStickerGetArgAsStringReturnAddress + 52;
+    useToolGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x85\xC0\x0F\x84????\x8B\xC8\xE8????\x8B\x37");
+    useToolGetArg2AsStringReturnAddress = useToolGetArgAsStringReturnAddress + 52;
     getSOCData = relativeToAbsolute<decltype(getSOCData)>(findPattern(CLIENT_DLL, "\xE8????\x32\xC9") + 1);
     setCustomName = relativeToAbsolute<decltype(setCustomName)>(findPattern(CLIENT_DLL, "\xE8????\x8B\x46\x78\xC1\xE8\x0A\xA8\x01\x74\x13\x8B\x46\x34") + 1);
     setDynamicAttributeValueFn = findPattern(CLIENT_DLL, "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x3C\x53\x8B\x5D\x08\x56\x57\x6A");
@@ -292,8 +292,8 @@ Memory::Memory() noexcept
     getInventoryItemByItemID = relativeToAbsolute<decltype(getInventoryItemByItemID)>(findPattern(CLIENT_DLL, "\xE8????\x45\x84\xED\x49\x89\xC1") + 1);
     getSOCData = relativeToAbsolute<decltype(getSOCData)>(findPattern(CLIENT_DLL, "\xE8????\x5B\x44\x89\xEE") + 1);
     setCustomName = relativeToAbsolute<decltype(setCustomName)>(findPattern(CLIENT_DLL, "\xE8????\x41\x8B\x84\x24????\xE9????\x8B\x98") + 1);
-    useToolStickerGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B");
-    useToolGetArg2AsStringReturnAddress = useToolStickerGetArgAsStringReturnAddress + 55;
+    useToolGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\x48\x85\xC0\x74\xDA\x48\x89\xC7\xE8????\x48\x8B\x0B");
+    useToolGetArg2AsStringReturnAddress = useToolGetArgAsStringReturnAddress + 55;
     wearItemStickerGetArgAsNumberReturnAddress = findPattern(CLIENT_DLL, "\xF2\x44\x0F\x2C\xF8\x45\x39\xFE");
     wearItemStickerGetArgAsStringReturnAddress = wearItemStickerGetArgAsNumberReturnAddress - 57;
     setNameToolStringGetArgAsStringReturnAddress = findPattern(CLIENT_DLL, "\xBA????\x4C\x89\xF6\x48\x89\xC7\x49\x89\xC4");

@@ -488,7 +488,7 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
     if (result) {
         const auto ret = RETURN_ADDRESS();
-        if (ret == memory->useToolStickerGetArgAsStringReturnAddress) {
+        if (ret == memory->useToolGetArgAsStringReturnAddress) {
             InventoryChanger::setToolToUse(stringToUint64(result));
         } else if (ret == memory->useToolGetArg2AsStringReturnAddress) {
             InventoryChanger::setItemToApplyTool(stringToUint64(result));
