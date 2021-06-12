@@ -176,7 +176,7 @@ private:
             if (stickerKit->id == 0)
                 continue;
 
-            const auto name = std::string_view{ stickerKit->name.data() };
+            const auto name = std::string_view{ stickerKit->name.data(), static_cast<std::size_t>(stickerKit->name.length - 1) };
             const auto isPatch = name.starts_with("patch");
             const auto isGraffiti = !isPatch && (name.starts_with("spray") || name.ends_with("graffiti"));
             const auto isSticker = !isPatch && !isGraffiti;
