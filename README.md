@@ -216,7 +216,7 @@ Free open-source cross-platform cheat software for **Counter-Strike: Global Offe
 
     *   **Max angle delta** - maximum viewangles change per tick
 
-    *   **Fake Prime** - set a fake prime (visible in lobby)
+    *   **Aspect Ratio** - allows you to change the aspect ratio
 
     *   **Purchase List** - show the purchased equipment by enemies.
 
