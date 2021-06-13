@@ -13,6 +13,7 @@ public:
 private:
     bool open = true;
 
+    void StyleColorsGold() const noexcept;
     void updateColors() const noexcept;
     void renderMenuBar() noexcept;
     void renderAimbotWindow(bool contentOnly = false) noexcept;
