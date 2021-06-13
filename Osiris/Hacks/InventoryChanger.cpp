@@ -66,7 +66,8 @@ public:
         Patch,
         Graffiti,
         SealedGraffiti,
-        Agent
+        Agent,
+        CaseKey
     };
 
     struct GameItem {
@@ -242,6 +243,9 @@ private:
             } else if (item->isPatchable()) {
                 if (const auto image = item->getInventoryImage())
                     _gameItems.emplace_back(Type::Agent, item->getRarity(), item->getWeaponId(), 0, image);
+            } else if (itemTypeName == "#CSGO_Tool_WeaponCase_KeyTag") {
+                if (const auto image = item->getInventoryImage())
+                    _gameItems.emplace_back(Type::CaseKey, item->getRarity(), item->getWeaponId(), 0, image);
             }
         }
     }
