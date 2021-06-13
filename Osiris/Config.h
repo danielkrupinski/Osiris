@@ -201,7 +201,7 @@ public:
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
     const auto& getSystemFonts() const noexcept { return systemFonts; }
-    const auto& getFonts() noexcept { return fonts; }
+    const auto& getFonts() const noexcept { return fonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::vector<std::string> systemFonts{ "Default" };
