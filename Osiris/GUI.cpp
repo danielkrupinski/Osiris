@@ -128,7 +128,7 @@ void GUI::updateColors() const noexcept
 
 void GUI::handleToggle() noexcept
 {
-    if (config->misc.menuKey.isPressed()) {
+    if (Misc::isMenuKeyPressed()) {
         open = !open;
         if (!open)
             interfaces->inputSystem->resetInputState();
@@ -1000,7 +1000,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                     case 9: InventoryChanger::resetConfig(); InventoryChanger::scheduleHudUpdate(); break;
                     case 10: Sound::resetConfig(); break;
                     case 11: config->style = { }; updateColors(); break;
-                    case 12: config->misc = { };  Misc::updateClanTag(true); break;
+                    case 12: Misc::resetConfig(); Misc::updateClanTag(true); break;
                     }
                 }
             }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../JsonForward.h"
+
 enum class FrameStage;
 class GameEvent;
 struct ImDrawList;
@@ -11,6 +13,8 @@ namespace Misc
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
     bool shouldFixBoneMatrix() noexcept;
+    bool isRadarHackOn() noexcept;
+    bool isMenuKeyPressed() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
 
@@ -62,4 +66,9 @@ namespace Misc
     void menuBarItem() noexcept;
     void tabItem() noexcept;
     void drawGUI(bool contentOnly) noexcept;
+
+    // Config
+    json toJson() noexcept;
+    void fromJson(const json& j) noexcept;
+    void resetConfig() noexcept;
 }

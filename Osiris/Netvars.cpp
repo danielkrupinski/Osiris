@@ -22,7 +22,7 @@ static std::unordered_map<std::uint32_t, std::pair<recvProxy, recvProxy*>> proxi
 
 static void __CDECL spottedHook(recvProxyData& data, void* arg2, void* arg3) noexcept
 {
-    if (config->misc.radarHack)
+    if (Misc::isRadarHackOn())
         data.value._int = 1;
 
     constexpr auto hash{ fnv::hash("CBaseEntity->m_bSpotted") };
