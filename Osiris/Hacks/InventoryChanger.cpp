@@ -83,6 +83,7 @@ public:
         bool isGraffiti() const noexcept { return type == Type::Graffiti; }
         bool isSealedGraffiti() const noexcept { return type == Type::SealedGraffiti; }
         bool isAgent() const noexcept { return type == Type::Agent; }
+        bool isCaseKey() const noexcept { return type == Type::CaseKey; }
 
         // TODO: We need a better name for this
         bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch() || isGraffiti() || isSealedGraffiti(); }
@@ -1557,6 +1558,11 @@ json InventoryChanger::toJson() noexcept
             }
             break;
         }
+        case StaticData::Type::CaseKey: {
+            itemConfig["Type"] = "Case Key";
+            itemConfig["Weapon ID"] = gameItem.weaponID;
+            break;
+        }
         }
 
         items.push_back(std::move(itemConfig));
@@ -1800,6 +1806,17 @@ void InventoryChanger::fromJson(const json& j) noexcept
                     continue;
                 dynamicData.patches[slot].patchID = patchID;
             }
+        } else if (type == "Case Key") {
+            if (!jsonItem.contains("Weapon ID") || !jsonItem["Weapon ID"].is_number_integer())
+                continue;
+
+            const WeaponId weaponID = jsonItem["Weapon ID"];
+
+            const auto staticData = std::ranges::find_if(StaticData::gameItems(), [weaponID](const auto& gameItem) { return gameItem.isCaseKey() && gameItem.weaponID == weaponID; });
+            if (staticData == StaticData::gameItems().end())
+                continue;
+
+            inventory.emplace_back(std::ranges::distance(StaticData::gameItems().begin(), staticData));
         }
     }
 
