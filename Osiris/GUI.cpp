@@ -60,6 +60,10 @@ GUI::GUI() noexcept
     ImGuiStyle& style = ImGui::GetStyle();
 
     style.ScrollbarSize = 9.0f;
+    style.WindowRounding = 3;
+    style.GrabRounding = 3;
+    style.ScrollbarRounding = 3;
+    style.FrameRounding = 3;
     style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
 
     ImGuiIO& io = ImGui::GetIO();
