@@ -608,6 +608,8 @@ void Hooks::install() noexcept
     engine.hookAt(101, &getScreenAspectRatio);
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
+    inventoryManager.init(memory->inventoryManager);
+
     modelRender.init(interfaces->modelRender);
     modelRender.hookAt(21, &drawModelExecute);
 
@@ -687,6 +689,7 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
+    inventoryManager.restore();
     modelRender.restore();
     panoramaMarshallHelper.restore();
     sound.restore();

@@ -19,6 +19,7 @@
 #include "../Config.h"
 #include "../Interfaces.h"
 #include "../Memory.h"
+#include "../Hacks/Misc.h"
 #include "../Netvars.h"
 
 struct AnimState;
@@ -145,7 +146,7 @@ public:
     bool setupBones(matrix3x4* out, int maxBones, int boneMask, float currentTime) noexcept
     {
 #ifdef _WIN32
-        if (config->misc.fixBoneMatrix) {
+        if (Misc::shouldFixBoneMatrix()) {
             int* render = reinterpret_cast<int*>(this + 0x274);
             int backup = *render;
             Vector absOrigin = getAbsOrigin();

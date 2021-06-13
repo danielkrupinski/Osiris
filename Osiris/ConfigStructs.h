@@ -227,6 +227,18 @@ static void to_json(json& j, const ColorToggle3& o, const ColorToggle3& dummy = 
     WRITE("Enabled", enabled);
 }
 
+static void to_json(json& j, const ColorToggleThickness& o, const ColorToggleThickness& dummy = {})
+{
+    to_json(j, static_cast<const ColorToggle&>(o), dummy);
+    WRITE("Thickness", thickness);
+}
+
+static void to_json(json& j, const HealthBar& o, const HealthBar& dummy = {})
+{
+    to_json(j, static_cast<const ColorToggle&>(o), dummy);
+    WRITE("Type", type);
+}
+
 template <value_t Type, typename T>
 static typename std::enable_if_t<!std::is_same_v<T, bool>> read(const json& j, const char* key, T& o) noexcept
 {
@@ -372,4 +384,10 @@ static void from_json(const json& j, Color3& c)
     read(j, "Color", c.color);
     read(j, "Rainbow", c.rainbow);
     read(j, "Rainbow Speed", c.rainbowSpeed);
+}
+
+static void from_json(const json& j, HealthBar& o)
+{
+    from_json(j, static_cast<ColorToggle&>(o));
+    read(j, "Type", o.type);
 }
