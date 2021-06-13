@@ -10,6 +10,7 @@ namespace Misc
     bool shouldRevealMoney() noexcept;
     bool shouldRevealSuspect() noexcept;
     bool shouldDisableModelOcclusion() noexcept;
+    bool shouldFixBoneMatrix() noexcept;
     float maxAngleDelta() noexcept;
     float aspectRatio() noexcept;
 

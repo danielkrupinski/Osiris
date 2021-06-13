@@ -72,6 +72,11 @@ bool Misc::shouldDisableModelOcclusion() noexcept
     return config->misc.disableModelOcclusion;
 }
 
+bool Misc::shouldFixBoneMatrix() noexcept
+{
+    return config->misc.fixBoneMatrix;
+}
+
 float Misc::maxAngleDelta() noexcept
 {
     return config->misc.maxAngleDelta;
