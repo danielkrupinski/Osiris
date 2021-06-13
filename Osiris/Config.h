@@ -54,7 +54,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
     bool aimbotOnKey{ false };
-    KeyBind aimbotKey = KeyBind::NONE;
+    KeyBind aimbotKey{ KeyBind::NONE };
     int aimbotKeyMode{ 0 };
 
     struct Triggerbot {
@@ -70,7 +70,7 @@ public:
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
-    KeyBind triggerbotHoldKey = KeyBind::NONE;
+    KeyBind triggerbotHoldKey{ KeyBind::NONE };
 
     struct Chams {
         struct Material : Color4 {
@@ -86,12 +86,12 @@ public:
     };
 
     std::unordered_map<std::string, Chams> chams;
-    KeyBindToggle chamsToggleKey = KeyBind::NONE;
-    KeyBind chamsHoldKey = KeyBind::NONE;
+    KeyBindToggle chamsToggleKey{ KeyBind::NONE };
+    KeyBind chamsHoldKey{ KeyBind::NONE };
 
     struct StreamProofESP {
-        KeyBindToggle toggleKey = KeyBind::NONE;
-        KeyBind holdKey = KeyBind::NONE;
+        KeyBindToggle toggleKey{ KeyBind::NONE };
+        KeyBind holdKey{ KeyBind::NONE };
 
         std::unordered_map<std::string, Player> allies;
         std::unordered_map<std::string, Player> enemies;
@@ -115,7 +115,7 @@ public:
     struct Misc {
         Misc() { clanTag[0] = '\0'; }
 
-        KeyBind menuKey = KeyBind::INSERT;
+        KeyBind menuKey{ KeyBind::INSERT };
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
         bool bunnyHop{ false };
@@ -150,8 +150,8 @@ public:
         bool oppositeHandKnife = false;
         PreserveKillfeed preserveKillfeed;
         char clanTag[16];
-        KeyBind edgejumpkey = KeyBind::NONE;
-        KeyBind slowwalkKey = KeyBind::NONE;
+        KeyBind edgejumpkey{ KeyBind::NONE };
+        KeyBind slowwalkKey{ KeyBind::NONE };
         ColorToggleThickness noscopeCrosshair;
         ColorToggleThickness recoilCrosshair;
 
@@ -172,10 +172,10 @@ public:
         int banColor{ 6 };
         std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
         ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
-        KeyBind prepareRevolverKey = KeyBind::NONE;
+        KeyBind prepareRevolverKey{ KeyBind::NONE };
         int hitSound{ 0 };
         int chokedPackets{ 0 };
-        KeyBind chokedPacketsKey = KeyBind::NONE;
+        KeyBind chokedPacketsKey{ KeyBind::NONE };
         int quickHealthshotKey{ 0 };
         float maxAngleDelta{ 255.0f };
         int killSound{ 0 };

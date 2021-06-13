@@ -279,7 +279,7 @@ static void read(const json& j, const char* key, KeyBind& o) noexcept
         return;
 
     if (const auto& val = j[key]; val.is_string())
-        o = val.get<std::string>().c_str();
+        o = KeyBind{ val.get<std::string>().c_str() };
 }
 
 static void read(const json& j, const char* key, char* o, std::size_t size) noexcept
