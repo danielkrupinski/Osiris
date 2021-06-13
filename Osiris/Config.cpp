@@ -804,7 +804,7 @@ void Config::save(size_t id) const noexcept
 
 void Config::add(const char* name) noexcept
 {
-    if (*name && std::find(configs.cbegin(), configs.cend(), name) == configs.cend()) {
+    if (*name && std::ranges::find(configs, name) == configs.cend()) {
         configs.emplace_back(name);
         save(configs.size() - 1);
     }
