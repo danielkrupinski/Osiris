@@ -46,9 +46,9 @@ struct VisualsConfig {
     bool noShadows{ false };
     bool wireframeSmoke{ false };
     bool zoom{ false };
-    KeyBindToggle zoomKey{ KeyBind::NONE };
+    KeyBindToggle zoomKey;
     bool thirdperson{ false };
-    KeyBindToggle thirdpersonKey{ KeyBind::NONE };
+    KeyBindToggle thirdpersonKey;
     int thirdpersonDistance{ 0 };
     int viewmodelFov{ 0 };
     int fov{ 0 };

@@ -776,18 +776,18 @@ void Config::save(size_t id) const noexcept
 
     j["Aimbot"] = aimbot;
     j["Aimbot On key"] = aimbotOnKey;
-    to_json(j["Aimbot Key"], aimbotKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Aimbot Key"], aimbotKey, {});
     j["Aimbot Key mode"] = aimbotKeyMode;
 
     j["Triggerbot"] = triggerbot;
-    to_json(j["Triggerbot Key"], triggerbotHoldKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Triggerbot Key"], triggerbotHoldKey, {});
 
     j["Backtrack"] = Backtrack::toJson();
     j["Anti aim"] = AntiAim::toJson();
     j["Glow"] = Glow::toJson();
     j["Chams"] = chams;
-    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, KeyBind{ KeyBind::NONE });
-    to_json(j["Chams"]["Hold Key"], chamsHoldKey, KeyBind{ KeyBind::NONE });
+    to_json(j["Chams"]["Toggle Key"], chamsToggleKey, {});
+    to_json(j["Chams"]["Hold Key"], chamsHoldKey, {});
     j["ESP"] = streamProofESP;
     j["Sound"] = Sound::toJson();
     j["Visuals"] = Visuals::toJson();
