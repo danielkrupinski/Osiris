@@ -380,8 +380,8 @@ static int __STDCALL listLeavesInBox(LINUX_ARGS(void* thisptr, ) const Vector& m
 {
 #ifdef _WIN32
     if (RETURN_ADDRESS() == memory->insertIntoTree) {
-        if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + 0x18); info && info->renderable) {
-            if (const auto ent = VirtualMethod::call<Entity*, 7>(info->renderable - 4); ent && ent->isPlayer()) {
+        if (const auto info = *reinterpret_cast<RenderableInfo**>(FRAME_ADDRESS() + WIN32_LINUX(0x18, 0x10 + 0x948)); info && info->renderable) {
+            if (const auto ent = VirtualMethod::call<Entity*, WIN32_LINUX(7, 8)>(info->renderable - sizeof(std::uintptr_t)); ent && ent->isPlayer()) {
                 if (Misc::shouldDisableModelOcclusion()) {
                     /* 
                     info->flags &= ~0x100;
