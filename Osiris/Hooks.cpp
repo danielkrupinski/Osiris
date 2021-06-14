@@ -458,10 +458,10 @@ static void __STDCALL renderSmokeOverlay(LINUX_ARGS(void* thisptr,) bool update)
 static double __STDCALL getArgAsNumber(LINUX_ARGS(void* thisptr,) void* params, int index) noexcept
 {
     const auto result = hooks->panoramaMarshallHelper.callOriginal<double, 5>(params, index);
-
-    if (RETURN_ADDRESS() == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
+    
+    if (const auto ret = RETURN_ADDRESS(); ret == memory->setStickerToolSlotGetArgAsNumberReturnAddress)
         InventoryChanger::setStickerApplySlot(static_cast<int>(result));
-    else if (RETURN_ADDRESS() == memory->wearItemStickerGetArgAsNumberReturnAddress)
+    else if (ret == memory->wearItemStickerGetArgAsNumberReturnAddress)
         InventoryChanger::setStickerSlotToWear(static_cast<int>(result));
 
     return result;
