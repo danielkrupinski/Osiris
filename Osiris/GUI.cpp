@@ -942,7 +942,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
     auto& configItems = config->getConfigs();
     static int currentConfig = -1;
 
-    static std::string buffer;
+    static std::u8string buffer;
 
     timeToNextConfigRefresh -= ImGui::GetIO().DeltaTime;
     if (timeToNextConfigRefresh <= 0.0f) {
@@ -956,11 +956,11 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
         currentConfig = -1;
 
     if (ImGui::ListBox("", &currentConfig, [](void* data, int idx, const char** out_text) {
-        auto& vector = *static_cast<std::vector<std::string>*>(data);
-        *out_text = vector[idx].c_str();
+        auto& vector = *static_cast<std::vector<std::u8string>*>(data);
+        *out_text = (const char*)vector[idx].c_str();
         return true;
         }, &configItems, configItems.size(), 5) && currentConfig != -1)
-            buffer = configItems[currentConfig];
+            buffer = configItems[currentConfig].c_str();
 
         ImGui::PushID(0);
         if (ImGui::InputTextWithHint("", "config name", &buffer, ImGuiInputTextFlags_EnterReturnsTrue)) {
@@ -1019,7 +1019,7 @@ void GUI::renderConfigWindow(bool contentOnly) noexcept
                 config->remove(currentConfig);
 
                 if (static_cast<std::size_t>(currentConfig) < configItems.size())
-                    buffer = configItems[currentConfig];
+                    buffer = configItems[currentConfig].c_str();
                 else
                     buffer.clear();
             }

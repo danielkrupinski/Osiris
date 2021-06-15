@@ -19,9 +19,9 @@ public:
     void load(std::size_t, bool incremental) noexcept;
     void load(const char8_t* name, bool incremental) noexcept;
     void save(std::size_t) const noexcept;
-    void add(const char*) noexcept;
+    void add(const char8_t*) noexcept;
     void remove(std::size_t) noexcept;
-    void rename(std::size_t, const char*) noexcept;
+    void rename(std::size_t, const char8_t*) noexcept;
     void reset() noexcept;
     void listConfigs() noexcept;
     void createConfigDir() const noexcept;
@@ -121,7 +121,7 @@ private:
     std::vector<std::string> systemFonts{ "Default" };
     std::unordered_map<std::string, Font> fonts;
     std::filesystem::path path;
-    std::vector<std::string> configs;
+    std::vector<std::u8string> configs;
 };
 
 inline std::unique_ptr<Config> config;
