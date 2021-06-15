@@ -41,8 +41,8 @@ struct PlayerGlow {
 
 static std::unordered_map<std::string, PlayerGlow> playerGlowConfig;
 static std::unordered_map<std::string, GlowItem> glowConfig;
-static KeyBindToggle glowToggleKey = KeyBind::NONE;
-static KeyBind glowHoldKey = KeyBind::NONE;
+static KeyBindToggle glowToggleKey;
+static KeyBind glowHoldKey;
 
 static std::vector<std::pair<int, int>> customGlowEntities;
 
@@ -269,8 +269,8 @@ json Glow::toJson() noexcept
     json j;
     j["Items"] = glowConfig;
     j["Players"] = playerGlowConfig;
-    to_json(j["Toggle Key"], glowToggleKey, KeyBind::NONE);
-    to_json(j["Hold Key"], glowHoldKey, KeyBind::NONE);
+    to_json(j["Toggle Key"], glowToggleKey, {});
+    to_json(j["Hold Key"], glowHoldKey, {});
     return j;
 }
 
@@ -302,8 +302,8 @@ void Glow::resetConfig() noexcept
 {
     glowConfig = {};
     playerGlowConfig = {};
-    glowToggleKey = KeyBind::NONE;
-    glowHoldKey = KeyBind::NONE;
+    glowToggleKey = {};
+    glowHoldKey = {};
 }
 
 #else

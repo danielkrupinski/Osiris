@@ -54,7 +54,7 @@ public:
     };
     std::array<Aimbot, 40> aimbot;
     bool aimbotOnKey{ false };
-    KeyBind aimbotKey = KeyBind::NONE;
+    KeyBind aimbotKey;
     int aimbotKeyMode{ 0 };
 
     struct Triggerbot {
@@ -70,7 +70,7 @@ public:
         float burstTime = 0.0f;
     };
     std::array<Triggerbot, 40> triggerbot;
-    KeyBind triggerbotHoldKey = KeyBind::NONE;
+    KeyBind triggerbotHoldKey;
 
     struct Chams {
         struct Material : Color4 {
@@ -86,12 +86,12 @@ public:
     };
 
     std::unordered_map<std::string, Chams> chams;
-    KeyBindToggle chamsToggleKey = KeyBind::NONE;
-    KeyBind chamsHoldKey = KeyBind::NONE;
+    KeyBindToggle chamsToggleKey;
+    KeyBind chamsHoldKey;
 
     struct StreamProofESP {
-        KeyBindToggle toggleKey = KeyBind::NONE;
-        KeyBind holdKey = KeyBind::NONE;
+        KeyBindToggle toggleKey;
+        KeyBind holdKey;
 
         std::unordered_map<std::string, Player> allies;
         std::unordered_map<std::string, Player> enemies;
@@ -106,154 +106,16 @@ public:
         ImFont* medium;
         ImFont* big;
     };
-
-    struct Visuals {
-        bool disablePostProcessing{ false };
-        bool inverseRagdollGravity{ false };
-        bool noFog{ false };
-        bool no3dSky{ false };
-        bool noAimPunch{ false };
-        bool noViewPunch{ false };
-        bool noHands{ false };
-        bool noSleeves{ false };
-        bool noWeapons{ false };
-        bool noSmoke{ false };
-        bool noBlur{ false };
-        bool noScopeOverlay{ false };
-        bool noGrass{ false };
-        bool noShadows{ false };
-        bool wireframeSmoke{ false };
-        bool zoom{ false };
-        KeyBindToggle zoomKey = KeyBind::NONE;
-        bool thirdperson{ false };
-        KeyBindToggle thirdpersonKey = KeyBind::NONE;
-        int thirdpersonDistance{ 0 };
-        int viewmodelFov{ 0 };
-        int fov{ 0 };
-        int farZ{ 0 };
-        int flashReduction{ 0 };
-        float brightness{ 0.0f };
-        int skybox{ 0 };
-        ColorToggle3 world;
-        ColorToggle3 sky;
-        bool deagleSpinner{ false };
-        int screenEffect{ 0 };
-        int hitEffect{ 0 };
-        float hitEffectTime{ 0.6f };
-        int hitMarker{ 0 };
-        float hitMarkerTime{ 0.6f };
-        int playerModelT{ 0 };
-        int playerModelCT{ 0 };
-        BulletTracers bulletTracers;
-        ColorToggle molotovHull{ 1.0f, 0.27f, 0.0f, 0.3f };
-
-        struct ColorCorrection {
-            bool enabled = false;
-            float blue = 0.0f;
-            float red = 0.0f;
-            float mono = 0.0f;
-            float saturation = 0.0f;
-            float ghost = 0.0f;
-            float green = 0.0f;
-            float yellow = 0.0f;
-        } colorCorrection;
-    } visuals;
-
+   
     struct Style {
         int menuStyle{ 0 };
         int menuColors{ 0 };
     } style;
 
-    struct Misc {
-        Misc() { clanTag[0] = '\0'; }
-
-        KeyBind menuKey = KeyBind::INSERT;
-        bool antiAfkKick{ false };
-        bool autoStrafe{ false };
-        bool bunnyHop{ false };
-        bool customClanTag{ false };
-        bool clocktag{ false };
-        bool animatedClanTag{ false };
-        bool fastDuck{ false };
-        bool moonwalk{ false };
-        bool edgejump{ false };
-        bool slowwalk{ false };
-        bool autoPistol{ false };
-        bool autoReload{ false };
-        bool autoAccept{ false };
-        bool radarHack{ false };
-        bool revealRanks{ false };
-        bool revealMoney{ false };
-        bool revealSuspect{ false };
-        bool revealVotes{ false };
-        bool fixAnimationLOD{ false };
-        bool fixBoneMatrix{ false };
-        bool fixMovement{ false };
-        bool disableModelOcclusion{ false };
-        bool nameStealer{ false };
-        bool disablePanoramablur{ false };
-        bool killMessage{ false };
-        bool nadePredict{ false };
-        bool fixTabletSignal{ false };
-        bool fastPlant{ false };
-        bool fastStop{ false };
-        bool quickReload{ false };
-        bool prepareRevolver{ false };
-        bool oppositeHandKnife = false;
-        PreserveKillfeed preserveKillfeed;
-        char clanTag[16];
-        KeyBind edgejumpkey = KeyBind::NONE;
-        KeyBind slowwalkKey = KeyBind::NONE;
-        ColorToggleThickness noscopeCrosshair;
-        ColorToggleThickness recoilCrosshair;
-
-        struct SpectatorList {
-            bool enabled = false;
-            bool noTitleBar = false;
-            ImVec2 pos;
-            ImVec2 size{ 200.0f, 200.0f };
-        };
-
-        SpectatorList spectatorList;
-        struct Watermark {
-            bool enabled = false;
-        };
-        Watermark watermark;
-        float aspectratio{ 0 };
-        std::string killMessageString{ "Gotcha!" };
-        int banColor{ 6 };
-        std::string banText{ "Cheater has been permanently banned from official CS:GO servers." };
-        ColorToggle3 bombTimer{ 1.0f, 0.55f, 0.0f };
-        KeyBind prepareRevolverKey = KeyBind::NONE;
-        int hitSound{ 0 };
-        int chokedPackets{ 0 };
-        KeyBind chokedPacketsKey = KeyBind::NONE;
-        int quickHealthshotKey{ 0 };
-        float maxAngleDelta{ 255.0f };
-        int killSound{ 0 };
-        std::string customKillSound;
-        std::string customHitSound;
-        PurchaseList purchaseList;
-
-        struct Reportbot {
-            bool enabled = false;
-            bool textAbuse = false;
-            bool griefing = false;
-            bool wallhack = true;
-            bool aimbot = true;
-            bool other = true;
-            int target = 0;
-            int delay = 1;
-            int rounds = 1;
-        } reportbot;
-
-        OffscreenEnemies offscreenEnemies;
-    } misc;
-
     void scheduleFontLoad(const std::string& name) noexcept;
     bool loadScheduledFonts() noexcept;
-    const auto& getSystemFonts() noexcept { return systemFonts; }
-    const auto& getFonts() noexcept { return fonts; }
+    const auto& getSystemFonts() const noexcept { return systemFonts; }
+    const auto& getFonts() const noexcept { return fonts; }
 private:
     std::vector<std::string> scheduledFonts{ "Default" };
     std::vector<std::string> systemFonts{ "Default" };

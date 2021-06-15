@@ -174,16 +174,16 @@ std::vector<char> Helpers::loadBinaryFile(const std::string& path) noexcept
     return result;
 }
 
-std::size_t Helpers::calculateVmtLength(std::uintptr_t* vmt) noexcept
+std::size_t Helpers::calculateVmtLength(const std::uintptr_t* vmt) noexcept
 {
     std::size_t length = 0;
 #ifdef _WIN32
     MEMORY_BASIC_INFORMATION memoryInfo;
     while (VirtualQuery(LPCVOID(vmt[length]), &memoryInfo, sizeof(memoryInfo)) && memoryInfo.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))
-        length++;
+        ++length;
 #else
-    while(vmt[length])
-        length++;
+    while (vmt[length])
+        ++length;
 #endif
     return length;
 }
