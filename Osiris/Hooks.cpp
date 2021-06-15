@@ -712,6 +712,11 @@ void Hooks::uninstall() noexcept
 #endif
 }
 
+void Hooks::callOriginalDrawModelExecute(void* ctx, void* state, const ModelRenderInfo& info, matrix3x4* customBoneToWorld) noexcept
+{
+    modelRender.callOriginal<void, 21>(ctx, state, std::cref(info), customBoneToWorld);
+}
+
 #ifndef _WIN32
 
 static int pollEvent(SDL_Event* event) noexcept
