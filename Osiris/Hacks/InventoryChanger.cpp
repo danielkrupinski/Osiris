@@ -57,7 +57,7 @@ constexpr auto isKnife(WeaponId id) noexcept
 class StaticData {
 public:
     enum class Type : std::uint8_t {
-        // has paint kit
+        // has paint kit, must match GameItem::hasPaintKit() below
         Sticker,
         Glove,
         Skin,
@@ -88,8 +88,7 @@ public:
         bool isAgent() const noexcept { return type == Type::Agent; }
         bool isCaseKey() const noexcept { return type == Type::CaseKey; }
 
-        // TODO: We need a better name for this
-        bool hasPaintKit() const noexcept { return isSkin() || isGlove() || isSticker() || isMusic() || isPatch() || isGraffiti() || isSealedGraffiti(); }
+        bool hasPaintKit() const noexcept { return type >= Type::Sticker && type <= Type::SealedGraffiti; }
 
         Type type;
         std::uint8_t rarity;
