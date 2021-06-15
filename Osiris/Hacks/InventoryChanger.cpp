@@ -57,15 +57,18 @@ constexpr auto isKnife(WeaponId id) noexcept
 class StaticData {
 public:
     enum class Type : std::uint8_t {
+        // has paint kit
         Sticker,
         Glove,
         Skin,
         Music,
-        Collectible,
-        NameTag,
         Patch,
         Graffiti,
         SealedGraffiti,
+
+        // has other data
+        Collectible,
+        NameTag,
         Agent,
         CaseKey
     };
