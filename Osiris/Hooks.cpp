@@ -505,6 +505,7 @@ static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, 
 
 static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
 {
+    InventoryChanger::onSoUpdated(object, event);
     hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
