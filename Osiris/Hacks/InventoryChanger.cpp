@@ -1904,6 +1904,7 @@ void InventoryChanger::clearInventory() noexcept
     resetConfig();
 }
 
+static std::uint64_t lastEquippedItemID = 0;
 void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
 {
     if (!wasItemCreatedByOsiris(itemID))
@@ -1920,13 +1921,22 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
         }
     } else if (item.isSkin()) {
+        const auto view = localInventory->getItemInLoadout(team, slot);
         memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item.get().weaponID));
+        if (view) {
+            if (const auto econItem = memory->getSOCData(view))
+                localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
+        }
+        lastEquippedItemID = itemID;
     }
 }
 
 void InventoryChanger::onSoUpdated(SharedObject* object, int event) noexcept
 {
-
+    if (lastEquippedItemID != 0 && object->getTypeID() == 43 /* = k_EEconTypeDefaultEquippedDefinitionInstanceClient */) {
+        *reinterpret_cast<WeaponId*>(std::uintptr_t(object) + WIN32_LINUX(0x10, 0x1C)) = WeaponId::None;
+        lastEquippedItemID = 0;
+    }
 }
 
 struct Icon {
