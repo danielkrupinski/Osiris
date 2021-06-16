@@ -27,4 +27,5 @@ public:
     NETVAR(bombsiteCenterA, "CCSPlayerResource", "m_bombsiteCenterA", Vector)
     NETVAR(bombsiteCenterB, "CCSPlayerResource", "m_bombsiteCenterB", Vector)
     NETVAR(musicID, "CCSPlayerResource", "m_nMusicID", int[65])
+    NETVAR(activeCoinRank, "CCSPlayerResource", "m_nActiveCoinRank", int[65])
 };
