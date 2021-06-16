@@ -1924,6 +1924,11 @@ void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) no
     }
 }
 
+void InventoryChanger::onSoUpdated(SharedObject* object, int event) noexcept
+{
+
+}
+
 struct Icon {
     Texture texture;
     int lastReferencedFrame = 0;

@@ -17,6 +17,7 @@ enum class FrameStage;
 enum class Team;
 class Entity;
 class GameEvent;
+class SharedObject;
 
 namespace InventoryChanger
 {
@@ -51,4 +52,5 @@ namespace InventoryChanger
     void clearInventory() noexcept;
 
     void onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept;
+    void onSoUpdated(SharedObject* object, int event) noexcept;
 }
