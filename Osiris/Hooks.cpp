@@ -55,6 +55,7 @@
 #include "SDK/GameUI.h"
 #include "SDK/GlobalVars.h"
 #include "SDK/InputSystem.h"
+#include "SDK/ItemSchema.h"
 #include "SDK/MaterialSystem.h"
 #include "SDK/ModelRender.h"
 #include "SDK/Platform.h"
@@ -498,8 +499,13 @@ static const char* __STDCALL getArgAsString(LINUX_ARGS(void* thisptr,) void* par
 
 static bool __STDCALL equipItemInLoadout(LINUX_ARGS(void* thisptr, ) Team team, int slot, std::uint64_t itemID, bool swap) noexcept
 {
-    InventoryChanger::onItemEquip(team, slot, itemID);
+   InventoryChanger::onItemEquip(team, slot, itemID);
     return hooks->inventoryManager.callOriginal<bool, 20>(team, slot, itemID, swap);
+}
+
+static void __STDCALL soUpdated(LINUX_ARGS(void* thisptr, ) SOID owner, SharedObject* object, int event) noexcept
+{
+    hooks->inventory.callOriginal<void, 1>(owner, object, event);
 }
 
 #ifdef _WIN32
@@ -606,6 +612,9 @@ void Hooks::install() noexcept
     engine.hookAt(101, &getScreenAspectRatio);
     engine.hookAt(WIN32_LINUX(218, 219), &getDemoPlaybackParameters);
 
+    inventory.init(memory->inventoryManager->getLocalInventory());
+    inventory.hookAt(1, &soUpdated);
+
     inventoryManager.init(memory->inventoryManager);
     inventoryManager.hookAt(20, &equipItemInLoadout);
 
@@ -688,6 +697,7 @@ void Hooks::uninstall() noexcept
     client.restore();
     clientMode.restore();
     engine.restore();
+    inventory.restore();
     inventoryManager.restore();
     modelRender.restore();
     panoramaMarshallHelper.restore();
