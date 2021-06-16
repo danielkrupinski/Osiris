@@ -14,6 +14,7 @@
 #include "../JsonForward.h"
 
 enum class FrameStage;
+enum class Team;
 class Entity;
 class GameEvent;
 
@@ -49,5 +50,5 @@ namespace InventoryChanger
 
     void clearInventory() noexcept;
 
-    void onItemEquip(std::uint64_t itemID) noexcept;
+    void onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept;
 }

@@ -1904,7 +1904,7 @@ void InventoryChanger::clearInventory() noexcept
     resetConfig();
 }
 
-void InventoryChanger::onItemEquip(std::uint64_t itemID) noexcept
+void InventoryChanger::onItemEquip(Team team, int slot, std::uint64_t itemID) noexcept
 {
     if (!wasItemCreatedByOsiris(itemID))
         return;
@@ -1919,6 +1919,8 @@ void InventoryChanger::onItemEquip(std::uint64_t itemID) noexcept
             if (const auto econItem = memory->getSOCData(view))
                 localInventory->soUpdated(localInventory->getSOID(), (SharedObject*)econItem, 4);
         }
+    } else if (item.isSkin()) {
+        memory->inventoryManager->equipItemInSlot(team, slot, (std::uint64_t(0xF) << 60) | static_cast<short>(item.get().weaponID));
     }
 }
 
