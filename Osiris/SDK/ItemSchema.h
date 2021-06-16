@@ -268,6 +268,13 @@ public:
     }
 };
 
+class SharedObject {
+public:
+    INCONSTRUCTIBLE(SharedObject)
+
+    VIRTUAL_METHOD_V(int, getTypeID, 1, (), (this))
+};
+
 template <typename T>
 class SharedObjectTypeCache {
 public:
